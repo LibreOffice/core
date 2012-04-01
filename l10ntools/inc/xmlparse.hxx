@@ -29,17 +29,18 @@
 #ifndef BOOTSTRP_XMLPARSE_HXX
 #define BOOTSTRP_XMLPARSE_HXX
 
+#include "sal/config.h"
+
+#include <cstddef>
+#include <vector>
+
 #include <signal.h>
 #include <expat.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
-#include <tools/stream.hxx>
+#include "boost/unordered_map.hpp"
 #include "export.hxx"
 #include "xmlutil.hxx"
-
-#include <fstream>
-#include <iostream>
 
 class XMLParentNode;
 class XMLElement;
@@ -48,11 +49,6 @@ class XMLElement;
 using namespace ::rtl;
 using namespace std;
 
-#include <boost/unordered_map.hpp>
-#include <deque>    /* std::deque*/
-#include <iterator> /* std::iterator*/
-#include <list>     /* std::list*/
-#include <vector>   /* std::vector*/
 #define XML_NODE_TYPE_FILE          0x001
 #define XML_NODE_TYPE_ELEMENT       0x002
 #define XML_NODE_TYPE_DATA          0x003
@@ -64,34 +60,35 @@ using namespace std;
 
 /** Holds data of Attributes
  */
-class XMLAttribute : public String
+class XMLAttribute
 {
 private:
-    String sValue;
+    rtl::OUString sName;
+    rtl::OUString sValue;
 
 public:
     /// creates an attribute
     XMLAttribute(
-        const String &rName,    // attributes name
-        const String &rValue    // attributes data
+        const rtl::OUString &rName,    // attributes name
+        const rtl::OUString &rValue    // attributes data
     )
-                : String( rName ), sValue( rValue ) {}
+                : sName( rName ), sValue( rValue ) {}
 
-    /// getting value of an attribue
-    const String &GetValue() { return sValue; }
+    rtl::OUString GetName() const { return sName; }
+    rtl::OUString GetValue() const { return sValue; }
 
-    void setValue(const String &rValue){sValue=rValue;}
+    void setValue(const rtl::OUString &rValue){sValue=rValue;}
 
     /// returns true if two attributes are equal and have the same value
     sal_Bool IsEqual(
         const XMLAttribute &rAttribute  // the attribute which has to be equal
     )
     {
-        return (( rAttribute == *this ) && ( rAttribute.sValue == sValue ));
+        return (( rAttribute.sName == sName ) && ( rAttribute.sValue == sValue ));
     }
 };
 
-typedef ::std::vector< XMLAttribute* > XMLAttributeList;
+typedef std::vector< XMLAttribute* > XMLAttributeList;
 
 //-------------------------------------------------------------------------
 
@@ -129,7 +126,7 @@ public:
     virtual ~XMLChildNode(){};
 };
 
-typedef ::std::vector< XMLChildNode* > XMLChildNodeList;
+typedef std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
@@ -172,14 +169,7 @@ public:
         XMLChildNode *pChild , size_t pos   /// the new child
     );
 
-    virtual int GetPosition( ByteString id );
-    int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChildren();
-
-    /// returns a child element which matches the given one
-    XMLElement *GetChildElement(
-        XMLElement *pRefElement // the reference elelement
-    );
 };
 
 //-------------------------------------------------------------------------
@@ -204,18 +194,17 @@ class XMLFile : public XMLParentNode
 {
 public:
     XMLFile(
-                const String &rFileName // the file name, empty if created from memory stream
+        const rtl::OUString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& obj ) ;
     ~XMLFile();
 
-    ByteString* GetGroupID(std::deque<rtl::OString> &groupid);
     void        Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    sal_Bool        Write( ByteString &rFilename );
+    void Write( rtl::OString const &rFilename );
     sal_Bool        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
@@ -225,23 +214,18 @@ public:
     virtual sal_uInt16  GetNodeType();
 
     /// returns file name
-    const String &GetName() { return sFileName; }
-    void          SetName( const String &rFilename ) { sFileName = rFilename; }
-    void          SetFullName( const String &rFullFilename ) { sFullName = rFullFilename; }
+    rtl::OUString GetName() { return sFileName; }
+    void          SetName( const rtl::OUString &rFilename ) { sFileName = rFilename; }
     const std::vector<rtl::OString> getOrder(){ return order; }
 
 protected:
     // writes a string as UTF8 with dos line ends to a given stream
-    void        WriteString( ofstream &rStream, const String &sString );
-
-    // quotes the given text for writing to a file
-    void        QuotHTML( String &rString );
+    void        WriteString( ofstream &rStream, const rtl::OUString &sString );
 
     void        InsertL10NElement( XMLElement* pElement);
 
     // DATA
-    String      sFileName;
-    String      sFullName;
+    rtl::OUString      sFileName;
 
     const rtl::OString ID, OLDREF, XML_LANG;
 
@@ -257,13 +241,10 @@ class XMLUtil{
 
 public:
     /// Quot the XML characters and replace \n \t
-    static void         QuotHTML( String &rString );
+    static void         QuotHTML( rtl::OUString &rString );
 
     /// UnQuot the XML characters and restore \n \t
-    static void         UnQuotHTML  ( String &rString );
-private:
-    static void UnQuotData( String &rString );
-    static void UnQuotTags( String &rString );
+    static void         UnQuotHTML  ( rtl::OUString &rString );
 };
 
 
@@ -275,9 +256,9 @@ private:
 class XMLElement : public XMLParentNode
 {
 private:
-    String sElementName;
+    rtl::OUString sElementName;
     XMLAttributeList *pAttributes;
-    ByteString   project,
+    rtl::OString   project,
                  filename,
                  id,
                  sOldRef,
@@ -291,7 +272,7 @@ public:
     /// create a element node
     XMLElement(){}
     XMLElement(
-        const String &rName,    // the element name
+        const rtl::OUString &rName,    // the element name
         XMLParentNode *Parent   // parent node of this element
     ):          XMLParentNode( Parent ),
                 sElementName( rName ),
@@ -313,42 +294,34 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns element name
-    const String &GetName() { return sElementName; }
+    rtl::OUString GetName() { return sElementName; }
 
     /// returns list of attributes of this element
     XMLAttributeList *GetAttributeList() { return pAttributes; }
 
     /// adds a new attribute to this element, typically used by parser
-    void AddAttribute( const String &rAttribute, const String &rValue );
+    void AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue );
 
-    void ChangeLanguageTag( const String &rValue );
-    // Return a ASCII String representation of this object
-    OString ToOString();
+    void ChangeLanguageTag( const rtl::OUString &rValue );
 
     // Return a Unicode String representation of this object
     OUString ToOUString();
 
-    bool    Equals(OUString refStr);
-
-    /// returns a attribute
-    XMLAttribute *GetAttribute(
-        const String &rName // the attribute name
-    );
-    void SetProject         ( ByteString prj        ){ project = prj;        }
-    void SetFileName        ( ByteString fn         ){ filename = fn;        }
-    void SetId              ( ByteString theId      ){ id = theId;           }
-    void SetResourceType    ( ByteString rt         ){ resourceType = rt;    }
-    void SetLanguageId      ( ByteString lid        ){ languageId = lid;     }
+    void SetProject         ( rtl::OString const & prj        ){ project = prj;        }
+    void SetFileName        ( rtl::OString const & fn         ){ filename = fn;        }
+    void SetId              ( rtl::OString const & theId      ){ id = theId;           }
+    void SetResourceType    ( rtl::OString const & rt         ){ resourceType = rt;    }
+    void SetLanguageId      ( rtl::OString const & lid        ){ languageId = lid;     }
     void SetPos             ( int nPos_in           ){ nPos = nPos_in;       }
-    void SetOldRef          ( ByteString sOldRef_in ){ sOldRef = sOldRef_in; }
+    void SetOldRef          ( rtl::OString const & sOldRef_in ){ sOldRef = sOldRef_in; }
 
     virtual int        GetPos()         { return nPos;         }
-    ByteString GetProject()     { return project;      }
-    ByteString GetFileName()    { return filename;     }
-    ByteString GetId()          { return id;           }
-    ByteString GetOldref()      { return sOldRef;      }
-    ByteString GetResourceType(){ return resourceType; }
-    ByteString GetLanguageId()  { return languageId;   }
+    rtl::OString GetProject()     { return project;      }
+    rtl::OString GetFileName()    { return filename;     }
+    rtl::OString GetId()          { return id;           }
+    rtl::OString GetOldref()      { return sOldRef;      }
+    rtl::OString GetResourceType(){ return resourceType; }
+    rtl::OString GetLanguageId()  { return languageId;   }
 
 
 };
@@ -360,18 +333,18 @@ public:
 class XMLData : public XMLChildNode
 {
 private:
-    String sData;
+    rtl::OUString sData;
     bool   isNewCreated;
 
 public:
     /// create a data node
     XMLData(
-        const String &rData,    // the initial data
+        const rtl::OUString &rData,    // the initial data
         XMLParentNode *Parent   // the parent node of this data, typically a element node
     )
                 : XMLChildNode( Parent ), sData( rData ) , isNewCreated ( false ){}
     XMLData(
-        const String &rData,    // the initial data
+        const rtl::OUString &rData,    // the initial data
         XMLParentNode *Parent,  // the parent node of this data, typically a element node
         bool newCreated
     )
@@ -383,12 +356,12 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the data
-    const String &GetData() { return sData; }
+    rtl::OUString GetData() { return sData; }
 
     bool isNew() { return isNewCreated; }
     /// adds new character data to the existing one
     void AddData(
-        const String &rData // the new data
+        const rtl::OUString &rData // the new data
     );
 
 
@@ -402,12 +375,12 @@ public:
 class XMLComment : public XMLChildNode
 {
 private:
-    String sComment;
+    rtl::OUString sComment;
 
 public:
     /// create a comment node
     XMLComment(
-        const String &rComment, // the comment
+        const rtl::OUString &rComment, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sComment( rComment ) {}
@@ -419,7 +392,7 @@ public:
     XMLComment& operator=(const XMLComment& obj);
 
     /// returns the comment
-    const String &GetComment()  { return sComment; }
+    rtl::OUString GetComment()  { return sComment; }
 };
 
 //-------------------------------------------------------------------------
@@ -429,12 +402,12 @@ public:
 class XMLDefault : public XMLChildNode
 {
 private:
-    String sDefault;
+    rtl::OUString sDefault;
 
 public:
     /// create a comment node
     XMLDefault(
-        const String &rDefault, // the comment
+        const rtl::OUString &rDefault, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sDefault( rDefault ) {}
@@ -447,7 +420,7 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the comment
-    const String &GetDefault()  { return sDefault; }
+    rtl::OUString GetDefault()  { return sDefault; }
 };
 
 //-------------------------------------------------------------------------
@@ -456,9 +429,9 @@ public:
  */
 struct XMLError {
     XML_Error eCode;    // the error code
-    sal_uLong nLine;        // error line number
-    sal_uLong nColumn;      // error column number
-    String sMessage;    // readable error message
+    std::size_t nLine; // error line number
+    std::size_t nColumn; // error column number
+    rtl::OUString sMessage;    // readable error message
 };
 
 //-------------------------------------------------------------------------
@@ -491,7 +464,6 @@ private:
     void Comment( const XML_Char *data );
     void Default( const XML_Char *s, int len );
 
-
 public:
     /// creates a new parser
     SimpleXMLParser();
@@ -499,14 +471,8 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
-        const String &rFullFileName,
-        const String &rFileName,    // the file name
+        const rtl::OUString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
-    );
-
-    /// parse a memory stream, returns NULL on criticall errors
-    XMLFile *Execute(
-        SvMemoryStream *pStream // the stream
     );
 
     /// returns an error struct

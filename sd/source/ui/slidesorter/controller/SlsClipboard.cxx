@@ -64,7 +64,6 @@
 #include "sdresid.hxx"
 #include "sdxfer.hxx"
 #include "sdmod.hxx"
-#include "sddll.hxx"
 #include "ins_paste.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"

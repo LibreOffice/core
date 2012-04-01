@@ -41,7 +41,7 @@ namespace connectivity
     class java_sql_SQLException :   public starsdbc::SQLException
     {
     public:
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_SQLException(){}
         java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
     };
@@ -49,12 +49,12 @@ namespace connectivity
     class java_sql_SQLException_BASE :  public java_lang_Exception
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_SQLException_BASE();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_SQLException_BASE( JNIEnv * pEnv, jobject myObj );
 
         ::rtl::OUString getSQLState() const;

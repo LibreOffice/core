@@ -223,7 +223,7 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    // oder matters: we want to "override" the XImageProducer interface of the aggreate with out
+    // Order matters: we want to "override" the XImageProducer interface of the aggreate with out
     // own XImageProducer interface, thus we need to query OImageControlModel_Base first
     Any aReturn = OImageControlModel_Base::queryInterface( _rType );
 
@@ -373,7 +373,7 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
 //------------------------------------------------------------------------------
 void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    // Basisklasse
+    // Base class
     OBoundControlModel::write(_rxOutStream);
     // Version
     _rxOutStream->writeShort(0x0003);
@@ -411,7 +411,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             defaultCommonProperties();
             break;
     }
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // Display default values after read
     if ( !getControlSource().isEmpty() )
     {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
         ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
@@ -728,7 +728,7 @@ OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>
 {
     increment(m_refCount);
     {
-        // als Focus- und MouseListener anmelden
+        // Add as Focus- and MouseListener
         Reference< XWindow > xComp;
         query_aggregation( m_xAggregate, xComp );
         if ( xComp.is() )
@@ -959,7 +959,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     else
     {
         //////////////////////////////////////////////////////////////////////
-        // Doppelclick
+        // Double click
         if (e.ClickCount == 2)
         {
 
@@ -967,8 +967,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if (!xSet.is())
                 return;
 
-            // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
-            // versanden wuerde)
+            // If the Control is not bound, do not display a dialog (because the to-be-sent URL would be invalid anyway)
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));

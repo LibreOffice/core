@@ -54,10 +54,6 @@ namespace com
     }
 }
 
-#define NS_UNO ::com::sun::star::uno
-#define NS_IO ::com::sun::star::io
-#define NS_TASK ::com::sun::star::task
-
 class String;
 namespace utl
 {
@@ -69,15 +65,15 @@ namespace utl
         static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
                                 UcbLockBytesHandler* pHandler=0 );
         static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
-                                NS_UNO::Reference < NS_TASK::XInteractionHandler >,
+                                ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >,
                                 UcbLockBytesHandler* pHandler=0 );
         static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
                                 sal_Bool bFileExists,
                                 UcbLockBytesHandler* pHandler=0 );
-        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream );
-        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream );
-        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream, sal_Bool bCloseStream );
-        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream, sal_Bool bCloseStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream, sal_Bool bCloseStream );
+        static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream, sal_Bool bCloseStream );
     };
 }
 

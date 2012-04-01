@@ -45,10 +45,16 @@ public:
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getLocked() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
     // XDefaultProperty
     rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
     //XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

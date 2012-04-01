@@ -467,6 +467,7 @@ namespace xmloff { namespace token {
         XML_CONTENT_VALIDATION,
         XML_CONTENT_VALIDATION_NAME,
         XML_CONTENT_VALIDATIONS,
+        XML_CONTEXTUAL_SPACING,
         XML_CONTINUE,
         XML_CONTINUE_NUMBERING,
         XML_CONTOUR_PATH,

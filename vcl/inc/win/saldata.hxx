@@ -239,13 +239,10 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
 // \WIN\SOURCE\GDI\SALGDI3.CXX
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont );
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
-bool ImplIsFontAvailable( HDC hDC, const UniString& rName );
 
 // \WIN\SOURCE\APP\SALDATA.CXX
 rtl_TextEncoding ImplSalGetSystemEncoding();
-rtl::OString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName = FALSE );
 UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 

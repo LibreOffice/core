@@ -57,6 +57,7 @@ private:
     ScRangeManagerTable* mpTable;
 
     std::vector<rtl::OUString> maSelectedNames;
+    boost::ptr_map<rtl::OUString, ScRangeName> maRangeMap;
 public:
     ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList=true );
 

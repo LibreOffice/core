@@ -44,7 +44,6 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/sequence.hxx>

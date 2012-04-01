@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include "oox/token/properties.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -56,7 +57,7 @@ typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
     name mapping is done internally while the properties are written to
     property sets.
  */
-class PropertyMap : public PropertyMapBase
+class OOX_DLLPUBLIC PropertyMap : public PropertyMapBase
 {
 public:
     explicit            PropertyMap();
@@ -67,9 +68,6 @@ public:
     /** Returns true, if the map contains a property with the passed identifier. */
     inline bool         hasProperty( sal_Int32 nPropId ) const
                             { return find( nPropId ) != end(); }
-
-    /** Returns the property value of the specified property, or 0 if not found. */
-    const ::com::sun::star::uno::Any* getProperty( sal_Int32 nPropId ) const;
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
@@ -103,8 +101,9 @@ public:
                         makePropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
   static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
-  void dump();
+#endif
   static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dumpCode();
 #endif

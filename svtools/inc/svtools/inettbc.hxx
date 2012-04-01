@@ -31,6 +31,7 @@
 
 // includes *****************************************************************
 
+#include "rtl/ref.hxx"
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -47,7 +48,7 @@ friend class SvtURLBox_Impl;
     Link                            aOpenHdl;
     String                          aBaseURL;
     String                          aPlaceHolder;
-    SvtMatchContext_Impl*           pCtx;
+    rtl::Reference< SvtMatchContext_Impl > pCtx;
     SvtURLBox_Impl*                 pImp;
     INetProtocol                    eSmartProtocol;
     sal_Bool                            bAutoCompleteMode   : 1;

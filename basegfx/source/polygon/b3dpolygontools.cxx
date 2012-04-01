@@ -55,26 +55,6 @@ namespace basegfx
             }
         }
 
-        // Get successor and predecessor indices. Returning the same index means there
-        // is none. Same for successor.
-        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const B3DPolygon& rCandidate)
-        {
-            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-
-            if(nIndex)
-            {
-                return nIndex - 1L;
-            }
-            else if(rCandidate.count())
-            {
-                return rCandidate.count() - 1L;
-            }
-            else
-            {
-                return nIndex;
-            }
-        }
-
         sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const B3DPolygon& rCandidate)
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
@@ -106,39 +86,6 @@ namespace basegfx
         B3DVector getNormal(const B3DPolygon& rCandidate)
         {
             return rCandidate.getNormal();
-        }
-
-        B3DVector getPositiveOrientedNormal(const B3DPolygon& rCandidate)
-        {
-            B3DVector aRetval(rCandidate.getNormal());
-
-            if(ORIENTATION_NEGATIVE == getOrientation(rCandidate))
-            {
-                aRetval = -aRetval;
-            }
-
-            return aRetval;
-        }
-
-        B2VectorOrientation getOrientation(const B3DPolygon& rCandidate)
-        {
-            B2VectorOrientation eRetval(ORIENTATION_NEUTRAL);
-
-            if(rCandidate.count() > 2L)
-            {
-                const double fSignedArea(getSignedArea(rCandidate));
-
-                if(fSignedArea > 0.0)
-                {
-                    eRetval = ORIENTATION_POSITIVE;
-                }
-                else if(fSignedArea < 0.0)
-                {
-                    eRetval = ORIENTATION_NEGATIVE;
-                }
-            }
-
-            return eRetval;
         }
 
         double getSignedArea(const B3DPolygon& rCandidate)
@@ -206,45 +153,6 @@ namespace basegfx
             return fRetval;
         }
 
-        double getArea(const B3DPolygon& rCandidate)
-        {
-            double fRetval(0.0);
-
-            if(rCandidate.count() > 2)
-            {
-                fRetval = getSignedArea(rCandidate);
-                const double fZero(0.0);
-
-                if(fTools::less(fRetval, fZero))
-                {
-                    fRetval = -fRetval;
-                }
-            }
-
-            return fRetval;
-        }
-
-        double getEdgeLength(const B3DPolygon& rCandidate, sal_uInt32 nIndex)
-        {
-            OSL_ENSURE(nIndex < rCandidate.count(), "getEdgeLength: Access to polygon out of range (!)");
-            double fRetval(0.0);
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nIndex < nPointCount)
-            {
-                if(rCandidate.isClosed() || ((nIndex + 1L) != nPointCount))
-                {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(nIndex));
-                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                    const B3DVector aVector(aNextPoint - aCurrentPoint);
-                    fRetval = aVector.getLength();
-                }
-            }
-
-            return fRetval;
-        }
-
         double getLength(const B3DPolygon& rCandidate)
         {
             double fRetval(0.0);
@@ -265,118 +173,6 @@ namespace basegfx
             }
 
             return fRetval;
-        }
-
-        B3DPoint getPositionAbsolute(const B3DPolygon& rCandidate, double fDistance, double fLength)
-        {
-            B3DPoint aRetval;
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount > 1L)
-            {
-                sal_uInt32 nIndex(0L);
-                bool bIndexDone(false);
-                const double fZero(0.0);
-                double fEdgeLength(fZero);
-
-                // get length if not given
-                if(fTools::equalZero(fLength))
-                {
-                    fLength = getLength(rCandidate);
-                }
-
-                // handle fDistance < 0.0
-                if(fTools::less(fDistance, fZero))
-                {
-                    if(rCandidate.isClosed())
-                    {
-                        // if fDistance < 0.0 increment with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
-                        fDistance += double(nCount + 1L) * fLength;
-                    }
-                    else
-                    {
-                        // crop to polygon start
-                        fDistance = fZero;
-                        bIndexDone = true;
-                    }
-                }
-
-                // handle fDistance >= fLength
-                if(fTools::moreOrEqual(fDistance, fLength))
-                {
-                    if(rCandidate.isClosed())
-                    {
-                        // if fDistance >= fLength decrement with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                        fDistance -= (double)(nCount) * fLength;
-                    }
-                    else
-                    {
-                        // crop to polygon end
-                        fDistance = fZero;
-                        nIndex = nPointCount - 1L;
-                        bIndexDone = true;
-                    }
-                }
-
-                // look for correct index. fDistance is now [0.0 .. fLength[
-                if(!bIndexDone)
-                {
-                    do
-                    {
-                        // get length of next edge
-                        fEdgeLength = getEdgeLength(rCandidate, nIndex);
-
-                        if(fTools::moreOrEqual(fDistance, fEdgeLength))
-                        {
-                            // go to next edge
-                            fDistance -= fEdgeLength;
-                            nIndex++;
-                        }
-                        else
-                        {
-                            // it's on this edge, stop
-                            bIndexDone = true;
-                        }
-                    } while (!bIndexDone);
-                }
-
-                // get the point using nIndex
-                aRetval = rCandidate.getB3DPoint(nIndex);
-
-                // if fDistance != 0.0, move that length on the edge. The edge
-                // length is in fEdgeLength.
-                if(!fTools::equalZero(fDistance))
-                {
-                    sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                    double fRelative(fZero);
-
-                    if(!fTools::equalZero(fEdgeLength))
-                    {
-                        fRelative = fDistance / fEdgeLength;
-                    }
-
-                    // add calculated average value to the return value
-                    aRetval += interpolate(aRetval, aNextPoint, fRelative);
-                }
-            }
-
-            return aRetval;
-        }
-
-        B3DPoint getPositionRelative(const B3DPolygon& rCandidate, double fDistance, double fLength)
-        {
-            // get length if not given
-            if(fTools::equalZero(fLength))
-            {
-                fLength = getLength(rCandidate);
-            }
-
-            // multiply fDistance with real length to get absolute position and
-            // use getPositionAbsolute
-            return getPositionAbsolute(rCandidate, fDistance * fLength, fLength);
         }
 
         void applyLineDashing(const B3DPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, B3DPolyPolygon* pGapTarget, double fDotDashLength)
@@ -748,121 +544,6 @@ namespace basegfx
             return aRetval;
         }
 
-        bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance)
-        {
-            // build edge vector
-            const B3DVector aEdge(rEdgeEnd - rEdgeStart);
-            bool bDoDistanceTestStart(false);
-            bool bDoDistanceTestEnd(false);
-
-            if(aEdge.equalZero())
-            {
-                // no edge, just a point. Do one of the distance tests.
-                bDoDistanceTestStart = true;
-            }
-            else
-            {
-                // calculate fCut in aEdge
-                const B3DVector aTestEdge(rTestPosition - rEdgeStart);
-                const double fScalarTestEdge(aEdge.scalar(aTestEdge));
-                const double fScalarStartEdge(aEdge.scalar(rEdgeStart));
-                const double fScalarEdge(aEdge.scalar(aEdge));
-                const double fCut((fScalarTestEdge - fScalarStartEdge) / fScalarEdge);
-                const double fZero(0.0);
-                const double fOne(1.0);
-
-                if(fTools::less(fCut, fZero))
-                {
-                    // left of rEdgeStart
-                    bDoDistanceTestStart = true;
-                }
-                else if(fTools::more(fCut, fOne))
-                {
-                    // right of rEdgeEnd
-                    bDoDistanceTestEnd = true;
-                }
-                else
-                {
-                    // inside line [0.0 .. 1.0]
-                    const B3DPoint aCutPoint(interpolate(rEdgeStart, rEdgeEnd, fCut));
-                    const B3DVector aDelta(rTestPosition - aCutPoint);
-                    const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                    if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            if(bDoDistanceTestStart)
-            {
-                const B3DVector aDelta(rTestPosition - rEdgeStart);
-                const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                {
-                    return true;
-                }
-            }
-            else if(bDoDistanceTestEnd)
-            {
-                const B3DVector aDelta(rTestPosition - rEdgeEnd);
-                const double fDistanceSquare(aDelta.scalar(aDelta));
-
-                if(fDistanceSquare <= fDistance * fDistance * fDistance)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        bool isInEpsilonRange(const B3DPolygon& rCandidate, const B3DPoint& rTestPosition, double fDistance)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount)
-            {
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
-                B3DPoint aCurrent(rCandidate.getB3DPoint(0));
-
-                if(nEdgeCount)
-                {
-                    // edges
-                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                    {
-                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                        const B3DPoint aNext(rCandidate.getB3DPoint(nNextIndex));
-
-                        if(isInEpsilonRange(aCurrent, aNext, rTestPosition, fDistance))
-                        {
-                            return true;
-                        }
-
-                        // prepare next step
-                        aCurrent = aNext;
-                    }
-                }
-                else
-                {
-                    // no edges, but points -> not closed. Check single point. Just
-                    // use isInEpsilonRange with twice the same point, it handles those well
-                    if(isInEpsilonRange(aCurrent, aCurrent, rTestPosition, fDistance))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
         bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)
         {
             if(bWithBorder && isPointOnPolygon(rCandidate, rPoint, true))
@@ -1015,23 +696,6 @@ namespace basegfx
             }
         }
 
-        bool isInside(const B3DPolygon& rCandidate, const B3DPolygon& rPolygon, bool bWithBorder)
-        {
-            const sal_uInt32 nPointCount(rPolygon.count());
-
-            for(sal_uInt32 a(0L); a < nPointCount; a++)
-            {
-                const B3DPoint aTestPoint(rPolygon.getB3DPoint(a));
-
-                if(!isInside(rCandidate, aTestPoint, bWithBorder))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         bool isPointOnLine(const B3DPoint& rStart, const B3DPoint& rEnd, const B3DPoint& rCandidate, bool bWithPoints)
         {
             if(rCandidate.equal(rStart) || rCandidate.equal(rEnd))
@@ -1141,25 +805,6 @@ namespace basegfx
             return false;
         }
 
-        bool getCutBetweenLineAndPolygon(const B3DPolygon& rCandidate, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount > 2 && !rEdgeStart.equal(rEdgeEnd))
-            {
-                const B3DVector aPlaneNormal(rCandidate.getNormal());
-
-                if(!aPlaneNormal.equalZero())
-                {
-                    const B3DPoint aPointOnPlane(rCandidate.getB3DPoint(0));
-
-                    return getCutBetweenLineAndPlane(aPlaneNormal, aPointOnPlane, rEdgeStart, rEdgeEnd, fCut);
-                }
-            }
-
-            return false;
-        }
-
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D Polygons
 
@@ -1184,13 +829,6 @@ namespace basegfx
             }
 
             return true;
-        }
-
-        bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
         // snap points of horizontal or vertical edges to discrete values

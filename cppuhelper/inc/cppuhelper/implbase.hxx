@@ -181,11 +181,12 @@ struct ClassData##N : public ClassDataBase \
         {} \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE ImplHelperBase##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelperBase##N \
     : public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
 { \
 protected: \
+    ~ImplHelperBase##N() throw () {} \
     ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW(()) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
@@ -210,7 +211,7 @@ protected: \
     } \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE ImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper##N \
     : public ImplHelperBase##N< __IFC##N > \
 { \
     static ClassData##N s_aCD; \
@@ -221,9 +222,11 @@ public: \
         { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return this->getClassData( s_aCD ).getImplementationId(); } \
+protected: \
+    ~ImplHelper##N() throw () {} \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
     : public ::cppu::OWeakObject \
     , public ImplHelperBase##N< __IFC##N > \
 { \
@@ -244,7 +247,7 @@ public: \
         { return this->getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakAggImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper##N \
     : public ::cppu::OWeakAggObject \
     , public ImplHelperBase##N< __IFC##N > \
 { \

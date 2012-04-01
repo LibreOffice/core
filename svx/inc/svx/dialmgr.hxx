@@ -43,8 +43,7 @@ struct SVX_DLLPUBLIC DialogsResMgr
 
 #define DIALOG_MGR()    (*DialogsResMgr::GetResMgr())
 #define SVX_RES(i)      ResId(i,DIALOG_MGR())
-#define SVX_RESSTR(i)   UniString(ResId(i,DIALOG_MGR()))
-#define SVX_RESSSTR(i)  String(ResId(i,DIALOG_MGR()))
+#define SVX_RESSTR(i)   ResId::toString(ResId(i,DIALOG_MGR()))
 
 #endif
 

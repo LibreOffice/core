@@ -34,118 +34,118 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     HelpId = CMD_FID_ADD_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 120 ) ;
+    Size = MAP_APPFONT ( 225 , 116 ) ;
     Text [ en-US ] = "Define Name" ;
     Moveable = TRUE ;
     Closeable = TRUE;
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 90, 100 );
+        Pos = MAP_APPFONT( 115, 96 );
         Size = MAP_APPFONT( 50, 15 );
         TabStop = TRUE;
         Text [en-US] = "Add";
     };
     PushButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 145, 100 );
+        Pos = MAP_APPFONT( 170, 96 );
         Size = MAP_APPFONT ( 50, 15 );
         TabStop = TRUE;
         Text [en-US] = "Cancel";
     };
     CheckBox BTN_MORE
     {
-        Pos = MAP_APPFONT( 5, 82 );
+        Pos = MAP_APPFONT( 5, 81 );
         Size = MAP_APPFONT( 80, 15 );
         Text [en-US] = "Range Options";
     };
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 180, 15 );
+        Size = MAP_APPFONT( 215, 15 );
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT( 5, 25 );
-        Size = MAP_APPFONT( 30, 15 );
+        Pos = MAP_APPFONT( 5, 27 );
+        Size = MAP_APPFONT( 50, 13 );
         Text [en-US] = "Name";
     };
     FixedText FT_RANGE
     {
         Pos = MAP_APPFONT( 5, 45 );
-        Size = MAP_APPFONT( 30, 15 );
+        Size = MAP_APPFONT( 50, 13 );
         Text [en-US] = "Range";
     };
     FixedText FT_SCOPE
     {
-        Pos = MAP_APPFONT( 5, 65 );
-        Size = MAP_APPFONT( 30, 15 );
+        Pos = MAP_APPFONT( 5, 63 );
+        Size = MAP_APPFONT( 50, 13 );
         Text [en-US] = "Scope";
     };
     Edit ED_NAME
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 40, 25 );
-        Size = MAP_APPFONT( 155, 15 );
+        Pos = MAP_APPFONT( 60, 25 );
+        Size = MAP_APPFONT( 160, 13 );
         TabStop = TRUE;
     };
     Edit ED_RANGE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 40, 45 );
-        Size = MAP_APPFONT( 140, 15 );
+        Pos = MAP_APPFONT( 60, 43 );
+        Size = MAP_APPFONT( 145, 13 );
         TabStop = TRUE;
     };
     ImageButton RB_RANGE
     {
-        Pos = MAP_APPFONT ( 180 , 45 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 205 , 43 ) ;
+        Size = MAP_APPFONT ( 15 , 13 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     CheckBox BTN_PRINTAREA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 5 , 100 ) ;
-        Size = MAP_APPFONT ( 80 , 15 ) ;
+        Pos = MAP_APPFONT ( 5 , 94 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_CRITERIA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 5 , 120 ) ;
-        Size = MAP_APPFONT ( 60 , 15 ) ;
+        Pos = MAP_APPFONT ( 5 , 107 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_ROWHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 110, 120 ) ;
-        Size = MAP_APPFONT ( 82 , 15 ) ;
+        Pos = MAP_APPFONT ( 120, 107 ) ;
+        Size = MAP_APPFONT ( 92 , 10 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_COLHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 110 , 100 ) ;
-        Size = MAP_APPFONT ( 82 , 15 ) ;
+        Pos = MAP_APPFONT ( 120 , 94 ) ;
+        Size = MAP_APPFONT ( 92 , 10 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
     };
     ListBox LB_SCOPE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 40 , 65 );
-        Size = MAP_APPFONT ( 155 , 80 );
+        Pos = MAP_APPFONT ( 60 , 61 );
+        Size = MAP_APPFONT ( 160 , 80 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedLine FL_DIV
     {
-        Pos = MAP_APPFONT( 0, 95 );
-        Size = MAP_APPFONT(200, 3 );
+        Pos = MAP_APPFONT( 0, 91 );
+        Size = MAP_APPFONT(225, 3 );
     };
     String STR_DEFAULT_INFO
     {

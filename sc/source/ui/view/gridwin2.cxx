@@ -398,7 +398,7 @@ namespace {
 
 struct DPFieldPopupData : public ScCheckListMenuWindow::ExtendedData
 {
-    ScPivotParam    maDPParam;
+    ScDPLabelData   maLabels;
     ScDPObject*     mpDPObj;
     long            mnDim;
 };
@@ -457,17 +457,12 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 {
     // We need to get the list of field members.
     auto_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
-    pDPObj->FillLabelData(pDPData->maDPParam);
-    pDPData->mpDPObj = pDPObj;
-
     sal_uInt16 nOrient;
     pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
+    pDPObj->FillLabelData(pDPData->mnDim, pDPData->maLabels);
+    pDPData->mpDPObj = pDPObj;
 
-    if (pDPData->maDPParam.maLabelArray.size() <= static_cast<size_t>(pDPData->mnDim))
-        // out-of-bound dimension ID.  This should never happen!
-        return;
-
-    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = pDPData->maLabels;
 
     mpDPFieldPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
     mpDPFieldPopup->setName(OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot field member popup")));
@@ -525,7 +520,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         }
     }
 
-    sal_Bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
 
     Rectangle aCellRect(rScrPos, rScrSize);
     const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
@@ -557,9 +552,8 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         return;
 
     ScDPObject* pDPObj = pDPData->mpDPObj;
-    ScDPObject aNewDPObj(*pDPObj);
-    aNewDPObj.BuildAllDimensionMembers();
-    ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
+    pDPObj->BuildAllDimensionMembers();
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
 
     bool bIsDataLayout;
     OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
@@ -568,7 +562,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         return;
 
     // Build a map of layout names to original names.
-    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = pDPData->maLabels;
     MemNameMapType aMemNameMap;
     for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
            itr != itrEnd; ++itr)
@@ -606,7 +600,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     pDim->UpdateMemberVisibility(aResult);
 
     ScDBDocFunc aFunc(*pViewData->GetDocShell());
-    aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
+    aFunc.DataPilotUpdate(pDPObj, pDPObj, true, false);
 }
 
 void ScGridWindow::UpdateVisibleRange()

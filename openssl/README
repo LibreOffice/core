@@ -1,0 +1,7 @@
+Open Source toolkit implementing SSL and TLS.
+
+From [http://www.openssl.org/].
+
+SSL = Secure Sockets Layer (SSL v2/v3) protocol.
+TLS = Transport Layer Security (TLS v1) protocol.
+

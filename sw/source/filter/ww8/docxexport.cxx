@@ -80,8 +80,6 @@ using rtl::OUStringBuffer;
 
 using sw::mark::IMark;
 
-#define S( x ) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 AttributeOutputBase& DocxExport::AttrOutput() const
 {
     return *m_pAttrOutput;
@@ -135,7 +133,7 @@ void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xu
     if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-              it < end; ++it )
+              it != end; ++it )
         {
             IMark* pMark = (*it);
 
@@ -306,25 +304,17 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 
 rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
 {
-    rtl::OUString aFileName = rtl::OUStringBuffer()
-                                .appendAscii(RTL_CONSTASCII_STRINGPARAM("charts/chart"))
-                                .append(nCount)
-                                .appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
-                                .makeStringAndClear();
+    rtl::OUString aFileName = rtl::OUStringBuffer().append("charts/chart").append(nCount).append(".xml").makeStringAndClear();
 
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                    S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" ),
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
                     aFileName );
 
-    aFileName = rtl::OUStringBuffer()
-                  .appendAscii(RTL_CONSTASCII_STRINGPARAM("word/charts/chart"))
-                  .append(nCount)
-                  .appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
-                  .makeStringAndClear();
+    aFileName = rtl::OUStringBuffer().append("word/charts/chart").append(nCount).append(".xml").makeStringAndClear();
 
     ::sax_fastparser::FSHelperPtr pChartFS =
         m_pFilter->openFragmentStreamWithSerializer( aFileName,
-            S( "application/vnd.openxmlformats-officedocument.drawingml.chart" ) );
+            "application/vnd.openxmlformats-officedocument.drawingml.chart" );
 
     oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
     aChartExport.ExportContent();
@@ -459,12 +449,12 @@ void DocxExport::InitStyles()
 
     // setup word/styles.xml and the relations + content type
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" ),
-            S( "styles.xml" ) );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
+            "styles.xml" );
 
     ::sax_fastparser::FSHelperPtr pStylesFS =
-        m_pFilter->openFragmentStreamWithSerializer( S( "word/styles.xml" ),
-            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml" ) );
+        m_pFilter->openFragmentStreamWithSerializer( "word/styles.xml",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml" );
 
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pStylesFS );
@@ -482,12 +472,12 @@ void DocxExport::WriteFootnotesEndnotes()
     {
         // setup word/styles.xml and the relations + content type
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes" ),
-                S( "footnotes.xml" ) );
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+                "footnotes.xml" );
 
         ::sax_fastparser::FSHelperPtr pFootnotesFS =
-            m_pFilter->openFragmentStreamWithSerializer( S( "word/footnotes.xml" ),
-                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml" ) );
+            m_pFilter->openFragmentStreamWithSerializer( "word/footnotes.xml",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml" );
 
         // switch the serializer to redirect the output to word/footnotes.xml
         m_pAttrOutput->SetSerializer( pFootnotesFS );
@@ -503,12 +493,12 @@ void DocxExport::WriteFootnotesEndnotes()
     {
         // setup word/styles.xml and the relations + content type
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes" ),
-                S( "endnotes.xml" ) );
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+                "endnotes.xml" );
 
         ::sax_fastparser::FSHelperPtr pEndnotesFS =
-            m_pFilter->openFragmentStreamWithSerializer( S( "word/endnotes.xml" ),
-                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" ) );
+            m_pFilter->openFragmentStreamWithSerializer( "word/endnotes.xml",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" );
 
         // switch the serializer to redirect the output to word/endnotes.xml
         m_pAttrOutput->SetSerializer( pEndnotesFS );
@@ -526,12 +516,12 @@ void DocxExport::WritePostitFields()
     if ( m_pAttrOutput->HasPostitFields() )
     {
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" ),
-                S( "comments.xml" ) );
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
+                "comments.xml" );
 
         ::sax_fastparser::FSHelperPtr pPostitFS =
-            m_pFilter->openFragmentStreamWithSerializer( S( "word/comments.xml" ),
-                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" ) );
+            m_pFilter->openFragmentStreamWithSerializer( "word/comments.xml",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" );
 
         pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces( pPostitFS ));
         m_pAttrOutput->SetSerializer( pPostitFS );
@@ -547,11 +537,11 @@ void DocxExport::WriteNumbering()
         return; // no numbering is used
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-        S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" ),
-        S( "numbering.xml" ) );
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+        "numbering.xml" );
 
-    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/numbering.xml" ),
-        S( "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml" ) );
+    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( "word/numbering.xml",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml" );
 
     // switch the serializer to redirect the output to word/nubering.xml
     m_pAttrOutput->SetSerializer( pNumberingFS );
@@ -577,29 +567,27 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     ::sax_fastparser::FSHelperPtr pFS;
     if ( bHeader )
     {
-        OUString aName( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("header"))
-            .append( ++m_nHeaders ).appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
-            .makeStringAndClear() );
+        OUString aName( OUStringBuffer().append("header").append( ++m_nHeaders ).append(".xml").makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("word/")).append( aName ).makeStringAndClear(),
-                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" );
 
         pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces( pFS ));
     }
     else
     {
-        OUString aName( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("footer")).append( ++m_nFooters ).appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml")).makeStringAndClear() );
+        OUString aName( OUStringBuffer().append("footer").append( ++m_nFooters ).append(".xml").makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("word/")).append( aName ).makeStringAndClear(),
-                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" );
 
         pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces( pFS ));
     }
@@ -636,12 +624,12 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
 void DocxExport::WriteFonts()
 {
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" ),
-            S( "fontTable.xml" ) );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
+            "fontTable.xml" );
 
     ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
-            S( "word/fontTable.xml" ),
-            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" ) );
+            "word/fontTable.xml",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" );
 
     pFS->startElementNS( XML_w, XML_fonts,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -681,12 +669,12 @@ void DocxExport::WriteSettings()
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" ),
-            S( "settings.xml" ) );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
+            "settings.xml" );
 
     ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
-            S( "word/settings.xml" ),
-            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" ) );
+            "word/settings.xml",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" );
 
     pFS->startElementNS( XML_w, XML_settings,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -812,12 +800,12 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     WriteProperties( );
 
     // relations for the document
-    m_pFilter->addRelation( S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ),
-            S( "word/document.xml" ) );
+    m_pFilter->addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "word/document.xml" );
 
     // the actual document
-    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/document.xml" ),
-            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) );
+    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( "word/document.xml",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" );
 
     // the DrawingML access
     m_pDrawingML = new oox::drawingml::DrawingML( m_pDocumentFS, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );

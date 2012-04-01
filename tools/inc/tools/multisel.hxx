@@ -64,7 +64,6 @@ private:
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
     TOOLS_DLLPRIVATE sal_Bool           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
-    TOOLS_DLLPRIVATE long           ImplBwdUnselected();
 #endif
 
 public:
@@ -91,7 +90,6 @@ public:
     void            SetTotalRange( const Range& rTotRange );
     void            Insert( long nIndex, long nCount = 1 );
     void            Remove( long nIndex );
-    void            Append( long nCount = 1 );
 
     const Range&    GetTotalRange() const { return aTotRange; }
     sal_Bool            IsCurValid() const { return bCurValid; }
@@ -99,7 +97,6 @@ public:
     long            FirstSelected( sal_Bool bInverse = sal_False );
     long            LastSelected();
     long            NextSelected();
-    long            PrevSelected();
 
     size_t          GetRangeCount() const { return aSels.size(); }
     const Range&    GetRange( size_t nRange ) const {

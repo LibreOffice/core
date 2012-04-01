@@ -74,9 +74,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
     * Disposes Spreadsheet document.
     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        //add this lines after synchronisation
-    //log.println("    disposing xSheetDoc ");
-        //DesktopTools.closeDoc(xSheetDoc);
+        util.DesktopTools.closeDoc(xSheetDoc);
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,

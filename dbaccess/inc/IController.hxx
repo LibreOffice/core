@@ -130,6 +130,9 @@ namespace dbaui
         /** allows interception of user input, aka mouse clicks and key events
         */
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) = 0;
+
+    protected:
+        ~IController() {}
     };
 }
 #endif // DBAUI_ICONTROLLER_HXX

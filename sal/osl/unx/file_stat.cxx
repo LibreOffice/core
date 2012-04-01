@@ -224,11 +224,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
     if (osl_File_E_None != osl_error)
         return osl_error;
 
-#if defined(__GNUC__) && (__GNUC__ < 3)
-    struct ::stat file_stat;
-#else
     struct stat file_stat;
-#endif
 
     bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl->getFileType());
     if (bStatNeeded && (0 != osl::lstat(file_path, file_stat)))
@@ -460,11 +456,7 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
                 pB->m_ustrFilePath->buffer, pB->m_ustrFilePath->length ) == 0)
         return sal_True;
 
-#if defined(__GNUC__) && (__GNUC__ < 3)
-    struct ::stat a_stat, b_stat;
-#else
     struct stat a_stat, b_stat;
-#endif
 
     if (osl::lstat(rtl::OUString(pA->m_ustrFilePath), a_stat) != 0 ||
         osl::lstat(rtl::OUString(pB->m_ustrFilePath), b_stat) != 0)

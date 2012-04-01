@@ -32,7 +32,7 @@
 // string ids (relative to other resources, that's why not unique)
 #define STR_MYSQL_ODBC          1
 #define STR_MYSQL_JDBC          2
-#define STR_ADABAS              3
+    // FREE
 #define STR_ORACLE_JDBC         4
 #define STR_JDBC                5
 #define STR_ODBC                6

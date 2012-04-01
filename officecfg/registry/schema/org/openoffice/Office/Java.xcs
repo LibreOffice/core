@@ -34,7 +34,7 @@
 			<info>
 				<desc >Provides information used to initialize a Java Virtual Machine. </desc>
 			</info>
-			<prop oor:name="Home" oor:type="xs:string">
+			<prop oor:name="Home" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on Java installation path -->
@@ -45,7 +45,7 @@
 				</info>
 				<value>NULL</value>
 			</prop>
-			<prop oor:name="Version" oor:type="xs:string">
+			<prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on version used -->
@@ -56,7 +56,7 @@
 				</info>
 				<value>NULL</value>
 			</prop>
-			<prop oor:name="RunTimeLib" oor:type="xs:string">
+			<prop oor:name="RunTimeLib" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -66,7 +66,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="SystemClassPath" oor:type="xs:string">
+			<prop oor:name="SystemClassPath" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -76,7 +76,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="Enable" oor:type="xs:boolean">
+			<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -86,7 +86,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="Security" oor:type="xs:boolean">
+			<prop oor:name="Security" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
@@ -122,7 +122,7 @@
 					</enumeration>
 				</constraints>
 			</prop>
-			<prop oor:name="UserClassPath" oor:type="xs:string">
+			<prop oor:name="UserClassPath" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
@@ -282,7 +282,7 @@
 					</enumeration>
 				</constraints>
 			</prop>
-			<prop oor:name="JavaLibPath" oor:type="xs:string">
+			<prop oor:name="JavaLibPath" oor:type="xs:string" oor:nillable="false">
 				<!-- Platform: UNIX -->
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
@@ -307,7 +307,7 @@
 				<deprecated/>
 				<desc>Provides information which are used by jvmsetup. </desc>
 			</info>
-			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
+			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -316,7 +316,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="VerifiedVersion" oor:type="xs:string">
+			<prop oor:name="VerifiedVersion" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -325,7 +325,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="Version" oor:type="xs:string">
+			<prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -334,7 +334,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="Vendor" oor:type="xs:string">
+			<prop oor:name="Vendor" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -343,7 +343,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="RequiredVersion" oor:type="xs:string">
+			<prop oor:name="RequiredVersion" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -352,7 +352,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="InstallationPackage" oor:type="xs:string">
+			<prop oor:name="InstallationPackage" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -361,7 +361,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ExcludeVersion" oor:type="xs:string">
+			<prop oor:name="ExcludeVersion" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -370,7 +370,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="AdditionalSearchPath" oor:type="xs:string">
+			<prop oor:name="AdditionalSearchPath" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
@@ -379,7 +379,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="AdditionalClasspath" oor:type="xs:string">
+			<prop oor:name="AdditionalClasspath" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>

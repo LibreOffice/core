@@ -559,27 +559,6 @@ Sequence< Any > Content::getPropertyValues(
 }
 
 //=========================================================================
-Sequence< Any > Content::getPropertyValues(
-                            const Sequence< sal_Int32 >& nPropertyHandles )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Reference< XRow > xRow = getPropertyValuesInterface( nPropertyHandles );
-
-    sal_Int32 nCount = nPropertyHandles.getLength();
-    Sequence< Any > aValues( nCount );
-
-    if ( xRow.is() )
-    {
-        Any* pValues = aValues.getArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-            pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
-    }
-
-    return aValues;
-}
-
-//=========================================================================
 Reference< XRow > Content::getPropertyValuesInterface(
                             const Sequence< rtl::OUString >& rPropertyNames )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -596,39 +575,6 @@ Reference< XRow > Content::getPropertyValuesInterface(
 
         rProp.Name       = pNames[ n ];
         rProp.Handle     = -1; // n/a
-//        rProp.Type       =
-//        rProp.Attributes = ;
-    }
-
-    Command aCommand;
-    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aProps;
-
-    Any aResult = m_xImpl->executeCommand( aCommand );
-
-    Reference< XRow > xRow;
-    aResult >>= xRow;
-    return xRow;
-}
-
-//=========================================================================
-Reference< XRow > Content::getPropertyValuesInterface(
-                            const Sequence< sal_Int32 >& nPropertyHandles )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    sal_Int32 nCount = nPropertyHandles.getLength();
-    Sequence< Property > aProps( nCount );
-    Property* pProps = aProps.getArray();
-
-    const sal_Int32* pHandles  = nPropertyHandles.getConstArray();
-
-    for ( sal_Int32 n = 0; n< nCount; ++n )
-    {
-        Property& rProp = pProps[ n ];
-
-        rProp.Name       = rtl::OUString(); // n/a
-        rProp.Handle     = pHandles[ n ];
 //        rProp.Type       =
 //        rProp.Attributes = ;
     }
@@ -677,54 +623,6 @@ Sequence< Any > Content::setPropertyValues(
 
         rProp.Name   = pNames[ n ];
         rProp.Handle = -1; // n/a
-        rProp.Value  = pValues[ n ];
-//        rProp.State  = ;
-    }
-
-    Command aCommand;
-    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aProps;
-
-    Any aResult = m_xImpl->executeCommand( aCommand );
-
-    Sequence< Any > aErrors;
-    aResult >>= aErrors;
-    return aErrors;
-}
-
-//=========================================================================
-Sequence< Any > Content::setPropertyValues(
-                            const Sequence< sal_Int32 >& nPropertyHandles,
-                                const Sequence< Any >& rValues )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    if ( nPropertyHandles.getLength() != rValues.getLength() )
-    {
-        ucbhelper::cancelCommandExecution(
-            makeAny( IllegalArgumentException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "Length of property handles sequence and value "
-                            "sequence are unequal!" )),
-                        get(),
-                        -1 ) ),
-            m_xImpl->getEnvironment() );
-        // Unreachable
-    }
-
-    sal_Int32 nCount = rValues.getLength();
-    Sequence< PropertyValue > aProps( nCount );
-    PropertyValue* pProps = aProps.getArray();
-
-    const sal_Int32* pHandles = nPropertyHandles.getConstArray();
-    const Any*       pValues  = rValues.getConstArray();
-
-    for ( sal_Int32 n = 0; n< nCount; ++n )
-    {
-        PropertyValue& rProp = pProps[ n ];
-
-        rProp.Name   = rtl::OUString(); // n/a
-        rProp.Handle = pHandles[ n ];
         rProp.Value  = pValues[ n ];
 //        rProp.State  = ;
     }
@@ -1137,69 +1035,6 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
-                                makeAny(
-                                    InsertCommandArgument(
-                                        rData.is() ? rData : new EmptyInputStream,
-                                        sal_False /* ReplaceExisting */ ) ) );
-    aNewContent.m_xImpl->inserted();
-
-    rNewContent = aNewContent;
-    return sal_True;
-}
-
-//=========================================================================
-sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
-                                    const Sequence< sal_Int32 >&
-                                        nPropertyHandles,
-                                    const Sequence< Any >& rPropertyValues,
-                                    const Reference< XInputStream >& rData,
-                                    Content& rNewContent )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    if ( rContentType.isEmpty() )
-        return sal_False;
-
-    // First, try it using "createNewContent" command -> the "new" way.
-    ContentInfo aInfo;
-    aInfo.Type = rContentType;
-    aInfo.Attributes = 0;
-
-    Command aCommand;
-    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aInfo;
-
-    Reference< XContent > xNew;
-    try
-    {
-        m_xImpl->executeCommand( aCommand ) >>= xNew;
-    }
-    catch ( RuntimeException const & )
-    {
-        throw;
-    }
-    catch ( Exception const & )
-    {
-    }
-
-    if ( !xNew.is() )
-    {
-        // Second, try it using XContentCreator interface -> the "old"
-        // way (not providing the chance to supply an XCommandEnvironment.
-        Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
-
-        if ( !xCreator.is() )
-            return sal_False;
-
-        xNew = xCreator->createNewContent( aInfo );
-
-        if ( !xNew.is() )
-            return sal_False;
-    }
-
-    Content aNewContent( xNew, m_xImpl->getEnvironment() );
-    aNewContent.setPropertyValues( nPropertyHandles, rPropertyValues );
     aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                 makeAny(
                                     InsertCommandArgument(

@@ -79,10 +79,8 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
 {
     if(!aDBData.sDataSource.isEmpty() || !aDBData.sCommand.isEmpty())
     {
-        sName =  aDBData.sDataSource;
-        sName += DB_DELIM;
-        sName += (String)aDBData.sCommand;
-        sName += DB_DELIM;
+        sName = rtl::OUStringBuffer(aDBData.sDataSource).append(DB_DELIM).
+            append(aDBData.sCommand).append(DB_DELIM).makeStringAndClear();
     }
     sName += GetColumnName();
 }
@@ -99,7 +97,7 @@ SwFieldType* SwDBFieldType::Copy() const
 }
 
 //------------------------------------------------------------------------------
-const String& SwDBFieldType::GetName() const
+const rtl::OUString& SwDBFieldType::GetName() const
 {
     return sName;
 }
@@ -216,9 +214,9 @@ void SwDBField::InitContent()
 {
     if (!IsInitialized())
     {
-        aContent = '<';
-        aContent += ((SwDBFieldType*)GetTyp())->GetColumnName();
-        aContent += '>';
+        aContent = rtl::OUStringBuffer().append('<')
+            .append(((const SwDBFieldType*)GetTyp())->GetColumnName())
+            .append('>').makeStringAndClear();
     }
 }
 
@@ -365,7 +363,7 @@ void SwDBField::Evaluate()
         else
         {
             // Bei Strings sal_True wenn Laenge > 0 sonst sal_False
-            SetValue(aContent.Len() ? 1 : 0);
+            SetValue(aContent.isEmpty() ? 0 : 1);
         }
     }
     bInitialized = sal_True;
@@ -375,9 +373,9 @@ void SwDBField::Evaluate()
     Beschreibung: Namen erfragen
  --------------------------------------------------------------------*/
 
-const String& SwDBField::GetPar1() const
+const rtl::OUString& SwDBField::GetPar1() const
 {
-    return ((SwDBFieldType*)GetTyp())->GetName();
+    return ((const SwDBFieldType*)GetTyp())->GetName();
 }
 
 sal_uInt16 SwDBField::GetSubType() const
@@ -470,10 +468,10 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR1:
-        ::GetString( rAny, aContent );
+        rAny >>= aContent;
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, sFieldCode );
+        rAny >>= sFieldCode;
     break;
     default:
         OSL_FAIL("illegal property");
@@ -651,12 +649,12 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     Beschreibung: Bedingung
  --------------------------------------------------------------------*/
 
-const String& SwDBNextSetField::GetPar1() const
+const rtl::OUString& SwDBNextSetField::GetPar1() const
 {
     return aCond;
 }
 
-void SwDBNextSetField::SetPar1(const String& rStr)
+void SwDBNextSetField::SetPar1(const rtl::OUString& rStr)
 {
     aCond = rStr;
 }
@@ -681,7 +679,7 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aCond );
+        rAny >>= aCond;
         break;
     default:
         bRet = SwDBNameInfField::PutValue( rAny, nWhichId );
@@ -754,12 +752,12 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     Beschreibung: LogDBName
  --------------------------------------------------------------------*/
 
-const String& SwDBNumSetField::GetPar1() const
+const rtl::OUString& SwDBNumSetField::GetPar1() const
 {
     return aCond;
 }
 
-void SwDBNumSetField::SetPar1(const String& rStr)
+void SwDBNumSetField::SetPar1(const rtl::OUString& rStr)
 {
     aCond = rStr;
 }
@@ -768,12 +766,12 @@ void SwDBNumSetField::SetPar1(const String& rStr)
     Beschreibung: Bedingung
  --------------------------------------------------------------------*/
 
-String SwDBNumSetField::GetPar2() const
+rtl::OUString SwDBNumSetField::GetPar2() const
 {
     return aPar2;
 }
 
-void SwDBNumSetField::SetPar2(const String& rStr)
+void SwDBNumSetField::SetPar2(const rtl::OUString& rStr)
 {
     aPar2 = rStr;
 }
@@ -801,7 +799,7 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aCond );
+        rAny >>= aCond;
         break;
     case FIELD_PROP_FORMAT:
         {

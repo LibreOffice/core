@@ -550,6 +550,11 @@ GtkData::~GtkData()
     osl_destroyMutex( m_aDispatchMutex );
 }
 
+void GtkData::Dispose()
+{
+    deInitNWF();
+}
+
 void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     /* #i33212# only enter g_main_context_iteration in one thread at any one
@@ -653,7 +658,7 @@ void GtkData::Init()
 
     // Set consistant name of the root accessible
     rtl::OUString aAppName = Application::GetAppName();
-    if( aAppName.getLength() > 0 )
+    if( !aAppName.isEmpty() )
     {
         rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
         g_set_prgname(aPrgName.getStr());

@@ -48,6 +48,7 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     : mrParent(rParent)
     , mnId(0)
     , meType(VALUESETITEM_NONE)
+    , mbVisible(true)
     , mpData(NULL)
     , mpxAcc(NULL)
 {
@@ -436,16 +437,14 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( ((sal_uInt16)-1) != nItemId )
+    if ( nItemId )
     {
         const size_t nItemPos = mpParent->GetItemPos( nItemId );
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = (*mpParent->mpImpl->mpItemList)[ nItemPos ];
-
-            if( !pItem->maRect.IsEmpty() )
-               xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            ValueSetItem *const pItem = mpParent->mItemList[nItemPos];
+            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
         }
     }
 
@@ -1110,7 +1109,7 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->maRect );
+        Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
         Point       aOrigin;
         Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
@@ -1149,7 +1148,8 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
 
     if( mpParent )
     {
-        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( mpParent->maRect.TopLeft() ) );
+        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( aPos ) );
 
         aRet.X = aScreenPos.X();
         aRet.Y = aScreenPos.Y();

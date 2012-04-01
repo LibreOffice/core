@@ -63,6 +63,8 @@ public:
         const rtl::OUString &rUserData) = 0;
 
 protected:
+    ~FiltersTest() {}
+
     void recursiveScan(
         const rtl::OUString &rFilter,
         const rtl::OUString &rURL,

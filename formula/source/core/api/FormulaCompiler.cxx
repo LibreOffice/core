@@ -271,7 +271,7 @@ void FormulaCompiler::OpCodeMap::putExternalSoftly( const String & rSymbol, cons
 {
     bool bOk = mpReverseExternalHashMap->insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
     if (bOk)
-        mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn)).second;
+        mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn));
 }
 uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,const uno::Sequence< ::rtl::OUString >& rNames ) const
 {

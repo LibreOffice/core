@@ -27,32 +27,27 @@
 
 package com.sun.star.uno;
 
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class Any_Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] { "testAnyAny", "testComplete" };
-    }
-
-    public void testAnyAny() {
+public final class Any_Test {
+    @Test public void testAnyAny() {
         boolean caught = false;
         try {
             new Any(Type.ANY, null);
         } catch (IllegalArgumentException e) {
             caught = true;
         }
-        assure(caught);
+        assertTrue(caught);
     }
 
-    public void testComplete() {
-        assure(Any.complete(Any.VOID) == Any.VOID);
-        assure(
-            Any.complete(new Integer(10)).equals(
-                new Any(Type.LONG, new Integer(10))));
-        assure(
-            Any.complete(null).equals(
-                new Any(new Type(XInterface.class), null)));
+    @Test public void testComplete() {
+        assertSame(Any.VOID, Any.complete(Any.VOID));
+        assertEquals(
+            new Any(Type.LONG, new Integer(10)), Any.complete(new Integer(10)));
+        assertEquals(
+            new Any(new Type(XInterface.class), null), Any.complete(null));
         XInterface x = new XInterface() {};
-        assure(Any.complete(x).equals(new Any(new Type(XInterface.class), x)));
+        assertEquals(new Any(new Type(XInterface.class), x), Any.complete(x));
     }
 }

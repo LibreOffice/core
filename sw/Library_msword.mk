@@ -31,15 +31,11 @@ $(eval $(call gb_Library_Library,msword))
 $(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
 
 $(eval $(call gb_Library_set_include,msword,\
-    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(WORKDIR)/inc/sw/sdi \
-    -I$(WORKDIR)/Misc/sw/ \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
-    -I$(WORKDIR)/oox/inc/ \
-    -I$(OUTDIR)/inc/sw \
 ))
 
 $(eval $(call gb_Library_add_api,msword,\
@@ -94,13 +90,13 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/rtfexportfilter \
     sw/source/filter/ww8/rtfimportfilter \
     sw/source/filter/ww8/rtfsdrexport \
+    sw/source/filter/ww8/rtfstringbuffer \
     sw/source/filter/ww8/WW8FFData \
     sw/source/filter/ww8/WW8FibData \
     sw/source/filter/ww8/WW8Sttbf \
     sw/source/filter/ww8/WW8TableInfo \
     sw/source/filter/ww8/fields \
     sw/source/filter/ww8/styles \
-    sw/source/filter/ww8/tracer \
     sw/source/filter/ww8/writerhelper \
     sw/source/filter/ww8/writerwordglue \
     sw/source/filter/ww8/wrtw8esh \

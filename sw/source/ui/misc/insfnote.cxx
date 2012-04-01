@@ -97,31 +97,31 @@ void SwInsFootNoteDlg::Apply()
     bFootnote = aFtnBtn.IsChecked();
 }
 
-IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberCharHdl)
 {
     aNumberCharEdit.GrabFocus();
     aOkBtn.Enable( aNumberCharEdit.GetText().Len() || bExtCharAvailable );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberCharHdl)
 
-IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberEditHdl)
 {
     aNumberCharBtn.Check( sal_True );
     aOkBtn.Enable( 0 != aNumberCharEdit.GetText().Len() );
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberEditHdl)
 
-IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberAutoBtnHdl)
 {
     aOkBtn.Enable( sal_True );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberAutoBtnHdl)
 
-IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
 {
     aNumberCharBtn.Check( sal_True );
 

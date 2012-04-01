@@ -119,8 +119,8 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
         m_xCfgListener = new WeakChangesListener(this);
         xBroadcaster->addChangesListener(m_xCfgListener);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }

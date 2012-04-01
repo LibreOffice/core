@@ -42,7 +42,6 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdev.hxx>
 
 
 namespace cppcanvas

@@ -380,7 +380,7 @@ void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
 {
     if ( mnActDeltaX || mnActDeltaY )
     {

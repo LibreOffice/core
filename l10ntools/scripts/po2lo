@@ -186,7 +186,7 @@ def main():
         if opt in ("-s", "--skipsource"):
             pass
         elif opt in ("-i", "--input"):
-            options.input = arg.strip('/')
+            options.input = arg
         elif opt in ("-o", "--output"):
             options.output = arg
         elif opt in ("-l", "--language"):

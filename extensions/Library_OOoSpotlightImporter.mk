@@ -35,9 +35,7 @@ $(eval $(call gb_Library_add_objcobjects,OOoSpotlightImporter,\
 	extensions/source/macosx/spotlight/OOoContentDataParser \
 	extensions/source/macosx/spotlight/OOoMetaDataParser \
 	extensions/source/macosx/spotlight/OOoSpotlightImporter \
-	extensions/source/macosx/spotlight/ioapi \
 	extensions/source/macosx/spotlight/main \
-	extensions/source/macosx/spotlight/unzip \
 ))
 
 $(eval $(call gb_Library_add_ldflags,OOoSpotlightImporter,\

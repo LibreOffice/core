@@ -34,11 +34,6 @@
 #include <vcl/virdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// predeclarations
-
-class VirtualDevice;
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
@@ -75,15 +70,18 @@ namespace sdr
             void ImpRestoreBackground(const Region& rRegionPixel) const;
             void ImpSaveBackground(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L);
 
-        public:
             // when handing over another OverlayManager at construction, the OverlayObjects
             // will be taken over from it. The new one will have added all OverlayObjects
             // while the handed over one will have none
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
-                OverlayManager* pOldOverlayManager = 0,
-                bool bRefreshWithPreRendering = false);
+                OverlayManager* pOldOverlayManager,
+                bool bRefreshWithPreRendering);
             virtual ~OverlayManagerBuffered();
+
+        public:
+            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
+                OverlayManager* pOldOverlayManager = 0, bool bRefreshWithPreRendering = false);
 
             // complete redraw
             virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const;
@@ -102,7 +100,6 @@ namespace sdr
 
             // access to RefreshWithPreRendering Flag
             bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }
-            void SetRefreshWithPreRendering(bool bNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr

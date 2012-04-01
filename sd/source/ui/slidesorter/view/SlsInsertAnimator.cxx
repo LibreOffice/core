@@ -54,6 +54,9 @@ public:
     virtual view::SlideSorterView& GetView (void) const = 0;
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
     virtual SharedSdWindow GetContentWindow (void) = 0;
+
+protected:
+    ~AnimatorAccess() {}
 };
 
 

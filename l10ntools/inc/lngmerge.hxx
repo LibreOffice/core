@@ -25,18 +25,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// local includes
-#include "export.hxx"
+
+#include "sal/config.h"
+
+#include <iosfwd>
 #include <vector>
 
-typedef ::std::vector< rtl::OString* > LngLineList;
+#include "export.hxx"
+
+typedef std::vector< rtl::OString* > LngLineList;
 
 #define LNG_OK              0x0000
-#define LNG_FILE_NOTFOUND   0x0001
-#define LNG_COULD_NOT_OPEN  0x0002
-#define SDF_OK              0x0003
-#define SDF_FILE_NOTFOUND   0x0004
-#define SDF_COULD_NOT_OPEN  0x0005
+#define LNG_COULD_NOT_OPEN  0x0001
+#define SDF_OK              0x0002
+#define SDF_COULD_NOT_OPEN  0x0003
 
 //
 // class LngParser
@@ -55,8 +57,8 @@ private:
 
     bool isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in);
     void ReadLine(const rtl::OString &rLine_in,
-        ByteStringHashMap &rText_inout);
-    void WriteSDF(SvFileStream &aSDFStream, ByteStringHashMap &rText_inout,
+        OStringHashMap &rText_inout);
+    void WriteSDF(std::ofstream &aSDFStream, OStringHashMap &rText_inout,
         const rtl::OString &rPrj, const rtl::OString &rRoot,
         const rtl::OString &rActFileName, const rtl::OString &rID);
 public:

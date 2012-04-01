@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "sal/main.h"
+
 #if defined __GNUC__
 #pragma GCC system_header
 #elif defined __SINPRO_CC
@@ -34,18 +36,8 @@ int yycolumn = 1;
 #define YY_USER_ACTION yycolumn += yyleng;
 
 /* external functions (C++ code, declared as extren "C" */
-extern int WorkOnTokenSet( int, char* );
-extern int InitCfgExport( char * , char *);
-extern int EndCfgExport();
-extern int GetError();
-extern int SetError();
-extern char *GetOutputFile( int argc, char* argv[]);
-extern FILE *GetCfgFile();
-extern int isQuiet();
-extern void removeTempFile();
-extern char* getFilename();
-/* forwards */
-void YYWarning();
+extern void workOnTokenSet( int, char* );
+extern FILE * init(int, char **);
 
 int bText=0;
 %}
@@ -58,28 +50,28 @@ int bText=0;
 
 \<[^\>]*"xml:lang="\""x-no-translate"\"[^\<]*\/\>	{
 	bText = 0;
-	WorkOnTokenSet( CFG_TOKEN_NO_TRANSLATE, yytext );
+	workOnTokenSet( CFG_TOKEN_NO_TRANSLATE, yytext );
 }
 
 \<.*\/\> {
 	bText = 0;
-	WorkOnTokenSet( ANYTOKEN, yytext );
+	workOnTokenSet( ANYTOKEN, yytext );
 }
 
 \<[^\>]*"xml:lang="\".*\"[^\<]*\>	{
 	bText = 1;
-	WorkOnTokenSet( CFG_TEXT_START, yytext );
+	workOnTokenSet( CFG_TEXT_START, yytext );
 }
 
 
 \<[^\/\!][^\>]*\>	{
 	bText = 0;
-	WorkOnTokenSet( CFG_TAG, yytext );
+	workOnTokenSet( CFG_TAG, yytext );
 }
 
 "<!"DOCTYPE[^\>]*\>	{
 	bText = 0;
-	WorkOnTokenSet( CFG_TAG, yytext );
+	workOnTokenSet( CFG_TAG, yytext );
 }
 
 
@@ -89,8 +81,8 @@ int bText=0;
 	pChar[1] = 0x00;
 	pChar[0] = c3;
 
-	WorkOnTokenSet( COMMEND, yytext );
-	WorkOnTokenSet( COMMEND, pChar );
+	workOnTokenSet( COMMEND, yytext );
+	workOnTokenSet( COMMEND, pChar );
 
 	for(;;) {
 		if ( c3 == EOF )
@@ -101,29 +93,29 @@ int bText=0;
 		c2 = c3;
 		c3 = input();
 		pChar[0] = c3;
-		WorkOnTokenSet( COMMEND, pChar );
+		workOnTokenSet( COMMEND, pChar );
 	}
 }
 
 \<\/[^\>]*\> {
 	bText = 0;
-	WorkOnTokenSet( CFG_CLOSETAG, yytext );
+	workOnTokenSet( CFG_CLOSETAG, yytext );
 }
 
 \<[^\>\!]*\> {
 	bText = 0;
 	if ( yytext[ 1 ] == '!' && yytext[ 2 ] == '-' && yytext[ 3 ] == '-' )
-		WorkOnTokenSet( COMMEND, yytext );
+		workOnTokenSet( COMMEND, yytext );
 	else
-		WorkOnTokenSet( CFG_UNKNOWNTAG, yytext );
+		workOnTokenSet( CFG_UNKNOWNTAG, yytext );
 }
 
 .|\n {
     yycolumn = 1;
 	if ( bText == 1 )
-		WorkOnTokenSet( CFG_TEXTCHAR, yytext );
+		workOnTokenSet( CFG_TEXTCHAR, yytext );
 	else
-		WorkOnTokenSet( UNKNOWNCHAR, yytext );
+		workOnTokenSet( UNKNOWNCHAR, yytext );
 }
 
 
@@ -156,63 +148,11 @@ void yyerror ( const char *s )
 	/* write error to stderr */
 	fprintf( stderr,
 		"Error: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
-	SetError();
+	exit(EXIT_FAILURE);
 }
 
-/*****************************************************************************/
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char* argv[])
-/*****************************************************************************/
-{
-	/* error level */
-	int nRetValue = 0;
-	char *pOutput;
-	FILE *pFile;
-
-	pOutput = GetOutputFile( argc, argv );
-
-    if ( !pOutput ) {
-		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-L l1,l2,...]\n" );
-		fprintf( stdout, " Prj:      Project\n" );
-		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
-		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
-		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
-		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-        fprintf( stdout, " -e: Disable writing errorlog\n" );
-		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
-		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
-		fprintf( stdout, " -f: force extraction and merge even if only one language is existent\n" );
-		fprintf( stdout, " -g[:dtd]: enables generation of properties (dtds if :dtd is set) - in this case FileOut is the output path\n" );
-		fprintf( stdout, " -d: enables generation of *.don if work is done\n" );
-		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
-		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US...)\n" );
-		return 1;
-	}
-
-	pFile = GetCfgFile();
-	InitCfgExport( pOutput , getFilename() );
-	if ( !pFile )
-		return 1;
-
-   	yyin = pFile;
-
-	/* create global instance of class CfgExport */
-	//InitCfgExport( pOutput );
-
-	/* start parser */
-   	yylex();
-
-	/* get error info. and end export */
-	nRetValue = GetError();
-	EndCfgExport();
-
-    
-    removeTempFile();
-/* return error level */
-	return nRetValue;
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+    yyin = init(argc, argv);
+    yylex();
+    return EXIT_SUCCESS;
 }
-
-

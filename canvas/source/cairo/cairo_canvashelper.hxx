@@ -152,13 +152,13 @@ namespace cairocanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
             fillPolyPolygon( const ::com::sun::star::rendering::XCanvas*            pCanvas,
                              const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::rendering::XPolyPolygon2D >&     xPolyPolygon,
+                                     ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                              const ::com::sun::star::rendering::ViewState&          viewState,
                              const ::com::sun::star::rendering::RenderState&        renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
             fillTexturedPolyPolygon( const ::com::sun::star::rendering::XCanvas*            pCanvas,
                                      const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::rendering::XPolyPolygon2D >&     xPolyPolygon,
+                                             ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const ::com::sun::star::rendering::ViewState&          viewState,
                                      const ::com::sun::star::rendering::RenderState&        renderState,
                                      const ::com::sun::star::uno::Sequence<
@@ -172,7 +172,7 @@ namespace cairocanvas
                                           const ::com::sun::star::uno::Sequence<
                                                   ::com::sun::star::rendering::Texture >&       textures,
                                           const ::com::sun::star::uno::Reference<
-                                                  ::com::sun::star::geometry::XMapping2D >&         xMapping );
+                                                  ::com::sun::star::geometry::XMapping2D >&     xMapping );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > SAL_CALL
             createFont( const ::com::sun::star::rendering::XCanvas*             pCanvas,
@@ -212,7 +212,7 @@ namespace cairocanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
             drawBitmapModulated( const ::com::sun::star::rendering::XCanvas*        pCanvas,
                                  const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XBitmap >&        xBitmap,
+                                         ::com::sun::star::rendering::XBitmap >&    xBitmap,
                                  const ::com::sun::star::rendering::ViewState&      viewState,
                                  const ::com::sun::star::rendering::RenderState&    renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >
@@ -272,14 +272,13 @@ namespace cairocanvas
             LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
         };
 
-    void doPolyPolygonPath( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                  Operation aOperation,
-                  bool bNoLineJoin = false,
-                  const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
-                  ::cairo::Cairo* pCairo=NULL ) const;
+        void doPolyPolygonPath( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
+                                Operation aOperation,
+                                bool bNoLineJoin = false,
+                                const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
+                                ::cairo::Cairo* pCairo=NULL ) const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-    implDrawBitmapSurface(
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > implDrawBitmapSurface(
                    const ::com::sun::star::rendering::XCanvas*      pCanvas,
                    const ::cairo::SurfaceSharedPtr&                 pSurface,
                    const ::com::sun::star::rendering::ViewState&    viewState,
@@ -290,7 +289,7 @@ namespace cairocanvas
 
         bool repaint( const ::cairo::SurfaceSharedPtr& pSurface,
               const ::com::sun::star::rendering::ViewState& viewState,
-              const ::com::sun::star::rendering::RenderState&   renderState );
+              const ::com::sun::star::rendering::RenderState& renderState );
 
     protected:
         /** Surface provider
@@ -312,9 +311,9 @@ namespace cairocanvas
 
         boost::shared_ptr<VirtualDevice> mpVirtualDevice;
 
-    void useStates( const ::com::sun::star::rendering::ViewState& viewState,
-            const ::com::sun::star::rendering::RenderState& renderState,
-            bool setColor );
+        void useStates( const ::com::sun::star::rendering::ViewState& viewState,
+                        const ::com::sun::star::rendering::RenderState& renderState,
+                        bool setColor );
 
         /// When true, content is able to represent alpha
         bool mbHaveAlpha;

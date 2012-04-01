@@ -48,14 +48,13 @@ namespace scripting_runtimemgr
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
 
 /**
  * Class responsible for managing the various ScriptRuntime implementations.
  */
 class ScriptRuntimeManager : public
-    ::cppu::WeakImplHelper3< dcsssf::runtime::XScriptInvocation, css::lang::XServiceInfo,
-    dcsssf::runtime::XScriptNameResolver >
+    ::cppu::WeakImplHelper3< ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation, css::lang::XServiceInfo,
+    ::drafts::com::sun::star::script::framework::runtime::XScriptNameResolver >
 {
 public:
     explicit ScriptRuntimeManager(
@@ -128,17 +127,17 @@ public:
      same as the documentStorageID.
      * @return the resolved URI
      */
-    virtual css::uno::Reference< dcsssf::storage::XScriptInfo > SAL_CALL resolve(
+    virtual css::uno::Reference< ::drafts::com::sun::star::script::framework::storage::XScriptInfo > SAL_CALL resolve(
         const ::rtl::OUString& scriptUri,
         css::uno::Any& invocationCtx )
         throw( css::lang::IllegalArgumentException, css::script::CannotConvertException,
            css::uno::RuntimeException );
 
 private:
-    css::uno::Reference< dcsssf::runtime::XScriptInvocation > SAL_CALL getScriptRuntime(
+    css::uno::Reference< ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation > SAL_CALL getScriptRuntime(
         const css::uno::Reference< css::uno::XInterface > & scriptInfo )
         throw( css::uno::RuntimeException );
-    css::uno::Reference< dcsssf::runtime::XScriptNameResolver > SAL_CALL getScriptNameResolver()
+    css::uno::Reference< ::drafts::com::sun::star::script::framework::runtime::XScriptNameResolver > SAL_CALL getScriptNameResolver()
         throw( css::uno::RuntimeException );
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

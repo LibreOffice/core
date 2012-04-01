@@ -36,8 +36,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/rptui))
 
 $(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc \
-	-I$(WORKDIR)/inc/reportdesign \
 	-I$(SRCDIR)/reportdesign/source/ui/inc \
 	-I$(SRCDIR)/reportdesign/inc \
 ))

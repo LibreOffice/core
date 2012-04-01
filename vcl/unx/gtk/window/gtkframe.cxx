@@ -345,11 +345,15 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 static int debugQueuePureRedraw = 0;
 static int debugRedboxRedraws = 0;
 
+namespace {
 /// Decouple SalFrame lifetime from damagetracker lifetime
 struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 {
     DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
     {}
+
+    virtual ~DamageTracker() {}
+
     virtual void damaged(const basegfx::B2IBox& rDamageRect) const
     {
         m_rFrame.damaged(rDamageRect);
@@ -357,6 +361,7 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 
     GtkSalFrame& m_rFrame;
 };
+}
 #endif
 
 void GtkSalFrame::doKeyCallback( guint state,
@@ -1572,6 +1577,8 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
+// FIXME: we should really be an SvpSalFrame sub-class, and
+// share their AllocateFrame !
 void GtkSalFrame::AllocateFrame()
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -1949,7 +1956,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 void GtkSalFrame::updateWMClass()
 {
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                                                     SalGenericSystem::getFrameClassName();
     Display *display;
 
@@ -2444,32 +2451,6 @@ sal_Bool GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode&
 LanguageType GtkSalFrame::GetInputLanguage()
 {
     return LANGUAGE_DONTKNOW;
-}
-
-SalBitmap* GtkSalFrame::SnapShot()
-{
-    if( !m_pWindow )
-        return NULL;
-
-#if GTK_CHECK_VERSION(3,0,0)
-    SvpSalGraphics *pGraphics = static_cast<SvpSalGraphics *>(GetGraphics());
-    if (!pGraphics)
-        return NULL;
-
-    SalBitmap *pRet = pGraphics->getBitmap( 0, 0, maGeometry.nWidth, maGeometry.nHeight );
-    ReleaseGraphics( pGraphics );
-
-    return pRet;
-#else
-    X11SalBitmap *pBmp = new X11SalBitmap;
-    if( pBmp->SnapShot( GDK_DISPLAY_XDISPLAY( getGdkDisplay() ),
-                        widget_get_xid(m_pWindow) ) )
-        return pBmp;
-    else
-        delete pBmp;
-#endif
-
-    return NULL;
 }
 
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
@@ -2994,19 +2975,17 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     return sal_True;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
 void GtkSalFrame::pushIgnoreDamage()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     m_nDuringRender++;
-#endif
 }
 
 void GtkSalFrame::popIgnoreDamage()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     m_nDuringRender--;
-#endif
 }
+#endif
 
 void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 {
@@ -3256,17 +3235,6 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
-    if( ImplGetSVData()->mbIsTestTool )
-    {
-        /* #i76541# testtool needs the focus to be in a new document
-        *  however e.g. metacity does not necessarily put the focus into
-        *  a newly shown window. An extra little hint seems to help here.
-        *  however we don't want to interfere with the normal user experience
-        *  so this is done when running in testtool only
-        */
-        if( ! pThis->m_pParent && (pThis->m_nStyle & SAL_FRAME_STYLE_MOVEABLE) != 0 )
-            bSetFocus = true;
-    }
 
 #if !GTK_CHECK_VERSION(3,0,0)
     if( bSetFocus )
@@ -3870,6 +3838,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
     // open a block that will end the GTK_YIELD_GRAB before calling preedit changed again
     {
@@ -3959,6 +3928,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         if( pThis->m_aInputEvent.maText.Len() == 0 )
         {
             g_free( pText );
+            pango_attr_list_unref( pAttrs );
             return;
         }
     }
@@ -3975,7 +3945,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
     pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.Len() ), 0 );
 
-    PangoAttrIterator   *iter       = pango_attr_list_get_iterator (pAttrs);
+    PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do
     {
         GSList *attr_list = NULL;
@@ -4019,17 +3989,27 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         g_slist_free (attr_list);
 
         // Set the sal attributes on our text
-        for (int i = start; i < end; i++)
+        for (int i = start; i < end; ++i)
+        {
+            SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
+                "vcl.gtk", "pango attrib out of range. Broken range: "
+                << start << "," << end << " Legal range: 0,"
+                << pThis->m_aInputFlags.size());
+            if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
+                continue;
             pThis->m_aInputFlags[i] |= sal_attr;
+        }
     } while (pango_attr_iterator_next (iter));
+    pango_attr_iterator_destroy(iter);
 
-    pThis->m_aInputEvent.mpTextAttr         = &pThis->m_aInputFlags[0];
+    pThis->m_aInputEvent.mpTextAttr = &pThis->m_aInputFlags[0];
 
     g_free( pText );
     pango_attr_list_unref( pAttrs );
 
     GTK_YIELD_GRAB();
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
     pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
@@ -4050,6 +4030,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
 
     pThis->m_bPreeditJustChanged = true;
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
     pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )
@@ -4112,7 +4093,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
         rtl::OUString sAllText = xText->getText();
-        if (!sAllText.getLength())
+        if (sAllText.isEmpty())
             return sal_False;
     rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
     rtl::OUString sCursorText(sAllText.copy(0, nPosition));

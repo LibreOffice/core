@@ -118,9 +118,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
-    sal_Bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
+    bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
     bool bOnlyNotBecauseOfMatrix;
-    sal_Bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
+    bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -135,38 +135,47 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        sal_Bool bDisable = false;
-        sal_Bool bNeedEdit = sal_True;      // need selection be editable?
+        bool bDisable = false;
+        bool bNeedEdit = true;      // need selection be editable?
         switch ( nWhich )
         {
             case FID_FILL_TO_BOTTOM:    // fill to top / bottom
-            case FID_FILL_TO_TOP:       // are at least 2 rows marked?
-                bDisable = (!bSimpleArea) || (nRow1 == nRow2);
+            {
+                bDisable = !bSimpleArea || (nRow1 == 0 && nRow2 == 0);
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
-                    if ( nWhich == FID_FILL_TO_BOTTOM )
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol2, nRow1, rMark );    // first row
-                    else
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow2, nCol2, nRow2, rMark );    // last row
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol1, nRow1, nCol2, nRow1, rMark );    // first row
                 }
-                break;
-
+            }
+            break;
+            case FID_FILL_TO_TOP:
+            {
+                bDisable = (!bSimpleArea) || (nRow1 == MAXROW && nRow2 == MAXROW);
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol1, nRow2, nCol2, nRow2, rMark );    // last row
+                }
+            }
+            break;
             case FID_FILL_TO_RIGHT:     // fill to left / right
-            case FID_FILL_TO_LEFT:      // are at least 2 columns marked?
-                bDisable = (!bSimpleArea) || (nCol1 == nCol2);
+            {
+                bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
+                bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                    nCol1, nRow1, nCol1, nRow2, rMark );    // first column
+            }
+            break;
+            case FID_FILL_TO_LEFT:
+            {
+                bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
                 if ( !bDisable && bEditable )
                 {   // Matrix nicht zerreissen
-                    if ( nWhich == FID_FILL_TO_RIGHT )
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol1, nRow2, rMark );    // first column
-                    else
-                        bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol2, nRow1, nCol2, nRow2, rMark );    // last column
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                        nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
-                break;
-
+            }
+            break;
             case FID_FILL_SERIES:       // fill block
             case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)
@@ -440,6 +449,8 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
         rBindings.Invalidate( SID_PASTE_SPECIAL );
+        rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
+        rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -528,6 +539,8 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );
+        rSet.DisableItem( SID_PASTE_ONLY_TEXT );
+        rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
@@ -568,8 +581,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
-
-
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
@@ -597,9 +608,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_NOTETEXT:
                 {
                     //  always take cursor position, do not use top-left cell of selection
-                    ScAddress aPos( nPosX, nPosY, nTab );
                     String aNoteText;
-                    if ( const ScPostIt* pNote = pDoc->GetNote( aPos ) )
+                    if ( const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY) )
                         aNoteText = pNote->GetText();
                     rSet.Put( SfxStringItem( nWhich, aNoteText ) );
                 }
@@ -912,7 +922,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_NOTE_VISIBLE:
                 {
-                    const ScPostIt* pNote = pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
+                    const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY);
                     if ( pNote && pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
                         rSet.Put( SfxBoolItem( nWhich, pNote->IsCaptionShown() ) );
                     else
@@ -922,7 +932,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_DELETE_NOTE:
                 {
-                    sal_Bool bEnable = false;
+                    bool bEnable = false;
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
                         if ( pDoc->IsSelectionEditable( rMark ) )
@@ -933,17 +943,23 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             size_t nCount = aRanges.size();
                             for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
                             {
-                                ScCellIterator aCellIter(pDoc, *aRanges[nPos]);
-                                for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
-                                    if ( pCell->HasNote() )
-                                        bEnable = sal_True;             // note found
+                                ScNotes* pNotes = pDoc->GetNotes( aRanges[nPos]->aStart.Tab() );
+                                for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
+                                {
+                                    SCCOL nCol = itr->first.first;
+                                    SCROW nRow = itr->first.second;
+
+                                    if ( nCol <= aRanges[nPos]->aEnd.Col() && nRow <= aRanges[nPos]->aEnd.Row()
+                                            && nCol >= aRanges[nPos]->aStart.Col() && nRow >= aRanges[nPos]->aStart.Row() )
+                                        bEnable = true; //note found
+                                }
                             }
                         }
                     }
                     else
                     {
                         bEnable = pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
-                                  pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
+                                  pDoc->GetNotes(nTab)->findByAddress( nPosX, nPosY );
                     }
                     if ( !bEnable )
                         rSet.DisableItem( nWhich );

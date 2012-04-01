@@ -228,12 +228,6 @@ sal_Int32 ZipPackageStream::GetBlockSize() const
 }
 
 //--------------------------------------------------------------------------
-void ZipPackageStream::SetBaseEncryptionData( const ::rtl::Reference< BaseEncryptionData >& xData )
-{
-    m_xBaseEncryptionData = xData;
-}
-
-//--------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
 {
     uno::Sequence< sal_Int8 > aResult;
@@ -538,9 +532,11 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
         OSL_FAIL( "ZipException thrown" );//rException.Message);
         return uno::Reference < io::XInputStream > ();
     }
-    catch ( Exception & )
+    catch ( Exception &ex )
     {
         OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
+        OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+        (void)ex;
         return uno::Reference < io::XInputStream > ();
     }
 }

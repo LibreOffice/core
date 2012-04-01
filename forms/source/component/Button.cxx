@@ -382,13 +382,13 @@ OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory
 {
     increment(m_refCount);
     {
-        // als ActionListener anmelden
+        // Register as ActionListener
         Reference<XButton>  xButton;
         query_aggregation( m_xAggregate, xButton);
         if (xButton.is())
             xButton->addActionListener(this);
     }
-    // Refcount bei 1 fuer Listener
+    // For Listener: refcount at one
     decrement(m_refCount);
 }
 
@@ -399,7 +399,7 @@ OButtonControl::~OButtonControl()
         Application::RemoveUserEvent(m_nClickEvent);
 }
 
-// UNO Anbindung
+// UNO binding
 //------------------------------------------------------------------------------
 Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
@@ -437,7 +437,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 //------------------------------------------------------------------------------
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    // Asynchron fuer starutil::URL-Button
+    // Asynchronous for starutil::URL-Button
     sal_uLong n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -446,7 +446,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::co
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(OButtonControl, OnClick)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     m_nClickEvent = 0;
@@ -459,8 +459,8 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
     }
     else
     {
-        // Sonst nicht. Dann darf man aber auf keinen Fal die Listener
-        // benachrichtigen, auch dann nicht, wenn er spaeter hinzukommt.
+        // Else, don't. We then must not notify the Listeners in any case,
+        // not even if added later on.
         aGuard.clear();
 
         // recognize the button type
@@ -485,7 +485,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 #ifdef DBG_UTIL
                 catch( const RuntimeException& )
                 {
-                    // silent this
+                    // silence this
                 }
 #endif
                 catch( const Exception& )
@@ -685,7 +685,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
         xModelProps->getPropertyValue( PROPERTY_BUTTONTYPE ) >>= eButtonType;
     }
 
-    // are we an URL button?
+    // are we a URL button?
     if ( eButtonType == FormButtonType_URL )
     {
         // is it a feature URL?

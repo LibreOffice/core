@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_kde,\
@@ -64,7 +63,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \
@@ -85,6 +83,13 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
     vcl/unx/kde/kdedata \
     vcl/unx/kde/salnativewidgets-kde \
 ))
+
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde,\
+        -Wno-shadow \
+))
+
+$(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\

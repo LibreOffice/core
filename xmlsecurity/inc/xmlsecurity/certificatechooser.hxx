@@ -74,7 +74,7 @@ private:
     sal_Bool                mbInitialized;
 
     sal_uInt16              GetSelectedEntryPos( void ) const;
-    DECL_LINK(          ViewButtonHdl, Button* );
+    DECL_LINK(ViewButtonHdl, void *);
     DECL_LINK(          CertificateHighlightHdl, void* );
     DECL_LINK(          CertificateSelectHdl, void* );
 

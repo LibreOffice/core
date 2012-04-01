@@ -95,12 +95,12 @@ sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScShowTabDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
 {
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScShowTabDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScShowTabDlg, DblClkHdl)
 
 ScShowTabDlg::~ScShowTabDlg()
 {

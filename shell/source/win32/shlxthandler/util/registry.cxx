@@ -57,8 +57,9 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     HKEY hSubKey;
 
     // open or create the desired key
+    char dummy[] = "";
     int rc = RegCreateKeyExA(
-        RootKey, KeyName, 0, "", REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hSubKey, 0);
+        RootKey, const_cast<char*>(KeyName), 0, dummy, REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hSubKey, 0);
 
     if (ERROR_SUCCESS == rc)
     {

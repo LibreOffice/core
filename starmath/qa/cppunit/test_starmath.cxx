@@ -159,7 +159,7 @@ Test::~Test()
 void Test::tmEditMarker()
 {
     {
-        rtl::OUString sMarkedText(RTL_CONSTASCII_USTRINGPARAM("<?> under <?> under <?>"));
+        rtl::OUString sMarkedText("<?> under <?> under <?>");
         m_pEditWindow->SetText(sMarkedText);
         m_pEditWindow->Flush();
         rtl::OUString sFinalText = m_pEditWindow->GetText();
@@ -167,20 +167,20 @@ void Test::tmEditMarker()
     }
 
     {
-        rtl::OUString sTargetText(RTL_CONSTASCII_USTRINGPARAM("a under b under c"));
+        rtl::OUString sTargetText("a under b under c");
 
         m_pEditWindow->SelNextMark();
         m_pEditWindow->Cut();
-        m_pEditWindow->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a")));
+        m_pEditWindow->InsertText("a");
 
         m_pEditWindow->SelNextMark();
         m_pEditWindow->SelNextMark();
         m_pEditWindow->Cut();
-        m_pEditWindow->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c")));
+        m_pEditWindow->InsertText("c");
 
         m_pEditWindow->SelPrevMark();
         m_pEditWindow->Cut();
-        m_pEditWindow->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b")));
+        m_pEditWindow->InsertText("b");
 
         m_pEditWindow->Flush();
         rtl::OUString sFinalText = m_pEditWindow->GetText();
@@ -195,7 +195,7 @@ void Test::tmEditMarker()
 
 void Test::tmEditAllClipboard()
 {
-    rtl::OUString sOriginalText(RTL_CONSTASCII_USTRINGPARAM("a over b"));
+    rtl::OUString sOriginalText("a over b");
 
     {
         m_pEditWindow->SetText(sOriginalText);
@@ -225,7 +225,7 @@ void Test::tmEditAllClipboard()
     }
 
     {
-        rtl::OUString sExpectedText(RTL_CONSTASCII_USTRINGPARAM("a over ba over b"));
+        rtl::OUString sExpectedText("a over ba over b");
 
         m_pEditWindow->Paste();
         m_pEditWindow->Paste();
@@ -242,7 +242,7 @@ void Test::tmEditAllClipboard()
 
 void Test::tmEditFailure()
 {
-    m_xDocShRef->SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("color a b over {a/}")));
+    m_xDocShRef->SetText("color a b over {a/}");
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 
@@ -269,7 +269,7 @@ void Test::tmEditUndoRedo()
 {
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    rtl::OUString sStringOne(RTL_CONSTASCII_USTRINGPARAM("a under b"));
+    rtl::OUString sStringOne("a under b");
     {
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
@@ -277,7 +277,7 @@ void Test::tmEditUndoRedo()
         CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne == sFinalText);
     }
 
-    rtl::OUString sStringTwo(RTL_CONSTASCII_USTRINGPARAM("a over b"));
+    rtl::OUString sStringTwo("a over b");
     {
         rEditEngine.SetText(0, sStringTwo);
         m_xDocShRef->UpdateText();
@@ -328,7 +328,7 @@ void Test::tViewZoom()
 
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    rtl::OUString sStringOne(RTL_CONSTASCII_USTRINGPARAM("a under b"));
+    rtl::OUString sStringOne("a under b");
     {
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();

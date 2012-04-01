@@ -27,18 +27,17 @@ $(eval $(call gb_Library_add_sdi_headers,sc,sc/sdi/scslots))
 $(eval $(call gb_Library_set_componentfile,sc,sc/util/sc))
 
 $(eval $(call gb_Library_set_include,sc,\
-        -I$(realpath $(SRCDIR)/sc/source/core/inc) \
-        -I$(realpath $(SRCDIR)/sc/source/filter/inc) \
-        -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-        -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(WORKDIR)/SdiTarget/sc/sdi \
-        -I$(WORKDIR)/Misc/sc/ \
-        $$(INCLUDE) \
+	-I$(SRCDIR)/sc/source/core/inc \
+	-I$(SRCDIR)/sc/source/filter/inc \
+	-I$(SRCDIR)/sc/source/ui/inc \
+	-I$(SRCDIR)/sc/inc \
+	-I$(WORKDIR)/SdiTarget/sc/sdi \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,sc,\
-        -DSC_DLLIMPLEMENTATION \
-        -DSC_INFO_OSVERSION=\"$(OS)\" \
+	-DSC_DLLIMPLEMENTATION \
+	-DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
 $(eval $(call gb_Library_add_api,sc,\
@@ -47,34 +46,34 @@ $(eval $(call gb_Library_add_api,sc,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sc,\
-        avmedia \
-        basegfx \
-        comphelper \
-        cppu \
-        cppuhelper \
-        drawinglayer \
-        editeng \
-        for \
-        forui \
-        i18nisolang1 \
-        sal \
-        salhelper \
-        sax \
-        sb \
-        sfx \
-        sot \
-        svl \
-        svt \
-        svx \
-        svxcore \
-        tk \
-        tl \
-        ucbhelper \
-        utl \
-        vbahelper \
-        vcl \
-        xo \
-        $(gb_STDLIBS) \
+	avmedia \
+	basegfx \
+	comphelper \
+	cppu \
+	cppuhelper \
+	drawinglayer \
+	editeng \
+	for \
+	forui \
+	i18nisolang1 \
+	sal \
+	salhelper \
+	sax \
+	sb \
+	sfx \
+	sot \
+	svl \
+	svt \
+	svx \
+	svxcore \
+	tk \
+	tl \
+	ucbhelper \
+	utl \
+	vbahelper \
+	vcl \
+	xo \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
@@ -105,8 +104,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/document \
 	sc/source/core/data/dpcachetable \
 	sc/source/core/data/dpdimsave \
-	sc/source/core/data/dpglobal \
 	sc/source/core/data/dpgroup \
+	sc/source/core/data/dpitemdata \
+	sc/source/core/data/dpnumgroupinfo \
 	sc/source/core/data/dpobject \
 	sc/source/core/data/dpoutput \
 	sc/source/core/data/dpoutputgeometry \
@@ -114,13 +114,14 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/dpsdbtab \
 	sc/source/core/data/dpshttab \
 	sc/source/core/data/dptabdat \
-	sc/source/core/data/dptablecache \
+	sc/source/core/data/dpcache \
 	sc/source/core/data/dptabres \
 	sc/source/core/data/dptabsrc \
+	sc/source/core/data/dputil \
 	sc/source/core/data/drawpage \
 	sc/source/core/data/drwlayer \
 	sc/source/core/data/fillinfo \
-        sc/source/core/data/funcdesc \
+    sc/source/core/data/funcdesc \
 	sc/source/core/data/global \
 	sc/source/core/data/global2 \
 	sc/source/core/data/globalx \
@@ -166,7 +167,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/chartpos \
 	sc/source/core/tool/chgtrack \
 	sc/source/core/tool/chgviset \
-	sc/source/core/tool/collect  \
 	sc/source/core/tool/compiler \
 	sc/source/core/tool/consoli  \
 	sc/source/core/tool/dbdata \
@@ -212,6 +212,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/stringutil \
 	sc/source/core/tool/subtotal \
 	sc/source/core/tool/token \
+	sc/source/core/tool/typedstrdata \
 	sc/source/core/tool/unitconv \
 	sc/source/core/tool/userlist \
 	sc/source/core/tool/viewopti \
@@ -419,7 +420,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/undo/undodat \
 	sc/source/ui/undo/undodraw \
 	sc/source/ui/undo/undoolk \
-        sc/source/ui/undo/undorangename \
+    sc/source/ui/undo/undorangename \
 	sc/source/ui/undo/undostyl \
 	sc/source/ui/undo/undotab \
 	sc/source/ui/undo/undoutil \
@@ -555,9 +556,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
-        -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(realpath $(SRCDIR)/sc/sdi) \
-        $$(INCLUDE) \
+	-I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/sdi \
+	$$(INCLUDE) \
 ))
 
 # vim: set noet sw=4 ts=4:

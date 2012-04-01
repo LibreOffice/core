@@ -99,7 +99,7 @@ endef
 define gb_ExternalLib__command_autotools
 	rm -fr $(call gb_ExternalLib_get_workdir,$(1)) && \
 	mkdir -p $(call gb_ExternalLib_get_builddir,$(1)) && \
-	$(GNUTAR) -x -C $(call gb_ExternalLib_get_builddir,$(1)) --strip-component=1 -f $< && \
+	$(GNUTAR) -x -C $(call gb_ExternalLib_get_builddir,$(1)) --strip-components=1 -f $< && \
 	cd $(call gb_ExternalLib_get_builddir,$(1)) && for p in $(T_PATCHES) ; do patch -p 1 < $(SRCDIR)/$$p || exit 1; done && \
 	CC="$(gb_CC)" CXX="$(gb_CXX)" CFLAGS="$(T_CFLAGS)" CXXFLAGS="$(T_CXXFLAGS)" PKG_CONFIG_PATH="$(PKG_CONFIG_PATH) $(OUTDIR)/lib/pkgconfig" ./configure $(if $(findstring YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) --prefix=$(OUTDIR) $(T_CONF_ARGS) && \
 	for p in $(T_POST_PATCHES) ; do patch -p 1 < $(SRCDIR)/$p || exit 1; done

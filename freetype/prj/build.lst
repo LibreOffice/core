@@ -1,3 +1,3 @@
-ft     libfreetype      :       NULL
-ft     libfreetype              usr1    -       u ft_mkout NULL
-ft     libfreetype              nmake   -       u ft_libfreetype NULL
+ft     freetype      :       NULL
+ft     freetype              usr1    -       u ft_mkout NULL
+ft     freetype              nmake   -       u ft_libfreetype NULL

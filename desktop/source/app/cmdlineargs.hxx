@@ -71,6 +71,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_PSN,
             CMD_BOOLPARAM_VERSION,
+            CMD_BOOLPARAM_UNKNOWN,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
@@ -162,6 +163,7 @@ class CommandLineArgs
         sal_Bool                IsWeb() const;
         sal_Bool                IsVersion() const;
         sal_Bool                HasModuleParam() const;
+        sal_Bool                HasUnknown() const;
         sal_Bool                WantsToLoadDocument() const;
 
         // Access to string parameters

@@ -579,7 +579,7 @@ void ScTPValidationValue::TidyListBoxes()
     }
 }
 
-IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, EMPTYARG)
+IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
 {
     sal_uInt16  nPos=maLbAllow.GetSelectEntryPos();
 
@@ -606,7 +606,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 
 // ----------------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
     sal_uInt16 nLbPos = maLbAllow.GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
@@ -660,7 +660,7 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScTPValidationValue, CheckHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 {
     maCbSort.Enable( maCbShow.IsChecked() );
     return 0;
@@ -854,7 +854,7 @@ sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) aLbAction.GetSelectEntryPos();
     sal_Bool bMacro = ( eStyle == SC_VALERR_MACRO );
@@ -868,7 +868,7 @@ IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 {
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );

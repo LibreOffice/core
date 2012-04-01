@@ -388,7 +388,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     }
 }
 
-IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 {
     sal_uInt16 nPos = m_aFormattingLB.GetSelectEntryPos();
     sal_uLong nOptions = (sal_uLong)(void*)m_aFormattingLB.GetEntryData( nPos );
@@ -397,7 +397,7 @@ IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 {
     QueryBox aBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), m_sUseAsDefaultQuery );
     if ( aBox.Execute() == RET_YES )

@@ -36,8 +36,8 @@ endif
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/source/xmlsec) \
+	-I$(SRCDIR)/xmlsecurity/inc \
+	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
 ))
 
 $(eval $(call gb_Library_add_api,xsec_xmlsec,\
@@ -164,8 +164,8 @@ else
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
-	-I$(realpath $(OUTDIR)/inc/mozilla/nspr) \
-	-I$(realpath $(OUTDIR)/inc/mozilla/nss) \
+	-I$(OUTDIR)/inc/mozilla/nspr \
+	-I$(OUTDIR)/inc/mozilla/nss \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\

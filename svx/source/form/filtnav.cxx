@@ -1224,7 +1224,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;
@@ -1281,7 +1281,7 @@ IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
 {
     if (--m_aTimerCounter > 0)
         return 0L;

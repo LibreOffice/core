@@ -48,7 +48,7 @@ private:
     void initBaseCollection();
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     virtual css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     css::uno::Reference< css::drawing::XShape > createShape( rtl::OUString service ) throw (css::uno::RuntimeException);
@@ -56,7 +56,6 @@ protected:
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, css::uno::Any aRange ) throw (css::uno::RuntimeException);
     css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
     rtl::OUString createName( rtl::OUString sName );
-    css::uno::Any AddShape( const rtl::OUString& sService, const rtl::OUString& sName, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
 

@@ -150,9 +150,6 @@ public:
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr );
     virtual ~InternetProxyDecider_Impl();
 
-    static rtl::Reference< InternetProxyDecider_Impl > createInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr );
-
     void dispose();
 
     const InternetProxyServer & getProxy( const rtl::OUString & rProtocol,

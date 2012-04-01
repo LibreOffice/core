@@ -29,8 +29,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,starmath_qa_cppunit))
 
 $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/starmath/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/starmath/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,starmath_qa_cppunit,\
@@ -55,7 +54,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,starmath_qa_cppunit,\
     cppuhelper \
     editeng \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     sal \
     sfx \
     sot \

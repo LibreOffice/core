@@ -256,7 +256,7 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         protected:
-            DECL_LINK( implts_ConfigurationNotify, SubstitutePathNotify* );
+            DECL_LINK(implts_ConfigurationNotify, void *);
 
             void            SetPredefinedPathVariables( PredefinedPathVariables& );
             rtl::OUString   ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const;

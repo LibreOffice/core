@@ -49,6 +49,9 @@ interface XComboBox
     [attribute] long EnterFieldBehavior;
     [attribute] long ListStyle;
     [attribute] long TextAlign;
+    [attribute] long BackColor;
+    [attribute] boolean AutoSize;
+    [attribute] boolean Locked;
     [attribute, readonly] long TextLength;
     [attribute, readonly] XNewFont Font;
 

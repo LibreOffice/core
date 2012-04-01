@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Package_xml \
 ))
 
-ifneq (IOS,$(OS))
+ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_vbaobj \
@@ -46,17 +46,22 @@ $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_filters_test \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,sc,\
+    CppunitTest_sc_subsequent_filters_test \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_complex \
     JunitTest_sc_unoapi \
     CppunitTest_sc_cellrangeobj \
+    $(if $(filter-out $(OS),IOS), \
+	    CppunitTest_sc_databaserangeobj) \
     CppunitTest_sc_datapilottableobj \
     CppunitTest_sc_datapilotfieldobj \
     CppunitTest_sc_macros_test \
     CppunitTest_sc_namedrangeobj \
     CppunitTest_sc_namedrangesobj \
     CppunitTest_sc_tablesheetsobj \
-    CppunitTest_sc_subsequent_filters_test \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -60,6 +60,9 @@ namespace slideshow
                 called, too.
              */
             virtual bool handlePause( bool bPauseShow ) = 0;
+
+        protected:
+            ~PauseEventHandler() {}
         };
 
         typedef ::boost::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;

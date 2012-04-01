@@ -18,8 +18,8 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
-  <library vendor="The FreeBSD Foundation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
-  <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
+  <library vendor="The FreeBSD Foundation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
+  <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
  </plugins>
 </javaSelection>

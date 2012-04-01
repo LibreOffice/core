@@ -82,6 +82,11 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
   return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
 }
 
+::rtl::OUString test::BootstrapFixtureBase::getURLFromSolver( const char *pPath )
+{
+  return m_aSolverRootURL + rtl::OUString::createFromAscii( pPath );
+}
+
 ::rtl::OUString test::BootstrapFixtureBase::getPathFromSolver( const char *pPath )
 {
   return m_aSolverRootPath + rtl::OUString::createFromAscii( pPath );

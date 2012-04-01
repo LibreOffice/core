@@ -141,30 +141,8 @@ namespace sw
 
     namespace util
     {
-        struct AuthorInfo;
-        typedef AuthorInfo* AuthorInfo_Ptr;
-
-        /// Redlining Authors
-        struct AuthorInfo
-        {
-            sal_uInt16 nWWAuthorId;
-            sal_uInt16 nOurId;
-
-            AuthorInfo(sal_uInt16 nWWAuthorId_, sal_uInt16 nOurId_ = 0):
-                nWWAuthorId( nWWAuthorId_ ),
-                nOurId(      nOurId_ )
-                {}
-            bool operator==(const AuthorInfo& rEntry) const
-            {
-                return (nWWAuthorId == rEntry.nWWAuthorId);
-            }
-            bool operator<(const AuthorInfo& rEntry) const
-            {
-                return (nWWAuthorId < rEntry.nWWAuthorId);
-            }
-        };
-
-        SV_DECL_PTRARR_SORT_DEL(AuthorInfos, AuthorInfo_Ptr,16)
+        /// Redlining Authors, map word author key to writer author value
+        typedef std::map<sal_uInt16, sal_uInt16> AuthorInfos;
 
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes
@@ -432,14 +410,14 @@ namespace sw
         class WrtRedlineAuthor : public boost::noncopyable
         {
         protected:
-            std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
+            std::vector<rtl::OUString> maAuthors;          // Array of Sw - Bookmarknames
 
             sal_uInt16 GetPos( const String& rNm );
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}
 
-            sal_uInt16 AddName( const String& rNm );
+            sal_uInt16 AddName( const rtl::OUString& rNm );
             virtual void Write(Writer &rWrt) = 0;
             // std::vector<String> GetNames();
         };

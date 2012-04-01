@@ -60,7 +60,6 @@
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -94,11 +93,6 @@ using namespace ::com::sun::star;
 #include "markdata.hxx"
 
 extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
-
-//------------------------------------------------------------------------
-
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 namespace {
 
@@ -507,7 +501,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
-            if( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
+            if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
             aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
 
             aPositionRange = pViewSh->GetViewData()->GetCurPos();
@@ -607,7 +601,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             const SfxPoolItem* pItem;
             sal_uInt16 nToTable = 0;
 
-            if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
+            if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
             {
                 if ( pItem->ISA( SfxUInt16Item ) )
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();

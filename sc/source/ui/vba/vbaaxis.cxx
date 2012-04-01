@@ -647,11 +647,10 @@ void SAL_CALL ScVbaAxis::setLeft( double left ) throw (css::script::BasicErrorEx
     oShapeHelper->setLeft( left );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaAxis::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaAxis") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAxis"));
 }
 
 uno::Sequence< rtl::OUString >

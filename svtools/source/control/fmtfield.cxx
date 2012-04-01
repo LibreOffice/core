@@ -398,20 +398,6 @@ FormattedField::~FormattedField()
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetValidateText(const XubString& rText, const String* pErrorText)
-{
-    DBG_CHKTHIS(FormattedField, NULL);
-
-    if (CheckText(rText))
-        SetText(rText);
-    else
-        if (pErrorText)
-            ImplSetTextImpl(*pErrorText, NULL);
-        else
-            ImplSetValue(m_dDefaultValue, sal_True);
-}
-
-//------------------------------------------------------------------------------
 void FormattedField::SetText(const XubString& rStr)
 {
     DBG_CHKTHIS(FormattedField, NULL);

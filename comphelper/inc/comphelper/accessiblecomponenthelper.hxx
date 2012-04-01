@@ -77,7 +77,10 @@ namespace comphelper
 
     struct OAccessibleComponentHelper_Base :
         public ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleComponent >
-    {};
+    {
+    protected:
+        ~OAccessibleComponentHelper_Base() {}
+    };
 
     /** a helper class for implementing an AccessibleContext which at the same time
         supports an XAccessibleComponent interface.

@@ -46,24 +46,57 @@ public:
     SwFormatClipboard();
     ~SwFormatClipboard();
 
+    /**
+     * Test if the object contains text or paragraph attribute
+     */
     bool HasContent() const;
     bool HasContentForThisType( int nSelectionType ) const;
     bool CanCopyThisType( int nSelectionType ) const;
 
+    /**
+     * Store/Backup the text and paragraph attribute of the current selection.
+     *
+     * @param bPersistentCopy
+     * input parameter - specify if the Paste function will erase the current object.
+     */
     void Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy=false );
+
+    /**
+     * Paste the stored text and paragraph attributes on the current selection and current paragraph.
+     *
+     * @param bNoCharacterFormats
+     * Do not paste the character formats.
+     *
+     * @param bNoParagraphFormats
+     * Do not paste the paragraph formats.
+     */
     void Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool
         , bool bNoCharacterFormats=false, bool bNoParagraphFormats=false );
+
+    /**
+     * Clear the currently stored text and paragraph attributes.
+     */
     void Erase();
 
 private:
     int         m_nSelectionType;
-    SfxItemSet* m_pItemSet;
+
+    /** automatic/named character attribute set */
+    SfxItemSet* m_pItemSet_TxtAttr;
+    /** automatic/named paragraph attribute set
+     * (it can be caractere attribute applyied to the paragraph) */
+    SfxItemSet* m_pItemSet_ParAttr;
+
+    /** table attribute set */
     SfxItemSet* m_pTableItemSet;
 
+    /** name of the character format (if it exist) */
     String m_aCharStyle;
+    /** name of the paragraph format (if it exist) */
     String m_aParaStyle;
     //no frame style because it contains position information
 
+    /** specify if the Paste function have to clear the current object */
     bool   m_bPersistentCopy;
 };
 

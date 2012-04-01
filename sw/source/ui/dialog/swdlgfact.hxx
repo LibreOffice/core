@@ -242,8 +242,8 @@ class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
     DECL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl,SwRenameXNamedDlg )
     virtual void    SetForbiddenChars( const String& rSet );
     virtual void SetAlternativeAccess(
-             STAR_REFERENCE( container::XNameAccess ) & xSecond,
-             STAR_REFERENCE( container::XNameAccess ) & xThird );
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird );
 };
 //add for SwRenameXNamedDlg end
 //add for SwModalRedlineAcceptDlg begin
@@ -433,6 +433,8 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
 
 public:
+    virtual ~SwAbstractDialogFactory_Impl() {}
+
     virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
                                                                         const SfxItemSet& rAttr,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
@@ -493,8 +495,8 @@ public:
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ); //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ); //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
-                                                                STAR_REFERENCE( container::XNamed ) & xNamed,
-                                                                STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId );
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId );
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ); //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateSwVclDialog( int nResId,

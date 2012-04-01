@@ -633,7 +633,7 @@ bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
     return rRefObj.DoMacro(rRec); // TODO: positioning offset
 }
 
-XubString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+rtl::OUString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     return rRefObj.GetMacroPopupComment(rRec); // TODO: positioning offset
 }

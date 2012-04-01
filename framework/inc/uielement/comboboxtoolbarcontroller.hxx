@@ -51,6 +51,9 @@ class IComboBoxListener
         virtual void GetFocus() = 0;
         virtual void LoseFocus() = 0;
         virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
+
+    protected:
+        ~IComboBoxListener() {}
 };
 
 class ComboboxToolbarController : public IComboBoxListener,

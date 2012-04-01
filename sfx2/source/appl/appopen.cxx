@@ -39,9 +39,8 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
@@ -108,6 +107,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
 #include <svl/svstdarr.hxx>
+#include "openuriexternally.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -115,7 +115,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::container;
 using namespace ::cppu;
@@ -952,140 +951,100 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
-                Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), UNO_QUERY );
-                if ( xSystemShellExecute.is() )
+                if ( aINetProtocol == INET_PROT_MAILTO )
                 {
-                    if ( aINetProtocol == INET_PROT_MAILTO )
+                    // don't dispatch mailto hyperlink to desktop dispatcher
+                    rReq.RemoveItem( SID_TARGETNAME );
+                    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
+                }
+                else if ( aINetProtocol == INET_PROT_FTP ||
+                     aINetProtocol == INET_PROT_HTTP ||
+                     aINetProtocol == INET_PROT_HTTPS )
+                {
+                    sfx2::openUriExternally(aURL.Complete, true);
+                    return;
+                }
+                else
+                {
+                    // check for "internal" protocols that should not be forwarded to the system
+                    Sequence < ::rtl::OUString > aProtocols(2);
+
+                    // add special protocols that always should be treated as internal
+                    aProtocols[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:*"));
+                    aProtocols[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.*"));
+
+                    try
                     {
-                        // don't dispatch mailto hyperlink to desktop dispatcher
-                        rReq.RemoveItem( SID_TARGETNAME );
-                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
+                        // get registered protocol handlers from configuration
+                        Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.ProtocolHandler/HandlerSet")), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
+                        if ( xAccess.is() )
+                        {
+                            Sequence < ::rtl::OUString > aNames = xAccess->getElementNames();
+                            for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
+                            {
+                                Reference < XPropertySet > xSet;
+                                Any aRet = xAccess->getByName( aNames[nName] );
+                                aRet >>= xSet;
+                                if ( xSet.is() )
+                                {
+                                    // copy protocols
+                                    aRet = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Protocols")) );
+                                    Sequence < ::rtl::OUString > aTmp;
+                                    aRet >>= aTmp;
+
+                                    // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
+                                    sal_Int32 nLength = aProtocols.getLength();
+                                    aProtocols.realloc( nLength+aTmp.getLength() );
+                                    for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
+                                        aProtocols[(++nLength)-1] = aTmp[n];
+                                }
+                            }
+                        }
                     }
-                    else if ( aINetProtocol == INET_PROT_FTP ||
-                         aINetProtocol == INET_PROT_HTTP ||
-                         aINetProtocol == INET_PROT_HTTPS )
+                    catch ( Exception& )
                     {
-                        try
-                        {
-                            // start browser
-                            ::rtl::OUString aURLString( aURL.Complete );
-                            xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                        }
-                        catch ( ::com::sun::star::lang::IllegalArgumentException& )
-                        {
-                            SolarMutexGuard aGuard;
-                            Window *pWindow = SFX_APP()->GetTopWindow();
-                            ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
-                        }
-                        catch ( ::com::sun::star::system::SystemShellExecuteException& )
-                        {
-                            SolarMutexGuard aGuard;
-                            Window *pWindow = SFX_APP()->GetTopWindow();
-                            ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
-                        }
-
-                        return;
+                        // registered protocols could not be read
                     }
-                    else
+
+                    sal_Bool bFound = sal_False;
+                    for ( sal_Int32 nProt=0; nProt<aProtocols.getLength(); nProt++ )
                     {
-                        // check for "internal" protocols that should not be forwarded to the system
-                        Sequence < ::rtl::OUString > aProtocols(2);
-
-                        // add special protocols that always should be treated as internal
-                        aProtocols[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:*"));
-                        aProtocols[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.*"));
-
-                        try
+                        WildCard aPattern(aProtocols[nProt]);
+                        if ( aPattern.Matches( aURL.Complete ) )
                         {
-                            // get registered protocol handlers from configuration
-                            Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.ProtocolHandler/HandlerSet")), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
-                            if ( xAccess.is() )
-                            {
-                                Sequence < ::rtl::OUString > aNames = xAccess->getElementNames();
-                                for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
-                                {
-                                    Reference < XPropertySet > xSet;
-                                    Any aRet = xAccess->getByName( aNames[nName] );
-                                    aRet >>= xSet;
-                                    if ( xSet.is() )
-                                    {
-                                        // copy protocols
-                                        aRet = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Protocols")) );
-                                        Sequence < ::rtl::OUString > aTmp;
-                                        aRet >>= aTmp;
+                            bFound = sal_True;
+                            break;
+                        }
+                    }
 
-                                        // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
-                                        sal_Int32 nLength = aProtocols.getLength();
-                                        aProtocols.realloc( nLength+aTmp.getLength() );
-                                        for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
-                                            aProtocols[(++nLength)-1] = aTmp[n];
-                                    }
-                                }
+                    if ( !bFound )
+                    {
+                        sal_Bool bLoadInternal = sal_False;
+
+                        // security reservation: => we have to check the referer before executing
+                        if (SFX_APP()->IsSecureURL(rtl::OUString(), &aReferer))
+                        {
+                            try
+                            {
+                                sfx2::openUriExternally(
+                                    aURL.Complete, pFilter == 0);
+                            }
+                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                            {
+                                rReq.RemoveItem( SID_TARGETNAME );
+                                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                                bLoadInternal = sal_True;
                             }
                         }
-                        catch ( Exception& )
+                        else
                         {
-                            // registered protocols could not be read
+                            SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
+                            ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
                         }
 
-                        sal_Bool bFound = sal_False;
-                        for ( sal_Int32 nProt=0; nProt<aProtocols.getLength(); nProt++ )
-                        {
-                            WildCard aPattern(aProtocols[nProt]);
-                            if ( aPattern.Matches( aURL.Complete ) )
-                            {
-                                bFound = sal_True;
-                                break;
-                            }
-                        }
-
-                        if ( !bFound )
-                        {
-                            sal_Bool bLoadInternal = sal_False;
-
-                            // security reservation: => we have to check the referer before executing
-                            if (SFX_APP()->IsSecureURL(rtl::OUString(), &aReferer))
-                            {
-                                ::rtl::OUString aURLString( aURL.Complete );
-
-                                try
-                                {
-                                    // give os this file
-                                    xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                                }
-                                catch ( ::com::sun::star::lang::IllegalArgumentException& )
-                                {
-                                    SolarMutexGuard aGuard;
-                                    Window *pWindow = SFX_APP()->GetTopWindow();
-                                    ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
-                                }
-                                catch ( ::com::sun::star::system::SystemShellExecuteException& )
-                                {
-                                    if ( !pFilter )
-                                    {
-                                        SolarMutexGuard aGuard;
-                                        Window *pWindow = SFX_APP()->GetTopWindow();
-                                        ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
-                                    }
-                                    else
-                                    {
-                                        rReq.RemoveItem( SID_TARGETNAME );
-                                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
-                                        bLoadInternal = sal_True;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
-                                ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
-                            }
-
-                            if ( !bLoadInternal )
-                                return;
-                        }
+                        if ( !bLoadInternal )
+                            return;
                     }
                 }
             }

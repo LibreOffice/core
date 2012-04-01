@@ -155,8 +155,6 @@ namespace comphelper
 
         /// add a new continuation
         void addContinuation(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >& _rxContinuation);
-        /// clear all continuations
-        void clearContinuations();
 
     // XInteractionRequest
         virtual ::com::sun::star::uno::Any SAL_CALL getRequest(  ) throw(::com::sun::star::uno::RuntimeException);

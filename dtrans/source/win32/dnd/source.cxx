@@ -45,6 +45,9 @@
 #include <stdio.h>
 
 #ifdef __MINGW32__
+#if defined __uuidof
+#undef __uuidof
+#endif
 #define __uuidof(I) IID_##I
 #endif
 
@@ -74,8 +77,8 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 /** Ctor
 */
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
-    m_serviceFactory( sf),
     WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
+    m_serviceFactory( sf),
 //  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0),

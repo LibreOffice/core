@@ -71,7 +71,8 @@
 #define SCHATTR_STAT_INDICATE               (SCHATTR_STAT_START + 6)
 #define SCHATTR_STAT_RANGE_POS              (SCHATTR_STAT_START + 7)
 #define SCHATTR_STAT_RANGE_NEG              (SCHATTR_STAT_START + 8)
-#define SCHATTR_STAT_END                    SCHATTR_STAT_RANGE_NEG
+#define SCHATTR_STAT_ERRORBAR_TYPE          (SCHATTR_STAT_START + 9)
+#define SCHATTR_STAT_END                    SCHATTR_STAT_ERRORBAR_TYPE
 
 // --------------------------------------------------------
 // these attributes are for replacement of enum eChartStyle

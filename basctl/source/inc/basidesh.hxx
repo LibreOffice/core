@@ -34,8 +34,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
-#include <tools/table.hxx>
 #include <vcl/scrbar.hxx>
+#include <map>
 
 class SfxViewFactory;
 
@@ -60,9 +60,9 @@ class LocalizationMgr;
 struct BasicIDEShell_Impl;
 
 #if _SOLAR__PRIVATE
-DECLARE_TABLE( IDEWindowTable, IDEBaseWindow* )
+typedef std::map<sal_uInt16, IDEBaseWindow*> IDEWindowTable;
 #else
-typedef Table IDEWindowTable;
+typedef std::map<sal_uInt16, void*> IDEWindowTable;
 #endif
 
 namespace BasicIDE
@@ -100,6 +100,8 @@ friend class LocalizationMgr;
 friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
+    sal_Bool            bObjectCatalogDisplay;
+
 #if _SOLAR__PRIVATE
     void                Init();
     void                InitTabBar();
@@ -118,7 +120,7 @@ friend class ContainerListenerImpl;
     void                ImplStartListening( StarBASIC* pBasic );
 
     DECL_LINK( TabBarHdl, TabBar* );
-    DECL_LINK( ObjectDialogCancelHdl, ObjectCatalog * );
+    DECL_LINK(ObjectDialogCancelHdl, void *);
     DECL_LINK( TabBarSplitHdl, TabBar * );
 #endif
 
@@ -184,6 +186,7 @@ public:
     ScrollBarBox&       GetScrollBarBox()       { return aScrollBarBox; }
     TabBar*             GetTabBar()             { return (TabBar*)pTabBar; }
     IDEWindowTable&     GetIDEWindowTable()     { return aIDEWindowTable; }
+    sal_uInt16          GetIDEWindowId(const IDEBaseWindow* pWin) const;
 
     SdrView*            GetCurDlgView() const;
 

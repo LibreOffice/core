@@ -32,8 +32,8 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
-#include <tools/table.hxx>
 #include <svtools/xtextedt.hxx>
+#include <set>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
@@ -68,12 +68,13 @@ public:
 };
 
 //------------------------------------------------------------
+typedef std::set<sal_uInt16> SyntaxLineSet;
+
 class SwSrcEditWindow : public Window, public SfxListener
 {
 private:
     class ChangesListener;
     friend class ChangesListener;
-
     ExtTextView*    pTextView;
     ExtTextEngine*  pTextEngine;
 
@@ -96,7 +97,7 @@ private:
     sal_Bool            bHighlighting;
 
     Timer           aSyntaxIdleTimer;
-    Table           aSyntaxLineTable;
+    SyntaxLineSet   aSyntaxLineTable;
 
     void            ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff );
 

@@ -78,14 +78,14 @@
 
     # This is to undo the EVIL in solenv/gbuild/BuildDirs.mk
     if ($ENV{OS_FOR_BUILD} eq 'WNT') {
-	$ENV{WORKDIR} = `cygpath -m '$ENV{WORKDIR}'`;
-	$ENV{OUTDIR} = `cygpath -m '$ENV{OUTDIR}'`;
-	$ENV{OUTDIR_FOR_BUILD} = `cygpath -m '$ENV{OUTDIR_FOR_BUILD}'`;
-	$ENV{SRCDIR} = `cygpath -m '$ENV{SRCDIR}'`;
-	chomp($ENV{WORKDIR});
-	chomp($ENV{OUTDIR});
-	chomp($ENV{OUTDIR_FOR_BUILD});
-	chomp($ENV{SRCDIR});
+        $ENV{WORKDIR} = `cygpath -m '$ENV{WORKDIR}'`;
+        $ENV{OUTDIR} = `cygpath -m '$ENV{OUTDIR}'`;
+        $ENV{OUTDIR_FOR_BUILD} = `cygpath -m '$ENV{OUTDIR_FOR_BUILD}'`;
+        $ENV{SRCDIR} = `cygpath -m '$ENV{SRCDIR}'`;
+        chomp($ENV{WORKDIR});
+        chomp($ENV{OUTDIR});
+        chomp($ENV{OUTDIR_FOR_BUILD});
+        chomp($ENV{SRCDIR});
     }
 
     my $modules_number++;
@@ -116,7 +116,7 @@
     my %alive_dependencies = ();
     my %global_deps_hash = (); # hash of dependencies of the all modules
     my %global_deps_hash_backup = (); # backup hash of external dependencies of the all modules
-    my %module_deps_hash_backup = (); # backup hash of internal dependencies for aech module
+    my %module_deps_hash_backup = (); # backup hash of internal dependencies for each module
     my @broken_modules_names = ();   # array of modules, which cannot be built further
     my @dmake_args = ();
     my %dead_parents = ();
@@ -191,7 +191,7 @@
     my $verbose = 0;
 
     my @modules_built = ();
-    my $deliver_command = $ENV{DELIVER};
+    my $deliver_command = "deliver.pl";
     my %prj_platform = ();
     my $check_error_string = '';
     my $dmake = '';
@@ -479,13 +479,13 @@ sub get_build_list_path {
     my $possible_dir_path = $module_paths{$module}.'/prj/';
     if (-d $possible_dir_path)
     {
-	my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
-	if (-f $possible_build_list_path)
-	{
-	    $build_list_paths{$module} = $possible_build_list_path;
-	    return $possible_build_list_path;
-	};
-	print_error("There's no build.lst for $module");
+        my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
+        if (-f $possible_build_list_path)
+        {
+            $build_list_paths{$module} = $possible_build_list_path;
+            return $possible_build_list_path;
+        };
+        print_error("There's no build.lst for $module");
     };
     $dead_parents{$module}++;
     return $build_list_paths{$module};
@@ -748,10 +748,10 @@ sub store_build_list_content {
 
     if (open (BUILD_LST, $build_list_path))
     {
-	my @build_lst = <BUILD_LST>;
-	$build_lists_hash{$module} = \@build_lst;
-	close BUILD_LST;
-	return;
+        my @build_lst = <BUILD_LST>;
+        $build_lists_hash{$module} = \@build_lst;
+        close BUILD_LST;
+        return;
     };
     $dead_parents{$module}++;
 }
@@ -1076,7 +1076,6 @@ sub pick_prj_to_build {
 sub check_platform {
     my $platform = shift;
     return 1 if ($platform eq 'all');
-    return 1 if (($ENV{GUI} eq 'WIN') && ($platform eq 'w'));
     return 1 if (($ENV{GUI} eq 'UNX') && ($platform eq 'u'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
                  (($platform eq 'w') || ($platform eq 'n')));
@@ -1148,16 +1147,16 @@ sub check_deps_hash {
                     $log_name = $module if ($log_name =~ /^\.+$/);
                     $log_name .= '.txt';
 
-		    if ( $source_config->is_gbuild($module) )
-		    {
-			$log_path = correct_path("$workdir/Logs/${module}_${log_name}");
-			$long_log_path = correct_path("$workdir/Logs/${module}_${log_name}");
-		    }
-		    else
-		    {
-			$log_path = '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
-			$long_log_path = correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
-		    }
+                    if ( $source_config->is_gbuild($module) )
+                    {
+                        $log_path = correct_path("$workdir/Logs/${module}_${log_name}");
+                        $long_log_path = correct_path("$workdir/Logs/${module}_${log_name}");
+                    }
+                    else
+                    {
+                        $log_path = '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
+                        $long_log_path = correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
+                    }
 
                     push(@possible_order, $key);
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
@@ -1165,7 +1164,7 @@ sub check_deps_hash {
                                             STATUS => 'waiting',
                                             LOG_PATH => $log_path,
                                             LONG_LOG_PATH => $long_log_path,
-					    MODULE => $module,
+                                            MODULE => $module,
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
                                             CLIENT => '-'
@@ -1335,7 +1334,7 @@ sub usage {
     print STDERR "        --help       - print help info\n";
     print STDERR "        --ignore     - force tool to ignore errors\n";
     print STDERR "        --html       - generate html page with build status\n";
-    print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SOLARSRC}\n";
+    print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SRC_ROOT}\n";
     print STDERR "          --html_path      - set html page path\n";
     print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --interactive      - start interactive build process (process can be managed via html page)\n";
@@ -1508,24 +1507,20 @@ sub cancel_build {
         print STDERR " it seems that the error is inside '$module', please re-run build\n";
         print STDERR " inside this module to isolate the error and/or test your fix:\n";
     }
+    print STDERR "\n";
+    print STDERR "build_error.log should contain the captured output of the failed module(s)\n";
+    print STDERR "\n";
     print STDERR "-----------------------------------------------------------------------\n";
+    print STDERR "To rebuild a specific module:\n";
     print STDERR "\n";
-    print STDERR "" . $ENV{'OOO_SHELL'} . "\n";
-    print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
-    print STDERR "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
-    print STDERR "cd $module\n";
-    if ($source_config->is_gbuild($module) )
-    {
-        print STDERR "$ENV{GNUMAKE} clean # optional\n";
-        print STDERR "$ENV{GNUMAKE} -r\n"
+    if ($module eq 'tail_build') {
+	print STDERR "$ENV{GNUMAKE} $module.clean # not recommended, this will re-build almost everything\n";
+    } else {
+	print STDERR "$ENV{GNUMAKE} $module.clean # optional\n";
     }
-    else
-    {
-        print STDERR "rm -Rf " . $ENV{'SRC_ROOT'} . "/$module/" . $ENV{'INPATH'} . " # optional module 'clean'\n";
-        print STDERR "build\n";
-    }
+    print STDERR "$ENV{GNUMAKE} $module\n";
     print STDERR "\n";
-    print STDERR "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
+    print STDERR "when the problem is isolated and fixed, re-run '$ENV{GNUMAKE}'\n";
     zenity_message("LibreOffice Build Failed!");
     zenity_close();
 
@@ -1656,6 +1651,7 @@ sub build_dependent {
             };
 
             if (defined $modules_with_errors{$dependencies_hash}) {
+                push(@broken_modules_names, $module_by_hash{$dependencies_hash});
                 cancel_build();
             }
             mp_success_exit();
@@ -1818,7 +1814,6 @@ sub run_job {
     my ($job, $path, $registered_name) = @_;
     my $job_to_do = $job;
     my $error_code = 0;
-    my $retry_counter = 10;
 
     print "$registered_name\n";
     return 0 if ( $show );
@@ -1833,16 +1828,16 @@ sub run_job {
 
     if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
     {
-	mkpath("$workdir/Logs");
+        mkpath("$workdir/Logs");
     }
     else
     {
-	if (!-d $log_dir)
-	{
-	    system("$perl $mkout");
-	};
+        if (!-d $log_dir)
+        {
+            system("$perl $mkout");
+        };
     }
-RETRY:
+
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
     open (LOGFILE, "> $log_file") or return 8;
     while (<MAKE>) { print LOGFILE $_; print $_ }
@@ -1851,11 +1846,6 @@ RETRY:
     close LOGFILE;
     if ( $error_code != 0)
     {
-        if ($ENV{GUI} eq 'WIN' && $retry_counter > 0)
-        {
-	    $retry_counter -= 1;
-            system('grep "Error 126\$"') && goto RETRY;
-	}
         system("echo \"log for $path\" >> $build_error_log");
         system("cat $log_file >> $build_error_log");
     }

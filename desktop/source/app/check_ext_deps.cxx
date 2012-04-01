@@ -218,9 +218,9 @@ void SilentCommandEnv::pop() throw (uno::RuntimeException)
 
 } // end namespace
 
-//-----------------------------------------------------------------------------
-static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
-//------------------------------------------------------------------------------
+
+static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
+
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > &xContext )
 {
     rtl::OUString sServiceName = UNISTRING("com.sun.star.deployment.ui.UpdateRequiredDialog");
@@ -333,7 +333,7 @@ static void impl_setNeedsCompatCheck()
                       makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
-            theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
         Any value = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("never")) );
 
@@ -385,7 +385,7 @@ static bool impl_needsCompatCheck()
                       makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
-            theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
         Any result = pset->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")) );
 

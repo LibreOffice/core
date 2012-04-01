@@ -155,7 +155,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablemodel.hxx,s
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablerenderer.hxx,svtools/table/tablerenderer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tabletypes.hxx,svtools/table/tabletypes.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablesort.hxx,svtools/table/tablesort.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/taskbar.hxx,svtools/taskbar.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templatefoldercache.hxx,svtools/templatefoldercache.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templdlg.hxx,svtools/templdlg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textdata.hxx,svtools/textdata.hxx))

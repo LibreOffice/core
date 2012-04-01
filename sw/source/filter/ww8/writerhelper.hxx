@@ -530,7 +530,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const String& rName);
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const rtl::OUString& rName);
 
         /** Get a Character Style which fits a given name
 
@@ -548,7 +548,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const String& rName);
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const rtl::OUString& rName);
 
         /** Sort sequence of Paragraph Styles by assigned outline style list level
 
@@ -622,7 +622,7 @@ namespace sw
             e.g. Page Anchored elements will not be. For the winword export we
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
-            of sw::Frames which are guaranteed to have an appropiate anchor.
+            of sw::Frames which are guaranteed to have an appropriate anchor.
 
             @param rDoc
             The SwDoc document to get the styles from
@@ -741,7 +741,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        bool IsStarSymbol(const String &rFontName);
+        bool IsStarSymbol(const rtl::OUString &rFontName);
 
         /** Make setting a drawing object's layer in a Writer document easy
 
@@ -873,7 +873,7 @@ namespace sw
         class DrawingOLEAdaptor
         {
         private:
-            String msOrigPersistName;
+            rtl::OUString msOrigPersistName;
             com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
             Graphic* mpGraphic;
@@ -907,7 +907,7 @@ namespace sw
                 @return On success true is returned, otherwise false. On
                 success rName is then suitable for user with SwDoc::InsertOLE
             */
-            bool TransferToDoc(::rtl::OUString &rName);
+            bool TransferToDoc(rtl::OUString &rName);
         private:
             /// No assigning allowed
             DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&);

@@ -102,7 +102,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
         String  aStr;
         for( i=0; i < nEntryCount; i++ )
         {
-            readByteString(rStream, aStr);
+            aStr = readByteString(rStream);
             pImp->aList.push_back(aStr);
         }
     }
@@ -234,8 +234,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
 
     xub_StrLen nStart = 0;
     xub_StrLen nDelimPos;
-    XubString aStr(rStr);
-    aStr.ConvertLineEnd(LINEEND_CR);
+    XubString aStr(convertLineEnd(rStr, LINEEND_CR));
     do
     {
         nDelimPos = aStr.Search( _CR, nStart );
@@ -277,8 +276,7 @@ XubString SfxStringListItem::GetString()
                 break;
         }
     }
-    aStr.ConvertLineEnd();
-    return aStr;
+    return convertLineEnd(aStr, GetSystemLineEnd());
 }
 
 //------------------------------------------------------------------------

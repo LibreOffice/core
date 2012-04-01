@@ -47,7 +47,7 @@ class AquaSalFrame;
 class AquaSalBitmap;
 class ImplDevFontAttributes;
 
-class CGRect;
+struct CGRect;
 
 // mac specific physically available font face
 class ImplMacFontData : public ImplFontData
@@ -238,9 +238,6 @@ public:
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                               ControlState nState, const ImplControlValue& aValue,
-                                               const rtl::OUString& aCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );

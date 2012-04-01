@@ -69,8 +69,7 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            sal_Int32                       m_nNumParams;       // Number of parameter markers
-                                                                //  for the prepared statement
+            sal_Int32                       m_nNumParams; // Number of parameter markers for the prepared statement
 
             ::rtl::OUString                             m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
@@ -109,7 +108,7 @@ namespace connectivity
 
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor need for returning the object
             OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql);
             void lateInit();
 

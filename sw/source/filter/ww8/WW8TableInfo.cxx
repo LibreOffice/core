@@ -631,8 +631,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
 
     WW8TableNodeInfo * pPrev = NULL;
 
-    SwFrmFmt * pFrmFmt = pTable->GetFrmFmt();
-    if (pFrmFmt != NULL && pTable->IsTblComplex())
+    if (pTable->IsTblComplex() && pTable->HasLayout())
     {
         pPrev = processSwTableByLayout(pTable);
 
@@ -1171,9 +1170,11 @@ void WW8TableCellGrid::addShadowCells()
             }
 
             ++aCellIt;
-
-            bBeginningOfCell = (aRect.Left() != aCellIt->left());
-            aRect = aCellIt->getRect();
+            if (aCellIt != aCellEndIt)
+            {
+                bBeginningOfCell = (aRect.Left() != aCellIt->left());
+                aRect = aCellIt->getRect();
+            }
         }
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);

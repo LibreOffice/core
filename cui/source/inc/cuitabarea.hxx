@@ -30,7 +30,17 @@
 
 // include ---------------------------------------------------------------
 
+#include <svtools/valueset.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <svx/dlgctrl.hxx>
+#include <svx/xsetit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xfillit.hxx>
 #include <svx/tabarea.hxx>
+
+class SdrModel;
+class SdrView;
 
 /************************************************************************/
 
@@ -252,21 +262,21 @@ private:
     FieldUnit           eFUnit;
 
 #ifdef _SVX_TPAREA_CXX
-    DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
-    DECL_LINK( ClickInvisibleHdl_Impl, void * );
-    DECL_LINK( ClickColorHdl_Impl, void * );
+    DECL_LINK(SelectDialogTypeHdl_Impl, void *);
     DECL_LINK( ModifyColorHdl_Impl, void * );
     DECL_LINK( ModifyHatchBckgrdColorHdl_Impl, void * );
-    DECL_LINK( ClickGradientHdl_Impl, void * );
     DECL_LINK( ModifyGradientHdl_Impl, void * );
-    DECL_LINK( ClickHatchingHdl_Impl, void * );
     DECL_LINK( ModifyHatchingHdl_Impl, void * );
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
-    DECL_LINK( ClickBitmapHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
+    void ClickInvisibleHdl_Impl();
+    void ClickHatchingHdl_Impl();
+    void ClickGradientHdl_Impl();
+    void ClickColorHdl_Impl();
+    void ClickBitmapHdl_Impl();
 #endif
 
 public:

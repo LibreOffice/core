@@ -64,7 +64,8 @@ using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
 
 #include <unicode/ubidi.h>
-#include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
+#include <i18nutil/scripttypedetector.hxx>
+#include <i18nutil/unicode.hxx>
 
 #define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
 #define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
@@ -904,16 +905,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
         // than one script:
-        if( i18n::ScriptType::COMPLEX == nScript && pBreakIt->GetScriptTypeDetector().is() )
+        if( i18n::ScriptType::COMPLEX == nScript )
         {
-            const short nScriptType = pBreakIt->GetScriptTypeDetector()->getCTLScriptType( rTxt, nSearchStt );
+            const short nScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nSearchStt );
             xub_StrLen nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
-                nNextCTLScriptStart = (xub_StrLen)pBreakIt->GetScriptTypeDetector()->endOfCTLScriptType( rTxt, nNextCTLScriptStart );
+                nNextCTLScriptStart = (xub_StrLen)ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
                 if( nNextCTLScriptStart < rTxt.Len() && nNextCTLScriptStart < nChg )
-                    nCurrentScriptType = pBreakIt->GetScriptTypeDetector()->getCTLScriptType( rTxt, nNextCTLScriptStart );
+                    nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
                 else
                     break;
             }

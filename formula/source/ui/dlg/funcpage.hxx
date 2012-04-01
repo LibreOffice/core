@@ -41,7 +41,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
-#include "ModuleHelper.hxx"
+#include "formula/omoduleclient.hxx"
 //============================================================================
 namespace formula
 {
@@ -88,7 +88,7 @@ private:
 
     void impl_addFunctions(const IFunctionCategory* _pCategory);
                     DECL_LINK( SelHdl, ListBox* );
-                    DECL_LINK( DblClkHdl, ListBox* );
+                    DECL_LINK(DblClkHdl, void *);
 
 protected:
 

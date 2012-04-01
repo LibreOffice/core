@@ -86,7 +86,6 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, sal_Bool bAsNewAlreadyParsed )
         if( !bAsNewAlreadyParsed )
             Next();
         rDef.SetDefinedAs();
-        String aType;
         SbiToken eTok = Next();
         if( !bAsNewAlreadyParsed && eTok == NEW )
         {

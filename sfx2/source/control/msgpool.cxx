@@ -301,16 +301,6 @@ SfxInterface* SfxSlotPool::FirstInterface()
 
 //--------------------------------------------------------------------
 
-SfxInterface* SfxSlotPool::NextInterface()
-{
-    _nCurInterface++;
-    sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
-    if ( _nCurInterface < nFirstInterface )
-        return (*_pParentPool->_pInterfaces)[_nCurInterface];
-    sal_uInt16 nInterface = _nCurInterface - nFirstInterface;
-    return nInterface < _pInterfaces->size() ? (*_pInterfaces)[nInterface] : 0;
-}
-
 const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
 {
     const SfxSlot *pSlot = NULL;

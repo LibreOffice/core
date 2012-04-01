@@ -726,8 +726,7 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
             if ( eType == CELLTYPE_STRING )
             {
-                rtl::OUString aText;
-                static_cast<ScStringCell*>(pCell)->GetString(aText);
+                rtl::OUString aText = static_cast<ScStringCell*>(pCell)->GetString();
                 pEngine->SetText( aText );
             }
             else
@@ -1464,7 +1463,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
 // TimerDelays etc.
 void ScDocument::KeyInput( const KeyEvent& )
 {
-    if ( pChartListenerCollection->GetCount() )
+    if ( pChartListenerCollection->hasListeners() )
         pChartListenerCollection->StartTimer();
     if( apTemporaryChartLock.get() )
         apTemporaryChartLock->StartOrContinueLocking();
@@ -1595,8 +1594,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                 else if ( eType == CELLTYPE_STRING )
                 {
-                    rtl::OUString aOldStr;
-                    ((const ScStringCell*)pCell)->GetString(aOldStr);
+                    rtl::OUString aOldStr = ((const ScStringCell*)pCell)->GetString();
                     sal_Int32 nOldLen = aOldStr.getLength();
 
                     if ( bConsiderLanguage )

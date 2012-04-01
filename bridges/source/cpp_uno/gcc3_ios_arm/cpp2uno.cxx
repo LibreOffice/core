@@ -77,7 +77,7 @@ void cpp2uno_call(
 #else
             CPPU_CURRENT_NAMESPACE::isSimpleReturnType( pReturnTypeDescr )
 #endif
-                                                                          )
+            )
         {
             pUnoReturn = pReturnValue; // direct way for simple types
         }
@@ -365,10 +365,13 @@ extern "C" void cpp_vtable_call(
 }
 
 //==================================================================================================
-
 extern "C" { 
 extern int nFunIndexes, nVtableOffsets;
-extern unsigned char **codeSnippets; 
+#ifdef __arm
+extern int codeSnippets[];
+#else
+extern unsigned char **codeSnippets;
+#endif
 }
 
 unsigned char * codeSnippet(
@@ -389,7 +392,7 @@ unsigned char * codeSnippet(
         return NULL;
     
 #ifdef __arm
-    return codeSnippets[functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam];
+    return ((unsigned char *) &codeSnippets) + codeSnippets[functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam];
 #else
     enum { General, Void, Hyper, Float, Double, Class } exec;
     int flag = 0;
@@ -442,7 +445,6 @@ unsigned char * codeSnippet(
 
     return codeSnippets[functionIndex*nVtableOffsets*6*2 + vtableOffset*6*2 + exec*2 + flag];
 #endif
-
 }
 
 }
@@ -458,7 +460,11 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return 0;
+#ifdef __arm
+    ???
+#else
+    return (slotCount + 2) * sizeof (Slot);
+#endif
 }
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
@@ -483,7 +489,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
         OSL_ASSERT(member != 0);
         switch (member->eTypeClass) {
-        case typelib_TypeClass_INTERFACE_ATTRIBUTE: {
+        case typelib_TypeClass_INTERFACE_ATTRIBUTE:
 #ifdef __arm
             typelib_InterfaceAttributeTypeDescription *pAttrTD =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
@@ -512,10 +518,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 #endif
                                         );
             }
-            }
             break;
 
-        case typelib_TypeClass_INTERFACE_METHOD: {
+        case typelib_TypeClass_INTERFACE_METHOD:
 #ifdef __arm
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<
@@ -530,7 +535,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     member)->pReturnTypeRef
 #endif
                                     );
-            }
             break;
 
         default:

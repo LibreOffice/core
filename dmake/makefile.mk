@@ -7,7 +7,7 @@
 #	OSENVIRONMENT - optionally specifies the environment under which the
 #                       OS and OSENVIRONMENT are running.
 #
-# For valid values for the above macros consult the readme/* files or type
+# For valid values for the above macros consult the doc/* files or type
 # 'make' by itself to get a summary of what is available.
 
 # First target in the makefile, do this so that targets declared in the
@@ -164,7 +164,7 @@ src-list : clean
     grep -v tst | grep -v $@ | grep -v license |\
     grep -v CVS | grep -v RCS |\
     grep -v '\.zip' | grep -v '\.tar'| grep -v '\.shar' >> $@
-    echo ' readme/license.txt' >> $@
+    echo ' doc/license.txt' >> $@
 
 #--------------------------------------------------------------------------
 # This section can be used to make the necessary script files so that dmake

@@ -1484,30 +1484,6 @@ namespace basegfx
         return mpPolygon->getB2DRange(*this);
     }
 
-    void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)
-    {
-        OSL_ENSURE(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
-
-        if(rPoly.count())
-        {
-            if(!nCount)
-            {
-                nCount = rPoly.count();
-            }
-
-            if(0 == nIndex2 && nCount == rPoly.count())
-            {
-                mpPolygon->insert(nIndex, *rPoly.mpPolygon);
-            }
-            else
-            {
-                OSL_ENSURE(nIndex2 + nCount <= rPoly.mpPolygon->count(), "B2DPolygon Insert outside range (!)");
-                ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex2, nCount);
-                mpPolygon->insert(nIndex, aTempPoly);
-            }
-        }
-    }
-
     void B2DPolygon::append(const B2DPolygon& rPoly, sal_uInt32 nIndex, sal_uInt32 nCount)
     {
         if(rPoly.count())

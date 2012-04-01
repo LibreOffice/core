@@ -69,6 +69,10 @@ namespace
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
 
+#ifdef __ARM_PCS_VFP
+        int dc = 0;
+        char * pFloatArgs = (char *)(pCppStack - 64);
+#endif
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
         if (pReturnTypeRef)
@@ -125,7 +129,9 @@ namespace
                 {
                     case typelib_TypeClass_HYPER:
                     case typelib_TypeClass_UNSIGNED_HYPER:
+#ifndef __ARM_PCS_VFP
                     case typelib_TypeClass_DOUBLE:
+#endif
             if ((pCppStack - pTopStack) % 8) pCppStack+=sizeof(sal_Int32); //align to 8
                         break;
                     default:
@@ -133,13 +139,36 @@ namespace
                 }
 #endif
 
-                pCppArgs[nPos] = pCppStack;
-                pUnoArgs[nPos] = pCppStack;
+// For armhf we get the floating point arguments from a different area of the stack
+// TODO: deal with functions with more than 8 floating point args that need to overflow
+// to the stack. Find such an UNO API to try on.
+#ifdef __ARM_PCS_VFP
+                if (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT)
+                {
+                    pCppArgs[nPos] =  pUnoArgs[nPos] = pFloatArgs;
+                    pFloatArgs += sizeof(float);
+                } else
+                if (pParamTypeDescr->eTypeClass == typelib_TypeClass_DOUBLE)
+                {
+                    if ((pFloatArgs - pTopStack) % 8) pFloatArgs+=sizeof(float); //align to 8
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pFloatArgs;
+                    pFloatArgs += sizeof(double);
+                    if (++dc == arm::MAX_FPR_REGS) {
+                        if (pCppStack - pTopStack < 16)
+                            pCppStack = pTopStack + 16;
+                        pFloatArgs = pCppStack;
+                    }
+                } else
+#endif
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pCppStack;
+
                 switch (pParamTypeDescr->eTypeClass)
                 {
                     case typelib_TypeClass_HYPER:
                     case typelib_TypeClass_UNSIGNED_HYPER:
+#ifndef __ARM_PCS_VFP
                     case typelib_TypeClass_DOUBLE:
+#endif
                         pCppStack += sizeof(sal_Int32); // extra long
                         break;
                     default:
@@ -179,6 +208,13 @@ namespace
                     TYPELIB_DANGER_RELEASE( pParamTypeDescr );
                 }
             }
+#ifdef __ARM_PCS_VFP
+            // use the stack for output parameters or non floating point values
+                if (rParam.bOut ||
+                        ((pParamTypeDescr->eTypeClass != typelib_TypeClass_DOUBLE)
+                         && (pParamTypeDescr->eTypeClass != typelib_TypeClass_FLOAT))
+                    )
+#endif
             pCppStack += sizeof(sal_Int32); // standard parameter length
         }
 
@@ -393,8 +429,6 @@ namespace
             throw RuntimeException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
                 (XInterface *)pCppI );
-            // is here for dummy
-            eRet = typelib_TypeClass_VOID;
         }
         }
 

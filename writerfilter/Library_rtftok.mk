@@ -30,9 +30,8 @@ $(eval $(call gb_Library_Library,rtftok))
 
 $(eval $(call gb_Library_set_include,rtftok,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/writerfilter/inc) \
+	-I$(SRCDIR)/writerfilter/inc \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
-	-I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,rtftok,\
@@ -40,7 +39,7 @@ $(eval $(call gb_Library_add_api,rtftok,\
 	udkapi \
 ))
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_add_defs,rtftok,\
 	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \
@@ -52,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
 	cppuhelper \
 	oox \
 	sal \
+	svt \
 	ucbhelper \
 	utl \
 	tl \

@@ -27,12 +27,10 @@
  ************************************************************************/
 
 #include <package/Inflater.hxx>
-#ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
 #include <zlib.h>
 #else
 #include <external/zlib/zlib.h>
-#endif
 #endif
 #include <string.h> // for memset
 
@@ -105,7 +103,7 @@ void SAL_CALL Inflater::end(  )
 {
     if (pStream != NULL)
     {
-#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIX
+#if !defined Z_PREFIX
         inflateEnd(pStream);
 #else
         z_inflateEnd(pStream);
@@ -130,7 +128,7 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     pStream->next_out  = reinterpret_cast < unsigned char* > ( rBuffer.getArray() + nNewOffset );
     pStream->avail_out = nNewLength;
 
-#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIX
+#if !defined Z_PREFIX
     sal_Int32 nResult = ::inflate(pStream, Z_PARTIAL_FLUSH);
 #else
     sal_Int32 nResult = ::z_inflate(pStream, Z_PARTIAL_FLUSH);

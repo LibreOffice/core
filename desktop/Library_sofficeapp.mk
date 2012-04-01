@@ -31,6 +31,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
     -I$(SRCDIR)/desktop/source/inc \
+    -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sofficeapp,\
@@ -46,10 +47,6 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
-$(eval $(call gb_Library_set_include,sofficeapp,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,sofficeapp,\
     comphelper \
     cppu \
@@ -57,6 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,sofficeapp,\
     deploymentmisc \
     i18nisolang1 \
     sal \
+    salhelper \
     sfx \
     svl \
     svt \
@@ -86,16 +84,11 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/desktopresid \
     desktop/source/app/dispatchwatcher \
     desktop/source/app/langselect \
-    desktop/source/app/lockfile \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
     desktop/source/app/sofficemain \
     desktop/source/app/userinstall \
     desktop/source/migration/migration \
-))
-
-$(eval $(call gb_Library_add_cobjects,sofficeapp,\
-    desktop/source/app/main \
 ))
 
 # vim: set ts=4 sw=4 et:

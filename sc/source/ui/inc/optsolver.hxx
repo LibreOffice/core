@@ -209,13 +209,13 @@ private:
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( DelBtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( LoseFocusHdl, Control* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( LoseFocusHdl, void* );
+    DECL_LINK(ScrollHdl, void *);
     DECL_LINK( CursorUpHdl, ScCursorRefEdit* );
     DECL_LINK( CursorDownHdl, ScCursorRefEdit* );
-    DECL_LINK( CondModifyHdl, Edit* );
-    DECL_LINK( TargetModifyHdl, Edit* );
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK( CondModifyHdl, void* );
+    DECL_LINK( TargetModifyHdl, void* );
+    DECL_LINK( SelectHdl, void* );
 };
 
 

@@ -875,7 +875,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             if ( nEscLen <= ( nRecSize * 2 ) )
                             {
 #ifdef OSL_BIGENDIAN
-                                sal_uInt32 nTmp = SWAPLONG( nEsc );
+                                sal_uInt32 nTmp = OSL_SWAPDWORD( nEsc );
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
@@ -918,9 +918,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                                                 if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                                 {
-                                                    sal_Unicode* pBuf = aString.AllocBuffer( (xub_StrLen)nStringLen );
-                                                    for (sal_uInt32 i = 0; i < nStringLen; i++ )
-                                                        aMemoryStream >> pBuf[ i ];
+
+                                                    aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
                                                     aMemoryStream >> nDXCount;
                                                     if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                         nDXCount = 0;
@@ -1100,8 +1099,13 @@ sal_Bool WMFReader::ReadHeader()
         return false;
     if (nMetaKey != 0x00090001)
     {
-        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return false;
+        sal_uInt16 aNextWord(0);
+        *pWMF >> aNextWord;
+        if (nMetaKey != 0x10000 || aNextWord != 0x09)
+        {
+            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+            return false;
+        }
     }
 
     pWMF->SeekRel( 2 ); // Version (von Windows)

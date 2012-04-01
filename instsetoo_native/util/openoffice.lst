@@ -13,7 +13,6 @@ Globals
             SERVICETAG_PARENTNAME LibreOffice 3.6
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
             SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
-            HIDELICENSEDIALOG 1
             PACKAGEPREFIX
             BASISPACKAGEPREFIX libobasis
             UREPACKAGEPREFIX libreoffice
@@ -36,8 +35,8 @@ Globals
             WINDOWSPATCHLEVEL 8
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
-            STARTCENTER_LAYOUT_STYLE 0
             BUILDIDCWS {buildidcws}
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
     }
 }
@@ -62,10 +61,8 @@ LibreOffice
             BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
-            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
-            EVAL
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
@@ -75,21 +72,18 @@ LibreOffice
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
             USE_FILEVERSION 1
             LIBRARYVERSION 9.4.0
             PATCHCODEFILE ooo_patchcodes.txt
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
@@ -127,9 +121,8 @@ LibreOffice_Dev
             REGISTRYLAYERNAME LayerDev
             SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
-            EVAL
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
@@ -139,9 +132,7 @@ LibreOffice_Dev
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
@@ -150,12 +141,11 @@ LibreOffice_Dev
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
@@ -183,19 +173,17 @@ URE
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION alpha0
             LICENSENAME LGPL
-            SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
             GLOBALFILEGID gid_File_Dl_Cppu
             DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             PACKAGEMAP package_names_ext.txt
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -232,12 +220,11 @@ LibreOffice_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -280,12 +267,11 @@ LibreOffice_Dev_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -322,12 +308,11 @@ LibreOffice_Test
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -370,12 +355,11 @@ LibreOffice_Dev_Test
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -404,10 +388,8 @@ OxygenOffice
             BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
-            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
-            EVAL
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
@@ -418,9 +400,7 @@ OxygenOffice
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
@@ -431,12 +411,11 @@ OxygenOffice
             PROGRESSSIZE 430,5
             PROGRESSPOSITION 5,230
             PROGRESSFRAMECOLOR 207,208,211
-            RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5

@@ -89,7 +89,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
     //------------------------
     DECL_LINK( CheckHdl, Button * );
-    DECL_LINK( OkHdl, Button * );
+    DECL_LINK(OkHdl, void *);
     DECL_LINK( AddHdl, void * );
     DECL_LINK( RemoveHdl, void * );
     DECL_LINK( RenameHdl, void * );

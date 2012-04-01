@@ -104,9 +104,8 @@ File::do_write( const void *    i_pSrc,
 
     if ( eLastIO == io_write )
         ::fseek( pStream, 0, SEEK_CUR );
-    uintt ret = position();
-    ::fwrite( i_pSrc, 1, i_nNrofBytes, pStream );
-    ret = position() - ret;
+
+    uintt ret = ::fwrite( i_pSrc, 1, i_nNrofBytes, pStream );
 
     eLastIO = io_write;
     return ret;

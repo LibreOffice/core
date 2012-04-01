@@ -97,8 +97,8 @@ public:
     /** Holds a mapping from the specified source to the specified destination
         environment.
 
-        @param from         source environment
-        @param to           destination environment
+        @param rFrom         source environment
+        @param rTo           destination environment
         @param rAddPurpose  additional purpose
     */
     inline Mapping(const Environment & rFrom, const Environment & rTo,

@@ -28,7 +28,9 @@ PRJ=..$/..
 
 PRJNAME=cpputools
 TARGET=uno
+.IF "$(OS)" != "IOS"
 LIBTARGET=NO
+.ENDIF
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -68,12 +70,15 @@ UNOTYPES= \
 
 DEPOBJFILES=$(OBJ)$/unoexe.obj
 
+.IF "$(OS)" == "IOS"
+LIB1TARGET=$(LB)/$(TARGET).lib
+LIB1ARCHIV=$(LB)/lib$(TARGET).a
+LIB1OBJFILES=$(DEPOBJFILES)
+CFLAGSCXX += $(OBJCXXFLAGS)
+.ELSE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(DEPOBJFILES)  
 APP1RPATH=UREBIN
-
-.IF "$(OS)" == "IOS"
-CFLAGSCXX += $(OBJCXXFLAGS)
 .ENDIF
 
 # Include all relevant (see ure/source/README) dynamic libraries, so that C++

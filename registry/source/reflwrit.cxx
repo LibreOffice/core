@@ -302,7 +302,8 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer)
             buff += writeBYTE(buff, (sal_uInt8) m_value.aConst.aBool);
             break;
         case CP_TAG_CONST_BYTE:
-            buff += writeBYTE(buff, m_value.aConst.aByte);
+            buff += writeBYTE(
+                buff, static_cast< sal_uInt8 >(m_value.aConst.aByte));
             break;
         case CP_TAG_CONST_INT16:
             buff += writeINT16(buff, m_value.aConst.aShort);

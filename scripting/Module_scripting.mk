@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Module_Module,scripting))
 
-ifneq (IOS,$(OS))
+ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,scripting,\
 	$(if $(SOLAR_JAVA),\

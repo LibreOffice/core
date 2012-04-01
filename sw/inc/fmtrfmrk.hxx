@@ -43,7 +43,7 @@ class SwFmtRefMark : public SfxPoolItem
 
     // Protected CopyCtor.
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
-    String aRefName;
+    rtl::OUString aRefName;
 
 public:
     SwFmtRefMark( const String& rTxt );
@@ -57,8 +57,8 @@ public:
     const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
     SwTxtRefMark *GetTxtRefMark()               { return pTxtAttr; }
 
-    inline       String &GetRefName()       { return aRefName; }
-    inline const String &GetRefName() const { return aRefName; }
+    inline       rtl::OUString &GetRefName()       { return aRefName; }
+    inline const rtl::OUString &GetRefName() const { return aRefName; }
 };
 
 #endif

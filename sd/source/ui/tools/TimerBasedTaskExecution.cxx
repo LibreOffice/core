@@ -138,7 +138,7 @@ void TimerBasedTaskExecution::SetSelf (
 
 
 
-IMPL_LINK(TimerBasedTaskExecution,TimerCallback, Timer*,EMPTYARG)
+IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
 {
     if (mpTask.get() != NULL)
     {

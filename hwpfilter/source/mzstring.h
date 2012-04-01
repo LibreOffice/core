@@ -29,10 +29,6 @@
 #ifndef _MZSTRING_H_
 #define _MZSTRING_H_
 
-#ifdef __GNUG__
-#  pragma interface
-#endif
-
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif

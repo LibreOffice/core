@@ -58,7 +58,7 @@ void TimerTriggeredControllerLock::startTimer()
         m_apControllerLockGuard = std::auto_ptr< ControllerLockGuard >( new  ControllerLockGuard(m_xModel) );
     m_aTimer.Start();
 }
-IMPL_LINK( TimerTriggeredControllerLock, TimerTimeout, void*, EMPTYARG )
+IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout)
 {
     m_apControllerLockGuard.reset();
     return 0;

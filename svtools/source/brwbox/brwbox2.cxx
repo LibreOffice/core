@@ -165,7 +165,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
     }
     else if ( STATE_CHANGE_INITSHOW == nStateChange )
     {
-        bBootstrapped = sal_True; // muss zuerst gesetzt werden!
+        bBootstrapped = sal_True; // must be set first!
 
         Resize();
         if ( bMultiSelection )
@@ -192,7 +192,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         if (pHeaderBar)
             pHeaderBar->SetZoom(GetZoom());
 
-        // let the cols calc their new widths and adjust the header bar
+        // let the columns calculate their new widths and adjust the header bar
         for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
         {
             (*pCols)[ nPos ]->ZoomChanged(GetZoom());
@@ -207,7 +207,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
     {
         // do we have a handle column?
         sal_Bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
-        // do we have a header bar
+        // do we have a header bar?
         sal_Bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
 
         if  (   nTitleLines
@@ -335,9 +335,9 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
 
     // accumulate areas of rows to highlight
     RectangleList aHighlightList;
-    long nLastRowInRect = 0; // fuer den CFront
+    long nLastRowInRect = 0; // for the CFront
 
-    // Handle-Column nicht highlighten
+    // don't highlight handle column
     BrowserColumn *pFirstCol = pCols->empty() ? NULL : (*pCols)[ 0 ];
     long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
 
@@ -420,7 +420,7 @@ void BrowseBox::DrawCursor()
     if ( nCurColId == HandleColumnId )
         nCurColId = GetColumnId(1);
 
-    // Cursor-Rechteck berechnen
+    // calculate cursor rectangle
     Rectangle aCursor;
     if ( bColumnCursor )
     {
@@ -445,7 +445,7 @@ void BrowseBox::DrawCursor()
 
     if (m_aCursorColor == COL_TRANSPARENT)
     {
-        // auf diesem Plattformen funktioniert der StarView-Focus richtig
+        // on these platforms, the StarView focus works correctly
         if ( bReallyHide )
             ((Control*)pDataWin)->HideFocus();
         else
@@ -531,12 +531,12 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
         {
             // down and up
             while ( rEvt.GetRow() < aSelRange.Max() )
-            {   // ZTC/Mac bug - dont put these statemants together!
+            {   // ZTC/Mac bug - don't put these statements together!
                 SelectRow( aSelRange.Max(), bSelectThis, sal_True );
                 --aSelRange.Max();
             }
             while ( rEvt.GetRow() > aSelRange.Max() )
-            {   // ZTC/Mac bug - dont put these statemants together!
+            {   // ZTC/Mac bug - don't put these statements together!
                 SelectRow( aSelRange.Max(), bSelectThis, sal_True );
                 ++aSelRange.Max();
             }
@@ -547,7 +547,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
             sal_Bool bOldSelecting = bSelecting;
             bSelecting = sal_True;
             while ( rEvt.GetRow() < aSelRange.Max() )
-            {   // ZTC/Mac bug - dont put these statemants together!
+            {   // ZTC/Mac bug - don't put these statements together!
                 --aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
@@ -556,7 +556,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 }
             }
             while ( rEvt.GetRow() > aSelRange.Max() )
-            {   // ZTC/Mac bug - dont put these statemants together!
+            {   // ZTC/Mac bug - don't put these statements together!
                 ++aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
@@ -604,7 +604,7 @@ void BrowseBox::Resize()
     if (GetDataRowHeight())
         nOldVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
-    // did we need a horiz. scroll bar oder gibt es eine Control Area?
+    // did we need a horizontal scroll bar or is there a Control Area?
     if ( !getDataWindow()->bNoHScroll &&
          ( ( pCols->size() - FrozenColCount() ) > 1 ) )
         aHScroll.Show();
@@ -630,8 +630,7 @@ void BrowseBox::Resize()
     if (GetDataRowHeight())
         nVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
-    // TopRow ist unveraendert, aber die Anzahl sichtbarer Zeilen hat sich
-    // geaendert
+    // TopRow is unchanged, but the number of visible lines has changed.
     if ( nVisibleRows != nOldVisibleRows )
         VisibleRowsChanged(nTopRow, nVisibleRows);
 
@@ -647,7 +646,7 @@ void BrowseBox::Resize()
     HeaderBar* pHeaderBar = getDataWindow()->pHeaderBar;
     if ( pHeaderBar )
     {
-        // Handle-Column beruecksichtigen
+        // take the handle column into account
         BrowserColumn *pFirstCol = (*pCols)[ 0 ];
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
         pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
@@ -691,9 +690,8 @@ void BrowseBox::Paint( const Rectangle& rRect )
     }
 
     // Title Bar
-    // Wenn es eine Handle Column gibt und die Headerbar verfuegbar ist, dann nur
-    // die HandleColumn
-    // Handle-Column beruecksichtigen
+    // If there is a handle column and if the  header bar is available, only
+    // take the HandleColumn into account
     if ( nTitleLines && (!bHeaderBar || bHandleCol) )
     {
         // iterate through columns to redraw
@@ -703,11 +701,11 @@ void BrowseBox::Paint( const Rectangle& rRect )
               nCol < pCols->size() && nX < rRect.Right();
               ++nCol )
         {
-            // skip invisible colums between frozen and scrollable area
+            // skip invisible columns between frozen and scrollable area
             if ( nCol < nFirstCol && !(*pCols)[ nCol ]->IsFrozen() )
                 nCol = nFirstCol;
 
-            // nur die HandleCol ?
+            // only the handle column?
             if (bHeaderBar && bHandleCol && nCol > 0)
                 break;
 
@@ -749,8 +747,8 @@ void BrowseBox::Paint( const Rectangle& rRect )
             DrawRect( Rectangle(
                 Point( nX, 0 ),
                 Point( rRect.Right(), GetTitleHeight() - 2 ) ) );
-            SetFillColor( aOldFillColor); // aOldLineColor );  oj 09.02.00 seems to be a copy&paste bug
-            SetLineColor( aOldLineColor); // aOldFillColor );
+            SetFillColor( aOldFillColor);
+            SetLineColor( aOldLineColor);
         }
     }
 }
@@ -944,7 +942,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
           ++nRelRow, aPos.Y() += nDataRowHeigt )
     {
         // get row
-        // Zur Sicherheit auf zul"assigen Bereich abfragen:
+        // check valid area, to be on the safe side:
         DBG_ASSERT( (sal_uInt16)(nTopRow+nRelRow) < nRowCount, "BrowseBox::ImplPaintData: invalid seek" );
         if ( (nTopRow+long(nRelRow)) < 0 || (sal_uInt16)(nTopRow+nRelRow) >= nRowCount )
             continue;
@@ -952,7 +950,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
         // prepare row
         sal_uLong nRow = nTopRow+nRelRow;
         if ( !SeekRow( nRow) ) {
-            OSL_FAIL("BrowseBox::ImplPaintData: SeekRow gescheitert");
+            OSL_FAIL("BrowseBox::ImplPaintData: SeekRow failed");
         }
         _rOut.SetClipRegion();
         aPos.X() = aOverallAreaPos.X();
@@ -993,7 +991,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
                 pCol = (nCol < pCols->size() ) ? (*pCols)[ nCol ] : NULL;
                 if (!pCol)
                 {   // FS - 21.05.99 - 66325
-                    // ist zwar eigentlich woanders (an der richtigen Stelle) gefixt, aber sicher ist sicher ...
+                    // actually this has been fixed elsewhere (in the right place),
+                    // but let's make sure...
                     OSL_FAIL("BrowseBox::PaintData : nFirstCol is probably invalid !");
                     break;
                 }
@@ -1017,13 +1016,13 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
             if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == (sal_uLong)GetCurRow()))
                 DrawCursor();
 
-            // draw a single field
-            // #63864#, Sonst wird auch etwas gezeichnet, bsp Handle Column
+            // draw a single field.
+            // else something is drawn to, e.g. handle column
             if (pCol->Width())
             {
                 // clip the column's output to the field area
                 if (_bForeignDevice)
-                {   // (not neccessary if painting onto the data window)
+                {   // (not necessary if painting onto the data window)
                     Size aFieldSize(pCol->Width(), nDataRowHeigt);
 
                     if (aPos.X() + aFieldSize.Width() > aOverallAreaBRPos.X())
@@ -1122,7 +1121,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
             // get column
             BrowserColumn *pCol = (*pCols)[ nCol ];
 
-            // skip invisible colums between frozen and scrollable area
+            // skip invisible columns between frozen and scrollable area
             if ( nCol < nFirstCol && !pCol->IsFrozen() )
             {
                 nCol = nFirstCol;
@@ -1163,7 +1162,7 @@ void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
         return;
     if ( getDataWindow()->bResizeOnPaint )
         Resize();
-    // MI: wer war das denn? Window::Update();
+    // MI: who was that? Window::Update();
 
     ImplPaintData(rWin, rRect, sal_False, sal_True);
 }
@@ -1177,7 +1176,7 @@ void BrowseBox::UpdateScrollbars()
     if ( !bBootstrapped || !IsUpdateMode() )
         return;
 
-    // Rekursionsschutz
+    // protect against recursion
     BrowserDataWin *pBDW = (BrowserDataWin*) pDataWin;
     if ( pBDW->bInUpdateScrollbars )
     {
@@ -1252,10 +1251,10 @@ void BrowseBox::UpdateScrollbars()
         Point( nHScrX, GetOutputSizePixel().Height() - nCornerSize ),
         Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
 
-    // Scrollable Columns insgesamt
+    // total scrollable columns
     short nScrollCols = short(pCols->size()) - (short)nFrozenCols;
 
-    // Sichtbare Columns
+    // visible columns
     short nVisibleHSize = nLastCol == BROWSER_INVALIDID
         ? (short)( pCols->size() - nFirstCol )
         : (short)( nLastCol - nFirstCol );
@@ -1319,7 +1318,7 @@ void BrowseBox::UpdateScrollbars()
     else
         DELETEZ( getDataWindow()->pCornerWin );
 
-    // ggf. Headerbar mitscrollen
+    // scroll headerbar, if necessary
     if ( getDataWindow()->pHeaderBar )
     {
         long nWidth = 0;
@@ -1327,7 +1326,7 @@ void BrowseBox::UpdateScrollbars()
               nCol < pCols->size() && nCol < nFirstCol;
               ++nCol )
         {
-            // HandleColumn nicht
+            // not the handle column
             if ( (*pCols)[ nCol ]->GetId() )
                 nWidth += (*pCols)[ nCol ]->Width();
         }
@@ -1354,9 +1353,8 @@ void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
         return;
 
     Control::SetUpdateMode( bUpdate );
-    // OV
-    // Wenn an der BrowseBox WB_CLIPCHILDREN gesetzt ist (wg. Flackerminimierung),
-    // wird das Datenfenster nicht von SetUpdateMode invalidiert.
+    // If WB_CLIPCHILDREN is st at the BrowseBox (to minimize flicker),
+    // the data window is not invalidated by SetUpdateMode.
     if( bUpdate )
         getDataWindow()->Invalidate();
     getDataWindow()->SetUpdateMode( bUpdate );
@@ -1447,12 +1445,9 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 
 //-------------------------------------------------------------------
 
-IMPL_LINK( BrowseBox,EndScrollHdl,ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    // kein Focus grabben!
-    /// GrabFocus();
 
     if ( getDataWindow()->bNoScrollBack )
     {
@@ -1472,7 +1467,7 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 }
 
 //-------------------------------------------------------------------
-// MI: es wurde immer nur die 1. Spalte resized
+// usually only the first column was resized
 #ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
@@ -1483,7 +1478,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 
     GrabFocus();
 
-    // onl< mouse events in the title-line are supported
+    // only mouse events in the title-line are supported
     const Point &rEvtPos = rEvt.GetPosPixel();
     if ( rEvtPos.Y() >= GetTitleHeight() )
         return;
@@ -1563,10 +1558,10 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                 aNewPointer = Pointer( POINTER_HSPLIT );
                 if ( bResizing )
                 {
-                    // alte Hilfslinie loeschen
+                    // delete old auxiliary line
                     pDataWin->HideTracking() ;
 
-                    // erlaubte breite abholen und neues Delta
+                    // check allowed width and new delta
                     nDragX = Max( rEvt.GetPosPixel().X(), nMinResizeX );
                     long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
@@ -1575,7 +1570,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                                     nOldWidth + nDeltaX )
                              + nResizeX - nOldWidth;
 
-                    // neue Hilfslinie zeichnen
+                    // draw new auxiliary line
                     pDataWin->ShowTracking( Rectangle( Point( nDragX, 0 ),
                             Size( 1, pDataWin->GetSizePixel().Height() ) ),
                             SHOWTRACK_SPLIT|SHOWTRACK_WINDOW );
@@ -1597,7 +1592,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 
     if ( bResizing )
     {
-        // Hilfslinie loeschen
+        // delete auxiliary line
         pDataWin->HideTracking();
 
         // width changed?
@@ -1712,7 +1707,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                         // click in the selected area?
                         else if ( IsRowSelected( rEvt.GetRow() ) )
                         {
-                            // auf Drag&Drop warten
+                            // wait for Drag&Drop
                             bHit = sal_True;
                             bExtendedMode = MOUSE_MULTISELECT ==
                                     ( rEvt.GetMode() & MOUSE_MULTISELECT );
@@ -1769,7 +1764,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                     SelectColumnId( rEvt.GetColumnId(), sal_True, sal_False );
             }
 
-            // ggf. Cursor wieder an
+            // turn cursor on again, if necessary
             bSelecting = sal_False;
             DoShowCursor( "MouseButtonDown" );
             if ( bSelect )

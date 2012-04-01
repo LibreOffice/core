@@ -29,11 +29,14 @@
 #ifndef _CFG_MERGE_HXX
 #define _CFG_MERGE_HXX
 
-#include <tools/string.hxx>
-#include <boost/unordered_map.hpp>
+#include "sal/config.h"
+
+#include <fstream>
 #include <vector>
 
-typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
+#include "boost/unordered_map.hpp"
+
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> OStringHashMap;
 
 
 //
@@ -54,7 +57,7 @@ private:
     rtl::OString sTextTag;
     rtl::OString sEndTextTag;
 
-    ByteStringHashMap sText;
+    OStringHashMap sText;
 public:
     CfgStackData(const rtl::OString &rTag, const rtl::OString &rId)
         : sTagType( rTag ), sIdentifier( rId )
@@ -69,7 +72,7 @@ public:
 // class CfgStack
 //
 
-typedef ::std::vector< CfgStackData* > CfgStackList;
+typedef std::vector< CfgStackData* > CfgStackList;
 
 class CfgStack
 {
@@ -90,9 +93,9 @@ public:
         return temp;
     }
 
-    CfgStackData *GetStackData( size_t nPos = LIST_APPEND );
+    CfgStackData *GetStackData();
 
-    rtl::OString GetAccessPath( size_t nPos = LIST_APPEND );
+    rtl::OString GetAccessPath( size_t nPos );
 
     size_t size() const { return maList.size(); }
 };
@@ -106,7 +109,7 @@ class CfgParser
 protected:
     rtl::OString sCurrentResTyp;
     rtl::OString sCurrentIsoLang;
-    ByteString sCurrentText;
+    rtl::OString sCurrentText;
 
     rtl::OString sLastWhitespace;
 
@@ -116,22 +119,22 @@ protected:
     sal_Bool bLocalize;
 
     virtual void WorkOnText(
-        ByteString &rText,
+        rtl::OString &rText,
         const rtl::OString &rLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
 
     virtual void Output(const rtl::OString & rOutput)=0;
 
-    void Error( const ByteString &rError );
+    void Error(const rtl::OString &rError);
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
     std::vector<rtl::OString> aLanguages;
     void AddText(
-        ByteString &rText,
-        const ByteString &rIsoLang,
-        const ByteString &rResTyp );
+        rtl::OString &rText,
+        const rtl::OString &rIsoLang,
+        const rtl::OString &rResTyp );
 
     sal_Bool IsTokenClosed(const rtl::OString &rToken);
 
@@ -149,9 +152,9 @@ public:
 class CfgOutputParser : public CfgParser
 {
 protected:
-    SvFileStream *pOutputStream;
+    std::ofstream pOutputStream;
 public:
-    CfgOutputParser ( const ByteString &rOutputFile );
+    CfgOutputParser(const rtl::OString &rOutputFile);
     virtual ~CfgOutputParser();
 };
 
@@ -162,12 +165,12 @@ public:
 class CfgExport : public CfgOutputParser
 {
 private:
-    ByteString sPrj;
-    ByteString sPath;
+    rtl::OString sPrj;
+    rtl::OString sPath;
     std::vector<rtl::OString> aLanguages;
 protected:
     virtual void WorkOnText(
-        ByteString &rText,
+        rtl::OString &rText,
         const rtl::OString &rIsoLang
         );
 
@@ -175,9 +178,9 @@ protected:
     void Output(const rtl::OString& rOutput);
 public:
     CfgExport(
-        const ByteString &rOutputFile,
-        const ByteString &rProject,
-        const ByteString &rFilePath
+        const rtl::OString &rOutputFile,
+        const rtl::OString &rProject,
+        const rtl::OString &rFilePath
     );
     ~CfgExport();
 };
@@ -197,7 +200,7 @@ private:
     sal_Bool bEnglish;
 
 protected:
-    virtual void WorkOnText(ByteString &rText, const rtl::OString &rLangIndex);
+    virtual void WorkOnText(rtl::OString &rText, const rtl::OString &rLangIndex);
 
     void WorkOnRessourceEnd();
 

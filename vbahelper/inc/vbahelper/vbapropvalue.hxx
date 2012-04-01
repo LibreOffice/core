@@ -39,6 +39,9 @@ class VBAHELPER_DLLPUBLIC PropListener
 public:
     virtual void setValueEvent( const css::uno::Any& value ) = 0;
     virtual css::uno::Any getValueEvent() = 0;
+
+protected:
+    ~PropListener() {}
 };
 
 

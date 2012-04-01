@@ -63,30 +63,6 @@ sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const ::rtl::OUString& Ser
     return aSeq;
 }
 
-/** this method concatenates the given sequences and returns the result
- */
-::com::sun::star::uno::Sequence< ::rtl::OUString > ServiceInfoHelper::concatSequences( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq1,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq2 ) throw()
-{
-    const sal_Int32 nLen1 = rSeq1.getLength();
-    const sal_Int32 nLen2 = rSeq2.getLength();
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq( nLen1 + nLen2 );
-
-    ::rtl::OUString* pStrings = aSeq.getArray();
-
-    sal_Int32 nIdx;
-    const ::rtl::OUString* pStringSrc = rSeq1.getConstArray();
-    for( nIdx = 0; nIdx < nLen1; nIdx++ )
-        *pStrings++ = *pStringSrc++;
-
-    pStringSrc = rSeq2.getConstArray();
-    for( nIdx = 0; nIdx < nLen2; nIdx++ )
-        *pStrings++ = *pStringSrc++;
-
-    return aSeq;
-}
-
 /** this method adds a variable number of char pointer to a given Sequence
  */
 void ServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()

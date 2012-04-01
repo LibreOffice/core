@@ -26,12 +26,13 @@
  *
  ************************************************************************/
 
-
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#include <stdlib.h>
+#else
+#include <alloca.h>
+#endif
 #include <exception>
 #include <typeinfo>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "rtl/alloc.h"
 #include "rtl/ustrbuf.hxx"
@@ -46,158 +47,11 @@
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
 #include "abi.hxx"
+#include "callvirtualmethod.hxx"
 #include "share.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
-//==================================================================================================
-static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
-                              void * pRegisterReturn, typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
-                              sal_uInt64 *pStack, sal_uInt32 nStack,
-                              sal_uInt64 *pGPR, sal_uInt32 nGPR,
-                              double *pFPR, sal_uInt32 nFPR) __attribute__((noinline));
-
-static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
-                              void * pRegisterReturn, typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
-                              sal_uInt64 *pStack, sal_uInt32 nStack,
-                              sal_uInt64 *pGPR, sal_uInt32 nGPR,
-                              double *pFPR, sal_uInt32 nFPR)
-{
-#if OSL_DEBUG_LEVEL > 1
-    // Let's figure out what is really going on here
-    {
-        fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-        for ( unsigned int i = 0; i < nGPR; ++i )
-            fprintf( stderr, "0x%lx, ", pGPR[i] );
-        fprintf( stderr, "\nFPR's (%d): ", nFPR );
-        for ( unsigned int i = 0; i < nFPR; ++i )
-            fprintf( stderr, "%f, ", pFPR[i] );
-        fprintf( stderr, "\nStack (%d): ", nStack );
-        for ( unsigned int i = 0; i < nStack; ++i )
-            fprintf( stderr, "0x%lx, ", pStack[i] );
-        fprintf( stderr, "\n" );
-    }
-#endif
-
-    // The call instruction within the asm section of callVirtualMethod may throw
-    // exceptions.  So that the compiler handles this correctly, it is important
-    // that (a) callVirtualMethod might call dummy_can_throw_anything (although this
-    // never happens at runtime), which in turn can throw exceptions, and (b)
-    // callVirtualMethod is not inlined at its call site (so that any exceptions are
-    // caught which are thrown from the instruction calling callVirtualMethod):
-    if ( !pThis )
-        CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything( "xxx" ); // address something
-
-    // Should not happen, but...
-    if ( nFPR > x86_64::MAX_SSE_REGS )
-        nFPR = x86_64::MAX_SSE_REGS;
-    if ( nGPR > x86_64::MAX_GPR_REGS )
-        nGPR = x86_64::MAX_GPR_REGS;
-
-    // Get pointer to method
-    sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
-    pMethod += 8 * nVtableIndex;
-    pMethod = *((sal_uInt64 *)pMethod);
-
-    // Load parameters to stack, if necessary
-    if ( nStack )
-    {
-        // 16-bytes aligned
-        sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
-        sal_uInt64 *pCallStack = (sal_uInt64 *) __builtin_alloca( nStackBytes );
-        memcpy( pCallStack, pStack, nStackBytes );
-    }
-
-    // Return values
-    sal_uInt64 rax;
-    sal_uInt64 rdx;
-    double xmm0;
-    double xmm1;
-
-    asm volatile (
-
-        // Fill the xmm registers
-        "movq %6, %%rax\n\t"
-
-        "movsd   (%%rax), %%xmm0\n\t"
-        "movsd  8(%%rax), %%xmm1\n\t"
-        "movsd 16(%%rax), %%xmm2\n\t"
-        "movsd 24(%%rax), %%xmm3\n\t"
-        "movsd 32(%%rax), %%xmm4\n\t"
-        "movsd 40(%%rax), %%xmm5\n\t"
-        "movsd 48(%%rax), %%xmm6\n\t"
-        "movsd 56(%%rax), %%xmm7\n\t"
-
-        // Fill the general purpose registers
-        "movq %5, %%rax\n\t"
-
-        "movq    (%%rax), %%rdi\n\t"
-        "movq   8(%%rax), %%rsi\n\t"
-        "movq  16(%%rax), %%rdx\n\t"
-        "movq  24(%%rax), %%rcx\n\t"
-        "movq  32(%%rax), %%r8\n\t"
-        "movq  40(%%rax), %%r9\n\t"
-
-        // Perform the call
-        "movq %4, %%r11\n\t"
-        "movq %7, %%rax\n\t"
-        "call *%%r11\n\t"
-
-        // Fill the return values
-        "movq   %%rax, %0\n\t"
-        "movq   %%rdx, %1\n\t"
-        "movsd %%xmm0, %2\n\t"
-        "movsd %%xmm1, %3\n\t"
-        : "=m" ( rax ), "=m" ( rdx ), "=m" ( xmm0 ), "=m" ( xmm1 )
-        : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR )
-        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
-    );
-
-    switch (pReturnTypeRef->eTypeClass)
-    {
-    case typelib_TypeClass_HYPER:
-    case typelib_TypeClass_UNSIGNED_HYPER:
-        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = rax;
-        break;
-    case typelib_TypeClass_LONG:
-    case typelib_TypeClass_UNSIGNED_LONG:
-    case typelib_TypeClass_ENUM:
-        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &rax );
-        break;
-    case typelib_TypeClass_CHAR:
-    case typelib_TypeClass_SHORT:
-    case typelib_TypeClass_UNSIGNED_SHORT:
-        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &rax );
-        break;
-    case typelib_TypeClass_BOOLEAN:
-    case typelib_TypeClass_BYTE:
-        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &rax );
-        break;
-    case typelib_TypeClass_FLOAT:
-    case typelib_TypeClass_DOUBLE:
-        *reinterpret_cast<double *>( pRegisterReturn ) = xmm0;
-        break;
-    default:
-        {
-            sal_Int32 const nRetSize = pReturnTypeRef->pType->nSize;
-            if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
-            {
-                sal_uInt64 longs[2];
-                longs[0] = rax;
-                longs[1] = rdx;
-
-                double doubles[2];
-                doubles[0] = xmm0;
-                doubles[1] = xmm1;
-                x86_64::fill_struct( pReturnTypeRef, &longs[0], &doubles[0], pRegisterReturn);
-            }
-            break;
-        }
-    }
-}
-
-//==================================================================================================
 
 // Macros for easier insertion of values to registers or stack
 // pSV - pointer to the source
@@ -384,7 +238,7 @@ static void cpp_call(
     try
     {
         try {
-            callVirtualMethod(
+            CPPU_CURRENT_NAMESPACE::callVirtualMethod(
                 pAdjustedThisPtr, aVtableSlot.index,
                 pCppReturn, pReturnTypeRef, bSimpleReturn,
                 pStackStart, ( pStack - pStackStart ),
@@ -446,7 +300,7 @@ static void cpp_call(
      catch (...)
      {
           // fill uno exception
-        fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+        fillUnoException( __cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
         for ( ; nTempIndizes--; )

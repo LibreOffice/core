@@ -401,11 +401,10 @@ SwVbaFind::ClearFormatting(  ) throw (uno::RuntimeException)
     mxPropertyReplace->setSearchAttributes( aSearchAttribs );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFind::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFind") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFind"));
 }
 
 uno::Sequence< rtl::OUString >

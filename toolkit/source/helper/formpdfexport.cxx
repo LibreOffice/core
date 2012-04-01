@@ -65,7 +65,7 @@ namespace toolkitform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    static const ::rtl::OUString FM_PROP_NAME(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    static const char FM_PROP_NAME[] = "Name";
 
     namespace
     {
@@ -166,7 +166,7 @@ namespace toolkitform
 
             Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
             ::rtl::OUString sRadioGroupName;
-            OSL_VERIFY( _rxRadioModel->getPropertyValue( FM_PROP_NAME ) >>= sRadioGroupName );
+            OSL_VERIFY( _rxRadioModel->getPropertyValue( rtl::OUString(FM_PROP_NAME) ) >>= sRadioGroupName );
 
             Reference< XIndexAccess > xCurrentContainer( xRoot );
             sal_Int32 nStartWithChild = 0;
@@ -293,7 +293,7 @@ namespace toolkitform
 
             // --------------------------------
             // Name, Description, Text
-            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_NAME ) >>= _rpDescriptor->Name );
+            OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
             static const ::rtl::OUString FM_PROP_HELPTEXT(RTL_CONSTASCII_USTRINGPARAM("HelpText"));
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= _rpDescriptor->Description );
             Any aText;
@@ -610,8 +610,7 @@ namespace toolkitform
             // --------------------------------
             // text line ends
             // some controls may (always or dependent on other settings) return UNIX line ends
-            String aConverter( _rpDescriptor->Text );
-            _rpDescriptor->Text = aConverter.ConvertLineEnd( LINEEND_CRLF );
+            _rpDescriptor->Text = convertLineEnd(_rpDescriptor->Text, LINEEND_CRLF);
         }
         catch( const Exception& )
         {

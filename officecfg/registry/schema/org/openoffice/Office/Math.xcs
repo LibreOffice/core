@@ -213,7 +213,7 @@
 					<desc>Specifies the symbol set containing the symbol.</desc>
 				</info>
 			</prop>
-			<prop oor:name="Predefined" oor:type="xs:boolean">
+			<prop oor:name="Predefined" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<desc>Specifies if a symbol is predefined or user-defined.</desc>
 				</info>
@@ -231,7 +231,7 @@
 			<info>
 				<desc>Contains settings for printing.</desc>
 			</info>
-			<prop oor:name="Title" oor:type="xs:boolean">
+			<prop oor:name="Title" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Print -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
@@ -242,7 +242,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="FormulaText" oor:type="xs:boolean">
+			<prop oor:name="FormulaText" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Print -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
@@ -253,7 +253,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="Frame" oor:type="xs:boolean">
+			<prop oor:name="Frame" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Print -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
@@ -264,7 +264,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="Size" oor:type="xs:short">
+			<prop oor:name="Size" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/Print -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
@@ -292,7 +292,7 @@
 				</constraints>
 				<value>0</value>
 			</prop>
-			<prop oor:name="ZoomFactor" oor:type="xs:short">
+			<prop oor:name="ZoomFactor" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/Print -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
@@ -320,7 +320,7 @@
             <info>
                 <desc>Contains settings related to load and save operations.</desc>
             </info>
-            <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean">
+            <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean" oor:nillable="false">
                 <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
                 <info>
                     <author>TL</author>
@@ -334,7 +334,7 @@
 			<info>
 				<desc>Contains miscellaneous settings.</desc>
 			</info>
-			<prop oor:name="NoSymbolsWarning" oor:type="xs:boolean">
+			<prop oor:name="NoSymbolsWarning" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Misc -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: - -->
@@ -346,7 +346,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean">
+			<prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Misc -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
@@ -362,7 +362,7 @@
 			<info>
 				<desc>Contains view settings.</desc>
 			</info>
-			<prop oor:name="ToolboxVisible" oor:type="xs:boolean">
+			<prop oor:name="ToolboxVisible" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/View -->
 				<!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: View - Elements -->
@@ -373,7 +373,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="AutoRedraw" oor:type="xs:boolean">
+			<prop oor:name="AutoRedraw" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/View -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: View - AutoRefresh Display -->
@@ -384,7 +384,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="FormulaCursor" oor:type="xs:boolean">
+			<prop oor:name="FormulaCursor" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/View -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: The icon &quot;Formula Cursor&quot; in the Tool bar -->
@@ -405,7 +405,7 @@
 			<info>
 				<desc>Defines the default format settings for formulas.</desc>
 			</info>
-			<prop oor:name="Textmode" oor:type="xs:boolean">
+			<prop oor:name="Textmode" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Text Mode -->
@@ -416,7 +416,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-            <prop oor:name="GreekCharStyle" oor:type="xs:short">
+            <prop oor:name="GreekCharStyle" oor:type="xs:short" oor:nillable="false">
                 <!-- UIHints: n/a yet -->
                 <info>
                     <author>TL</author>
@@ -437,7 +437,7 @@
                 </constraints>
                 <value>0</value>
             </prop>
-            <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean">
+            <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
@@ -448,7 +448,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="HorizontalAlignment" oor:type="xs:short">
+			<prop oor:name="HorizontalAlignment" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Alignment - Horizontal -->
@@ -476,7 +476,7 @@
 				</constraints>
 				<value>1</value>
 			</prop>
-			<prop oor:name="BaseSize" oor:type="xs:short">
+			<prop oor:name="BaseSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Base size -->
@@ -499,7 +499,7 @@
 				</constraints>
 				<value>12</value>
 			</prop>
-			<prop oor:name="TextSize" oor:type="xs:short">
+			<prop oor:name="TextSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Text -->
@@ -522,7 +522,7 @@
 				</constraints>
 				<value>100</value>
 			</prop>
-			<prop oor:name="IndexSize" oor:type="xs:short">
+			<prop oor:name="IndexSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Indices -->
@@ -545,7 +545,7 @@
 				</constraints>
 				<value>60</value>
 			</prop>
-			<prop oor:name="FunctionSize" oor:type="xs:short">
+			<prop oor:name="FunctionSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Functions -->
@@ -568,7 +568,7 @@
 				</constraints>
 				<value>100</value>
 			</prop>
-			<prop oor:name="OperatorSize" oor:type="xs:short">
+			<prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Operators -->
@@ -591,7 +591,7 @@
 				</constraints>
 				<value>100</value>
 			</prop>
-			<prop oor:name="LimitsSize" oor:type="xs:short">
+			<prop oor:name="LimitsSize" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Limits -->
@@ -614,7 +614,7 @@
 				</constraints>
 				<value>60</value>
 			</prop>
-			<prop oor:name="VariableFont" oor:type="xs:string">
+			<prop oor:name="VariableFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Variables -->
@@ -625,7 +625,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="FunctionFont" oor:type="xs:string">
+			<prop oor:name="FunctionFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Functions -->
@@ -636,7 +636,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="NumberFont" oor:type="xs:string">
+			<prop oor:name="NumberFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Numbers -->
@@ -647,7 +647,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="TextFont" oor:type="xs:string">
+			<prop oor:name="TextFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Text -->
@@ -658,7 +658,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="SansFont" oor:type="xs:string">
+			<prop oor:name="SansFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Sans -->
@@ -669,7 +669,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="SerifFont" oor:type="xs:string">
+			<prop oor:name="SerifFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Serif -->
@@ -680,7 +680,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="FixedFont" oor:type="xs:string">
+			<prop oor:name="FixedFont" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Fixed -->
@@ -695,7 +695,7 @@
 				<info>
 					<desc>Specifies the distance settings used for formatting a formula.</desc>
 				</info>
-				<prop oor:name="Horizontal" oor:type="xs:short">
+				<prop oor:name="Horizontal" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
@@ -718,7 +718,7 @@
 					</constraints>
 					<value>10</value>
 				</prop>
-				<prop oor:name="Vertical" oor:type="xs:short">
+				<prop oor:name="Vertical" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
@@ -741,7 +741,7 @@
 					</constraints>
 					<value>5</value>
 				</prop>
-				<prop oor:name="Root" oor:type="xs:short">
+				<prop oor:name="Root" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
@@ -764,7 +764,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="SubScript" oor:type="xs:short">
+				<prop oor:name="SubScript" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
@@ -787,7 +787,7 @@
 					</constraints>
 					<value>20</value>
 				</prop>
-				<prop oor:name="SuperScript" oor:type="xs:short">
+				<prop oor:name="SuperScript" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
@@ -810,7 +810,7 @@
 					</constraints>
 					<value>20</value>
 				</prop>
-				<prop oor:name="LowerLimit" oor:type="xs:short">
+				<prop oor:name="LowerLimit" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
@@ -833,7 +833,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="UpperLimit" oor:type="xs:short">
+				<prop oor:name="UpperLimit" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
@@ -856,7 +856,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="OperatorSize" oor:type="xs:short">
+				<prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
@@ -879,7 +879,7 @@
 					</constraints>
 					<value>50</value>
 				</prop>
-				<prop oor:name="OperatorSpace" oor:type="xs:short">
+				<prop oor:name="OperatorSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
@@ -902,7 +902,7 @@
 					</constraints>
 					<value>20</value>
 				</prop>
-				<prop oor:name="Numerator" oor:type="xs:short">
+				<prop oor:name="Numerator" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
@@ -925,7 +925,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Denominator" oor:type="xs:short">
+				<prop oor:name="Denominator" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
@@ -948,7 +948,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Fraction" oor:type="xs:short">
+				<prop oor:name="Fraction" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
@@ -971,7 +971,7 @@
 					</constraints>
 					<value>10</value>
 				</prop>
-				<prop oor:name="StrokeWidth" oor:type="xs:short">
+				<prop oor:name="StrokeWidth" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
@@ -994,7 +994,7 @@
 					</constraints>
 					<value>5</value>
 				</prop>
-				<prop oor:name="BracketSize" oor:type="xs:short">
+				<prop oor:name="BracketSize" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
@@ -1017,7 +1017,7 @@
 					</constraints>
 					<value>5</value>
 				</prop>
-				<prop oor:name="BracketSpace" oor:type="xs:short">
+				<prop oor:name="BracketSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
@@ -1040,7 +1040,7 @@
 					</constraints>
 					<value>5</value>
 				</prop>
-				<prop oor:name="NormalBracketSize" oor:type="xs:short">
+				<prop oor:name="NormalBracketSize" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
@@ -1063,7 +1063,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="MatrixRow" oor:type="xs:short">
+				<prop oor:name="MatrixRow" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
@@ -1086,7 +1086,7 @@
 					</constraints>
 					<value>3</value>
 				</prop>
-				<prop oor:name="MatrixColumn" oor:type="xs:short">
+				<prop oor:name="MatrixColumn" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
@@ -1109,7 +1109,7 @@
 					</constraints>
 					<value>30</value>
 				</prop>
-				<prop oor:name="OrnamentSize" oor:type="xs:short">
+				<prop oor:name="OrnamentSize" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
@@ -1132,7 +1132,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="OrnamentSpace" oor:type="xs:short">
+				<prop oor:name="OrnamentSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
@@ -1155,7 +1155,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="LeftSpace" oor:type="xs:short">
+				<prop oor:name="LeftSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Left -->
@@ -1178,7 +1178,7 @@
 					</constraints>
 					<value>100</value>
 				</prop>
-				<prop oor:name="RightSpace" oor:type="xs:short">
+				<prop oor:name="RightSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Right -->
@@ -1201,7 +1201,7 @@
 					</constraints>
 					<value>100</value>
 				</prop>
-				<prop oor:name="TopSpace" oor:type="xs:short">
+				<prop oor:name="TopSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Top -->
@@ -1224,7 +1224,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="BottomSpace" oor:type="xs:short">
+				<prop oor:name="BottomSpace" oor:type="xs:short" oor:nillable="false">
 					<!-- OldPath: Math/StandardFormat -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Bottom -->

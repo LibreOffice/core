@@ -24,7 +24,6 @@ ALLTAR:\
 
 $(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
     cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . $(CHECKZIPRESULT)
-    $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
 #	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*" $(CHECKZIPRESULT)
 #	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/odkidl.zip idl/* $(CHECKZIPRESULT)
 

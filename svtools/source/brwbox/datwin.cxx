@@ -407,7 +407,7 @@ void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 //-------------------------------------------------------------------
 void BrowserDataWin::Command( const CommandEvent& rEvt )
 {
-    // Scrollmaus-Event?
+    // scroll mouse event?
     BrowseBox *pBox = GetParent();
     if ( ( (rEvt.GetCommand() == COMMAND_WHEEL) ||
            (rEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
@@ -488,7 +488,7 @@ void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 
 void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 {
-    // Pseudo MouseMoves verhindern
+    // avoid pseudo MouseMoves
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     if ( ( aNewPos == aLastMousePos ) )
         return;
@@ -521,25 +521,25 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 
 //-------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( BrowserDataWin, RepeatedMouseMove, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(BrowserDataWin, RepeatedMouseMove)
 {
     GetParent()->MouseMove( BrowserMouseEvent( this, aRepeatEvt ) );
     return 0;
 }
-IMPL_LINK_INLINE_END( BrowserDataWin, RepeatedMouseMove, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(BrowserDataWin, RepeatedMouseMove)
 
 //-------------------------------------------------------------------
 
 void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
 {
-    // Pseudo MouseMoves verhindern
+    // avoid pseudo MouseMoves
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     aLastMousePos = aNewPos;
 
-    // Move an die aktuelle Position simulieren
+    // simulate a move to the current position
     MouseMove( rEvt );
 
-    // eigentliches Up-Handling
+    // actual button up handling
     ReleaseMouse();
     if ( aMouseTimer.IsActive() )
         aMouseTimer.Stop();

@@ -1762,7 +1762,7 @@ rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 
     if ( pItem )
     {
-        if ( pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpId.isEmpty() )
             aRet = pItem->maHelpId;
         else
             aRet = ::rtl::OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
@@ -2018,7 +2018,7 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK( ToolBox, ImplCallExecuteCustomMenu, void*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu)
 {
     mpData->mnEventId = 0;
     ImplExecuteCustomMenu();

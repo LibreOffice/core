@@ -139,7 +139,7 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
     rDesc.bNative = ( nSelect == DP_TYPELIST_SQLNAT );
 }
 
-IMPL_LINK( ScDataPilotDatabaseDlg, SelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataPilotDatabaseDlg, SelectHdl)
 {
     FillObjects();
     return 0;

@@ -225,7 +225,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplSelectHdl)
 {
     sal_Bool bPopup = IsInDropDown();
     if( IsDropDownBox() )
@@ -254,7 +254,7 @@ IMPL_LINK( ListBox, ImplSelectHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplScrollHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplScrollHdl)
 {
     ImplCallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
     return 1;
@@ -262,7 +262,7 @@ IMPL_LINK( ListBox, ImplScrollHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplCancelHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplCancelHdl)
 {
     if( IsInDropDown() )
         mpFloatWin->EndPopupMode();
@@ -305,7 +305,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplDoubleClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl)
 {
     DoubleClick();
     return 1;
@@ -313,7 +313,7 @@ IMPL_LINK( ListBox, ImplDoubleClickHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl)
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
@@ -335,7 +335,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -1424,7 +1424,7 @@ Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth( UniString( 'x' ) );
+    long nCharWidth = GetTextWidth( rtl::OUString(static_cast<sal_Unicode>('x')) );
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();

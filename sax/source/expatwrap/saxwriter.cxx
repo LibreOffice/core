@@ -71,54 +71,6 @@ using namespace ::com::sun::star::io;
 *****/
 
 namespace sax_expatwrap {
-/*****
-*
-* Calculates the length of the sequence after conversion, but the conversion is not done.
-* .g. &<>"' plus some more are
-* special characters in XML that need to be transformed
-*
-* @param bConvertAll For Attributes it is necessary to convert every symbol (including line feed and tab)
-*                    Set this to true, if you want to perform this special conversion
-* @return The returned value is equal to the length of the incoming sequence, when no
-+         conversion is necessary, otherwise it is larger than the length of the sequence.
-****/
-//  inline sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll ) throw()
-//  {
-//      sal_Int32 nLen = 0;
-//      const sal_Int8 *pArray = seq.getConstArray();
-
-//      for( int i = 0 ; i < seq.getLength() ; i ++ ) {
-
-//          sal_Int8 c = pArray[i];
-//          switch( c )
-//          {
-//          case '&':       // resemble to &amp;
-//              nLen +=5;
-//              break;
-//          case '<':       // &lt;
-//          case '>':       // &gt;
-//              nLen +=4;
-//              break;
-//          case 39:        // 39 == ''', &apos;
-//          case '"':       // &quot;
-//          case 13:        // &#x0d;
-//              nLen += 6;
-//              break;
-
-//          case 10:        // &#x0a;
-//          case 9:         // &#x09;
-//              if( bConvertAll )
-//              {
-//                  nLen += 6;        //
-//              }
-//              break;
-//          default:
-//              nLen ++;
-//          }
-//      }
-
-//      return nLen;
-//  }
 
 enum SaxInvalidCharacterError
 {

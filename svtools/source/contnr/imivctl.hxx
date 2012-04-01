@@ -56,7 +56,7 @@ class IcnGridMap_Impl;
 
 #define F_VER_SBARSIZE_WITH_HBAR        0x0001
 #define F_HOR_SBARSIZE_WITH_VBAR        0x0002
-#define F_PAINTED                       0x0004  // sal_True nach erstem Paint
+#define F_PAINTED                       0x0004  // sal_True after first paint
 #define F_ADD_MODE                      0x0008
 #define F_SELECTING_RECT                0x0020
 #define F_DOWN_CTRL                     0x0080
@@ -67,20 +67,20 @@ class IcnGridMap_Impl;
 #define F_CLEARING_SELECTION            0x2000
 #define F_ARRANGING                     0x4000
 
-// alle Angaben in Pixel
-// Abstaende von Fensterraendern
+// unit = pixels
+// distances from window borders
 #define LROFFS_WINBORDER            4
 #define TBOFFS_WINBORDER            4
-// fuer das Bounding-Rectangle
+// for the bounding rectangle
 #define LROFFS_BOUND                2
 #define TBOFFS_BOUND                2
-// Abstand Fokusrechteck - Icon
+// distance focus rectangle to icon
 #define LROFFS_ICON                 2
 #define TBOFFS_ICON                 2
-// Abstaende Icon - Text
+// distance icon to text
 #define HOR_DIST_BMP_STRING         3
 #define VER_DIST_BMP_STRING         3
-// Breitenoffset Highlight-Rect bei Text
+//  width offset of highlight rectangle for Text
 #define LROFFS_TEXT                 2
 
 #define DEFAULT_MAX_VIRT_WIDTH      200
@@ -172,7 +172,7 @@ class SvxIconChoiceCtrl_Impl
     ScrollBarBox            aScrBarBox;
     Rectangle               aCurSelectionRect;
     SvPtrarr                aSelectedRectList;
-    Timer                   aEditTimer;                 // fuer Inplace-Editieren
+    Timer                   aEditTimer;                 // for editing in place
     Timer                   aAutoArrangeTimer;
     Timer                   aDocRectChangedTimer;
     Timer                   aVisRectChangedTimer;
@@ -188,20 +188,20 @@ class SvxIconChoiceCtrl_Impl
     SvtIconChoiceCtrl*      pView;
     IcnCursor_Impl*         pImpCursor;
     IcnGridMap_Impl*        pGridMap;
-    long                    nMaxVirtWidth;  // max. Breite aVirtOutputSize bei ALIGN_TOP
-    long                    nMaxVirtHeight; // max. Hoehe aVirtOutputSize bei ALIGN_LEFT
+    long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
+    long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
     SvPtrarr*               pColumns;
     IcnViewEdit_Impl*       pEdit;
     WinBits                 nWinBits;
-    long                    nMaxBoundHeight;            // Hoehe des hoechsten BoundRects
+    long                    nMaxBoundHeight;            // height of highest BoundRects
     sal_uInt16              nFlags;
     sal_uInt16              nCurTextDrawFlags;
     sal_uLong               nUserEventAdjustScrBars;
     sal_uLong               nUserEventShowCursor;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
     sal_Bool                bHighlightFramePressed;
-    SvxIconChoiceCtrlEntry* pHead;                      // Eintrag oben links
+    SvxIconChoiceCtrlEntry* pHead;                      // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     SvxIconChoiceCtrlEntry* pPrevDropTarget;
     SvxIconChoiceCtrlEntry* pHdlEntry;
@@ -210,7 +210,7 @@ class SvxIconChoiceCtrl_Impl
     VirtualDevice*          pDDBufDev;
     VirtualDevice*          pDDTempDev;
     VirtualDevice*          pEntryPaintDev;
-    SvxIconChoiceCtrlEntry* pAnchor;                    // fuer Selektion
+    SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
     ::svt::AccessibleFactoryAccess aAccFactory;
 
@@ -232,7 +232,7 @@ class SvxIconChoiceCtrl_Impl
 
                         DECL_LINK( ScrollUpDownHdl, ScrollBar * );
                         DECL_LINK( ScrollLeftRightHdl, ScrollBar * );
-                        DECL_LINK( EditTimeoutHdl, Timer* );
+                        DECL_LINK(EditTimeoutHdl, void *);
                         DECL_LINK( UserEventHdl, void* );
                         DECL_LINK( EndScrollHdl, void* );
                         DECL_LINK( AutoArrangeHdl, void* );
@@ -289,7 +289,7 @@ class SvxIconChoiceCtrl_Impl
     void                ClipAtVirtOutRect( Rectangle& rRect ) const;
     void                AdjustAtGrid( const SvPtrarr& rRow, SvxIconChoiceCtrlEntry* pStart=0 );
     Point               AdjustAtGrid(
-                            const Rectangle& rCenterRect, // "Schwerpunkt" des Objekts (typ. Bmp-Rect)
+                            const Rectangle& rCenterRect, // balance point of object (typically Bmp-Rect)
                             const Rectangle& rBoundRect
                         ) const;
     sal_uLong           GetPredecessorGrid( const Point& rDocPos) const;
@@ -320,7 +320,7 @@ class SvxIconChoiceCtrl_Impl
     void                VisRectChanged() { aVisRectChangedTimer.Start(); }
     void                SetOrigin( const Point&, sal_Bool bDoNotUpdateWallpaper = sal_False );
 
-                        DECL_LINK( TextEditEndedHdl, IcnViewEdit_Impl* );
+                        DECL_LINK(TextEditEndedHdl, void *);
 
     void                ShowFocus ( Rectangle& rRect );
     void                DrawFocusRect ( OutputDevice* pOut );
@@ -397,7 +397,7 @@ public:
     SvxIconChoiceCtrlEntry* GetCurEntry() const { return pCursor; }
     void                SetCursor(
                             SvxIconChoiceCtrlEntry*,
-                            // sal_True == bei Single-Selection die Sel. mitfuehren
+                            // sal_True == carry selection when single-selecting
                             sal_Bool bSyncSingleSelection = sal_True,
                             sal_Bool bShowFocusAsync = sal_False
                         );
@@ -431,7 +431,7 @@ public:
                             const Point& rPos,
                             const Size& rBoundingSize
                         );
-    // berechnet alle ungueltigen BoundRects neu
+    // recalculates all invalid BoundRects
     void                RecalcAllBoundingRectsSmart();
     const Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
     void                InvalidateBoundingRect( Rectangle& rRect )
@@ -461,9 +461,9 @@ public:
                             ::vcl::ControlLayoutData* _pLayoutData = NULL
                         );
 
-    // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == sal_True
+    // recalculates all BoundingRects if bMustRecalcBoundingRects == sal_True
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
-    // berechnet alle invalidierten BoundingRects neu
+    // recalculates all invalidated BoundingRects
     void                ShowTargetEmphasis( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bShow );
     void                Command( const CommandEvent& rCEvt );
     void                ToTop( SvxIconChoiceCtrlEntry* );
@@ -536,7 +536,7 @@ public:
     sal_Bool            ArePredecessorsSet() const { return (sal_Bool)(pHead != 0); }
     SvxIconChoiceCtrlEntry* GetPredecessorHead() const { return pHead; }
     void                SetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry* pPredecessor);
-    // liefert gueltige Ergebnisse nur im AutoArrange-Modus!
+    // only delivers valid results when in AutoArrange mode!
     SvxIconChoiceCtrlEntry* FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry, const Point& );
 
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
@@ -608,15 +608,14 @@ public:
                             ~IcnCursor_Impl();
     void                    Clear();
 
-    // fuer Cursortravelling usw.
+    // for Cursortravelling etc.
     SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, sal_Bool bRight );
     SvxIconChoiceCtrlEntry* GoUpDown( SvxIconChoiceCtrlEntry*, sal_Bool bDown );
     SvxIconChoiceCtrlEntry* GoPageUpDown( SvxIconChoiceCtrlEntry*, sal_Bool bDown );
 
-    // Erzeugt fuer jede Zeile (Hoehe=nGridDY) eine nach BoundRect.Left()
-    // sortierte Liste der Eintraege, die in ihr stehen. Eine Liste kann
-    // leer sein. Die Listen gehen in das Eigentum des Rufenden ueber und
-    // muessen mit DestroyGridAdjustData geloescht werden
+    // Creates a list of entries for every row (height = nGridDY) sorted by
+    // BoundRect.Left(). A list may be empty. The lists become the property of
+    // the caller and have to be deleted with DestroyGridAdjustData.
     void                    CreateGridAjustData( SvPtrarr& pLists, SvxIconChoiceCtrlEntry* pRow=0);
     static void             DestroyGridAdjustData( SvPtrarr& rLists );
 };

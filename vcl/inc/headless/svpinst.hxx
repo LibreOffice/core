@@ -105,7 +105,6 @@ public:
     virtual ~SvpSalInstance();
 
     void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    void CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
 
     void StartTimer( sal_uLong nMS );
     void StopTimer();

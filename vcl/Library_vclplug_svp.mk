@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,vclplug_svp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,vclplug_svp,\
@@ -59,7 +58,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \
@@ -73,16 +71,13 @@ $(eval $(call gb_Library_use_externals,vclplug_svp,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
     vcl/headless/svpgdi \
     vcl/headless/svpinst \
     vcl/headless/svpdata \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,vclplug_svp,\
+    headless \
 ))
 
 ifeq ($(OS),LINUX)

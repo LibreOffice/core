@@ -1,0 +1,4 @@
+PDF-viewer library from [http://www.foolabs.com/xpdf/].
+
+This code is -used by [[sdext/source/pdfimport]] to implement the PDF
+import functionality, that allows PDF's to be edited.

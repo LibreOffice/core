@@ -307,11 +307,6 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     return eRet;
 }
 
-sal_Int32 SfxMailModel::GetCount() const
-{
-    return maAttachedDocuments.size();
-}
-
 sal_Bool SfxMailModel::IsEmpty() const
 {
     return maAttachedDocuments.empty();

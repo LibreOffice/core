@@ -49,7 +49,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -58,8 +57,6 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
@@ -361,7 +358,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             bool bSetToAllPages = false;
 
-            // Ask, wether the setting are for the background-page or for the current page
+            // Ask, whether the setting are for the background-page or for the current page
             if( !mbMasterPage && bChanges )
             {
                 // But don't ask in notice-view, because we can't change the background of

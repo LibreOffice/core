@@ -53,13 +53,13 @@ class ScDPObject;
 
 // ============================================================================
 
-class ScDPFunctionListBox : public MultiListBox
+class ScDPFunctionListBox : public ListBox
 {
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
     void                SetSelection( sal_uInt16 nFuncMask );
-    sal_uInt16              GetSelection() const;
+    sal_uInt16          GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -71,7 +71,7 @@ class ScDPFunctionDlg : public ModalDialog
 {
     typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
+    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     sal_uInt16              GetFuncMask() const;
@@ -87,7 +87,7 @@ private:
     sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( DblClickHdl, MultiListBox* );
+    DECL_LINK( DblClickHdl, void* );
 
 private:
     FixedLine           maFlFunc;
@@ -111,7 +111,7 @@ private:
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
-    const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
+    const ScDPLabelDataVec& mrLabelVec;  /// Data of all labels.
     bool                mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
@@ -131,7 +131,7 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
-    DECL_LINK( DblClickHdl, MultiListBox* );
+    DECL_LINK(DblClickHdl, void *);
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( ClickHdl, PushButton* );
 

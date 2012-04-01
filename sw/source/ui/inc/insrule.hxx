@@ -51,7 +51,7 @@ class SwInsertGrfRulerDlg  : public SfxModalDialog
 
 protected:
     DECL_LINK(SelectHdl, ValueSet*);
-    DECL_LINK(DoubleClickHdl, ValueSet*);
+    DECL_LINK(DoubleClickHdl, void *);
 
 public:
     SwInsertGrfRulerDlg( Window* pParent );

@@ -330,7 +330,7 @@ void SdModifyFieldDlg::FillControls()
 }
 
 
-IMPL_LINK( SdModifyFieldDlg, LanguageChangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl)
 {
     FillFormatList();
 

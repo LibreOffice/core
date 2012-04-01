@@ -37,8 +37,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/fontenum.hxx>
 
-#include <tools/string.hxx>
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -80,7 +78,7 @@ XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
 sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    String sValue;
+    OUStringBuffer sValue;
     sal_Int32 nPos = 0;
 
     do
@@ -109,11 +107,10 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
 
         if( nFirst <= nLast )
         {
-            if( sValue.Len() != 0 )
-                sValue += sal_Unicode(';');
+            if( sValue.getLength() != 0 )
+                sValue.append(';');
 
-            OUString sTemp = rStrImpValue.copy( nFirst, nLast-nFirst+1 );
-            sValue += sTemp.getStr();
+            sValue.append(rStrImpValue.copy( nFirst, nLast-nFirst+1));
         }
 
         if( -1 != nPos )
@@ -121,9 +118,9 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
     }
     while( -1 != nPos );
 
-    if( sValue.Len() )
+    if (sValue.getLength())
     {
-        rValue <<= OUString(sValue.GetBuffer());
+        rValue <<= sValue.makeStringAndClear();
         bRet = sal_True;
     }
 

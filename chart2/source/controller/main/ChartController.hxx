@@ -623,14 +623,13 @@ private:
     void                executeDispatch_InsertGrid();
 
     void                executeDispatch_InsertMenu_DataLabels();
-    void                executeDispatch_InsertMenu_YErrorBars();
     void                executeDispatch_InsertMenu_Trendlines();
     void                executeDispatch_InsertMenu_MeanValues();
 
     void                executeDispatch_InsertMeanValue();
     void                executeDispatch_InsertTrendline();
     void                executeDispatch_InsertTrendlineEquation( bool bInsertR2=false );
-    void                executeDispatch_InsertYErrorBars();
+    void                executeDispatch_InsertErrorBars( bool bYError );
 
     void                executeDispatch_InsertR2Value();
     void                executeDispatch_DeleteR2Value();
@@ -638,7 +637,7 @@ private:
     void                executeDispatch_DeleteMeanValue();
     void                executeDispatch_DeleteTrendline();
     void                executeDispatch_DeleteTrendlineEquation();
-    void                executeDispatch_DeleteYErrorBars();
+    void                executeDispatch_DeleteErrorBars( bool bYError );
 
     void                executeDispatch_InsertDataLabels();
     void                executeDispatch_InsertDataLabel();

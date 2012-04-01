@@ -89,10 +89,10 @@ private:
                         DECL_LINK( implTimeHdl, Slider* );
                         DECL_LINK( implTimeEndHdl, Slider* );
                         DECL_LINK( implVolumeHdl, Slider* );
-                        DECL_LINK( implVolumeEndHdl, Slider* );
+                        DECL_LINK(implVolumeEndHdl, void *);
                         DECL_LINK( implSelectHdl, ToolBox* );
                         DECL_LINK( implZoomSelectHdl, ListBox* );
-                        DECL_LINK( implTimeoutHdl, Timer* );
+                        DECL_LINK(implTimeoutHdl, void *);
 
     ImageList           maImageList;
     Timer               maTimer;

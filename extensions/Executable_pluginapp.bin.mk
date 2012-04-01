@@ -47,8 +47,10 @@ $(eval $(call gb_Executable_add_api,pluginapp.bin,\
 $(eval $(call gb_Executable_add_exception_objects,pluginapp.bin,\
 	extensions/source/plugin/unx/npwrap \
 	extensions/source/plugin/unx/npnapi \
-	extensions/source/plugin/unx/mediator \
-	extensions/source/plugin/unx/plugcon \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,pluginapp.bin,\
+	plugcon \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,pluginapp.bin,\

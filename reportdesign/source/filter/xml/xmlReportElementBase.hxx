@@ -41,6 +41,9 @@ namespace rptxml
     {
     public:
         virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair) = 0;
+
+    protected:
+        ~IMasterDetailFieds() {}
     };
 
     class OXMLReportElementBase : public SvXMLImportContext

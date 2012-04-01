@@ -595,6 +595,8 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
 // ensure object identity and struct equality
 static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 {
+    PyObject *result;
+
     if(op != Py_EQ && op != Py_NE)
     {
         PyErr_SetString(PyExc_TypeError, "only '==' and '!=' comparisions are defined");
@@ -602,7 +604,9 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     }
     if( self == that )
     {
-        return (op == Py_EQ ? Py_True : Py_False);
+        result = (op == Py_EQ ? Py_True : Py_False);
+        Py_INCREF(result);
+        return result;
     }
     try
     {
@@ -624,14 +628,18 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
                     Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );
                     if( xMe->getMaterial() == xOther->getMaterial() )
                     {
-                        return (op == Py_EQ ? Py_True : Py_False);
+                        result = (op == Py_EQ ? Py_True : Py_False);
+                        Py_INCREF(result);
+                        return result;
                     }
                 }
                 else if( tcMe == com::sun::star::uno::TypeClass_INTERFACE )
                 {
                     if( me->members->wrappedObject == other->members->wrappedObject )
                     {
-                        return (op == Py_EQ ? Py_True : Py_False);
+                        result = (op == Py_EQ ? Py_True : Py_False);
+                        Py_INCREF(result);
+                        return result;
                     }
                 }
             }
@@ -641,8 +649,18 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    return Py_False;
+
+    result = (op == Py_EQ ? Py_False : Py_True);
+    Py_INCREF(result);
+    return result;
 }
+
+/* Python 2 has a tp_flags value for rich comparisons.  Python 3 does not (on by default) */
+#ifdef Py_TPFLAGS_HAVE_RICHCOMPARE
+#define TP_FLAGS (Py_TPFLAGS_HAVE_RICHCOMPARE)
+#else
+#define TP_FLAGS 0
+#endif
 
 static PyTypeObject PyUNOType =
 {
@@ -654,7 +672,7 @@ static PyTypeObject PyUNOType =
     (printfunc) 0,
     (getattrfunc) PyUNO_getattr,
     (setattrfunc) PyUNO_setattr,
-    0,
+    /* this type does not exist in Python 3: (cmpfunc) */ 0,
     (reprfunc) PyUNO_repr,
     0,
     0,
@@ -665,7 +683,7 @@ static PyTypeObject PyUNOType =
     (getattrofunc)0,
     (setattrofunc)0,
     NULL,
-    0,
+    TP_FLAGS,
     NULL,
     (traverseproc)0,
     (inquiry)0,

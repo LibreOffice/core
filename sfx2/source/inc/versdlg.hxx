@@ -70,8 +70,8 @@ class SfxVersionDialog : public SfxModalDialog
     LocaleDataWrapper*          mpLocaleWrapper;
     sal_Bool                    mbIsSaveVersionOnClose;
 
-    DECL_LINK(                  DClickHdl_Impl, Control* );
-    DECL_LINK(                  SelectHdl_Impl, Control* );
+    DECL_LINK(DClickHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(                  ButtonHdl_Impl, Button* );
     void                        Init_Impl();
     void                        Open_Impl();

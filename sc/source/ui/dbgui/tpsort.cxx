@@ -61,26 +61,26 @@ using namespace com::sun::star;
 // -----------------------------------------------------------------------
 
 /*
- * Da sich Einstellungen auf der zweiten TabPage (Optionen) auf
- * die erste TabPage auswirken, muss es die Moeglichkeit geben,
- * dies der jeweils anderen Seite mitzuteilen.
+ * Since the settings on the second Tab Page (Options) effects
+ * the first Tab Page, there must be a way for it to communicate with the
+ * other Page.
  *
- * Im Moment wird dieses Problem ueber zwei Datenmember des TabDialoges
- * geloest. Wird eine Seite Aktiviert/Deaktiviert, so gleicht sie diese
- * Datenmember mit dem eigenen Zustand ab (->Activate()/Deactivate()).
+ * At the moment this problem is solved through using two data members of the
+ * Tab Pages. If a page is enabled / disabled, it compares this data member
+ * with its own state (-> Activate() / Deactivate()).
  *
- * Die Klasse SfxTabPage bietet mittlerweile ein Verfahren an:
+ * In the meantime the class SfxTabPage offers the following method:
  *
  * virtual sal_Bool HasExchangeSupport() const; -> return sal_True;
  * virtual void ActivatePage(const SfxItemSet &);
  * virtual int  DeactivatePage(SfxItemSet * = 0);
  *
- * muss noch geaendert werden!
+ * This still needs to be changed!
  */
 
 //========================================================================
 //========================================================================
-// Sortierkriterien-Tabpage:
+// Sort Criteria Tab page
 
 ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
                                           const SfxItemSet& rArgSet )
@@ -183,7 +183,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     if ( aLbSort1.GetEntryCount() == 0 )
         FillFieldLists();
 
-    // Selektieren der ListBoxen:
+    // ListBox selection:
 
     if ( rSortData.bDoSort[0] )
     {
@@ -200,7 +200,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
             }
             else
             {
-                aSortLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
+                aSortLbArr[i]->SelectEntryPos( 0 ); // Select none
                 aDirBtnArr[i][0]->Check();          // Up
             }
         }
@@ -261,7 +261,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
     OSL_ENSURE(    (nSort1Pos <= SC_MAXFIELDS)
                 && (nSort2Pos <= SC_MAXFIELDS)
                 && (nSort3Pos <= SC_MAXFIELDS),
-                "Array-Range Fehler!" );
+                "Array range error!" );
 
     if ( nSort1Pos == LISTBOX_ENTRY_NOTFOUND ) nSort1Pos = 0;
     if ( nSort2Pos == LISTBOX_ENTRY_NOTFOUND ) nSort2Pos = 0;
@@ -273,10 +273,9 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         theSortData.bDoSort[1] = (nSort2Pos > 0);
         theSortData.bDoSort[2] = (nSort3Pos > 0);
 
-        // wenn auf Optionen-Seite "OK" gewaehlt wurde und
-        // dabei die Sortierrichtung umgestellt wurde, so
-        // wird das erste Feld der jeweiligen Richtung als
-        // Sortierkriterium gewaehlt (steht in nFieldArr[0]):
+        // If the "OK" was selected on the Options page while the sort
+        // direction was changed, then the first field (i.e. nFieldArr[0])
+        // of the respective direction is chosen as the sorting criterion:
         if ( bSortByRows != pDlg->GetByRows() )
         {
             theSortData.nField[0] =
@@ -295,7 +294,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         theSortData.bAscending[0] = aBtnUp1.IsChecked();
         theSortData.bAscending[1] = aBtnUp2.IsChecked();
         theSortData.bAscending[2] = aBtnUp3.IsChecked();
-        //  bHasHeader ist in ScTabPageSortOptions::FillItemSet, wo es hingehoert
+        // bHasHeader is in ScTabPageSortOptions::FillItemSet, where it belongs
     }
     else
     {
@@ -311,8 +310,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-// fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
-
+// for data exchange without dialogue detour: (still TODO!)
 void ScTabPageSortFields::ActivatePage()
 {
     if ( pDlg )
@@ -518,7 +516,7 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 }
 
 //========================================================================
-// Sortieroptionen-Tabpage:
+// Sort option Tab Page:
 //========================================================================
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
@@ -636,10 +634,7 @@ void ScTabPageSortOptions::Init()
         aLbOutPos.SelectEntryPos( 0 );
         aEdOutPos.SetText( EMPTY_STRING );
 
-        /*
-         * Ueberpruefen, ob es sich bei dem uebergebenen
-         * Bereich um einen Datenbankbereich handelt:
-         */
+        // Check whether the field that is passed on is a database field:
 
         ScAddress aScAddress( rSortData.nCol1, rSortData.nRow1, nCurTab );
         ScRange( aScAddress,
@@ -803,7 +798,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-// fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
+// for data exchange without dialogue detour: (still TODO!)
 void ScTabPageSortOptions::ActivatePage()
 {
     if ( pDlg )
@@ -991,7 +986,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
 {
     aLbAlgorithm.SetUpdateMode( false );
     aLbAlgorithm.Clear();

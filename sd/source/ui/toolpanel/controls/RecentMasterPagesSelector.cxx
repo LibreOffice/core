@@ -75,7 +75,7 @@ void RecentMasterPagesSelector::LateInit (void)
 
 
 
-IMPL_LINK(RecentMasterPagesSelector,MasterPageListListener, void*, EMPTYARG)
+IMPL_LINK_NOARG(RecentMasterPagesSelector, MasterPageListListener)
 {
     MasterPagesSelector::Fill();
     return 0;

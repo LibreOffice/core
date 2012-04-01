@@ -35,6 +35,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { class GraphicHelper; }
 
@@ -43,7 +44,7 @@ namespace drawingml {
 
 // ============================================================================
 
-class Color
+class OOX_DLLPUBLIC Color
 {
 public:
                         Color();

@@ -12,8 +12,8 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\transex3 %_DEST%\bin\transex3
 ..\%__SRC%\bin\lngex.exe %_DEST%\bin\lngex.exe
 ..\%__SRC%\bin\lngex %_DEST%\bin\lngex
-..\%__SRC%\bin\localize_sl.exe %_DEST%\bin\localize_sl.exe
-..\%__SRC%\bin\localize_sl %_DEST%\bin\localize_sl
+..\%__SRC%\bin\localize.exe %_DEST%\bin\localize.exe
+..\%__SRC%\bin\localize %_DEST%\bin\localize
 ..\%__SRC%\bin\xrmex.exe %_DEST%\bin\xrmex.exe
 ..\%__SRC%\bin\xrmex %_DEST%\bin\xrmex
 ..\%__SRC%\bin\gsicheck.exe %_DEST%\bin\gsicheck.exe
@@ -26,12 +26,14 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\txtconv %_DEST%\bin\txtconv
 ..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
 ..\%__SRC%\class\FCFGMerge.jar %_DEST%\bin\FCFGMerge.jar
-..\%__SRC%\class\HelpIndexerTool.jar %_DEST%\bin\HelpIndexerTool.jar
-..\%__SRC%\bin\HelpLinker %_DEST%\bin\HelpLinker
 ..\%__SRC%\bin\HelpCompiler %_DEST%\bin\HelpCompiler
 ..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin\HelpCompiler.exe
+..\%__SRC%\bin\HelpLinker %_DEST%\bin\HelpLinker
 ..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin\HelpLinker.exe
 ..\%__SRC%\bin\HelpLinker* %_DEST%\bin
+..\%__SRC%\bin\HelpIndexer %_DEST%\bin\HelpIndexer
+..\%__SRC%\bin\HelpIndexer.exe %_DEST%\bin\HelpIndexer.exe
+..\%__SRC%\bin\HelpIndexer* %_DEST%\bin
 
 ..\scripts\localize %_DEST%\bin\localize
 ..\scripts\fast_merge.pl %_DEST%\bin\fast_merge.pl
@@ -42,8 +44,11 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\scripts\propex.bat %_DEST%\bin\propex.bat
 ..\scripts\propmerge %_DEST%\bin\propmerge
 ..\inc\export.hxx %_DEST%\inc\l10ntools\export.hxx
+..\inc\l10ntools\dllapi.h %_DEST%\inc\l10ntools\dllapi.h
 ..\inc\l10ntools\directory.hxx %_DEST%\inc\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc\l10ntools\file.hxx
+..\inc\l10ntools\HelpIndexer.hxx %_DEST%\inc\l10ntools\HelpIndexer.hxx
+..\inc\l10ntools\HelpSearch.hxx %_DEST%\inc\l10ntools\HelpSearch.hxx
 ..\source\filter\merge\FCFGMerge.cfg  %_DEST%\inc\l10ntools\FCFGMerge.cfg
 
 ..\%__SRC%\lib\transex.lib %_DEST%\lib\transex.lib

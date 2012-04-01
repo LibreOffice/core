@@ -77,15 +77,14 @@ namespace writerfilter { namespace ooxml { namespace tokenmap {
 %}
 struct token { const char * name; Token_t nToken; };
 %%</xsl:text>
-    <xsl:for-each select=".//rng:element|.//rng:attribute">
-      <xsl:if test="generate-id(.) = generate-id(key('same-token-name', @localname)[1])">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:value-of select="@localname"/>
-        <xsl:text>, </xsl:text>
-        <xsl:call-template name="fastlocalname"/>
-      </xsl:if>
+    <xsl:for-each select="/model/fasttoken">
+      <xsl:text>&#xa;</xsl:text>
+      <xsl:value-of select="translate(., '-', '_')"/>
+      <xsl:text>, OOXML_</xsl:text>
+      <xsl:value-of select="translate(., '-', '_')"/>
     </xsl:for-each>
     <xsl:text>
+FAST_TOKENS_END, OOXML_FAST_TOKENS_END
 %%&#xa;</xsl:text>
 }}}&#xa;</xsl:template>
 

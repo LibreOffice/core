@@ -51,7 +51,7 @@ public:
 
     // SwVbaFormFields_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

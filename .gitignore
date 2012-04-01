@@ -49,18 +49,18 @@
 /aclocal.m4
 /autom4te.cache
 /autogen.lastrun
-/build_env
+/autogen.lastrun.bak
 /ChangeLog
 /config.guess
 /config.log
 /config.status
 /config.parms
 /config_host.mk
+/config_host.mk.last
 /config_build.mk
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk
-/set_soenv
 /post_download
 /bin/repo-list
 /src.downloaded
@@ -77,7 +77,6 @@
 # misc
 /file-lists
 /cross-build-toolset.built
-/set_soenv.last
 /set_soenv.stamp
 /warn
 /build.log
@@ -85,8 +84,6 @@
 /post_download.log
 /install
 /downloaded
-/Env.Build.sh
-/Env.Host.sh
 /ID
 /tags
 /docs
@@ -129,10 +126,6 @@ test/user-template/user/psprint/pspfontcache
 
 # LibreOffice lock files
 .~lock.*#
-
-# Everyone loves patching
-*.orig
-*.rej
 
 # Somepeople love debugging
 gdbtrace.log

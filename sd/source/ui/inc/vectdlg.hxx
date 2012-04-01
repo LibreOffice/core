@@ -91,8 +91,8 @@ class SdVectorizeDlg : public ModalDialog
                                  long nPosX, long nPosY, long nWidth, long nHeight );
 
                         DECL_LINK( ProgressHdl, void* );
-                        DECL_LINK( ClickPreviewHdl, PushButton* );
-                        DECL_LINK( ClickOKHdl, OKButton* );
+                        DECL_LINK( ClickPreviewHdl, void* );
+                        DECL_LINK( ClickOKHdl, void* );
                         DECL_LINK( ToggleHdl, CheckBox* );
                         DECL_LINK( ModifyHdl, void* );
 

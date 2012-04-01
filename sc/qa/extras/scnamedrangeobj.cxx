@@ -26,20 +26,25 @@
  * instead of those above.
  */
 
-#include <test/sheet/xnamedrange.hxx>
 #include <test/unoapi_test.hxx>
+#include <test/sheet/xnamedrange.hxx>
+#include <test/container/xnamed.hxx>
+#include <test/sheet/xcellrangereferrer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 6
+#define NUMBER_OF_TESTS 9
 
-class ScNamedRangeObj : public UnoApiTest, apitest::XNamedRange
+class ScNamedRangeObj : public UnoApiTest, apitest::XNamedRange, apitest::XNamed, apitest::XCellRangeReferrer
 {
 public:
+    ScNamedRangeObj();
+
     virtual void setUp();
     virtual void tearDown();
 
@@ -53,8 +58,13 @@ public:
     CPPUNIT_TEST(testSetType);
     CPPUNIT_TEST(testGetReferencePosition);
     CPPUNIT_TEST(testSetReferencePosition);
+    CPPUNIT_TEST(testSetName);
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testGetReferredCells);
     CPPUNIT_TEST_SUITE_END();
 private:
+    uno::Reference< sheet::XNamedRanges > init_impl();
+
     static sal_Int32 nTest;
     static uno::Reference< lang::XComponent > mxComponent;
 };
@@ -62,9 +72,32 @@ private:
 sal_Int32 ScNamedRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
+ScNamedRangeObj::ScNamedRangeObj():
+        apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange"))),
+        apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
+{
+
+}
+
+uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
+{
+    rtl::OUString aFileURL;
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods")), aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
+    rtl::OUString aNamedRangesPropertyString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xNamedRanges.is());
+
+    return xNamedRanges;
+}
+
 uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const rtl::OUString& rRangeName)
 {
-    uno::Reference< container::XNameAccess > xNamedAccess(init(), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNamedAccess(init_impl(), UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRange > xNamedRange(xNamedAccess->getByName(rRangeName), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xNamedRange.is());
 
@@ -73,18 +106,7 @@ uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const rtl::OU
 
 uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 {
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods")), aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
-    rtl::OUString aNamedRangesPropertyString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xNamedRangesNameAccess.is());
-
-    return xNamedRangesNameAccess;
+    return getNamedRange(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange")));
 }
 
 void ScNamedRangeObj::setUp()

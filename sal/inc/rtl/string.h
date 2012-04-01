@@ -886,6 +886,11 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const s
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
+/**
+ @internal
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromLiteral( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+
 /** Assign a new value to a string.
 
     First releases any value str might currently hold, then acquires
@@ -999,6 +1004,66 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceStrAt(
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplace(
         rtl_String ** newStr, rtl_String * str, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing the first occurrence of a given substring
+    with another substring.
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_String
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength bytes
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the replacing substring; must not be null and must
+    point to memory of at least \p toLength bytes
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @param[in,out] index  pointer to a start index, must not be null; upon entry
+    to the function its value is the index into the original string at which to
+    start searching for the \p from substring, the value must be non-negative
+    and not greater than the original string's length; upon exit from the
+    function its value is the index into the original string at which the
+    replacement took place or -1 if no replacement took place
+
+    @since LibreOffice 3.6
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceFirst(
+    rtl_String ** newStr, rtl_String * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_String
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength bytes
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the replacing substring; must not be null and must
+    point to memory of at least \p toLength bytes
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @since LibreOffice 3.6
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceAll(
+    rtl_String ** newStr, rtl_String * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C();
 
 /** Create a new string by converting all ASCII uppercase letters to lowercase
     within another string.
@@ -1129,7 +1194,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
+// The &foo[0] trick is intentional, it makes sure the type is char* or const char*
+// (plain cast to const char* would not work with non-const char foo[]="a", which seems to be allowed).
+// This is to avoid mistaken use with functions that accept string literals
+// (i.e. const char (&)[N]) where usage of this macro otherwise could match
+// the argument and a following int argument with a default value (e.g. OString::match()).
+#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
+    ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
 
 /** Supply the length of an ASCII string literal.
 

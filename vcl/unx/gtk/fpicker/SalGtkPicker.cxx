@@ -87,7 +87,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         else
         {
             OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext), UNO_QUERY_THROW)->translateToInternal(sURL);
-            if( aNewURL.getLength() )
+            if( !aNewURL.isEmpty() )
                 sURL = aNewURL;
         }
     }
@@ -104,7 +104,7 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     {
         OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext ), UNO_QUERY_THROW)->translateToExternal( rURL );
 
-        if( aNewURL.getLength() )
+        if( !aNewURL.isEmpty() )
         {
             // At this point the URL should contain ascii characters only actually
             sURL = OUStringToOString( aNewURL, osl_getThreadTextEncoding() );

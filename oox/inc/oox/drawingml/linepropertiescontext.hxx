@@ -30,6 +30,7 @@
 #define OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { namespace drawingml {
 
@@ -37,7 +38,7 @@ namespace oox { namespace drawingml {
 
 struct LineProperties;
 
-class LinePropertiesContext : public ::oox::core::ContextHandler
+class OOX_DLLPUBLIC LinePropertiesContext : public ::oox::core::ContextHandler
 {
 public:
     LinePropertiesContext( ::oox::core::ContextHandler& rParent,

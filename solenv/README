@@ -1,0 +1,48 @@
+Tools and makefile fragments necessary for compilation
+
+This module contains many tools and makefile configuration pieces,
+critical for building LibreOffice:
+
+bin/
+	contains lots of tools used during the build:
+
+	build.pl
+		the top-level wrapper perl-script, from the dmake
+		days - we're incrementally removing this in favour
+		of gnumake
+
+	deliver.pl
+		copies files from old-style dmake packages into the
+		top-level 'solver' directory
+
+	concat-deps*
+		these aggregate, and remove duplicates from module
+		dependencies, to accelerate build times.
+
+	make_installer.pl
+		this script executes the compiled instructions from
+		the scp2/ module to create an installer, and/or to
+		do a local install for the smoketest.
+
+	linkoo
+		creates a forest of symlinks inside an install such
+		that a developer can re-compile in the source tree,
+		and re-run without re-installing (on Unix at least)
+
+gbuild/
+	the (shiny new) gnumake build makefile fragments we are
+	migrating the codebase to use.
+
+gdb/
+	lots of nice python helpers to make debugging -much- easier
+	that (eg.) print UCS2 strings as UTF-8 on the console to
+	help with debugging.
+
+inc/
+	old / increasingly obsolete dmake setup and includes, we are
+	trying to entirely rid ourselves of this
+
+src/
+	useful standard / re-usable component map files for components
+	which shouldn't export anything more than a few registration
+	symbols.

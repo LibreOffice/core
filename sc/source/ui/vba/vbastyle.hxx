@@ -60,7 +60,7 @@ public:
     virtual void SAL_CALL setMergeCells( const css::uno::Any& MergeCells ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

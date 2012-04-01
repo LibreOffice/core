@@ -25,9 +25,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include "sal/config.h"
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
 #endif
+
+#include <cassert>
+#include <cstdlib>
 
 #include <rtl/memory.h>
 #include <osl/interlck.h>
@@ -322,6 +328,59 @@ sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
 {
     return rtl_impl_convertUStringToString(pTarget, pSource, nLength, nEncoding,
                                            nFlags, sal_True);
+}
+
+void rtl_string_newReplaceFirst(
+    rtl_String ** newStr, rtl_String * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != 0);
+    assert(index != 0);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_str_indexOfStr_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_string_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
+            std::abort();
+        }
+        sal_Int32 n = str->length - fromLength + toLength;
+        rtl_string_acquire(str); // in case *newStr == str
+        rtl_string_new_WithLength(newStr, n);
+        if (n != 0) {
+            (*newStr)->length = n;
+            assert(i >= 0 && i < str->length);
+            rtl_copyMemory((*newStr)->buffer, str->buffer, i);
+            rtl_copyMemory((*newStr)->buffer + i, to, toLength);
+            rtl_copyMemory(
+                (*newStr)->buffer + i + toLength, str->buffer + i + fromLength,
+                str->length - i - fromLength);
+        }
+        rtl_string_release(str);
+    }
+    *index = i;
+}
+
+void rtl_string_newReplaceAll(
+    rtl_String ** newStr, rtl_String * str, char const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C()
+{
+    rtl_string_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_string_newReplaceFirst(
+            newStr, *newStr, from, fromLength, to, toLength, &i);
+        if (i == -1) {
+            break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

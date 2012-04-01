@@ -96,7 +96,7 @@ BreakDlg::~BreakDlg()
 }
 
 // Control-Handler fuer den Abbruch Button
-IMPL_LINK( BreakDlg, CancelButtonHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
   bCancel = sal_True;
   aBtnCancel.Disable();
@@ -176,7 +176,7 @@ short BreakDlg::Execute()
 }
 
 // Linkmethode welche die Arbeitsfunktion startet
-IMPL_LINK( BreakDlg, InitialUpdate, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(BreakDlg, InitialUpdate)
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
     EndDialog(sal_True);

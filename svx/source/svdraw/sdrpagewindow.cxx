@@ -147,7 +147,7 @@ sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 }
 
 // OVERLAY MANAGER
-::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
+rtl::Reference< ::sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
 }
@@ -179,13 +179,13 @@ void SdrPageWindow::PrePaint()
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
 {
-    // evtl. give OC the chance to do ProcessDisplay preparations
+    // give OC the chance to do ProcessDisplay preparations
     if(HasObjectContact())
     {
         GetObjectContact().PrepareProcessDisplay();
     }
 
-    // remember eventually changed RedrawArea at PaintWindow for usage with
+    // if necessary, remember changed RedrawArea at PaintWindow for usage with
     // overlay and PreRenderDevice stuff
     GetPaintWindow().SetRedrawRegion(rReg);
 }

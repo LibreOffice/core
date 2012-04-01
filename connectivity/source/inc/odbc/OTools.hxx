@@ -216,13 +216,16 @@ namespace connectivity
                                     SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             /**
-                bindData copies the from pValue to pData
-                @param  _nOdbcType          the ODBC sql type
-                @param  _bUseWChar          true when Unicode should be used
-                @param  _pData              contains a copy of the data to be set
-                @param  _pValue             contains the data to be copied
-                @param  _nTextEncoding      the text encoding
-                @param  _nColumnSize        the columnsize which is a out param
+                bindData copies data from pValue to pData
+                @param  _nOdbcType          [in] the ODBC sql type
+                @param  _bUseWChar          [in] true when Unicode should be used
+                @param  _pData              [in/out] data copy destination
+                @param  pLen                [out] buffer length of data written to _pData
+                @param  _pValue             [in] contains the data to be copied
+                @param  _nTextEncoding      [in] the text encoding
+                @param  _nColumnSize        [out] columnSize of data written to _pData
+                @param  atExec              [out] data was not copied, but setup for data-at-execution;
+                                                  caller is responsible for writing a token in _pData
             */
             static void bindData(   SQLSMALLINT _nOdbcType,
                                     sal_Bool _bUseWChar,
@@ -230,7 +233,8 @@ namespace connectivity
                                     SQLLEN*& pLen,
                                     const void* _pValue,
                                     rtl_TextEncoding _nTextEncoding,
-                                    SQLULEN& _nColumnSize);
+                                    SQLULEN& _nColumnSize,
+                                    bool &atExec);
 
             static void bindParameter(  OConnection* _pConnection,
                                         SQLHANDLE _hStmt,

@@ -72,7 +72,7 @@ namespace framework{
 // definitions
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
-static ::rtl::OUString PROGRESS_RESOURCE(RTL_CONSTASCII_USTRINGPARAM("private:resource/progressbar/progressbar"));
+const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
@@ -476,10 +476,11 @@ void StatusIndicatorFactory::impl_createProgress()
             if (xLayoutManager.is())
             {
                 xLayoutManager->lock();
-                xLayoutManager->createElement( PROGRESS_RESOURCE );
-                xLayoutManager->hideElement( PROGRESS_RESOURCE );
+                rtl::OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
+                xLayoutManager->createElement( sPROGRESS_RESOURCE );
+                xLayoutManager->hideElement( sPROGRESS_RESOURCE );
 
-                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESS_RESOURCE);
+                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
                 if (xProgressBar.is())
                     xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
                 xLayoutManager->unlock();
@@ -522,10 +523,11 @@ void StatusIndicatorFactory::impl_showProgress()
                 // Be sure that we have always a progress. It can be that our frame
                 // was recycled and therefore the progress was destroyed!
                 // CreateElement does nothing if there is already a valid progress.
-                xLayoutManager->createElement( PROGRESS_RESOURCE );
-                xLayoutManager->showElement( PROGRESS_RESOURCE );
+                rtl::OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
+                xLayoutManager->createElement( sPROGRESS_RESOURCE );
+                xLayoutManager->showElement( sPROGRESS_RESOURCE );
 
-                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESS_RESOURCE);
+                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
                 if (xProgressBar.is())
                     xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
             }
@@ -561,7 +563,7 @@ void StatusIndicatorFactory::impl_hideProgress()
             css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
-                xLayoutManager->hideElement( PROGRESS_RESOURCE );
+                xLayoutManager->hideElement( rtl::OUString(PROGRESS_RESOURCE) );
         }
     }
 }

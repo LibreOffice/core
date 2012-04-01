@@ -40,9 +40,6 @@ class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
 
-/*************************************************************************
- *                      class SwTxtFormatter
- *************************************************************************/
 
 class SwTxtFormatter : public SwTxtPainter
 {
@@ -69,6 +66,10 @@ class SwTxtFormatter : public SwTxtPainter
     SwExpandPortion *NewFldPortion( SwTxtFormatInfo &rInf,
                                     const SwTxtAttr *pHt ) const;
     SwFtnPortion *NewFtnPortion( SwTxtFormatInfo &rInf, SwTxtAttr *pHt );
+
+    /**
+        Sets a new portion for an object anchored as character
+     */
     SwFlyCntPortion *NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                        SwTxtAttr *pHt ) const;
     SwLinePortion *WhichFirstPortion( SwTxtFormatInfo &rInf );
@@ -77,9 +78,18 @@ class SwTxtFormatter : public SwTxtPainter
 
     // Das Herzstueck der Formatierung
     void BuildPortions( SwTxtFormatInfo &rInf );
+
     sal_Bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
-    // Berechnung des emulierten rechten Rands
+    /**
+        Calculation of the emulated right side.
+
+        Determines the next object, that reaches into the rest of the line and
+        constructs the appropriate FlyPortion.
+        SwTxtFly::GetFrm(const SwRect&, sal_Bool) will be needed for this.
+
+        The right edge can be shortened by flys
+     */
     void CalcFlyWidth( SwTxtFormatInfo &rInf );
 
     // wird von SwTxtFormatter wegen UpdatePos ueberladen
@@ -103,14 +113,29 @@ class SwTxtFormatter : public SwTxtPainter
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );
 
-    // durch das Adjustment aendert sich die Position der Portions
+    /**
+        The position of the portions changes with the adjustment.
+
+        This method updates the reference point of the anchored as character objects,
+        for example after adjustment change (right alignment, justified, etc.)
+        Mainly to correct the X position.
+     */
     void UpdatePos( SwLineLayout *pCurr, Point aStart, xub_StrLen nStartIdx,
             sal_Bool bAllWays = sal_False ) const;
 
-    // Setze alle FlyInCntFrms auf die uebergebene BaseLine
+    /**
+        Set all anchored as character objects to the passed BaseLine
+        (in Y direction).
+     */
     void AlignFlyInCntBase( long nBaseLine ) const;
 
-    // Unterlaufbedingungen bei Flys
+    /**
+        This is called after the real height of the line has been calculated
+        Therefore it is possible, that more flys from below intersect with the
+        line, or that flys from above do not intersect with the line anymore.
+        We check this and return true, meaning that the line has to be
+        formatted again.
+     */
     sal_Bool ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const;
 
     // Portion einfuegen.

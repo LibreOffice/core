@@ -265,7 +265,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 /////////////////
 }
 
-IMPL_LINK( ImpPDFTabDialog, CancelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 {
     EndDialog( sal_False );
     return 0;
@@ -665,7 +665,7 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl)
 {
     maEdPages.Enable( maRbRange.IsChecked() );
     if ( maRbRange.IsChecked() )
@@ -674,7 +674,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl)
 {
     maLbFormsFormat.Enable( maCbExportFormFields.IsChecked() );
     maCbAllowDuplicateFieldNames.Enable( maCbExportFormFields.IsChecked() );
@@ -682,21 +682,21 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleCompressionHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl)
 {
     maNfQuality.Enable( maRbJPEGCompression.IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl)
 {
     maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl)
 {
     if( maCbAddStream.IsVisible() )
     {
@@ -719,7 +719,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
 {
     ImpPDFTabSecurityPage* pSecPage = NULL;
 //set the security page status (and its controls as well)
@@ -935,7 +935,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     }
 }
 
-IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl)
 {
     maCbPgLyFirstOnLeft.Enable( maRbPgLyContinueFacing.IsChecked() );
     return 0;
@@ -1217,7 +1217,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
             !( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected() );
 }
 
-IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
 {
     SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog.SetMinLen( 0 );
@@ -1479,7 +1479,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
 // -----------------------------------------------------------------------------
 // reset the memory of Launch action present
 // when PDF/A-1 was requested
-IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl)
 {
     mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
     mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
@@ -1490,7 +1490,7 @@ IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, void*, EMPTYARG )
 // -----------------------------------------------------------------------------
 // reset the memory of a launch action present
 // when PDF/A-1 was requested
-IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl)
 {
     mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
     mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
@@ -1594,7 +1594,7 @@ ImplErrorDialog::~ImplErrorDialog()
         delete (String*)maErrors.GetEntryData( n );
 }
 
-IMPL_LINK( ImplErrorDialog, SelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
     String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
     maExplanation.SetText( pStr ? *pStr : String() );

@@ -37,7 +37,6 @@
 #include <svx/dlgctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
 #include "sdtreelb.hxx"
 #include "anmdef.hxx"
 

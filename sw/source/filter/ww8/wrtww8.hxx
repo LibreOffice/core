@@ -117,7 +117,10 @@ class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
 class SwMSConvertControls;
-class WW8OleMaps;
+namespace com { namespace sun { namespace star { namespace embed {
+class XEmbeddedObject;
+} } } }
+typedef std::map<const com::sun::star::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
@@ -461,7 +464,7 @@ public:
     boost::shared_ptr<NfKeywordTable> pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
-    WW8OleMaps* pOleMap;
+    WW8OleMap m_aOleMap;    // To remember all already exported ole objects
     ww8::WW8TableInfo::Pointer_t mpTableInfo;
 
     sal_uInt16 nCharFmtStart;
@@ -593,10 +596,10 @@ public:
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
 
     /// Find the reference.
-    bool HasRefToObject( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo );
+    bool HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find the bookmark name.
-    String GetBookmarkName( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo );
+    String GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
 
     /// Add a bookmark converted to a Word name.
     void AppendWordBookmark( const String& rName );
@@ -968,7 +971,7 @@ public:
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
-    WW8OleMaps& GetOLEMap()                 { return *pOleMap; }
+    WW8OleMap& GetOLEMap()                  { return m_aOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );
@@ -1005,7 +1008,7 @@ public:
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
     void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
 
-    void WriteAsStringTable(const ::std::vector<String>&, sal_Int32& rfcSttbf,
+    void WriteAsStringTable(const ::std::vector<rtl::OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );

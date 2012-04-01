@@ -48,7 +48,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include "ContainerMediator.hxx"
 #include <rtl/logfile.hxx>

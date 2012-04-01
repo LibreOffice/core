@@ -38,6 +38,11 @@ $(eval $(call gb_Jar_add_jars,ScriptProviderForJava,\
 
 $(eval $(call gb_Jar_set_componentfile,ScriptProviderForJava,scripting/java/ScriptProviderForJava,OOO))
 
+$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForJava, \
+    ScriptFramework.jar))
+
+$(eval $(call gb_Jar_set_manifest,ScriptProviderForJava,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/java/MANIFEST.MF))
+
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForJava,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,ScriptProviderForJava,\

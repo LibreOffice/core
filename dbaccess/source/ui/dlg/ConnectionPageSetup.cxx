@@ -96,13 +96,6 @@ namespace dbaui
         return oDBWizardPage;
     }
 
-    OGenericAdministrationPage* OConnectionTabPageSetup::CreateAdabasTabPage( Window* pParent,  const SfxItemSet& _rAttrSet )
-    {
-        OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_ADABAS, _rAttrSet, STR_ADABAS_HELPTEXT, STR_ADABAS_HEADERTEXT, STR_ADABAS_DATABASE_NAME);
-        oDBWizardPage->FreeResource();
-        return oDBWizardPage;
-    }
-
     OGenericAdministrationPage* OConnectionTabPageSetup::CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_ADO, _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL);

@@ -824,7 +824,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
     startIndicator( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
-    m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::iterator());
+    m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDocument->emitStructure( 0 );
@@ -836,7 +836,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
         rVisitorFactory.createStyleCollectingVisitor(aStyles,*this));
     // FIXME: localization
 
-    m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::iterator() );
+    m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::const_iterator() );
 
     EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
@@ -871,7 +871,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     // emit style list
     aStyles.emit( aContext, *aEmittingVisitor );
 
-    m_pDocument->visitedBy( *aEmittingVisitor, std::list<Element*>::iterator() );
+    m_pDocument->visitedBy( *aEmittingVisitor, std::list<Element*>::const_iterator() );
     aContext.rEmitter.endTag( "office:document" );
     endIndicator();
 }
@@ -906,16 +906,6 @@ void PDFIProcessor::endIndicator()
 {
     if( m_xStatusIndicator.is() )
         m_xStatusIndicator->end();
-}
-
-void PDFIProcessor::sortDocument( bool bDeep )
-{
-    for( std::list< Element* >::iterator it = m_pDocument->Children.begin();
-         it != m_pDocument->Children.end(); ++it )
-    {
-        if( dynamic_cast<PageElement*>(*it) != NULL )
-            sortElements( *it, bDeep );
-    }
 }
 
 static bool lr_tb_sort( Element* pLeft, Element* pRight )

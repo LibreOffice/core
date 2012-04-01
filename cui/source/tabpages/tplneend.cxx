@@ -289,7 +289,7 @@ SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, SelectLineEndHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 {
     if( pLineEndList->Count() > 0 )
     {
@@ -324,7 +324,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
 
@@ -396,7 +396,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 {
     if( pPolyObj )
     {
@@ -515,7 +515,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
 
@@ -551,7 +551,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -625,7 +625,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );

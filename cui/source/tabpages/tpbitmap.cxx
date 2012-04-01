@@ -324,7 +324,7 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
     XOBitmap* pXOBitmap = NULL;
     int nPos = aLbBitmaps.GetSelectEntryPos();
@@ -577,7 +577,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
@@ -706,7 +706,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #pragma optimize ( "", off )
 #endif
 
-IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ) );
@@ -807,7 +807,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
 
@@ -877,7 +877,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
 
@@ -913,7 +913,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 {
     sal_uInt16 nReturn = RET_YES;
     ResMgr& rMgr = CUI_MGR();
@@ -1007,7 +1007,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -1069,7 +1069,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ChangePixelColorHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
 {
     aCtlPixel.SetPixelColor( aLbColor.GetSelectEntryColor() );
     aCtlPixel.Invalidate();
@@ -1088,7 +1088,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangePixelColorHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 {
     aCtlPixel.SetBackgroundColor( aLbBackgroundColor.GetSelectEntryColor() );
     aCtlPixel.Invalidate();

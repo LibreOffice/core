@@ -38,6 +38,7 @@
 #include <com/sun/star/table/CellVertJustify.idl>
 #include <com/sun/star/table/CellOrientation.idl>
 #include <com/sun/star/table/TableBorder.idl>
+#include <com/sun/star/table/TableBorder2.idl>
 
 //=============================================================================
 
@@ -300,6 +301,16 @@ published service TableAutoFormatField
         @since OOo 1.1.2
      */
     [optional, property] com::sun::star::table::TableBorder TableBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** property containing a description of the cell border.
+        Preferred over <type scope="com::sun::star::table">TableBorder</type> 
+        <member>TableBorder</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::TableBorder2 TableBorder2;
 };
 
 //=============================================================================

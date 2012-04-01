@@ -182,7 +182,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
     }
 }
 
-IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
 {
     sal_Bool bEnable = m_aCbxShow.IsChecked();
 

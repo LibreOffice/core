@@ -1,0 +1,1 @@
+Implements XSimpleFileAccess interface that makes the UCB interfaces actually usable (via UNO) and more intuitive.

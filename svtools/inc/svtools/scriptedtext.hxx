@@ -87,18 +87,6 @@ public:
                                     const ::rtl::OUString& _rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& _xBreakIter );
 
-                                /** Returns the previously set text.
-                                    @return  The current text. */
-    const ::rtl::OUString&      GetText() const;
-
-                                /** Returns the calculated width the text will take in the current output device.
-                                    @return  The calculated text width. */
-    sal_Int32                   GetTextWidth() const;
-
-                                /** Returns the maximum height the text will take in the current output device.
-                                    @return  The maximum text height. */
-    sal_Int32                   GetTextHeight() const;
-
                                 /** Returns a size struct containing the width and height of the text in the current output device.
                                     @return  A size struct with the text dimensions. */
     const Size&                 GetTextSize() const;

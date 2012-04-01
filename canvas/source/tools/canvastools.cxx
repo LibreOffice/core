@@ -181,15 +181,6 @@ namespace canvas
             return setRenderStateTransform( renderState, transform * rTransform );
         }
 
-        rendering::ViewState& appendToViewState( rendering::ViewState&          viewState,
-                                                 const ::basegfx::B2DHomMatrix& rTransform )
-        {
-            ::basegfx::B2DHomMatrix transform;
-
-            getViewStateTransform( transform, viewState );
-            return setViewStateTransform( viewState, transform * rTransform );
-        }
-
         rendering::RenderState& prependToRenderState( rendering::RenderState&           renderState,
                                                       const ::basegfx::B2DHomMatrix&    rTransform )
         {
@@ -197,15 +188,6 @@ namespace canvas
 
             getRenderStateTransform( transform, renderState );
             return setRenderStateTransform( renderState, rTransform * transform );
-        }
-
-        rendering::ViewState& prependToViewState( rendering::ViewState&             viewState,
-                                                  const ::basegfx::B2DHomMatrix&        rTransform )
-        {
-            ::basegfx::B2DHomMatrix transform;
-
-            getViewStateTransform( transform, viewState );
-            return setViewStateTransform( viewState, rTransform * transform );
         }
 
         ::basegfx::B2DHomMatrix& mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&      combinedTransform,
@@ -221,23 +203,6 @@ namespace canvas
             combinedTransform *= viewTransform;
 
             return combinedTransform;
-        }
-
-        rendering::ViewState& mergeViewAndRenderState( rendering::ViewState&                        resultViewState,
-                                                       const rendering::ViewState&                  viewState,
-                                                       const rendering::RenderState&                renderState,
-                                                       const uno::Reference< rendering::XCanvas >&  /*xCanvas*/     )
-        {
-            ::basegfx::B2DHomMatrix     aTmpMatrix;
-            geometry::AffineMatrix2D    convertedMatrix;
-
-            resultViewState.Clip = NULL; // TODO(F2): intersect clippings
-
-            return setViewStateTransform(
-                resultViewState,
-                mergeViewAndRenderTransform( aTmpMatrix,
-                                             viewState,
-                                             renderState ) );
         }
 
         geometry::AffineMatrix2D& setIdentityAffineMatrix2D( geometry::AffineMatrix2D& matrix )

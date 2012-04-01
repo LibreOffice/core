@@ -625,7 +625,7 @@ bool ScrollBarManager::RepeatAutoScroll (void)
 
 
 
-IMPL_LINK(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, EMPTYARG)
+IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler)
 {
     RepeatAutoScroll();
 

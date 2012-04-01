@@ -66,26 +66,12 @@ MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<u
 }
 
 namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
- sdecl::class_<MtfRenderer, sdecl::with_args<true> > serviceImpl;
- const sdecl::ServiceDecl MtfRendererDecl(
-     serviceImpl,
-#else
  const sdecl::ServiceDecl MtfRendererDecl(
      sdecl::class_<MtfRenderer, sdecl::with_args<true> >(),
-#endif
     "com.sun.star.comp.rendering.MtfRenderer",
     "com.sun.star.rendering.MtfRenderer" );
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL mtfrenderer_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, MtfRendererDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(mtfrenderer, MtfRendererDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,6 @@
 #include <tools/poly.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdedtv.hxx>
 
 

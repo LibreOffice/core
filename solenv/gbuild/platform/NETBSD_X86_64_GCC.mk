@@ -27,7 +27,7 @@
 
 #please make generic modifications to unxgcc.mk
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_COMPILERDEFAULTOPTFLAGS := -O -g
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

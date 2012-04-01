@@ -33,12 +33,12 @@ namespace basegfx
 namespace zoomtools
 {
 
-/** 2^(1/4) as the default step
+/** 2^(1/6) as the default step
 
-    This ensures (unless the rounding is used) that 4 steps lead
+    This ensures (unless the rounding is used) that 6 steps lead
     to double / half zoom level.
 */
-const double ZOOM_FACTOR = 1.1892071150027210667175;
+const double ZOOM_FACTOR = 1.12246205;
 
 /**
 * Round a value against a specified multiple. Values below half
@@ -104,8 +104,11 @@ static long enforceStep(long nCurrent, long nPrevious, int nStep)
 long zoomIn(long nCurrent)
 {
     long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
-    // make sure 100% isn't skipped
+    // make sure some values are not skipped
+    nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
+    nNew = enforceStep(nNew, nCurrent, 75);
+    nNew = enforceStep(nNew, nCurrent, 50);
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
@@ -118,32 +121,14 @@ long zoomIn(long nCurrent)
 long zoomOut(long nCurrent)
 {
     long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
-    // make sure 100% isn't skipped
+    // make sure some values are not skipped
+    nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
+    nNew = enforceStep(nNew, nCurrent, 75);
+    nNew = enforceStep(nNew, nCurrent, 50);
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
-
-/**
-* Increasing the zoom level.
-*
-* @param nCurrent current zoom factor
-*/
-int zoomIn(int nCurrent)
-{
-    return static_cast<int>( zoomIn( long( nCurrent ) ) );
-}
-
-/**
-* Decreasing the zoom level.
-*
-* @param nCurrent current zoom factor
-*/
-int zoomOut(int nCurrent)
-{
-    return static_cast<int>( zoomOut( long( nCurrent ) ) );
-}
-
 } // namespace zoomtools
 } // namespace basegfx
 

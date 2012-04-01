@@ -466,6 +466,19 @@ namespace
     }
 }
 
+//FontConfig doesn't come with a way to remove an element from a FontSet as far
+//as I can see
+static void lcl_FcFontSetRemove(FcFontSet* pFSet, int i)
+{
+    FcPatternDestroy(pFSet->fonts[i]);
+
+    int nTail = pFSet->nfont - (i + 1);
+    --pFSet->nfont;
+    if (!nTail)
+        return;
+    memmove(pFSet->fonts + i, pFSet->fonts + i + 1, nTail*sizeof(FcPattern*));
+}
+
 int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths )
 {
     int nFonts = 0;
@@ -557,7 +570,13 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
             }
             if( aFonts.empty() )
             {
-                // TODO: remove fonts unusable to psprint from fontset
+                //remove font, reuse index
+                //we want to remove unusable fonts here, in case there is a usable font
+                //which duplicates the properties of the unusable one
+                //
+                //not removing the unusable font will risk the usable font being rejected
+                //as a duplicate by isPreviouslyDuplicateOrObsoleted
+                lcl_FcFontSetRemove(pFSet, i--);
                 continue;
             }
 

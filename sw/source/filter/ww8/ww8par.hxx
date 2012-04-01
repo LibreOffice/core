@@ -40,7 +40,6 @@
 #include <map>
 #include <utility>
 
-#include "tracer.hxx"
 #include "ww8struc.hxx"     // WW8_BRC
 #include "ww8scan.hxx"  // WW8Fib
 #include "ww8glsy.hxx"
@@ -144,12 +143,7 @@ namespace com{namespace sun {namespace star{
 
 struct WW8LFOInfo;
 typedef WW8LFOInfo* WW8LFOInfo_Ptr;
-// Redlining: match WinWord author ids to StarWriter author ids
-struct WW8OleMap;
-typedef WW8OleMap* WW8OleMap_Ptr;
-
 SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16)
-SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16)
 
 class WW8Reader : public StgReader
 {
@@ -161,28 +155,6 @@ public:
     virtual sal_Bool HasGlossaries() const;
     virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const;
 };
-
-struct WW8OleMap
-{
-    sal_uInt32 mnWWid;
-    String msStorageName;
-
-    WW8OleMap(sal_uInt32 nWWid)
-        : mnWWid(nWWid) {}
-
-     WW8OleMap(sal_uInt32 nWWid, String sStorageName)
-        : mnWWid(nWWid), msStorageName(sStorageName) {}
-
-    bool operator==(const WW8OleMap & rEntry) const
-    {
-        return (mnWWid == rEntry.mnWWid);
-    }
-    bool operator<(const WW8OleMap & rEntry) const
-    {
-        return (mnWWid < rEntry.mnWWid);
-    }
-};
-
 
 class SwWW8ImplReader;
 struct WW8LSTInfo;
@@ -507,7 +479,6 @@ class FieldEntry
         xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
         ::rtl::OUString GetBookmarkName();
-        ::rtl::OUString GetBookmarkType();
         ::rtl::OUString GetBookmarkCode();
         void SetBookmarkName(::rtl::OUString bookmarkName);
         void SetBookmarkType(::rtl::OUString bookmarkType);
@@ -580,12 +551,12 @@ enum SwWw8ControlType
     WW8_CT_DROPDOWN
 };
 
-class WW8FormulaControl
+class WW8FormulaControl : private ::boost::noncopyable
 {
 protected:
     SwWW8ImplReader &rRdr;
 public:
-    WW8FormulaControl(const String& rN, SwWW8ImplReader &rR)
+    WW8FormulaControl(const rtl::OUString& rN, SwWW8ImplReader &rR)
         : rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
@@ -605,12 +576,12 @@ public:
     sal_uInt16 nChecked;
     sal_uInt16 nDefaultChecked;
 
-    String sTitle;
-    String sDefault;
-    String sFormatting;
-    String sHelp;
-    String sToolTip;
-    std::vector<String> maListEntries;
+    rtl::OUString sTitle;
+    rtl::OUString sDefault;
+    rtl::OUString sFormatting;
+    rtl::OUString sHelp;
+    rtl::OUString sToolTip;
+    std::vector<rtl::OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
@@ -618,11 +589,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz) = 0;
-    UniString sName;
-private:
-    //No copying
-    WW8FormulaControl(const WW8FormulaControl&);
-    WW8FormulaControl& operator=(const WW8FormulaControl&);
+    rtl::OUString sName;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl
@@ -970,11 +937,6 @@ friend class SwWW8FltControlStack;
 friend class WW8FormulaControl;
 friend class wwSectionManager;
 
-public:
-    /*
-    To log unimplemented features
-    */
-    sw::log::Tracer maTracer;
 private:
 
     SvStorage* pStg;                // Input-Storage
@@ -1151,7 +1113,7 @@ private:
 
     std::vector<String>* mpAtnNames;
 
-    sw::util::AuthorInfos* pAuthorInfos;
+    sw::util::AuthorInfos m_aAuthorInfos;
     String sBaseURL;
 
                                 // Ini-Flags:
@@ -1626,7 +1588,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_UL(               sal_uInt16 nId, const sal_uInt8*, short nLen );
     void Read_ParaAutoBefore(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_ParaAutoAfter(sal_uInt16 , const sal_uInt8 *pData, short nLen);
-    void Read_DontAddEqual(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_LineSpace(        sal_uInt16, const sal_uInt8*, short nLen );
     void Read_Justify(sal_uInt16, const sal_uInt8*, short nLen);
     void Read_IdctHint(sal_uInt16, const sal_uInt8*, short nLen);

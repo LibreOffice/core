@@ -344,7 +344,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
     }
     catch(const css::container::NoSuchElementException& exNotExist)
     {
-        throw exNotExist;
+        throw;
     }
     catch(const css::uno::Exception&)
     {

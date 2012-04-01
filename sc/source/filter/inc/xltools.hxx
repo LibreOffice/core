@@ -205,8 +205,7 @@ public:
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
     static rtl::OUString GetBuiltInStyleName( sal_uInt8 nStyleId, const rtl::OUString& rName, sal_uInt8 nLevel );
-    /** Returns the passed style name with a special built-in prefix. */
-    static rtl::OUString GetBuiltInStyleName( const rtl::OUString& rStyleName );
+
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */

@@ -58,7 +58,6 @@
 #include <usrfld.hxx>
 #include <dbmgr.hxx>
 #include <docfld.hxx>
-#include <swunodef.hxx>
 #include <swtypes.hxx>
 
 using namespace ::com::sun::star;
@@ -268,8 +267,8 @@ SwCalc::SwCalc( SwDoc& rD )
     if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) ||
         eLang != SvxLocaleToLanguage( pCharClass->getLocale() ) )
     {
-        STAR_NMSPC::lang::Locale aLocale( SvxCreateLocale( eLang ));
-        STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF(
+        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(
                             ::comphelper::getProcessServiceFactory() );
         pCharClass = new CharClass( xMSF, aLocale );
         pLclData = new LocaleDataWrapper( xMSF, aLocale );
@@ -592,7 +591,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
             if( 0 != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
                 nTmpRec = ((SwCalcExp*)pFnd)->nValue.GetULong();
 
-            String sResult;
+            rtl::OUString sResult;
             double nNumber = DBL_MAX;
 
             long nLang = SvxLocaleToLanguage( pLclData->getLocale() );

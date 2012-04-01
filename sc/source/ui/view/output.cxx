@@ -93,9 +93,9 @@ class ScActionColorChanger
 {
 private:
     const ScAppOptions&     rOpt;
-    const ScStrCollection&  rUsers;
-    String                  aLastUserName;
-    sal_uInt16                  nLastUserIndex;
+    const std::set<rtl::OUString>& rUsers;
+    rtl::OUString           aLastUserName;
+    size_t                  nLastUserIndex;
     ColorData               nColor;
 
 public:
@@ -142,18 +142,21 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
         nColor = nSetColor;
     else                                    // nach Autor
     {
-        if ( rAction.GetUser() != aLastUserName )
+        if (!aLastUserName.equals(rAction.GetUser()))
         {
             aLastUserName = rAction.GetUser();
-            StrData aData(aLastUserName);
-            sal_uInt16 nIndex;
-            if (!rUsers.Search(&aData, nIndex))
+            std::set<rtl::OUString>::const_iterator it = rUsers.find(aLastUserName);
+            if (it == rUsers.end())
             {
                 // empty string is possible if a name wasn't found while saving a 5.0 file
-                OSL_ENSURE( aLastUserName.Len() == 0, "Author not found" );
-                nIndex = 0;
+                SAL_INFO_IF( aLastUserName.isEmpty(), "sc.ui", "Author not found" );
+                nLastUserIndex = 0;
             }
-            nLastUserIndex = nIndex % SC_AUTHORCOLORCOUNT;
+            else
+            {
+                size_t nPos = std::distance(rUsers.begin(), it);
+                nLastUserIndex = nPos % SC_AUTHORCOLORCOUNT;
+            }
         }
         nColor = nAuthorColor[nLastUserIndex];
     }
@@ -794,7 +797,6 @@ void ScOutputData::DrawBackground()
     sal_Bool bShowProt = bSyntaxMode && pDoc->IsTabProtected(nTab);
     sal_Bool bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
 
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -912,7 +914,6 @@ void ScOutputData::DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRigh
     pDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
@@ -1123,7 +1124,6 @@ void ScOutputData::DrawFrame()
     Color aSingleColor;
     sal_Bool bUseSingleColor = false;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     //  if a Calc OLE object is embedded in Draw/Impress, the VCL DrawMode is used
@@ -1322,7 +1322,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     const SfxItemSet*    pCondSet;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     //  color (pForceColor) is determined externally, including DrawMode changes
@@ -2078,8 +2077,10 @@ void ScOutputData::DrawChangeTrack()
     }
 }
 
+//TODO: moggi Need to check if this can't be written simpler
 void ScOutputData::DrawNoteMarks()
 {
+
     sal_Bool bFirst = sal_True;
 
     long nInitPosX = nScrX;
@@ -2097,7 +2098,6 @@ void ScOutputData::DrawNoteMarks()
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                ScBaseCell* pCell = pInfo->pCell;
                 sal_Bool bIsMerged = false;
 
                 if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
@@ -2108,11 +2108,10 @@ void ScOutputData::DrawNoteMarks()
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                if ( pDoc->GetNotes(nTab)->findByAddress(nX, pRowInfo[nArrY].nRowNo) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     if (bFirst)
@@ -2175,7 +2174,6 @@ void ScOutputData::AddPDFNotes()
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                ScBaseCell* pCell = pInfo->pCell;
                 sal_Bool bIsMerged = false;
                 SCROW nY = pRowInfo[nArrY].nRowNo;
                 SCCOL nMergeX = nX;
@@ -2186,11 +2184,10 @@ void ScOutputData::AddPDFNotes()
                     // find start of merged cell
                     bIsMerged = sal_True;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                if ( pDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     long nNoteWidth = (long)( SC_CLIPMARK_SIZE * nPPTX );
@@ -2210,7 +2207,7 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
-                        const ScPostIt* pNote = pCell->GetNote();
+                        const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY);
 
                         // Note title is the cell address (as on printed note pages)
                         String aTitle;

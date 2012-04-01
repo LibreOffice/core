@@ -35,8 +35,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/tabarea.hxx>
-#include <svx/tabline.hxx>
+#include <svx/svdpage.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -54,8 +53,6 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
@@ -63,7 +60,6 @@
 #include "scslots.hxx"
 
 #include "userdat.hxx"
-#include <sfx2/objsh.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>
@@ -309,8 +305,8 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
-        String sMacro(  pInfo->GetMacro() );
-        aTab.Insert( SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro( sMacro, String() ) );
+        rtl::OUString sMacro = pInfo->GetMacro();
+        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, SvxMacro(sMacro, rtl::OUString()));
         aItem.SetMacroTable( aTab );
     }
 
@@ -335,7 +331,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
             rtl::OUString sMacro;
-            SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
+            const SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
             if ( pMacro )
                 sMacro = pMacro->GetMacName();
 

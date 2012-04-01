@@ -45,7 +45,7 @@ private:
     sal_Int32 m_nShapeGroupCount;
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     css::uno::Reference< css::drawing::XShapes > getShapes() throw (css::uno::RuntimeException) ;
 public:

@@ -52,6 +52,8 @@ class SwLabPreview : public Window
     String aUpperStr;
     String aColsStr;
     String aRowsStr;
+    String aPWidthStr;
+    String aPHeightStr;
 
     long lHDistWidth;
     long lVDistWidth;
@@ -59,6 +61,9 @@ class SwLabPreview : public Window
     long lLeftWidth;
     long lUpperWidth;
     long lColsWidth;
+    long PRowsWidth;
+    long lPWidthWidth;
+    long lPHeightWidth;
 
     long lXWidth;
     long lXHeight;
@@ -105,6 +110,10 @@ class SwLabFmtPage : public SfxTabPage
     NumericField aColsField;
     FixedText    aRowsText;
     NumericField aRowsField;
+    FixedText    aPWidthText;
+    MetricField  aPWidthField;
+    FixedText    aPHeightText;
+    MetricField  aPHeightField;
     PushButton   aSavePB;
 
     Timer aPreviewTimer;
@@ -115,10 +124,10 @@ class SwLabFmtPage : public SfxTabPage
      SwLabFmtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabFmtPage();
 
-    DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( PreviewHdl, Timer * );
+    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK(PreviewHdl, void *);
     DECL_LINK( LoseFocusHdl, Control * );
-    DECL_LINK( SaveHdl, PushButton* );
+    DECL_LINK(SaveHdl, void *);
 
     void ChangeMinMax();
 
@@ -157,8 +166,8 @@ class SwSaveLabelDlg : public ModalDialog
     SwLabFmtPage*   pLabPage;
     SwLabRec&       rLabRec;
 
-    DECL_LINK(OkHdl, OKButton*);
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK(OkHdl, void *);
+    DECL_LINK(ModifyHdl, void *);
 
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);

@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include "oox/helper/refvector.hxx"
 #include "oox/helper/storagebase.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -50,7 +51,7 @@ namespace ole {
 
 // ============================================================================
 
-class VbaFilterConfig
+class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
@@ -89,7 +90,7 @@ private:
     store all information needed to finally attach the macro to the action,
     once the VBA project has been imported.
  */
-class VbaMacroAttacherBase
+class OOX_DLLPUBLIC VbaMacroAttacherBase
 {
 public:
     explicit            VbaMacroAttacherBase( const ::rtl::OUString& rMacroName );
@@ -140,13 +141,9 @@ public:
 
     /** Returns true, if the document contains at least one code module. */
     bool                hasModules() const;
-    /** Returns true, if the document contains the specified code module. */
-    bool                hasModule( const ::rtl::OUString& rModuleName ) const;
 
     /** Returns true, if the document contains at least one dialog. */
     bool                hasDialogs() const;
-    /** Returns true, if the document contains the specified dialog. */
-    bool                hasDialog( const ::rtl::OUString& rDialogName ) const;
 
     void                setOleOverridesSink( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
 

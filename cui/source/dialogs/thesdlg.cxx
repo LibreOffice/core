@@ -51,7 +51,6 @@
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
-#include <svl/lngmisc.hxx>
 
 #include <stack>
 #include <algorithm>

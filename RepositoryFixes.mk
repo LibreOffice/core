@@ -40,6 +40,9 @@ gb_Library_FILENAMES := $(patsubst log_uno:liblog_uno%,log_uno:liblog_uno_uno%,$
 gb_Library_FILENAMES := $(patsubst purpenvhelper:libpurpen%,purpenvhelper:libuno_purpen%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
+ifneq ($(OS),ANDROID)
+gb_Library_FILENAMES := $(patsubst unoexceptionprotector:libuno%,unoexceptionprotector:uno%,$(gb_Library_FILENAMES))
+endif
 gb_Library_FILENAMES := $(patsubst unsafe_uno:libunsafe_uno%,unsafe_uno:libunsafe_uno_uno%,$(gb_Library_FILENAMES))
 endif
 
@@ -112,7 +115,8 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
 gb_Library_NOILIBFILENAMES += \
     graphite2_off \
-	icudt icuin icule icuuc \
+    icudt icuin icule icuuc \
+    lcms2 \
     msvcprt \
     nspr4 \
     nss3 \
@@ -127,11 +131,14 @@ endif # ifeq ($(COM),GCC)
 
 endif # ifeq ($(OS),WNT)
 
-ifeq ($(OS),IOS)
+ifeq (,$(filter SCRIPTING,$(BUILD_TYPE)))
 
-gb_Library_FILENAMES := $(patsubst sb:libsb%,,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:libvbahelper%,,$(gb_Library_FILENAMES))
 
+endif
+
+ifeq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+gb_Library_FILENAMES := $(patsubst dbtools:libdbtools%,,$(gb_Library_FILENAMES))
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -78,7 +78,6 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <unotools/saveopt.hxx>
@@ -996,7 +995,7 @@ sal_Bool SfxObjectShell::DoSave()
             }
             else
                 bOk = sal_True;
-
+#ifndef DISABLE_SCRIPTING
             if ( HasBasic() )
             {
                 try
@@ -1033,6 +1032,7 @@ sal_Bool SfxObjectShell::DoSave()
                     bOk = sal_False;
                 }
             }
+#endif
         }
 
         if ( bOk )
@@ -2605,8 +2605,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
     {
-        pImp->bWaitingForPicklist = sal_True;
-
         // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );
@@ -3007,7 +3005,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         sal_Bool bTemplate = ( rMedium.GetFilter()->IsOwnTemplateFormat() && nVersion > SOFFICE_FILEFORMAT_60 );
 
         SetupStorage( xStorage, nVersion, bTemplate );
-
+#ifndef DISABLE_SCRIPTING
         if ( HasBasic() )
         {
             // Initialize Basic
@@ -3016,7 +3014,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             // Save dialog/script container
             pImp->pBasicManager->storeLibrariesToStorage( xStorage );
         }
-
+#endif
         return SaveAs( rMedium );
     }
     else return sal_False;
@@ -3554,6 +3552,9 @@ void SfxObjectShell::SetConfigOptionsChecked( sal_Bool bChecked )
 
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) xHandler;
+#else
     if ( !HasBasic() )
         return sal_True;
 
@@ -3570,6 +3571,7 @@ sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference
             return pReq->isApprove();
         }
     }
+#endif
     // No interaction handler, default is to continue to save
     return sal_True;
 }

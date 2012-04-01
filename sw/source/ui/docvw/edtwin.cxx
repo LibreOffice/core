@@ -176,6 +176,14 @@ QuickHelpData* SwEditWin::pQuickHlpData = 0;
 
 long    SwEditWin::nDDStartPosY = 0;
 long    SwEditWin::nDDStartPosX = 0;
+/* Note:
+   The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+   (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+   The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+   (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+   and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+   (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+ */
 Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
 sal_Bool SwEditWin::bTransparentBackColor = sal_False; // background not transparent
@@ -581,7 +589,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     Description: increase timer for selection
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 {
     DBG_PROFSTART(edithdl);
 
@@ -4340,11 +4348,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             switch( pApplyTempl->nColor )
             {
                 case SID_ATTR_CHAR_COLOR_EXT:
+                case SID_ATTR_CHAR_COLOR2:
                     nId = RES_CHRATR_COLOR;
-                break;
+                    break;
                 case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
+                case SID_ATTR_CHAR_COLOR_BACKGROUND:
                     nId = RES_CHRATR_BACKGROUND;
-                break;
+                    break;
             }
             if( nId && (nsSelectionType::SEL_TXT|nsSelectionType::SEL_TBL) & eSelection)
             {
@@ -4731,7 +4741,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if (rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
                 return;
 
-            if ( lcl_CheckHeaderFooterClick( rSh,
+            if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh,
                         PixelToLogic( rCEvt.GetMousePosPixel() ), 1 ) )
                 return;
 
@@ -5380,13 +5390,13 @@ void SwEditWin::ClearTip()
 {
 }
 
-IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, KeyInputFlushHandler)
 {
     FlushInBuffer();
     return 0;
 }
 
-IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, KeyInputTimerHandler)
 {
     bTblInsDelMode = sal_False;
     return 0;
@@ -5409,7 +5419,7 @@ void SwEditWin::StopQuickHelp()
         pQuickHlpData->Stop( rView.GetWrtShell() );
 }
 
-IMPL_LINK(SwEditWin, TemplateTimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SwEditWin, TemplateTimerHdl)
 {
     SetApplyTemplate(SwApplyTemplate());
     return 0;

@@ -586,7 +586,7 @@ ScViewCfg::ScViewCfg() :
     aGridItem.SetCommitLink( LINK( this, ScViewCfg, GridCommitHdl ) );
 }
 
-IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -633,7 +633,7 @@ IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScViewCfg, DisplayCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl)
 {
     Sequence<OUString> aNames = GetDisplayPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -677,7 +677,7 @@ IMPL_LINK( ScViewCfg, DisplayCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScViewCfg, GridCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl)
 {
     const ScGridOptions& rGrid = GetGridOptions();
 

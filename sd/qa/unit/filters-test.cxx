@@ -95,15 +95,15 @@ FileFormat aFileFormats[] = {
 
 ::sd::DrawDocShellRef SdFiltersTest::loadURL( const rtl::OUString &rURL )
 {
-    FileFormat *pFmt;
+    FileFormat *pFmt = NULL;
 
     for (size_t i = 0; i < SAL_N_ELEMENTS (aFileFormats); i++)
     {
         pFmt = aFileFormats + i;
-        if (pFmt->pName &&  rURL.endsWithIgnoreAsciiCaseAsciiL (pFmt->pName, strlen (pFmt->pName)))
+        if (pFmt->pName && rURL.endsWithIgnoreAsciiCaseAsciiL (pFmt->pName, strlen (pFmt->pName)))
             break;
     }
-    CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt && pFmt->pName != NULL );
 
     sal_uInt32 nFormat = 0;
     if (pFmt->nFormatType)

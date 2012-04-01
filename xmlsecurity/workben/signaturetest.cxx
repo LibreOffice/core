@@ -293,7 +293,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
 
 }
 
-IMPL_LINK( MyWin, CryptoCheckBoxHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(MyWin, CryptoCheckBoxHdl)
 {
     if ( maCryptoCheckBox.IsChecked() )
     {
@@ -308,7 +308,7 @@ IMPL_LINK( MyWin, CryptoCheckBoxHdl, CheckBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( MyWin, DigitalSignaturesWithServiceHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
 {
     rtl::OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
@@ -323,7 +323,7 @@ IMPL_LINK( MyWin, DigitalSignaturesWithServiceHdl, Button*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
 {
     rtl::OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(

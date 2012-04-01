@@ -39,6 +39,8 @@ ANT_BUILDFILE=build$/build.xml
 
 .INCLUDE : antsettings.mk
 
+.INCLUDE :  tg_javav.mk
+
 .INCLUDE :  version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
@@ -58,16 +60,24 @@ PATCH_FILES=patches$/i96823.patch \
             patches$/i103528.patch \
             patches$/i104901.patch
 
-.IF "$(JAVACISGCJ)"=="yes"
+.IF "$(JAVANUMVER:s/.//)" >= "000100060000"
+PATCH_FILES+= \
+            patches$/jdbc-4.1.patch
+.ENDIF
+
+.IF "$(JAVACISGCJ)"=="yes" || "$(JAVA_SOURCE_VER)"=="1.5"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
+.ENDIF
+
+.IF "$(JAVACISGCJ)"=="yes"
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
-.ELSE
-.IF "$(debug)"!=""
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.debug="on" -f $(ANT_BUILDFILE) jar
 .ELSE
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) jar
 .ENDIF
+
+.IF "$(debug)"!=""
+BUILD_ACTION+=-Dbuild.debug="on"
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""

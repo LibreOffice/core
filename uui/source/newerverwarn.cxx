@@ -83,7 +83,7 @@ NewerVersionWarningDialog::~NewerVersionWarningDialog()
 {
 }
 
-IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 {
     // detect execute path
     ::rtl::OUString sProgramPath;
@@ -113,7 +113,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
             if ( xSystemShell.is() && !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else
@@ -166,7 +166,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( NewerVersionWarningDialog, LaterHdl, CancelButton*, EMPTYARG )
+IMPL_LINK_NOARG(NewerVersionWarningDialog, LaterHdl)
 {
     EndDialog( RET_ASK_LATER );
     return 0;

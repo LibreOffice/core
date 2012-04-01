@@ -74,6 +74,11 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
             sal_Int32 nToken = getBaseToken( aElementToken );
             ShapeStyleRef& rStyleRef = mrShape.getShapeStyleRefs()[ nToken ];
             rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? aAttribs.getToken( XML_idx, XML_none ) : aAttribs.getInteger( XML_idx, 0 );
+            // Set default Text Color. Some xml files don't seem
+            // to have color definitions inside fontRef - Use
+            // tx1 in such cases
+            if( nToken == XML_fontRef && !rStyleRef.maPhClr.isUsed() )
+                rStyleRef.maPhClr.setSchemeClr(XML_tx1);
             xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
         }
         break;

@@ -75,12 +75,12 @@ ScColOrRowDlg::~ScColOrRowDlg()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScColOrRowDlg, OkHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScColOrRowDlg, OkHdl)
 {
     EndDialog( aBtnCols.IsChecked() ? SCRET_COLS : SCRET_ROWS );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScColOrRowDlg, OkHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScColOrRowDlg, OkHdl)
 
 
 

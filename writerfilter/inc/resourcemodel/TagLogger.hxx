@@ -45,6 +45,9 @@ namespace writerfilter
     public:
         typedef boost::shared_ptr<IdToString> Pointer_t;
         virtual std::string toString(const Id & id) const = 0;
+
+    protected:
+        ~IdToString() {}
     };
 
     class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC TagLogger

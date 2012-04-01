@@ -283,11 +283,11 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
 
 namespace {
 
-String lclGetUrlRepresentation( const SvxURLField& rUrlField )
+rtl::OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
 {
-    String aRepr( rUrlField.GetRepresentation() );
+    const rtl::OUString& aRepr = rUrlField.GetRepresentation();
     // no representation -> use URL
-    return aRepr.Len() ? aRepr : rUrlField.GetURL();
+    return aRepr.isEmpty() ? rUrlField.GetURL() : aRepr;
 }
 
 } // namespace
@@ -305,9 +305,9 @@ XclExpHyperlinkHelper::~XclExpHyperlinkHelper()
 {
 }
 
-String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
+rtl::OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 {
-    String aUrlRepr;
+    rtl::OUString aUrlRepr;
 
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
@@ -324,7 +324,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
     }
 
     // no hyperlink representation from Excel HLINK record -> use it from text field
-    return aUrlRepr.Len() ? aUrlRepr : lclGetUrlRepresentation( rUrlField );
+    return aUrlRepr.isEmpty() ? lclGetUrlRepresentation(rUrlField) : aUrlRepr;
 }
 
 bool XclExpHyperlinkHelper::HasLinkRecord() const
@@ -573,8 +573,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
         const XclExpRoot& rRoot, const ScStringCell& rStringCell, const ScPatternAttr* pCellAttr,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    String aCellText;
-    rStringCell.GetString( aCellText );
+    rtl::OUString aCellText = rStringCell.GetString();
     return lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
 }
 
@@ -602,8 +601,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     else
     {
         // unformatted cell
-        String aCellText;
-        rEditCell.GetString( aCellText );
+        String aCellText = rEditCell.GetString();
         xString = lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
     }
     return xString;
@@ -912,13 +910,13 @@ rtl::OUString lclEncodeDosUrl(
         rtl::OUString aOldUrl = rUrl;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if (aOldUrl.getLength() > 2 && aOldUrl.copy(0,2).equalsAscii("\\\\"))
+        if (aOldUrl.getLength() > 2 && aOldUrl.copy(0,2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\\\")))
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append(sal_Unicode('@'));
             aOldUrl = aOldUrl.copy(2);
         }
-        else if (aOldUrl.getLength() > 2 && aOldUrl.copy(1,2).equalsAscii(":\\"))
+        else if (aOldUrl.getLength() > 2 && aOldUrl.copy(1,2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(":\\")))
         {
             // drive letter
             sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase.getStr()[0];
@@ -935,7 +933,7 @@ rtl::OUString lclEncodeDosUrl(
         sal_Int32 nPos = -1;
         while((nPos = aOldUrl.indexOf('\\')) != -1)
         {
-            if (aOldUrl.copy(0,2).equalsAscii(".."))
+            if (aOldUrl.copy(0,2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
                 // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);

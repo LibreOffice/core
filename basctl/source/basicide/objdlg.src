@@ -30,19 +30,20 @@
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
-FloatingWindow RID_BASICIDE_OBJCAT
+DockingWindow RID_BASICIDE_OBJCAT
 {
     HelpID = "basctl:FloatingWindow:RID_BASICIDE_OBJCAT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 179 ) ;
-    Text [ en-US ] = "Objects" ;
+    Text [ en-US ] = "Object Catalog" ;
     Closeable = TRUE ;
     Moveable = TRUE ;
     Sizeable = TRUE ;
     Zoomable = TRUE ;
     Hide = TRUE ;
     ClipChildren = TRUE ;
+    Border = TRUE ;
     Control RID_TLB_MACROS
     {
         HelpId = HID_BASICIDE_OBJECTCAT ;

@@ -46,7 +46,6 @@
 #include <connectivity/dbexception.hxx>
 #include "dbase/DResultSet.hxx"
 #include "diagnose_ex.h"
-#include <comphelper/types.hxx>
 #include "resource/dbase_res.hrc"
 #include <unotools/sharedunocomponent.hxx>
 

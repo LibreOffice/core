@@ -67,29 +67,6 @@ namespace toolkit
     using namespace ::com::sun::star::registry;
 
     //.........................................................................
-    Reference< XRegistryKey > registerServices( const Reference< XRegistryKey >& _rxParentKey,
-        const sal_Char* _pAsciiImplName, const sal_Char* _pAsciiServiceName )
-    {
-        ::rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "/stardiv.Toolkit." ) );
-        sImplName += ::rtl::OUString::createFromAscii( _pAsciiImplName );
-        sImplName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
-
-        Reference< XRegistryKey > xNewKey = _rxParentKey->createKey( sImplName );
-        xNewKey->createKey( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
-
-        return xNewKey;
-    }
-
-    //.........................................................................
-    Reference< XRegistryKey > registerServices( const Reference< XRegistryKey >& _rxParentKey,
-        const sal_Char* _pAsciiImplName, const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2 )
-    {
-        Reference< XRegistryKey > xComponentServicesKey = registerServices( _rxParentKey, _pAsciiImplName, _pAsciiServiceName1 );
-        xComponentServicesKey->createKey( ::rtl::OUString::createFromAscii( _pAsciiServiceName2 ) );
-        return xComponentServicesKey;
-    }
-
-    //.........................................................................
     void* tryCreateFactory( const sal_Char* _pRequiredImplName, const sal_Char* _pComponentImplName,
         const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2,
         ::cppu::ComponentInstantiation _pInstantiation, const Reference< XMultiServiceFactory >& _rxServiceFactory )

@@ -84,10 +84,29 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::R
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString& ScVbaLabel::getServiceImplName()
+rtl::OUString ScVbaLabel::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaLabel") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaLabel"));
+}
+
+sal_Int32 SAL_CALL ScVbaLabel::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaLabel::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
+sal_Bool SAL_CALL ScVbaLabel::getAutoSize() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getAutoSize();
+}
+
+void SAL_CALL ScVbaLabel::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setAutoSize( bAutoSize );
 }
 
 uno::Sequence< rtl::OUString >

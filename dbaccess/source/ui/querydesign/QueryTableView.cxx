@@ -56,7 +56,6 @@
 #include "querydlg.hxx"
 #include "JoinExchange.hxx"
 #include <comphelper/extract.hxx>
-#include "QueryDesignView.hxx"
 #include "dbu_qry.hrc"
 #include <vcl/msgbox.hxx>
 

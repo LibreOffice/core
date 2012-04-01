@@ -418,7 +418,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnFinish, PushButton*, EMPTYARG)
+    IMPL_LINK_NOARG(OWizardMachine, OnFinish)
     {
         if ( isTravelingSuspended() )
             return 0;
@@ -635,7 +635,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnPrevPage, PushButton*, EMPTYARG)
+    IMPL_LINK_NOARG(OWizardMachine, OnPrevPage)
     {
         if ( isTravelingSuspended() )
             return 0;
@@ -645,7 +645,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OWizardMachine, OnNextPage, PushButton*, EMPTYARG)
+    IMPL_LINK_NOARG(OWizardMachine, OnNextPage)
     {
         if ( isTravelingSuspended() )
             return 0;

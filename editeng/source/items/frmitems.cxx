@@ -29,6 +29,7 @@
 
 // include ---------------------------------------------------------------
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
@@ -685,8 +686,8 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
 
         if( 0x80 & nAutoFirst )
         {
-            rStrm << nLeftMargin;
-            rStrm << nRightMargin;
+            rStrm << static_cast<sal_Int32>(nLeftMargin);
+            rStrm << static_cast<sal_Int32>(nRightMargin);
         }
     }
 
@@ -791,28 +792,26 @@ bool SvxLRSpaceItem::HasMetrics() const
 
 // class SvxULSpaceItem --------------------------------------------------
 
-SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    nUpper( 0 ),
-    nLower( 0 ),
-    nPropUpper( 100 ),
-    nPropLower( 100 )
+SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId )
+    : SfxPoolItem(nId)
+    , nUpper(0)
+    , nLower(0)
+    , bContext(false)
+    , nPropUpper(100)
+    , nPropLower(100)
 {
 }
 
 // -----------------------------------------------------------------------
 
 SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
-                                const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    nUpper( nUp  ),
-    nLower( nLow ),
-    nPropUpper( 100 ),
-    nPropLower( 100 )
+                                const sal_uInt16 nId )
+    : SfxPoolItem(nId)
+    , nUpper(nUp)
+    , nLower(nLow)
+    , bContext(false)
+    , nPropUpper(100)
+    , nPropLower(100)
 {
 }
 
@@ -836,6 +835,7 @@ bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nUpper) : nUpper); break;
         case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nLower) : nLower); break;
+        case MID_CTX_MARGIN: rVal <<= bContext; break;
         case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
         case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
     }
@@ -848,6 +848,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
+    sal_Bool bVal = 0;
     switch( nMemberId )
     {
         case 0:
@@ -874,6 +875,11 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
             SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            break;
+        case MID_CTX_MARGIN :
+            if (!(rVal >>= bVal))
+                return false;
+            SetContextValue(bVal);
             break;
         case MID_UP_REL_MARGIN:
         case MID_LO_REL_MARGIN:
@@ -906,6 +912,7 @@ int SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 
     return ( nUpper == ( (SvxULSpaceItem&)rAttr ).nUpper &&
              nLower == ( (SvxULSpaceItem&)rAttr ).nLower &&
+             bContext == ( (SvxULSpaceItem&)rAttr ).bContext &&
              nPropUpper == ( (SvxULSpaceItem&)rAttr ).nPropUpper &&
              nPropLower == ( (SvxULSpaceItem&)rAttr ).nPropLower );
 }
@@ -1919,6 +1926,53 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case TOP_BORDER:
         case MID_TOP_BORDER:
             nLine = BOX_LINE_TOP;
+            break;
+        case LINE_STYLE:
+            {
+                drawing::LineStyle eDrawingStyle;
+                rVal >>= eDrawingStyle;
+                editeng::SvxBorderStyle eBorderStyle = editeng::NO_STYLE;
+                switch ( eDrawingStyle )
+                {
+                    default:
+                    case drawing::LineStyle_NONE:
+                        eBorderStyle = editeng::NO_STYLE;
+                        break;
+                    case drawing::LineStyle_SOLID:
+                        eBorderStyle = editeng::SOLID;
+                        break;
+                    case drawing::LineStyle_DASH:
+                        eBorderStyle = editeng::DASHED;
+                        break;
+                }
+
+                // Set the line style on all borders
+                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                {
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    pLine->SetStyle( eBorderStyle );
+                }
+                return sal_True;
+            }
+            break;
+        case LINE_WIDTH:
+            {
+                // Set the line width on all borders
+                long nWidth(0);
+                rVal >>= nWidth;
+                if( bConvert )
+                    nWidth = MM100_TO_TWIP( nWidth );
+
+                // Set the line Width on all borders
+                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                {
+                    editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
+                    pLine->SetWidth( nWidth );
+                }
+            }
+            return sal_True;
             break;
     }
 
@@ -4054,7 +4108,7 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
 {
     aColor = rItem.GetColor();
 
-    if( rItem.GetBitmapURL().Len() )
+    if (!rItem.GetBitmapURL().isEmpty())
     {
         pStrLink    = new String( rItem.GetBitmapURL() );
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
@@ -4077,11 +4131,6 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
     }
 }
 // class SvxFrameDirectionItem ----------------------------------------------
-
-SvxFrameDirectionItem::SvxFrameDirectionItem( sal_uInt16 _nWhich )
-    : SfxUInt16Item( _nWhich, (sal_uInt16)FRMDIR_HORI_LEFT_TOP )
-{
-}
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )

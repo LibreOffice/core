@@ -176,7 +176,6 @@ private:
     bool mbIsLayoutPending;
     class Layout;
     ::boost::shared_ptr<Layout> mpLayout;
-    ::rtl::Reference<PresenterScrollBar> mpHorizontalScrollBar;
     ::rtl::Reference<PresenterScrollBar> mpVerticalScrollBar;
     ::rtl::Reference<PresenterButton> mpCloseButton;
     class MouseOverManager;

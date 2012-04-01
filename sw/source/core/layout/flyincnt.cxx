@@ -40,7 +40,7 @@
 // OD 2004-01-19 #110582#
 #include <dflyobj.hxx>
 
-//aus FlyCnt.cxx
+//from FlyCnt.cxx
 void DeepCalc( const SwFrm *pFrm );
 
 /*************************************************************************
@@ -64,7 +64,7 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 SwFlyInCntFrm::~SwFlyInCntFrm()
 {
-    //und Tschuess.
+    //good bye
     if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
@@ -154,14 +154,14 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 |*
 |*  SwFlyInCntFrm::Format()
 |*
-|*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
+|*  Here the content gets formatted initially.
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
     {
-        Lock(); //nicht hintenherum den Anker formatieren.
+        Lock(); //don't format the anchor on the crook.
         SwCntntFrm *pCntnt = ContainsCntnt();
         while ( pCntnt )
         {   pCntnt->Calc();
@@ -175,10 +175,8 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwFlyInCntFrm::MakeFlyPos()
 |*
-|*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
-|*      die RelPos berechnet. Die absolute Position wird ausschliesslich
-|*      per SetAbsPos errechnet.
-|*
+|*  Description         In contrast to other Frms we only calculate the RelPos
+|*      here. The absolute position is only calculated using SetAbsPos.
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
 //void SwFlyInCntFrm::MakeFlyPos()
@@ -189,8 +187,8 @@ void SwFlyInCntFrm::MakeObjPos()
         bValidPos = sal_True;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-        //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
-        //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
+        //Update the current values in the format if needed, during this we of
+        //course must not send any Modify.
         const bool bVert = GetAnchorFrm()->IsVertical();
         const bool bRev = GetAnchorFrm()->IsReverse();
         SwTwips nOld = rVert.GetPos();
@@ -248,7 +246,7 @@ void SwFlyInCntFrm::RegistFlys()
 {
     // vgl. SwRowFrm::RegistFlys()
     SwPageFrm *pPage = FindPageFrm();
-    OSL_ENSURE( pPage, "Flys ohne Seite anmelden?" );
+    OSL_ENSURE( pPage, "Register Flys without pages?" );
     ::RegistFlys( pPage, this );
 }
 
@@ -268,9 +266,9 @@ void SwFlyInCntFrm::MakeAll()
     if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
-    Lock(); //Der Vorhang faellt
+    Lock(); // The curtain falls
 
-        //uebernimmt im DTor die Benachrichtigung
+        //does the notification in the DTor
     const SwFlyNotify aNotify( this );
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -280,7 +278,7 @@ void SwFlyInCntFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
-        //Nur einstellen wenn das Flag gesetzt ist!!
+        //Only stop, if the flag is set!!
         if ( !bValidSize )
         {
             bValidPrtArea = sal_False;

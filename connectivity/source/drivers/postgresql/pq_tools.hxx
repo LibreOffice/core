@@ -125,8 +125,6 @@ sal_Bool extractBoolProperty(
 void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 void disposeObject( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 
-void rollbackNoThrow( const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & r );
-
 ::rtl::OUString extractTableFromInsert( const rtl::OUString & sql );
 ::rtl::OString extractSingleTableFromSelect( const OStringVector &vec );
 
@@ -199,7 +197,7 @@ public:
 
 template < typename T, typename Allocator > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T, Allocator> &vec )
 {
-    if ( vec.size() == 0 )
+    if ( vec.empty() )
         return com::sun::star::uno::Sequence<T>();
     else
         return com::sun::star::uno::Sequence<T>( &vec[0], vec.size());

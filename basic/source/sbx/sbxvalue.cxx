@@ -205,32 +205,9 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 
 SbxValue::~SbxValue()
 {
-#ifndef C50
     Broadcast( SBX_HINT_DYING );
     SetFlag( SBX_WRITE );
     SbxValue::Clear();
-#else
-    // Provisional fix for the Solaris 5.0 compiler bbug
-    // at using virtual inheritance. Avoid virtual calls
-    // in the destructor. Instead of calling clear()
-    // de-allocate posible object references direct.
-    if( aData.eType == SbxOBJECT )
-    {
-        if( aData.pObj && aData.pObj != this )
-        {
-            HACK(nicht bei Parent-Prop - sonst CyclicRef)
-            SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-            sal_Bool bParentProp = pThisVar && 5345 ==
-            ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
-            if ( !bParentProp )
-                aData.pObj->ReleaseRef();
-        }
-    }
-    else if( aData.eType == SbxDECIMAL )
-    {
-        releaseDecimalPtr( aData.pDecimal );
-    }
-#endif
 }
 
 void SbxValue::Clear()
@@ -320,7 +297,11 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
                     ((SbxValue*) pObj)->aData.pObj == pObj )
                 {
+#ifdef DISABLE_SCRIPTING // No sbunoobj
+                    const bool bSuccess = false;
+#else
                     bool bSuccess = handleToStringForCOMObjects( pObj, p );
+#endif
                     if( !bSuccess )
                     {
                         SetError( SbxERR_BAD_PROP_VALUE );
@@ -873,7 +854,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == UniString::CreateFromAscii( "Parent" ),
+                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().EqualsAscii("Parent"),
                                     "SID_PARENTOBJECT heisst nicht 'Parent'" );
                         sal_Bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )
@@ -937,8 +918,11 @@ sal_Bool SbxValue::Convert( SbxDataType eTo )
 
 sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
+#ifdef DISABLE_SCRIPTING
+    bool bVBAInterop = false;
+#else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
-
+#endif
     SbxDataType eThisType = GetType();
     SbxDataType eOpType = rOp.GetType();
     SbxError eOld = GetError();
@@ -1306,7 +1290,11 @@ Lbl_OpIsEmpty:
 
 sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
+#ifdef DISABLE_SCRIPTING
+    bool bVBAInterop = false;
+#else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+#endif
 
     sal_Bool bRes = sal_False;
     SbxError eOld = GetError();

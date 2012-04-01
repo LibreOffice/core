@@ -62,8 +62,8 @@ private:
     Window* m_pParent;
     ResMgr*     pResourceMgr;
 
-    DECL_LINK( OKHdl_Impl, PushButton * );
-    DECL_LINK( ViewCertHdl_Impl, PushButton * );
+    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK(ViewCertHdl_Impl, void *);
 
     public:
     SSLWarnDialog( Window* pParent,

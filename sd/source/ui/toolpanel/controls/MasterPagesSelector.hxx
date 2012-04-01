@@ -216,7 +216,7 @@ private:
         last seen.  This value is used heuristically to speed up the lookup
         of an index for a token.
     */
-    DECL_LINK(ClickHandler, PreviewValueSet*);
+    DECL_LINK(ClickHandler, void *);
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(ContextMenuCallback, CommandEvent*);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);

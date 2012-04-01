@@ -86,7 +86,8 @@ PATCH_FILES = \
     patches/libpr0n_build_fix.patch \
     patches/macosx_build_fix.patch \
     patches/nss-linux3.patch \
-
+    patches/clang_add_nsCaseInsensitiveStringComparator_default_constructor.patch \
+    patches/clang_missing_this_pointers.patch \
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
@@ -161,7 +162,8 @@ MOZILLA_CONFIGURE_FLAGS+= \
     --with-macos-sdk=$(MACOSX_SDK_PATH) \
     --disable-glibtest \
     --enable-macos-target=$(MACOSX_DEPLOYMENT_TARGET) \
-    --disable-libxul
+    --disable-libxul \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
 DEFAULT_MOZILLA_TOOLKIT=mac
 
 .ELSE

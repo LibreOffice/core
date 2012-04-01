@@ -2722,7 +2722,19 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         // if special TBX_LAYOUT_LOCKVERT lock vertical position
                         // don't recalulate the vertical position of the item
                         if ( meLayoutMode == TBX_LAYOUT_LOCKVERT && mnLines == 1 )
-                            it->maCalcRect.Top()      =  it->maRect.Top();
+                        {
+                            // Somewhat of a hack here, calc deletes and re-adds
+                            // the sum/assign & ok/cancel items dynamically.
+                            // Because TBX_LAYOUT_LOCKVERT effectively prevents
+                            // recalculation of the vertical pos of an item the
+                            // it->maRect.Top() for those newly added items is
+                            // 0. The hack here is that we want to effectively
+                            // recalculate the vertical pos for those added
+                            // items here. ( Note: assume mnMaxItemHeight is
+                            // equal to the LineSize when multibar has a single
+                            // line size )
+                            it->maCalcRect.Top()      =  it->maRect.Top() ? it->maRect.Top() : ( nY + ( mnMaxItemHeight-aCurrentItemSize.Height())/2 );
+                        }
                         else
                             it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
                         it->maCalcRect.Right()    = nX+aCurrentItemSize.Width()-1;
@@ -2854,7 +2866,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
@@ -2885,7 +2897,7 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -4578,14 +4590,14 @@ const XubString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 
     if ( pItem )
     {
-        if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommandStr.Len() ))
+        if ( !pItem->maHelpText.Len() && ( !pItem->maHelpId.isEmpty() || pItem->maCommandStr.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if ( pItem->maCommandStr.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
-                if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+                if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
                     pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
@@ -4654,7 +4666,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             String aCommand = GetItemCommand( nItemId );
             rtl::OString  aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || aHelpId.getLength() )
+            if ( aCommand.Len() || !aHelpId.isEmpty() )
             {
                 // If help is available then trigger it
                 Help* pHelp = Application::GetHelp();
@@ -4662,7 +4674,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 {
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
-                    else if ( aHelpId.getLength() )
+                    else if ( !aHelpId.isEmpty() )
                         pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;
@@ -5986,7 +5998,7 @@ void ToolBox::ImplDisableFlatButtons()
         HKEY hkey;
 
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            "Software\\LibreOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType = 0;

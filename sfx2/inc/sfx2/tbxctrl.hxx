@@ -127,7 +127,7 @@ private:
 
     SAL_DLLPRIVATE SfxPopupWindow(SfxPopupWindow &); // not defined
     SAL_DLLPRIVATE void operator =(SfxPopupWindow &); // not defined
-    DECL_DLLPRIVATE_LINK( Delete, void * );
+    void Delete();
 
 protected:
     virtual void            PopupModeEnd();
@@ -141,7 +141,6 @@ protected:
     void                    BindListener();
     void                    UnbindListener();
     void                    AddStatusListener( const rtl::OUString& rCommandURL );
-    void                    RemoveStatusListener( const rtl::OUString& rCommandURL );
 
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;

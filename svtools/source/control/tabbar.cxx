@@ -336,7 +336,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabBarEdit, ImplEndTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 {
     if ( HasFocus() )
         return 0;

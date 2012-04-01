@@ -244,11 +244,11 @@ void SbiTokenizer::Push( SbiToken t )
 
 void SbiTokenizer::Error( SbError code, const char* pMsg )
 {
-    aError = String::CreateFromAscii( pMsg );
+    aError = ::rtl::OUString::createFromAscii( pMsg );
     Error( code );
 }
 
-void SbiTokenizer::Error( SbError code, String aMsg )
+void SbiTokenizer::Error( SbError code, const ::rtl::OUString &aMsg )
 {
     aError = aMsg;
     Error( code );
@@ -400,6 +400,15 @@ special:
     if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
         return eCurTok = SYMBOL;
     else if( tp->t == TEXT )
+        return eCurTok = SYMBOL;
+    // maybe we can expand this for other statements that have parameters
+    // that are keywords ( and those keywords are only used within such
+    // statements )
+    // what's happening here is that if we come across 'append' ( and we are
+    // not in the middle of parsing a special statement ( like 'Open')
+    // we just treat keyword 'append' as a normal 'SYMBOL'.
+    // Also we accept Dim APPEND
+    else if ( ( !bInStatement || eCurTok == DIM ) && tp->t == APPEND )
         return eCurTok = SYMBOL;
 
     // #i92642: Special LINE token handling -> SbiParser::Line()

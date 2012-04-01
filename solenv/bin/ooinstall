@@ -16,7 +16,8 @@ $do_link = 0;
 $is_windows = 0;
 my $tmp_dir;
 
-die "You need to source Env.Host.sh first " if (!defined $ENV{SRC_ROOT});
+# FIXME: really we should hunt and parse / source the config_host.mk magic I guess.
+die "You need your environment setup right, eg. run make cmd cmd='ooinstall /path/to/install'" if (!defined $ENV{SRC_ROOT});
 
 if ($ENV{GUI} eq 'WNT') {
     $is_windows = 1;
@@ -48,10 +49,6 @@ for $arg (@ARGV) {
 		# Cwd::realpath does not work if the path does not exist
 		mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
 		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
-		if (!$do_link) {
-			my $destdir = Cwd::realpath( $ENV{DESTDIR} );
-			$path =~ s|$destdir||;
-	    }
     }
 }
 

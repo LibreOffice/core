@@ -73,11 +73,11 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
     maOKBtn.Enable( bEnable );
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxPasswordDialog, OKHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {
     bool bConfirmFailed = ( ( mnExtras & SHOWEXTRAS_CONFIRM ) == SHOWEXTRAS_CONFIRM ) &&
                             ( GetConfirm() != GetPassword() );
@@ -219,15 +219,6 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     SetPasswdText();
-    EditModifyHdl( NULL );
-}
-
-// -----------------------------------------------------------------------
-
-void SfxPasswordDialog::SetMaxLen( sal_uInt16 nLen )
-{
-    maPasswordED.SetMaxTextLen( nLen );
-    maConfirmED.SetMaxTextLen( nLen );
     EditModifyHdl( NULL );
 }
 

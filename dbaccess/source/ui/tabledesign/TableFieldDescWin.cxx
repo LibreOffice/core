@@ -31,7 +31,6 @@
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "dbu_tbl.hrc"
-#include "FieldDescriptions.hxx"
 #include "TableDesignHelpBar.hxx"
 #include <vcl/fixed.hxx>
 #include "dbaccess_helpid.hrc"

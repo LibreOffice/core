@@ -48,7 +48,6 @@ namespace XmlSec
     const LocaleDataWrapper&    GetLocaleData( void );
     DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
     String          GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
-    String          GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime );
     String          GetDateString( const ::com::sun::star::util::DateTime& _rDT );
 
     std::vector< std::pair< ::rtl::OUString, ::rtl::OUString> >

@@ -174,8 +174,6 @@
 #include "warnbox.hxx"
 #include "drwlayer.hxx"
 #include "editable.hxx"
-#include "transobj.hxx"
-#include "drwtrans.hxx"
 #include "docuno.hxx"
 #include "clipparam.hxx"
 #include "undodat.hxx"

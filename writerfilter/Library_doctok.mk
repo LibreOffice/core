@@ -29,16 +29,15 @@ $(eval $(call gb_Library_Library,doctok))
 
 $(eval $(call gb_Library_set_include,doctok,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
-    -I$(realpath $(SRCDIR)/writerfilter/source) \
-    -I$(realpath $(SRCDIR)/writerfilter/source/doctok) \
+    -I$(SRCDIR)/writerfilter/inc \
+    -I$(SRCDIR)/writerfilter/source \
+    -I$(SRCDIR)/writerfilter/source/doctok \
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-    -I$(OUTDIR)/inc \
 ))
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_add_defs,doctok,\
 	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \

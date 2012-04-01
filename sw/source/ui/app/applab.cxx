@@ -164,7 +164,6 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     return pFmt;
 }
 
-
 void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 {
     static sal_uInt16 nLabelTitleNo = 0;
@@ -250,8 +249,8 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             SvxULSpaceItem aULMargin( RES_UL_SPACE );
             aLRMargin.SetLeft ((sal_uInt16) rItem.lLeft );
             aULMargin.SetUpper((sal_uInt16) rItem.lUpper);
-            aLRMargin.SetRight(MINLAY/2);
-            aULMargin.SetLower(MINLAY/2);
+            aLRMargin.SetRight( 0 );
+            aULMargin.SetLower( 0 );
             rFmt.SetFmtAttr(aLRMargin);
             rFmt.SetFmtAttr(aULMargin);
 
@@ -264,15 +263,11 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
 
-            // fix (fdo36874) revised page size calculation
             // Set page size
-	    long lPgWidth, lPgHeight;
-	    lPgWidth = (((rItem.lLeft  + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth + rItem.lLeft) > MINLAY) ?
-		    (rItem.lLeft  + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth + rItem.lLeft) : MINLAY);
-	    lPgHeight = (((rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight + rItem.lUpper) > MINLAY) ?
-		    (rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight + rItem.lUpper) : MINLAY);
+            long lPgWidth, lPgHeight;
+            lPgWidth  = (rItem.lPWidth > MINLAY ? rItem.lPWidth : MINLAY);
+            lPgHeight = (rItem.lPHeight > MINLAY ? rItem.lPHeight : MINLAY);
             rFmt.SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
-
             // Numbering type
             SvxNumberType aType;
             aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
@@ -287,10 +282,8 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFmt.SetFmtAttr(aItem);
 
-            // Determine orientation by calculating the width and height of the resulting page
-            const int nResultWidth = rItem.lHDist * (rItem.nCols - 1) + rItem.lWidth + rItem.lLeft;
-            const int nResultHeight = rItem.lVDist * (rItem.nRows - 1) + rItem.lHeight + rItem.lUpper;
-            aDesc.SetLandscape(nResultWidth > nResultHeight);
+            // Determine orientation of the resulting page
+            aDesc.SetLandscape(rItem.lPWidth > rItem.lPHeight);
 
             pSh->ChgPageDesc( 0, aDesc );
 
@@ -298,37 +291,35 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             SwFldMgr*        pFldMgr = new SwFldMgr;
             pFldMgr->SetEvalExpFlds(sal_False);
 
-            //fix(24446): To avoid that labels end up in unprintable area, we set
-            //borders accordingly. To keep the handling as good as possible, we
-            //don't set any border as hard attribute at the current paragraph template
-            //(so that formating works, because of character-bound borders). Then
-            //we set the default paragraph template using the unprintable area.
-            const long nMin = pPrt->GetPageOffset().X() - rItem.lLeft;
-            if ( nMin > 0 )
-            {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                pSh->SetAttr( aLR );
-                SwFmt *pStandard = pSh->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-                aLR.SetLeft ( sal_uInt16(nMin) );
-                aLR.SetRight( sal_uInt16(nMin) );
-                pStandard->SetFmtAttr( aLR );
-            }
-
             // Prepare border template
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
-            SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE,
-                                    rItem.lHDist - (rItem.lHDist-rItem.lWidth),
-                                    rItem.lVDist - (rItem.lVDist-rItem.lHeight));
-            pFmt->SetFmtAttr(aFrmSize);
+            sal_Int32 iResultWidth = rItem.lLeft + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth - rItem.lPWidth;
+            sal_Int32 iResultHeight = rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight - rItem.lPHeight;
+            sal_Int32 iWidth = (iResultWidth > 0 ? rItem.lWidth - (iResultWidth / rItem.nCols) - 1 : rItem.lWidth);
+            sal_Int32 iHeight = (iResultHeight > 0 ? rItem.lHeight - (iResultHeight / rItem.nRows) - 1 : rItem.lHeight);
+            SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE, iWidth, iHeight );
+            pFmt->SetFmtAttr( aFrmSize );
 
-            SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
-                                        0, 0,
-                                        RES_LR_SPACE);
-            pFmt->SetFmtAttr(aFrmLRSpace);
+            SwFrmFmt* pFmtEORow = new SwFrmFmt (*pFmt);
+            SwFrmFmt* pFmtEOCol = new SwFrmFmt (*pFmt);
+            SwFrmFmt* pFmtEOColEORow = new SwFrmFmt (*pFmt);
 
             SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
-                                        RES_UL_SPACE);
+                                        RES_UL_SPACE );
+            SvxULSpaceItem aFrmNoULSpace( 0, 0, RES_UL_SPACE );
+
+            SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
+                                        0, 0, RES_LR_SPACE );
+            SvxLRSpaceItem aFrmNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE );
+
             pFmt->SetFmtAttr(aFrmULSpace);
+            pFmt->SetFmtAttr(aFrmLRSpace);
+            pFmtEORow->SetFmtAttr(aFrmULSpace);
+            pFmtEORow->SetFmtAttr(aFrmNoLRSpace);
+            pFmtEOCol->SetFmtAttr(aFrmNoULSpace);
+            pFmtEOCol->SetFmtAttr(aFrmLRSpace);
+            pFmtEOColEORow->SetFmtAttr(aFrmNoULSpace);
+            pFmtEOColEORow->SetFmtAttr(aFrmNoLRSpace);
 
             const SwFrmFmt *pFirstFlyFmt = 0;
             if ( rItem.bPage )
@@ -336,18 +327,26 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 SwFmtVertOrient aFrmVertOrient( pFmt->GetVertOrient() );
                 aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
                 pFmt->SetFmtAttr(aFrmVertOrient);
+                pFmtEORow->SetFmtAttr(aFrmVertOrient);
+                pFmtEOCol->SetFmtAttr(aFrmVertOrient);
+                pFmtEOColEORow->SetFmtAttr(aFrmVertOrient);
 
                 for ( sal_uInt16 i = 0; i < rItem.nRows; ++i )
                 {
                     for ( sal_uInt16 j = 0; j < rItem.nCols; ++j )
                     {
                         pSh->Push();
+                        SwFrmFmt* pFrmFmt;
+                        if ( j == rItem.nCols - 1 )
+                            pFrmFmt = ( i == rItem.nRows - 1 ? pFmtEOColEORow : pFmtEORow );
+                        else
+                            pFrmFmt = ( i == rItem.nRows - 1 ? pFmtEOCol : pFmt );
+
                         const SwFrmFmt *pTmp =
                                 bLabel ?
-                                lcl_InsertLabText( *pSh, rItem, *pFmt, *pFldMgr, j, i,
-                                    i == rItem.nRows - 1 && j == rItem.nCols - 1,
-                                    sal_True ) :
-                                lcl_InsertBCText(*pSh, rItem, *pFmt, j, i, sal_True);
+                                lcl_InsertLabText( *pSh, rItem, *pFrmFmt, *pFldMgr, j, i,
+                                    i == rItem.nRows - 1 && j == rItem.nCols - 1, sal_True ) :
+                                lcl_InsertBCText(*pSh, rItem, *pFrmFmt, j, i, sal_True);
                         if (!(i|j))
                         {
                             pFirstFlyFmt = pTmp;

@@ -44,6 +44,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <generic/gendata.hxx>
+#include <basebmp/scanlineformats.hxx>
 #include <vcl/solarmutex.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
@@ -126,29 +127,6 @@ void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 
     Wakeup();
 }
 
-void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( m_aEventGuard ) )
-    {
-        if( ! m_aUserEvents.empty() )
-        {
-            std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-            do
-            {
-                if( it->m_pFrame    == pFrame   &&
-                    it->m_pData     == pData    &&
-                    it->m_nEvent    == nEvent )
-                {
-                    it = m_aUserEvents.erase( it );
-                }
-                else
-                    ++it;
-            } while( it != m_aUserEvents.end() );
-        }
-        osl_releaseMutex( m_aEventGuard );
-    }
-}
-
 void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 {
     m_aFrames.remove( pFrame );
@@ -205,12 +183,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
 {
-    return new SvpSalFrame( this, NULL, nStyle, pParent );
+    return new SvpSalFrame( this, NULL, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
-    return new SvpSalFrame( this, pParent, nStyle );
+    return new SvpSalFrame( this, pParent, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT );
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
@@ -301,7 +279,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 {
                     // this would be a good time to post a paint
                     const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
-                    pSvpFrame->PostPaint();
+                    pSvpFrame->PostPaint(false);
                 }
             }
         }

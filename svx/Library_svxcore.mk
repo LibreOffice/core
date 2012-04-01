@@ -43,8 +43,8 @@ $(eval $(call gb_Library_add_api,svxcore,\
 ))
 
 $(eval $(call gb_Library_set_include,svxcore,\
-    -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/source/inc) \
+    -I$(SRCDIR)/svx/inc \
+    -I$(SRCDIR)/svx/source/inc \
     $$(INCLUDE) \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
@@ -123,58 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/engine3d/view3d \
     svx/source/engine3d/view3d1 \
     svx/source/engine3d/viewpt3d2 \
-    svx/source/fmcomp/dbaexchange \
-    svx/source/fmcomp/fmgridcl \
-    svx/source/fmcomp/fmgridif \
-    svx/source/fmcomp/gridcell \
-    svx/source/fmcomp/gridcols \
-    svx/source/fmcomp/gridctrl \
-    svx/source/fmcomp/trace \
-    svx/source/fmcomp/xmlexchg \
-    svx/source/form/dataaccessdescriptor \
-    svx/source/form/datalistener \
-    svx/source/form/datanavi \
-    svx/source/form/dbtoolsclient \
-    svx/source/form/delayedevent \
-    svx/source/form/fmcontrolbordermanager \
-    svx/source/form/fmcontrollayout \
-    svx/source/form/fmdmod \
-    svx/source/form/fmdocumentclassification \
-    svx/source/form/fmdpage \
-    svx/source/form/fmexch \
-    svx/source/form/fmexpl \
-    svx/source/form/fmitems \
-    svx/source/form/fmmodel \
-    svx/source/form/fmobj \
-    svx/source/form/fmpage \
-    svx/source/form/fmpgeimp \
-    svx/source/form/fmscriptingenv \
-    svx/source/form/fmservs \
-    svx/source/form/fmshell \
-    svx/source/form/fmshimp \
-    svx/source/form/fmtextcontroldialogs \
-    svx/source/form/fmtextcontrolfeature \
-    svx/source/form/fmtextcontrolshell \
-    svx/source/form/fmtools \
-    svx/source/form/fmundo \
-    svx/source/form/fmview \
-    svx/source/form/fmvwimp \
-    svx/source/form/formcontrolfactory \
-    svx/source/form/formcontroller \
-    svx/source/form/formcontrolling \
-    svx/source/form/formdispatchinterceptor \
-    svx/source/form/formfeaturedispatcher \
-    svx/source/form/formtoolbars \
-    svx/source/form/legacyformcontroller \
-    svx/source/form/navigatortree \
-    svx/source/form/navigatortreemodel \
-    svx/source/form/ParseContext \
-    svx/source/form/sdbdatacolumn \
-    svx/source/form/sqlparserclient \
-    svx/source/form/stringlistresource \
-    svx/source/form/typeconversionclient \
-    svx/source/form/typemap \
-    svx/source/form/xfm_addcondition \
     svx/source/gallery2/codec \
     svx/source/gallery2/galbrws \
     svx/source/gallery2/galbrws1 \
@@ -433,6 +381,63 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE))$(filter IOS,$(OS)))
+$(eval $(call gb_Library_add_exception_objects,svxcore,\
+    svx/source/fmcomp/dbaexchange \
+    svx/source/fmcomp/fmgridcl \
+    svx/source/fmcomp/fmgridif \
+    svx/source/fmcomp/gridcell \
+    svx/source/fmcomp/gridcols \
+    svx/source/fmcomp/gridctrl \
+    svx/source/fmcomp/trace \
+    svx/source/fmcomp/xmlexchg \
+    svx/source/form/dataaccessdescriptor \
+    svx/source/form/datalistener \
+    svx/source/form/datanavi \
+    svx/source/form/dbtoolsclient \
+    svx/source/form/delayedevent \
+    svx/source/form/fmcontrolbordermanager \
+    svx/source/form/fmcontrollayout \
+    svx/source/form/fmdmod \
+    svx/source/form/fmdocumentclassification \
+    svx/source/form/fmdpage \
+    svx/source/form/fmexch \
+    svx/source/form/fmexpl \
+    svx/source/form/fmitems \
+    svx/source/form/fmmodel \
+    svx/source/form/fmobj \
+    svx/source/form/fmpage \
+    svx/source/form/fmpgeimp \
+    svx/source/form/fmscriptingenv \
+    svx/source/form/fmservs \
+    svx/source/form/fmshell \
+    svx/source/form/fmshimp \
+    svx/source/form/fmtextcontroldialogs \
+    svx/source/form/fmtextcontrolfeature \
+    svx/source/form/fmtextcontrolshell \
+    svx/source/form/fmtools \
+    svx/source/form/fmundo \
+    svx/source/form/fmview \
+    svx/source/form/fmvwimp \
+    svx/source/form/formcontrolfactory \
+    svx/source/form/formcontroller \
+    svx/source/form/formcontrolling \
+    svx/source/form/formdispatchinterceptor \
+    svx/source/form/formfeaturedispatcher \
+    svx/source/form/formtoolbars \
+    svx/source/form/legacyformcontroller \
+    svx/source/form/navigatortree \
+    svx/source/form/navigatortreemodel \
+    svx/source/form/ParseContext \
+    svx/source/form/sdbdatacolumn \
+    svx/source/form/sqlparserclient \
+    svx/source/form/stringlistresource \
+    svx/source/form/typeconversionclient \
+    svx/source/form/typemap \
+    svx/source/form/xfm_addcondition \
+))
+endif
+
 # the following source file can't be compiled with optimization by some compilers (crash or endless loop):
 # Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
 # the latter is currently not supported by gbuild and needs a fix here later
@@ -451,8 +456,8 @@ $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
 
 $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/sdi) \
+    -I$(SRCDIR)/svx/inc \
+    -I$(SRCDIR)/svx/sdi \
 ))
 
 # vim: set noet sw=4 ts=4:

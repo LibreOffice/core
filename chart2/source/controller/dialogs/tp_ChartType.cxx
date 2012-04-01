@@ -95,7 +95,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( AxisTypeCheckHdl, CheckBox* );
+    DECL_LINK( AxisTypeCheckHdl, void* );
 private:
     CheckBox    m_aCB_XAxis_Categories;
 };
@@ -132,7 +132,7 @@ void AxisTypeResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.bXAxisWithValues = !m_aCB_XAxis_Categories.IsChecked();
 }
-IMPL_LINK( AxisTypeResourceGroup, AxisTypeCheckHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(AxisTypeResourceGroup, AxisTypeCheckHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -157,7 +157,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( Dim3DLookCheckHdl, CheckBox* );
+    DECL_LINK( Dim3DLookCheckHdl, void* );
     DECL_LINK( SelectSchemeHdl, void* );
 
 private:
@@ -225,13 +225,13 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     else
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
 }
-IMPL_LINK( Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-IMPL_LINK( Dim3DLookResourceGroup, SelectSchemeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -254,7 +254,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( SortByXValuesCheckHdl, CheckBox* );
+    DECL_LINK( SortByXValuesCheckHdl, void* );
 
 private:
     CheckBox    m_aCB_XValueSorting;
@@ -288,7 +288,7 @@ void SortByXValuesResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.bSortByXValues = m_aCB_XValueSorting.IsChecked();
 }
-IMPL_LINK( SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -428,7 +428,7 @@ IMPL_LINK( StackingResourceGroup, StackingChangeHdl, RadioButton*, pRadio )
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-IMPL_LINK( StackingResourceGroup, StackingEnableHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -447,7 +447,7 @@ public:
     virtual void StateChanged( StateChangedType nType );
 
 private:
-    DECL_LINK( SplineModeRadioHdl, RadioButton* );
+    DECL_LINK( SplineModeRadioHdl, void* );
 
     void adjustControlPositions();
     void adjustSize();
@@ -583,7 +583,7 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
     rParameter.nCurveResolution = static_cast< sal_Int32 >( m_aMF_SplineResolution.GetValue());
     rParameter.nSplineOrder = static_cast< sal_Int32 >( m_aMF_SplineOrder.GetValue());
 }
-IMPL_LINK( SplinePropertiesDialog, SplineModeRadioHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SplinePropertiesDialog, SplineModeRadioHdl)
 {
     m_aFT_SplineOrder.Enable(m_aRB_Splines_B.IsChecked());
     m_aMF_SplineOrder.Enable(m_aRB_Splines_B.IsChecked());
@@ -686,14 +686,14 @@ void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     getSplinePropertiesDialog().fillParameter( rParameter, m_aCB_Splines.IsChecked() );
 }
-IMPL_LINK( SplineResourceGroup, SplineChangeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SplineResourceGroup, SplineChangeHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
     return 0;
 }
 
-IMPL_LINK( SplineResourceGroup, SplineDetailsDialogHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
 {
 
     ChartTypeParameter aOldParameter;
@@ -770,7 +770,7 @@ void GeometryResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     if( m_aGeometryResources.GetSelectEntryCount() )
         rParameter.nGeometry3D = m_aGeometryResources.GetSelectEntryPos();
 }
-IMPL_LINK( GeometryResourceGroup, GeometryChangeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -964,7 +964,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
         pTypeController = m_aChartTypeDialogControllerList[nM];
     return pTypeController;
 }
-IMPL_LINK( ChartTypeTabPage, SelectSubTypeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl)
 {
     if( m_pCurrentMainType )
     {
@@ -977,7 +977,7 @@ IMPL_LINK( ChartTypeTabPage, SelectSubTypeHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl)
 {
     ChartTypeParameter aParameter( this->getCurrentParamter() );
 

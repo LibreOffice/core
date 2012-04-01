@@ -59,7 +59,7 @@ void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
-    OSL_ENSURE(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
+    OSL_ENSURE(m_vConnLineData.empty(), "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines(sal_True);
         // das legt Defaults an
 }

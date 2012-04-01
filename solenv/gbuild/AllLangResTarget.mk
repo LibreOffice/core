@@ -50,7 +50,6 @@
 gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target_for_build,transex3)
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
@@ -58,14 +57,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
-		-i $(realpath $(3)) \
+		-i $(3) \
 		-o $(1) \
 		-m $(SDF) \
 		-l all)
 
 endef
 
-$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET)
+$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
 
 
@@ -83,10 +82,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
 	echo "-s \
 		$(INCLUDE) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(DEFS) \
 		-fp=$(1) \
-		$(realpath $(if $(MERGEDFILE),$(MERGEDFILE),$<))" > $${RESPONSEFILE} && \
+		$(if $(MERGEDFILE),$(MERGEDFILE),$<)" > $${RESPONSEFILE} && \
 	$(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
 	rm -rf $${RESPONSEFILE})
 
@@ -113,7 +112,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 endif
 
 endef
@@ -126,7 +125,7 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(SDF)
 endif
 
@@ -311,7 +310,7 @@ endef
 
 gb_ResTarget_RSCTARGET := $(gb_SrsPartTarget_RSCTARGET)
 gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
-gb_ResTarget_DEFIMAGESLOCATION := $(realpath $(SRCDIR)/icon-themes/galaxy)/
+gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/icon-themes/galaxy/
 
 $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RES,2)
@@ -327,15 +326,15 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 		echo "-r -p \
 			-lg$(LANGUAGE) \
 			-fs=$@ \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-			-subMODULE=$(dir $(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION))) \
+			-subMODULE=$(dir $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
 			-subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
 			$(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
@@ -357,6 +356,8 @@ $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,
 
 $(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
 $(call gb_ResTarget_get_outdir_target,$(1)) : ILSTTARGET = $(call gb_ResTarget_get_outdir_imagelist_target,$(1))
+$(call gb_ResTarget_get_outdir_imagelist_target,$(1)) :| \
+	$(dir $(call gb_ResTarget_get_outdir_imagelist_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_imagelist_target,$(1)),$(call gb_ResTarget_get_imagelist_target,$(1)),$(1))
 

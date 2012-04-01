@@ -56,7 +56,7 @@ public:
     virtual sal_Bool SAL_CALL getShadow() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShadow( sal_Bool _shadow ) throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

@@ -26,26 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef __FILTER_CONFIG_LATEINITTHREAD_HXX_
-#define __FILTER_CONFIG_LATEINITTHREAD_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_LATEINITTHREAD_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_LATEINITTHREAD_HXX
 
-//_______________________________________________
-// includes
+#include "sal/config.h"
 
-#include "filtercache.hxx"
-#include <salhelper/singletonref.hxx>
-#include <osl/thread.hxx>
+#include "salhelper/thread.hxx"
 
-//_______________________________________________
-// namespace
-
-namespace filter{
-    namespace config{
-
-//_______________________________________________
-// definitions
-
-//_______________________________________________
+namespace filter{ namespace config {
 
 /** @short      implements a thread, which will update the
                 global filter cache of an office, after its
@@ -57,38 +45,18 @@ namespace filter{
 
     @attention  The filter cache will be blocked during this thrad runs!
  */
-class LateInitThread : public ::osl::Thread
-{
-    //-------------------------------------------
-    // native interface
+class LateInitThread: public salhelper::Thread {
+public:
+    LateInitThread();
 
-    public:
+private:
+    virtual ~LateInitThread();
 
-        //---------------------------------------
-        // ctor/dtor
-
-        /** @short  initialize new instance of this class.
-         */
-        LateInitThread();
-
-        //---------------------------------------
-
-        /** @short  standard dtor.
-         */
-        virtual ~LateInitThread();
-
-        //---------------------------------------
-
-        /** @short  thread function.
-         */
-        virtual void SAL_CALL run();
-
-        virtual void SAL_CALL onTerminated();
+    virtual void execute();
 };
 
-    } // namespace config
-} // namespace filter
+} }
 
-#endif // __FILTER_CONFIG_LATEINITTHREAD_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

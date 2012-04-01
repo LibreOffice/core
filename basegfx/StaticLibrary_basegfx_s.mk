@@ -31,10 +31,9 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,basegfx_s))
 $(eval $(call gb_StaticLibrary_add_package_headers,basegfx_s,basegfx_inc))
 
 $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
-	-I$(realpath $(SRCDIR)/basegfx/inc) \
-	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
+	-I$(SRCDIR)/basegfx/inc \
+	-I$(SRCDIR)/basegfx/source/inc \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc \
 ))
 
 # Work around gcc bug 41847 present at least in
@@ -70,7 +69,6 @@ $(WORKDIR)/CustomTarget/basegfx/source/%.cxx : $(SRCDIR)/basegfx/source/%.cxx
 
 # copied sources are generated cxx sources
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
-	CustomTarget/basegfx/source/tools/liangbarsky \
 	CustomTarget/basegfx/source/tools/canvastools \
 	CustomTarget/basegfx/source/tools/zoomtools \
 	CustomTarget/basegfx/source/tools/gradienttools \
@@ -100,7 +98,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/polygon/b3dpolygontools \
 	CustomTarget/basegfx/source/polygon/b2dlinegeometry \
 	CustomTarget/basegfx/source/polygon/b3dpolypolygontools \
-	CustomTarget/basegfx/source/polygon/b3dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolypolygoncutter \
 	CustomTarget/basegfx/source/polygon/b2dpolygon \

@@ -35,6 +35,8 @@
 #include "address.hxx"
 #include "scdllapi.h"
 
+#include <map>
+
 class EditTextObject;
 class OutlinerParaObject;
 class SdrCaptionObj;
@@ -128,8 +130,6 @@ public:
 
     /** Returns the caption text of this note. */
     ::rtl::OUString     GetText() const;
-    /** Returns true, if the caption text of this note contains line breaks. */
-    bool                HasMultiLineText() const;
     /** Changes the caption text of this note. All text formatting will be lost. */
     void                SetText( const ScAddress& rPos, const ::rtl::OUString& rText );
 
@@ -257,6 +257,61 @@ public:
                             ScDocument& rDoc, const ScAddress& rPos,
                             const ::rtl::OUString& rNoteText, bool bShown,
                             bool bAlwaysCreateCaption );
+};
+
+class SC_DLLPUBLIC ScNotes
+{
+private:
+    typedef std::pair<SCCOL, SCROW> ScAddress2D;
+    typedef std::map<ScAddress2D, ScPostIt*> ScNoteMap;
+    ScNoteMap maNoteMap;
+
+    ScDocument* mpDoc;
+public:
+    ScNotes(ScDocument* pDoc);
+    ScNotes(const ScNotes& rNotes);
+    ~ScNotes();
+
+    typedef ScNoteMap::iterator iterator;
+    typedef ScNoteMap::const_iterator const_iterator;
+
+    iterator begin();
+    iterator end();
+
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    size_t size() const;
+    bool empty() const;
+
+    ScPostIt* findByAddress(SCCOL nCol, SCROW nRow);
+    const ScPostIt* findByAddress(SCCOL nCol, SCROW nRow) const;
+
+    ScPostIt* findByAddress(const ScAddress& rAddress);
+    const ScPostIt* findByAddress(const ScAddress& rAddress) const;
+    /**
+     * takes ownership of the
+     */
+    bool insert( SCCOL nCol, SCROW nRow, ScPostIt* );
+    bool insert( const ScAddress& rPos, ScPostIt* );
+
+    void erase(SCCOL, SCROW, bool bForgetCaption = false);
+    void erase(const ScAddress& rPos);
+
+    /** Returns and forgets the cell note object at the passed cell address. */
+    ScPostIt*       ReleaseNote( const ScAddress& rPos );
+    ScPostIt*       ReleaseNote( SCCOL nCol, SCROW nRow );
+    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
+    ScPostIt* GetOrCreateNote( const ScAddress& rPos );
+
+    void clear();
+
+    ScNotes* clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab);
+    void CopyFromClip(const ScNotes& maNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption);
+
+    void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption = false);
+
+
 };
 
 // ============================================================================

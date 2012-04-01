@@ -40,6 +40,8 @@ TARFILE_NAME=postgresql-9.1.1
 TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 PATCH_FILES=\
 	postgresql-moz-ldap.patch \
+	postgresql-libs-leak.patch \
+	libpq-parallel-build.patch \
 	$(TARFILE_NAME)-libreoffice.patch \
 	$(TARFILE_NAME)-autoreconf.patch
 
@@ -54,8 +56,15 @@ CONFIGURE_DIR=.
 BUILD_DIR=src
 
 CONFIGURE_ACTION =
-BUILD_ACTION = nmake -f win32.mak USE_SSL=1 USE_LDAP=1 USE_MOZLDAP=1
-.ELSE
+BUILD_ACTION = nmake -f win32.mak USE_SSL=1
+.IF "$(WITH_LDAP)" == "YES"
+BUILD_ACTION += USE_LDAP=1
+.IF "$(WITH_OPENLDAP)" != "YES"
+SOLARINC += -I$(SOLARVER)$/$(INPATH)$/inc$/mozilla$/ldap
+BUILD_ACTION += USE_MOZLDAP=1
+.ENDIF
+.ENDIF # "$(WITH_LDAP)" == "YES"
+.ELSE #"$(GUI)$(COM)"!="WNTMSC"
 CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 

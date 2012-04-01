@@ -32,7 +32,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
-#include "comphelper/string.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
@@ -94,8 +93,7 @@ bool satisfiesMaximalVersion(
 rtl::OUString produceErrorText(
     rtl::OUString const & reason, rtl::OUString const & version)
 {
-    return comphelper::string::searchAndReplaceAsciiL(
-        reason, RTL_CONSTASCII_STRINGPARAM("%VERSION"),
+    return reason.replaceFirst("%VERSION",
         (version.isEmpty()
          ? ResId::toString(
              dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))

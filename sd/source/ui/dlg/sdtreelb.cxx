@@ -1201,9 +1201,9 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
         if (pCustomShow != NULL)
         {
             bBelongsToShow = false;
-            sal_uLong nPageCount = pCustomShow->Count();
+            sal_uLong nPageCount = pCustomShow->PagesVector().size();
             for (sal_uInt16 i=0; i<nPageCount && !bBelongsToShow; i++)
-                if (pPage == static_cast<SdPage*>(pCustomShow->GetObject (i)))
+                if (pPage == pCustomShow->PagesVector()[i])
                     bBelongsToShow = true;
         }
     }

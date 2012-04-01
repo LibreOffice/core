@@ -90,7 +90,7 @@ using namespace ::std;
 */
 
 template <class T>
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Reference
+class SAL_DLLPUBLIC_TEMPLATE Reference
 {
 public:
     /**
@@ -100,8 +100,6 @@ public:
         the reference is passed.
     */
     typedef boost::shared_ptr< Reference<T> > Pointer_t;
-
-    virtual ~Reference() {}
 
     /**
        Resolves the reference.
@@ -117,6 +115,9 @@ public:
        Returns the type of the reference aka the name of the access class.
      */
     virtual string getType() const = 0;
+
+protected:
+    ~Reference() {}
 };
 
 class Value;
@@ -143,6 +144,8 @@ public:
     */
     virtual void sprm(Sprm & sprm) = 0;
 
+protected:
+    ~Properties() {}
 };
 
 /**
@@ -152,6 +155,7 @@ class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
 {
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
+
     /**
        Receives an entry of the table.
 
@@ -159,6 +163,9 @@ public:
        @param ref     reference to properties of the entry
      */
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+protected:
+    ~Table() {}
 };
 
 /**
@@ -176,6 +183,9 @@ public:
      */
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+protected:
+    ~BinaryObj() {}
 };
 
 /**
@@ -184,6 +194,7 @@ public:
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Stream
 {
 public:
+
     /**
        Pointer to this stream.
      */
@@ -276,6 +287,9 @@ public:
        @param info     the information
      */
     virtual void info(const string & info) = 0;
+
+protected:
+    ~Stream() {}
 };
 
 /**
@@ -294,6 +308,8 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef auto_ptr<Value> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    virtual ~Value() {}
 
     /**
        Returns integer representation of the value.
@@ -342,6 +358,7 @@ public:
     typedef auto_ptr<Sprm> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
+
     /**
        Returns id of the SPRM.
      */
@@ -382,6 +399,9 @@ public:
        Returns string repesentation of sprm.
      */
     virtual string toString() const = 0;
+
+protected:
+    ~Sprm() {}
 };
 
 /**

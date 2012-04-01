@@ -81,7 +81,6 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -200,17 +199,17 @@ static const ::rtl::OUString CMD_DO_SESSION_RESTORE(RTL_CONSTASCII_USTRINGPARAM(
 static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/disableRecovery"));    // disable recovery and auto save (!) temp. for this office session
 static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("/setAutoSaveState"));    // disable/enable auto save (not crash save) for this office session
 
-static const ::rtl::OUString REFERRER_USER(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+static const char REFERRER_USER[] = "private:user";
 
-static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron"));
-static const ::rtl::OUString PROP_PROGRESS(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
-static const ::rtl::OUString PROP_SAVEPATH(RTL_CONSTASCII_USTRINGPARAM("SavePath"));
-static const ::rtl::OUString PROP_ENTRY_ID(RTL_CONSTASCII_USTRINGPARAM("EntryID"));
-static const ::rtl::OUString PROP_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
+static const char PROP_DISPATCH_ASYNCHRON[] = "DispatchAsynchron";
+static const char PROP_PROGRESS[] = "StatusIndicator";
+static const char PROP_SAVEPATH[] = "SavePath";
+static const char PROP_ENTRY_ID[] = "EntryID";
+static const char PROP_AUTOSAVE_STATE[] = "AutoSaveState";
 
-static const ::rtl::OUString OPERATION_START(RTL_CONSTASCII_USTRINGPARAM("start"));
-static const ::rtl::OUString OPERATION_STOP(RTL_CONSTASCII_USTRINGPARAM("stop"));
-static const ::rtl::OUString OPERATION_UPDATE(RTL_CONSTASCII_USTRINGPARAM("update"));
+static const char OPERATION_START[] = "start";
+static const char OPERATION_STOP[] = "stop";
+static const char OPERATION_UPDATE[] = "update";
 
 static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
@@ -693,7 +692,9 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         throw;
     }
     catch(const css::uno::Exception&)
-        {} // TODO better error handling
+    {
+        // TODO better error handling
+    }
 
     aListenerInformer.stop();
 
@@ -973,12 +974,12 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
-        {
-            // These config keys are not sooooo important, that
-            // we are interested on errors here realy .-)
-            nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
-            nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
-        }
+    {
+        // These config keys are not sooooo important, that
+        // we are interested on errors here realy .-)
+        nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
+        nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
+    }
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -1292,7 +1293,9 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
                 xModify->removeByName(sID);
             }
             catch(const css::container::NoSuchElementException&)
-                { return; }
+            {
+                return;
+            }
         }
         else
         {
@@ -1318,9 +1321,13 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         }
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        {} // ??? can it happen that a full disc let these set of operations fail too ???
+    {
+        // ??? can it happen that a full disc let these set of operations fail too ???
+    }
 
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     do
@@ -1336,29 +1343,29 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
             nRetry = 0;
         }
-        catch(const css::uno::Exception& ex)
-            {
-                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
-                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+        catch(const css::uno::Exception&)
+        {
+            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
-                // SAFE ->
-                ReadGuard aReadLock(m_aLock);
-                sal_Int32 nMinSpaceConfigSave = m_nMinSpaceConfigSave;
-                aReadLock.unlock();
-                // <- SAFE
+            // SAFE ->
+            ReadGuard aReadLock(m_aLock);
+            sal_Int32 nMinSpaceConfigSave = m_nMinSpaceConfigSave;
+            aReadLock.unlock();
+            // <- SAFE
 
-                if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
-                    AutoRecovery::impl_showFullDiscError();
-                else
-                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
-                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-                else
-                if (nRetry <= GIVE_UP_RETRY)
-                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+            if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
+                AutoRecovery::impl_showFullDiscError();
+            else
+            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+            else
+            if (nRetry <= GIVE_UP_RETRY)
+                throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
-                --nRetry;
-            }
+            --nRetry;
+        }
     }
     while(nRetry>0);
 }
@@ -1529,7 +1536,7 @@ void AutoRecovery::implts_stopTimer()
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
+IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
 {
     try
     {
@@ -1630,7 +1637,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, EMPTYARG)
+IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
 {
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
@@ -2031,7 +2038,8 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
             }
         }
         catch( const css::uno::Exception& )
-        {}
+        {
+        }
     }
 }
 
@@ -2086,17 +2094,11 @@ void AutoRecovery::implts_prepareSessionShutdown()
                 {
                     xClose->close(sal_False);
                 }
-                /*
-                catch(const css::lang::DisposedException&)
-                    {
-                        // closed ... disposed ... always the same .-)
-                    }
-                */
                 catch(const css::uno::Exception&)
-                    {
-                        // At least it's only a try to close these documents before anybody else it does.
-                        // So it seams to be possible to ignore any error here .-)
-                    }
+                {
+                    // At least it's only a try to close these documents before anybody else it does.
+                    // So it seams to be possible to ignore any error here .-)
+                }
 
                 rInfo.Document.clear();
             }
@@ -2374,31 +2376,31 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
             bError = sal_False;
             nRetry = 0;
         }
-        catch(const css::uno::Exception& ex)
-            {
-                bError = sal_True;
+        catch(const css::uno::Exception&)
+        {
+            bError = sal_True;
 
-                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
-                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+            // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
-                // SAFE ->
-                ReadGuard aReadLock2(m_aLock);
-                sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
-                aReadLock2.unlock();
-                // <- SAFE
+            // SAFE ->
+            ReadGuard aReadLock2(m_aLock);
+            sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
+            aReadLock2.unlock();
+            // <- SAFE
 
-                if (! impl_enoughDiscSpace(nMinSpaceDocSave))
-                    AutoRecovery::impl_showFullDiscError();
-                else
-                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
-                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-                else
-                if (nRetry <= GIVE_UP_RETRY)
-                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+            if (! impl_enoughDiscSpace(nMinSpaceDocSave))
+                AutoRecovery::impl_showFullDiscError();
+            else
+            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+            else
+            if (nRetry <= GIVE_UP_RETRY)
+                throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
-                --nRetry;
-            }
+            --nRetry;
+        }
     }
     while(nRetry>0);
 
@@ -2481,7 +2483,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         ::comphelper::MediaDescriptor lDescriptor;
 
         // its an UI feature - so the "USER" itself must be set as referer
-        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= REFERRER_USER;
+        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= ::rtl::OUString(REFERRER_USER);
         lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
 
         // recovered documents are loaded hidden, and shown all at once, later
@@ -2727,7 +2729,9 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         rInfo.Document = xModel.get();
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
     {
         Any aCaughtException( ::cppu::getCaughtException() );
@@ -2823,7 +2827,9 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
                 xListener->statusChanged(aEvent);
             }
             catch(const css::uno::RuntimeException&)
-                { pIt.remove(); }
+            {
+                pIt.remove();
+            }
         }
     }
 }
@@ -2924,7 +2930,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     aEvent.FeatureURL.Complete   = AutoRecovery::implst_getJobDescription(eJob);
     aEvent.FeatureDescriptor     = sEventType;
 
-    if (sEventType.equals(OPERATION_UPDATE) && pInfo)
+    if (pInfo && sEventType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OPERATION_UPDATE)))
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;
@@ -3244,7 +3250,9 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment);
     }
     catch(const css::uno::Exception&)
-        { return AutoRecovery::E_WRONG_TARGET_PATH; }
+    {
+        return AutoRecovery::E_WRONG_TARGET_PATH;
+    }
 
     sal_Int32 nNameClash;
     nNameClash = css::ucb::NameClash::RENAME;
@@ -3255,7 +3263,9 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
-        { return AutoRecovery::E_ORIGINAL_FILE_MISSING; }
+    {
+        return AutoRecovery::E_ORIGINAL_FILE_MISSING;
+    }
 
     return AutoRecovery::E_COPIED;
 }
@@ -3410,7 +3420,9 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             // can happen in multithreaded environments, that frames was removed from the container during this loop runs!
             // Ignore it.
             catch(const css::lang::IndexOutOfBoundsException&)
-                { continue; }
+            {
+                continue;
+            }
 
             // We are interested on visible documents only.
             // Note: It's n optional interface .-(
@@ -3443,10 +3455,13 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             implts_registerDocument(xModel);
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 
     LOG_RECOVERY("... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()")
 }
@@ -3483,8 +3498,6 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 //-----------------------------------------------
 void AutoRecovery::impl_showFullDiscError()
 {
-    rtl::OUString PLACEHOLDER_PATH(RTL_CONSTASCII_USTRINGPARAM("%PATH"));
-
     rtl::OUString sBtn(ResId::toString(FwkResId(STR_FULL_DISC_RETRY_BUTTON)));
     rtl::OUString sMsg(ResId::toString(FwkResId(STR_FULL_DISC_MSG)));
 
@@ -3495,7 +3508,9 @@ void AutoRecovery::impl_showFullDiscError()
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
-    ErrorBox dlgError(0, WB_OK, comphelper::string::replace(sMsg, PLACEHOLDER_PATH, sBackupPath));
+    ErrorBox dlgError(
+        0, WB_OK,
+        sMsg.replaceAll("%PATH", sBackupPath));
     dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
     dlgError.Execute();
 }
@@ -3620,7 +3635,8 @@ void AutoRecovery::impl_flushALLConfigChanges()
         ::utl::ConfigManager::storeConfigItems();
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 //-----------------------------------------------
@@ -3635,7 +3651,8 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 //-----------------------------------------------
@@ -3654,7 +3671,8 @@ void AutoRecovery::st_impl_removeLockFile()
         AutoRecovery::st_impl_removeFile(sLockURL);
     }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 }
 
 } // namespace framework

@@ -49,6 +49,9 @@ class MarkHandleProvider
 public:
     virtual bool getMarkHandles( SdrHdlList& rHdlList ) =0;
     virtual bool getFrameDragSingles() =0;
+
+protected:
+    ~MarkHandleProvider() {}
 };
 
 class DrawViewWrapper : public E3dView

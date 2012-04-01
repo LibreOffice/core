@@ -85,8 +85,6 @@
 using ::std::auto_ptr;
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 #define GET_STRING(nid) ((const SfxStringItem&)pReqArgs->Get(nid)).GetValue()
 #define GET_UINT16(nid) ((const SfxUInt16Item&)pReqArgs->Get(nid)).GetValue()
 #define GET_BOOL(nid)   ((const SfxBoolItem&)pReqArgs->Get(nid)).GetValue()
@@ -998,7 +996,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
-                    if( IS_AVAILABLE( FID_PROTECT_DOC, &pItem ) &&
+                    if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
                         ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
                     {
                         rReq.Ignore();
@@ -1071,7 +1069,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 bool bNewProtection = !bOldProtection;
-                if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
+                if( pReqArgs->HasItem( FID_PROTECT_TABLE, &pItem ) )
                     bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
                 if( bNewProtection == bOldProtection )
                 {

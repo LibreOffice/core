@@ -83,23 +83,6 @@ void ScaList::_Grow()
     pData = pNewData;
 }
 
-void ScaList::Insert( void* pNew, sal_uInt32 nIndex )
-{
-    if( nIndex >= nCount )
-        Append( pNew );
-    else
-    {
-        Grow();
-
-        void** pIns = pData + nIndex;
-        memmove( pIns + 1, pIns, (nCount - nIndex) * sizeof( void* ) );
-
-        *pIns = pNew;
-        nCount++;
-    }
-}
-
-
 //------------------------------------------------------------------
 
 ScaStringList::~ScaStringList()

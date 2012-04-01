@@ -345,19 +345,9 @@ ScUserList::iterator ScUserList::begin()
     return maData.begin();
 }
 
-ScUserList::iterator ScUserList::end()
-{
-    return maData.end();
-}
-
 ScUserList::const_iterator ScUserList::begin() const
 {
     return maData.begin();
-}
-
-ScUserList::const_iterator ScUserList::end() const
-{
-    return maData.end();
 }
 
 void ScUserList::clear()

@@ -81,7 +81,6 @@
 #include <docsh.hxx>
 #include <mdiexp.hxx>           // Progress
 #include <fmtcnct.hxx>
-#include <swunodef.hxx>
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
 #include "ww8par.hxx"           // class SwWWImplReader
@@ -1310,7 +1309,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
 #ifdef OSL_BIGENDIAN
-    nGrouped = (sal_Int16)SWAPSHORT( nGrouped );
+    nGrouped = (sal_Int16)OSL_SWAPWORD( nGrouped );
 #endif
 
     nDrawXOfs = nDrawXOfs + (sal_Int16)SVBT16ToShort( pHd->xa );
@@ -2341,14 +2340,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         rFlySet.Put(SwFmtVertOrient(MakeSafePositioningValue(nYPos),
             eVertOri, eVertRel));
-
-        if (
-            (pFSPA->nYaTop < 0) && (eVertOri == text::VertOrientation::NONE) &&
-            ((eAnchor == FLY_AT_PARA) || (eAnchor == FLY_AT_CHAR))
-           )
-        {
-            maTracer.Log(sw::log::eNegativeVertPlacement);
-        }
     }
 
     return eAnchor;
@@ -2700,15 +2691,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
 SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
-    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
-    {
-        sal_uInt16 nTextAreaWidth = static_cast< sal_uInt16 >( maSectionManager.GetPageWidth() -
-            maSectionManager.GetPageRight() - maSectionManager.GetPageLeft());
-
-        if (pFmt->GetFrmSize().GetSize().Width() > nTextAreaWidth)
-            maTracer.Log(sw::log::eTooWideAsChar);
-    }
-
     /*
      * anchored to character at the current position will move along the
      * paragraph as text is added because we are at the insertion point.

@@ -43,7 +43,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -56,7 +55,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/shl.hxx>
 #include <linguistic/misc.hxx>

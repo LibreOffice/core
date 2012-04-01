@@ -333,34 +333,6 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
 }
 
 
-void CalendarWrapper::setFirstDayOfWeek( sal_Int16 nDay )
-{
-    try
-    {
-        if ( xC.is() )
-            xC->setFirstDayOfWeek( nDay );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "setFirstDayOfWeek: Exception caught " << e.Message );
-    }
-}
-
-
-void CalendarWrapper::setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays )
-{
-    try
-    {
-        if ( xC.is() )
-            xC->setMinimumNumberOfDaysForFirstWeek( nDays );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "setMinimumNumberOfDaysForFirstWeek: Exception caught " << e.Message );
-    }
-}
-
-
 sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
 {
     try

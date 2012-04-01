@@ -72,7 +72,6 @@ namespace drawinglayer
                 bool bShadow3D,
                 bool bTextureFilter,
                 bool bReducedLineGeometry);
-            Sdr3DObjectAttribute();
             Sdr3DObjectAttribute(const Sdr3DObjectAttribute& rCandidate);
             ~Sdr3DObjectAttribute();
 

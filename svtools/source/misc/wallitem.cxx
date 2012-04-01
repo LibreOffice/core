@@ -50,13 +50,13 @@ SfxBrushItemLink::~SfxBrushItemLink()
 }
 
 //static
-void SfxBrushItemLink::Set( SfxBrushItemLink* pLink )
+/*void SfxBrushItemLink::Set( SfxBrushItemLink* pLink )
 {
     SfxBrushItemLink** ppLink =  (SfxBrushItemLink**)GetAppData(SHL_BRUSHITEM);
     if( !*ppLink )
         *ppLink = pLink;
     else
         delete pLink;
-}
+}*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

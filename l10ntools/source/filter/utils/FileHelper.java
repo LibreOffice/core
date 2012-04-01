@@ -38,7 +38,7 @@ import java.util.*;
 
 /**
  * It collects some static helper functons to handle file system specific problems.
- * Sometimes it's neccessary to convert URL from/to system pathes;
+ * Sometimes it's neccessary to convert URL from/to system paths;
  * or from string notation to structural versions (e.g. com.sun.star.util.URL).
  * And sometimes java had another notation then the office it has.
  * Further it provides functionality to work easiear with the java.io.File class of java.
@@ -51,7 +51,7 @@ public class FileHelper
 
     /**
      * Because the office need URLs for loading/saving documents
-     * we must convert used system pathes.
+     * we must convert used system paths.
      * And java use another notation for file URLs ... correct it.
      *
      * @param aSystemPath

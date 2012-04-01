@@ -29,42 +29,53 @@
 #ifndef _XMLOFF_I18NMAP_HXX
 #define _XMLOFF_I18NMAP_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <map>
 
-
-namespace rtl
+class SvI18NMapEntry_Key
 {
-    class OUString;
-}
+    sal_uInt16      nKind;
+    rtl::OUString   aName;
+public:
+    SvI18NMapEntry_Key( sal_uInt16 nKnd, const rtl::OUString& rName ) :
+        nKind( nKnd ),
+        aName( rName )
+    {
+    }
 
-class SvI18NMap_Impl;
-class SvI18NMapEntry_Impl;
+    sal_Bool operator==( const SvI18NMapEntry_Key& r ) const
+    {
+        return nKind == r.nKind &&
+               aName == r.aName;
+    }
+
+    sal_Bool operator<( const SvI18NMapEntry_Key& r ) const
+    {
+        return nKind < r.nKind ||
+               ( nKind == r.nKind &&
+                 aName < r.aName);
+    }
+};
+
+typedef std::map<SvI18NMapEntry_Key, rtl::OUString> SvI18NMap_Impl;
 
 class XMLOFF_DLLPUBLIC SvI18NMap
 {
-    SvI18NMap_Impl      *pImpl;
-
-    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( sal_uInt16 nKind,
-                                const ::rtl::OUString& rName ) const;
+    SvI18NMap_Impl m_aMap;
 
 public:
-
-    SvI18NMap();
-    ~SvI18NMap();
-
     // Add a name mapping
-    void Add( sal_uInt16 nKind, const ::rtl::OUString& rName,
-              const ::rtl::OUString& rNewName );
+    bool Add( sal_uInt16 nKind, const rtl::OUString& rName,
+              const rtl::OUString& rNewName );
 
     // Return a mapped name. If the name could not be found, return the
     // original name.
-    const ::rtl::OUString& Get( sal_uInt16 nKind,
-                                const ::rtl::OUString& rName ) const;
+    const rtl::OUString& Get( sal_uInt16 nKind,
+                                const rtl::OUString& rName ) const;
 };
-
 
 #endif  //  _XMLOFF_I18NMAP_HXX
 

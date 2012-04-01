@@ -29,7 +29,6 @@ package installer::epmfile;
 
 use Cwd;
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -58,7 +57,7 @@ sub read_packagemap
     my $infoline = "\n\nCollected abbreviations and package names:\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-    # Can be a comma separated list. All files have to be found in include pathes
+    # Can be a comma separated list. All files have to be found in include paths
     my $allpackagemapnames = installer::converter::convert_stringlist_into_hash(\$packagemapname, ",");
     foreach my $onepackagemapname ( keys %{$allpackagemapnames} )
     {
@@ -134,77 +133,6 @@ sub read_packagemap
     $infoline = "\n\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-}
-
-############################################################################
-# The header file contains the strings for the epm header in all languages
-############################################################################
-
-sub get_string_from_headerfile
-{
-    my ($searchstring, $language, $fileref) = @_;
-
-    my $returnstring  = "";
-    my $onestring  = "";
-    my $englishstring  = "";
-    my $foundblock = 0;
-    my $foundstring = 0;
-    my $foundenglishstring = 0;
-    my $englishidentifier = "01";
-
-    $searchstring = "[" . $searchstring . "]";
-
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
-    {
-        my $line = ${$fileref}[$i];
-
-        if ( $line =~ /^\s*\Q$searchstring\E\s*$/ )
-        {
-            $foundblock = 1;
-            my $counter = $i + 1;
-
-            $line = ${$fileref}[$counter];
-
-            # Beginning of the next block oder Dateiende
-
-            while ((!($line =~ /^\s*\[\s*\w+\s*\]\s*$/ )) && ( $counter <= $#{$fileref} ))
-            {
-                if ( $line =~ /^\s*\Q$language\E\s+\=\s*\"(.*)\"\s*$/ )
-                {
-                    $onestring = $1;
-                    $foundstring = 1;
-                    last;
-                }
-
-                if ( $line =~ /^\s*\Q$englishidentifier\E\s+\=\s*\"(.*)\"\s*$/ )
-                {
-                    $englishstring = $1;
-                    $foundenglishstring = 1;
-                }
-
-                $counter++;
-                $line = ${$fileref}[$counter];
-            }
-        }
-    }
-
-    if ( $foundstring )
-    {
-        $returnstring = $onestring;
-    }
-    else
-    {
-        if ( $foundenglishstring )
-        {
-            $returnstring = $englishstring;
-        }
-        else
-        {
-            installer::exiter::exit_program("ERROR: No string found for $searchstring in epm header file (-h)", "get_string_from_headerfile");
-        }
-    }
-
-    return \$returnstring;
 }
 
 ##########################################################
@@ -738,20 +666,6 @@ sub replace_variable_in_shellscripts
     for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
     {
         ${$scriptref}[$i] =~ s/\$\{$searchstring\}/$variable/g;
-    }
-}
-
-###################################################
-# Replace one in shell scripts ( %VARIABLENAME )
-###################################################
-
-sub replace_percent_variable_in_shellscripts
-{
-    my ($scriptref, $variable, $searchstring) = @_;
-
-    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
-    {
-        ${$scriptref}[$i] =~ s/\%$searchstring/$variable/g;
     }
 }
 
@@ -1680,7 +1594,7 @@ sub set_tab_into_datafile
                         push(@installer::globals::logfileinfo, $infoline);
 
                         # collecting all new classes
-                        if (! installer::existence::exists_in_array($onefile->{'SolarisClass'}, \@newclasses))
+                        if (! grep {$_ eq $onefile->{'SolarisClass'}} @newclasses)
                         {
                             push(@newclasses, $onefile->{'SolarisClass'});
                         }
@@ -2177,32 +2091,6 @@ sub prepare_packages
     }
 
     return $newepmdir;
-}
-
-############################################################
-# Linux requirement for perl is changed by epm from
-# /usr/bin/perl to perl .
-# Requires: perl
-############################################################
-
-sub check_requirements_in_specfile
-{
-    my ( $specfile ) = @_;
-
-    for ( my $i = 0; $i <= $#{$specfile}; $i++ )
-    {
-        if (( ${$specfile}[$i] =~ /^\s*Requires/ ) && ( ${$specfile}[$i] =~ /\bperl\b/ ) && ( ! (  ${$specfile}[$i] =~ /\/usr\/bin\/perl\b/ )))
-        {
-            my $oldline = ${$specfile}[$i];
-            ${$specfile}[$i] =~ s/perl/\/usr\/bin\/perl/;
-            my $newline = ${$specfile}[$i];
-
-            $oldline =~ s/\s*$//;
-            $newline =~ s/\s*$//;
-            my $infoline = "Spec File: Changing content from \"$oldline\" to \"$newline\".\n";
-            push(@installer::globals::logfileinfo, $infoline);
-        }
-    }
 }
 
 ###############################################################################
@@ -2914,11 +2802,6 @@ sub copy_childproject_files
         installer::systemactions::copy_one_file($sourcefile, $localdestdir);
         # Solaris: unpacking tar.gz files and setting new packagename
         if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $localdestdir); }
-
-        if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
-        {
-            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $localdestdir, $packagename, $allvariableshashref, $modulesarrayref);
-        }
     }
 
 }
@@ -3029,9 +2912,7 @@ sub put_systemintegration_into_installset
     # Getting name of package from scp-Module
     # Search package in list off all include files
     # Copy file into installation set and unpack it (always tar.gz)
-    # Create xpd file and put it into xpd directory
     # tar.gz can contain a different number of packages -> automatically create hidden sub modules
-    # xpd file has to be created completely from module and package itself (-> no packagelist!)
 
     # Collect all modules with flag "SYSTEMMODULE"
     my $allmodules = collect_modules_with_style("SYSTEMMODULE", $modulesarrayref);
@@ -3062,11 +2943,6 @@ sub put_systemintegration_into_installset
 
         # Adding license content into Solaris packages
         if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
-
-        if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
-        {
-            installer::xpdinstaller::create_xpd_file_for_systemintegration($onemodule, $newcontent, $modulesarrayref, $subdir);
-        }
     }
 }
 

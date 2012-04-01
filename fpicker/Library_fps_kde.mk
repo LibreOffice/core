@@ -48,4 +48,11 @@ $(eval $(call gb_Library_add_exception_objects,fps_kde,\
 	fpicker/source/unx/kde_unx/UnxNotifyThread \
 ))
 
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,fps_kde,\
+	-Wno-shadow \
+))
+
+$(eval $(call gb_Library_set_warnings_not_errors,fps_kde))
+
 # vim: set noet sw=4 ts=4:

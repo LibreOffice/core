@@ -30,11 +30,14 @@
 #define _XMLOFF_NMSPMAP_HXX
 
 #include "sal/config.h"
+
+#include <map>
+#include <utility>
+
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
-#include <map>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -73,25 +76,17 @@ struct uInt32lt
         return r1 < r2;
     }
 };
-typedef ::std::pair < sal_uInt16, const ::rtl::OUString* > QNamePair;
+typedef ::std::pair < sal_uInt16, rtl::OUString > QNamePair;
 
 struct QNamePairHash
 {
     size_t operator()( const QNamePair &r1 ) const
     {
-        return (size_t) r1.second->hashCode() + r1.first;
-    }
-};
-struct QNamePairEq
-{
-    bool operator()( const QNamePair &r1,
-                     const QNamePair &r2 ) const
-    {
-        return r1.first == r2.first && *(r1.second) == *(r2.second);
+        return (size_t) r1.second.hashCode() + r1.first;
     }
 };
 
-typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
+typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash > QNameCache;
 typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
 typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
@@ -100,9 +95,10 @@ class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
     const ::rtl::OUString       sXMLNS;
     const ::rtl::OUString       sEmpty;
 
-    NameSpaceHash               aNameHash, aNameCache;
+    NameSpaceHash               aNameHash;
+    mutable NameSpaceHash       aNameCache;
     NameSpaceMap                aNameMap;
-    QNameCache                  aQNameCache;
+    mutable QNameCache          aQNameCache;
     SAL_DLLPRIVATE sal_uInt16 _Add( const rtl::OUString& rPrefix, const rtl::OUString &rName, sal_uInt16 nKey );
 
 public:

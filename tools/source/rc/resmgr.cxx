@@ -727,7 +727,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Funktion verlassen, falls Resourcefehler in dieser Funktion
     static int bInUse = sal_False;
-    UniString aTypStr( UniString::CreateFromInt32( rTypeId.GetId() ) );
+    rtl::OUString aTypStr(OUString::valueOf(static_cast<sal_Int32>(rTypeId.GetId())));
 
     if ( !bInUse )
     {
@@ -741,7 +741,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
             rTypeId.SetRT( RSC_STRING );
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
-                aTypStr = UniString( rTypeId );
+                aTypStr = ResId::toString(rTypeId);
                 // Versions Resource Klassenzeiger ans Ende setzen
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
@@ -1012,18 +1012,29 @@ void ResMgr::TestStack( const Resource* pResObj )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
+    int upperLimit = nCurStack;
+
+    if ( upperLimit < 0 )
+    {
+        OSL_FAIL( "resource stack underrun!" );
+        upperLimit = aStack.size() - 1;
+    }
+    else if ( upperLimit >=  static_cast<int>(aStack.size()) )
+    {
+        OSL_FAIL( "stack occupation index > allocated stack size" );
+        upperLimit = aStack.size() - 1;
+    }
+
     if ( DbgIsResource() )
     {
-        for( int i = 1; i <= nCurStack; ++i )
+        for( int i = 1; i <= upperLimit; ++i )
         {
             if ( aStack[i].pResObj == pResObj )
             {
-#ifdef DBG_UTIL
                 RscError_Impl( "Resource not freed! ", this,
                                aStack[i].pResource->GetRT(),
                                aStack[i].pResource->GetId(),
                                aStack, i-1 );
-#endif
             }
         }
     }
@@ -1338,7 +1349,7 @@ sal_uInt32 ResMgr::GetString( UniString& rStr, const sal_uInt8* pStr )
     UniString aString;
     sal_uInt32 nRet =  GetStringWithoutHook( aString, pStr );
     if ( pImplResHookProc )
-        pImplResHookProc( aString );
+        aString = pImplResHookProc( aString );
     rStr = aString;
     return nRet;
 }
@@ -1743,7 +1754,7 @@ UniString ResMgr::ReadString()
 {
     UniString aRet = ReadStringWithoutHook();
     if ( pImplResHookProc )
-        pImplResHookProc( aRet );
+        aRet = pImplResHookProc( aRet );
     return aRet;
 }
 
@@ -1912,13 +1923,6 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 
     m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::SimpleResMgr : have no impl class !" );
-}
-
-// -----------------------------------------------------------------------
-SimpleResMgr::SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale )
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    m_pResImpl = ResMgrContainer::get().getResMgr( _rPrefixName, _inout_Locale, true );
 }
 
 // -----------------------------------------------------------------------

@@ -77,18 +77,6 @@ namespace basegfx
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder = false);
 
-        /** Get the range of a polygon including bezier control points
-
-            For detailed discussion, see B2DPolygon::getB2DRange()
-
-            @param rCandidate
-            The B2DPolygon eventually containing bezier segments
-
-            @return
-            The outer range of the bezier curve containing bezier control points
-        */
-        BASEGFX_DLLPUBLIC B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate);
-
         /** Get the range of a polygon
 
             This method creates the outer range of the subdivided bezier curve.
@@ -130,12 +118,6 @@ namespace basegfx
         // if 0.0 it is calculated using getLength(...)
         BASEGFX_DLLPUBLIC B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength = 0.0);
 
-        // get a snippet from given polygon for relative distances. The polygon is assumed
-        // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. 1.0], where
-        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
-        // if 0.0 it is calculated using getLength(...)
-        BASEGFX_DLLPUBLIC B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom = 0.0, double fTo = 1.0, double fLength = 0.0);
-
         // Continuity check for point with given index
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
@@ -159,23 +141,6 @@ namespace basegfx
         #define CUTFLAG_END2            (0x0010)
         #define CUTFLAG_ALL         (CUTFLAG_LINE|CUTFLAG_START1|CUTFLAG_START2|CUTFLAG_END1|CUTFLAG_END2)
         #define CUTFLAG_DEFAULT     (CUTFLAG_LINE|CUTFLAG_START2|CUTFLAG_END2)
-
-        // Calculate cut between the points given by the two indices. pCut1
-        // and pCut2 will contain the cut coordinate on each edge in ]0.0, 1.0]
-        // (if given) and the return value will contain a cut description.
-        BASEGFX_DLLPUBLIC CutFlagValue findCut(
-            const B2DPolygon& rCandidate,
-            sal_uInt32 nIndex1, sal_uInt32 nIndex2,
-            CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
-            double* pCut1 = 0L, double* pCut2 = 0L);
-
-        // This version is working with two indexed edges from different
-        // polygons.
-        BASEGFX_DLLPUBLIC CutFlagValue findCut(
-            const B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
-            const B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
-            CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
-            double* pCut1 = 0L, double* pCut2 = 0L);
 
         // This version works with two points and vectors to define the
         // edges for the cut test.
@@ -245,17 +210,6 @@ namespace basegfx
         // to the given edge, using height 2 x fDistance, and the circle around both points
         // with radius fDistance.
         BASEGFX_DLLPUBLIC bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
-
-        /** Create a polygon from a rectangle.
-
-            @param rRect
-            The rectangle which describes the polygon size
-
-            @param fRadius
-            Radius of the edge rounding, relative to the rectangle size. 0.0 means no
-            rounding, 1.0 will lead to an ellipse
-         */
-        BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadius );
 
         /** Create a polygon from a rectangle.
 
@@ -346,15 +300,6 @@ namespace basegfx
         // matrix and the resulting x,y is used to form the new polygon.
         BASEGFX_DLLPUBLIC B2DPolygon createB2DPolygonFromB3DPolygon(const B3DPolygon& rCandidate, const B3DHomMatrix& rMat);
 
-        // create simplified version of the original polygon by
-        // replacing segments with spikes/loops and self intersections
-        // by several trivial sub-segments
-        BASEGFX_DLLPUBLIC B2DPolygon createSimplifiedPolygon(const B2DPolygon&);
-
-        // calculate the distance to the given endless ray and return. The relative position on the edge is returned in Cut.
-        // That position may be less than 0.0 or more than 1.0
-        BASEGFX_DLLPUBLIC double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut);
-
         // calculate the smallest distance to given edge and return. The relative position on the edge is returned in Cut.
         // That position is in the range [0.0 .. 1.0] and the returned distance is adapted accordingly to the start or end
         // point of the edge
@@ -371,9 +316,6 @@ namespace basegfx
         // distort polygon. rOriginal describes the original range, where the given points describe the distorted corresponding points.
         BASEGFX_DLLPUBLIC B2DPolygon distort(const B2DPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
 
-        // rotate polygon around given point with given angle.
-        BASEGFX_DLLPUBLIC B2DPolygon rotateAroundPoint(const B2DPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
-
         // expand all segments (which are not yet) to curve segments. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances on each segment.
         BASEGFX_DLLPUBLIC B2DPolygon expandToCurve(const B2DPolygon& rCandidate);
@@ -381,9 +323,6 @@ namespace basegfx
         // expand given segment to curve segment. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances. The return value describes if a change took place.
         BASEGFX_DLLPUBLIC bool expandToCurveInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex);
-
-        // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
-        B2DPolygon setContinuity(const B2DPolygon& rCandidate, B2VectorContinuity eContinuity);
 
         // set continuity for given index. If not a curve, nothing will change. Non-curve points are not changed, too.
         // The return value describes if a change took place.
@@ -431,8 +370,6 @@ namespace basegfx
         // create polygon state at t from 0.0 to 1.0 between the two polygons. Both polygons must have the same
         // organisation, e.g. same amount of points
         BASEGFX_DLLPUBLIC B2DPolygon interpolate(const B2DPolygon& rOld1, const B2DPolygon& rOld2, double t);
-
-        BASEGFX_DLLPUBLIC bool isPolyPolygonEqualRectangle( const B2DPolyPolygon& rPolyPoly, const B2DRange& rRect );
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         BASEGFX_DLLPUBLIC B2DPolygon simplifyCurveSegments(const B2DPolygon& rCandidate);
@@ -489,32 +426,9 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight);
 
-        /** split each edge of a polygon in exactly nSubEdges equidistant edges
-
-            @param rCandidate
-            The source polygon. If too small (no edges), nSubEdges too small (<2)
-            or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
-            Else for each edge nSubEdges will be created. Closed state is preserved.
-
-            @param nSubEdges
-            How many edges shall be created as replacement for each single edge
-
-            @param bHandleCurvedEdges
-            Process curved edges or not. If to handle the curved edges will be splitted
-            into nSubEdges part curved edges of equidistant bezier distances. If not,
-            curved edges will just be copied.
-
-            @param bHandleStraightEdges
-            Process straight edges or not. If to handle the straight edges will be splitted
-            into nSubEdges part curved edges of equidistant length. If not,
-            straight edges will just be copied.
-        */
-        BASEGFX_DLLPUBLIC B2DPolygon reSegmentPolygonEdges(const B2DPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
-
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D Polygons
         BASEGFX_DLLPUBLIC bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue);
-        BASEGFX_DLLPUBLIC bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB);
 
         /** snap some polygon coordinates to discrete coordinates
 

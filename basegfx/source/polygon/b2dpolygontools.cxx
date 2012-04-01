@@ -476,30 +476,6 @@ namespace basegfx
             return true;
         }
 
-        B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-            B2DRange aRetval;
-
-            if(nPointCount)
-            {
-                const bool bControlPointsUsed(rCandidate.areControlPointsUsed());
-
-                for(sal_uInt32 a(0); a < nPointCount; a++)
-                {
-                    aRetval.expand(rCandidate.getB2DPoint(a));
-
-                    if(bControlPointsUsed)
-                    {
-                        aRetval.expand(rCandidate.getNextControlPoint(a));
-                        aRetval.expand(rCandidate.getPrevControlPoint(a));
-                    }
-                }
-            }
-
-            return aRetval;
-        }
-
         B2DRange getRange(const B2DPolygon& rCandidate)
         {
             // changed to use internally buffered version at B2DPolygon
@@ -976,80 +952,6 @@ namespace basegfx
             {
                 return rCandidate;
             }
-        }
-
-        B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength)
-        {
-            // get length if not given
-            if(fTools::equalZero(fLength))
-            {
-                fLength = getLength(rCandidate);
-            }
-
-            // multiply distances with real length to get absolute position and
-            // use getSnippetAbsolute
-            return getSnippetAbsolute(rCandidate, fFrom * fLength, fTo * fLength, fLength);
-        }
-
-        CutFlagValue findCut(
-            const B2DPolygon& rCandidate,
-            sal_uInt32 nIndex1, sal_uInt32 nIndex2,
-            CutFlagValue aCutFlags,
-            double* pCut1, double* pCut2)
-        {
-            CutFlagValue aRetval(CUTFLAG_NONE);
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nIndex1 < nPointCount && nIndex2 < nPointCount && nIndex1 != nIndex2)
-            {
-                sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate));
-                sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate));
-
-                const B2DPoint aStart1(rCandidate.getB2DPoint(nIndex1));
-                const B2DPoint aEnd1(rCandidate.getB2DPoint(nEnd1));
-                const B2DVector aVector1(aEnd1 - aStart1);
-
-                const B2DPoint aStart2(rCandidate.getB2DPoint(nIndex2));
-                const B2DPoint aEnd2(rCandidate.getB2DPoint(nEnd2));
-                const B2DVector aVector2(aEnd2 - aStart2);
-
-                aRetval = findCut(
-                    aStart1, aVector1, aStart2, aVector2,
-                    aCutFlags, pCut1, pCut2);
-            }
-
-            return aRetval;
-        }
-
-        CutFlagValue findCut(
-            const B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
-            const B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
-            CutFlagValue aCutFlags,
-            double* pCut1, double* pCut2)
-        {
-            CutFlagValue aRetval(CUTFLAG_NONE);
-            const sal_uInt32 nPointCount1(rCandidate1.count());
-            const sal_uInt32 nPointCount2(rCandidate2.count());
-
-            if(nIndex1 < nPointCount1 && nIndex2 < nPointCount2)
-            {
-                sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate1));
-                sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate2));
-
-                const B2DPoint aStart1(rCandidate1.getB2DPoint(nIndex1));
-                const B2DPoint aEnd1(rCandidate1.getB2DPoint(nEnd1));
-                const B2DVector aVector1(aEnd1 - aStart1);
-
-                const B2DPoint aStart2(rCandidate2.getB2DPoint(nIndex2));
-                const B2DPoint aEnd2(rCandidate2.getB2DPoint(nEnd2));
-                const B2DVector aVector2(aEnd2 - aStart2);
-
-                aRetval = findCut(
-                    aStart1, aVector1, aStart2, aVector2,
-                    aCutFlags, pCut1, pCut2);
-            }
-
-            return aRetval;
         }
 
         CutFlagValue findCut(
@@ -1674,32 +1576,6 @@ namespace basegfx
             }
 
             return false;
-        }
-
-        B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadius )
-        {
-            const double fZero(0.0);
-            const double fOne(1.0);
-
-            if(fTools::lessOrEqual(fRadius, fZero))
-            {
-                // no radius, use rectangle
-                return createPolygonFromRect( rRect );
-            }
-            else if(fTools::moreOrEqual(fRadius, fOne))
-            {
-                // full radius, use ellipse
-                const B2DPoint aCenter(rRect.getCenter());
-                const double fRadiusX(rRect.getWidth() / 2.0);
-                const double fRadiusY(rRect.getHeight() / 2.0);
-
-                return createPolygonFromEllipse( aCenter, fRadiusX, fRadiusY );
-            }
-            else
-            {
-                // create rectangle with two radii between ]0.0 .. 1.0[
-                return createPolygonFromRect( rRect, fRadius, fRadius );
-            }
         }
 
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadiusX, double fRadiusY )
@@ -2499,30 +2375,6 @@ namespace basegfx
             return aRetval;
         }
 
-        double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
-        {
-            if(rPointA.equal(rPointB))
-            {
-                rCut = 0.0;
-                const B2DVector aVector(rTestPoint - rPointA);
-                return aVector.getLength();
-            }
-            else
-            {
-                // get the relative cut value on line vector (Vector1) for cut with perpendicular through TestPoint
-                const B2DVector aVector1(rPointB - rPointA);
-                const B2DVector aVector2(rTestPoint - rPointA);
-                const double fDividend((aVector2.getX() * aVector1.getX()) + (aVector2.getY() * aVector1.getY()));
-                const double fDivisor((aVector1.getX() * aVector1.getX()) + (aVector1.getY() * aVector1.getY()));
-
-                rCut = fDividend / fDivisor;
-
-                const B2DPoint aCutPoint(rPointA + rCut * aVector1);
-                const B2DVector aVector(rTestPoint - aCutPoint);
-                return aVector.getLength();
-            }
-        }
-
         double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
         {
             if(rPointA.equal(rPointB))
@@ -2697,21 +2549,6 @@ namespace basegfx
             }
         }
 
-        B2DPolygon rotateAroundPoint(const B2DPolygon& rCandidate, const B2DPoint& rCenter, double fAngle)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-            B2DPolygon aRetval(rCandidate);
-
-            if(nPointCount)
-            {
-                const B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(rCenter, fAngle));
-
-                aRetval.transform(aMatrix);
-            }
-
-            return aRetval;
-        }
-
         B2DPolygon expandToCurve(const B2DPolygon& rCandidate)
         {
             B2DPolygon aRetval(rCandidate);
@@ -2764,18 +2601,6 @@ namespace basegfx
             }
 
             return bRetval;
-        }
-
-        B2DPolygon setContinuity(const B2DPolygon& rCandidate, B2VectorContinuity eContinuity)
-        {
-            B2DPolygon aRetval(rCandidate);
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                setContinuityInPoint(aRetval, a, eContinuity);
-            }
-
-            return aRetval;
         }
 
         bool setContinuityInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex, B2VectorContinuity eContinuity)
@@ -3014,81 +2839,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolygon reSegmentPolygonEdges(const B2DPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount < 2 || nSubEdges < 2 || (!bHandleCurvedEdges && !bHandleStraightEdges))
-            {
-                // nothing to do:
-                // - less than two points -> no edge at all
-                // - less than two nSubEdges -> no resegment necessary
-                // - neither bHandleCurvedEdges nor bHandleStraightEdges -> nothing to do
-                return rCandidate;
-            }
-            else
-            {
-                B2DPolygon aRetval;
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
-                B2DCubicBezier aCurrentEdge;
-
-                // prepare first edge and add start point to target
-                aCurrentEdge.setStartPoint(rCandidate.getB2DPoint(0));
-                aRetval.append(aCurrentEdge.getStartPoint());
-
-                for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                {
-                    // fill edge
-                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                    aCurrentEdge.setControlPointA(rCandidate.getNextControlPoint(a));
-                    aCurrentEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
-                    aCurrentEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
-
-                    if(aCurrentEdge.isBezier())
-                    {
-                        if(bHandleCurvedEdges)
-                        {
-                            for(sal_uInt32 b(nSubEdges); b > 1; b--)
-                            {
-                                const double fSplitPoint(1.0 / b);
-                                B2DCubicBezier aLeftPart;
-
-                                aCurrentEdge.split(fSplitPoint, &aLeftPart, &aCurrentEdge);
-                                aRetval.appendBezierSegment(aLeftPart.getControlPointA(), aLeftPart.getControlPointB(), aLeftPart.getEndPoint());
-                            }
-                        }
-
-                        // copy remaining segment to target
-                        aRetval.appendBezierSegment(aCurrentEdge.getControlPointA(), aCurrentEdge.getControlPointB(), aCurrentEdge.getEndPoint());
-                    }
-                    else
-                    {
-                        if(bHandleStraightEdges)
-                        {
-                            for(sal_uInt32 b(nSubEdges); b > 1; b--)
-                            {
-                                const double fSplitPoint(1.0 / b);
-                                const B2DPoint aSplitPoint(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fSplitPoint));
-
-                                aRetval.append(aSplitPoint);
-                                aCurrentEdge.setStartPoint(aSplitPoint);
-                            }
-                        }
-
-                        // copy remaining segment to target
-                        aRetval.append(aCurrentEdge.getEndPoint());
-                    }
-
-                    // prepare next step
-                    aCurrentEdge.setStartPoint(aCurrentEdge.getEndPoint());
-                }
-
-                // copy closed flag and return
-                aRetval.setClosed(rCandidate.isClosed());
-                return aRetval;
-            }
-        }
-
         B2DPolygon interpolate(const B2DPolygon& rOld1, const B2DPolygon& rOld2, double t)
         {
             OSL_ENSURE(rOld1.count() == rOld2.count(), "B2DPolygon interpolate: Different geometry (!)");
@@ -3119,139 +2869,6 @@ namespace basegfx
                 }
 
                 return aRetval;
-            }
-        }
-
-        bool isPolyPolygonEqualRectangle( const B2DPolyPolygon& rPolyPoly,
-                                          const B2DRange&      rRect )
-        {
-            // exclude some cheap cases first
-            if( rPolyPoly.count() != 1 )
-                return false;
-
-            // fill array with rectangle vertices
-            const B2DPoint aPoints[] =
-              {
-                  B2DPoint(rRect.getMinX(),rRect.getMinY()),
-                  B2DPoint(rRect.getMaxX(),rRect.getMinY()),
-                  B2DPoint(rRect.getMaxX(),rRect.getMaxY()),
-                  B2DPoint(rRect.getMinX(),rRect.getMaxY())
-              };
-
-            const B2DPolygon& rPoly( rPolyPoly.getB2DPolygon(0) );
-            const sal_uInt32 nCount( rPoly.count() );
-            const double epsilon = ::std::numeric_limits<double>::epsilon();
-
-            for(unsigned int j=0; j<4; ++j)
-            {
-                const B2DPoint &p1 = aPoints[j];
-                const B2DPoint &p2 = aPoints[(j+1)%4];
-                bool bPointOnBoundary = false;
-                for( sal_uInt32 i=0; i<nCount; ++i )
-                {
-                    const B2DPoint p(rPoly.getB2DPoint(i));
-
-                    //     1 | x0 y0 1 |
-                    // A = - | x1 y1 1 |
-                    //     2 | x2 y2 1 |
-                    double fDoubleArea = p2.getX()*p.getY() -
-                                         p2.getY()*p.getX() -
-                                         p1.getX()*p.getY() +
-                                         p1.getY()*p.getX() +
-                                         p1.getX()*p2.getY() -
-                                         p1.getY()*p2.getX();
-
-                    if(fDoubleArea < epsilon)
-                    {
-                        bPointOnBoundary=true;
-                        break;
-                    }
-                }
-                if(!(bPointOnBoundary))
-                    return false;
-            }
-
-            return true;
-        }
-
-
-        // create simplified version of the original polygon by
-        // replacing segments with spikes/loops and self intersections
-        // by several trivial sub-segments
-        B2DPolygon createSimplifiedPolygon( const B2DPolygon& rCandidate )
-        {
-            const sal_uInt32 nCount(rCandidate.count());
-
-            if(nCount && rCandidate.areControlPointsUsed())
-            {
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nCount : nCount - 1);
-                B2DPolygon aRetval;
-                B2DCubicBezier aSegment;
-
-                aSegment.setStartPoint(rCandidate.getB2DPoint(0));
-                aRetval.append(aSegment.getStartPoint());
-
-                for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                {
-                    // fill edge
-                    const sal_uInt32 nNextIndex((a + 1) % nCount);
-                    aSegment.setControlPointA(rCandidate.getNextControlPoint(a));
-                    aSegment.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
-                    aSegment.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
-
-                    if(aSegment.isBezier())
-                    {
-                        double fExtremumPos(0.0);
-                        sal_uInt32 nExtremumCounter(4);
-
-                        while(nExtremumCounter-- && aSegment.isBezier() && aSegment.getMinimumExtremumPosition(fExtremumPos))
-                        {
-                            // split off left, now extremum-free part and append
-                            B2DCubicBezier aLeft;
-
-                            aSegment.split(fExtremumPos, &aLeft, &aSegment);
-                            aLeft.testAndSolveTrivialBezier();
-                            aSegment.testAndSolveTrivialBezier();
-
-                            if(aLeft.isBezier())
-                            {
-                                aRetval.appendBezierSegment(aLeft.getControlPointA(), aLeft.getControlPointB(), aLeft.getEndPoint());
-                            }
-                            else
-                            {
-                                aRetval.append(aLeft.getEndPoint());
-                            }
-                        }
-
-                        // append (evtl. reduced) rest of Segment
-                        if(aSegment.isBezier())
-                        {
-                            aRetval.appendBezierSegment(aSegment.getControlPointA(), aSegment.getControlPointB(), aSegment.getEndPoint());
-                        }
-                        else
-                        {
-                            aRetval.append(aSegment.getEndPoint());
-                        }
-                    }
-                    else
-                    {
-                        // simple edge, append end point
-                        aRetval.append(aSegment.getEndPoint());
-                    }
-
-                    // prepare next edge
-                    aSegment.setStartPoint(aSegment.getEndPoint());
-                }
-
-                // copy closed flag and check for double points
-                aRetval.setClosed(rCandidate.isClosed());
-                aRetval.removeDoublePoints();
-
-                return aRetval;
-            }
-            else
-            {
-                return rCandidate;
             }
         }
 
@@ -3546,13 +3163,6 @@ namespace basegfx
             }
 
             return true;
-        }
-
-        bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
         // snap points of horizontal or vertical edges to discrete values

@@ -29,11 +29,9 @@
 $(eval $(call gb_Library_Library,fwe))
 
 $(eval $(call gb_Library_set_include,fwe,\
-    -I$(realpath $(SRCDIR)/framework/source/inc) \
-    -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(WORKDIR)/inc/framework/ \
+    -I$(SRCDIR)/framework/source/inc \
+    -I$(SRCDIR)/framework/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/framework \
 ))
 
 $(eval $(call gb_Library_add_defs,fwe,\

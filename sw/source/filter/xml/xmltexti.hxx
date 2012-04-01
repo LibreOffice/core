@@ -29,7 +29,6 @@
 #define _XMLTEXTI_HXX
 
 #include <xmloff/txtimp.hxx>
-#include <xmloff/functional.hxx>
 
 class XMLRedlineImportHelper;
 class SvXMLImport;

@@ -307,7 +307,7 @@ public:
     //XDefaultProperty
     virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual uno::Sequence<rtl::OUString> getServiceNames();
 };
 
@@ -459,11 +459,10 @@ SwVbaBuiltInDocumentProperty::setLinkSource( const rtl::OUString& /*LinkSource*/
     throw uno::RuntimeException();
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaBuiltInDocumentProperty::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperty") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperty"));
 }
 
 uno::Sequence<rtl::OUString>
@@ -615,11 +614,10 @@ SwVbaBuiltinDocumentProperties::createCollectionObject( const uno::Any& aSource 
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaBuiltinDocumentProperties::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperties") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperties"));
 }
 
 uno::Sequence<rtl::OUString>
@@ -756,11 +754,10 @@ SwVbaCustomDocumentProperties::Add( const ::rtl::OUString& Name, ::sal_Bool Link
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaCustomDocumentProperties::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaCustomDocumentProperties") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCustomDocumentProperties"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

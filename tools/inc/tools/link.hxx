@@ -78,18 +78,21 @@ typedef long (*PSTUB)( void*, void* );
     IMPL_STUB( Class, Method, ArgType ) \
     long Class::Method( ArgType ArgName )
 
-#if defined GCC && defined NO_OPTIMIZE
-#define IMPL_LINK_INLINE_START( Class, Method, ArgType, ArgName ) \
-    IMPL_LINK( Class, Method, ArgType, ArgName )
+#define IMPL_LINK_NOARG( Class, Method ) \
+    IMPL_STUB( Class, Method, void* ) \
+    long Class::Method( SAL_UNUSED_PARAMETER void* )
 
-#define IMPL_LINK_INLINE_END( Class, Method, ArgType, ArgName )
-#else
 #define IMPL_LINK_INLINE_START( Class, Method, ArgType, ArgName ) \
     inline long Class::Method( ArgType ArgName )
 
 #define IMPL_LINK_INLINE_END( Class, Method, ArgType, ArgName ) \
     IMPL_STUB( Class, Method, ArgType )
-#endif
+
+#define IMPL_LINK_NOARG_INLINE_START( Class, Method ) \
+    inline long Class::Method( SAL_UNUSED_PARAMETER void* )
+
+#define IMPL_LINK_NOARG_INLINE_END( Class, Method ) \
+    IMPL_STUB( Class, Method, void* )
 
 #define IMPL_LINK_INLINE( Class, Method, ArgType, ArgName, Body ) \
     long Class::Method( ArgType ArgName ) \

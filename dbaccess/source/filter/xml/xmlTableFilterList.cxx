@@ -32,7 +32,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmltoken.hxx>
 #include "xmlstrings.hrc"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>

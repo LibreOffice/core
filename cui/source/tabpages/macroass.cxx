@@ -131,7 +131,7 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
 {
     String aName( pMacro->GetMacName() );
     String aEntry;
-    if ( ! pMacro->GetLanguage().EqualsAscii("JavaScript") )
+    if ( ! pMacro->GetLanguage().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("JavaScript")) )
     {
         sal_uInt16 nCount = comphelper::string::getTokenCount(aName, '.');
         aEntry = aName.GetToken( nCount-1, '.' );
@@ -329,8 +329,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     // aus der Tabelle entfernen
     sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
-    SvxMacro *pRemoveMacro = pThis->aTbl.Remove( nEvent );
-    delete pRemoveMacro;
+    pThis->aTbl.Erase( nEvent );
 
     String sScriptURI;
     if( bAssEnabled )
@@ -339,13 +338,13 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         if( sScriptURI.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
         {
             pThis->aTbl.Insert(
-                nEvent, new SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_SF ) ) );
+                nEvent, SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_SF ) ) );
         }
         else
         {
             OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
             pThis->aTbl.Insert(
-                nEvent, new SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
+                nEvent, SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
     }
 

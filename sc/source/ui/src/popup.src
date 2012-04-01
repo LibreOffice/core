@@ -76,6 +76,12 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "Delete C~ontents..." ;
         };
+        MenuItem
+        {
+            Identifier = FID_MERGE_ON ;
+            HelpId = CMD_FID_MERGE_ON ;
+            Text [ en-US ] = "~Merge Cells..." ;
+        };
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -126,6 +132,31 @@ Menu RID_POPUP_CELLS
             Identifier = SID_PASTE_SPECIAL ;
             HelpId = CMD_SID_PASTE_SPECIAL ;
             Text [ en-US ] = "P~aste Special..." ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE_ONLY ;
+            HelpId = CMD_SID_PASTE_ONLY ;
+            Text [ en-US ] = "Paste O~nly" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_PASTE_ONLY_TEXT ;
+                        HelpId = CMD_SID_PASTE_ONLY_TEXT ;
+                        Text [ en-US ] = "~Text" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_PASTE_ONLY_FORMULA ;
+                        HelpId = CMD_SID_PASTE_ONLY_FORMULA ;
+                        Text [ en-US ] = "~Formula" ;
+                    };
+                };
+            };
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };

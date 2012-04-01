@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,visioimport,writerperfect/util/visiof
 
 $(eval $(call gb_Library_set_include,visioimport,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_Library_add_api,visioimport,\

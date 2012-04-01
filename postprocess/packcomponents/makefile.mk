@@ -32,11 +32,8 @@ TARGET = packcomponents
 .INCLUDE: settings.mk
 
 my_components = \
-    calc \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
-    component/basctl/util/basctl \
-    component/basic/util/sb \
     component/chart2/source/controller/chartcontroller \
     component/chart2/source/model/chartmodel \
     component/chart2/source/tools/charttools \
@@ -48,12 +45,8 @@ my_components = \
     component/configmgr/source/configmgr \
     component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
-    component/dbaccess/source/ext/macromigration/dbmm \
-    component/dbaccess/source/filter/xml/dbaxml \
-    component/dbaccess/util/dba \
-    component/dbaccess/util/dbu \
-    component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
+    component/embeddedobj/util/embobj \
     component/eventattacher/source/evtatt \
     component/fileaccess/source/fileacc \
     component/filter/source/config/cache/filterconfig1 \
@@ -68,7 +61,6 @@ my_components = \
     component/filter/source/xmlfilterdetect/xmlfd \
     component/filter/source/xsltdialog/xsltdlg \
     component/filter/source/xsltfilter/xsltfilter \
-    component/forms/util/frm \
     component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
@@ -85,25 +77,14 @@ my_components = \
     component/oox/util/oox \
     component/package/source/xstor/xstor \
     component/package/util/package2 \
-    component/reportdesign/util/rpt \
-    component/reportdesign/util/rptui \
-    component/reportdesign/util/rptxml \
     component/sax/source/expatwrap/expwrap \
     component/sax/source/fastparser/fastsax \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
-    component/sc/util/vbaobj \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
     component/sccomp/source/solver/solver \
-    component/scripting/source/basprov/basprov \
-    component/scripting/source/dlgprov/dlgprov \
-    component/scripting/source/protocolhandler/protocolhandler \
-    component/scripting/source/pyprov/mailmerge \
-    component/scripting/source/stringresource/stringresource \
-    component/scripting/source/vbaevents/vbaevents \
-    component/scripting/util/scriptframe \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -123,7 +104,6 @@ my_components = \
     component/sw/util/msword \
     component/sw/util/sw \
     component/sw/util/swd \
-    component/sw/util/vbaswobj \
     component/toolkit/util/tk \
     component/ucb/source/sorter/srtrs1 \
     component/ucb/source/core/ucb1 \
@@ -141,29 +121,38 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/uui/util/uui \
-    component/vbahelper/util/msforms \
-    component/writerfilter/util/writerfilter \
-    component/writerperfect/util/msworksfilter \
-    component/writerperfect/util/visiofilter \
-    component/writerperfect/util/wpft \
-    component/writerperfect/util/wpgfilter \
-    component/writerperfect/util/cdrfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+
+my_components += \
+    calc \
+    component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/util/dba \
+    component/dbaccess/util/dbu \
+    component/dbaccess/util/sdbt \
+    component/forms/util/frm \
+    component/reportdesign/util/rpt \
+    component/reportdesign/util/rptui \
+    component/reportdesign/util/rptxml \
     dbase \
     dbpool2 \
     dbtools \
-    embobj \
     flat \
     localebe1 \
     mysql \
     odbc \
     sdbc2 \
 
+.ENDIF
+
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
+
 my_components += \
     component/desktop/source/deployment/deployment \
     component/desktop/source/deployment/gui/deploymentgui \
@@ -189,16 +178,56 @@ my_components += \
 
 .ENDIF
 
-.IF "$(DISABLE_PYTHON)" != "TRUE"
-my_components += pythonloader
+.IF "$(DISABLE_SCRIPTING)" != "TRUE"
+
+my_components += \
+    component/basctl/util/basctl \
+    component/basic/util/sb \
+    component/sc/util/vbaobj \
+    component/scripting/source/basprov/basprov \
+    component/scripting/source/dlgprov/dlgprov \
+    component/scripting/source/protocolhandler/protocolhandler \
+    component/scripting/source/pyprov/mailmerge \
+    component/scripting/source/stringresource/stringresource \
+    component/scripting/source/vbaevents/vbaevents \
+    component/scripting/util/scriptframe \
+    component/sw/util/vbaswobj \
+    component/vbahelper/util/msforms \
+
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
-my_components += component/desktop/unx/splash/splash
+.IF "$(DISABLE_PYTHON)" != "TRUE"
+
+my_components += \
+    pythonloader \
+
+.ENDIF
+
+.IF "$(OS)" != "IOS"
+
+my_components += \
+    component/writerfilter/util/writerfilter \
+    component/writerperfect/util/msworksfilter \
+    component/writerperfect/util/visiofilter \
+    component/writerperfect/util/wpft \
+    component/writerperfect/util/wpgfilter \
+    component/writerperfect/util/cdrfilter \
+
+.ENDIF
+
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
+
+my_components += \
+    component/desktop/unx/splash/splash \
+
 .ENDIF
 
 .IF "$(DISABLE_ATL)" == ""
-my_components += emboleobj
+.IF "$(OS)" == "WNT"
+my_components += component/embeddedobj/source/msole/emboleobj.windows
+.ELSE
+my_components += component/embeddedobj/source/msole/emboleobj
+.ENDIF
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"
@@ -242,10 +271,6 @@ my_components += component/framework/util/lomenubar
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
-.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
-my_components += \
-    LuceneHelpWrapper
-.ENDIF
 my_components += \
     component/xmerge/source/bridge/XMergeBridge \
     component/filter/source/xsltfilter/XSLTFilter.jar \
@@ -309,8 +334,7 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
-    component/fpicker/util/fop \
-    component/fpicker/util/fps \
+    component/fpicker/source/win32/fps \
     component/vcl/vcl.windows
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
@@ -318,7 +342,12 @@ my_components += \
 .END
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
+.IF "$(GUIBASE)" == "headless"
+my_components += \
+    component/vcl/vcl.headless
+.END
+
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx
@@ -326,7 +355,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
 my_components += \
-    emser \
+    component/embedserv/util/emser \
     component/extensions/source/ole/oleautobridge
 .END
 
@@ -337,22 +366,20 @@ my_components += \
     component/canvas/source/directx/gdipluscanvas
 .END
 
-.IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != "" && "$(USE_DIRECTX5)" != ""
-my_components += component/canvas/source/directx/directx5canvas
-.END
-
+.IF "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
     "$(WITH_MOZILLA)" != "NO"
 my_components += mozab
 .ELSE
 my_components += mozbootstrap
 .END
+.ENDIF
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""
 my_components += component/fpicker/source/unx/kde4/fps_kde4
 .END
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+.IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
 my_components += cmdmail
 .END
 

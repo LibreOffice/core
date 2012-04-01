@@ -92,11 +92,10 @@ SwVbaHeaderFooter::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
     return uno::makeAny( xCol );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaHeaderFooter::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaHeaderFooter") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaHeaderFooter"));
 }
 
 uno::Sequence< rtl::OUString >

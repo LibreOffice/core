@@ -35,7 +35,6 @@
 #include <vector>
 #include <list>
 #include <boost/unordered_map.hpp>
-#include <tools/string.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -226,11 +225,7 @@ namespace
             framebound_map_t m_vFrameBoundsOf;
             const Reference<XEnumerationAccess> m_xEnumAccess;
             void Fill(const filter_t& rFilter);
-            static const OUString our_sAnchorType;
-            static const OUString our_sAnchorFrame;
     };
-    const OUString BoundFrames::our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
-    const OUString BoundFrames::our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
 
     class FieldParamExporter
     {
@@ -341,6 +336,8 @@ void BoundFrames::Fill(const filter_t& rFilter)
     const Reference< XEnumeration > xEnum = m_xEnumAccess->createEnumeration();
     if(!xEnum.is())
         return;
+    const OUString our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
+    const OUString our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
     while(xEnum->hasMoreElements())
     {
         Reference<XPropertySet> xPropSet(xEnum->nextElement(), UNO_QUERY);
@@ -1267,7 +1264,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                              GetExport() );
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
-    OUString aPrefix( String( 'P' ) );
+    OUString aPrefix(static_cast<sal_Unicode>('P'));
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               xParaPropMapper, aPrefix );
 
@@ -1275,7 +1272,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = OUString( GetXMLToken(XML_TEXT) );
-    aPrefix = OUString( String( 'T' ) );
+    aPrefix = OUString(static_cast<sal_Unicode>('T'));
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
                               xTextPropMapper, aPrefix );
 
@@ -1338,7 +1335,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
     PopTextListsHelper();
-    DBG_ASSERT( maTextListsHelperStack.size() == 0,
+    DBG_ASSERT( maTextListsHelperStack.empty(),
                 "misusage of text lists helper stack - it is not empty. Serious defect - please inform OD" );
 }
 
@@ -2064,7 +2061,7 @@ void XMLTextParagraphExport::exportParagraph(
                     }
 
                     {
-                        String sParaIsNumberingRestart
+                        rtl::OUString sParaIsNumberingRestart
                             (RTL_CONSTASCII_USTRINGPARAM
                              ("ParaIsNumberingRestart"));
                         bool bIsRestartNumbering = false;
@@ -2087,7 +2084,7 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_RESTART_NUMBERING,
                                                      XML_TRUE);
 
-                            String sNumberingStartValue
+                            rtl::OUString sNumberingStartValue
                                 (RTL_CONSTASCII_USTRINGPARAM
                                  ("NumberingStartValue"));
 
@@ -2465,7 +2462,8 @@ sal_Bool lcl_txtpara_isBoundAsChar(
 sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,
     sal_Bool bShape,
-    OUString *pMinHeightValue )
+    OUString *pMinHeightValue,
+    OUString *pMinWidthValue)
 {
     sal_Int32 nShapeFeatures = SEF_DEFAULT;
 
@@ -2501,6 +2499,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         sal_Int16 nPage = 0;
         rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
+        SAL_WARN_IF(nPage <= 0, "xmloff",
+                "ERROR: writing invalid anchor-page-number 0");
         ::sax::Converter::convertNumber( sValue, (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
                                   sValue.makeStringAndClear() );
@@ -2569,8 +2569,13 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         }
         GetExport().GetMM100UnitConverter().convertMeasureToXML(sValue, nWidth);
         if( SizeType::FIX != nWidthType )
-            GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_WIDTH,
-                                      sValue.makeStringAndClear() );
+        {
+            assert(pMinWidthValue);
+            if (pMinWidthValue)
+            {
+                *pMinWidthValue = sValue.makeStringAndClear();
+            }
+        }
         else
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                                       sValue.makeStringAndClear() );
@@ -2639,8 +2644,13 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         ::sax::Converter::convertPercent( sValue, nRelHeight );
         if( SizeType::MIN == nSizeType )
-            GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
-                                      sValue.makeStringAndClear() );
+        {
+            assert(pMinHeightValue);
+            if (pMinHeightValue)
+            {
+                *pMinHeightValue = sValue.makeStringAndClear();
+            }
+        }
         else
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_HEIGHT,
                                       sValue.makeStringAndClear() );
@@ -2788,11 +2798,12 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     OUString sAutoStyle( sStyle );
     OUString aMinHeightValue;
+    OUString sMinWidthValue;
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( !sAutoStyle.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                               GetExport().EncodeStyleName( sAutoStyle ) );
-    addTextFrameAttributes( rPropSet, sal_False, &aMinHeightValue );
+    addTextFrameAttributes(rPropSet, false, &aMinHeightValue, &sMinWidthValue);
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               XML_FRAME, sal_False, sal_True );
@@ -2800,6 +2811,12 @@ void XMLTextParagraphExport::_exportTextFrame(
     if( !aMinHeightValue.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
                                   aMinHeightValue );
+
+    if (!sMinWidthValue.isEmpty())
+    {
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_WIDTH,
+                                  sMinWidthValue );
+    }
 
     // draw:chain-next-name
     if( rPropSetInfo->hasPropertyByName( sChainNextName ) )

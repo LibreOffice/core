@@ -54,7 +54,7 @@
 #include <oox/token/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
-#include <oox/xls/excelvbaproject.hxx>
+#include <excelvbaproject.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -659,11 +659,11 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
 
         bool bRet = maCodec.Encode(&aBytes[nPos], nEncBytes, &aBytes[nPos], nEncBytes);
         OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
-        bRet = bRet; // to remove a silly compiler warning.
+        (void) bRet; // to remove a silly compiler warning.
 
         sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
         OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
-        nRet = nRet; // to remove a silly compiler warning.
+        (void) nRet; // to remove a silly compiler warning.
 
         nStrmPos = rStrm.Tell();
         nBlockOffset = GetOffsetInBlock(nStrmPos);
@@ -717,8 +717,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         case NUMBERFORMAT_TEXT:
         {
             rsType = "str";
-            String aResult;
-            rCell.GetString( aResult );
+            String aResult = rCell.GetString();
             rsValue = ToOUString( aResult );
         }
         break;
@@ -733,8 +732,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         default:
         {
             rsType = "inlineStr";
-            String aResult;
-            rCell.GetString( aResult );
+            String aResult = rCell.GetString();
             rsValue = ToOUString( aResult );
         }
         break;
@@ -1184,6 +1182,13 @@ Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XCom
     return (cppu::OWeakObject*) new XclExpXmlStream( rCC );
 }
 
+namespace oox { namespace xls {
+    OUString SAL_CALL ExcelFilter_getImplementationName() throw();
+    Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw();
+    Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
+        const Reference< XComponentContext >& rxContext ) throw( Exception );
+} }
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -1197,6 +1202,11 @@ extern "C"
     {
         XlsxExport_createInstance, XlsxExport_getImplementationName,
         XlsxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    {
+        oox::xls::ExcelFilter_createInstance, oox::xls::ExcelFilter_getImplementationName,
+        oox::xls::ExcelFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }

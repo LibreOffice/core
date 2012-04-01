@@ -115,17 +115,16 @@ void SwDateTimeField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-void SwDateTimeField::SetPar2(const String& rStr)
+void SwDateTimeField::SetPar2(const rtl::OUString& rStr)
 {
-    nOffset = rStr.ToInt32();
+    nOffset = rStr.toInt32();
 }
 
-String SwDateTimeField::GetPar2() const
+rtl::OUString SwDateTimeField::GetPar2() const
 {
     if (nOffset)
-        return String::CreateFromInt32(nOffset);
-    else
-        return aEmptyStr;
+        return rtl::OUString::valueOf(static_cast<sal_Int32>(nOffset));
+    return rtl::OUString();
 }
 
 void SwDateTimeField::SetDateTime(const DateTime& rDT)

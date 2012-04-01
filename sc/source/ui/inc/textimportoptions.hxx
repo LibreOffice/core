@@ -65,7 +65,7 @@ private:
 
     CheckBox        maBtnConvertDate;
 
-    DECL_LINK( OKHdl, OKButton* );
+    DECL_LINK(OKHdl, void *);
 
     DECL_LINK( RadioHdl, RadioButton* );
 };

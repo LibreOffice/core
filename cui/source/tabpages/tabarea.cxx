@@ -221,7 +221,7 @@ short SvxAreaTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxAreaTabDialog, CancelHdlImpl, void *, EMPTYARG)
+IMPL_LINK_NOARG_INLINE_START(SvxAreaTabDialog, CancelHdlImpl)
 {
     SavePalettes();
 

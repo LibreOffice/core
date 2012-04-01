@@ -1,0 +1,32 @@
+Resource Compiler.
+
+This compiler converts .src files and .hrc equivalents into binary
+.res files.  The basic idea is that this provides a map between
+integer identifiers and the resources: string, pixmap (only the
+file-name), and VCL control properties.
+
+In more detail:
+
+Typically we would have a .hrc file with entries like this:
+
+#define SID_STR_FOO    1234
+
+And then a .src file with some entries like this:
+
+String SID_STR_FOO
+{
+    Text [ en-US ] = "Foo !" ;
+};
+
+This is compiled into a binary resource file, we have many of these
+which live in program/resource/ and then tends to get used in the code
+thus:
+
+String aStr( ResId( SID_STR_FOO ) );
+
+It is important to note that any appearance of hierarchical structure
+in the .src files is in fact a mirage. The file is compiled at root
+into a plain map<integer,resource>.
+
+There is some German documentation about it in a subdirectory called
+[git:rsc/doku].  Seems to be very old (January 1992).

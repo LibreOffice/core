@@ -27,8 +27,8 @@
 
 PRJ=.
 
-PRJNAME=visio
-TARGET=visio
+PRJNAME=cdr
+TARGET=cdr
 
 # --- Settings -----------------------------------------------------
 
@@ -41,7 +41,7 @@ TARGET=visio
     @echo "Using system libcdr..."
 .ENDIF
 
-# libcdr depends on the libwpd and libwpg
+# libcdr depends on the libwpd, libwpg and lcms2
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 INCPRE+=$(WPD_CFLAGS)
 .ELSE
@@ -53,12 +53,18 @@ INCPRE+=$(WPG_CFLAGS)
 .ELSE
 INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpg
 .ENDIF
+.IF "$(SYSTEM_LCMS2)" == "YES"
+INCPRE+=$(LCMS2_CFLAGS)
+.ELSE
+INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/lcms2
+.ENDIF
 
-TARFILE_NAME=libcdr-0.0.0
-TARFILE_MD5=cc8eb870d6a324d36575420efd856319
+TARFILE_NAME=libcdr-0.0.5
+TARFILE_MD5=4def42cfe3527ed7c515bea8cc3f23b8
 
 PATCH_FILES=\
-    libcdr-0.0.0.patch
+    $(TARFILE_NAME).patch \
+    $(TARFILE_NAME)-zip.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib

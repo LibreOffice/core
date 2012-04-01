@@ -60,7 +60,6 @@
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
-#include <vcl/virdev.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
@@ -84,6 +83,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "cell.hxx"
+#include "column.hxx"
+#include "postit.hxx"
 #include "global.hxx"
 #include "filter.hxx"
 #include "scmod.hxx"
@@ -104,7 +105,6 @@
 #include "docpool.hxx"      // LoadCompleted
 #include "progress.hxx"
 #include "pntlock.hxx"
-#include "collect.hxx"
 #include "docuno.hxx"
 #include "appoptio.hxx"
 #include "detdata.hxx"
@@ -264,15 +264,11 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
     if ( nStates & HIDDENINFORMATION_NOTES )
     {
         SCTAB nTableCount = aDocument.GetTableCount();
-        SCTAB nTable = 0;
-        sal_Bool bFound(false);
-        while ( nTable < nTableCount && !bFound )
+        bool bFound = false;
+        for (SCTAB nTab = 0; nTab < nTableCount && !bFound; ++nTab)
         {
-            ScCellIterator aCellIter( &aDocument, 0,0, nTable, MAXCOL,MAXROW, nTable );
-            for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bFound; pCell = aCellIter.GetNext() )
-                if (pCell->HasNote())
-                    bFound = sal_True;
-            nTable++;
+            if (!aDocument.GetNotes(nTab)->empty())
+                bFound = true;
         }
 
         if (bFound)
@@ -350,7 +346,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
                                 if( String(aName).Equals(String(aLinkTabName), nIndex, nLinkTabNameLength) &&
-                                    (aName.getStr()[nIndex - 1] == '#') && // before the table name should be the # char
+                                    (aName[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
                                     aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );
@@ -1592,6 +1588,7 @@ sal_Bool ScDocShell::IsInformationLost()
     return SfxObjectShell::IsInformationLost();
 }
 
+namespace {
 
 // Xcl-like column width measured in characters of standard font.
 sal_Int32 lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
@@ -1669,23 +1666,49 @@ void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
     rStream.WriteUnicodeOrByteText( aString );
 }
 
+template<typename StrT, typename SepCharT>
+sal_Int32 getTextSepPos(
+    const StrT& rStr, const ScImportOptions& rAsciiOpt, const SepCharT& rTextSep, const SepCharT& rFieldSep, bool& rNeedQuotes)
+{
+    // #i116636# quotes are needed if text delimiter (quote), field delimiter,
+    // or LF is in the cell text.
+    sal_Int32 nPos = rStr.indexOf(rTextSep);
+    rNeedQuotes = rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
+        (rStr.indexOf(rFieldSep) >= 0) ||
+        (rStr.indexOf(sal_Unicode(_LF)) >= 0);
+    return nPos;
+}
+
+template<typename StrT, typename StrBufT>
+void escapeTextSep(sal_Int32 nPos, const StrT& rStrDelim, StrT& rStr)
+{
+    while (nPos >= 0)
+    {
+        StrBufT aBuf(rStr);
+        aBuf.insert(nPos, rStrDelim);
+        rStr = aBuf.makeStringAndClear();
+        nPos = rStr.indexOf(rStrDelim, nPos+1+rStrDelim.getLength());
+    }
+}
+
+}
 
 void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt )
 {
     sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
     CharSet eCharSet      = rAsciiOpt.eCharSet;
-    sal_Bool bFixedWidth      = rAsciiOpt.bFixedWidth;
-    sal_Bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
+    bool bFixedWidth      = rAsciiOpt.bFixedWidth;
+    bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
 
     CharSet eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
     sal_uInt16 nOldNumberFormatInt = rStream.GetNumberFormatInt();
-    ByteString aStrDelimEncoded;    // only used if not Unicode
-    UniString aStrDelimDecoded;     // only used if context encoding
-    ByteString aDelimEncoded;
-    UniString aDelimDecoded;
-    sal_Bool bContextOrNotAsciiEncoding;
+    rtl::OString aStrDelimEncoded;    // only used if not Unicode
+    rtl::OUString aStrDelimDecoded;     // only used if context encoding
+    rtl::OString aDelimEncoded;
+    rtl::OUString aDelimDecoded;
+    bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rStream.StartWritingUnicodeText();
@@ -1704,8 +1727,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
             {
-                aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
-                aDelimDecoded = String( aDelimEncoded, eCharSet );
+                aStrDelimDecoded = rtl::OStringToOUString(aStrDelimEncoded, eCharSet);
+                aDelimDecoded = rtl::OStringToOUString(aDelimEncoded, eCharSet);
             }
         }
         else
@@ -1727,8 +1750,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     const ScViewOptions& rOpt = (pViewSh)
                                 ? pViewSh->GetViewData()->GetOptions()
                                 : aDocument.GetViewOptions();
-    sal_Bool bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
-    sal_Bool bTabProtect = aDocument.IsTabProtected( nTab );
+    bool bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
+    bool bTabProtect = aDocument.IsTabProtected( nTab );
 
     SCCOL nCol;
     SCROW nRow;
@@ -1743,10 +1766,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     ScBaseCell* pCell;
     while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
     {
-        sal_Bool bProgress = false;     // only upon line change
+        bool bProgress = false;     // only upon line change
         if ( nNextRow < nRow )
         {   // empty rows or/and empty columns up to end of row
-            bProgress = sal_True;
+            bProgress = true;
             for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
             {   // remaining columns of last row
                 if ( bFixedWidth )
@@ -1792,7 +1815,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         }
         if ( nCol == nEndCol )
         {
-            bProgress = sal_True;
+            bProgress = true;
             nNextCol = nStartCol;
             nNextRow = nRow + 1;
         }
@@ -1810,7 +1833,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                       pProtAttr->GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
-        sal_Bool bString;
+        bool bString;
         switch ( eType )
         {
             case CELLTYPE_NOTE:
@@ -1824,12 +1847,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     if ( bShowFormulas )
                     {
                         ((ScFormulaCell*)pCell)->GetFormula( aString );
-                        bString = sal_True;
+                        bString = true;
                     }
                     else if ( ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() ) != 0 )
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
-                        bString = sal_True;
+                        bString = true;
                     }
                     else if ( ((ScFormulaCell*)pCell)->IsValue() )
                     {
@@ -1857,8 +1880,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                             ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
                         }
                         else
-                            ((ScFormulaCell*)pCell)->GetString( aString );
-                        bString = sal_True;
+                            aString = ((ScFormulaCell*)pCell)->GetString();
+                        bString = true;
                     }
                 }
                 break;
@@ -1871,8 +1894,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
                 }
                 else
-                    ((ScStringCell*)pCell)->GetString( aString );
-                bString = sal_True;
+                    aString = ((ScStringCell*)pCell)->GetString();
+                bString = true;
                 break;
             case CELLTYPE_EDIT :
                 {
@@ -1881,7 +1904,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     EditEngine& rEngine = aDocument.GetEditEngine();
                     rEngine.SetText( *pObj);
                     aString = rEngine.GetText();  // including LF
-                    bString = sal_True;
+                    bString = true;
                 }
                 break;
             case CELLTYPE_VALUE :
@@ -1918,15 +1941,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         }
         else
         {
-            String aUniString = aString;//remove that later
-            if (!bString && cStrDelim != 0 && aUniString.Len() > 0)
+            rtl::OUString aUniString = aString;//remove that later
+            if (!bString && cStrDelim != 0 && !aUniString.isEmpty())
             {
-                sal_Unicode c = aUniString.GetChar(0);
+                sal_Unicode c = aUniString[0];
                 bString = (c == cStrDelim || c == ' ' ||
-                        aUniString.GetChar( aUniString.Len()-1) == ' ' ||
-                        aUniString.Search( cStrDelim) != STRING_NOTFOUND);
+                        aUniString[aUniString.getLength()-1] == ' ' ||
+                        aUniString.indexOf(cStrDelim) >= 0);
                 if (!bString && cDelim != 0)
-                    bString = (aUniString.Search( cDelim) != STRING_NOTFOUND);
+                    bString = (aUniString.indexOf(cDelim) >= 0);
             }
             if ( bString )
             {
@@ -1934,17 +1957,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 {
                     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                     {
-                        xub_StrLen nPos = aUniString.Search( cStrDelim );
-                        // #i116636# quotes are needed if text delimiter (quote), field delimiter, or LF is in the cell text
-                        bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
-                                            ( nPos != STRING_NOTFOUND ) ||
-                                            ( aUniString.Search( cDelim ) != STRING_NOTFOUND ) ||
-                                            ( aUniString.Search( sal_Unicode(_LF) ) != STRING_NOTFOUND );
-                        while ( nPos != STRING_NOTFOUND )
-                        {
-                            aUniString.Insert( cStrDelim, nPos );
-                            nPos = aUniString.Search( cStrDelim, nPos+2 );
-                        }
+                        bool bNeedQuotes = false;
+                        sal_Int32 nPos = getTextSepPos(
+                            aUniString, rAsciiOpt, cStrDelim, cDelim, bNeedQuotes);
+
+                        escapeTextSep<rtl::OUString, rtl::OUStringBuffer>(
+                            nPos, rtl::OUString(cStrDelim), aUniString);
+
                         if ( bNeedQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         write_uInt16s_FromOUString(rStream, aUniString);
@@ -1970,21 +1989,18 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         if ( bContextOrNotAsciiEncoding )
                         {
                             // to byte encoding
-                            rtl::OString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
+                            rtl::OString aStrEnc = rtl::OUStringToOString(aUniString, eCharSet);
                             // back to Unicode
-                            UniString aStrDec(rtl::OStringToOUString(aStrEnc, eCharSet));
+                            rtl::OUString aStrDec = rtl::OStringToOUString(aStrEnc, eCharSet);
+
                             // search on re-decoded string
-                            xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
-                            bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
-                                                ( nPos != STRING_NOTFOUND ) ||
-                                                ( aStrDec.Search( aDelimDecoded ) != STRING_NOTFOUND ) ||
-                                                ( aStrDec.Search( sal_Unicode(_LF) ) != STRING_NOTFOUND );
-                            while ( nPos != STRING_NOTFOUND )
-                            {
-                                aStrDec.Insert( aStrDelimDecoded, nPos );
-                                nPos = aStrDec.Search( aStrDelimDecoded,
-                                        nPos+1+aStrDelimDecoded.Len() );
-                            }
+                            bool bNeedQuotes = false;
+                            sal_Int32 nPos = getTextSepPos(
+                                aStrDec, rAsciiOpt, aStrDelimDecoded, aDelimDecoded, bNeedQuotes);
+
+                            escapeTextSep<rtl::OUString, rtl::OUStringBuffer>(
+                                nPos, aStrDelimDecoded, aStrDec);
+
                             // write byte re-encoded
                             if ( bNeedQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
@@ -1994,27 +2010,24 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            ByteString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
+                            rtl::OString aStrEnc = rtl::OUStringToOString(aUniString, eCharSet);
+
                             // search on encoded string
-                            xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
-                            bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
-                                                ( nPos != STRING_NOTFOUND ) ||
-                                                ( aStrEnc.Search( aDelimEncoded ) != STRING_NOTFOUND ) ||
-                                                ( aStrEnc.Search( sal_Char(_LF) ) != STRING_NOTFOUND );
-                            while ( nPos != STRING_NOTFOUND )
-                            {
-                                aStrEnc.Insert( aStrDelimEncoded, nPos );
-                                nPos = aStrEnc.Search( aStrDelimEncoded,
-                                        nPos+1+aStrDelimEncoded.Len() );
-                            }
+                            bool bNeedQuotes = false;
+                            sal_Int32 nPos = getTextSepPos(
+                                aStrEnc, rAsciiOpt, aStrDelimEncoded, aDelimEncoded, bNeedQuotes);
+
+                            escapeTextSep<rtl::OString, rtl::OStringBuffer>(
+                                nPos, aStrDelimEncoded, aStrEnc);
+
                             // write byte encoded
                             if ( bNeedQuotes )
-                                rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                        aStrDelimEncoded.Len() );
-                            rStream.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
+                                rStream.Write(
+                                    aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
+                            rStream.Write(aStrEnc.getStr(), aStrEnc.getLength());
                             if ( bNeedQuotes )
-                                rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                        aStrDelimEncoded.Len() );
+                                rStream.Write(
+                                    aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                         }
                     }
                 }
@@ -2204,10 +2217,10 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
         WaitObject aWait( GetActiveDialogParent() );
 // HACK damit Sba geoffnetes TempFile ueberschreiben kann
         rMed.CloseOutStream();
-        sal_Bool bHasMemo = false;
+        bool bHasMemo = false;
 
-        sal_uLong eError = DBaseExport( rMed.GetPhysicalName(),
-                        ScGlobal::GetCharsetValue(sCharSet), bHasMemo );
+        sal_uLong eError = DBaseExport(
+            rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
         if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {

@@ -72,7 +72,6 @@
 #include "glob.hrc"
 #include "sdmod.hxx"
 #include "sdxfer.hxx"
-#include "FrameView.hxx"
 #include "ViewShellHint.hxx"
 #include "AccessibleSlideSorterView.hxx"
 #include "AccessibleSlideSorterObject.hxx"

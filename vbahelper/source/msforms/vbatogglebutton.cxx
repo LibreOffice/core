@@ -99,11 +99,12 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
 
 sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
 {
+    ScVbaControl::setAutoSize( bAutoSize );
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getCancel() throw (uno::RuntimeException)
@@ -126,11 +127,12 @@ void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno:
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getBackColor() throw (uno::RuntimeException)
 {
-    return 0;
+    return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 /*nBackColor*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
 {
+    ScVbaControl::setBackColor( nBackColor );
 }
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getForeColor() throw (uno::RuntimeException)
@@ -147,11 +149,20 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont() throw 
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+sal_Bool SAL_CALL ScVbaToggleButton::getLocked() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getLocked();
+}
+
+void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setLocked( bLocked );
+}
+
+rtl::OUString
 ScVbaToggleButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -45,7 +45,6 @@
 #include <svx/svxids.hrc>
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
-#include <svx/svdpagv.hxx>
 
 #include <sfx2/viewfrm.hxx>
 

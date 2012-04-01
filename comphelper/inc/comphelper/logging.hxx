@@ -136,38 +136,8 @@ namespace comphelper
         ~EventLogger();
 
     public:
-        /** returns the name of the logger
-        */
-        const ::rtl::OUString&  getName() const;
-
-        /// returns the current log level threshold of the logger
-        sal_Int32   getLogLevel() const;
-
-        /// sets a new log level threshold of the logger
-        void        setLogLevel( const sal_Int32 _nLogLevel ) const;
-
         /// determines whether an event with the given level would be logged
         bool        isLoggable( const sal_Int32 _nLogLevel ) const;
-
-        /** adds the given log handler to the logger's set of handlers.
-
-            Note that normally, you would not use this method: The logger implementations
-            initialize themselves from the configuration, where usually, a default log handler
-            is specified. In this case, the logger will create and use this handler.
-
-            @return
-                <TRUE/> if and only if the addition was successful (as far as this can be detected
-                from outside the <code>XLogger</code>'s implementation.
-        */
-        bool        addLogHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogHandler >& _rxLogHandler );
-
-        /** removes the given log handler from the logger's set of handlers.
-
-            @return
-                <TRUE/> if and only if the addition was successful (as far as this can be detected
-                from outside the <code>XLogger</code>'s implementation.
-        */
-        bool        removeLogHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogHandler >& _rxLogHandler );
 
         //----------------------------------------------------------------
         //- XLogger::log equivalents/wrappers
@@ -569,23 +539,6 @@ namespace comphelper
         ::boost::shared_ptr< ResourceBasedEventLogger_Data >    m_pData;
 
     public:
-        /** creates a resource based event logger
-            @param _rxContext
-                the component context for creating new components
-            @param _rResourceBundleBaseName
-                the base name of the resource bundle to use. Will be used
-                in conjunction with XResourceBundleLoader::loadResource.
-            @param _rLoggerName
-                the name of the logger to work with. If empty, the office-wide
-                default logger will be used.
-
-        */
-        ResourceBasedEventLogger(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rResourceBundleBaseName,
-            const ::rtl::OUString& _rLoggerName = ::rtl::OUString()
-        );
-
         /** creates a resource based event logger
             @param _rxContext
                 the component context for creating new components

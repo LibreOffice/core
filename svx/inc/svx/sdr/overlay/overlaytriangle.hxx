@@ -57,11 +57,9 @@ namespace sdr
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint& rNew);
 
             // change third position
             const basegfx::B2DPoint& getThirdPosition() const { return maThirdPosition; }
-            void setThirdPosition(const basegfx::B2DPoint& rNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr

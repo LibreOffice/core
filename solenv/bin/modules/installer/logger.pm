@@ -27,8 +27,28 @@
 
 package installer::logger;
 
+use strict;
+use warnings;
+
+use base 'Exporter';
+
 use installer::files;
 use installer::globals;
+
+our @EXPORT_OK = qw(
+    include_header_into_logfile
+    include_timestamp_into_logfile
+    log_hashref
+    globallog
+    copy_globalinfo_into_logfile
+    starttime
+    stoptime
+    print_message
+    print_warning
+    print_error
+);
+
+my $starttime;
 
 ####################################################
 # Including header files into the logfile
@@ -40,7 +60,7 @@ sub include_header_into_logfile
 
     my $infoline;
 
-    $infoline = "\n" . get_time_string();
+    $infoline = "\n" . _get_time_string();
     push( @installer::globals::logfileinfo, $infoline);
 
     $infoline = "######################################################\n";
@@ -52,30 +72,6 @@ sub include_header_into_logfile
 
     $infoline = "######################################################\n";
     push( @installer::globals::logfileinfo, $infoline);
-}
-
-####################################################
-# Including header files into the logfile
-####################################################
-
-sub include_header_into_globallogfile
-{
-    my ($message) = @_;
-
-    my $infoline;
-
-    $infoline = "\n" . get_time_string();
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    $infoline = "######################################################\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    $infoline = "$message\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-
-    $infoline = "######################################################\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
 }
 
 ####################################################
@@ -87,7 +83,7 @@ sub include_timestamp_into_logfile
     my ($message) = @_;
 
     my $infoline;
-    my $timestring = get_time_string();
+    my $timestring = _get_time_string();
     $infoline = "$message\t$timestring";
     push( @installer::globals::logfileinfo, $infoline);
 }
@@ -128,16 +124,16 @@ sub globallog
 
     my $infoline;
 
-    $infoline = "\n" . get_time_string();
+    $infoline = "\n" . _get_time_string();
     push( @installer::globals::globallogfileinfo, $infoline);
 
-    $infoline = "################################################################\n";
+    $infoline = "######################################################\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
     $infoline = "$message\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
-    $infoline = "################################################################\n";
+    $infoline = "######################################################\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 
 }
@@ -156,44 +152,19 @@ sub copy_globalinfo_into_logfile
 }
 
 ###############################################################
-# For each product (new language) a new log file is created.
-# Therefore the global logging has to be saved in this file.
-###############################################################
-
-sub debuginfo
-{
-    my  ( $message ) = @_;
-
-    $message = $message . "\n";
-    push(@installer::globals::functioncalls, $message);
-}
-
-###############################################################
-# Saving the debug information.
-###############################################################
-
-sub savedebug
-{
-    my ( $outputdir ) = @_;
-
-    installer::files::save_file($outputdir . $installer::globals::debugfilename, \@installer::globals::functioncalls);
-    print_message( "... writing debug file " . $outputdir . $installer::globals::debugfilename . "\n" );
-}
-
-###############################################################
 # Starting the time
 ###############################################################
 
 sub starttime
 {
-    $installer::globals::starttime = time();
+    $starttime = time();
 }
 
 ###############################################################
 # Convert time string
 ###############################################################
 
-sub convert_timestring
+sub _convert_timestring
 {
     my ($secondstring) = @_;
 
@@ -234,26 +205,13 @@ sub convert_timestring
 # Returning time string for logging
 ###############################################################
 
-sub get_time_string
+sub _get_time_string
 {
     my $currenttime = time();
-    $currenttime = $currenttime - $installer::globals::starttime;
-    $currenttime = convert_timestring($currenttime);
+    $currenttime = $currenttime - $starttime;
+    $currenttime = _convert_timestring($currenttime);
     $currenttime = localtime() . " \(" . $currenttime . "\)\n";
     return $currenttime;
-}
-
-###############################################################
-# Returning the age of a file (in seconds)
-###############################################################
-
-sub get_file_age
-{
-    my ( $filename ) = @_;
-
-    my $filetime = (stat($filename))[9];
-    my $timediff = time() - $filetime;
-    return $timediff;
 }
 
 ###############################################################
@@ -262,31 +220,7 @@ sub get_file_age
 
 sub stoptime
 {
-    my $infoline = get_time_string();
-    print_message( "$infoline" );
-}
-
-###############################################################
-# Set date string, format: yymmdd
-###############################################################
-
-sub set_installation_date
-{
-    my $datestring = "";
-
-    my @timearray = localtime(time);
-
-    my $day = $timearray[3];
-    my $month = $timearray[4] + 1;
-    my $year = $timearray[5] - 100;
-
-    if ( $year < 10 ) { $year = "0" . $year; }
-    if ( $month < 10 ) { $month = "0" . $month; }
-    if ( $day < 10 ) { $day = "0" . $day; }
-
-    $datestring = $year . $month . $day;
-
-    return $datestring;
+    print_message( _get_time_string() );
 }
 
 ###############################################################
@@ -299,14 +233,6 @@ sub print_message
     chomp $message;
     my $force = shift || 0;
     print "$message\n" if ( $force || ! $installer::globals::quiet );
-    return;
-}
-
-sub print_message_without_newline
-{
-    my $message = shift;
-    chomp $message;
-    print "$message" if ( ! $installer::globals::quiet );
     return;
 }
 

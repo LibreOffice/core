@@ -60,12 +60,6 @@ namespace framework{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// declarations
-
-const ::rtl::OUString WindowCommandDispatch::COMMAND_PREFERENCES(RTL_CONSTASCII_USTRINGPARAM(".uno:OptionsTreeDialog"));
-const ::rtl::OUString WindowCommandDispatch::COMMAND_ABOUTBOX(RTL_CONSTASCII_USTRINGPARAM(".uno:About"));
-
 //-----------------------------------------------
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
@@ -152,16 +146,16 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const int nCommand = pData->GetDialogId();
-          ::rtl::OUString sCommand;
+    ::rtl::OUString sCommand;
 
     switch (nCommand)
     {
         case SHOWDIALOG_ID_PREFERENCES :
-                sCommand = WindowCommandDispatch::COMMAND_PREFERENCES;
+                sCommand = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:OptionsTreeDialog"));
                 break;
 
         case SHOWDIALOG_ID_ABOUT :
-                sCommand = WindowCommandDispatch::COMMAND_ABOUTBOX;
+                sCommand = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:About"));
                 break;
 
         default :

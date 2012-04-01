@@ -54,8 +54,8 @@ private:
     void    ExecuteEntries();
     void    AdjustEntries(sal_uLong nDiff);
     void    StartTimer(sal_uLong nNow);
-    DECL_LINK( TimerHdl, Timer* );
-    DECL_LINK( InitHdl, Timer* );
+    DECL_LINK( TimerHdl, void* );
+    DECL_LINK( InitHdl, void* );
 
 public:
             ScAutoStyleList(ScDocShell* pShell);

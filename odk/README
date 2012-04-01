@@ -1,0 +1,3 @@
+Office development kit - implements the first step on the way to the LibreOffice SDK tarball.
+
+Part of the SDK; to build you need to add --enable-odk.

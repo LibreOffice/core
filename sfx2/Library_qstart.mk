@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,qstart_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,qstart_gtk,\

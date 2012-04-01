@@ -166,12 +166,10 @@ ScVbaStyle::getMergeCells(  ) throw (script::BasicErrorException, uno::RuntimeEx
     return uno::Any();
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaStyle::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaStyle") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaStyle"));
 }
 
 uno::Sequence< rtl::OUString >

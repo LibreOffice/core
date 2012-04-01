@@ -423,6 +423,7 @@ public:
     }
 
     void            CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp );
+    void            CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp );
 
     void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 

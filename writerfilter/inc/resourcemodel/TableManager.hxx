@@ -101,6 +101,9 @@ public:
         @param rT    end handle of cell
     */
     virtual void endCell(const T & rT) = 0;
+
+protected:
+    ~TableDataHandler() {}
 };
 
 template <typename T, typename PropertiesPointer>

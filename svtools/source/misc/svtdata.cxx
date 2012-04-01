@@ -49,7 +49,7 @@ ResMgr * ImpSvtData::GetResMgr(const ::com::sun::star::lang::Locale aLocale)
 {
     if (!pResMgr)
     {
-        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svt), aLocale );
+        pResMgr = ResMgr::CreateResMgr("svt", aLocale );
     }
     return pResMgr;
 }
@@ -68,9 +68,6 @@ ImpSvtData & ImpSvtData::GetSvtData()
         *pAppData= new ImpSvtData;
     return *static_cast<ImpSvtData *>(*pAppData);
 }
-
-SvtResId::SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale):
-        ResId(nId, *ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
 
 SvtResId::SvtResId(sal_uInt16 nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
 

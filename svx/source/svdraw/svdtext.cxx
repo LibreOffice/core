@@ -169,7 +169,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
             if (bSetHgtItem)
             {
-                // Und nun noch das Rahmenattribut korregieren
+                // Now correct the frame attribute
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
                 SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
             }

@@ -42,8 +42,10 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -59,6 +61,7 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
 namespace oox {
@@ -111,7 +114,8 @@ Rectangle lclGetAbsRect( const Rectangle& rRelRect, const Rectangle& rShapeRect,
 
 // ============================================================================
 
-ShapeTypeModel::ShapeTypeModel()
+ShapeTypeModel::ShapeTypeModel():
+    mbAutoHeight( sal_False )
 {
 }
 
@@ -363,8 +367,29 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, rShapeRect );
+    Rectangle aShapeRect(rShapeRect);
+    if (!maTypeModel.maFlip.isEmpty())
+    {
+        if (maTypeModel.maFlip.equalsAscii("x"))
+        {
+            aShapeRect.X += aShapeRect.Width;
+            aShapeRect.Width *= -1;
+        }
+        else if (maTypeModel.maFlip.equalsAscii("y"))
+        {
+            aShapeRect.Y += aShapeRect.Height;
+            aShapeRect.Height *= -1;
+        }
+    }
+
+    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
     convertShapeProperties( xShape );
+
+    if ( maService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+    {
+        PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
+        PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+    }
 
     // Import Legacy Fragments (if any)
     if( xShape.is() && !maShapeModel.maLegacyDiagramPath.isEmpty() )
@@ -373,6 +398,16 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         if( xInStrm.is() )
             PropertySet( xShape ).setProperty( PROP_LegacyFragment, xInStrm );
     }
+
+    if (xShape.is() && !maTypeModel.maRotation.isEmpty())
+    {
+        PropertySet aPropertySet(xShape);
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+        // If rotation is used, simple setPosition() is not enough.
+        aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
+        aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
+    }
+
     return xShape;
 }
 
@@ -413,6 +448,26 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
         aPropSet.setProperty( PROP_PolyPolygon, aPointSeq );
     }
     return xShape;
+}
+
+LineShape::LineShape(Drawing& rDrawing)
+    : SimpleShape(rDrawing, "com.sun.star.drawing.LineShape")
+{
+}
+
+Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+{
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+    Rectangle aShapeRect(rShapeRect);
+    sal_Int32 nIndex = 0;
+
+    aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
+    aShapeRect.Y = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
+    nIndex = 0;
+    aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.X;
+    aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.Y;
+
+    return SimpleShape::implConvertAndInsert(rxShapes, aShapeRect);
 }
 
 // ============================================================================
@@ -524,10 +579,20 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         if( xShape.is() )
         {
             OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
+            PropertySet aPropSet( xShape );
             if( !aGraphicUrl.isEmpty() )
             {
-                PropertySet aPropSet( xShape );
                 aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+            }
+            // If the shape has an absolute position, set the properties accordingly.
+            if (maTypeModel.maPosition.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("absolute")))
+            {
+                aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
+                aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
+            }
+            if (maTypeModel.maPositionVerticalRelative.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("page")))
+            {
+                aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
             }
         }
         return xShape;

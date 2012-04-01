@@ -74,6 +74,9 @@ class SwAccTableSelHander_Impl
 {
 public:
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) = 0;
+
+protected:
+    ~SwAccTableSelHander_Impl() {}
 };
 
 
@@ -506,6 +509,8 @@ class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
 public:
 
     inline SwAccSingleTableSelHander_Impl();
+
+    virtual ~SwAccSingleTableSelHander_Impl() {}
 
     inline sal_Bool IsSelected() const { return bSelected; }
 

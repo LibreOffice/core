@@ -53,6 +53,7 @@
 #include "globstr.hrc"
 #include "rangenam.hxx"
 #include "dbdata.hxx"
+#include "typedstrdata.hxx"
 
 #include <math.h>
 #include <memory>
@@ -211,7 +212,7 @@ sal_Bool ScValidationData::DoScript( const ScAddress& rPos, const String& rInput
         if ( bIsValue )
             nValue  = pCell->GetValue();
         else
-            pCell->GetString( aValStr );
+            aValStr = pCell->GetString();
     }
     if ( bIsValue )
         aParams[0] = ::com::sun::star::uno::makeAny( nValue );
@@ -291,6 +292,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
     //  ist das Sbx-Objekt evtl. nicht angelegt (?)
 //  pDocSh->GetSbxObject();
 
+#ifndef DISABLE_SCRIPTING
     //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
 
     //  Funktion ueber den einfachen Namen suchen,
@@ -333,7 +335,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             if ( bIsValue )
                 nValue  = pCell->GetValue();
             else
-                pCell->GetString( aValStr );
+                aValStr = pCell->GetString();
         }
         if ( bIsValue )
             refPar->Get(1)->PutDouble( nValue );
@@ -366,7 +368,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             bRet = sal_True;
         bDone = sal_True;
     }
-
+#endif
     if ( !bDone && !pCell )         // Makro nicht gefunden (nur bei Eingabe)
     {
         //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
@@ -477,11 +479,11 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
             nVal = ((ScValueCell*)pCell)->GetValue();
             break;
         case CELLTYPE_STRING:
-            ((ScStringCell*)pCell)->GetString( aString );
+            aString = ((ScStringCell*)pCell)->GetString();
             bIsVal = false;
             break;
         case CELLTYPE_EDIT:
-            ((ScEditCell*)pCell)->GetString( aString );
+            aString = ((ScEditCell*)pCell)->GetString();
             bIsVal = false;
             break;
         case CELLTYPE_FORMULA:
@@ -491,7 +493,7 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
                 if ( bIsVal )
                     nVal  = pFCell->GetValue();
                 else
-                    pFCell->GetString( aString );
+                    aString = pFCell->GetString();
             }
             break;
         default:                        // Notizen, Broadcaster
@@ -600,13 +602,6 @@ sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
     return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
 }
 
-/** Inserts the passed string object. Always takes ownership. pData is invalid after this call! */
-void lclInsertStringToCollection( TypedScStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
-{
-    if( !(bSorted ? rStrColl.Insert( pData ) : rStrColl.AtInsert( rStrColl.GetCount(), pData )) )
-        delete pData;
-}
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -616,11 +611,9 @@ bool ScValidationData::HasSelectionList() const
     return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
 }
 
-bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
-                                                ScBaseCell* pCell,
-                                                const ScAddress& rPos,
-                                                const ScTokenArray& rTokArr,
-                                                int& rMatch ) const
+bool ScValidationData::GetSelectionFromFormula(
+    std::vector<ScTypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+    const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
 
@@ -662,8 +655,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             xMatRef->PutDouble( aValidationSrc.GetValue(), 0);
         else
         {
-            String aStr;
-            aValidationSrc.GetString( aStr);
+            String aStr = aValidationSrc.GetString();
             xMatRef->PutString( aStr, 0);
         }
 
@@ -675,7 +667,6 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
 
-    bool    bSortList = (mnListType == ValidListType::SORTEDASCENDING);
     SCSIZE  nCol, nRow, nCols, nRows, n = 0;
     pValues->GetDimensions( nCols, nRows );
 
@@ -724,7 +715,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
         for( nCol = 0; nCol < nCols ; nCol++ )
         {
             ScTokenArray         aCondTokArr;
-            TypedStrData*        pEntry = NULL;
+            ScTypedStrData*        pEntry = NULL;
             String               aValStr;
             ScMatrixValue nMatVal = pValues->Get( nCol, nRow);
 
@@ -734,7 +725,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                 aValStr = nMatVal.GetString();
 
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, 0.0, SC_STRTYPE_STANDARD);
+                    pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
 
                 if( pCell && rMatch < 0 )
                     aCondTokArr.AddString( aValStr );
@@ -769,7 +760,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                     aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, nMatVal.fVal, SC_STRTYPE_VALUE);
+                    pEntry = new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value);
             }
 
             if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )
@@ -782,7 +773,8 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
 
             if( NULL != pEntry )
             {
-                lclInsertStringToCollection( *pStrings, pEntry, bSortList );
+                pStrings->push_back(*pEntry);
+                delete pEntry;
                 n++;
             }
         }
@@ -793,27 +785,25 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     return bOk || NULL == pCell;
 }
 
-bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const ScAddress& rPos ) const
+bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, const ScAddress& rPos) const
 {
     bool bOk = false;
 
     if( HasSelectionList() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<ScTokenArray> pTokArr( CreateTokenArry(0) );
 
         // *** try if formula is a string list ***
 
-        bool bSortList = (mnListType == ValidListType::SORTEDASCENDING);
         sal_uInt32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
         ScStringTokenIterator aIt( *pTokArr );
         for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
         {
             double fValue;
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
-            TypedStrData* pData = new TypedStrData( *pString, fValue, bIsValue ? SC_STRTYPE_VALUE : SC_STRTYPE_STANDARD );
-            lclInsertStringToCollection( rStrColl, pData, bSortList );
+            rStrColl.push_back(
+                ScTypedStrData(
+                    *pString, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard));
         }
         bOk = aIt.Ok();
 

@@ -40,8 +40,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/DESKTOP//)"
+
 ALL:
-    @echo Nothing done for non-desktop OSes
+# nothing
+
 .ENDIF
 
 #

@@ -105,16 +105,16 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
 {
     static SfxItemPropertyMapEntry aDataPilotDescriptorBaseMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_GRANDTOTAL_NAME),0,&getCppuType((rtl::OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNO_IGNEMPROWS),   0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_RPTEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_ROWGRAND),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SERVICEARG),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SHOWFILT),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SOURCESERV),   0,  &getCppuType((rtl::OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_GRANDTOTAL_NAME),0,&getCppuType((rtl::OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_IGNORE_EMPTYROWS),   0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SERVICEARG),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SHOWFILTER),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SOURCESERVICE),   0,  &getCppuType((rtl::OUString*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aDataPilotDescriptorBaseMap_Impl;
@@ -246,12 +246,12 @@ sal_uInt16 ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
 
 void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const ScDPNumGroupInfo& rGroupInfo )
 {
-    rInfo.HasDateValues = rGroupInfo.DateValues;
-    rInfo.HasAutoStart  = rGroupInfo.AutoStart;
-    rInfo.Start         = rGroupInfo.Start;
-    rInfo.HasAutoEnd    = rGroupInfo.AutoEnd;
-    rInfo.End           = rGroupInfo.End;
-    rInfo.Step          = rGroupInfo.Step;
+    rInfo.HasDateValues = rGroupInfo.mbDateValues;
+    rInfo.HasAutoStart  = rGroupInfo.mbAutoStart;
+    rInfo.Start         = rGroupInfo.mfStart;
+    rInfo.HasAutoEnd    = rGroupInfo.mbAutoEnd;
+    rInfo.End           = rGroupInfo.mfEnd;
+    rInfo.Step          = rGroupInfo.mfStep;
 }
 
 //------------------------------------------------------------------------
@@ -383,7 +383,7 @@ bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
 {
     try
     {
-        Any aAny = xDimProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ORIGINAL ) ) );
+        Any aAny = xDimProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_ORIGINAL ) ) );
         Reference< XNamed > xOriginal( aAny, UNO_QUERY );
         return xOriginal.is();
     }
@@ -402,7 +402,7 @@ OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
     {
         try
         {
-            Any aAny = xDimProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ORIGINAL)));
+            Any aAny = xDimProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)));
             aAny >>= xOriginal;
         }
         catch( Exception& )
@@ -792,37 +792,37 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             ScDPSaveData aNewData( *pOldData );
 
             String aNameString = aPropertyName;
-            if ( aNameString.EqualsAscii( SC_UNO_COLGRAND ) )
+            if ( aNameString.EqualsAscii( SC_UNO_DP_COLGRAND ) )
             {
                 aNewData.SetColumnGrand(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_IGNEMPROWS ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_IGNORE_EMPTYROWS ) )
             {
                 aNewData.SetIgnoreEmptyRows(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_RPTEMPTY ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_REPEATEMPTY ) )
             {
                 aNewData.SetRepeatIfEmpty(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_ROWGRAND ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_ROWGRAND ) )
             {
                 aNewData.SetRowGrand(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SHOWFILT ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SHOWFILTER ) )
             {
                 aNewData.SetFilterButton(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_DRILLDOWN ) )
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_GRANDTOTAL_NAME ) )
             {
                 rtl::OUString aStrVal;
                 if ( aValue >>= aStrVal )
                     aNewData.SetGrandTotalName(aStrVal);
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_IMPORTDESC ) )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
@@ -854,7 +854,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     pDPObject->SetImportDesc( aImportDesc );
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SOURCESERV ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SOURCESERVICE ) )
             {
                 rtl::OUString aStrVal;
                 if ( aValue >>= aStrVal )
@@ -871,7 +871,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     pDPObject->SetServiceData( aServiceDesc );
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SERVICEARG ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SERVICEARG ) )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
@@ -890,22 +890,22 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                         const beans::PropertyValue& rProp = aArgSeq[nArgPos];
                         String aPropName(rProp.Name);
 
-                        if (aPropName.EqualsAscii( SC_UNO_SOURCENAME ))
+                        if (aPropName.EqualsAscii( SC_UNO_DP_SOURCENAME ))
                         {
                             if ( rProp.Value >>= aStrVal )
                                 aServiceDesc.aParSource = aStrVal;
                         }
-                        else if (aPropName.EqualsAscii( SC_UNO_OBJECTNAME ))
+                        else if (aPropName.EqualsAscii( SC_UNO_DP_OBJECTNAME ))
                         {
                             if ( rProp.Value >>= aStrVal )
                                 aServiceDesc.aParName = aStrVal;
                         }
-                        else if (aPropName.EqualsAscii( SC_UNO_USERNAME ))
+                        else if (aPropName.EqualsAscii( SC_UNO_DP_USERNAME ))
                         {
                             if ( rProp.Value >>= aStrVal )
                                 aServiceDesc.aParUser = aStrVal;
                         }
-                        else if (aPropName.EqualsAscii( SC_UNO_PASSWORD ))
+                        else if (aPropName.EqualsAscii( SC_UNO_DP_PASSWORD ))
                         {
                             if ( rProp.Value >>= aStrVal )
                                 aServiceDesc.aParPass = aStrVal;
@@ -941,37 +941,37 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             ScDPSaveData aNewData( *pOldData );
 
             String aNameString = aPropertyName;
-            if ( aNameString.EqualsAscii( SC_UNO_COLGRAND ) )
+            if ( aNameString.EqualsAscii( SC_UNO_DP_COLGRAND ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetColumnGrand() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_IGNEMPROWS ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_IGNORE_EMPTYROWS ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetIgnoreEmptyRows() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_RPTEMPTY ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_REPEATEMPTY ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetRepeatIfEmpty() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_ROWGRAND ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_ROWGRAND ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetRowGrand() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SHOWFILT ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SHOWFILTER ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetFilterButton() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_DRILLDOWN ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_GRANDTOTAL_NAME ) )
             {
                 const rtl::OUString* pGrandTotalName = aNewData.GetGrandTotalName();
                 if (pGrandTotalName)
                     aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_IMPORTDESC ) )
             {
                 const ScImportSourceDesc* pImportDesc = pDPObject->GetImportSourceDesc();
                 if ( pImportDesc )
@@ -996,7 +996,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aRet <<= aEmpty;
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SOURCESERV ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SOURCESERVICE ) )
             {
                 rtl::OUString aServiceName;
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
@@ -1004,20 +1004,20 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aServiceName = pServiceDesc->aServiceName;
                 aRet <<= aServiceName;      // empty string if no ServiceDesc set
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_SERVICEARG ) )
+            else if ( aNameString.EqualsAscii( SC_UNO_DP_SERVICEARG ) )
             {
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
                 if (pServiceDesc)
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SOURCENAME ));
+                    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SOURCENAME ));
                     pArray[0].Value <<= pServiceDesc->aParSource;
-                    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OBJECTNAME ));
+                    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_OBJECTNAME ));
                     pArray[1].Value <<= pServiceDesc->aParName;
-                    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_USERNAME ));
+                    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USERNAME ));
                     pArray[2].Value <<= pServiceDesc->aParUser;
-                    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PASSWORD ));
+                    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_PASSWORD ));
                     pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
@@ -1193,7 +1193,7 @@ void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
     if ( pDPObj && pDocSh )
     {
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DataPilotUpdate( pDPObj, pDPObject, sal_True, sal_True );
+        aFunc.DataPilotUpdate( pDPObj, pDPObject, true, true );
     }
 }
 
@@ -1276,14 +1276,7 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
     if (pDPObj)
     {
         ScDBDocFunc aFunc(*GetDocShell());
-        std::set<ScDPObject*> aRefs;
-        GetDocShell()->GetDocument()->GetDPCollection()->ReloadCache(pDPObj, aRefs);
-        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-        for (; it != itEnd; ++it)
-        {
-            ScDPObject* pObj = *it;
-            aFunc.DataPilotUpdate(pObj, pObj, true, true);
-        }
+        aFunc.RefreshPivotTables(pDPObj, true);
     }
 }
 
@@ -1572,6 +1565,11 @@ Reference< XNameAccess > ScDataPilotChildObjBase::GetMembers() const
     return xMembersNA;
 }
 
+ScDocShell* ScDataPilotChildObjBase::GetDocShell() const
+{
+    return mrParent.GetDocShell();
+}
+
 // ============================================================================
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj( ScDataPilotDescriptorBase& rParent ) :
@@ -1606,7 +1604,7 @@ sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, cons
         for (sal_Int32 i = 0; i < nIntCount; ++i)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ORIENTAT))) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION))) == rOrient))
                 ++nRet;
         }
     }
@@ -1646,7 +1644,7 @@ sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
         while (i < nIntCount && !bOk)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ORIENTAT))) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION))) == rOrient))
             {
                 if (nPos == nIndex)
                 {
@@ -1688,7 +1686,7 @@ sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
             OUString sOriginalName( lcl_GetOriginalName( xDimName ) );
             rFieldId.maFieldName = sOriginalName;
             rFieldId.mbDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDim,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ISDATALA)) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
 
             sal_Int32 nRepeat = 0;
             if ( rOrient.hasValue() && lcl_IsDuplicated( xDim ) )
@@ -2429,7 +2427,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                             ScFieldGroup aGroup;
                             aGroup.maName = pGroup->GetGroupName();
                             for( sal_Int32 nMemIdx = 0, nMemCount = pGroup->GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
-                                if( const String* pMem = pGroup->GetElementByIndex( nMemIdx ) )
+                                if (const rtl::OUString* pMem = pGroup->GetElementByIndex(nMemIdx))
                                     aGroup.maMembers.push_back( *pMem );
                             aGroups.push_back( aGroup );
                         }
@@ -2464,13 +2462,13 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
         if( pInfo && lclCheckMinMaxStep( *pInfo ) )
         {
             ScDPNumGroupInfo aInfo;
-            aInfo.Enable = sal_True;
-            aInfo.DateValues = pInfo->HasDateValues;
-            aInfo.AutoStart = pInfo->HasAutoStart;
-            aInfo.AutoEnd = pInfo->HasAutoEnd;
-            aInfo.Start = pInfo->Start;
-            aInfo.End = pInfo->End;
-            aInfo.Step = pInfo->Step;
+            aInfo.mbEnable = sal_True;
+            aInfo.mbDateValues = pInfo->HasDateValues;
+            aInfo.mbAutoStart = pInfo->HasAutoStart;
+            aInfo.mbAutoEnd = pInfo->HasAutoEnd;
+            aInfo.mfStart = pInfo->Start;
+            aInfo.mfEnd = pInfo->End;
+            aInfo.mfStep = pInfo->Step;
             Reference< XNamed > xNamed( pInfo->SourceField, UNO_QUERY );
             if( xNamed.is() )
             {
@@ -2576,13 +2574,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        String aDimName = pDim->GetName();
+        rtl::OUString aDimName = pDim->GetName();
 
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
         ScDPDimensionSaveData* pDimData = aSaveData.GetDimensionData();     // created if not there
 
         // find original base
-        String aBaseDimName( aDimName );
+        rtl::OUString aBaseDimName( aDimName );
         const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
         if ( pBaseGroupDim )
         {
@@ -2602,7 +2600,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         {
             for (nEntry=0; nEntry<nEntryCount; nEntry++)
             {
-                String aEntryName(rItems[nEntry]);
+                const rtl::OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
                 {
                     // for each selected (intermediate) group, remove all its items
@@ -2622,9 +2620,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if ( !pGroupDimension )
         {
             // create a new group dimension
-            String aGroupDimName = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
-            pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
-            sNewDim = aGroupDimName;
+            sNewDim = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
+            pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, sNewDim );
 
             pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
 
@@ -2642,8 +2639,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 {
                     const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                    StrData aStrData( pBaseGroup->GetGroupName() );
-                    if ( !HasString(rItems, aStrData.GetString()) )    //! ignore case?
+                    if (!HasString(rItems, pBaseGroup->GetGroupName()))    //! ignore case?
                     {
                         // add an additional group for each item that is not in the selection
                         ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
@@ -2653,10 +2649,10 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 }
             }
         }
-        String aGroupDimName = pGroupDimension->GetGroupDimName();
+        rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
         //! localized prefix string
-        String aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+        rtl::OUString aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
         ScDPSaveGroupItem aGroup( aGroupName );
         Reference< XNameAccess > xMembers = GetMembers();
         if (!xMembers.is())
@@ -2710,7 +2706,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         // apply changes
         pDPObj->SetSaveData( aSaveData );
-        SetDPObject( pDPObj );
+        ScDBDocFunc(*GetDocShell()).RefreshPivotTableGroups(pDPObj);
     }
 
     // if new grouping field has been created (on first group), return it
@@ -2747,13 +2743,13 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         ScDPNumGroupInfo aInfo;
-        aInfo.Enable = sal_True;
-        aInfo.DateValues = (rInfo.GroupBy == DAYS) && (rInfo.Step >= 1.0);
-        aInfo.AutoStart = rInfo.HasAutoStart;
-        aInfo.AutoEnd = rInfo.HasAutoEnd;
-        aInfo.Start = rInfo.Start;
-        aInfo.End = rInfo.End;
-        aInfo.Step = static_cast< sal_Int32 >( rInfo.Step );
+        aInfo.mbEnable = true;
+        aInfo.mbDateValues = (rInfo.GroupBy == DAYS) && (rInfo.Step >= 1.0);
+        aInfo.mbAutoStart = rInfo.HasAutoStart;
+        aInfo.mbAutoEnd = rInfo.HasAutoEnd;
+        aInfo.mfStart = rInfo.Start;
+        aInfo.mfEnd = rInfo.End;
+        aInfo.mfStep = static_cast< sal_Int32 >( rInfo.Step );
 
         // create a local copy of the entire save data (will be written back below)
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
@@ -2761,21 +2757,21 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         ScDPDimensionSaveData& rDimData = *aSaveData.GetDimensionData();
 
         // find source dimension name
-        const String& rDimName = pDim->GetName();
+        const rtl::OUString& rDimName = pDim->GetName();
         const ScDPSaveGroupDimension* pGroupDim = rDimData.GetNamedGroupDim( rDimName );
-        String aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
+        rtl::OUString aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
 
         // find a group dimension for the base field, or get numeric grouping
         pGroupDim = rDimData.GetFirstNamedGroupDim( aSrcDimName );
         const ScDPSaveNumGroupDimension* pNumGroupDim = rDimData.GetNumGroupDim( aSrcDimName );
 
         // do not group by dates, if named groups or numeric grouping is present
-        bool bHasNamedGrouping = pGroupDim && !pGroupDim->GetDateInfo().Enable;
-        bool bHasNumGrouping = pNumGroupDim && pNumGroupDim->GetInfo().Enable && !pNumGroupDim->GetInfo().DateValues && !pNumGroupDim->GetDateInfo().Enable;
+        bool bHasNamedGrouping = pGroupDim && !pGroupDim->GetDateInfo().mbEnable;
+        bool bHasNumGrouping = pNumGroupDim && pNumGroupDim->GetInfo().mbEnable && !pNumGroupDim->GetInfo().mbDateValues && !pNumGroupDim->GetDateInfo().mbEnable;
         if( bHasNamedGrouping || bHasNumGrouping )
             throw IllegalArgumentException();
 
-        if( aInfo.DateValues )  // create day ranges grouping
+        if( aInfo.mbDateValues )  // create day ranges grouping
         {
             // first remove all named group dimensions
             while( pGroupDim )
@@ -3506,7 +3502,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet = xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHOWDETA ) ) );
+                            aRet = xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SHOWDETAILS ) ) );
                         else
                             aRet <<= true;
                     }
@@ -3521,7 +3517,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ISVISIBL ) ) ) );
+                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_ISVISIBLE ) ) ) );
                         else
                             aRet <<= false;
                     }

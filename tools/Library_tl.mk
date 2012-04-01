@@ -29,11 +29,11 @@
 $(eval $(call gb_Library_Library,tl))
 
 $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
-$(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
+
+$(eval $(call gb_Library_add_custom_headers,tl,tools/reversemap))
 
 $(eval $(call gb_Library_set_include,tl,\
-    -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
+    -I$(SRCDIR)/tools/inc \
     $$(INCLUDE) \
 ))
 
@@ -106,7 +106,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/stream/strmsys \
     tools/source/stream/vcompat \
     tools/source/string/tenccvt \
-    tools/source/string/tstring \
     tools/source/string/tustring \
     tools/source/string/reversemap \
     tools/source/zcodec/zcodec \
@@ -123,7 +122,7 @@ $(eval $(call gb_Library_use_external,tl,zlib))
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\
-    -I$(realpath $(SRCDIR)/tools/win/inc) \
+    -I$(SRCDIR)/tools/win/inc \
     $$(INCLUDE) \
 ))
 
@@ -140,6 +139,4 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 
 endif
 
-# no -DTOOLS_DLLIMPLEMENTATION on toolsdll
-# -DEXCEPTIONS_OFF -fno-exceptions on datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring
 # vim: set noet sw=4 ts=4:

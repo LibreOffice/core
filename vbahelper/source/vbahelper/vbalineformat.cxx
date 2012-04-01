@@ -45,12 +45,6 @@ ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& 
 }
 
 sal_Int32
-ScVbaLineFormat::calculateArrowheadSize() const
-{
-    return 0;
-}
-
-sal_Int32
 ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( rtl::OUString sLineName )
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
@@ -433,12 +427,10 @@ ScVbaLineFormat::ForeColor() throw (uno::RuntimeException)
     return uno::Reference< msforms::XColorFormat >( new ScVbaColorFormat( getParent(), mxContext, this, m_xShape, ::ColorFormatType::LINEFORMAT_FORECOLOR ) );
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaLineFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaLineFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaLineFormat"));
 }
 
 uno::Sequence< rtl::OUString >

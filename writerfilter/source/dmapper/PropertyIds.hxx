@@ -51,6 +51,7 @@ enum PropertyIds
         ,PROP_ANCHOR_TYPE
         ,PROP_AUTOMATIC_DISTANCE
         ,PROP_BACK_COLOR
+        ,PROP_BACK_COLOR_TRANSPARENCY
         ,PROP_BITMAP
         ,PROP_BOTTOM_BORDER
         ,PROP_BOTTOM_BORDER_DISTANCE
@@ -291,6 +292,7 @@ enum PropertyIds
         ,PROP_WRITING_MODE
 /*253*/ ,PROP_FRM_DIRECTION
         ,PROP_EMBEDDED_OBJECT
+        ,PROP_PARA_CONTEXT_MARGIN
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

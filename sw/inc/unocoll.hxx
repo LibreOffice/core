@@ -73,6 +73,8 @@ class SwUnoCollection
             pDoc(p),
             bObjectValid(sal_True){}
 
+    virtual ~SwUnoCollection() {}
+
     virtual void                Invalidate();
     sal_Bool                        IsValid() const {return bObjectValid;}
 

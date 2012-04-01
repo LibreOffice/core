@@ -2609,7 +2609,7 @@ namespace listfunc
         n += Date( Date::SYSTEM ).GetDate();
         n += rand();
         // #i92478#
-        aNewListId += String::CreateFromInt64( n );
+        aNewListId += rtl::OUString::valueOf(n);
 
         return MakeListIdUnique( rDoc, aNewListId );
     }

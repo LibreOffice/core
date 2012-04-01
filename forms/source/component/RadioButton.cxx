@@ -171,7 +171,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
     if (sMyGroup.isEmpty())
         sMyGroup = m_aName;
 
-    // meine Siblings durchiterieren
+    // Iterate over my siblings
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
     if (xIndexAccess.is())
     {
@@ -185,9 +185,9 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
             if (!xSiblingProperties.is())
                 continue;
             if (xMyProps == xSiblingProperties)
-                continue;   // mich selber nicht umsetzen
+                continue;   // do not set myself
 
-            // nur wenn es ein Radio-Button ist
+            // Only if it's a RadioButton
             if (!hasProperty(PROPERTY_CLASSID, xSiblingProperties))
                 continue;
             sal_Int16 nType = 0;
@@ -195,7 +195,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
             if (nType != FormComponentType::RADIOBUTTON)
                 continue;
 
-            // das 'zur selben Gruppe gehoeren' wird am Namen festgemacht
+            // The group association is attached to the name
             sCurrentGroup = OGroupManager::GetGroupName( xSiblingProperties );
             if (sCurrentGroup == sMyGroup)
                 xSiblingProperties->setPropertyValue(rPropName, rValue);
@@ -214,14 +214,13 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         SetSiblingPropsTo(PROPERTY_CONTROLLABEL, rValue);
     }
 
-    // wenn sich die ControlSource-Eigenschaft geaendert hat ...
+    // If the ControlSource property has changed ...
     if (nHandle == PROPERTY_ID_CONTROLSOURCE)
-    {   // ... muss ich allen meinen Siblings, die in der selben RadioButton-Gruppe sind wie ich, auch die
-        // neue ControlSource mitgeben
+    {   // ... I have to pass the new ControlSource to my siblings, which are in the same RadioButton group as I am
         SetSiblingPropsTo(PROPERTY_CONTROLSOURCE, rValue);
     }
 
-    // die andere Richtung : wenn sich mein Name aendert ...
+    // The other way: if my name changes ...
     if (nHandle == PROPERTY_ID_NAME)
     {
         setControlSource();
@@ -232,8 +231,8 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         sal_Int16 nValue;
         rValue >>= nValue;
         if (1 == nValue)
-        {   // bei allen Radios der selben Gruppe das 'default checked' ruecksetzen, denn wie schon der highlander wusste :
-            // es kann nur einen geben.
+        {   // Reset the 'default checked' for all Radios of the same group.
+            // Because (as the Highlander already knew): "There can be only one"
             Any aZero;
             nValue = 0;
             aZero <<= nValue;
@@ -262,13 +261,13 @@ void ORadioButtonModel::setControlSource()
                 continue;
 
             if (xMyProps == xSiblingProperties)
-                // nur wenn ich nicht mich selber gefunden habe
+                // Only if I didn't find myself
                 continue;
 
             sal_Int16 nType = 0;
             xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
             if (nType != FormComponentType::RADIOBUTTON)
-                // nur Radio-Buttons
+                // Only RadioButtons
                 continue;
 
             ::rtl::OUString sSiblingName, sSiblingGroupName;
@@ -357,7 +356,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     setReferenceValue( sReferenceValue );
     setDefaultChecked( (ToggleState)nDefaultChecked );
 
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // Display default values after read
     if ( !getControlSource().isEmpty() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
@@ -370,8 +369,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
     {
         if ( _rEvent.NewValue == (sal_Int16)1 )
         {
-            // wenn sich mein Status auf 'checked' geaendert hat, muss ich alle meine Siblings, die in der selben Gruppe
-            // sind wie ich, entsprechend zuruecksetzen
+            // If my status has changed to 'checked', I have to reset all my siblings, which are in the same group as I am
             Any aZero;
             aZero <<= (sal_Int16)0;
             SetSiblingPropsTo( PROPERTY_STATE, aZero );

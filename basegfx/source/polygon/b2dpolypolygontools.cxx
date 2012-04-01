@@ -238,20 +238,6 @@ namespace basegfx
             }
         }
 
-        B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate)
-        {
-            B2DRange aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-            {
-                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.expand(tools::getRangeWithControlPoints(aCandidate));
-            }
-
-            return aRetval;
-        }
-
         B2DRange getRange(const B2DPolyPolygon& rCandidate)
         {
             B2DRange aRetval;
@@ -396,21 +382,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle)
-        {
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-            {
-                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-
-                aRetval.append(rotateAroundPoint(aCandidate, rCenter, fAngle));
-            }
-
-            return aRetval;
-        }
-
         B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate)
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
@@ -424,28 +395,6 @@ namespace basegfx
             }
 
             return aRetval;
-        }
-
-        B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-                B2DPolyPolygon aRetval;
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-
-                    aRetval.append(setContinuity(aCandidate, eContinuity));
-                }
-
-                return aRetval;
-            }
-            else
-            {
-                return rCandidate;
-            }
         }
 
         B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue)
@@ -526,18 +475,6 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges)
-        {
-            B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(reSegmentPolygonEdges(rCandidate.getB2DPolygon(a), nSubEdges, bHandleCurvedEdges, bHandleStraightEdges));
-            }
-
-            return aRetval;
-        }
-
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons
 
@@ -557,13 +494,6 @@ namespace basegfx
             }
 
             return true;
-        }
-
-        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
         B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate)

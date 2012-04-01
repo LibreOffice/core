@@ -17,7 +17,7 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,filter_complex,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,filter_complex))
 
 $(eval $(call gb_JunitTest_add_jars,filter_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \

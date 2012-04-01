@@ -851,11 +851,10 @@ ScVbaWindow::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::scri
     PrintPreviewHelper( EnableChanges, excel::getBestViewShell( m_xModel ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaWindow::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWindow") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWindow"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -56,7 +56,7 @@ struct SwFindRowSpanCacheObj;
 #define MA_FASTCALL
 #endif
 
-#define WEIT_WECH       LONG_MAX - 20000        //Initale Position der Flys.
+#define FAR_AWAY       LONG_MAX - 20000        //Initale Position der Flys.
 #define BROWSE_HEIGHT   56700L * 10L               //10 Meter
 
 #define GRFNUM_NO 0

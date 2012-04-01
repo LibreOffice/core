@@ -176,53 +176,53 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForCharacterProperties =
         tMakePropertyNameMap
-        ( C2U( "CharColor" ),               C2U("CharColor") )
-        ( C2U( "CharContoured" ),           C2U("CharContoured") )
-        ( C2U( "CharEmphasis" ),            C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
+        ( "CharColor",                "CharColor" )
+        ( "CharContoured",            "CharContoured" )
+        ( "CharEmphasis",             "CharEmphasis" )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
 
-        ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )
-        ( C2U( "CharFontFamilyAsian" ),     C2U("CharFontFamilyAsian") )
-        ( C2U( "CharFontFamilyComplex" ),   C2U("CharFontFamilyComplex") )
-        ( C2U( "CharFontCharSet" ),         C2U("CharFontCharSet") )
-        ( C2U( "CharFontCharSetAsian" ),    C2U("CharFontCharSetAsian") )
-        ( C2U( "CharFontCharSetComplex" ),  C2U("CharFontCharSetComplex") )
-        ( C2U( "CharFontName" ),            C2U("CharFontName") )
-        ( C2U( "CharFontNameAsian" ),       C2U("CharFontNameAsian") )
-        ( C2U( "CharFontNameComplex" ),     C2U("CharFontNameComplex") )
-        ( C2U( "CharFontPitch" ),           C2U("CharFontPitch") )
-        ( C2U( "CharFontPitchAsian" ),      C2U("CharFontPitchAsian") )
-        ( C2U( "CharFontPitchComplex" ),    C2U("CharFontPitchComplex") )
-        ( C2U( "CharFontStyleName" ),       C2U("CharFontStyleName") )
-        ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontStyleNameAsian") )
-        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
+        ( "CharFontFamily",           "CharFontFamily" )
+        ( "CharFontFamilyAsian",      "CharFontFamilyAsian" )
+        ( "CharFontFamilyComplex",    "CharFontFamilyComplex" )
+        ( "CharFontCharSet",          "CharFontCharSet" )
+        ( "CharFontCharSetAsian",     "CharFontCharSetAsian" )
+        ( "CharFontCharSetComplex",   "CharFontCharSetComplex" )
+        ( "CharFontName",             "CharFontName" )
+        ( "CharFontNameAsian",        "CharFontNameAsian" )
+        ( "CharFontNameComplex",      "CharFontNameComplex" )
+        ( "CharFontPitch",            "CharFontPitch" )
+        ( "CharFontPitchAsian",       "CharFontPitchAsian" )
+        ( "CharFontPitchComplex",     "CharFontPitchComplex" )
+        ( "CharFontStyleName",        "CharFontStyleName" )
+        ( "CharFontStyleNameAsian",   "CharFontStyleNameAsian" )
+        ( "CharFontStyleNameComplex", "CharFontStyleNameComplex" )
 
-        ( C2U( "CharHeight" ),              C2U("CharHeight") )
-        ( C2U( "CharHeightAsian" ),         C2U("CharHeightAsian") )
-        ( C2U( "CharHeightComplex" ),       C2U("CharHeightComplex") )
-        ( C2U( "CharKerning" ),             C2U("CharKerning") )
-        ( C2U( "CharLocale" ),              C2U("CharLocale") )
-        ( C2U( "CharLocaleAsian" ),         C2U("CharLocaleAsian") )
-        ( C2U( "CharLocaleComplex" ),       C2U("CharLocaleComplex") )
-        ( C2U( "CharPosture" ),             C2U("CharPosture") )
-        ( C2U( "CharPostureAsian" ),        C2U("CharPostureAsian") )
-        ( C2U( "CharPostureComplex" ),      C2U("CharPostureComplex") )
-        ( C2U( "CharRelief" ),              C2U("CharRelief") )
-        ( C2U( "CharShadowed" ),            C2U("CharShadowed") )
-        ( C2U( "CharStrikeout" ),           C2U("CharStrikeout") )
-        ( C2U( "CharUnderline" ),           C2U("CharUnderline") )
-        ( C2U( "CharUnderlineColor" ),      C2U("CharUnderlineColor") )
-        ( C2U( "CharUnderlineHasColor" ),   C2U("CharUnderlineHasColor") )
-        ( C2U( "CharOverline" ),            C2U("CharOverline") )
-        ( C2U( "CharOverlineColor" ),       C2U("CharOverlineColor") )
-        ( C2U( "CharOverlineHasColor" ),    C2U("CharOverlineHasColor") )
-        ( C2U( "CharWeight" ),              C2U("CharWeight") )
-        ( C2U( "CharWeightAsian" ),         C2U("CharWeightAsian") )
-        ( C2U( "CharWeightComplex" ),       C2U("CharWeightComplex") )
-        ( C2U( "CharWordMode" ),            C2U("CharWordMode") )
+        ( "CharHeight",               "CharHeight" )
+        ( "CharHeightAsian",          "CharHeightAsian" )
+        ( "CharHeightComplex",        "CharHeightComplex" )
+        ( "CharKerning",              "CharKerning" )
+        ( "CharLocale",               "CharLocale" )
+        ( "CharLocaleAsian",          "CharLocaleAsian" )
+        ( "CharLocaleComplex",        "CharLocaleComplex" )
+        ( "CharPosture",              "CharPosture" )
+        ( "CharPostureAsian",         "CharPostureAsian" )
+        ( "CharPostureComplex",       "CharPostureComplex" )
+        ( "CharRelief",               "CharRelief" )
+        ( "CharShadowed",             "CharShadowed" )
+        ( "CharStrikeout",            "CharStrikeout" )
+        ( "CharUnderline",            "CharUnderline" )
+        ( "CharUnderlineColor",       "CharUnderlineColor" )
+        ( "CharUnderlineHasColor",    "CharUnderlineHasColor" )
+        ( "CharOverline",             "CharOverline" )
+        ( "CharOverlineColor",        "CharOverlineColor" )
+        ( "CharOverlineHasColor",     "CharOverlineHasColor" )
+        ( "CharWeight",               "CharWeight" )
+        ( "CharWeightAsian",          "CharWeightAsian" )
+        ( "CharWeightComplex",        "CharWeightComplex" )
+        ( "CharWordMode",             "CharWordMode" )
 
-        ( C2U( "WritingMode" ),             C2U("WritingMode") )
+        ( "WritingMode",              "WritingMode" )
 
-        ( C2U( "ParaIsCharacterDistance" ), C2U("ParaIsCharacterDistance") )
+        ( "ParaIsCharacterDistance",  "ParaIsCharacterDistance" )
         ;
     return m_aShapePropertyMapForCharacterProperties;
 }
@@ -232,13 +232,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForParagraphProperties =
         tMakePropertyNameMap
-        ( C2U( "ParaAdjust" ),          C2U("ParaAdjust") )
-        ( C2U( "ParaBottomMargin" ),    C2U("ParaBottomMargin") )
-        ( C2U( "ParaIsHyphenation" ),   C2U("ParaIsHyphenation") )
-        ( C2U( "ParaLastLineAdjust" ),  C2U("ParaLastLineAdjust") )
-        ( C2U( "ParaLeftMargin" ),      C2U("ParaLeftMargin") )
-        ( C2U( "ParaRightMargin" ),     C2U("ParaRightMargin") )
-        ( C2U( "ParaTopMargin" ),       C2U("ParaTopMargin") )
+        ( "ParaAdjust",          "ParaAdjust" )
+        ( "ParaBottomMargin",    "ParaBottomMargin" )
+        ( "ParaIsHyphenation",   "ParaIsHyphenation" )
+        ( "ParaLastLineAdjust",  "ParaLastLineAdjust" )
+        ( "ParaLeftMargin",      "ParaLeftMargin" )
+        ( "ParaRightMargin",     "ParaRightMargin" )
+        ( "ParaTopMargin",       "ParaTopMargin" )
         ;
     return m_aShapePropertyMapForParagraphProperties;
 }
@@ -248,25 +248,25 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForFillProperties =
         tMakePropertyNameMap
-        ( C2U( "FillBackground" ),        C2U( "FillBackground" ) )
-        ( C2U( "FillBitmapName" ),        C2U( "FillBitmapName" ) )
-        ( C2U( "FillColor" ),             C2U( "FillColor" ) )
-        ( C2U( "FillGradientName" ),      C2U( "FillGradientName" ) )
-        ( C2U( "FillGradientStepCount" ), C2U( "FillGradientStepCount" ) )
-        ( C2U( "FillHatchName" ),         C2U( "FillHatchName" ) )
-        ( C2U( "FillStyle" ),             C2U( "FillStyle" ) )
-        ( C2U( "FillTransparence" ),      C2U( "FillTransparence" ) )
-        ( C2U( "FillTransparenceGradientName" ), C2U("FillTransparenceGradientName") )
+        ( "FillBackground",               "FillBackground" )
+        ( "FillBitmapName",               "FillBitmapName" )
+        ( "FillColor",                    "FillColor" )
+        ( "FillGradientName",             "FillGradientName" )
+        ( "FillGradientStepCount",        "FillGradientStepCount" )
+        ( "FillHatchName",                "FillHatchName" )
+        ( "FillStyle",                    "FillStyle" )
+        ( "FillTransparence",             "FillTransparence" )
+        ( "FillTransparenceGradientName", "FillTransparenceGradientName" )
         //bitmap properties
-        ( C2U( "FillBitmapMode" ),        C2U( "FillBitmapMode" ) )
-        ( C2U( "FillBitmapSizeX" ),       C2U( "FillBitmapSizeX" ) )
-        ( C2U( "FillBitmapSizeY" ),       C2U( "FillBitmapSizeY" ) )
-        ( C2U( "FillBitmapLogicalSize" ), C2U( "FillBitmapLogicalSize" ) )
-        ( C2U( "FillBitmapOffsetX" ),     C2U( "FillBitmapOffsetX" ) )
-        ( C2U( "FillBitmapOffsetY" ),     C2U( "FillBitmapOffsetY" ) )
-        ( C2U( "FillBitmapRectanglePoint" ),C2U( "FillBitmapRectanglePoint" ) )
-        ( C2U( "FillBitmapPositionOffsetX" ),C2U( "FillBitmapPositionOffsetX" ) )
-        ( C2U( "FillBitmapPositionOffsetY" ),C2U( "FillBitmapPositionOffsetY" ) )
+        ( "FillBitmapMode",               "FillBitmapMode" )
+        ( "FillBitmapSizeX",              "FillBitmapSizeX" )
+        ( "FillBitmapSizeY",              "FillBitmapSizeY" )
+        ( "FillBitmapLogicalSize",        "FillBitmapLogicalSize" )
+        ( "FillBitmapOffsetX",            "FillBitmapOffsetX" )
+        ( "FillBitmapOffsetY",            "FillBitmapOffsetY" )
+        ( "FillBitmapRectanglePoint",     "FillBitmapRectanglePoint" )
+        ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
+        ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
         ;
     return m_aShapePropertyMapForFillProperties;
 }
@@ -276,12 +276,12 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForLineProperties =
         tMakePropertyNameMap
-        ( C2U( "LineColor" ),             C2U( "LineColor" ) )
-        ( C2U( "LineDashName" ),          C2U( "LineDashName" ) )
-        ( C2U( "LineJoint" ),             C2U( "LineJoint" ) )
-        ( C2U( "LineStyle" ),             C2U( "LineStyle" ) )
-        ( C2U( "LineTransparence" ),      C2U( "LineTransparence" ) )
-        ( C2U( "LineWidth" ),             C2U( "LineWidth" ) )
+        ( "LineColor",              "LineColor" )
+        ( "LineDashName",           "LineDashName" )
+        ( "LineJoint",              "LineJoint" )
+        ( "LineStyle",              "LineStyle" )
+        ( "LineTransparence",       "LineTransparence" )
+        ( "LineWidth",              "LineWidth" )
         ;
     return m_aShapePropertyMapForLineProperties;
 }
@@ -313,11 +313,11 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForLineSeriesProperties =
         tMakePropertyNameMap
-        ( C2U( "LineColor" ),           C2U("Color") )
-        ( C2U( "LineDashName" ),        C2U("LineDashName") )
-        ( C2U( "LineStyle" ),           C2U("LineStyle") )
-        ( C2U( "LineTransparence" ),    C2U("Transparency") )
-        ( C2U( "LineWidth" ),           C2U("LineWidth") )
+        ( "LineColor",           "Color" )
+        ( "LineDashName",        "LineDashName" )
+        ( "LineStyle",           "LineStyle" )
+        ( "LineTransparence",    "Transparency" )
+        ( "LineWidth",           "LineWidth" )
 
         ;
     return m_aShapePropertyMapForLineSeriesProperties;
@@ -328,31 +328,31 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForFilledSeriesProperties =
         tMakePropertyNameMap
-        ( C2U( "FillBackground"),       C2U("FillBackground") )
-        ( C2U( "FillBitmapName" ),      C2U("FillBitmapName") )
-        ( C2U( "FillColor" ),           C2U("Color") )
-        ( C2U( "FillGradientName" ),    C2U("GradientName") )
-        ( C2U( "FillGradientStepCount" ), C2U( "GradientStepCount" ) )
-        ( C2U( "FillHatchName" ),       C2U("HatchName") )
-        ( C2U( "FillStyle" ),           C2U("FillStyle") )
-        ( C2U( "FillTransparence" ),    C2U("Transparency") )
-        ( C2U( "FillTransparenceGradientName" ), C2U("TransparencyGradientName") )
+        ( "FillBackground",               "FillBackground" )
+        ( "FillBitmapName",               "FillBitmapName" )
+        ( "FillColor",                    "Color" )
+        ( "FillGradientName",             "GradientName" )
+        ( "FillGradientStepCount",        "GradientStepCount" )
+        ( "FillHatchName",                "HatchName" )
+        ( "FillStyle",                    "FillStyle" )
+        ( "FillTransparence",             "Transparency" )
+        ( "FillTransparenceGradientName", "TransparencyGradientName" )
         //bitmap properties
-        ( C2U( "FillBitmapMode" ),        C2U( "FillBitmapMode" ) )
-        ( C2U( "FillBitmapSizeX" ),       C2U( "FillBitmapSizeX" ) )
-        ( C2U( "FillBitmapSizeY" ),       C2U( "FillBitmapSizeY" ) )
-        ( C2U( "FillBitmapLogicalSize" ), C2U( "FillBitmapLogicalSize" ) )
-        ( C2U( "FillBitmapOffsetX" ),     C2U( "FillBitmapOffsetX" ) )
-        ( C2U( "FillBitmapOffsetY" ),     C2U( "FillBitmapOffsetY" ) )
-        ( C2U( "FillBitmapRectanglePoint" ),C2U( "FillBitmapRectanglePoint" ) )
-        ( C2U( "FillBitmapPositionOffsetX" ),C2U( "FillBitmapPositionOffsetX" ) )
-        ( C2U( "FillBitmapPositionOffsetY" ),C2U( "FillBitmapPositionOffsetY" ) )
+        ( "FillBitmapMode",               "FillBitmapMode" )
+        ( "FillBitmapSizeX",              "FillBitmapSizeX" )
+        ( "FillBitmapSizeY",              "FillBitmapSizeY" )
+        ( "FillBitmapLogicalSize",        "FillBitmapLogicalSize" )
+        ( "FillBitmapOffsetX",            "FillBitmapOffsetX" )
+        ( "FillBitmapOffsetY",            "FillBitmapOffsetY" )
+        ( "FillBitmapRectanglePoint",     "FillBitmapRectanglePoint" )
+        ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
+        ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
         //line properties
-        ( C2U( "LineColor" ),           C2U("BorderColor") )
-        ( C2U( "LineDashName" ),        C2U("BorderDashName") )
-        ( C2U( "LineStyle" ),           C2U("BorderStyle") )
-        ( C2U( "LineTransparence" ),    C2U("BorderTransparency") )
-        ( C2U( "LineWidth" ),           C2U("BorderWidth") )
+        ( "LineColor",                    "BorderColor" )
+        ( "LineDashName",                 "BorderDashName" )
+        ( "LineStyle",                    "BorderStyle" )
+        ( "LineTransparence",             "BorderTransparency" )
+        ( "LineWidth",                    "BorderWidth" )
         ;
     return m_aShapePropertyMapForFilledSeriesProperties;
 }

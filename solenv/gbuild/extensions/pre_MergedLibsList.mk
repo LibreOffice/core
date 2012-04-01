@@ -31,18 +31,31 @@ ifeq ($(MERGELIBS),TRUE)
 gb_MERGEDLIBS := \
 	avmedia \
 	canvastools \
+	configmgr \
 	cppcanvas \
 	deploymentmisc \
 	drawinglayer \
 	editeng \
 	filterconfig \
+	fwe \
+	fwi \
+	fwk \
+	fwl \
+	fwm \
 	lng \
 	package2 \
+	sb \
+	sfx \
 	sofficeapp \
 	spl \
+	svt \
 	svx \
 	svxcore \
+	tk \
+	ucb1 \
+	ucpfile1 \
 	uui \
+	xcr \
 	xo \
 
 endif

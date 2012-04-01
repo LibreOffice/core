@@ -162,14 +162,6 @@ namespace nullcanvas
 }
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, nullcanvas::nullCanvasDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(nullcanvas, nullcanvas::nullCanvasDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

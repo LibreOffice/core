@@ -47,7 +47,6 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/srchdlg.hxx>
 #include <unotools/linguprops.hxx>

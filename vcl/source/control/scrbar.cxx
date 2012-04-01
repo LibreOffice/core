@@ -1204,7 +1204,7 @@ void ScrollBar::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScrollBar, ImplAutoTimerHdl, AutoTimer*, EMPTYARG )
+IMPL_LINK_NOARG(ScrollBar, ImplAutoTimerHdl)
 {
     if( mpData && mpData->mbHide )
         return 0;
@@ -1532,16 +1532,6 @@ ScrollBarBox::ScrollBarBox( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SCROLLBARBOX )
 {
     ImplInit( pParent, nStyle );
-}
-
-// -----------------------------------------------------------------------
-
-ScrollBarBox::ScrollBarBox( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_SCROLLBARBOX )
-{
-    rResId.SetRT( RSC_SCROLLBAR );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
 }
 
 // -----------------------------------------------------------------------

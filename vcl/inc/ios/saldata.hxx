@@ -75,9 +75,9 @@ struct FrameHash : public boost::hash<sal_IntPtr>
     { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
-struct SalData
+class SalData
 {
-
+public:
     SALTIMERPROC                                 mpTimerProc;       // timer callback proc
     IosSalInstance                              *mpFirstInstance;   // pointer of first instance
     std::list<IosSalFrame*>                      maFrames;          // pointer of first frame

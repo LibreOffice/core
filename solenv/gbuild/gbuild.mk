@@ -33,7 +33,6 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 # DEBUG
 # INPATH
 # JAVA_HOME
-# JDKINCS
 # LIBXML_CFLAGS
 # OS
 # PRODUCT
@@ -71,18 +70,14 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
-# BuildDirs uses the Output functions already
+# BuildDirs overrides *DIR variables for Windows
 include $(GBUILDDIR)/BuildDirs.mk
 
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
-ifneq ($(strip $(product)),)
-gb_PRODUCT := $(true)
-else
 gb_PRODUCT := $(false)
-endif
 endif
 
 ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
@@ -116,11 +111,15 @@ ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
 endif
 
+ifneq ($(nodep),)
+gb_FULLDEPS := $(false)
+else
 # for clean, setuplocal and removelocal goals we switch off dependencies
 ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
+endif
 endif
 
 # save user-supplied flags for latter use
@@ -151,9 +150,7 @@ $(eval $(call gb_Helper_collect_libtargets))
 gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
-ifneq ($(filter gbuild buidpl,$(gb_SourceEnvAndRecurse_STAGE)),)
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
-endif
 
 ifeq ($(CROSS_COMPILING),YES)
 # We can safely Assume all cross-compilation is from Unix systems.
@@ -187,11 +184,7 @@ gb_GLOBALDEFS := \
 	$(gb_CPUDEFS) \
 
 
-ifeq ($(gb_PRODUCT),$(true))
-gb_GLOBALDEFS += \
-	-DPRODUCT \
-
-else
+ifeq ($(gb_PRODUCT),$(false))
 gb_GLOBALDEFS += \
 	-DDBG_UTIL \
 
@@ -239,6 +232,26 @@ ifeq ($(strip $(ENABLE_GRAPHITE)),TRUE)
 gb_GLOBALDEFS += -DENABLE_GRAPHITE
 endif
 
+ifeq ($(strip $(ENABLE_HEADLESS)),TRUE)
+gb_GLOBALDEFS += -DLIBO_HEADLESS
+endif
+
+ifeq ($(strip $(DISABLE_DBCONNECTIVITY)),TRUE)
+gb_GLOBALDEFS += -DDISABLE_DBCONNECTIVITY
+endif
+
+ifeq ($(strip $(DISABLE_EXTENSIONS)),TRUE)
+gb_GLOBALDEFS += -DDISABLE_EXTENSIONS
+endif
+
+ifeq ($(strip $(DISABLE_SCRIPTING)),TRUE)
+gb_GLOBALDEFS += -DDISABLE_SCRIPTING
+endif
+
+ifeq ($(strip $(DISABLE_DYNLOADING)),TRUE)
+gb_GLOBALDEFS += -DDISABLE_DYNLOADING
+endif
+
 ifeq ($(HAVE_THREADSAFE_STATICS),TRUE)
 gb_GLOBALDEFS += -DHAVE_THREADSAFE_STATICS
 endif
@@ -268,7 +281,6 @@ include $(SOLARENV)/inc/minor.mk
 # shortest stem instead of first match. However, upon intoduction this version
 # is not available everywhere by default.
 
-ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 include $(foreach class, \
 	ComponentTarget \
 	ComponentsTarget \
@@ -282,6 +294,7 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	ExternalLib \
+	Pagein \
 	Pyuno \
 	Rdb \
 	CppunitTest \
@@ -297,7 +310,6 @@ include $(foreach class, \
 	Configuration \
 	Extension \
 ,$(GBUILDDIR)/$(class).mk)
-endif
 
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
@@ -320,6 +332,14 @@ gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_Helper_set_ld_path) $(gb_XSLTPROCTARGET)
 endif
 
+ifeq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
+gb_XMLLINTTARGET :=
+gb_XMLLINT := xsltproc
+else
+gb_XMLLINTTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
+gb_XMLLINT := $(gb_Helper_set_ld_path) $(gb_XMLLINTTARGET)
+endif
+
 ifeq ($(SYSTEM_PYTHON),YES)
 gb_PYTHONTARGET :=
 gb_PYTHON := $(PYTHON)
@@ -337,78 +357,9 @@ gb_PYTHONTARGET := $(OUTDIR)/bin/python
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
 endif
 
-define gb_HelpMessage
-NAME
-       gbuild - GNU make based build system for LibreOffice
-
-SYNOPSIS
-       make [ -f makefile ] [ options ] [ variable=value ... ] [ targets ] ...
-
-IMPORTANT OPTIONS
-       -s Silent operation; do not print the commands as they are executed.
-
-       -n Print the commands that would be executed, but do not execute them.
-       -k Continue as much as possible after an error.
-
-       -j Specifies the number of jobs (commands) to run simultaneously.
-       -l Specifies that no new jobs (commands) should be started if there are
-          others jobs running and the load average is at least load.
-
-       -t Touch files (mark them up to date without really changing them)
-          instead of running their commands.
-       -W Pretend that the target file has just been modified.
-       -o Do not remake the file file even if it is older than its
-          dependencies, and do not remake anything on account of changes in file.
-
-       -p Print the data base (rules and variable values) that results from
-          reading the makefiles.
-       --debug=b debug make run, see GNU make man page for details
-
-       (descriptions from GNU make man page)
-
-AVAILABLE TARGETS
-       all              build product and run unit tests (default goal)
-       build            build product
-       unitcheck        run unit tests
-       subsequentcheck  run system tests (requires full installation)
-       check            run unit tests and if in toplevel subsequentcheck
-       clean            remove all generated files
-       showdeliverables show the targets delivered to OUTDIR and their source
-       debugrun         starts the dev-install instance and allows tests to be run
-                        against it
-
-INTERACTIVE VARIABLES:
-       DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).
-       ENABLE_SYMBOLS / enable_symbols
-                       If not empty, build with debug symbols. Automatically
-                       enabled by DEBUG/debug.
-       DBGLEVEL / dbglevel
-                       If not empty, force the debug level to the specified value. The
-                       debug level is passed to the source code through OSL_DEBUG_LEVEL
-                       macro.
-                       0 = no debug
-                       1 = symbols + no optimizations
-                       2 = symbols + no optimizations + extra debug output. OSL_TRACE
-                           starts being active on this level.
-                       3... = symbols + no optimizations + extra debug output (usually
-                              extremely verbose). Levels > 2 are not used very much.
-
-       YACCFLAGS       Add as flags for YACC parser generator invocation.
-       CPPFLAGS        Add as preprocessor flags for C/C++/ObjC/ObjC++ compilation.
-       CFLAGS          Add as compiler flags for plain C compilation.
-       CXXFLAGS        Add as compiler flags for C++ compilation.
-       OBJCFLAGS       Add as compiler flags for Objective C compilation.
-       OBJCXXFLAGS     Add as compiler flags for Objective C++ compilation.
-       LDFLAGS         Add as linker flags.
-       gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
-       gb_COLOR        Use ASCII color output.
-       gb_TITLES       Show progress in terminal title.
-
-endef
-
 .PHONY: help
 help:
-	$(info $(gb_HelpMessage))
+	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
 	@true
 
 # vim: set noet sw=4:

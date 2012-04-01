@@ -192,36 +192,6 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     return xReferenceResolvedListener;
 }
 
-/* public: for signature generation */
-void XSecController::collectToSign( sal_Int32 securityId, const rtl::OUString& referenceId )
-{
-    /* DBG_ASSERT( m_xSAXEventKeeper.is(), "the SAXEventKeeper is NULL" ); */
-
-    chainOn(true);
-
-    if ( m_nStatusOfSecurityComponents == INITIALIZED )
-    /*
-     * if all security components are ready, add a signature.
-     */
-    {
-        sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-            cssxc::sax::ElementMarkPriority_AFTERMODIFY, sal_False);
-
-        int index = findSignatureInfor( securityId );
-
-        if ( index == -1 )
-        {
-            InternalSignatureInformation isi(securityId, NULL);
-            isi.addReference(TYPE_SAMEDOCUMENT_REFERENCE, referenceId, nKeeperId );
-            m_vInternalSignatureInformations.push_back( isi );
-        }
-        else
-        {
-            m_vInternalSignatureInformations[index].addReference(TYPE_SAMEDOCUMENT_REFERENCE, referenceId, nKeeperId );
-        }
-    }
-}
-
 void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& /*objectURL*/, sal_Bool isBinary)
 {
         sal_Int32 type = ((isBinary==sal_True)?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);

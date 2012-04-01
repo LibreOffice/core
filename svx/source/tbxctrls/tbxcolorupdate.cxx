@@ -44,6 +44,14 @@ namespace svx
     //====================================================================
     //= ToolboxButtonColorUpdater
     //====================================================================
+    /* Note:
+       The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+       (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+       The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+       (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+       and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+       (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+     */
 
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
         sal_uInt16 nId,
@@ -60,7 +68,22 @@ namespace svx
             mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
         mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
-        Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
+        switch( mnSlotId )
+        {
+            case SID_ATTR_CHAR_COLOR  :
+            case SID_ATTR_CHAR_COLOR2 :
+                Update( COL_RED );
+                break;
+            case SID_FRAME_LINECOLOR  :
+                Update( COL_BLUE );
+                break;
+            case SID_ATTR_CHAR_COLOR_BACKGROUND :
+            case SID_BACKGROUND_COLOR :
+                Update( COL_YELLOW );
+                break;
+            default :
+                Update( COL_TRANSPARENT );
+        }
     }
 
     // -----------------------------------------------------------------------

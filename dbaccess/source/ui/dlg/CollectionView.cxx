@@ -124,7 +124,7 @@ Reference< XContent> OCollectionView::getSelectedFolder() const
     return m_xContent;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
     ::rtl::OUString sName = m_aName.GetText();
     if ( sName.isEmpty() )
@@ -221,7 +221,7 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
     return 0;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OCollectionView, NewFolder_Click, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
 {
     try
     {
@@ -240,7 +240,7 @@ IMPL_LINK( OCollectionView, NewFolder_Click, PushButton*, EMPTYARG )
     return 0;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OCollectionView, Up_Click, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCollectionView, Up_Click)
 {
     try
     {
@@ -265,7 +265,7 @@ IMPL_LINK( OCollectionView, Up_Click, PushButton*, EMPTYARG )
     return 0;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OCollectionView, Dbl_Click_FileView, SvtFileView*, EMPTYARG )
+IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
 {
     try
     {

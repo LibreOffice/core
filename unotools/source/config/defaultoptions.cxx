@@ -248,7 +248,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                 {
                     case ::com::sun::star::uno::TypeClass_STRING :
                     {
-                        // multi pathes
+                        // multi paths
                         if ( pValues[nProp] >>= aTempStr )
                             aFullPath = aPathOpt.SubstituteVariable( aTempStr );
                         else
@@ -260,7 +260,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
 
                     case ::com::sun::star::uno::TypeClass_SEQUENCE :
                     {
-                        // single pathes
+                        // single paths
                         aFullPath = OUString();
                         Sequence < OUString > aList;
                         if ( pValues[nProp] >>= aList )

@@ -50,7 +50,7 @@ protected:
     virtual sal_Bool    FillItemSet(      SfxItemSet &rSet);
     virtual void    Reset      (const SfxItemSet &rSet);
 
-    DECL_LINK( UpdateHdl, PushButton*);
+    DECL_LINK(UpdateHdl, void *);
 
 private:
     FixedText       aPageLbl;

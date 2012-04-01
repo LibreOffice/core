@@ -78,8 +78,7 @@ extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),
     mpDoc( pDocP ),
-    mpParser( NULL ),
-    mpRowHeights( new Table )
+    mpParser( NULL )
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
@@ -94,7 +93,6 @@ ScEEImport::~ScEEImport()
     // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
     // Ist gewaehrleistet, da ScEEImport Basisklasse ist
     delete mpEngine;        // nach Parser!
-    delete mpRowHeights;
 }
 
 
@@ -431,14 +429,17 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
     if ( bSizeColsRows )
     {
         // Spaltenbreiten
-        Table* pColWidths = mpParser->GetColWidths();
-        if ( pColWidths->Count() )
+        ColWidthsMap& rColWidths = mpParser->GetColWidths();
+        if ( !rColWidths.empty() )
         {
             nProgress = 0;
             pProgress->SetState( nProgress, nEndCol - nStartCol + 1 );
             for ( SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++ )
             {
-                sal_uInt16 nWidth = (sal_uInt16)(sal_uLong) pColWidths->Get( nCol );
+                sal_uInt16 nWidth = 0;
+                ColWidthsMap::const_iterator it = rColWidths.find( nCol );
+                if ( it != rColWidths.end() )
+                    nWidth = it->second;
                 if ( nWidth )
                     mpDoc->SetColWidth( nCol, nTab, nWidth );
                 pProgress->SetState( ++nProgress );
@@ -454,11 +455,12 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
         mpDoc->SetOptimalHeight( 0, nEndRow, 0,
             static_cast< sal_uInt16 >( ScGlobal::nLastRowHeightExtra ), &aVirtDev,
             nPPTX, nPPTY, aZoom, aZoom, false );
-        if ( mpRowHeights->Count() )
+        if ( !maRowHeights.empty() )
         {
             for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )
             {
-                sal_uInt16 nHeight = (sal_uInt16)(sal_uLong) mpRowHeights->Get( nRow );
+                RowHeightMap::const_iterator it = maRowHeights.find( nRow );
+                sal_uInt16 nHeight = it == maRowHeights.end() ? 0 : it->second;
                 if ( nHeight > mpDoc->GetRowHeight( nRow, nTab ) )
                     mpDoc->SetRowHeight( nRow, nTab, nHeight );
             }
@@ -513,20 +515,22 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
         nDir = pI->nDir;
     }
     // Spaltenbreiten
-    Table* pColWidths = mpParser->GetColWidths();
-    long nThisWidth = (long) pColWidths->Get( nCol );
+    ColWidthsMap& rColWidths = mpParser->GetColWidths();
+    long nThisWidth = 0;
+    ColWidthsMap::const_iterator it = rColWidths.find( nCol );
+    if ( it != rColWidths.end() )
+        nThisWidth = it->second;
     long nColWidths = nThisWidth;
     SCCOL nColSpanCol = nCol + pE->nColOverlap;
     for ( SCCOL nC = nCol + 1; nC < nColSpanCol; nC++ )
     {
-        nColWidths += (long) pColWidths->Get( nC );
+        ColWidthsMap::const_iterator it2 = rColWidths.find( nC   );
+        if ( it2 != rColWidths.end() )
+            nColWidths += it2->second;
     }
     if ( nWidth > nColWidths )
     {   // Differenz nur in der ersten Spalte eintragen
-        if ( nThisWidth )
-            pColWidths->Replace( nCol, (void*)(nWidth - nColWidths + nThisWidth) );
-        else
-            pColWidths->Insert( nCol, (void*)(nWidth - nColWidths) );
+        rColWidths[ nCol ] = nWidth - nColWidths + nThisWidth;
     }
     // Zeilenhoehen, Differenz auf alle betroffenen Zeilen verteilen
     SCROW nRowSpan = pE->nRowOverlap;
@@ -535,13 +539,11 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
         nHeight = 1;        // fuer eindeutigen Vergleich
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
-        long nRowHeight = (long) mpRowHeights->Get( nR );
+        RowHeightMap::const_iterator it2 = maRowHeights.find( nR );
+        long nRowHeight = it2 == maRowHeights.end() ? 0 : it2->second;
         if ( nHeight > nRowHeight )
         {
-            if ( nRowHeight )
-                mpRowHeights->Replace( nR, (void*)nHeight );
-            else
-                mpRowHeights->Insert( nR, (void*)nHeight );
+            maRowHeights[ nR ] = nHeight;
         }
     }
     return bHasGraphics;
@@ -619,7 +621,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
         pDocPool( new ScDocumentPool ),
-        pColWidths( new Table ),
         nLastToken(0),
         nColCnt(0),
         nRowCnt(0),
@@ -636,7 +637,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
 ScEEParser::~ScEEParser()
 {
     delete pActEntry;
-    delete pColWidths;
     if ( !maList.empty() ) maList.clear();
 
     // Pool erst loeschen nachdem die Listen geloescht wurden

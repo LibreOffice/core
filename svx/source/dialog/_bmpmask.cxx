@@ -191,7 +191,7 @@ public:
                 DECL_LINK( CbxHdl, CheckBox* pCbx );
                 DECL_LINK( CbxTransHdl, CheckBox* pCbx );
                 DECL_LINK( FocusLbHdl, ColorLB* pLb );
-                DECL_LINK( ExecHdl, PushButton* pBtn );
+                DECL_LINK(ExecHdl, void *);
 };
 
 //-------------------------------------------------------------------------
@@ -331,7 +331,7 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( MaskData, ExecHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MaskData, ExecHdl)
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, sal_True );
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );

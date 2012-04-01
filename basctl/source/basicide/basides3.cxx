@@ -110,13 +110,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     else
     {
         pWin->SetStatus( pWin->GetStatus() & ~BASWIN_SUSPENDED );
-        IDEBaseWindow* pTmp = aIDEWindowTable.First();
-        while ( pTmp && !nKey )
-        {
-            if ( pTmp == pWin )
-                nKey = aIDEWindowTable.GetCurKey();
-            pTmp = aIDEWindowTable.Next();
-        }
+        nKey = GetIDEWindowId( pWin );
         DBG_ASSERT( nKey, "CreateDlgWin: Kein Key - Fenster nicht gefunden!" );
     }
 
@@ -136,22 +130,35 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
 DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
-    IDEBaseWindow* pWin = aIDEWindowTable.First();
-    while ( pWin && !pDlgWin )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
+        IDEBaseWindow* pWin = it->second;
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
             if ( rLibName.isEmpty() )
+            {
                 pDlgWin = (DialogWindow*)pWin;
+                break;
+            }
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
+            {
                 pDlgWin = (DialogWindow*)pWin;
+                break;
+            }
         }
-        pWin = aIDEWindowTable.Next();
     }
     if ( !pDlgWin && bCreateIfNotExist )
         pDlgWin = CreateDlgWin( rDocument, rLibName, rDlgName );
 
     return pDlgWin;
+}
+
+sal_uInt16 BasicIDEShell::GetIDEWindowId(const IDEBaseWindow* pWin) const
+{
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+        if ( it->second == pWin )
+            return it->first;
+    return 0;
 }
 
 SdrView* BasicIDEShell::GetCurDlgView() const

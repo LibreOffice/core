@@ -292,7 +292,7 @@ void SwParagraphNumTabPage::EnableNewStart()
     aNewStartNF.Show();
 }
 
-IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl)
 {
     sal_Bool bEnable = aNewStartCB.IsChecked();
     aNewStartNumberCB.Enable(bEnable);
@@ -300,7 +300,7 @@ IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl)
 {
     aRestartParaCountCB.Enable(aCountParaCB.IsChecked());
 

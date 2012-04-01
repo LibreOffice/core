@@ -42,13 +42,13 @@ using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL SmDocument_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.FormulaDocument" ) );
+    return rtl::OUString( "com.sun.star.comp.Math.FormulaDocument" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL SmDocument_getSupportedServiceNames() throw()
 {
     uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" ));
+    aSeq[0] = "com.sun.star.formula.FormulaProperties";
     return aSeq;
 }
 

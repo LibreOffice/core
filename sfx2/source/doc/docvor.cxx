@@ -67,7 +67,6 @@
 #include "docvor.hrc"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/localresaccess.hxx>
 #include <svtools/addresstemplate.hxx>
@@ -172,12 +171,11 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( AddFiles_Impl, Button * );
     DECL_LINK( OnAddressTemplateClicked, Button * );
 
-    DECL_LINK( ImportHdl, sfx2::FileDialogHelper* );
-    DECL_LINK( ExportHdl, sfx2::FileDialogHelper* );
-    DECL_LINK( AddFilesHdl, sfx2::FileDialogHelper* );
+    DECL_LINK(ImportHdl, void *);
+    DECL_LINK(ExportHdl, void *);
+    DECL_LINK(AddFilesHdl, void *);
 
     sal_Bool        DontDelete_Impl( SvLBoxEntry* pEntry );
-    void        OkHdl( Button* );
 
 public:
     SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent, SfxDocumentTemplates* pTempl );
@@ -885,7 +883,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection& 
     (SV-Handler)
 
     [Cross-references]
-    <SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)>
+    <SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const rtl::OUString& rText)>
 */
 
 {
@@ -900,7 +898,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection& 
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)
+sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const rtl::OUString& rText)
 
 /*  [Description]
 
@@ -922,7 +920,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String&
     delete pDlg->pSuspend;
     pDlg->pSuspend = NULL;
     SvLBoxEntry* pParent = GetParent(pEntry);
-    if( !rText.Len() )
+    if( rText.isEmpty() )
     {
         ErrorBox aBox( this, SfxResId( MSG_ERROR_EMPTY_NAME ) );
         aBox.GrabFocus();
@@ -1993,17 +1991,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AccelSelect_Impl, Accelerator *, pAccel )
         Dispatch_Impl( pAccel->GetCurItemId(), NULL ) : 0;
 }
 
-//-------------------------------------------------------------------------
-
-void SfxOrganizeDlg_Impl::OkHdl(Button *pButton)
-{
-    if(pFocusBox && pFocusBox->IsEditingActive())
-        pFocusBox->EndEditing(sal_False);
-    pButton->Click();
-}
-
-
-
 IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
 
 /*  [Description]
@@ -2242,7 +2229,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, ImportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
 
@@ -2279,7 +2266,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, ImportHdl, sfx2::FileDialogHelper *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, ExportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
@@ -2330,7 +2317,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, ExportHdl, sfx2::FileDialogHelper *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, AddFilesHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, AddFilesHdl)
 {
     if ( ERRCODE_NONE == pFileDlg->GetError() )
     {

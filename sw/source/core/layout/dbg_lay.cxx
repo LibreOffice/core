@@ -29,51 +29,74 @@
 #ifdef DBG_UTIL
 
 /*
- * Und hier die Beschreibung:
+ * And here's the description:
  *
- * Durch die PROTOCOL-Makros wird es ermoeglicht, Ereignisse im Frame-Methoden zu protokollieren.
- * In protokollwuerdigen Stellen in Frame-Methoden muss entweder ein PROTOCOL(...) oder bei Methoden,
- * bei denen auch das Verlassen der Methode mitprotokolliert werden soll, ein PROTOCOL_ENTER(...)-Makro
- * stehen.
- * Die Parameter der PROTOCOL-Makros sind
- * 1.   Ein Pointer auf einen SwFrm, also meist "this" oder "rThis"
- * 2.   Die Funktionsgruppe z.B. PROT_MAKEALL, hierueber wird (inline) entschieden, ob dies
- *      zur Zeit protokolliert werden soll oder nicht.
- * 3.   Die Aktion, im Normalfall 0, aber z.B. ein ACT_START bewirkt eine Einrueckung in der
- *      Ausgabedatei, ein ACT_END nimmt dies wieder zurueck. Auf diese Art wird z.B. durch
- *      PROTOCOL_ENTER am Anfang einer Methode eingerueckt und beim Verlassen wieder zurueck.
- * 4.   Der vierte Parameter ist ein void-Pointer, damit man irgendetwas uebergeben kann,
- *      was in das Protokoll einfliessen kann, typesches Beispiel bei PROT_GROW muss man
- *      einen Pointer auf den Wert, um den gegrowt werden soll, uebergeben.
+ * The PROTOCOL macros allow you to log events in frame methods. In places where
+ * logging is useful either one of the PROTOCOL(...) or PROTOCOL_ENTER(...) can
+ * be used. PROTOCOL_ENTER(...) additionally logs the leaving of a method.
+
+ * The PROTOCOL macros accept the following parameters:
+ * 1.   A pointer to an SwFrm (usually "this" or "rThis")
+ * 2.   The function group i.e. PROT_MAKEALL. This is used to decide (inline)
+ *      whether this event shall be logged at the current time.
+ * 3.   The action, usually 0. For example ACT_START indents output in the log
+ *      file and ACT_END stops the indentation. This allows for example
+ *      PROTOCOL_ENTER to indent at the beginning of a method and stop indenting
+ *      when leaving the method.
+ * 4.   The fourth parameter is a void pointer which allows to pass anything
+ *      which can be used in the log. A good example is PROT_GROW: this requires
+ *      a pointer to the value which defines how much to grow.
  *
- *
- * Das Protokoll ist die Datei "dbg_lay.out" im aktuellen (BIN-)Verzeichnis.
- * Es enthaelt Zeilen mit FrmId, Funktionsgruppe sowie weiteren Infos.
+ * The log file is called "dbg_lay.out", which is saved in the current (BIN-)
+ * directory. The file contains lines with FrmId, function group and additional
+ * information.
  *
  * Was genau protokolliert wird, kann auf folgende Arten eingestellt werden:
- * 1.   Die statische Variable SwProtokoll::nRecord enthaelt die Funktionsgruppen,
- *      die aufgezeichnet werden sollen.
- *      Ein Wert von z.B. PROT_GROW bewirkt, das Aufrufe von SwFrm::Grow dokumentiert werden,
- *      PROT_MAKEALL protokolliert Aufrufe von xxx::MakeAll.
- *      Die PROT_XY-Werte koennen oderiert werden.
- *      Default ist Null, es wird keine Methode aufgezeichnet.
- * 2.   In der SwImplProtocol-Klasse gibt es einen Filter fuer Frame-Typen,
- *      nur die Methodenaufrufe von Frame-Typen, die dort gesetzt sind, werden protokolliert.
- *      Der Member nTypes kann auf Werte wie FRM_PAGE, FRM_SECTION gesetzt und oderiert werden.
- *      Default ist 0xFFFF, d.h. alle Frame-Typen.
+ * What exactly is going to be logged, can be defined as follows:
+ * 1.   The static variable SwProtocol::nRecord contains the function groups
+ *      which shall be logged.
+ *      A value of i.e. PROT_GROW causes calls to SwFrm::Grow to be
+ *      logged; PROT_MAKEALL logs the calls to xxx::MakeAll.
+ *      The PROT_XY values can be combined using binary OR, the default value
+ *      is null - no method calls are logged.
+ * 2.   The SwImplProtocol class contains a filter for frame types, only method
+ *      call of frame types which are defined there are logged.
+ *      The member nTypes can be set to values like FRM_PAGE or FRM_SECTION and
+ *      may be combined using binary OR. The default values is 0xFFFF - meaning
+ *      all frame types.
+
  * 3.   In der SwImplProtocol-Klasse gibt es einen ArrayPointer auf FrmIds, die zu ueberwachen sind.
  *      Ist der Pointer Null, so werden alle Frames protokolliert, ansonsten nur Frames,
  *      die in dem Array vermerkt sind.
+
+ * 3.   The SwImplProtocol class contains an ArrayPointer to FrmIds which need to be
+ *      tracked. If the pointer is null, all frames will be logged; otherwise
+ *      only frames of linked from the array will be logged.
  *
  * Eine Aufzeichnung in Gang zu setzen, erfordert entweder Codemanipulation, z.B. in
  * SwProtocol::Init() einen anderen Default fuer nRecord setzen oder Debuggermanipulation.
  * Im Debugger gibt verschiedene, sich anbietende Stellen:
+
+ * Code changes are needed to start logging; either change the default of nRecord
+ * in SwProtocol::Init() or change the debugger. There are several possible
+ * places in the debugger:
+
  * 1.   In SwProtocol::Init() einen Breakpoint setzen und dort nRecord manipulieren, ggf.
  *      FrmIds eintragen, dann beginnt die Aufzeichnung bereits beim Programmstart.
+
+ * 1.   Set a breakpoint in SwProtocol::Init() and manipulate nRecord there, set
+        FrmIds accordingly then start logging during program start.
+
  * 2.   Waehrend des Programmlaufs einen Breakpoint vor irgendein PROTOCOL oder PROTOCOL_ENTER-
  *      Makro setzen, dann am SwProtocol::nRecord das unterste Bit setzen (PROT_INIT). Dies
  *      bewirkt, dass die Funktionsgruppe des folgenden Makros aktiviert und in Zukunft
  *      protokolliert wird.
+
+ * 2.   Set a breakpoint before any PROTOCOL or PROTOCOL_ENTER macro during
+        program execution, then set the lowest bit (PROT_INIT) of
+        SwProtocol::nRecord. This activates the function group of the following
+        macro and causes it to be logged in the future.
+
  * 3.   Spezialfall von 2.: Wenn man 2. in der Methode SwRootFrm::Paint(..) anwendet, werden
  *      die Aufzeichnungseinstellung aus der Datei "dbg_lay.ini" ausgelesen!
  *      In dieser INI-Datei kann es Kommentarzeilen geben, diese beginnen mit '#', dann
@@ -98,9 +121,39 @@
  *          [frmtype] !0x3FFF 0x4
  *      ------------------------------------------
  *
+ * 3.   There's a special case for 2: If one uses 2. in SwRootFrm::Paint(..),
+ *      the log settings are taken from the file "dbg_lay.ini"!
+ *      In this INI-file you can have comment lines starting with a '#'.
+ *      The sections "[frmid]", "[frmtype]" and "[record]" are relevant.
+ *      In the [frmid] section, you can put FrameIds of the Frames to be logged.
+ *      If there are no entries in this section, all Frames will be logged.
+ *      In the [frmtype] section, the frame types which should be logged are
+ *      listed; default is USHRT_MAX which means that all types are logged.
+ *      It's possible to remove types from the list using '!' in front of a
+ *      value. The value !0xC000 would for example exclude SwCntntFrms from
+ *      logging.
+ *      In the [record] section the functions group which should be logged are
+ *      listed; default is 0 which means that none are logged. It's also
+ *      possible to remove functions using '!'.
+ *      An example INI file:
+ *      ------------------------------------------
+ *           #Functions: all, except PRTARE
+ *           [record] 0xFFFFFFFE !0x200
+ *           [frmid]
+ *           #the following FrmIds:
+ *           1 2 12 13 14 15
+ *           #no layout frames, except ColumnFrms
+ *           [frmtype] !0x3FFF 0x4
+ *      ------------------------------------------
+
  * Wenn die Aufzeichnung erstmal laeuft, kann man in SwImplProtocol::_Record(...) mittels
  * Debugger vielfaeltige Manipulationen vornehmen, z.B. bezueglich FrameTypen oder FrmIds.
  *
+
+ * As soon as the logging is in process, one can manipulate many things in
+ * SwImplProtocol::_Record(...) using a debugger, especially concerning
+ * frame types and FrmIds.
+
  * --------------------------------------------------*/
 
 #include "dbg_lay.hxx"
@@ -137,16 +190,15 @@ sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 
 class SwImplProtocol
 {
-    SvFileStream *pStream;      // Ausgabestream
-    std::set<sal_uInt16> *pFrmIds;      // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
-    std::vector<long> aVars;    // Variables
-    rtl::OStringBuffer aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
-    sal_uInt16 nTypes;              // welche Typen sollen aufgezeichnet werden
-    sal_uInt16 nLineCount;          // Ausgegebene Zeilen
-    sal_uInt16 nMaxLines;           // Maximal auszugebende Zeilen
-    sal_uInt8 nInitFile;                // Bereich (FrmId,FrmType,Record) beim Einlesen der INI-Datei
-    sal_uInt8 nTestMode;                // Special fuer Testformatierung, es wird ggf. nur
-                                // innerhalb einer Testformatierung aufgezeichnet.
+    SvFileStream *pStream;          // output stream
+    std::set<sal_uInt16> *pFrmIds;  // which FrmIds shall be logged ( NULL == all)
+    std::vector<long> aVars;        // variables
+    rtl::OStringBuffer aLayer;      // indentation of output ("  " per start/end)
+    sal_uInt16 nTypes;              // which types shall be logged
+    sal_uInt16 nLineCount;          // printed lines
+    sal_uInt16 nMaxLines;           // max lines to be printed
+    sal_uInt8 nInitFile;            // range (FrmId,FrmType,Record) during reading of the INI file
+    sal_uInt8 nTestMode;            // special for test formating, logging may only be done in test formating.
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     sal_Bool NewStream();
     void CheckLine( rtl::OString& rLine );
@@ -154,44 +206,39 @@ class SwImplProtocol
 public:
     SwImplProtocol();
     ~SwImplProtocol();
-    // Aufzeichnen
+    // logging
     void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
         { if( pStream ) _Record( pFrm, nFunction, nAct, pParam ); }
-    sal_Bool InsertFrm( sal_uInt16 nFrmId );    // FrmId aufnehmen zum Aufzeichnen
-    sal_Bool DeleteFrm( sal_uInt16 nFrmId );    // FrmId entfernen, diesen nicht mehr Aufzeichnen
-    void FileInit();                    // Auslesen der INI-Datei
+    sal_Bool InsertFrm( sal_uInt16 nFrmId );    // take FrmId for logging
+    sal_Bool DeleteFrm( sal_uInt16 nFrmId );    // remove FrmId; don't log him anymore
+    void FileInit();                    // read the INI file
     void ChkStream() { if( !pStream ) NewStream(); }
-    void SnapShot( const SwFrm* pFrm, sal_uLong nFlags );
-    void GetVar( const sal_uInt16 nNo, long& rVar )
-        { if( nNo < aVars.size() ) rVar = aVars[ nNo ]; }
 };
 
 /* --------------------------------------------------
- * Durch das PROTOCOL_ENTER-Makro wird ein SwEnterLeave-Objekt erzeugt,
- * wenn die aktuelle Funktion aufgezeichnet werden soll, wird ein
- * SwImplEnterLeave-Objekt angelegt. Der Witz dabei ist, das der Ctor
- * des Impl-Objekt am Anfang der Funktion und automatisch der Dtor beim
- * Verlassen der Funktion gerufen wird. In der Basis-Implementierung ruft
- * der Ctor lediglich ein PROTOCOL(..) mit ACT_START und im Dtor ein
- * PROTOCOL(..) mit ACT_END.
- * Es lassen sich Ableitungen der Klasse bilden, um z.B. beim Verlassen
- * einer Funktion Groessenaenderungen des Frames zu dokumentieren u.v.a.m.
- * Dazu braucht dann nur noch in SwEnterLeave::Ctor(...) die gewuenschte
- * SwImplEnterLeave-Klasse angelegt zu werden.
- *
+ * Through the PROTOCOL_ENTER macro a SwEnterLeave object gets created. If the
+ * current function should be logged a SwImplEnterLeace object gets created.
+ * The funny thing here is, that the Ctor of the Impl object is automatically
+ * called at the beginning of the function and the Dtor is automatically called
+ * when leaving the function. In the base implementation the Ctor calls only
+ * PROTOCOL(..) with ACT_START and in the Dtor a PROTOCOL(..) with ACT_END.
+ * It's possible to derive from this class, for example to be able to document
+ * frame resize while leaving a function. To do this, one only needs to add the
+ * desired SwImplEnterLeave class in SwEnterLeave::Ctor().
  * --------------------------------------------------*/
 
 class SwImplEnterLeave
 {
 protected:
-    const SwFrm* pFrm;              // Der Frame,
-    sal_uLong nFunction, nAction;       // die Funktion, ggf. die Aktion
-    void* pParam;                   // und weitere Parameter
+    const SwFrm* pFrm;              // the frame
+    sal_uLong nFunction, nAction;   // the function, the action if needed
+    void* pParam;                   // further parameter
 public:
     SwImplEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : pFrm( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}
-    virtual void Enter();           // Ausgabe beim Eintritt
-    virtual void Leave();           // Ausgabe beim Verlassen
+    virtual ~SwImplEnterLeave() {}
+    virtual void Enter();           // message when entering
+    virtual void Leave();           // message when leaving
 };
 
 class SwSizeEnterLeave : public SwImplEnterLeave
@@ -200,7 +247,8 @@ class SwSizeEnterLeave : public SwImplEnterLeave
 public:
     SwSizeEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmHeight( pF->Frm().Height() ) {}
-    virtual void Leave();           // Ausgabe der Groessenaenderung
+    virtual ~SwSizeEnterLeave() {}
+    virtual void Leave();           // resize message
 };
 
 class SwUpperEnterLeave : public SwImplEnterLeave
@@ -209,8 +257,9 @@ class SwUpperEnterLeave : public SwImplEnterLeave
 public:
     SwUpperEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmId( 0 ) {}
-    virtual void Enter();           // Ausgabe
-    virtual void Leave();           // Ausgabe der FrmId des Uppers
+    virtual ~SwUpperEnterLeave() {}
+    virtual void Enter();           // message
+    virtual void Leave();           // message of FrmId from upper
 };
 
 class SwFrmChangesLeave : public SwImplEnterLeave
@@ -219,33 +268,35 @@ class SwFrmChangesLeave : public SwImplEnterLeave
 public:
     SwFrmChangesLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrm( pF->Frm() ) {}
-    virtual void Enter();           // keine Ausgabe
-    virtual void Leave();           // Ausgabe bei Aenderung der Frm-Area
+    virtual ~SwFrmChangesLeave() {}
+    virtual void Enter();           // no message
+    virtual void Leave();           // message when resizing the Frm area
 };
 
 void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     if( Start() )
-    {   // Hier landen wir, wenn im Debugger SwProtocol::nRecord mit PROT_INIT(0x1) oderiert wurde
-        sal_Bool bFinit = sal_False; // Dies bietet im Debugger die Moeglichkeit,
-        if( bFinit )         // die Aufzeichnung dieser Action zu beenden
+    {   // We reach this point if SwProtocol::nRecord is binary OR'd with PROT_INIT(0x1) using the debugger
+        sal_Bool bFinit = sal_False; // This gives the possibility to stop logging of this action in the debugger
+        if( bFinit )
         {
-            nRecord &= ~nFunction;  // Diese Funktion nicht mehr aufzeichnen
-            nRecord &= ~PROT_INIT;  // PROT_INIT stets zuruecksetzen
+            nRecord &= ~nFunction;  // Don't log this function any longer
+            nRecord &= ~PROT_INIT;  // Always reset PROT_INIT
             return;
         }
-        nRecord |= nFunction;       // Aufzeichnung dieser Funktion freischalten
-        nRecord &= ~PROT_INIT;      // PROT_INIT stets zuruecksetzen
+        nRecord |= nFunction;       // Acitivate logging of this function
+        nRecord &= ~PROT_INIT;      // Always reset PROT_INIT
         if( pImpl )
             pImpl->ChkStream();
     }
-    if( !pImpl )                        // Impl-Object anlegen, wenn noetig
+    if( !pImpl )                        // Create Impl object if needed
         pImpl = new SwImplProtocol();
-    pImpl->Record( pFrm, nFunction, nAct, pParam ); // ...und Aufzeichnen
+    pImpl->Record( pFrm, nFunction, nAct, pParam ); // ...and start logging
 }
 
-// Die folgende Funktion wird beim Anziehen der Writer-DLL durch TxtInit(..) aufgerufen
-// und ermoeglicht dem Debuggenden Funktionen und/oder FrmIds freizuschalten
+// The following function gets called when pulling in the writer DLL through
+// TxtInit(..) and gives the possibility to release functions
+// and/or FrmIds to the debugger
 
 void SwProtocol::Init()
 {
@@ -260,7 +311,7 @@ void SwProtocol::Init()
     aStream.Close();
 }
 
-// Ende der Aufzeichnung
+// End of logging
 
 void SwProtocol::Stop()
 {
@@ -272,20 +323,6 @@ void SwProtocol::Stop()
             pFntCache->Flush();
      }
      nRecord = 0;
-}
-
-// Creates a more or less detailed snapshot of the layout structur
-
-void SwProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
-{
-    if( pImpl )
-        pImpl->SnapShot( pFrm, nFlags );
-}
-
-void SwProtocol::GetVar( const sal_uInt16 nNo, long& rVar )
-{
-    if( pImpl )
-        pImpl->GetVar( nNo, rVar );
 }
 
 SwImplProtocol::SwImplProtocol()
@@ -321,43 +358,43 @@ SwImplProtocol::~SwImplProtocol()
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::CheckLine analysiert eine Zeile der INI-Datei
+ * SwImplProtocol::CheckLine analyzes a line in the INI file
  * --------------------------------------------------*/
 
 void SwImplProtocol::CheckLine( rtl::OString& rLine )
 {
-    rLine = rLine.toAsciiLowerCase(); // Gross/Kleinschreibung ist einerlei
+    rLine = rLine.toAsciiLowerCase(); // upper/lower case is the same
     rLine = rLine.replace( '\t', ' ' );
-    if( '#' == rLine[0] )   // Kommentarzeilen beginnen mit '#'
+    if( '#' == rLine[0] )   // comments start with '#'
         return;
-    if( '[' == rLine[0] )   // Bereiche: FrmIds, Typen oder Funktionen
+    if( '[' == rLine[0] )   // section: FrmIds, type or funciton
     {
         rtl::OString aTmp = comphelper::string::getToken(rLine, 0, ']');
-        if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmid")))      // Bereich FrmIds
+        if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmid")))      // section FrmIds
         {
             nInitFile = 1;
             pFrmIds->clear();
             delete pFrmIds;
-            pFrmIds = NULL;         // Default: Alle Frames aufzeichnen
+            pFrmIds = NULL;         // default: log all frames
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmtype")))// Bereich Typen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmtype")))// section types
         {
             nInitFile = 2;
-            nTypes = USHRT_MAX;     // Default: Alle FrmaeTypen aufzeichnen
+            nTypes = USHRT_MAX;     // default: log all frame types
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[record")))// Bereich Funktionen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[record")))// section functions
         {
             nInitFile = 3;
-            SwProtocol::SetRecord( 0 );// Default: Keine Funktion wird aufgezeichnet
+            SwProtocol::SetRecord( 0 );// default: don't log any function
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[test")))// Bereich Funktionen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[test")))// section functions
         {
-            nInitFile = 4; // Default:
-            nTestMode = 0; // Ausserhalb der Testformatierung wird aufgezeichnet
+            nInitFile = 4; // default:
+            nTestMode = 0; // log outside of test formating
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[max")))// maximale Zeilenzahl
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[max")))// Max number of lines
         {
-            nInitFile = 5; // Default:
+            nInitFile = 5; // default:
             nMaxLines = USHRT_MAX;
         }
         else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[var")))// variables
@@ -365,11 +402,11 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
             nInitFile = 6;
         }
         else
-            nInitFile = 0;          // Nanu: Unbekannter Bereich?
+            nInitFile = 0;          // oops: unknown section?
         rLine = rLine.copy(aTmp.getLength() + 1);
     }
 
-    // Blanks (oder Tabs) sind die Trenner
+    // spaces (or tabs) are the delimiter
     sal_Int32 nIndex = 0;
     do
     {
@@ -377,7 +414,7 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
         sal_Bool bNo = sal_False;
         if( '!' == aTok[0] )
         {
-            bNo = sal_True;                 // Diese(n) Funktion/Typ entfernen
+            bNo = sal_True;                 // remove this function/type
             aTok = aTok.copy(1);
         }
         if( !aTok.isEmpty() )
@@ -386,31 +423,31 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
             sscanf( aTok.getStr(), "%li", &nVal );
             switch ( nInitFile )
             {
-                case 1: InsertFrm( sal_uInt16( nVal ) );    // FrmId aufnehmen
+                case 1: InsertFrm( sal_uInt16( nVal ) );    // add FrmId
                         break;
                 case 2: {
                             sal_uInt16 nNew = (sal_uInt16)nVal;
                             if( bNo )
-                                nTypes &= ~nNew;    // Typ entfernen
+                                nTypes &= ~nNew;    // remove type
                             else
-                                nTypes |= nNew;     // Typ aufnehmen
+                                nTypes |= nNew;     // add type
                         }
                         break;
                 case 3: {
                             sal_uLong nOld = SwProtocol::Record();
                             if( bNo )
-                                nOld &= ~nVal;      // Funktion entfernen
+                                nOld &= ~nVal;      // remove function
                             else
-                                nOld |= nVal;       // Funktion aufnehmen
+                                nOld |= nVal;       // remove function
                             SwProtocol::SetRecord( nOld );
                         }
                         break;
                 case 4: {
                             sal_uInt8 nNew = (sal_uInt8)nVal;
                             if( bNo )
-                                nTestMode &= ~nNew; // TestMode zuruecksetzen
+                                nTestMode &= ~nNew; // reset test mode
                             else
-                                nTestMode |= nNew;      // TestMode setzen
+                                nTestMode |= nNew;      // set test mode
                         }
                         break;
                 case 5: nMaxLines = (sal_uInt16)nVal;
@@ -424,8 +461,8 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::FileInit() liest die Datei "dbg_lay.ini"
- * im aktuellen Verzeichnis und wertet sie aus.
+ * SwImplProtocol::FileInit() reads the file "dbg_lay.ini"
+ * in the current directory and evaluates it.
  * --------------------------------------------------*/
 void SwImplProtocol::FileInit()
 {
@@ -439,25 +476,25 @@ void SwImplProtocol::FileInit()
         {
             sal_Char c;
             aStream >> c;
-            if( '\n' == c || '\r' == c )    // Zeilenende
+            if( '\n' == c || '\r' == c )    // line ending
             {
                 aLine = aLine.trim();
                 if( !aLine.isEmpty() )
-                    CheckLine( aLine );     // Zeile auswerten
+                    CheckLine( aLine );     // evaluate line
                 aLine = rtl::OString();
             }
             else
                 aLine = rtl::OString(c);
         }
         if( !aLine.isEmpty() )
-            CheckLine( aLine );     // letzte Zeile auswerten
+            CheckLine( aLine );     // evaluate last line
     }
     aStream.Close();
 }
 
 /* --------------------------------------------------
- * lcl_Start sorgt fuer Einrueckung um zwei Blanks bei ACT_START
- * und nimmt diese bei ACT_END wieder zurueck.
+ * lcl_Start enables indentation by two spaces during ACT_START and disables
+ * it again at ACT_END.
  * --------------------------------------------------*/
 void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAction)
 {
@@ -478,8 +515,8 @@ void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAc
 }
 
 /* --------------------------------------------------
- * lcl_Flags gibt das ValidSize-, ValidPos- und ValidPrtArea-Flag ("Sz","Ps","PA")
- * des Frames aus, "+" fuer valid, "-" fuer invalid.
+ * lcl_Flags outputs the ValidSize-, ValidPos- and ValidPrtArea-Flag ("Sz","Ps","PA")
+ * of the frame; "+" stands for valid, "-" stands for invalid.
  * --------------------------------------------------*/
 
 void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
@@ -493,7 +530,7 @@ void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
 }
 
 /* --------------------------------------------------
- * lcl_FrameType gibt den Typ des Frames in Klartext aus.
+ * lcl_FrameType outputs the type of the frame as clear text.
  * --------------------------------------------------*/
 
 void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
@@ -542,16 +579,15 @@ void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::Record(..) wird nur gerufen, wenn das PROTOCOL-Makro
- * feststellt, dass die Funktion aufgezeichnet werden soll ( SwProtocol::nRecord ).
- * In dieser Methode werden noch die beiden weiteren Einschraenkungen ueberprueft,
- * ob die FrmId und der FrameType zu den aufzuzeichnenden gehoeren.
+ * SwImplProtocol::Record(..) is only called if the PROTOCOL macro finds out,
+ * that this function should be recorded ( SwProtocol::nRecord ).
+ * In this method we also check if FrmId and frame type should be logged.
  * --------------------------------------------------*/
 
 void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     sal_uInt16 nSpecial = 0;
-    if( nSpecial )  // Debugger-Manipulationsmoeglichkeit
+    if( nSpecial )  // the possible debugger manipulations
     {
         sal_uInt16 nId = sal_uInt16(lcl_GetFrameId( pFrm ));
         switch ( nSpecial )
@@ -564,22 +600,22 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         return;
     }
     if( !pStream && !NewStream() )
-        return; // Immer noch kein Stream
+        return; // still no stream
 
     if( pFrmIds && !pFrmIds->count( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
-        return; // gehoert nicht zu den gewuenschten FrmIds
+        return; // doesn't belong to the wished FrmIds
 
     if( !(pFrm->GetType() & nTypes) )
-        return; // Der Typ ist unerwuenscht
+        return; // the type is unwanted
 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
-        return; // Wir sollen nur innerhalb einer Testformatierung aufzeichnen
+        return; // we may only log inside a test formating
     sal_Bool bTmp = sal_False;
     rtl::OStringBuffer aOut(aLayer);
     aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));
     aOut.append(' ');
-    lcl_FrameType( aOut, pFrm );    // dann den FrameType
-    switch ( nFunction )            // und die Funktion
+    lcl_FrameType( aOut, pFrm );    // then the frame type
+    switch ( nFunction )            // and the function
     {
         case PROT_SNAPSHOT: lcl_Flags( aOut, pFrm );
                             break;
@@ -701,15 +737,15 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                                 break;
                             }
     }
-    *pStream << aOut.getStr() << endl;  // Ausgabe
-    pStream->Flush();   // Gleich auf die Platte, damit man mitlesen kann
-    if( ++nLineCount >= nMaxLines )     // Maximale Ausgabe erreicht?
-        SwProtocol::SetRecord( 0 );        // => Ende der Aufzeichnung
+    *pStream << aOut.getStr() << endl;  // output
+    pStream->Flush();   // to the disk, so we can read it immediately
+    if( ++nLineCount >= nMaxLines )     // max number of lines reached?
+        SwProtocol::SetRecord( 0 );        // => end f logging
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::SectFunc(...) wird von SwImplProtocol::_Record(..) gerufen,
- * hier werden die Ausgaben rund um SectionFrms abgehandelt.
+ * SwImplProtocol::SectFunc(...) is called from SwImplProtocol::_Record(..)
+ * here we handle the output of the SectionFrms.
  * --------------------------------------------------*/
 
 void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
@@ -740,9 +776,9 @@ void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::InsertFrm(..) nimmt eine neue FrmId zum Aufzeichnen auf,
- * wenn pFrmIds==NULL, werden alle aufgezeichnet, sobald durch InsertFrm(..)
- * pFrmIds angelegt wird, werden nur noch die enthaltenen FrmIds aufgezeichnet.
+ * SwImplProtocol::InsertFrm(..) takes a new FrmId for logging; if pFrmIds==NULL
+ * all are going to be logged but as soon as pFrmIds are set through
+ * InsertFrm(..) only the added FrmIds are being logged.
  * --------------------------------------------------*/
 
 sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
@@ -756,8 +792,8 @@ sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
 }
 
 /* --------------------------------------------------
- * SwImplProtocol::DeleteFrm(..) entfernt eine FrmId aus dem pFrmIds-Array,
- * so dass diese Frame nicht mehr aufgezeichnet wird.
+ * SwImplProtocol::DeleteFrm(..) removes a FrmId from the pFrmIds array, so they
+ * won't be logged anymore.
  * --------------------------------------------------*/
 sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
@@ -768,45 +804,11 @@ sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
     return sal_False;
 }
 
-/*--------------------------------------------------
- * SwProtocol::SnapShot(..)
- * creates a snapshot of the given frame and its content.
- * --------------------------------------------------*/
-void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
-{
-    while( pFrm )
-    {
-        _Record( pFrm, PROT_SNAPSHOT, 0, 0);
-        if( pFrm->GetDrawObjs() && nFlags & SNAP_FLYFRAMES )
-        {
-            aLayer.append(RTL_CONSTASCII_STRINGPARAM("[ "));
-            const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
-            {
-                SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
-                    SnapShot( static_cast<SwFlyFrm*>(pObj), nFlags );
-            }
-            if (aLayer.getLength() > 1)
-                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
-        }
-        if( pFrm->IsLayoutFrm() && nFlags & SNAP_LOWER &&
-            ( !pFrm->IsTabFrm() || nFlags & SNAP_TABLECONT ) )
-        {
-            aLayer.append(RTL_CONSTASCII_STRINGPARAM("  "));
-            SnapShot( ((SwLayoutFrm*)pFrm)->Lower(), nFlags );
-            if (aLayer.getLength() > 1)
-                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
-        }
-        pFrm = pFrm->GetNext();
-    }
-}
-
 /* --------------------------------------------------
- * SwEnterLeave::Ctor(..) wird vom eigentlichen (inline-)Kontruktor gerufen,
- * wenn die Funktion aufgezeichnet werden soll.
- * Die Aufgabe ist es abhaengig von der Funktion das richtige SwImplEnterLeave-Objekt
- * zu erzeugen, alles weitere geschieht dann in dessen Ctor/Dtor.
+ * SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should
+ * be logged.
+ * The task here is to find the right SwImplEnterLeave object based on the
+ * function; everything else is then done in his Ctor/Dtor.
  * --------------------------------------------------*/
 void SwEnterLeave::Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar )
 {
@@ -824,9 +826,9 @@ void SwEnterLeave::Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, voi
 }
 
 /* --------------------------------------------------
- * SwEnterLeave::Dtor() ruft lediglich den Destruktor des SwImplEnterLeave-Objekts,
- * ist nur deshalb nicht inline, damit die SwImplEnterLeave-Definition nicht
- * im dbg_lay.hxx zu stehen braucht.
+ * SwEnterLeave::Dtor() only calls the Dtor of the SwImplEnterLeave object. It's
+ * just no inline because we don't want the SwImplEnterLeave definition inside
+ * dbg_lay.hxx.
  * --------------------------------------------------*/
 
 void SwEnterLeave::Dtor()

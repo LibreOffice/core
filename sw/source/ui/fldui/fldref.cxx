@@ -277,7 +277,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
 {
     // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
@@ -415,7 +415,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldRefPage, SubTypeHdl)
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -629,7 +629,7 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        std::vector<String> aLst;
+        std::vector<rtl::OUString> aLst;
         GetFldMgr().GetSubTypes(nTypeId, aLst);
         for(size_t i = 0; i < aLst.size(); ++i)
             aSelectionLB.InsertEntry(aLst[i]);
@@ -769,7 +769,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     Description: Modify
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
 {
     String aName(aNameED.GetText());
     const sal_uInt16 nLen = aName.Len();

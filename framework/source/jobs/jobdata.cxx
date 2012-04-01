@@ -162,7 +162,7 @@ JobData::~JobData()
 //________________________________
 /**
     @short      initalize this instance as a job with configuration
-    @descr      They given alias can be used to adress some configuraton data.
+    @descr      They given alias can be used to address some configuraton data.
                 We read it and fill our internal structures. Of course old informations
                 will be lost doing so.
 

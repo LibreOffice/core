@@ -79,7 +79,6 @@
 #include "undo/undomanager.hxx"
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
@@ -114,11 +113,11 @@ TYPEINIT1(View, FmFormView);
 |*
 \************************************************************************/
 
-View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
+View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)
-  : FmFormView(pDrawDoc, pOutDev),
-    mpDoc(pDrawDoc),
-    mpDocSh( pDrawDoc->GetDocSh() ),
+  : FmFormView(&rDrawDoc, pOutDev),
+    mrDoc(rDrawDoc),
+    mpDocSh(rDrawDoc.GetDocSh()),
     mpViewSh(pViewShell),
     mpDragSrcMarkList(NULL),
     mpDropMarkerObj(NULL),
@@ -499,7 +498,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
             SdPage* pPage = (SdPage*) pPgView->GetPage();
             if( pPage )
             {
-                SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
+                SdrOutliner& rOutl = mrDoc.GetDrawOutliner(NULL);
                 bool bScreenDisplay(true);
 
                 if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
@@ -703,9 +702,9 @@ sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHar
 |*
 \************************************************************************/
 
-static void SetSpellOptions( SdDrawDocument* pDoc, sal_uLong& rCntrl )
+static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
 {
-    sal_Bool bOnlineSpell = pDoc->GetOnlineSpell();
+    sal_Bool bOnlineSpell = rDoc.GetOnlineSpell();
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -728,7 +727,7 @@ sal_Bool View::SdrBeginTextEdit(
     // make draw&impress specific initialisations
     if( pOutl )
     {
-        pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
+        pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mrDoc.GetStyleSheetPool());
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
         sal_uLong nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
@@ -737,10 +736,10 @@ sal_Bool View::SdrBeginTextEdit(
         nCntrl |= EE_CNTRL_AUTOCORRECT;
 
         nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
-        if ( mpDoc->IsSummationOfParagraphs() )
+        if ( mrDoc.IsSummationOfParagraphs() )
             nCntrl |= EE_CNTRL_ULSPACESUMMATION;
 
-        SetSpellOptions( mpDoc, nCntrl );
+        SetSpellOptions( mrDoc, nCntrl );
 
         pOutl->SetControlWord(nCntrl);
 
@@ -868,7 +867,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 
 void View::SetMarkedOriginalSize()
 {
-    SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*mpDoc);
+    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
     sal_uLong           nCount = GetMarkedObjectCount();
     sal_Bool            bOK = sal_False;
 
@@ -911,7 +910,7 @@ void View::SetMarkedOriginalSize()
                     {
                         Rectangle   aDrawRect( pObj->GetLogicRect() );
 
-                        pUndoGroup->AddAction( mpDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                        pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
                     }
@@ -974,7 +973,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz;
 
-                    MapMode aMapMode( mpDoc->GetScaleUnit() );
+                    MapMode aMapMode( mrDoc.GetScaleUnit() );
                     Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
@@ -1021,8 +1020,8 @@ sal_Bool View::IsMorphingAllowed() const
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
              !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
         {
-            SfxItemSet      aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet      aSet1( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet      aSet2( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
 
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());
@@ -1133,9 +1132,9 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 bool View::isRecordingUndo() const
 {
-    if( mpDoc && mpDoc->IsUndoEnabled() )
+    if( mrDoc.IsUndoEnabled() )
     {
-        sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
+        sd::UndoManager* pUndoManager = mrDoc.GetUndoManager();
         return pUndoManager && pUndoManager->IsInListAction();
     }
     else
@@ -1249,7 +1248,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         {
             // for outline shapes, set the correct outline style sheet for each
             // new paragraph, depending on the paragraph depth
-            SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
+            SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
             for ( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
             {

@@ -9,7 +9,7 @@
       <info>
         <desc>invitations to usage tracking etc.</desc>
       </info>
-      <prop oor:name="OfficeStartCounterdown" oor:type="xs:int">
+      <prop oor:name="OfficeStartCounterdown" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>the number of starts that will be skipped before the user will get invited to the
                 OpenOffice.org Improvement Program. If this is zero the user will get asked.
@@ -17,26 +17,26 @@
         </info>
         <value>1</value>
       </prop>
-      <prop oor:name="InvitationAccepted" oor:type="xs:boolean">
+      <prop oor:name="InvitationAccepted" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>true, if the user accepted the invitation.</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="ShowedInvitation" oor:type="xs:boolean">
+      <prop oor:name="ShowedInvitation" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>true, if the user was already invited.</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="DeliveredPrebundled" oor:type="xs:boolean">
+      <prop oor:name="DeliveredPrebundled" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>true, if the extension is prebundled - is set by an onFirstRunInitialization job.
                 (currently not implemented)</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="HelpUrl" oor:type="xs:string">
+      <prop oor:name="HelpUrl" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>the url where additional information can be found.</desc>
         </info>
@@ -47,19 +47,19 @@
       <info>
         <desc>counts of recorded events, uploaded reports etc.</desc>
       </info>
-      <prop oor:name="UploadedReports" oor:type="xs:int">
+      <prop oor:name="UploadedReports" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>the number of reports uploaded.</desc>
         </info>
         <value>0</value>
       </prop>
-      <prop oor:name="LoggedEvents" oor:type="xs:int">
+      <prop oor:name="LoggedEvents" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>the number of events in zipped or already uploaded report.</desc>
         </info>
         <value>0</value>
       </prop>
-      <prop oor:name="FailedAttempts" oor:type="xs:int">
+      <prop oor:name="FailedAttempts" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>the number of failed upload tries.</desc>
         </info>
@@ -70,13 +70,13 @@
       <info>
         <desc>settings on destination for uploading reports</desc>
       </info>
-      <prop oor:name="SoapUrl" oor:type="xs:string">
+      <prop oor:name="SoapUrl" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>the url where reports get send to.</desc>
         </info>
         <value>http://report.libreoffice.org:80/soap/servlet/rpcrouter</value>
       </prop>
-      <prop oor:name="SoapIdAdditions" oor:type="xs:string">
+      <prop oor:name="SoapIdAdditions" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Additions to the SoapId for automated testing
                 DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!
@@ -84,7 +84,7 @@
         </info>
         <value></value>
       </prop>
-      <prop oor:name="ReporterEmail" oor:type="xs:string">
+      <prop oor:name="ReporterEmail" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>The Emailaddress to fill out in the reportmail.xml file.
                 DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!

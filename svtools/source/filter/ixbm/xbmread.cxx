@@ -65,38 +65,38 @@ XBMReader::~XBMReader()
 
 void XBMReader::InitTable()
 {
-    memset( pHexTable, 0, sizeof( short ) );
+    memset( pHexTable, 0, sizeof( short ) * 256 );
 
-    pHexTable['0'] = 0;
-    pHexTable['1'] = 1;
-    pHexTable['2'] = 2;
-    pHexTable['3'] = 3;
-    pHexTable['4'] = 4;
-    pHexTable['5'] = 5;
-    pHexTable['6'] = 6;
-    pHexTable['7'] = 7;
-    pHexTable['8'] = 8;
-    pHexTable['9'] = 9;
-    pHexTable['A'] = 10;
-    pHexTable['B'] = 11;
-    pHexTable['C'] = 12;
-    pHexTable['D'] = 13;
-    pHexTable['E'] = 14;
-    pHexTable['F'] = 15;
-    pHexTable['X'] = 0;
-    pHexTable['a'] = 10;
-    pHexTable['b'] = 11;
-    pHexTable['c'] = 12;
-    pHexTable['d'] = 13;
-    pHexTable['e'] = 14;
-    pHexTable['f'] = 15;
-    pHexTable['x'] = 0;
-    pHexTable[' '] =     -1;
-    pHexTable[','] = -1;
-    pHexTable['}'] = -1;
-    pHexTable['\n'] = -1;
-    pHexTable['\t'] = -1;
-    pHexTable['\0'] = -1;
+    pHexTable[(int)'0'] = 0;
+    pHexTable[(int)'1'] = 1;
+    pHexTable[(int)'2'] = 2;
+    pHexTable[(int)'3'] = 3;
+    pHexTable[(int)'4'] = 4;
+    pHexTable[(int)'5'] = 5;
+    pHexTable[(int)'6'] = 6;
+    pHexTable[(int)'7'] = 7;
+    pHexTable[(int)'8'] = 8;
+    pHexTable[(int)'9'] = 9;
+    pHexTable[(int)'A'] = 10;
+    pHexTable[(int)'B'] = 11;
+    pHexTable[(int)'C'] = 12;
+    pHexTable[(int)'D'] = 13;
+    pHexTable[(int)'E'] = 14;
+    pHexTable[(int)'F'] = 15;
+    pHexTable[(int)'X'] = 0;
+    pHexTable[(int)'a'] = 10;
+    pHexTable[(int)'b'] = 11;
+    pHexTable[(int)'c'] = 12;
+    pHexTable[(int)'d'] = 13;
+    pHexTable[(int)'e'] = 14;
+    pHexTable[(int)'f'] = 15;
+    pHexTable[(int)'x'] = 0;
+    pHexTable[(int)' '] =     -1;
+    pHexTable[(int)','] = -1;
+    pHexTable[(int)'}'] = -1;
+    pHexTable[(int)'\n'] = -1;
+    pHexTable[(int)'\t'] = -1;
+    pHexTable[(int)'\0'] = -1;
 }
 
 // ------------------------------------------------------------------------
@@ -317,10 +317,9 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                     {
                         XBMFormat eFormat = XBM10;
 
-                        using comphelper::string::indexOfL;
-                        if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("short")) != -1)
+                        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("short")) != -1)
                             eFormat = XBM10;
-                        else if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("char")) != -1)
+                        else if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("char")) != -1)
                             eFormat = XBM11;
                         else
                             bStatus = sal_False;

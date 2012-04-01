@@ -40,15 +40,14 @@ class SVT_DLLPUBLIC SvtAccessibilityOptions:
     public utl::detail::Options, private SfxListener
 {
 private:
-    static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;
-    static sal_Int32                     volatile sm_nAccessibilityRefCount;
+    static SvtAccessibilityOptions_Impl* sm_pSingleImplConfig;
+    static sal_Int32                     sm_nAccessibilityRefCount;
 
 public:
     SvtAccessibilityOptions();
     virtual ~SvtAccessibilityOptions();
 
     // get & set config entries
-    sal_Bool    GetIsForBorders() const;        // obsolete!
     sal_Bool    GetIsForPagePreviews() const;
     sal_Bool    GetIsHelpTipsDisappear() const;
     sal_Bool    GetIsAllowAnimatedGraphics() const;

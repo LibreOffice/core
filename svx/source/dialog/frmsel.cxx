@@ -107,13 +107,6 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
     return FRAMESEL_NONE;
 }
 
-/** Converts an SvxBorderLine line width (in twips) to a pixel line width. */
-inline sal_uInt16 lclGetPixel( sal_uInt16 nWidth )
-{
-    // convert all core styles expect 0 to a visible UI style (at least 1 pixel), map 1pt to 1pixel
-    return nWidth ? std::min< sal_uInt16 >( std::max< sal_uInt16 >( (nWidth + 5) / 20, 1 ), FRAMESEL_GEOM_WIDTH ) : 0;
-}
-
 /** Merges the rSource polypolygon into the rDest polypolygon. */
 inline void lclPolyPolyUnion( PolyPolygon& rDest, const PolyPolygon& rSource )
 {

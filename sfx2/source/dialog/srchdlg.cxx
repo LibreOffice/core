@@ -141,7 +141,7 @@ void SearchDialog::SaveConfig()
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 }
 
-IMPL_LINK( SearchDialog, FindHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SearchDialog, FindHdl)
 {
     String sSrchTxt = m_aSearchEdit.GetText();
     sal_uInt16 nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
@@ -153,7 +153,7 @@ IMPL_LINK( SearchDialog, FindHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SearchDialog, ToggleHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SearchDialog, ToggleHdl)
 {
     String sTemp = m_aWrapAroundBox.GetText();
     m_aWrapAroundBox.SetText( m_sToggleText );

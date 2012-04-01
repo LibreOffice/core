@@ -130,6 +130,7 @@ namespace sdr
             OutputDevice& rOutputDevice,
             OverlayManager* pOldOverlayManager)
         :   Scheduler(),
+            mnRefCount(0),
             rmOutputDevice(rOutputDevice),
             maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
@@ -174,6 +175,14 @@ namespace sdr
                     pOldOverlayManager->maOverlayObjects.clear();
                 }
             }
+        }
+
+        rtl::Reference<OverlayManager> OverlayManager::create(
+            OutputDevice& rOutputDevice,
+            OverlayManager* pOldOverlayManager)
+        {
+            return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice,
+                pOldOverlayManager));
         }
 
         const drawinglayer::geometry::ViewInformation2D OverlayManager::getCurrentViewInformation2D() const
@@ -385,6 +394,20 @@ namespace sdr
                 ImpStripeDefinitionChanged();
             }
         }
+
+        oslInterlockedCount OverlayManager::acquire()
+        {
+            return osl_incrementInterlockedCount( &mnRefCount );
+        }
+
+        oslInterlockedCount OverlayManager::release()
+        {
+            oslInterlockedCount nCount( osl_decrementInterlockedCount( &mnRefCount ) );
+            if ( nCount == 0 )
+                delete this;
+            return nCount;
+        }
+
     } // end of namespace overlay
 } // end of namespace sdr
 

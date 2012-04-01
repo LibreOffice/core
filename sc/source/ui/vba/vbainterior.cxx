@@ -394,11 +394,10 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex ) throw 
         throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Pattern Color" )), uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaInterior::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaInterior") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaInterior"));
 }
 
 uno::Sequence< rtl::OUString >

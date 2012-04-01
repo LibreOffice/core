@@ -782,7 +782,7 @@ bool ToolbarLayoutManager::dockAllToolbars()
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
-        if ( pIter->m_aType.equalsAscii( "toolbar" ) && pIter->m_xUIElement.is() &&
+        if ( pIter->m_aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) && pIter->m_xUIElement.is() &&
              pIter->m_bFloating && pIter->m_bVisible )
             aToolBarNameVector.push_back( pIter->m_aName );
     }
@@ -1151,7 +1151,8 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
                 // Check that we only create:
                 // - Toolbars (the statusbar is also member of the persistent window state)
                 // - Not custom toolbars, there are created with their own method (implts_createCustomToolbars)
-                if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ) && aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
+                if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) &&
+                     aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
                 {
                     UIElement aNewToolbar = implts_findToolbar( aName );
                     bool bFound = ( aNewToolbar.m_aName == aName );
@@ -1191,9 +1192,9 @@ void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno
         ::rtl::OUString aTbxTitle;
         for ( sal_Int32 j = 0; j < rTbxSeq.getLength(); j++ )
         {
-            if ( rTbxSeq[j].Name.equalsAscii( "ResourceURL" ))
+            if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")))
                 rTbxSeq[j].Value >>= aTbxResName;
-            else if ( rTbxSeq[j].Name.equalsAscii( "UIName" ))
+            else if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UIName")))
                 rTbxSeq[j].Value >>= aTbxTitle;
         }
 

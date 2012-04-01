@@ -36,6 +36,7 @@
 #include <sal/macros.h>
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -79,6 +80,8 @@ using namespace cppu;
 
 namespace // private
 {
+    namespace css = com::sun::star;
+
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
@@ -161,7 +164,7 @@ namespace // private
 
     oslFileError _mapError( DWORD dwError )
     {
-        int i;
+        unsigned i;
 
         /* check the table for the OS error code */
         for ( i = 0; i < ERRTABLESIZE; ++i )
@@ -258,8 +261,9 @@ namespace // private
 
 //-----------------------------------------------------------------------------------------
 
-CSysShExec::CSysShExec( ) :
-    WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex )
+CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
+    WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex ),
+    m_xContext(xContext)
 {
     /*
      * As this service is declared thread-affine, it is ensured to be called from a
@@ -284,11 +288,27 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
-    if (!(nFlags >= DEFAULTS && nFlags <= NO_SYSTEM_ERROR_MESSAGE))
+    if ((nFlags & ~(NO_SYSTEM_ERROR_MESSAGE | URIS_ONLY)) != 0)
         throw IllegalArgumentException(
             OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Flags specified")),
             static_cast< XSystemShellExecute* >( this ),
             3 );
+
+    if ((nFlags & URIS_ONLY) != 0)
+    {
+        css::uno::Reference< css::uri::XUriReference > uri(
+            css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
+        if (!(uri.is() && uri->isAbsolute()))
+        {
+            throw css::lang::IllegalArgumentException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "XSystemShellExecute.execute URIS_ONLY with"
+                        " non-absolute URI reference "))
+                 + aCommand),
+                static_cast< cppu::OWeakObject * >(this), 0);
+        }
+    }
 
     /*  #i4789#; jump mark detection on system paths
         if the given command is a system path (not http or

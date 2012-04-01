@@ -283,9 +283,12 @@ sal_Bool SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos)
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->ExpandField(true) )
+// fdo#39694 the ExpandField here may not give the correct result in all cases,
+// but is better than nothing
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;

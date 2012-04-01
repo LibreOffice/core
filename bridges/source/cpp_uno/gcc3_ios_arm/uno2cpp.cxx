@@ -43,6 +43,123 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
+#ifdef __arm
+
+namespace arm
+{
+    bool is_complex_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
+                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
+            {
+                typelib_TypeDescription * t = 0;
+                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
+                bool b = is_complex_struct(t);
+                TYPELIB_DANGER_RELEASE(t);
+                if (b) {
+                    return true;
+                }
+            }
+            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
+                return true;
+        }
+        if (p->pBaseTypeDescription != 0)
+            return is_complex_struct(&p->pBaseTypeDescription->aBase);
+        return false;
+    }
+
+#ifdef __ARM_PCS_VFP
+    bool is_float_only_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_FLOAT &&
+                p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_DOUBLE)
+                return false;
+        }
+        return true;
+    }
+#endif
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef )
+    {
+        if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
+            return false;
+        else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
+        {
+            typelib_TypeDescription * pTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
+
+            //A Composite Type not larger than 4 bytes is returned in r0
+            bool bRet = pTypeDescr->nSize > 4 || is_complex_struct(pTypeDescr);
+
+#ifdef __ARM_PCS_VFP
+            // In the VFP ABI, structs with only float/double values that fit in
+            // 16 bytes are returned in registers
+            if( pTypeDescr->nSize <= 16 && is_float_only_struct(pTypeDescr))
+                bRet = false;
+#endif
+
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            return bRet;
+        }
+        return true;
+    }
+}
+
+void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
+{
+    switch( pReturnType->eTypeClass )
+    {
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            pRegisterReturn[1] = r1;
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+            pRegisterReturn[0] = r0;
+            break;
+        case typelib_TypeClass_FLOAT:
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
+            pRegisterReturn[0] = r0;
+#else
+            register float fret asm("s0");
+            *(float*)pRegisterReturn = fret;
+#endif
+        break;
+        case typelib_TypeClass_DOUBLE:
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
+            pRegisterReturn[1] = r1;
+            pRegisterReturn[0] = r0;
+#else
+            register double dret asm("d0");
+            *(double*)pRegisterReturn = dret;
+#endif
+            break;
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION:
+        {
+            if (!arm::return_in_hidden_param(pReturnType))
+                pRegisterReturn[0] = r0;
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+#endif
+
 namespace
 {
 
@@ -83,7 +200,7 @@ void callVirtualMethod(
 
 #else
     volatile long edx = 0, eax = 0; // for register returns
-    void * stackptr;
+    void * stackptr = 0;
     asm volatile (
         "mov   %%esp, %6\n\t"
         "mov   %0, %%eax\n\t"

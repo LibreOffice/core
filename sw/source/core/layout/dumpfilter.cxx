@@ -146,6 +146,7 @@ namespace sw
                     writeCallback, closeCallback, ( void* ) xOut.get(), NULL );
 
             xmlTextWriterPtr writer = xmlNewTextWriter( outBuffer );
+            xmlTextWriterSetIndent(writer, 1);
             xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
 
             // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely

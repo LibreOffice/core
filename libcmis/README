@@ -1,0 +1,8 @@
+A C++ client library for the CMIS interface.
+
+From:
+[http://sourceforge.net/projects/libcmis/]
+
+Wikipedia (CMIS):
+Content Management Interoperability Services (CMIS) is an open standard that defines an
+abstraction layer for controlling diverse document management systems and repositories using web protocols.

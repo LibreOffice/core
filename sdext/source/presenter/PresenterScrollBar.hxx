@@ -285,38 +285,6 @@ private:
     sal_Int32 mnScrollBarWidth;
 };
 
-/** A horizontal scroll bar.
-*/
-class PresenterHorizontalScrollBar : public PresenterScrollBar
-{
-public:
-    PresenterHorizontalScrollBar (
-        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::boost::function<void(double)>& rThumbMotionListener);
-    virtual ~PresenterHorizontalScrollBar (void);
-    virtual sal_Int32 GetSize (void) const;
-
-protected:
-    virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const;
-    virtual void UpdateDragAnchor (const double nDragDistance);
-    virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const;
-    virtual double GetMinor (const double nX, const double nY) const;
-    virtual double GetMajor (const double nX, const double nY) const;
-    virtual void UpdateBorders (void);
-    virtual void UpdateBitmaps (void);
-    virtual void PaintComposite(
-        const css::awt::Rectangle& rRepaintBox,
-        const Area eArea,
-        const SharedBitmapDescriptor& rpStartBitmaps,
-        const SharedBitmapDescriptor& rpCenterBitmaps,
-        const SharedBitmapDescriptor& rpEndBitmaps);
-
-private:
-    sal_Int32 mnScrollBarHeight;
-};
-
 } } // end of namespace ::sdext::presenter
 
 #endif

@@ -58,7 +58,10 @@ CONFIGURE_ACTION=configure --disable-shared --with-pic CFLAGS="$(ARCH_FLAGS) $(E
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
 .IF "$(OS)"=="AIX"
 CONFIGURE_FLAGS+= CFLAGS=-D_LINUX_SOURCE_COMPAT
-.ENDIF
+.ELIF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF

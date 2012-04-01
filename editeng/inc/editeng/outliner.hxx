@@ -308,7 +308,8 @@ public:
     void        Paste();
     void        PasteSpecial();
 
-    SfxStyleSheet*  GetStyleSheet() const;
+    const SfxStyleSheet*  GetStyleSheet() const;
+    SfxStyleSheet*  GetStyleSheet();
 
     void        SetControlWord( sal_uLong nWord );
     sal_uLong       GetControlWord() const;
@@ -617,7 +618,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 #ifdef _OUTLINER_CXX
 
     DECL_LINK(              ParaVisibleStateChangedHdl, Paragraph* );
-    DECL_LINK(              BeginMovingParagraphsHdl, MoveParagraphsInfo* );
+    DECL_LINK(              BeginMovingParagraphsHdl, void* );
     DECL_LINK(              EndMovingParagraphsHdl, MoveParagraphsInfo* );
     DECL_LINK(              BeginPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EndPasteOrDropHdl, PasteOrDropInfos* );

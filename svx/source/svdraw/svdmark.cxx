@@ -56,6 +56,8 @@ public:
     :   ContainerSorter(rNewCont)
     {}
 
+    virtual ~ImpSdrUShortContSorter() {}
+
     virtual int Compare(const void* pElem1, const void* pElem2) const;
 };
 
@@ -319,6 +321,8 @@ public:
     ImpSdrMarkListSorter(Container& rNewCont)
         :   ContainerSorter(rNewCont)
     {}
+
+    virtual ~ImpSdrMarkListSorter() {}
 
     virtual int Compare(const void* pElem1, const void* pElem2) const;
 };

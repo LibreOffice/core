@@ -59,6 +59,8 @@ public:
     Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
              rtl::OUString & rName);
 
+    virtual ~Bookmark() {}
+
     /**
        Resolve bookmark to handler.
 

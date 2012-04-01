@@ -47,30 +47,8 @@
 #include "scitems.hxx"
 #include "document.hxx"
 
-#define ODS_FORMAT_TYPE 50331943
-#define XLS_FORMAT_TYPE 318767171
-#define XLSX_FORMAT_TYPE 268959811
-
-#define ODS     0
-#define XLS     1
-#define XLSX    2
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-namespace {
-
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-};
-
-FileFormat aFileFormats[] = {
-    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
-};
-
-}
 
 /* Implementation of Macros test */
 
@@ -114,12 +92,10 @@ void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
 void ScMacrosTest::testStarBasic()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("StarBasic."));
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileExtension("ods");
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    std::cout << "StarBasic test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
@@ -141,7 +117,7 @@ void ScMacrosTest::testStarBasic()
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << "returned value = " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     xDocSh->DoClose();
 }
 
@@ -159,10 +135,7 @@ void ScMacrosTest::testVba()
         }
     };
 
-    rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[1].pName << " Test" << std::endl;
+    rtl::OUString aFileExtension("xls");
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
@@ -207,7 +180,7 @@ void ScMacrosTest::setUp()
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
     mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
+    CPPUNIT_ASSERT(mxDesktop.is());
 }
 
 void ScMacrosTest::tearDown()

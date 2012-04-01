@@ -54,7 +54,7 @@ public:
     virtual sal_Int32 SAL_CALL getIndex() throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_VARIABLE_HXX */

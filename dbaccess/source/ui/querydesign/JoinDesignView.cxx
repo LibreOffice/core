@@ -46,7 +46,6 @@
 #include "dbustrings.hrc"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
-#include "JoinTableView.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

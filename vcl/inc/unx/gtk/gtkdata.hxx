@@ -113,6 +113,7 @@ public:
     virtual ~GtkData();
 
     virtual void Init();
+    virtual void Dispose();
 
     virtual void initNWF();
     virtual void deInitNWF();

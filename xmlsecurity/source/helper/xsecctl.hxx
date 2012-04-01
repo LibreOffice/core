@@ -425,17 +425,8 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XElementStackKeeper >& xElementStackKeeper);
 
-    void setSAXChainConnector(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XParser >& xParser,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::sax::XElementStackKeeper >& xElementStackKeeper);
-
     void clearSAXChainConnector();
     void endMission();
-    const char* getErrorMessage();
 
     SignatureInformation    getSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations   getSignatureInformations() const;
@@ -449,7 +440,6 @@ public:
     /*
      * For signature generation
      */
-    void collectToSign( sal_Int32 securityId, const rtl::OUString& referenceId );
     void signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool isBinary);
 
 

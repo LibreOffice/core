@@ -110,7 +110,7 @@ public:
     virtual long        Notify( NotifyEvent& rNEvt );
     virtual void        FadeIn( sal_Bool );
     void                AutoShow( sal_Bool bShow = sal_True );
-    DECL_LINK( TimerHdl, Timer* );
+    DECL_LINK(TimerHdl, void *);
 
     SAL_DLLPRIVATE void Initialize_Impl();
     SAL_DLLPRIVATE sal_uInt16 GetWinBits_Impl() const;

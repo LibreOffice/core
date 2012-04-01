@@ -197,10 +197,8 @@ void SfxChildWindow::Destroy()
 SfxChildWindow::~SfxChildWindow()
 {
     DBG_DTOR(SfxChildWindow,0);
-    if ( pContext )
-        delete pContext;
-    if ( pWindow )
-        delete pWindow;
+    delete pContext;
+    delete pWindow;
     delete pImp;
 }
 
@@ -532,22 +530,6 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
         OSL_FAIL("No FloatingWindow-Context!");
         return NULL;
     }
-}
-
-SfxChildAlignment SfxChildWindowContext::GetAlignment() const
-{
-    Window *pParent = pWindow->GetParent();
-    if ( pParent->GetType() == RSC_DOCKINGWINDOW )
-    {
-        return ((SfxDockingWindow*)pParent)->GetAlignment();
-    }
-    else if ( pParent->GetType() == RSC_TOOLBOX )
-    {
-        HACK(noch nicht verwendet und noch nicht implementiert);
-        return SFX_ALIGN_NOALIGNMENT;
-    }
-    else
-        return SFX_ALIGN_NOALIGNMENT;
 }
 
 void SfxChildWindowContext::Resizing( Size& )

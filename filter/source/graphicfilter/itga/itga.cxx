@@ -304,7 +304,6 @@ sal_Bool TGAReader::ImplReadBody()
         nYAdd -=2;
     }
 
-//  nDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
     nDepth = mpFileHeader->nPixelDepth;
 
     if ( mbEncoding )
@@ -339,7 +338,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -364,7 +363,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -394,7 +393,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -417,7 +416,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -453,7 +452,7 @@ sal_Bool TGAReader::ImplReadBody()
                                         nYCount++;
 
                                         if( nYCount >= mpFileHeader->nImageHeight )
-                                            return false; // invalid picture
+                                            break;
                                     }
                                 }
                             }
@@ -473,7 +472,7 @@ sal_Bool TGAReader::ImplReadBody()
                                         nYCount++;
 
                                         if( nYCount >= mpFileHeader->nImageHeight )
-                                            return false; // invalid picture
+                                            break;
                                     }
                                 }
                             }
@@ -502,7 +501,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -522,7 +521,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -553,7 +552,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }
@@ -576,7 +575,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     nYCount++;
 
                                     if( nYCount >= mpFileHeader->nImageHeight )
-                                        return false; // invalid picture
+                                        break;
                                 }
                             }
                         }

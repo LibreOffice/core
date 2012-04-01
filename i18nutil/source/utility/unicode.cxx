@@ -411,85 +411,18 @@ sal_Bool SAL_CALL func( const sal_Unicode ch) {\
 
 IsType(unicode::isUpper, UPPERMASK)
 IsType(unicode::isLower, LOWERMASK)
-IsType(unicode::isTitle, DIGITMASK)
 IsType(unicode::isControl, CONTROLMASK)
 IsType(unicode::isPrint, PRINTMASK)
 IsType(unicode::isAlpha, ALPHAMASK)
 IsType(unicode::isDigit, DIGITMASK)
 IsType(unicode::isAlphaDigit, ALPHAMASK|DIGITMASK)
 IsType(unicode::isSpace, SPACEMASK)
-IsType(unicode::isBase, BASEMASK)
-IsType(unicode::isPunctuation, PUNCTUATIONMASK)
 
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
             bit(0x1c)|bit(0x1d)|bit(0x1e)|bit(0x1f)
 
 sal_Bool SAL_CALL unicode::isWhiteSpace( const sal_Unicode ch) {
     return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & (CONTROLSPACE)));
-}
-
-sal_Int32 SAL_CALL unicode::getCharType( const sal_Unicode ch )
-{
-    using namespace ::com::sun::star::i18n::KCharacterType;
-
-    switch ( getUnicodeType( ch ) ) {
-    // Upper
-    case UnicodeType::UPPERCASE_LETTER :
-        return UPPER|LETTER|PRINTABLE|BASE_FORM;
-
-    // Lower
-    case UnicodeType::LOWERCASE_LETTER :
-        return LOWER|LETTER|PRINTABLE|BASE_FORM;
-
-    // Title
-    case UnicodeType::TITLECASE_LETTER :
-        return TITLE_CASE|LETTER|PRINTABLE|BASE_FORM;
-
-    // Letter
-    case UnicodeType::MODIFIER_LETTER :
-    case UnicodeType::OTHER_LETTER :
-        return LETTER|PRINTABLE|BASE_FORM;
-
-    // Digit
-    case UnicodeType::DECIMAL_DIGIT_NUMBER:
-    case UnicodeType::LETTER_NUMBER:
-    case UnicodeType::OTHER_NUMBER:
-        return DIGIT|PRINTABLE|BASE_FORM;
-
-    // Base
-    case UnicodeType::NON_SPACING_MARK:
-    case UnicodeType::ENCLOSING_MARK:
-    case UnicodeType::COMBINING_SPACING_MARK:
-        return BASE_FORM|PRINTABLE;
-
-    // Print
-    case UnicodeType::SPACE_SEPARATOR:
-
-    case UnicodeType::DASH_PUNCTUATION:
-    case UnicodeType::INITIAL_PUNCTUATION:
-    case UnicodeType::FINAL_PUNCTUATION:
-    case UnicodeType::CONNECTOR_PUNCTUATION:
-    case UnicodeType::OTHER_PUNCTUATION:
-
-    case UnicodeType::MATH_SYMBOL:
-    case UnicodeType::CURRENCY_SYMBOL:
-    case UnicodeType::MODIFIER_SYMBOL:
-    case UnicodeType::OTHER_SYMBOL:
-        return PRINTABLE;
-
-    // Control
-    case UnicodeType::CONTROL:
-    case UnicodeType::FORMAT:
-        return CONTROL;
-
-    case UnicodeType::LINE_SEPARATOR:
-    case UnicodeType::PARAGRAPH_SEPARATOR:
-        return CONTROL|PRINTABLE;
-
-    // for all others
-    default:
-        return 0;
-    }
 }
 
 sal_Int16 SAL_CALL unicode::getScriptClassFromUScriptCode(UScriptCode eScript)

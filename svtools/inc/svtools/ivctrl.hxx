@@ -241,7 +241,7 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool        EditedEntry( SvxIconChoiceCtrlEntry*, const XubString& rNewText, sal_Bool bCancelled );
+    virtual sal_Bool    EditedEntry( SvxIconChoiceCtrlEntry*, const rtl::OUString& rNewText, sal_Bool bCancelled );
     virtual void        DocumentRectChanged();
     virtual void        VisibleRectChanged();
     virtual sal_Bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
@@ -273,7 +273,6 @@ protected:
 public:
 
                         SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
-                        SvtIconChoiceCtrl( Window* pParent, const ResId& rResId );
     virtual             ~SvtIconChoiceCtrl();
 
     void                SetStyle( WinBits nWinStyle );

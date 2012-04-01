@@ -300,8 +300,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
             if(HasCurrentFunction( SID_BEZIER_EDIT ) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+#endif
             rRequest.Ignore ();
             return NULL;
         }
@@ -312,8 +313,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
         if(HasCurrentFunction(SID_BEZIER_EDIT) )
             GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
+#ifndef DISABLE_SCRIPTING
         StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
         rRequest.Ignore ();
         return NULL;
     }

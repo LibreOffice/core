@@ -55,6 +55,9 @@
 
 #include <systools/win32/comtools.hxx>
 #ifdef __MINGW32__
+#if defined __uuidof
+#undef __uuidof
+#endif
 #define __uuidof(I) IID_##I
 #endif
 
@@ -327,6 +330,7 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     sal_uInt32 dwResult = WaitForSingleObject(
         m_hClipboardChangedNotifierThread, MAX_WAIT_SHUTDOWN );
 
+    (void) dwResult;
     OSL_ENSURE( dwResult == WAIT_OBJECT_0, "clipboard notifier thread could not terminate" );
 
     if ( NULL != m_hClipboardChangedNotifierThread )

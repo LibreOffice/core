@@ -18,13 +18,11 @@ AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
 ApplicationInfo1	OK	EndDialog	Return	1	0
 CancelSetup	No	EndDialog	Return	1	0
 CancelSetup	Yes	EndDialog	Exit	1	2
-CustomerInformation	Back	NewDialog	LicenseAgreement	HIDEEULA <> 1	1
-CustomerInformation	Back	NewDialog	InstallWelcome	HIDEEULA = 1	1
+CustomerInformation	Back	NewDialog	InstallWelcome	1	1
 CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
 CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
 CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
-CustomerInformation	Next	EndDialog	Exit	(SERIALNUMVALRETRYLIMIT) And (SERIALNUMVALRETRYLIMIT<0) And (SERIALNUMVALRETURN<>SERIALNUMVALSUCCESSRETVAL)	3
-CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL))	4
+CustomerInformation	Next	NewDialog	SetupType	1	3
 CustomSetup	Back	NewDialog	MaintenanceType	Installed	0
 CustomSetup	Back	NewDialog	SetupType	NOT Installed	0
 CustomSetup	Cancel	SpawnDialog	CancelSetup	1	0
@@ -43,11 +41,6 @@ CustomSetup	Next	DoAction	SetApplicationSelected	Not Installed And (APPLICATIONC
 CustomSetup	Next	DoAction	SetApplicationSelected	Installed	5
 CustomSetup	Next	SpawnDialog	ApplicationInfo1	APP_SELECTED <> 1	6
 CustomSetupTips	OK	EndDialog	Return	1	1
-DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
-DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
-DatabaseFolder	ChangeFolder	[_BrowseProperty]	DATABASEDIR	1	2
-DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
-DatabaseFolder	Next	NewDialog	SetupType	1	1
 DestinationFolder	Back	NewDialog	CustomerInformation	1	0
 DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
@@ -68,15 +61,8 @@ InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
 InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
-InstallWelcome	Next	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
-InstallWelcome	Next	NewDialog	CustomerInformation	HIDEEULA = 1	0
+InstallWelcome	Next	NewDialog	CustomerInformation	1	0
 LanguageInfo1	OK	EndDialog	Return	1	0
-LanguageSelection	Back	NewDialog	CustomerInformation	1	1
-LanguageSelection	Cancel	SpawnDialog	CancelSetup	1	1
-LanguageSelection	Next	NewDialog	SetupType	1	1
-LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
-LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
-LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0
 MaintenanceType	Back	NewDialog	MaintenanceWelcome	1	0
 MaintenanceType	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceType	Next	[ProgressType0]	Modify	_IsMaintenance = "Change"	2

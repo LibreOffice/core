@@ -133,19 +133,6 @@ sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllD
 
 //--------------------------------------------------------------------
 
-// unregisteres at a specific SfxBroadcaster by index
-
-void SfxListener::EndListening( sal_uInt16 nNo )
-{
-    DBG_CHKTHIS(SfxListener, 0);
-
-    SfxBroadcaster *pBC = aBCs.GetObject(nNo);
-    pBC->RemoveListener(*this);
-    aBCs.Remove( nNo, 1 );
-}
-
-//--------------------------------------------------------------------
-
 // unregisteres all Broadcasters
 
 void SfxListener::EndListeningAll()

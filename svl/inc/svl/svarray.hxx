@@ -112,7 +112,7 @@ inline void* operator new( size_t, DummyType* pPtr )
 }
 inline void operator delete( void*, DummyType* ) {}
 
-#if defined(PRODUCT)
+#ifndef DBG_UTIL
 
 #define _SVVARARR_DEF_GET_OP_INLINE( nm, ArrElem ) \
 ArrElem& operator[](sal_uInt16 nP) const { return *(pData+nP); }\
@@ -128,7 +128,7 @@ void Insert( const nm * pI, sal_uInt16 nP,\
 
 #define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )
 
-#else
+#else // DBG_UTIL
 
 #define _SVVARARR_DEF_GET_OP_INLINE( nm,ArrElem )\
 ArrElem& operator[](sal_uInt16 nP) const;\
@@ -150,7 +150,7 @@ void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
         Insert( (const ArrElem*)pI->pData+nStt, (sal_uInt16)nE-nStt, nP );\
 }
 
-#endif
+#endif // DBG_UTIL
 
 #define _SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
@@ -738,13 +738,7 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#if defined (C40) || defined (C41) || defined (C42) || defined(C50)
-#define C40_INSERT( c, p, n) Insert( (c const *) p, n )
-#define C40_PTR_INSERT( c, p) Insert( (c const *) p )
-#define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
-#define C40_GETPOS( c, r) GetPos( (c const *)r )
-#else
-#if defined ICC || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
+#if defined(ICC) || defined(GCC) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
 #define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
@@ -754,7 +748,6 @@ _SV_SEEK_OBJECT( nm,AE )
 #define C40_PTR_INSERT( c, p ) Insert( p )
 #define C40_REPLACE( c, p, n ) Replace( p, n )
 #define C40_GETPOS( c, r) GetPos( r )
-#endif
 #endif
 
 #endif  //_SVARRAY_HXX

@@ -40,11 +40,11 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB$(TNR)NAME)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(SOLARDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
+    $(foreach,j,$(subst,$(PRJ),$(SRC_ROOT)/$(RSCDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
     -lip={$j} ) \
-    -lip=$(SOLARDEFIMG)/res/$i -lip=$(SOLARDEFIMG)/res ) \
-    -subMODULE=$(SOLARDEFIMG) \
-    -subGLOBALRES=$(SOLARDEFIMG)/res \
+    -lip=$(SRC_ROOT)/$(RSCDEFIMG)/res/$i -lip=$(SRC_ROOT)/$(RSCDEFIMG)/res ) \
+    -subMODULE=$(SRC_ROOT)/$(RSCDEFIMG) \
+    -subGLOBALRES=$(SRC_ROOT)/$(RSCDEFIMG)/res \
     -oil=$(BIN) \
     -ft=$@ \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \

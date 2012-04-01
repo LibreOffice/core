@@ -840,8 +840,10 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 sal_Bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
+                bool const bOldRedlineMove(IsRedlineMove());
                 mbCopyIsMove = sal_True;
                 GetIDocumentUndoRedo().DoUndo(false);
+                SetRedlineMove(true);
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -850,6 +852,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                     }
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
+                SetRedlineMove(bOldRedlineMove);
                 mbCopyIsMove = bOldFlag;
                 GetIDocumentUndoRedo().DoUndo(bOldUndo);
 
@@ -1173,7 +1176,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;
@@ -1529,7 +1532,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;

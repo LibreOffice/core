@@ -28,18 +28,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "unzip.h" //for unzFile
-
 @interface OOoSpotlightImporter : NSObject {
 }
 
 - (BOOL)importDocument:(NSString*)pathToFile contentType:(NSString*)contentTypeUTI attributes:(NSMutableDictionary*)attributes;
 
-- (unzFile)openZipFileAtPath:(NSString*)pathToFile;
+- (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile;
 
-- (NSData*)metaDataFileFromZip:(unzFile)unzipFile;
+- (NSData*)metaDataFileFromZip:(NSFileHandle*)unzipFile;
 
-- (NSData*)contentDataFileFromZip:(unzFile)unzipFile;
+- (NSData*)contentDataFileFromZip:(NSFileHandle*)unzipFile;
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

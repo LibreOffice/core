@@ -277,10 +277,7 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
         }
         else if( pVInfos[i].c_class == PseudoColor )
         {
-            if( pVInfos[i].depth <= 8 )
-                bUsable = sal_True;
-            else if( pVInfos[i].depth == 12 )
-                bUsable = sal_True;
+            bUsable = sal_True;
         }
         pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
         pWeight[ i ] -= pVInfos[ i ].visualid;

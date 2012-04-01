@@ -62,10 +62,10 @@ namespace dbaui
         sal_Int32       m_nFixDeltaHeight;
         sal_Bool        m_bCreateForm;
 
-        DECL_LINK(Up_Click,PushButton*);
-        DECL_LINK(NewFolder_Click,PushButton*);
-        DECL_LINK(Save_Click,PushButton*);
-        DECL_LINK(Dbl_Click_FileView,SvtFileView*);
+        DECL_LINK(Up_Click,void*);
+        DECL_LINK(NewFolder_Click,void*);
+        DECL_LINK(Save_Click,void*);
+        DECL_LINK(Dbl_Click_FileView,void*);
 
         /// sets the fixedtext to the right content
         void initCurrentPath();

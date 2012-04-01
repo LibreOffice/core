@@ -29,12 +29,13 @@
 #ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
 #define COMPHELPER_ASYNCNOTIFICATION_HXX
 
-#include <osl/thread.hxx>
-#include <rtl/ref.hxx>
-#include <comphelper/comphelperdllapi.h>
-#include <rtl/alloc.h>
+#include "sal/config.h"
 
-#include <memory>
+#include "boost/scoped_ptr.hpp"
+#include "comphelper/comphelperdllapi.h"
+#include "rtl/ref.hxx"
+#include "sal/types.h"
+#include "salhelper/thread.hxx"
 
 //........................................................................
 namespace comphelper
@@ -86,12 +87,14 @@ namespace comphelper
 
         virtual void SAL_CALL acquire() = 0;
         virtual void SAL_CALL release() = 0;
+
+    protected:
+        ~IEventProcessor() {}
     };
 
     //====================================================================
     //= AsyncEventNotifier
     //====================================================================
-    typedef ::osl::Thread  AsyncEventNotifier_TBASE;
     struct EventNotifierImpl;
 
     /** a helper class for notifying events asynchronously
@@ -110,34 +113,25 @@ namespace comphelper
         events in the queue. As soon as you add an event, the thread is woken up, processes the event,
         and sleeps again.
     */
-    class COMPHELPER_DLLPUBLIC AsyncEventNotifier   :protected AsyncEventNotifier_TBASE
-                                                    ,public ::rtl::IReference
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifier: public salhelper::Thread
     {
         friend struct EventNotifierImpl;
 
     private:
-        ::std::auto_ptr< EventNotifierImpl >        m_pImpl;
+        boost::scoped_ptr< EventNotifierImpl >        m_pImpl;
 
-    protected:
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
+
         // Thread
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
+        SAL_DLLPRIVATE virtual void execute();
 
     public:
         /** constructs a notifier thread
+
+            @param name the thread name, see ::osl_setThreadName; must not be
+            null
         */
-        AsyncEventNotifier();
-
-        // IReference implementations
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
-
-        using AsyncEventNotifier_TBASE::create;
-        using AsyncEventNotifier_TBASE::join;
-        using AsyncEventNotifier_TBASE::getIdentifier;
-
-        using AsyncEventNotifier_TBASE::operator new;
-        using AsyncEventNotifier_TBASE::operator delete;
+        AsyncEventNotifier(char const * name);
 
         /** terminates the thread
 
@@ -165,9 +159,6 @@ namespace comphelper
         /** removes all events for the given event processor from the queue
         */
         void removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor );
-
-    protected:
-        virtual ~AsyncEventNotifier();
     };
 
     //====================================================================

@@ -284,11 +284,4 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
-void SvxOpenGraphicDialog::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
-{
-    mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,6 @@
 
 #include "propacc.hxx"
 
-#include <tools/errcode.hxx>
 #include <svl/svarray.hxx>
 #include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
@@ -316,7 +315,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     }
 
     // Get class names of struct
-    String aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
+    ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
 
     Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
 

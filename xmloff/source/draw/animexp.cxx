@@ -302,9 +302,9 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )
             }
         }
     }
-    catch(const Exception&)
+    catch (const Exception&)
     {
-        OSL_FAIL("exception catched while collection animation information!");
+        OSL_FAIL("exception caught while collection animation information!");
     }
 }
 
@@ -432,9 +432,9 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
             }
         }
     }
-    catch(const Exception&)
+    catch (const Exception&)
     {
-        OSL_FAIL("exception catched while collection animation information!");
+        OSL_FAIL("exception caught while collection animation information!");
     }
 }
 

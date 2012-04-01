@@ -324,7 +324,7 @@ void SfxModelessDialog::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
 {
     pImp->aMoveTimer.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
@@ -612,7 +612,7 @@ void SfxFloatingWindow::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK( SfxFloatingWindow, TimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl)
 {
     pImp->aMoveTimer.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
@@ -677,7 +677,7 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 // SfxSingleTabDialog ----------------------------------------------------
 
-IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 
 /*  [Description]
 

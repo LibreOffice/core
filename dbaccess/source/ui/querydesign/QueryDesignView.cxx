@@ -60,7 +60,6 @@
 #include "dbustrings.hrc"
 #include "UITools.hxx"
 #include "querycontainerwindow.hxx"
-#include "QueryTableView.hxx"
 #include "sqlmessage.hxx"
 #include <unotools/syslocale.hxx>
 
@@ -2319,16 +2318,16 @@ namespace
                             const ::connectivity::OSQLParseNode* pParseRoot )
     {
         SqlParseError eErrorCode = eOk;
-        if (!pParseRoot->getChild(3)->getChild(4)->isLeaf())
+        if (!pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->isLeaf())
         {
-            ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(4)->getChild(2);
+            ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->getChild(2);
             ::connectivity::OSQLParseNode* pParamRef = NULL;
 
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             EOrderDir eOrderDir;
-            OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             for( sal_uInt32 i=0 ; i<pNode->count() ; i++ )
             {
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
                 eOrderDir = ORDER_ASC;
                 ::connectivity::OSQLParseNode*  pChild = pNode->getChild( i );
 
@@ -3125,7 +3124,7 @@ void OQueryDesignView::GetFocus()
     OQueryView::GetFocus();
     if ( m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus() )
     {
-        // first we have to deactivate the current cell to refill when nescessary
+        // first we have to deactivate the current cell to refill when necessary
         m_pSelectionBox->DeactivateCell();
         m_pSelectionBox->ActivateCell(m_pSelectionBox->GetCurRow(), m_pSelectionBox->GetCurColumnId());
         m_pSelectionBox->GrabFocus();

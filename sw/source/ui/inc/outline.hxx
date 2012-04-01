@@ -67,7 +67,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     sal_Bool                bModified : 1;
 
     protected:
-    DECL_LINK( CancelHdl, Button * );
+    DECL_LINK(CancelHdl, void *);
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
 
@@ -121,11 +121,11 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK( ToggleComplete, NumericField * );
     DECL_LINK( CollSelect, ListBox * );
-    DECL_LINK( CollSelectGetFocus, ListBox * );
+    DECL_LINK(CollSelectGetFocus, void *);
     DECL_LINK( NumberSelect, SwNumberingTypeListBox * );
-    DECL_LINK( DelimModify, Edit * );
+    DECL_LINK(DelimModify, void *);
     DECL_LINK( StartModified, NumericField * );
-    DECL_LINK( CharFmtHdl, ListBox * );
+    DECL_LINK(CharFmtHdl, void *);
 
     void    Update();
 

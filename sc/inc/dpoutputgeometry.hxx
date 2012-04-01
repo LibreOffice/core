@@ -38,14 +38,12 @@ class SC_DLLPUBLIC ScDPOutputGeometry
 {
 public:
     enum FieldType { Column, Row, Page, Data, None };
-    enum ImportType { ODF, XLS };
 
-    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType);
+    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
     ~ScDPOutputGeometry();
 
     /**
-     * @param nCount number of row fields, <b>excluding the data layout
-     *               field if exists</b>.
+     * @param nCount number of row fields.
      */
     void setRowFieldCount(sal_uInt32 nCount);
     void setColumnFieldCount(sal_uInt32 nCount);
@@ -58,19 +56,17 @@ public:
 
     SCROW getRowFieldHeaderRow() const;
 
-    FieldType getFieldButtonType(const ScAddress& rPos) const;
+    std::pair<FieldType, size_t> getFieldButtonType(const ScAddress& rPos) const;
 
 private:
     ScDPOutputGeometry(); // disabled
 
 private:
     ScRange     maOutRange;
-    sal_uInt32  mnRowFields;    /// number of row fields (data layout field NOT included!)
+    sal_uInt32  mnRowFields;    /// number of row fields
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;
-
-    ImportType  meImportType;
 
     bool        mbShowFilter;
 };

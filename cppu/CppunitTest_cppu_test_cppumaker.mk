@@ -39,7 +39,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,cppu_test_cppumaker, \
 
 $(eval $(call gb_CppunitTest_set_include,cppu_test_cppumaker,\
 	-I$(WORKDIR)/CustomTarget/cppu/qa \
-	-I$(realpath $(SRCDIR)/cppu/inc) \
+	-I$(SRCDIR)/cppu/inc \
 	$$(INCLUDE) \
 ))
 

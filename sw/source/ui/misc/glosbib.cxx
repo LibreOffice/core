@@ -228,7 +228,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
     return 0;
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
 {
     String sGroup(aNameED.GetText());
     sGroup += GLOS_DELIM;
@@ -305,7 +305,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     return 0;
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 {
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
@@ -357,7 +357,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
 {
     String sEntry(aNameED.GetText());
     sal_Bool bEnableNew = sal_True;

@@ -35,7 +35,6 @@
 #include "adtabdlg.hxx"
 #include "querycontroller.hxx"
 #include "sqledit.hxx"
-#include "querycontainerwindow.hxx"
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

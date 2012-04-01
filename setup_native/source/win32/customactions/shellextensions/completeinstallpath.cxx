@@ -83,8 +83,6 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     TCHAR   szValue[8192];
     DWORD   nValueSize = sizeof(szValue);
     HKEY    hKey;
-    std::_tstring   sInstDir;
-    std::_tstring   mystr;
 
     // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
     // the program files folder.
@@ -100,8 +98,6 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     if ( _tcsstr( sInstallLocation.c_str(), sOfficeDirHostname.c_str() ) )
     {
         pathCompletionRequired = false;  // nothing to do
-        // mystr = "Nothing to do, officedir is included into installlocation";
-        // MessageBox( NULL, mystr.c_str(), "It is part of installlocation", MB_OK );
     }
 
     // If the path INSTALLLOCATION does not end with this string, INSTALLLOCATION is maybe
@@ -123,12 +119,6 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 
         std::_tstring   sProductKey32 = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                             "\\" + "3.2" + "\\" + sUpgradeCode;
-
-        // mystr = "ProductKey: " + sProductKey;
-        // MessageBox( NULL, mystr.c_str(), "ProductKey", MB_OK );
-
-        // mystr = "Checking registry";
-        // MessageBox( NULL, mystr.c_str(), "registry search", MB_OK );
 
         bool oldVersionExists = false;
 
@@ -169,13 +159,8 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
             sInstallLocation = sInstallLocation + sOfficeDirHostname;
             // Setting the new property value
             MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstallLocation.c_str());
-            // mystr = "Setting path to: " + sInstallLocation;
-            // MessageBox( NULL, mystr.c_str(), "sInstallLocation", MB_OK );
         }
     }
-
-    // mystr = "Ending with INSTALLLOCATION: " + sInstallLocation;
-    // MessageBox( NULL, mystr.c_str(), "END", MB_OK );
 
     return ERROR_SUCCESS;
 }

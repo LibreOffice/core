@@ -800,9 +800,9 @@ public class ServiceManager implements XMultiServiceFactory,
                 return enumeration.nextElement();
             } catch (java.util.NoSuchElementException e) {
                 com.sun.star.container.NoSuchElementException ex =
-                        new com.sun.star.container.NoSuchElementException();
-                ex.fillInStackTrace();
-
+                    new com.sun.star.container.NoSuchElementException(
+                        e.toString());
+                ex.initCause(e);
                 throw ex;
             }
         }
@@ -841,7 +841,7 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
     }
 
     /**
-     * Checks wether or not a service is supported.
+     * Checks whether or not a service is supported.
      * <p>
      * @return      true - if the service is supported, otherwise false.
      * @param       serviceName     the name of the service that should be checked.

@@ -61,14 +61,6 @@ ORegKey::~ORegKey()
 }
 
 //*********************************************************************
-//  acquireKey
-//
-RegError ORegKey::acquireKey(RegKeyHandle hKey)
-{
-    return m_pRegistry->acquireKey(hKey);
-}
-
-//*********************************************************************
 //  releaseKey
 //
 RegError ORegKey::releaseKey(RegKeyHandle hKey)

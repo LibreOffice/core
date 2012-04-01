@@ -356,10 +356,13 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #pragma pack(push, 8)
 #endif
 
-#if defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) \
-        || defined(NETBSD) || defined(OPENBSD)) || defined(MACOSX) || defined(DRAGONFLY) \
-        || defined(__SUNPRO_CC) && defined(SOLARIS))
+// Why hardcode like this instead of using the (generated)
+// <sal/typesizes.h> ?
+
+#if (defined(INTEL) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD)) \
+        || defined(MACOSX) || defined(DRAGONFLY) || (defined(__SUNPRO_CC) && defined(SOLARIS)))) \
+    || defined(IOS)
 #define MAX_ALIGNMENT_4
 #endif
 

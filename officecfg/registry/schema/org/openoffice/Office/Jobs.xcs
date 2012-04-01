@@ -55,13 +55,13 @@
             		<info>
 				<desc>Is used to enable/disable a job execution related to a triggered event.</desc>
 			</info>
-            		<prop oor:name="AdminTime" oor:type="xs:string">
+            		<prop oor:name="AdminTime" oor:type="xs:string" oor:nillable="false">
                 		<info>
 					<desc>If it's newer then UserTime, the job will be reactivated next time.</desc>
 				</info>
                 		<value>2003-01-01T00:00:00+00:00</value>
             		</prop>
-            		<prop oor:name="UserTime" oor:type="xs:string">
+            		<prop oor:name="UserTime" oor:type="xs:string" oor:nillable="false">
                 		<info>
 					<desc>If it's newer then AdminTime, the job is deactivated for execution.</desc>
 				</info>

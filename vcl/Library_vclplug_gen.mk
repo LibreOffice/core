@@ -30,9 +30,8 @@ $(eval $(call gb_Library_Library,vclplug_gen))
 
 $(eval $(call gb_Library_set_include,vclplug_gen,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,vclplug_gen,\
@@ -50,7 +49,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \

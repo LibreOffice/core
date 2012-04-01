@@ -471,7 +471,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             if( pOStm )
                 xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
         }
-        else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
+        else if( pValue[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
         {
             pValue[ i ].Value >>= maFilterData;
         }

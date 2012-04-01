@@ -216,7 +216,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 }
 
 
-IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
+IMPL_LINK_NOARG(ScRedlineOptionsTabPage, ColorHdl)
 {
     return 0;
 }

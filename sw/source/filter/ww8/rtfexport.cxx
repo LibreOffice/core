@@ -82,7 +82,7 @@ using sw::mark::IMark;
 #if defined(UNX)
 const sal_Char RtfExport::sNewLine = '\012';
 #else
-const sal_Char RtfExport::sNewLine[] = "\015\012";
+const sal_Char* const RtfExport::sNewLine = "\015\012";
 #endif
 
 // the default text encoding for the export, if it doesn't fit unicode will
@@ -149,7 +149,7 @@ void RtfExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub
     if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-                it < end; ++it )
+                it != end; ++it )
         {
             IMark* pMark = (*it);
             xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();

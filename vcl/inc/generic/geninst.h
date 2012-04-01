@@ -103,7 +103,7 @@ public:
     virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList );
     virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo );
     virtual void                DeletePrinterQueueInfo ( SalPrinterQueueInfo* pInfo );
-    virtual rtl::OUString              GetDefaultPrinter();
+    virtual rtl::OUString       GetDefaultPrinter();
     virtual void                PostPrintersChanged() = 0;
     virtual void                updatePrinterUpdate();
     virtual void                jobStartedPrinterUpdate();
@@ -117,8 +117,8 @@ public:
 
 protected:
     void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
-                           SalPrinterQueueInfo* pQueueInfo,
-                           ImplJobSetup* pSetupData );
+                                  SalPrinterQueueInfo* pQueueInfo,
+                                  ImplJobSetup* pSetupData );
 };
 
 inline SalGenericInstance *GetGenericInstance()

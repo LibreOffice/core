@@ -38,6 +38,9 @@ namespace formula
     {
         public:
             virtual ::rtl::OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const = 0;
+
+        protected:
+            ~ExternalReferenceHelper() {}
     };
 // =============================================================================
 } // formula

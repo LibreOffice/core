@@ -40,7 +40,7 @@
 					<desc>Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 				</info>
 			</prop>
-			<prop oor:name="Data" oor:type="xs:string">
+			<prop oor:name="Data" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 				</info>
@@ -51,7 +51,7 @@
 			<info>
 				<desc>Lists filters that can import or export content.</desc>
 			</info>
-			<prop oor:name="Installed" oor:type="xs:boolean">
+			<prop oor:name="Installed" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<desc>Enables or disables filter with the setup utility.</desc>
 				</info>
@@ -134,13 +134,13 @@
 			<info>
 				<desc>Contains default objects that are used if no specialized service was registered.</desc>
 			</info>
-			<prop oor:name="FrameLoader" oor:type="xs:string">
+			<prop oor:name="FrameLoader" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the default frame loader.</desc>
 				</info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
-			<prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean">
+			<prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<author>OS</author>
 					<desc>Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>

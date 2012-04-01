@@ -1,3 +1,8 @@
-This is the gui code, much of which is now deprecated.
-List of documents open would be traceked,
-raw C__ code; gutsy core of document management and loading. 
+This is core gui code, contining base-classes for documents
+
+Document load/save code is maintained in [git:sfx2/source/doc/docfile.cxx]
+SfxMedium class, which handles all the twisty load and save corner cases.
+
+[git:sfx2/source/applappl/sfxhelp.cxx] Start procedure for the online
+help viewer top level window; handling of help URL creation and
+dispatch.

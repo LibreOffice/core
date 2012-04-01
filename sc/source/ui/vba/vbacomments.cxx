@@ -97,11 +97,10 @@ ScVbaComments::getElementType() throw (uno::RuntimeException)
     return excel::XComment::static_type(0);
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaComments::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComments") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComments"));
 }
 
 css::uno::Sequence<rtl::OUString>

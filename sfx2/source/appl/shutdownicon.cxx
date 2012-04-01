@@ -40,7 +40,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -686,6 +685,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
+    SAL_INFO("sfx2.shutdown", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
 
     if ( m_bVeto )

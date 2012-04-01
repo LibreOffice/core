@@ -29,12 +29,11 @@
 $(eval $(call gb_Library_Library,swui))
 
 $(eval $(call gb_Library_set_include,swui,\
-    -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
-    -I$(WORKDIR)/Misc/sw \
     $$(INCLUDE) \
 ))
 
@@ -86,21 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/config/optcomp \
     sw/source/ui/config/optload \
     sw/source/ui/config/optpage \
-    sw/source/ui/dbui/addresslistdialog \
-    sw/source/ui/dbui/createaddresslistdialog \
-    sw/source/ui/dbui/customizeaddresslistdialog \
-    sw/source/ui/dbui/dbinsdlg \
-    sw/source/ui/dbui/dbtablepreviewdialog \
-    sw/source/ui/dbui/mailmergewizard \
-    sw/source/ui/dbui/mmaddressblockpage \
-    sw/source/ui/dbui/mmdocselectpage \
-    sw/source/ui/dbui/mmgreetingspage \
-    sw/source/ui/dbui/mmlayoutpage \
-    sw/source/ui/dbui/mmmergepage \
-    sw/source/ui/dbui/mmoutputpage \
-    sw/source/ui/dbui/mmoutputtypepage \
-    sw/source/ui/dbui/mmpreparemergepage \
-    sw/source/ui/dbui/selectdbtabledialog \
     sw/source/ui/dialog/abstract \
     sw/source/ui/dialog/addrdlg \
     sw/source/ui/dialog/ascfldlg \
@@ -170,5 +154,25 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/table/tautofmt \
     sw/source/ui/utlui/swrenamexnameddlg \
 ))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,swui,\
+    sw/source/ui/dbui/addresslistdialog \
+    sw/source/ui/dbui/createaddresslistdialog \
+    sw/source/ui/dbui/customizeaddresslistdialog \
+    sw/source/ui/dbui/dbinsdlg \
+    sw/source/ui/dbui/dbtablepreviewdialog \
+    sw/source/ui/dbui/mailmergewizard \
+    sw/source/ui/dbui/mmaddressblockpage \
+    sw/source/ui/dbui/mmdocselectpage \
+    sw/source/ui/dbui/mmgreetingspage \
+    sw/source/ui/dbui/mmlayoutpage \
+    sw/source/ui/dbui/mmmergepage \
+    sw/source/ui/dbui/mmoutputpage \
+    sw/source/ui/dbui/mmoutputtypepage \
+    sw/source/ui/dbui/mmpreparemergepage \
+    sw/source/ui/dbui/selectdbtabledialog \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

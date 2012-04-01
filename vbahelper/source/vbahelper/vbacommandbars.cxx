@@ -237,12 +237,12 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBars::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBars") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBars"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaCommandBars::getServiceNames()
 {

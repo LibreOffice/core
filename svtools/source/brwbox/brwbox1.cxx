@@ -262,7 +262,7 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
     pCols->insert( pCols->begin(), new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ) );
     FreezeColumn( 0 );
 
-    // Headerbar anpassen
+    // adjust headerbar
     if ( getDataWindow()->pHeaderBar )
     {
         getDataWindow()->pHeaderBar->SetPosSizePixel(
@@ -564,12 +564,12 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
 
         pCol->Title() = rTitle;
 
-        // Headerbar-Column anpassen
+        // adjust headerbar column
         if ( getDataWindow()->pHeaderBar )
             getDataWindow()->pHeaderBar->SetItemText( nItemId, rTitle );
         else
         {
-            // redraw visible colums
+            // redraw visible columns
             if ( GetUpdateMode() && ( pCol->IsFrozen() || nItemPos > nFirstCol ) )
                 Invalidate( Rectangle( Point(0,0),
                     Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
@@ -602,7 +602,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
     {
         long nOldWidth = (*pCols)[ nItemPos ]->Width();
 
-        // ggf. letzte Spalte anpassen
+        // adjust last column, if necessary
         if ( IsVisible() && nItemPos == pCols->size() - 1 )
         {
             long nMaxWidth = pDataWin->GetSizePixel().Width();
@@ -617,32 +617,31 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         }
 
         // OV
-        // In AutoSizeLastColumn() wird SetColumnWidth mit nWidth==0xffff
-        // gerufen. Deshalb muss hier nochmal geprueft werden, ob sich die
-        // Breite tatsaechlich geaendert hat.
+        // In AutoSizeLastColumn(), we call SetColumnWidth with nWidth==0xffff.
+        // Thus, check here, if the width has actually changed.
         if( (sal_uLong)nOldWidth == nWidth )
             return;
 
-        // soll die Aenderung sofort dargestellt werden?
+        // do we want to display the change immediately?
         sal_Bool bUpdate = GetUpdateMode() &&
                        ( (*pCols)[ nItemPos ]->IsFrozen() || nItemPos >= nFirstCol );
 
         if ( bUpdate )
         {
-            // Selection hiden
+            // Selection hidden
             DoHideCursor( "SetColumnWidth" );
             ToggleSelection();
             //!getDataWindow()->Update();
             //!Control::Update();
         }
 
-        // Breite setzen
+        // set width
         (*pCols)[ nItemPos ]->SetWidth(nWidth, GetZoom());
 
         // scroll and invalidate
         if ( bUpdate )
         {
-            // X-Pos der veraenderten Spalte ermitteln
+            // get X-Pos of the column changed
             long nX = 0;
             for ( sal_uInt16 nCol = 0; nCol < nItemPos; ++nCol )
             {
@@ -651,7 +650,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
                     nX += pCol->Width();
             }
 
-            // eigentliches scroll+invalidate
+            // actually scroll+invalidate
             pDataWin->SetClipRegion();
             sal_Bool bSelVis = bSelectionIsVisible;
             bSelectionIsVisible = sal_False;
@@ -683,7 +682,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         }
         UpdateScrollbars();
 
-        // Headerbar-Column anpassen
+        // adjust headerbar column
         if ( getDataWindow()->pHeaderBar )
             getDataWindow()->pHeaderBar->SetItemSize(
                     nItemId ? nItemId : USHRT_MAX - 1, nWidth );
@@ -714,33 +713,32 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // Spaltenposition ermitteln
+    // get column position
     sal_uInt16 nPos = GetColumnPos(nItemId);
     if ( nPos >= ColCount() )
-        // nicht vorhanden
+        // not available
         return;
 
-    // Spaltenselektion korrigieren
+    // correct column selection
     if ( pColSel )
         pColSel->Remove( nPos );
 
-    // Spaltencursor korrigieren
+    // correct column cursor
     if ( nCurColId == nItemId )
         nCurColId = 0;
 
-    // Spalte entfernen
+    // delete column
     BrowserColumns::iterator it = pCols->begin();
     ::std::advance( it, nPos );
     delete *it;
     pCols->erase( it );
-    // OJ #93534#
     if ( nFirstCol >= nPos && nFirstCol > FrozenColCount() )
     {
         OSL_ENSURE(nFirstCol > 0,"FirstCol must be greater zero!");
         --nFirstCol;
     }
 
-    // Handlecolumn nicht in der Headerbar
+    // handlecolumn not in headerbar
     if (nItemId)
     {
         if ( getDataWindow()->pHeaderBar )
@@ -748,7 +746,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
     }
     else
     {
-        // Headerbar anpassen
+        // adjust headerbar
         if ( getDataWindow()->pHeaderBar )
         {
             getDataWindow()->pHeaderBar->SetPosSizePixel(
@@ -758,10 +756,10 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
         }
     }
 
-    // vertikalen Scrollbar korrigieren
+    // correct vertical scrollbar
     UpdateScrollbars();
 
-    // ggf. Repaint ausl"osen
+    // trigger repaint, if necessary
     if ( GetUpdateMode() )
     {
         getDataWindow()->Invalidate();
@@ -1036,7 +1034,7 @@ long BrowseBox::ScrollColumns( long nCols )
         aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
     }
 
-    // ggf. externe Headerbar anpassen
+    // adjust external headerbar, if necessary
     if ( getDataWindow()->pHeaderBar )
     {
         long nWidth = 0;
@@ -1044,7 +1042,7 @@ long BrowseBox::ScrollColumns( long nCols )
               nCol < pCols->size() && nCol < nFirstCol;
               ++nCol )
         {
-            // HandleColumn nicht
+            // not the handle column
             if ( (*pCols)[ nCol ]->GetId() )
                 nWidth += (*pCols)[ nCol ]->Width();
         }
@@ -1164,10 +1162,9 @@ void BrowseBox::Clear()
     nTopRow = 0;
     nCurColId = 0;
 
-    // nFirstCol darf nicht zurueckgesetzt werden, da ansonsten das Scrollen
-    // total durcheinander kommt
-    // nFirstCol darf nur beim Hinzufuegen oder Loeschen von Spalten geaendert werden
-    // nFirstCol = 0; ->Falsch!!!!
+    // nFirstCol may not be reset, else the scrolling code will become confused.
+    // nFirstCol may only be changed when adding or deleting columns
+    // nFirstCol = 0; -> wrong!
     aHScroll.SetThumbPos( 0 );
     pVScroll->SetThumbPos( 0 );
 
@@ -1256,7 +1253,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
                          Size( aSz.Width(), nNumRows * GetDataRowHeight() ) ) );
     }
 
-    // ggf. Top-Row korrigieren
+    // correct top row if necessary
     if ( nRow < nTopRow )
         nTopRow += nNumRows;
 
@@ -1511,7 +1508,7 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
     if ( nRow < 0 || nRow >= nRowCount )
         return sal_False;
 
-    // nicht erlaubt?
+    // not allowed?
     if ( ( !bRowColMove && !IsCursorMoveAllowed( nRow, nCurColId ) ) )
         return sal_False;
 
@@ -1526,7 +1523,7 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
     // suspend Updates
     getDataWindow()->EnterUpdateLock();
 
-    // ggf. altes Highlight weg
+    // remove old highlight, if necessary
     if ( !bMultiSelection && !bKeepSelection )
         ToggleSelection();
     DoHideCursor( "GoToRow" );
@@ -1559,7 +1556,7 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
         nCurRow = nRowCount - 1;
     aSelRange = Range( nCurRow, nCurRow );
 
-    // ggf. neues Highlight anzeigen
+    // display new highlight if necessary
     if ( !bMultiSelection && !bKeepSelection )
         uRow.nSel = nRow;
 
@@ -1598,7 +1595,7 @@ sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_
     if (!bColumnCursor)
         return sal_False;
 
-    // erlaubt?
+    // allowed?
     if (!bRowColMove && !IsCursorMoveAllowed( nCurRow, nColId ) )
         return sal_False;
 
@@ -1653,7 +1650,7 @@ sal_Bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
          nColId == nCurColId && IsFieldVisible(nCurRow, nColId, sal_True))
         return sal_True;
 
-    // erlaubt?
+    // allowed?
     if (!IsCursorMoveAllowed(nRow, nColId))
         return sal_False;
 
@@ -1725,7 +1722,7 @@ void BrowseBox::SelectAll()
         pColSel->SelectAll(sal_False);
     uRow.pSel->SelectAll(sal_True);
 
-    // Handle-Column nicht highlighten
+    // don't highlight handle column
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
     long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
@@ -1814,7 +1811,7 @@ void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
                 )
             )
     {
-        // Handle-Column nicht highlighten
+        // don't highlight handle column
         BrowserColumn *pFirstCol = (*pCols)[ 0 ];
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
@@ -1992,26 +1989,25 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 
 sal_Bool BrowseBox::MakeFieldVisible
 (
-    long    nRow,       // Zeilen-Nr des Feldes (beginnend mit 0)
-    sal_uInt16  nColId,     // Spalten-Id des Feldes
-    sal_Bool    bComplete   // (== sal_False), sal_True => vollst"andig sichtbar machen
+    long    nRow,       // line number of the field (starting with 0)
+    sal_uInt16  nColId,     // column ID of the field
+    sal_Bool    bComplete   // (== sal_False), sal_True => make visible in its entirety
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Macht das durch 'nRow' und 'nColId' beschriebene Feld durch
-    entsprechendes scrollen sichtbar. Ist 'bComplete' gesetzt, dann wird
-    gefordert, da\s das Feld ganz sichtbar wird.
+    Makes visible the field described in 'nRow' and 'nColId' by scrolling
+    accordingly. If 'bComplete' is set, the field should become visible in its
+    entirety.
 
-    [R"uckgabewert]
+    [Returned Value]
 
-    sal_Bool            sal_True
-                    Das angegebene Feld wurde sichtbar gemacht, bzw. war
-                    bereits sichtbar.
+    sal_Bool        sal_True
+                    The given field is already visible or was already visible.
 
                     sal_False
-                    Das angegebene Feld konnte nicht sichtbar bzw. bei
-                    'bComplete' nicht vollst"andig sichtbar gemacht werden.
+                    The given field could not be made visible or in the case of
+                    'bComplete' could not be made visible in its entirety.
 */
 
 {
@@ -2021,51 +2017,51 @@ sal_Bool BrowseBox::MakeFieldVisible
          ( aTestSize.Width() == 0 && aTestSize.Height() == 0 ) )
         return sal_False;
 
-    // ist es schon sichtbar?
+    // is it visible already?
     sal_Bool bVisible = IsFieldVisible( nRow, nColId, bComplete );
     if ( bVisible )
         return sal_True;
 
-    // Spaltenposition und Feld-Rechteck und Ausgabebereich berechnen
+    // calculate column position, field rectangle and painting area
     sal_uInt16 nColPos = GetColumnPos( nColId );
     Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, sal_False );
     Rectangle aDataRect = Rectangle( Point(0, 0), pDataWin->GetSizePixel() );
 
-    // links au\serhalb?
+    // positioned outside on the left?
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )
-        // => nach rechts scrollen
+        // => scroll to the right
         ScrollColumns( nColPos - nFirstCol );
 
-    // solange rechts au\serhalb
+    // while outside on the right
     while ( aDataRect.Right() < ( bComplete
                 ? aFieldRect.Right()
                 : aFieldRect.Left()+aFieldRect.GetWidth()/2 ) )
     {
-        // => nach links scrollen
+        // => scroll to the left
         if ( ScrollColumns( 1 ) != 1 )
-            // nichts mehr zu scrollen
+            // no more need to scroll
             break;
         aFieldRect = GetFieldRectPixel( nRow, nColId, sal_False );
     }
 
-    // oben au\serhalb?
+    // positioned outside above?
     if ( nRow < nTopRow )
-        // nach unten scrollen
+        // scroll further to the bottom
         ScrollRows( nRow - nTopRow );
 
-    // unten au\serhalb?
+    // positioned outside below?
     long nBottomRow = nTopRow + GetVisibleRows();
-    // OV: damit nBottomRow die Nummer der letzten sichtbaren Zeile ist
-    // (Zaehlung ab Null!), muss sie dekrementiert werden.
-    // Beispiel: BrowseBox enthaelt genau einen Eintrag. nBottomRow := 0 + 1 - 1
+    // decrement nBottomRow to make it the number of the last visible line
+    // (count starts with 0!).
+    // Example: BrowseBox contains exactly one entry. nBottomRow := 0 + 1 - 1
     if( nBottomRow )
         nBottomRow--;
 
     if ( nRow > nBottomRow )
-        // nach oben scrollen
+        // scroll further to the top
         ScrollRows( nRow - nBottomRow );
 
-    // jetzt kann es immer noch nicht passen, z.B. weil Window zu klein
+    // it might still not actually fit, e.g. if the window is too small
     return IsFieldVisible( nRow, nColId, bComplete );
 }
 
@@ -2076,7 +2072,7 @@ sal_Bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // durch frozen-Column verdeckt?
+    // hidden by frozen column?
     sal_uInt16 nColPos = GetColumnPos( nColumnId );
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )
         return sal_False;
@@ -2154,7 +2150,7 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // compute the X-coordinte realtiv to DataWin by accumulation
+    // compute the X-coordinate relative to DataWin by accumulation
     long nColX = 0;
     sal_uInt16 nFrozenCols = FrozenColCount();
     size_t nCol;
@@ -2185,7 +2181,7 @@ long BrowseBox::GetRowAtYPosPixel( long nY, sal_Bool bRelToBrowser ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // compute the Y-coord
+    // compute the Y-coordinate
     if ( bRelToBrowser )
     {
         Point aDataTopLeft = pDataWin->OutputToScreenPixel( Point(0, 0) );
@@ -2215,7 +2211,7 @@ sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, sal_Bool ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // accumulate the withds of the visible columns
+    // accumulate the widths of the visible columns
     long nColX = 0;
     for ( size_t nCol = 0; nCol < pCols->size(); ++nCol )
     {
@@ -2331,7 +2327,8 @@ void BrowseBox::SetMode( BrowserMode nMode )
     getDataWindow()->bOwnDataChangedHdl =
             BROWSER_OWN_DATACHANGED == ( nMode & BROWSER_OWN_DATACHANGED );
 
-    // Headerbar erzeugen, was passiert, wenn eine erzeugt werden mu� und schon Spalten bestehen ?
+    // create a headerbar. what happens, if a headerbar has to be created and
+    // there already are columns?
     if ( BROWSER_HEADERBAR_NEW == ( nMode & BROWSER_HEADERBAR_NEW ) )
     {
         if (!getDataWindow()->pHeaderBar)
@@ -2392,7 +2389,7 @@ void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    // Das alte Verhalten: NumRows automatisch korrigieren:
+    // old behavior: automatically correct NumRows:
     if ( nRowCount < GetRowCount() )
     {
         RowInserted(nRowCount,GetRowCount() - nRowCount,sal_False);
@@ -2407,17 +2404,16 @@ void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
 
 sal_Bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird immer gerufen bevor der Cursor direkt
-    bewegt werden soll. Durch 'return sal_False' kann verhindert werden, da\s
-    dies geschieht, wenn z.B. ein Datensatz irgendwelchen Rules widerspricht.
+    This virtual method is always called before the cursor is moved directly.
+    By means of 'return sal_False', we avoid doing this if e.g. a record
+    contradicts any rules.
 
-    Diese Methode wird nicht gerufen, wenn die Cursorbewegung durch
-    ein L"oschen oder Einf"ugen (einer Zeile/Spalte) ausgel"ost wird, also
-    genaugenommen nur eine Cursor-Korrektur vorliegt.
+    This method is not called, if the cursor movement results from removing or
+    deleting a row/column (thus, in cases where only a "cursor correction" happens).
 
-    Die Basisimplementierung liefert derzeit immer sal_True.
+    The base implementation currently always returns sal_True.
 */
 
 {
@@ -2459,7 +2455,7 @@ const char* BrowseBoxCheckInvariants( const void * pVoid )
     if (p->nCurRow < -1) return "BrowseBox: nCurRow < -1";
     if (p->nCurRow > p->nRowCount) return "BrowseBox: nCurRow > nRowCount";
 
-    // Leider waehrend der Bearbeitung nicht immer der Fall:
+    // Sadly not always the case when editing:
     //if (p->nCurRow < 0 && p->nRowCount != 0) return "nCurRow < 0 && nRowCount != 0";
     //if (p->nCurRow >= p->nRowCount && p->nRowCount != 0) return "nCurRow >= nRowCount && nRowCount != 0";
 

@@ -49,10 +49,6 @@ namespace basegfx
         // Changed: Self intersections are searched by default, but may be switched off by 2nd parameter.
         BASEGFX_DLLPUBLIC B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate, bool bSelfIntersections = true);
 
-        // look for intersections of rCandidate with all polygons from rMask and add extra points there. Do
-        // not change or add points to rMask.
-        BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rMask, const B2DPolygon& rCandidate);
-
         // look for intersections of rCandidate with the edge from rStart to rEnd and add extra points there.
         // Points are only added in the range of the edge, not on the endless vector.
         BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
@@ -60,10 +56,6 @@ namespace basegfx
         // look for intersections of rCandidate with the mask Polygon and add extra points there.
         // The mask polygon is assumed to be closed, even when it's not explicitly.
         BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
-
-        // look for self-intersections in given polygon and add extra points there. Result will have no
-        // intersections on an edge
-        BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate);
 
     } // end of namespace tools
 } // end of namespace basegfx

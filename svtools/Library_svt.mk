@@ -38,14 +38,10 @@ $(eval $(call gb_Library_add_api,svt,\
 ))
 
 $(eval $(call gb_Library_set_include,svt,\
-    -I$(OUTDIR)/inc/external/jpeg \
     $$(INCLUDE) \
-    -I$(WORKDIR)/inc/svtools \
-    -I$(WORKDIR)/inc/ \
-    -I$(OUTDIR)/inc/ \
-    -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
-    -I$(realpath $(SRCDIR)/svtools/source/inc) \
-    -I$(realpath $(SRCDIR)/svtools/inc) \
+    -I$(SRCDIR)/svtools/inc/svtools \
+    -I$(SRCDIR)/svtools/source/inc \
+    -I$(SRCDIR)/svtools/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,svt,\
@@ -98,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/miscopt \
     svtools/source/config/optionsdrawinglayer \
     svtools/source/config/printoptions \
+    svtools/source/contnr/DocumentInfoPreview \
     svtools/source/contnr/contentenumeration \
     svtools/source/contnr/fileview \
     svtools/source/contnr/imivctl1 \
@@ -132,10 +129,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/stdctrl \
     svtools/source/control/stdmenu \
     svtools/source/control/tabbar \
-    svtools/source/control/taskbar \
-    svtools/source/control/taskbox \
-    svtools/source/control/taskmisc \
-    svtools/source/control/taskstat \
     svtools/source/control/toolbarmenu \
     svtools/source/control/toolbarmenuacc \
     svtools/source/control/urlcontrol \

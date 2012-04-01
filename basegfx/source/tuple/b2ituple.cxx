@@ -34,11 +34,6 @@ namespace { struct EmptyTuple : public rtl::Static<basegfx::B2ITuple, EmptyTuple
 
 namespace basegfx
 {
-    const B2ITuple& B2ITuple::getEmptyTuple()
-    {
-            return EmptyTuple::get();
-    }
-
     // external operators
     //////////////////////////////////////////////////////////////////////////
 

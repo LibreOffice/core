@@ -399,7 +399,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
         ::utl::TempFile aTempFile;
 
         maURL = aTempFile.GetURL();
-        if( maURL.getLength() )
+        if( !maURL.isEmpty() )
         {
             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
             if( pOStm )

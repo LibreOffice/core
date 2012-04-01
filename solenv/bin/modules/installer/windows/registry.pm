@@ -401,7 +401,7 @@ sub create_registry_table
             $registry{'Component_'} = get_registry_component($oneregistry, $allvariableshashref);
 
             # Collecting all components
-            if (!(installer::existence::exists_in_array($registry{'Component_'}, $allregistrycomponentsref)))
+            if (! grep {$_ eq $registry{'Component_'}} @{$allregistrycomponentsref})
             {
                 push(@{$allregistrycomponentsref}, $registry{'Component_'});
             }

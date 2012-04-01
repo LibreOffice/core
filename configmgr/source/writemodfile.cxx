@@ -509,7 +509,7 @@ void writeModifications(
                 break;
             }
         }
-        writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>\n"));
     } else {
         assert(node.is());
         rtl::OUString pathRep(
@@ -573,10 +573,10 @@ void writeModFile(
     writeData(
         tmp.handle,
         RTL_CONSTASCII_STRINGPARAM(
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><oor:items"
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
             " xmlns:oor=\"http://openoffice.org/2001/registry\""
             " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
-            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"));
+            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"));
     //TODO: Do not write back information about those removed items that did not
     // come from the .xcs/.xcu files, anyway (but had been added dynamically
     // instead):
@@ -590,7 +590,7 @@ void writeModFile(
             Data::findNode(Data::NO_LAYER, data.getComponents(), j->first),
             j->second);
     }
-    writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</oor:items>"));
+    writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</oor:items>\n"));
     oslFileError e = osl_closeFile(tmp.handle);
     tmp.closed = true;
     if (e != osl_File_E_None) {

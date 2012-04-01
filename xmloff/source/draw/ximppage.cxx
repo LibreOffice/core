@@ -40,7 +40,6 @@
 #include "ximpshap.hxx"
 #include "animimp.hxx"
 #include "XMLStringBufferImportContext.hxx"
-#include <xmloff/formsimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include "ximpstyl.hxx"
 #include <xmloff/prstylei.hxx>
@@ -429,9 +428,9 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch (const uno::Exception&)
         {
-            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
+            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception caught!" );
         }
     }
 }

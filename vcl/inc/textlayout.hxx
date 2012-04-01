@@ -55,6 +55,9 @@ namespace vcl
         virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
         virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
+
+    protected:
+        ~ITextLayout() {}
     };
 
     //====================================================================

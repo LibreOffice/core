@@ -135,12 +135,9 @@ sal_uInt16 SfxVisibilityItem::GetValueCount() const
 
 //============================================================================
 // virtual
-UniString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
+rtl::OUString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
-    return
-        bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
+    return bTheValue ?  rtl::OUString("TRUE") : rtl::OUString("FALSE");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -423,7 +423,7 @@ public:
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
-                                                                const ScDPLabelDataVector& rLabelVec,
+                                                                const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData ) = 0;
 
@@ -510,6 +510,9 @@ public:
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
+
+protected:
+    ~ScAbstractDialogFactory() {}
 };
 #endif
 

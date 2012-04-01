@@ -342,7 +342,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, OnClickedSearchAgain, Button*, EMPTYARG)
+IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
 {
     if (m_pbClose.IsEnabled())
     {   // der Button hat die Funktion 'Suchen'
@@ -436,7 +436,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, OnSearchTextModified, ComboBox*, EMPTYARG)
+IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
 {
     if ((m_cmbSearchText.GetText().Len() != 0) || !m_rbSearchForText.IsChecked())
         m_pbSearchAgain.Enable();
@@ -739,7 +739,7 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, OnDelayedPaint, void*, EMPTYARG)
+IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint)
 {
     EnableControlPaint(sal_True);
     return 0L;

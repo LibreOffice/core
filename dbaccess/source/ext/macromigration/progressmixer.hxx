@@ -52,6 +52,9 @@ namespace dbmm
         virtual void    start( sal_uInt32 _nRange ) = 0;
         virtual void    advance( sal_uInt32 _nValue ) = 0;
         virtual void    end() = 0;
+
+    protected:
+        ~IProgressConsumer() {}
     };
 
     //====================================================================

@@ -222,7 +222,7 @@ typedef void* storeStreamHandle;
     @param  hFile [in] the File Handle.
     @param  pPath [in] the stream path.
     @param  pName [in] the stream name.
-    @param  eAccessMode [in] the access mode.
+    @param  eMode [in] the access mode.
     @param  phStrm [out] the Stream Handle.
     @return store_E_None upon success
  */

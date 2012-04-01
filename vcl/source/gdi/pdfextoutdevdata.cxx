@@ -599,10 +599,6 @@ void PDFExtOutDevData::SetIsExportFormFields( const sal_Bool bExportFomtFields )
 {
     mbExportFormFields = bExportFomtFields;
 }
-sal_Int32 PDFExtOutDevData::GetFormsFormat() const
-{
-    return mnFormsFormat;
-}
 void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
 {
     mnFormsFormat = nFormsFormat;
@@ -721,39 +717,12 @@ sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const rtl::OUS
     mpGlobalSyncData->mParaInts.push_back( nDestID );
     return mpGlobalSyncData->mCurId++;
 }
-sal_Int32 PDFExtOutDevData::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
-{
-    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetOutlineItemParent );
-    mpGlobalSyncData->mParaInts.push_back( nItem );
-    mpGlobalSyncData->mParaInts.push_back( nNewParent );
-    return 0;
-}
-sal_Int32 PDFExtOutDevData::SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText )
-{
-    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetOutlineItemText );
-    mpGlobalSyncData->mParaInts.push_back( nItem );
-    mpGlobalSyncData->mParaOUStrings.push_back( rText );
-    return 0;
-}
-sal_Int32 PDFExtOutDevData::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
-{
-    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetOutlineItemDest );
-    mpGlobalSyncData->mParaInts.push_back( nItem );
-    mpGlobalSyncData->mParaInts.push_back( nDestID );
-    return 0;
-}
 void PDFExtOutDevData::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNote );
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaPDFNotes.push_back( rNote );
-    mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
-}
-void PDFExtOutDevData::SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
-{
-    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetAutoAdvanceTime );
-    mpGlobalSyncData->mParauInts.push_back( nSeconds );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
 }
 void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )
@@ -841,10 +810,6 @@ void PDFExtOutDevData::BeginGroup()
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginGroup );
 }
 
-void PDFExtOutDevData::EndGroup()
-{
-    mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroup );
-}
 void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
                                  sal_uInt8              nTransparency,
                                  const Rectangle&   rOutputRect,

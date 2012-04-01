@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_componentfile,hyphen,lingucomponent/source/hyphenat
 
 $(eval $(call gb_Library_set_include,hyphen,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/lingucomponent/source/lingutil) \
+	-I$(SRCDIR)/lingucomponent/source/lingutil \
 ))
 
 $(eval $(call gb_Library_add_api,hyphen,\

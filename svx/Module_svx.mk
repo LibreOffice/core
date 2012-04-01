@@ -41,6 +41,13 @@ $(eval $(call gb_Module_add_targets,svx,\
     Package_sdi \
 ))
 
+ifneq ($(OS),IOS)
+$(eval $(call gb_Module_add_targets,svx,\
+    Executable_gengal.bin \
+    Package_gengal \
+))
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
     JunitTest_svx_unoapi \
 ))

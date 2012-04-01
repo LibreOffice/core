@@ -120,6 +120,11 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_jpeg
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/external/jpeg \
+)
+
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	jpeglib \
 )
@@ -401,6 +406,12 @@ define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	rdf \
 )
+
+ifeq ($(OS),MACOSX)
+
+$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal.1 libraptor.1,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
+
+endif
 
 endef
 
@@ -782,6 +793,33 @@ endef
 endif # SYSTEM_LIBWPS
 
 
+ifeq ($(SYSTEM_LCMS2),YES)
+
+define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LCMS2_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
+
+endef
+
+else # !SYSTEM_LCMS2
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	lcms2 \
+))
+
+define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	lcms2 \
+)
+
+endef
+
+endif # SYSTEM_LCMS2
+
+
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
 define gb_LinkTarget__use_lpsolve55
@@ -1006,6 +1044,82 @@ endef
 endif #SYSTEM_MOZILLA_HEADERS
 
 
+ifneq ($(VALGRIND_CFLAGS),)
+
+define gb_LinkTarget__use_valgrind
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DHAVE_VALGRIND_H \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(VALGRIND_CFLAGS) \
+)
+
+endef
+
+else # !VALGRIND_CFLAGS
+
+define gb_LinkTarget__use_valgrind
+
+endef
+
+endif # VALGRIND_CFLAGS
+
+ifeq ($(SYSTEM_POPPLER),YES)
+
+define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_POPPLER \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(POPPLER_CFLAGS) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(POPPLER_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_POPPLER
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	fofi \
+	Goo \
+	xpdf \
+))
+
+define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/xpdf \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	fofi \
+	Goo \
+	xpdf \
+)
+
+ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	objc \
+)
+else ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	advapi32 \
+	gdi32 \
+)
+endif
+
+endef
+
+endif # SYSTEM_POPPLER
+
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
@@ -1019,6 +1133,13 @@ endef
 define gb_LinkTarget__use_cocoa
 $(call gb_LinkTarget_add_libs,$(1), \
 	-framework Cocoa \
+)
+
+endef
+
+define gb_LinkTarget__use_iokit
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework IOKit \
 )
 
 endef

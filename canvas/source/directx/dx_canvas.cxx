@@ -250,14 +250,8 @@ namespace dxcanvas
 }
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL gdipluscanvas_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, dxcanvas::dxCanvasDecl, dxcanvas::dxBitmapCanvasDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS2(gdipluscanvas,
+                                dxcanvas::dxCanvasDecl,
+                                dxcanvas::dxBitmapCanvasDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

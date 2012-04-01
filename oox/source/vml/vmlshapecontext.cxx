@@ -234,11 +234,12 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
             return new ShapeContext( rParent, rShapes.createShape< EllipseShape >(), rAttribs );
         case VML_TOKEN( polyline ):
             return new ShapeContext( rParent, rShapes.createShape< PolyLineShape >(), rAttribs );
+        case VML_TOKEN( line ):
+            return new ShapeContext( rParent, rShapes.createShape< LineShape >(), rAttribs );
 
         // TODO:
         case VML_TOKEN( arc ):
         case VML_TOKEN( curve ):
-        case VML_TOKEN( line ):
         case VML_TOKEN( diagram ):
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
@@ -346,6 +347,10 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "height" ) ) )        mrTypeModel.maHeight = aValue;
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso-position-vertical-relative" ) ) ) mrTypeModel.maPositionVerticalRelative = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso-fit-shape-to-text" ) ) )          mrTypeModel.mbAutoHeight = sal_True;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "rotation" ) ) )      mrTypeModel.maRotation = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flip" ) ) )      mrTypeModel.maFlip = aValue;
         }
     }
 }
@@ -361,6 +366,9 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
     mrShapeModel.maType = rAttribs.getXString( XML_type, OUString() );
     // polyline path
     setPoints( rAttribs.getString( XML_points, OUString() ) );
+    // line start and end positions
+    setFrom(rAttribs.getString(XML_from, OUString()));
+    setTo(rAttribs.getString(XML_to, OUString()));
 }
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -397,6 +405,18 @@ void ShapeContext::setPoints( const OUString& rPoints )
         sal_Int32 nY = rPoints.getToken( 0, ',', nIndex ).toInt32();
         mrShapeModel.maPoints.push_back( Point( nX, nY ) );
     }
+}
+
+void ShapeContext::setFrom( const OUString& rPoints )
+{
+    if (!rPoints.isEmpty())
+        mrShapeModel.maFrom = rPoints;
+}
+
+void ShapeContext::setTo( const OUString& rPoints )
+{
+    if (!rPoints.isEmpty())
+        mrShapeModel.maTo = rPoints;
 }
 
 // ============================================================================

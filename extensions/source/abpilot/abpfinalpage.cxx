@@ -210,7 +210,7 @@ namespace abp
     }
 
     // -----------------------------------------------------------------------------
-    IMPL_LINK( FinalPage, OnRegister, CheckBox*, EMPTYARG )
+    IMPL_LINK_NOARG(FinalPage, OnRegister)
     {
         sal_Bool bEnable = m_aRegisterName.IsChecked();
         m_aNameLabel.Enable(bEnable);

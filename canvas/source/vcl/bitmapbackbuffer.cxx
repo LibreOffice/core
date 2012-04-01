@@ -30,7 +30,6 @@
 #include "bitmapbackbuffer.hxx"
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>

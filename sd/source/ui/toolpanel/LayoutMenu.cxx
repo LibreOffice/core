@@ -618,7 +618,7 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
 
 
 
-IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(LayoutMenu, ClickHandler)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
     return 0;
@@ -901,7 +901,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
 
 
 
-IMPL_LINK(LayoutMenu, StateChangeHandler, ::rtl::OUString*, EMPTYARG)
+IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler)
 {
     InvalidateContent();
     return 0;

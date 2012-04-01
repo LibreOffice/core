@@ -358,7 +358,10 @@ get_pipe_path( rtl_uString *pAppPath )
     rtl_uString_release( pMd5hash );
     rtl_uString_release( pPath );
     rtl_uString_release( pTmp );
-    rtl_uString_release( pBasePath );
+    if ( pBasePath )
+    {
+        rtl_uString_release( pBasePath );
+    }
     rtl_uString_release( pUserInstallation );
     rtl_uString_release( pAbsUserInstallation );
 
@@ -450,7 +453,6 @@ send_args( int fd, rtl_uString *pCwdPath )
     sal_Bool bResult;
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path( pCwdPath );
-    sal_Bool bDontConvertNext = sal_False;
     sal_uInt32 nArg = 0;
     sal_uInt32 nArgCount = osl_getCommandArgCount();
 
@@ -485,44 +487,6 @@ send_args( int fd, rtl_uString *pCwdPath )
 
         osl_getCommandArg( nArg, &pTmp );
 
-        // this is not a param, we have to prepend filenames with file://
-        // FIXME: improve the check
-        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) )
-        {
-            sal_Int32 nFirstColon = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, ':' );
-            sal_Int32 nFirstSlash = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, '/' );
-
-            // check that pTmp is not an URI yet
-            // note ".uno" ".slot" & "vnd.sun.star.script" are special urls that
-            // don't expect a following '/'
-
-             const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
-             sal_Bool bIsSpecialURL = sal_False;
-             int i = 0;
-             int len =  SAL_N_ELEMENTS(schemes);
-             for ( ; i < len; ++i )
-             {
-                 if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
-                     , pTmp->length , schemes[ i ], strlen(schemes[ i ] ))  == 0  )
-                 {
-                     bIsSpecialURL = sal_True;
-                     break;
-                 }
-             }
-
-            if ( !bIsSpecialURL && ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) ) )
-            {
-                // some of the switches (currently just -pt) don't want to
-                // have the filenames as URIs
-                if ( !bDontConvertNext )
-                    osl_getAbsoluteFileURL( pCwdPath, pTmp, &pTmp );
-            }
-        }
-
-        // don't convert filenames with some of the switches
-        // (currently just -pt)
-        bDontConvertNext = !rtl_ustr_ascii_compareIgnoreAsciiCase( pTmp->buffer, "-pt" );
-
         pEscapedTmp = escape_path( pTmp );
 
         rtl_uStringbuffer_insert( &pBuffer, &nCapacity,
@@ -535,7 +499,15 @@ send_args( int fd, rtl_uString *pCwdPath )
 
     ustr_debug( "Pass args", pBuffer );
 
-    pOut = ustr_to_str( pBuffer );
+    if ( !rtl_convertUStringToString(
+             &pOut, rtl_uString_getStr( pBuffer ),
+             rtl_uString_getLength( pBuffer ), RTL_TEXTENCODING_UTF8,
+             ( RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+               | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR ) ) )
+    {
+        fprintf( stderr, "ERROR: cannot convert arguments to UTF-8" );
+        exit( 1 );
+    }
 
     nLen = rtl_string_getLength( pOut ) + 1;
     bResult = ( write( fd, rtl_string_getStr( pOut ), nLen ) == (ssize_t) nLen );
@@ -666,6 +638,8 @@ exec_pagein (Args *args)
     free (argv[1]);
 }
 
+#if defined SOLAR_JAVA
+
 static void extend_library_path (const char *new_element)
 {
     rtl_uString *pEnvName=NULL, *pOrigEnvVar=NULL, *pNewEnvVar=NULL;
@@ -789,6 +763,8 @@ exec_javaldx (Args *args)
         osl_closeFile(fileOut);
 }
 
+#endif
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int fd = 0;
@@ -854,7 +830,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         }
 
         /* pagein */
-        if (!args->bInhibitJavaLdx)
+        if (!args->bInhibitPagein)
             exec_pagein (args);
 
         /* javaldx */

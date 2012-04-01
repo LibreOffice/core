@@ -111,7 +111,7 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
         {
             pObj = aIter.Next();
 
-            if( ( rObjName == pObj->GetName() ) ||
+            if( ( pObj->GetName().equals(rObjName) ) ||
                 ( SdrInventor == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
@@ -138,7 +138,7 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
         {
             pObj = aIter.Next();
 
-            if( ( rObjName == pObj->GetName() ) ||
+            if( ( pObj->GetName().equals(rObjName) ) ||
                 ( SdrInventor == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
@@ -957,7 +957,7 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 {
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_True );
@@ -989,7 +989,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, EMPTYARG )
         pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
     }
 
-    SetChanged(bChanged || sal_False);
+    SetChanged(bChanged);
 
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_False );
@@ -1059,7 +1059,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     if( (pRet == 0) && bCreate )
     {
         pRet = new SdAnimationInfo( rObject );
-        rObject.InsertUserData( pRet);
+        rObject.AppendUserData( pRet);
     }
 
     return pRet;

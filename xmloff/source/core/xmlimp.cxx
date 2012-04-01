@@ -59,7 +59,6 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/logfile.hxx>
-#include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1717,36 +1716,6 @@ void SvXMLImport::SetError(
     SetError( nId, aSeq );
 }
 
-void SvXMLImport::SetError(
-    sal_Int32 nId,
-    const OUString& rMsg1,
-    const OUString& rMsg2,
-    const OUString& rMsg3)
-{
-    Sequence<OUString> aSeq(3);
-    OUString* pSeq = aSeq.getArray();
-    pSeq[0] = rMsg1;
-    pSeq[1] = rMsg2;
-    pSeq[2] = rMsg3;
-    SetError( nId, aSeq );
-}
-
-void SvXMLImport::SetError(
-    sal_Int32 nId,
-    const OUString& rMsg1,
-    const OUString& rMsg2,
-    const OUString& rMsg3,
-    const OUString& rMsg4)
-{
-    Sequence<OUString> aSeq(4);
-    OUString* pSeq = aSeq.getArray();
-    pSeq[0] = rMsg1;
-    pSeq[1] = rMsg2;
-    pSeq[2] = rMsg3;
-    pSeq[3] = rMsg4;
-    SetError( nId, aSeq );
-}
-
 void SvXMLImport::DisposingModel()
 {
     if( mxFontDecls.Is() )
@@ -1779,12 +1748,12 @@ SvXMLImport::GetComponentContext() const
     return mpImpl->mxComponentContext;
 }
 
-String SvXMLImport::GetBaseURL() const
+::rtl::OUString SvXMLImport::GetBaseURL() const
 {
     return mpImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-String SvXMLImport::GetDocumentBase() const
+::rtl::OUString SvXMLImport::GetDocumentBase() const
 {
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }

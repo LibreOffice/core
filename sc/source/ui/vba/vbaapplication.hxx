@@ -141,7 +141,7 @@ public:
     virtual double SAL_CALL InchesToPoints( double Inches ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SC_VBA_APPLICATION_HXX */

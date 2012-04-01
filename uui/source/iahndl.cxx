@@ -1204,7 +1204,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParen
                                                                   rtl::OUString & rProposedNewName,
                                                                   bool bAllowOverwrite )
 {
-    boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr( "uui" ) );
     if ( !xManager.get() )
         return ABORT;
 
@@ -1313,7 +1313,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
             boost::scoped_ptr< ResMgr > xManager(
-                ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+                ResMgr::CreateResMgr( "uui" ) );
             rtl::OUString aTitle( utl::ConfigManager::getProductName() );
 
             ::rtl::OUString aErrTitle
@@ -1355,8 +1355,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
     bool bApprove = false;
 
-    boost::scoped_ptr< ResMgr > pResMgr(
-        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
     if ( pResMgr.get() )
     {
         bool bShowSignatures = aSignInfo.getLength() > 0;
@@ -1419,8 +1418,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
 
     if ( !s_bDeferredToNextSession )
     {
-        boost::scoped_ptr< ResMgr > pResMgr(
-            ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+        boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
         if ( pResMgr.get() )
         {
             ::uui::NewerVersionWarningDialog aDialog(
@@ -1490,8 +1488,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     ::rtl::OUString aMessage;
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 

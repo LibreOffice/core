@@ -26,10 +26,15 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 
-// local includes
+#include "sal/main.h"
+
 #include "helpmerge.hxx"
 
 // defines to parse command line
@@ -181,14 +186,7 @@ void Help()
 /*****************************************************************************/
 #ifndef TESTDRIVER
 
-#if defined(UNX)
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char *argv[] )
-#endif
-/*****************************************************************************/
-{
-
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     if ( !ParseCommandLine( argc, argv )) {
         Help();
         return 1;
@@ -209,15 +207,15 @@ int _cdecl main( int argc, char *argv[] )
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
         }
         else
-            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( '0' ), "help" );
+            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( rtl::OUString('0') ), "help" );
     }else if ( sOutputFileX.getLength() && sOutputFileY.getLength() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
 
             ifstream aFStream( sInputFile.copy( 1 ).getStr() , ios::in );
 
             if( !aFStream ){
-                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
-                exit(-1);
+                std::cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
+                std::exit(EXIT_FAILURE);
             }
 
             vector<rtl::OString> filelist;
@@ -244,7 +242,6 @@ int _cdecl main( int argc, char *argv[] )
             for( vector<rtl::OString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
             {
                 sHelpFile = *pos;
-                cout << ".";cout.flush();
 
                 HelpParser aParser( sHelpFile , bUTF8 , true );
                 hasNoError = aParser.Merge( sSDFFile , sOutputFileX , sOutputFileY , true , aLanguages , aMergeDataFile , bCreateDir );
@@ -252,7 +249,7 @@ int _cdecl main( int argc, char *argv[] )
             }
         }
     } else
-        cerr << "helpex ERROR: Wrong input parameters!\n";
+        std::cerr << "helpex ERROR: Wrong input parameters!\n";
 
     if( hasNoError )
         return 0;

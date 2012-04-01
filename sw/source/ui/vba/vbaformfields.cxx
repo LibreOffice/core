@@ -47,7 +47,7 @@ rtl::OUString lcl_getFormFieldName( const uno::Reference< text::XFormField >& xF
     sal_Int32 nCount = xFormField->getParamCount();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( xFormField->getParamName(i).equalsIgnoreAsciiCaseAscii( "Name" ) )
+        if( xFormField->getParamName(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
         {
             sName = xFormField->getParamValue(i);
             OSL_TRACE("lcl_getFormFieldName: %s", rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -183,11 +183,10 @@ SwVbaFormFields::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFormFields::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFormFields") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormFields"));
 }
 
 css::uno::Sequence<rtl::OUString>

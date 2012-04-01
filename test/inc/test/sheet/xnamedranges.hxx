@@ -43,6 +43,8 @@ public:
     // removes given entry
     XNamedRanges(const rtl::OUString& rNameToRemove);
 
+    virtual ~XNamedRanges();
+
     virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheets = 0) = 0;
 
     // XNamedRanges

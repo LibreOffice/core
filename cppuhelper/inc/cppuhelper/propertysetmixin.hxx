@@ -87,6 +87,10 @@ template< typename T > class PropertySetMixin;
 
    @since UDK 3.2.1
 */
+#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#endif
 class CPPUHELPER_DLLPUBLIC PropertySetMixinImpl:
     public com::sun::star::beans::XPropertySet,
     public com::sun::star::beans::XFastPropertySet,
@@ -403,6 +407,9 @@ private:
 
     void checkUnknown(rtl::OUString const & propertyName);
 };
+#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#pragma GCC diagnostic pop
+#endif
 
 /**
    @short A helper mixin to implement certain UNO interfaces related to property

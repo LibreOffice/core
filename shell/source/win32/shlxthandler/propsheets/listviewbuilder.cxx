@@ -67,8 +67,8 @@ list_view_builder::list_view_builder(
     HWND hwnd_list_view,
     const std::wstring& column1_title,
     const std::wstring& column2_title) :
-    hwnd_list_view_(hwnd_list_view),
     row_index_(-1),
+    hwnd_list_view_(hwnd_list_view),
     column1_title_(column1_title),
     column2_title_(column2_title)
 {
@@ -110,7 +110,7 @@ void list_view_builder::setup_list_view()
     HBITMAP    h_bmp = LoadBitmap(GetModuleHandle(MODULE_NAME), MAKEINTRESOURCE(IDB_PROPERTY_IMAGES));
     ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
 
-    ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
+    (void) ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
 
     std::wstring header = GetResString(IDS_PROPERTY);
 

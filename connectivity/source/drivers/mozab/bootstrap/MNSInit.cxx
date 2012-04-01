@@ -231,8 +231,8 @@ void MNS_XPCOM_EventLoop()
         if (NS_FAILED(rv))
             return ;
         if (event)
-        eventQ->HandleEvent(event);
-    }while ( PR_SUCCESS == PR_Sleep( PR_MillisecondsToInterval(1)) && aLive );
+            eventQ->HandleEvent(event);
+    }while ( PR_SUCCESS == PR_Sleep( PR_MillisecondsToInterval(20)) && aLive );
 
     eventQ->ProcessPendingEvents();
     OSL_TRACE( "OUT : MNS_XPCOM_EventLoop()" );

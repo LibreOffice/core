@@ -181,9 +181,9 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const ::rtl:
             {
                 xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_True); // TODO think about delegating fallback decision to our own calli!
             }
-            catch(const css::uno::RuntimeException& exRun)
-                { throw exRun; }
-            catch(const css::uno::Exception& exAny)
+            catch(const css::uno::RuntimeException&)
+                { throw; }
+            catch(const css::uno::Exception&)
                 {
                     /* TODO URGENT!
                         in case we found some "already existing storages" on the path before and increased its UseCount ...
@@ -195,7 +195,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const ::rtl:
                         A flush method with the same unique number force increasing of the "UseCount" variable then
                         inside a synchronized block ...
                     */
-                    throw exAny;
+                    throw;
                 }
 
             // SAFE -> ------------------------------
@@ -295,7 +295,7 @@ void StorageHolder::closePath(const ::rtl::OUString& rPath)
     ::rtl::OUString sNormedPath = StorageHolder::impl_st_normPath(rPath);
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
-    /* convert list of pathes in the following way:
+    /* convert list of paths in the following way:
         [0] = "path_1" => "path_1
         [1] = "path_2" => "path_1/path_2"
         [2] = "path_3" => "path_1/path_2/path_3"

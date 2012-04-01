@@ -70,7 +70,7 @@
 #include "glob.hrc"
 #include "prlayout.hxx"         // enum PresentationObjects
 #include "prltempl.hrc"         // TAB_PRES_LAYOUT_TEMPLATE_x
-#include <svx/tabarea.hxx>
+#include <svx/xfillit.hxx>
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
 #include "strings.hrc"
@@ -203,7 +203,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         {
             // Z.Z. geht immer noch der Dialog auf, um den Namen
             // der Vorlage einzugeben.
-            if( mpView->AreObjectsMarked() || sal_True )
+            mpView->AreObjectsMarked();
+            if( sal_True )
             {
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
                 if(p)

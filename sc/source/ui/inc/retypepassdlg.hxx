@@ -113,9 +113,9 @@ private:
     String          maTextHashGood;
     String          maTextHashRegen;
 
-    DECL_LINK( OKHdl, OKButton* );
+    DECL_LINK( OKHdl, void* );
     DECL_LINK( RetypeBtnHdl, PushButton* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( ScrollHdl, void* );
 
     struct TableItem
     {
@@ -164,10 +164,10 @@ private:
 
     RadioButton     maBtnRemovePassword;
 
-    DECL_LINK( OKHdl, OKButton* );
+    DECL_LINK( OKHdl, void* );
     DECL_LINK( RadioBtnHdl, RadioButton* );
-    DECL_LINK( CheckBoxHdl, CheckBox* );
-    DECL_LINK( PasswordModifyHdl, Edit* );
+    DECL_LINK( CheckBoxHdl, void* );
+    DECL_LINK( PasswordModifyHdl, void* );
 
     ScPassHashProtectable* mpProtected;
 };

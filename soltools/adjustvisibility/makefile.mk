@@ -40,8 +40,8 @@ noadjust=TRUE
 
 # --- Files --------------------------------------------------------
 
-# This tool is for Solaris only
-.IF "$(OS)"=="SOLARIS"
+# This tool is for SunStudio on Solaris only
+.IF "$(OS)$(COM)"=="SOLARISC52"
 
 APP1TARGET	= 	adjustvisibility
 APP1OBJS	=	$(OBJ)$/adjustvisibility.obj
@@ -52,7 +52,7 @@ APP1RPATH   =   NONE
 #APP1STDLIBS+=-lstlport
 APP1STDLIBS+=-lCstd
 
-.ENDIF "$(OS)"=="SOLARIS"
+.ENDIF "$(OS)$(COM)"=="SOLARISC52"
 
 # --- Targets ------------------------------------------------------
 

@@ -47,7 +47,7 @@ SolarThreadExecutor::~SolarThreadExecutor()
     osl_destroyCondition( m_aFinish );
 }
 
-IMPL_LINK( SolarThreadExecutor, worker, void*, EMPTYARG )
+IMPL_LINK_NOARG(SolarThreadExecutor, worker)
 {
     if ( !m_bTimeout )
     {

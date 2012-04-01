@@ -502,7 +502,7 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
         Reference< XInterface > xInterface( m_xContext->getValueByName(
                     OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) ), UNO_QUERY_THROW );
         // check that we have permissions for this storage
-        Reference< dcsssf::security::XScriptSecurity > xScriptSecurity( xInterface, UNO_QUERY_THROW );
+        Reference< ::drafts::com::sun::star::script::framework::security::XScriptSecurity > xScriptSecurity( xInterface, UNO_QUERY_THROW );
         scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
         // if we dealing with a document storage (ie. not user or share

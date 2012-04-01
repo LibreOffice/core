@@ -238,12 +238,12 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControls") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControls"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaCommandBarControls::getServiceNames()
 {
@@ -312,10 +312,9 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
 }
 
 // XHelperInterface
-rtl::OUString& VbaDummyCommandBarControls::getServiceImplName()
+rtl::OUString VbaDummyCommandBarControls::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBarControls") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBarControls"));
 }
 
 uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()

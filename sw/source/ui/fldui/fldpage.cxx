@@ -381,7 +381,7 @@ void SwFldPage::EnableInsert(sal_Bool bEnable)
     m_bInsert = bEnable;
 }
 
-IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldPage, NumFormatHdl)
 {
     InsertHdl();
 

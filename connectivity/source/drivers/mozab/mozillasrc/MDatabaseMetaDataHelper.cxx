@@ -40,7 +40,10 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
+#include "pre_include_mozilla.h"
 #include <nsIAbDirFactoryService.h>
+#include "post_include_mozilla.h"
+
 #include <MNSInit.hxx>
 #include <MNameMapper.hxx>
 #include "MNSMozabProxy.hxx"

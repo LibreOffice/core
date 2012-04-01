@@ -149,9 +149,14 @@ SwFieldType::SwFieldType( sal_uInt16 nWhichId )
 {
 }
 
-const String& SwFieldType::GetName() const
+namespace
 {
-    return aEmptyStr;
+    rtl::OUString aEmptyOUStr;
+}
+
+const rtl::OUString& SwFieldType::GetName() const
+{
+    return aEmptyOUStr;
 }
 
 bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
@@ -265,14 +270,14 @@ String SwField::GetFieldName() const
     Beschreibung: Parameter setzen auslesen
  --------------------------------------------------------------------*/
 
-const String& SwField::GetPar1() const
+const rtl::OUString& SwField::GetPar1() const
 {
-    return aEmptyStr;
+    return aEmptyOUStr;
 }
 
-String SwField::GetPar2() const
+rtl::OUString SwField::GetPar2() const
 {
-    return aEmptyStr;
+    return rtl::OUString();
 }
 
 String SwField::GetFormula() const
@@ -280,10 +285,10 @@ String SwField::GetFormula() const
     return GetPar2();
 }
 
-void SwField::SetPar1(const String& )
+void SwField::SetPar1(const rtl::OUString& )
 {}
 
-void SwField::SetPar2(const String& )
+void SwField::SetPar2(const rtl::OUString& )
 {}
 
 sal_uInt16 SwField::GetSubType() const

@@ -361,7 +361,7 @@ namespace canvas
 
                         ::std::sort( aSortedUpdateSprites.begin(),
                                      aSortedUpdateSprites.end(),
-                                     SpriteComparator() );
+                                     SpriteWeakOrder() );
 
                         if( isAreaUpdateOpaque( rUpdateArea,
                                                 nNumSprites ) )

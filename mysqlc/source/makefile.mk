@@ -220,7 +220,7 @@ EXTENSION_PACKDEPS+=$(COMPONENT_MYSQL_CPPCONN_FILE)
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+$(COMPONENT_IMAGES) : $(SRC_ROOT)/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

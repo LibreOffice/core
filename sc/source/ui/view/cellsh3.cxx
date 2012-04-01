@@ -817,7 +817,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         const SfxStringItem& rNameItem = (const SfxStringItem&)pReqArgs->Get( SID_AUTOFORMAT );
                         ScAutoFormat* pFormat = ScGlobal::GetOrCreateAutoFormat();
-                        sal_uInt16 nIndex = pFormat->FindIndexPerName( rNameItem.GetValue() );
+                        ScAutoFormat::const_iterator it = pFormat->find(rNameItem.GetValue());
+                        ScAutoFormat::const_iterator itBeg = pFormat->begin();
+                        size_t nIndex = std::distance(itBeg, it);
 
                         pTabViewShell->AutoFormat( nIndex );
 

@@ -53,6 +53,8 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwNodeNum.hxx>
+#include <set>
+#include <vector>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -266,7 +268,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // kopiere Attribute/Text
     if( !pCpyAttrNd->HasSwAttrSet() )
         // wurde ein AttrSet fuer die Numerierung angelegt, so loesche diesen!
-        pCpyAttrNd->ResetAllAttr();
+        pTxtNd->ResetAllAttr();
 
     // if Copy-Textnode unequal to Copy-Attrnode, then copy first
     // the attributes into the new Node.
@@ -328,7 +330,7 @@ sal_Bool lcl_CopyTblLine( const SwTableLine*& rpLine, void* pPara );
 
 sal_Bool lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
 {
-    _CopyTable* pCT = (_CopyTable*)pPara;
+    _CopyTable* pCT = reinterpret_cast< _CopyTable* >(pPara);
 
     SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rpBox->GetFrmFmt();
     pCT->rMapArr.ForEach( lcl_SrchNew, &pBoxFmt );
@@ -392,7 +394,7 @@ sal_Bool lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
 
 sal_Bool lcl_CopyTblLine( const SwTableLine*& rpLine, void* pPara )
 {
-    _CopyTable* pCT = (_CopyTable*)pPara;
+    _CopyTable* pCT = reinterpret_cast< _CopyTable* >(pPara);
     SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rpLine->GetFrmFmt();
     pCT->rMapArr.ForEach( lcl_SrchNew, &pLineFmt );
     if( pLineFmt == rpLine->GetFrmFmt() )   // ein neues anlegen ??
@@ -1403,7 +1405,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     //            die Ordnungsnummer (wird nur im DrawModel verwaltet)
     //            beibehalten.
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
-    _ZSortFlys aArr;
+    ::std::set< _ZSortFly > aSet;
     sal_uInt16 nArrLen = GetSpzFrmFmts()->Count();
 
     for ( sal_uInt16 n = 0; n < nArrLen; ++n )
@@ -1431,7 +1433,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             bool bAdd = false;
             if( pAPos->nNode < rRg.aEnd )
                 bAdd = true;
-            if( !bAdd )
+            if (!bAdd && !IsRedlineMove()) // fdo#40599: not for redline move
             {
                 bool bEmptyNode = false;
                 bool bLastNode = false;
@@ -1467,22 +1469,20 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 }
             }
             if( bAdd )
-                aArr.Insert( _ZSortFly( pFmt, pAnchor, nArrLen + aArr.Count() ));
+                aSet.insert( _ZSortFly( pFmt, pAnchor, nArrLen + aSet.size() ));
         }
     }
 
     //Alle kopierten (also die neu erzeugten) Rahmen in ein weiteres Array
     //stopfen. Dort sizten sie passend zu den Originalen, damit hinterher
     //die Chains entsprechend aufgebaut werden koennen.
-    SvPtrarr aNewArr( 10 );
+    ::std::vector< SwFrmFmt* > aVecSwFrmFmt;
 
-    for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+    for (::std::set< _ZSortFly >::const_iterator it=aSet.begin() ; it != aSet.end(); ++it )
     {
-        const _ZSortFly& rZSortFly = aArr[ n ];
-
         // #i59964#
         // correct determination of new anchor position
-        SwFmtAnchor aAnchor( *rZSortFly.GetAnchor() );
+        SwFmtAnchor aAnchor( *(*it).GetAnchor() );
         SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
         // for at-paragraph and at-character anchored objects the new anchor
         // position can *not* be determined by the difference of the current
@@ -1571,7 +1571,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         sal_Bool bMakeCpy = sal_True;
         if( pDest == this )
         {
-            const SwFmtCntnt& rCntnt = rZSortFly.GetFmt()->GetCntnt();
+            const SwFmtCntnt& rCntnt = (*it).GetFmt()->GetCntnt();
             const SwStartNode* pSNd;
             if( rCntnt.GetCntntIdx() &&
                 0 != ( pSNd = rCntnt.GetCntntIdx()->GetNode().GetStartNode() ) &&
@@ -1579,42 +1579,42 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
                 bMakeCpy = sal_False;
-                aArr.Remove( n, 1 );
-                --n;
+                aSet.erase ( it );
             }
         }
 
         // Format kopieren und den neuen Anker setzen
         if( bMakeCpy )
-            aNewArr.Insert( pDest->CopyLayoutFmt( *rZSortFly.GetFmt(),
-                        aAnchor, false, true ), aNewArr.Count() );
+            aVecSwFrmFmt.push_back( pDest->CopyLayoutFmt( *(*it).GetFmt(),
+                        aAnchor, false, true ) );
     }
 
     //Alle chains, die im Original vorhanden sind, soweit wie moeglich wieder
     //aufbauen.
-    OSL_ENSURE( aArr.Count() == aNewArr.Count(), "Missing new Flys" );
-    if ( aArr.Count() == aNewArr.Count() )
+    OSL_ENSURE( aSet.size() == aVecSwFrmFmt.size(), "Missing new Flys" );
+    if ( aSet.size() == aVecSwFrmFmt.size() )
     {
-        for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+        size_t n = 0;
+        for (::std::set< _ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
         {
-            const SwFrmFmt *pFmt = aArr[n].GetFmt();
-            const SwFmtChain &rChain = pFmt->GetChain();
+            const SwFrmFmt *pFmtN = (*nIt).GetFmt();
+            const SwFmtChain &rChain = pFmtN->GetChain();
             int nCnt = 0 != rChain.GetPrev();
             nCnt += rChain.GetNext() ? 1: 0;
-            for ( sal_uInt16 k = 0; nCnt && k < aArr.Count(); ++k )
+            size_t k = 0;
+            for (::std::set< _ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
             {
-                const _ZSortFly &rTmp = aArr[k];
-                const SwFrmFmt *pTmp = rTmp.GetFmt();
-                if ( rChain.GetPrev() == pTmp )
+                const SwFrmFmt *pFmtK = (*kIt).GetFmt();
+                if ( rChain.GetPrev() == pFmtK )
                 {
-                    ::lcl_ChainFmts( (SwFlyFrmFmt*)aNewArr[k],
-                                     (SwFlyFrmFmt*)aNewArr[n] );
+                    ::lcl_ChainFmts( dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]),
+                                     dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]) );
                     --nCnt;
                 }
-                else if ( rChain.GetNext() == pTmp )
+                else if ( rChain.GetNext() == pFmtK )
                 {
-                    ::lcl_ChainFmts( (SwFlyFrmFmt*)aNewArr[n],
-                                     (SwFlyFrmFmt*)aNewArr[k] );
+                    ::lcl_ChainFmts( dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[n]),
+                                     dynamic_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]) );
                     --nCnt;
                 }
             }

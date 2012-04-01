@@ -29,14 +29,16 @@
 #ifndef _OSL_FILE_HXX_
 #define _OSL_FILE_HXX_
 
-#ifdef __cplusplus
+#include "sal/config.h"
+
+#include <cassert>
 
 #include <osl/time.h>
-#   include <rtl/memory.h>
-#   include <rtl/ustring.hxx>
+#include <rtl/memory.h>
+#include <rtl/ustring.hxx>
 
 #include <osl/file.h>
-#   include <rtl/byteseq.hxx>
+#include <rtl/byteseq.hxx>
 
 #include <stdio.h>
 
@@ -388,34 +390,6 @@ public:
         return *this;
     }
 
-    /** Automount a volume device.
-
-        @return
-        E_None on success
-
-        @todo
-        specify all error codes that may be returned
-    */
-
-    inline RC automount()
-    {
-        return (RC)osl_automountVolumeDevice( _aHandle );
-    }
-
-    /** Unmount a volume device.
-
-        @return
-        E_None on success
-
-        @todo
-        specify all error codes that may be returned
-    */
-
-    inline RC unmount()
-    {
-        return (RC)osl_unmountVolumeDevice( _aHandle );
-    }
-
     /** Get the full qualified URL where a device is mounted to.
 
            @return
@@ -751,11 +725,54 @@ public:
     /** Get the file type.
 
         @return
-        The file type if this information is valid, Unknown otherwise.
+        The file type.
     */
     inline Type getFileType() const
     {
-        return (_aStatus.uValidFields & osl_FileStatus_Mask_Type) ?  (Type) _aStatus.eType : Unknown;
+        assert(isValid(osl_FileStatus_Mask_Type));
+        return static_cast< Type >(_aStatus.eType);
+    }
+
+    /** Is it a directory?
+        This method returns True for both directories, and volumes.
+
+        @return
+        True if it's a directory, False otherwise.
+
+        @see getFileType
+        @since LibreOffice 3.6
+    */
+    inline sal_Bool isDirectory() const
+    {
+        return ( getFileType() == Directory || getFileType() == Volume );
+    }
+
+    /** Is it a regular file?
+
+        @return
+        True if it's a regular file, False otherwise.
+
+        @see getFileType
+        @see isFile
+        @see isLink
+        @since LibreOffice 3.6
+    */
+    inline sal_Bool isRegular() const
+    {
+        return ( getFileType() == Regular );
+    }
+
+    /** Is it a link?
+
+        @return
+        True if it's a link, False otherwise.
+
+        @see getFileType
+        @since LibreOffice 3.6
+    */
+    inline sal_Bool isLink() const
+    {
+        return ( getFileType() == Link );
     }
 
     /** Get the file attributes.
@@ -766,88 +783,93 @@ public:
 
     inline sal_uInt64 getAttributes() const
     {
+        assert(isValid(osl_FileStatus_Mask_Attributes));
         return _aStatus.uAttributes;
     }
 
     /** Get the creation time of this file.
 
         @return
-        The creation time if this information is valid,
-        an uninitialized TimeValue otherwise.
+        The creation time.
     */
 
     inline TimeValue getCreationTime() const
     {
+        assert(isValid(osl_FileStatus_Mask_CreationTime));
         return _aStatus.aCreationTime;
     }
 
     /** Get the file access time.
 
         @return
-        The last access time if this information is valid,
-        an uninitialized TimeValue otherwise.
+        The last access time.
     */
 
     inline TimeValue getAccessTime() const
     {
+        assert(isValid(osl_FileStatus_Mask_AccessTime));
         return _aStatus.aAccessTime;
     }
 
     /** Get the file modification time.
 
         @return
-        The last modified time if this information is valid,
-        an uninitialized TimeValue otherwise.
+        The last modified time.
     */
 
     inline TimeValue getModifyTime() const
     {
+        assert(isValid(osl_FileStatus_Mask_ModifyTime));
         return _aStatus.aModifyTime;
     }
 
     /** Get the size of the file.
 
         @return
-        The actual file size if this information is valid, 0 otherwise.
+        The actual file size.
     */
 
     inline sal_uInt64 getFileSize() const
     {
+        assert(isValid(osl_FileStatus_Mask_FileSize));
         return _aStatus.uFileSize;
     }
 
     /** Get the file name.
 
         @return
-        The file name if this information is valid, an empty string otherwise.
+        The file name.
     */
 
     inline ::rtl::OUString getFileName() const
     {
-        return _aStatus.ustrFileName ? ::rtl::OUString(_aStatus.ustrFileName) : ::rtl::OUString();
+        assert(isValid(osl_FileStatus_Mask_FileName));
+        return rtl::OUString(_aStatus.ustrFileName);
     }
 
 
     /** Get the URL of the file.
 
         @return
-        The full qualified URL of the file if this information is valid, an empty string otherwise.
+        The full qualified URL of the file.
     */
 
     inline ::rtl::OUString getFileURL() const
     {
-        return _aStatus.ustrFileURL ? ::rtl::OUString(_aStatus.ustrFileURL) : ::rtl::OUString();
+        assert(isValid(osl_FileStatus_Mask_FileURL));
+        return rtl::OUString(_aStatus.ustrFileURL);
     }
 
     /** Get the link target URL.
 
         @return
-        The link target URL if this information is valid, an empty string otherwise.
+        The link target URL.
     */
 
     inline ::rtl::OUString getLinkTargetURL() const
     {
-        return _aStatus.ustrLinkTargetURL ? ::rtl::OUString(_aStatus.ustrLinkTargetURL) : ::rtl::OUString();
+        assert(isValid(osl_FileStatus_Mask_LinkTargetURL));
+        return rtl::OUString(_aStatus.ustrLinkTargetURL);
     }
 
     friend class DirectoryItem;
@@ -1917,7 +1939,6 @@ public:
 
 } /* namespace osl */
 
-#endif  /* __cplusplus */
 #endif  /* _OSL_FILE_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,6 +76,7 @@
 #include "scextopt.hxx"
 #include "preview.hxx"
 #include <svx/sdrhittesthelper.hxx>
+#include <boost/foreach.hpp>
 
 using namespace com::sun::star;
 
@@ -123,13 +124,6 @@ const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
 }
 
 //------------------------------------------------------------------------
-
-SV_IMPL_PTRARR( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr );
-SV_IMPL_PTRARR( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr );
-SV_IMPL_PTRARR( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr );
-SV_IMPL_PTRARR( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr );
-SV_IMPL_PTRARR( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr );
-SV_IMPL_PTRARR( XActivationEventListenerArr_Impl, XActivationEventListenerPtr );
 
 #define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
 #define SCVIEWSETTINGS_SERVICE      "com.sun.star.sheet.SpreadsheetViewSettings"
@@ -588,12 +582,12 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
 ScTabViewObj::~ScTabViewObj()
 {
     //! Listening oder so
-    if (aMouseClickHandlers.Count())
+    if (!aMouseClickHandlers.empty())
     {
         acquire();
         EndMouseListening();
     }
-    if (aActivationListeners.Count())
+    if (!aActivationListeners.empty())
     {
         acquire();
         EndActivationListening();
@@ -677,23 +671,23 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
 
     ScViewData* pViewData = GetViewShell()->GetViewData();
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    if (aActivationListeners.Count() > 0)
+    if (!aActivationListeners.empty())
     {
         sheet::ActivationEvent aEvent;
         uno::Reference< sheet::XSpreadsheetView > xView(this);
         uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
         aEvent.Source = xSource;
         aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, pViewData->GetTabNo());
-        for ( sal_uInt16 n=0; n<aActivationListeners.Count(); n++ )
+        for (XActivationEventListenerVector::iterator it = aActivationListeners.begin(); it != aActivationListeners.end(); )
         {
             try
             {
-                (*aActivationListeners[n])->activeSpreadsheetChanged( aEvent );
+                (*it)->activeSpreadsheetChanged( aEvent );
+                ++it;
             }
             catch( uno::Exception& )
             {
-                aActivationListeners.DeleteAndDestroy( n );
-                --n; // because it will be increased again in the loop
+                it = aActivationListeners.erase( it);
             }
         }
     }
@@ -1300,7 +1294,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
 bool ScTabViewObj::IsMouseListening() const
 {
-    if ( aMouseClickHandlers.Count() > 0 )
+    if ( !aMouseClickHandlers.empty() )
         return true;
 
     // also include sheet events, because MousePressed must be called for them
@@ -1318,7 +1312,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
     sal_Bool bReturn(false);
 
     uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
-    if (aMouseClickHandlers.Count() && xTarget.is())
+    if (!aMouseClickHandlers.empty() && xTarget.is())
     {
         awt::EnhancedMouseEvent aMouseEvent;
 
@@ -1329,17 +1323,17 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         aMouseEvent.PopupTrigger = e.PopupTrigger;
         aMouseEvent.Target = xTarget;
 
-        for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
+        for (XMouseClickHandlerVector::iterator it = aMouseClickHandlers.begin(); it != aMouseClickHandlers.end(); )
         {
             try
             {
-                if (!(*aMouseClickHandlers[n])->mousePressed( aMouseEvent ))
+                if (!(*it)->mousePressed( aMouseEvent ))
                     bReturn = sal_True;
+                ++it;
             }
             catch ( uno::Exception& )
             {
-                aMouseClickHandlers.DeleteAndDestroy(n);
-                --n; // because it will be increased again in the loop
+                it = aMouseClickHandlers.erase(it);
             }
         }
     }
@@ -1408,7 +1402,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
 {
     sal_Bool bReturn(false);
 
-    if (aMouseClickHandlers.Count())
+    if (!aMouseClickHandlers.empty())
     {
         uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
 
@@ -1423,17 +1417,17 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             aMouseEvent.PopupTrigger = e.PopupTrigger;
             aMouseEvent.Target = xTarget;
 
-            for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
+            for (XMouseClickHandlerVector::iterator it = aMouseClickHandlers.begin(); it != aMouseClickHandlers.end(); )
             {
                 try
                 {
-                    if (!(*aMouseClickHandlers[n])->mouseReleased( aMouseEvent ))
+                    if (!(*it)->mouseReleased( aMouseEvent ))
                         bReturn = sal_True;
+                    ++it;
                 }
                 catch ( uno::Exception& )
                 {
-                    aMouseClickHandlers.DeleteAndDestroy(n);
-                    --n; // because it will be increased again in the loop
+                    it = aMouseClickHandlers.erase(it);
                 }
             }
         }
@@ -1449,20 +1443,19 @@ void ScTabViewObj::StartMouseListening()
 
 void ScTabViewObj::EndMouseListening()
 {
-    sal_uInt16 nCount(aMouseClickHandlers.Count());
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( sal_uInt16 n=0; n<nCount; n++ )
+    BOOST_FOREACH(const XMouseClickHandlerUnoRef rListener, aMouseClickHandlers)
     {
         try
         {
-            (*aMouseClickHandlers[n])->disposing(aEvent);
+            rListener->disposing(aEvent);
         }
         catch ( uno::Exception& )
         {
         }
     }
-    aMouseClickHandlers.DeleteAndDestroy(0, nCount);
+    aMouseClickHandlers.clear();
 }
 
 void ScTabViewObj::StartActivationListening()
@@ -1471,20 +1464,19 @@ void ScTabViewObj::StartActivationListening()
 
 void ScTabViewObj::EndActivationListening()
 {
-    sal_uInt16 nCount = aActivationListeners.Count();
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( sal_uInt16 n=0; n<nCount; n++ )
+    BOOST_FOREACH(const XActivationEventListenerUnoRef rListener, aActivationListeners)
     {
         try
         {
-            (*aActivationListeners[n])->disposing(aEvent);
+            rListener->disposing(aEvent);
         }
         catch ( uno::Exception& )
         {
         }
     }
-    aActivationListeners.DeleteAndDestroy(0, nCount);
+    aActivationListeners.clear();
 }
 
 void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
@@ -1494,12 +1486,12 @@ void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< 
 
     if (aListener.is())
     {
-        sal_uInt16 nCount = aMouseClickHandlers.Count();
+        sal_uInt16 nCount = aMouseClickHandlers.size();
         uno::Reference<awt::XEnhancedMouseClickHandler> *pObj =
                 new uno::Reference<awt::XEnhancedMouseClickHandler>( aListener );
-        aMouseClickHandlers.Insert( pObj, nCount );
+        aMouseClickHandlers.push_back( pObj );
 
-        if (aMouseClickHandlers.Count() == 1 && nCount == 0) // only if a listener added
+        if (aMouseClickHandlers.size() == 1 && nCount == 0) // only if a listener added
             StartMouseListening();
     }
 }
@@ -1508,14 +1500,15 @@ void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Referenc
                                     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aMouseClickHandlers.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    sal_uInt16 nCount = aMouseClickHandlers.size();
+    for (XMouseClickHandlerVector::iterator it = aMouseClickHandlers.begin(); it != aMouseClickHandlers.end(); )
     {
-        uno::Reference<awt::XEnhancedMouseClickHandler> *pObj = aMouseClickHandlers[n];
-        if ( *pObj == aListener )
-            aMouseClickHandlers.DeleteAndDestroy( n );
+        if ( *it == aListener )
+            it = aMouseClickHandlers.erase(it);
+        else
+            ++it;
     }
-    if ((aMouseClickHandlers.Count() == 0) && (nCount > 0)) // only if last listener removed
+    if ((aMouseClickHandlers.size() == 0) && (nCount > 0)) // only if last listener removed
         EndMouseListening();
 }
 
@@ -1528,12 +1521,12 @@ void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sh
 
     if (aListener.is())
     {
-        sal_uInt16 nCount = aActivationListeners.Count();
+        sal_uInt16 nCount = aActivationListeners.size();
         uno::Reference<sheet::XActivationEventListener> *pObj =
                 new uno::Reference<sheet::XActivationEventListener>( aListener );
-        aActivationListeners.Insert( pObj, nCount );
+        aActivationListeners.push_back( pObj );
 
-        if (aActivationListeners.Count() == 1 && nCount == 0) // only if a listener added
+        if (aActivationListeners.size() == 1 && nCount == 0) // only if a listener added
             StartActivationListening();
     }
 }
@@ -1542,14 +1535,15 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
                                     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aActivationListeners.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    sal_uInt16 nCount = aActivationListeners.size();
+    for (XActivationEventListenerVector::iterator it = aActivationListeners.begin(); it != aActivationListeners.end(); )
     {
-        uno::Reference<sheet::XActivationEventListener> *pObj = aActivationListeners[n];
-        if ( *pObj == aListener )
-            aActivationListeners.DeleteAndDestroy( n );
+        if ( *it == aListener )
+            it = aActivationListeners.erase(it);
+        else
+            ++it;
     }
-    if ((aActivationListeners.Count() == 0) && (nCount > 0)) // only if last listener removed
+    if ((aActivationListeners.size() == 0) && (nCount > 0)) // only if last listener removed
         EndActivationListening();
 }
 
@@ -1824,7 +1818,7 @@ void SAL_CALL ScTabViewObj::addSelectionChangeListener(
     SolarMutexGuard aGuard;
     uno::Reference<view::XSelectionChangeListener>* pObj =
             new uno::Reference<view::XSelectionChangeListener>( xListener );
-    aSelectionListeners.Insert( pObj, aSelectionListeners.Count() );
+    aSelectionChgListeners.push_back( pObj );
 }
 
 void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
@@ -1832,13 +1826,12 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aSelectionListeners.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    for (XSelectionChangeListenerVector::iterator it = aSelectionChgListeners.begin();
+         it != aSelectionChgListeners.end(); ++it )
     {
-        uno::Reference<view::XSelectionChangeListener> *pObj = aSelectionListeners[n];
-        if ( *pObj == xListener )       //! wozu der Mumpitz mit queryInterface?
+        if ( *it == xListener ) //! wozu der Mumpitz mit queryInterface?
         {
-            aSelectionListeners.DeleteAndDestroy( n );
+            aSelectionChgListeners.erase(it);
             break;
         }
     }
@@ -1848,8 +1841,8 @@ void ScTabViewObj::SelectionChanged()
 {
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( sal_uInt16 n=0; n<aSelectionListeners.Count(); n++ )
-        (*aSelectionListeners[n])->selectionChanged( aEvent );
+    BOOST_FOREACH(const XSelectionChangeListenerUnoRef rListener, aSelectionChgListeners)
+        rListener->selectionChanged( aEvent );
 
     // handle sheet events
     ScTabViewShell* pViewSh = GetViewShell();
@@ -2082,7 +2075,7 @@ void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& /*
     SolarMutexGuard aGuard;
     uno::Reference<beans::XPropertyChangeListener>* pObj =
             new uno::Reference<beans::XPropertyChangeListener>( xListener );
-    aPropertyChgListeners.Insert( pObj, aPropertyChgListeners.Count() );
+    aPropertyChgListeners.push_back( pObj );
 }
 
 void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
@@ -2092,13 +2085,12 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString&
                                     uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aPropertyChgListeners.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    for (XViewPropertyChangeListenerVector::iterator it = aPropertyChgListeners.begin();
+         it != aPropertyChgListeners.end(); ++it )
     {
-        uno::Reference<beans::XPropertyChangeListener> *pObj = aPropertyChgListeners[n];
-        if ( *pObj == xListener )       //! wozu der Mumpitz mit queryInterface?
+        if ( *it == xListener ) //! wozu der Mumpitz mit queryInterface?
         {
-            aPropertyChgListeners.DeleteAndDestroy( n );
+            aPropertyChgListeners.erase(it);
             break;
         }
     }
@@ -2124,8 +2116,8 @@ void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( sal_uInt16 n=0; n<aPropertyChgListeners.Count(); n++ )
-        (*aPropertyChgListeners[n])->propertyChange( aEvent );
+    BOOST_FOREACH(const XViewPropertyChangeListenerUnoRef rListener, aPropertyChgListeners)
+        rListener->propertyChange( aEvent );
 }
 
 // XRangeSelection
@@ -2188,7 +2180,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionListener(
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XRangeSelectionListener>* pObj =
             new uno::Reference<sheet::XRangeSelectionListener>( xListener );
-    aRangeSelListeners.Insert( pObj, aRangeSelListeners.Count() );
+    aRangeSelListeners.push_back( pObj );
 }
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
@@ -2196,13 +2188,12 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRangeSelListeners.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    for (XRangeSelectionListenerVector::iterator it = aRangeSelListeners.begin();
+         it != aRangeSelListeners.end(); ++it )
     {
-        uno::Reference<sheet::XRangeSelectionListener> *pObj = aRangeSelListeners[n];
-        if ( *pObj == xListener )
+        if ( *it == xListener )
         {
-            aRangeSelListeners.DeleteAndDestroy( n );
+            aRangeSelListeners.erase(it);
             break;
         }
     }
@@ -2215,7 +2206,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionChangeListener(
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XRangeSelectionChangeListener>* pObj =
             new uno::Reference<sheet::XRangeSelectionChangeListener>( xListener );
-    aRangeChgListeners.Insert( pObj, aRangeChgListeners.Count() );
+    aRangeChgListeners.push_back( pObj );
 }
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
@@ -2223,13 +2214,12 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRangeChgListeners.Count();
-    for ( sal_uInt16 n=nCount; n--; )
+    for (XRangeSelectionChangeListenerVector::iterator it = aRangeChgListeners.begin();
+         it != aRangeChgListeners.end(); ++it )
     {
-        uno::Reference<sheet::XRangeSelectionChangeListener> *pObj = aRangeChgListeners[n];
-        if ( *pObj == xListener )
+        if ( *it == xListener )
         {
-            aRangeChgListeners.DeleteAndDestroy( n );
+            aRangeChgListeners.erase(it);
             break;
         }
     }
@@ -2241,8 +2231,8 @@ void ScTabViewObj::RangeSelDone( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( sal_uInt16 n=0; n<aRangeSelListeners.Count(); n++ )
-        (*aRangeSelListeners[n])->done( aEvent );
+    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, aRangeSelListeners)
+        rListener->done( aEvent );
 }
 
 void ScTabViewObj::RangeSelAborted( const String& rText )
@@ -2251,8 +2241,8 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( sal_uInt16 n=0; n<aRangeSelListeners.Count(); n++ )
-        (*aRangeSelListeners[n])->aborted( aEvent );
+    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, aRangeSelListeners)
+        rListener->aborted( aEvent );
 }
 
 void ScTabViewObj::RangeSelChanged( const String& rText )
@@ -2261,8 +2251,8 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( sal_uInt16 n=0; n<aRangeChgListeners.Count(); n++ )
-        (*aRangeChgListeners[n])->descriptorChanged( aEvent );
+    BOOST_FOREACH(const XRangeSelectionChangeListenerUnoRef rListener, aRangeChgListeners)
+        rListener->descriptorChanged( aEvent );
 }
 
 // XServiceInfo

@@ -70,7 +70,7 @@ static Sequence< OUString > lcl_GetFontPropertyNames()
     OUString *pNames = aNames.getArray();
     for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
     {
-        pNames[i] = A2OU( *ppPropName );
+        pNames[i] = OUString::createFromAscii( *ppPropName );
     }
     return aNames;
 }
@@ -95,7 +95,7 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
     OUString *pNames = aNames.getArray();
     for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
     {
-        pNames[i] = A2OU( *ppPropName );
+        pNames[i] = OUString::createFromAscii( *ppPropName );
     }
     return aNames;
 }
@@ -176,7 +176,7 @@ static Sequence< OUString > lcl_GetPropertyNames(
     OUString *pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i, ++ppPropName)
     {
-        pNames[i] = A2OU( *ppPropName );
+        pNames[i] = OUString::createFromAscii( *ppPropName );
     }
     return aNames;
 }
@@ -578,7 +578,7 @@ void SmMathConfig::Save()
 
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
-    Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( A2OU( SYMBOL_LIST ) ) );
+    Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( SYMBOL_LIST ) );
     const OUString *pNode = aNodes.getConstArray();
     sal_Int32 nNodes = aNodes.getLength();
 
@@ -587,7 +587,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
     std::vector< SmSym >::iterator aEnd( rSymbols.end() );
     while (aIt != aEnd)
     {
-        ReadSymbol( *aIt++, *pNode++, A2OU( SYMBOL_LIST ) );
+        ReadSymbol( *aIt++, *pNode++, SYMBOL_LIST );
     }
 }
 
@@ -610,7 +610,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     while (aIt != aEnd)
     {
         const SmSym &rSymbol = *aIt++;
-        OUString  aNodeNameDelim( A2OU( SYMBOL_LIST ) );
+        OUString  aNodeNameDelim( SYMBOL_LIST );
         aNodeNameDelim += aDelim;
         aNodeNameDelim += rSymbol.GetExportName();
         aNodeNameDelim += aDelim;
@@ -645,7 +645,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         pVal++;
     }
     OSL_ENSURE( pVal - pValues == sal::static_int_cast< ptrdiff_t >(nCount * nSymbolProps), "properties missing" );
-    ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
+    ReplaceSetProperties( SYMBOL_LIST, aValues );
 
     StripFontFormatList( rNewSymbols );
     SaveFontFormatList();
@@ -669,14 +669,14 @@ void SmMathConfig::LoadFontFormatList()
     else
         pFontFormatList->Clear();
 
-    Sequence< OUString > aNodes( GetNodeNames( A2OU( FONT_FORMAT_LIST ) ) );
+    Sequence< OUString > aNodes( GetNodeNames( FONT_FORMAT_LIST ) );
     const OUString *pNode = aNodes.getConstArray();
     sal_Int32 nNodes = aNodes.getLength();
 
     for (sal_Int32 i = 0;  i < nNodes;  ++i)
     {
         SmFontFormat aFntFmt;
-        ReadFontFormat( aFntFmt, pNode[i], A2OU( FONT_FORMAT_LIST ) );
+        ReadFontFormat( aFntFmt, pNode[i], FONT_FORMAT_LIST );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
         {
             OSL_ENSURE( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
@@ -776,7 +776,7 @@ void SmMathConfig::SaveFontFormatList()
         String aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
         const SmFontFormat aFntFmt( *rFntFmtList.GetFontFormat( aFntFmtId ) );
 
-        OUString  aNodeNameDelim( A2OU( FONT_FORMAT_LIST ) );
+        OUString  aNodeNameDelim( FONT_FORMAT_LIST );
         aNodeNameDelim += aDelim;
         aNodeNameDelim += aFntFmtId;
         aNodeNameDelim += aDelim;
@@ -815,7 +815,7 @@ void SmMathConfig::SaveFontFormatList()
         pVal++;
     }
     OSL_ENSURE( sal::static_int_cast<size_t>(pVal - pValues) == nCount * nSymbolProps, "properties missing" );
-    ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
+    ReplaceSetProperties( FONT_FORMAT_LIST, aValues );
 
     rFntFmtList.SetModified( false );
 }

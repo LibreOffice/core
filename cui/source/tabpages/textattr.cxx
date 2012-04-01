@@ -624,7 +624,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
     to be moved to a valid and adjacent position.  This position depends on
     the current anchor position and the text writing direction.
 */
-IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 {
     if( aTsbFullWidth.GetState() == STATE_CHECK )
     {
@@ -682,7 +682,7 @@ IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 {
     sal_Bool bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
     sal_Bool bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;

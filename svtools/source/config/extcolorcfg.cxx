@@ -39,9 +39,6 @@
 #include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 
- /* #100822# ----
-#include <vcl/wrkwin.hxx>
- ------------- */
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
@@ -58,7 +55,6 @@ using ::rtl::OUString;
 namespace svtools
 {
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 sal_Int32            nExtendedColorRefCount_Impl = 0;
 namespace
 {
@@ -208,7 +204,7 @@ ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(
 sal_Bool ExtendedColorConfig_Impl::m_bLockBroadcast = sal_False;
 sal_Bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(sal_Bool bEditMode) :
-    ConfigItem(C2U("Office.ExtendedColorScheme")),
+    ConfigItem(rtl::OUString("Office.ExtendedColorScheme")),
     m_bEditMode(bEditMode),
     m_bIsBroadcastEnabled(sal_True)
 {
@@ -476,7 +472,7 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
     uno::Sequence < ::rtl::OUString > aCurrent(1);
-    aCurrent.getArray()[0] = C2U("ExtendedColorScheme/CurrentColorScheme");
+    aCurrent.getArray()[0] = rtl::OUString("ExtendedColorScheme/CurrentColorScheme");
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
@@ -509,7 +505,7 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName
 
 sal_Bool ExtendedColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
 {
-    if(ConfigItem::AddNode(C2U("ExtendedColorScheme/ColorSchemes"), rScheme))
+    if(ConfigItem::AddNode(rtl::OUString("ExtendedColorScheme/ColorSchemes"), rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
@@ -522,7 +518,7 @@ sal_Bool ExtendedColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
 {
     uno::Sequence< rtl::OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
-    return ClearNodeElements(C2U("ExtendedColorScheme/ColorSchemes"), aElements);
+    return ClearNodeElements(rtl::OUString("ExtendedColorScheme/ColorSchemes"), aElements);
 }
 
 void ExtendedColorConfig_Impl::SettingsChanged()

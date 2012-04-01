@@ -48,7 +48,7 @@ VER_PATCH=8
 TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.8.6
 TARFILE_MD5=71474203939fafbe271e1263e61d083e
 TARFILE_ROOTDIR=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
-PATCH_FILES=nss.patch nss.aix.patch nss-config.patch nss-linux3.patch
+PATCH_FILES=nss.patch nss.aix.patch nss-config.patch nss-linux3.patch nss-clang_os_Linux_x86_s_comments.patch nss-clang_os_Linux_x86_64_s_comments.patch nss-string-concat.patch nss-asm-fix.patch
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
@@ -60,7 +60,13 @@ BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
 
-CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(OUTDIR) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
+.IF "$(OS)" == "MACOSX"
+my_prefix=/@.__________________________________________________$(EXTRPATH)
+.ELSE
+my_prefix=$(OUTDIR)
+.END
+
+CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
 
@@ -91,10 +97,13 @@ OUT2LIB=mozilla/dist/out/lib/*$(DLLPOST) mozilla/dist/out/lib/libcrmf.a
 OUT2BIN=config/nspr-config mozilla/security/nss/nss-config
 
 BUILD_DIR=mozilla/security/nss
-BUILD_ACTION= $(GNUMAKE) nss_build_all
+BUILD_ACTION= $(GNUMAKE) nss_build_all -j1
 #See #i105566# && moz#513024#
 .IF "$(OS)"=="LINUX"
 BUILD_ACTION+=FREEBL_NO_DEPEND=1
+.ENDIF
+.IF "$(OS)$(COM)"=="SOLARISGCC"
+BUILD_ACTION+=NS_USE_GCC=1
 .ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"

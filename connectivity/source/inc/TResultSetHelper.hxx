@@ -52,6 +52,9 @@ namespace connectivity
         virtual sal_Int32 getDriverPos() const = 0;
         virtual sal_Bool deletedVisible() const = 0;
         virtual sal_Bool isRowDeleted() const = 0;
+
+    protected:
+        ~IResultSetHelper() {}
     };
 }
 

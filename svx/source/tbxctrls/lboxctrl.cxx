@@ -89,7 +89,6 @@ public:
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
-    void                        StartSelection();
     inline ListBox &            GetListBox()    { return *pListBox; }
 
     sal_Bool                        IsUserSelected() const          { return bUserSel; }
@@ -149,12 +148,6 @@ void SvxPopupWindowListBox::StateChanged(
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
-
-void SvxPopupWindowListBox::StartSelection()
-{
-    rToolBox.StartSelection();
-}
-
 Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 {
     // allows forwarding key events in the correct window
@@ -163,9 +156,6 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 }
 
 /////////////////////////////////////////////////////////////////
-
-SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
-
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -202,7 +192,7 @@ void SvxListBoxControl::StateChanged(
 }
 
 
-IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl)
 {
     if( pPopupWin && 0 == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
@@ -240,7 +230,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
 }
 
 
-IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
 {
     if (pPopupWin)
     {

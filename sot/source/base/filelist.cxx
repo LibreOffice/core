@@ -67,17 +67,6 @@ FileList& FileList::operator=( const FileList& rFileList )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    FileList::GetFormatName()
-|*
-\*************************************************************************/
-
-sal_uLong FileList::GetFormat()
-{
-    return FORMAT_FILE_LIST;
-}
-
 /******************************************************************************
 |*
 |*  virtuelle SvData-Methoden

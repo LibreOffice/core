@@ -595,8 +595,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                         // Font setzen
                         {
                             SvxRTFFontTbl& rTbl = GetFontTbl();
-                            for( Font* pFont = rTbl.First(); pFont;
-                                    pFont = rTbl.Next() )
+
+                            for( SvxRTFFontTbl::iterator it = rTbl.begin();
+                                it != rTbl.end(); ++it )
+                            {
+                                Font* pFont = it->second;
                                 if( pFont->GetName() == sParam )
                                 {
                                     rSet.Put( SvxFontItem(
@@ -608,6 +611,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                                             RES_CHRATR_FONT ));
                                     break;
                                 }
+                            }
                         }
                         break;
                     case 'h': case 'H':

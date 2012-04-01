@@ -143,8 +143,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
     // allow to use other ucp's
     // if ( !isLocalNotFile_Impl( aURL ) )
-    if ( aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.pkg", 16 )
-      || aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.zip", 16 )
+    if ( aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg"))
+      || aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip"))
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
     {
         OSL_FAIL( "File system storages can be based only on file URLs!\n" ); // ???

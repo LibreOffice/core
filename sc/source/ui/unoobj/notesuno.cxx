@@ -268,7 +268,7 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
-    return pDocShell ? pDocShell->GetDocument()->GetNote( aCellPos ) : 0;
+    return pDocShell ? pDocShell->GetDocument()->GetNotes( aCellPos.Tab() )->findByAddress(aCellPos) : 0;
 }
 //------------------------------------------------------------------------
 
@@ -298,7 +298,7 @@ SvxUnoText& ScAnnotationShapeObj::GetUnoText()
 uno::Reference < drawing::XShape > ScAnnotationShapeObj::GetXShape()
 {
     if (!xShape.is())
-        if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
+        if( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( aCellPos.Tab() )->findByAddress(aCellPos) )
             if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ) )
                 xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
     return xShape;

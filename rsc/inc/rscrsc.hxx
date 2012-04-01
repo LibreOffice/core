@@ -68,7 +68,7 @@ public:
         rtl::OString aLangName;         // language name
         rtl::OString aOutputRc;         // target file
         rtl::OString aLangSearchPath;   // language specific search path
-        ::std::list< rtl::OString >    aSysSearchDirs;    // pathes to search for images
+        ::std::list< rtl::OString >    aSysSearchDirs;    // paths to search for images
 
         OutputFile() {}
     };

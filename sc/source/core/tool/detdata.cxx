@@ -37,41 +37,33 @@
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( ScDetOpArr_Impl, ScDetOpDataPtr );
-
-//------------------------------------------------------------------------
-
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
-    ScDetOpArr_Impl(),
     bHasAddError( false )
 {
-    sal_uInt16 nCount = rList.Count();
+    size_t nCount = rList.Count();
 
-    for (sal_uInt16 i=0; i<nCount; i++)
-        Append( new ScDetOpData(*rList[i]) );
+    for (size_t i=0; i<nCount; i++)
+        Append( new ScDetOpData(rList.aDetOpDataVector[i]) );
 }
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
-    sal_uInt16 nPos = 0;
-    while ( nPos < Count() )
+    for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); /*noop*/ )
     {
         // look for operations on the deleted sheet
-
-        if ( (*this)[nPos]->GetPos().Tab() == nTab )
-            Remove(nPos);
+        if (it->GetPos().Tab() == nTab)
+            it = aDetOpDataVector.erase( it);
         else
-            ++nPos;
+            ++it;
     }
 }
 
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); ++it )
     {
-        ScAddress aPos = (*this)[i]->GetPos();
+        ScAddress aPos = it->GetPos();
         SCCOL nCol1 = aPos.Col();
         SCROW nRow1 = aPos.Row();
         SCTAB nTab1 = aPos.Tab();
@@ -85,7 +77,7 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
                 rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
-            (*this)[i]->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
+            it->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
     }
 }
 
@@ -94,7 +86,7 @@ void ScDetOpList::Append( ScDetOpData* pDetOpData )
     if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
         bHasAddError = sal_True;
 
-    Insert( pDetOpData, Count() );
+    aDetOpDataVector.push_back( pDetOpData );
 }
 
 
@@ -102,15 +94,18 @@ sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {
     // fuer Ref-Undo
 
-    sal_uInt16 nCount = Count();
+    size_t nCount = Count();
     sal_Bool bEqual = ( nCount == r.Count() );
-    for (sal_uInt16 i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
-        if ( !(*(*this)[i] == *r[i]) )              // Eintraege unterschiedlich ?
+    for (size_t i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
+        if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    // Eintraege unterschiedlich ?
             bEqual = false;
 
     return bEqual;
 }
 
-
+const ScDetOpData* ScDetOpList::GetObject( size_t nPos ) const
+{
+    return &aDetOpDataVector[nPos];
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

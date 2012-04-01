@@ -29,6 +29,9 @@
 #ifndef __SC_CLIPDATA_HXX__
 #define __SC_CLIPDATA_HXX__
 
+class ScTransferObj;
+class ScDrawTransferObj;
+
 struct ScClipData
 {
     ScTransferObj*      pCellClipboard;

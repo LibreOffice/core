@@ -53,7 +53,6 @@
 #include <tools/debug.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <tools/string.hxx>
 #include <sot/clsids.hxx>
 #include <tools/globname.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

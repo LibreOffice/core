@@ -81,8 +81,8 @@ class SwCharURLPage : public SfxTabPage
     SvxMacroItem*       pINetItem;
     sal_Bool                bModified;
 
-    DECL_LINK( InsertFileHdl, PushButton * );
-    DECL_LINK( EventHdl, PushButton * );
+    DECL_LINK(InsertFileHdl, void *);
+    DECL_LINK(EventHdl, void *);
 
 public:
                         SwCharURLPage( Window* pParent,

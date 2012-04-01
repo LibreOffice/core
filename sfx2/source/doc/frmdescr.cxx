@@ -89,12 +89,6 @@ void SfxFrameDescriptor::SetURL( const String& rURL )
     SetActualURL( aURL );
 }
 
-void SfxFrameDescriptor::SetURL( const INetURLObject& rURL )
-{
-    aURL = rURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    SetActualURL( aURL );
-}
-
 void SfxFrameDescriptor::SetActualURL( const String& rURL )
 {
     aActualURL = INetURLObject(rURL);
@@ -151,28 +145,9 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
     return pFrame;
 }
 
-sal_uInt16 SfxFrameDescriptor::GetWinBits() const
-{
-    sal_uInt16 nBits = 0;
-    if ( eSizeSelector == SIZE_REL )
-        nBits |= SWIB_RELATIVESIZE;
-    if ( eSizeSelector == SIZE_PERCENT )
-        nBits |= SWIB_PERCENTSIZE;
-    if ( !IsResizable() )
-        nBits |= SWIB_FIXED;
-    if ( !nWidth )
-        nBits |= SWIB_INVISIBLE;
-    return nBits;
-}
-
 sal_Bool SfxFrameDescriptor::HasFrameBorder() const
 {
     return (nHasBorder & BORDER_YES) != 0;
-}
-
-long SfxFrameDescriptor::GetSize() const
-{
-    return nWidth;
 }
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
@@ -181,16 +156,6 @@ void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 
     if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
         pImp->pWallpaper = new Wallpaper( rWallpaper );
-}
-
-const Wallpaper* SfxFrameDescriptor::GetWallpaper() const
-{
-    return pImp->pWallpaper;
-}
-
-sal_uInt16 SfxFrameDescriptor::GetItemPos() const
-{
-    return USHRT_MAX;
 }
 
 SfxFrameProperties& SfxFrameProperties::operator =(

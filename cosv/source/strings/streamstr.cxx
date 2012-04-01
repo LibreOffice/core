@@ -34,7 +34,6 @@
 #include <cosv/streamstr.hxx>
 #include <cosv/std_outp.hxx>
 #include <cosv/tpl/dyn.hxx>
-#include <cosv/streamstr.hxx>
 
 // NOT FULLY DECLARED SERVICES
 #include <string.h>
@@ -42,7 +41,6 @@
 #include <stdarg.h> // both are needed to satisfy all compilers
 #include <cstdarg>  // std::va_list and friends
 
-#include <cosv/comfunc.hxx>
 #include <cosv/tpl/swelist.hxx>
 
 

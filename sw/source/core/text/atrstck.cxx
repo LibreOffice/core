@@ -153,7 +153,7 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
     }
     else
     {
-        // aus der Vorlage die Attribute holen:
+        // Get the attributes from the template
         SwCharFmt* pFmt = RES_TXTATR_INETFMT == rAttr.Which() ?
                         ((SwFmtINetFmt&)rAttr).GetTxtINetFmt()->GetCharFmt() :
                         ((SwFmtCharFmt&)rAttr).GetCharFmt();

@@ -28,7 +28,9 @@
 #ifndef DBAUI_VERTSPLITVIEW_HXX
 #define DBAUI_VERTSPLITVIEW_HXX
 
-#include <vcl/split.hxx>
+#include <vcl/window.hxx>
+
+class Splitter;
 
 namespace dbaui
 {

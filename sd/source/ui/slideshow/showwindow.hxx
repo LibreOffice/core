@@ -129,7 +129,7 @@ private:
     sal_uLong           mnFirstMouseMove;
 
                     DECL_LINK( PauseTimeoutHdl, Timer* pTimer );
-                    DECL_LINK( MouseTimeoutHdl, Timer* pTimer );
+                    DECL_LINK(MouseTimeoutHdl, void *);
                     DECL_LINK( EventHdl, VclWindowEvent* pEvent );
 
     ::rtl::Reference< SlideshowImpl > mxController;

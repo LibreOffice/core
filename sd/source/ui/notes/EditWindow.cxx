@@ -358,11 +358,11 @@ void EditWindow::Command(const CommandEvent& rCEvt)
         Window::Command (rCEvt);
 
 }
-IMPL_LINK_INLINE_START( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(EditWindow, MenuSelectHdl)
 {
     return 0;
 }
-IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(EditWindow, MenuSelectHdl)
 
 void EditWindow::KeyInput(const KeyEvent& )
 {
@@ -423,7 +423,7 @@ void EditWindow::CreateEditView (void)
 
 
 
-IMPL_LINK( EditWindow, EditStatusHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG(EditWindow, EditStatusHdl)
 {
     if (!mpEditView)
         return 1;
@@ -434,7 +434,7 @@ IMPL_LINK( EditWindow, EditStatusHdl, EditStatus *, EMPTYARG )
     }
 }
 
-IMPL_LINK_INLINE_START( EditWindow, ScrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(EditWindow, ScrollHdl)
 {
     DBG_ASSERT(mpEditView, "EditView missing");
     if (mpEditView)
@@ -446,7 +446,7 @@ IMPL_LINK_INLINE_START( EditWindow, ScrollHdl, ScrollBar *, EMPTYARG )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( EditWindow, ScrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(EditWindow, ScrollHdl)
 
 Rectangle EditWindow::AdjustScrollBars()
 {

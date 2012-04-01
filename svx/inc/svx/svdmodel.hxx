@@ -178,11 +178,9 @@ protected:
     String         aUIUnitStr;   // see above
     Fraction       aUIUnitFact;  // see above
     int            nUIUnitKomma; // see above
-    bool           bUIOnlyKomma; // see above
 
     SdrLayerAdmin*  pLayerAdmin;
     SfxItemPool*    pItemPool;
-    bool            bMyPool;        // zum Aufraeumen von pMyPool ab 303a
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
@@ -199,29 +197,31 @@ protected:
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
     sal_uInt16          nUndoLevel;     // Undo-Klammerung
-    bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
     sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
     sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
-    bool            bExtColorTable; // Keinen eigenen ColorTable
-    sal_Bool        mbChanged;
-    bool            bInfoChanged;
-    bool            bPagNumsDirty;
-    bool            bMPgNumsDirty;
-    bool            bPageNotValid;  // TRUE=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
-    bool            bSavePortable;  // Metafiles portabel speichern
-    bool            bNoBitmapCaching;   // Bitmaps fuer Screenoutput cachen
-    bool            bReadOnly;
-    bool            bTransparentTextFrames;
-    bool            bSaveCompressed;
-    bool            bSwapGraphics;
-    bool            bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
-    bool            bSaveOLEPreview;      // save preview metafile of OLE objects
+    bool            bMyPool:1;        // zum Aufraeumen von pMyPool ab 303a
+    bool            bUIOnlyKomma:1; // see eUIUnit
+    bool            mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
+    bool            bExtColorTable:1; // Keinen eigenen ColorTable
+    bool            mbChanged:1;
+    bool            bInfoChanged:1;
+    bool            bPagNumsDirty:1;
+    bool            bMPgNumsDirty:1;
+    bool            bPageNotValid:1;  // TRUE=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
+    bool            bSavePortable:1;  // Metafiles portabel speichern
+    bool            bNoBitmapCaching:1;   // Bitmaps fuer Screenoutput cachen
+    bool            bReadOnly:1;
+    bool            bTransparentTextFrames:1;
+    bool            bSaveCompressed:1;
+    bool            bSwapGraphics:1;
+    bool            bPasteResize:1; // Objekte werden gerade resized wegen Paste mit anderem MapMode
+    bool            bSaveOLEPreview:1;      // save preview metafile of OLE objects
+    bool            bSaveNative:1;
+    bool            bStarDrawPreviewMode:1;
     sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
     sal_uInt16          nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
-    bool            bSaveNative;
-    sal_Bool            bStarDrawPreviewMode;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -419,8 +419,8 @@ public:
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void             TakeMetricStr(long nVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    void             TakeWinkStr(long nWink, String& rStr, bool bNoDegChar = false) const;
+    void             TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
+    void             TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.

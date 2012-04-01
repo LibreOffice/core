@@ -26,23 +26,17 @@
 #
 #*************************************************************************
 
-# FIXME: this is currently hardcoded to SunStudio.
-# We really don't want to support building with that because of all its
-# bugs that need painful work-arounds; if somebody revives the Solaris
-# port then please make it use GCC instead (there used to be a Solaris/GCC
-# port at some point in the past, see solenv/inc/unxsog{i,s}.mk).
-
 GUI := UNX
-COM := C52
+
+gb_Executable_EXT:=
+
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
-gb_CC := cc
-gb_CXX := CC
-gb_GCCP := cc
-gb_AR := ar
-gb_AWK := /usr/xpg4/bin/awk
-gb_CLASSPATHSEP := :
+ifneq ($(origin AR),default)
+gb_AR := $(AR)
+endif
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -53,9 +47,12 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+ifeq ($(CPUNAME),SPARC)
+gb_CPUDEFS := -D__sparcv8plus
+endif
+
 gb_OSDEFS := \
 	-D$(OS) \
-	-D$(GUI) \
 	-DSYSV \
 	-DSUN \
 	-DSUN4 \
@@ -63,134 +60,157 @@ gb_OSDEFS := \
 	-D_POSIX_PTHREAD_SEMANTICS \
 	-D_PTHREADS \
 	-DUNIX \
+	-DUNX \
+	$(PTHREAD_CFLAGS) \
 
-gb_COMPILERDEFS := \
-	-D$(COM) \
-	-DCPPU_ENV=sunpro5 \
-
-ifeq ($(CPUNAME),SPARC)
-gb_CPUDEFS := -D__sparcv8plus
+ifeq ($(GXX_INCLUDE_PATH),)
+GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
 endif
 
 gb_CFLAGS := \
-	-temp=/tmp \
-	-KPIC \
-	-mt \
-	-xldscope=hidden \
-	-xCC \
-	-xc99=none \
+	$(gb_CFLAGS_COMMON) \
+	-fPIC \
+	-Wdeclaration-after-statement \
+	-Wshadow \
 
 gb_CXXFLAGS := \
-	-temp=/tmp \
-	-KPIC \
-	-mt \
-	-xldscope=hidden \
-	-features=no%altspell \
-	-library=no%Cstd \
-	+w2 \
-	-erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype \
+	$(gb_CXXFLAGS_COMMON) \
+	-fPIC \
+	-Wshadow \
+	-Wsign-promo \
+	-Woverloaded-virtual \
+	-Wno-non-virtual-dtor \
 
-ifeq ($(gb_SYMBOL),$(true))
-gb_CFLAGS += -g -xs
-gb_CXXFLAGS += -g0 -xs
+ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+gb_COMPILERDEFS += \
+        -DHAVE_GCC_VISIBILITY_FEATURE \
+
+gb_CFLAGS += \
+        -fvisibility=hidden
+
+gb_CXXFLAGS += \
+	-fvisibility=hidden \
+
+ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
+gb_CXXFLAGS += \
+        -fvisibility-inlines-hidden \
+
 endif
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -errwarn=%all
-gb_CXXFLAGS_WERROR := -xwe
 endif
 
-gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
+# enable debug STL
+ifeq ($(gb_PRODUCT),$(false))
+gb_COMPILERDEFS += \
+	-D_GLIBCXX_DEBUG \
 
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-noex \
+endif
 
-gb_LinkTarget_LDFLAGS := \
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
+gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
+
+#At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
+#junk, so only strict-alias on >= 4.6.0
+gb_StrictAliasingUnsafe := $(gb_GccLess460)
+
+ifeq ($(gb_StrictAliasingUnsafe),1)
+gb_CFLAGS += -fno-strict-aliasing
+gb_CXXFLAGS += -fno-strict-aliasing
+endif
+
+ifeq ($(HAVE_CXX0X),TRUE)
+#Currently, as well as for its own merits, c++11/c++0x mode allows use to use
+#a template for SAL_N_ELEMENTS to detect at compiler time its misuse
+gb_CXXFLAGS += -std=c++0x
+
+#We have so many std::auto_ptr uses that we need to be able to disable
+#warnings for those so that -Werror continues to be useful, seeing as moving
+#to unique_ptr isn't an option when we must support different compilers
+
+#When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
+#warnings in isolation, but for <= 4.5.X we need to globally disable
+#deprecation
+ifeq ($(gb_GccLess460),1)
+gb_CXXFLAGS += -Wno-deprecated-declarations
+endif
+endif
+
+ifeq ($(ENABLE_LTO),TRUE)
+gb_LinkTarget_LDFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
+endif
+
+ifneq ($(strip $(SYSBASE)),)
+gb_CXXFLAGS += --sysroot=$(SYSBASE)
+gb_CFLAGS += --sysroot=$(SYSBASE)
+gb_LinkTarget_LDFLAGS += \
+	-Wl,--sysroot=$(SYSBASE)
+endif
+
+#JAD#	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+gb_LinkTarget_LDFLAGS += \
+	-L$(SYSBASE)/lib \
+	-L$(SYSBASE)/usr/lib \
+	-Wl,-z,combreloc \
 	$(subst -L../lib , ,$(SOLARLIB)) \
-	-temp=/tmp \
-	-w \
-	-mt \
-	-Bdirect \
-	-z defs \
-	-z combreloc \
-	-norunpath \
-	-PIC \
-	-library=no%Cstd \
 
+ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
+gb_LinkTarget_LDFLAGS += \
+	-Wl,--hash-style=$(WITH_LINKER_HASH_STYLE) \
 
-gb_DEBUG_CFLAGS := -g
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS :=
-else
-ifeq ($(CPUNAME),INTEL)
-gb_COMPILEROPTFLAGS := -xarch=generic -xO3
-else # ifeq ($(CPUNAME),SPARC)
-#  -m32 -xarch=sparc		restrict target to 32 bit sparc
-#  -xO3					 optimization level 3
-#  -xspace				  don't do optimizations which do increase binary size
-#  -xprefetch=yes		   do prefetching (helps on UltraSparc III)
-gb_COMPILEROPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
-endif
 endif
 
-gb_COMPILERNOOPTFLAGS :=
-
-# Helper class
-
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
-# $(1): list of directory pathnames to append at the end of the ld path
-define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
-endef
-
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
+# Convert path to native notation
+define gb_Helper_native_path
 $(1)
 endef
 
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
+ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
+gb_LinkTarget_LDFLAGS += \
+	-Wl,--dynamic-list-cpp-new \
+	-Wl,--dynamic-list-cpp-typeinfo \
+	-Wl,-Bsymbolic-functions \
 
-# CObject class
+endif
 
-define gb_CObject__command
-$(call gb_Output_announce,$(2).c,$(true),C  ,3)
+ifneq ($(gb_SYMBOL),$(true))
+ifeq ($(gb_STRIP),$(true))
+gb_LinkTarget_LDFLAGS += -Wl,--strip-all
+endif
+endif
+
+ifneq ($(gb_DEBUGLEVEL),0)
+gb_COMPILEROPTFLAGS := -O0
+gb_LINKEROPTFLAGS :=
+else
+gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
+gb_LINKEROPTFLAGS := -Wl,-O1
+endif
+
+gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
+
+gb_COMPILERNOOPTFLAGS := -O0
+
+# AsmObject class
+
+gb_AsmObject_get_source = $(1)/$(2).s
+
+# $(call gb_AsmObject__command,object,relative-source,source,dep-file)
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
-	rm -f $(4) && \
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
-		-c $(3) \
-		-o $(1) \
-		-xMMD \
-		-xMF $(4) \
 		$(DEFS) \
 		$(T_CFLAGS) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
-# CxxObject class
-
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(T_CXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
-		-xMMD \
-		-xMF $(4) \
+		-MMD -MT $(1) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE)) && \
+	echo "$(1) : $(3)" > $(4)
 endef
-
 
 # LinkTarget class
 
@@ -208,28 +228,31 @@ gb_LinkTarget__RPATHS := \
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
+ifeq ($(gb_SYMBOL),$(true))
+gb_LinkTarget_CXXFLAGS += -ggdb2
+gb_LinkTarget_CFLAGS += -ggdb2
+endif
 
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
-
+# note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
+# we want to use @$(extraobjectlist) in the long run
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(SOVERSIONSCRIPT),-M $(SOVERSIONSCRIPT)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
-		$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		$(LIBS) \
-		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
-	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
+		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		$(LIBS) -lnsl -lsocket \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
+		-o $(1))
 endef
 
 define gb_LinkTarget__command_staticlink
@@ -238,8 +261,10 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 endef
 
@@ -249,40 +274,34 @@ $(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
+
 # Library class
 
 gb_Library_DEFS :=
-gb_Library_TARGETTYPEFLAGS := -Bdynamic -z text -G
+gb_Library_TARGETTYPEFLAGS := -shared
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
 gb_Library_DLLEXT := .so
-gb_Library_RTEXT := C52$(gb_Library_PLAINEXT)
+gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
-gb_STDLIBS := \
-	Crun \
-	m \
-	c \
-
 gb_Library_PLAINLIBS_NONE += \
-	$(gb_STDLIBS) \
 	dl \
 	fontconfig \
 	freetype \
 	GL \
 	GLU \
-	jpeg \
+	ICE \
 	m \
-	nsl \
 	pthread \
-	socket \
-	X11 \
-	Xext \
 	SM \
 	ICE \
+	X11 \
+	Xext \
+	Xrender \
 
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
@@ -307,7 +326,9 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
-'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))'
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
+'-L$(gb_Library_OUTDIRLOCATION)'
+#JAD#'-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
 endef
 
 define gb_Library_Library_platform
@@ -342,7 +363,9 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable_get_rpath
-'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))'
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
+-L$(gb_Library_OUTDIRLOCATION)
+#JAD#-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
 endef
 
 define gb_Executable_Executable_platform
@@ -368,34 +391,42 @@ endef
 
 # JunitTest class
 
+ifneq ($(OOO_TEST_SOFFICE),)
+gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE)
+else
+ifneq ($(gb_JunitTest_DEBUGRUN),)
+gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
+else
+gb_JunitTest_SOFFICEARG:=path:$(OUTDIR)/installation/opt/program/soffice
+endif
+endif
+
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice}" \
-	-Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
+	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR) \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
+	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
+	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
 
 endef
 
-# Sun cc/CC support -xM1/-xMF flags, but unfortunately refuse input files that
-# do not have the right suffix, so use makedepend here...
-define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(INCLUDE) \
-		$(DEFS) \
-		$(2) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
+# Module class
+
+define gb_Module_DEBUGRUNCOMMAND
+OFFICESCRIPT=`mktemp` && \
+printf ". $(OUTDIR)/installation/opt/program/ooenv\\n" > $${OFFICESCRIPT} && \
+printf "gdb --tui $(OUTDIR)/installation/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(OUTDIR)/installation/\"" >> $${OFFICESCRIPT} && \
+printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
+$(SHELL) $${OFFICESCRIPT} && \
+rm $${OFFICESCRIPT}
 endef
+
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+
+include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:

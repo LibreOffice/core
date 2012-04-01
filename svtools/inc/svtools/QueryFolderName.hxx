@@ -49,8 +49,8 @@ private:
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
 
-    DECL_LINK( OKHdl, Button * );
-    DECL_LINK( NameHdl, Edit * );
+    DECL_LINK( OKHdl, void * );
+    DECL_LINK( NameHdl, void * );
 
 public:
                     QueryFolderNameDialog(  Window* _pParent,

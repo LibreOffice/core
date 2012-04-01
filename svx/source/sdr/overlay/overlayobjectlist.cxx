@@ -67,18 +67,6 @@ namespace sdr
             maVector.clear();
         }
 
-        void OverlayObjectList::remove(OverlayObject& rOverlayObject)
-        {
-            const OverlayObjectVector::iterator aFindResult = ::std::find(maVector.begin(), maVector.end(), &rOverlayObject);
-            const bool bFound(aFindResult != maVector.end());
-            OSL_ENSURE(bFound, "Could not find given object in list (!)");
-
-            if(bFound)
-            {
-                maVector.erase(aFindResult);
-            }
-        }
-
         bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
             if(!maVector.empty())

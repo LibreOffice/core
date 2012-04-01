@@ -34,7 +34,6 @@ use File::Temp qw(tmpnam);
 use File::Path;
 use installer::control;
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -42,178 +41,8 @@ use installer::logger;
 use installer::pathanalyzer;
 use installer::scpzipfiles;
 use installer::scriptitems;
-use installer::sorter;
 use installer::systemactions;
 use installer::windows::language;
-
-#####################################################################
-# Unpacking all files ending with tar.gz in a specified directory
-#####################################################################
-
-sub unpack_all_targzfiles_in_directory
-{
-    my ( $directory ) = @_;
-
-    installer::logger::include_header_into_logfile("Unpacking tar.gz files:");
-
-    installer::logger::print_message( "... unpacking tar.gz files ... \n" );
-
-    my $localdirectory = $directory . $installer::globals::separator . "packages";
-    my $alltargzfiles = installer::systemactions::find_file_with_file_extension("tar.gz", $localdirectory);
-
-    for ( my $i = 0; $i <= $#{$alltargzfiles}; $i++ )
-    {
-        my $onefile = $localdirectory . $installer::globals::separator . ${$alltargzfiles}[$i];
-
-        my $systemcall = "cd $localdirectory; cat ${$alltargzfiles}[$i] \| gunzip \| tar -xf -";
-        $returnvalue = system($systemcall);
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-}
-
-#########################################
-# Copying installation sets to ship
-#########################################
-
-sub copy_install_sets_to_ship
-{
-    my ( $destdir, $shipinstalldir  ) = @_;
-
-    installer::logger::include_header_into_logfile("Copying installation set to ship:");
-
-    my $dirname = $destdir;
-    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$dirname);
-    $dirname = $dirname . "_inprogress";
-    my $localshipinstalldir = $shipinstalldir . $installer::globals::separator . $dirname;
-    if ( ! -d $localshipinstalldir ) { installer::systemactions::create_directory_structure($localshipinstalldir); }
-
-    # copy installation set to /ship ($localshipinstalldir)
-    installer::logger::print_message( "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
-    installer::systemactions::copy_complete_directory($destdir, $localshipinstalldir);
-
-    # unpacking the tar.gz file for Solaris
-    if ( $installer::globals::issolarisbuild ) { unpack_all_targzfiles_in_directory($localshipinstalldir); }
-
-    $localshipinstalldir = installer::systemactions::rename_string_in_directory($localshipinstalldir, "_inprogress", "");
-
-    return $localshipinstalldir;
-}
-
-#########################################
-# Copying installation sets to ship
-#########################################
-
-sub link_install_sets_to_ship
-{
-    my ( $destdir, $shipinstalldir  ) = @_;
-
-    installer::logger::include_header_into_logfile("Linking installation set to ship:");
-
-    my $infoline = "... destination directory: $shipinstalldir ...\n";
-    installer::logger::print_message( $infoline );
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ( ! -d $shipinstalldir)
-    {
-        $infoline = "Creating directory: $shipinstalldir\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        installer::systemactions::create_directory_structure($shipinstalldir);
-        $infoline = "Created directory: $shipinstalldir\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    my $dirname = $destdir;
-    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$dirname);
-
-    my $localshipinstalldir = $shipinstalldir . $installer::globals::separator . $dirname;
-
-    # link installation set to /ship ($localshipinstalldir)
-    installer::logger::print_message( "... linking installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
-
-    my $systemcall = "ln -s $destdir $localshipinstalldir";
-
-    $returnvalue = system($systemcall);
-
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not create link \"$localshipinstalldir\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Created link \"$localshipinstalldir\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    return $localshipinstalldir;
-}
-
-#########################################
-# Create checksum file
-#########################################
-
-sub make_checksum_file
-{
-    my ( $filesref, $includepatharrayref ) = @_;
-
-    my @checksum = ();
-
-    my $checksumfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::checksumfile, $includepatharrayref, 1);
-    if ( $$checksumfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $installer::globals::checksumfile !", "make_checksum_file"); }
-
-    my $systemcall = "$$checksumfileref";
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        $systemcall = $systemcall . " " . $onefile->{'sourcepath'};     # very very long systemcall
-
-        if ((( $i > 0 ) &&  ( $i%100 == 0 )) || ( $i == $#{$filesref} ))    # limiting to 100 files
-        {
-            $systemcall = $systemcall . " \|";
-
-            my @localchecksum = ();
-            open (CHECK, "$systemcall");
-            @localchecksum = <CHECK>;
-            close (CHECK);
-
-            for ( my $j = 0; $j <= $#localchecksum; $j++ ) { push(@checksum, $localchecksum[$j]); }
-
-            $systemcall = "$$checksumfileref";  # reset the system call
-        }
-    }
-
-    return \@checksum;
-}
-
-#########################################
-# Saving the checksum file
-#########################################
-
-sub save_checksum_file
-{
-    my ($current_install_number, $installchecksumdir, $checksumfile) = @_;
-
-    my $numberedchecksumfilename = $installer::globals::checksumfilename;
-    $numberedchecksumfilename =~ s/\./_$current_install_number\./;  # checksum.txt -> checksum_01.txt
-    installer::files::save_file($installchecksumdir . $installer::globals::separator . $numberedchecksumfilename, $checksumfile);
-}
 
 #################################################
 # Writing some global information into
@@ -432,9 +261,6 @@ sub analyze_and_save_logfile
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 
-    # Saving the checksumfile in a checksum directory in the install directory
-    # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
-
     # Saving the list of patchfiles in a patchlist directory in the install directory
     if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
 
@@ -447,21 +273,6 @@ sub analyze_and_save_logfile
     if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
 
     return ($is_success, $finalinstalldir);
-}
-
-###############################################################
-# Analyzing and creating the log file
-###############################################################
-
-sub save_logfile_after_linking
-{
-    my ($loggingdir, $installlogdir, $current_install_number) = @_;
-
-    # Saving the logfile in the log file directory and additionally in a log directory in the install directory
-    my $numberedlogfilename = $installer::globals::logfilename;
-    installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
-    installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
-    installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 }
 
 ###############################################################
@@ -824,7 +635,7 @@ sub collect_all_modules
         $registryitem = ${$registryitemsref}[$i];
         my $module = $registryitem->{'ModuleID'};
 
-        if ( ! installer::existence::exists_in_array($module, \@allmodules) )
+        if ( ! grep {$_ eq $module} @allmodules )
         {
             push(@allmodules, $module);
         }
@@ -906,7 +717,11 @@ sub write_content_into_inf_file
             replace_in_template_file($templatefile, $placeholder, $tooltip);
 
             my $executablegid = $folderitem->{'FileID'};
-            my $exefile = installer::existence::get_specified_file($filesref, $executablegid);
+            my ($exefile) = grep {$_->{gid} eq $executablegid} @{$filesref};
+            if (! defined $exefile) {
+                installer::exiter::exit_program("ERROR: Could not find file $executablegid in list of files!", "write_content_into_inf_file");
+            }
+
             my $exefilename = $exefile->{'Name'};
             $placeholder = "PLACEHOLDER_FOLDERITEM_TARGET_" . $app;
             replace_in_template_file($templatefile, $placeholder, $exefilename);
@@ -1533,23 +1348,6 @@ sub shift_file_to_end
 }
 
 ###########################################################
-# Putting hash content into array and sorting it
-###########################################################
-
-sub sort_hash
-{
-    my ( $hashref ) =  @_;
-
-    my $item = "";
-    my @sortedarray = ();
-
-    foreach $item (keys %{$hashref}) { push(@sortedarray, $item); }
-    installer::sorter::sorting_array_of_strings(\@sortedarray);
-
-    return \@sortedarray;
-}
-
-###########################################################
 # Renaming Windows files in Patch and creating file
 # patchfiles.txt
 ###########################################################
@@ -1608,10 +1406,13 @@ sub prepare_windows_patchfiles
     my $winpatchdirname = "winpatch";
     my $winpatchdir = installer::systemactions::create_directories($winpatchdirname, $languagestringref);
 
-    my $patchlistfile = installer::existence::get_specified_file_by_name($filesref, $patchfilename);
+    my ($patchlistfile) = grep {$_->{Name} eq $patchfilename} @{$filesref};
+    if (! defined $patchlistfile) {
+        installer::exiter::exit_program("ERROR: Could not find file $patchfilename in list of files!", "prepare_windows_patchfiles");
+    }
 
     # reorganizing the patchfile content, sorting for directory to decrease the file size
-    my $sorteddirectorylist = sort_hash(\%patchfiledirectories);
+    my $sorteddirectorylist = [ sort keys %patchfiledirectories ];
     my $patchfilelist = reorg_patchfile(\@patchfiles, $sorteddirectorylist);
 
     # shifting version.ini to the end of the list, to guarantee, that all files are patched
@@ -2455,141 +2256,6 @@ sub filter_pkgmapfile
     }
 
     return \@pkgmap;
-}
-
-##############################################
-# Creating double packages for Solaris x86.
-# One package with ARCH=i386 and one with
-# ARCH=i86pc.
-##############################################
-
-sub fix_solaris_x86_patch
-{
-    my ($packagename, $subdir) = @_;
-
-    # changing into directory of packages, important for soft linking
-    my $startdir = cwd();
-    chdir($subdir);
-
-    # $packagename is: "SUNWstaroffice-core01"
-    # Current working directory is: "<path>/install/en-US_inprogress"
-
-    # create new folder in "packages": $packagename . ".i"
-    my $newpackagename = $packagename . "\.i";
-    my $newdir = $newpackagename;
-    installer::systemactions::create_directory($newdir);
-
-    # collecting all directories in the package
-    my $olddir = $packagename;
-    my $allsubdirs = installer::systemactions::get_all_directories_without_path($olddir);
-
-    # link all directories from $packagename to $packagename . ".i"
-    for ( my $i = 0; $i <= $#{$allsubdirs}; $i++ )
-    {
-        my $sourcedir = $olddir . $installer::globals::separator . ${$allsubdirs}[$i];
-        my $destdir = $newdir . $installer::globals::separator . ${$allsubdirs}[$i];
-        my $directory_depth = 2; # important for soft links, two directories already exist
-        installer::systemactions::softlink_complete_directory($sourcedir, $destdir, $directory_depth);
-    }
-
-    # copy "pkginfo" and "pkgmap" from $packagename to $packagename . ".i"
-    my @allcopyfiles = ("pkginfo", "pkgmap");
-    for ( my $i = 0; $i <= $#allcopyfiles; $i++ )
-    {
-        my $sourcefile = $olddir . $installer::globals::separator . $allcopyfiles[$i];
-        my $destfile = $newdir . $installer::globals::separator . $allcopyfiles[$i];
-        installer::systemactions::copy_one_file($sourcefile, $destfile);
-    }
-
-    # change in pkginfo in $packagename . ".i" the value for ARCH from i386 to i86pc
-    my $pkginfofilename = "pkginfo";
-    $pkginfofilename = $newdir . $installer::globals::separator . $pkginfofilename;
-
-    my $pkginfofile = installer::files::read_file($pkginfofilename);
-    set_old_architecture_string($pkginfofile);
-    installer::files::save_file($pkginfofilename, $pkginfofile);
-
-    # adapt the values in pkgmap for pkginfo file, because this file was edited
-    my $pkgmapfilename = "pkgmap";
-    $pkgmapfilename = $newdir . $installer::globals::separator . $pkgmapfilename;
-
-    my $pkgmapfile = installer::files::read_file($pkgmapfilename);
-    set_pkginfo_line($pkgmapfile, $pkginfofilename);
-    installer::files::save_file($pkgmapfilename, $pkgmapfile);
-
-    # changing back to startdir
-    chdir($startdir);
-}
-
-###################################################
-# Creating double core01 package for Solaris x86.
-# One package with ARCH=i386 and one with
-# ARCH=i86pc. This is necessary, to inform the
-# user about the missing "small patch", if
-# packages with ARCH=i86pc are installed.
-###################################################
-
-sub fix2_solaris_x86_patch
-{
-    my ($packagename, $subdir) = @_;
-
-    if ( $packagename =~ /-core01\s*$/ )    # only this one package needs to be duplicated
-    {
-        my $startdir = cwd();
-        chdir($subdir);
-
-        # $packagename is: "SUNWstaroffice-core01"
-        # Current working directory is: "<path>/install/en-US_inprogress"
-
-        # create new package in "packages": $packagename . ".i"
-        my $olddir = $packagename;
-        my $newpackagename = $packagename . "\.i";
-        my $newdir = $newpackagename;
-
-        installer::systemactions::create_directory($newdir);
-
-        my $oldinstalldir = $olddir . $installer::globals::separator . "install";
-        my $newinstalldir = $newdir . $installer::globals::separator . "install";
-
-        installer::systemactions::copy_complete_directory($oldinstalldir, $newinstalldir);
-
-        # setting time stamp of all copied files to avoid errors from pkgchk
-        my $allinstallfiles = installer::systemactions::get_all_files_from_one_directory_without_path($newinstalldir);
-        set_time_stamp($oldinstalldir, $newinstalldir, $allinstallfiles);
-
-        # copy "pkginfo" and "pkgmap" from $packagename to $packagename . ".i"
-        my @allcopyfiles = ("pkginfo", "pkgmap");
-        for ( my $i = 0; $i <= $#allcopyfiles; $i++ )
-        {
-            my $sourcefile = $olddir . $installer::globals::separator . $allcopyfiles[$i];
-            my $destfile = $newdir . $installer::globals::separator . $allcopyfiles[$i];
-            installer::systemactions::copy_one_file($sourcefile, $destfile);
-        }
-
-        # change in pkginfo in $packagename . ".i" the value for ARCH from i386 to i86pc
-        my $pkginfofilename = "pkginfo";
-        $pkginfofilename = $newdir . $installer::globals::separator . $pkginfofilename;
-
-        my $pkginfofile = installer::files::read_file($pkginfofilename);
-        set_old_architecture_string($pkginfofile);
-        check_requires_setting($pkginfofile);
-        installer::files::save_file($pkginfofilename, $pkginfofile);
-
-        # adapt the values in pkgmap for pkginfo file, because this file was edited
-        my $pkgmapfilename = "pkgmap";
-        $pkgmapfilename = $newdir . $installer::globals::separator . $pkgmapfilename;
-
-        my $pkgmapfile = installer::files::read_file($pkgmapfilename);
-        set_pkginfo_line($pkgmapfile, $pkginfofilename);
-        $pkgmapfile = filter_pkgmapfile($pkgmapfile);
-        installer::files::save_file($pkgmapfilename, $pkgmapfile);
-
-        # setting time stamp of all copied files to avoid errors from pkgchk
-        set_time_stamp($olddir, $newdir, \@allcopyfiles);
-
-        # changing back to startdir
-        chdir($startdir);
-    }
 }
 
 ################################################

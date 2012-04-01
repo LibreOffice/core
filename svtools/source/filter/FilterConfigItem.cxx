@@ -356,25 +356,6 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
     return aRetValue;
 }
 
-Any FilterConfigItem::ReadAny( const ::rtl::OUString& rKey, const Any& rDefault )
-{
-    Any aAny, aRetValue( rDefault );
-    PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
-    if ( pPropVal )
-    {
-        aRetValue = pPropVal->Value;
-    }
-    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
-    {
-        aRetValue = aAny;
-    }
-    PropertyValue aPropValue;
-    aPropValue.Name = rKey;
-    aPropValue.Value = aRetValue;
-    WritePropertyValue( aFilterData, aPropValue );
-    return aRetValue;
-}
-
 void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
 {
     PropertyValue aBool;
@@ -436,34 +417,6 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
                     {
                         OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
-                }
-            }
-        }
-    }
-}
-
-void FilterConfigItem::WriteAny( const OUString& rKey, const Any& rNewAny )
-{
-    PropertyValue aPropValue;
-    aPropValue.Name = rKey;
-    aPropValue.Value = rNewAny;
-    WritePropertyValue( aFilterData, aPropValue );
-    if ( xPropSet.is() )
-    {
-        Any aAny;
-        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
-        {
-            if ( aAny != rNewAny )
-            {
-                try
-                {
-                    xPropSet->setPropertyValue( rKey, rNewAny );
-                    bModified = sal_True;
-                }
-                catch ( com::sun::star::uno::Exception& )
-                {
-                    OSL_FAIL( "FilterConfigItem::WriteAny - could not set PropertyValue" );
-
                 }
             }
         }

@@ -55,7 +55,7 @@
 #include <algorithm>
 
 #ifdef ANDROID
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #endif
 
 /************************************************************************
@@ -774,7 +774,7 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     int nRet=0;
     struct stat aStat;
 
-    nRet = lstat(pszPath,&aStat);
+    nRet = lstat_c(pszPath,&aStat);
     if ( nRet < 0 )
     {
         nRet=errno;
@@ -1055,14 +1055,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     int DestFileFD=0;
     int nRet=0;
 
-#ifdef ANDROID
-    volatile int beenhere = 0;
-    if (!beenhere) {
-        beenhere++;
-        fprintf(stderr, "Sleeping NOW, start ndk-gdb!\n");
-        ::sleep(20);
-    }
-#endif
     if (osl_openFilePath(pszSourceFileName,
                          &SourceFileFH,
                          osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl) != osl_File_E_None)

@@ -116,8 +116,7 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
 {
     if ( rPrompt.Len() == 0 )
         return;
-    String aText_( rPrompt );
-    aText_.ConvertLineEnd( LINEEND_CR );
+    String aText_(convertLineEnd(rPrompt, LINEEND_CR));
     aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
     aPromptText.SetText( aText_ );
     Size aSize( rDlgSize );

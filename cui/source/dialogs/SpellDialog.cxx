@@ -402,6 +402,92 @@ void SpellDialog::UpdateBoxes_Impl()
     aIgnoreRulePB.Enable(pSpellErrorDescription && !pSpellErrorDescription->sRuleId.isEmpty());
     aAutoCorrPB.Show( bShowChangeAll && rParent.HasAutoCorrection() );
 
+    bool bHasGrammarChecking = rParent.HasGrammarChecking();
+    aCheckGrammarCB.Show( bHasGrammarChecking );
+    if( !bHasGrammarChecking )
+    {
+        //resize the dialog to hide the hidden area of the CheckBox
+        Size aBackSize = aBackgroundGB.GetSizePixel();
+        sal_Int32 nDiff = aBackgroundGB.GetPosPixel().Y() + aBackSize.Height()
+                            - aCheckGrammarCB.GetPosPixel().Y();
+        aBackSize.Height() -= nDiff;
+        aBackgroundGB.SetSizePixel(aBackSize);
+        Button* aButtons[] = { &aHelpPB, &aOptionsPB, &aUndoPB, &aClosePB, 0 };
+        sal_Int32 nButton = 0;
+        while( aButtons[nButton])
+        {
+            Point aPos = aButtons[nButton]->GetPosPixel();
+            aPos.Y() -= nDiff;
+            aButtons[nButton]->SetPosPixel(aPos);
+            ++nButton;
+        }
+        Size aDlgSize = GetSizePixel();
+        aDlgSize.Height() -= nDiff;
+        SetSizePixel( aDlgSize );
+    }
+    else
+    {
+        bool bHasExplainLink = aExplainLink.GetURL().Len() != 0;
+        aExplainLink.Show( bHasExplainLink );
+
+        sal_Int32 nExplainWidth = aExplainLink.GetPosPixel().X() - aExplainFT.GetPosPixel().X();
+        if ( !bHasExplainLink )
+            nExplainWidth += aExplainLink.GetSizePixel().Width();
+        sal_Int32 nExplainHeight = aExplainFT.GetActualHeight();
+        sal_Int32 nCurrentHeight = aExplainFT.GetSizePixel().Height();
+        if( aExplainFT.GetText().Len() == 0 )
+        {
+            nExplainHeight = 0;
+            aExplainFT.Hide();
+            aExplainLink.Hide();
+        }
+
+        Size aCtlSize = aExplainFT.GetSizePixel();
+        aCtlSize.Height() = nExplainHeight;
+        aCtlSize.Width() = nExplainWidth;
+        aExplainFT.SetSizePixel( aCtlSize );
+
+        aCtlSize = aExplainLink.GetSizePixel();
+        aCtlSize.Height() = nExplainHeight;
+        aExplainLink.SetSizePixel( aCtlSize );
+
+        sal_Int32 nDiff = - ( nCurrentHeight - nExplainHeight );
+        if ( nDiff != 0 )
+        {
+            Control* aControls[] = {
+                &aNotInDictFT,
+                &aSentenceED,
+                &aSuggestionFT,
+                &aSuggestionLB,
+                &aIgnorePB,
+                &aIgnoreAllPB,
+                &aIgnoreRulePB,
+                &aAddToDictMB,
+                &aChangePB,
+                &aChangeAllPB,
+                &aAutoCorrPB,
+                &aCheckGrammarCB,
+                &aHelpPB,
+                &aOptionsPB,
+                &aUndoPB,
+                &aClosePB,
+                &aBackgroundGB,
+                0
+            };
+            sal_Int32 nControl = 0;
+            while( aControls[nControl])
+            {
+                Point aPos = aControls[nControl]->GetPosPixel();
+                aPos.Y() += nDiff;
+                aControls[nControl]->SetPosPixel(aPos);
+                ++nControl;
+            }
+            Size aDlgSize = GetSizePixel();
+            aDlgSize.Height() += nDiff;
+            SetSizePixel( aDlgSize );
+            Invalidate();
+        }
+    }
 }
 // -----------------------------------------------------------------------
 
@@ -468,95 +554,6 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
         pThis->aClosePB.GrabFocus();
     pThis->LockFocusChanges(false);
     //show grammar CheckBox depending on the modules abilities
-    bool bHasGrammarChecking = pThis->rParent.HasGrammarChecking();
-    pThis->aCheckGrammarCB.Show( bHasGrammarChecking );
-    if( !bHasGrammarChecking )
-    {
-        //resize the dialog to hide the hidden area of the CheckBox
-        Size aBackSize = pThis->aBackgroundGB.GetSizePixel();
-        sal_Int32 nDiff = pThis->aBackgroundGB.GetPosPixel().Y() + aBackSize.Height()
-                            - pThis->aCheckGrammarCB.GetPosPixel().Y();
-        aBackSize.Height() -= nDiff;
-        pThis->aBackgroundGB.SetSizePixel(aBackSize);
-        Button* aButtons[] = { &pThis->aHelpPB, &pThis->aOptionsPB, &pThis->aUndoPB, &pThis->aClosePB, 0 };
-        sal_Int32 nButton = 0;
-        while( aButtons[nButton])
-        {
-            Point aPos = aButtons[nButton]->GetPosPixel();
-            aPos.Y() -= nDiff;
-            aButtons[nButton]->SetPosPixel(aPos);
-            ++nButton;
-        }
-        Size aDlgSize = pThis->GetSizePixel();
-        aDlgSize.Height() -= nDiff;
-        pThis->SetSizePixel( aDlgSize );
-    }
-    else
-    {
-        if( pThis->aExplainLink.GetURL().Len() == 0 )
-        {
-            pThis->aExplainLink.Hide();
-            Size aExplainSize = pThis->aExplainFT.GetSizePixel();
-            aExplainSize.Width() += pThis->aExplainLink.GetSizePixel().Width();
-            pThis->aExplainFT.SetSizePixel( aExplainSize );
-        }
-
-        sal_Int32 nExplainHeight = pThis->aExplainFT.GetActualHeight();
-        sal_Int32 nCurrentHeight = pThis->aExplainFT.GetSizePixel().Height();
-        if( pThis->aExplainFT.GetText().Len() == 0 )
-        {
-            nExplainHeight = 0;
-            pThis->aExplainFT.Hide();
-            pThis->aExplainLink.Hide();
-        }
-        else
-        {
-            Size aSize = pThis->aExplainFT.GetSizePixel();
-            aSize.Height() = nExplainHeight;
-            pThis->aExplainFT.SetSizePixel( aSize );
-
-            aSize = pThis->aExplainLink.GetSizePixel();
-            aSize.Height() = nExplainHeight;
-            pThis->aExplainLink.SetSizePixel( aSize );
-        }
-
-        sal_Int32 nDiff = - ( nCurrentHeight - nExplainHeight );
-        if ( nDiff != 0 )
-        {
-            Control* aControls[] = {
-                &pThis->aNotInDictFT,
-                &pThis->aSentenceED,
-                &pThis->aSuggestionFT,
-                &pThis->aSuggestionLB,
-                &pThis->aIgnorePB,
-                &pThis->aIgnoreAllPB,
-                &pThis->aIgnoreRulePB,
-                &pThis->aAddToDictMB,
-                &pThis->aChangePB,
-                &pThis->aChangeAllPB,
-                &pThis->aAutoCorrPB,
-                &pThis->aCheckGrammarCB,
-                &pThis->aHelpPB,
-                &pThis->aOptionsPB,
-                &pThis->aUndoPB,
-                &pThis->aClosePB,
-                &pThis->aBackgroundGB,
-                0
-            };
-            sal_Int32 nControl = 0;
-            while( aControls[nControl])
-            {
-                Point aPos = aControls[nControl]->GetPosPixel();
-                aPos.Y() += nDiff;
-                aControls[nControl]->SetPosPixel(aPos);
-                ++nControl;
-            }
-            Size aDlgSize = pThis->GetSizePixel();
-            aDlgSize.Height() += nDiff;
-            pThis->SetSizePixel( aDlgSize );
-            pThis->Invalidate();
-        }
-    }
     pThis->aCheckGrammarCB.Check( pThis->rParent.IsGrammarChecking() );
     pThis->SetUpdateMode( sal_True );
     pThis->Show();
@@ -651,7 +648,7 @@ String SpellDialog::getReplacementString() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
 {
     if(aSentenceED.IsUndoEditMode())
     {
@@ -673,7 +670,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
 {
     aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     String aString = getReplacementString();
@@ -749,7 +746,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
 }
 
 //-----------------------------------------------------------------------
-IMPL_LINK( SpellDialog, UndoHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, UndoHdl)
 {
     aSentenceED.Undo();
     if(!aSentenceED.GetUndoActionCount())
@@ -817,7 +814,7 @@ void SpellDialog::Impl_Restore()
     aIgnorePB.SetText(aIgnoreOnceST);
 }
 
-IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
 {
     if(aIgnorePB.GetText() == aResumeST)
     {
@@ -1089,7 +1086,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 };
 
 //-----------------------------------------------------------------------
-IMPL_LINK(SpellDialog, CancelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, CancelHdl)
 {
     //apply changes and ignored text parts first - if there are any
     rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true), false);
@@ -1234,7 +1231,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     sal_Int32 i = 0;
                     while ( sFullCommentURL.isEmpty() && i < aProperties.getLength() )
                     {
-                        if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+                        if ( aProperties[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullCommentURL")) )
                         {
                             uno::Any aValue = aProperties[i].Value;
                             aValue >>= sFullCommentURL;
@@ -2149,7 +2146,7 @@ IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {

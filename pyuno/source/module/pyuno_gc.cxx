@@ -25,8 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <pyuno_impl.hxx>
-#include <osl/thread.hxx>
+
+#include "pyuno_impl.hxx"
+
+#include "sal/config.h"
+
+#include "rtl/ref.hxx"
+#include "salhelper/thread.hxx"
+
 namespace pyuno
 {
 
@@ -47,25 +53,25 @@ static bool isAfterUnloadOrPy_Finalize()
         !Py_IsInitialized();
 }
 
-class GCThread : public ::osl::Thread
-{
-    PyObject *mPyObject;
-    PyInterpreterState *mPyInterpreter;
-    GCThread( const GCThread & ); // not implemented
-    GCThread &operator =( const GCThread & ); // not implemented
-
+class GCThread: public salhelper::Thread {
 public:
     GCThread( PyInterpreterState *interpreter, PyObject * object );
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
+
+private:
+    virtual ~GCThread() {}
+
+    virtual void execute();
+
+    PyObject *mPyObject;
+    PyInterpreterState *mPyInterpreter;
 };
 
-
 GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
-    mPyObject( object ), mPyInterpreter( interpreter )
+    Thread( "pyunoGCThread" ), mPyObject( object ),
+    mPyInterpreter( interpreter )
 {}
 
-void GCThread::run()
+void GCThread::execute()
 {
     //  otherwise we crash here, when main has been left already
     if( isAfterUnloadOrPy_Finalize() )
@@ -95,12 +101,6 @@ void GCThread::run()
     }
 }
 
-
-void GCThread::onTerminated()
-{
-    delete this;
-}
-
 void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
 {
     //  otherwise we crash in the last after main ...
@@ -111,8 +111,11 @@ void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
     // to be a method, which tells, whether the global
     // interpreter lock is held or not
     // TODO: Look for a more efficient solution
-    osl::Thread *t = new GCThread( interpreter, object );
-    t->create();
+    rtl::Reference< GCThread >(new GCThread(interpreter, object))->launch();
+        //TODO: a protocol is missing how to join with the launched thread
+        // before exit(3), to ensure the thread is no longer relying on any
+        // infrastructure while that infrastructure is being shut down in
+        // atexit handlers
 }
 
 }

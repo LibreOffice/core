@@ -43,8 +43,7 @@ struct SwDialogsResMgr
 
 #define SWDIALOG_MGR()  SwDialogsResMgr::GetResMgr()
 #define SW_RES(i)       ResId(i,SWDIALOG_MGR())
-#define SW_RESSTR(i)    UniString(ResId(i,SWDIALOG_MGR()))
-#define SW_RESSSTR(i)   String(ResId(i,SWDIALOG_MGR()))
+#define SW_RESSTR(i)    ResId::toString(SW_RES(i))
 
 #endif
 

@@ -240,7 +240,7 @@ size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 {
     osl::MutexGuard aGuard(m_Mutex);
-    if (0 == m_EventList.size())
+    if ( m_EventList.empty() )
         ResetEvent(m_NotifyEvent);
 }
 

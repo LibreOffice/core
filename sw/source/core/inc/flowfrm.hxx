@@ -58,6 +58,7 @@ class SwObjectFormatterTxtFrm;
 
 void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
+/// Base class for frames that are allowed at page breaks and shall continue on the next page, e.g. paragraphs, tables.
 class SwFlowFrm
 {
     //PrepareMake darf Locken/Unlocken (Robustheit)
@@ -114,10 +115,9 @@ class SwFlowFrm
 
 protected:
 
-    SwFlowFrm *pFollow;
-    SwFlowFrm *pPrecede;
+    SwFlowFrm *m_pFollow;
+    SwFlowFrm *m_pPrecede;
 
-    sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
     sal_Bool bUndersized:1; // wir sind kleiner als gewuenscht
     sal_Bool bFlyLock   :1; //  Stop positioning of at-character flyframes
@@ -145,6 +145,7 @@ protected:
 
 public:
     SwFlowFrm( SwFrm &rFrm );
+    virtual ~SwFlowFrm();
 
     const SwFrm *GetFrm() const            { return &rThis; }
           SwFrm *GetFrm()                  { return &rThis; }
@@ -161,16 +162,15 @@ public:
     //neuen Parent Moven.
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-           sal_Bool       HasFollow() const    { return pFollow ? sal_True : sal_False; }
-           sal_Bool       IsFollow()     const { return bIsFollow; }
-    inline void       _SetIsFollow( sal_Bool bSet ) { bIsFollow = bSet; }
-    const  SwFlowFrm *GetFollow() const    { return pFollow;   }
-           SwFlowFrm *GetFollow()          { return pFollow;   }
+           sal_Bool       HasFollow() const    { return m_pFollow ? sal_True : sal_False; }
+           sal_Bool       IsFollow()     const { return 0 != m_pPrecede; }
+    const  SwFlowFrm *GetFollow() const    { return m_pFollow;   }
+           SwFlowFrm *GetFollow()          { return m_pFollow;   }
            sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
-    inline void       SetFollow( SwFlowFrm *pNew );
+           void       SetFollow(SwFlowFrm *const pFollow);
 
-    const  SwFlowFrm *GetPrecede() const   { return pPrecede;   }
-           SwFlowFrm *GetPrecede()         { return pPrecede;   }
+    const  SwFlowFrm *GetPrecede() const   { return m_pPrecede;   }
+           SwFlowFrm *GetPrecede()         { return m_pPrecede;   }
 
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
@@ -237,13 +237,6 @@ public:
 inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
 {
     return rThis.GetIndPrev() != 0;
-}
-
-inline void SwFlowFrm::SetFollow( SwFlowFrm *pNew )
-{
-    pFollow = pNew;
-    if ( pFollow != NULL )
-        pFollow->pPrecede = this;
 }
 
 #endif

@@ -37,13 +37,6 @@
 
 extern "C" {
 
-/* defines for shutdown */
-#ifdef GCC
-#   define SD_RECEIVE 0
-#   define SD_SEND 1
-#   define SD_BOTH 2
-#endif
-
 /*
     oslSocketAddr is a pointer to a Berkeley struct sockaddr.
     I refrained from using sockaddr_in because of possible further
@@ -656,7 +649,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     rtl_uString *strDottedAddr,
     sal_Int32    Port)
 {
-    DWORD Addr;
+    sal_uInt32 Addr;
     rtl_String  *pDottedAddr=NULL;
 
     rtl_uString2String(
@@ -667,7 +660,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     rtl_string_release (pDottedAddr);
 
     oslSocketAddr pAddr = 0;
-    if(Addr != -1)
+    if(Addr != OSL_INADDR_NONE)
     {
         pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( (sal_uInt16)Port), Addr );
     }
@@ -1419,7 +1412,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
         Connection= accept(pSocket->m_Socket, &Addr, &AddrLen);
         OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
-        if(Connection != OSL_SOCKET_ERROR)
+        if(Connection != static_cast<SOCKET>(OSL_SOCKET_ERROR))
             *ppAddr= __osl_createSocketAddrFromSystem(&Addr);
         else
             *ppAddr = NULL;
@@ -1431,7 +1424,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
     }
 
     /* accept failed? */
-    if(Connection == OSL_SOCKET_ERROR)
+    if(Connection == static_cast<SOCKET>(OSL_SOCKET_ERROR))
         return ((oslSocket)NULL);
 
     /* alloc memory */

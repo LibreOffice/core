@@ -36,7 +36,6 @@
 // - Debug-Methoden fuer String -
 // ------------------------------
 
-const char* DbgCheckByteString( const void* pString );
 const char* DbgCheckUniString( const void* pString );
 
 // -------------------------------

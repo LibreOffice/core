@@ -72,9 +72,9 @@ class SwFldRefPage : public SwFldPage
     // fallback, if previously selected text node doesn't exist anymore
     sal_uInt16 mnSavedSelectedPos;
 
-    DECL_LINK( TypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( ModifyHdl, Edit *pEd = 0 );
+    DECL_LINK(TypeHdl, void *);
+    DECL_LINK(SubTypeHdl, void * = 0);
+    DECL_LINK(ModifyHdl, void * = 0);
 
     void                UpdateSubType();
     sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);

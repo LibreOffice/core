@@ -81,8 +81,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 
@@ -911,7 +909,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     return res;
 }
 
-IMPL_LINK( SwView, FieldPopupModeEndHdl, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl)
 {
     if ( mpFieldPopup )
     {

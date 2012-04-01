@@ -60,16 +60,6 @@ SfxXRangeItem::SfxXRangeItem( sal_uInt16 which, NUMTYPE from, NUMTYPE to ):
 {
 }
 
-
-// -----------------------------------------------------------------------
-
-SfxXRangeItem::SfxXRangeItem( sal_uInt16 nW, SvStream &rStream ) :
-    SfxPoolItem( nW )
-{
-    rStream >> nFrom;
-    rStream >> nTo;
-}
-
 // -----------------------------------------------------------------------
 
 SfxXRangeItem::SfxXRangeItem( const SfxXRangeItem& rItem ) :
@@ -90,9 +80,9 @@ SfxItemPresentation SfxXRangeItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    rText = UniString::CreateFromInt64(nFrom);
+    rText = rtl::OUString::valueOf(static_cast<sal_Int64>(nFrom));
     rText += ':';
-    rText += UniString::CreateFromInt64(nTo);
+    rText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTo));
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -118,7 +108,7 @@ SfxPoolItem* SfxXRangeItem::Clone(SfxItemPool *) const
 
 SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, sal_uInt16) const
 {
-    NUMTYPE     nVon, nBis;
+    NUMTYPE nVon(0), nBis(0);
     rStream >> nVon;
     rStream >> nBis;
     return new SfxXRangeItem( Which(), nVon, nBis );
@@ -142,20 +132,10 @@ SfxXRangesItem::SfxXRangesItem()
 
 //-------------------------------------------------------------------------
 
-SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges )
-:   SfxPoolItem( nWID )
-{
-    NUMTYPE nCount = Count_Impl(pRanges) + 1;
-    _pRanges = new NUMTYPE[nCount];
-    memcpy( _pRanges, pRanges, sizeof(NUMTYPE) * nCount );
-}
-
-//-------------------------------------------------------------------------
-
 SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream )
 :   SfxPoolItem( nWID )
 {
-    NUMTYPE nCount;
+    NUMTYPE nCount(0);
     rStream >> nCount;
     _pRanges = new NUMTYPE[nCount + 1];
     for ( NUMTYPE n = 0; n < nCount; ++n )

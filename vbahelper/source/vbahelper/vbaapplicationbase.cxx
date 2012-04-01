@@ -122,7 +122,7 @@ public:
     DECL_LINK( MacroCallHdl, void* );
 };
 
-IMPL_LINK( VbaTimer, MacroCallHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
     {
@@ -277,6 +277,29 @@ void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::Ru
     m_pImpl->mbVisible = bVisible;  // dummy implementation
 }
 
+
+void SAL_CALL
+VbaApplicationBase::OnKey( const ::rtl::OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
+{
+    // parse the Key & modifiers
+    awt::KeyEvent aKeyEvent = parseKeyEvent( Key );
+    rtl::OUString MacroName;
+    Procedure >>= MacroName;
+    uno::Reference< frame::XModel > xModel;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
+    {
+        SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
+        if ( pMod )
+            xModel = StarBASIC::GetModelFromBasic( pMod );
+    }
+
+    if ( !xModel.is() )
+        xModel = getCurrentDocument();
+
+    applyShortCutKeyBinding( xModel, aKeyEvent, MacroName );
+}
+
 uno::Any SAL_CALL
 VbaApplicationBase::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
@@ -396,17 +419,16 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBE" ) ), aArgs, mxContext );
         return uno::Any( xVBE );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
     return uno::Any();
 }
 
-rtl::OUString&
+rtl::OUString
 VbaApplicationBase::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase"));
 }
 
 uno::Sequence<rtl::OUString>

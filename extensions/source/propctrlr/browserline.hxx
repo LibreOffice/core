@@ -52,6 +52,9 @@ namespace pcr
     {
     public:
         virtual void    buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary ) = 0;
+
+    protected:
+        ~IButtonClickListener() {}
     };
 
     //========================================================================

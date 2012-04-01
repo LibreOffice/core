@@ -96,7 +96,6 @@ public:
     }
 
     bool getChar( sal_Unicode& rVal );
-    bool getByte( sal_uInt8& rVal );
     bool getShort( sal_Int16& rVal );
     bool getLong( sal_Int32& rVal );
     bool getUShort( sal_uInt16& rVal );

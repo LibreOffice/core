@@ -102,8 +102,10 @@ public:
     void testCVEs();
 
     //ods, xls, xlsx filter tests
-    void testRangeName(); // only test ods here, xls and xlsx in subsequent_filters-test
-    void testContent();
+    void testRangeNameODS(); // only test ods here, xls and xlsx in subsequent_filters-test
+    void testContentODS();
+    void testContentXLS();
+    void testContentXLSX();
 
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
@@ -116,8 +118,10 @@ public:
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
-    CPPUNIT_TEST(testRangeName);
-    CPPUNIT_TEST(testContent);
+    CPPUNIT_TEST(testRangeNameODS);
+    CPPUNIT_TEST(testContentODS);
+    CPPUNIT_TEST(testContentXLS);
+    CPPUNIT_TEST(testContentXLSX);
 
 #if TEST_BUG_FILES
     CPPUNIT_TEST(testBugFiles);
@@ -127,6 +131,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    ScDocShellRef loadDoc(const rtl::OUString& rName, sal_Int32 nFormat);
     uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aBaseString;
 };
@@ -194,6 +199,9 @@ void ScFiltersTest::testCVEs()
     //not indicate that it imported as .slk.
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
         getURLFromSrc("/sc/qa/unit/data/slk/"), rtl::OUString());
+
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel 97")),
+        getURLFromSrc("/sc/qa/unit/data/xls/"), rtl::OUString());
 }
 
 #if TEST_BUG_FILES
@@ -210,8 +218,8 @@ void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-        rtl::OStringBuffer aMessage("Failed loading: ");
-        aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
+        //rtl::OStringBuffer aMessage("Failed loading: ");
+        //aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
         ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[nType].nFormatType);
         // use this only if you're sure that all files can be loaded
         // pay attention to lock files
@@ -278,31 +286,35 @@ void testRangeNameImpl(ScDocument* pDoc)
 
 }
 
-void ScFiltersTest::testRangeName()
+ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nFormat)
+{
+    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL( rName, aFileExtension, aFileName );
+    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    return xDocSh;
+}
+
+void ScFiltersTest::testRangeNameODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
-    //XLSX does not work yet
-    for (sal_uInt32 i = 0; i < 1; ++i)
-    {
-        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
-        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName;
-        createFileURL( aFileNameBase, aFileExtension, aFileName );
-        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
-        std::cout << aFileFormats[i].pName << " Test" << std::endl;
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
 
-        CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
-        ScDocument* pDoc = xDocSh->GetDocument();
-        testRangeNameImpl(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
 
-        rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
-        rtl::OUString aCSVPath;
-        createCSVPath( aSheet2CSV, aCSVPath );
-        testFile( aCSVPath, pDoc, 1);
-        xDocSh->DoClose();
-    }
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testRangeNameImpl(pDoc);
+
+    rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+    rtl::OUString aCSVPath;
+    createCSVPath( aSheet2CSV, aCSVPath );
+    testFile( aCSVPath, pDoc, 1);
+    xDocSh->DoClose();
 }
 
 namespace {
@@ -337,7 +349,7 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
     //check notes import
     ScAddress aAddress(7, 2, 0);
-    ScPostIt* pNote = pDoc->GetNote(aAddress);
+    ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
     CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
     CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
     //add additional checks here
@@ -345,25 +357,37 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
 
 }
 
-void ScFiltersTest::testContent()
+void ScFiltersTest::testContentODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    for (sal_uInt32 i = 0; i < 3; ++i)
-    {
-        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
-        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName;
-        createFileURL(aFileNameBase, aFileExtension, aFileName);
-        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
-        std::cout << aFileFormats[i].pName << " Test" << std::endl;
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    xDocSh->DoHardRecalc(true);
 
-        CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.*", xDocSh.Is());
-        ScDocument* pDoc = xDocSh->GetDocument();
-        testContentImpl(pDoc);
-        xDocSh->DoClose();
-    }
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testContentImpl(pDoc);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testContentImpl(pDoc);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 2);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testContentImpl(pDoc);
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()

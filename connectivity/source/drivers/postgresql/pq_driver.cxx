@@ -367,7 +367,7 @@ void * SAL_CALL component_getFactory(
                 {
                     propSet->getPropertyValue( ASCII_STR( "DefaultContext" ) ) >>= defaultContext;
                 }
-                catch( com::sun::star::uno::Exception &e )
+                catch( com::sun::star::uno::Exception & )
                 {
                     // if there is no default context, ignore it
                 }

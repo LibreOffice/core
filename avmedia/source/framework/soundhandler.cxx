@@ -445,7 +445,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
-IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
+IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
 {
     // SAFE {
     ::osl::ClearableMutexGuard aLock( m_aLock );

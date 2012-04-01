@@ -134,24 +134,6 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewParent
         );
 
-        /** sets or resets a state bit in the set of foreign-controlled states of the component.
-
-        @param _rxComponent
-            is the component which's state is to be (re)set
-        @param _nState
-            the state bit which should be affected. This should be one of the respective UNO constants.
-        @param _bSet
-            <TRUE/> if the bit should be set, <FALSE/> otherwise
-        @return
-            <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
-            <method>getImplementation</method>.
-        */
-        static sal_Bool setForeignControlledState(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
-            const sal_Int16 _nState,
-            const sal_Bool  _bSet
-        );
-
 
     private:
         COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

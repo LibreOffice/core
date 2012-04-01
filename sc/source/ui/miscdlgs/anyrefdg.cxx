@@ -38,7 +38,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/shl.hxx>
-#include <svtools/taskbar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -898,7 +897,7 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
     }
 }
 
-IMPL_LINK( ScRefHandler, UpdateFocusHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl)
 {
     if (pActiveWin)
     {

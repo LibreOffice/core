@@ -35,11 +35,11 @@ $(eval $(call gb_Module_add_targets,accessibility,\
 ifneq ($(SOLAR_JAVA),)
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,accessibility,\
+    CustomTarget_bridge \
+    CustomTarget_bridge_inc \
     Jar_accessibility \
     Jar_uno_accessbridge \
     Library_java_uno_accessbridge \
-    Package_bridge \
-    Package_bridge_inc \
 ))
 endif
 endif

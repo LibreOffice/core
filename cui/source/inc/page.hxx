@@ -38,7 +38,7 @@
 #include <svx/pagectrl.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <editeng/svxenum.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 
 // class SvxPageDescPage -------------------------------------------------
@@ -167,18 +167,18 @@ class SvxPageDescPage : public SfxTabPage
 
 #ifdef _SVX_PAGE_CXX
     void                Init_Impl();
-    DECL_LINK(          LayoutHdl_Impl, ListBox* );
-    DECL_LINK(          PaperBinHdl_Impl, ListBox* );
+    DECL_LINK(LayoutHdl_Impl, void *);
+    DECL_LINK(PaperBinHdl_Impl, void *);
     DECL_LINK(          SwapOrientation_Impl, RadioButton* );
     void                SwapFirstValues_Impl( bool bSet );
-    DECL_LINK(          BorderModify_Impl, MetricField* );
+    DECL_LINK(BorderModify_Impl, void *);
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK(          CenterHdl_Impl, CheckBox* );
+    DECL_LINK(CenterHdl_Impl, void *);
     void                UpdateExample_Impl( bool bResetbackground = false );
 
     // Papiergroesse
     DECL_LINK(          PaperSizeSelect_Impl, ListBox* );
-    DECL_LINK(          PaperSizeModify_Impl, Edit* );
+    DECL_LINK(PaperSizeModify_Impl, void *);
 
     DECL_LINK(          FrameDirectionModify_Impl, ListBox* );
 
@@ -186,7 +186,7 @@ class SvxPageDescPage : public SfxTabPage
     void                ResetBackground_Impl( const SfxItemSet& rSet );
 
     // Grenzwerte
-    DECL_LINK(          RangeHdl_Impl, Edit* );
+    DECL_LINK(RangeHdl_Impl, void *);
     void                CalcMargin_Impl();
 
     // Registerhaltigkeit

@@ -306,7 +306,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_PushButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if ( (type == CTRL_MENUBAR))
+    else if (type == CTRL_MENUBAR)
     {
         if (part == PART_MENU_ITEM)
         {
@@ -369,6 +369,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             // paints the whole menu item, so translate position (and it'll be clipped);
             // it is also necessary to fill the background transparently first, as this
             // is painted after menuitem highlight, otherwise there would be a grey area
+            assert( value.getType() == CTRL_MENU_POPUP );
             const MenupopupValue* menuVal = static_cast<const MenupopupValue*>(&value);
             QRect menuItemRect( region2QRect( menuVal->maItemRect ));
             QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),

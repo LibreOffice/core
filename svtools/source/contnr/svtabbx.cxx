@@ -40,7 +40,7 @@ using namespace ::com::sun::star::accessibility;
 #define MYTABMASK \
     ( SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC )
 
-// SvTreeListBox-Callback
+// SvTreeListBox callback
 
 void SvTabListBox::SetTabs()
 {
@@ -49,16 +49,16 @@ void SvTabListBox::SetTabs()
     {
         DBG_ASSERT(pTabList,"TabList ?");
 
-        // die TreeListBox hat jetzt ihre Tabulatoren in die Liste eingefuegt.
-        // jetzt plustern wir die Liste mit zusaetzlichen Tabulatoren auf,
-        // und passen den ganz rechten Tab der Treelistbox an.
+        // The tree listbox has now inserted its tabs into the list. Now we
+        // fluff up the list with additional tabs and adjust the rightmost tab
+        // of the tree listbox.
 
-        // den ganz rechten Tab nehmen
-        // HACK fuer den Explorer! Wenn der ViewParent != 0 ist, dann wird
-        // der erste Tab der TreeListBox von der TreelistBox berechnet!
-        // Dies wird fuer ButtonsOnRoot benoetigt, da der Explorer nicht
-        // weiss, welchen zusaetzlichen Offset er in diesem Modus auf
-        // den Tabulator addieren muss. Die TreeListBox weiss es!
+        // Picking the rightmost tab.
+        // HACK for the explorer! If ViewParent != 0, the first tab of the tree
+        // listbox is calculated by the tre listbox itself! This behavior is
+        // necessary for ButtonsOnRoot, as the explorer does not know in this
+        // case, which additional offset it need to add to the tabs in this mode
+        // -- the tree listbox knows that, though!
         /*
         if( !pViewParent )
         {
@@ -69,7 +69,7 @@ void SvTabListBox::SetTabs()
         }
         */
 
-        // alle anderen Tabs an Liste haengen
+        // append all other tabs to the list
         for( sal_uInt16 nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
         {
             SvLBoxTab* pTab = pTabList+nCurTab;
@@ -112,7 +112,7 @@ SvTabListBox::SvTabListBox( Window* pParent, WinBits nBits )
     pTabList = 0;
     nTabCount = 0;
     pViewParent = 0;
-    SetHighlightRange();    // ueber volle Breite selektieren
+    SetHighlightRange();    // select full width
 }
 
 SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
@@ -127,7 +127,7 @@ SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
 
 SvTabListBox::~SvTabListBox()
 {
-    // array-delete
+    // delete array
     delete [] pTabList;
 #ifdef DBG_UTIL
     pTabList = 0;
@@ -341,7 +341,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal
                 if( pCurToken )
                     aTemp = XubString( pCurToken, nCurTokenLen );
                 else
-                    aTemp.Erase(); // alle Spalten ohne Token loeschen
+                    aTemp.Erase(); // delete all columns without a token
                 ((SvLBoxString*)pStr)->SetText( pEntry, aTemp );
                 pCurToken = pNextToken;
                 pNextToken = GetToken( pCurToken, nCurTokenLen );
@@ -435,7 +435,7 @@ const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, sal_uInt16& 
         c = *pPtr;
     }
     if( c )
-        pPtr++; // Tab ueberspringen
+        pPtr++; // skip tab
     else
         pPtr = 0;
     rLen = nLen;
@@ -536,18 +536,6 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
     SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
-}
-
-SvTabJustify SvTabListBox::GetTabJustify( sal_uInt16 nTab ) const
-{
-    SvTabJustify eResult = AdjustLeft;
-    if( nTab >= nTabCount )
-        return eResult;
-    SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    sal_uInt16 nFlags = pTab->nFlags;
-    nFlags &= MYTABMASK;
-    eResult = (SvTabJustify)nFlags;
-    return eResult;
 }
 
 long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
@@ -711,7 +699,7 @@ void SvHeaderTabListBox::Clear()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
 {
     m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );
     return 0;
@@ -719,7 +707,7 @@ IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, EMPTYARG )
+IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
 {
     Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );

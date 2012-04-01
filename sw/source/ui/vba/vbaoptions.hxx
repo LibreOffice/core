@@ -82,7 +82,7 @@ public:
     virtual css::uno::Any getValueEvent();
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_OPTIONS_HXX */

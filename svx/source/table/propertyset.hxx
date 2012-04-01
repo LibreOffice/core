@@ -52,11 +52,9 @@ typedef boost::unordered_map< ::rtl::OUString, ::sal_uInt32, ::rtl::OUStringHash
 class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
 public:
-    FastPropertySetInfo();
     FastPropertySetInfo( const PropertyVector& rProps );
     virtual ~FastPropertySetInfo();
 
-    void addProperty( const ::com::sun::star::beans::Property& rProperty );
     void addProperties( const PropertyVector& rProps );
 
     const ::com::sun::star::beans::Property& getProperty( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException );

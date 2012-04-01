@@ -67,6 +67,8 @@ class IGate
         virtual void     openGap (                                   ) = 0;
         virtual sal_Bool wait    ( const TimeValue* pTimeOut = NULL  ) = 0;
 
+    protected:
+        ~IGate() {}
 };      //  class IGate
 
 }       //  namespace framework

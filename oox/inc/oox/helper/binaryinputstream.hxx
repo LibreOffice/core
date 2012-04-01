@@ -47,7 +47,7 @@ class BinaryOutputStream;
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class BinaryInputStream : public virtual BinaryStreamBase
+class OOX_DLLPUBLIC BinaryInputStream : public virtual BinaryStreamBase
 {
 public:
     /** Derived classes implement reading nBytes bytes to the passed sequence.
@@ -163,17 +163,6 @@ public:
      */
     template< typename Type >
     void                skipArray( sal_Int32 nElemCount );
-
-    /** Reads a NUL-terminated byte character array and returns the string.
-     */
-    ::rtl::OString      readNulCharArray();
-
-    /** Reads a NUL-terminated byte character array and returns a Unicode string.
-
-        @param eTextEnc
-            The text encoding used to create the Unicode string.
-     */
-    ::rtl::OUString     readNulCharArrayUC( rtl_TextEncoding eTextEnc );
 
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
@@ -292,7 +281,7 @@ void BinaryInputStream::skipArray( sal_Int32 nElemCount )
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed input stream.
@@ -344,7 +333,7 @@ private:
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed data sequence.

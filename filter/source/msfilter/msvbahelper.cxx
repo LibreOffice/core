@@ -42,6 +42,12 @@
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 
+#include <com/sun/star/awt/KeyModifier.hpp>
+#include <svtools/acceleratorexecute.hxx>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <map>
+
 using namespace ::com::sun::star;
 
 namespace ooo {
@@ -175,6 +181,13 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
 bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, const String& sMacro )
 {
     bool bFound = false;
+
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) sLibrary;
+    (void) sMod;
+    (void) sMacro;
+#else
     if ( sLibrary.Len() && sMacro.Len() )
     {
         OSL_TRACE("** Searching for %s.%s in library %s"
@@ -222,6 +235,7 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
             }
         }
     }
+#endif
     return bFound;
 }
 
@@ -260,6 +274,12 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
 
 ::rtl::OUString resolveVBAMacro( SfxObjectShell* pShell, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModuleName, const ::rtl::OUString& rMacroName )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) rLibName;
+    (void) rModuleName;
+    (void) rMacroName;
+#else
     if( pShell )
     {
         ::rtl::OUString aLibName = rLibName.isEmpty() ?  getDefaultProjectName( pShell ) : rLibName ;
@@ -267,11 +287,19 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
         if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
             return ::rtl::OUStringBuffer( aLibName ).append( sal_Unicode( '.' ) ).append( aModuleName ).append( sal_Unicode( '.' ) ).append( rMacroName ).makeStringAndClear();
     }
+#endif
     return ::rtl::OUString();
 }
 
 MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& MacroName, bool bSearchGlobalTemplates )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) MacroName;
+    (void) bSearchGlobalTemplates;
+
+    return MacroResolvedInfo();
+#else
     if( !pShell )
         return MacroResolvedInfo();
 
@@ -433,11 +461,20 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
     aRes.msResolvedMacro = sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 );
 
     return aRes;
+#endif
 }
 
 // Treat the args as possible inouts ( convertion at bottom of method )
 sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) sMacroName;
+    (void) aArgs;
+    (void) aRet;
+
+    return sal_False;
+#else
     sal_Bool bRes = sal_False;
     if ( !pShell )
         return bRes;
@@ -470,6 +507,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
        bRes = sal_False;
     }
     return bRes;
+#endif
 }
 
 // ============================================================================
@@ -581,6 +619,176 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
     throw uno::RuntimeException();
 }
 
+bool getModifier( char c, sal_uInt16& mod )
+{
+    static const char modifiers[] = "+^%";
+    static const sal_uInt16 KEY_MODS[] = {KEY_SHIFT, KEY_MOD1, KEY_MOD2};
+
+    for ( unsigned int i=0; i<SAL_N_ELEMENTS(modifiers); ++i )
+    {
+        if ( c == modifiers[i] )
+        {
+            mod = mod | KEY_MODS[ i ];
+            return true;
+        }
+    }
+    return false;
+}
+
+typedef std::map< rtl::OUString, sal_uInt16 > MSKeyCodeMap;
+
+sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
+{
+    sal_uInt16 nVclKey = 0;
+    // do we care about locale here for isupper etc. ? probably not
+    if ( isalpha( c ) )
+    {
+        nVclKey |= ( toupper( c ) - 'A' ) + KEY_A;
+        if ( isupper( c ) )
+            nVclKey |= KEY_SHIFT;
+    }
+    else if ( isdigit( c ) )
+        nVclKey |= ( c  - '0' ) + KEY_0;
+    else if ( c == '~' ) // special case
+        nVclKey = KEY_RETURN;
+    else if ( c == ' ' ) // special case
+        nVclKey = KEY_SPACE;
+    else // I guess we have a problem ( but not sure if locale specific keys might come into play here )
+        throw uno::RuntimeException();
+    return nVclKey;
+}
+
+struct KeyCodeEntry
+{
+   const char* sName;
+   sal_uInt16 nCode;
+};
+
+KeyCodeEntry aMSKeyCodesData[] = {
+    { "BACKSPACE", KEY_BACKSPACE },
+    { "BS", KEY_BACKSPACE },
+    { "DELETE", KEY_DELETE },
+    { "DEL", KEY_DELETE },
+    { "DOWN", KEY_DOWN },
+    { "UP", KEY_UP },
+    { "LEFT", KEY_LEFT },
+    { "RIGHT", KEY_RIGHT },
+    { "END", KEY_END },
+    { "ESCAPE", KEY_ESCAPE },
+    { "ESC", KEY_ESCAPE },
+    { "HELP", KEY_HELP },
+    { "HOME", KEY_HOME },
+    { "PGDN", KEY_PAGEDOWN },
+    { "PGUP", KEY_PAGEUP },
+    { "INSERT", KEY_INSERT },
+    { "SCROLLLOCK", KEY_SCROLLLOCK },
+    { "NUMLOCK", KEY_NUMLOCK },
+    { "TAB", KEY_TAB },
+    { "F1", KEY_F1 },
+    { "F2", KEY_F2 },
+    { "F3", KEY_F3 },
+    { "F4", KEY_F4 },
+    { "F5", KEY_F5 },
+    { "F6", KEY_F6 },
+    { "F7", KEY_F7 },
+    { "F8", KEY_F8 },
+    { "F9", KEY_F1 },
+    { "F10", KEY_F10 },
+    { "F11", KEY_F11 },
+    { "F12", KEY_F12 },
+    { "F13", KEY_F13 },
+    { "F14", KEY_F14 },
+    { "F15", KEY_F15 },
+};
+
+awt::KeyEvent parseKeyEvent( const ::rtl::OUString& Key ) throw ( uno::RuntimeException )
+{
+    static MSKeyCodeMap msKeyCodes;
+    if ( msKeyCodes.empty() )
+    {
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aMSKeyCodesData ); ++i )
+        {
+            msKeyCodes[ rtl::OUString::createFromAscii( aMSKeyCodesData[ i ].sName ) ] = aMSKeyCodesData[ i ].nCode;
+        }
+    }
+    rtl::OUString sKeyCode;
+    sal_uInt16 nVclKey = 0;
+
+    // parse the modifier if any
+    for ( int i=0; i<Key.getLength(); ++i )
+    {
+        if ( ! getModifier( Key[ i ], nVclKey ) )
+        {
+            sKeyCode = Key.copy( i );
+            break;
+        }
+    }
+
+    // check if keycode is surrounded by '{}', if so scoop out the contents
+    // else it should be just one char of ( 'a-z,A-Z,0-9' )
+    if ( sKeyCode.getLength() == 1 ) // ( a single char )
+    {
+        char c = (char)( sKeyCode[ 0 ] );
+        nVclKey |= parseChar( c );
+    }
+    else // key should be enclosed in '{}'
+    {
+        if ( sKeyCode.getLength() < 3 ||  !( sKeyCode[0] == '{' && sKeyCode[sKeyCode.getLength() - 1 ] == '}' ) )
+            throw uno::RuntimeException();
+
+        sKeyCode = sKeyCode.copy(1, sKeyCode.getLength() - 2 );
+
+        if ( sKeyCode.getLength() == 1 )
+            nVclKey |= parseChar( (char)( sKeyCode[ 0 ] ) );
+        else
+        {
+            MSKeyCodeMap::iterator it = msKeyCodes.find( sKeyCode );
+            if ( it == msKeyCodes.end() ) // unknown or unsupported
+                throw uno::RuntimeException();
+            nVclKey |= it->second;
+        }
+    }
+
+    awt::KeyEvent aKeyEvent = svt::AcceleratorExecute::st_VCLKey2AWTKey( KeyCode( nVclKey ) );
+    return aKeyEvent;
+}
+
+void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, const awt::KeyEvent& rKeyEvent, const ::rtl::OUString& rMacroName ) throw (uno::RuntimeException)
+{
+    rtl::OUString MacroName( rMacroName );
+    if ( !MacroName.isEmpty() )
+    {
+        ::rtl::OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        ::rtl::OUString sMacroSeparator(RTL_CONSTASCII_USTRINGPARAM("!"));
+        ::rtl::OUString aMacroName = MacroName.trim();
+        if (0 == aMacroName.indexOf('!'))
+            MacroName = aMacroName.copy(1).trim();
+        SfxObjectShell* pShell = NULL;
+        if ( rxModel.is() )
+        {
+            uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY_THROW );
+            pShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+            if ( !pShell )
+                throw uno::RuntimeException();
+        }
+        MacroResolvedInfo aMacroInfo = resolveVBAMacro( pShell, aMacroName );
+        if( !aMacroInfo.mbFound )
+            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The procedure doesn't exist") ), uno::Reference< uno::XInterface >() );
+       MacroName = aMacroInfo.msResolvedMacro;
+    }
+    uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);
+    uno::Reference< ui::XUIConfigurationManager > xCfgMgr = xCfgSupplier->getUIConfigurationManager();
+
+    uno::Reference< ui::XAcceleratorConfiguration > xAcc( xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW );
+    if ( MacroName.isEmpty() )
+        // I believe this should really restore the [application] default. Since
+        // afaik we don't actually setup application default bindings on import
+        // we don't even know what the 'default' would be for this key
+        xAcc->removeKeyEvent( rKeyEvent );
+    else
+        xAcc->setKeyEvent( rKeyEvent, ooo::vba::makeMacroURL( MacroName ) );
+
+}
 // ============================================================================
 
 } // namespace vba

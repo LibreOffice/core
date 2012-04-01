@@ -733,7 +733,7 @@ void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-IMPL_LINK( AbstractSvxNameDialog_Impl, CheckNameHdl, Window*, EMPTYARG )
+IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl)
 {
     if( aCheckNameHdl.IsSet() )
         return aCheckNameHdl.Call(this);
@@ -759,7 +759,7 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link& rLink, bool b
     }
 }
 
-IMPL_LINK(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, Window*, EMPTYARG)
+IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl)
 {
     if(aCheckNameHdl.IsSet())
     {
@@ -959,13 +959,13 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link& rLink )
     else
         pDlg->SetPrevHdl( Link() );
 }
-IMPL_LINK( AbstractSvxPostItDialog_Impl, NextHdl, Window*, EMPTYARG )
+IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, NextHdl)
 {
     if( aNextHdl.IsSet() )
         aNextHdl.Call(this);
     return 0;
 }
-IMPL_LINK( AbstractSvxPostItDialog_Impl, PrevHdl, Window*, EMPTYARG )
+IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, PrevHdl)
 {
     if( aPrevHdl.IsSet() )
         aPrevHdl.Call(this);
@@ -1881,11 +1881,11 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
             const SvObjectServerList* pList )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    if ( rCommand.equalsAscii(".uno:InsertObject" ) )
+    if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObject")) )
         pDlg = new SvInsertOleDlg( pParent, xStor, pList );
-    else if ( rCommand.equalsAscii(".uno:InsertPlugin" ) )
+    else if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertPlugin")) )
         pDlg = new SvInsertPlugInDialog( pParent, xStor );
-    else if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
+    else if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObjectFloatingFrame")) )
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor );
 
     if ( pDlg )
@@ -1900,7 +1900,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* p
             const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
+    if ( rCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:InsertObjectFloatingFrame")) )
     {
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
         pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );

@@ -25,36 +25,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #define SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
-#include "svtools/svtdllapi.h"
-#include <vcl/window.hxx>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+#include "sal/config.h"
 
-class SvtExtendedMultiLineEdit_Impl;
+#include "boost/scoped_ptr.hpp"
+#include "com/sun/star/lang/Locale.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "svtools/svmedit2.hxx"
+#include "svtools/svtdllapi.h"
+#include "tools/wintypes.hxx"
+#include "vcl/window.hxx"
+
 class SvtDocInfoTable_Impl;
 
-namespace svtools
-{
-    class SVT_DLLPUBLIC ODocumentInfoPreview : public Window
-    {
-        SvtExtendedMultiLineEdit_Impl*  m_pEditWin;
-        SvtDocInfoTable_Impl*           m_pInfoTable;
-        com::sun::star::lang::Locale    m_aLocale;
+namespace com { namespace sun { namespace star {
+    namespace document { class XDocumentProperties; }
+    namespace util { struct DateTime; }
+} } }
+namespace rtl { class OUString; }
 
-    public:
-        ODocumentInfoPreview( Window* pParent ,WinBits _nBits);
-        virtual ~ODocumentInfoPreview();
+namespace svtools {
 
-        virtual void Resize();
-        void    Clear();
-        void    fill(const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::document::XDocumentProperties>& i_xDocProps
-                    ,const String& i_rURL);
-        void SetAutoScroll(sal_Bool _bAutoScroll);
-    };
+class SVT_DLLPUBLIC ODocumentInfoPreview: public Window {
+public:
+    ODocumentInfoPreview(Window * pParent, WinBits nBits);
+
+    virtual ~ODocumentInfoPreview();
+
+    virtual void Resize();
+
+    void clear();
+
+    void fill(
+        com::sun::star::uno::Reference<
+            com::sun::star::document::XDocumentProperties > const & xDocProps,
+        rtl::OUString const & rURL);
+
+private:
+    ExtMultiLineEdit m_pEditWin;
+    boost::scoped_ptr< SvtDocInfoTable_Impl > m_pInfoTable;
+    com::sun::star::lang::Locale m_aLocale;
+
+    void insertEntry(rtl::OUString const & title, rtl::OUString const & value);
+
+    void insertNonempty(long id, rtl::OUString const & value);
+
+    void insertDateTime(long id, com::sun::star::util::DateTime const & value);
+};
+
 }
 
 #endif // SVTOOLS_DOCUMENTINFOPREVIEW_HXX

@@ -52,7 +52,7 @@ struct class_data##N \
     type_entry m_typeEntries[ N + 1 ]; \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE ImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper##N \
     : public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
 { \
@@ -69,7 +69,7 @@ template< __CLASS_IFC##N > \
 class_data##N ImplHelper##N< __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (ImplHelper##N< __IFC##N > *) ); \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
     : public OWeakObject \
     , public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
@@ -91,7 +91,7 @@ template< __CLASS_IFC##N > \
 class_data##N WeakImplHelper##N< __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (WeakImplHelper##N< __IFC##N > *) ); \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakAggImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper##N \
     : public OWeakAggObject \
     , public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
@@ -115,7 +115,7 @@ template< __CLASS_IFC##N > \
 class_data##N WeakAggImplHelper##N< __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (WeakAggImplHelper##N< __IFC##N > *) ); \
 template< class BaseClass, __CLASS_IFC##N > \
-class SAL_NO_VTABLE ImplInheritanceHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper##N \
     : public BaseClass \
     , __PUBLIC_IFC##N \
 { \
@@ -141,7 +141,7 @@ template< class BaseClass, __CLASS_IFC##N > \
 class_data##N ImplInheritanceHelper##N< BaseClass, __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (ImplInheritanceHelper##N< BaseClass, __IFC##N > *) ); \
 template< class BaseClass, __CLASS_IFC##N > \
-class SAL_NO_VTABLE AggImplInheritanceHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE AggImplInheritanceHelper##N \
     : public BaseClass \
     , __PUBLIC_IFC##N \
 { \
@@ -174,7 +174,7 @@ __DEF_CLASS_DATA_INIT_EX( N, (AggImplInheritanceHelper##N< BaseClass, __IFC##N >
 namespace cppu \
 { \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakComponentImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper##N \
     : public WeakComponentImplHelperBase \
     , public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
@@ -199,7 +199,7 @@ template< __CLASS_IFC##N > \
 class_data##N WeakComponentImplHelper##N< __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (WeakComponentImplHelper##N< __IFC##N > *) ); \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakAggComponentImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper##N \
     : public WeakAggComponentImplHelperBase \
     , public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \

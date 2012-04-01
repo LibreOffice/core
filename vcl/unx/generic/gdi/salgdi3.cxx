@@ -33,6 +33,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <fontconfig/fontconfig.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>

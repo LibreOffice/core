@@ -662,8 +662,8 @@ public:
 
 
 private:
-    void OObjectStreamTest::testObject(     const XObjectOutputStreamRef &rOut,
-                                            const XObjectInputStreamRef &rIn );
+    void testObject(     const XObjectOutputStreamRef &rOut,
+                         const XObjectInputStreamRef &rIn );
 
 private:
 };

@@ -75,8 +75,8 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv)
         WORD wMinorVersionRequired = 1;
 
         if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
-            (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
-            ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
+            ((LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
+            ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired))))
             {
                 // How to handle a very unlikely error ???
             }

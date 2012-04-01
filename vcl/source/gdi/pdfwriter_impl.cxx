@@ -777,7 +777,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     } while( nTokenIndex != -1 );
 
     // insert widget into its hierarchy field
-    if( aDomain.getLength() )
+    if( !aDomain.isEmpty() )
     {
         boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
@@ -792,7 +792,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         }
     }
 
-    if( aPartialName.getLength() == 0 )
+    if( aPartialName.isEmpty() )
     {
         // how funny, an empty field name
         if( i_rControl.getType() == PDFWriter::RadioButton )
@@ -1098,7 +1098,7 @@ static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, const P
     int ni = 0;
     for( PDFWriterImpl::ResourceMap::const_iterator it = rList.begin(); it != rList.end(); ++it )
     {
-        if( it->first.getLength() && it->second > 0 )
+        if( !it->first.isEmpty() && it->second > 0 )
         {
             rBuf.append( '/' );
             rBuf.append( it->first );
@@ -2272,7 +2272,7 @@ ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( FontSelectPattern& rF
 
 ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 {
-    DBG_ASSERT( m_aSubsets.size() == 0, "Fonts changing during PDF generation, document will be invalid" );
+    DBG_ASSERT( m_aSubsets.empty(), "Fonts changing during PDF generation, document will be invalid" );
     ImplDevFontList* pFiltered = pFontList->Clone( true, true );
 
     // append the PDF builtin fonts
@@ -2364,6 +2364,7 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
+    Reserve(rArgs.mnLength);
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         // TODO: handle unicode surrogates
@@ -2372,24 +2373,22 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( bRightToLeft )
             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
 
-        if( 1 ) // TODO: shortcut for ASCII?
-        {
-            sal_Char aBuf[4];
-            sal_uInt32 nInfo;
-            sal_Size nSrcCvtChars;
+        sal_Char aBuf[4];
+        sal_uInt32 nInfo;
+        sal_Size nSrcCvtChars;
 
-            sal_Size nConv = rtl_convertUnicodeToText( aConv,
-                                                       NULL,
-                                                       &cChar, 1,
-                                                       aBuf, sizeof(aBuf)/sizeof(*aBuf),
-                                                       RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
-                                                       &nInfo, &nSrcCvtChars );
-            // check whether conversion was possible
-            // else fallback font is needed as the standard fonts
-            // are handled via WinAnsi encoding
-            if( nConv > 0 )
-                cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
-        }
+        sal_Size nConv = rtl_convertUnicodeToText( aConv,
+                                                   NULL,
+                                                   &cChar, 1,
+                                                   aBuf, sizeof(aBuf)/sizeof(*aBuf),
+                                                   RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+                                                   &nInfo, &nSrcCvtChars );
+        // check whether conversion was possible
+        // else fallback font is needed as the standard fonts
+        // are handled via WinAnsi encoding
+        if( nConv > 0 )
+            cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
+
         if( cChar & 0xff00 )
         {
             cChar = 0;   // NotDef glyph
@@ -2873,7 +2872,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     {
         aLine.append( "/StructElem\n"
                       "/S/" );
-        if( rEle.m_aAlias.getLength() > 0 )
+        if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
         else
             aLine.append( getStructureTag( rEle.m_eType ) );
@@ -2884,13 +2883,13 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                       "/Pg " );
         aLine.append( rEle.m_nFirstPageObject );
         aLine.append( " 0 R\n" );
-        if( rEle.m_aActualText.getLength() )
+        if( !rEle.m_aActualText.isEmpty() )
         {
             aLine.append( "/ActualText" );
             appendUnicodeTextStringEncrypt( rEle.m_aActualText, rEle.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( rEle.m_aAltText.getLength() )
+        if( !rEle.m_aAltText.isEmpty() )
         {
             aLine.append( "/Alt" );
             appendUnicodeTextStringEncrypt( rEle.m_aAltText, rEle.m_nObject, aLine );
@@ -2900,18 +2899,18 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     if( ! rEle.m_aBBox.IsEmpty() || rEle.m_aAttributes.size() )
     {
         OString aAttribs =  emitStructureAttributes( rEle );
-        if( aAttribs.getLength() )
+        if( !aAttribs.isEmpty() )
         {
             aLine.append( "/A" );
             aLine.append( aAttribs );
             aLine.append( "\n" );
         }
     }
-    if( rEle.m_aLocale.Language.getLength() > 0 )
+    if( !rEle.m_aLocale.Language.isEmpty() )
     {
         OUStringBuffer aLocBuf( 16 );
         aLocBuf.append( rEle.m_aLocale.Language.toAsciiLowerCase() );
-        if( rEle.m_aLocale.Country.getLength() > 0 )
+        if( !rEle.m_aLocale.Country.isEmpty() )
         {
             aLocBuf.append( sal_Unicode('-') );
             aLocBuf.append( rEle.m_aLocale.Country );
@@ -4623,7 +4622,7 @@ we check in the following sequence:
             if( aTargetURL.hasFinalSlash() )
                 m_aContext.DefaultLinkAction = PDFWriter::URIAction;
 
-            if( aFileExtension.getLength() > 0 )
+            if( !aFileExtension.isEmpty() )
             {
                 if( m_aContext.ConvertOOoTargetToPDFTarget )
                 {
@@ -4684,7 +4683,7 @@ we check in the following sequence:
 // This code will permit the correct opening of application on web pages, the one that
 // normally have fragments (but I may be wrong...)
 // and will force the use of URI when the protocol is not file://
-                        if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
+                        if( (!aFragment.isEmpty() && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
                         {
                             aLine.append( "/URI/URI" );
@@ -4709,7 +4708,7 @@ we check in the following sequence:
                                                                                          INetURLObject::WAS_ENCODED,
                                                                                          INetURLObject::DECODE_WITH_CHARSET ) :
                                                                    aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
-                    if( aFragment.getLength() > 0 )
+                    if( !aFragment.isEmpty() )
                     {
                         aLine.append("/D/");
                         appendDestinationName( aFragment , aLine );
@@ -4720,7 +4719,7 @@ we check in the following sequence:
 // change the fragment to accomodate the bookmark (only if the file extension is PDF and
 // the requested action is of the correct type)
                     if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
-                               bTargetHasPDFExtension && aFragment.getLength() > 0 )
+                               bTargetHasPDFExtension && !aFragment.isEmpty() )
                     {
                         OStringBuffer aLineLoc( 1024 );
                         appendDestinationName( aFragment , aLineLoc );
@@ -5404,7 +5403,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
             rAnnotDict.append( bUseSubDict ? ">>\n" : "\n" );
         }
         rAnnotDict.append( ">>\n" );
-        if( aStandardAppearance.getLength() )
+        if( !aStandardAppearance.isEmpty() )
         {
             rAnnotDict.append( "/AS /" );
             rAnnotDict.append( aStandardAppearance );
@@ -5459,7 +5458,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     {
                         aValue.append( "/" );
                         // check for radio group with all buttons unpressed
-                        if( rWidget.m_aValue.getLength() == 0 )
+                        if( rWidget.m_aValue.isEmpty() )
                             aValue.append( "Off" );
                         else
                             appendName( rWidget.m_aValue, aValue );
@@ -5522,13 +5521,13 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             }
             aLine.append( "]\n" );
         }
-        if( rWidget.m_aName.getLength() )
+        if( !rWidget.m_aName.isEmpty() )
         {
             aLine.append( "/T" );
             appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.Version > PDFWriter::PDF_1_2 && rWidget.m_aDescription.getLength() )
+        if( m_aContext.Version > PDFWriter::PDF_1_2 && !rWidget.m_aDescription.isEmpty() )
         {
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
@@ -5642,9 +5641,9 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             else
                 m_aErrors.insert( PDFWriter::Warning_FormAction_Omitted_PDFA );
         }
-        if( rWidget.m_aDAString.getLength() )
+        if( !rWidget.m_aDAString.isEmpty() )
         {
-            if( rWidget.m_aDRDict.getLength() )
+            if( !rWidget.m_aDRDict.isEmpty() )
             {
                 aLine.append( "/DR<<" );
                 aLine.append( rWidget.m_aDRDict );
@@ -5667,7 +5666,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         // appearance charactristics for terminal fields
         // which are supposed to have an appearance constructed
         // by the viewer application
-        if( rWidget.m_aMKDict.getLength() )
+        if( !rWidget.m_aMKDict.isEmpty() )
         {
             aLine.append( "/MK<<" );
             aLine.append( rWidget.m_aMKDict );
@@ -5952,11 +5951,11 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( nStructureDict );
         aLine.append( " 0 R\n" );
     }
-    if( m_aContext.DocumentLocale.Language.getLength() > 0 )
+    if( !m_aContext.DocumentLocale.Language.isEmpty() )
     {
         OUStringBuffer aLocBuf( 16 );
         aLocBuf.append( m_aContext.DocumentLocale.Language.toAsciiLowerCase() );
-        if( m_aContext.DocumentLocale.Country.getLength() > 0 )
+        if( !m_aContext.DocumentLocale.Country.isEmpty() )
         {
             aLocBuf.append( sal_Unicode('-') );
             aLocBuf.append( m_aContext.DocumentLocale.Country );
@@ -6698,11 +6697,10 @@ PDFStreamIf::~PDFStreamIf()
 
 void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw()
 {
-    if( m_bWrite )
+    if( m_bWrite && aData.getLength() )
     {
         sal_Int32 nBytes = aData.getLength();
-        if( nBytes > 0 )
-            m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
+        m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
     }
 }
 
@@ -7794,8 +7792,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
-                    aLastLine.ConvertLineEnd( LINEEND_LF );
+                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )
@@ -10749,7 +10746,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         OStringBuffer aLine( 128 );
         sal_Int32 nMCID = m_aPages[ m_nCurrentPage ].m_aMCIDParents.size();
         aLine.append( "/" );
-        if( rEle.m_aAlias.getLength() > 0 )
+        if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
         else
             aLine.append( getStructureTag( rEle.m_eType ) );
@@ -10871,7 +10868,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     m_nCurrentStructElement = nNewId;
 
     // handle alias names
-    if( rAlias.getLength() && eType != PDFWriter::NonStructElement )
+    if( !rAlias.isEmpty() && eType != PDFWriter::NonStructElement )
     {
         OStringBuffer aNameBuf( rAlias.getLength() );
         appendName( rAlias, aNameBuf );
@@ -10885,7 +10882,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     aLine.append( m_nCurrentStructElement );
     aLine.append( ": " );
     aLine.append( getStructureTag( eType ) );
-    if( rEle.m_aAlias.getLength() )
+    if( !rEle.m_aAlias.isEmpty() )
     {
         aLine.append( " aliased as \"" );
         aLine.append( rEle.m_aAlias );
@@ -10929,7 +10926,7 @@ void PDFWriterImpl::endStructureElement()
     aLine.append( m_nCurrentStructElement );
     aLine.append( ": " );
     aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
-    if( m_aStructure[ m_nCurrentStructElement ].m_aAlias.getLength() )
+    if( !m_aStructure[ m_nCurrentStructElement ].m_aAlias.isEmpty() )
     {
         aLine.append( " aliased as \"" );
         aLine.append( m_aStructure[ m_nCurrentStructElement ].m_aAlias );
@@ -11067,7 +11064,7 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
         aLine.append( m_nCurrentStructElement );
         aLine.append( ": " );
         aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
-        if( m_aStructure[ m_nCurrentStructElement ].m_aAlias.getLength() )
+        if( !m_aStructure[ m_nCurrentStructElement ].m_aAlias.isEmpty() )
         {
             aLine.append( " aliased as \"" );
             aLine.append( m_aStructure[ m_nCurrentStructElement ].m_aAlias );
@@ -11622,7 +11619,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
                 TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
         rNewWidget.m_nFlags |= 0x00010000;
-        if( rBtn.URL.getLength() )
+        if( !rBtn.URL.isEmpty() )
             rNewWidget.m_aListEntries.push_back( rBtn.URL );
         rNewWidget.m_bSubmit    = rBtn.Submit;
         rNewWidget.m_bSubmitGet = rBtn.SubmitGet;
@@ -11653,7 +11650,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         rNewWidget.m_aValue     = OUString( RTL_CONSTASCII_USTRINGPARAM( "Off" ) );
         rNewWidget.m_aOnValue   = rBtn.OnValue;
-        if( ! rRadioButton.m_aValue.getLength() && rBtn.Selected )
+        if( rRadioButton.m_aValue.isEmpty() && rBtn.Selected )
         {
             rNewWidget.m_aValue     = rNewWidget.m_aOnValue;
             rRadioButton.m_aValue   = rNewWidget.m_aOnValue;

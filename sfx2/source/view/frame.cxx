@@ -65,7 +65,6 @@
 #include <sfx2/fcontnr.hxx>
 #include "impframe.hxx"
 #include <sfx2/appuno.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "workwin.hxx"
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/msgpool.hxx>
@@ -496,11 +495,6 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
 
 //-------------------------------------------------------------------------
 
-SfxBroadcaster& SfxFrame::GetBroadcaster() const
-{
-    return *pImp;
-}
-
 sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {
     SfxFrame *pParent = pParentFrame;
@@ -701,11 +695,6 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     }
 
     return pRet;
-}
-
-sal_Bool SfxFrame::IsTop() const
-{
-    return GetFrameInterface().is() ? GetFrameInterface()->isTop() : sal_False;
 }
 
 sal_Bool SfxFrame::HasComponent() const

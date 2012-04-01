@@ -88,14 +88,13 @@ LIBPQ_DEP_LIBS += \
 LIBPQ_DEP_LIBS+=\
         $(LDAPSDKLIB)
 .ENDIF
-.ELSE
+.ELSE # "$(GUI)$(COM)"!="WNTMSC"
 LIBPQ_LINK=$(OUTDIR)/lib/libpq.a
 LIBPQ_DEP_LIBS+=$(eq,$(OS),MACOSX $(NULL) -Wl,--as-needed)
 .INCLUDE : $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
 LIBPQ_DEP_LIBS+=$(eq,$(OS),MACOSX $(NULL) -Wl,--no-as-needed)
 .ENDIF
 POSTGRESQL_INC=-I$(OUTDIR)/inc/postgresql
-POSTGRESQL_LIB=
 .ENDIF # SYSTEM_POSTGRESQL
 
 CFLAGS+=$(POSTGRESQL_INC) \
@@ -156,13 +155,13 @@ LIB2OBJFILES= \
 
 
 SHL2STDLIBS= \
+        $(POSTGRESQL_LIB)	\
+        $(LIBPQ_LINK)		\
+        $(LIBPQ_DEP_LIBS)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
-        $(SALHELPERLIB)		\
-        $(POSTGRESQL_LIB)	\
-        $(LIBPQ_LINK)	\
-        $(LIBPQ_DEP_LIBS)
+        $(SALHELPERLIB)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)/$(SHL2TARGET).def

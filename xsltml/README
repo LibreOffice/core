@@ -1,4 +1,4 @@
-Date: 2009-02-19
+XSLT MathML Library from [http://xsltml.sourceforge.net/].
 
 This project is used in the Wiki filter that is installed
 with the WikiPublisher extension. The extension is built
@@ -9,6 +9,6 @@ related files that are used by the filter to transform
 embedded formula objects into media wiki format.
 
 The archive was downloaded from:
-http://xsltml.sourceforge.net
+[http://xsltml.sourceforge.net]
 on 2009-02-16.
 

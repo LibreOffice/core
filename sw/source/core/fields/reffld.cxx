@@ -276,7 +276,7 @@ String SwGetRefField::Expand() const
 
 String SwGetRefField::GetFieldName() const
 {
-    if ( GetTyp()->GetName().Len() > 0 || sSetRefName.Len() > 0 )
+    if ( GetTyp()->GetName().getLength() > 0 || sSetRefName.getLength() > 0 )
     {
         String aStr(GetTyp()->GetName());
         aStr += ' ';
@@ -563,19 +563,19 @@ SwField* SwGetRefField::Copy() const
  --------------------------------------------------------------------*/
 
 
-const String& SwGetRefField::GetPar1() const
+const rtl::OUString& SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
 
 
-void SwGetRefField::SetPar1( const String& rName )
+void SwGetRefField::SetPar1( const rtl::OUString& rName )
 {
     sSetRefName = rName;
 }
 
 
-String SwGetRefField::GetPar2() const
+rtl::OUString SwGetRefField::GetPar2() const
 {
     return Expand();
 }
@@ -974,11 +974,13 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
         GetFieldIdsFromDoc( rDoc, aDstIds );
 
         // Define the mappings now
-        sal_uInt16 nMaxDstId = *aIds.end();
+        sal_uInt16 nMaxDstId = -1;
+        if ( !aIds.empty() )
+            nMaxDstId = *aIds.rbegin();
 
         // Map all the src fields to their value + nMaxDstId
         for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
-            AddId( nMaxDstId++, *pIt );
+            AddId( ++nMaxDstId, *pIt );
 
         // Change the Sequence number of all the SetExp fields in the destination document
         SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
@@ -1072,8 +1074,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
-    if( &rDestDoc != pDoc &&
-        rDestDoc.GetSysFldType( RES_GETREFFLD )->GetDepends() )
+    if( &rDestDoc != pDoc )
     {
         // dann gibt es im DestDoc RefFelder, also muessen im SourceDoc
         // alle RefFelder auf einduetige Ids in beiden Docs umgestellt
@@ -1091,11 +1092,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                 {
                     _RefIdsMap* pMap = 0;
                     for( sal_uInt16 n = aFldMap.Count(); n; )
-                        if( aFldMap[ --n ]->GetName() == rRefFld.GetSetRefName() )
+                    {
+                        if( aFldMap[ --n ]->GetName().Equals(rRefFld.GetSetRefName()) )
                         {
                             pMap = aFldMap[ n ];
                             break;
                         }
+                    }
                     if( !pMap )
                     {
                         pMap = new _RefIdsMap( rRefFld.GetSetRefName() );

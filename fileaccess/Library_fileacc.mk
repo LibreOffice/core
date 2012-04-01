@@ -29,7 +29,6 @@ $(eval $(call gb_Library_Library,fileacc))
 
 $(eval $(call gb_Library_set_include,fileacc,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,fileacc,\

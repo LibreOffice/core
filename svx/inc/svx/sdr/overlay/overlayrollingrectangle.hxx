@@ -67,11 +67,9 @@ namespace sdr
 
             // change extended lines
             bool getExtendedLines() const { return mbExtendedLines; }
-            void setExtendedLines(bool bNew);
 
             // change show bounds
             bool getShowBounds() const { return mbShowBounds; }
-            void setShowBounds(bool bNew);
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged();

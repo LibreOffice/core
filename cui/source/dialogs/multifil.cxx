@@ -142,7 +142,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxMultiFileDialog, DelHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxMultiFileDialog, DelHdl_Impl)
 {
     sal_uInt16 nPos = aPathLB.GetSelectEntryPos();
     aPathLB.RemoveEntry( nPos );

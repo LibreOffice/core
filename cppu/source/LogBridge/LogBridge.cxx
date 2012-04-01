@@ -262,6 +262,13 @@ void LogProbe(
     }
 }
 
+#ifdef DISABLE_DYNLOADING
+
+#define uno_initEnvironment log_uno_uno_initEnvironment
+#define uno_ext_getMapping log_uno_uno_ext_getMapping
+
+#endif
+
 extern "C" void SAL_DLLPUBLIC_EXPORT SAL_CALL uno_initEnvironment(uno_Environment * pEnv)
     SAL_THROW_EXTERN_C()
 {

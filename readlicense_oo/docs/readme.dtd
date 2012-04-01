@@ -14,7 +14,7 @@
 	gui (all | UNX | WNT) "all"
 	os (none | all | SOLARIS | LINUX | WNT | MACOSX) "all"
 	cpuname (all | SPARC | INTEL | POWERPC) "all"
-	com (all | C50 | C52 | GCC | MSC) "all"
+	com (all | GCC | MSC) "all"
 	localized (true | false) "true"
 	style (P | H1 | H2 | H3 | HR) "P"
 >

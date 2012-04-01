@@ -41,6 +41,8 @@ using namespace com::sun::star::uno;
 
 namespace apitest {
 
+std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
+
 void XDataPilotDescriptor::testTag()
 {
     rtl::OUString aTag(RTL_CONSTASCII_USTRINGPARAM("DataPilotDescriptor_Tag"));
@@ -104,7 +106,7 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
         CPPUNIT_ASSERT(xNamed.is());
         rtl::OUString aName = xNamed->getName();
         maFieldNames.push_back(aName);
-        CPPUNIT_ASSERT( !aName.equalsAscii("Data") );
+        CPPUNIT_ASSERT( !aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Data")) );
 
         uno::Reference< beans::XPropertySet > xPropSet( xNamed, UNO_QUERY_THROW);
         CPPUNIT_ASSERT( xPropSet.is() );

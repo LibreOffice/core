@@ -98,8 +98,20 @@ public:
 
     bool RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
-    sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );
+    bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                          bool bRecord, bool bApi, bool bAllowMove = false );
+
+    /**
+     * Reload the referenced pivot cache, and refresh all pivot tables that
+     * reference the cache.
+     */
+    sal_uLong RefreshPivotTables(ScDPObject* pDPObj, bool bApi);
+
+    /**
+     * Refresh the group dimensions of all pivot tables referencing the same
+     * cache.
+     */
+    void RefreshPivotTableGroups(ScDPObject* pDPObj);
 };
 
 

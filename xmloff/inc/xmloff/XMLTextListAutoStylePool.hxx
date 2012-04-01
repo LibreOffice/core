@@ -67,7 +67,6 @@ public:
     ~XMLTextListAutoStylePool();
 
     void RegisterName( const ::rtl::OUString& rName );
-    sal_Bool HasName( const ::rtl::OUString& rName ) const;
 
     ::rtl::OUString Add(
             const ::com::sun::star::uno::Reference <

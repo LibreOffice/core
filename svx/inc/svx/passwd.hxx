@@ -63,8 +63,8 @@ private:
 
     sal_Bool            bEmpty;
 
-    DECL_LINK( ButtonHdl, OKButton * );
-    DECL_LINK( EditModifyHdl, Edit * );
+    DECL_LINK(ButtonHdl, void *);
+    DECL_LINK(EditModifyHdl, void *);
 
 public:
                     SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords = sal_False, sal_Bool bDisableOldPassword = sal_False );

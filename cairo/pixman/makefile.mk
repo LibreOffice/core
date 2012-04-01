@@ -145,7 +145,12 @@ CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
 
 CONFIGURE_FLAGS+=--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt
 
-.ENDIF
+.ELIF "$(OS)" == "MACOSX"
+
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+
+.END
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)

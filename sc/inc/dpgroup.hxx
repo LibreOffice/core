@@ -35,45 +35,11 @@
 
 #include "dptabdat.hxx"
 #include "scdllapi.h"
-#include "dpglobal.hxx"
+#include "dpitemdata.hxx"
+#include "dpnumgroupinfo.hxx"
+
 class ScDocument;
 class SvNumberFormatter;
-
-//! API struct?
-struct ScDPNumGroupInfo
-{
-    sal_Bool Enable;
-    sal_Bool DateValues;
-    sal_Bool AutoStart;
-    sal_Bool AutoEnd;
-    double   Start;
-    double   End;
-    double   Step;
-
-    ScDPNumGroupInfo() : Enable(false), DateValues(false), AutoStart(false), AutoEnd(false),
-                         Start(0.0), End(0.0), Step(0.0) {}
-};
-
-//  ScDPDateGroupHelper is used as part of ScDPGroupDimension (additional dim.)
-//  or ScDPNumGroupDimension (innermost, replaces the original dim.).
-//  Source index, name and result collection are stored at the parent.
-
-class ScDPDateGroupHelper
-{
-    ScDPNumGroupInfo    aNumInfo;       // only start and end (incl. auto flags) are used
-    sal_Int32           nDatePart;      // single part
-
-public:
-                ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
-                ~ScDPDateGroupHelper();
-
-    sal_Int32   GetDatePart() const { return nDatePart; }
-    const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
-
-    void FillColumnEntries(
-        SCCOL nSourceDim, const ScDPCache* pCahe , std::vector<SCROW>& rEntries,
-        const std::vector<SCROW>& rOriginal) const;
-};
 
 typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
 
@@ -101,10 +67,10 @@ class ScDPGroupDimension
 {
     long                        nSourceDim;
     long                        nGroupDim;
-    String                      aGroupName;
-    ScDPDateGroupHelper*        pDateHelper;
+    rtl::OUString               aGroupName;
     ScDPGroupItemVec            aItems;
-   mutable  ::std::vector< SCROW >            maMemberEntries;
+    mutable std::vector<SCROW> maMemberEntries;
+    bool mbDateDimension;
 public:
                 ScDPGroupDimension( long nSource, const String& rNewName );
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
@@ -117,31 +83,28 @@ public:
 
     long        GetSourceDim() const    { return nSourceDim; }
     long        GetGroupDim() const     { return nGroupDim; }
-    const      String& GetName() const       { return aGroupName; }
+    const rtl::OUString& GetName() const { return aGroupName; }
 
-    const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal ) const;
+    const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
 
-    const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
-
-    void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
-
     void        DisposeData();
 
     size_t      GetItemCount() const { return aItems.size(); }
+
+    void SetDateDimension();
+    bool IsDateDimension() const;
 };
 
 typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
-    ScDPNumGroupInfo            aGroupInfo;         // settings
-    ScDPDateGroupHelper*        pDateHelper;
-    mutable  ::std::vector< SCROW >            maMemberEntries;
-    mutable bool                bHasNonInteger;     // initialized in GetNumEntries
-    mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
+    mutable ScDPNumGroupInfo    aGroupInfo;         // settings
+    mutable std::vector<SCROW>  maMemberEntries;
+    bool mbDateDimension;
 
 public:
                 ScDPNumGroupDimension();
@@ -152,18 +115,14 @@ public:
     ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
-    bool        HasNonInteger() const           { return bHasNonInteger; }
-    sal_Unicode GetDecSeparator() const         { return cDecSeparator; }
 
-    const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
+    const std::vector<SCROW>& GetNumEntries(SCCOL nSourceDim, const ScDPCache* pCache) const;
 
-    const std::vector<SCROW>& GetNumEntries(
-        SCCOL nSourceDim, const ScDPCache* pCache,
-        const std::vector< SCROW >& rOriginal) const;
-
-    void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
+    void SetDateDimension();
 
     void        DisposeData();
+
+    bool IsDateDimension() const;
 };
 
 //
@@ -181,12 +140,11 @@ class ScDPGroupTableData : public ScDPTableData
     ScDocument*             pDoc;
     StringHashSet           aGroupNames;
 
-    void                         FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
+    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
     virtual long                GetSourceDim( long nDim );
 
     bool        IsNumGroupDimension( long nDimension ) const;
-    void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
-                                    bool& rNonInteger, sal_Unicode& rDecimal );
+    void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
 
     void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria);
 
@@ -195,9 +153,11 @@ public:
                 ScDPGroupTableData( const ::boost::shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument );
     virtual     ~ScDPGroupTableData();
 
+    boost::shared_ptr<ScDPTableData> GetSourceTableData();
+
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );
-    long        GetDimensionIndex( const String& rName );
+    long        GetDimensionIndex( const rtl::OUString& rName );
 
     ScDocument* GetDocument()   { return pDoc; }
 
@@ -207,7 +167,7 @@ public:
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
-    virtual String                  getDimensionName(long nColumn);
+    virtual rtl::OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual sal_uLong                  GetNumberFormat(long nDim);
@@ -231,6 +191,10 @@ public:
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual sal_Bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
+
+#if DEBUG_PIVOT_TABLE
+    virtual void Dump() const;
+#endif
 };
 
 

@@ -125,11 +125,10 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     return uno::makeAny( xCol );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaTemplate::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTemplate") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTemplate"));
 }
 
 uno::Sequence< rtl::OUString >

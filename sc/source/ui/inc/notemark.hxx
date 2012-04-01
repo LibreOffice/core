@@ -58,7 +58,7 @@ private:
     SdrObject*      pObject;
     sal_Bool            bVisible;
 
-    DECL_LINK( TimeHdl, Timer* );
+    DECL_LINK( TimeHdl, void* );
 
 public:
                 ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,

@@ -156,6 +156,7 @@ namespace comphelper
     // no, we don't use templates here. This would lead to a lot of implicit uses of the conversion methods,
     // which would be difficult to trace ...
 
+    COMPHELPER_DLLPUBLIC sal_Int64      getINT64(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC double         getDouble(const staruno::Any& _rAny);

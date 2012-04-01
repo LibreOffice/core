@@ -36,7 +36,6 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include "dbastrings.hrc"
 #include <cppuhelper/typeprovider.hxx>

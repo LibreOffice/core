@@ -134,8 +134,8 @@ public:
 
                         // moved by the application
 
-    DECL_LINK( IdleHandler,     Timer* );   // Timer instead of idle
-    DECL_LINK( SpellTimerHdl,   Timer* );
+    DECL_LINK( IdleHandler, void* );   // Timer instead of idle
+    DECL_LINK( SpellTimerHdl, void* );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
     void                Execute( SfxRequest& rReq );

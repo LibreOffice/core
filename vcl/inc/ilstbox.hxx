@@ -168,7 +168,6 @@ public:
     sal_uInt16          GetSelectEntryCount() const;
     XubString       GetSelectEntry( sal_uInt16 nIndex ) const;
     sal_uInt16          GetSelectEntryPos( sal_uInt16 nIndex ) const;
-    sal_Bool            IsEntrySelected( const XubString& rStr ) const;
     sal_Bool            IsEntryPosSelected( sal_uInt16 nIndex ) const;
 
     void            SetLastSelected( sal_uInt16 nPos )  { mnLastSelected = nPos; }

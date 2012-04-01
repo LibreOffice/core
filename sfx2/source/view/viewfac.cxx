@@ -73,10 +73,5 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
     DBG_CTOR(SfxViewFactory, 0);
 }
 
-SfxViewFactory::~SfxViewFactory()
-{
-    DBG_DTOR(SfxViewFactory, 0);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -84,7 +84,7 @@ public:
 
     virtual sal_uInt16 GetValueCount() const;
 
-    virtual UniString GetValueTextByVal(sal_Bool bTheValue) const;
+    virtual rtl::OUString GetValueTextByVal(sal_Bool bTheValue) const;
 
     sal_Bool GetValue() const { return m_nValue.bVisible; }
 

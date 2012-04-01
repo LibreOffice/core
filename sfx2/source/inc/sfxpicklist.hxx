@@ -62,6 +62,12 @@ class SfxPickList : public SfxListener
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
     void                    CreatePickListEntries();
     void                    RemovePickListEntries();
+    /**
+     * Adds the given document to the pick list (recent documents) if it satisfies
+       certain requirements, e.g. being writable. Check implementation for requirement
+       details.
+     */
+    void                    AddDocumentToPickList( SfxObjectShell* pDocShell );
 
     public:
         static SfxPickList& Get();

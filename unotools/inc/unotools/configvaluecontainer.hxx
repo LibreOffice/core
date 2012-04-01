@@ -73,10 +73,6 @@ namespace utl
                     m_pImpl;
 
     protected:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                    getServiceFactory( ) const;
-
-    protected:
         //-----------------------------------------------------------------
         // construction/destruction
 

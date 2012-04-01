@@ -63,8 +63,8 @@ private:
     void setPosition();
     void storePosition();
 
-    DECL_LINK( implActivatePagekHdl, Control* );
-    DECL_LINK( implDeactivatePagekHdl, Control* );
+    DECL_LINK(implActivatePagekHdl, void *);
+    DECL_LINK(implDeactivatePagekHdl, void *);
 
 private:
     CustomAnimationPane* mpPane;

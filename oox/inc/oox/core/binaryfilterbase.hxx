@@ -37,7 +37,7 @@ namespace core {
 
 // ============================================================================
 
-class BinaryFilterBase : public FilterBase
+class OOX_DLLPUBLIC BinaryFilterBase : public FilterBase
 {
 public:
     explicit            BinaryFilterBase(

@@ -39,6 +39,7 @@
 class ScDPCacheTable;
 class ScDocument;
 class ScDPCache;
+class ScDPDimensionSaveData;
 
 struct ScImportSourceDesc
 {
@@ -58,7 +59,7 @@ struct ScImportSourceDesc
                 mpDoc == rOther.mpDoc; }
 
     sal_Int32 GetCommandType() const;
-    const ScDPCache* CreateCache() const;
+    const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
 };
 
 /**
@@ -74,7 +75,7 @@ public:
     virtual ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
+    virtual rtl::OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual void                    DisposeData();

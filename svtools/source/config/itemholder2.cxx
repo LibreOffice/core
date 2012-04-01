@@ -69,9 +69,9 @@ ItemHolder2::ItemHolder2()
         if (xCfg.is())
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
-    catch(const css::uno::RuntimeException& rREx)
+    catch(const css::uno::RuntimeException&)
     {
-        throw rREx;
+        throw;
     }
 #ifdef DBG_UTIL
     catch(const css::uno::Exception& rEx)

@@ -202,7 +202,7 @@ public:
     static sal_uInt16   GetPos(sal_uInt16 nTypeId);
 
     // subtypes to a type
-    sal_Bool            GetSubTypes(sal_uInt16 nId, std::vector<String>& rToFill);
+    sal_Bool            GetSubTypes(sal_uInt16 nId, std::vector<rtl::OUString>& rToFill);
 
     // format to a type
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode = sal_False) const;

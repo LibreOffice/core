@@ -76,9 +76,9 @@ class LoginDialog : public ModalDialog
     void            HideControls_Impl( sal_uInt16 nFlags );
     void            EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled );
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( PathHdl_Impl, PushButton * );
-    DECL_LINK( UseSysCredsHdl_Impl, CheckBox * );
+    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK(PathHdl_Impl, void *);
+    DECL_LINK(UseSysCredsHdl_Impl, void *);
 
 public:
     LoginDialog( Window* pParent, sal_uInt16 nFlags,

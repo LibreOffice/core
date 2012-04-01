@@ -47,7 +47,7 @@
 #include <node.hxx>
 #include <swtable.hxx>
 #include <frmtool.hxx>
-#include <doc.hxx>          // fuer GetAttrPool
+#include <doc.hxx>          // for GetAttrPool
 #include <poolfmt.hxx>
 #include <switerator.hxx>
 
@@ -117,8 +117,8 @@ SwPageDesc::~SwPageDesc()
 |*
 |*  SwPageDesc::Mirror()
 |*
-|*  Beschreibung        Gespiegelt werden nur die Raender.
-|*      Attribute wie Umrandung und dergleichen werden 1:1 kopiert.
+|*  Description         Only the margin is mirrored.
+|*      Attributes like borders and so on are copied 1:1.
 |*
 |*************************************************************************/
 
@@ -126,8 +126,7 @@ SwPageDesc::~SwPageDesc()
 
 void SwPageDesc::Mirror()
 {
-    //Das Spiegeln findet nur beim RandAttribut statt, alle anderen Werte
-    //werden schlicht uebertragen.
+    //Only the margins are mirrored, all other values are just copied.
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SvxLRSpaceItem &rLR = aMaster.GetLRSpace();
     aLR.SetLeft(  rLR.GetRight() );
@@ -160,12 +159,12 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 |*
 |*                SwPageDesc::GetInfo()
 |*
-|*    Beschreibung      erfragt Informationen
+|*    Description       retrieves information
 |*
 *************************************************************************/
 
 
-    // erfrage vom Modify Informationen
+    // gets information from Modify
 sal_Bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( !aMaster.GetInfo( rInfo ) )
@@ -177,7 +176,7 @@ sal_Bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 |*
 |*                SwPageDesc::SetRegisterFmtColl()
 |*
-|*    Beschreibung      setzt die Vorlage fuer die Registerhaltigkeit
+|*    Description       sets the style for the grid alignment
 |*
 *************************************************************************/
 
@@ -199,7 +198,7 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 |*
 |*                SwPageDesc::GetRegisterFmtColl()
 |*
-|*    Beschreibung      holt die Vorlage fuer die Registerhaltigkeit
+|*    Description       retrieves the style for the grid alignment
 |*
 *************************************************************************/
 
@@ -214,7 +213,7 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 |*
 |*                SwPageDesc::RegisterChange()
 |*
-|*    Beschreibung      benachrichtigt alle betroffenen PageFrames
+|*    Description       notifies all affected page frames
 |*
 *************************************************************************/
 
@@ -259,8 +258,7 @@ void SwPageDesc::RegisterChange()
 |*
 |*                SwPageDesc::Modify()
 |*
-|*    Beschreibung      reagiert insbesondere auf Aenderungen
-|*                      der Vorlage fuer die Registerhaltigkeit
+|*    special handling if the style of the grid alignment changes
 |*
 *************************************************************************/
 
@@ -311,7 +309,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
                                               sal_Bool bCheckForThisPgDc ) const
 {
-    // welches PageDescFormat ist fuer diesen Node gueltig?
+    // which PageDescFormat is valid for this node?
     const SwFrmFmt* pRet;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
 
@@ -321,7 +319,7 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
                                 ((SwPageFrm*)pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
         OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
-        // an welchem Format haengt diese Seite?
+        // this page is assigned to which format?
         if( !pChkFrm->KnowsFormat(*pRet) )
         {
             pRet = &pPd->GetLeft();
@@ -343,7 +341,7 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             pChkFrm->IsPageFrm() &&
             ( !pChkFrm->GetNext() || GetFollow() ==
                         ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
-            // die Seite gefunden, auf die der Follow verweist
+            // the page on which the follow points was found
             bRet = sal_True;
     }
     return bRet;

@@ -141,20 +141,6 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    /** Test two vectors which need not to be normalized for parallelism
-
-        @param rVecA
-        The first 2D Vector
-
-        @param rVecB
-        The second 2D Vector
-
-        @return
-        bool if the two values are parallel. Also true if
-        one of the vectors is empty.
-    */
-    BASEGFX_DLLPUBLIC bool areParallel( const B2IVector& rVecA, const B2IVector& rVecB );
-
     /** Transform vector by given transformation matrix.
 
         Since this is a vector, translational components of the

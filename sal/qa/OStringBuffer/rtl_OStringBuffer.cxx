@@ -190,7 +190,7 @@ namespace rtl_OStringBuffer
             arrOUS[2] = new OString( kTestStr25 );
             arrOUS[3] = new OString( kTestStr27 );
             arrOUS[4] = new OString( kTestStr29 );
-            arrOUS[5] = new OString( "\0" );
+            arrOUS[5] = new OString( "\0", 1 );
 
         }
 
@@ -395,7 +395,7 @@ namespace rtl_OStringBuffer
             arrOUS[1] = new OString( "1" );
             arrOUS[2] = new OString( );
             arrOUS[3] = new OString( "" );
-            arrOUS[4] = new OString( "\0" );
+            arrOUS[4] = new OString( "\0", 1 );
             arrOUS[5] = new OString( kTestStr2 );
 
         }
@@ -458,11 +458,11 @@ namespace rtl_OStringBuffer
         void getLength_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            sal_Int32              expVal = 0;
+            sal_Int32              expVal = 1;
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "length of empty string (string arg = '\\0')",
+                "length of string with \\0 embedded",
                 aStrBuf.getLength() == expVal
             );
         }
@@ -528,7 +528,7 @@ namespace rtl_OStringBuffer
             arrOUS[1] = new OString( "1" );
             arrOUS[2] = new OString( );
             arrOUS[3] = new OString( "" );
-            arrOUS[4] = new OString( "\0" );
+            arrOUS[4] = new OString( "\0", 1 );
             arrOUS[5] = new OString( kTestStr2 );
 
         }
@@ -591,11 +591,11 @@ namespace rtl_OStringBuffer
         void getCapacity_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            sal_Int32              expVal = 0+16;
+            sal_Int32              expVal = 1+16;
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "capacity of empty string (string arg = '\\0')",
+                "capacity of string with \\0 embedded",
                 aStrBuf.getCapacity() == expVal
             );
         }
@@ -992,7 +992,7 @@ namespace rtl_OStringBuffer
             arrOUS[1] = new OString( "1" );
             arrOUS[2] = new OString( );
             arrOUS[3] = new OString( "" );
-            arrOUS[4] = new OString( "\0" );
+            arrOUS[4] = new OString( "\0", 1 );
             arrOUS[5] = new OString( kTestStr2 );
 
         }
@@ -1308,7 +1308,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             sal_Int32              expVal1 = 5;
             ::rtl::OString         expVal2;
-            sal_Int32              expVal3 = 16;
+            sal_Int32              expVal3 = 17;
             sal_Int32              input   = 5;
 
             aStrBuf.setLength( input );
@@ -1328,7 +1328,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             sal_Int32              expVal1 = 0;
             ::rtl::OString         expVal2;
-            sal_Int32              expVal3 = 16;
+            sal_Int32              expVal3 = 17;
             sal_Int32              input   = 0;
 
             aStrBuf.setLength( input );
@@ -1573,7 +1573,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -2004,7 +2004,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -2391,7 +2391,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -2777,7 +2777,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -3012,7 +3012,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -3245,7 +3245,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -5231,7 +5231,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -6242,7 +6242,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -8295,7 +8295,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
             intVal = 11;
 
@@ -8420,7 +8420,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -8994,7 +8994,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -10980,7 +10980,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -11991,7 +11991,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -14044,7 +14044,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
             intVal = 11;
 
@@ -14169,7 +14169,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -14752,7 +14752,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -15488,7 +15488,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -16239,7 +16239,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }
@@ -16301,7 +16301,7 @@ namespace rtl_OStringBuffer
             arrOUS[0] = new OString( kTestStr7 );
             arrOUS[1] = new OString(  );
             arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "\0"  );
+            arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
 
         }

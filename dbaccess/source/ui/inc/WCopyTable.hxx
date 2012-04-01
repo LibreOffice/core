@@ -56,6 +56,9 @@ namespace dbaui
     {
     public:
         virtual bool operator()(const ::rtl::OUString& _sColumnName) const = 0;
+
+    protected:
+        ~TColumnFindFunctor() {}
     };
 
     class TExportColumnFindFunctor : public TColumnFindFunctor
@@ -66,6 +69,9 @@ namespace dbaui
         {
             m_pColumns = _pColumns;
         }
+
+        virtual ~TExportColumnFindFunctor() {}
+
         inline bool operator()(const ::rtl::OUString& _sColumnName) const
         {
             return m_pColumns->find(_sColumnName) != m_pColumns->end();
@@ -83,6 +89,9 @@ namespace dbaui
             ,m_pVector(_pVector)
         {
         }
+
+        virtual ~TMultiListBoxEntryFindFunctor() {}
+
         inline bool operator()(const ::rtl::OUString& _sColumnName) const
         {
             return ::std::find_if(m_pVector->begin(),m_pVector->end(),
@@ -284,10 +293,10 @@ namespace dbaui
         sal_Bool                        m_bUseHeaderLine;
 
     private:
-        DECL_LINK( ImplPrevHdl  , PushButton* );
-        DECL_LINK( ImplNextHdl  , PushButton* );
-        DECL_LINK( ImplOKHdl    , OKButton* );
-        DECL_LINK( ImplActivateHdl, WizardDialog* );
+        DECL_LINK( ImplPrevHdl  , void* );
+        DECL_LINK( ImplNextHdl  , void* );
+        DECL_LINK( ImplOKHdl    , void* );
+        DECL_LINK( ImplActivateHdl, void* );
         sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,
                        ODatabaseExport::TColumns& _rColumns,

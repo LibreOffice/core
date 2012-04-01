@@ -29,9 +29,13 @@
 #include "oox/vml/vmldrawing.hxx"
 
 #include <algorithm>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <rtl/oustringostreaminserter.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/ole/axcontrol.hxx"
@@ -44,8 +48,10 @@ namespace vml {
 // ============================================================================
 
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
@@ -217,13 +223,25 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     {
         Reference< XMultiServiceFactory > xModelFactory( mrFilter.getModelFactory(), UNO_SET_THROW );
         xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );
-        // insert shape into passed shape collection (maybe drawpage or group shape)
-        rxShapes->add( xShape );
-        xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+        if ( !rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+        {
+            // insert shape into passed shape collection (maybe drawpage or group shape)
+            rxShapes->add( xShape );
+            xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+        }
+        else
+        {
+            Reference< XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrient" ), makeAny( HoriOrientation::NONE ) );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrient" ), makeAny( VertOrientation::NONE ) );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), makeAny( rShapeRect.X ) );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), makeAny( rShapeRect.Y ) );
+        }
         xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
     }
-    catch( Exception& )
+    catch( Exception& e )
     {
+        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e.Message );
     }
     OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instanciate shape object" );
     return xShape;

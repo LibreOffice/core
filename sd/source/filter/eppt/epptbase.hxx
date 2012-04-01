@@ -190,7 +190,7 @@ public :
 
     ~FontCollection();
 
-    short GetScriptDirection( const String& rText ) const;
+    short GetScriptDirection( const rtl::OUString& rText ) const;
 
     sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
 

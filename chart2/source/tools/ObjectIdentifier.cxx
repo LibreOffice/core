@@ -875,9 +875,6 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
         case OBJECTTYPE_DATA_LABEL:
                 aRet=C2U("DataLabel");
                 break;
-        case OBJECTTYPE_DATA_ERRORS:
-                aRet=C2U("Errors");
-                break;
         case OBJECTTYPE_DATA_ERRORS_X:
                 aRet=C2U("ErrorsX");
                 break;
@@ -963,8 +960,6 @@ ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
         eRet = OBJECTTYPE_DATA_ERRORS_Y;
     else if( rCID.match(C2U("ErrorsZ"),nLastSign) )
         eRet = OBJECTTYPE_DATA_ERRORS_Z;
-    else if( rCID.match(C2U("Errors"),nLastSign) )
-        eRet = OBJECTTYPE_DATA_ERRORS;
     else if( rCID.match(C2U("Curve"),nLastSign) )
         eRet = OBJECTTYPE_DATA_CURVE;
     else if( rCID.match(C2U("Equation"),nLastSign) )
@@ -1233,7 +1228,9 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     }
                     break;
                 }
-            case OBJECTTYPE_DATA_ERRORS:
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
                 {
                     Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
                         rObjectCID, xChartModel ) );
@@ -1243,18 +1240,21 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         Reference< beans::XPropertySet > xErrorBarProp;
                         if( xSeriesProp.is() )
                         {
-                            xSeriesProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp;
+                            OUString errorBar;
+
+                            if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
+                                errorBar = C2U("ErrorBarX");
+                            else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
+                                errorBar = C2U("ErrorBarY");
+                            else
+                                errorBar = C2U("ErrorBarZ");
+
+                            xSeriesProp->getPropertyValue( errorBar ) >>= xErrorBarProp;
                             xObjectProperties = Reference< beans::XPropertySet >( xErrorBarProp, uno::UNO_QUERY );
                         }
                     }
                     break;
                 }
-            case OBJECTTYPE_DATA_ERRORS_X:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Y:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Z:
-                    break;
             case OBJECTTYPE_DATA_AVERAGE_LINE:
             case OBJECTTYPE_DATA_CURVE:
             case OBJECTTYPE_DATA_CURVE_EQUATION:

@@ -239,7 +239,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            int wmEvent = HIWORD(wParam);
             // Menüauswahlen analysieren:
             switch( wmId )
             {

@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 BorderHandler::BorderHandler( bool bOOXML ) :
 LoggedProperties(dmapper_logger, "BorderHandler"),
 m_nCurrentBorderPosition( BORDER_TOP ),
-m_nLineWidth(0),
+m_nLineWidth(26), // Word default
 m_nLineType(0),
 m_nLineColor(0),
 m_nLineDistance(0),

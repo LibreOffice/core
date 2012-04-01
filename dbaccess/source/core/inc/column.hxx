@@ -150,6 +150,9 @@ namespace dbaccess
         /** notifies that a column with a given name has been dropped
         */
         virtual void columnDropped( const ::rtl::OUString& _sName ) = 0;
+
+    protected:
+        ~IColumnFactory() {}
     };
 
     //============================================================

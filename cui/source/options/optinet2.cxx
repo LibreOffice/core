@@ -284,15 +284,15 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         }
     }
 
-    catch(container::NoSuchElementException &) {
+    catch (const container::NoSuchElementException&) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException &) {
+    catch (const com::sun::star::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException &) {
+    catch (const RuntimeException &) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 
@@ -342,16 +342,16 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             aNoProxyForED.SetText( aStringValue );
         }
     }
-    catch(beans::UnknownPropertyException &)
+    catch (const beans::UnknownPropertyException &)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException &) {
+    catch (const com::sun::star::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException &)
+    catch (const RuntimeException &)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -376,16 +376,16 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xChangesBatch->commitChanges();
     }
 
-    catch(beans::UnknownPropertyException &)
+    catch (const beans::UnknownPropertyException &)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException &) {
+    catch (const com::sun::star::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException &)
+    catch (const RuntimeException &)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -481,23 +481,23 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
         xChangesBatch->commitChanges();
     }
 
-    catch(com::sun::star::lang::IllegalArgumentException &) {
+    catch (const com::sun::star::lang::IllegalArgumentException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
-    catch(beans::UnknownPropertyException &) {
+    catch (const beans::UnknownPropertyException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
 
-    catch(beans::PropertyVetoException &) {
+    catch (const beans::PropertyVetoException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException &) {
+    catch (const com::sun::star::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException &) {
+    catch (const RuntimeException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
@@ -691,7 +691,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
     delete mpSecOptDlg;
 }
 
-IMPL_LINK( SvxSecurityTabPage, SecurityOptionsHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
 {
     if ( !mpSecOptDlg )
         mpSecOptDlg = new svx::SecurityOptionsDialog( this, mpSecOptions );
@@ -699,7 +699,7 @@ IMPL_LINK( SvxSecurityTabPage, SecurityOptionsHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
 {
     try
     {
@@ -748,7 +748,7 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             }
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
     }
@@ -756,7 +756,7 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
 {
     try
     {
@@ -768,13 +768,13 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
         if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
             xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {}
 
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
 {
     try
     {
@@ -812,7 +812,7 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
             }
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
     }
@@ -820,7 +820,7 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 {
     try
     {
@@ -835,12 +835,12 @@ IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
             aDlg.Execute();
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {}
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
 {
     try
     {
@@ -852,6 +852,7 @@ IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
     catch (const Exception& e)
     {
         OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        (void)e;
     }
     return 0;
 }
@@ -960,7 +961,7 @@ void SvxSecurityTabPage::InitControls()
             }
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         maSavePasswordsCB.Enable( sal_False );
     }

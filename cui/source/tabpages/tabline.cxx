@@ -68,8 +68,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nLineEndListState( CT_NONE ),
     nDashListState( CT_NONE ),
     mnColorListState( CT_NONE ),
-    nPageType( 0 ), // wird hier in erster Linie benutzt, um mit FillItemSet
-                   // die richtigen Attribute zu erhalten ( noch Fragen? )
+    nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
     nDlgType( 0 ),
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
@@ -145,7 +144,7 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList = pDrawModel->GetLineEndList();
     }
 
-    // Speichern der Tabellen, wenn sie geaendert wurden.
+    // Save the tables when they have been changed
 
     const String aPath( SvtPathOptions().GetPalettePath() );
 
@@ -154,7 +153,7 @@ void SvxLineTabDialog::SavePalettes()
         pDashList->SetPath( aPath );
         pDashList->Save();
 
-        // ToolBoxControls werden benachrichtigt:
+        // Notify ToolBoxControls
         if ( pShell )
             pShell->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
     }
@@ -164,7 +163,7 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList->SetPath( aPath );
         pLineEndList->Save();
 
-        // ToolBoxControls werden benachrichtigt:
+        // Notify ToolBoxControls
         if ( pShell )
             pShell->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
@@ -174,7 +173,7 @@ void SvxLineTabDialog::SavePalettes()
         pColorList->SetPath( aPath );
         pColorList->Save();
 
-        // ToolBoxControls werden benachrichtigt:
+        // Notify ToolBoxControls
         if ( pShell )
             pShell->PutItem( SvxColorListItem( pColorList, SID_COLOR_TABLE ) );
     }
@@ -186,22 +185,21 @@ short SvxLineTabDialog::Ok()
 {
     SavePalettes();
 
-    // Es wird RET_OK zurueckgeliefert, wenn wenigstens eine
-    // TabPage in FillItemSet() sal_True zurueckliefert. Dieses
-    // geschieht z.Z. standardmaessig.
+    // We return RET_OK if at least one TabPage in FillItemSet() returns sal_True.
+    // We do this by default at the moment.
     return( SfxTabDialog::Ok() );
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxLineTabDialog, CancelHdlImpl)
 
 // -----------------------------------------------------------------------
 
@@ -222,7 +220,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
             ( (SvxLineTabPage&) rPage ).Construct();
             ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
-            // ActivatePage() wird das erste mal nicht gerufen
+            // ActivatePage() is not called the first time
             ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
         break;
 

@@ -27,8 +27,10 @@
 
 package installer::helppack;
 
+use strict;
+use warnings;
+
 use installer::converter;
-use installer::existence;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -137,7 +139,7 @@ sub create_tar_gz_file
 
     $packagename =~ s/\.rpm\s*$//;
     my $targzname = $packagename . ".tar.gz";
-    $systemcall = "cd $installdir; tar -cf - $packagestring | gzip > $targzname";
+    my $systemcall = "cd $installdir; tar -cf - $packagestring | gzip > $targzname";
     installer::logger::print_message( "... $systemcall ...\n" );
 
     my $returnvalue = system($systemcall);

@@ -34,12 +34,12 @@ using rtl::OString;
 using rtl::OUString;
 
 RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
-        RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
-        uno::Reference<io::XInputStream> rStream)
+        RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
+        uno::Reference<io::XInputStream> xStream)
     : m_nValue(nValue),
     m_sValue(sValue),
-    m_rShape(rShape),
-    m_rStream(rStream),
+    m_xShape(xShape),
+    m_xStream(xStream),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
@@ -49,8 +49,8 @@ RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),
-    m_rShape(),
-    m_rStream(),
+    m_xShape(),
+    m_xStream(),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
@@ -60,8 +60,8 @@ RTFValue::RTFValue(int nValue)
 RTFValue::RTFValue(OUString sValue, bool bForce)
     : m_nValue(),
     m_sValue(sValue),
-    m_rShape(),
-    m_rStream(),
+    m_xShape(),
+    m_xStream(),
     m_bForceString(bForce)
 {
     m_pAttributes.reset(new RTFSprms());
@@ -71,8 +71,8 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
 RTFValue::RTFValue(RTFSprms rAttributes)
     : m_nValue(),
     m_sValue(),
-    m_rShape(),
-    m_rStream(),
+    m_xShape(),
+    m_xStream(),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
@@ -82,8 +82,8 @@ RTFValue::RTFValue(RTFSprms rAttributes)
 RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     : m_nValue(),
     m_sValue(),
-    m_rShape(),
-    m_rStream(),
+    m_xShape(),
+    m_xStream(),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
@@ -93,8 +93,8 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
 RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     : m_nValue(),
     m_sValue(),
-    m_rShape(rShape),
-    m_rStream(),
+    m_xShape(rShape),
+    m_xStream(),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
@@ -104,8 +104,8 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
 RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
     : m_nValue(),
     m_sValue(),
-    m_rShape(),
-    m_rStream(rStream),
+    m_xShape(),
+    m_xStream(rStream),
     m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
@@ -139,10 +139,10 @@ uno::Any RTFValue::getAny() const
     uno::Any ret;
     if (!m_sValue.isEmpty() || m_bForceString)
         ret <<= m_sValue;
-    else if (m_rShape.is())
-        ret <<= m_rShape;
-    else if (m_rStream.is())
-        ret <<= m_rStream;
+    else if (m_xShape.is())
+        ret <<= m_xShape;
+    else if (m_xStream.is())
+        ret <<= m_xStream;
     else
         ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
@@ -176,7 +176,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_rShape, m_rStream);
+    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream);
 }
 
 RTFSprms& RTFValue::getAttributes()

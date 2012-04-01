@@ -191,7 +191,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
          ::rtl::OUStringToOString
          (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
-    if (aStr.size() == 0)
+    if (aStr.empty())
         debug_logger->element( "unknown-qname" );
 #endif
 
@@ -217,7 +217,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     debug_logger->attribute("name", aStr);
     debug_logger->attribute("value", pVal->toString());
 
-    if (aStr.size() == 0)
+    if (aStr.empty())
         debug_logger->element("unknown-qname");
 
     debug_logger->endElement();
@@ -243,7 +243,7 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
      ::rtl::OUStringToOString
      (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
-    if (aStr.size() == 0)
+    if (aStr.empty())
         debug_logger->element("unknown-qname");
 
     debug_logger->endElement();

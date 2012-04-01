@@ -340,7 +340,7 @@ void SdXMLEventContext::EndElement()
                     nPropertyCount += 1;
                     break;
                 case ClickAction_MACRO:
-                    if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
+                    if ( msLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starbasic")) )
                         nPropertyCount += 1;
                     break;
 
@@ -360,7 +360,7 @@ void SdXMLEventContext::EndElement()
 
             if( ClickAction_MACRO == meClickAction )
             {
-                if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
+                if ( msLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starbasic")) )
                 {
                     OUString sLibrary;
                     const OUString& rApp = GetXMLToken( XML_APPLICATION );

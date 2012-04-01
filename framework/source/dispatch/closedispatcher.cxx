@@ -266,7 +266,14 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 - decide then, if we must close this frame only, establish the backing mode
                   or shutdown the whole application.
 */
-IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
+IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
+{
+    SolarMutexReleaser aReleaser;
+    doClose();
+    return 0;
+}
+
+void CloseDispatcher::doClose()
 {
     try
     {
@@ -296,7 +303,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     // frame already dead ?!
     // Nothing to do !
     if (! xCloseFrame.is())
-        return 0;
+        return;
 
     sal_Bool bCloseFrame           = sal_False;
     sal_Bool bEstablishBackingMode = sal_False;
@@ -452,7 +459,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     {
     }
 
-    return 0;
+    return;
 }
 
 //-----------------------------------------------
@@ -605,7 +612,7 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
 css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                               const ::rtl::OUString&                           sTarget)
 {
-    if (sTarget.equalsIgnoreAsciiCaseAscii("_self"))
+    if (sTarget.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")))
         return xFrame;
 
     OSL_ENSURE(sTarget.isEmpty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");

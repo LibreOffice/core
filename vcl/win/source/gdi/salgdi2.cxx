@@ -624,7 +624,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     BLENDFUNCTION aFunc = {
         AC_SRC_OVER,
         0,
-        255 - 255L*nTransparency/100,
+        sal::static_int_cast<sal_uInt8>(255 - 255L*nTransparency/100),
         0
     };
 
@@ -705,7 +705,6 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
     else
     {
-        DWORD err = GetLastError();
         // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
         DeleteBitmap( hBmpBitmap );
     }

@@ -106,7 +106,7 @@ extern "C" void SAL_CALL freeProxyCallback(
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
-void joinThread(osl::Thread * thread) {
+void joinThread(salhelper::Thread * thread) {
     assert(thread != 0);
     if (thread->getIdentifier() != osl::Thread::getCurrentIdentifier()) {
         thread->join();
@@ -239,9 +239,15 @@ void Bridge::start() {
     threadPool_ = uno_threadpool_create();
     assert(threadPool_ != 0);
     writer_.set(new Writer(this));
-    writer_->create();
+    writer_->launch();
     reader_.set(new Reader(this));
-    reader_->create();
+    reader_->launch();
+        // it is important to call reader_->launch() last here; both
+        // Writer::execute and Reader::execute can call Bridge::terminate, but
+        // Writer::execute is initially blocked in unblocked_.wait() until
+        // Reader::execute has called bridge_->sendRequestChangeRequest(), so
+        // effectively only reader_->launch() can lead to an early call to
+        // Bridge::terminate
 }
 
 void Bridge::terminate() {

@@ -51,14 +51,21 @@ PATCH_FILES=
 CONFIGURE_DIR=
 
 .IF "$(OS)"=="MACOSX"
-CONFIGURE_ACTION=./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+.IF "$(SYSTEM_LIBXML)" == "YES"
+my_libxml2_cflags=$(LIBXML_CFLAGS)
+my_libxml2_libs=$(LIBXML_LIBS)
+.ELSE
+my_libxml2_cflags=-I$(SOLARINCDIR)/external/libxml -DCROCO_HAVE_LIBXML2=1
+my_libxml2_libs=-L$(SOLARLIBDIR) -lxml2
+.ENDIF
+CONFIGURE_ACTION=./configure --prefix=/@.__________________________________________________$(EXTRPATH) \
                  CPPFLAGS="$(EXTRA_CDEFS)" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS) -Wl,-dylib_file,@loader_path/libgmodule-2.0.0.dylib:$(SOLARLIBDIR)/libgmodule-2.0.0.dylib" \
                  GLIB2_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  GLIB2_LIBS="-lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
-                 LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
-                 LIBXML2_LIBS="$(LIBXML_LIBS)"
+                 LIBXML2_CFLAGS='$(my_libxml2_cflags)' \
+                 LIBXML2_LIBS='$(my_libxml2_libs)'
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
@@ -68,7 +75,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-EXTRPATH=LOADER
 OUT2LIB+=src/.libs/libcroco-0.6.3.0.1.dylib
 
 OUT2INC+=src/cr-additional-sel.h

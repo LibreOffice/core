@@ -135,8 +135,8 @@ class SwAddPrinterTabPage : public SfxTabPage
     sal_Bool        bPreview;
 
     void        Init();
-                DECL_LINK( AutoClickHdl, CheckBox * );
-                DECL_LINK( SelectHdl, ListBox * );
+                DECL_LINK(AutoClickHdl, void *);
+                DECL_LINK(SelectHdl, void *);
 
 
                 SwAddPrinterTabPage( Window* pParent,
@@ -219,7 +219,7 @@ class SwStdFontTabPage : public SfxTabPage
     String sScriptAsian;
     String sScriptComplex;
 
-    DECL_LINK( StandardHdl, PushButton * );
+    DECL_LINK(StandardHdl, void *);
     DECL_LINK( ModifyHdl, ComboBox * );
     DECL_LINK( ModifyHeightHdl, FontSizeBox * );
     DECL_LINK( LoseFocusHdl, ComboBox * );
@@ -278,7 +278,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     SwWrtShell* pWrtShell;
     sal_Bool        bHTMLMode;
 
-    DECL_LINK(CheckBoxHdl, CheckBox *pCB);
+    DECL_LINK(CheckBoxHdl, void *);
 
 
                 SwTableOptionsTabPage( Window* pParent,
@@ -429,7 +429,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     ~SwRedlineOptionsTabPage();
 
     DECL_LINK( AttribHdl, ListBox *pLB );
-    DECL_LINK( ChangedMaskPrevHdl, ListBox *pLB = 0 );
+    DECL_LINK(ChangedMaskPrevHdl, void * = 0);
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
 
     void                InitFontStyle(SvxFontPrevWindow& rExampleWin);
@@ -476,7 +476,7 @@ private:
     sal_Bool        bAttrModified;
 
     void        Init();
-    DECL_LINK( AutoClickHdl, CheckBox * );
+    DECL_LINK(AutoClickHdl, void *);
 
 };
 #endif // DBG_UTIL
@@ -496,8 +496,8 @@ class SwCompareOptionsTabPage : public SfxTabPage
     SwCompareOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwCompareOptionsTabPage();
 
-    DECL_LINK( ComparisonHdl, RadioButton *pRB);
-    DECL_LINK( IgnoreHdl, CheckBox *pCB);
+    DECL_LINK(ComparisonHdl, void *);
+    DECL_LINK(IgnoreHdl, void *);
 
 public:
 

@@ -372,7 +372,7 @@ void ThreeD_SceneIllumination_TabPage::commitPendingChanges()
 {
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void *, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
 {
     if( m_bInCommitToModel )//don't read own changes
         return 0;
@@ -408,7 +408,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
@@ -460,7 +460,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl)
 {
     sal_uInt32 nLightNumber = m_aCtl_Preview.GetSvx3DLightControl().GetSelectedLight();
     if(nLightNumber<8)

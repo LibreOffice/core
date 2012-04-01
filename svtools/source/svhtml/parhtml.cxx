@@ -39,7 +39,6 @@
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
 #include <svl/inettype.hxx>
-#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -1967,7 +1966,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         return true;
 
     // <HTML> somewhere in the first 80 characters of the document
-    nStart = comphelper::string::indexOfL(sCmp, RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_html));
+    nStart = sCmp.indexOfL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_html));
     if( nStart != -1 &&
         nStart>0 && '<'==sCmp[nStart-1] &&
         nStart+4 < sCmp.getLength() && '>'==sCmp[nStart+4] )
@@ -2126,7 +2125,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
     else
     {
         // convert line endings for Description
-        aContent.ConvertLineEnd();
+        aContent = convertLineEnd(aContent, GetSystemLineEnd());
     }
 
 

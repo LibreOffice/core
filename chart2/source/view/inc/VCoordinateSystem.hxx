@@ -45,6 +45,7 @@
 #include<map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //.............................................................................
 namespace chart
@@ -165,7 +166,7 @@ protected: //member
 
     rtl::OUString m_aCooSysParticle;
 
-    typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates wether this is a main or secondary axis
+    typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
     //
     ::com::sun::star::uno::Reference<
@@ -201,7 +202,7 @@ private:
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
 
-    ::std::auto_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
+    boost::scoped_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
 //.............................................................................

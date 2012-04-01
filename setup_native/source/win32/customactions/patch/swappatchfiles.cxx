@@ -184,8 +184,6 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
     //Try to move the original file to a temp file
     fSuccess = MoveFileExA( sFileName1.c_str(), sTempFileName.c_str(), MOVEFILE_REPLACE_EXISTING);
 
-    std::_tstring   mystr;
-
     if ( fSuccess )
     {
         fSuccess = MoveFileExA( sFileName2.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING );
@@ -713,7 +711,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 
 extern "C" UINT __stdcall SetNewFeatureState( MSIHANDLE handle )
 {
-    std::_tstring mystr;
     std::_tstring sValueName;
 
     sValueName = TEXT("gm_o_Onlineupdate");

@@ -133,11 +133,11 @@ ScVbaOLEObject::setWidth( double _width ) throw (uno::RuntimeException)
 {
     m_xControl->setWidth( _width );
 }
-rtl::OUString&
+
+rtl::OUString
 ScVbaOLEObject::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObject") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObject"));
 }
 
 uno::Sequence< rtl::OUString >

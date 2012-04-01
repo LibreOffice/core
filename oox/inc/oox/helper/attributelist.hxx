@@ -34,6 +34,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 
@@ -42,7 +43,7 @@ namespace oox {
 /** Static helpers for conversion of strings to attribute values of various
     different data types.
  */
-class AttributeConversion
+class OOX_DLLPUBLIC AttributeConversion
 {
 public:
     /** Returns the XML token identifier from the passed string. */
@@ -66,12 +67,6 @@ public:
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
     static sal_Int32    decodeIntegerHex( const ::rtl::OUString& rValue );
-
-    /** Returns the 32-bit unsigned integer value from the passed string (hexadecimal). */
-    static sal_uInt32   decodeUnsignedHex( const ::rtl::OUString& rValue );
-
-    /** Returns the 64-bit signed integer value from the passed string (hexadecimal). */
-    static sal_Int64    decodeHyperHex( const ::rtl::OUString& rValue );
 };
 
 // ============================================================================
@@ -82,7 +77,7 @@ public:
     convenience functions that convert the string value of an attribute to
     various other data types.
  */
-class AttributeList
+class OOX_DLLPUBLIC AttributeList
 {
 public:
     explicit            AttributeList(
@@ -121,12 +116,6 @@ public:
 
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
     OptValue< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
-
-    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal). */
-    OptValue< sal_uInt32 > getUnsignedHex( sal_Int32 nAttrToken ) const;
-
-    /** Returns the 64-bit signed integer value of the specified attribute (hexadecimal). */
-    OptValue< sal_Int64 > getHyperHex( sal_Int32 nAttrToken ) const;
 
     /** Returns the boolean value of the specified attribute. */
     OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
@@ -167,14 +156,6 @@ public:
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal),
         or the passed default value if the attribute is missing or not convertible. */
     sal_Int32           getIntegerHex( sal_Int32 nAttrToken, sal_Int32 nDefault ) const;
-
-    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal),
-        or the passed default value if the attribute is missing or not convertible. */
-    sal_uInt32          getUnsignedHex( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const;
-
-    /** Returns the 64-bit signed integer value of the specified attribute (hexadecimal),
-        or the passed default value if the attribute is missing or not convertible. */
-    sal_Int64           getHyperHex( sal_Int32 nAttrToken, sal_Int64 nDefault ) const;
 
     /** Returns the boolean value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to bool. */

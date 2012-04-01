@@ -67,9 +67,9 @@ class OutlineView
 {
     friend class OutlineViewModelChangeGuard;
 public:
-    OutlineView (DrawDocShell* pDocSh,
+    OutlineView (DrawDocShell& rDocSh,
         ::Window* pWindow,
-        OutlineViewShell* pOutlineViewSh);
+        OutlineViewShell& rOutlineViewSh);
     ~OutlineView (void);
 
     /** This method is called by the view shell that owns the view to tell
@@ -92,13 +92,13 @@ public:
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin);
 
     OutlinerView*   GetViewByWindow (::Window* pWin) const;
-    SdrOutliner*    GetOutliner() { return(mpOutliner) ; }
+    SdrOutliner*    GetOutliner() { return(&mrOutliner) ; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
     SdPage*         GetActualPage();
     SdPage*         GetPageForParagraph( Paragraph* pPara );
-    Paragraph*      GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage );
+    Paragraph*      GetParagraphForPage( ::Outliner& rOutl, SdPage* pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
     void            SetActualPage( SdPage* pActual );
@@ -113,10 +113,10 @@ public:
     DECL_LINK( ParagraphInsertedHdl, Outliner * );
     DECL_LINK( ParagraphRemovingHdl, Outliner * );
     DECL_LINK( DepthChangedHdl, Outliner * );
-    DECL_LINK( StatusEventHdl, EditStatus * );
+    DECL_LINK( StatusEventHdl, void * );
     DECL_LINK( BeginMovingHdl, Outliner * );
     DECL_LINK( EndMovingHdl, Outliner * );
-    DECL_LINK( RemovingPagesHdl, OutlinerView * );
+    DECL_LINK(RemovingPagesHdl, void *);
     DECL_LINK( IndentingPagesHdl, OutlinerView * );
     DECL_LINK( BeginDropHdl, void * );
     DECL_LINK( EndDropHdl, void * );
@@ -187,8 +187,8 @@ private:
     /** updates all changes in the outliner model to the draw model */
     void UpdateDocument();
 
-    OutlineViewShell*   mpOutlineViewShell;
-    SdrOutliner*        mpOutliner;
+    OutlineViewShell&   mrOutlineViewShell;
+    SdrOutliner&        mrOutliner;
     OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
 
     std::vector<Paragraph*> maOldParaOrder;

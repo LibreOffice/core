@@ -260,7 +260,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
 
     // When the last active task was canceled then the timer can be
     // stopped.
-    if (maScheduledTasks.size() == 0)
+    if (maScheduledTasks.empty())
     {
         mbIsRunning = false;
         resume();
@@ -477,7 +477,7 @@ void PresenterClockTimer::RemoveListener (const SharedListener& rListener)
         rListener));
     if (iListener != maListeners.end())
         maListeners.erase(iListener);
-    if (maListeners.size() == 0)
+    if (maListeners.empty())
     {
         // We have no more clients and therefore are not interested in time changes.
         if (mnTimerTaskId != PresenterTimer::NotAValidTaskId)

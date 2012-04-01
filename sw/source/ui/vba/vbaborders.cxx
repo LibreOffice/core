@@ -149,11 +149,11 @@ private:
     }
     SwVbaBorder(); // no impl
 protected:
-    virtual rtl::OUString& getServiceImplName()
+    virtual rtl::OUString getServiceImplName()
     {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBorder") );
-    return sImplName;
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBorder"));
     }
+
     virtual css::uno::Sequence<rtl::OUString> getServiceNames()
     {
         static uno::Sequence< rtl::OUString > aServiceNames;
@@ -360,11 +360,10 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::Runtim
     // TODO:
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaBorders::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBorders") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBorders"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -33,7 +33,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 /** === end UNO includes === **/
-#include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
@@ -135,6 +135,9 @@ namespace svt
     {
     public:
         virtual sal_Bool    GetTranslation( const ::rtl::OUString& _rOriginalName, ::rtl::OUString& _rTranslatedName ) const = 0;
+
+    protected:
+        ~IContentTitleTranslation() {}
     };
 
     //====================================================================
@@ -142,8 +145,8 @@ namespace svt
     //====================================================================
     enum EnumerationResult
     {
-        SUCCESS,    /// the enumration was successfull
-        ERROR,      /// the enumration was unsuccessfull
+        SUCCESS,    /// the enumeration was successful
+        ERROR,      /// the enumeration was unsuccessful
         RUNNING     /// the enumeration is still running, and the maximum wait time has passed
     };
 
@@ -180,14 +183,15 @@ namespace svt
     {
     public:
         virtual void        enumerationDone( EnumerationResult _eResult ) = 0;
+
+    protected:
+        ~IEnumerationResultHandler() {}
     };
 
     //====================================================================
     //= FileViewContentEnumerator
     //====================================================================
-    class FileViewContentEnumerator
-            :public  ::rtl::IReference
-            ,private ::osl::Thread
+    class FileViewContentEnumerator: public salhelper::Thread
     {
     public:
         typedef ::std::vector< SortingData_Impl* >  ContentData;
@@ -261,13 +265,6 @@ namespace svt
         */
         void    cancel();
 
-        // IReference overridables
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
-
-        using Thread::operator new;
-        using Thread::operator delete;
-
     protected:
         ~FileViewContentEnumerator();
 
@@ -275,8 +272,7 @@ namespace svt
         EnumerationResult enumerateFolderContent();
 
         // Thread overridables
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
+        virtual void execute();
 
     private:
         sal_Bool implGetDocTitle( const ::rtl::OUString& _rTargetURL, ::rtl::OUString& _rRet ) const;

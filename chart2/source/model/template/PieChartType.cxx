@@ -34,7 +34,6 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
-#include "AxisHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 

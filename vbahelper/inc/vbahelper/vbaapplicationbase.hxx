@@ -58,6 +58,7 @@ public:
     virtual void SAL_CALL setInteractive( ::sal_Bool bInteractive ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( ::sal_Bool bVisible ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL OnKey( const ::rtl::OUString& Key, const ::com::sun::star::uno::Any& Procedure ) throw (::com::sun::star::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getVersion() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getVBE() throw (css::uno::RuntimeException);
@@ -69,7 +70,7 @@ public:
     virtual void SAL_CALL Quit() throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif

@@ -57,7 +57,7 @@ protected:
     void                ImplInitScrollBars();
     void                ImplResizeChild();
 
-    DECL_LINK(          ScrollBarHdl, ScrollBar* );
+    DECL_LINK(ScrollBarHdl, void *);
 
 public:
                     DialogListBox( ::Window* pParent, WinBits nWinStyle );

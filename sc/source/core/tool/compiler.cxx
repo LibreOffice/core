@@ -188,7 +188,7 @@ void ScCompiler::DeInit()
 bool ScCompiler::IsEnglishSymbol( const String& rName )
 {
     // function names are always case-insensitive
-    String aUpper( ScGlobal::pCharClass->uppercase( rName ) );
+    rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -197,15 +197,14 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
         return true;
     }
     // 2. old add in functions
-    sal_uInt16 nIndex;
-    if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
+    if (ScGlobal::GetFuncCollection()->findByName(aUpper))
     {
         return true;
     }
 
     // 3. new (uno) add in functions
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, false ));
-    if (aIntName.Len())
+    rtl::OUString aIntName = ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
+    if (!aIntName.isEmpty())
     {
         return true;
     }
@@ -2522,9 +2521,7 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
         if (!aIntName.Len())
         {
             // Old (deprecated) addins first for legacy.
-            sal_uInt16 nIndex;
-            bFound = ScGlobal::GetFuncCollection()->SearchFunc( cSymbol, nIndex);
-            if (bFound)
+            if (ScGlobal::GetFuncCollection()->findByName(cSymbol))
             {
                 ScRawToken aToken;
                 aToken.SetExternal( cSymbol );
@@ -2881,6 +2878,11 @@ bool ScCompiler::IsReference( const String& rName )
 
 bool ScCompiler::IsMacro( const String& rName )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rName;
+
+    return false;
+#else
     String aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
@@ -2916,6 +2918,7 @@ bool ScCompiler::IsMacro( const String& rName )
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
     return true;
+#endif
 }
 
 bool ScCompiler::IsNamedRange( const String& rUpperName )
@@ -3052,13 +3055,13 @@ bool ScCompiler::IsColRowName( const String& rName )
                         switch ( eType )
                         {
                             case CELLTYPE_STRING:
-                                ((ScStringCell*)pCell)->GetString( aStr );
+                                aStr = ((ScStringCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_FORMULA:
-                                ((ScFormulaCell*)pCell)->GetString( aStr );
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_EDIT:
-                                ((ScEditCell*)pCell)->GetString( aStr );
+                                aStr = ((ScEditCell*)pCell)->GetString();
                             break;
                             case CELLTYPE_NONE:
                             case CELLTYPE_VALUE:
@@ -3181,13 +3184,13 @@ bool ScCompiler::IsColRowName( const String& rName )
                     switch ( eType )
                     {
                         case CELLTYPE_STRING:
-                            ((ScStringCell*)pCell)->GetString( aStr );
+                            aStr = ((ScStringCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_FORMULA:
-                            ((ScFormulaCell*)pCell)->GetString( aStr );
+                            aStr = ((ScFormulaCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_EDIT:
-                            ((ScEditCell*)pCell)->GetString( aStr );
+                            aStr = ((ScEditCell*)pCell)->GetString();
                         break;
                         case CELLTYPE_NONE:
                         case CELLTYPE_VALUE:
@@ -3725,6 +3728,14 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
         if( bExternal )
             rFormulaNmsp = ppTokens[ 1 ]->GetString();
     }
+}
+
+void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp )
+{
+    String sFormula, aFormulaNmsp;
+    CreateStringFromXMLTokenArray(sFormula, aFormulaNmsp);
+    rFormula = sFormula;
+    rFormulaNmsp = aFormulaNmsp;
 }
 
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )

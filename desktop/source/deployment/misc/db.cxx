@@ -30,6 +30,7 @@
 #include <db.hxx>
 
 #include <rtl/alloc.h>
+#include <rtl/instance.hxx>
 #include <cstring>
 #include <errno.h>
 
@@ -49,16 +50,63 @@ namespace berkeleydbproxy {
 
 //----------------------------------------------------------------------------
 
-char *DbEnv::strerror(int error) {
+char *DbEnv::strerror(int error)
+{
     return (db_strerror(error));
+}
+
+namespace
+{
+    class theDbEnvMutex
+        : public rtl::Static<osl::Mutex, theDbEnvMutex> {};
+
+    class SharedDbEnv : private boost::noncopyable
+    {
+    public:
+        static DB_ENV* getInstance();
+        static void releaseInstance();
+    private:
+        SharedDbEnv();
+        ~SharedDbEnv();
+        static DB_ENV* pSharedEnv;
+        static int nSharedEnv;
+    };
+
+    DB_ENV* SharedDbEnv::pSharedEnv = NULL;
+    int SharedDbEnv::nSharedEnv = 0;
+
+    DB_ENV* SharedDbEnv::getInstance()
+    {
+        ::osl::MutexGuard aGuard(theDbEnvMutex::get());
+        if (pSharedEnv == NULL)
+        {
+            db_env_create(&pSharedEnv, 0);
+            // xxx todo: DB_THREAD currently not used
+            pSharedEnv->open(pSharedEnv, NULL, DB_CREATE | DB_INIT_MPOOL | DB_PRIVATE /*| DB_THREAD*/, 0);
+        }
+        ++nSharedEnv;
+        return pSharedEnv;
+    }
+
+    void SharedDbEnv::releaseInstance()
+    {
+        ::osl::MutexGuard aGuard(theDbEnvMutex::get());
+        --nSharedEnv;
+        if (0 == nSharedEnv)
+        {
+            pSharedEnv->close(pSharedEnv, 0);
+            pSharedEnv = NULL;
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
 
-Db::Db(DbEnv* pDbenv,u_int32_t flags)
-: m_pDBP(0)
+Db::Db(u_int32_t flags)
+    : m_pDBP(0)
 {
-    db_internal::check_error( db_create(&m_pDBP,pDbenv ? pDbenv->m_pDBENV:0,flags),"Db::Db" );
+    DB_ENV *pSharedDbEnv = SharedDbEnv::getInstance();
+    db_internal::check_error( db_create(&m_pDBP, pSharedDbEnv, flags),"Db::Db" );
 }
 
 
@@ -77,6 +125,7 @@ int Db::close(u_int32_t flags)
 {
     int error = m_pDBP->close(m_pDBP,flags);
     m_pDBP = 0;
+    SharedDbEnv::releaseInstance();
     return db_internal::check_error(error,"Db::close");
 }
 

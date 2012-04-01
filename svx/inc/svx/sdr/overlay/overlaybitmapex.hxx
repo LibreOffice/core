@@ -61,11 +61,9 @@ namespace sdr
             virtual ~OverlayBitmapEx();
 
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
-            void setBitmapEx(const BitmapEx& rNew);
 
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
-            void setCenterXY(sal_uInt16 nNewX, sal_uInt16 nNewY);
         };
     } // end of namespace overlay
 } // end of namespace sdr

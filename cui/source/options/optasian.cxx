@@ -317,7 +317,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     LanguageHdl(&aLanguageLB);
 }
 
-IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
 {
     //set current value
     Locale aLocale;

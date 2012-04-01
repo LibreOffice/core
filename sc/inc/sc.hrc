@@ -116,6 +116,13 @@
 #define FID_MARKPAGEUP          (SC_VIEW_START + 18)
 #define FID_MARKPAGEDOWN        (SC_VIEW_START + 19)
 
+// Format options
+#define SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME   (SC_VIEW_START + 20)
+#define SID_SC_OPT_FORMULA_GRAMMAR            (SC_VIEW_START + 21)
+#define SID_SC_OPT_FORMULA_SEP_ARG            (SC_VIEW_START + 22)
+#define SID_SC_OPT_FORMULA_SEP_ARRAY_ROW      (SC_VIEW_START + 23)
+#define SID_SC_OPT_FORMULA_SEP_ARRAY_COL      (SC_VIEW_START + 24)
+
 // slot-IDs for attributes
 
 #define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // alignment-page
@@ -222,6 +229,8 @@
 
 // "Zoom / Synchronize sheets" in options dialog
 #define SID_SC_OPT_SYNCZOOM             (SC_VIEW_START + 98)
+
+#define SID_SC_OPT_KEY_BINDING_COMPAT   (SC_VIEW_START + 99)
 
 // NOTE: last valid ID is (SC_VIEW_START + 99)
 

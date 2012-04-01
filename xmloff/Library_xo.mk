@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 $(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
 
 $(eval $(call gb_Library_set_include,xo,\
-    -I$(realpath $(SRCDIR)/xmloff/inc) \
+    -I$(SRCDIR)/xmloff/inc \
     $$(INCLUDE) \
 ))
 
@@ -171,7 +171,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/forms/formevents \
     xmloff/source/forms/formlayerexport \
     xmloff/source/forms/formlayerimport \
-    xmloff/source/forms/formsimp \
     xmloff/source/forms/gridcolumnproptranslator \
     xmloff/source/forms/layerexport \
     xmloff/source/forms/layerimport \
@@ -223,7 +222,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/SinglePropertySetInfoCache \
     xmloff/source/style/StyleMap \
     xmloff/source/style/TransGradientStyle \
-    xmloff/source/style/VisAreaContext \
     xmloff/source/style/WordWrapPropertyHdl \
     xmloff/source/style/XMLBackgroundImageContext \
     xmloff/source/style/XMLBackgroundImageExport \

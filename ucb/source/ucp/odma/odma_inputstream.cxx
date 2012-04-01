@@ -60,12 +60,12 @@ public:
 OOdmaStream::OOdmaStream(::ucbhelper::Content* _pContent,
                          ContentProvider* _pProvider,
                          const ::rtl::Reference<ContentProperties>& _rProp)
- :m_pContent(_pContent)
+ :m_aProp(_rProp)
+ ,m_pContent(_pContent)
+ ,m_pProvider(_pProvider)
  ,m_bInputStreamCalled(sal_False)
  ,m_bOutputStreamCalled(sal_False)
  ,m_bModified(sal_False)
- ,m_pProvider(_pProvider)
- ,m_aProp(_rProp)
 {
 }
 // -----------------------------------------------------------------------------

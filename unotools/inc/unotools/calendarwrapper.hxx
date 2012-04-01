@@ -87,8 +87,6 @@ public:
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
     void addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount );
     sal_Int16 getFirstDayOfWeek() const;
-    void setFirstDayOfWeek( sal_Int16 nDay );
-    void setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays );
     sal_Int16 getNumberOfMonthsInYear() const;
     sal_Int16 getNumberOfDaysInWeek() const;
     String getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;

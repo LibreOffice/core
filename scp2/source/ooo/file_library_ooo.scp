@@ -39,6 +39,8 @@ End
 STD_LIB_FILE( gid_File_Lib_Ado, ado)
 #endif
 
+#ifndef DISABLE_SCRIPTING
+
 STD_LIB_FILE( gid_File_Lib_Basctl, basctl)
 
 File gid_File_Lib_Basprov
@@ -63,6 +65,8 @@ File gid_File_Lib_Vbaevent
   #endif
 End
 
+#endif
+
 STD_LIB_FILE( gid_File_Lib_Bib , bib)
 
 File gid_File_Lib_Cached1
@@ -75,6 +79,19 @@ File gid_File_Lib_Cached1
     Name = "cached1.dll";
   #endif
 End
+
+#ifndef SYSTEM_CLUCENE
+File gid_File_Lib_CLucene
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libclucene,UNXSUFFIX));
+  #else
+    Name = "clucene.dll";
+  #endif
+End
+#endif
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
@@ -296,6 +313,8 @@ File gid_File_Lib_Textconv_Dict
     Styles = (PACKED);
 End
 
+#ifndef DISABLE_SCRIPTING
+
 File gid_File_Lib_Dlgprov
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -307,6 +326,8 @@ File gid_File_Lib_Dlgprov
   #endif
 End
 
+#endif
+
 File gid_File_Lib_Stringresource
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -317,6 +338,8 @@ File gid_File_Lib_Stringresource
     Name = STRING(CONCAT3(stringresource,.uno,.dll));
   #endif
 End
+
+#ifndef DISABLE_SCRIPTING
 
 File gid_File_Lib_Vbaobj
     LIB_FILE_BODY;
@@ -362,6 +385,7 @@ File gid_File_Lib_Vbahelper
   #endif
 End
 
+#endif
 
 #ifdef WNT
 
@@ -460,17 +484,6 @@ STD_LIB_FILE( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
 
-File gid_File_Lib_Fop
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "fop.dll";
-End
-
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Fps
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -548,6 +561,31 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 
+#ifndef SYSTEM_LCMS2
+
+File gid_File_Lib_Lcms2
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(liblcms2,.2,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(liblcms2,UNXSUFFIX,.2));
+    #endif
+  #elif defined(WNT)
+    #ifdef _gcc3
+       Name = "liblcms2-2.dll";
+    #else
+       Name = "lcms2.dll";
+    #endif
+  #endif
+End
+
+#endif
+
+#ifndef LIBO_HEADLESS
+
 #ifndef SYSTEM_CAIRO
 
 File gid_File_Lib_Cairo
@@ -583,6 +621,8 @@ File gid_File_Lib_Pixman
     #endif
   #endif
 End
+
+#endif
 
 #endif
 
@@ -674,8 +714,6 @@ File gid_File_Lib_I18nutil
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
-
-STD_LIB_FILE( gid_File_Lib_I18npaper, i18npaper)
 
 #ifndef SYSTEM_ICU
 
@@ -930,7 +968,7 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-#if defined(UNX) && ! defined(QUARTZ)
+#if defined(UNX) && ! defined(QUARTZ) && ! defined(LIBO_HEADLESS)
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
     LIB_FILE_BODY;
@@ -1156,7 +1194,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sot, sot )
 
-#if defined(UNX) && !defined(QUARTZ)
+#if defined(UNX) && !defined(QUARTZ) && !defined(LIBO_HEADLESS)
 
 File gid_File_Lib_Spa
     Name = LIBNAME(spa);
@@ -1174,9 +1212,11 @@ File gid_File_Lib_Spell
     Dir = SCP2_OOO_BIN_DIR;
 End
 
+#if !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
+#endif
 
-#if defined UNX && !defined MACOSX
+#if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
 
@@ -1603,6 +1643,7 @@ STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
 // RSVG and dependencies
+#if ENABLE_LIBRSVG
 #if ! defined (SYSTEM_GETTEXT)
 File gid_File_Lib_Intl
     LIB_FILE_BODY;
@@ -1669,8 +1710,6 @@ File gid_File_Lib_Gmodule
 End
 #endif
 
-#if ENABLE_LIBRSVG
-
 #if ! defined SYSTEM_GDKPIXBUF
 File gid_File_Lib_Gdkpixbuf
     LIB_FILE_BODY;
@@ -1697,6 +1736,7 @@ File gid_File_Lib_Libcroco
 End
 #endif
 
+#if ! defined LIBO_HEADLESS
 #if ! defined SYSTEM_PANGO
 File gid_File_Lib_Libpango
     LIB_FILE_BODY;
@@ -1727,6 +1767,7 @@ File gid_File_Lib_Libpangowin32
 End
 #endif
 #endif
+#endif
 
 #if ! defined SYSTEM_LIBGSF
 File gid_File_Lib_Libgsf
@@ -1752,7 +1793,7 @@ File gid_File_Lib_Librsvg
 End
 #endif
 
-#endif
+#endif // #if ENABLE_LIBRSVG
 
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 

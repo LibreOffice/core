@@ -55,6 +55,15 @@ PATCH_FILES=$(TARFILE_NAME).patch
 PATCH_FILES += vigra1.4.0-unused-parameters.patch
 .END
 
+# At least GCC 4.7 treats more correctly now the type of enumerators prior to
+# the closing brace of the enum-specifier (see [dcl.enum] in the C++ 2003
+# Standard), leading to "comparison between <enum1> and <enum2> [-Werror=enum-
+# compare]" and "enumeral mismatch in conditional expression [-Werror]"
+# warnings (included upstream as <https://github.com/ukoethe/vigra/commit/
+# e0dcd31c76bb13c98920e21544b309ca47bb3c5c> "added explicit cast (gcc 4.7
+# compatibility patch by Stephan Bergmann)"):
+PATCH_FILES += vigra1.4.0-enumwarn.patch
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 

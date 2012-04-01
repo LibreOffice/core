@@ -186,13 +186,6 @@ public:
         }
     }
 
-    void makeUnique()
-    {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B3DPolygon::makeUnique ));
-    }
-
     const basegfx::B3DPolygon* begin() const
     {
         if(maPolygons.empty())
@@ -383,23 +376,6 @@ namespace basegfx
     void B3DPolyPolygon::clear()
     {
         mpPolyPolygon = DefaultPolyPolygon::get();
-    }
-
-    bool B3DPolyPolygon::isClosed() const
-    {
-        bool bRetval(true);
-
-        // PolyPOlygon is closed when all contained Polygons are closed or
-        // no Polygon exists.
-        for(sal_uInt32 a(0L); bRetval && a < mpPolyPolygon->count(); a++)
-        {
-            if(!(mpPolyPolygon->getB3DPolygon(a)).isClosed())
-            {
-                bRetval = false;
-            }
-        }
-
-        return bRetval;
     }
 
     void B3DPolyPolygon::flip()

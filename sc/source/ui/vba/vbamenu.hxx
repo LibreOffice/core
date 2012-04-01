@@ -49,7 +49,7 @@ public:
     virtual css::uno::Any SAL_CALL MenuItems( const css::uno::Any& aIndex ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif//SC_VBA_MENU_HXX

@@ -46,13 +46,13 @@ namespace connectivity
         java_sql_Connection*        m_pConnection;
         java::sql::ConnectionLog    m_aLogger;
 
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
 
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_DatabaseMetaData();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rConnection );
 
     private:

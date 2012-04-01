@@ -127,13 +127,14 @@ void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
 
 void ScRangeManagerTable::Init()
 {
+    SetUpdateMode(false);
     Clear();
     for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
             itr != mrRangeMap.end(); ++itr)
     {
         const ScRangeName* pLocalRangeName = itr->second;
         ScRangeNameLine aLine;
-        if (itr->first == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))
+        if (itr->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_GLOBAL_RANGE_NAME)))
             aLine.aScope = maGlobalString;
         else
             aLine.aScope = itr->first;
@@ -147,6 +148,7 @@ void ScRangeManagerTable::Init()
             }
         }
     }
+    SetUpdateMode(true);
 }
 
 const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLine)
@@ -265,7 +267,7 @@ void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemR
 
 }
 
-IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
 {
     long aTableSize = maHeaderBar.GetSizePixel().Width();
     long aItemNameSize = maHeaderBar.GetItemSize(ITEMID_NAME);
@@ -289,7 +291,7 @@ IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( ScRangeManagerTable, ScrollHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl)
 {
     CheckForFormulaString();
     return 0;

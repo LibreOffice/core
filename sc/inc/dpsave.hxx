@@ -30,10 +30,10 @@
 #define SC_DPSAVE_HXX
 
 #include <list>
-#include <memory>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -61,9 +61,7 @@ class ScDPSaveMember
 {
 private:
     ::rtl::OUString aName;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
     sal_uInt16 nVisibleMode;
     sal_uInt16 nShowDetailsMode;
 
@@ -107,10 +105,8 @@ class SC_DLLPUBLIC ScDPSaveDimension
 private:
     ::rtl::OUString aName;
     ::rtl::OUString* pSelectedPage;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<rtl::OUString> mpLayoutName;
-    ::std::auto_ptr<rtl::OUString> mpSubtotalName;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<rtl::OUString> mpLayoutName;
+    boost::scoped_ptr<rtl::OUString> mpSubtotalName;
     bool bIsDataLayout;
     bool bDupFlag;
     sal_uInt16 nOrientation;
@@ -185,6 +181,7 @@ public:
     void RemoveLayoutName();
     void SetSubtotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString* GetSubtotalName() const;
+    void RemoveSubtotalName();
 
     bool IsMemberNameInUse(const ::rtl::OUString& rName) const;
 
@@ -229,8 +226,6 @@ public:
     void SetMemberPosition( const ::rtl::OUString& rName, sal_Int32 nNewPos );
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xDim );
-    void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource ,
-                      const std::list<rtl::OUString> & deletedDims);
 
     void UpdateMemberVisibility(const ::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 
@@ -240,8 +235,13 @@ public:
 
 class ScDPSaveData
 {
+    typedef boost::unordered_map<rtl::OUString, size_t, rtl::OUStringHash> DupNameCountType;
+public:
+    typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
+
 private:
-    boost::ptr_vector<ScDPSaveDimension> aDimList;
+    DimsType aDimList;
+    DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
     ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
@@ -254,9 +254,7 @@ private:
      *  created. */
     bool mbDimensionMembersBuilt;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<rtl::OUString> mpGrandTotalName;
 
 public:
     SC_DLLPUBLIC ScDPSaveData();
@@ -270,11 +268,21 @@ public:
     SC_DLLPUBLIC void SetGrandTotalName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC const ::rtl::OUString* GetGrandTotalName() const;
 
-    const boost::ptr_vector<ScDPSaveDimension>& GetDimensions() const
-        { return aDimList; }
+    SC_DLLPUBLIC const DimsType& GetDimensions() const;
 
-    void AddDimension(ScDPSaveDimension* pDim)
-        { aDimList.push_back(pDim); }
+    /**
+     * Get all dimensions in a given orientation.  The order represents the
+     * actual order of occurrence.  The returned list also includes data
+     * layout dimension.
+     *
+     * @param eOrientation orientation
+     * @param rDims (out) list of dimensions for specified orientation
+     */
+    SC_DLLPUBLIC void GetAllDimensionsByOrientation(
+        com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
+        std::vector<const ScDPSaveDimension*>& rDims) const;
+
+    void AddDimension(ScDPSaveDimension* pDim);
 
     /**
      * Get a dimension object by its name.  <i>If one doesn't exist for the
@@ -343,6 +351,23 @@ public:
      * @param rDimName dimension name
      */
     SC_DLLPUBLIC bool HasInvisibleMember(const ::rtl::OUString& rDimName) const;
+
+private:
+    void CheckDuplicateName(ScDPSaveDimension& rDim);
+    void RemoveDuplicateNameCount(const rtl::OUString& rName);
+
+    /**
+     * Append a new original dimension. Not to be called to insert a duplicate
+     * dimension.
+     *
+     * @param rName Dimension name. The name must be the original dimension
+     *              name; not a duplicate dimension name.
+     * @param bDataLayout true if this is a data layout dimension, false
+     *                    otherwise.
+     *
+     * @return pointer to the new dimension just inserted.
+     */
+    ScDPSaveDimension* AppendNewDimension(const rtl::OUString& rName, bool bDataLayout);
 };
 
 #endif

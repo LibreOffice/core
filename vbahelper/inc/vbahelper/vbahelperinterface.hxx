@@ -61,10 +61,9 @@
 //     virtual OUString getName();
 // }
 //
-const ::rtl::OUString sHelperServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.HelperServiceBase" ) );
 
 template< typename Ifc1 >
-class InheritedHelperInterfaceImpl : public Ifc1
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc1
 {
 protected:
     css::uno::WeakReference< ov::XHelperInterface > mxParent;
@@ -73,7 +72,7 @@ public:
     InheritedHelperInterfaceImpl() {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxContext( xContext ) {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
-    virtual rtl::OUString& getServiceImplName() = 0;
+    virtual rtl::OUString getServiceImplName() = 0;
     virtual css::uno::Sequence<rtl::OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
@@ -110,7 +109,7 @@ public:
  };
 
 template< typename Ifc1 >
-class InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
 public:
@@ -120,7 +119,7 @@ public:
 };
 
 template< typename Ifc1, typename Ifc2 >
-class InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > > Base;
 public:
@@ -130,7 +129,7 @@ public:
 };
 
 template< typename Ifc1, typename Ifc2, typename Ifc3 >
-class InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > > Base;
 public:
@@ -146,10 +145,9 @@ public:
     implementation name.
  */
 #define VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
-::rtl::OUString& classname::getServiceImplName() \
+::rtl::OUString classname::getServiceImplName() \
 { \
-    static ::rtl::OUString saImplName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
-    return saImplName; \
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
 }
 
 // ----------------------------------------------------------------------------
@@ -176,7 +174,7 @@ css::uno::Sequence< ::rtl::OUString > classname::getServiceNames() \
     declaration.
  */
 #define VBAHELPER_DECL_XHELPERINTERFACE \
-    virtual ::rtl::OUString& getServiceImplName(); \
+    virtual ::rtl::OUString getServiceImplName(); \
     virtual css::uno::Sequence< ::rtl::OUString > getServiceNames();
 
 // ----------------------------------------------------------------------------

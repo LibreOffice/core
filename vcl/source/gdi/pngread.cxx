@@ -49,16 +49,9 @@
 #define PNGCHUNK_IDAT       0x49444154
 #define PNGCHUNK_IEND       0x49454e44
 #define PNGCHUNK_bKGD       0x624b4744
-#define PNGCHUNK_cHRM       0x6348524d
 #define PNGCHUNK_gAMA       0x67414d41
-#define PNGCHUNK_hIST       0x68495354
 #define PNGCHUNK_pHYs       0x70485973
-#define PNGCHUNK_sBIT       0x73425420
-#define PNGCHUNK_tIME       0x74494d45
-#define PNGCHUNK_tEXt       0x74455874
 #define PNGCHUNK_tRNS       0x74524e53
-#define PNGCHUNK_zTXt       0x7a545874
-#define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
 #define VIEWING_GAMMA       2.35
 #define DISPLAY_GAMMA       1.0
@@ -286,7 +279,7 @@ bool PNGReaderImpl::ReadNextChunk()
         // calculate chunktype CRC (swap it back to original byte order)
         sal_uInt32 nChunkType = mnChunkType;
         #if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
-        nChunkType = SWAPLONG( nChunkType );
+        nChunkType = OSL_SWAPDWORD( nChunkType );
         #endif
         sal_uInt32 nCRC32 = rtl_crc32( 0, &nChunkType, 4 );
 

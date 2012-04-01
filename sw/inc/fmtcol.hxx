@@ -57,6 +57,7 @@ private:
     const SwFmtColl &operator=(const SwFmtColl &);
 };
 
+/// Represents the style of a paragraph.
 class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 {
     friend class SwDoc;

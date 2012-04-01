@@ -180,7 +180,7 @@ void ScHFPage::DeactivatePage()
 // Handler:
 //------------------------------------------------------------------
 
-IMPL_LINK( ScHFPage, TurnOnHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 {
     SvxHFPage::TurnOnHdl( &aTurnOnBox );
 
@@ -195,7 +195,7 @@ IMPL_LINK( ScHFPage, TurnOnHdl, CheckBox*, EMPTYARG )
 
 //------------------------------------------------------------------
 
-IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
     //  Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
     //  aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
@@ -206,7 +206,7 @@ IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
 {
     SfxViewShell*   pViewSh = SfxViewShell::Current();
 

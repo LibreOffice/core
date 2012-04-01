@@ -1830,30 +1830,56 @@ void XclImpChSeries::ReadSubRecord( XclImpStream& rStrm )
     }
 }
 
-void XclImpChSeries::SetDataFormat( XclImpChDataFormatRef xDataFmt )
+void XclImpChSeries::SetDataFormat( const XclImpChDataFormatRef& xDataFmt )
 {
-    if( xDataFmt )
+    if (!xDataFmt)
+        return;
+
+    sal_uInt16 nPointIdx = xDataFmt->GetPointPos().mnPointIdx;
+    if (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS)
     {
-        XclImpChDataFormatRef* pxDataFmt = GetDataFormatRef( xDataFmt->GetPointPos().mnPointIdx );
-        // do not overwrite existing data format
-        if( pxDataFmt && !*pxDataFmt )
-        {
-            *pxDataFmt = xDataFmt;
-            // #i51639# register series format index at chart type group
-            if( (pxDataFmt == &mxSeriesFmt) && !HasParentSeries() )
-                if( XclImpChTypeGroup* pTypeGroup = GetChartData().GetTypeGroup( mnGroupIdx ).get() )
-                    pTypeGroup->SetUsedFormatIndex( xDataFmt->GetFormatIdx() );
-        }
+        if (mxSeriesFmt)
+            // Don't overwrite the existing format.
+            return;
+
+        mxSeriesFmt = xDataFmt;
+        if (HasParentSeries())
+            return;
+
+        XclImpChTypeGroupRef pTypeGroup = GetChartData().GetTypeGroup(mnGroupIdx);
+        if (pTypeGroup)
+            pTypeGroup->SetUsedFormatIndex(xDataFmt->GetFormatIdx());
+
+        return;
+    }
+
+    if (nPointIdx >= EXC_CHDATAFORMAT_MAXPOINTCOUNT)
+        // Above the max point count.  Bail out.
+        return;
+
+    XclImpChDataFormatMap::iterator itr = maPointFmts.lower_bound(nPointIdx);
+    if (itr == maPointFmts.end() || maPointFmts.key_comp()(nPointIdx, itr->first))
+    {
+        // No object exists at this point index position.  Insert it.
+        itr = maPointFmts.insert(itr, XclImpChDataFormatMap::value_type(nPointIdx, xDataFmt));
     }
 }
 
-void XclImpChSeries::SetDataLabel( XclImpChTextRef xLabel )
+void XclImpChSeries::SetDataLabel( const XclImpChTextRef& xLabel )
 {
-    if( xLabel )
+    if (!xLabel)
+        return;
+
+    sal_uInt16 nPointIdx = xLabel->GetPointPos().mnPointIdx;
+    if ((nPointIdx != EXC_CHDATAFORMAT_ALLPOINTS) && (nPointIdx >= EXC_CHDATAFORMAT_MAXPOINTCOUNT))
+        // Above the maximum allowed data points. Bail out.
+        return;
+
+    XclImpChTextMap::iterator itr = maLabels.lower_bound(nPointIdx);
+    if (itr == maLabels.end() || maLabels.key_comp()(nPointIdx, itr->first))
     {
-        XclImpChTextRef* pxLabel = GetDataLabelRef( xLabel->GetPointPos().mnPointIdx );
-        if( pxLabel && !*pxLabel )
-            *pxLabel = xLabel;
+        // No object exists at this point index position.  Insert it.
+        itr = maLabels.insert(itr, XclImpChTextMap::value_type(nPointIdx, xLabel));
     }
 }
 
@@ -1911,11 +1937,28 @@ void XclImpChSeries::FinalizeDataFormats()
         // set text labels to data formats
         for( XclImpChTextMap::iterator aTIt = maLabels.begin(), aTEnd = maLabels.end(); aTIt != aTEnd; ++aTIt )
         {
-            if( XclImpChDataFormatRef* pxDataFmt = GetDataFormatRef( aTIt->first ) )
+            sal_uInt16 nPointIdx = aTIt->first;
+            if (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS)
             {
-                if( !*pxDataFmt )
-                    *pxDataFmt = CreateDataFormat( aTIt->first, EXC_CHDATAFORMAT_DEFAULT );
-                (*pxDataFmt)->SetDataLabel( aTIt->second );
+                if (!mxSeriesFmt)
+                    mxSeriesFmt = CreateDataFormat(nPointIdx, EXC_CHDATAFORMAT_DEFAULT);
+                mxSeriesFmt->SetDataLabel(aTIt->second);
+            }
+            else if (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT)
+            {
+                XclImpChDataFormatRef p;
+                XclImpChDataFormatMap::iterator itr = maPointFmts.lower_bound(nPointIdx);
+                if (itr == maPointFmts.end() || maPointFmts.key_comp()(nPointIdx, itr->first))
+                {
+                    // No object exists at this point index position.  Insert
+                    // a new one.
+                    p = CreateDataFormat(nPointIdx, EXC_CHDATAFORMAT_DEFAULT);
+                    itr = maPointFmts.insert(
+                        itr, XclImpChDataFormatMap::value_type(nPointIdx, p));
+                }
+                else
+                    p = itr->second;
+                p->SetDataLabel(aTIt->second);
             }
         }
 
@@ -2106,41 +2149,6 @@ XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sa
     XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
     xDataFmt->SetPointPos( XclChDataPointPos( mnSeriesIdx, nPointIdx ), nFormatIdx );
     return xDataFmt;
-}
-
-XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
-{
-    if( nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS )
-        return &mxSeriesFmt;
-
-    if (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT)
-    {
-        XclImpChDataFormatMap::iterator itr = maPointFmts.lower_bound(nPointIdx);
-        if (itr == maPointFmts.end() || maPointFmts.key_comp()(nPointIdx, itr->first))
-        {
-            // No object exists at this point index position.  Insert a new one.
-            XclImpChDataFormatRef p(new XclImpChDataFormat(GetChRoot()));
-            itr = maPointFmts.insert(itr, XclImpChDataFormatMap::value_type(nPointIdx, p));
-        }
-        return &itr->second;
-    }
-    return 0;
-}
-
-XclImpChTextRef* XclImpChSeries::GetDataLabelRef( sal_uInt16 nPointIdx )
-{
-    if ((nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT))
-    {
-        XclImpChTextMap::iterator itr = maLabels.lower_bound(nPointIdx);
-        if (itr == maLabels.end() || maLabels.key_comp()(nPointIdx, itr->first))
-        {
-            // No object exists at this point index position.  Insert a new one.
-            XclImpChTextRef p(new XclImpChText(GetChRoot()));
-            itr = maLabels.insert(itr, XclImpChTextMap::value_type(nPointIdx, p));
-        }
-        return &itr->second;
-    }
-    return 0;
 }
 
 void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) const
@@ -4013,7 +4021,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
             SAL_WNODEPRECATED_DECLARATIONS_POP
             xListener->SetUsed( true );
             xListener->StartListeningTo();
-            pChartCollection->Insert( xListener.release() );
+            pChartCollection->insert( xListener.release() );
         }
     }
 }

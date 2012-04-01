@@ -52,6 +52,10 @@ public:
     void testGetHiddenFields();
 
     virtual uno::Reference< uno::XInterface > init() = 0;
+
+protected:
+    ~XDataPilotDescriptor() {}
+
 private:
 
     void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );
@@ -59,8 +63,6 @@ private:
     void checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex );
     static std::vector<rtl::OUString> maFieldNames;
 };
-
-std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
 
 }
 

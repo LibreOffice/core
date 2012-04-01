@@ -34,8 +34,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/i18n/LocaleDataItem.hpp>
 
 #include "cfgids.hxx"
 #include "docoptio.hxx"
@@ -44,11 +42,10 @@
 #include "sc.hrc"
 #include "miscuno.hxx"
 #include "global.hxx"
+#include "globstr.hrc"
 
 using namespace utl;
 using namespace com::sun::star::uno;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::i18n::LocaleDataItem;
 using ::rtl::OUString;
 
 //------------------------------------------------------------------------
@@ -88,8 +85,8 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
             nInitTabCount( rCpy.nInitTabCount ),
+            aInitTabPrefix( rCpy.aInitTabPrefix ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
-            eKeyBindingType( rCpy.eKeyBindingType ),
             nDay( rCpy.nDay ),
             nMonth( rCpy.nMonth ),
             nYear( rCpy.nYear ),
@@ -101,12 +98,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             bMatchWholeCell( rCpy.bMatchWholeCell ),
             bDoAutoSpell( rCpy.bDoAutoSpell ),
             bLookUpColRowNames( rCpy.bLookUpColRowNames ),
-            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled ),
-            bUseEnglishFuncName( rCpy.bUseEnglishFuncName ),
-            eFormulaGrammar( rCpy.eFormulaGrammar ),
-            aFormulaSepArg( rCpy.aFormulaSepArg ),
-            aFormulaSepArrayRow( rCpy.aFormulaSepArrayRow ),
-            aFormulaSepArrayCol( rCpy.aFormulaSepArrayCol )
+            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled )
 {
 }
 
@@ -124,9 +116,9 @@ void ScDocOptions::ResetDocOptions()
     bIsIter             = false;
     nIterCount          = 100;
     nInitTabCount       = 3;
+    aInitTabPrefix      = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
-    eKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
     nDay                = 30;
     nMonth              = 12;
     nYear               = 1899;
@@ -137,67 +129,6 @@ void ScDocOptions::ResetDocOptions()
     bDoAutoSpell        = false;
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= true;
-    bUseEnglishFuncName = false;
-    eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
-
-    ResetFormulaSeparators();
-}
-
-void ScDocOptions::ResetFormulaSeparators()
-{
-    // Defaults to the old separator values.
-    aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
-
-    const Locale& rLocale = *ScGlobal::GetLocale();
-    const OUString& rLang = rLocale.Language;
-    if (rLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")))
-        // Don't do automatic guess for these languages, and fall back to
-        // the old separator set.
-        return;
-
-    const LocaleDataWrapper& rLocaleData = GetLocaleDataWrapper();
-    const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
-    const OUString& rListSep = rLocaleData.getListSep();
-
-    if (rDecSep.isEmpty() || rListSep.isEmpty())
-        // Something is wrong.  Stick with the default separators.
-        return;
-
-    sal_Unicode cDecSep  = rDecSep.getStr()[0];
-    sal_Unicode cListSep = rListSep.getStr()[0];
-
-    // Excel by default uses system's list separator as the parameter
-    // separator, which in English locales is a comma.  However, OOo's list
-    // separator value is set to ';' for all English locales.  Because of this
-    // discrepancy, we will hardcode the separator value here, for now.
-    if (cDecSep == sal_Unicode('.'))
-        cListSep = sal_Unicode(',');
-
-    // Special case for de_CH locale.
-    if (rLocale.Language.equalsAsciiL("de", 2) && rLocale.Country.equalsAsciiL("CH", 2))
-        cListSep = sal_Unicode(';');
-
-    // by default, the parameter separator equals the locale-specific
-    // list separator.
-    aFormulaSepArg = OUString(cListSep);
-
-    if (cDecSep == cListSep && cDecSep != sal_Unicode(';'))
-        // if the decimal and list separators are equal, set the
-        // parameter separator to be ';', unless they are both
-        // semicolon in which case don't change the decimal separator.
-        aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-    if (cDecSep == sal_Unicode(','))
-        aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-}
-
-const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
-{
-    return *ScGlobal::pLocaleData;
 }
 
 //========================================================================
@@ -271,26 +202,15 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_COUNT             12
 
-#define CFGPATH_FORMULA     "Office.Calc/Formula"
-#define SCFORMULAOPT_GRAMMAR           0
-#define SCFORMULAOPT_ENGLISH_FUNCNAME  1
-#define SCFORMULAOPT_SEP_ARG           2
-#define SCFORMULAOPT_SEP_ARRAY_ROW     3
-#define SCFORMULAOPT_SEP_ARRAY_COL     4
-#define SCFORMULAOPT_COUNT             5
-
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
 #define SCDOCLAYOUTOPT_TABSTOP      0
 #define SCDOCLAYOUTOPT_COUNT        1
 
-#define CFGPATH_COMPAT      "Office.Calc/Compatibility"
-#define SCCOMPATOPT_KEY_BINDING     0
-#define SCCOMPATOPT_COUNT           1
-
 #define CFGPATH_DEFAULTS    "Office.Calc/Defaults"
 #define SCDEFAULTSOPT_TAB_COUNT     0
-#define SCDEFAULTSOPT_COUNT         1
+#define SCDEFAULTSOPT_TAB_PREFIX    1
+#define SCDEFAULTSOPT_COUNT         2
 
 
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
@@ -318,24 +238,6 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
     return aNames;
 }
 
-Sequence<OUString> ScDocCfg::GetFormulaPropertyNames()
-{
-    static const char* aPropNames[] =
-    {
-        "Syntax/Grammar",             // SCFORMULAOPT_GRAMMAR
-        "Syntax/EnglishFunctionName", // SCFORMULAOPT_ENGLISH_FUNCNAME
-        "Syntax/SeparatorArg",        // SCFORMULAOPT_SEP_ARG
-        "Syntax/SeparatorArrayRow",   // SCFORMULAOPT_SEP_ARRAY_ROW
-        "Syntax/SeparatorArrayCol",   // SCFORMULAOPT_SEP_ARRAY_COL
-    };
-    Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for (int i = 0; i < SCFORMULAOPT_COUNT; ++i)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
-}
-
 Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
@@ -354,25 +256,12 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
     return aNames;
 }
 
-Sequence<OUString> ScDocCfg::GetCompatPropertyNames()
-{
-    static const char* aPropNames[] =
-    {
-        "KeyBindings/BaseGroup"             // SCCOMPATOPT_KEY_BINDING
-    };
-    Sequence<OUString> aNames(SCCOMPATOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for (int i = 0; i < SCCOMPATOPT_COUNT; ++i)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
-}
-
 Sequence<OUString> ScDocCfg::GetDefaultsPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/TabCount"             // SCDEFAULTSOPT_COUNT_TAB_COUNT
+        "Sheet/SheetCount",            // SCDEFAULTSOPT_TAB_COUNT
+        "Sheet/SheetPrefix"            // SCDEFAULTSOPT_TAB_PREFIX
     };
     Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -385,9 +274,7 @@ Sequence<OUString> ScDocCfg::GetDefaultsPropertyNames()
 
 ScDocCfg::ScDocCfg() :
     aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
-    aFormulaItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_FORMULA))),
     aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT))),
-    aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT))),
     aDefaultsItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DEFAULTS)))
 {
     sal_Int32 nIntVal = 0;
@@ -459,79 +346,6 @@ ScDocCfg::ScDocCfg() :
 
     SetDate( nDateDay, nDateMonth, nDateYear );
 
-    aNames = GetFormulaPropertyNames();
-    aValues = aFormulaItem.GetProperties(aNames);
-    aFormulaItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    if (aValues.getLength() == aNames.getLength())
-    {
-        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-        {
-            switch (nProp)
-            {
-                case SCFORMULAOPT_GRAMMAR:
-                {
-                    // Get default value in case this option is not set.
-                    ::formula::FormulaGrammar::Grammar eGram = GetFormulaSyntax();
-
-                    do
-                    {
-                        if (!(pValues[nProp] >>= nIntVal))
-                            // extractino failed.
-                            break;
-
-                        switch (nIntVal)
-                        {
-                            case 0: // Calc A1
-                                eGram = ::formula::FormulaGrammar::GRAM_NATIVE;
-                            break;
-                            case 1: // Excel A1
-                                eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
-                            break;
-                            case 2: // Excel R1C1
-                                eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
-                            break;
-                            default:
-                                ;
-                        }
-                    }
-                    while (false);
-                    SetFormulaSyntax(eGram);
-                }
-                break;
-                case SCFORMULAOPT_ENGLISH_FUNCNAME:
-                {
-                    sal_Bool bEnglish = false;
-                    if (pValues[nProp] >>= bEnglish)
-                        SetUseEnglishFuncName(bEnglish);
-                }
-                break;
-                case SCFORMULAOPT_SEP_ARG:
-                {
-                    OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
-                        SetFormulaSepArg(aSep);
-                }
-                break;
-                case SCFORMULAOPT_SEP_ARRAY_ROW:
-                {
-                    OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
-                        SetFormulaSepArrayRow(aSep);
-                }
-                break;
-                case SCFORMULAOPT_SEP_ARRAY_COL:
-                {
-                    OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
-                        SetFormulaSepArrayCol(aSep);
-                }
-                break;
-            }
-        }
-    }
-    aFormulaItem.SetCommitLink( LINK(this, ScDocCfg, FormulaCommitHdl) );
-
     aNames = GetLayoutPropertyNames();
     aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
@@ -557,28 +371,6 @@ ScDocCfg::ScDocCfg() :
     }
     aLayoutItem.SetCommitLink( LINK( this, ScDocCfg, LayoutCommitHdl ) );
 
-    aNames = GetCompatPropertyNames();
-    aValues = aCompatItem.GetProperties(aNames);
-    aCompatItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    if (aValues.getLength() == aNames.getLength())
-    {
-        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-        {
-            switch (nProp)
-            {
-                case SCCOMPATOPT_KEY_BINDING:
-                {
-                    nIntVal = 0; // 0 = 'Default'
-                    pValues[nProp] >>= nIntVal;
-                    SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
-                }
-                break;
-            }
-        }
-    }
-    aCompatItem.SetCommitLink( LINK(this, ScDocCfg, CompatCommitHdl) );
-
     aNames = GetDefaultsPropertyNames();
     aValues = aDefaultsItem.GetProperties(aNames);
     aDefaultsItem.EnableNotification(aNames);
@@ -595,13 +387,18 @@ ScDocCfg::ScDocCfg() :
                 if (pValues[nProp] >>= nIntVal)
                     SetInitTabCount( static_cast<SCTAB>(nIntVal) );
                 break;
+            case SCDEFAULTSOPT_TAB_PREFIX:
+                OUString aPrefix;
+                if (pValues[nProp] >>= aPrefix)
+                    SetInitTabPrefix(aPrefix);
+                break;
             }
         }
     }
     aDefaultsItem.SetCommitLink( LINK(this, ScDocCfg, DefaultsCommitHdl) );
 }
 
-IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
 {
     Sequence<OUString> aNames = GetCalcPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -657,51 +454,7 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDocCfg, FormulaCommitHdl, void *, EMPTYARG )
-{
-    Sequence<OUString> aNames = GetFormulaPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
-
-    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-    {
-        switch (nProp)
-        {
-            case SCFORMULAOPT_GRAMMAR :
-            {
-                sal_Int32 nVal = 0;
-                switch (GetFormulaSyntax())
-                {
-                    case ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1:    nVal = 1; break;
-                    case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:  nVal = 2; break;
-                    default: break;
-                }
-                pValues[nProp] <<= nVal;
-            }
-            break;
-            case SCFORMULAOPT_ENGLISH_FUNCNAME:
-            {
-                sal_Bool b = GetUseEnglishFuncName();
-                pValues[nProp] <<= b;
-            }
-            break;
-            case SCFORMULAOPT_SEP_ARG:
-                pValues[nProp] <<= GetFormulaSepArg();
-            break;
-            case SCFORMULAOPT_SEP_ARRAY_ROW:
-                pValues[nProp] <<= GetFormulaSepArrayRow();
-            break;
-            case SCFORMULAOPT_SEP_ARRAY_COL:
-                pValues[nProp] <<= GetFormulaSepArrayCol();
-            break;
-        }
-    }
-    aFormulaItem.PutProperties(aNames, aValues);
-
-    return 0;
-}
-
-IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -724,26 +477,7 @@ IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDocCfg, CompatCommitHdl, void *, EMPTYARG )
-{
-    Sequence<OUString> aNames = GetCompatPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
-
-    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-    {
-        switch(nProp)
-        {
-            case SCCOMPATOPT_KEY_BINDING:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetKeyBindingType());
-            break;
-        }
-    }
-    aCompatItem.PutProperties(aNames, aValues);
-    return 0;
-}
-
-IMPL_LINK( ScDocCfg, DefaultsCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, DefaultsCommitHdl)
 {
     Sequence<OUString> aNames = GetDefaultsPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -756,6 +490,9 @@ IMPL_LINK( ScDocCfg, DefaultsCommitHdl, void *, EMPTYARG )
         case SCDEFAULTSOPT_TAB_COUNT:
             pValues[nProp] <<= static_cast<sal_Int32>(GetInitTabCount());
         break;
+        case SCDEFAULTSOPT_TAB_PREFIX:
+            pValues[nProp] <<= GetInitTabPrefix();
+        break;
         }
     }
     aDefaultsItem.PutProperties(aNames, aValues);
@@ -767,9 +504,7 @@ void ScDocCfg::SetOptions( const ScDocOptions& rNew )
     *(ScDocOptions*)this = rNew;
 
     aCalcItem.SetModified();
-    aFormulaItem.SetModified();
     aLayoutItem.SetModified();
-    aCompatItem.SetModified();
     aDefaultsItem.SetModified();
 }
 

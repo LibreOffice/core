@@ -181,7 +181,7 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
         sal_Int32 nIndex = 0;
         do
         {
@@ -192,7 +192,8 @@ public:
 
         // loop throuzh the given names
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
-        for (;pFields != pFields; ++pFields)
+        const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
+        for (;pFields != pFieldsEnd; ++pFields)
         {
             StringBagIterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
             if ( aKnownNames.end() != aKnownPos )
@@ -690,7 +691,7 @@ void AssignmentPersistentData::Commit()
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
@@ -1146,7 +1147,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnDelayedInitialize, void*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnDelayedInitialize)
     {
         // load the initial data from the configuration
         loadConfiguration();
@@ -1191,7 +1192,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
     {
         String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
         if ( m_pImpl->bWorkingPersistent )
@@ -1215,7 +1216,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnAdministrateDatasources, void*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnAdministrateDatasources)
     {
         // collect some initial arguments for the dialog
         Sequence< Any > aArgs(1);

@@ -217,26 +217,6 @@ sal_Bool TransliterationWrapper::equals(
     return sal_False;
 }
 
-
-sal_Int32 TransliterationWrapper::compareSubstring(
-    const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
-    const String& rStr2, sal_Int32 nOff2, sal_Int32 nLen2 ) const
-{
-    try
-    {
-        if( bFirstCall )
-            loadModuleImpl();
-        if ( xTrans.is() )
-            return xTrans->compareSubstring( rStr1, nOff1, nLen1, rStr2, nOff2, nLen2 );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "compareSubstring: Exception caught " << e.Message );
-    }
-    return 0;
-}
-
-
 sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const String& rStr2 ) const
 {
     try

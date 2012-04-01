@@ -97,6 +97,8 @@ using namespace ::com::sun::star::lang;
 
 using rtl::OUString;
 
+#ifndef DISABLE_SCRIPTING
+
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
 {
     SwDocShell* mpDocShell;
@@ -260,6 +262,7 @@ public:
             return sal_True;
         return sal_False;
     }
+
     ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
@@ -281,6 +284,8 @@ public:
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException ) { return sal_True; }
 
 };
+
+#endif
 
 struct  ProvNamesId_Type
 {
@@ -573,12 +578,15 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         }
         break;
         case  SW_SERVICE_VBAOBJECTPROVIDER :
+#ifndef DISABLE_SCRIPTING
         {
             SwVbaObjectForCodeNameProvider* pObjProv = new SwVbaObjectForCodeNameProvider( pDoc->GetDocShell() );
             xRet =  (cppu::OWeakObject*)pObjProv;
         }
+#endif
         break;
         case  SW_SERVICE_VBACODENAMEPROVIDER :
+#ifndef DISABLE_SCRIPTING
         {
             if ( pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
             {
@@ -586,8 +594,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 xRet =  (cppu::OWeakObject*)pObjProv;
             }
         }
+#endif
         break;
         case  SW_SERVICE_VBAPROJECTNAMEPROVIDER :
+#ifndef DISABLE_SCRIPTING
         {
                         uno::Reference< container::XNameContainer > xProjProv = pDoc->GetVBATemplateToProjectCache();
                         if ( !xProjProv.is() && pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
@@ -598,8 +608,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             //xRet =  (cppu::OWeakObject*)xProjProv;
             xRet = xProjProv;
         }
+#endif
         break;
         case  SW_SERVICE_VBAGLOBALS :
+#ifndef DISABLE_SCRIPTING
         {
             if ( pDoc )
             {
@@ -614,6 +626,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 aGlobs >>= xRet;
             }
         }
+#endif
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
@@ -1948,7 +1961,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
-        std::vector<String> aStrings;
+        std::vector<rtl::OUString> aStrings;
         sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
         aRet.realloc(nCount);
         OUString* pNames = aRet.getArray();

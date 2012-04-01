@@ -57,11 +57,10 @@ void SAL_CALL SwVbaReplacement::ClearFormatting( ) throw (uno::RuntimeException)
     mxPropertyReplace->setReplaceAttributes( aPropValues );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaReplacement::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaReplacement") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaReplacement"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -531,6 +531,7 @@ StringArray RID_STR_PAPERNAMES
         < "B4 (JIS)"; >;
         < "B5 (JIS)"; >;
         < "B6 (JIS)"; >;
+        < "Japanese Postcard"; >;
     };
 };
 

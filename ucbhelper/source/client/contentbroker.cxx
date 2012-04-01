@@ -42,6 +42,12 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <ucbhelper/contentbroker.hxx>
 
+#ifdef ANDROID
+#include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <ucbhelper/configurationkeys.hxx>
+#endif
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -128,13 +134,6 @@ ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
 }
 
 //=========================================================================
-ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
-                              const ContentProviderDataList & rData )
-{
-    m_pImpl = new ContentBroker_Impl( rSMgr, rData );
-}
-
-//=========================================================================
 ContentBroker::~ContentBroker()
 {
     delete m_pImpl;
@@ -201,6 +200,38 @@ sal_Bool ContentBroker::initialize(
 
     return m_pTheBroker != 0;
 }
+
+#ifdef ANDROID
+
+extern "C" __attribute__ ((visibility("default"))) void
+InitUCBHelper()
+{
+    Reference< XMultiServiceFactory > xFactory;
+    try
+    {
+        Reference< XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
+        xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(),
+                                                       UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+
+    if( !xFactory.is() )
+    {
+        fprintf( stderr,
+                 "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+
+    // Create UCB.
+    Sequence< Any > aArgs( 2 );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
+}
+
+#endif
 
 //=========================================================================
 // static

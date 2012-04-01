@@ -160,7 +160,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     Point aOffset( (aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2 ,
                    (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2 );
 
-    if( maReplacementString.getLength() != 0 )
+    if( !maReplacementString.isEmpty() )
     {
         // replacement is active
         Push();
@@ -266,7 +266,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     String aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     aBuf.append( aNumText );
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
-    if( i_rPaperName.getLength() )
+    if( !i_rPaperName.isEmpty() )
     {
         aBuf.appendAscii( " (" );
         aBuf.append( i_rPaperName );
@@ -628,7 +628,7 @@ void PrintDialog::JobTabPage::readFromSettings()
 
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
-    if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
+    if( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("alwaysoff")) )
     {
         mnCollateUIMode = 1;
         maCollateBox.Check( sal_False );
@@ -639,7 +639,7 @@ void PrintDialog::JobTabPage::readFromSettings()
         mnCollateUIMode = 0;
         aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
-        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
     }
     Resize();
 }
@@ -692,7 +692,7 @@ void PrintDialog::OutputOptPage::readFromSettings()
     rtl::OUString aValue;
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ) );
-    if ( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
+    if ( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
     {
         maCollateSingleJobsBox.Check( sal_True );
     }
@@ -991,7 +991,7 @@ void PrintDialog::readFromSettings()
     // persistent window state
     rtl::OUString aWinState( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WindowState" ) ) ) );
-    if( aWinState.getLength() )
+    if( !aWinState.isEmpty() )
         SetWindowState( rtl::OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if( maOptionsPage.maToFileBox.IsChecked() )
@@ -1179,11 +1179,11 @@ void PrintDialog::setupOptionalUI()
         }
 
         // bUseDependencyRow should only be true if a dependency exists
-        bUseDependencyRow = bUseDependencyRow && (aDependsOnName.getLength() != 0);
+        bUseDependencyRow = bUseDependencyRow && !aDependsOnName.isEmpty();
 
         // is it necessary to switch between static and dynamic pages ?
         bool bSwitchPage = false;
-        if( aGroupingHint.getLength() )
+        if( !aGroupingHint.isEmpty() )
             bSwitchPage = true;
         else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) || (bOnStaticPage && ! bSubgroupOnStaticPage )  )
             bSwitchPage = true;
@@ -1222,7 +1222,7 @@ void PrintDialog::setupOptionalUI()
                 pCurParent = &maNUpPage;            // set layout page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.getLength() )
+            else if( !aGroupingHint.isEmpty() )
             {
                 pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maJobPage.getLayout());
                 pCurParent = &maJobPage;            // set job page as current parent
@@ -1231,7 +1231,7 @@ void PrintDialog::setupOptionalUI()
         }
 
         if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) ) ||
-            ( ! pCurParent && ! (bOnStaticPage || aGroupingHint.getLength() ) ) )
+            ( ! pCurParent && ! (bOnStaticPage || !aGroupingHint.isEmpty() ) ) )
         {
             // add new tab page
             TabPage* pNewGroup = new TabPage( &maTabCtrl );
@@ -1252,9 +1252,9 @@ void PrintDialog::setupOptionalUI()
             bSubgroupOnStaticPage = false;
             bOnStaticPage = false;
         }
-        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && (pCurParent || aGroupingHint.getLength() ) )
+        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && (pCurParent || !aGroupingHint.isEmpty() ) )
         {
-            bSubgroupOnStaticPage = (aGroupingHint.getLength() != 0);
+            bSubgroupOnStaticPage = !aGroupingHint.isEmpty();
             // create group FixedLine
             if( ! aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) ||
                 ! pCurColumn->countElements() == 0
@@ -1365,7 +1365,7 @@ void PrintDialog::setupOptionalUI()
             {
                 sal_Int32 nCurHelpText = 0;
                 boost::shared_ptr<vcl::RowOrColumn> pRadioColumn( pCurColumn );
-                if( aText.getLength() )
+                if( !aText.isEmpty() )
                 {
                     // add a FixedText:
                     FixedText* pHeading = new FixedText( pCurParent );
@@ -1432,7 +1432,7 @@ void PrintDialog::setupOptionalUI()
                 aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >( aPropertyName, pFieldColumn ) );
 
                 vcl::LabeledElement* pLabel = NULL;
-                if( aText.getLength() )
+                if( !aText.isEmpty() )
                 {
                     // add a FixedText:
                     FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
@@ -1719,7 +1719,7 @@ void PrintDialog::checkOptionalControlDependencies()
             {
                 rtl::OUString aDep( maPController->getDependency( it->second ) );
                 // if the dependency is at least enabled, then enable this control anyway
-                if( aDep.getLength() && maPController->isUIOptionEnabled( aDep ) )
+                if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
                     bShouldbeEnabled = true;
             }
         }
@@ -2178,7 +2178,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, UIOptionsChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
 {
     checkOptionalControlDependencies();
     return 0;
@@ -2258,7 +2258,7 @@ void PrintDialog::makeEnabled( Window* i_pWindow )
     if( it != maControlToPropertyMap.end() )
     {
         rtl::OUString aDependency( maPController->makeEnabled( it->second ) );
-        if( aDependency.getLength() )
+        if( !aDependency.isEmpty() )
             updateWindowFromProperty( aDependency );
     }
 }

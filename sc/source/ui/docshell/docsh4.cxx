@@ -131,9 +131,6 @@ using namespace ::com::sun::star;
         ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
-
 #define SC_PREVIEW_SIZE_X   10000
 #define SC_PREVIEW_SIZE_Y   12400
 
@@ -159,10 +156,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
             const SfxPoolItem* pRowItem;
             const SfxPoolItem* pTabItem;
             const SfxPoolItem* pTextItem;
-            if( pReqArgs && IS_AVAILABLE( FN_PARAM_1, &pColItem ) &&
-                            IS_AVAILABLE( FN_PARAM_2, &pRowItem ) &&
-                            IS_AVAILABLE( FN_PARAM_3, &pTabItem ) &&
-                            IS_AVAILABLE( SID_SC_SETTEXT, &pTextItem ) )
+            if( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pColItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_2, &pRowItem ) &&
+                            pReqArgs->HasItem( FN_PARAM_3, &pTabItem ) &&
+                            pReqArgs->HasItem( SID_SC_SETTEXT, &pTextItem ) )
             {
                 //  Parameter sind 1-based !!!
                 SCCOL nCol = ((SfxInt16Item*)pColItem)->GetValue() - 1;
@@ -185,12 +182,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     }
                     else                // geschuetzte Zelle
                     {
+#ifndef DISABLE_SCRIPTING
                         SbxBase::SetError( SbxERR_BAD_PARAMETER );      //! welchen Fehler ?
+#endif
                         break;
                     }
                 }
             }
+#ifndef DISABLE_SCRIPTING
             SbxBase::SetError( SbxERR_NO_OBJECT );
+#endif
         }
         break;
 
@@ -291,18 +292,18 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 sal_Bool bRowInit = false;
                 sal_Bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
 
-                if( IS_AVAILABLE( SID_CHART_NAME, &pItem ) )
+                if( pReqArgs->HasItem( SID_CHART_NAME, &pItem ) )
                     aChartName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( IS_AVAILABLE( SID_CHART_SOURCE, &pItem ) )
+                if( pReqArgs->HasItem( SID_CHART_SOURCE, &pItem ) )
                     aRangeName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                 {
                     bColHeaders = ((const SfxBoolItem*)pItem)->GetValue();
                     bColInit = sal_True;
                 }
-                if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                 {
                     bRowHeaders = ((const SfxBoolItem*)pItem)->GetValue();
                     bRowInit = sal_True;
@@ -1101,8 +1102,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
             ScTabViewShell* pSh = GetBestViewShell();
             if ( pSh )
                 pSh->Execute( rReq );
+#ifndef DISABLE_SCRIPTING
             else
                 SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
+#endif
         }
     }
 }
@@ -1223,7 +1226,7 @@ void ScDocShell::DoRecalc( bool bApi )
         //  doppelt gepainted werden.
 
         ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
-        if ( pCharts && pCharts->GetCount() )
+        if ( pCharts && pCharts->hasListeners() )
             PostPaintGridAll();
         else
             PostDataChanged();

@@ -29,8 +29,7 @@ $(eval $(call gb_Library_Library,charttools))
 
 $(eval $(call gb_Library_set_include,charttools,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/chart2/source/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/chart2/source/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,charttools,\

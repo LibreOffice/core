@@ -75,7 +75,7 @@ import static org.junit.Assert.*;
             The parameters for this have to be "ftp_access" and "http_access".
             If they are not given, tests for ftp and http will fail.
 
-    @todo   We need a further test for accessing UNC pathes on windows!
+    @todo   We need a further test for accessing UNC paths on windows!
  */
 public class CheckXComponentLoader
 {

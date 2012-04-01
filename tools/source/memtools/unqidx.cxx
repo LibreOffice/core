@@ -195,43 +195,6 @@ sal_uIntPtr UniqueIndex::GetIndex( const void* p ) const
 
 /*************************************************************************
 |*
-|*    UniqueIndex::IsIndexValid()
-|*
-*************************************************************************/
-
-sal_Bool UniqueIndex::IsIndexValid( sal_uIntPtr nIndex ) const
-{
-    // Ist Index zulaessig
-    if ( (nIndex >= nStartIndex) &&
-         (nIndex < (Container::GetSize()+nStartIndex)) )
-    {
-        // Index ist nur zulaessig, wenn Eintrag auch belegt ist
-        if ( Container::ImpGetObject( nIndex-nStartIndex ) )
-            return sal_True;
-        else
-            return sal_False;
-    }
-    else
-        return sal_False;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Seek()
-|*
-*************************************************************************/
-
-void* UniqueIndex::Seek( sal_uIntPtr nIndex )
-{
-    // Index-Eintrag als aktuellen setzten, wenn er gueltig ist
-    if ( IsIndexValid( nIndex ) )
-        return Container::Seek( nIndex-nStartIndex );
-    else
-        return NULL;
-}
-
-/*************************************************************************
-|*
 |*    UniqueIndex::Seek()
 |*
 *************************************************************************/

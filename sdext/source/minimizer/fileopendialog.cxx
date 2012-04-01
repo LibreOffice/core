@@ -35,7 +35,6 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -109,7 +108,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
                         {
                             rtl::OUString sDocumentService;
                             rProperty.Value >>= sDocumentService;
-                            if ( sDocumentService == OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+                            if ( sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
                                 bImpressFilter = sal_True;
                             else
                                 j = aFilterProperties.getLength();

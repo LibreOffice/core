@@ -50,6 +50,8 @@ public:
     void testQueryRowDifference();
     void testQueryVisibleCells();
 
+protected:
+    ~XCellRangesQuery() {}
 };
 
 }

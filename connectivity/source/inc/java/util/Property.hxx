@@ -35,12 +35,12 @@ namespace connectivity
     class java_util_Properties : public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_util_Properties();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_util_Properties( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         java_util_Properties( );
         void setProperty(const ::rtl::OUString key, const ::rtl::OUString& value);

@@ -33,6 +33,7 @@
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
+#include "objdlg.hxx"
 
 #include "baside2.hrc"
 
@@ -1388,6 +1389,11 @@ void ModulWindow::SetLineNumberDisplay(bool b)
     aXEditorWindow.SetLineNumberDisplay(b);
 }
 
+void ModulWindow::SetObjectCatalogDisplay(bool b)
+{
+    aXEditorWindow.SetObjectCatalogDisplay(b);
+}
+
 sal_Bool ModulWindow::IsPasteAllowed()
 {
     sal_Bool bPaste = sal_False;
@@ -1420,6 +1426,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     aHSplitter( this, WinBits( WB_HSCROLL ) ),
     aWatchWindow( this ),
     aStackWindow( this ),
+    aObjectCatalog( this ),
     bVSplitted(sal_False),
     bHSplitted(sal_False),
     m_pModulWindow(0),
@@ -1434,6 +1441,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
 
     aWatchWindow.Show();
     aStackWindow.Show();
+    aObjectCatalog.Show();
 
     Color aColor(GetSettings().GetStyleSettings().GetFieldTextColor());
     m_aSyntaxColors[TT_UNKNOWN] = aColor;
@@ -1506,12 +1514,13 @@ void ModulWindowLayout::ArrangeWindows()
         nVSplitPos = ( nVSplitPos < nMinPos ) ? 0 : ( aSz.Height() - SPLIT_HEIGHT );
 
     Size aXEWSz;
-    aXEWSz.Width() = aSz.Width();
+    aXEWSz.Width() = aSz.Width() - OBJCAT_PANE_WIDTH;
+
     aXEWSz.Height() = nVSplitPos + 1;
     if ( m_pModulWindow )
     {
         DBG_CHKOBJ( m_pModulWindow, ModulWindow, 0 );
-        m_pModulWindow->SetPosSizePixel( Point( 0, 0 ), aXEWSz );
+        m_pModulWindow->SetPosSizePixel( Point( OBJCAT_PANE_WIDTH, 0 ), aXEWSz );
     }
 
     aVSplitter.SetDragRectPixel( Rectangle( Point( 0, 0 ), Size( aSz.Width(), aSz.Height() ) ) );
@@ -1535,6 +1544,11 @@ void ModulWindowLayout::ArrangeWindows()
     aSWSz.Height() = aSz.Height() - aSWPos.Y();
     if ( !aStackWindow.IsFloatingMode() )
         aStackWindow.SetPosSizePixel( aSWPos, aSWSz );
+
+    Size aOCSz( OBJCAT_PANE_WIDTH, aSz.Height() - aSWSz.Height() - 3 );
+    Point aOCPos( 0, 0 );
+    if ( !aObjectCatalog.IsFloatingMode() )
+        aObjectCatalog.SetPosSizePixel( aOCPos, aOCSz );
 
     if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
         aHSplitter.Hide();
@@ -1592,6 +1606,15 @@ sal_Bool ModulWindowLayout::IsToBeDocked( DockingWindow* pDockingWindow, const P
                 return sal_True;
             }
         }
+        if ( pDockingWindow == &aObjectCatalog )
+        {
+            if ( ( aPosInMe.Y() > nVSplitPos ) && ( aPosInMe.X() > nHSplitPos ) )
+            {
+                rRect.SetSize( Size( aSz.Width() - nHSplitPos, aSz.Height() - nVSplitPos ) );
+                rRect.SetPos( OutputToScreenPixel( Point( nHSplitPos, nVSplitPos ) ) );
+                return sal_True;
+            }
+        }
     }
     return sal_False;
 }
@@ -1603,6 +1626,10 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
         ArrangeWindows();
     }
     else if ( pDockingWindow == &aStackWindow )
+    {
+        ArrangeWindows();
+    }
+    else if ( pDockingWindow == &aObjectCatalog )
     {
         ArrangeWindows();
     }

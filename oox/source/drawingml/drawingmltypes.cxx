@@ -47,23 +47,6 @@ namespace drawingml {
 
 // ============================================================================
 
-/** converts an emu string into 1/100th mmm but constrain as per ST_TextMargin
- * see 5.1.12.73
- */
-sal_Int32 GetTextMargin( const OUString& sValue )
-{
-    sal_Int32 nRet = 0;
-    if( !::sax::Converter::convertNumber( nRet, sValue ) )
-        nRet = 0;
-    else if( nRet < 0 )
-        nRet = 0;
-    else if( nRet > 51206400 )
-        nRet = 51206400;
-
-    nRet /= 360;
-    return nRet;
-}
-
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
 {
@@ -97,12 +80,6 @@ double GetPositiveFixedPercentage( const OUString& sValue )
 
 // --------------------------------------------------------------------
 
-/** converts the attributes from an CT_Point2D into an awt Point with 1/100thmm */
-Point GetPoint2D( const Reference< XFastAttributeList >& xAttribs )
-{
-    return Point( GetCoordinate( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
-}
-
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
@@ -134,22 +111,6 @@ sal_Int32 GetTextSpacingPoint( const OUString& sValue )
 sal_Int32 GetTextSpacingPoint( const sal_Int32 nValue )
 {
     return ( nValue * 254 + 360 ) / 720;
-}
-
-TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken )
-{
-    TextVerticalAdjust rVal = TextVerticalAdjust_TOP;
-
-    switch( nToken ) {
-    case XML_b:
-        rVal = TextVerticalAdjust_BOTTOM;
-        break;
-    case XML_ctr:
-        rVal = TextVerticalAdjust_CENTER;
-        break;
-    }
-
-    return rVal;
 }
 
 float GetFontHeight( sal_Int32 nHeight )

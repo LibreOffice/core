@@ -25,8 +25,27 @@
 #
 #*************************************************************************
 
-use lib ("$ENV{SOLARENV}/bin/modules");
-use macosxotoolhelper;
+# The install names of our dynamic libraries contain a special segment token
+# that denotes where the dynamic library is located in the installation set.
+# The segment token consists of "@", optionally followed by ".", followed by 50
+# "_", followed by a location token (one of "URELIB", "OOO", "OXT", or "NONE").
+#
+# Typically, the segment token is the first segment of a relative install name.
+# But the segment token may also appear within an absolute install name.  That
+# is useful when tunnelling the segment token into the external build process
+# via a --prefix configure switch, for example.
+#
+# When another dynamic library or an executable links against such a dynamic
+# library, the path recorded in the former to locate the latter is rewritten
+# according to the below %action table.  The result path consists of the prefix
+# from the action table followed by the suffix of the dynamic library's install
+# name.  If the special segment token does not contain the optional "." after
+# the "@", the suffix consists of all segments after the special token segment.
+# If the special token segment does contain the optional ".", then the suffix
+# consists of just the last segment of the original install name.
+#
+# That latter case is useful for libraries from external modules, where the
+# external build process locates them in some sub-directory.
 
 sub action($$$)
 {
@@ -41,7 +60,6 @@ sub action($$$)
          'shl/URELIB/URELIB' => '@loader_path',
          'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OOO/OOO' => '@loader_path',
-         'shl/LOADER/LOADER' => '@loader_path',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/OOO/NONE' => '@__VIA_LIBRARY_PATH__',
@@ -53,51 +71,16 @@ sub action($$$)
     return $act;
 }
 
-@ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or die
-  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|OXT|NONE|LOADER <filepath>*';
+@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDK|OXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
-if ($type eq "SharedLibrary")
-{
-    $type = "shl";
-}
 if ($type eq "Executable")
 {
     $type = "app"
 }
-if ($type eq "Library")
+elsif ($type eq "Library" || $type eq "SharedLibrary")
 {
     $type = "shl"
-}
-if ($type eq "extshl")
-{
-    $type = "shl";
-    my $change = "";
-    my %inames;
-    foreach $file (@ARGV)
-    {
-        my $iname = otoolD($file);
-        (defined $iname ? $iname : $file . "\n") =~ m'^(.*?([^/]+))\n$' or
-            die "unexpected otool -D output";
-        $change .= " -change $1 " . action($type, $loc, $loc) . "/$2";
-        $inames{$file} = $2;
-    }
-    if( $loc eq "LOADER" )
-    {
-        foreach $file (@ARGV)
-        {
-            my $call = "install_name_tool$change -id \@loader_path/$inames{$file} $file";
-            system($call) == 0 or die "cannot $call";
-        }
-    }
-    else
-    {
-        foreach $file (@ARGV)
-        {
-            my $call = "install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
-            system($call) == 0 or die "cannot $call";
-        }
-    }
 }
 foreach $file (@ARGV)
 {
@@ -106,10 +89,14 @@ foreach $file (@ARGV)
     my $change = "";
     while (<IN>)
     {
-        $change .= " -change $1 " . action($type, $loc, $2) . "$3"
-            if m'^\s*(@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$';
-        $change .= ' -change '.$1.' @loader_path/'.$2
-            if m'^\s*(/python-inst/(OOoPython.framework/Versions/[^/]+/OOoPython))';
+        if (m'^\s*(((/.*)?/)?@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$')
+        {
+            $change .= " -change $1 " . action($type, $loc, $4) . $5;
+        }
+        elsif (m'^\s*(((/.*)?/)?@\._{50}([^/]+)(/.+)?(/[^/]+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$')
+        {
+            $change .= " -change $1 " . action($type, $loc, $4) . $6;
+        }
     }
     close(IN);
     if ($change ne "")

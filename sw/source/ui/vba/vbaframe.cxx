@@ -52,11 +52,10 @@ void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException )
     xSelectSupp->select( uno::makeAny( mxTextFrame ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFrame::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFrame") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFrame"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -334,7 +334,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[INSTALLLOCATION]Basis\\";
+	Value = "[INSTALLLOCATION]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -343,7 +343,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[INSTALLLOCATION]Basis\\";
+	Value = "[INSTALLLOCATION]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -352,7 +352,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
     Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\Basis\%PRODUCTVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[INSTALLLOCATION]Basis\\";
+	Value = "[INSTALLLOCATION]";
 	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_PRODUCTVERSION);
 End
 
@@ -361,7 +361,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstal
     Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[INSTALLLOCATION]Basis\\";
+	Value = "[INSTALLLOCATION]";
 	Styles = (ALWAYS_REQUIRED);
 End
 

@@ -202,20 +202,6 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    Sequence< Reference< XInterface > > AccessibleEventNotifier::getEventListeners( const TClientId _nClient ) SAL_THROW( ( ) )
-    {
-        Sequence< Reference< XInterface > > aListeners;
-
-        ::osl::MutexGuard aGuard( lclMutex::get() );
-
-        ClientMap::iterator aClientPos;
-        if ( implLookupClient( _nClient, aClientPos ) )
-            aListeners = aClientPos->second->getElements();
-
-        return aListeners;
-    }
-
-    //---------------------------------------------------------------------
     void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent ) SAL_THROW( ( ) )
     {
         Sequence< Reference< XInterface > > aListeners;

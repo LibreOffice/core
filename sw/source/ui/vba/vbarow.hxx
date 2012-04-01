@@ -61,7 +61,7 @@ public:
     static void SelectRow( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_ROW_HXX */

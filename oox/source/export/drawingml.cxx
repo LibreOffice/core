@@ -64,7 +64,6 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -118,41 +117,6 @@ namespace drawingml {
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
         mAny >>= variable;
-DBG(
-void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
-{
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
-
-    for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
-
-    try {
-        Any value = rXPropSet->getPropertyValue( props [i].Name );
-
-        OUString strValue;
-        sal_Int32 intValue;
-        bool boolValue;
-    LineSpacing spacing;
-
-        if( value >>= strValue )
-            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
-        else if( value >>= intValue )
-            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
-        else if( value >>= boolValue )
-            fprintf (stderr,"%d            (bool)\n", boolValue);
-    else if( value >>= spacing ) {
-        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
-    }
-        else
-            fprintf (stderr,"???           <unhandled type>\n");
-    } catch(const Exception &) {
-        fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
-    }
-    }
-}
-);
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;
@@ -451,8 +415,7 @@ OUString DrawingML::WriteImage( const OUString& rURL )
     rtl::OString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-    using comphelper::string::indexOfL;
-    sal_Int32 index = indexOfL(aURLBS, RTL_CONSTASCII_STRINGPARAM(aURLBegin));
+    sal_Int32 index = aURLBS.indexOfL(RTL_CONSTASCII_STRINGPARAM(aURLBegin));
 
     if ( index != -1 )
     {
@@ -908,27 +871,27 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
     rBuffer.append( '{' );
     for( i = 0; i < 4; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 6; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 8; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 10; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 16; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '}' );
 }
@@ -1499,8 +1462,8 @@ sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star
 {
     String sNumStr = cBulletId;
 
-    if ( rFontDesc.Name.equalsIgnoreAsciiCaseAscii("starsymbol") ||
-         rFontDesc.Name.equalsIgnoreAsciiCaseAscii("opensymbol") )  {
+    if ( rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
+         rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )  {
         String sFontName = rFontDesc.Name;
         rtl_TextEncoding aCharSet = rFontDesc.CharSet;
 

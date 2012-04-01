@@ -66,7 +66,6 @@ public:
     void                    Suspend();
     sal_Bool                    IsSuspended() const { return bSuspended; }
 
-    void                    Lock();
     void                    UnLock();
     void                    Reschedule();
 

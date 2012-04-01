@@ -87,16 +87,15 @@ void SalAbort( const rtl::OUString& rErrorText, bool )
 
     if ( rErrorText.isEmpty() )
     {
-        // #112255# make sure crash reporter is triggered
+        // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        FatalAppExit( 0, "Application Error" );
+        FatalAppExitW( 0, L"Application Error" );
     }
     else
     {
-        // #112255# make sure crash reporter is triggered
+        // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
-        ByteString aErrorText( ImplSalGetWinAnsiString( rErrorText ) );
-        FatalAppExit( 0, aErrorText.GetBuffer() );
+        FatalAppExitW( 0, reinterpret_cast<LPCWSTR>(rErrorText.getStr()) );
     }
 }
 
@@ -329,32 +328,13 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount )
 
 bool WinSalInstance::CheckYieldMutex()
 {
-    bool bRet = true;
     SalData*    pSalData = GetSalData();
-    DWORD       nCurThreadId = GetCurrentThreadId();
-    if ( pSalData->mnAppThreadId != nCurThreadId )
+    if ( pSalData->mpFirstInstance )
     {
-        if ( pSalData->mpFirstInstance )
-        {
-            SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-            if ( pYieldMutex->mnThreadId != nCurThreadId )
-            {
-                bRet = false;
-            }
-        }
+        SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
+        return (pYieldMutex->mnThreadId == (GetCurrentThreadId()));
     }
-    else
-    {
-        if ( pSalData->mpFirstInstance )
-        {
-            SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-            if ( pYieldMutex->mnThreadId != nCurThreadId )
-            {
-                bRet = false;
-            }
-        }
-    }
-    return bRet;
+    return true;
 }
 
 // =======================================================================

@@ -101,6 +101,9 @@
 #include <sfxlocal.hrc>
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
+#ifdef UNX
+#include <sys/stat.h>
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -597,7 +600,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-        // check, wether or not we have to display a preview
+        // check, whether or not we have to display a preview
         if ( xCtrlAccess.is() )
         {
             try
@@ -694,7 +697,7 @@ void FileDialogHelper_Impl::updateVersions()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
 {
     if ( !mbHasPreview )
         return 0;
@@ -1550,7 +1553,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<rtl::OUString>& rpURLList,
         if ( rpURLList.empty() )
             return ERRCODE_ABORT;
 
-        // check, wether or not we have to display a password box
+        // check, whether or not we have to display a password box
         if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try
@@ -1635,6 +1638,24 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
     }
 }
 
+void FileDialogHelper_Impl::verifyPath()
+{
+#ifdef UNX
+    struct stat aFileStat;
+    const OString sFullPath = OUStringToOString( maPath.copy(RTL_CONSTASCII_LENGTH("file://")) + maFileName, osl_getThreadTextEncoding() );
+    stat( sFullPath.getStr(), &aFileStat );
+    // lp#905355, fdo#43895
+    // Check that the file has read only permission and is in /tmp -- this is
+    //  the case if we have opened the file from the web with firefox only.
+    if ( maPath.reverseCompareToAsciiL("file:///tmp",11) == 0 &&
+            ( aFileStat.st_mode & (S_IRWXO + S_IRWXG + S_IRWXU) ) == S_IRUSR )
+    {
+        maPath = SvtPathOptions().GetWorkPath();
+        mxFileDlg->setDisplayDirectory( maPath );
+    }
+#endif
+}
+
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
 {
@@ -1648,6 +1669,7 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         try
         {
             mxFileDlg->setDisplayDirectory( maPath );
+            verifyPath();
         }
         catch( const IllegalArgumentException& )
         {
@@ -1665,6 +1687,7 @@ void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
         try
         {
             mxFileDlg->setDefaultName( maFileName );
+            verifyPath();
         }
         catch( const IllegalArgumentException& )
         {
@@ -2298,7 +2321,7 @@ void FileDialogHelper::SetContext( Context _eNewContext )
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( FileDialogHelper, ExecuteSystemFilePicker, void*, EMPTYARG )
+IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker)
 {
     m_nError = mpImp->execute();
     if ( m_aDialogClosedLink.IsSet() )
@@ -2473,23 +2496,10 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 // ------------------------------------------------------------------------
 static int impl_isFolder( const OUString& rPath )
 {
-    uno::Reference< task::XInteractionHandler > xHandler;
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xHandler.set( xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.task.InteractionHandler" ) ),
-                      uno::UNO_QUERY_THROW );
-    }
-    catch ( const Exception & )
-    {
-    }
-
-    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
-
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, new ::ucbhelper::CommandEnvironment( static_cast< task::XInteractionHandler* > ( aHandler.get() ), uno::Reference< ucb::XProgressHandler >() ) );
+            rPath, uno::Reference< ucb::XCommandEnvironment > () );
         if ( aContent.isFolder() )
             return 1;
 

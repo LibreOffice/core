@@ -135,33 +135,32 @@ static void ImplCalcBorder( WindowAlign eAlign, sal_Bool bNoAlign,
     }
     else
     {
-        if ( eAlign == WINDOWALIGN_TOP )
+        switch ( eAlign )
         {
+        case WINDOWALIGN_TOP:
             rLeft   = 2;
             rTop    = 2;
             rRight  = 2;
             rBottom = 0;
-        }
-        else if ( eAlign == WINDOWALIGN_LEFT )
-        {
+            break;
+        case WINDOWALIGN_LEFT:
             rLeft   = 2;
             rTop    = 2;
             rRight  = 0;
             rBottom = 2;
-        }
-        else if ( eAlign == WINDOWALIGN_BOTTOM )
-        {
+            break;
+        case WINDOWALIGN_BOTTOM:
             rLeft   = 2;
             rTop    = 0;
             rRight  = 2;
             rBottom = 2;
-        }
-        else
-        {
+            break;
+        default:
             rLeft   = 0;
             rTop    = 2;
             rRight  = 2;
             rBottom = 2;
+            break;
         }
     }
 }
@@ -183,8 +182,9 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
     }
     else
     {
-        if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
+        switch ( pWin->meAlign )
         {
+        case WINDOWALIGN_BOTTOM:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
             pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
@@ -194,9 +194,8 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
             pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
             pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
             pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-        }
-        else if ( pWin->meAlign == WINDOWALIGN_TOP )
-        {
+            break;
+        case WINDOWALIGN_TOP:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
             pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
@@ -206,9 +205,8 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
             pWin->DrawLine( Point( 1, 1 ), Point( nDX-3, 1 ) );
             pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-1 ) );
             pWin->DrawLine( Point( nDX-1, 1 ), Point( nDX-1, nDY-1 ) );
-        }
-        else if ( pWin->meAlign == WINDOWALIGN_LEFT )
-        {
+            break;
+        case WINDOWALIGN_LEFT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
             pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
@@ -218,9 +216,8 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
             pWin->DrawLine( Point( 1, 1 ), Point( nDX-1, 1 ) );
             pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
             pWin->DrawLine( Point( 1, nDY-1 ), Point( nDX-1, nDY-1 ) );
-        }
-        else
-        {
+            break;
+        default:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, 0 ), Point( nDX-2, 0 ) );
             pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
@@ -230,6 +227,7 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
             pWin->DrawLine( Point( 0, 1 ), Point( nDX-3, 1 ) );
             pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
             pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
+            break;
         }
     }
 }
@@ -244,33 +242,32 @@ void SplitWindow::ImplDrawBorderLine( SplitWindow* pWin )
         long                    nDX = pWin->mnDX;
         long                    nDY = pWin->mnDY;
 
-        if ( pWin->meAlign == WINDOWALIGN_LEFT )
+        switch ( pWin->meAlign )
         {
+        case WINDOWALIGN_LEFT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, nDY-3 ) );
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
             pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-4 ) );
-        }
-        else if ( pWin->meAlign == WINDOWALIGN_RIGHT )
-        {
+            break;
+        case WINDOWALIGN_RIGHT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-3 ) );
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
             pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-4 ) );
-        }
-        else if ( pWin->meAlign == WINDOWALIGN_TOP )
-        {
+            break;
+        case WINDOWALIGN_TOP:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-3, nDY-SPLITWIN_SPLITSIZEEXLN-1 ) );
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
             pWin->DrawLine( Point( 1, nDY-SPLITWIN_SPLITSIZEEXLN ), Point( nDX-4, nDY-SPLITWIN_SPLITSIZEEXLN ) );
-        }
-        else if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
-        {
+            break;
+        case WINDOWALIGN_BOTTOM:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
             pWin->DrawLine( Point( 0, SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-3, SPLITWIN_SPLITSIZEEXLN-1 ) );
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
             pWin->DrawLine( Point( 1, SPLITWIN_SPLITSIZEEXLN ), Point( nDX-4, SPLITWIN_SPLITSIZEEXLN ) );
+            break;
         }
     }
 }
@@ -1431,31 +1428,35 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
         return;
 
     Size aSize = GetSizePixel();
-    if ( meAlign == WINDOWALIGN_TOP )
+    switch ( meAlign )
     {
+    case WINDOWALIGN_TOP:
         aSize.Height() += nDelta;
         SetSizePixel( aSize );
-    }
-    else if ( meAlign == WINDOWALIGN_BOTTOM )
+        break;
+    case WINDOWALIGN_BOTTOM:
     {
         maDragRect.Top() += nDelta;
         Point aPos = GetPosPixel();
         aPos.Y() -= nDelta;
         aSize.Height() += nDelta;
         SetPosSizePixel( aPos, aSize );
+        break;
     }
-    else if ( meAlign == WINDOWALIGN_LEFT )
-    {
+    case WINDOWALIGN_LEFT:
         aSize.Width() += nDelta;
         SetSizePixel( aSize );
-    }
-    else // meAlign == WINDOWALIGN_RIGHT
+        break;
+    case WINDOWALIGN_RIGHT:
+    default:
     {
         maDragRect.Left() += nDelta;
         Point aPos = GetPosPixel();
         aPos.X() -= nDelta;
         aSize.Width() += nDelta;
         SetPosSizePixel( aPos, aSize );
+        break;
+    }
     }
 
     SplitResize();
@@ -1504,23 +1505,23 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
             if ( !nDelta )
                 return aSize;
 
-            if ( meAlign == WINDOWALIGN_TOP )
+            switch ( meAlign )
             {
+            case WINDOWALIGN_TOP:
                 aSize.Height() += nDelta;
-            }
-            else if ( meAlign == WINDOWALIGN_BOTTOM )
-            {
+                break;
+            case WINDOWALIGN_BOTTOM:
                 aPos.Y() -= nDelta;
                 aSize.Height() += nDelta;
-            }
-            else if ( meAlign == WINDOWALIGN_LEFT )
-            {
+                break;
+            case WINDOWALIGN_LEFT:
                 aSize.Width() += nDelta;
-            }
-            else // meAlign == WINDOWALIGN_RIGHT
-            {
+                break;
+            case WINDOWALIGN_RIGHT:
+            default:
                 aPos.X() -= nDelta;
                 aSize.Width() += nDelta;
+                break;
             }
         }
     }
@@ -1675,8 +1676,9 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
     if ( nCenterEx > 0 )
         nEx += nCenterEx;
 
-    if ( meAlign == WINDOWALIGN_TOP )
+    switch ( meAlign )
     {
+    case WINDOWALIGN_TOP:
         rRect.Left()    = mnLeftBorder+nEx;
         rRect.Top()     = mnDY-mnBottomBorder-nSplitSize;
         rRect.Right()   = rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE;
@@ -1686,9 +1688,8 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
             rRect.Top()     -= mnTopBorder;
             rRect.Bottom()  += mnBottomBorder;
         }
-    }
-    else if ( meAlign == WINDOWALIGN_BOTTOM )
-    {
+        break;
+    case WINDOWALIGN_BOTTOM:
         rRect.Left()    = mnLeftBorder+nEx;
         rRect.Top()     = mnTopBorder;
         rRect.Right()   = rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE;
@@ -1698,9 +1699,8 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
             rRect.Top()     -= mnTopBorder;
             rRect.Bottom()  += mnBottomBorder;
         }
-    }
-    else if ( meAlign == WINDOWALIGN_LEFT )
-    {
+        break;
+    case WINDOWALIGN_LEFT:
         rRect.Left()    = mnDX-mnRightBorder-nSplitSize;
         rRect.Top()     = mnTopBorder+nEx;
         rRect.Right()   = mnDX-mnRightBorder-1;
@@ -1710,9 +1710,8 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
             rRect.Left()    -= mnLeftBorder;
             rRect.Right()   += mnRightBorder;
         }
-    }
-    else if ( meAlign == WINDOWALIGN_RIGHT )
-    {
+        break;
+    case WINDOWALIGN_RIGHT:
         rRect.Left()    = mnLeftBorder;
         rRect.Top()     = mnTopBorder+nEx;
         rRect.Right()   = mnLeftBorder+nSplitSize-1;
@@ -1722,6 +1721,7 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
             rRect.Left()    -= mnLeftBorder;
             rRect.Right()   += mnRightBorder;
         }
+        break;
     }
 }
 
@@ -2032,20 +2032,21 @@ void SplitWindow::ImplDrawFadeIn( sal_Bool bInPaint )
     if ( mbFadeIn )
     {
         Rectangle       aTempRect;
-        Image           aImage;
         ImplGetFadeInRect( aTempRect );
 
-        sal_Bool bLeft;
-        if ( meAlign == WINDOWALIGN_TOP )
-            bLeft   = sal_False;
-        else if ( meAlign == WINDOWALIGN_BOTTOM )
-            bLeft   = sal_True;
-        else if ( meAlign == WINDOWALIGN_LEFT )
-            bLeft   = sal_False;
-        else if ( meAlign == WINDOWALIGN_RIGHT )
-            bLeft   = sal_True;
-        else
-            bLeft   = sal_True;
+        sal_Bool bLeft = sal_True;
+        switch ( meAlign )
+        {
+        case WINDOWALIGN_TOP:
+        case WINDOWALIGN_LEFT:
+            bLeft = sal_False;
+            break;
+        case WINDOWALIGN_BOTTOM:
+        case WINDOWALIGN_RIGHT:
+        default:
+            bLeft = sal_True;
+            break;
+        }
 
         if ( !bInPaint )
             Erase( aTempRect );
@@ -2061,20 +2062,21 @@ void SplitWindow::ImplDrawFadeOut( sal_Bool bInPaint )
     if ( mbFadeOut )
     {
         Rectangle       aTempRect;
-        Image           aImage;
         ImplGetFadeOutRect( aTempRect );
 
-        sal_Bool bLeft;
-        if ( meAlign == WINDOWALIGN_TOP )
-            bLeft   = sal_True;
-        else if ( meAlign == WINDOWALIGN_BOTTOM )
-            bLeft   = sal_False;
-        else if ( meAlign == WINDOWALIGN_LEFT )
-            bLeft   = sal_True;
-        else if ( meAlign == WINDOWALIGN_RIGHT )
-            bLeft   = sal_False;
-        else
-            bLeft   = sal_True;
+        sal_Bool bLeft = sal_True;
+        switch ( meAlign )
+        {
+        case WINDOWALIGN_BOTTOM:
+        case WINDOWALIGN_RIGHT:
+            bLeft = sal_False;
+            break;
+        case WINDOWALIGN_TOP:
+        case WINDOWALIGN_LEFT:
+        default:
+            bLeft = sal_True;
+            break;
+        }
 
         if ( !bInPaint )
             Erase( aTempRect );
@@ -2722,20 +2724,20 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
 
 void SplitWindow::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    switch ( nType )
     {
+    case STATE_CHANGE_INITSHOW:
         if ( IsUpdateMode() )
             ImplCalcLayout();
-    }
-    else if ( nType == STATE_CHANGE_UPDATEMODE )
-    {
+        break;
+    case STATE_CHANGE_UPDATEMODE:
         if ( IsUpdateMode() && IsReallyShown() )
             ImplCalcLayout();
-    }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-    {
+        break;
+    case STATE_CHANGE_CONTROLBACKGROUND:
         ImplInitSettings();
         Invalidate();
+        break;
     }
 
     DockingWindow::StateChanged( nType );
@@ -3341,25 +3343,27 @@ void SplitWindow::ImplNewAlign()
         mbHorz        = sal_False;
         mbBottomRight = sal_False;
     }
-    else if ( meAlign == WINDOWALIGN_TOP )
+    else
     {
-        mbHorz        = sal_True;
-        mbBottomRight = sal_False;
-    }
-    else if ( meAlign == WINDOWALIGN_BOTTOM )
-    {
-        mbHorz        = sal_True;
-        mbBottomRight = sal_True;
-    }
-    else if ( meAlign == WINDOWALIGN_LEFT )
-    {
-        mbHorz        = sal_False;
-        mbBottomRight = sal_False;
-    }
-    else if ( meAlign == WINDOWALIGN_RIGHT )
-    {
-        mbHorz        = sal_False;
-        mbBottomRight = sal_True;
+        switch ( meAlign )
+        {
+        case WINDOWALIGN_TOP:
+            mbHorz        = sal_True;
+            mbBottomRight = sal_False;
+            break;
+        case WINDOWALIGN_BOTTOM:
+            mbHorz        = sal_True;
+            mbBottomRight = sal_True;
+            break;
+        case WINDOWALIGN_LEFT:
+            mbHorz        = sal_False;
+            mbBottomRight = sal_False;
+            break;
+        case WINDOWALIGN_RIGHT:
+            mbHorz        = sal_False;
+            mbBottomRight = sal_True;
+            break;
+        }
     }
 
     if ( mnWinStyle & WB_BORDER )

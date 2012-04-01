@@ -62,6 +62,7 @@ struct SwCrsrMoveState;
 
 #include <vector>
 
+/// The root element of a Writer document layout.
 class SwRootFrm: public SwLayoutFrm
 {
     //Muss das Superfluous temporaer abschalten.
@@ -177,7 +178,7 @@ public:
     static sal_Bool HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, ViewShell* );
-    ~SwRootFrm();
+    virtual ~SwRootFrm();
     void Init(SwFrmFmt*);
 
     ViewShell *GetCurrShell() const { return pCurrShell; }

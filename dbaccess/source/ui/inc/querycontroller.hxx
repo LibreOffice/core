@@ -48,7 +48,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>

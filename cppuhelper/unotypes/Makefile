@@ -26,12 +26,12 @@
 # instead of those above.
 
 gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild_simple.mk
+include $(GBUILDDIR)/gbuild.mk
 
 all: private_types.flag unotypes.flag
 
 # private_types
-private_types.flag: private_types.rdb
+private_types.flag: private_types.rdb $(gb_UnoApiTarget_CPPUMAKERTARGET)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	    $(call gb_Helper_execute,cppumaker) -O. -BUCR -C $< \
 			-Tcppuhelper.detail.XExceptionThrower \
@@ -48,10 +48,11 @@ XExceptionThrower.urd: $(SRCDIR)/cppuhelper/unotypes/cppuhelper/detail/XExceptio
 		$(call gb_Helper_execute,idlc) -I. -I$(OUTDIR_FOR_BUILD)/idl -O. $<)
 
 # unotypes
-unotypes.flag:
+unotypes.flag: $(gb_UnoApiTarget_CPPUMAKERTARGET)
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(call gb_Helper_execute,cppumaker) -O. -BUCR -C \
 			$(foreach type,$(UNOTYPES),-T$(type)) $(OUTDIR_FOR_BUILD)/bin/udkapi.rdb)
+	touch $@
 
 UNOTYPES := \
 	com.sun.star.beans.PropertyAttribute \

@@ -1,0 +1,19 @@
+When updating biblio.odb be aware that biblio.odb *does not* embed the data of
+the database inside the .odb, instead it is configured to store its data in the
+per-user database/biblio/biblio.dbf and database/biblio/biblio.dbt files. i.e.
+the contents of the ~/.libreoffice/3/user/database/biblio dir.
+
+If you edit biblio.odb in "base" you will really just be changing your local
+data store.
+
+So, to really change the bibliography the easiest thing to do is to launch
+writer and use tools->bibliography database and edit your local one through
+that UI.
+
+Then *copy* ~/.libreoffice/3/user/database/biblio/biblio.db* to
+extras/source/database/ in order to overwrite biblio.dbf and biblio.dbt and
+copy ~/.libreoffice/3/user/database/biblio.odb to
+extras/source/database/biblio.odb
+
+NOTE: base doesn't seem to "PACK" the dbase III files after editing, so deleted
+records still take up space in the file, possibly a bug worth fixing ?

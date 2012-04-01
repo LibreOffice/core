@@ -26,40 +26,21 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include "salhelper/singletonref.hxx"
+
+#include "filtercache.hxx"
 #include "lateinitthread.hxx"
 
-//_______________________________________________
-// includes
+namespace filter { namespace config {
 
-//_______________________________________________
-// namespace
+LateInitThread::LateInitThread(): Thread("lateinitthread") {}
 
-namespace filter{
-    namespace config{
+LateInitThread::~LateInitThread() {}
 
-namespace css = ::com::sun::star;
-
-//_______________________________________________
-// definitions
-
-
-
-LateInitThread::LateInitThread()
-{
-}
-
-
-
-LateInitThread::~LateInitThread()
-{
-}
-
-
-
-void SAL_CALL LateInitThread::run()
-{
-    // sal_True => It indicates using of this method by this thread
+void LateInitThread::execute() {
+    // true => It indicates using of this method by this thread
     // The filter cache use this information to show an assertion
     // for "optimization failure" in case the first calli of loadAll()
     // was not this thread ...
@@ -68,16 +49,10 @@ void SAL_CALL LateInitThread::run()
     // May be they show the problem of a corrupted filter
     // configuration, which is handled inside our event loop or desktop.main()!
 
-    ::salhelper::SingletonRef< FilterCache > rCache;
-    rCache->load(FilterCache::E_CONTAINS_ALL, sal_True);
+    salhelper::SingletonRef< FilterCache >()->load(
+        FilterCache::E_CONTAINS_ALL, true);
 }
 
-void SAL_CALL LateInitThread::onTerminated()
-{
-    delete this;
-}
-
-    } // namespace config
-} // namespace filter
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -449,7 +449,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 {
     // Options noted locally
     if ( !_pOptions )
@@ -610,7 +610,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     const beans::PropertyValue* pVal = rProps.getConstArray();
     for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
     {
-        if( pVal[i].Name.equalsAscii( "PrinterName" ) )
+        if( pVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterName")) )
         {
             rtl::OUString aPrinterName;
             pVal[i].Value >>= aPrinterName;

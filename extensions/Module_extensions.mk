@@ -29,26 +29,40 @@ $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_abp \
+	AllLangResTarget_scn \
+	AllLangResTarget_upd \
+	Library_abp \
+	Library_log \
+	Library_res \
+	Library_scn \
+))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_bib \
 	AllLangResTarget_dbp \
 	AllLangResTarget_pcr \
-	AllLangResTarget_scn \
-	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
-	Library_abp \
 	Library_bib \
 	Library_dbp \
-	Library_log \
 	Library_pcr \
-	Library_res \
-	Library_scn \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
 	Package_bib \
 	Package_pcr \
 ))
+endif
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,extensions,\
+	AllLangResTarget_updchk \
+	Configuration_updchk \
+	Library_updatecheckui \
+	Library_updatefeed \
+	Library_updchk \
+))
+
+$(eval $(call gb_Module_add_check_targets,extensions,\
+    CppunitTest_extensions_test_update \
+))
+endif
 
 ifeq ($(OS),WNT)
 
@@ -57,11 +71,13 @@ ifneq ($(DISABLE_ACTIVEX),TRUE)
 $(eval $(call gb_Module_add_targets,extensions,\
 	WinResTarget_activex \
 	Library_so_activex \
+	Package_so_activex_idl \
 ))
 
 ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_so_activex_x64 \
+	Package_so_activex_x64 \
 ))
 endif # BUILD_X64
 endif # DISABLE_ACTIVEX
@@ -76,6 +92,15 @@ endif # DISABLE_ATL
 
 endif # WNT
 
+ifeq ($(ENABLE_NSPLUGIN),YES)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Executable_nsplugin \
+	Library_npsoplugin \
+	StaticLibrary_npsoenv \
+	WinResTarget_npsoplugin \
+))
+endif
+
 ifeq ($(WITH_MOZILLA),YES)
 
 $(eval $(call gb_Module_add_targets,extensions,\
@@ -85,17 +110,10 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ifeq ($(GUI),UNX)
 ifneq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,extensions,\
+	StaticLibrary_plugcon \
 	Executable_pluginapp.bin \
 ))
 endif
-endif
-
-ifeq ($(ENABLE_NSPLUGIN),YES)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Executable_nsplugin \
-	Library_npsoplugin \
-	WinResTarget_npsoplugin \
-))
 endif
 
 endif # WITH_MOZILLA=YES
@@ -112,9 +130,5 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_ldapbe2 \
 ))
 endif # WITH_LDAP=YES
-
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
-))
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

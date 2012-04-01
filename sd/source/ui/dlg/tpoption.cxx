@@ -564,7 +564,7 @@ SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
     sal_uInt16 nPos = aLbMetric.GetSelectEntryPos();
 

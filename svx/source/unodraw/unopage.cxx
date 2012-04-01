@@ -95,18 +95,6 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 }
 
 //----------------------------------------------------------------------
-// Ctor fuer SvxDrawPage_NewInstance()
-//----------------------------------------------------------------------
-SvxDrawPage::SvxDrawPage() throw()
-: mrBHelper( getMutex() )
-, mpPage( NULL )
-, mpModel( NULL )
-, mpView( NULL )
-{
-    DBG_CTOR(SvxDrawPage,NULL);
-}
-
-//----------------------------------------------------------------------
 SvxDrawPage::~SvxDrawPage() throw()
 {
     DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
@@ -185,14 +173,14 @@ void SvxDrawPage::dispose()
             // notify subclasses to do their dispose
             disposing();
         }
-        catch(const ::com::sun::star::uno::Exception& e)
+        catch(const ::com::sun::star::uno::Exception&)
         {
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
             // only once.
             mrBHelper.bDisposed = sal_True;
             mrBHelper.bInDispose = sal_False;
-            throw e;
+            throw;
         }
 
         // the values bDispose and bInDisposing must set in this order.

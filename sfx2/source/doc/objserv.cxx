@@ -342,9 +342,6 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
                 aParams );
 
         }
-
-        // prevent picklist-entry
-        GetMedium()->SetUpdatePickList( sal_False );
     }
 
     return bOk;
@@ -769,7 +766,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     if ( !pNameItem )
                     {
+#ifndef DISABLE_SCRIPTING
                         SbxBase::SetError( SbxERR_WRONG_ARGS );
+#endif
                         rReq.Ignore();
                         return;
                     }
@@ -839,7 +838,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( (!pRegionItem && !pRegionNrItem ) || !pNameItem )
             {
                 DBG_ASSERT( rReq.IsAPI(), "non-API call without Arguments" );
+#ifndef DISABLE_SCRIPTING
                 SbxBase::SetError( SbxERR_WRONG_ARGS );
+#endif
                 rReq.Ignore();
                 return;
             }

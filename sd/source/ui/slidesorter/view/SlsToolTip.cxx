@@ -204,7 +204,7 @@ bool ToolTip::Hide (void)
 
 
 
-IMPL_LINK(ToolTip, DelayTrigger, void*, EMPTYARG)
+IMPL_LINK_NOARG(ToolTip, DelayTrigger)
 {
     DoShow();
 

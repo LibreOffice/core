@@ -461,45 +461,6 @@ void SfxProgress::Suspend()
 
 // -----------------------------------------------------------------------
 
-void SfxProgress::Lock()
-{
-    if( pImp->pActiveProgress ) return;
-    // No Reschedule for Embedded-Objects,
-    // because we are defenseless against the OLE protocol
-    if ( !pImp->xObjSh.Is() )
-    {
-        for ( SfxObjectShell *pDocSh = SfxObjectShell::GetFirst();
-              pDocSh;
-              pDocSh = SfxObjectShell::GetNext(*pDocSh) )
-        {
-            SfxObjectCreateMode eMode = pDocSh->GetCreateMode();
-            if ( ( eMode == SFX_CREATE_MODE_EMBEDDED ) ||
-                 ( eMode == SFX_CREATE_MODE_PREVIEW ) )
-            {
-                DBG( DbgOutf( "SfxProgress: not locked because EMBEDDED/PREVIEW found" ) );
-                pImp->bAllowRescheduling = sal_False;
-            }
-        }
-    }
-    else
-    {
-        SfxObjectCreateMode eMode = pImp->xObjSh->GetCreateMode();
-        if ( ( eMode == SFX_CREATE_MODE_EMBEDDED ) ||
-             ( eMode == SFX_CREATE_MODE_PREVIEW ) )
-        {
-            DBG( DbgOutf( "SfxProgress: not locked because ObjectShell is EMBEDDED/PREVIEW" ) );
-            pImp->bAllowRescheduling = sal_False;
-        }
-    }
-
-    pImp->Enable_Impl( sal_False );
-
-    DBG( DbgOutf( "SfxProgress: locked" ) );
-    pImp->bLocked = sal_True;
-}
-
-// -----------------------------------------------------------------------
-
 void SfxProgress::UnLock()
 {
     if( pImp->pActiveProgress ) return;

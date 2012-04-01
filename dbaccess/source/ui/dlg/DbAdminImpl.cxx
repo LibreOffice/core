@@ -68,11 +68,6 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
-#include <svl/poolitem.hxx>
-#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>
@@ -208,13 +203,6 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_RESPECTRESULTSETTYPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RespectDriverResultSetType" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_MAX_ROW_SCAN, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxRowScan" ) ) ) );
-
-    // special settings for adabas
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSize"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))));
 
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
@@ -519,17 +507,6 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_DBASE:
         case  ::dbaccess::DST_FLAT:
         case  ::dbaccess::DST_CALC:
-            break;
-        case  ::dbaccess::DST_ADABAS:
-            {
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
-                sNewUrl = lcl_createHostWithPort(pHostName,NULL);
-                String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
-                if ( comphelper::string::getTokenCount(sUrl, ':') == 1 )
-                    sNewUrl += String::CreateFromAscii(":");
-
-                sNewUrl += sUrl;
-            }
             break;
         case  ::dbaccess::DST_MSACCESS:
         case  ::dbaccess::DST_MSACCESS_2007:

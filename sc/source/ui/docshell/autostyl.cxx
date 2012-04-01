@@ -111,7 +111,7 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
     aInitTimer.Start();
 }
 
-IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoStyleList, InitHdl)
 {
     boost::ptr_vector<ScAutoStyleInitData>::iterator iter;
     for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
@@ -216,7 +216,7 @@ void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
     nTimerStart = nNow;
 }
 
-IMPL_LINK( ScAutoStyleList, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoStyleList, TimerHdl)
 {
     sal_uLong nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit

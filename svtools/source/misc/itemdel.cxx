@@ -101,7 +101,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SfxItemDesruptor_Impl, Delete, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
     {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}
     delete this;

@@ -47,12 +47,16 @@ namespace sd { namespace toolpanel { namespace controls {
 class MasterPageContainerQueue
 {
 public:
-    class ContainerAdapter { public:
+    class ContainerAdapter {
+    public:
         virtual bool UpdateDescriptor (
             const SharedMasterPageDescriptor& rpDescriptor,
             bool bForcePageObject,
             bool bForcePreview,
             bool bSendEvents) = 0;
+
+    protected:
+        ~ContainerAdapter() {}
     };
 
     static MasterPageContainerQueue* Create (

@@ -34,8 +34,6 @@
 
 #include <svx/numinf.hxx>
 
-#include <svx/numinf.hxx>
-
 #include <svx/dialogs.hrc>
 #include "dbu_dlg.hrc"
 #include <svl/itemset.hxx>

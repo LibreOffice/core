@@ -63,21 +63,6 @@ sal_uLong SvxEditSourceHint::GetEndValue() const
     return mnEnd;
 }
 
-void SvxEditSourceHint::SetValue( sal_uLong n )
-{
-    TextHint::SetValue( n );
-}
-
-void SvxEditSourceHint::SetStartValue( sal_uLong n )
-{
-    mnStart = n;
-}
-
-void SvxEditSourceHint::SetEndValue( sal_uLong n )
-{
-    mnEnd = n;
-}
-
 //------------------------------------------------------------------------
 
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
@@ -179,12 +164,6 @@ Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size
 {
     return bIsVertical ? Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
                                     EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
-}
-
-Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
-{
-    return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
-                                    UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

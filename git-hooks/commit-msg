@@ -14,6 +14,8 @@
 
 # This example catches duplicate Signed-off-by lines.
 
+base_dir=$(dirname $0)
+
 abort() {
     cp $1 $1.save
     cat >&2 <<EOF
@@ -55,8 +57,12 @@ fi
 
 # Check for whitespace in front of *'s
 
-if [ -n "`grep '^[[:space:]]\+\*.*:' $1`" -a -z "`grep '^\*' $1`" ] ; then
+if [ -n "`sed '/^#/,$d' $1 | grep '^[[:space:]]\+\*.*:'`" -a -z "`grep '^\*' $1`" ] ; then
     abort "$1" "Please don't use whitespace in front of '* file: Description.' entries."
+fi
+
+if [ -f "${base_dir}/gerrit-commit-msg" ] ; then
+    source "${base_dir}/gerrit-commit-msg"
 fi
 
 exit 0

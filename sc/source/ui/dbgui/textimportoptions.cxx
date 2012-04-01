@@ -96,7 +96,7 @@ void ScTextImportOptionsDlg::init()
     maLbCustomLang.Disable();
 }
 
-IMPL_LINK( ScTextImportOptionsDlg, OKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl)
 {
     EndDialog(RET_OK);
     return 0;

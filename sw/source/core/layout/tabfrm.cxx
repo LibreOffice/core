@@ -96,10 +96,10 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
+    bFixSize = sal_False;     //Don't fall for import filter again.
     nType = FRMC_TAB;
 
-    //Gleich die Zeilen erzeugen und einfuegen.
+    //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
     SwFrm *pTmpPrev = 0;
     for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
@@ -121,14 +121,13 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     SwFlowFrm( (SwFrm&)*this ),
     pTable( rTab.GetTable() )
 {
-    bIsFollow = sal_True;
     bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
     // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
+    bFixSize = sal_False;     //Don't fall for import filter again.
     nType = FRMC_TAB;
 
     SetFollow( rTab.GetFollow() );
@@ -181,7 +180,7 @@ void SwTabFrm::JoinAndDelFollows()
 |*************************************************************************/
 void SwTabFrm::RegistFlys()
 {
-    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "Keine Zeilen." );
+    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "No rows." );
 
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
@@ -433,7 +432,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
                     while ( pTmpDestRow->GetNext() )
                         pTmpDestRow = (SwRowFrm*)pTmpDestRow->GetNext();
 
-                    OSL_ENSURE( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" );
+                    OSL_ENSURE( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Table contains node" );
 
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
@@ -997,9 +996,9 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
     }
 
-    //Um die Positionen der Zellen mit der CutPos zu vergleichen muessen sie
-    //ausgehend von der Tabelle nacheinander berechnet werden. Sie koennen
-    //wg. Positionsaenderungen der Tabelle durchaus ungueltig sein.
+    //In order to be able to compare the positions of the cells whit CutPos,
+    //they have to be calculated consecutively starting from the table.
+    //They can definitely be invalid because of position changes of the table.
     SwRowFrm *pRow = static_cast<SwRowFrm*>(Lower());
     if( !pRow )
         return bRet;
@@ -1269,9 +1268,9 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
 
     SwTwips nRet = 0;
 
-    //Optimierung beim neuen Follow braucht's kein Paste und dann kann
-    //das Optimierte Insert verwendet werden (nur dann treten gluecklicher weise
-    //auch groessere Mengen von Rows auf).
+    //Optimization: There is no paste needed for the new Follow and the
+    //optimized insert can be used (big amounts of rows luckily only occurs in
+    //such situations).
     if ( bNewFollow )
     {
         SwFrm* pNxt = 0;
@@ -1345,15 +1344,15 @@ bool SwTabFrm::Join()
     if ( !pFoll->IsJoinLocked() )
     {
         SWRECTFN( this )
-        pFoll->Cut();   //Erst ausschneiden um unuetze Benachrichtigungen zu
-                        //minimieren.
+        pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
 
         SwFrm *pRow = pFoll->GetFirstNonHeadlineRow(),
               *pNxt;
 
         SwFrm* pPrv = GetLastLower();
 
-        SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
+        SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
+
         while ( pRow )
         {
             pNxt = pRow->GetNext();
@@ -1819,14 +1818,13 @@ void SwTabFrm::MakeAll()
 
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-    LockJoin(); //Ich lass mich nicht unterwegs vernichten.
-    SwLayNotify aNotify( this );    //uebernimmt im DTor die Benachrichtigung
+    LockJoin(); //I don't want to be destroyed on the way.
+    SwLayNotify aNotify( this );    //does the notification in the DTor
     // If pos is invalid, we have to call a SetInvaKeep at aNotify.
     // Otherwise the keep atribute would not work in front of a table.
     const sal_Bool bOldValidPos = GetValidPosFlag();
 
-    //Wenn mein direkter Nachbar gleichzeitig mein Follow ist
-    //verleibe ich mir das Teil ein.
+    //If my neighbour is my Follow at the same time, I'll swallow it up.
     // OD 09.04.2003 #108698# - join all follows, which are placed on the
     // same page/column.
     // OD 29.04.2003 #109213# - join follow, only if join for the follow
@@ -1850,7 +1848,7 @@ void SwTabFrm::MakeAll()
         SetRemoveFollowFlowLinePending( sal_False );
     }
 
-    if ( bResizeHTMLTable ) //Optimiertes Zusammenspiel mit Grow/Shrink des Inhaltes
+    if ( bResizeHTMLTable ) //Optimized interplay with grow/shrink of the content
     {
         bResizeHTMLTable = sal_False;
         SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
@@ -1997,9 +1995,8 @@ void SwTabFrm::MakeAll()
             }
         }
 
-        //Wir muessen die Hoehe der ersten Zeile kennen, denn nur wenn diese
-        //kleiner wird muss ggf. der Master angestossen werden um noetigenfalls
-        //die Zeile aufzunehmen.
+        //We need to know the height of the first row, because the master needs
+        //to be activated if it shrinks and then absorb the row if necessary.
         long n1StLineHeight = 0;
         if ( IsFollow() )
         {
@@ -2102,7 +2099,7 @@ void SwTabFrm::MakeAll()
             }
         }
 
-        //Wieder ein Wert ungueltig? - dann nochmal das ganze...
+        //Again an invalid value? - do it again...
         if ( !bValidPos || !bValidSize || !bValidPrtArea )
             continue;
 
@@ -2170,7 +2167,7 @@ void SwTabFrm::MakeAll()
                             SwFrm* pRow = GetFollow()->GetFirstNonHeadlineRow();
 
                             if ( !pRow || !pRow->GetNext() )
-                                //Der Follow wird leer und damit ueberfluessig.
+                                //The follow becomes empty and invalid for this reason.
                                 Join();
 
                             continue;
@@ -2182,7 +2179,7 @@ void SwTabFrm::MakeAll()
                         //
                         SwRowFrm *pRow = GetFollow()->GetFirstNonHeadlineRow();
 
-                          //Der Follow wird leer und damit ueberfluessig.
+                          //The follow becomes empty and invalid for this reason.
                            if ( !pRow )
                         {
                             Join();
@@ -2204,7 +2201,7 @@ void SwTabFrm::MakeAll()
                             SwFrm* pNextRow = pRowToMove->GetNext();
 
                             if ( !pNextRow )
-                                //Der Follow wird leer und damit ueberfluessig.
+                                //The follow becomes empty and invalid for this reason.
                                 Join();
                             else
                             {
@@ -2212,7 +2209,7 @@ void SwTabFrm::MakeAll()
                                 pRowToMove->Paste( this );
                             }
 
-                            //Die Fussnoten verschieben!
+                            //Displace the footnotes!
                             if ( bMoveFtns )
                                 if ( ((SwLayoutFrm*)pRowToMove)->MoveLowerFtns(
                                      0, pOldBoss, FindFtnBossFrm( sal_True ), sal_True ) )
@@ -2295,13 +2292,12 @@ void SwTabFrm::MakeAll()
             continue;
         }
 
-        //Ich passe nicht mehr in meinen Uebergeordneten, also ist es jetzt
-        //an der Zeit moeglichst konstruktive Veranderungen vorzunehmen
+        //I don't fit in the higher-ranked element anymore, therefore it's the
+        //right moment to do some preferably constructive changes.
 
-        //Wenn ich den uebergeordneten Frm nicht verlassen darf, habe
-        //ich ein Problem; Frei nach Artur Dent tun wir das einzige das man
-        //mit einen nicht loesbaren Problem tun kann: wir ignorieren es - und
-        //zwar mit aller Kraft.
+        //If I'm NOT allowed to leave the parent Frm, I've got a problem.
+        // Following Artur Dent, we do the only thing that you can do with
+        // an unsolvable problem: We ignore it with all our power.
         if ( !bMoveable )
         {
             if ( bCalcLowers && IsValid() )
@@ -2462,8 +2458,7 @@ void SwTabFrm::MakeAll()
 
                       bTryToSplit = !bSplitError;
 
-                    //Damit es nicht zu Oszillationen kommt, muss der
-                    //Follow gleich gueltig gemacht werden.
+                    //To avoid oscillations the Follow must become valid now
                     if ( GetFollow() )
                     {
                         // #i80924#
@@ -2553,7 +2548,7 @@ void SwTabFrm::MakeAll()
         // #i29771# Reset bTryToSplit flag on change of upper
         const SwFrm* pOldUpper = GetUpper();
 
-        //Mal sehen ob ich irgenwo Platz finde...
+        //Let's see if we find some place anywhere...
         if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
             bMakePage = false;
 
@@ -2569,8 +2564,8 @@ void SwTabFrm::MakeAll()
         bMovedFwd = true;
         aNotify.SetLowersComplete( sal_False );
         if ( IsFollow() )
-        {   //Um Oszillationen zu vermeiden sollte kein ungueltiger Master
-            //zurueckbleiben.
+        {
+            //To avoid oscillations now invalid master should drop behind.
             SwTabFrm *pTab = FindMaster();
             if ( pTab->GetUpper() )
                 pTab->GetUpper()->Calc();
@@ -2578,8 +2573,7 @@ void SwTabFrm::MakeAll()
             pTab->SetLowersFormatted( sal_False );
         }
 
-        //Wenn mein direkter Nachbar jetzt gleichzeitig mein Follow ist
-        //verleibe ich mir das Teil ein.
+        //If my neighbour is my Follow at the same time, I'll swallow it up.
         if ( ( GetNext() && GetNext() == GetFollow() ) || !GetLower() )
         {
             if ( HasFollowFlowLine() )
@@ -2589,9 +2583,8 @@ void SwTabFrm::MakeAll()
         }
 
         if ( bMovedBwd && GetUpper() )
-            //Beim zurueckfliessen wurde der Upper angeregt sich vollstaendig
-            //zu Painten, dass koennen wir uns jetzt nach dem hin und her
-            //fliessen sparen.
+            //During floating back the upper was animated to do a full repaint,
+            //we can now skip this after the whole back and forth floating.
             GetUpper()->ResetCompletePaint();
 
         if ( bCalcLowers && IsValid() )
@@ -2617,8 +2610,8 @@ void SwTabFrm::MakeAll()
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
 
-    //Wenn mein direkter Vorgaenger jetzt mein Master ist, so kann er mich
-    //bei der nachstbesten Gelegenheit vernichten.
+    //If my direct predecessor is my master now, it can destroy me during the
+    //next best opportunity.
     if ( IsFollow() )
     {
         SwFrm *pPre = GetPrev();
@@ -2637,8 +2630,7 @@ void SwTabFrm::MakeAll()
 |*
 |*  SwTabFrm::CalcFlyOffsets()
 |*
-|*  Beschreibung:       Berechnet die Offsets, die durch FlyFrames
-|*                      entstehen.
+|*  Description:       Calculate the offsets arising because of FlyFrames
 |*
 |*************************************************************************/
 sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
@@ -2676,7 +2668,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 // #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
                 // - no need to check, if top of Writer fly frame differs
-                //   from WEIT_WECH, because its also check, if the Writer
+                //   from FAR_AWAY, because its also check, if the Writer
                 //   fly frame rectangle overlaps with <aRect>
                 // - no check, if bottom of anchor frame is prior the top of
                 //   the table, because Writer fly frames can be negative positioned.
@@ -2777,8 +2769,8 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 |*
 |*  SwTabFrm::Format()
 |*
-|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea
-|*                      Die Fixsize wird hier nicht eingestellt.
+|*  Description:        "Formats" the frame; Frm and PrtArea
+|*                      The fixed size is not adjusted here.
 |*
 |*************************************************************************/
 void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
@@ -2794,17 +2786,16 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             (aFrm.*fnRect->fnAddRight)( nDiff );
     }
 
-    //VarSize ist immer die Hoehe.
-    //Fuer den oberen/unteren Rand gelten die selben Regeln wie fuer
-    //cntfrms (sie MakePrtArea() von diesen).
+    //VarSize is always the height.
+    //For the upper/lower border the same rules apply as for cntfrms (see
+    //MakePrtArea() of those).
 
     SwTwips nUpper = CalcUpperSpace( pAttrs );
 
-    //Wir wollen Rahmen ausweichen. Zwei Moeglichkeiten:
-    //1. Es gibt Rahmen mit SurroundNone, diesen wird vollsaendig ausgewichen
-    //2. Es gibt Rahmen mit Umlauf nur rechts bzw. nur links und diese sind
-    //   rechts bzw. links ausgerichtet, diese geben ein Minimum fuer die
-    //   Raender vor.
+    //We want to dodge the border. Two possibilities:
+    //1. There are borders with SurroundNone, dodge them completely
+    //2. There are borders which only float on the right or the left side and
+    //   are right or left aligned, those set the minimum for the borders.
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
@@ -2820,13 +2811,13 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !bValidPrtArea )
     {   bValidPrtArea = sal_True;
 
-        //Die Breite der PrtArea wird vom FrmFmt vorgegeben, die Raender
-        //sind entsprechend einzustellen.
-        //Mindestraender werden von Umrandung und Schatten vorgegeben.
-        //Die Rander werden so eingestellt, dass die PrtArea nach dem
-        //angegebenen Adjustment im Frm ausgerichtet wird.
-        //Wenn das Adjustment 0 ist, so werden die Rander anhand des
-        //Randattributes eingestellt.
+        //The width of the PrtArea is given by the FrmFmt, the borders have to
+        //be set accordingly.
+        //Minimum borders are determined depending on margins and shadows.
+        //The borders are adjusted so that the PrtArea is aligned into the Frm
+        //according to the adjustment.
+        //If the adjustment is 0, the borders are set according to the border
+        //attributes.
 
         const SwTwips nOldHeight = (Prt().*fnRect->fnGetHeight)();
         const SwTwips nMax = (aFrm.*fnRect->fnGetWidth)();
@@ -2835,9 +2826,9 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         const SwTwips nLeftLine  = pAttrs->CalcLeftLine();
         const SwTwips nRightLine = pAttrs->CalcRightLine();
 
-        //Die Breite ist evtl. eine Prozentangabe. Wenn die Tabelle irgendwo
-        //'drinsteckt bezieht sie sich auf die Umgebung. Ist es der Body, so
-        //bezieht sie sich in der BrowseView auf die Bildschirmbreite.
+        //The width possibly is a percentage value. If the table is inside
+        //something else, the value applies to the surrounding. If it's the body
+        //the value applies to the screen width in the BrowseView.
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
         const SwTwips nWishedTableWidth = CalcRel( rSz, sal_True );
@@ -2927,17 +2918,17 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                 }
                 break;
             case text::HoriOrientation::FULL:
-                    //Das Teil dehnt sich ueber die gesamte Breite aus.
-                    //Nur die fuer die Umrandung benoetigten Freiraeume
-                    //werden beruecksichtigt.
-                    //Die Attributwerte von LRSpace werden bewusst missachtet!
+                    //This things grows over the whole width.
+                    //Only the free space needed for the border is taken into
+                    //account. The attribute values of LRSpace are ignored
+                    //intentionally.
                     bCheckBrowseWidth = sal_True;
                     nLeftSpacing  = nLeftLine + nLeftOffset;
                     nRightSpacing = nRightLine + nRightOffset;
                 break;
             case text::HoriOrientation::NONE:
                 {
-                    //Die Raender werden vom Randattribut bestimmt.
+                    //The border are defined by the border attribute.
                     nLeftSpacing = pAttrs->CalcLeft( this );
                     if( nLeftOffset )
                     {
@@ -3002,12 +2993,12 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         ViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( bCheckBrowseWidth &&
              pSh && pSh->GetViewOptions()->getBrowseMode() &&
-             GetUpper()->IsPageBodyFrm() &&  // nur PageBodyFrms, nicht etwa ColBodyFrms
+             GetUpper()->IsPageBodyFrm() &&  // only PageBodyFrms and not ColBodyFrms
              pSh->VisArea().Width() )
         {
-            //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
-            //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"
-            //geben kann (RootFrm::ImplCalcBrowseWidth())
+            //Don't overlap the edge of the visible area.
+            //The page width can be bigger because objects with
+            //"over-size" are possible (RootFrm::ImplCalcBrowseWidth())
             long nWidth = pSh->GetBrowseWidth();
             nWidth -= Prt().Left();
             nWidth -= pAttrs->CalcRightLine();
@@ -3022,7 +3013,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = sal_True;
 
-        //Die Groesse wird durch den Inhalt plus den Raendern bestimmt.
+        //The size is defined by the content plus the borders.
         SwTwips nRemaining = 0, nDiff;
         SwFrm *pFrm = pLower;
         while ( pFrm )
@@ -3030,7 +3021,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
             pFrm = pFrm->GetNext();
         }
-        //Jetzt noch die Raender addieren
+        //And now add the borders
         nRemaining += nUpper + nLower;
 
         nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
@@ -3061,6 +3052,9 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
         //Der Upper wird nur soweit wie notwendig gegrowed. In nReal wird erstmal
         //die bereits zur Verfuegung stehende Strecke bereitgestellt.
+
+        //The upper only grows as far as needed. nReal provides the distance
+        //which is already available.
         SwTwips nReal = (GetUpper()->Prt().*fnRect->fnGetHeight)();
         SwFrm *pFrm = GetUpper()->Lower();
         while ( pFrm && GetFollow() != pFrm )
@@ -3228,7 +3222,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             rInvFlags |= 0x22;
             break;
 
-        case RES_PAGEDESC:                      //Attributaenderung (an/aus)
+        case RES_PAGEDESC:                      //Attribute changes (on/off)
             if ( IsInDocBody() )
             {
                 rInvFlags |= 0x40;
@@ -3260,7 +3254,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         case RES_UL_SPACE:
             rInvFlags |= 0x1C;
-            /* kein Break hier */
+            /* no break here */
 
         default:
             bClear = sal_False;
@@ -3294,15 +3288,15 @@ sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
         {
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
-                //Das sollte er sein (kann allenfalls temporaer anders sein,
-                //                    sollte uns das beunruhigen?)
+                //Here it should be (can temporary be different, should we be
+                //                    concerned about this?)
                 rInfo.SetInfo( pPage, this );
                 return sal_False;
             }
             if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
                  (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
             {
-                //Das koennte er sein.
+                //This could be the one.
                 rInfo.SetInfo( pPage, this );
             }
         }
@@ -3336,15 +3330,15 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             pRet = pRet->GetLower();
         if ( pRet == pOld )
         {
-            // Wenn am Ende der letzten Zelle ein spaltiger Bereich steht,
-            // der eine leere letzte Spalte hat, muessen wir noch die anderen
-            // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
+            // Check all other columns if there is a column based section with
+            // an empty last column at the end of the last line - this is done
+            // by SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
 #if OSL_DEBUG_LEVEL > 0
                 SwSectionFrm* pSect = pRet->FindSctFrm();
-                OSL_ENSURE( pSect, "Wo kommt denn die Spalte her?");
-                OSL_ENSURE( IsAnLower( pSect ), "Gespaltene Zelle?" );
+                OSL_ENSURE( pSect, "Where does this column come fron?");
+                OSL_ENSURE( IsAnLower( pSect ), "Splited cell?" );
 #endif
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
@@ -3410,7 +3404,7 @@ SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 |*
 |*  SwTabFrm::ShouldBwdMoved()
 |*
-|*  Beschreibung        Returnwert sagt ob der Frm verschoben werden sollte
+|*  Description        Return value defines if the frm needs to be relocated
 |*
 |*************************************************************************/
 sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &rReformat )
@@ -3418,22 +3412,19 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
     rReformat = sal_False;
     if ( (SwFlowFrm::IsMoveBwdJump() || !IsPrevObjMove()) )
     {
-        //Das zurueckfliessen von Frm's ist leider etwas Zeitintensiv.
-        //Der haufigste Fall ist der, dass dort wo der Frm hinfliessen
-        //moechte die FixSize die gleiche ist, die der Frm selbst hat.
-        //In diesem Fall kann einfach geprueft werden, ob der Frm genug
-        //Platz fuer seine VarSize findet, ist dies nicht der Fall kann
-        //gleich auf das Verschieben verzichtet werden.
-        //Die Pruefung, ob der Frm genug Platz findet fuehrt er selbst
-        //durch, dabei wird beruecksichtigt, dass er sich moeglicherweise
-        //aufspalten kann.
-        //Wenn jedoch die FixSize eine andere ist oder Flys im Spiel sind
-        //(an der alten oder neuen Position) hat alle Prueferei keinen Sinn
-        //der Frm muss dann halt Probehalber verschoben werden (Wenn ueberhaupt
-        //etwas Platz zur Verfuegung steht).
+        //Floating back Frm's is quite time consuming unfortunately.
+        //Most often the location where the Frm wants to float to has the same
+        //FixSize as the Frm itself. In such a situation it's easy to check if
+        //the Frm will find enough space for its VarSize, if this is not the
+        //case, the relocation can be skipped.
+        //Checking if the Frm will find enough space is done by the Frm itself,
+        //this also takes the possibility of splitting the Frm into account.
+        //If the FixSize is different or Flys are involved  (at the old or the
+        //new position) the whole checks don't make sense at all, the Frm then
+        //needs to be relocated tentatively (if a bit of space is available).
 
-        //Die FixSize der Umgebungen in denen Tabellen herumlungern ist immer
-        //Die Breite.
+        //The FixSize of the surrounding which contain tables is always the
+        //width.
 
         SwPageFrm *pOldPage = FindPageFrm(),
                   *pNewPage = pNewUpper->FindPageFrm();
@@ -3526,8 +3517,9 @@ void SwTabFrm::Cut()
     InvalidatePage( pPage );
     SwFrm *pFrm = GetNext();
     if( pFrm )
-    {   //Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
-        //berechnet der ist jetzt wo er der erste wird obsolete
+    {
+        //The old follower eventually calculated a margin to the predecessor
+        //which is obsolete now as it became the first one
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
         if ( pFrm->IsCntntFrm() )
@@ -3545,7 +3537,7 @@ void SwTabFrm::Cut()
     else
     {
         InvalidateNextPos();
-        //Einer muss die Retusche uebernehmen: Vorgaenger oder Upper
+        //Someone has to do the retouch: predecessor or upper
         if ( 0 != (pFrm = GetPrev()) )
         {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
@@ -3553,9 +3545,8 @@ void SwTabFrm::Cut()
             if ( pFrm->IsCntntFrm() )
                 pFrm->InvalidatePage( pPage );
         }
-        //Wenn ich der einzige FlowFrm in meinem Upper bin (war), so muss
-        //er die Retouche uebernehmen.
-        //Ausserdem kann eine Leerseite entstanden sein.
+        //If I am (was) the only FlowFrm in my own upper, it has to do
+        //the retouch. Moreover it has to do the retouch.
         else
         {   SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
             pRoot->SetSuperfluous();
@@ -3572,13 +3563,13 @@ void SwTabFrm::Cut()
         }
     }
 
-    //Erst removen, dann Upper Shrinken.
+    //First remove, then shrink the upper.
     SwLayoutFrm *pUp = GetUpper();
     SWRECTFN( this )
     Remove();
     if ( pUp )
     {
-        OSL_ENSURE( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
+        OSL_ENSURE( !pUp->IsFtnFrm(), "Table in Footnote." );
         SwSectionFrm *pSct = 0;
         // #126020# - adjust check for empty section
         // #130797# - correct fix #126020#
@@ -3611,14 +3602,14 @@ void SwTabFrm::Cut()
 |*************************************************************************/
 void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
-    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
-    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( pParent, "No parent for pasting." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent is CntntFrm." );
+    OSL_ENSURE( pParent != this, "I'm the parent myself." );
+    OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
-            "Bin noch irgendwo angemeldet." );
+            "I'm still registred somewhere." );
 
-    //In den Baum einhaengen.
+    //Insert in the tree.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
 
     _InvalidateAll();
@@ -3649,10 +3640,10 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         }
     }
     else if ( GetNext() )
-        //Bei CntntFrm's gilt es den Abstand zum Vorgaenger/Nachfolger
-        //zu beachten. Faelle (beide treten immer gleichzeitig auf):
-        //a) Der Cntnt wird der erste einer Kette
-        //b) Der neue Nachfolger war vorher der erste einer Kette
+        //Take the marging into account when dealing with CntntFrm's. There are
+        //two situations (both always happen at once):
+        //a) The Cntnt becomes the first in a chain
+        //b) The new follower was the first in a chain before
         GetNext()->_InvalidatePrt();
 
     if ( pPage && !IsFollow() )
@@ -3660,7 +3651,7 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         if ( pPage->GetUpper() )
             ((SwRootFrm*)pPage->GetUpper())->InvalidateBrowseWidth();
 
-        if ( !GetPrev() )//Mindestens fuer HTML mit Tabelle am Anfang notwendig.
+        if ( !GetPrev() )//At least needed for HTML with a table at the beginning.
         {
             const SwPageDesc *pDesc = GetFmt()->GetPageDesc().GetPageDesc();
             if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
@@ -3705,7 +3696,7 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent )
 {
     nType = FRMC_ROW;
 
-    //Gleich die Boxen erzeugen und einfuegen.
+    //Create the boxes and insert them.
        const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
     SwFrm *pTmpPrev = 0;
       for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
@@ -3721,9 +3712,9 @@ SwRowFrm::~SwRowFrm()
     SwModify* pMod = GetFmt();
     if( pMod )
     {
-        pMod->Remove( this );           // austragen,
+        pMod->Remove( this );           // remove,
         if( !pMod->GetDepends() )
-            delete pMod;                // und loeschen
+            delete pMod;                // and delete
     }
 }
 
@@ -3851,7 +3842,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                     const SwFrmFmt& rFrmFmt = pAnchoredObj->GetFrmFmt();
                     const bool bConsiderObj =
                         (rFrmFmt.GetAnchor().GetAnchorId() != FLY_AS_CHAR) &&
-                            pAnchoredObj->GetObjRect().Top() != WEIT_WECH &&
+                            pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
                             rFrmFmt.GetFollowTextFlow().GetValue() &&
                             pAnchoredObj->GetPageFrm() == pTmp->FindPageFrm();
                     if ( bConsiderObj )
@@ -3970,9 +3961,9 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
         if ( nFlyAdd )
             nHeight += nFlyAdd;
     }
-    //Der Border will natuerlich auch mitspielen, er kann leider nicht
-    //aus PrtArea und Frm errechnet werden, da diese in beliebiger
-    //Kombination ungueltig sein koennen.
+    //The border needs to be considered too, unfortunately it can't be
+    //calculated using PrtArea and Frm because those can be invalid in arbitrary
+    //combinations.
     if ( _pCell->Lower() )
     {
         if ( pAttrs )
@@ -4143,14 +4134,14 @@ sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
 void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 {
     SWRECTFN( this )
-    OSL_ENSURE( pAttrs, "SwRowFrm::Format ohne Attrs." );
+    OSL_ENSURE( pAttrs, "SwRowFrm::Format without Attrs." );
 
     const sal_Bool bFix = bFixSize;
 
     if ( !bValidPrtArea )
     {
-        //RowFrms haben keine Umrandung usw. also entspricht die PrtArea immer
-        //dem Frm.
+        //RowFrms don't have borders and so on therefore the PrtArea always
+        //matches the Frm.
         bValidPrtArea = sal_True;
         aPrt.Left( 0 );
         aPrt.Top( 0 );
@@ -4290,7 +4281,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     // last row will fill the space in its upper.
     if ( !GetNext() )
     {
-        //Der letzte fuellt den verbleibenden Raum im Upper aus.
+        //The last fills the remaining space in the upper.
         SwTwips nDiff = (GetUpper()->Prt().*fnRect->fnGetHeight)();
         SwFrm *pSibling = GetUpper()->Lower();
         do
@@ -4507,7 +4498,7 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     pTab->SetRestrictTableGrowth( sal_False );
     pTab->SetFollowFlowLine( bHasFollowFlowLine );
 
-    //Hoehe der Zellen auf den neuesten Stand bringen.
+    //Update the height of the cells to the newest value.
     if ( !bTst )
     {
         SWRECTFNX( this )
@@ -4537,7 +4528,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     //entsprechend reagiert werden
     const sal_Bool bShrinkAnyway = bInfo;
 
-    //Nur soweit Shrinken, wie es der Inhalt der groessten Zelle zulaesst.
+    //Only shrink as much as the content of the biggest cell allows.
     SwTwips nRealDist = nDist;
     {
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
@@ -4577,8 +4568,8 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         SwTwips nTmp = GetUpper()->Shrink( nReal, bTst );
         if ( !bShrinkAnyway && !GetNext() && nTmp != nReal )
         {
-            //Der letzte bekommt den Rest im Upper und nimmt deshalb
-            //ggf. Ruecksichten (sonst: Endlosschleife)
+            //The last one gets the leftover in the upper and therefore takes
+            //care (otherwise: endless loop)
             if ( !bTst )
             {
                 nReal -= nTmp;
@@ -4592,8 +4583,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         }
     }
 
-    //Geeignet invalidieren und die Hoehe der Zellen auf den neuesten
-    //Stand bringen.
+    //Invalidate if possible and update the height to the newest value.
     if ( !bTst )
     {
         if ( nReal )
@@ -4674,9 +4664,8 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent )
     if ( !bInsertContent )
         return;
 
-    //Wenn ein StartIdx vorhanden ist, so werden CntntFrms in der Zelle
-    //angelegt, andernfalls muessen Rows vorhanden sein und diese werden
-    //angelegt.
+    //If a StartIdx is available, CntntFrms are added in the cell, otherwise
+    //Rows have to be present and those are added.
     if ( rBox.GetSttIdx() )
     {
         sal_uLong nIndex = rBox.GetSttIdx();
@@ -4709,9 +4698,9 @@ SwCellFrm::~SwCellFrm()
             pRootFrm->GetCurrShell()->Imp()->DisposeAccessibleFrm( this, sal_True );
         }
 
-        pMod->Remove( this );           // austragen,
+        pMod->Remove( this );           // remove,
         if( !pMod->GetDepends() )
-            delete pMod;                // und loeschen
+            delete pMod;                // and delete
     }
 }
 
@@ -4784,7 +4773,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                         // #i52904# - no direct move of objects,
                         // whose vertical position doesn't depend on anchor frame.
                         const bool bDirectMove =
-                                WEIT_WECH != pFly->Frm().Top() &&
+                                FAR_AWAY != pFly->Frm().Top() &&
                                 bVertPosDepOnAnchor &&
                                 !pFly->ConsiderObjWrapInfluenceOnObjPos();
                         if ( bDirectMove )
@@ -4951,7 +4940,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidPrtArea = sal_True;
 
-        //Position einstellen.
+        //Adjust position.
         if ( Lower() )
         {
             SwTwips nTopSpace, nBottomSpace, nLeftSpace, nRightSpace;
@@ -4985,24 +4974,22 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = sal_True;
 
-        //Die VarSize der CellFrms ist immer die Breite.
-        //Tatsaechlich ist die Breite jedoch nicht Variabel, sie wird durch das
-        //Format vorgegeben. Dieser Vorgegebene Wert muss aber nun wiederum
-        //nicht der tatsaechlichen Breite entsprechen. Die Breite wird auf
-        //Basis des Attributes errechnet, der Wert im Attribut passt zu dem
-        //gewuenschten Wert des TabFrms. Anpassungen die dort vorgenommen
-        //wurden werden hier Proportional beruecksichtigt.
-        //Wenn die Celle keinen Nachbarn mehr hat beruecksichtigt sie nicht
-        //die Attribute, sonder greift sich einfach den Rest des
-        //Uppers
+        //The VarSize of the CellFrms is always the width.
+        //The width is not variable though, it is defined by the format.
+        //This predefined value however does not necessary match the actual
+        //width. The width is calculated based on the attribute, the value in
+        //the attribute matches the desired value of the TabFrm. Changes which
+        //were done there are taken into account here proportionately.
+        //If the cell doesn't have a neighbour anymore, it does not take the
+        //attribute into account and takes the rest of the upper instead.
         SwTwips nWidth;
         if ( GetNext() )
         {
             const SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
-            OSL_ENSURE( nWish, "Tabelle ohne Breite?" );
-            OSL_ENSURE( nWidth <= nWish, "Zelle breiter als Tabelle." );
+            OSL_ENSURE( nWish, "Tabele without width?" );
+            OSL_ENSURE( nWidth <= nWish, "Width of cell larger than table." );
             OSL_ENSURE( nWidth > 0, "Box without width" );
 
             const long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
@@ -5071,23 +5058,21 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             (Frm().*fnRect->fnAddRight)( nDiff );
         (Prt().*fnRect->fnAddRight)( nDiff );
 
-        //Jetzt die Hoehe einstellen, sie wird vom Inhalt und den Raendern
-        //bestimmt.
+        //Adjust the height, it's defined through the content and the border.
         const long nDiffHeight = nRemaining - (Frm().*fnRect->fnGetHeight)();
         if ( nDiffHeight )
         {
             if ( nDiffHeight > 0 )
             {
-                //Wieder validieren wenn kein Wachstum stattgefunden hat.
-                //Invalidiert wird durch AdjustCells von der Row.
+                //Validate again if no growth happened. Invalidation is done
+                //through AdjustCells of the row.
                 if ( !Grow( nDiffHeight ) )
                     bValidSize = bValidPrtArea = sal_True;
             }
             else
             {
-                //Nur dann invalidiert lassen, wenn tatsaechlich
-                //geshrinkt wurde; das kann abgelehnt werden, weil alle
-                //nebeneinanderliegenden Zellen gleichgross sein muessen.
+                //Only keep invalidated if shrinking was done; this can be
+                //dismissed because all adjoined cells have to be the same size.
                 if ( !Shrink( -nDiffHeight ) )
                     bValidSize = bValidPrtArea = sal_True;
             }
@@ -5110,8 +5095,8 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
-            // OSL_ENSURE(fuer HTML-Import!
-            OSL_ENSURE( !this, "VAlign an Zelle ohne Inhalt" );
+            // OSL_ENSURE(for HTML-import!
+            OSL_ENSURE( !this, "VAlign to cell without content" );
             return;
         }
         sal_Bool bVertDir = sal_True;
@@ -5119,7 +5104,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
         const bool bConsiderWrapOnObjPos( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) );
-        //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
+        //No alignment if border with flow overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {
             SwRect aRect( Prt() ); aRect += Frm().Pos();
@@ -5189,7 +5174,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     }
     else
     {
-        //Ist noch eine alte Ausrichtung beruecksichtigt worden?
+        //Was an old alignment taken into account?
         if ( Lower()->IsCntntFrm() )
         {
             const long lYStart = (this->*fnRect->fnGetPrtTop)();

@@ -97,7 +97,9 @@ namespace cppu_threadpool {
                 if( 0 == m_lstCallstack.front() )
                 {
                     // disposed !
-                    if( m_lstJob.empty() )
+                    if( m_lstJob.empty()
+                        && (m_lstCallstack.empty()
+                            || m_lstCallstack.front() != 0) )
                     {
                         osl_resetCondition( m_cndWait );
                     }
@@ -110,7 +112,8 @@ namespace cppu_threadpool {
                     job = m_lstJob.front();
                     m_lstJob.pop_front();
                 }
-                if( m_lstJob.empty() )
+                if( m_lstJob.empty()
+                    && (m_lstCallstack.empty() || m_lstCallstack.front() != 0) )
                 {
                     osl_resetCondition( m_cndWait );
                 }
@@ -119,12 +122,14 @@ namespace cppu_threadpool {
             if( job.doRequest )
             {
                 job.doRequest( job.pThreadSpecificData );
+                MutexGuard guard( m_mutex );
                 m_nToDo --;
             }
             else
             {
-                m_nToDo --;
                 pReturn = job.pThreadSpecificData;
+                MutexGuard guard( m_mutex );
+                m_nToDo --;
                 break;
             }
         }
@@ -174,13 +179,13 @@ namespace cppu_threadpool {
         }
     }
 
-    sal_Bool JobQueue::isEmpty()
+    sal_Bool JobQueue::isEmpty() const
     {
         MutexGuard guard( m_mutex );
         return m_lstJob.empty();
     }
 
-    sal_Bool JobQueue::isCallstackEmpty()
+    sal_Bool JobQueue::isCallstackEmpty() const
     {
         MutexGuard guard( m_mutex );
         return m_lstCallstack.empty();
@@ -188,6 +193,7 @@ namespace cppu_threadpool {
 
     sal_Bool JobQueue::isBusy() const
     {
+        MutexGuard guard( m_mutex );
         return m_nToDo > 0;
     }
 

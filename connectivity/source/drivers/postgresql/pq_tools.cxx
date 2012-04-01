@@ -360,25 +360,11 @@ void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::
     {
         disposeObject( r );
     }
-    catch( SQLException & e )
-    {
-        // ignore this
-    }
-
-}
-
-void rollbackNoThrow( const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & r )
-{
-    try
-    {
-        Reference< XStatement > stmt = r->createStatement();
-        stmt->executeUpdate( getStatics().ROLLBACK );
-
-    }
     catch( SQLException & )
     {
         // ignore this
     }
+
 }
 
 Reference< XConnection > extractConnectionFromStatement( const Reference< XInterface > & stmt )
@@ -437,7 +423,7 @@ TransactionGuard::~TransactionGuard()
         if( ! m_commited )
             m_stmt->executeUpdate( getStatics().ROLLBACK );
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
         // ignore, we are within a dtor
     }
@@ -532,6 +518,7 @@ static bool isOperator( char c )
     case '?':
     case '$':
         ret = true;
+        break;
     default:
         ret = false;
     }
@@ -876,11 +863,12 @@ void fillAttnum2attnameMap(
 ::rtl::OString extractSingleTableFromSelect( const OStringVector &vec )
 {
     rtl::OString ret;
-    size_t token = 0;
 
     if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             vec[0].pData->buffer, vec[0].pData->length, "select" , 6 , 6 ) )
     {
+        size_t token = 0;
+
         for( token = 1; token < vec.size() ; token ++ )
         {
             if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(

@@ -2257,14 +2257,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
     }
 
-    String sTrue( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "TRUE" ))),
-           sFalse( String::CreateFromAscii(
-                                       RTL_CONSTASCII_STRINGPARAM( "FALSE" )));
+    rtl::OUString sTrue("TRUE"), sFalse("FALSE");
 
     sal_Bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;
-    const String* pFormel = 0;
+    const rtl::OUString* pFormel = 0;
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )
@@ -2303,9 +2300,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 if( GETFLD_ALL == eGetMode )
                 {
                     pFormel = &pFld->GetPar1();
-                    if( !pFormel->Len() || pFormel->Equals( sFalse ))
+                    if (pFormel->isEmpty() || pFormel->equals(sFalse))
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_False );
-                    else if( pFormel->Equals( sTrue ))
+                    else if (pFormel->equals(sTrue))
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_True );
                     else
                         break;
@@ -2320,9 +2317,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 if( GETFLD_ALL == eGetMode )
                 {
                     pFormel = &pFld->GetPar1();
-                    if( !pFormel->Len() || pFormel->Equals( sFalse ))
+                    if (pFormel->isEmpty() || pFormel->equals(sFalse))
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_True );
-                    else if( pFormel->Equals( sTrue ))
+                    else if (pFormel->equals(sTrue))
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_False );
                     else
                         break;
@@ -2364,7 +2361,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             break;
         }
 
-        if( pFormel && pFormel->Len() )
+        if (pFormel && !pFormel->isEmpty())
         {
             GetBodyNode( *pTxtFld, nWhich );
             pFormel = 0;

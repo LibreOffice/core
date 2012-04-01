@@ -152,9 +152,7 @@ inline const SvxMacro& IMapObject::GetEvent( sal_uInt16 nEvent ) const
 }
 inline sal_Bool IMapObject::DelEvent( sal_uInt16 nEvent )
 {
-    SvxMacro *pMacro = aEventList.Remove( nEvent );
-    delete pMacro;
-    return ( pMacro != 0 );
+    return aEventList.Erase( nEvent );
 }
 
 #endif

@@ -74,12 +74,6 @@ namespace basegfx
         return *this;
     }
 
-    bool areParallel( const B2IVector& rVecA, const B2IVector& rVecB )
-    {
-        double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-        return ::basegfx::fTools::equalZero(fVal);
-    }
-
     B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec )
     {
         B2IVector aRes( rVec );

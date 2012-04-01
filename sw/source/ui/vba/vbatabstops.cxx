@@ -258,11 +258,10 @@ SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaTabStops::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStops") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStops"));
 }
 
 css::uno::Sequence<rtl::OUString>

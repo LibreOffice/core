@@ -74,7 +74,7 @@ private:
     double          mfScaleY;
     Size            maSizePixel;
 
-                    DECL_LINK( ImplPreviewTimeoutHdl, Timer* pTimer );
+                    DECL_LINK(ImplPreviewTimeoutHdl, void *);
                     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:

@@ -73,7 +73,7 @@ public:
     virtual void SAL_CALL setTrailingCharacter( ::sal_Int32 _trailingcharacter ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_LISTLEVEL_HXX */

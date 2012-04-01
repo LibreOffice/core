@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 

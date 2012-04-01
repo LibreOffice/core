@@ -230,22 +230,14 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         }
                     }
 
-#if OSL_DEBUG_LEVEL > 2
-                    sal_Bool aSuccess =
-#endif
-                                          maSizeCondition.set();
-                    DBG( "%p set condition result: %d", this, aSuccess );
+                    maSizeCondition.set();
                 }
             }
         }
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
-#if OSL_DEBUG_LEVEL > 2
-            sal_Bool aSuccess =
-#endif
-                                maSizeCondition.set();
-            DBG( "%p set condition result: %d", this, aSuccess );
+            maSizeCondition.set();
         }
     }
 
@@ -404,32 +396,6 @@ double SAL_CALL Player::getMediaTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setStopTime( double /*fTime*/ )
-    throw (uno::RuntimeException)
-{
-    // TODO implement
-}
-
-// ------------------------------------------------------------------------------
-
-double SAL_CALL Player::getStopTime(  )
-    throw (uno::RuntimeException)
-{
-    // Get the time at which to stop
-
-    return 0;
-}
-
-// ------------------------------------------------------------------------------
-
-void SAL_CALL Player::setRate( double /*fRate*/ )
-    throw (uno::RuntimeException)
-{
-    // TODO set the window rate
-}
-
-// ------------------------------------------------------------------------------
-
 double SAL_CALL Player::getRate(  )
     throw (uno::RuntimeException)
 {
@@ -537,7 +503,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
 
     TimeValue aTimeout = { 10, 0 };
 #if OSL_DEBUG_LEVEL > 2
-    oslConditionResult aResult =
+    osl::Condition::Result aResult =
 #endif
                                  maSizeCondition.wait( &aTimeout );
 

@@ -405,11 +405,10 @@ ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
     return uno::Any( xNames );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaWorkbook::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbook") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbook"));
 }
 
 uno::Sequence< rtl::OUString >

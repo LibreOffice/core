@@ -54,6 +54,12 @@
 #include <memory>
 #include <utility>
 
+#ifdef IOS
+#include <premac.h>
+#import <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #define MY_STRING_(x) # x
 #define MY_STRING(x) MY_STRING_(x)
 
@@ -271,7 +277,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 {
 #if OSL_DEBUG_LEVEL > 1
     OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE(__FILE__" -- Bootstrap_Impl() - %s\n", sFile.getStr());
+    OSL_TRACE("Bootstrap_Impl(): sFile=%s", sFile.getStr());
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
     oslFileHandle handle;
@@ -295,7 +301,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 				OString name_tmp = OUStringToOString(sName, RTL_TEXTENCODING_ASCII_US);
 				OString value_tmp = OUStringToOString(sValue, RTL_TEXTENCODING_UTF8);
                 OSL_TRACE(
-                    __FILE__" -- pushing: name=%s value=%s\n",
+                    "pushing: name=%s value=%s",
                     name_tmp.getStr(), value_tmp.getStr() );
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
@@ -308,7 +314,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     else
     {
         OString file_tmp = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
+        OSL_TRACE( "couldn't open file: %s", file_tmp.getStr() );
     }
 #endif /* OSL_DEBUG_LEVEL > 1 */
 }
@@ -390,6 +396,21 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
     if (baseIni_ == 0) {
         rtl::OUString uri;
         if (baseIniUri_.isEmpty()) {
+#if defined IOS
+            // On iOS hardcode the inifile as "rc" in the .app
+            // directory. Apps are self-contained anyway, there is no
+            // possibility to have several "applications" in the same
+            // installation location with different inifiles.
+            const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
+            uri = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
+            resolvePathnameUrl(&uri);
+#elif defined ANDROID
+            // Apps are self-contained on Android, too, can as well hardcode
+            // it as "rc" in the "/assets" directory, i.e.  inside the app's
+            // .apk (zip) archive as the /assets/rc file.
+            uri = rtl::OUString("vnd.sun.star.pathname:/assets/rc");
+            resolvePathnameUrl(&uri);
+#else
             if (CommandLineParameters::get().get(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")),
                     &uri))
@@ -416,6 +437,7 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
                 uri += rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
             }
+#endif
         } else {
             uri = baseIniUri_;
         }

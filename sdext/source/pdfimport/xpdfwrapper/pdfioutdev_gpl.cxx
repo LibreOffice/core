@@ -56,8 +56,12 @@
 
 #ifdef WNT
 # define snprintf _snprintf
-#endif
 
+#if defined GCC
+#pragma GCC diagnostic warning "-Wformat"
+#pragma GCC diagnostic warning "-Wformat-extra-args"
+#endif
+#endif
 
 /* SYNC STREAMS
    ============

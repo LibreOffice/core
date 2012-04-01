@@ -95,7 +95,7 @@ void SwHTMLParser::EndScript()
     }
 
     bIgnoreRawData = sal_False;
-    aScriptSource.ConvertLineEnd();
+    aScriptSource = convertLineEnd(aScriptSource, GetSystemLineEnd());
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
@@ -254,8 +254,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
     if( !pDocSh )
         return;
 
-    String sEvent( rName );
-    sEvent.ConvertLineEnd();
+    String sEvent(convertLineEnd(rName, GetSystemLineEnd()));
     String sScriptType;
     if( EXTENDED_STYPE == eScrType )
         sScriptType = rScrType;
@@ -268,6 +267,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
 
 void SwHTMLWriter::OutBasic()
 {
+#ifndef DISABLE_SCRIPTING
     if( !bCfgStarBasic )
         return;
 
@@ -320,6 +320,7 @@ void SwHTMLWriter::OutBasic()
                                      eDestEnc, &aNonConvertableCharacters );
         }
     }
+#endif
 }
 
 static const char* aEventNames[] =
@@ -341,10 +342,13 @@ void SwHTMLWriter::OutBasicBodyEvents()
     {
         SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
         if ( pMacro )
-            pDocTable->Insert( aBodyEventTable[i].nEvent, pMacro );
+        {
+            pDocTable->Insert( aBodyEventTable[i].nEvent, *pMacro );
+            delete pMacro;
+        }
     }
 
-    if( pDocTable && pDocTable->Count() )
+    if( pDocTable && !pDocTable->empty() )
         HTMLOutFuncs::Out_Events( Strm(), *pDocTable, aBodyEventTable,
                                   bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }

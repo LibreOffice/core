@@ -48,126 +48,6 @@
 
 namespace comphelper { namespace string {
 
-rtl::OUString searchAndReplaceAsciiL(
-    rtl::OUString const & source, char const * from, sal_Int32 fromLength,
-    rtl::OUString const & to, sal_Int32 beginAt, sal_Int32 * replacedAt)
-{
-    sal_Int32 n = source.indexOfAsciiL(from, fromLength, beginAt);
-    if (replacedAt != NULL) {
-        *replacedAt = n;
-    }
-    return n == -1 ? source : source.replaceAt(n, fromLength, to);
-}
-
-::rtl::OUString searchAndReplaceAllAsciiWithAscii(
-    const ::rtl::OUString& _source, const sal_Char* _from, const sal_Char* _to,
-    const sal_Int32 _beginAt )
-{
-    sal_Int32 fromLength = strlen( _from );
-    sal_Int32 n = _source.indexOfAsciiL( _from, fromLength, _beginAt );
-    if ( n == -1 )
-        return _source;
-
-    ::rtl::OUString dest( _source );
-    ::rtl::OUString to( ::rtl::OUString::createFromAscii( _to ) );
-    do
-    {
-        dest = dest.replaceAt( n, fromLength, to );
-        n = dest.indexOfAsciiL( _from, fromLength, n + to.getLength() );
-    }
-    while ( n != -1 );
-
-    return dest;
-}
-
-::rtl::OUString& searchAndReplaceAsciiI(
-    ::rtl::OUString & _source, sal_Char const * _asciiPattern, ::rtl::OUString const & _replace,
-    sal_Int32 _beginAt, sal_Int32 * _replacedAt )
-{
-    sal_Int32 fromLength = strlen( _asciiPattern );
-    sal_Int32 n = _source.indexOfAsciiL( _asciiPattern, fromLength, _beginAt );
-    if ( _replacedAt != NULL )
-        *_replacedAt = n;
-
-    if ( n != -1 )
-        _source = _source.replaceAt( n, fromLength, _replace );
-
-    return _source;
-}
-
-namespace
-{
-    template <typename T, typename O> T tmpl_replace(const T &rIn,
-        const T &rSearch, const T &rReplace)
-    {
-        if (rIn.isEmpty() || rSearch.isEmpty())
-            return rIn;
-
-        O aRet;
-
-        sal_Int32 nFromIndex = 0;
-        while (nFromIndex < rIn.getLength())
-        {
-            sal_Int32 nIndex = rIn.indexOf(rSearch, nFromIndex);
-            if (nIndex == -1)
-            {
-                aRet.append(rIn.copy(nFromIndex));
-                break;
-            }
-            aRet.append(rIn.copy(nFromIndex, nIndex-nFromIndex));
-            aRet.append(rReplace);
-            nFromIndex = nIndex+rSearch.getLength();
-        }
-
-        return aRet.makeStringAndClear();
-    }
-}
-
-rtl::OString replace(const rtl::OString &rIn, const rtl::OString &rSearch,
-    const rtl::OString &rReplace)
-{
-    return tmpl_replace<rtl::OString, rtl::OStringBuffer>(rIn, rSearch,
-        rReplace);
-}
-
-rtl::OUString replace(const rtl::OUString &rIn, const rtl::OUString &rSearch,
-    const rtl::OUString &rReplace)
-{
-    return tmpl_replace<rtl::OUString, rtl::OUStringBuffer>(rIn, rSearch,
-        rReplace);
-}
-
-namespace
-{
-    template <typename T, typename C, typename O> T tmpl_remove(const T &rIn,
-        const C cRemove)
-    {
-        if (rIn.isEmpty())
-            return rIn;
-
-        O aRet;
-
-        for (sal_Int32 i = 0; i < rIn.getLength(); ++i)
-        {
-            C cChar = rIn[i];
-            if (cChar != cRemove)
-                aRet.append(cChar);
-        }
-
-        return aRet.makeStringAndClear();
-    }
-}
-
-rtl::OString remove(const rtl::OString &rIn, sal_Char c)
-{
-    return tmpl_remove<rtl::OString, sal_Char, rtl::OStringBuffer>(rIn, c);
-}
-
-rtl::OUString remove(const rtl::OUString &rIn, sal_Unicode c)
-{
-    return tmpl_remove<rtl::OUString, sal_Unicode, rtl::OUStringBuffer>(rIn, c);
-}
-
 namespace
 {
     template <typename T, typename C> T tmpl_stripStart(const T &rIn,
@@ -511,16 +391,6 @@ namespace
     }
 }
 
-bool isalnumAsciiString(const rtl::OString &rString)
-{
-    return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
-}
-
-bool isalnumAsciiString(const rtl::OUString &rString)
-{
-    return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
-}
-
 bool isdigitAsciiString(const rtl::OString &rString)
 {
     return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
@@ -531,24 +401,41 @@ bool isdigitAsciiString(const rtl::OUString &rString)
     return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
 }
 
-bool islowerAsciiString(const rtl::OString &rString)
+namespace
 {
-    return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
+    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
+    {
+        //Clearly this is somewhat cosy with the sal implmentation
+
+        //rtl_[u]String contains U buffer[1], so an input of nLen
+        //allocates a buffer of nLen + 1 and we'll ensure a null termination
+
+        T* newStr =
+            (sal::static_int_cast< sal_uInt32 >(nLen)
+               <= ((SAL_MAX_UINT32 - sizeof (T))
+                   / sizeof (U)))
+            ? (T*) rtl_allocateMemory(
+                sizeof (T) + nLen * sizeof (U))
+            : NULL;
+
+        if (!newStr)
+            throw std::bad_alloc();
+
+        newStr->refCount = 1;
+        newStr->length = nLen;
+        newStr->buffer[nLen] = 0;
+        return newStr;
+    }
 }
 
-bool islowerAsciiString(const rtl::OUString &rString)
+rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
 {
-    return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
+    return string_alloc<rtl_uString, sal_Unicode>(nLen);
 }
 
-bool isupperAsciiString(const rtl::OString &rString)
+rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
 {
-    return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
-}
-
-bool isupperAsciiString(const rtl::OUString &rString)
-{
-    return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
+    return string_alloc<rtl_String, sal_Char>(nLen);
 }
 
 } }

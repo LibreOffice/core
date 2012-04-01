@@ -38,7 +38,6 @@
 #include "res_bmp.hrc"
 #include "slideshow.hxx"
 #include "ViewShellBase.hxx"
-#include "slideshow.hxx"
 #include "sdresid.hxx"
 #include "helpids.h"
 #include "strings.hrc"
@@ -652,7 +651,7 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
     return 0L;
 }
 
-IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl)
 {
     if( mbMouseCursorHidden )
     {

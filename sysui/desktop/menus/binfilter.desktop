@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Exec=${UNIXBASISROOTNAME} %U
+MimeType=application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/vnd.stardivision.draw;application/vnd.stardivision.impress;application/vnd.stardivision.math;application/vnd.stardivision.writer;
+Name=%PRODUCTNAME Legacy StarOffice 5 Binary Format Importer
+GenericName=Legacy StarOffice 5 Binary Format Importer
+NoDisplay=true

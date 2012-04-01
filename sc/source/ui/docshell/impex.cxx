@@ -63,12 +63,14 @@ class StarBASIC;
 #include "filter.hxx"
 #include "asciiopt.hxx"
 #include "cell.hxx"
+#include "column.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"
 #include "editable.hxx"
 #include "compiler.hxx"
 #include "warnbox.hxx"
+#include "clipparam.hxx"
 
 #include "impex.hxx"
 
@@ -263,7 +265,7 @@ void ScImportExport::EndPaste()
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         pDoc->CopyToDocument( aRange, IDF_ALL | IDF_NOCAPTIONS, false, pRedoDoc );
         ScMarkData aDestMark;
-        aDestMark.SelectOneTable( aRange.aStart.Tab() );
+        aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, IDF_ALL, NULL));
     }
@@ -1436,26 +1438,33 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
     SCROW nRow;
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
+
+    if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
+        pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
     String aCell;
+
     bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
-        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, aRange.aStart.Tab() ))
+        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, nStartTab ))
         {
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
                 CellType eType;
-                pDoc->GetCellType( nCol, nRow, aRange.aStart.Tab(), eType );
+                pDoc->GetCellType( nCol, nRow, nStartTab, eType );
                 switch (eType)
                 {
                     case CELLTYPE_FORMULA:
                     {
                         if (bFormulas)
                         {
-                            pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell );
+                            pDoc->GetFormula( nCol, nRow, nStartTab, aCell );
                             if( aCell.Search( cSep ) != STRING_NOTFOUND )
                                 lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
@@ -1463,7 +1472,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
                         else
                         {
-                            pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                            pDoc->GetString( nCol, nRow, nStartTab, aCell );
 
                             bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                             if( bMultiLineText )
@@ -1471,7 +1480,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                                 if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
                                     aCell.SearchAndReplaceAll( _LF, ' ' );
                                 else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                    aCell.ConvertLineEnd();
+                                    aCell = convertLineEnd(aCell, GetSystemLineEnd());
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
@@ -1486,7 +1495,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
                         lcl_WriteSimpleString( rStrm, aCell );
                     }
                     break;
@@ -1495,7 +1504,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     default:
                     {
-                        pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
 
                         bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                         if( bMultiLineText )
@@ -1503,7 +1512,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                             if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
                                 aCell.SearchAndReplaceAll( _LF, ' ' );
                             else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
-                                aCell.ConvertLineEnd();
+                                aCell = convertLineEnd(aCell, GetSystemLineEnd());
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
@@ -1869,7 +1878,9 @@ sal_Bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                pFCell->GetFormula( aCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
+                                rtl::OUString aOUCellStr;
+                                pFCell->GetFormula( aOUCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
+                                aCellStr = aOUCellStr;
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel
@@ -2059,6 +2070,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     {
       OSL_FAIL("Missing file filters");
     }
+    virtual ~ScFormatFilterMissing() {}
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet ) RETURN_ERROR
     virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR

@@ -240,6 +240,9 @@ class ISequenceListener
 {
 public:
     virtual void notify_change() = 0;
+
+protected:
+    ~ISequenceListener() {}
 };
 
 /** this class keeps track of a group of animations that build up
@@ -436,7 +439,7 @@ protected:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_LINK( onTimerHdl, Timer * );
+    DECL_LINK(onTimerHdl, void *);
 
     virtual void implRebuild();
 

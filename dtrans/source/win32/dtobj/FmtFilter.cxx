@@ -215,7 +215,7 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     else if( ( BI_BITFIELDS == pBmpInfoHdr->biCompression ) && ( ( 16 == pBmpInfoHdr->biBitCount ) || ( 32 == pBmpInfoHdr->biBitCount ) ) )
         nOffset += 12;
 
-    pBmpFileHdr->bfType      = 'MB';
+    pBmpFileHdr->bfType      = ('M' << 8) | 'B';
     pBmpFileHdr->bfSize      = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
     pBmpFileHdr->bfReserved1 = 0;
     pBmpFileHdr->bfReserved2 = 0;
@@ -482,7 +482,7 @@ typedef Sequence<sal_Int8> ByteSequence_t;
    a double '\0' terminated string buffer */
 size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
 {
-    if (fileList.size() == 0)
+    if ( fileList.empty() )
         return 0;
 
     size_t size = 1; // one for the very final '\0'

@@ -163,7 +163,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
             const ::rtl::OUString & rEntry = *aIt;
             WriteOUString(pDataStrm, rEntry, false);
 
-            aIt++;
+            ++aIt;
         }
     }
 

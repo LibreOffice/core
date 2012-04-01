@@ -124,7 +124,7 @@ public class _XNamed extends MultiMethodTest {
             // special case, here name is equals to links URL.
             NewName = "file:///c:/somename/from/XNamed";
         } else if (testobjname.equals("ScDDELinkObj")) {
-            String fileName = utils.getFullTestDocName("ScDDELinksObj.sdc");
+            String fileName = utils.getFullTestDocName("ScDDELinksObj.ods");
             NewName = "soffice|" + fileName + "!Sheet1.A2";
         } else if (testobjname.equals("SwXAutoTextGroup")) {
             //This avoids a GPF

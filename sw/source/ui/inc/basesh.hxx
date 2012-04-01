@@ -35,6 +35,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 #include <svl/svstdarr.hxx>
+#include <viewopt.hxx>
 
 #include <mdiexp.hxx>
 #include <set>
@@ -60,7 +61,7 @@ class SwBaseShell: public SfxShell
     // Update-Timer for graphic
     std::set<sal_uInt16> aGrfUpdateSlots;
 
-    DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
+    DECL_LINK( GraphicArrivedHdl, void* );
 
 protected:
     SwWrtShell&         GetShell();
@@ -119,7 +120,6 @@ public:
     static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrmMode()                 { return eFrameMode;  }
-
 };
 
 

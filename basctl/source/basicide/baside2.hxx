@@ -54,6 +54,9 @@ class SvxSearchItem;
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
+#include "objdlg.hxx"
+
+#include <tools/table.hxx>
 
 DBG_NAMEEX( ModulWindow )
 
@@ -110,7 +113,7 @@ private:
     SyntaxHighlighter   aHighlighter;
     Timer           aSyntaxIdleTimer;
     Table           aSyntaxLineTable;
-    DECL_LINK( SyntaxTimerHdl, Timer * );
+    DECL_LINK(SyntaxTimerHdl, void *);
     ProgressInfo*   pProgress;
     ModulWindow*    pModulWindow;
 
@@ -216,7 +219,7 @@ class WatchTreeListBox : public SvHeaderTabListBox
 
 protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     sal_Bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
@@ -248,7 +251,7 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
 
     DECL_LINK( ButtonHdl, ImageButton * );
-    DECL_LINK( TreeListHdl, SvTreeListBox * );
+    DECL_LINK(TreeListHdl, void *);
     DECL_LINK( implEndDragHdl, HeaderBar * );
     DECL_LINK( EditAccHdl, Accelerator * );
 
@@ -291,6 +294,7 @@ private:
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
     bool                bLineNumberDisplay;
+    bool                bObjectCatalogDisplay;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -307,6 +311,7 @@ public:
     ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
 
     void SetLineNumberDisplay(bool b);
+    void SetObjectCatalogDisplay(bool b);
 };
 
 
@@ -368,6 +373,7 @@ public:
     virtual sal_Bool    IsReadOnly();
 
     void SetLineNumberDisplay(bool);
+    void SetObjectCatalogDisplay(bool);
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
@@ -437,6 +443,7 @@ private:
 
     WatchWindow     aWatchWindow;
     StackWindow     aStackWindow;
+    ObjectCatalog   aObjectCatalog;
 
     sal_Bool            bVSplitted;
     sal_Bool            bHSplitted;
@@ -474,6 +481,7 @@ public:
 
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
+    ObjectCatalog&    GetObjectCatalog()    { return aObjectCatalog; }
 
     Image getImage(sal_uInt16 nId) const;
 

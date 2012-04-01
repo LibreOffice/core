@@ -64,6 +64,7 @@ class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 
 public:
     SwTblBoxFormula( const String& rFormula );
+    ~SwTblBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;

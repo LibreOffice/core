@@ -206,8 +206,6 @@ PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Run
 PyObject* PyUNO_char_new (sal_Unicode c , const Runtime &r);
 PyObject *PyUNO_ByteSequence_new( const com::sun::star::uno::Sequence< sal_Int8 > &, const Runtime &r );
 
-PyObject *importToGlobal( PyObject *typeName, PyObject *dict, PyObject *targetName );
-
 PyRef getTypeClass( const Runtime &);
 PyRef getEnumClass( const Runtime &);
 PyRef getBoolClass( const Runtime &);

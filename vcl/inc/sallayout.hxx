@@ -345,6 +345,7 @@ class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 public:
     // used by layout engines
     void            AppendGlyph( const GlyphItem& );
+    void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    ApplyDXArray( ImplLayoutArgs& );
     virtual void    Justify( long nNewWidth );
@@ -374,9 +375,7 @@ protected:
     bool            GetCharWidths( sal_Int32* pCharWidths ) const;
 
 private:
-    GlyphItem*      mpGlyphItems;   // TODO: change to GlyphList
-    int             mnGlyphCount;
-    int             mnGlyphCapacity;
+    GlyphVector     m_GlyphItems;
     mutable Point   maBasePoint;
 
     // enforce proper copy semantic

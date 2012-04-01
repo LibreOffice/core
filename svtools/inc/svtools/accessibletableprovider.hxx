@@ -141,6 +141,9 @@ public:
 
     virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) = 0;
+
+protected:
+    ~IAccessibleTableProvider() {}
 };
 
 // ----------------------------------------------------------------------------
@@ -168,6 +171,9 @@ public:
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
+
+protected:
+    ~IAccessibleTabListBox() {}
 };
 
 /** interface for an implementation of a browse box's Accesible component
@@ -239,6 +245,9 @@ public:
         const ::com::sun::star::uno::Any& rNewValue,
         const ::com::sun::star::uno::Any& rOldValue
     ) = 0;
+
+protected:
+    ~IAccessibleBrowseBox() {}
 };
 
 // ----------------------------------------------------------------------------

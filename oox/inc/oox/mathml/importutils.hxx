@@ -213,10 +213,6 @@ public:
     */
     bool findTag( int token );
     /**
-     Skips the given element (i.e. reads up to and including the matching closing tag).
-    */
-    void skipElement( int token );
-    /**
      Handle the current (unexpected) tag.
     */
     void handleUnexpectedTag();

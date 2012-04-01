@@ -205,10 +205,9 @@ void EditUndoDelContent::Redo()
 
     // pNode is no longer correct, if the paragraphs where merged
     // in between Undos
-    pContentNode = _pImpEE->GetEditDoc().SaveGetObject( nNode );
+    pContentNode = _pImpEE->GetEditDoc().SafeGetObject( nNode );
     DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
 
-    delete _pImpEE->GetParaPortions()[nNode];
     _pImpEE->GetParaPortions().Remove( nNode );
 
     // Do not delete node, depends on the undo!
@@ -221,8 +220,8 @@ void EditUndoDelContent::Redo()
     _pImpEE->UpdateSelections();
 
     ContentNode* pN = ( nNode < _pImpEE->GetEditDoc().Count() )
-        ? _pImpEE->GetEditDoc().SaveGetObject( nNode )
-        : _pImpEE->GetEditDoc().SaveGetObject( nNode-1 );
+        ? _pImpEE->GetEditDoc().SafeGetObject( nNode )
+        : _pImpEE->GetEditDoc().SafeGetObject( nNode-1 );
     DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
     EditPaM aPaM( pN, pN->Len() );
 
@@ -540,52 +539,52 @@ EditUndoSetAttribs::EditUndoSetAttribs( ImpEditEngine* _pImpEE, const ESelection
     nSpecial = 0;
 }
 
+namespace {
+
+struct RemoveAttribsFromPool : std::unary_function<ContentAttribsInfo, void>
+{
+    SfxItemPool& mrPool;
+public:
+    RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
+    void operator() (ContentAttribsInfo& rInfo)
+    {
+        rInfo.RemoveAllCharAttribsFromPool(mrPool);
+    }
+};
+
+}
+
 EditUndoSetAttribs::~EditUndoSetAttribs()
 {
     // Get Items from Pool...
     SfxItemPool* pPool = aNewAttribs.GetPool();
-    sal_uInt16 nContents = aPrevAttribs.Count();
-    for ( sal_uInt16 n = 0; n < nContents; n++ )
-    {
-        ContentAttribsInfo* pInf = aPrevAttribs[n];
-        DBG_ASSERT( pInf, "Undo_DTOR (SetAttribs): pInf = NULL!" );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
-        {
-            EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
-            DBG_ASSERT( pX, "Undo_DTOR (SetAttribs): pX = NULL!" );
-            pPool->Remove( *pX->GetItem() );
-            delete pX;
-        }
-        delete pInf;
-    }
+    std::for_each(aPrevAttribs.begin(), aPrevAttribs.end(), RemoveAttribsFromPool(*pPool));
 }
 
 void EditUndoSetAttribs::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     ImpEditEngine* _pImpEE = GetImpEditEngine();
-    sal_Bool bFields = sal_False;
+    bool bFields = false;
     for ( sal_uInt16 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
-        ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
-        DBG_ASSERT( pInf, "Undo (SetAttribs): pInf = NULL!" );
+        const ContentAttribsInfo& rInf = aPrevAttribs[nPara-aESel.nStartPara];
 
         // first the paragraph attributes ...
-        _pImpEE->SetParaAttribs( nPara, pInf->GetPrevParaAttribs() );
+        _pImpEE->SetParaAttribs(nPara, rInf.GetPrevParaAttribs());
 
         // Then the character attributes ...
         // Remove all attributes including features, are later re-established.
-        _pImpEE->RemoveCharAttribs( nPara, 0, sal_True );
-        DBG_ASSERT( _pImpEE->GetEditDoc().SaveGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
+        _pImpEE->RemoveCharAttribs(nPara, 0, true);
+        DBG_ASSERT( _pImpEE->GetEditDoc().SafeGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = _pImpEE->GetEditDoc().GetObject( nPara );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+        for (size_t nAttr = 0; nAttr < rInf.GetPrevCharAttribs().size(); ++nAttr)
         {
-            EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
-            DBG_ASSERT( pX, "Redo (SetAttribs): pX = NULL!" );
+            const EditCharAttrib& rX = rInf.GetPrevCharAttribs()[nAttr];
             // is automatically "poolsized"
-            _pImpEE->GetEditDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
-            if ( pX->Which() == EE_FEATURE_FIELD )
-                bFields = sal_True;
+            _pImpEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
+            if (rX.Which() == EE_FEATURE_FIELD)
+                bFields = true;
         }
     }
     if ( bFields )
@@ -605,6 +604,11 @@ void EditUndoSetAttribs::Redo()
         _pImpEE->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
 
     ImpSetSelection( GetImpEditEngine()->GetActiveView() );
+}
+
+void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
+{
+    aPrevAttribs.push_back(pNew);
 }
 
 void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )

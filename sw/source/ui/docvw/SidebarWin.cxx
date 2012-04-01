@@ -1048,13 +1048,13 @@ IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, ModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)
 {
     mrView.GetDocShell()->SetModified(sal_True);
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, DeleteHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl)
 {
     mnEventId = 0;
     Delete();

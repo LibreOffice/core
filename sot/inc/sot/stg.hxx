@@ -176,7 +176,6 @@ public:
     virtual sal_Bool    Revert();
     virtual sal_Bool    Validate( sal_Bool=sal_False ) const;
     virtual sal_Bool    ValidateMode( StreamMode ) const;
-    sal_Bool            ValidateMode( StreamMode, StgDirEntry* p ) const;
     const SvStream* GetSvStream() const;
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const;
 };
@@ -296,7 +295,6 @@ protected:
                                 ~UCBStorage();
 public:
     static sal_Bool                 IsStorageFile( SvStream* );
-    static sal_Bool                 IsStorageFile( const String& rName );
     static sal_Bool                 IsDiskSpannedFile( SvStream* );
     static String               GetLinkedFile( SvStream& );
     static String               CreateLinkFile( const String& rName );

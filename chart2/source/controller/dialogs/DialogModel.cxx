@@ -90,7 +90,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
     typedef ::std::map< OUString, OUString > tTranslationMap;
     static tTranslationMap aTranslationMap;
 
-    if( aTranslationMap.size() == 0 )
+    if( aTranslationMap.empty() )
     {
         aTranslationMap[ C2U( "categories" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_CATEGORIES )));
         aTranslationMap[ C2U( "error-bars-x" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR )));

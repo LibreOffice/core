@@ -78,9 +78,9 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     ::rtl::OUString m_aIconMediaType;
 
-    DECL_LINK(          DoubleClickHdl, ListBox* );
-    DECL_LINK(          BrowseHdl, PushButton* );
-    DECL_LINK(          RadioHdl, RadioButton* );
+    DECL_LINK(          DoubleClickHdl, void* );
+    DECL_LINK(BrowseHdl, void *);
+    DECL_LINK(RadioHdl, void *);
     void                SelectDefault();
     ListBox&            GetObjectTypes()
                         { return aLbObjecttype; }
@@ -114,7 +114,7 @@ private:
     INetURLObject*      m_pURL;
     String              m_aCommands;
 
-    DECL_LINK(          BrowseHdl, PushButton * );
+    DECL_LINK(BrowseHdl, void *);
     String              GetPlugInFile() const { return aEdFileurl.GetText(); }
     String              GetPlugInOptions() const { return aEdPluginsOptions.GetText(); }
 

@@ -75,9 +75,9 @@ private:
     String          maSelectLockedCells;
     String          maSelectUnlockedCells;
 
-    DECL_LINK( OKHdl, OKButton* );
+    DECL_LINK( OKHdl, void* );
     DECL_LINK( CheckBoxHdl, CheckBox* );
-    DECL_LINK( PasswordModifyHdl, Edit* );
+    DECL_LINK( PasswordModifyHdl, void* );
 };
 
 #endif

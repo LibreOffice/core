@@ -91,7 +91,7 @@ public:
 
 /*************************************************************************/
 
-class SvxBmpItemInfo;
+struct SvxBmpItemInfo;
 typedef ::std::vector< SvxBmpItemInfo* > SvxBmpItemInfoList;
 
 class SvxLineTabPage : public SvxTabPage
@@ -140,9 +140,8 @@ private:
     FixedText           aSymbolHeightFT;
     MetricField         aSymbolHeightMF;
     CheckBox            aSymbolRatioCB;
-    std::vector<String> aGrfNames;
+    std::vector<rtl::OUString> aGrfNames;
     SvxBmpItemInfoList  aGrfBrushItems;
-    String              sNumCharFmtName;
     sal_Bool            bLastWidthModified;
     Size                aSymbolLastSize;
     Graphic             aSymbolGraphic;
@@ -198,6 +197,8 @@ private:
     sal_Bool FillXLSet_Impl();
 #endif
 
+    void InitSymbols(MenuButton* pButton);
+    void SymbolSelected(MenuButton* pButton);
     void FillListboxes();
 public:
 

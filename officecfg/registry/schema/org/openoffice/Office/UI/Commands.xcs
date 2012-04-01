@@ -45,7 +45,7 @@
                     <desc>A localized text that describes the identifier of a command in a structured menu.  </desc>
                 </info>
             </prop>
-            <prop oor:name="Properties" oor:type="xs:int">
+            <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc>
                     Additional information about a single command.

@@ -265,11 +265,6 @@ public:
     */
     void selectChild( RECT_POINT ePoint );
 
-    /// Sets the name
-    void setName( const ::rtl::OUString& rName );
-
-    /// Sets the description
-    void setDescription( const ::rtl::OUString& rDescr );
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
@@ -279,9 +274,6 @@ protected:
 
     /// @Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /// Calls all Listener to tell they the change.
-    void CommitChange( const com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
     virtual void SAL_CALL disposing();
 

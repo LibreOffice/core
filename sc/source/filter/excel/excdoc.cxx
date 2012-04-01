@@ -64,6 +64,7 @@
 #include "patattr.hxx"
 #include "docoptio.hxx"
 #include "tabprotection.hxx"
+#include "postit.hxx"
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"
@@ -149,7 +150,8 @@ ExcTable::ExcTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnScTab( SCTAB_GLOBAL ),
     nExcTab( EXC_NOTAB ),
-    pTabNames( new NameBuffer( 0, 16 ) )
+    pTabNames( new NameBuffer( 0, 16 ) ),
+    mxNoteList( new XclExpNoteList )
 {
 }
 
@@ -158,7 +160,8 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
     mnScTab( nScTab ),
     nExcTab( rRoot.GetTabInfo().GetXclTab( nScTab ) ),
-    pTabNames( new NameBuffer( 0, 16 ) )
+    pTabNames( new NameBuffer( 0, 16 ) ),
+    mxNoteList( new XclExpNoteList )
 {
 }
 
@@ -427,6 +430,17 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 
     // cell table: DEFROWHEIGHT, DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
     mxCellTable.reset( new XclExpCellTable( GetRoot() ) );
+
+    //export cell notes
+    ScNotes::iterator itr = rDoc.GetNotes(mnScTab)->begin();
+    ScNotes::iterator itrEnd = rDoc.GetNotes(mnScTab)->end();
+    for (; itr != itrEnd; ++itr)
+    {
+        // notes
+        const ScPostIt* pScNote = itr->second;
+        ScAddress aScPos( itr->first.first, itr->first.second, mnScTab );
+        mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, rtl::OUString() ) );
+    }
 
     if( GetOutput() != EXC_OUTPUT_BINARY )
     {

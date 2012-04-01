@@ -376,11 +376,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
 // ============================================================================
 
-void GraphicProperties::assignUsed( const GraphicProperties& rSourceProps )
-{
-    maBlipProps.assignUsed( rSourceProps.maBlipProps );
-}
-
 void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
     if( maBlipProps.mxGraphic.is() )
@@ -444,6 +439,10 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nContrast != 0 )
         rPropMap[ PROP_AdjustContrast ] <<= nContrast;
+
+    // TODO: Audio content, yet to be implemented
+    if( !maAudio.msEmbed.isEmpty() )
+        rPropMap[ PROP_Sound ] <<= maAudio.msEmbed;
 }
 
 // ============================================================================

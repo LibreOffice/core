@@ -148,11 +148,11 @@ private:
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );
-    DECL_LINK( SelectHdl_Impl, ListBox* );
-    DECL_LINK( BrowseHdl_Impl, PushButton* );
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(BrowseHdl_Impl, void *);
     DECL_LINK( RadioClickHdl_Impl, RadioButton* );
     DECL_LINK( FileClickHdl_Impl, CheckBox* );
-    DECL_LINK( BackgroundColorHdl_Impl, ValueSet* );
+    DECL_LINK(BackgroundColorHdl_Impl, void *);
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
     DECL_LINK( ParaDestinationHdl_Impl, ListBox* );
 #endif

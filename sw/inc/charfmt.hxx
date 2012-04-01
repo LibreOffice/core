@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwCharFmt : public SwFmt
                 SwCharFmt *pDerivedFrom )
           : SwFmt( rPool, pFmtName, aCharFmtSetRange, pDerivedFrom, RES_CHRFMT )
     {}
-    SwCharFmt( SwAttrPool& rPool, const String &rFmtName,
+    SwCharFmt( SwAttrPool& rPool, const rtl::OUString &rFmtName,
                 SwCharFmt *pDerivedFrom )
           : SwFmt( rPool, rFmtName, aCharFmtSetRange, pDerivedFrom, RES_CHRFMT )
     {}

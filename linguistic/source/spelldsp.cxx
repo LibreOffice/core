@@ -81,7 +81,6 @@ public:
     void    Append( const OUString &rNew );
     void    Append( const std::vector< OUString > &rNew );
     void    Append( const Sequence< OUString > &rNew );
-    void    Remove( const OUString &rText );
     Sequence< OUString >    GetSequence() const;
 };
 
@@ -162,20 +161,6 @@ Sequence< OUString > ProposalList::GetSequence() const
             pRes[ nIdx++ ] = rText;
     }
     return aRes;
-}
-
-void ProposalList::Remove( const OUString &rText )
-{
-    size_t nLen = aVec.size();
-    for (size_t i = 0;  i < nLen;  ++i)
-    {
-        OUString &rEntry = aVec[i];
-        if (rEntry == rText)
-        {
-            rEntry = OUString();
-            break;  // there should be only one matching entry
-        }
-    }
 }
 
 sal_Bool SvcListHasLanguage(

@@ -84,7 +84,7 @@ ScAddress ScFormulaDlg::aCursorPos;
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
-    : formula::FormulaDlg( pB, pCW, pParent, true,true,true,this, _pFunctionMgr,this)
+    : formula::FormulaDlg( pB, pCW, pParent, true,true,true, _pFunctionMgr,this)
     , m_aHelper(this,pB)
 {
     m_aHelper.SetWindow(this);
@@ -272,6 +272,7 @@ ScFormulaDlg::~ScFormulaDlg()
     {
         //Referenz Inputhandler zuruecksetzen
         pScMod->SetRefInputHdl(NULL);
+        StoreFormEditData(pData);
     } // if (pData) // wird nicht ueber Close zerstoert;
 
     delete pCell;
@@ -370,9 +371,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         }
         else
         {
-            String aStr;
-
-            pFCell->GetString( aStr );
+            String aStr = pFCell->GetString();
             sal_uLong nFormat = aFormatter.GetStandardFormat(
                             pFCell->GetFormatType(), ScGlobal::eLnge);
             aFormatter.GetOutputString( aStr, nFormat,

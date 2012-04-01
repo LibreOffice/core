@@ -41,9 +41,6 @@
 #include <svl/nranges.hxx>
 
 #undef NUMTYPE
-#define NUMTYPE sal_uLong
-#define SfxNumRanges SfxULongRanges
-#include <svl/nranges.hxx>
 
 #define _SFXNRANGES_HXX
 
@@ -62,7 +59,6 @@ public:
                                 SfxNumRanges() : _pRanges( 0 ) {}
                                 SfxNumRanges( const SfxNumRanges &rOrig );
                                 SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 );
-                                SfxNumRanges( NUMTYPE_ARG nWh1, NUMTYPE_ARG nWh2, NUMTYPE_ARG nNull, ... );
                                 SfxNumRanges( const NUMTYPE* nNumTable );
                                 ~SfxNumRanges()
                                 { delete [] _pRanges; }
@@ -80,8 +76,6 @@ public:
     NUMTYPE                     Count() const;
     sal_Bool                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
-    sal_Bool                        Contains( NUMTYPE n ) const;
-    sal_Bool                        Intersects( const SfxNumRanges & ) const;
 
                                 operator const NUMTYPE* () const
                                 { return _pRanges; }

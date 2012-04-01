@@ -57,7 +57,7 @@ private:
 
     DECL_LINK( ActivatePageHdl, TabControl * );
     DECL_LINK( DeactivatePageHdl, TabControl * );
-    DECL_LINK( OkHdl, Button * );
+    DECL_LINK(OkHdl, void *);
 
     ResMgr& mrResMgr;
 

@@ -183,7 +183,6 @@ public:
         hasPropertyByName( const ::rtl::OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
 
-    const SfxItemPropertyMap* getMap() const;
 };
 
 class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo >

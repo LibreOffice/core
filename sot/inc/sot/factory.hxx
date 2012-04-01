@@ -58,7 +58,6 @@ public:
                         TYPEINFO();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
-    static  void        TestInvariant();
 
     static  const SotFactory *      Find( const SvGlobalName & );
 

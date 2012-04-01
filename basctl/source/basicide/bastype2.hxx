@@ -157,6 +157,7 @@ private:
     ::basctl::DocumentEventNotifier m_aNotifier;
 
     void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
 protected:
     virtual void            RequestingChildren( SvLBoxEntry* pParent );

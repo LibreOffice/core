@@ -87,21 +87,27 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-                        ,m_xStatement(*pStmt)
-                        ,m_pStmt(pStmt)
-                        ,m_nRowPos(0)
-                        ,m_xMetaData(NULL)
                         ,m_pRecordSet(_pRecordSet)
+                        ,m_pStmt(pStmt)
+                        ,m_xStatement(*pStmt)
+                        ,m_xMetaData(NULL)
+                        ,m_nRowPos(0)
+                        ,m_bWasNull(sal_False)
                         ,m_bEOF(sal_False)
+                        ,m_bOnFirstAfterOpen(sal_False)
 {
 }
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
+                        ,m_pRecordSet(_pRecordSet)
+                        ,m_pStmt(NULL)
                         ,m_xStatement(NULL)
                         ,m_xMetaData(NULL)
-                        ,m_pRecordSet(_pRecordSet)
+                        ,m_nRowPos(0)
+                        ,m_bWasNull(sal_False)
                         ,m_bEOF(sal_False)
+                        ,m_bOnFirstAfterOpen(sal_False)
 {
 }
 // -----------------------------------------------------------------------------
@@ -279,7 +285,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
     PositionEnum_Param aPos;
     m_pRecordSet->get_AbsolutePosition(&aPos);
-    return  (aPos > 0) ? aPos : m_nRowPos;
+    return  (aPos > 0) ? static_cast<sal_Int32>(aPos) : m_nRowPos;
     // return the rowcount from driver if the driver doesn't support this return our count
 }
 // -------------------------------------------------------------------------
@@ -848,7 +854,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
@@ -863,7 +869,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     nPos += rows;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
@@ -872,15 +878,15 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
 }
 //------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any& bookmark2 ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nPos1;
-    first >>= nPos1;
-    sal_Int32 nPos2;
-    second >>= nPos2;
+    sal_Int32 nPos1 = 0;
+    bookmark1 >>= nPos1;
+    sal_Int32 nPos2 = 0;
+    bookmark2 >>= nPos2;
     if(nPos1 == nPos2)  // they should be equal
         return sal_True;
 
@@ -923,7 +929,7 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLExce
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     return nPos;
 }
@@ -936,7 +942,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
 
 
     OLEVariant aVar;
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
 
     // Create SafeArray Bounds and initialize the array
     SAFEARRAYBOUND rgsabound[1];

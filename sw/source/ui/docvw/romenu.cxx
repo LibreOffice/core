@@ -47,7 +47,6 @@
 #include <editeng/brshitem.hxx>
 
 
-#include <swunodef.hxx>
 #include <frmatr.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -378,7 +377,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 
     if( pClipCntnr )
     {
-        STAR_REFERENCE( datatransfer::XTransferable ) xRef( pClipCntnr );
+        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRef( pClipCntnr );
         if( pClipCntnr->HasAnyData() )
             pClipCntnr->CopyToClipboard( pWin );
     }

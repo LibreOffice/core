@@ -28,6 +28,7 @@
 
 
 #include <stdio.h>
+#include <strings.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <boost/unordered_map.hpp>

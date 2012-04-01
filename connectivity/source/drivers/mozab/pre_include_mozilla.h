@@ -55,8 +55,9 @@
     #endif
 #endif
 
-#if defined __GNUC__
-    #pragma GCC system_header
+#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #elif defined __SUNPRO_CC
     #pragma disable_warn
 #elif defined _MSC_VER

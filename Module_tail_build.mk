@@ -27,12 +27,15 @@ $(eval $(call gb_Module_Module,tail_end))
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
     animations \
+    apple_remote \
     avmedia \
     basctl \
+    basebmp \
     basic \
     bean \
     canvas \
     chart2 \
+    configmgr \
     cppcanvas \
     cui \
     dbaccess \
@@ -40,6 +43,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     dtrans \
     drawinglayer \
     editeng \
+    embeddedobj \
     eventattacher \
     extensions \
     fileaccess \
@@ -56,6 +60,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
     Mesa \
     np_sdk \
+    oovbaapi \
     oox \
     package \
     padmin \
@@ -66,23 +71,29 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sccomp \
     scripting \
     sd \
+    sdext \
     sfx2 \
     slideshow \
+    smoketest \
     starmath \
     svtools \
     svx \
     sw \
     swext \
+    test \
+    toolkit \
     ucb \
     UnoControls \
     unoxml \
     uui \
     vbahelper \
+    vcl \
     wizards \
     writerfilter \
     writerperfect \
     xmerge \
     xmloff \
+    xmlscript \
     xmlsecurity \
 ))
 

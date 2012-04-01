@@ -77,21 +77,16 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
 #include "headerfooterdlg.hxx"
 #include "masterlayoutdlg.hxx"
-#include "Ruler.hxx"
-#include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
 #include <sfx2/ipclient.hxx>
 #include <tools/diagnose_ex.h>
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
 #include "LayerTabBar.hxx"
-#include "sdabstdlg.hxx"
-#include "sdpage.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
@@ -174,7 +169,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
                     if (! CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
                     {
+#ifndef DISABLE_SCRIPTING
                         StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+#endif
                         rReq.Ignore ();
                         break;
                     }
@@ -182,7 +179,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     {
                         if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount((PageKind)nWhatKind)))
                         {
+#ifndef DISABLE_SCRIPTING
                             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+#endif
                             rReq.Ignore ();
                             break;
                         }
@@ -193,7 +192,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
                 else
                 {
+#ifndef DISABLE_SCRIPTING
                     StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
                     rReq.Ignore ();
                     break;
                 }

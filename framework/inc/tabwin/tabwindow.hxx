@@ -85,7 +85,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         //  XInterface, XTypeProvider, XServiceInfo
         FWK_DECLARE_XINTERFACE
-        DECLARE_XSERVICEINFO
+        DECLARE_XSERVICEINFO_NOFACTORY
         FWK_DECLARE_XTYPEPROVIDER
 
         using ::cppu::OPropertySetHelper::disposing;

@@ -50,6 +50,7 @@ OPENSSL_NAME=openssl-0.9.8o
 
 TARFILE_NAME=$(OPENSSL_NAME)
 TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
+PATCH_FILES=openssl-asm-fix.patch
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
@@ -60,6 +61,11 @@ CONFIGURE_FLAGS=shared no-idea
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 BUILD_DIR=.
 
 COMPILER_AND_FLAGS=$(CC)
@@ -69,7 +75,7 @@ COMPILER_AND_FLAGS=$(CC)
 COMPILER_AND_FLAGS+=-fvisibility=hidden
 .ENDIF
 
-BUILD_ACTION=make build_libs CC='$(COMPILER_AND_FLAGS)'
+BUILD_ACTION=make build_libs CC='$(COMPILER_AND_FLAGS)' -j1
 
 OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
@@ -78,7 +84,7 @@ OUT2INC += include/openssl/*
 UNAME=$(shell uname)
 
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "ANDROID"
-    PATCH_FILES=openssllnx.patch
+    PATCH_FILES+=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8o.map \
         libssl_OOo_0_9_8o.map
@@ -102,7 +108,7 @@ UNAME=$(shell uname)
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
-    PATCH_FILES=opensslsol.patch
+    PATCH_FILES+=opensslsol.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8o.map \
         libssl_OOo_0_9_8o.map
@@ -124,7 +130,7 @@ UNAME=$(shell uname)
 .ENDIF
 
 .IF "$(OS)" == "IOS"
-    PATCH_FILES=opensslios.patch
+    PATCH_FILES+=opensslios.patch
     CONFIGURE_ACTION=Configure ios-armv7
     CONFIGURE_FLAGS=no-shared no-idea
 .ENDIF
@@ -132,8 +138,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "WNT"
 
 .IF "$(COM)"=="GCC"
-PATCH_FILES=opensslmingw.patch
-CONFIGURE_ACTION=$(PERL) configure
+PATCH_FILES+=opensslmingw.patch
+CONFIGURE_ACTION=$(PERL) Configure
 CONFIGURE_FLAGS=mingw shared 
 INSTALL_ACTION=mv libcrypto.a libcrypto_static.a && mv libcrypto.dll.a libcrypto.a && mv libssl.a libssl_static.a && mv libssl.dll.a libssl.a
 OUT2LIB = libcrypto_static.*
@@ -144,7 +150,7 @@ OUT2BIN = ssleay32.dll
 OUT2BIN += libeay32.dll
 .ELSE
 
-        PATCH_FILES=openssl.patch
+        PATCH_FILES+=openssl.patch
         .IF "$(MAKETARGETS)" == ""
             # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
             # If WRAPCMD is set it is prepended before the compiler, don't touch that.

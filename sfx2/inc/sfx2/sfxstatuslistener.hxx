@@ -46,6 +46,9 @@ class SfxStatusListenerInterface
 {
     public:
         virtual void StateChanged( sal_uInt16 nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
+
+    protected:
+        ~SfxStatusListenerInterface() {}
 };
 
 class SFX2_DLLPUBLIC SfxStatusListener :

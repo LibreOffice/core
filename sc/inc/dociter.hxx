@@ -73,15 +73,15 @@ private:
     SCSIZE                  nColPos;
     SCSIZE                  nAttrPos;
 
-    sal_Bool                    GetThis();
-    sal_Bool                    GetThisCol();
+    bool                    GetThis();
+    bool                    GetThisCol();
 
 public:
             ScDocumentIterator( ScDocument* pDocument, SCTAB nStartTable, SCTAB nEndTable );
             ~ScDocumentIterator();
 
-    sal_Bool                    GetFirst();
-    sal_Bool                    GetNext();
+    bool                    GetFirst();
+    bool                    GetNext();
 
     ScBaseCell*             GetCell();
     const ScPatternAttr*    GetPattern();
@@ -109,27 +109,27 @@ private:
     SCROW           nNextRow;
     SCROW           nAttrEndRow;
     short           nNumFmtType;
-    sal_Bool            bNumValid;
-    sal_Bool            bSubTotal;
-    sal_Bool            bNextValid;
-    sal_Bool            bCalcAsShown;
-    sal_Bool            bTextAsZero;
+    bool            bNumValid;
+    bool            bSubTotal;
+    bool            bNextValid;
+    bool            bCalcAsShown;
+    bool            bTextAsZero;
 
-    sal_Bool            GetThis(double& rValue, sal_uInt16& rErr);
+    bool            GetThis(double& rValue, sal_uInt16& rErr);
 public:
 
                     ScValueIterator(ScDocument* pDocument,
-                                    const ScRange& rRange, sal_Bool bSTotal = false,
-                                    sal_Bool bTextAsZero = false );
+                                    const ScRange& rRange, bool bSTotal = false,
+                                    bool bTextAsZero = false );
     void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
     /// Does NOT reset rValue if no value found!
-    sal_Bool            GetFirst(double& rValue, sal_uInt16& rErr);
+    bool            GetFirst(double& rValue, sal_uInt16& rErr);
     /// Does NOT reset rValue if no value found!
-    sal_Bool            GetNext(double& rValue, sal_uInt16& rErr)
+    bool            GetNext(double& rValue, sal_uInt16& rErr)
                     {
                         return bNextValid ? ( bNextValid = false, rValue = fNextValue,
                                                 rErr = 0, nRow = nNextRow,
-                                                ++nColRow, bNumValid = false, sal_True )
+                                                ++nColRow, bNumValid = false, true )
                                           : ( ++nRow, GetThis(rValue, rErr) );
                     }
 };
@@ -233,16 +233,16 @@ private:
     SCROW           nRow;
     SCTAB           nTab;
     SCSIZE          nColRow;
-    sal_Bool            bSubTotal;
+    bool            bSubTotal;
 
     ScBaseCell*     GetThis();
 public:
                     ScCellIterator(ScDocument* pDocument,
                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
-                                   sal_Bool bSTotal = false);
+                                   bool bSTotal = false);
                     ScCellIterator(ScDocument* pDocument,
-                                   const ScRange& rRange, sal_Bool bSTotal = false);
+                                   const ScRange& rRange, bool bSTotal = false);
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
     SCCOL           GetCol() const { return nCol; }
@@ -281,8 +281,8 @@ private:
     SCROW           nAttrEndRow;
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
-    sal_Bool            bAdvanceQuery;
-    sal_Bool            bIgnoreMismatchOnLeadingStrings;
+    bool            bAdvanceQuery;
+    bool            bIgnoreMismatchOnLeadingStrings;
 
     ScBaseCell*     GetThis();
 
@@ -299,7 +299,7 @@ private:
 
 public:
                     ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
-                                        const ScQueryParam& aParam, sal_Bool bMod = true);
+                                        const ScQueryParam& aParam, bool bMod = true);
                                         // for bMod = FALSE the QueryParam has to be filled
                                         // (bIsString)
     ScBaseCell*     GetFirst();
@@ -309,7 +309,7 @@ public:
 
                     // increments all Entry.nField, if column
                     // changes, for ScInterpreter ScHLookup()
-    void            SetAdvanceQueryParamEntryField( sal_Bool bVal )
+    void            SetAdvanceQueryParamEntryField( bool bVal )
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
 
@@ -318,17 +318,17 @@ public:
                         cell range is assumed to be sorted; stops on first
                         value being greater than the queried value and
                         GetFirst()/GetNext() return NULL. StoppedOnMismatch()
-                        returns sal_True then.
+                        returns true then.
                         However, the iterator's conditions are not set to end
                         all queries, GetCol() and GetRow() return values for
                         the non-matching cell, further GetNext() calls may be
                         executed. */
-    void            SetStopOnMismatch( sal_Bool bVal )
+    void            SetStopOnMismatch( bool bVal )
                         {
                             nStopOnMismatch = sal::static_int_cast<sal_uInt8>(bVal ? nStopOnMismatchEnabled :
                                 nStopOnMismatchDisabled);
                         }
-    sal_Bool            StoppedOnMismatch() const
+    bool            StoppedOnMismatch() const
                         { return nStopOnMismatch == nStopOnMismatchExecuted; }
 
                     /** If set, an additional test for SC_EQUAL condition is
@@ -336,13 +336,13 @@ public:
                         SC_GREATER_EQUAL conditions are to be tested. May be
                         used where a cell range is assumed to be sorted to stop
                         if an equal match is found. */
-    void            SetTestEqualCondition( sal_Bool bVal )
+    void            SetTestEqualCondition( bool bVal )
                         {
                             nTestEqualCondition = sal::static_int_cast<sal_uInt8>(bVal ?
                                 nTestEqualConditionEnabled :
                                 nTestEqualConditionDisabled);
                         }
-    sal_Bool            IsEqualConditionFulfilled() const
+    bool            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
 
                     /** In a range assumed to be sorted find either the last of
@@ -360,7 +360,7 @@ public:
 
                         @param bIgnoreMismatchOnLeadingStrings
                             Normally strings are sorted behind numerical
-                            values. If this parameter is sal_True, the search does
+                            values. If this parameter is true, the search does
                             not stop when encountering a string and does not
                             assume that no values follow anymore.
                             If querying for a string a mismatch on the first
@@ -372,9 +372,9 @@ public:
                         iterator is not usable anymore except for obtaining the
                         number format!
                       */
-    sal_Bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-                        SCROW& nFoundRow, sal_Bool bSearchForEqualAfterMismatch = false,
-                        sal_Bool bIgnoreMismatchOnLeadingStrings = sal_True );
+    bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+                        SCROW& nFoundRow, bool bSearchForEqualAfterMismatch = false,
+                        bool bIgnoreMismatchOnLeadingStrings = true );
 };
 
 class ScDocAttrIterator             // all attribute areas
@@ -431,7 +431,7 @@ private:
     SCSIZE*         pNextIndices;
     SCCOL           nCol;
     SCROW           nRow;
-    sal_Bool            bMore;
+    bool            bMore;
 
 public:
                     ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
@@ -439,7 +439,7 @@ public:
                     ~ScHorizontalCellIterator();
 
     ScBaseCell*     GetNext( SCCOL& rCol, SCROW& rRow );
-    sal_Bool            ReturnNext( SCCOL& rCol, SCROW& rRow );
+    bool            ReturnNext( SCCOL& rCol, SCROW& rRow );
     /// Set a(nother) sheet and (re)init.
     void            SetTab( SCTAB nTab );
 
@@ -475,7 +475,6 @@ public:
                                                bool bSTotal = false,
                                                bool bTextAsZero = false );
                     ~ScHorizontalValueIterator();
-    void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
     /// Does NOT reset rValue if no value found!
     bool            GetNext( double& rValue, sal_uInt16& rErr );
 };
@@ -500,7 +499,7 @@ private:
     const ScPatternAttr**   ppPatterns;
     SCCOL                   nCol;
     SCROW                   nRow;
-    sal_Bool                    bRowEmpty;
+    bool                    bRowEmpty;
 
 public:
             ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,
@@ -542,7 +541,7 @@ public:
                                 SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScUsedAreaIterator();
 
-    sal_Bool    GetNext();
+    bool    GetNext();
 
     SCCOL                   GetStartCol() const     { return nFoundStartCol; }
     SCCOL                   GetEndCol() const       { return nFoundEndCol; }

@@ -1,0 +1,20 @@
+--- misc/libcdr-0.0.5/src/lib/libcdr_utils.h	2012-03-07 13:51:21.000000000 +0100
++++ misc/build/libcdr-0.0.5/src/lib/libcdr_utils.h	2012-03-08 12:46:38.194534604 +0100
+@@ -54,17 +54,8 @@
+ 
+ #else
+ 
+-#ifdef HAVE_CONFIG_H
+-#include <config.h>
+-#endif
+-
+-#ifdef HAVE_STDINT_H
+ #include <stdint.h>
+-#endif
+-
+-#ifdef HAVE_INTTYPES_H
+ #include <inttypes.h>
+-#endif
+ 
+ #endif
+ 

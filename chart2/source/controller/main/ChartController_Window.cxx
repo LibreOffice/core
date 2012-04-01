@@ -203,11 +203,14 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
         case OBJECTTYPE_DATA_AVERAGE_LINE:
             aDispatchCommand = C2U(".uno:FormatMeanValue");
             break;
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
+            aDispatchCommand = C2U(".uno:FormatXErrorBars");
+            break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-        case OBJECTTYPE_DATA_ERRORS_Z:
             aDispatchCommand = C2U(".uno:FormatYErrorBars");
+            break;
+        case OBJECTTYPE_DATA_ERRORS_Z:
+            aDispatchCommand = C2U(".uno:FormatZErrorBars");
             break;
         case OBJECTTYPE_DATA_CURVE:
             aDispatchCommand = C2U(".uno:FormatTrendline");
@@ -250,7 +253,7 @@ const short HITPIX=2; //hit-tolerance in pixel
         Size aLogicSize = m_pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MAP_100TH_MM )  );
 
         bool bIsEmbedded = true;
-        //todo: for standalone chart: detect wether we are standalone
+        //todo: for standalone chart: detect whether we are standalone
         if( bIsEmbedded )
         {
             //change map mode to fit new size
@@ -580,7 +583,7 @@ void ChartController::stopDoubleClickWaiting()
     m_bWaitingForDoubleClick = false;
 }
 
-IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
 {
     m_bWaitingForDoubleClick = false;
 
@@ -1063,6 +1066,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries, true );
+                    bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
                     bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
                     bool bHasDataLabelsAtPoints = DataSeriesHelper::hasDataLabelsAtPoints( xSeries );
                     bool bHasDataLabelAtPoint = false;
@@ -1146,6 +1150,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
                     if( xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMeanValue") );
+                    if( bHasXErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatXErrorBars") );
                     if( bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
 
@@ -1159,6 +1165,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
                     if( !xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue") );
+                    if( !bHasXErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertXErrorBars"));
                     if( !bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorBars") );
 
@@ -1171,6 +1179,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
                     if( xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue") );
+                    if( bHasXErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteXErrorBars"));
                     if( bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorBars") );
 

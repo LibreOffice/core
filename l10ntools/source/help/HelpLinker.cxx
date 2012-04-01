@@ -43,6 +43,7 @@
 #include <libxslt/functions.h>
 #include <libxslt/extensions.h>
 
+#include <sal/main.h>
 #include <sal/types.h>
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
@@ -538,7 +539,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
 
-        const std::string documentBaseId = streamTable.document_id;
         std::string documentPath = streamTable.document_path;
         if (documentPath.find("/") == 0)
             documentPath = documentPath.substr(1);
@@ -702,7 +702,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::path fsAdditionalFileName( additionalFileName, fs::native );
                 std::string aNativeStr = fsAdditionalFileName.native_file_string();
                 const char* pStr = aNativeStr.c_str();
-                std::cerr << pStr;
+                HCDBG(std::cerr << pStr << std::endl);
 
             fs::path fsTargetName( indexDirParentName / additionalFileKey );
 
@@ -1024,8 +1024,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     link();
 }
 
-int main(int argc, char**argv)
-{
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     std::vector<std::string> args;
     for (int i = 1; i < argc; ++i)
         args.push_back(std::string(argv[i]));

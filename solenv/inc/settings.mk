@@ -271,6 +271,9 @@ PROFILE=
 DBGUTIL=
 dbgutil=
 
+ZIPDEP:="zipdep.pl"
+
+
 # ===========================================================================
 # unter NT werden Variablennamen an untergeordnete makefiles UPPERCASE
 # weitergereicht, aber case significant ausgewertet!
@@ -563,7 +566,7 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
 $(posix_PWD)/$(OUT)/inc/%world.mk :
-    @$(MKOUT) $(ROUT)
+    @mkout.pl $(ROUT)
     @echo $(EMQ)# > $@
 
 .INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
@@ -739,12 +742,12 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 .EXPORT : SOLARBINDIR
 
 .IF "$(WITH_LANG)"!=""
-.INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
+.INCLUDE .IGNORE: $(WORKDIR)$/CustomTarget$/translations$/localization_present.mk
 
 # if the l10n module exists, use split localize.sdf directly from there
 .IF "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # still check for existence as there may be no localization yet
-TRYSDF:=$(L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+TRYSDF:=$(WORKDIR)$/CustomTarget$/translations$/translate$/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI)))
 .ENDIF			# "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # else use localize.sdf from local output tree if localization .zip exists
@@ -1003,6 +1006,7 @@ CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
+HELPINDEXER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpIndexer
 
 .IF "$(JAVAINTERPRETER)" == ""
 JAVA*:=java
@@ -1012,7 +1016,7 @@ JAVA*:=$(JAVAINTERPRETER)
 .EXPORT : JAVA JAVAI
 
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
-# pathes. (See iz57443)
+# paths. (See iz57443)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
@@ -1121,6 +1125,10 @@ CDEFS+=-DGSTREAMER
 CDEFS += -DHAVE_THREADSAFE_STATICS
 .END
 
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+CDEFS += -DDISABLE_DYNLOADING
+.ENDIF
+
 # compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"
 CFLAGSSLO+=$(CFLAGSSLOGUIMT)
@@ -1193,7 +1201,7 @@ CFLAGSCXX+=$(CFLAGSWARNCXX)
 CFLAGSCC+=$(CFLAGSWALLCC)
 CFLAGSCXX+=$(CFLAGSWALLCXX)
 .ENDIF
-.IF "$(COMPILER_WARN_ERRORS)"!="" && "$(EXTERNAL_WARNINGS_NOT_ERRORS)"==""
+.IF "$(COMPILER_WARN_ERRORS)"!="" && "$(EXTERNAL_WARNINGS_NOT_ERRORS)"=="FALSE"
 CFLAGSCC+=$(CFLAGSWERRCC)
 CFLAGSCXX+=$(CFLAGSWERRCXX)
 .ENDIF
@@ -1297,12 +1305,18 @@ XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 CPPUNIT_CFLAGS =
 .END
 
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+COMPONENTPREFIX_URE_NATIVE =
+COMPONENTPREFIX_BASIS_NATIVE =
+COMPONENTPREFIX_INBUILD_NATIVE =
+.ELSE
 COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
-COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
 COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$LO_LIB_DIR/
+COMPONENTPREFIX_INBUILD_NATIVE = vnd.sun.star.expand:$$LO_LIB_DIR/
+.ENDIF
+COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
 COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$LO_JAVA_DIR/
 COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
-COMPONENTPREFIX_INBUILD_NATIVE = vnd.sun.star.expand:$$LO_LIB_DIR/
 COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$LO_JAVA_DIR/
 COMPONENTPREFIX_EXTENSION = ./
 

@@ -212,67 +212,6 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     return pKeySet;
 }
 
-//------------------------------------------------------------------
-void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns)
-{
-    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
-    OCodeStack aCodeStack;
-
-    if (!rCodeList.size())
-        return;     // no predicate
-    if (!rParameterColumns->get().size())
-        return; // no parameters
-
-    // Create columns, that have a more precise description for the included
-    ::rtl::Reference<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
-
-
-    // Create a Test-row, is needed to describe the parameters
-    OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->get().size());
-    bindParameterRow(aParameterRow);
-
-    OValueRefRow aTestRow = new OValueRefVector(Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getCount());
-    delete bindEvaluationRow(aTestRow);                 // Bind the attributes to the values
-
-    for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
-    {
-        OOperand* pOperand = PTR_CAST(OOperand,(*aIter));
-        OOperator* pOperator = PTR_CAST(OOperator,(*aIter));
-        if (pOperand)
-            aCodeStack.push(pOperand);
-        else
-        {
-            if (pOperator->getRequestedOperands() == 2)     // with two Operands it is possible
-            {                                               // to specify one parameter better
-                OOperandParam *pParam  = PTR_CAST(OOperandParam,aCodeStack.top());
-                if (pParam)  // adjust the Parameter-types, if the left Operand is an attribute
-                {
-                    OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
-                    if (pLeft)
-                    {
-                        Reference< XPropertySet> xCol;
-                        Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
-                        OSL_ENSURE(xCol.is(), "Ungueltige Struktur");
-                        pParam->describe(xCol, aNewParamColumns);
-                    }
-                }
-            }
-            pOperator->Exec(aCodeStack);
-        }
-    }
-    OOperand* pOperand = aCodeStack.top();
-    aCodeStack.pop();
-
-    OSL_ENSURE(aCodeStack.size() == 0, "StackFehler");
-    OSL_ENSURE(pOperand, "StackFehler");
-    if (IS_TYPE(OOperandResult,pOperand))
-        delete pOperand;
-    else
-        OSL_FAIL("Illegal here!");
-
-    rParameterColumns = aNewParamColumns;
-}
-
 // -----------------------------------------------------------------------------
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,

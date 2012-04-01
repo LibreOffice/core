@@ -51,7 +51,7 @@ namespace pyuno
 
 /** Helper class for keeping references to python objects.
     BEWARE: Look up every python function you use to check
-    wether you get an acquired or not acquired object pointer
+    whether you get an acquired or not acquired object pointer
     (python terminus for a not acquired object pointer
     is 'borrowed reference'). Use in the acquired pointer cases the
     PyRef( pointer, SAL_NO_ACQUIRE) ctor.
@@ -174,20 +174,9 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & ctx )
         throw ( com::sun::star::uno::RuntimeException );
 
-
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
      */
     static bool SAL_CALL isInitialized() throw (com::sun::star::uno::RuntimeException);
-
-
-    /** disposes the UNO bridge in this interpreter. All existing stubs/proxies
-        become non-functional, using these proxies/stubs leads to runtime errors.
-
-        preconditions: python has been initialized before and
-        the global interpreter lock is held and pyuno was
-        initialized before for the currently in use interpreter.
-    */
-    static void SAL_CALL finalize() throw(com::sun::star::uno::RuntimeException );
 
     /** converts something contained in an UNO Any to a Python object
 

@@ -31,19 +31,15 @@
 
 #include "sal/config.h"
 
-#include <cstddef>
 #include <deque>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "osl/conditn.hxx"
 #include "osl/mutex.hxx"
-#include "osl/thread.hxx"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/thread.hxx"
 #include "typelib/typedescription.hxx"
 #include "uno/dispatcher.hxx"
 
@@ -55,17 +51,9 @@ namespace binaryurp { class Bridge; }
 
 namespace binaryurp {
 
-class Writer:
-    public osl::Thread, public salhelper::SimpleReferenceObject,
-    private boost::noncopyable
+class Writer: public salhelper::Thread
 {
 public:
-    static void * operator new(std::size_t size)
-    { return Thread::operator new(size); }
-
-    static void operator delete(void * pointer)
-    { Thread::operator delete(pointer); }
-
     explicit Writer(rtl::Reference< Bridge > const & bridge);
 
     // Only called from Bridge::reader_ thread, and only before Bridge::writer_
@@ -104,9 +92,7 @@ public:
 private:
     virtual ~Writer();
 
-    virtual void SAL_CALL run();
-
-    virtual void SAL_CALL onTerminated();
+    virtual void execute();
 
     void sendRequest(
         rtl::ByteSequence const & tid, rtl::OUString const & oid,

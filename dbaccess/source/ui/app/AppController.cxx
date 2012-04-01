@@ -62,11 +62,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -90,7 +85,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -2313,7 +2307,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnClipboardChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(OApplicationController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0L;
@@ -2964,8 +2958,10 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             default:
             case DatabaseObjectContainer::DATA_SOURCE:
             {
-                ::rtl::OUString sMessage = String(ModuleRes( RID_STR_UNSUPPORTED_OBJECT_TYPE ));
-                ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$type$", ::rtl::OUString::valueOf(sal_Int32( pObject->Type )) );
+                ::rtl::OUString sMessage(
+                    rtl::OUString(
+                        String(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
+                    replaceFirst("$type$", ::rtl::OUString::valueOf(sal_Int32(pObject->Type))));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
         }

@@ -107,10 +107,10 @@ class SwCaptionDialog : public SvxStandardDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xNameAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >         xNamed;
 
-    DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK( ModifyHdl, Edit * );
+    DECL_LINK(SelectHdl, void *);
+    DECL_LINK(ModifyHdl, void *);
     DECL_LINK( OptionHdl, Button * );
-    DECL_LINK( CaptionHdl, PushButton*);
+    DECL_LINK(CaptionHdl, void *);
 
     virtual void Apply();
 

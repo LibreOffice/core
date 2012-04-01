@@ -147,13 +147,6 @@ namespace connectivity
     }
 
 
-    guint
-    getFieldCount()
-    {
-        initFields();
-        return nFields;
-    }
-
     const ColumnProperty *
     getField(guint n)
     {

@@ -113,7 +113,7 @@ class ScContentTree : public SvTreeListBox
 
     ScDocument* GetSourceDocument();
 
-    DECL_LINK( ContentDoubleClickHdl, ScContentTree* );
+    DECL_LINK( ContentDoubleClickHdl, void* );
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 
 protected:

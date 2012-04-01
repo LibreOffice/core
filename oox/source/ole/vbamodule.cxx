@@ -33,7 +33,9 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/awt/KeyEvent.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
@@ -54,6 +56,7 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::awt::KeyEvent;
 // ============================================================================
 typedef ::cppu::WeakImplHelper1< XIndexContainer > OleIdToNameContainer_BASE;
 typedef boost::unordered_map< sal_Int32, rtl::OUString >  ObjIdToName;
@@ -156,6 +159,9 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULESTREAMNAME:
                 maStreamName = aRecStrm.readCharArrayUC( nRecSize, meTextEnc );
+                // Actually the stream name seems the best name to use
+                // the VBA_ID_MODULENAME name can sometimes be the wrong case
+                maName = maStreamName;
             break;
             case VBA_ID_MODULESTREAMNAMEUNICODE:
             break;
@@ -218,6 +224,7 @@ void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;
+    const static rtl::OUString sUnmatchedRemovedTag( RTL_CONSTASCII_USTRINGPARAM( "Rem removed unmatched Sub/End: " ) );
     if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
@@ -231,16 +238,94 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
             VbaInputStream aVbaStrm( aInStrm );
             // load the source code line-by-line, with some more processing
             TextInputStream aVbaTextStrm( mxContext, aVbaStrm, meTextEnc );
+
+            struct ProcedurePair
+            {
+                bool bInProcedure;
+                sal_uInt32 nPos;
+                ProcedurePair() : bInProcedure( false ), nPos( 0 ) {};
+            } procInfo;
+
             while( !aVbaTextStrm.isEof() )
             {
                 OUString aCodeLine = aVbaTextStrm.readLine();
                 if( aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
                 {
                     // attribute
-                    extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
+                    int index = aCodeLine.indexOf( ".VB_ProcData.VB_Invoke_Func = " );
+                    if ( index != -1 )
+                    {
+                        // format is
+                        //    'Attribute Procedure.VB_ProcData.VB_Invoke_Func = "*\n14"'
+                        //    where 'Procedure' is the procedure name and '*' is the shortcut key
+                        // note: his is only relevant for Excel, seems that
+                        // word doesn't store the shortcut in the module
+                        // attributes
+                        int nSpaceIndex = aCodeLine.indexOf(' ');
+                        rtl::OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
+                        // for Excel short cut key seems limited to cntrl+'a-z, A-Z'
+                        rtl::OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
+                        // only alpha key valid for key shortcut, however the api will accept other keys
+                        if ( !isalpha( (char)sKey[ 0 ] ) )
+                        {
+                            // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
+                            // will handle and uppercase letter appropriately
+                            rtl::OUString sApiKey = "^";
+                            sApiKey += sKey;
+                            try
+                            {
+                                KeyEvent aKeyEvent = ooo::vba::parseKeyEvent( sApiKey );
+                                ooo::vba::applyShortCutKeyBinding( mxDocModel, aKeyEvent, sProc );
+                            }
+                            catch( Exception& )
+                            {
+                            }
+                        }
+                    }
+                    else
+                        extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
                 }
                 else
                 {
+                    // Hack here to weed out any unmatched End Sub / Sub Foo statements.
+                    // The behaviour of the vba ide practically guarantees the case and
+                    // spacing of Sub statement(s). However, indentation can be arbitrary hence
+                    // the trim.
+                    rtl::OUString trimLine( aCodeLine.trim() );
+                    if ( mbExecutable && (
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Sub ") )         ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Public Sub ") )  ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Private Sub ") ) ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Static Sub ") ) ) )
+                    {
+                        // this should never happen, basic doesn't support nested procedures
+                        // first Sub Foo must be bogus
+                        if ( procInfo.bInProcedure )
+                        {
+                            // comment out the line
+                            aSourceCode.insert( procInfo.nPos, sUnmatchedRemovedTag );
+                            // mark location of this Sub
+                            procInfo.nPos = aSourceCode.getLength();
+                        }
+                        else
+                        {
+                            procInfo.bInProcedure = true;
+                            procInfo.nPos = aSourceCode.getLength();
+                        }
+                    }
+                    else if ( mbExecutable && aCodeLine.trim().matchAsciiL( RTL_CONSTASCII_STRINGPARAM("End Sub")) )
+                    {
+                        // un-matched End Sub
+                        if ( !procInfo.bInProcedure )
+                        {
+                            aSourceCode.append( sUnmatchedRemovedTag );
+                        }
+                        else
+                        {
+                            procInfo.bInProcedure = false;
+                            procInfo.nPos = 0;
+                        }
+                    }
                     // normal source code line
                     if( !mbExecutable )
                         aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );

@@ -335,7 +335,7 @@ void SdrDragMethod::createSdrDragEntries()
 
 void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 {
-    // add full obejct drag; Clone() at the object has to work
+    // add full object drag; Clone() at the object has to work
     // for this
     addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
 }
@@ -379,7 +379,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
                                 if(!bSuppressFullDrag)
                                 {
-                                    // add full obejct drag; Clone() at the object has to work
+                                    // add full object drag; Clone() at the object has to work
                                     // for this
                                     createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
                                 }
@@ -1411,15 +1411,15 @@ SdrDragMove::SdrDragMove(SdrDragView& rNewView)
 
 void SdrDragMove::TakeSdrDragComment(XubString& rStr) const
 {
-    XubString aStr;
+    rtl::OUString aStr;
 
     ImpTakeDescriptionStr(STR_DragMethMove, rStr);
     rStr.AppendAscii(" (x=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr.AppendAscii(" y=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr += sal_Unicode(')');
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2015,7 +2015,6 @@ void SdrDragRotate::TakeSdrDragComment(XubString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
     rStr.AppendAscii(" (");
-    XubString aStr;
     sal_Int32 nTmpWink(NormAngle360(nWink));
 
     if(bRight && nWink)
@@ -2023,8 +2022,9 @@ void SdrDragRotate::TakeSdrDragComment(XubString& rStr) const
         nTmpWink -= 36000;
     }
 
+    rtl::OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr += sal_Unicode(')');
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2159,10 +2159,9 @@ void SdrDragShear::TakeSdrDragComment(XubString& rStr) const
 
     nTmpWink = NormAngle180(nTmpWink);
 
-    XubString aStr;
-
+    rtl::OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr += sal_Unicode(')');
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2476,7 +2475,7 @@ bool SdrDragMirror::BeginSdrDrag()
         nWink=NormAngle360(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
-            return false; // free choice of axis angle not alowed
+            return false; // free choice of axis angle not allowed
 
         if (!getSdrDragView().IsMirrorAllowed(true,false) && !b90)
             return false;  // 45 degrees not allowed either
@@ -2742,15 +2741,15 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
     {
         rStr.AppendAscii(" (");
 
-        XubString aStr;
         sal_Int32 nVal(nWink);
 
         if(bAtCenter)
             nVal *= 2;
 
         nVal = Abs(nVal);
+        rtl::OUString aStr;
         getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
-        rStr += aStr;
+        rStr.Append(aStr);
         rStr += sal_Unicode(')');
     }
 
@@ -3399,14 +3398,14 @@ void SdrDragDistort::TakeSdrDragComment(XubString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethDistort, rStr);
 
-    XubString aStr;
+    rtl::OUString aStr;
 
     rStr.AppendAscii(" (x=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr.AppendAscii(" y=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr += sal_Unicode(')');
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3554,14 +3553,14 @@ void SdrDragCrop::TakeSdrDragComment(XubString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
 
-    XubString aStr;
+    rtl::OUString aStr;
 
     rStr.AppendAscii(" (x=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr.AppendAscii(" y=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
+    rStr.Append(aStr);
     rStr += sal_Unicode(')');
 
     if(getSdrDragView().IsDragWithCopy())

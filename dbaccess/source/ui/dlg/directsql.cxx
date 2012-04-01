@@ -32,7 +32,6 @@
 #include "dbu_dlg.hrc"
 #include <vcl/msgbox.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>

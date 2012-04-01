@@ -74,14 +74,10 @@ EditAttrib::~EditAttrib()
 // -------------------------------------------------------------------------
 // class EditCharAttrib
 // -------------------------------------------------------------------------
-EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
-                    : EditAttrib( rAttr )
+EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE ) :
+    EditAttrib(rAttr),
+    nStart(nS), nEnd(nE), bFeature(false), bEdge(false)
 {
-    nStart      = nS;
-    nEnd        = nE;
-    bFeature    = sal_False;
-    bEdge       = sal_False;
-
     DBG_ASSERT( ( rAttr.Which() >= EE_ITEMS_START ) && ( rAttr.Which() <= EE_ITEMS_END ), "EditCharAttrib CTOR: Invalid id!" );
     DBG_ASSERT( ( rAttr.Which() < EE_FEATURE_START ) || ( rAttr.Which() > EE_FEATURE_END ) || ( nE == (nS+1) ), "EditCharAttrib CTOR: Invalid feature!" );
 }

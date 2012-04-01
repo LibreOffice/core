@@ -528,7 +528,7 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     return sal_True;
 }
 
-IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
 {
     sal_uInt16 nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();

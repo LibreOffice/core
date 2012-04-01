@@ -46,7 +46,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/urlbmk.hxx>
-#include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>
@@ -123,14 +122,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
-    SdTransferable* pTransferable = new SdTransferable( mpDoc, NULL, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( &mrDoc, NULL, sal_False );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferClip = pTransferable;
 
-    mpDoc->CreatingDataObj( pTransferable );
+    mrDoc.CreatingDataObj( pTransferable );
     pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
-    mpDoc->CreatingDataObj( NULL );
+    mrDoc.CreatingDataObj( NULL );
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
     // fat lines correctly
@@ -187,7 +186,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
-    SdTransferable* pTransferable = new SdTransferable( mpDoc, pWorkView, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, sal_False );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferDrag = pTransferable;
@@ -238,7 +237,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
-    SdTransferable*                 pTransferable = new SdTransferable( mpDoc, pWorkView, sal_True );
+    SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, sal_True );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
     TransferableObjectDescriptor    aObjDesc;
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
@@ -355,10 +354,10 @@ void View::DoPaste (::Window* pWindow)
                 }
             }
 
-            if( !mpDoc->IsChanged() )
+            if( !mrDoc.IsChanged() )
             {
                 if( pOutliner && pOutliner->IsModified() )
-                    mpDoc->SetChanged( sal_True );
+                    mrDoc.SetChanged( sal_True );
             }
         }
     }
@@ -455,7 +454,7 @@ void View::DragFinished( sal_Int8 nDropAction )
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
             if( bUndo )
-                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
@@ -503,7 +502,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
     if( nLayer != SDRLAYER_NOTFOUND )
     {
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
         aLayerName = rLayerAdmin.GetLayerPerID(nLayer)->GetName();
     }
 
@@ -732,7 +731,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
                             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
                             {
-                                XFillExchangeData aFillData( XFillAttrSetItem( &mpDoc->GetPool() ) );
+                                XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
                                 *xStm >> aFillData;
                                 const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
@@ -779,7 +778,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         {
                             // insert as clip action => jump
                             rtl::OUString       aBookmark( aINetBookmark.GetURL() );
-                            SdAnimationInfo*    pInfo = mpDoc->GetAnimationInfo( pPickObj );
+                            SdAnimationInfo*    pInfo = mrDoc.GetAnimationInfo( pPickObj );
                             sal_Bool                bCreated = sal_False;
 
                             if( !aBookmark.isEmpty() )
@@ -806,7 +805,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 }
 
                                 // Undo-Action mit alten und neuen Groessen erzeugen
-                                SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(mpDoc, pPickObj, bCreated);
+                                SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(&mrDoc, pPickObj, bCreated);
                                 pAction->SetActive(pInfo->mbActive, pInfo->mbActive);
                                 pAction->SetEffect(pInfo->meEffect, pInfo->meEffect);
                                 pAction->SetTextEffect(pInfo->meTextEffect, pInfo->meTextEffect);
@@ -831,7 +830,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                                 pInfo->meClickAction = eClickAction;
                                 pInfo->SetBookmark( aBookmark );
-                                mpDoc->SetChanged();
+                                mrDoc.SetChanged();
 
                                 nRet = nDropAction;
                             }
@@ -897,7 +896,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         // Sollten Seitennamen und Objektnamen identisch sein gibt es hier natuerlich Probleme !!!
         if( bNameOK )
         {
-            mpDoc->InsertBookmark( &aBookmarkList, pExchangeList,
+            mrDoc.InsertBookmark( &aBookmarkList, pExchangeList,
                                   bLink, bReplace, nPgPos, sal_False,
                                   &pPageObjsTransferable->GetDocShell(),
                                   sal_True, &aPos );
@@ -952,7 +951,7 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
 
             if( bNameOK && ( nType == 1  || nType == 2 ) )
             {
-                if( mpDoc->GetObj( *pNewName ) )
+                if( mrDoc.GetObj( *pNewName ) )
                 {
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
@@ -969,7 +968,7 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
                         {
                             pDlg->GetName( *pNewName );
 
-                            if( !mpDoc->GetObj( *pNewName ) )
+                            if( !mrDoc.GetObj( *pNewName ) )
                                 bNameOK = sal_True;
                         }
 

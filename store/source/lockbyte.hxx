@@ -111,6 +111,9 @@ public:
      */
     storeError flush();
 
+protected:
+    ~ILockBytes() {}
+
 private:
     /** Implementation (abstract).
      */

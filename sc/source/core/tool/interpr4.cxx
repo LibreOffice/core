@@ -40,7 +40,6 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zforlist.hxx>
 #include <rtl/logfile.hxx>
 #include <stdlib.h>
 #include <string.h>
@@ -456,8 +455,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     }
                     else
                     {
-                        String aStr;
-                        pFCell->GetString( aStr );
+                        String aStr = pFCell->GetString();
                         fValue = ConvertStringToValue( aStr );
                     }
                 }
@@ -484,9 +482,9 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                 // it ... #i5658#
                 String aStr;
                 if ( eType == CELLTYPE_STRING )
-                    ((ScStringCell*)pCell)->GetString( aStr );
+                    aStr = ((ScStringCell*)pCell)->GetString();
                 else
-                    ((ScEditCell*)pCell)->GetString( aStr );
+                    aStr = ((ScEditCell*)pCell)->GetString();
                 fValue = ConvertStringToValue( aStr );
             }
             break;
@@ -518,10 +516,10 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-                ((ScStringCell*) pCell)->GetString(rStr);
+                rStr = ((ScStringCell*) pCell)->GetString();
             break;
             case CELLTYPE_EDIT:
-                ((ScEditCell*) pCell)->GetString(rStr);
+                rStr = ((ScEditCell*) pCell)->GetString();
             break;
             case CELLTYPE_FORMULA:
             {
@@ -536,7 +534,7 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
                     pFormatter->GetInputLineString(fVal, nIndex, rStr);
                 }
                 else
-                    pFCell->GetString(rStr);
+                    rStr = pFCell->GetString();
             }
             break;
             case CELLTYPE_VALUE:
@@ -687,16 +685,16 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
-                            ((ScStringCell*)pCell)->GetString(aStr);
+                            aStr = ((ScStringCell*)pCell)->GetString();
                             break;
                         case CELLTYPE_EDIT :
-                            ((ScEditCell*)pCell)->GetString(aStr);
+                            aStr = ((ScEditCell*)pCell)->GetString();
                             break;
                         case CELLTYPE_FORMULA :
                             if (!((ScFormulaCell*)pCell)->IsValue())
                             {
                                 nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                                ((ScFormulaCell*)pCell)->GetString(aStr);
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             }
                             else
                                 bOk = false;
@@ -793,11 +791,11 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
-                            ((ScStringCell*)pCell)->GetString(aStr);
+                            aStr = ((ScStringCell*)pCell)->GetString();
                             nType = 1;
                             break;
                         case CELLTYPE_EDIT :
-                            ((ScEditCell*)pCell)->GetString(aStr);
+                            aStr = ((ScEditCell*)pCell)->GetString();
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
@@ -808,7 +806,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             if (((ScFormulaCell*)pCell)->IsValue())
                                 nVal = ((ScFormulaCell*)pCell)->GetValue();
                             else
-                                ((ScFormulaCell*)pCell)->GetString(aStr);
+                                aStr = ((ScFormulaCell*)pCell)->GetString();
                             break;
                         default :
                             bOk = false;
@@ -2495,13 +2493,12 @@ void ScInterpreter::ScDBGet()
 void ScInterpreter::ScExternal()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScExternal" );
-    sal_uInt16 nIndex;
     sal_uInt8 nParamCount = GetByte();
     String aUnoName;
     String aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
-    if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
+    FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
+    if (pFuncData)
     {
-        FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
         if (nParamCount <= MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
@@ -2645,7 +2642,7 @@ void ScInterpreter::ScExternal()
                         ScAddInAsync* pAs = ScAddInAsync::Get( nHandle );
                         if ( !pAs )
                         {
-                            pAs = new ScAddInAsync( nHandle, nIndex, pDok );
+                            pAs = new ScAddInAsync(nHandle, pFuncData, pDok);
                             pMyFormulaCell->StartListening( *pAs );
                         }
                         else
@@ -3047,6 +3044,8 @@ void ScInterpreter::ScMissing()
     PushTempToken( new FormulaMissingToken );
 }
 
+#ifndef DISABLE_SCRIPTING
+
 uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
@@ -3103,9 +3102,16 @@ lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
     return bOk;
 }
 
+#endif
+
 void ScInterpreter::ScMacro()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMacro" );
+
+#ifdef DISABLE_SCRIPTING
+    PushNoValue();      // ohne DocShell kein CallBasic
+    return;
+#else
     SbxBase::ResetError();
 
     sal_uInt8 nParamCount = GetByte();
@@ -3350,8 +3356,10 @@ void ScInterpreter::ScMacro()
 
     if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
         meVolatileType = VOLATILE_MACRO;
+#endif
 }
 
+#ifndef DISABLE_SCRIPTING
 
 bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
@@ -3370,15 +3378,13 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                 break;
             case CELLTYPE_STRING :
             {
-                String aVal;
-                ((ScStringCell*)pCell)->GetString( aVal );
+                rtl::OUString aVal = ((ScStringCell*)pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
             case CELLTYPE_EDIT :
             {
-                String aVal;
-                ((ScEditCell*) pCell)->GetString( aVal );
+                rtl::OUString aVal = ((ScEditCell*) pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
@@ -3393,8 +3399,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                     }
                     else
                     {
-                        String aVal;
-                        ((ScFormulaCell*)pCell)->GetString( aVal );
+                        rtl::OUString aVal = ((ScFormulaCell*)pCell)->GetString();
                         pVar->PutString( aVal );
                     }
                 }
@@ -3409,6 +3414,8 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
         pVar->PutDouble( 0.0 );
     return bOk;
 }
+
+#endif
 
 namespace {
 

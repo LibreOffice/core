@@ -65,7 +65,7 @@ TabPage OFA_TP_MEMORY
         Value = 100 ;
         Last = 100 ;
         SpinSize = 1 ;
-        MaxTextLength = 4;
+        MaxTextLength = 5;
     };
     FixedLine GB_GRAPHICCACHE
     {

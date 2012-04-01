@@ -30,8 +30,8 @@ $(eval $(call gb_Executable_Executable,mkunroll))
 
 $(eval $(call gb_Executable_set_include,mkunroll,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(realpath $(SRCDIR)/tools/bootstrp) \
+    -I$(SRCDIR)/tools/inc \
+    -I$(SRCDIR)/tools/bootstrp \
 ))
 
 $(eval $(call gb_Executable_add_defs,mkunroll,\

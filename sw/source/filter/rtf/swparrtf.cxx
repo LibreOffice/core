@@ -235,7 +235,6 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     aTblFmts(0),
     mpBookmarkStart(0),
     mpRedlineStack(0),
-    pAuthorInfos(0),
     pGrfAttrSet(0),
     pTableNode(0),
     pOldTblNd(0),
@@ -1151,8 +1150,6 @@ SwRTFParser::~SwRTFParser()
 
     if (pGrfAttrSet)
         DELETEZ( pGrfAttrSet );
-
-    DELETEZ( pAuthorInfos );
 }
 
 //i19718
@@ -1175,39 +1172,38 @@ void SwRTFParser::ReadShpRslt()
 
 void SwRTFParser::ReadShpTxt(String& s)
 {
-  int nToken;
-  int level=1;
-  s.AppendAscii("{\\rtf");
-  while (level>0 && IsParserWorking())
+    int nToken;
+    int level=1;
+    s.AppendAscii("{\\rtf");
+    while (level>0 && IsParserWorking())
     {
-      nToken = GetNextToken();
-      switch(nToken)
-    {
-    case RTF_SN:
-    case RTF_SV:
-      SkipGroup();
-      break;
-    case RTF_TEXTTOKEN:
-      s.Append(aToken);
-      break;
-    case '{':
-      level++;
-      s.Append(String::CreateFromAscii("{"));
-      break;
-    case '}':
-      level--;
-      s.Append(String::CreateFromAscii("}"));
-      break;
-    default:
-      s.Append(aToken);
-      if (bTokenHasValue) {
-        s.Append(String::CreateFromInt64(nTokenValue));
-      }
-      s.Append(String::CreateFromAscii(" "));
-      break;
+        nToken = GetNextToken();
+        switch(nToken)
+        {
+            case RTF_SN:
+            case RTF_SV:
+                SkipGroup();
+                break;
+            case RTF_TEXTTOKEN:
+                s.Append(aToken);
+                break;
+            case '{':
+                level++;
+                s.Append(String::CreateFromAscii("{"));
+                break;
+            case '}':
+                level--;
+                s.Append(String::CreateFromAscii("}"));
+                break;
+            default:
+                s.Append(aToken);
+                if (bTokenHasValue)
+                    s.Append(rtl::OUString::valueOf(static_cast<sal_Int64>(nTokenValue)));
+                s.Append(String::CreateFromAscii(" "));
+                break;
+        }
     }
-    }
-  SkipToken(-1);
+    SkipToken(-1);
 }
 
 /*
@@ -1592,11 +1588,7 @@ sal_uInt16 SwRTFParser::ReadRevTbl()
 
             sal_uInt16 nSWId = pDoc->InsertRedlineAuthor(aToken);
             // Store matchpair
-            if( !pAuthorInfos )
-                pAuthorInfos = new sw::util::AuthorInfos;
-            sw::util::AuthorInfo* pAutorInfo = new sw::util::AuthorInfo( nAuthorTableIndex, nSWId );
-            if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
-                delete pAutorInfo;
+            m_aAuthorInfos[nAuthorTableIndex] = nSWId;
 
             aRevTbl.push_back(aToken);
             nAuthorTableIndex++;
@@ -1841,38 +1833,18 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_REVAUTH:
+        if (pRedlineInsert)
         {
-            sw::util::AuthorInfo aEntry( static_cast< sal_uInt16 >(nTokenValue) );
-            sal_uInt16 nPos;
-
-            if(pRedlineInsert)
-            {
-                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
-                {
-                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
-                    {
-                        pRedlineInsert->nAutorNo = pAuthor->nOurId;
-                    }
-                }
-            }
+            sal_uInt16 nRevAuth = static_cast<sal_uInt16>(nTokenValue);
+            pRedlineInsert->nAutorNo = m_aAuthorInfos[nRevAuth];
         }
         break;
 
     case RTF_REVAUTHDEL:
+        if(pRedlineDelete)
         {
-            sw::util::AuthorInfo aEntry( static_cast< short >(nTokenValue) );
-            sal_uInt16 nPos;
-
-            if(pRedlineDelete)
-            {
-                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
-                {
-                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
-                    {
-                        pRedlineDelete->nAutorNo = pAuthor->nOurId;
-                    }
-                }
-            }
+            sal_uInt16 nRevAuthDel = static_cast<sal_uInt16>(nTokenValue);
+            pRedlineDelete->nAutorNo = m_aAuthorInfos[nRevAuthDel];
         }
         break;
 
@@ -2195,8 +2167,9 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             ((SwFmtCharFmt*)pCharFmt)->GetCharFmt() )
         {
             const String& rName = ((SwFmtCharFmt*)pCharFmt)->GetCharFmt()->GetName();
-            SvxRTFStyleType* pStyle = GetStyleTbl().First();
-            do {
+            for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
+            {
+                SvxRTFStyleType* pStyle = it->second;
                 if( pStyle->bIsCharFmt && pStyle->sName == rName )
                 {
                     // alle Attribute, die schon vom Style definiert sind, aus dem
@@ -2218,7 +2191,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     }
                     break;
                 }
-            } while( 0 != (pStyle = GetStyleTbl().Next()) );
+            }
 
             pDoc->InsertPoolItem(aPam, *pCharFmt, 0);
             rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
@@ -2734,7 +2707,7 @@ void SwRTFParser::ReadDocControls( int nToken )
 void SwRTFParser::MakeStyleTab()
 {
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections
-    if( GetStyleTbl().Count() )
+    if( !GetStyleTbl().empty() )
     {
         sal_uInt16 nValidOutlineLevels = 0;
         if( !IsNewDoc() )
@@ -2746,9 +2719,10 @@ void SwRTFParser::MakeStyleTab()
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
 
-        SvxRTFStyleType* pStyle = GetStyleTbl().First();
-        do {
-            sal_uInt16 nNo = sal_uInt16( GetStyleTbl().GetCurKey() );
+        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
+        {
+            sal_uInt16 nNo = it->first;
+            SvxRTFStyleType* pStyle = it->second;
             if( pStyle->bIsCharFmt )
             {
                 if(aCharFmtTbl.find( nNo ) == aCharFmtTbl.end())
@@ -2761,7 +2735,7 @@ void SwRTFParser::MakeStyleTab()
                 MakeStyle( nNo, *pStyle );
             }
 
-        } while( 0 != (pStyle = GetStyleTbl().Next()) );
+        }
         bStyleTabValid = sal_True;
     }
 }
@@ -3996,7 +3970,10 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     sal_uInt16 nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
-        SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
+        SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+        SvxRTFStyleType* pDerivedStyle = NULL;
+        if ( styleIter != GetStyleTbl().end() )
+            pDerivedStyle = styleIter->second;
 
         SwTxtFmtColl* pDerivedColl = NULL;
         std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(nStyleNo);
@@ -4041,10 +4018,11 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
         if( iter == aTxtCollTbl.end())            // noch nicht vorhanden, also anlegen
         {
             // ist die ueberhaupt als Style vorhanden ?
-            SvxRTFStyleType* pMkStyle = GetStyleTbl().Get( nStyleNo );
-            pNext = pMkStyle
-                    ? MakeStyle( nStyleNo, *pMkStyle )
-                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+            SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+            if ( styleIter != GetStyleTbl().end() )
+                pNext = MakeStyle( nStyleNo, *styleIter->second );
+            else
+                pNext = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
         else
             pNext = iter->second;
@@ -4067,7 +4045,11 @@ SwCharFmt* SwRTFParser::MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rS
     sal_uInt16 nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
-        SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
+        SvxRTFStyleTbl::iterator styleIter = GetStyleTbl().find( nStyleNo );
+        SvxRTFStyleType* pDerivedStyle = NULL;
+        if ( styleIter != GetStyleTbl().end() )
+            pDerivedStyle = styleIter->second;
+
         SwCharFmt* pDerivedFmt = NULL;
         std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find( nStyleNo );
 

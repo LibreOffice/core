@@ -87,11 +87,6 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
     return *mpLocaleDataWrapper;
 }
 
-const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
-{
-    return maLocale;
-}
-
 inline bool is_formatting_mark( sal_Unicode c )
 {
     if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
@@ -174,13 +169,6 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMne
     return bEqual;
 }
 
-
-String vcl::I18nHelper::GetDate( const Date& rDate ) const
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
-
-    return ImplGetLocaleDataWrapper().getDate( rDate );
-}
 
 String vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
 {

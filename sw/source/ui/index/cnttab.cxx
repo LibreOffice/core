@@ -219,7 +219,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
 
     sal_Bool                bCreateMode;
 
-    DECL_LINK(OkHdl, OKButton*);
+    DECL_LINK(OkHdl, void *);
 public:
     SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
                         const String& rAutoMarkType, sal_Bool bCreate);
@@ -705,9 +705,9 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
     String          sHBFirst;
     String*         pStyleArr;
 
-    DECL_LINK(OkHdl, OKButton*);
+    DECL_LINK(OkHdl, void *);
     DECL_LINK(LeftRightHdl, PushButton*);
-    DECL_LINK(HeaderDragHdl, HeaderBar*);
+    DECL_LINK(HeaderDragHdl, void *);
 
 public:
     SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, String rStringArr[]);
@@ -801,7 +801,7 @@ SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
 }
 
-IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         pStyleArr[i].Erase();
@@ -826,7 +826,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwAddStylesDlg_Impl, HeaderDragHdl, HeaderBar*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
 {
     aHeaderTree.GetTreeListBox().Invalidate();
     return 0;
@@ -1460,7 +1460,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwTOXSelectTabPage, ModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifyHdl)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     if(pTOXDlg)
@@ -1500,7 +1500,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     return 0;
 };
 
-IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
 {
     sal_Bool bEnable = aFromCaptionsRB.IsChecked();
     aCaptionSequenceFT.Enable(bEnable);
@@ -2456,7 +2456,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, AllLevelsHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
 {
     //get current level
     //write it into all levels
@@ -3829,7 +3829,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 /*--------------------------------------------------------------------
      Description: allocate templates
  --------------------------------------------------------------------*/
-IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 {
     sal_uInt16 nLevPos   = aLevelLB.GetSelectEntryPos();
     sal_uInt16 nTemplPos = aParaLayLB.GetSelectEntryPos();
@@ -3851,12 +3851,12 @@ IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
         aLevelLB.RemoveEntry(nLevPos);
         aLevelLB.InsertEntry(aStr, nLevPos);
         aLevelLB.SelectEntry(aStr);
-        ModifyHdl(0);
+        Modify();
     }
     return 0;
 }
 
-IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 {
     sal_uInt16 nPos = aLevelLB.GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -3868,12 +3868,12 @@ IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
         aLevelLB.InsertEntry(aStr, nPos);
         aLevelLB.SelectEntry(aStr);
         m_pCurrentForm->SetTemplate(nPos, aEmptyStr);
-        ModifyHdl(0);
+        Modify();
     }
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 {
     String aTmpName( aParaLayLB.GetSelectEntry() );
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
@@ -3883,12 +3883,12 @@ IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
         AssignHdl(&aAssignBT);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
 
 /*--------------------------------------------------------------------
      Description: enable only when selected
  --------------------------------------------------------------------*/
-IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
 {
     aStdBT.Enable(aLevelLB.GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
@@ -3901,7 +3901,7 @@ IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
+void SwTOXStylesTabPage::Modify()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     if(pTOXDlg)
@@ -3909,7 +3909,6 @@ IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
         GetForm() = *m_pCurrentForm;
         pTOXDlg->CreateOrUpdateExample(pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_STYLES);
     }
-    return 0;
 }
 
 #define ITEM_SEARCH         1
@@ -4231,7 +4230,7 @@ SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
 }
 
-IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
 {
     sal_Bool bError = sal_False;
     if(aEntriesBB.IsModified() || bCreateMode)

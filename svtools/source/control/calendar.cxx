@@ -917,7 +917,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
             String aMonthText( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
             aMonthText += ' ';
-            aMonthText += String::CreateFromInt64( nYear );
+            aMonthText += rtl::OUString::valueOf(static_cast<sal_Int64>(nYear));
             long nMonthTextWidth = GetTextWidth( aMonthText );
             long nMonthOffX1 = 0;
             long nMonthOffX2 = 0;
@@ -935,7 +935,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 aMonthText  = maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 0);
                 aMonthText += ' ';
-                aMonthText += String::CreateFromInt64( nYear );
+                aMonthText += rtl::OUString::valueOf(static_cast<sal_Int64>(nYear));
                 nMonthTextWidth = GetTextWidth( aMonthText );
             }
             long nTempOff = (mnMonthWidth-nMonthTextWidth+1)/2;
@@ -2505,7 +2505,7 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( CalendarField, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
 {
     EndDropDown();
     GrabFocus();

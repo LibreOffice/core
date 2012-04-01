@@ -146,9 +146,6 @@ public:
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
                             rtl_TextEncoding eTextEnc );
-    explicit            SfxOleStringPropertyBase(
-                            sal_Int32 nPropId, sal_Int32 nPropType,
-                            rtl_TextEncoding eTextEnc, const String& rValue );
 
     inline const String& GetValue() const { return maValue; }
     inline void         SetValue( const String& rValue ) { maValue = rValue; }
@@ -181,7 +178,6 @@ class SfxOleString16Property : public SfxOleStringPropertyBase
 {
 public:
     explicit            SfxOleString16Property( sal_Int32 nPropId );
-    explicit            SfxOleString16Property( sal_Int32 nPropId, const String& rValue );
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
@@ -216,8 +212,6 @@ class SfxOleDateProperty : public SfxOlePropertyBase
 {
 public:
     explicit            SfxOleDateProperty( sal_Int32 nPropId );
-    /** @param rDate  Date as LOCAL time. */
-    explicit            SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate );
 
     /** Returns the date value as LOCAL time. */
     inline const util::Date& GetValue() const { return maDate; }
@@ -532,14 +526,6 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(
 {
 }
 
-SfxOleStringPropertyBase::SfxOleStringPropertyBase(
-        sal_Int32 nPropId, sal_Int32 nPropType, rtl_TextEncoding eTextEnc, const String& rValue ) :
-    SfxOlePropertyBase( nPropId, nPropType ),
-    SfxOleStringHelper( eTextEnc ),
-    maValue( rValue )
-{
-}
-
 // ----------------------------------------------------------------------------
 
 SfxOleString8Property::SfxOleString8Property(
@@ -568,11 +554,6 @@ void SfxOleString8Property::ImplSave( SvStream& rStrm )
 
 SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId ) :
     SfxOleStringPropertyBase( nPropId, PROPTYPE_STRING16, RTL_TEXTENCODING_UCS2 )
-{
-}
-
-SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId, const String& rValue ) :
-    SfxOleStringPropertyBase( nPropId, PROPTYPE_STRING16, RTL_TEXTENCODING_UCS2, rValue )
 {
 }
 
@@ -645,12 +626,6 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
 
 SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_DATE )
-{
-}
-
-SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate ) :
-    SfxOlePropertyBase( nPropId, PROPTYPE_DATE ),
-    maDate( rDate )
 {
 }
 

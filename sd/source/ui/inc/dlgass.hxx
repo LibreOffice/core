@@ -53,7 +53,7 @@ public:
     AssistentDlg(Window* pParent, sal_Bool bAutoPilot);
     ~AssistentDlg();
 
-    DECL_LINK( FinishHdl, OKButton * );
+    DECL_LINK( FinishHdl, void * );
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;

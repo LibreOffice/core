@@ -53,7 +53,6 @@ OBJFILES=   			\
     $(OBJ)$/export.obj	\
     $(OBJ)$/export2.obj	\
     $(OBJ)$/merge.obj   \
-    $(OBJ)$/srciter.obj		\
     $(OBJ)$/xmlparse.obj    \
     $(OBJ)$/helpmerge.obj   \
     $(OBJ)$/helpex.obj      \
@@ -66,7 +65,6 @@ LIB1ARCHIV= $(LB)$/libtransex.a
 LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/export2.obj     \
         $(OBJ)$/merge.obj   \
-        $(OBJ)$/srciter.obj             \
         $(OBJ)$/file.obj \
         $(OBJ)$/directory.obj
 
@@ -77,8 +75,6 @@ APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 APP1RPATH=  NONE
 APP1STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 APP1LIBS+=	$(LB)$/$(TARGET).lib
@@ -89,8 +85,6 @@ APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)
 APP2RPATH= NONE
 APP2STDLIBS+= \
             $(EXPATASCII3RDLIB) \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.lng and *.lng
@@ -98,8 +92,6 @@ APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj
 APP3RPATH=  NONE
 APP3STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # tag checker for *.gsi
@@ -107,8 +99,6 @@ APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5RPATH=  NONE
 APP5STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.cfg
@@ -116,8 +106,6 @@ APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP6RPATH=  NONE
 APP6STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.xrm
@@ -125,21 +113,15 @@ APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP7RPATH=  NONE
 APP7STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # localizer for l10n framework
-APP9TARGET= localize_sl
+APP9TARGET= localize
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
-APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
+APP9OBJS=   $(OBJ)$/localize.obj
 APP9RPATH=  NONE
 APP9STDLIBS+= \
-            $(TOOLSLIB) \
-            $(COMPHELPERLIB) \
-            $(ICUINLIB) \
-            $(ICUUCLIB) \
             $(SALLIB)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)

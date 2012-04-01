@@ -245,7 +245,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
     {
         HANDLE                      hImpersonationToken = NULL;
         PSID                        psidAdministrators;
-        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
+        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = { SECURITY_NT_AUTHORITY };
         sal_Bool                    bSuccess = sal_False;
 
 
@@ -584,7 +584,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
         LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
         LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
         HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
-        DWORD                   nError              = 0;
 
         /* try to create user profile */
         if ( !hAccessToken )
@@ -625,8 +624,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
                     bOk = TRUE;
                 }
-                else
-                    nError = GetLastError();
 
                 rtl_uString_release(buffer);
             }
@@ -649,7 +646,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
         HMODULE                 hUserEnvLib         = NULL;
         LPFNLOADUSERPROFILE     fLoadUserProfile    = NULL;
         LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = NULL;
-        BOOL                    bOk                 = FALSE;
         HANDLE                  hAccessToken        = ((oslSecurityImpl*)Security)->m_hToken;
 
         if ( !hAccessToken )
@@ -676,14 +672,14 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
             {
                 /* unloading the user profile */
                 if (fLoadUserProfile && fUnloadUserProfile)
-                    bOk = fUnloadUserProfile(hAccessToken, ((oslSecurityImpl*)Security)->m_hProfile);
+                    fUnloadUserProfile(hAccessToken, ((oslSecurityImpl*)Security)->m_hProfile);
 
                 if (hUserEnvLib)
                     FreeLibrary(hUserEnvLib);
             }
         }
 
-        ((oslSecurityImpl*)Security)->m_hProfile;
+        ((oslSecurityImpl*)Security)->m_hProfile = NULL;
 
         if (hAccessToken && (hAccessToken != ((oslSecurityImpl*)Security)->m_hToken))
         {

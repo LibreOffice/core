@@ -214,7 +214,7 @@ sub remove_multiple_modules_packages
                 # modules will only be removed from packages, that have more modules
                 # than the compare package
 
-                if ( $packagecount <= $comparepackagecount ) { next; }  # nothing to do, take next package
+                if ( $packagecount < $comparepackagecount ) { next; }  # nothing to do, take next package
 
                 # iterating over all modules of this package
 
@@ -728,7 +728,7 @@ sub log_packages_content
 }
 
 #####################################################################
-# Creating assignments from modules to destination pathes.
+# Creating assignments from modules to destination paths.
 # This is required for logging in fileinfo file. Otherwise
 # the complete destination file would not be known in file list.
 # Saved in %installer::globals::moduledestination
@@ -754,7 +754,7 @@ sub create_module_destination_hash
 }
 
 #####################################################################
-# Adding the default pathes into the files collector for Unixes.
+# Adding the default paths into the files collector for Unixes.
 # This is necessary to know the complete destination path in
 # fileinfo log file.
 #####################################################################

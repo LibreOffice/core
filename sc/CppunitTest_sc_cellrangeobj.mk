@@ -73,8 +73,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_cellrangesbase, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_cellrangesbase,\
-    -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sc/inc) \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
 ))
@@ -91,7 +91,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_cellrangesbase,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
-    basic/util/sb \
+	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
@@ -100,6 +100,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_cellrangesbase,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    i18npool/source/search/i18nsearch \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \

@@ -717,7 +717,7 @@ namespace cppcanvas
             Graphic graphic;
 
 
-            void Read (SvMemoryStream &s)
+            void Read (SvMemoryStream &s, sal_Bool bUseWholeStream)
             {
                 sal_uInt32 header, unknown;
 
@@ -742,17 +742,25 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d\n", mfType, mfSize));
 
                     GraphicFilter filter;
-                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), mfSize, STREAM_READ);
+                    // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
+                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : mfSize, STREAM_READ);
 
                     filter.ImportGraphic (graphic, String (), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
-                    EMFP_DEBUG(mfStream.Seek(0);
-                               SvFileStream file( UniString::CreateFromAscii( "/tmp/emf-embedded-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+                    EMFP_DEBUG(
+                        mfStream.Seek(0);
+                        static int emfp_debug_stream_numnber = 0;
+                        rtl::OUString emfp_debug_filename("/tmp/emf-embedded-stream");
+                        emfp_debug_filename += rtl::OUString::valueOf(emfp_debug_stream_numnber++);
+                        emfp_debug_filename += rtl::OUString(".emf");
 
-                               mfStream >> file;
-                               file.Flush();
-                               file.Close());
+                        SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
+
+                        mfStream >> file;
+                        file.Flush();
+                        file.Close()
+                    );
                 }
             }
         };
@@ -760,33 +768,33 @@ namespace cppcanvas
         struct EMFPFont : public EMFPObject
         {
             sal_uInt32 version;
-        float emSize;
-        sal_uInt32 sizeUnit;
-        sal_Int32 fontFlags;
-        rtl::OUString family;
+            float emSize;
+            sal_uInt32 sizeUnit;
+            sal_Int32 fontFlags;
+            rtl::OUString family;
 
             void Read (SvMemoryStream &s)
             {
                 sal_uInt32 header;
-        sal_uInt32 reserved;
-        sal_uInt32 length;
+                sal_uInt32 reserved;
+                sal_uInt32 length;
 
                 s >> header >> emSize >> sizeUnit >> fontFlags >> reserved >> length;
 
-        OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
+                OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
                 EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n",(unsigned int) header >> 12, (unsigned int)header & 0x1fff, emSize, (unsigned int)sizeUnit));
                 EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", (unsigned int)fontFlags, (unsigned int)reserved, (unsigned int)length));
 
-        if( length > 0 && length < 0x4000 ) {
-            sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
+                if( length > 0 && length < 0x4000 ) {
+                    sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
 
-            for( sal_uInt32 i = 0; i < length; i++ )
-            s >> chars[ i ];
+                    for( sal_uInt32 i = 0; i < length; i++ )
+                    s >> chars[ i ];
 
-            family = ::rtl::OUString( chars, length );
-            EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
-        }
+                    family = ::rtl::OUString( chars, length );
+                    EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
+                }
             }
         };
 
@@ -825,11 +833,6 @@ namespace cppcanvas
             y = 100*nMmY*y/nPixY;
         }
 
-        ::basegfx::B2DPoint ImplRenderer::Map (::basegfx::B2DPoint& p)
-        {
-            return Map (p.getX (), p.getY ());
-        }
-
         ::basegfx::B2DPoint ImplRenderer::Map (double ix, double iy)
         {
             double x, y;
@@ -863,29 +866,6 @@ namespace cppcanvas
             return ::basegfx::B2DSize (w, h);
         }
 
-        ::basegfx::B2DRange ImplRenderer::MapRectangle (double ix, double iy, double iwidth, double iheight)
-        {
-            double x, y, w, h;
-
-            x = ix*aWorldTransform.eM11 + iy*aWorldTransform.eM21 + aWorldTransform.eDx;
-            y = ix*aWorldTransform.eM12 + iy*aWorldTransform.eM22 + aWorldTransform.eDy;
-            w = iwidth*aWorldTransform.eM11 + iheight*aWorldTransform.eM21;
-            h = iwidth*aWorldTransform.eM12 + iheight*aWorldTransform.eM22;
-
-            MapToDevice (x, y);
-            MapToDevice (w, h);
-
-            x -= nFrameLeft;
-            y -= nFrameTop;
-
-            x *= aBaseTransform.eM11;
-            y *= aBaseTransform.eM22;
-            w *= aBaseTransform.eM11;
-            h *= aBaseTransform.eM22;
-
-            return ::basegfx::B2DRange (x, y, x + w, y + h);
-        }
-
 #define COLOR(x) \
     ::vcl::unotools::colorToDoubleSequence( ::Color (0xff - (x >> 24), \
                              (x >> 16) & 0xff, \
@@ -915,7 +895,7 @@ namespace cppcanvas
 
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
-        SET_FILL_COLOR(brushIndexOrColor);
+                SET_FILL_COLOR(brushIndexOrColor);
 
                 pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
 
@@ -1115,7 +1095,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags)
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_Bool bUseWholeStream)
         {
             sal_uInt32 index;
 
@@ -1170,7 +1150,7 @@ namespace cppcanvas
                 {
                     EMFPImage *image;
                     aObjects [index] = image = new EMFPImage ();
-                    image->Read (rObjectStream);
+                    image->Read (rObjectStream, bUseWholeStream);
 
                     break;
                 }
@@ -1221,7 +1201,7 @@ namespace cppcanvas
                     if (mbMultipart) {
                         EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
                         mMStream.Seek (0);
-                        processObjectRecord (mMStream, mMFlags);
+                        processObjectRecord (mMStream, mMFlags, sal_True);
                     }
                     mbMultipart = false;
                 }
@@ -1428,9 +1408,9 @@ namespace cppcanvas
                             if (unknown == 3) { // it probably means number of points defining destination rectangle
                                 float x1, y1, x2, y2, x3, y3;
 
-                                ReadPoint (rMF, x1, y1);
-                                ReadPoint (rMF, x2, y2);
-                                ReadPoint (rMF, x3, y3);
+                                ReadPoint (rMF, x1, y1, flags);
+                                ReadPoint (rMF, x2, y2, flags);
+                                ReadPoint (rMF, x3, y3, flags);
 
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
                                 const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (Map (sx, sy)),

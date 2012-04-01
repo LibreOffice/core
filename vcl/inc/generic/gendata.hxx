@@ -40,7 +40,8 @@ class GtkSalDisplay;
 enum SalGenericDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
                           SAL_DATA_KDE3, SAL_DATA_KDE4,
                           SAL_DATA_UNX, SAL_DATA_SVP,
-                          SAL_DATA_ANDROID, SAL_DATA_IOS };
+                          SAL_DATA_ANDROID, SAL_DATA_IOS,
+                          SAL_DATA_HEADLESS };
 
 class VCL_DLLPUBLIC SalGenericData : public SalData
 {
@@ -61,7 +62,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
 
     const rtl::OUString& GetHostname()
     {
-        if (!m_aHostname.getLength())
+        if (m_aHostname.isEmpty())
             osl_getLocalHostname( &m_aHostname.pData );
         return m_aHostname;
     }

@@ -133,7 +133,7 @@ const char* SalGenericSystem::getFrameResName()
         {
             rtl::OUString aArg;
             if( ! osl_getCommandArg( n, &aArg.pData ) &&
-                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
+                aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-name")) &&
                 ! osl_getCommandArg( n+1, &aArg.pData ) )
             {
                 aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
@@ -163,7 +163,7 @@ const char* SalGenericSystem::getFrameClassName()
         rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
 
-        if( aProduct.getLength() )
+        if( !aProduct.isEmpty() )
             aClassName.append( rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
         else
             aClassName.append( "VCLSalFrame" );

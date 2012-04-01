@@ -203,11 +203,11 @@ void ScDLL::Init()
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxFontNameToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
 //  SvxFontHeightToolBoxControl     ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
-    SvxFontColorToolBoxControl      ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
+    SvxColorExtToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
+    SvxColorExtToolBoxControl       ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
     SvxFrameToolBoxControl          ::RegisterControl(SID_ATTR_BORDER,          pMod);
     SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
-    SvxFrameLineColorToolBoxControl ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
+    SvxColorExtToolBoxControl       ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
@@ -295,9 +295,9 @@ void ScDLL::Init()
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-    rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-    rClassManager.SV_CLASS_REGISTER( SvxFileField );
-    rClassManager.SV_CLASS_REGISTER( SvxTableField );
+    rClassManager.Register(SvxPagesField::StaticClassId(), SvxPagesField::CreateInstance);
+    rClassManager.Register(SvxFileField::StaticClassId(),  SvxFileField::CreateInstance);
+    rClassManager.Register(SvxTableField::StaticClassId(), SvxTableField::CreateInstance);
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
 
@@ -310,16 +310,6 @@ void ScDLL::Init()
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<sal_uInt16>(pMod->GetAppOptions().GetAppMetric()) ) );
 
     //  StarOne Services are now handled in the registry
-}
-
-void ScDLL::Exit()
-{
-    // the SxxModule must be destroyed
-    ScModule **ppShlPtr = (ScModule**) GetAppData(SHL_CALC);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-
-    //  ScGlobal::Clear ist schon im Module-dtor
 }
 
 //------------------------------------------------------------------

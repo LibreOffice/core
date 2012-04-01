@@ -33,14 +33,6 @@ Window DLG_BACKING
     SVLook = TRUE ;
     Border = FALSE;
 
-    String STR_BACKING_WELCOME
-    {
-        Text [ en-US ] = "Welcome to";
-    };
-    String STR_BACKING_WELCOMEPRODUCT
-    {
-        Text [ en-US ] = "%PRODUCTNAME";
-    };
     String STR_BACKING_CREATE
     {
         Text [ en-US ] = "Create a new document";

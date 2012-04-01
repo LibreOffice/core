@@ -150,7 +150,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             }
 
             if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
@@ -229,7 +229,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             // replace object
             if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
 
             Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
             Size aPickObjSize(aPickObjRect.GetSize());
@@ -252,8 +252,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             pP->InsertObject(pNewGrafObj);
             if( bUndo )
             {
-                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
-                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
+                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
             }
             pP->RemoveObject(pPickObj->GetOrdNum());
 
@@ -272,7 +272,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
 
             if( pImageMap )
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+                pNewGrafObj->AppendUserData(new SdIMapInfo(*pImageMap));
         }
     }
 
@@ -295,7 +295,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     else
     {
         uno::Reference<frame::XModel> const xModel(
-                GetDoc()->GetObjectShell()->GetModel());
+                GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return 0; }
     }
@@ -374,7 +374,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(View, DropInsertFileHdl)
 {
     DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
     if( !mpViewSh )
@@ -444,12 +444,12 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                         aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
                     {
                         ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                        SfxRequest      aReq(SID_INSERTFILE, 0, mpDoc->GetItemPool());
+                        SfxRequest      aReq(SID_INSERTFILE, 0, mrDoc.GetItemPool());
                         SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
-                        FuInsertFile::Create( mpViewSh, pWin, this, mpDoc, aReq );
+                        FuInsertFile::Create( mpViewSh, pWin, this, &mrDoc, aReq );
                         bOK = sal_True;
                     }
                 }
@@ -566,7 +566,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropErrorHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(View, DropErrorHdl)
 {
     InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;

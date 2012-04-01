@@ -46,7 +46,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 
 #include <algorithm>
 #include <iterator>

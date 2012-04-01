@@ -1,0 +1,18 @@
+This code is used to generate the customshapepresets source code.
+
+To re-generate the code first you need to re-build oox with:
+
+make oox.clean oox dbglevel=2
+
+Then load the cshape-all.pptx file[1]
+
+SAL_LOG='+INFO+WARN' ./soffice /path/to/oox/pptx/cshape-all.pptx 2>& | tee /path/to/oox/custom-shapes.log
+
+Now run:
+
+generatePresetsCXX.pl # this operates on custom-shapes.log in the CWD
+
+And this will re-generate the .cxx sources we need to embed the right
+custom shapes into the source code.
+
+[1] - this file is built by generatePresetsPPTXs.pl incidentally.

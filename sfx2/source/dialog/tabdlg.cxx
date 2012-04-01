@@ -620,17 +620,6 @@ void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 
 // -----------------------------------------------------------------------
 
-Link SfxTabDialog::GetApplyHandler() const
-{
-    DBG_ASSERT( pImpl->pApplyButton, "SfxTabDialog::GetApplyHandler: no button enabled!" );
-    if ( !pImpl->pApplyButton )
-        return Link();
-
-    return pImpl->pApplyButton->GetClickHdl();
-}
-
-// -----------------------------------------------------------------------
-
 void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
 {
     if ( IsApplyButtonEnabled() == bEnable )
@@ -956,7 +945,7 @@ short SfxTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, CancelHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SfxTabDialog, CancelHdl)
 {
     EndDialog( RET_USER_CANCEL );
     return 0;
@@ -995,7 +984,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
 
 /*  [Description]
 
@@ -1059,7 +1048,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, UserHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxTabDialog, UserHdl)
 
 /*  [Description]
 
@@ -1085,7 +1074,7 @@ IMPL_LINK( SfxTabDialog, UserHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, ResetHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
 
 /*  [Description]
 
@@ -1112,7 +1101,7 @@ IMPL_LINK( SfxTabDialog, ResetHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
 
 /*  [Description]
 

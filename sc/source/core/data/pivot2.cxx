@@ -58,6 +58,18 @@ using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
 using ::std::vector;
 
+namespace {
+
+bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& right)
+{
+    return (left.ReferenceType     == right.ReferenceType)
+        && (left.ReferenceField    == right.ReferenceField)
+        && (left.ReferenceItemType == right.ReferenceItemType)
+        && (left.ReferenceItemName == right.ReferenceItemName);
+}
+
+}
+
 // ============================================================================
 
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
@@ -79,14 +91,28 @@ OUString ScDPLabelData::Member::getDisplayName() const
     return maName;
 }
 
-ScDPLabelData::ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue ) :
+ScDPLabelData::ScDPLabelData() :
+    mnCol(-1),
+    mnOriginalDim(-1),
+    mnFuncMask(PIVOT_FUNC_NONE),
+    mnUsedHier(0),
+    mnFlags(0),
+    mbShowAll(false),
+    mbIsValue(false),
+    mbDataLayout(false)
+{
+}
+
+ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue) :
     maName( rName ),
     mnCol( nCol ),
+    mnOriginalDim(-1),
     mnFuncMask( PIVOT_FUNC_NONE ),
     mnUsedHier( 0 ),
     mnFlags( 0 ),
     mbShowAll( false ),
-    mbIsValue( bIsValue )
+    mbIsValue( bIsValue ),
+    mbDataLayout(false)
 {
 }
 
@@ -98,27 +124,32 @@ OUString ScDPLabelData::getDisplayName() const
     return maName;
 }
 
-PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
+PivotField::PivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
     nCol( nNewCol ),
+    mnOriginalDim(-1),
     nFuncMask( nNewFuncMask ),
-    nFuncCount( 0 )
+    mnDupCount(0)
 {
 }
 
 PivotField::PivotField( const PivotField& r ) :
-    nCol(r.nCol), nFuncMask(r.nFuncMask), nFuncCount(r.nFuncCount), maFieldRef(r.maFieldRef)
+    nCol(r.nCol),
+    mnOriginalDim(r.mnOriginalDim),
+    nFuncMask(r.nFuncMask),
+    mnDupCount(r.mnDupCount),
+    maFieldRef(r.maFieldRef) {}
+
+long PivotField::getOriginalDim() const
 {
+    return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);
 }
 
 bool PivotField::operator==( const PivotField& r ) const
 {
-    return (nCol                            == r.nCol)
-        && (nFuncMask                       == r.nFuncMask)
-        && (nFuncCount                      == r.nFuncCount)
-        && (maFieldRef.ReferenceType        == r.maFieldRef.ReferenceType)
-        && (maFieldRef.ReferenceField       == r.maFieldRef.ReferenceField)
-        && (maFieldRef.ReferenceItemType    == r.maFieldRef.ReferenceItemType)
-        && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
+    return (nCol          == r.nCol)
+        && (mnOriginalDim == r.mnOriginalDim)
+        && (nFuncMask     == r.nFuncMask)
+        && equals(maFieldRef, r.maFieldRef);
 }
 
 ScPivotParam::ScPivotParam()
@@ -146,16 +177,14 @@ ScPivotParam::~ScPivotParam()
 {
 }
 
-void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
+void ScPivotParam::SetLabelData(const ScDPLabelDataVec& r)
 {
-    vector<ScDPLabelDataRef> aNewArray;
+    ScDPLabelDataVec aNewArray;
     aNewArray.reserve(r.size());
-    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
-          itr != itrEnd; ++itr)
-    {
-        ScDPLabelDataRef p(new ScDPLabelData(**itr));
-        aNewArray.push_back(p);
-    }
+    for (ScDPLabelDataVec::const_iterator itr = r.begin(), itrEnd = r.end();
+         itr != itrEnd; ++itr)
+        aNewArray.push_back(new ScDPLabelData(*itr));
+
     maLabelArray.swap(aNewArray);
 }
 
@@ -199,15 +228,29 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
-    mnFuncMask( nFuncMask )
+    mnOriginalDim(-1),
+    mnFuncMask( nFuncMask ),
+    mnDupCount(0)
 {
 }
 
-ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScDPFuncData::ScDPFuncData(
+    SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
+    const DataPilotFieldReference& rFieldRef) :
     mnCol( nCol ),
+    mnOriginalDim(nOriginalDim),
     mnFuncMask( nFuncMask ),
+    mnDupCount(nDupCount),
     maFieldRef( rFieldRef )
 {
+}
+
+bool ScDPFuncData::operator== (const ScDPFuncData& r) const
+{
+    if (mnCol != r.mnCol || mnOriginalDim != r.mnOriginalDim || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
+        return false;
+
+    return equals(maFieldRef, r.maFieldRef);
 }
 
 // ============================================================================

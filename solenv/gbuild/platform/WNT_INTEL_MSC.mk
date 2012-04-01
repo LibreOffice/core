@@ -147,6 +147,7 @@ gb_CXXFLAGS := \
 	-wd4245 \
 	-wd4250 \
 	-wd4251 \
+	-wd4265 \
 	-wd4275 \
 	-wd4290 \
 	-wd4294 \
@@ -191,6 +192,11 @@ gb_CFLAGS_WERROR := -WX -DLIBO_WERROR
 gb_CXXFLAGS_WERROR := -WX -DLIBO_WERROR
 endif
 
+ifeq ($(MERGELIBS),TRUE)
+gb_CFLAGS += -DLIBO_MERGELIBS
+gb_CXXFLAGS += -DLIBO_MERGELIBS
+endif
+
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-EHa \
@@ -226,7 +232,7 @@ gb_COMPILERNOOPTFLAGS := -Od
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3); exit $${PIPESTATUS[0]}
+| $(GBUILDDIR)/filter-showIncludes.pl $(1) $(2) $(3); exit $${PIPESTATUS[0]}
 endef
 else
 gb_COMPILERDEPFLAGS :=
@@ -236,29 +242,29 @@ endif
 
 # Helper class
 
+gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
+gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
+
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
-
-# This file:/// -> file:!!! -> file:/// substitution is to protect the
-# slashes after file: in a file: URL from being unduplicated by the
-# // -> / substitution.
 define gb_Helper_convert_native
-$(subst file:!!!,file:///, \
-$(subst //,/, \
-$(subst file:///,file:!!!, \
-$(subst $(REPODIR),$(patsubst %/,%,$(gb_Helper_REPODIR_NATIVE)), \
+$(strip \
 $(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
 $(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
 $(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
-$(1))))))))
+$(1)))))
+endef
+
+# Convert path to native notation
+define gb_Helper_native_path
+$(shell cygpath -m $(1))
 endef
 
 # YaccTarget class
@@ -273,6 +279,7 @@ endef
 
 # CObject class
 
+# $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -280,17 +287,19 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE) \
-		-c $(realpath $(3)) \
-		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
+		-c $(3) \
+		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
 
 
 # CxxObject class
 
+# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -298,13 +307,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
-		-c $(realpath $(3)) \
-		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
+		-c $(3) \
+		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
 
 
@@ -317,14 +327,14 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	"$(ML_EXE)" $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
-	echo "$(1) : $(realpath $(3))" > $(4)
+	echo "$(1) : $(3)" > $(4)
 endef
 
 
 # LinkTarget class
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
 	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
@@ -362,16 +372,18 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
-	$(if $(filter Executable,$(TARGETTYPE)),; if [ -f $@.manifest ]; then mt.exe $(MTFLAGS) -manifest $@.manifest -outputresource:$@\;1; fi) ; exit $$RC)
+	$(if $(filter Library,$(TARGETTYPE)),; if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2; fi) \
+	$(if $(filter Executable,$(TARGETTYPE)),; if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -manifest $(1).manifest -outputresource:$(1)\;1; fi) \
+	; exit $$RC)
 endef
 
 
 # Flags common for PE executables (EXEs and DLLs) 
 gb_Windows_PE_TARGETTYPEFLAGS := \
-    -release \
-    -opt:noref \
-    -incremental:no \
-    -debug \
+	-release \
+	-opt:noref \
+	-incremental:no \
+	-debug \
 	-nxcompat \
 	-dynamicbase \
 
@@ -380,8 +392,8 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 
 gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := \
-    -DLL \
-    $(gb_Windows_PE_TARGETTYPEFLAGS)
+	-DLL \
+	$(gb_Windows_PE_TARGETTYPEFLAGS)
 
 gb_Library_get_rpath :=
 
@@ -468,8 +480,9 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.ilk,$(3)) \
 )
 
+$(if $(filter $(gb_MERGEDLIBS),$(1)),,\
 $(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)))
 
 ifneq ($(ENABLE_CRASHDUMP),)
 $(call gb_Library_get_target,$(1)) \
@@ -481,7 +494,7 @@ endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
+$(if $(filter $(gb_MERGEDLIBS),$(1)),,$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1)))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -655,7 +668,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 else
@@ -672,7 +684,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
 		$(DEFS) $(FLAGS) \
-		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-Fo$(1) \
 		$(RCFILE) )
@@ -695,7 +706,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_WinResTarget_get_dep_target,$(1)))
 endef
 else
@@ -703,6 +713,6 @@ gb_WinResTarget__command_dep =
 endif
 
 # Python
-gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
+gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(shell cygpath -m $(OUTDIR)/bin)" PYTHONHOME="$(shell cygpath -m $(OUTDIR))/lib/python" PYTHONPATH="$(shell cygpath -m $(OUTDIR))/lib/python;$(shell cygpath -m $(OUTDIR))/lib/python/lib-dynload"
 
 # vim: set noet sw=4:

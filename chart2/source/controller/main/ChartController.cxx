@@ -1017,6 +1017,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("FormatDataPoint")
         || aCommand.equals("FormatDataLabels")
         || aCommand.equals("FormatDataLabel")
+        || aCommand.equals("FormatXErrorBars")
         || aCommand.equals("FormatYErrorBars")
         || aCommand.equals("FormatMeanValue")
         || aCommand.equals("FormatTrendline")
@@ -1111,8 +1112,10 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMenu_Trendlines();
     else if( aCommand.equals("InsertMenuMeanValues"))
         this->executeDispatch_InsertMenu_MeanValues();
+    else if( aCommand.equals("InsertMenuXErrorBars"))
+        this->executeDispatch_InsertErrorBars(false);
     else if( aCommand.equals("InsertMenuYErrorBars"))
-        this->executeDispatch_InsertMenu_YErrorBars();
+        this->executeDispatch_InsertErrorBars(true);
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))
@@ -1123,10 +1126,14 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMeanValue();
     else if( aCommand.equals("DeleteMeanValue"))
         this->executeDispatch_DeleteMeanValue();
+    else if( aCommand.equals("InsertXErrorBars"))
+        this->executeDispatch_InsertErrorBars(false);
     else if( aCommand.equals("InsertYErrorBars"))
-        this->executeDispatch_InsertYErrorBars();
+        this->executeDispatch_InsertErrorBars(true);
+    else if( aCommand.equals("DeleteXErrorBars"))
+        this->executeDispatch_DeleteErrorBars(false);
     else if( aCommand.equals("DeleteYErrorBars"))
-        this->executeDispatch_DeleteYErrorBars();
+        this->executeDispatch_DeleteErrorBars(true);
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
     else if( aCommand.equals("DeleteTrendlineEquation"))
@@ -1492,66 +1499,67 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
 {
     return ::comphelper::MakeSet< ::rtl::OUString >
         // commands for container forward
-        ( C2U("AddDirect"))           ( C2U("NewDoc"))                ( C2U("Open"))
-        ( C2U("Save"))                ( C2U("SaveAs"))                ( C2U("SendMail"))
-        ( C2U("EditDoc"))             ( C2U("ExportDirectToPDF"))     ( C2U("PrintDefault"))
+        ( "AddDirect" )           ( "NewDoc" )                ( "Open" )
+        ( "Save" )                ( "SaveAs" )                ( "SendMail" )
+        ( "EditDoc" )             ( "ExportDirectToPDF" )     ( "PrintDefault" )
 
         // own commands
-        ( C2U("Cut") )                ( C2U("Copy") )                 ( C2U("Paste") )
-        ( C2U("DataRanges") )         ( C2U("DiagramData") )
+        ( "Cut" )                ( "Copy" )                 ( "Paste" )
+        ( "DataRanges" )         ( "DiagramData" )
         // insert objects
-        ( C2U("InsertMenuTitles") )   ( C2U("InsertTitles") )
-        ( C2U("InsertMenuLegend") )   ( C2U("InsertLegend") )         ( C2U("DeleteLegend") )
-        ( C2U("InsertMenuDataLabels") )
-        ( C2U("InsertMenuAxes") )     ( C2U("InsertRemoveAxes") )         ( C2U("InsertMenuGrids") )
-        ( C2U("InsertSymbol") )
-        ( C2U("InsertTrendlineEquation") )  ( C2U("InsertTrendlineEquationAndR2") )
-        ( C2U("InsertR2Value") )      ( C2U("DeleteR2Value") )
-        ( C2U("InsertMenuTrendlines") )  ( C2U("InsertTrendline") )
-        ( C2U("InsertMenuMeanValues") ) ( C2U("InsertMeanValue") )
-        ( C2U("InsertMenuYErrorBars") )   ( C2U("InsertYErrorBars") )
-        ( C2U("InsertDataLabels") )   ( C2U("InsertDataLabel") )
-        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteTrendlineEquation") )
-        ( C2U("DeleteYErrorBars") )
-        ( C2U("DeleteDataLabels") )   ( C2U("DeleteDataLabel") )
+        ( "InsertMenuTitles" )   ( "InsertTitles" )
+        ( "InsertMenuLegend" )   ( "InsertLegend" )         ( "DeleteLegend" )
+        ( "InsertMenuDataLabels" )
+        ( "InsertMenuAxes" )     ( "InsertRemoveAxes" )         ( "InsertMenuGrids" )
+        ( "InsertSymbol" )
+        ( "InsertTrendlineEquation" )  ( "InsertTrendlineEquationAndR2" )
+        ( "InsertR2Value" )      ( "DeleteR2Value" )
+        ( "InsertMenuTrendlines" )  ( "InsertTrendline" )
+        ( "InsertMenuMeanValues" ) ( "InsertMeanValue" )
+        ( "InsertMenuXErrorBars" )  ( "InsertXErrorBars" )
+        ( "InsertMenuYErrorBars" )   ( "InsertYErrorBars" )
+        ( "InsertDataLabels" )   ( "InsertDataLabel" )
+        ( "DeleteTrendline" )    ( "DeleteMeanValue" )      ( "DeleteTrendlineEquation" )
+        ( "DeleteXErrorBars" )   ( "DeleteYErrorBars" )
+        ( "DeleteDataLabels" )   ( "DeleteDataLabel" )
         //format objects
-        ( C2U("FormatSelection") )     ( C2U("TransformDialog") )
-        ( C2U("DiagramType") )        ( C2U("View3D") )
-        ( C2U("Forward") )            ( C2U("Backward") )
-        ( C2U("MainTitle") )          ( C2U("SubTitle") )
-        ( C2U("XTitle") )             ( C2U("YTitle") )               ( C2U("ZTitle") )
-        ( C2U("SecondaryXTitle") )    ( C2U("SecondaryYTitle") )
-        ( C2U("AllTitles") )          ( C2U("Legend") )
-        ( C2U("DiagramAxisX") )       ( C2U("DiagramAxisY") )         ( C2U("DiagramAxisZ") )
-        ( C2U("DiagramAxisA") )       ( C2U("DiagramAxisB") )         ( C2U("DiagramAxisAll") )
-        ( C2U("DiagramGridXMain") )   ( C2U("DiagramGridYMain") )     ( C2U("DiagramGridZMain") )
-        ( C2U("DiagramGridXHelp") )   ( C2U("DiagramGridYHelp") )     ( C2U("DiagramGridZHelp") )
-        ( C2U("DiagramGridAll") )
-        ( C2U("DiagramWall") )        ( C2U("DiagramFloor") )         ( C2U("DiagramArea") )
+        ( "FormatSelection" )     ( "TransformDialog" )
+        ( "DiagramType" )        ( "View3D" )
+        ( "Forward" )            ( "Backward" )
+        ( "MainTitle" )          ( "SubTitle" )
+        ( "XTitle" )             ( "YTitle" )               ( "ZTitle" )
+        ( "SecondaryXTitle" )    ( "SecondaryYTitle" )
+        ( "AllTitles" )          ( "Legend" )
+        ( "DiagramAxisX" )       ( "DiagramAxisY" )         ( "DiagramAxisZ" )
+        ( "DiagramAxisA" )       ( "DiagramAxisB" )         ( "DiagramAxisAll" )
+        ( "DiagramGridXMain" )   ( "DiagramGridYMain" )     ( "DiagramGridZMain" )
+        ( "DiagramGridXHelp" )   ( "DiagramGridYHelp" )     ( "DiagramGridZHelp" )
+        ( "DiagramGridAll" )
+        ( "DiagramWall" )        ( "DiagramFloor" )         ( "DiagramArea" )
 
         //context menu - format objects entries
-        ( C2U("FormatWall") )        ( C2U("FormatFloor") )         ( C2U("FormatChartArea") )
-        ( C2U("FormatLegend") )
+        ( "FormatWall" )        ( "FormatFloor" )         ( "FormatChartArea" )
+        ( "FormatLegend" )
 
-        ( C2U("FormatAxis") )           ( C2U("FormatTitle") )
-        ( C2U("FormatDataSeries") )     ( C2U("FormatDataPoint") )
-        ( C2U("ResetAllDataPoints") )   ( C2U("ResetDataPoint") )
-        ( C2U("FormatDataLabels") )     ( C2U("FormatDataLabel") )
-        ( C2U("FormatMeanValue") )      ( C2U("FormatTrendline") )      ( C2U("FormatTrendlineEquation") )
-        ( C2U("FormatYErrorBars") )
-        ( C2U("FormatStockLoss") )      ( C2U("FormatStockGain") )
+        ( "FormatAxis" )           ( "FormatTitle" )
+        ( "FormatDataSeries" )     ( "FormatDataPoint" )
+        ( "ResetAllDataPoints" )   ( "ResetDataPoint" )
+        ( "FormatDataLabels" )     ( "FormatDataLabel" )
+        ( "FormatMeanValue" )      ( "FormatTrendline" )      ( "FormatTrendlineEquation" )
+        ( "FormatXErrorBars" )     ( "FormatYErrorBars" )
+        ( "FormatStockLoss" )      ( "FormatStockGain" )
 
-        ( C2U("FormatMajorGrid") )      ( C2U("InsertMajorGrid") )      ( C2U("DeleteMajorGrid") )
-        ( C2U("FormatMinorGrid") )      ( C2U("InsertMinorGrid") )      ( C2U("DeleteMinorGrid") )
-        ( C2U("InsertAxis") )           ( C2U("DeleteAxis") )           ( C2U("InsertAxisTitle") )
+        ( "FormatMajorGrid" )      ( "InsertMajorGrid" )      ( "DeleteMajorGrid" )
+        ( "FormatMinorGrid" )      ( "InsertMinorGrid" )      ( "DeleteMinorGrid" )
+        ( "InsertAxis" )           ( "DeleteAxis" )           ( "InsertAxisTitle" )
 
         // toolbar commands
-        ( C2U("ToggleGridHorizontal"))( C2U("ToggleLegend") )         ( C2U("ScaleText") )
-        ( C2U("NewArrangement") )     ( C2U("Update") )
-        ( C2U("DefaultColors") )      ( C2U("BarWidth") )             ( C2U("NumberOfLines") )
-        ( C2U("ArrangeRow") )
-        ( C2U("StatusBarVisible") )
-        ( C2U("ChartElementSelector") )
+        ( "ToggleGridHorizontal" )( "ToggleLegend" )         ( "ScaleText" )
+        ( "NewArrangement" )     ( "Update" )
+        ( "DefaultColors" )      ( "BarWidth" )             ( "NumberOfLines" )
+        ( "ArrangeRow" )
+        ( "StatusBarVisible" )
+        ( "ChartElementSelector" )
         ;
 }
 

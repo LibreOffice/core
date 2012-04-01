@@ -63,7 +63,7 @@ public:
     virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException) ;
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 protected:

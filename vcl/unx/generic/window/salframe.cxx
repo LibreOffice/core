@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <signal.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1805,54 +1806,6 @@ sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
-// get a screenshot of the current frame including window manager decoration
-SalBitmap* X11SalFrame::SnapShot()
-{
-    Display* pDisplay = GetXDisplay();
-
-    // make sure the frame has been reparented and all paint timer have been
-    // expired
-    do
-    {
-        XSync(pDisplay, False);
-        Application::Reschedule ();
-    }
-    while (XPending(pDisplay));
-    TimeValue aVal;
-    aVal.Seconds = 0;
-    aVal.Nanosec = 50000000;
-    osl_waitThread( &aVal );
-    do
-    {
-        XSync(pDisplay, False);
-        Application::Reschedule ();
-    }
-    while (XPending(pDisplay));
-
-    // get the most outer window, usually the window manager decoration
-    Drawable hWindow = None;
-    if (IsOverrideRedirect())
-        hWindow = GetDrawable();
-    else
-    if (hPresentationWindow != None)
-        hWindow = hPresentationWindow;
-    else
-        hWindow = GetStackingWindow();
-
-    // query the contents of the window
-    if (hWindow != None)
-    {
-        X11SalBitmap *pBmp = new X11SalBitmap;
-        if (pBmp->SnapShot (pDisplay, hWindow))
-            return pBmp;
-        else
-            delete pBmp;
-    }
-
-    return NULL;
-}
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // native menu implementation - currently empty
@@ -2160,7 +2113,7 @@ void X11SalFrame::updateWMClass()
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                             SalGenericSystem::getFrameClassName();
 
     pClass->res_class = const_cast<char*>(pResClass);
@@ -3099,7 +3052,7 @@ void X11SalFrame::beginUnicodeSequence()
     rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     DeletionListener aDeleteWatch( this );
 
-    if( rSeq.getLength() )
+    if( !rSeq.isEmpty() )
         endUnicodeSequence();
 
     rSeq = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "u" ) );
@@ -3124,7 +3077,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 {
     bool bRet = false;
     rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
-    if( rSeq.getLength() > 0 )
+    if( !rSeq.isEmpty() )
     {
         // range check
         if( (c >= sal_Unicode('0') && c <= sal_Unicode('9')) ||
@@ -3181,7 +3134,7 @@ bool X11SalFrame::endUnicodeSequence()
             CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
         }
     }
-    bool bWasInput = rSeq.getLength() > 0;
+    bool bWasInput = !rSeq.isEmpty();
     rSeq = rtl::OUString();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
         CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);
@@ -3762,7 +3715,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
-IMPL_LINK( X11SalFrame, HandleAlwaysOnTopRaise, void*, EMPTYARG )
+IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
 {
     if( bMapped_ )
         ToTop( 0 );

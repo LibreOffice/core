@@ -168,7 +168,7 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)
 {
     updateStates();
     return 0;
@@ -176,7 +176,7 @@ IMPL_LINK(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK(XMLFilterSettingsDialog, DoubleClickHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
 {
     onEdit();
     return 0;

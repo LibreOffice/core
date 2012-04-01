@@ -67,7 +67,9 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
                                    /* bNoneAvailable = */ true, eType ))
 {
     FreeResource();
-    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_ERRORS ) );
+    ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
+
+    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
 
     m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }

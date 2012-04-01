@@ -113,6 +113,9 @@ class FmGridListener
 public:
     virtual void selectionChanged() = 0;
     virtual void columnChanged() = 0;
+
+protected:
+    ~FmGridListener() {}
 };
 
 #define GRID_COLUMN_NOT_FOUND   SAL_MAX_UINT16

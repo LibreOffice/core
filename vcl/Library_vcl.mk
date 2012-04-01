@@ -36,20 +36,20 @@ else ifeq ($(GUIBASE),android)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
 else ifeq ($(OS),IOS)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
+else ifeq ($(GUIBASE),headless)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
+
+$(eval $(call gb_Library_add_custom_headers,vcl,vcl/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/vcl/inc) \
-    -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/vcl/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
-    -I$(WORKDIR)/CustomTarget/vcl/generic/fontmanager \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -72,7 +72,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     cppu \
     sal \
@@ -395,13 +394,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+vcl_generic_code=\
     vcl/generic/app/gensys \
     vcl/generic/app/geninst \
     vcl/generic/app/gendisp \
@@ -422,7 +415,28 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/fontmanager/fontconfig \
     vcl/generic/fontmanager/fontmanager \
     vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
+    vcl/generic/fontmanager/parseAFM
+
+vcl_headless_code=\
+    vcl/headless/svpbmp \
+    vcl/headless/svpdummies \
+    vcl/headless/svpelement \
+    vcl/headless/svpframe \
+    vcl/headless/svpgdi \
+    vcl/headless/svpinst \
+    vcl/headless/svpdata \
+    vcl/headless/svpprn \
+    vcl/headless/svptext \
+    vcl/headless/svpvd
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/cupsmgr \
     vcl/unx/generic/printer/jobdata \
@@ -435,10 +449,36 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
+ifeq ($(GUIBASE),headless)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	$(vcl_generic_code) \
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
+    vcl/null/printerinfomanager \
+    vcl/headless/headlessinst \
+	$(vcl_headless_code) \
+))
+
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+	basebmp \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+	fontconfig \
+	freetype \
+))
+endif
+
 ifeq ($(GUIBASE),android)
 $(eval $(call gb_Library_add_libs,vcl,\
 	-llog \
 	-landroid \
+	-lEGL -lGLESv1_CM \
 	-llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -447,41 +487,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/generic/app/gensys \
-    vcl/generic/app/geninst \
-    vcl/generic/app/gendisp \
-    vcl/generic/print/bitmap_gfx \
-    vcl/generic/print/common_gfx \
-    vcl/generic/print/glyphset \
-    vcl/generic/print/printerjob \
-    vcl/generic/print/psputil \
-    vcl/generic/print/genpspgraphics \
-    vcl/generic/print/genprnpsp \
-    vcl/generic/print/text_gfx \
-    vcl/generic/fontmanager/fontsubst \
-    vcl/generic/glyphs/gcach_ftyp \
-    vcl/generic/glyphs/gcach_layout \
-    vcl/generic/glyphs/gcach_rbmp \
-    vcl/generic/glyphs/glyphcache \
-    vcl/generic/fontmanager/fontcache \
-    vcl/generic/fontmanager/fontconfig \
-    vcl/generic/fontmanager/fontmanager \
-    vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
+	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/android/androidinst \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
-    vcl/headless/svpgdi \
-    vcl/headless/svpinst \
-    vcl/headless/svpdata \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+	$(vcl_headless_code) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -501,6 +512,7 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/ios/source/app/salnstimer \
     vcl/ios/source/app/vcluiapp \
+    vcl/ios/source/window/salframeview \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/app/saldata \
@@ -510,8 +522,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/dtrans/iOSTransferable \
     vcl/ios/source/dtrans/ios_clipboard \
     vcl/ios/source/dtrans/service_entry \
+    vcl/ios/source/gdi/salcoretextfontutils \
+    vcl/ios/source/gdi/salcoretextlayout \
     vcl/ios/source/gdi/salbmp \
     vcl/ios/source/gdi/salgdi \
+    vcl/ios/source/gdi/salnativewidgets \
+    vcl/ios/source/gdi/salgdiutils \
     vcl/ios/source/gdi/salvd \
     vcl/ios/source/window/salframe \
     vcl/ios/source/window/salmenu \
@@ -592,8 +608,8 @@ endif
 endif
 
 ifneq ($(OS),IOS)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/salmain/salmain \
+$(eval $(call gb_Library_add_linked_static_libs,vcl,\
+    vclmain \
 ))
 endif
 

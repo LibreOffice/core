@@ -1543,14 +1543,15 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySearchName( const String& rSearc
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const
+ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& rSearchName,
+    const rtl::OUString& rShortName) const
 {
     // short circuit for impossible font name alias
-    if( !rSearchName.Len() )
+    if (rSearchName.isEmpty())
         return NULL;
 
     // short circuit if no alias names are available
-    if( !mbMapNames )
+    if (!mbMapNames)
         return NULL;
 
     // use the font's alias names to find the font
@@ -1563,7 +1564,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName( const String& rSearch
             continue;
 
         // if one alias name matches we found a matching font
-        String aTempName;
+        rtl::OUString aTempName;
         xub_StrLen nIndex = 0;
         do
         {
@@ -1591,7 +1592,7 @@ ImplDevFontListData* ImplDevFontList::FindFontFamily( const String& rFontName ) 
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames( const String& rTokenStr ) const
+ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames(const rtl::OUString& rTokenStr) const
 {
     ImplDevFontListData* pFoundData = NULL;
 
@@ -1635,10 +1636,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
         const FontWeight eSearchWeight = rFontAttr.Weight;
         const FontWidth  eSearchWidth  = rFontAttr.Width;
         const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
-        const FontFamily eSearchFamily = FAMILY_DONTKNOW;
         const String aSearchName;
         pFoundData = ImplFindByAttributes( nSearchType,
-            eSearchWeight, eSearchWidth, eSearchFamily, eSearchSlant, aSearchName );
+            eSearchWeight, eSearchWidth, eSearchSlant, aSearchName );
         if( pFoundData )
             return pFoundData;
     }
@@ -1668,23 +1668,11 @@ void ImplDevFontList::InitMatchData() const
     }
 }
 
-//----------------------------------------------------------------------------
-ImplDevFontListData* ImplDevFontList::ImplFindByLocale( com::sun::star::lang::Locale& rLocale ) const
-{
-    // get the default font for a specified locale
-    const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
-    const String aDefault = rDefaults.getUserInterfaceFont( rLocale );
-    ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
-    if( pFontData )
-        return pFontData;
-    return NULL;
-}
-
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType,
-    FontWeight eSearchWeight, FontWidth eSearchWidth, FontFamily /*eSearchFamily*/,
-    FontItalic eSearchItalic, const String& rSearchFamilyName ) const
+    FontWeight eSearchWeight, FontWidth eSearchWidth,
+    FontItalic eSearchItalic, const rtl::OUString& rSearchFamilyName ) const
 {
     if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
         nSearchType |= IMPL_FONT_ATTR_ITALIC;
@@ -1792,7 +1780,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
             nTestMatch -= 10000;
 
         // match stripped family name
-        if( rSearchFamilyName.Len() && (rSearchFamilyName == pData->maMatchFamilyName) )
+        if( !rSearchFamilyName.isEmpty() && (rSearchFamilyName.equals(pData->maMatchFamilyName)) )
             nTestMatch += 1000000*3;
 
         // match ALLSCRIPT? attribute
@@ -1885,8 +1873,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
 
         // test font name substrings
     // TODO: calculate name matching score using e.g. Levenstein distance
-        if( (rSearchFamilyName.Len() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
-        &&    ((rSearchFamilyName.Search( pData->maMatchFamilyName ) != STRING_NOTFOUND)
+        if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
+        &&    ((rSearchFamilyName.indexOf( pData->maMatchFamilyName ) != -1)
             || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
                     nTestMatch += 5000;
 
@@ -2385,18 +2373,38 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         }
     }
 
+    ImplFontData* pFontData = NULL;
+
+    if (!pEntry && pFontFamily)// no cache hit => find the best matching physical font face
+    {
+        bool bOrigWasSymbol = aFontSelData.mpFontData && aFontSelData.mpFontData->IsSymbolFont();
+        pFontData = pFontFamily->FindBestFontFace( aFontSelData );
+        aFontSelData.mpFontData = pFontData;
+        bool bNewIsSymbol = aFontSelData.mpFontData && aFontSelData.mpFontData->IsSymbolFont();
+
+        if (bNewIsSymbol != bOrigWasSymbol)
+        {
+            // it is possible, though generally unlikely, that at this point we
+            // will attempt to use a symbol font as a last-ditch fallback for a
+            // non-symbol font request or vice versa, and by changing
+            // aFontSelData.mpFontData to/from a symbol font we may now find
+            // something in the cache that can be reused which previously
+            // wasn't a candidate
+            FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
+            if( it != maFontInstanceList.end() )
+                pEntry = (*it).second;
+        }
+    }
+
     if( pEntry ) // cache hit => use existing font instance
     {
         // increase the font instance's reference count
         if( !pEntry->mnRefCount++ )
             --mnRef0Count;
     }
-    else if (pFontFamily)// no cache hit => create a new font instance
-    {
-        // find the best matching physical font face
-        ImplFontData* pFontData = pFontFamily->FindBestFontFace( aFontSelData );
-        aFontSelData.mpFontData = pFontData;
 
+    if (!pEntry && pFontData)// still no cache hit => create a new font instance
+    {
         // create a new logical font instance from this physical font face
         pEntry = pFontData->CreateFontInstance( aFontSelData );
 
@@ -2698,7 +2706,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 
     ImplCalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.meFamily, pFontAttr );
     ImplDevFontListData* pFoundData = ImplFindByAttributes( nSearchType,
-        eSearchWeight, eSearchWidth, rFSD.meFamily, rFSD.meItalic, aSearchFamilyName );
+        eSearchWeight, eSearchWidth, rFSD.meItalic, aSearchFamilyName );
 
     if( pFoundData )
     {
@@ -6428,8 +6436,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
-                    aLastLine.ConvertLineEnd( LINEEND_LF );
+                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // Alle LineFeed's durch Spaces ersetzen
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )

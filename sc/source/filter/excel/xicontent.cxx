@@ -80,8 +80,8 @@ XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
 
 void XclImpSst::ReadSst( XclImpStream& rStrm )
 {
-    sal_uInt32 nStrCount;
     rStrm.Ignore( 4 );
+    sal_uInt32 nStrCount(0);
     rStrm >> nStrCount;
     maStrings.clear();
     maStrings.reserve( static_cast< size_t >( nStrCount ) );
@@ -136,7 +136,7 @@ void lclAppendString32( String& rString, XclImpStream& rStrm, bool b16Bit )
     @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
 void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
 {
-    sal_uInt32 nChars;
+    sal_uInt32 nChars(0);
     rStrm >> nChars;
     if( b16Bit )
         nChars *= 2;
@@ -240,10 +240,10 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
-    sal_uInt32 nFlags;
     XclGuid aGuid;
     rStrm >> aGuid;
     rStrm.Ignore( 4 );
+    sal_uInt32 nFlags(0);
     rStrm >> nFlags;
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
@@ -285,10 +285,11 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
             lclAppendString32( *xShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
-            sal_uInt32 nStrLen;
+            sal_uInt32 nStrLen = 0;
             rStrm >> nStrLen;
             if( nStrLen )
             {
+                nStrLen = 0;
                 rStrm >> nStrLen;
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
@@ -301,7 +302,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         }
         else if( aGuid == XclTools::maGuidUrlMoniker )
         {
-            sal_uInt32 nStrLen;
+            sal_uInt32 nStrLen(0);
             rStrm >> nStrLen;
             nStrLen /= 2;       // it's byte count here...
             xLongName.reset( new String );
@@ -516,9 +517,9 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     if( maRanges.empty() )
         return;
 
-    sal_uInt8 nType, nOperator;
-    sal_uInt16 nFmlaSize1, nFmlaSize2;
-    sal_uInt32 nFlags;
+    sal_uInt8 nType(0), nOperator(0);
+    sal_uInt16 nFmlaSize1(0), nFmlaSize2(0);
+    sal_uInt32 nFlags(0);
 
     rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags;
     rStrm.Ignore( 2 );
@@ -575,8 +576,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_BORDER ) )
     {
-        sal_uInt16 nLineStyle;
-        sal_uInt32 nLineColor;
+        sal_uInt16 nLineStyle(0);
+        sal_uInt32 nLineColor(0);
         rStrm >> nLineStyle >> nLineColor;
         rStrm.Ignore( 2 );
 
@@ -589,7 +590,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_AREA ) )
     {
-        sal_uInt16 nPattern, nColor;
+        sal_uInt16 nPattern(0), nColor(0);
         rStrm >> nPattern >> nColor;
 
         XclImpCellArea aArea;
@@ -706,7 +707,7 @@ void XclImpValidationManager::ReadDval( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
-    sal_uInt32 nObjId;
+    sal_uInt32 nObjId(0);
     rStrm.Ignore( 10 );
     rStrm >> nObjId;
     if( nObjId != EXC_DVAL_NOOBJ )
@@ -726,7 +727,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     ExcelToSc& rFmlaConv = rRoot.GetOldFmlaConverter();
 
     // flags
-    sal_uInt32 nFlags;
+    sal_uInt32 nFlags(0);
     rStrm >> nFlags;
 
     // message strings
@@ -744,7 +745,6 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         // Not enough bytes left in the record.  Bail out.
         return;
 
-    sal_uInt16 nLen;
 
     // first formula
     // string list is single tStr token with NUL separators -> replace them with LF
@@ -752,6 +752,8 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScTokenArray > xTokArr1;
     SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    sal_uInt16 nLen = 0;
     rStrm >> nLen;
     rStrm.Ignore( 2 );
     if( nLen > 0 )
@@ -769,6 +771,8 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScTokenArray > xTokArr2;
     SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    nLen = 0;
     rStrm >> nLen;
     rStrm.Ignore( 2 );
     if( nLen > 0 )
@@ -923,8 +927,8 @@ void XclImpWebQuery::ReadWqstring( XclImpStream& rStrm )
 
 void XclImpWebQuery::ReadWqsettings( XclImpStream& rStrm )
 {
-    sal_uInt16 nFlags;
     rStrm.Ignore( 10 );
+    sal_uInt16 nFlags(0);
     rStrm >> nFlags;
     rStrm.Ignore( 10 );
     rStrm >> mnRefresh;
@@ -1048,7 +1052,7 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
     OSL_ENSURE( rStrm.GetRecLeft() == 4, "lclReadFilepass5 - wrong record size" );
     if( rStrm.GetRecLeft() == 4 )
     {
-        sal_uInt16 nKey, nHash;
+        sal_uInt16 nKey(0), nHash(0);
         rStrm >> nKey >> nHash;
         xDecr.reset( new XclImpBiff5Decrypter( nKey, nHash ) );
     }
@@ -1082,7 +1086,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
 
-    sal_uInt16 nMode;
+    sal_uInt16 nMode(0);
     rStrm >> nMode;
     switch( nMode )
     {
@@ -1093,7 +1097,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
         case EXC_FILEPASS_BIFF8:
         {
             rStrm.Ignore( 2 );
-            sal_uInt16 nSubMode;
+            sal_uInt16 nSubMode(0);
             rStrm >> nSubMode;
             switch( nSubMode )
             {
@@ -1240,7 +1244,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 
     // feature type can be either 2 or 4.  If 2, this record stores flag for
     // enhanced protection, whereas if 4 it stores flag for smart tag.
-    sal_uInt16 nFeatureType;
+    sal_uInt16 nFeatureType(0);
     rStrm >> nFeatureType;
     if (nFeatureType != 2)
         // We currently only support import of enhanced protection data.
@@ -1252,14 +1256,14 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
     // feature data.  If -1 it depends on the feature type imported earlier.
     // For enhanced protection data, the size is always 4.  For the most xls
     // documents out there this value is almost always -1.
-    sal_Int32 nFlagSize;
+    sal_Int32 nFlagSize(0);
     rStrm >> nFlagSize;
     if (nFlagSize != -1)
         return;
 
     // There are actually 4 bytes to read, but the upper 2 bytes currently
     // don't store any bits.
-    sal_uInt16 nOptions;
+    sal_uInt16 nOptions(0);
     rStrm >> nOptions;
 
     Sheet* pSheet = GetSheetItem(nTab);
@@ -1269,7 +1273,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 
 void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab )
 {
-    sal_uInt16 nHash;
+    sal_uInt16 nHash(0);
     rStrm >> nHash;
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)

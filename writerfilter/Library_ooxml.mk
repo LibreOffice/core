@@ -25,20 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
-include $(realpath $(SRCDIR)/writerfilter/source/generated.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
+include $(SRCDIR)/writerfilter/source/generated.mk
 
 $(eval $(call gb_Library_Library,ooxml))
 
 $(eval $(call gb_Library_set_include,ooxml,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
-    -I$(realpath $(SRCDIR)/writerfilter/source/ooxml) \
-    -I$(realpath $(SRCDIR)/writerfilter/source/dmapper) \
+    -I$(SRCDIR)/writerfilter/inc \
+    -I$(SRCDIR)/writerfilter/source/ooxml \
+    -I$(SRCDIR)/writerfilter/source/dmapper \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,ooxml,\
@@ -57,7 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,ooxml,\
     cppuhelper \
 	doctok \
 	i18nisolang1 \
-	i18npaper \
+	i18nutil \
     oox \
 	resourcemodel \
     sal \

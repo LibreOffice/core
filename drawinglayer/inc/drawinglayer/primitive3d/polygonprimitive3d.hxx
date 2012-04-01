@@ -117,11 +117,6 @@ namespace drawinglayer
                 const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute);
 
-            /// constructor without stroking
-            PolygonStrokePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
-                const attribute::LineAttribute& rLineAttribute);
-
             /// data read access
             basegfx::B3DPolygon getB3DPolygon() const { return maPolygon; }
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }

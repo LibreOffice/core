@@ -563,7 +563,7 @@ void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 
 void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
 {
-    sal_Bool bAll = ( tabs.size() == 0 );
+    sal_Bool bAll = ( tabs.empty() );
 
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
@@ -603,7 +603,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, sal_Bool bAll )
 
 void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs )
 {
-    sal_Bool bAll = ( tabs.size() == 0 );
+    sal_Bool bAll = ( tabs.empty() );
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
     Fraction aFrac20( 1,5 );
@@ -1088,11 +1088,11 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //  needed, wenn position changed
 }
 
-IMPL_LINK_INLINE_START( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScViewData, EmptyEditHdl)
 {
     return 0;
 }
-IMPL_LINK_INLINE_END( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScViewData, EmptyEditHdl)
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
 {

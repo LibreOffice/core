@@ -152,11 +152,13 @@ namespace sfx2
 
         void                    implInitializeFileName( );
 
+        void                    verifyPath( );
+
         void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
                                                       std::vector<rtl::OUString>&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
 
-        DECL_LINK( TimeOutHdl_Impl, Timer* );
+        DECL_LINK(TimeOutHdl_Impl, void *);
         DECL_LINK( HandleEvent, FileDialogHelper* );
         DECL_LINK( InitControls, void* );
 

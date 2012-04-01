@@ -71,9 +71,9 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-UniString
+rtl::OUString
 URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-                        UniString const & rTheRelURIRef,
+                        rtl::OUString const & rTheRelURIRef,
                         Link const & rMaybeFileHdl,
                         bool bCheckFileExists,
                         bool bIgnoreFragment,
@@ -84,7 +84,7 @@ URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                         INetURLObject::FSysStyle eStyle)
 {
     // Backwards compatibility:
-    if (rTheRelURIRef.Len() != 0 && rTheRelURIRef.GetChar(0) == '#')
+    if (!rTheRelURIRef.isEmpty() && rTheRelURIRef[0] == '#')
         return rTheRelURIRef;
 
     INetURLObject aAbsURIRef;
@@ -508,8 +508,8 @@ sal_uInt32 scanDomain(UniString const & rStr, xub_StrLen * pPos,
 
 }
 
-UniString
-URIHelper::FindFirstURLInText(UniString const & rText,
+rtl::OUString
+URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                               xub_StrLen & rBegin,
                               xub_StrLen & rEnd,
                               CharClass const & rCharClass,
@@ -517,8 +517,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                               rtl_TextEncoding eCharset,
                               INetURLObject::FSysStyle eStyle)
 {
-    if (!(rBegin <= rEnd && rEnd <= rText.Len()))
-        return UniString();
+    if (!(rBegin <= rEnd && rEnd <= rText.getLength()))
+        return rtl::OUString();
 
     // Search for the first substring of [rBegin..rEnd[ that matches any of the
     // following productions (for which the appropriate style bit is set in
@@ -588,7 +588,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     bool bBoundary2 = true;
     for (xub_StrLen nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
     {
-        sal_Unicode c = rText.GetChar(nPos);
+        sal_Unicode c = rText[nPos];
         if (bBoundary1)
         {
             if (INetMIME::isAlpha(c))
@@ -599,13 +599,13 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                                                                      rEnd));
                 if (eScheme == INET_PROT_FILE) // 2nd
                 {
-                    while (rText.GetChar(i++) != ':') ;
+                    while (rText[i++] != ':') ;
                     xub_StrLen nPrefixEnd = i;
                     xub_StrLen nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
                                          true)) ;
-                    if (i != nPrefixEnd && rText.GetChar(i) == '#')
+                    if (i != nPrefixEnd && rText[i] == '#')
                     {
                         ++i;
                         while (i != rEnd
@@ -629,12 +629,12 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                 }
                 else if (eScheme != INET_PROT_NOT_VALID) // 1st
                 {
-                    while (rText.GetChar(i++) != ':') ;
+                    while (rText[i++] != ':') ;
                     xub_StrLen nPrefixEnd = i;
                     xub_StrLen nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
-                    if (i != nPrefixEnd && rText.GetChar(i) == '#')
+                    if (i != nPrefixEnd && rText[i] == '#')
                     {
                         ++i;
                         while (i != rEnd
@@ -642,7 +642,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                     }
                     if (nUriEnd != nPrefixEnd
                         && (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
-                            || rText.GetChar(nUriEnd) == '\\'))
+                            || rText[nUriEnd] == '\\'))
                     {
                         INetURLObject aUri(UniString(rText, nPos,
                                                      nUriEnd - nPos),
@@ -662,37 +662,37 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                 i = nPos;
                 sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
                 if (nLabels >= 3
-                    && rText.GetChar(nPos + 3) == '.'
-                    && (((rText.GetChar(nPos) == 'w'
-                          || rText.GetChar(nPos) == 'W')
-                         && (rText.GetChar(nPos + 1) == 'w'
-                             || rText.GetChar(nPos + 1) == 'W')
-                         && (rText.GetChar(nPos + 2) == 'w'
-                             || rText.GetChar(nPos + 2) == 'W'))
-                        || ((rText.GetChar(nPos) == 'f'
-                             || rText.GetChar(nPos) == 'F')
-                            && (rText.GetChar(nPos + 1) == 't'
-                                || rText.GetChar(nPos + 1) == 'T')
-                            && (rText.GetChar(nPos + 2) == 'p'
-                                || rText.GetChar(nPos + 2) == 'P'))))
+                    && rText[nPos + 3] == '.'
+                    && (((rText[nPos] == 'w'
+                          || rText[nPos] == 'W')
+                         && (rText[nPos + 1] == 'w'
+                             || rText[nPos + 1] == 'W')
+                         && (rText[nPos + 2] == 'w'
+                             || rText[nPos + 2] == 'W'))
+                        || ((rText[nPos] == 'f'
+                             || rText[nPos] == 'F')
+                            && (rText[nPos + 1] == 't'
+                                || rText[nPos + 1] == 'T')
+                            && (rText[nPos + 2] == 'p'
+                                || rText[nPos + 2] == 'P'))))
                     // (note that rText.GetChar(nPos + 3) is guaranteed to be
                     // valid)
                 {
                     xub_StrLen nUriEnd = i;
-                    if (i != rEnd && rText.GetChar(i) == '/')
+                    if (i != rEnd && rText[i] == '/')
                     {
                         nUriEnd = ++i;
                         while (i != rEnd
                                && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
-                    if (i != rEnd && rText.GetChar(i) == '#')
+                    if (i != rEnd && rText[i] == '#')
                     {
                         ++i;
                         while (i != rEnd
                                && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
-                        || rText.GetChar(nUriEnd) == '\\')
+                        || rText[nUriEnd] == '\\')
                     {
                         INetURLObject aUri(UniString(rText, nPos,
                                                      nUriEnd - nPos),
@@ -709,9 +709,9 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                 }
 
                 if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 3
-                    && rText.GetChar(nPos + 1) == ':'
-                    && (rText.GetChar(nPos + 2) == '/'
-                        || rText.GetChar(nPos + 2) == '\\')) // 7th, 8th
+                    && rText[nPos + 1] == ':'
+                    && (rText[nPos + 2] == '/'
+                        || rText[nPos + 2] == '\\')) // 7th, 8th
                 {
                     i = nPos + 3;
                     xub_StrLen nUriEnd = i;
@@ -736,12 +736,12 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                 }
             }
             else if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 2
-                     && rText.GetChar(nPos) == '\\'
-                     && rText.GetChar(nPos + 1) == '\\') // 6th
+                     && rText[nPos] == '\\'
+                     && rText[nPos + 1] == '\\') // 6th
             {
                 xub_StrLen i = nPos + 2;
                 sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
-                if (nLabels >= 1 && i != rEnd && rText.GetChar(i) == '\\')
+                if (nLabels >= 1 && i != rEnd && rText[i] == '\\')
                 {
                     xub_StrLen nUriEnd = ++i;
                     while (i != rEnd
@@ -771,7 +771,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
             bool bDot = false;
             for (xub_StrLen i = nPos + 1; i != rEnd; ++i)
             {
-                sal_Unicode c2 = rText.GetChar(i);
+                sal_Unicode c2 = rText[i];
                 if (INetMIME::isAtomChar(c2))
                     bDot = false;
                 else if (bDot)
@@ -807,7 +807,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
         bBoundary2 = isBoundary2(rCharClass, rText, nPos, rEnd);
     }
     rBegin = rEnd;
-    return UniString();
+    return rtl::OUString();
 }
 
 //============================================================================
@@ -816,8 +816,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
 //
 //============================================================================
 
-UniString
-URIHelper::removePassword(UniString const & rURI,
+rtl::OUString
+URIHelper::removePassword(rtl::OUString const & rURI,
                           INetURLObject::EncodeMechanism eEncodeMechanism,
                           INetURLObject::DecodeMechanism eDecodeMechanism,
                           rtl_TextEncoding eCharset)
@@ -825,7 +825,7 @@ URIHelper::removePassword(UniString const & rURI,
     INetURLObject aObj(rURI, eEncodeMechanism, eCharset);
     return aObj.HasError() ?
                rURI :
-               String(aObj.GetURLNoPass(eDecodeMechanism, eCharset));
+               aObj.GetURLNoPass(eDecodeMechanism, eCharset);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,10 +51,7 @@ module com {  module sun {  module star {  module security {
 
     @since OOo 1.1.2
 */
-published service AccessController
-{
-    interface XAccessController;
-};
+published service AccessController : XAccessController;
 
 }; }; }; };
 

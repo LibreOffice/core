@@ -28,13 +28,14 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk3))
 
+$(eval $(call gb_Library_set_warnings_not_errors,vclplug_gtk3))
+
 $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/unx/gtk3/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
@@ -68,7 +69,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \
@@ -111,13 +111,10 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/gdi/gtk3salprn-gtk \
     vcl/unx/gtk3/window/gtk3gtkframe \
     vcl/unx/gtk3/window/gtk3gtkobject \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,vclplug_gtk3,\
+    headless \
 ))
 
 ifeq ($(OS),LINUX)

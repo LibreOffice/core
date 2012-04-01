@@ -32,6 +32,7 @@
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace vml {
@@ -39,7 +40,7 @@ namespace vml {
 // ============================================================================
 
 /** Font settings for a text portion in a textbox. */
-struct TextFontModel
+struct OOX_DLLPUBLIC TextFontModel
 {
     OptValue< ::rtl::OUString > moName;     /// Font name.
     OptValue< ::rtl::OUString > moColor;    /// Font color, HTML encoded, sort of.
@@ -67,7 +68,7 @@ struct TextPortionModel
 // ============================================================================
 
 /** The textbox contains all text contents and properties. */
-class TextBox
+class OOX_DLLPUBLIC TextBox
 {
 public:
     explicit            TextBox();

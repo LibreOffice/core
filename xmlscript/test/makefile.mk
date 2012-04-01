@@ -63,23 +63,3 @@ APP1DEF=	$(MISC)$/imexp.def
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-# ------------------------------------------------------------------
-# Windows
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/imexp.def: makefile.mk
-    echo  NAME			imexp			>$@
-    echo  DESCRIPTION	'XML dialog im-/ exporter'     	>>$@
-    echo  EXETYPE		WINDOWS 			>>$@
-    echo  STUB		'winSTUB.EXE'           	>>$@
-    echo  PROTMODE						>>$@
-    echo  CODE		PRELOAD MOVEABLE DISCARDABLE	>>$@
-    echo  DATA		PRELOAD MOVEABLE MULTIPLE	>>$@
-    echo  HEAPSIZE		8192				>>$@
-    echo  STACKSIZE 	32768				>>$@
-
-.ENDIF

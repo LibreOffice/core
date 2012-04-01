@@ -296,21 +296,6 @@ const sal_uInt16 EXC_ID_TXO                 = 0x01B6;
 
 // Structs and classes ========================================================
 
-/** Identifies a drawing object by sheet index and object identifier. */
-struct XclObjId
-{
-    SCTAB               mnScTab;        /// Calc sheet index.
-    sal_uInt16          mnObjId;        /// Excel object identifier.
-
-    explicit            XclObjId();
-    explicit            XclObjId( SCTAB nScTab, sal_uInt16 nObjId );
-};
-
-bool operator==( const XclObjId& rL, const XclObjId& rR );
-bool operator<( const XclObjId& rL, const XclObjId& rR );
-
-// ----------------------------------------------------------------------------
-
 /** Represents the position (anchor) of an object in a Calc document. */
 struct XclObjAnchor : public XclRange
 {

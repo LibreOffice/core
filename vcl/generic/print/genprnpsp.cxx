@@ -47,7 +47,6 @@
 #endif
 
 #include "rtl/ustring.hxx"
-#include "comphelper/string.hxx"
 
 #include "osl/module.h"
 
@@ -243,7 +242,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 
     // setup command line for exec
     if( ! bPipe )
-        aCmdLine = comphelper::string::replace( aCmdLine, rtl::OString("(TMP)"), aFilename );
+        aCmdLine = aCmdLine.replaceAll(rtl::OString("(TMP)"), aFilename);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",
@@ -359,7 +358,8 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
         {
             OUString aFaxNumber( aFaxNumbers.front() );
             aFaxNumbers.pop_front();
-            OUString aCmdLine = comphelper::string::replace( rCommand, OUString( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber );
+            OUString aCmdLine(
+                rCommand.replaceAll("(PHONE)", aFaxNumber));
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -382,7 +382,8 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
 static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
 #if defined( UNX )
-    OUString aCommandLine = comphelper::string::replace( rCommandLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile );
+    OUString aCommandLine(
+        rCommandLine.replaceAll("(OUTFILE)", rToFile));
 
     return passFileToCommandLine( rFromFile, aCommandLine );
 #else
@@ -412,18 +413,6 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
         pJobSetup->maPrinterName    = pQueueInfo->maPrinterName;
         pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
-
-        // set/clear backwards compatibility flag
-        bool bStrictSO52Compatibility = false;
-        boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-            pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-        if( compat_it != pJobSetup->maValueMap.end() )
-        {
-            if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-                bStrictSO52Compatibility = true;
-        }
-        pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
     }
 }
 
@@ -626,18 +615,6 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 // should be merged into the independent data
 sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
-    // set/clear backwards compatibility flag
-    bool bStrictSO52Compatibility = false;
-    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-    if( compat_it != pJobSetup->maValueMap.end() )
-    {
-        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-            bStrictSO52Compatibility = true;
-    }
-    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
-
     if( pJobSetup->mpDriverData )
         return SetData( ~0, pJobSetup );
 
@@ -989,18 +966,6 @@ sal_Bool PspSalPrinter::StartJob(
     }
 #endif
     m_aPrinterGfx.Init( m_aJobData );
-
-    // set/clear backwards compatibility flag
-    bool bStrictSO52Compatibility = false;
-    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-    if( compat_it != pJobSetup->maValueMap.end() )
-    {
-        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-            bStrictSO52Compatibility = true;
-    }
-    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
     return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }

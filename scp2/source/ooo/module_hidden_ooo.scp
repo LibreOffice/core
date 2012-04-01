@@ -159,9 +159,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xflatxml,
 	gid_File_Jar_Xmerge,
 	gid_File_Jar_Xmergebridge,
-	gid_File_Jar_Lucene_Core,
-	gid_File_Jar_Lucene_Analyzers,
-	gid_File_Jar_Lucenehelpwrapper,
 	gid_File_Rdb_Offapi,
 	gid_Starregistry_Services_Rdb);
 End
@@ -339,8 +336,11 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dlgprov,
 	gid_File_Lib_Stringresource,
 	gid_File_Lib_Ldapbe2,
-	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Cached1,
+#if ! defined SYSTEM_CLUCENE
+        gid_File_Lib_CLucene,
+#endif
+	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Curl,
 	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,
@@ -356,7 +356,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Filterconfig1,
 	gid_File_Lib_Dbodbcbase,
 	gid_File_Lib_I18npool,
-	gid_File_Lib_I18npaper,
 	gid_File_Lib_I18nregexp,
 	gid_File_Lib_I18nsearch,
     gid_File_Lib_I18nisolang,
@@ -689,6 +688,7 @@ Module gid_Module_Root_Files_7
              gid_File_Mozilla_Runtime);
 End
 
+#ifndef LIBO_HEADLESS
 Module gid_Module_Root_Files_Images
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
@@ -719,6 +719,7 @@ Module gid_Module_Root_Files_Images
 #endif
 	);
 End
+#endif
 
 #ifndef WITHOUT_FONTS
 Module gid_Module_Root_Fonts_OOo_Hidden
@@ -784,15 +785,3 @@ Module gid_Module_Oo_Linguistic
         gid_File_Lib_Lnth,
         gid_File_Share_Registry_Lingucomponent_Xcd);
 End
-
-#ifdef LINUX
-Module gid_Module_Root_Userland
-    ParentID = gid_Module_Root;
-    InstallOrder = "5";
-	Name = "gid_Module_Root_Userland";
-	Description = "gid_Module_Root_Userland";
-	Subdir = "userland";
-    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY,INSTALLCANFAIL);
-    PackageName = "${USERLANDPACKAGENAME}";
-End
-#endif

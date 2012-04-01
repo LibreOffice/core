@@ -53,18 +53,6 @@ namespace dbaccess
 
         mutable bool m_bResultSetChanged;
 
-        /**
-            getComposedTableName return the composed table name for the query
-            @param _sCatalog    the catalogname may be empty
-            @param _sSchema     the schemaname may be empty
-            @param _sTable      the tablename
-
-            @return the composed name
-        */
-        ::rtl::OUString getComposedTableName( const ::rtl::OUString& _sCatalog,
-                                              const ::rtl::OUString& _sSchema,
-                                              const ::rtl::OUString& _sTable);
-
         void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
 
         void executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName);

@@ -493,7 +493,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtBoxWithBtns_Impl, HandleOptionsBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -516,7 +516,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleOptionsBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtBoxWithBtns_Impl, HandleEnableBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -537,7 +537,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleEnableBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtBoxWithBtns_Impl, HandleRemoveBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -634,7 +634,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Reference< XSystemShellExecute > xSystemShellExecute(
             m_xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), m_xContext), uno::UNO_QUERY_THROW);
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::DEFAULTS );
+        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( const uno::Exception& )
     {
@@ -994,7 +994,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -1092,7 +1092,7 @@ void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn)
 {
     setBusy( true );
 
@@ -1108,14 +1108,14 @@ IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleExtTypeCbx, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx)
 {
 	// re-creates the list of packages with addEntry selecting the packages
 	m_pManager->createPackageList();
     return 1;
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleUpdateBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
 {
     m_pManager->checkUpdates( false, true );
 
@@ -1131,7 +1131,7 @@ IMPL_LINK( ExtMgrDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, TimeOutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
 {
     if ( m_bStopProgress )
     {
@@ -1244,16 +1244,32 @@ void ExtMgrDialog::Resize()
 
 // checkboxes + text "type of extensions"
 
-    Size aCBSize(m_aBundledCbx.GetSizePixel());
+    long nWidth = m_aBundledCbx.GetCtrlTextWidth( m_aBundledCbx.GetText() );
+    Size aBCBSize(m_aBundledCbx.GetSizePixel());
+    aBCBSize.Width() = nWidth + 30;
+    aBCBSize.Height() += 3;
+    m_aBundledCbx.SetSizePixel( aBCBSize );
 
-    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*(aCBSize.Width() + RSC_SP_CTRL_GROUP_X) );
+    nWidth = m_aSharedCbx.GetCtrlTextWidth( m_aSharedCbx.GetText() );
+    Size aSCBSize(m_aSharedCbx.GetSizePixel());
+    aSCBSize.Width() = nWidth + 30;
+    aSCBSize.Height() += 3;
+    m_aSharedCbx.SetSizePixel( aSCBSize );
+
+    nWidth = m_aUserCbx.GetCtrlTextWidth( m_aUserCbx.GetText() );
+    Size aUCBSize(m_aUserCbx.GetSizePixel());
+    aUCBSize.Width() = nWidth + 30;
+    aUCBSize.Height() += 3;
+    m_aUserCbx.SetSizePixel( aUCBSize );
+
+    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*RSC_SP_CTRL_GROUP_X - aBCBSize.Width() - aSCBSize.Width() - aUCBSize.Width() );
 
     aPos = Point(offsetX, aPos.Y() - RSC_CD_CHECKBOX_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
-    m_aBundledCbx.SetPosSizePixel(aPos, aCBSize);
-    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
-    m_aSharedCbx.SetPosSizePixel(aPos, aCBSize);
-    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
-    m_aUserCbx.SetPosSizePixel(aPos, aCBSize);
+    m_aBundledCbx.SetPosPixel( aPos );
+    aPos.X() += aBCBSize.Width() + 3 * RSC_SP_CTRL_GROUP_X;
+    m_aSharedCbx.SetPosPixel( aPos );
+    aPos.X() += aSCBSize.Width() + 3 * RSC_SP_CTRL_GROUP_X;
+    m_aUserCbx.SetPosPixel( aPos );
 
     Size aFTTypeOfExtSize(m_aTypeOfExtTxt.GetSizePixel());
     aPos = Point(RSC_SP_DLG_INNERBORDER_LEFT , aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
@@ -1269,7 +1285,7 @@ void ExtMgrDialog::Resize()
 
     Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
                 aTotalSize.Height() - aBtnSize.Height() - LINE_SIZE - aBtnSize.Height()
-                - aCBSize.Height() - aFTTypeOfExtSize.Height()
+                - aBCBSize.Height() - aFTTypeOfExtSize.Height()
                 - RSC_SP_DLG_INNERBORDER_TOP - 5*RSC_SP_DLG_INNERBORDER_BOTTOM );
 
     m_pExtensionBox->SetSizePixel(aSize );
@@ -1453,7 +1469,7 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -1559,7 +1575,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1580,7 +1596,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateRequiredDialog, HandleCloseBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1606,7 +1622,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperli
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateRequiredDialog, TimeOutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
 {
     if ( m_bStopProgress )
     {

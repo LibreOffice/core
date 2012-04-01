@@ -48,8 +48,6 @@
 #include "GraphicViewShell.hxx"
 #include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>
-#include "GraphicViewShell.hxx"
-#include <sfx2/childwin.hxx>
 
 #include "app.hrc"
 #include "helpids.h"
@@ -71,7 +69,6 @@
 #include "MediaObjectBar.hxx"
 #include "ViewShellManager.hxx"
 #include "FormShellManager.hxx"
-#include <svx/fmshell.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -817,14 +814,6 @@ void ViewShell::Resize (void)
     // Rearrange the UI elements to take care of the new position and size.
     ArrangeGUIElements ();
     // end of included AdjustPosSizePixel.
-
-    Size aS (GetParentWindow()->GetOutputSizePixel());
-    Rectangle aCurrentVisArea (GetDocSh()->GetVisArea(ASPECT_CONTENT));
-    if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED
-        && IsMainViewShell())
-    {
-
-    }
 
     ::sd::View* pView = GetView();
 

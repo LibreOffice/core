@@ -69,7 +69,6 @@
 #include "imageprovider.hxx"
 #include <vcl/waitobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "IApplicationController.hxx"
 
@@ -158,7 +157,7 @@ namespace
         return nRet;
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK(OTablePreviewWindow, OnDisableInput, void*, EMPTYARG)
+    IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput)
     {
         EnableInput(sal_False);
         return 0L;
@@ -1116,7 +1115,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                 else
                 {
                     m_aPreview.Hide();
-                    m_aDocumentInfo.Clear();
+                    m_aDocumentInfo.clear();
                     m_aDocumentInfo.Show();
                     Reference<document::XDocumentProperties> xProp(
                         aPreview, UNO_QUERY);

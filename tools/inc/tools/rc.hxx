@@ -56,10 +56,6 @@ class TOOLS_DLLPUBLIC Resource
     void* GetClassRes()
     { return m_pResMgr->GetClass(); }
 
-    // read a string from the resource
-    static sal_uInt32   GetStringRes( UniString& rStr, const sal_uInt8* pStr )
-    { return ResMgr::GetString( rStr, pStr ); }
-
     // increase the memory pointer gotten by GetClassRes()
     void* IncrementRes( sal_uInt32 nBytes )
     { return m_pResMgr->Increment( nBytes ); }
@@ -86,7 +82,7 @@ class TOOLS_DLLPUBLIC Resource
     sal_Int16 ReadShortRes()
     { return m_pResMgr->ReadShort(); }
     // read a string from resource data and increment pointer
-    UniString ReadStringRes()
+    rtl::OUString ReadStringRes()
     { return m_pResMgr->ReadString(); }
     // read a byte string from resource data and increment pointer
     rtl::OString ReadByteStringRes()

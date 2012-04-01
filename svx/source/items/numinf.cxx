@@ -200,29 +200,6 @@ SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion
 
 // -----------------------------------------------------------------------
 
-void SvxNumberInfoItem::SetNumberFormatter( SvNumberFormatter* pNumFormatter )
-{
-    pFormatter = pNumFormatter;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxNumberInfoItem::SetStringValue( const String& rNewVal )
-{
-    aStringVal = rNewVal;
-    eValueType = SVX_VALUE_TYPE_STRING;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxNumberInfoItem::SetDoubleValue( const double& rNewVal )
-{
-    nDoubleVal = rNewVal;
-    eValueType = SVX_VALUE_TYPE_NUMBER;
-}
-
-// -----------------------------------------------------------------------
-
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
                                            const sal_uInt32 nCount )
 {

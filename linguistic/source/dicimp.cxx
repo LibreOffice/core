@@ -146,7 +146,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
                     bNeg = sal_False;
             }
 
-            if (comphelper::string::indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("---")) != -1) // end of header
+            if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("---")) != -1) // end of header
                 break;
         }
         if (!bSuccess)

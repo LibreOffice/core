@@ -170,7 +170,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
 extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 {
-    // std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
     std::_tstring sInstDir = GetMsiProperty( handle, TEXT("CustomActionData") );
     std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
     std::_tstring mystr;
@@ -211,8 +210,6 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 
 extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 {
-    std::_tstring mystr;
-
     // Finding the product with the help of the propery FINDPRODUCT,
     // that contains a Windows Registry key, that points to the install location.
 

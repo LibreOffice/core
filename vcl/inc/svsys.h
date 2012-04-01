@@ -39,6 +39,7 @@
 #include "ios/svsys.h"
 #elif defined ANDROID
 #include "android/svsys.h"
+#elif defined LIBO_HEADLESS
 #else
 #include "unx/svsys.h"
 #endif

@@ -51,7 +51,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
     sal \
     salhelper \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     $(gb_STDLIBS) \
 ))
 
@@ -61,7 +61,6 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_borderline,\
 
 $(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,editeng_borderline,\

@@ -104,9 +104,9 @@ private:
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
-    DECL_LINK(          ViewButtonHdl, Button* );
-    DECL_LINK(          AddButtonHdl, Button* );
-    DECL_LINK(          RemoveButtonHdl, Button* );
+    DECL_LINK(ViewButtonHdl, void *);
+    DECL_LINK(AddButtonHdl, void *);
+    DECL_LINK(RemoveButtonHdl, void *);
     DECL_LINK(          SignatureHighlightHdl, void* );
     DECL_LINK(          SignatureSelectHdl, void* );
     DECL_LINK(          StartVerifySignatureHdl, void* );

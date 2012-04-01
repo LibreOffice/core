@@ -29,28 +29,31 @@
 #ifndef _GSICHECK_HXX_
 #define _GSICHECK_HXX_
 
-#include "tagtest.hxx"
+#include "sal/config.h"
+
+#include <cstddef>
 #include <vector>
+
+#include "tagtest.hxx"
 
 //
 // class GSILine
 //
-enum LineFormat { FORMAT_GSI, FORMAT_SDF, FORMAT_UNKNOWN };
+enum LineFormat { FORMAT_SDF, FORMAT_UNKNOWN };
 
-class GSILine : public ByteString
+class GSILine
 {
 private:
-
     ParserMessageList aMessages;
     LineFormat aFormat;
-    sal_uLong nLineNumber;
+    std::size_t nLineNumber;
 
-    ByteString aUniqId;
-    ByteString aLineType;
-    ByteString aLangId;
-    ByteString aText;
-    ByteString aQuickHelpText;
-    ByteString aTitle;
+    rtl::OString aUniqId;
+    rtl::OString aLineType;
+    rtl::OString aLangId;
+    rtl::OString aText;
+    rtl::OString aQuickHelpText;
+    rtl::OString aTitle;
 
     sal_Bool bOK;
     sal_Bool bFixed;
@@ -58,22 +61,24 @@ private:
     void              ReassembleLine();
 
 public:
-    GSILine( const ByteString &rLine, sal_uLong nLine );
+    rtl::OString data_;
+
+    GSILine( const rtl::OString &rLine, std::size_t nLine );
     LineFormat  GetLineFormat() const    { return aFormat; }
-    sal_uLong       GetLineNumber() const    { return nLineNumber; }
+    std::size_t GetLineNumber() const    { return nLineNumber; }
 
-    ByteString  const GetUniqId()     const    { return aUniqId; }
-    ByteString  const GetLineType()   const    { return aLineType; }
-    ByteString  const GetLanguageId() const    { return aLangId; }
-    ByteString  const GetText()       const    { return aText; }
-        String  const GetUText()      const    { return String( aText, RTL_TEXTENCODING_UTF8 ); }
-    ByteString  const GetQuickHelpText() const { return aQuickHelpText; }
-    ByteString  const GetTitle()      const    { return aTitle; }
+    rtl::OString  const GetUniqId()     const    { return aUniqId; }
+    rtl::OString  const GetLineType()   const    { return aLineType; }
+    rtl::OString  const GetLanguageId() const    { return aLangId; }
+    rtl::OString  const GetText()       const    { return aText; }
+    rtl::OUString  const GetUText()      const    { return rtl::OStringToOUString( aText, RTL_TEXTENCODING_UTF8 ); }
+    rtl::OString  const GetQuickHelpText() const { return aQuickHelpText; }
+    rtl::OString  const GetTitle()      const    { return aTitle; }
 
-    void SetUText( String &aNew ) { aText = rtl::OUStringToOString(aNew, RTL_TEXTENCODING_UTF8); ReassembleLine(); }
-          void        SetText( ByteString &aNew ) { aText = aNew; ReassembleLine(); }
-          void        SetQuickHelpText( ByteString &aNew ) { aQuickHelpText = aNew; ReassembleLine(); }
-          void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
+    void SetUText( rtl::OUString const &aNew ) { aText = rtl::OUStringToOString(aNew, RTL_TEXTENCODING_UTF8); ReassembleLine(); }
+    void        SetText( rtl::OString const &aNew ) { aText = aNew; ReassembleLine(); }
+    void        SetQuickHelpText( rtl::OString const &aNew ) { aQuickHelpText = aNew; ReassembleLine(); }
+    void        SetTitle( rtl::OString const &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
     sal_Bool HasMessages(){ return ( aMessages.size() > 0 ); };
@@ -89,9 +94,9 @@ public:
 // class GSIBlock
 //
 
-typedef ::std::vector< GSILine* > GSIBlock_Impl;
+typedef std::vector< GSILine* > GSIBlock_Impl;
 
-class LazySvFileStream;
+class LazyStream;
 
 class GSIBlock
 {
@@ -99,32 +104,31 @@ private:
     GSIBlock_Impl maList;
     GSILine *pSourceLine;
     GSILine *pReferenceLine;
-    void PrintList( ParserMessageList *pList, ByteString aPrefix, GSILine *pLine );
+    void PrintList( ParserMessageList *pList, rtl::OString const & aPrefix, GSILine *pLine );
     sal_Bool bPrintContext;
     sal_Bool bCheckSourceLang;
     sal_Bool bCheckTranslationLang;
     sal_Bool bReference;
-    sal_Bool bAllowKeyIDs;
     sal_Bool bAllowSuspicious;
 
     sal_Bool bHasBlockError;
 
-    sal_Bool IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const;
+    sal_Bool IsUTF8( const rtl::OString &aTestee, sal_Bool bFixTags, sal_Int32 &nErrorPos, rtl::OString &aErrorMsg, sal_Bool &bHasBeenFixed, rtl::OString &aFixed ) const;
     sal_Bool TestUTF8( GSILine* pTestee, sal_Bool bFixTags );
     sal_Bool HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 
 public:
-    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp );
+    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowSusp );
     ~GSIBlock();
-    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
+    void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
+    void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix, rtl::OString const & aContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
     void InsertLine( GSILine* pLine, const rtl::OString &rSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
+    sal_Bool CheckSyntax( std::size_t nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 
-    void WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine );
-    void WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine );
-    void WriteFixed( LazySvFileStream &aFixOut );
+    void WriteError( LazyStream &aErrOut, sal_Bool bRequireSourceLine );
+    void WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine );
+    void WriteFixed( LazyStream &aFixOut );
 };
 
 #endif

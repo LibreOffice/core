@@ -34,6 +34,7 @@
 
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
+#include "oox/dllapi.h"
 
 namespace oox { class AttributeList; }
 
@@ -42,7 +43,7 @@ namespace core {
 
 // ============================================================================
 
-class CodecHelper
+class OOX_DLLPUBLIC CodecHelper
 {
 public:
     /** Returns the password hash if it is in the required 16-bit limit. */
@@ -60,7 +61,7 @@ private:
     Implements a simple XOR encoding/decoding algorithm used in MS Office
     versions up to MSO 95.
  */
-class BinaryCodec_XOR
+class OOX_DLLPUBLIC BinaryCodec_XOR
 {
 public:
     /** Enumerates codec types supported by this XOR codec implementation. */
@@ -186,7 +187,7 @@ private:
     Implementation is based on the wvDecrypt package by Caolan McNamara:
     http://www.csn.ul.ie/~caolan/docs/wvDecrypt.html
  */
-class BinaryCodec_RCF
+class OOX_DLLPUBLIC BinaryCodec_RCF
 {
 public:
     /** Default constructor.

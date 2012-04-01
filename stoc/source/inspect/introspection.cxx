@@ -2346,7 +2346,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             }
                             else
                             {
-                                if( aMethName != OUString( RTL_CONSTASCII_USTRINGPARAM("queryInterface")) )
+                                if( !aMethName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("queryInterface")) )
                                 {
                                     rMethodConcept_i |= MethodConcept::DANGEROUS;
                                     continue;
@@ -2355,7 +2355,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         }
                         else if( rxMethod_i->getDeclaringClass()->equals( mxAggregationClass ) )
                         {
-                            if( aMethName == OUString( RTL_CONSTASCII_USTRINGPARAM("setDelegator")) )
+                            if( aMethName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setDelegator")) )
                             {
                                 rMethodConcept_i |= MethodConcept::DANGEROUS;
                                 continue;
@@ -2388,7 +2388,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
 
                         // Ist es eine get-Methode?
                         aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("get")) )
+                        if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("get")) )
                         {
                             // Namen der potentiellen Property
                             aPropName = aMethName.copy( 3 );
@@ -2461,7 +2461,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                                 OUString aMethName2 = rxMethod_k->getName();
                                 OUString aStartStr2 = aMethName2.copy( 0, 3 );
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aStartStr2 == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) ) )
+                                if( !( aStartStr2.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("set")) ) )
                                     continue;
 
                                 // Ist es denn der gleiche Name?
@@ -2509,7 +2509,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         }
 
                         // Ist es eine addListener-Methode?
-                        else if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("add")) )
+                        else if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("add")) )
                         {
                             OUString aListenerStr( RTL_CONSTASCII_USTRINGPARAM("Listener" ) );
 
@@ -2598,7 +2598,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
 
                         // Ist es eine set-Methode ohne zugehoerige get-Methode?
                         aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) )
+                        if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("set")) )
                         {
                             // Namen der potentiellen Property
                             aPropName = aMethName.copy( 3 );

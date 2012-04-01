@@ -37,7 +37,9 @@
 #include <com/sun/star/table/CellOrientation.idl>
 #include <com/sun/star/util/CellProtection.idl>
 #include <com/sun/star/table/TableBorder.idl>
+#include <com/sun/star/table/TableBorder2.idl>
 #include <com/sun/star/table/BorderLine.idl>
+#include <com/sun/star/table/BorderLine2.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 
 //=============================================================================
@@ -233,6 +235,74 @@ published service CellProperties
     /** is <TRUE/>, if the cell content will be shrunk to fit in the cell.
      */
     [optional, property] boolean ShrinkToFit;
+
+
+    //=== BorderLine2 / TableBorder2 optional properties, preferred ===========
+
+    /** contains a description of the cell or cell range border.
+        Preferred over <type>TableBorder>/type> <member>TableBorder</member>.
+
+        <p>If used with a cell range, the top, left, right, and bottom
+        lines are at the edges of the entire range, not at the edges of
+        the individual cell.</p>
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::TableBorder2 TableBorder2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the top border line of each cell.
+        Preferred over <type>BorderLine</type> <member>TopBorder</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::BorderLine2 TopBorder2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the bottom border line of each cell.
+        Preferred over <type>BorderLine</type> <member>BottomBorder</member>.
+
+        @since LibreOffice 3.6
+    */
+    [optional, property] com::sun::star::table::BorderLine2 BottomBorder2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the left border line of each cell.
+        Preferred over <type>BorderLine</type> <member>LeftBorder</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::BorderLine2 LeftBorder2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the right border line of each cell.
+        Preferred over <type>BorderLine</type> <member>RightBorder</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::BorderLine2 RightBorder2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the top left to bottom right diagonal line of each cell.
+        Preferred over <type>BorderLine</type> <member>DiagonalTLBR</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::BorderLine2 DiagonalTLBR2;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the bottom left to top right diagonal line of each cell.
+        Preferred over <type>BorderLine</type> <member>DiagonalBLTR</member>.
+
+        @since LibreOffice 3.6
+     */
+    [optional, property] com::sun::star::table::BorderLine2 DiagonalBLTR2;
 
     //-------------------------------------------------------------------------
 };

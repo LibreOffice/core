@@ -1402,13 +1402,13 @@ ExportDialog::~ExportDialog()
 |* Speichert eingestellte Werte in ini-Datei
 |*
 \************************************************************************/
-IMPL_LINK( ExportDialog, UpdateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, UpdateHdl)
 {
     updateControls();
     return 0;
 }
 
-IMPL_LINK( ExportDialog, UpdateHdlMtfSizeX, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
 {
     double fRatio = static_cast< double >( maOriginalSize.Height ) / maOriginalSize.Width;
 
@@ -1442,7 +1442,7 @@ IMPL_LINK( ExportDialog, UpdateHdlMtfSizeX, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ExportDialog, UpdateHdlMtfSizeY, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
 {
     double fRatio = static_cast< double >( maOriginalSize.Width ) / maOriginalSize.Height;
 
@@ -1476,7 +1476,7 @@ IMPL_LINK( ExportDialog, UpdateHdlMtfSizeY, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ExportDialog, UpdateHdlNfResolution, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
 {
     sal_Int32 nResolution = maNfResolution.GetValue();
     if ( maLbResolution.GetSelectEntryPos() == 0 )      // pixels / cm
@@ -1490,14 +1490,14 @@ IMPL_LINK( ExportDialog, UpdateHdlNfResolution, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ExportDialog, SbCompressionUpdateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl)
 {
     maNfCompression.SetValue( maSbCompression.GetThumbPos() );
     updateControls();
     return 0;
 }
 
-IMPL_LINK( ExportDialog, OK, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExportDialog, OK)
 {
     // writing config parameter
 

@@ -102,12 +102,6 @@ namespace drawinglayer
         {
         }
 
-        Sdr3DLightAttribute::Sdr3DLightAttribute()
-        :   mpSdr3DLightAttribute(ImpSdr3DLightAttribute::get_global_default())
-        {
-            mpSdr3DLightAttribute->mnRefCount++;
-        }
-
         Sdr3DLightAttribute::Sdr3DLightAttribute(const Sdr3DLightAttribute& rCandidate)
         :   mpSdr3DLightAttribute(rCandidate.mpSdr3DLightAttribute)
         {

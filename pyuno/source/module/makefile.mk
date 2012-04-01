@@ -50,6 +50,9 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 .ENDIF # .IF "$(EXTRA_CFLAGS)"!=""
 
 .IF "$(GUI)" == "UNX"
+# python expects modules without the lib prefix
+# pyuno.so even on Mac OS X, because it is a python module
+PYUNO_MODULE=$(DLLDEST)$/pyuno.so
 PYUNORC=pyunorc
 .ELSE
 .IF "$(CROSS_COMPILING)" != "YES"
@@ -89,6 +92,7 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(PYTHONLIB) \
         $(EXTRA_FRAMEWORK_FLAG)
 
@@ -109,6 +113,7 @@ DEFLIB1NAME=$(TARGET)
 ALLTAR : \
     $(DLLDEST)/uno.py \
     $(DLLDEST)/unohelper.py \
+    $(PYUNO_MODULE) \
     $(MISC)/$(PYUNORC) \
     $(LB)/lib$(TARGET).a
 
@@ -116,17 +121,10 @@ $(LB)/lib$(TARGET).a: $(MISC)/$(TARGET).def
 	$(DLLTOOL) --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)/$(TARGET).def --kill-at --output-lib=$(LB)/lib$(TARGET).a
 .ELSE
 
-.IF "$(GUI)"!="WNT"
-# For some reason the build breaks on Windows if this is listed in the
-# prerequisite list of ALLTAR, but pyuno.pyd still gets produced. Go
-# figure. But we need it on non-Windows.
-targetdll=$(LB)/$(TARGET)$(DLLPOST)
-.ENDIF
-
 ALLTAR : \
     $(DLLDEST)/uno.py \
     $(DLLDEST)/unohelper.py \
-    $(targetdll) \
+    $(PYUNO_MODULE) \
     $(MISC)/$(PYUNORC)
 .ENDIF
 .ENDIF
@@ -141,6 +139,29 @@ $(MISC)/framework_link :
 	$(COMMAND_ECHO)ln -sf $(SOLARLIBDIR)/OOoPython.framework $(LB)/OOoPython.framework
 	@touch $@
 
+.IF "$(GUI)" == "UNX"
+$(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
+.IF "$(OS)" == "LINUX"
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "SOLARIS"
+    @echo ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "FREEBSD"
+    @echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "NETBSD"
+    @echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "OPENBSD"
+    @echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "DRAGONFLY"
+    @echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "MACOSX"
+    @echo $(CC) -bundle -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o $(EXTRA_LINKFLAGS) $(EXTRA_FRAMEWORK_FLAG) > $(MISC)$/$(@:b).cmd
+.ELSE
+    @echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ENDIF
+    cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.ENDIF
+
 $(MISC)/$(PYUNORC) : pyuno
 	-rm -f $@
 	cat pyuno > $@
@@ -148,12 +169,5 @@ $(MISC)/$(PYUNORC) : pyuno
 $(MISC)/pyuno.flt : pyuno.flt
 	-rm -f $@
 	cat $? > $@
-
-.IF "$(DLLPRE)"!=""
-# python does not accept the "lib" prefix in the module library
-$(LB)/$(TARGET)$(DLLPOST) : $(LB)/$(DLLPRE)$(TARGET)$(DLLPOST)
-	-rm -f $@
-	ln -s $? $@
-.ENDIF
 
 .ENDIF # L10N_framework

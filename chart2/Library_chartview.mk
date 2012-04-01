@@ -29,9 +29,8 @@ $(eval $(call gb_Library_Library,chartview))
 
 $(eval $(call gb_Library_set_include,chartview,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/chart2/source/view/inc) \
-    -I$(realpath $(SRCDIR)/chart2/source/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/chart2/source/view/inc \
+    -I$(SRCDIR)/chart2/source/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,chartview,\
@@ -113,6 +112,10 @@ $(eval $(call gb_Library_add_exception_objects,chartview,\
     chart2/source/view/main/VLineProperties \
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
+))
+
+$(eval $(call gb_Library_use_externals,chartview,\
+	libxml2 \
 ))
 
 # vim: set noet sw=4 ts=4:

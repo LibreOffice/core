@@ -158,7 +158,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_fLogicZPos(0.0)
     , m_xGroupShape(NULL)
     , m_xLabelsGroupShape(NULL)
-    , m_xErrorBarsGroupShape(NULL)
+    , m_xErrorXBarsGroupShape(NULL)
+    , m_xErrorYBarsGroupShape(NULL)
     , m_xFrontSubGroupShape(NULL)
     , m_xBackSubGroupShape(NULL)
     , m_xDataSeries(xDataSeries)
@@ -333,7 +334,8 @@ void VDataSeries::releaseShapes()
 {
     m_xGroupShape.set(0);
     m_xLabelsGroupShape.set(0);
-    m_xErrorBarsGroupShape.set(0);
+    m_xErrorXBarsGroupShape.set(0);
+    m_xErrorYBarsGroupShape.set(0);
     m_xFrontSubGroupShape.set(0);
     m_xBackSubGroupShape.set(0);
 
@@ -393,9 +395,10 @@ rtl::OUString VDataSeries::getPointCID_Stub() const
 {
     return m_aPointCID_Stub;
 }
-rtl::OUString VDataSeries::getErrorBarsCID() const
+rtl::OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
-    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_ERRORS ) );
+    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType(
+                                      bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) );
     aChildParticle+=(C2U("="));
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
@@ -814,6 +817,16 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     }
 
     return pRet;
+}
+
+uno::Reference< beans::XPropertySet > VDataSeries::getXErrorBarProperties( sal_Int32 index ) const
+{
+    uno::Reference< beans::XPropertySet > xErrorBarProp;
+
+    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
+    if( xPointProp.is() )
+        xPointProp->getPropertyValue( C2U( "ErrorBarX" )) >>= xErrorBarProp;
+    return xErrorBarProp;
 }
 
 uno::Reference< beans::XPropertySet > VDataSeries::getYErrorBarProperties( sal_Int32 index ) const

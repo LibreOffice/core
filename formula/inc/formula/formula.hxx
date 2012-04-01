@@ -32,6 +32,8 @@
 #include <sfx2/basedlgs.hxx>
 #include <memory>
 #include "formula/formuladllapi.h"
+#include "formula/omoduleclient.hxx"
+#include <formula/IFunctionDescription.hxx>
 
 namespace formula
 {
@@ -47,7 +49,6 @@ enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FOR
 
 //============================================================================
 
-class IFormulaEditorHelper;
 class FormulaDlg_Impl;
 class IControlReferenceHandler;
 class IFunctionDescription;
@@ -55,8 +56,9 @@ class IFunctionManager;
 class FormulaHelper;
 class RefEdit;
 class RefButton;
+class FormEditData;
 //============================================================================
-class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog
+class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formula::IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;
 public:
@@ -64,7 +66,6 @@ public:
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
-                                            ,IFormulaEditorHelper* _pHelper
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = NULL );
                     virtual ~FormulaModalDialog();
@@ -85,9 +86,17 @@ protected:
     void            Update();
     sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
     void            Update(const String& _sExp);
+
+    void            StoreFormEditData(FormEditData* pData);
 };
 
-class FORMULA_DLLPUBLIC FormulaDlg :   public SfxModelessDialog
+class FORMULA_DLLPUBLIC FormulaDlg:
+    private OModuleClient, public SfxModelessDialog, public IFormulaEditorHelper
+        // order of base classes is important, as OModuleClient controls the
+        // lifecycle of the ResMgr passed into SfxModelessDialog (via
+        // formula::ModuleRes), and at least with DBG_UTIL calling TestRes in
+        // ~Resource, the ResMgr must outlive the Resource (from which
+        // SfxModelessDialog ultimately derives)
 {
     friend class FormulaDlg_Impl;
 public:
@@ -97,7 +106,6 @@ public:
                                     , bool _bSupportFunctionResult
                                     , bool _bSupportResult
                                     , bool _bSupportMatrix
-                                    , IFormulaEditorHelper* _pHelper
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = NULL );
                     virtual ~FormulaDlg();
@@ -106,7 +114,7 @@ private:
     ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    DECL_LINK( UpdateFocusHdl, Timer*);
+    DECL_LINK( UpdateFocusHdl, void*);
 protected:
     void            disableOk();
 
@@ -133,6 +141,8 @@ protected:
     void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);
     RefEdit*        GetActiveEdit();
     void            SetEdSelection();
+
+    void            StoreFormEditData(FormEditData* pData);
 
     const FormulaHelper& GetFormulaHelper() const;
 };

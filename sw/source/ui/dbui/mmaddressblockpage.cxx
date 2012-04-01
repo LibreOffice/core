@@ -172,7 +172,7 @@ sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitP
     return sal_True;
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
 {
     try
     {
@@ -272,7 +272,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, SwAddressPreview*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
 {
     sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
     const uno::Sequence< ::rtl::OUString> aBlocks =
@@ -651,7 +651,7 @@ SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
 {
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, OKHdl_Impl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl)
 {
     EndDialog(RET_OK);
     return 0;
@@ -665,7 +665,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox
     return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit*, EMPTYARG)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)
 {
     String sAddress = SwAddressPreview::FillData(
             GetAddress(),
@@ -800,7 +800,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
     return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, ComboBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
@@ -1321,7 +1321,7 @@ uno::Sequence< ::rtl::OUString > SwAssignFieldsDialog::CreateAssignments()
     return aAssignments;
 }
 
-IMPL_LINK(SwAssignFieldsDialog, OkHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl)
 {
     m_rConfigItem.SetColumnAssignment(
                             m_rConfigItem.GetCurrentDBData(),
@@ -1330,7 +1330,7 @@ IMPL_LINK(SwAssignFieldsDialog, OkHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
 {
     uno::Sequence< ::rtl::OUString > aAssignments = CreateAssignments();
     String sPreview = SwAddressPreview::FillData(

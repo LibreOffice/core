@@ -147,11 +147,10 @@ float SAL_CALL SwVbaGlobals::CentimetersToPoints( float _Centimeters ) throw (un
     return getApplication()->CentimetersToPoints( _Centimeters );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaGlobals::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaGlobals") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaGlobals"));
 }
 
 uno::Sequence< rtl::OUString >

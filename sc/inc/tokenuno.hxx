@@ -49,7 +49,7 @@ class ScDocShell;
 class ScTokenConversion
 {
 public:
-    static bool ConvertToTokenArray(
+    static SC_DLLPUBLIC bool ConvertToTokenArray(
                         ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence );

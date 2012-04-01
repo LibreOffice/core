@@ -41,7 +41,6 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
 {
     rtl::OUString         m_sLabel;
     bool                  m_bIsHeader;
-    bool                  m_bReadonly;
     PopupMenu*            m_pPopupMenu;
     Window*               m_pLine;
     bool                  m_bIsAppearing;
@@ -71,7 +70,7 @@ public:
     void SetReadonly( bool bReadonly );
 
 private:
-    DECL_LINK( FadeHandler, Timer * );
+    DECL_LINK( FadeHandler, void * );
 };
 
 #endif

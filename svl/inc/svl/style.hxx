@@ -80,14 +80,14 @@ SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
    SfxStyleSheetBasePool::Clear()
 */
 
-#define VIRTUAL510 virtual
-
 class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
+private:
     friend class SfxStyleSheetBasePool;
+    SVL_DLLPRIVATE static SfxStyleSheetBasePool& implGetStaticPool();
 
 protected:
-    SfxStyleSheetBasePool&  rPool;          // zugehoeriger Pool
+    SfxStyleSheetBasePool*  pPool;          // zugehoeriger Pool
     SfxStyleFamily          nFamily;        // Familie
 
     UniString               aName, aParent, aFollow;
@@ -100,8 +100,7 @@ protected:
 
     sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
 
-    SfxStyleSheetBase(); // do not use!
-    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, sal_uInt16 mask );
+    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();
     virtual void Load( SvStream&, sal_uInt16 );
@@ -136,7 +135,7 @@ public:
     virtual UniString GetDescription();
     virtual UniString GetDescription( SfxMapUnit eMetric );
 
-    SfxStyleSheetBasePool& GetPool() { return rPool;   }
+    SfxStyleSheetBasePool& GetPool() { return *pPool; }
     SfxStyleFamily GetFamily() const     { return nFamily; }
     sal_uInt16   GetMask() const     { return nMask; }
     void     SetMask( sal_uInt16 mask) { nMask = mask; }
@@ -285,7 +284,12 @@ public:
     virtual sal_Bool        SetParent( const UniString& );
 
 protected:
-    SfxStyleSheet(); // do not use!
+    SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
+        : SfxStyleSheetBase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummy")),
+            NULL, SFX_STYLE_FAMILY_ALL, 0)
+    {
+        assert(false);
+    }
     virtual             ~SfxStyleSheet();
 };
 

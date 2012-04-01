@@ -294,7 +294,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
 {
     // evaluate current selection
     SfxItemSet* pSet = 0;
@@ -1056,7 +1056,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
 IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 {
     pModifiedField = pField;
-    Timeout(0);
+    Timeout();
     return 0;
 }
 
@@ -1085,7 +1085,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 /*------------------------------------------------------------------------
  Description:   scroll up the contents of the edits
 ------------------------------------------------------------------------*/
-IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwColumnPage, Up)
 {
     if( nFirstVis )
     {
@@ -1099,7 +1099,7 @@ IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
 /*------------------------------------------------------------------------
  Description:   scroll down the contents of the edits.
 ------------------------------------------------------------------------*/
-IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwColumnPage, Down)
 {
     if( nFirstVis + nVisCols < nCols )
     {
@@ -1115,7 +1115,7 @@ IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
                 handler; triggered by an alteration of the column width
                 or the column gap.
 ------------------------------------------------------------------------*/
-IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
+void SwColumnPage::Timeout()
 {
     DBG_PROFSTART(columnhdl) ;
     if(pModifiedField)
@@ -1156,7 +1156,6 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
     }
     Update();
     DBG_PROFSTOP(columnhdl) ;
-    return 0;
 }
 
 /*------------------------------------------------------------------------
@@ -1312,7 +1311,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
             pModifiedField = &aEd1;
         }
         bLockUpdate = sal_False;
-        Timeout(0);
+        Timeout();
 
     }
     return 0;

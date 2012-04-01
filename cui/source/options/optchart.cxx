@@ -184,7 +184,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 // ResetToDefaults
 // ---------------
 
-IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
 {
     if( pColorConfig )
     {
@@ -204,7 +204,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
 // AddChartColor
 // ------------
 
-IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 {
     if( pColorConfig )
     {
@@ -274,7 +274,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ChartColorLB*, _pColorList )
     return 0L;
 }
 
-IMPL_LINK( SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, EMPTYARG )
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
 {
     sal_uInt16 nIdx = aLbChartColors.GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )

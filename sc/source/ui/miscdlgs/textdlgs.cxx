@@ -44,7 +44,6 @@
 #include "textdlgs.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 // -----------------------------------------------------------------------

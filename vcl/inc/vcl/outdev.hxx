@@ -533,8 +533,6 @@ public:
                                         const OutputDevice& rOutDev, const Region& rRegion );
     SAL_DLLPRIVATE void         ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                         OutputDevice& rOutDev );
-    SAL_DLLPRIVATE void         ImplGetFrameBitmap( const Point& rPt, const Size& rSize,
-                                        Bitmap& rBitmap ) const;
 
     SAL_DLLPRIVATE sal_Bool         ImplIsRecordLayout() const;
 
@@ -879,7 +877,7 @@ public:
     the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
 
     A View than can make painting decisions dependent on this OutDevViewType.
-    E.g. text colors need to be handled different, dependent on wether it's a PrintPreview or not. (see #106611# for more)
+    E.g. text colors need to be handled different, dependent on whether it's a PrintPreview or not. (see #106611# for more)
     */
     void                SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType      GetOutDevViewType() const { return meOutDevViewType; }
@@ -1196,7 +1194,7 @@ public:
                                                 const ImplControlValue& aValue,
                                                 ::rtl::OUString aCaption,
                                                 Rectangle &rNativeBoundingRegion,
-                                                Rectangle &rNativeContentRegion );
+                                                Rectangle &rNativeContentRegion ) const;
 
 };
 

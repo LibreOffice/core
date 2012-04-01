@@ -62,8 +62,8 @@ CBaseReader( DocumentName )
     }
 }
 
-CContentReader::CContentReader( void* stream, LocaleSet_t const & DocumentLocale, zlib_filefunc_def* fa ) :
-CBaseReader( stream, fa )
+CContentReader::CContentReader( StreamInterface* stream, LocaleSet_t const & DocumentLocale ) :
+CBaseReader( stream )
 {
 try
     {

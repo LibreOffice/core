@@ -41,8 +41,6 @@
 #include <stdlib.h>  // due to bsearch
 
 #include <svtools/helpopt.hxx>
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 // due to nAutoPageID
 #include "appdata.hxx"
@@ -64,7 +62,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -1506,7 +1503,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
 
-            // slot decides wether a ChildWindow is shown when document is OLE server or OLE client
+            // slot decides whether a ChildWindow is shown when document is OLE server or OLE client
             sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
             if( pSlot )
             {

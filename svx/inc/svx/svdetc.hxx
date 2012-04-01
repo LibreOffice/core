@@ -148,6 +148,10 @@ public:
     //   0 if *pElem1=*pElem2
     //  +1 if *pElem1>*pElem2
     virtual int Compare(const void* pElem1, const void* pElem2) const=0;
+
+protected:
+    ~ContainerSorter() {}
+
 private: // damit keiner vergessen wird
 virtual
         void
@@ -256,7 +260,6 @@ public:
     OLEObjCache();
     SVX_DLLPUBLIC ~OLEObjCache();
 
-    void SetSize(sal_uIntPtr nNewSize);
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 };

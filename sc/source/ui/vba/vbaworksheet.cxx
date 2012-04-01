@@ -67,7 +67,6 @@
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
-#include <ooo/vba/excel/XlSheetVisibility.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -1095,12 +1094,12 @@ ScVbaWorksheet::getControlShape( const ::rtl::OUString& sName )
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaWorksheet::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheet") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheet"));
 }
+
 void SAL_CALL
 ScVbaWorksheet::setEnableCalculation( ::sal_Bool bEnableCalculation ) throw ( script::BasicErrorException, uno::RuntimeException)
 {

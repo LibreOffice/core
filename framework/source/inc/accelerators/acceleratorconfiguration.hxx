@@ -73,16 +73,10 @@
 
 namespace framework
 {
-//-----------------------------------------------
-// Accelerators.xcu
 
-extern const ::rtl::OUString CFG_ENTRY_PRIMARY;
-extern const ::rtl::OUString CFG_ENTRY_SECONDARY;
-
-extern const ::rtl::OUString CFG_ENTRY_GLOBAL;
-extern const ::rtl::OUString CFG_ENTRY_MODULES;
-
-extern const ::rtl::OUString CFG_PROP_COMMAND;
+const char CFG_ENTRY_PRIMARY[] = "PrimaryKeys";
+const char CFG_ENTRY_GLOBAL[] = "Global";
+const char CFG_ENTRY_MODULES[] = "Modules";
 
 /** "global" type to make accelerator presets unique, so they can be used
     in combination with the salhelper::SingletonRef mechanism! */

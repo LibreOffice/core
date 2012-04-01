@@ -35,19 +35,14 @@
 #include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/string.hxx>
 
 // *sigh*
 #define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
-#define CSTR( str ) ( rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr())
 
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
-
-// HACK - TODO convert to the real debug stuff
-#undef SAL_LOG_LEVEL
-#define SAL_LOG_LEVEL 2
-
 
 using namespace com::sun::star;
 using rtl::OUString;
@@ -84,7 +79,6 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
     }
 }
 
-#if 0
 static OUString tokenToString( int token )
 {
     OUString tokenname = StaticTokenMap::get().getUnicodeTokenName( token & TOKEN_MASK );
@@ -117,14 +111,8 @@ static OUString tokenToString( int token )
     // just the name itself, not specified whether opening or closing
     return namespacename + STR( ":" ) + tokenname;
 }
-#endif
 
 } // namespace
-
-bool XmlStream::AttributeList::hasAttribute( int token ) const
-{
-    return attrs.find( token ) != attrs.end();
-}
 
 rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
 {
@@ -139,13 +127,18 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
     std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
     {
-        if( find->second.equalsIgnoreAsciiCaseAscii( "true" ) || find->second.equalsIgnoreAsciiCaseAscii( "on" )
-            || find->second.equalsIgnoreAsciiCaseAscii( "t" ) || find->second.equalsIgnoreAsciiCaseAscii( "1" ))
+        const rtl::OUString sValue = find->second;
+        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("t")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) )
             return true;
-        if( find->second.equalsIgnoreAsciiCaseAscii( "false" ) || find->second.equalsIgnoreAsciiCaseAscii( "off" )
-            || find->second.equalsIgnoreAsciiCaseAscii( "f" ) || find->second.equalsIgnoreAsciiCaseAscii( "0" ))
+        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("off")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("f")) ||
+            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) )
             return false;
-//        fprintf( stderr, "Cannot convert \'%s\' to bool.\n", CSTR( find->second ));
+        SAL_WARN( "oox.xmlstream", "Cannot convert \'" << sValue << "\' to bool." );
     }
     return def;
 }
@@ -157,8 +150,8 @@ sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) co
     {
         if( !find->second.isEmpty() )
         {
-//            if( find->second.getLength() != 1 )
-//                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n", CSTR( find->second ));
+            if( find->second.getLength() != 1 )
+                SAL_WARN( "oox.xmlstream", "Cannot convert \'" << find->second << "\' to sal_Unicode, stripping." );
             return find->second[ 0 ];
         }
     }
@@ -229,7 +222,6 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 {
     // either it's the following tag, or find it
     int savedPos = pos;
-#if SAL_LOG_LEVEL >= 2
     if( optional )
     { // avoid printing debug messages about skipping tags if the optional one
       // will not be found and the position will be reset back
@@ -239,7 +231,6 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
             return Tag();
         }
     }
-#endif
     if( currentToken() == token || findTag( token ))
     {
         Tag ret = currentTag();
@@ -251,7 +242,7 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
         pos = savedPos;
         return Tag();
     }
-//    fprintf( stderr, "Expected tag %s not found.\n", CSTR( tokenToString( token )));
+    SAL_WARN( "oox.xmlstream", "Expected tag " << tokenToString( token ) << " not found." );
     return Tag();
 }
 
@@ -260,7 +251,7 @@ bool XmlStream::findTag( int token )
     return findTagInternal( token, false );
 }
 
-bool XmlStream::findTagInternal( int token, bool /*silent*/ )
+bool XmlStream::findTagInternal( int token, bool silent )
 {
     int depth = 0;
     for(;
@@ -271,20 +262,21 @@ bool XmlStream::findTagInternal( int token, bool /*silent*/ )
         {
             if( currentToken() == OPENING( currentToken()))
             {
-//                if( !silent )
-//                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+                if( !silent )
+                    SAL_INFO( "oox.xmlstream", "Skipping tag " << tokenToString( currentToken()));
                 ++depth;
             }
             else if( currentToken() == CLOSING( currentToken()))
             {
-//                if( !silent )
-//                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+                if( !silent )
+                    SAL_INFO( "oox.xmlstream", "Skipping tag " << tokenToString( currentToken()));
                 --depth;
             }
             else
             {
-//                if( !silent )
-//                    fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
+                if( !silent )
+                    SAL_WARN( "oox.xmlstream", "Malformed token " << currentToken() << " ("
+                        << tokenToString( currentToken()) << ")" );
                 abort();
             }
             continue;
@@ -295,40 +287,35 @@ bool XmlStream::findTagInternal( int token, bool /*silent*/ )
             return false; // that would be leaving current element, so not found
         if( currentToken() == OPENING( currentToken()))
         {
-//            if( !silent )
-//                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+            if( !silent )
+                SAL_INFO( "oox.xmlstream", "Skipping tag " << tokenToString( currentToken()));
             ++depth;
         }
         else
             abort();
     }
-//    if( !silent )
-//        fprintf( stderr, "Unexpected end of stream reached.\n" );
+    if( !silent )
+        SAL_WARN( "oox.xmlstream", "Unexpected end of stream reached." );
     return false;
 }
 
-void XmlStream::skipElement( int token )
-{
-    return skipElementInternal( token, true ); // no debug about skipping if called from outside
-}
-
-void XmlStream::skipElementInternal( int token, bool /*silent*/ )
+void XmlStream::skipElementInternal( int token, bool silent )
 {
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
     assert( currentToken() == OPENING( token ));
-//    if( !silent )
-//        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
+    if( !silent )
+        SAL_INFO( "oox.xmlstream", "Skipping unexpected element " << tokenToString( currentToken()));
     moveToNextTag();
     // and just find the matching closing tag
     if( findTag( closing ))
     {
-//        if( !silent )
-//            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));
+        if( !silent )
+            SAL_INFO( "oox.xmlstream", "Skipped unexpected element " << tokenToString( token ));
         moveToNextTag(); // and skip it too
         return;
     }
     // this one is an unexpected problem, do not silent it
-//    fprintf( stderr, "Expected end of element %s not found.\n", CSTR( tokenToString( token )));
+    SAL_WARN( "oox.xmlstream", "Expected end of element " << tokenToString( token ) << " not found." );
 }
 
 void XmlStream::handleUnexpectedTag()
@@ -337,7 +324,7 @@ void XmlStream::handleUnexpectedTag()
         return;
     if( currentToken() == CLOSING( currentToken()))
     {
-//        fprintf( stderr, "Skipping unexpected tag %s\n", CSTR( tokenToString( currentToken())));
+        SAL_INFO( "oox.xmlstream", "Skipping unexpected tag " << tokenToString( currentToken()));
         moveToNextTag(); // just skip it
         return;
     }

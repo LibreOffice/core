@@ -69,7 +69,6 @@
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -884,8 +883,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { m_xSMGR.clear(); }
 }
@@ -1020,8 +1019,8 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
             else
                 xAccMgr->removeKeyEvent(aAWTKey);
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             {}
 
@@ -1036,7 +1035,7 @@ void SfxAcceleratorConfigPage::ResetConfig()
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, Load, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
 {
     // ask for filename, where we should load the new config data from
     StartFileDialog( 0, aLoadAccelConfigStr );
@@ -1044,14 +1043,14 @@ IMPL_LINK( SfxAcceleratorConfigPage, Load, Button*, EMPTYARG )
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, Save, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
     return 0;
 }
 
 //-----------------------------------------------
-IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 {
     css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
     if (xReset.is())
@@ -1068,7 +1067,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
     sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
@@ -1086,7 +1085,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
     sal_uInt16    nPos   = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -1191,7 +1190,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
 
@@ -1225,7 +1224,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 {
     DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
 
@@ -1298,8 +1297,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
@@ -1309,7 +1308,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG )
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 {
     DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
 
@@ -1400,8 +1399,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 xComponent->dispose();
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
@@ -1437,8 +1436,8 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     {
         m_xAct->store();
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw;  }
     catch(const css::uno::Exception&)
         { return sal_False; }
 
@@ -1526,8 +1525,8 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
                 return sLabel;
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 

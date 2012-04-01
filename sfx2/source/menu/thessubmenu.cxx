@@ -46,73 +46,8 @@
 #include <sfx2/viewsh.hxx>
 #include "thessubmenu.hxx"
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-
-
-// STATIC DATA -----------------------------------------------------------
-
-SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
-
-
-
-/*
-    Constructor; sets the Select-Handler for the Menu and inserts it into
-    its Parent.
- */
-SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings )
-    : SfxMenuControl( nSlotId, rBindings ),
-    pMenu(new PopupMenu),
-    rParent(rMenu)
-{
-    rMenu.SetPopupMenu(nSlotId, pMenu);
-    pMenu->SetSelectHdl(LINK(this, SfxThesSubMenuControl, MenuSelect));
-    pMenu->Clear();
-    rParent.EnableItem( GetId(), sal_False );
-}
-
-
-SfxThesSubMenuControl::~SfxThesSubMenuControl()
-{
-    delete pMenu;
-}
-
-
-/*
-    Status notification:
-    If the functionality is disabled, the corresponding
-    menu entry in Parentmenu is disabled, otherwise it is enabled.
- */
-void SfxThesSubMenuControl::StateChanged(
-    sal_uInt16 /*nSID*/,
-    SfxItemState eState,
-    const SfxPoolItem* /*pState*/ )
-{
-    rParent.EnableItem(GetId(), SFX_ITEM_AVAILABLE == eState );
-}
-
-
-/*
-    Select-Handler for Menus;
-    run the selected Verb,
- */
-IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
-{
-    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
-    if( nSlotId )
-        GetBindings().Execute(nSlotId);
-    return 1;
-}
-IMPL_LINK_INLINE_END( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
-
-
-PopupMenu* SfxThesSubMenuControl::GetPopup() const
-{
-    return pMenu;
-}
-
-
 
 OUString SfxThesSubMenuHelper::GetText(
     const String &rLookUpString,

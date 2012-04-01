@@ -100,7 +100,7 @@ class SwSortDlg : public SvxStandardDialog
     DECL_LINK( CheckHdl, CheckBox * );
     DECL_LINK( DelimHdl, RadioButton* );
     DECL_LINK( LanguageHdl, ListBox* );
-    DECL_LINK( DelimCharHdl, PushButton* );
+    DECL_LINK(DelimCharHdl, void *);
 
 public:
     SwSortDlg(Window * pParent, SwWrtShell &rSh);

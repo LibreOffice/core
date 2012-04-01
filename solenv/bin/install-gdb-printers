@@ -165,7 +165,7 @@ fi
 
 if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
     mkdir -p "${DESTDIR}${pythondir}" || die "cannot create dir '${DESTDIR}${pythondir}'"
-    cp -r "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
+    cp -pr "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
 fi
 
 make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3

@@ -42,12 +42,12 @@ namespace connectivity
                                                         public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XArray>
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_Array();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Array( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         // XArray

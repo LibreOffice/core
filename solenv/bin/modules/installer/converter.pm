@@ -27,6 +27,9 @@
 
 package installer::converter;
 
+use strict;
+use warnings;
+
 use installer::globals;
 
 #############################
@@ -166,7 +169,7 @@ sub copy_item_object
 }
 
 #################################################################
-# Windows pathes must not contain the following structure:
+# Windows paths must not contain the following structure:
 # c:\dirA\dirB\..\dirC
 # This has to be exchanged to
 # c:\dirA\dirC

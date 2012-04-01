@@ -59,6 +59,9 @@ namespace slideshow
                 too.
              */
             virtual bool handleHyperlink( ::rtl::OUString const& rLink ) = 0;
+
+        protected:
+            ~HyperlinkHandler() {}
         };
 
         typedef ::boost::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;

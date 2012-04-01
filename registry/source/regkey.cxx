@@ -960,31 +960,6 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
 }
 
 //*********************************************************************
-//  reg_createLink
-//
-RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
-                                               rtl_uString* linkName,
-                                          rtl_uString* linkTarget)
-{
-    if (!hKey)
-        return REG_INVALID_KEY;
-
-    return createLink(hKey, linkName, linkTarget);
-}
-
-//*********************************************************************
-//  reg_deleteLink
-//
-RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
-                                            rtl_uString* linkName)
-{
-    if (!hKey)
-        return REG_INVALID_KEY;
-
-    return deleteLink(hKey, linkName);
-}
-
-//*********************************************************************
 //  reg_getKeyType
 //
 RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
@@ -995,19 +970,6 @@ RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
         return REG_INVALID_KEY;
 
     return getKeyType(hKey, keyName, pKeyType);
-}
-
-//*********************************************************************
-//  reg_getLinkTarget
-//
-RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
-                                             rtl_uString* linkName,
-                                               rtl_uString** pLinkTarget)
-{
-    if (!hKey)
-        return REG_INVALID_KEY;
-
-    return getLinkTarget(hKey, linkName, pLinkTarget);
 }
 
 //*********************************************************************

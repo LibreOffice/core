@@ -33,7 +33,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,solver/res))
 
 $(eval $(call gb_SrsTarget_set_include,solver/res,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sccomp/source/solver) \
+    -I$(SRCDIR)/sccomp/source/solver \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,solver/res,\

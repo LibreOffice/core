@@ -75,7 +75,7 @@ private:
                     DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplOptionsHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, void* );
-                    DECL_DLLPRIVATE_LINK( ImplStatusHdl, Timer* );
+                    DECL_DLLPRIVATE_LINK( ImplStatusHdl, void* );
 
 public:
                     PrinterSetupDialog( Window* pWindow );

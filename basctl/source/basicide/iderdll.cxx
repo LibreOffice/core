@@ -125,16 +125,13 @@ namespace BasicIDEGlobals
 }
 
 IDEResId::IDEResId( sal_uInt16 nId ):
-    ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
+    ResId( nId, *(BASIC_MOD())->GetResMgr() )
 {
 }
 
 BasicIDEDLL::~BasicIDEDLL()
 {
     delete m_pExtraData;
-#if 0
-    *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
-#endif
 }
 
 BasicIDEDLL::BasicIDEDLL()

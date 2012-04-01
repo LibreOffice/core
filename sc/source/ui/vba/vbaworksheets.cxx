@@ -498,11 +498,10 @@ ScVbaWorksheets::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno:
     return ScVbaWorksheets_BASE::getItemByStringIndex( sIndex );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaWorksheets::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheets") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheets"));
 }
 
 css::uno::Sequence<rtl::OUString>

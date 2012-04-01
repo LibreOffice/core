@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include "toolkit/helper/servicenames.hxx"
 #include "toolkit/helper/macros.hxx"
 #include <toolkit/controls/unocontrolcontainer.hxx>
@@ -48,8 +49,11 @@
 class UnoControlDialogModel :   public ControlModelContainerBase
 {
 protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
+    // ::cppu::OPropertySetHelper
+	void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 public:
                         UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );

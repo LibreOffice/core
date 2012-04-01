@@ -160,9 +160,11 @@ namespace connectivity
             sal_Int32 getFetchDirection()       const;
             sal_Int32 getFetchSize()            const;
             ::rtl::OUString getCursorName()     const;
+            template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
 
             void setFetchDirection(sal_Int32 _par0);
             void setFetchSize(sal_Int32 _par0);
+            template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
 
             void fillRow(sal_Int32 _nToColumn);
@@ -198,7 +200,7 @@ namespace connectivity
                                          ) const;
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor that is needed for returning the object
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
             virtual ~OResultSet();
 

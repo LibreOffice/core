@@ -779,7 +779,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x303C, 1, L_FIX}, // undocumented, sep
         {0x245B, 1, L_FIX}, // undocumented, para autobefore
         {0x245C, 1, L_FIX}, // undocumented, para autoafter
-        // undocumented, don't add space between para of the same style
+        // "sprmPFContextualSpacing", don't add space between para of the same style
         {0x246D, 1, L_FIX}
     };
 
@@ -1978,10 +1978,11 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    sal_Size nRemainingSize = pSt->remainingSize();
 
-    bool bValid = checkSeek(*pSt, nFilePos) && (nRemainingSize >= nValidMin) &&
-        (nPLCF >= nValidMin);
+    bool bValid = checkSeek(*pSt, nFilePos);
+    sal_Size nRemainingSize = pSt->remainingSize();
+    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+        bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
 
     // Pointer auf Pos- u. Struct-Array
@@ -1995,7 +1996,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
+        pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
     nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer auf Inhalts-Array
@@ -2136,9 +2137,7 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 {
     sal_Size nOldPos = rSt.Tell();
-    sal_Size nRemainingSize = rSt.remainingSize();
-
-    bool bValid = checkSeek(rSt, nFilePos) && (nRemainingSize >= nPLCF);
+    bool bValid = checkSeek(rSt, nFilePos) && (rSt.remainingSize() >= nPLCF);
 
     if (bValid)
     {
@@ -2151,7 +2150,7 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
     {
 #ifdef OSL_BIGENDIAN
         for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-            pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
+            pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
         nIdx = 0;
 #endif // OSL_BIGENDIAN
         // Pointer auf Inhalts-Array
@@ -2317,10 +2316,11 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    sal_Size nRemainingSize = pSt->remainingSize();
 
-    bool bValid = checkSeek(*pSt, nFilePos) && (nRemainingSize >= nValidMin) &&
-        (nPLCF >= nValidMin);
+    bool bValid = checkSeek(*pSt, nFilePos);
+    sal_Size nRemainingSize = pSt->remainingSize();
+    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+        bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
@@ -2332,7 +2332,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( long nI = 0; nI <= nIMax; nI++ )
-      pPLCF_PosArray[nI] = SWAPLONG( pPLCF_PosArray[nI] );
+      pPLCF_PosArray[nI] = OSL_SWAPDWORD( pPLCF_PosArray[nI] );
 #endif // OSL_BIGENDIAN
 
     // Pointer auf Inhalts-Array
@@ -4155,9 +4155,9 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     return bFound ? aBookNames[i] : aEmptyStr;
 }
 
-String WW8PLCFx_Book::GetUniqueBookmarkName(String &suggestedName)
+String WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggestedName)
 {
-    String aRet=(suggestedName.Len()==0?String::CreateFromAscii("Unnamed"):suggestedName);
+    String aRet=(rSuggestedName.isEmpty() ? rtl::OUString("Unnamed") : rSuggestedName);
     unsigned int i=0;
     while(i<aBookNames.size()) {
         String &s=aBookNames[i];
@@ -6499,7 +6499,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       endnote seperators, the documentation also gets the index numbers
       backwards when specifiying which bits to test. The bottom six bits
       of this value must be tested and skipped over. Each section's
-      grpfIhdt is then tested for the existence of the appropiate headers
+      grpfIhdt is then tested for the existence of the appropriate headers
       and footers, at the end of each section the nIdxOffset must be updated
       to point to the beginning of the next section's group of headers and
       footers in this PLCF, UpdateIndex does that task.
@@ -7388,7 +7388,9 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
 
         bool bValid = nSize <= nLen;
 
-        SAL_WARN_IF(!bValid, "sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+        SAL_WARN_IF(!bValid, "sw.ww8",
+            "sprm 0x" << std::hex << nAktId << std::dec << " longer than remaining bytes, " <<
+            nSize << " vs " << nLen << "doc or parser is wrong");
 
         if (nAktId == nId && bValid) // Sprm found
             return pSprms + DistanceToData(nId);
@@ -7434,7 +7436,7 @@ bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 void swapEndian(sal_Unicode *pString)
 {
     for (sal_Unicode *pWork = pString; *pWork; ++pWork)
-        *pWork = SWAPSHORT(*pWork);
+        *pWork = OSL_SWAPWORD(*pWork);
 }
 #endif
 

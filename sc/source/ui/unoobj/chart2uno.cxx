@@ -1460,7 +1460,7 @@ ScChart2DataProvider::createDataSource(
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
         rtl::OUString sName(aArguments[i].Name);
-        if (aArguments[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")))
+        if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
         {
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             if( ! (aArguments[i].Value >>= eSource))
@@ -1471,11 +1471,11 @@ ScChart2DataProvider::createDataSource(
             }
             bOrientCol = (eSource == chart::ChartDataRowSource_COLUMNS);
         }
-        else if (aArguments[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")))
+        else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
         {
             bLabel = ::cppu::any2bool(aArguments[i].Value);
         }
-        else if (aArguments[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")))
+        else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasCategories")))
         {
             bCategories = ::cppu::any2bool(aArguments[i].Value);
         }
@@ -1560,7 +1560,7 @@ ScChart2DataProvider::createDataSource(
         }
         Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
             pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transfered!
-        if ( xChartSeries.is() )
+        if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().getLength() )
         {
             aSeqs.push_back( xChartSeries );
         }
@@ -3280,7 +3280,7 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
         return nFormat;
 
     ScBaseCell* pCell = pDoc->GetCell(rPos);
-    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
+    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA || nFormat)
         return nFormat;
 
     // With formula cell, the format may be inferred from the formula result.

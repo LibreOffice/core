@@ -155,8 +155,9 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( sal_False );
-            rOutDev.SetLineColor( COL_TRANSPARENT );
-            rOutDev.SetFillColor( COL_TRANSPARENT );
+            rOutDev.SetLineColor( COL_WHITE );
+            rOutDev.SetFillColor( COL_WHITE );
+            rOutDev.SetClipRegion();
             rOutDev.DrawRect( Rectangle( Point(),
                                          rOutDev.GetOutputSizePixel()) );
 
@@ -166,8 +167,9 @@ namespace vclcanvas
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
                 rOutDev2.EnableMapMode( sal_False );
-                rOutDev2.SetLineColor( COL_TRANSPARENT );
-                rOutDev2.SetFillColor( COL_TRANSPARENT );
+                rOutDev2.SetLineColor( COL_WHITE );
+                rOutDev2.SetFillColor( COL_WHITE );
+                rOutDev2.SetClipRegion();
                 rOutDev2.DrawRect( Rectangle( Point(),
                                               rOutDev2.GetOutputSizePixel()) );
                 rOutDev2.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
@@ -500,27 +502,14 @@ namespace vclcanvas
 
             if( mp2ndOutDev )
             {
-                if( !nTransparency || bSourceAlpha )
+                // HACK. Normally, CanvasHelper does not care about
+                // actually what mp2ndOutDev is...  well, here we do &
+                // assume a 1bpp target - everything beyond 97%
+                // transparency is fully transparent
+                if( nTransparency < 253 )
                 {
-                    // HACK. Normally, CanvasHelper does not care
-                    // about actually what mp2ndOutDev is...
-                    if( bSourceAlpha && nTransparency == 255 )
-                    {
-                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                                              DRAWMODE_WHITEGRADIENT | DRAWMODE_WHITEBITMAP );
-                        mp2ndOutDev->getOutDev().SetFillColor( COL_WHITE );
-                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
-                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                                              DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
-                    }
-                    else
-                    {
-                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
-                    }
-                }
-                else
-                {
-                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
+                    mp2ndOutDev->getOutDev().SetFillColor( COL_BLACK );
+                    mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
                 }
             }
         }
@@ -721,8 +710,25 @@ namespace vclcanvas
                                                     aBmpEx );
 
                 if( mp2ndOutDev )
+                {
+                    // HACK. Normally, CanvasHelper does not care about
+                    // actually what mp2ndOutDev is...  well, here we do &
+                    // assume a 1bpp target - everything beyond 97%
+                    // transparency is fully transparent
+                    if( aBmpEx.IsAlpha() )
+                    {
+                        Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
+                        aMask.MakeMono( 253 );
+                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMask );
+                    }
+                    else if( aBmpEx.IsTransparent() )
+                    {
+                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
+                    }
+
                     mp2ndOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                            aBmpEx );
+                }
 
                 // Returning a cache object is not useful, the XBitmap
                 // itself serves this purpose
@@ -1275,21 +1281,21 @@ namespace vclcanvas
                 p2ndOutDev->SetClipRegion( aClipRegion );
         }
 
+        Color aColor( COL_WHITE );
+
+        if( renderState.DeviceColor.getLength() > 2 )
+        {
+            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+                renderState.DeviceColor );
+        }
+
+        // extract alpha, and make color opaque
+        // afterwards. Otherwise, OutputDevice won't draw anything
+        nTransparency = aColor.GetTransparency();
+        aColor.SetTransparency(0);
+
         if( eColorType != IGNORE_COLOR )
         {
-            Color aColor( COL_WHITE );
-
-            if( renderState.DeviceColor.getLength() > 2 )
-            {
-                aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
-                    renderState.DeviceColor );
-            }
-
-            // extract alpha, and make color opaque
-            // afterwards. Otherwise, OutputDevice won't draw anything
-            nTransparency = aColor.GetTransparency();
-            aColor.SetTransparency(0);
-
             switch( eColorType )
             {
                 case LINE_COLOR:

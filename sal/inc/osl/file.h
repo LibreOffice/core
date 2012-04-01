@@ -467,47 +467,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileStatus(
 
 typedef void *oslVolumeDeviceHandle;
 
-
-/** Unmount a volume device.
-
-    Unmount the volume specified by the given oslVolumeDeviceHandle.
-
-    @param Handle [in]
-    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
-
-    @return
-    osl_File_E_None on success<br>
-
-    @todo
-    specify all error codes that may be returned
-
-    @see osl_getVolumeInformation()
-*/
-
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmountVolumeDevice(
-        oslVolumeDeviceHandle Handle );
-
-
-/** Automount a volume device.
-
-    Automount the volume device specified by the given oslVolumeDeviceHandle.
-
-    @param Handle [in]
-    An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
-
-    @return
-    osl_File_E_None on success<br>
-
-    @todo
-    specify all error codes that may be returned
-
-    @see osl_getVolumeInformation()
-*/
-
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_automountVolumeDevice(
-        oslVolumeDeviceHandle Handle );
-
-
 /** Release a volume device handle.
 
     Releases the given oslVolumeDeviceHandle which was acquired by a call to
@@ -575,8 +534,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
     osl_File_E_EOVERFLOW value too large for defined data type<br>
 
     @see    osl_getVolumeInformation()
-    @see    osl_automountVolumeDevice()
-    @see    osl_unmountVolumeDevice()
 */
 
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(

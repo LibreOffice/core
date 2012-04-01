@@ -94,7 +94,8 @@ namespace svt
             const Reference< XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex,
             const IContentTitleTranslation* _pTranslator )
-        :m_rContent              ( _rContentToFill )
+        :Thread                  ( "FileViewContentEnumerator" )
+        ,m_rContent              ( _rContentToFill )
         ,m_rContentMutex         ( _rContentMutex  )
         ,m_refCount              ( 0               )
         ,m_xCommandEnv           ( _rxCommandEnv   )
@@ -142,15 +143,6 @@ namespace svt
     void FileViewContentEnumerator::enumerateFolderContent(
         const FolderDescriptor& _rFolder, const IUrlFilter* _pFilter, IEnumerationResultHandler* _pResultHandler )
     {
-        // ensure that we don't get deleted while herein
-        acquire();
-            // the matching "release" will be called in onTerminated
-            // Note that onTerminated is only called if run was left normally.
-            // If somebody terminates the thread from the outside, then onTerminated
-            // will never be called. However, our terminate method is not accessible
-            // to our clients, so the only class which could misbehave is this class
-            // here itself ...
-
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aFolder = _rFolder;
         m_pFilter = _pFilter;
@@ -159,25 +151,11 @@ namespace svt
         OSL_ENSURE( m_aFolder.aContent.get().is() || m_aFolder.sURL.Len(),
             "FileViewContentEnumerator::enumerateFolderContent: invalid folder descriptor!" );
 
-        // start the thread
-        create();
-    }
-
-    //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL FileViewContentEnumerator::acquire()
-    {
-        return osl_incrementInterlockedCount( &m_refCount );
-    }
-
-    //--------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL FileViewContentEnumerator::release()
-    {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_refCount;
+        launch();
+            //TODO: a protocol is missing how to join with the launched thread
+            // before exit(3), to ensure the thread is no longer relying on any
+            // infrastructure while that infrastructure is being shut down in
+            // atexit handlers
     }
 
     //--------------------------------------------------------------------
@@ -446,15 +424,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FileViewContentEnumerator::run()
+    void FileViewContentEnumerator::execute()
     {
         enumerateFolderContent();
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL FileViewContentEnumerator::onTerminated()
-    {
-        release();
     }
 
 //........................................................................

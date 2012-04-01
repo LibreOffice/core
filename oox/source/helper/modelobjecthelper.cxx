@@ -67,19 +67,6 @@ bool ObjectContainer::hasObject( const OUString& rObjName ) const
     return mxContainer.is() && mxContainer->hasByName( rObjName );
 }
 
-Any ObjectContainer::getObject( const OUString& rObjName ) const
-{
-    createContainer();
-    if( mxContainer.is() ) try
-    {
-        return mxContainer->getByName( rObjName );
-    }
-    catch( Exception& )
-    {
-    }
-    return Any();
-}
-
 OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rObj, bool bInsertByUnusedName )
 {
     createContainer();

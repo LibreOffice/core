@@ -535,7 +535,7 @@ $(MISC)/%.dpz :
     @echo "Making:   " $(@:f)
     @@-$(RM) $@
     $(COMMAND_ECHO)dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true $(ZIPDEPFILES)
-    $(COMMAND_ECHO)$(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" | grep -v "\.svn" >> $@
+    $(COMMAND_ECHO)$(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) >> $@
     @echo zipdep_langs=$(alllangiso) >> $@
     @@-$(RM) $(ZIPDEPFILES)
 .ENDIF			# "$(nodep)"==""

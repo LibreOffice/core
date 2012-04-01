@@ -70,6 +70,7 @@ template<> bool LazyDeletor<Window>::is_less( Window* left, Window* right )
     return (left != right && right->IsChild( left, sal_True )) ? true : false;
 }
 
+#ifndef LINUX
 // specialized is_less function for Menu
 template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
 {
@@ -77,6 +78,7 @@ template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
         left = left->ImplGetStartedFrom();
     return left != NULL;
 }
+#endif
 
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {

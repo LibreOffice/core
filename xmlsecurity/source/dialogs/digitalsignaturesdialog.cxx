@@ -370,7 +370,7 @@ short DigitalSignaturesDialog::Execute()
     return Dialog::Execute();
 }
 
-IMPL_LINK( DigitalSignaturesDialog, SignatureHighlightHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl)
 {
     bool bSel = maSignaturesLB.FirstSelected() ? true : false;
     maViewBtn.Enable( bSel );
@@ -380,7 +380,7 @@ IMPL_LINK( DigitalSignaturesDialog, SignatureHighlightHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl)
 {
     // Export all other signatures...
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
@@ -409,19 +409,19 @@ IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, SignatureSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl)
 {
     ImplShowSignaturesDetails();
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, ViewButtonHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl)
 {
     ImplShowSignaturesDetails();
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
 {
     if( ! canAdd())
         return 0;
@@ -527,7 +527,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
 {
     if (!canRemove())
         return 0;
@@ -570,7 +570,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DigitalSignaturesDialog, StartVerifySignatureHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl)
 {
     return mbVerifySignatures ? 1 : 0;
 }

@@ -44,7 +44,6 @@ namespace psp
     // contents
 
     VCL_DLLPUBLIC int GetCommandLineTokenCount(const rtl::OUString&);
-    VCL_DLLPUBLIC int GetCommandLineTokenCount(const rtl::OString&);
     // returns number of tokens (zero if empty or whitespace only)
 
     VCL_DLLPUBLIC String WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );

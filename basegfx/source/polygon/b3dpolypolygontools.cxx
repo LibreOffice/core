@@ -57,42 +57,6 @@ namespace basegfx
             return aRetval;
         }
 
-        void applyLineDashing(const B3DPolyPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, B3DPolyPolygon* pGapTarget, double fFullDashDotLen)
-        {
-            if(0.0 == fFullDashDotLen && rDotDashArray.size())
-            {
-                // calculate fFullDashDotLen from rDotDashArray
-                fFullDashDotLen = ::std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
-            }
-
-            if(rCandidate.count() && fFullDashDotLen > 0.0)
-            {
-                B3DPolyPolygon aLineTarget, aGapTarget;
-
-                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-                {
-                    const B3DPolygon aCandidate(rCandidate.getB3DPolygon(a));
-
-                    applyLineDashing(
-                        aCandidate,
-                        rDotDashArray,
-                        pLineTarget ? &aLineTarget : 0,
-                        pGapTarget ? &aGapTarget : 0,
-                        fFullDashDotLen);
-
-                    if(pLineTarget)
-                    {
-                        pLineTarget->append(aLineTarget);
-                    }
-
-                    if(pGapTarget)
-                    {
-                        pGapTarget->append(aGapTarget);
-                    }
-                }
-            }
-        }
-
         B3DPolyPolygon createUnitCubePolyPolygon()
         {
             static B3DPolyPolygon aRetval;
@@ -538,13 +502,6 @@ namespace basegfx
             }
 
             return true;
-        }
-
-        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
     } // end of namespace tools

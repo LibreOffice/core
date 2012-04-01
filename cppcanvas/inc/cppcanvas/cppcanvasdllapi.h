@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define  INCLUDED_CPPCANVASDLLAPI_H
 
 #if defined CPPCANVAS_DLLIMPLEMENTATION
-        
+
 #define CPPCANVAS_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define CPPCANVAS_DLLPUBLIC SAL_DLLPUBLIC_IMPORT

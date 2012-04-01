@@ -107,7 +107,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TableWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TableWindow, SelectHdl)
 {
     CloseAndShowTableDialog();
     return 0;

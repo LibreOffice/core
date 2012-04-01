@@ -786,7 +786,7 @@ SaveDialog::~SaveDialog()
 }
 
 //===============================================
-IMPL_LINK( SaveDialog, OKButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     m_nResult = DLG_RET_OK;
     return 0;
@@ -1386,7 +1386,7 @@ void RecoveryDialog::end()
 }
 
 //===============================================
-IMPL_LINK( RecoveryDialog, NextButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
 {
     m_bUserDecideNext = sal_True;
     m_bWaitForUser    = sal_False;
@@ -1394,7 +1394,7 @@ IMPL_LINK( RecoveryDialog, NextButtonHdl, void*, EMPTYARG )
 }
 
 //===============================================
-IMPL_LINK( RecoveryDialog, CancelButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
 {
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_PREPARED)
     {
@@ -1520,7 +1520,7 @@ sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 }
 
 //===============================================
-IMPL_LINK( BrokenRecoveryDialog, OkButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
     String sPhysicalPath = m_aSaveDirED.GetText().EraseLeadingChars().EraseTrailingChars();
     rtl::OUString sURL;
@@ -1534,14 +1534,14 @@ IMPL_LINK( BrokenRecoveryDialog, OkButtonHdl, void*, EMPTYARG )
 }
 
 //===============================================
-IMPL_LINK( BrokenRecoveryDialog, CancelButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl)
 {
     EndDialog(DLG_RET_CANCEL);
     return 0;
 }
 
 //===============================================
-IMPL_LINK( BrokenRecoveryDialog, SaveButtonHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
 {
     impl_askForSavePath();
     return 0;
@@ -1605,19 +1605,19 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
         }
 
-        IMPL_LINK( ErrorRepWelcomeDialog, PrevBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepWelcomeDialog, PrevBtnHdl)
         {
             m_nResult = DLG_RET_BACK;
             return 0;
         }
 
-        IMPL_LINK( ErrorRepWelcomeDialog, NextBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepWelcomeDialog, NextBtnHdl)
         {
             m_nResult = DLG_RET_OK;
             return 0;
         }
 
-        IMPL_LINK( ErrorRepWelcomeDialog, CancelBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepWelcomeDialog, CancelBtnHdl)
         {
             m_nResult = DLG_RET_CANCEL;
             return 0;
@@ -1656,7 +1656,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
         }
 
-        IMPL_LINK( ErrorDescriptionEdit, ModifyHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorDescriptionEdit, ModifyHdl)
         {
             if ( !GetVScrollBar() )
                 return 0;
@@ -1743,19 +1743,19 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             maDocTypeED.GrabFocus();
         }
 
-        IMPL_LINK( ErrorRepSendDialog, PrevBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, PrevBtnHdl)
         {
             m_nResult = DLG_RET_BACK;
             return 0;
         }
 
-        IMPL_LINK( ErrorRepSendDialog, CancelBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, CancelBtnHdl)
         {
             m_nResult = DLG_RET_CANCEL;
             return 0;
         }
 
-        IMPL_LINK( ErrorRepSendDialog, SendBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, SendBtnHdl)
         {
 
             SaveParams();
@@ -1765,21 +1765,21 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             return 0;
         }
 
-        IMPL_LINK( ErrorRepSendDialog, ShowRepBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, ShowRepBtnHdl)
         {
             ErrorRepPreviewDialog aDlg( this );
             aDlg.Execute();
             return 0;
         }
 
-        IMPL_LINK( ErrorRepSendDialog, OptBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, OptBtnHdl)
         {
             ErrorRepOptionsDialog aDlg( this, maParams );
             aDlg.Execute();
             return 0;
         }
 
-        IMPL_LINK( ErrorRepSendDialog, ContactCBHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepSendDialog, ContactCBHdl)
         {
             bool    bCheck = maContactCB.IsChecked();
             maEMailAddrFT.Enable( bCheck );
@@ -1929,7 +1929,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
         }
 
-        IMPL_LINK( ErrorRepOptionsDialog, ManualBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepOptionsDialog, ManualBtnHdl)
         {
             bool    bCheck = maManualBtn.IsChecked();
             maProxyServerFT.Enable( bCheck );
@@ -1939,7 +1939,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             return 0;
         }
 
-        IMPL_LINK( ErrorRepOptionsDialog, OKBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepOptionsDialog, OKBtnHdl)
         {
             if ( maManualBtn.IsChecked() )
                 mrParams.miHTTPConnectionType = 2;
@@ -1955,7 +1955,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             return 0;
         }
 
-        IMPL_LINK( ErrorRepOptionsDialog, CancelBtnHdl, void*, EMPTYARG )
+        IMPL_LINK_NOARG(ErrorRepOptionsDialog, CancelBtnHdl)
         {
             EndDialog(DLG_RET_CANCEL);
             return 0;

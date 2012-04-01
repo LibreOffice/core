@@ -81,8 +81,8 @@ CBaseReader( DocumentName )
     }
 }
 
-CMetaInfoReader::CMetaInfoReader( void* stream, zlib_filefunc_def* fa) :
-CBaseReader( stream, fa)
+CMetaInfoReader::CMetaInfoReader( StreamInterface* stream ) :
+CBaseReader( stream )
 {
 try
     {

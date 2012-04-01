@@ -542,9 +542,9 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             mpCharWidths[ i ] = 0;
         for( i = 0; i < mnGlyphCount; ++i )
         {
-            int j = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
-            if( j >= 0 )
-                mpCharWidths[ j ] += mpGlyphAdvances[ i ];
+            int k = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
+            if( k >= 0 )
+                mpCharWidths[ k ] += mpGlyphAdvances[ i ];
         }
     }
 
@@ -1448,8 +1448,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( (rArgs.mnEndCharPos <= rVisualItem.mnMinCharPos)
          || (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos) )
         {
-            for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-                mpLogClusters[i] = sal::static_int_cast<WORD>(~0U);
+            for( int j = rVisualItem.mnMinCharPos; j < rVisualItem.mnEndCharPos; ++j )
+                mpLogClusters[j] = sal::static_int_cast<WORD>(~0U);
             continue;
         }
 
@@ -1861,6 +1861,8 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             //position so that iterating over glyph slots one at a time for
             //glyph fallback can keep context as to what characters are the
             //inputs that caused a missing glyph in a given font.
+            //
+            //See: fdo#46923/fdo#46896/fdo#46750 for extra complexities
             {
                 int dir = 1;
                 int out = rVI.mnMinCharPos;
@@ -1871,7 +1873,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
                 }
                 for(c = rVI.mnMinCharPos; c < rVI.mnEndCharPos; ++c)
                 {
-                    int i = out;
+                    int i = out - mnSubStringMin;
                     mpGlyphs2Chars[i] = c;
                     out += dir;
                 }
@@ -2721,7 +2723,7 @@ void UniscribeLayout::Justify( long nNewWidth )
                 nItemWidth += mpCharWidths[ i ];
             nItemWidth = (int)((fStretch - 1.0) * nItemWidth + 0.5);
 
-            HRESULT nRC = (*pScriptJustify) (
+            (*pScriptJustify) (
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,

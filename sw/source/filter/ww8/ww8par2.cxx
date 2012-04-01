@@ -95,10 +95,7 @@ public:
     {}
 };
 
-typedef WW8SelBoxInfo* WW8SelBoxInfoPtr;
-
-SV_DECL_PTRARR_DEL(WW8MergeGroups, WW8SelBoxInfoPtr, 16)
-SV_IMPL_PTRARR(WW8MergeGroups, WW8SelBoxInfoPtr)
+typedef boost::ptr_vector<WW8SelBoxInfo> WW8MergeGroups;
 
 struct WW8TabBandDesc
 {
@@ -186,7 +183,7 @@ class WW8TabDesc
     SwTableBoxes* pTabBoxes;        // Boxen-Array in akt. Zeile
     SwTableBox* pTabBox;            // akt. Zelle
 
-    WW8MergeGroups* pMergeGroups;   // Listen aller zu verknuepfenden Zellen
+    WW8MergeGroups aMergeGroups;   // Listen aller zu verknuepfenden Zellen
 
     WW8_TCell* pAktWWCell;
 
@@ -224,9 +221,7 @@ class WW8TabDesc
     void InsertCells( short nIns );
     void AdjustNewBand();
 
-    // durchsucht pMergeGroups, meldet Index der ersten, passenden Gruppe bzw.
-    // -1 Details siehe bei der Implementierung
-    bool FindMergeGroup(short nX1, short nWidth, bool bExact, short& nMGrIdx);
+    WW8SelBoxInfo* FindMergeGroup(short nX1, short nWidth, bool bExact);
 
     // einzelne Box ggfs. in eine Merge-Gruppe aufnehmen
     // (die Merge-Gruppen werden dann spaeter auf einen Schlag abgearbeitet)
@@ -1786,7 +1781,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     pTabLine(0),
     pTabBoxes(0),
     pTabBox(0),
-    pMergeGroups(0),
     pAktWWCell(0),
     nRows(0),
     nDefaultSwCols(0),
@@ -2112,7 +2106,6 @@ WW8TabDesc::~WW8TabDesc()
     }
 
     delete pParentPos;
-    delete pMergeGroups;
 }
 
 void WW8TabDesc::CalcDefaults()
@@ -2570,7 +2563,7 @@ void WW8TabDesc::MergeCells()
             for( short j = 0; j < pActBand->nRows; j++, nRow++ )
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
-                    WW8SelBoxInfoPtr pActMGroup = 0;
+                    WW8SelBoxInfo* pActMGroup = 0;
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
                     //
@@ -2630,11 +2623,6 @@ void WW8TabDesc::MergeCells()
                         short nX1    = pActBand->nCenter[ i ];
                         short nWidth = pActBand->nWidth[ i ];
 
-                        // 0. falls noetig das Array fuer die Merge-Gruppen
-                        // anlegen
-                        if( !pMergeGroups )
-                            pMergeGroups = new WW8MergeGroups;
-
                         // 2. aktuelle Merge-Gruppe anlegen
                         pActMGroup = new WW8SelBoxInfo( nX1, nWidth );
 
@@ -2658,15 +2646,19 @@ void WW8TabDesc::MergeCells()
                         // 1. ggfs. alte Mergegruppe(n) schliessen, die
                         // den von unserer neuen Gruppe betroffenen
                         // X-Bereich ueberdecken
-                        short nMGrIdx;
-                        while ( FindMergeGroup( nX1, pActMGroup->nGroupWidth,
-                                                false, nMGrIdx ) )
+                        for (;;)
                         {
-                            (*pMergeGroups)[ nMGrIdx ]->bGroupLocked = true;
+                            WW8SelBoxInfo* p = FindMergeGroup(
+                                nX1, pActMGroup->nGroupWidth, false );
+                            if (p == 0)
+                            {
+                                break;
+                            }
+                            p->bGroupLocked = true;
                         }
 
                         // 3. und in Gruppen-Array eintragen
-                        pMergeGroups->Insert(pActMGroup, pMergeGroups->Count());
+                        aMergeGroups.push_back(pActMGroup);
                     }
 
                     // ggfs. akt. Box zu einer Merge-Gruppe hinzufuegen (dies
@@ -2739,22 +2731,21 @@ void WW8TabDesc::FinishSwTable()
     MergeCells();
 
     // falls noetig, zu mergende Zellen gruppenweise zusammenfassen
-    if( pMergeGroups )
+    if( !aMergeGroups.empty() )
     {
         // bearbeite alle Merge-Gruppen nacheinander
-        WW8SelBoxInfo* pActMGroup;
-        sal_uInt16         nActBoxCount;
-
-        for (sal_uInt16 iGr = 0; iGr < pMergeGroups->Count(); ++iGr)
+        for (
+                WW8MergeGroups::iterator groupIt = aMergeGroups.begin();
+                groupIt != aMergeGroups.end();
+                ++groupIt)
         {
-            pActMGroup   = (*pMergeGroups)[ iGr ];
-            nActBoxCount = pActMGroup->size();
+            sal_uInt16 nActBoxCount = groupIt->size();
 
-            if( ( 1 < nActBoxCount ) && pActMGroup && pActMGroup->begin()->second )
+            if( ( 1 < nActBoxCount ) && groupIt->begin()->second )
             {
-                const sal_uInt16 nRowSpan = pActMGroup->size();
+                const sal_uInt16 nRowSpan = groupIt->size();
                 sal_uInt16 n = 0;
-                for( SwSelBoxes::const_iterator it = pActMGroup->begin(); it != pActMGroup->end(); ++it )
+                for( SwSelBoxes::const_iterator it = groupIt->begin(); it != groupIt->end(); ++it )
                 {
                     SwTableBox* pCurrentBox = it->second;
                     const long nRowSpanSet = n == 0 ?
@@ -2766,28 +2757,24 @@ void WW8TabDesc::FinishSwTable()
             }
         }
         pIo->pFmtOfJustInsertedApo = 0;
-        DELETEZ( pMergeGroups );
+        aMergeGroups.clear();
     }
 }
 
 
-// durchsucht pMergeGroups, meldet Index der ersten, passenden Gruppe bzw. -1
+// durchsucht aMergeGroups, meldet Index der ersten, passenden Gruppe bzw. -1
 //
 // Parameter: nXcenter  = Mittenposition der anfragenden Box
 //            nWidth    = Breite der anfragenden Box
 //            bExact    = Flag, ob Box in dieser Gruppe passen muss,
 //                          oder diese nur zu tangieren braucht
 //
-bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
-    short& nMGrIdx)
+WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
-    nMGrIdx = -1;
-    if( pMergeGroups )
+    if( !aMergeGroups.empty() )
     {
         // noch als gueltig angesehener Bereich in der Naehe der Grenzen
         const short nToleranz = 4;
-        // die aktuell untersuchte Gruppe
-        WW8SelBoxInfoPtr pActGroup;
         // Boxgrenzen
         short nX2 = nX1 + nWidth;
         // ungefaehre Gruppengrenzen
@@ -2795,22 +2782,22 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
         short nGrX2;
 
         // improvement: search backwards
-        for ( short iGr = pMergeGroups->Count() - 1; iGr >= 0; --iGr )
+        for ( short iGr = aMergeGroups.size() - 1; iGr >= 0; --iGr )
         {
             // die aktuell untersuchte Gruppe
-            pActGroup = (*pMergeGroups)[ iGr ];
-            if (!pActGroup->bGroupLocked)
+            WW8SelBoxInfo& rActGroup = aMergeGroups[ iGr ];
+            if (!rActGroup.bGroupLocked)
             {
                 // ungefaehre Gruppengrenzen mit Toleranz nach *aussen* hin
-                nGrX1 = pActGroup->nGroupXStart - nToleranz;
-                nGrX2 = pActGroup->nGroupXStart
-                             +pActGroup->nGroupWidth  + nToleranz;
+                nGrX1 = rActGroup.nGroupXStart - nToleranz;
+                nGrX2 = rActGroup.nGroupXStart
+                             +rActGroup.nGroupWidth  + nToleranz;
                 //
                 // Falls Box reinpasst, melde auf jeden Fall den Erfolg
                 //
                 if( ( nX1 > nGrX1 ) && ( nX2 < nGrX2 ) )
                 {
-                    nMGrIdx = iGr;  break;
+                    return &rActGroup;
                 }
                 //
                 // hat die Box Bereiche mit der Gruppe gemeinsam?
@@ -2826,13 +2813,13 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
                             || (     ( nX1 <=nGrX1 )
                                         && ( nX2 >=nGrX2 ) ) )
                     {
-                        nMGrIdx = iGr;  break;
+                        return &rActGroup;
                     }
                 }
             }
         }
     }
-    return ( -1 < nMGrIdx );
+    return 0;
 }
 
 bool WW8TabDesc::IsValidCell(short nCol) const
@@ -3059,8 +3046,6 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
     {
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
-        if (aColor.GetColor() == 0x00333333)
-            pIo->maTracer.Log(sw::log::eAutoColorBg);
         pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aColor, RES_BACKGROUND));
         bFound = true;
     }
@@ -3341,10 +3326,8 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
         else
         {
             // Gruppe finden
-            short nMGrIdx;
-            if( FindMergeGroup( pActBand->nCenter[ nCol ],
-                                pActBand->nWidth[  nCol ], true, nMGrIdx ) )
-                pTheMergeGroup = (*pMergeGroups)[ nMGrIdx ];
+            pTheMergeGroup = FindMergeGroup(
+                pActBand->nCenter[ nCol ], pActBand->nWidth[  nCol ], true );
         }
         if( pTheMergeGroup )
         {
@@ -3433,7 +3416,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             {
                 // <WW8SwFlyPara> constructor has changed - new 4th parameter
                 // containing WW8 page top margin.
-                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
+                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *pTableWFlyPara,
                     maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);
@@ -3508,13 +3491,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     delete pTableWFlyPara;
     delete pTableSFlyPara;
 
-    bool bSuccess = (0 != pTableDesc);
-    if (bSuccess)
-    {
-        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
-            static_cast<sal_Int32>(maTableStack.size())));
-    }
-    return bSuccess;
+    return 0 != pTableDesc;
 }
 
 void SwWW8ImplReader::TabCellEnd()
@@ -3558,8 +3535,6 @@ void SwWW8ImplReader::PopTableDesc()
 
 void SwWW8ImplReader::StopTable()
 {
-    maTracer.LeaveEnvironment(sw::log::eTable);
-
     OSL_ENSURE(pTableDesc, "Panic, stop table with no table!");
     if (!pTableDesc)
         return;
@@ -3570,12 +3545,6 @@ void SwWW8ImplReader::StopTable()
 
     pTableDesc->FinishSwTable();
     PopTableDesc();
-
-    if (!maTableStack.empty())
-    {
-        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
-            static_cast<sal_Int32>(maTableStack.size())));
-    }
 
     bReadTable = true;
     // #i101116# - Keep PaM on table end only for nested tables

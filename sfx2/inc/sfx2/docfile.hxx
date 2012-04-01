@@ -65,7 +65,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 
-#define OUSTRING                    ::rtl::OUString
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
 #define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
 #define OWEAKOBJECT                 ::cppu::OWeakObject
@@ -111,8 +110,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 
 public:
 
-    SvCompatWeakHdl*    GetHdl();
-
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
@@ -140,7 +137,6 @@ public:
     SfxFrame*           GetLoadTargetFrame() const;
 
     void                SetReferer( const String& rRefer );
-    const String&       GetReferer( ) const;
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter *   GetFilter() const { return pFilter; }
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
@@ -301,7 +297,6 @@ public:
 };
 
 SV_DECL_IMPL_REF( SfxMedium )
-SV_DECL_COMPAT_WEAK( SfxMedium )
 
 typedef ::std::vector< SfxMedium* > SfxMediumList;
 

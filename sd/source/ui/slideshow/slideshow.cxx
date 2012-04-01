@@ -182,9 +182,17 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
     rtl::Reference< SlideShow > xRet;
 
     if( pDocument )
-        xRet = rtl::Reference< SlideShow >( dynamic_cast< SlideShow* >( pDocument->getPresentation().get() ) );
+        xRet = GetSlideShow( *pDocument );
 
     return xRet;
+}
+
+// --------------------------------------------------------------------
+
+rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument& rDocument )
+{
+    return rtl::Reference< SlideShow >(
+        dynamic_cast< SlideShow* >( rDocument.getPresentation().get() ) );
 }
 
 // --------------------------------------------------------------------
@@ -1157,7 +1165,7 @@ void SlideShow::StartInPlacePresentationConfigurationCallback()
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideShow, StartInPlacePresentationConfigurationHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideShow, StartInPlacePresentationConfigurationHdl)
 {
     mnInPlaceConfigEvent = 0;
     StartInPlacePresentation();

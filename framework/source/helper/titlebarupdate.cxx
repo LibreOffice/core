@@ -222,8 +222,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.StartModule")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         else
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         sApplicationID = utl::ConfigManager::getProductName().

@@ -664,16 +664,16 @@ void SfxFrameLoader_Impl::cancel() throw( RuntimeException )
 SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
 
 /* XServiceInfo */
-UNOOUSTRING SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( RuntimeException )
+rtl::OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const UNOOUSTRING& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const rtl::OUString& sServiceName ) throw( RuntimeException )
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -685,22 +685,22 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const UNOOUSTRING& sServ
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( RuntimeException )
+UNOSEQUENCE< rtl::OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
+UNOSEQUENCE< rtl::OUString > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
-    UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
+    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.SynchronousFrameLoader" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-UNOOUSTRING SfxFrameLoader_Impl::impl_getStaticImplementationName()
+rtl::OUString SfxFrameLoader_Impl::impl_getStaticImplementationName()
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.office.FrameLoader" ));
 }

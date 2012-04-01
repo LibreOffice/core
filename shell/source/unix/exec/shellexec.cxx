@@ -39,6 +39,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include "uno/current_context.hxx"
 
@@ -76,6 +77,8 @@ using namespace cppu;
 
 namespace // private
 {
+    namespace css = com::sun::star;
+
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
@@ -132,10 +135,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
     static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
 
-    // Check wether aCommand contains a document url or not
-    sal_Int32 nIndex = aCommand.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM(":/") ) );
-
-    if( nIndex > 0 || 0 == aCommand.compareToAscii("mailto:", 7) )
+    // Check whether aCommand contains an absolute URI reference:
+    css::uno::Reference< css::uri::XUriReference > uri(
+        css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
+    if (uri.is() && uri->isAbsolute())
     {
         // It seems to be a url ..
         // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
@@ -155,7 +158,29 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         }
 
 #ifdef MACOSX
-        aBuffer.append("open");
+        //TODO: Using open(1) with an argument that syntactically is an absolute
+        // URI reference does not necessarily give expected results:
+        // 1  If the given URI reference matches a supported scheme (e.g.,
+        //  "mailto:foo"):
+        // 1.1  If it matches an existing pathname (relative to CWD):  Results
+        //  in "mailto:foo?\n[0]\tcancel\n[1]\tOpen the file\tmailto:foo\n[2]\t
+        //  Open the URL\tmailto:foo\n\nWhich did you mean? Cancelled." on
+        //  stderr and SystemShellExecuteException.
+        // 1.2  If it does not match an exitsting pathname (relative to CWD):
+        //  Results in the corresponding application being opened with the given
+        //  document (e.g., Mail with a New Message).
+        // 2  If the given URI reference does not match a supported scheme
+        //  (e.g., "foo:bar"):
+        // 2.1  If it matches an existing pathname (relative to CWD) pointing to
+        //  an executable:  Results in execution of that executable.
+        // 2.2  If it matches an existing pathname (relative to CWD) pointing to
+        //  a non-executable regular file:  Results in opening it in TextEdit.
+        // 2.3  If it matches an existing pathname (relative to CWD) pointing to
+        //  a directory:  Results in opening it in Finder.
+        // 2.4  If it does not match an exitsting pathname (relative to CWD):
+        //  Results in "The file /.../foo:bar does not exits." (where "/..." is
+        //  the CWD) on stderr and SystemShellExecuteException.
+        aBuffer.append("open --");
 #else
         // The url launchers are expected to be in the $BRAND_BASE_DIR/program
         // directory:
@@ -233,6 +258,15 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             aLaunchBuffer.append(" ");
             escapeForShell(aLaunchBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
         }
+    } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)
+    {
+        throw css::lang::IllegalArgumentException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "XSystemShellExecute.execute URIS_ONLY with non-absolute"
+                    " URI reference "))
+             + aCommand),
+            static_cast< cppu::OWeakObject * >(this), 0);
     } else {
         escapeForShell(aBuffer, OUStringToOString(aCommand, osl_getThreadTextEncoding()));
         aBuffer.append(" ");

@@ -396,7 +396,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 {
     XHatch* pHatch = NULL;
     int nPos = aLbHatchings.GetSelectEntryPos();
@@ -470,7 +470,7 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
@@ -570,7 +570,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbHatchings.GetSelectEntryPos();
 
@@ -642,7 +642,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbHatchings.GetSelectEntryPos();
 
@@ -677,7 +677,7 @@ IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -765,7 +765,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );

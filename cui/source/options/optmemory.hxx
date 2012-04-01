@@ -64,7 +64,7 @@ private:
     FixedLine           aQuickLaunchFL;
     CheckBox            aQuickLaunchCB;
 
-    DECL_LINK( GraphicCacheConfigHdl, NumericField* );
+    DECL_LINK(GraphicCacheConfigHdl, void *);
 
     sal_Int32 GetNfGraphicCacheVal() const; // returns # of Bytes
     inline void         SetNfGraphicCacheVal( long nSizeInBytes );

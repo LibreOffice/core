@@ -172,8 +172,24 @@ public:
     // set by user through printer config dialog
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
+    // set by user through printer config dialog
     sal_Int32                                                   mnDefaultPaperBin;
+    // Set by user through printer preferences in print dialog.
+    // Overrides application-set tray for a page.
     sal_Int32                                                   mnFixedPaperBin;
+
+    // N.B. Apparently we have three levels of paper tray settings
+    // (latter overrides former):
+    // 1. default tray
+    // 2. tray set for a concrete page by an application, e.g., writer
+    //    allows setting a printer tray (for the default printer) for a
+    //    page style. This setting can be overriden by user by selecting
+    //    "Use only paper tray from printer preferences" on the Options
+    //    page in the print dialog, in which case the default tray is
+    //    used for all pages.
+    // 3. tray set in printer properties the printer dialog
+    // I'm not quite sure why 1. and 3. are distinct, but the commit
+    // history suggests this is intentional...
 
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
@@ -276,7 +292,7 @@ struct PrintJobAsync
     DECL_LINK( ExecJob, void* );
 };
 
-IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrintJobAsync, ExecJob)
 {
     Printer::ImplPrintJob( mpController, maInitSetup );
 
@@ -359,7 +375,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         rtl::OUString aPagesVal;
         pPagesVal->Value >>= aPagesVal;
-        if( aPagesVal.getLength() )
+        if( !aPagesVal.isEmpty() )
         {
             // "Pages" attribute from API is now equivalent to "PageRange"
             // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
@@ -384,7 +400,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 rtl::OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
-                if( aRange.getLength() == 0 )
+                if( aRange.isEmpty() )
                 {
                     sal_Int32 nPages = i_pController->getPageCount();
                     if( nPages > 0 )
@@ -442,7 +458,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( aDlg.isPrintToFile() )
             {
                 rtl::OUString aFile = queryFile( pController->getPrinter().get() );
-                if( ! aFile.getLength() )
+                if( aFile.isEmpty() )
                 {
                     i_pController->abortJob();
                     return;
@@ -526,7 +542,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     {
         rtl::OUString aFile;
         pFileValue->Value >>= aFile;
-        if( aFile.getLength() )
+        if( !aFile.isEmpty() )
         {
             mbPrintFile = sal_True;
             maPrintFile = aFile;
@@ -817,6 +833,11 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         if( aRealPaperSize != aCurSize )
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
+
+    // paper bin set from properties in print dialog overrides
+    // application default for a page
+    if ( mnFixedPaperBin != -1 )
+        nPaperBin = mnFixedPaperBin;
 
     if( nPaperBin != -1 && nPaperBin != mpPrinter->GetPaperBin() )
         mpPrinter->SetPaperBin( nPaperBin );
@@ -1376,7 +1397,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             {
                 rEntry.Value >>= aDep.mnDependsOnEntry;
             }
-            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
+            else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChoicesDisabled")) )
             {
                 rEntry.Value >>= aChoicesDisabled;
             }
@@ -1390,7 +1411,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             {
                 mpImplData->maUIPropertyEnabled[ it->second ] = bIsEnabled;
             }
-            if( aDep.maDependsOnName.getLength() > 0 )
+            if( !aDep.maDependsOnName.isEmpty() )
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
             if( aChoicesDisabled.getLength() > 0 )
                 mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
@@ -1707,15 +1728,15 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 {
     sal_Int32 nElements =
         1                                                               // ControlType
-        + (i_rTitle.getLength() ? 1 : 0)                                // Text
+        + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
         + (i_rHelpIds.getLength() ? 1 : 0)                              // HelpId
         + (i_pVal ? 1 : 0)                                              // Property
         + i_rControlOptions.maAddProps.getLength()                      // additional props
-        + (i_rControlOptions.maGroupHint.getLength() ? 1 : 0)           // grouping
+        + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
         + (i_rControlOptions.mbInternalOnly ? 1 : 0)                    // internal hint
         + (i_rControlOptions.mbEnabled ? 0 : 1)                         // enabled
         ;
-    if( i_rControlOptions.maDependsOnName.getLength() )
+    if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
         nElements += 1;
         if( i_rControlOptions.mnDependsOnEntry != -1 )
@@ -1726,7 +1747,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 
     Sequence< PropertyValue > aCtrl( nElements );
     sal_Int32 nUsed = 0;
-    if( i_rTitle.getLength() )
+    if( !i_rTitle.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
@@ -1743,7 +1764,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
         aCtrl[nUsed++].Value = makeAny( *i_pVal );
     }
-    if( i_rControlOptions.maDependsOnName.getLength() )
+    if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
         aCtrl[nUsed++].Value = makeAny( i_rControlOptions.maDependsOnName );
@@ -1758,7 +1779,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mbAttachToDependency );
         }
     }
-    if( i_rControlOptions.maGroupHint.getLength() )
+    if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
         aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
         aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
@@ -1786,7 +1807,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
 Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1800,7 +1821,7 @@ Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
                                                  )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1817,7 +1838,7 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
                                              )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1876,7 +1897,7 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
     }
 
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
@@ -1900,7 +1921,7 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                                            )
 {
     Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;

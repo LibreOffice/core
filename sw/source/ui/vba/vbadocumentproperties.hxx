@@ -51,7 +51,7 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
@@ -62,7 +62,7 @@ public:
 // XDocumentProperties
     virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const ::rtl::OUString& Name, ::sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
 };
 
 #endif /* SW_VBA_DOCUMENTPROPERTY_HXX */

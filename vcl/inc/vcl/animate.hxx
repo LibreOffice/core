@@ -153,7 +153,7 @@ class VCL_DLLPUBLIC Animation
 
 
     SAL_DLLPRIVATE void     ImplRestartTimer( sal_uLong nTimeout );
-    DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, Timer* );
+    DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, void* );
 
 public:
 

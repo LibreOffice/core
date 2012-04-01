@@ -51,6 +51,8 @@ class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const editen
 public:
     inline explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
 
+    virtual ~LineItemWrapper() {}
+
     virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
                             { return rItem.GetLine(); }
     virtual void        SetItemValue( SvxLineItem& rItem, const editeng::SvxBorderLine* pLine ) const

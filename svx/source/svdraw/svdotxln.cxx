@@ -151,7 +151,7 @@ void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName,
     pData->aFileName=rFileName;
     pData->aFilterName=rFilterName;
     pData->eCharSet=eCharSet;
-    InsertUserData(pData);
+    AppendUserData(pData);
     ImpLinkAnmeldung();
 }
 

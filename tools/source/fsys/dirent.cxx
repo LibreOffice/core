@@ -128,62 +128,6 @@ int Sys2SolarError_Impl( int nSysErr )
 
 //--------------------------------------------------------------------
 
-FSysRedirector* FSysRedirector::_pRedirector = 0;
-sal_Bool FSysRedirector::_bEnabled = sal_True;
-#ifdef UNX
-sal_Bool bInRedirection = sal_True;
-#else
-sal_Bool bInRedirection = sal_False;
-#endif
-static osl::Mutex* pRedirectMutex = 0;
-
-//------------------------------------------------------------------------
-void FSysRedirector::DoRedirect( String &rPath )
-{
-        String aURL(rPath);
-
-        // if redirection is disabled or not even registered do nothing
-        if ( !_bEnabled || !pRedirectMutex )
-                return;
-
-        // redirect only removable or remote volumes
-        if (!IsRedirectable_Impl(rtl::OUStringToOString(aURL, osl_getThreadTextEncoding())))
-                return;
-
-        // Redirection is acessible only by one thread per time
-        // dont move the guard behind the bInRedirection check!!!
-        // think of nested calls (when called from callback)
-        osl::MutexGuard aGuard( pRedirectMutex );
-
-        // if already in redirection, dont redirect
-        if ( bInRedirection )
-                return;
-
-        // dont redirect on nested calls
-        bInRedirection = sal_True;
-
-        // convert to URL
-#ifndef UNX
-        for ( sal_Unicode *p = (sal_Unicode*)aURL.GetBuffer(); *p; ++p )
-                if ( '\\' == *p ) *p = '/';
-                else if ( ':' == *p ) *p = '|';
-#endif
-
-        aURL.Insert( String("file:///", osl_getThreadTextEncoding()), 0 );
-
-        // do redirection
-        if ( !_pRedirector )
-        {
-            pRedirectMutex = new osl::Mutex;
-            _pRedirector = new FSysRedirector;
-        }
-
-        bInRedirection = sal_False;
-        return;
-}
-
-//--------------------------------------------------------------------
-
 class DirEntryStack
 {
 private:
@@ -721,6 +665,8 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
+    (void) eStyle; // only used for DBG_UTIL
+
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
@@ -732,11 +678,13 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
-    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+#ifdef DBG_UTIL
                 eStyle = FSYS_STYLE_HOST;
+#endif
     }
     else
     {
@@ -773,6 +721,8 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
+    (void) eStyle; // only used for DBG_UTIL
+
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
@@ -784,11 +734,13 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName( rInitName );
-    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+#ifdef DBG_UTIL
         eStyle = FSYS_STYLE_HOST;
+#endif
     }
 #ifdef DBG_UTIL
     else
@@ -958,7 +910,6 @@ sal_Bool DirEntry::First()
     FSysFailOnErrorImpl();
 
         String    aUniPathName( GetPath().GetFull() );
-        FSysRedirector::DoRedirect( aUniPathName );
         rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 
         DIR *pDir = opendir(aPathName.getStr());
@@ -1526,31 +1477,6 @@ DirEntry DirEntry::GetDevice() const
 
 /*************************************************************************
 |*
-|*    DirEntry::SetBase()
-|*
-*************************************************************************/
-
-void DirEntry::SetBase( const String& rBase, char cSep )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    const char *p0 = aName.getStr();
-    const char *p1 = p0 + aName.getLength() - 1;
-    while ( p1 >= p0 && *p1 != cSep )
-        p1--;
-
-    if ( p1 >= p0 )
-    {
-        // es wurde ein cSep an der Position p1 gefunden
-        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding())
-            + aName.copy(p1 - p0);
-    }
-    else
-        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding());
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::GetSearchDelimiter()
 |*
 *************************************************************************/
@@ -1568,34 +1494,6 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 |*
 *************************************************************************/
 namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
-
-const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
-{
-        DirEntry aTempDir = DirEntry().TempName().GetPath();
-        aTempDir += DirEntry( rBase );
-#ifdef UNX
-        rtl::OString aName(rtl::OUStringToOString(aTempDir.GetFull(), osl_getThreadTextEncoding()));
-        if ( access( aName.getStr(), W_OK | X_OK | R_OK ) )
-        {
-            // Create the directory and only on success give all rights to
-            // everyone. Use mkdir instead of DirEntry::MakeDir because
-            // this returns sal_True even if directory already exists.
-
-            if ( !mkdir( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO ) )
-                chmod( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO );
-
-            // This will not create a directory but perhaps FileStat called
-            // there modifies the DirEntry
-
-            aTempDir.MakeDir();
-        }
-#else
-        aTempDir.MakeDir();
-#endif
-        DirEntry &rEntry = TempNameBase_Impl::get();
-        rEntry = aTempDir.TempName( FSYS_KIND_DIR );
-        return rEntry;
-}
 
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
@@ -1712,7 +1610,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 // Redirect
                 String aRetVal(ret_val, osl_getThreadTextEncoding());
                                 String aRedirected (aRetVal);
-                                FSysRedirector::DoRedirect( aRedirected );
                                 if ( FSYS_KIND_DIR == eKind )
                                 {
                                                 if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
@@ -1797,7 +1694,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 
                 // das Dir selbst erzeugen
                 if ( pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
-                         pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
                          pNewDir->eFlag == FSYS_FLAG_VOLUME )
                         return sal_True;
                 else
@@ -1809,7 +1705,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                         {
                                 FSysFailOnErrorImpl();
                                 String aDirName(pNewDir->GetFull());
-                                FSysRedirector::DoRedirect( aDirName );
                                 rtl::OString bDirName(rtl::OUStringToOString(aDirName, osl_getThreadTextEncoding()));
 
 #ifdef WIN32
@@ -1895,11 +1790,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
 
-        FSysRedirector::DoRedirect(aFrom);
-
         String aTo( aDest.GetFull() );
-
-        FSysRedirector::DoRedirect(aTo);
 
         rtl::OString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
         rtl::OString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
@@ -2038,7 +1929,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 
         // Name als doppelt 0-terminierter String
         String aTmpName( GetFull() );
-        FSysRedirector::DoRedirect( aTmpName );
         rtl::OString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
         char *pName = new char[bTmpName.getLength()+2];

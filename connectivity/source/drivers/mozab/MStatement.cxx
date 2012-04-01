@@ -424,7 +424,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
 {
-    // set the value to what ever is nescessary
+    // set the value to whatever is necessary
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:

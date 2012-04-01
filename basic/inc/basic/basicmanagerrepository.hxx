@@ -65,6 +65,9 @@ namespace basic
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxForDocument,
             BasicManager& _rBasicManager
         ) = 0;
+
+    protected:
+        ~BasicManagerCreationListener() {}
     };
 
     //====================================================================

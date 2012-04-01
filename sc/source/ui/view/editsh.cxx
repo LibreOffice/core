@@ -438,7 +438,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( nRet == BTN_PASTE_NAME )
                 {
                     std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
-                    if (aNames.size())
+                    if (!aNames.empty())
                     {
                         rtl::OUStringBuffer aBuffer;
                         for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();

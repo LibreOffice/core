@@ -694,7 +694,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
-                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT )) ) );
+                        aFldPam, maFieldStack.back().GetBookmarkName(), ODF_FORMTEXT ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
                 const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
@@ -744,7 +744,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFldPam,
                                 maFieldStack.back().GetBookmarkName(),
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_UNHANDLED )) );
+                                ODF_UNHANDLED );
                     if ( pFieldmark )
                     {
                         const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
@@ -752,11 +752,11 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )),
+                                    ODF_ID_PARAM,
                                     uno::makeAny( sFieldId ) ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )),
+                                    ODF_CODE_PARAM,
                                     uno::makeAny( aCode ) ) );
 
                         if ( maFieldStack.back().mnObjLocFc > 0 )
@@ -773,7 +773,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             if (xDocStg.is())
                             {
                                 uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
+                                        "OLELinks", embed::ElementModes::WRITE );
                                 SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
                                 if ( xObjDst.Is() )
@@ -792,8 +792,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
                                     std::pair< rtl::OUString, uno::Any >(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )),
-                                        uno::makeAny( rtl::OUString( sOleId ) ) ) );
+                                        ODF_OLE_PARAM, uno::makeAny( rtl::OUString( sOleId ) ) ) );
                         }
 
                     }
@@ -853,11 +852,6 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
 ::rtl::OUString FieldEntry::GetBookmarkName()
 {
     return msBookmarkName;
-}
-
-::rtl::OUString FieldEntry::GetBookmarkType()
-{
-    return msMarkType;
 }
 
 ::rtl::OUString FieldEntry::GetBookmarkCode()
@@ -1372,7 +1366,7 @@ the field, which gives the same effect and meaning, to do so we must
 get any bookmarks in the field range, and begin them immediately before
 the set/ask field, and end them directly afterwards. MapBookmarkVariables
 returns an identifier of the bookmark attribute to close after inserting
-the appropiate set/ask field.
+the appropriate set/ask field.
 */
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     String &rOrigName, const String &rData)
@@ -2226,9 +2220,9 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_REF"));
+    ::rtl::OUString aBookmarkName("_REF");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_PAGEREF)));
+    maFieldStack.back().SetBookmarkType(ODF_PAGEREF);
     maFieldStack.back().AddParam(rtl::OUString(), sName);
     return FLD_TEXT;
     }
@@ -2324,8 +2318,7 @@ bool CanUseRemoteLink(const String &rGrfName)
             ucb::XCommandEnvironment >() );
         rtl::OUString   aTitle;
 
-        aCnt.getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")))
-            >>= aTitle;
+        aCnt.getPropertyValue("Title") >>= aTitle;
         bUseRemote = !aTitle.isEmpty();
     }
     catch ( ... )
@@ -2935,9 +2928,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
+    ::rtl::OUString aBookmarkName("_TOC");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_TOC)));
+    maFieldStack.back().SetBookmarkType(ODF_TOC);
     return FLD_TEXT;
     }
 #endif
@@ -3458,9 +3451,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
+    ::rtl::OUString aBookmarkName("_HYPERLINK");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_HYPERLINK)));
+    maFieldStack.back().SetBookmarkType(ODF_HYPERLINK);
     return FLD_TEXT;
     }
 #endif

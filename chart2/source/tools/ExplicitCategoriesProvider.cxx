@@ -86,19 +86,19 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             {
                 uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
 
-                OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
-                if( xDataProvider.is() && !aCatgoriesRange.isEmpty() )
+                OUString aCategoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+                if( xDataProvider.is() && !aCategoriesRange.isEmpty() )
                 {
                     const bool bFirstCellAsLabel = false;
                     const bool bHasCategories = false;
                     const uno::Sequence< sal_Int32 > aSequenceMapping;
 
                     uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
-                         DataSourceHelper::createArguments( aCatgoriesRange, aSequenceMapping, true /*bUseColumns*/
+                         DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
                             , bFirstCellAsLabel, bHasCategories ) ) );
 
                     uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
-                         DataSourceHelper::createArguments( aCatgoriesRange, aSequenceMapping, false /*bUseColumns*/
+                         DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
                             , bFirstCellAsLabel, bHasCategories ) ) );
 
                     if( xColumnCategoriesSource.is() &&  xRowCategoriesSource.is() )
@@ -321,7 +321,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
 sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategories )
 {
     sal_Int32 nCount = 0;
-    std::vector< ComplexCategory >::iterator aIt( rComplexCategories.begin() );
+    std::vector< ComplexCategory >::const_iterator aIt( rComplexCategories.begin() );
     std::vector< ComplexCategory >::const_iterator aEnd( rComplexCategories.end() );
     for( ; aIt != aEnd; ++aIt )
         nCount+=aIt->Count;

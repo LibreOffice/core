@@ -31,7 +31,6 @@
 
 #include "SlsBitmapCompressor.hxx"
 #include "SlsBitmapCache.hxx"
-#include "SlsCacheCompactor.hxx"
 #include "SlsCacheConfiguration.hxx"
 
 #include <rtl/ustring.hxx>
@@ -165,7 +164,7 @@ CacheCompactor::CacheCompactor(
 
 
 
-IMPL_LINK(CacheCompactor, CompactionCallback, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
 {
     mbIsCompactionRunning = true;
 

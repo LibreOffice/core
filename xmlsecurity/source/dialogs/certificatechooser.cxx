@@ -122,7 +122,7 @@ short CertificateChooser::Execute()
     return ModalDialog::Execute();
 }
 
-// IMPL_LINK( CertificateChooser, Initialize, void*, EMPTYARG )
+// IMPL_LINK_NOARG(CertificateChooser, Initialize)
 void CertificateChooser::ImplInitialize()
 {
     if ( !mbInitialized )
@@ -206,7 +206,7 @@ uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCe
     return xCert;
 }
 
-IMPL_LINK( CertificateChooser, CertificateHighlightHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl)
 {
     sal_Bool bEnable = GetSelectedCertificate().is();
     maViewBtn.Enable( bEnable );
@@ -214,13 +214,13 @@ IMPL_LINK( CertificateChooser, CertificateHighlightHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( CertificateChooser, CertificateSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl)
 {
     EndDialog( RET_OK );
     return 0;
 }
 
-IMPL_LINK( CertificateChooser, ViewButtonHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateChooser, ViewButtonHdl)
 {
     ImplShowCertificateDetails();
     return 0;

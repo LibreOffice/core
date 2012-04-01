@@ -381,7 +381,7 @@ sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc )
     return (*o_ppFunc != NULL);
 }
 
-IMPL_LINK( MacPluginComm, NullTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
 {
     // note: this is a Timer handler, we are already protected by the SolarMutex
 

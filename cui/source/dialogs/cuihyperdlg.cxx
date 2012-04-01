@@ -233,7 +233,7 @@ void SvxHpLinkDlg::Move()
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHpLinkDlg, ClickApplyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
 {
     SfxItemSet aItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
                          SID_HYPERLINK_SETLINK );
@@ -265,7 +265,7 @@ IMPL_LINK ( SvxHpLinkDlg, ClickApplyHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHpLinkDlg, ClickCloseHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl)
 {
     Close();
 

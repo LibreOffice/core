@@ -87,7 +87,7 @@ namespace cairo {
     SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
                                     int x, int y, int width, int height );
     /// Create Surface for given bitmap data
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice& rRefDevice,
+    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
                                           const BitmapSystemData& rData,
                                           const Size&             rSize );
 

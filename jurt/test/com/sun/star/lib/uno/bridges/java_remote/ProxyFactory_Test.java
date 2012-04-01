@@ -33,29 +33,22 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
-import complexlib.ComplexTestCase;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class ProxyFactory_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] { "testQueryInterface", "testExceptionHandling" };
-    }
-
-    public void testQueryInterface() {
+public final class ProxyFactory_Test {
+    @Test public void testQueryInterface() {
         TestRequestHandler handler = new TestRequestHandler();
         Type type = new Type(XNamingService.class);
         Object proxy = new ProxyFactory(handler, null).create("TestOID", type);
-        assure("", proxy == ((IQueryInterface) proxy).queryInterface(type));
-        assure("", proxy == UnoRuntime.queryInterface(type, proxy));
+        assertSame(proxy, ((IQueryInterface) proxy).queryInterface(type));
+        assertSame(proxy, UnoRuntime.queryInterface(type, proxy));
     }
 
-    public void testExceptionHandling() throws Exception {
+    @Test public void testExceptionHandling() throws Exception {
         TestRequestHandler handler = new TestRequestHandler();
         Object proxy = new ProxyFactory(handler, null).create(
             "TestOID", new Type(XNamingService.class));
@@ -94,11 +87,10 @@ public final class ProxyFactory_Test extends ComplexTestCase {
                                    Class exception) throws Exception {
         try {
             method.invoke(obj, args);
-            assure("expected exception: " + exception, exception == null);
+            assertNull(exception);
         } catch (InvocationTargetException e) {
-            assure("unexpected exception: " + e.getTargetException(),
-                   exception != null
-                   && exception.isInstance(e.getTargetException()));
+            assertNotNull(exception);
+            assertTrue(exception.isInstance(e.getTargetException()));
             // TODO  check stack trace
         }
     }

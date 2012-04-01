@@ -40,7 +40,7 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 {
-    String aName;
+    rtl::OUString aName;
     String aExpansion;
 
     ::sfx2::SvBaseLinkRef refLink;
@@ -62,7 +62,7 @@ public:
                                                   bCRLFFlag = sal_False; }
 
     virtual SwFieldType* Copy() const;
-    virtual const String& GetName() const;
+    virtual const rtl::OUString& GetName() const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -108,11 +108,11 @@ public:
 
     // Get parameter via types.
     // Name cannot be changed.
-    virtual const String& GetPar1() const;
+    virtual const rtl::OUString& GetPar1() const;
 
     // Command
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual rtl::OUString  GetPar2() const;
+    virtual void    SetPar2(const rtl::OUString& rStr);
 };
 
 

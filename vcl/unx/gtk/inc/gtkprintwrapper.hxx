@@ -35,7 +35,11 @@
 #include <gtk/gtk.h>
 
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
+#else
+#include <gtk/gtkpagesetupunixdialog.h>
+#endif
 
 #if !GTK_CHECK_VERSION(3,0,0)
 #include <osl/module.hxx>
@@ -81,8 +85,6 @@ public:
     void print_unix_dialog_set_settings(GtkPrintUnixDialog* dialog, GtkPrintSettings* settings) const;
 
     // print selection support, since 2.17.4
-    void print_operation_set_support_selection(GtkPrintOperation* op, gboolean support_selection) const;
-    void print_operation_set_has_selection(GtkPrintOperation* op, gboolean has_selection) const;
     void print_unix_dialog_set_support_selection(GtkPrintUnixDialog* dialog, gboolean support_selection) const;
     void print_unix_dialog_set_has_selection(GtkPrintUnixDialog* dialog, gboolean has_selection) const;
 
@@ -108,8 +110,6 @@ private:
     typedef void (* print_unix_dialog_set_manual_capabilities_t)(GtkPrintUnixDialog*, GtkPrintCapabilities);
     typedef GtkPrintSettings* (* print_unix_dialog_get_settings_t)(GtkPrintUnixDialog*);
     typedef void (* print_unix_dialog_set_settings_t)(GtkPrintUnixDialog*, GtkPrintSettings*);
-    typedef void (* print_operation_set_support_selection_t)(GtkPrintOperation*, gboolean);
-    typedef void (* print_operation_set_has_selection_t)(GtkPrintOperation*, gboolean);
     typedef void (* print_unix_dialog_set_support_selection_t)(GtkPrintUnixDialog*, gboolean);
     typedef void (* print_unix_dialog_set_has_selection_t)(GtkPrintUnixDialog*, gboolean);
 
@@ -136,8 +136,6 @@ private:
     print_unix_dialog_set_settings_t m_print_unix_dialog_set_settings;
 
     // print selection support, since 2.17.4
-    print_operation_set_support_selection_t m_print_operation_set_support_selection;
-    print_operation_set_has_selection_t m_print_operation_set_has_selection;
     print_unix_dialog_set_support_selection_t m_print_unix_dialog_set_support_selection;
     print_unix_dialog_set_has_selection_t m_print_unix_dialog_set_has_selection;
 #endif

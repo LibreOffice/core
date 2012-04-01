@@ -45,17 +45,17 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
                                     ::comphelper::getProcessServiceFactory();
 
     try {
-        STAR_REFERENCE( uno::XInterface ) xI =
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xI =
             rxMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.i18n.IndexEntrySupplier")) );
         if( xI.is() )
         {
-            UNO_NMSPC::Any x = xI->queryInterface( ::getCppuType(
+            ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType(
                     (const uno::Reference< i18n::XExtendedIndexEntrySupplier>*)0) );
             x >>= xIES;
         }
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -75,13 +75,13 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 
 String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
                                                const String& rTxtReading,
-                                               const STAR_NMSPC::lang::Locale& rLocale ) const
+                                               const ::com::sun::star::lang::Locale& rLocale ) const
 {
     String sRet;
     try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -102,7 +102,7 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -117,15 +117,15 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     return sRet;
 }
 
-STAR_NMSPC::uno::Sequence< ::rtl::OUString >
-IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const
 {
     uno::Sequence< ::rtl::OUString > sRet;
 
     try {
         sRet = xIES->getAlgorithmList( rLcl );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -141,14 +141,14 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
 }
 
 sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
-        const STAR_NMSPC::lang::Locale& rLcl,
+        const ::com::sun::star::lang::Locale& rLcl,
         const String& sSortAlgorithm, long nOptions ) const
 {
     sal_Bool bRet = sal_False;
     try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif
@@ -165,16 +165,16 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
 
 sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
             const String& rTxt1, const String& rTxtReading1,
-            const STAR_NMSPC::lang::Locale& rLocale1,
+            const ::com::sun::star::lang::Locale& rLocale1,
             const String& rTxt2, const String& rTxtReading2,
-            const STAR_NMSPC::lang::Locale& rLocale2 ) const
+            const ::com::sun::star::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;
     try {
         nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                         rTxt2, rTxtReading2, rLocale2 );
     }
-    catch (const UNO_NMSPC::Exception&
+    catch (const ::com::sun::star::uno::Exception&
 #if OSL_DEBUG_LEVEL > 0
         e
 #endif

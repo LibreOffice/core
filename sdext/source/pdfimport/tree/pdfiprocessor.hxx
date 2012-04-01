@@ -109,7 +109,6 @@ namespace pdfi
         sal_Int32 getFontId( const FontAttributes& rAttr ) const;
 
         void sortElements( Element* pElement, bool bDeep = false );
-        void sortDocument( bool bDeep = false );
 
         rtl::OUString mirrorString( const rtl::OUString& i_rInString );
 

@@ -9,6 +9,16 @@ symlink: %_DEST%\lib\libgthread-2.0.0.dylib %_DEST%\lib\libgthread-2.0.dylib
 symlink: %_DEST%\lib\libglib-2.0.0.dylib %_DEST%\lib\libglib-2.0.dylib
 ..\%__SRC%\lib\libgobject-2.0.0.dylib %_DEST%\lib\libgobject-2.0.0.dylib
 symlink: %_DEST%\lib\libgobject-2.0.0.dylib %_DEST%\lib\libgobject-2.0.dylib
+..\%__SRC%\lib\libgio-2.0.so.0 %_DEST%\lib\libgio-2.0.so.0
+symlink: %_DEST%\lib\libgio-2.0.so.0 %_DEST%\lib\libgio-2.0.so
+..\%__SRC%\lib\libgmodule-2.0.so.0 %_DEST%\lib\libgmodule-2.0.so.0
+symlink: %_DEST%\lib\libgmodule-2.0.so.0 %_DEST%\lib\libgmodule-2.0.so
+..\%__SRC%\lib\libgthread-2.0.so.0 %_DEST%\lib\libgthread-2.0.so.0
+symlink: %_DEST%\lib\libgthread-2.0.so.0 %_DEST%\lib\libgthread-2.0.so
+..\%__SRC%\lib\libglib-2.0.so.0 %_DEST%\lib\libglib-2.0.so.0
+symlink: %_DEST%\lib\libglib-2.0.so.0 %_DEST%\lib\libglib-2.0.so
+..\%__SRC%\lib\libgobject-2.0.so.0 %_DEST%\lib\libgobject-2.0.so.0
+symlink: %_DEST%\lib\libgobject-2.0.so.0 %_DEST%\lib\libgobject-2.0.so
 ..\%__SRC%\bin\*.dll %_DEST%\bin
 ..\%__SRC%\bin\glib-mkenums %_DEST%\bin\glib-mkenums
 ..\%__SRC%\bin\glib-genmarshal %_DEST%\bin\glib-genmarshal

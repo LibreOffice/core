@@ -46,7 +46,7 @@ public:
     virtual ~SwVbaTabStop();
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_TABSTOP_HXX */

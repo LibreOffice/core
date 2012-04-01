@@ -139,7 +139,6 @@ public:
     void        SetMaxTextLen( xub_StrLen nLen );
     xub_StrLen  GetMaxTextLen() const;
 
-    void        SetInsertMode( sal_Bool bInsert );
     sal_Bool        IsInsertMode() const;
 
     void        InsertText( const String& rStr );
@@ -156,7 +155,6 @@ public:
     void        SetText( const String& rStr );
     String      GetText() const;
     String      GetText( LineEnd aSeparator ) const;
-    String      GetTextLines() const;
     String      GetTextLines( LineEnd aSeparator ) const;
 
     void        Resize();
@@ -396,11 +394,6 @@ sal_Bool ImpSvMEdit::IsModified() const
     return mpTextWindow->GetTextEngine()->IsModified();
 }
 
-void ImpSvMEdit::SetInsertMode( sal_Bool bInsert )
-{
-    mpTextWindow->GetTextView()->SetInsertMode( bInsert );
-}
-
 void ImpSvMEdit::SetReadOnly( sal_Bool bRdOnly )
 {
     mpTextWindow->GetTextView()->SetReadOnly( bRdOnly );
@@ -544,11 +537,6 @@ String ImpSvMEdit::GetText() const
 String ImpSvMEdit::GetText( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextEngine()->GetText( aSeparator );
-}
-
-String ImpSvMEdit::GetTextLines() const
-{
-    return mpTextWindow->GetTextEngine()->GetTextLines();
 }
 
 String ImpSvMEdit::GetTextLines( LineEnd aSeparator ) const
@@ -1101,7 +1089,7 @@ void MultiLineEdit::Modify()
         pUpdateDataTimer->Start();
 }
 
-IMPL_LINK( MultiLineEdit, ImpUpdateDataHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MultiLineEdit, ImpUpdateDataHdl)
 {
     UpdateData();
     return 0;
@@ -1219,11 +1207,6 @@ String MultiLineEdit::GetText() const
 String MultiLineEdit::GetText( LineEnd aSeparator ) const
 {
     return pImpSvMEdit->GetText( aSeparator );
-}
-
-String MultiLineEdit::GetTextLines() const
-{
-    return pImpSvMEdit->GetTextLines();
 }
 
 String MultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
@@ -1565,12 +1548,6 @@ ExtTextView* MultiLineEdit::GetTextView() const
     return pImpSvMEdit->GetTextWindow()->GetTextView();
 }
 
-ScrollBar* MultiLineEdit::GetHScrollBar() const
-{
-    return pImpSvMEdit->GetHScrollBar();
-}
-
-
 ScrollBar* MultiLineEdit::GetVScrollBar() const
 {
     return pImpSvMEdit->GetVScrollBar();
@@ -1581,24 +1558,10 @@ void MultiLineEdit::EnableFocusSelectionHide( sal_Bool bHide )
     pImpSvMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-sal_Bool MultiLineEdit::IsFocusSelectionHideEnabled() const
-{
-    return pImpSvMEdit->GetTextWindow()->IsAutoFocusHide();
-}
-
-
 void MultiLineEdit::SetLeftMargin( sal_uInt16 n )
 {
     if ( GetTextEngine() )
         GetTextEngine()->SetLeftMargin( n );
-}
-
-sal_uInt16 MultiLineEdit::GetLeftMargin() const
-{
-    if ( GetTextEngine() )
-        return GetTextEngine()->GetLeftMargin();
-    else
-        return 0;
 }
 
 void MultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )

@@ -29,8 +29,7 @@ $(eval $(call gb_Library_Library,slideshow))
 
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/slideshow/source/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/slideshow/source/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,slideshow,\

@@ -70,7 +70,7 @@ protected:
     SVT_DLLPRIVATE void     GetFocus();
     SVT_DLLPRIVATE void     StateChanged( StateChangedType nType );
     SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
-    DECL_DLLPRIVATE_LINK( ButtonHdl, PushButton* );
+    DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
 
 public:
                     FileControl( Window* pParent, WinBits nStyle, FileControlMode = 0 );
@@ -86,18 +86,13 @@ public:
 
     void            SetText( const XubString& rStr );
     XubString       GetText() const;
-    UniString           GetSelectedText() const         { return maEdit.GetSelected(); }
+    rtl::OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
 
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
     Selection       GetSelection() const                        { return maEdit.GetSelection(); }
 
     void            SetReadOnly( sal_Bool bReadOnly = sal_True )    { maEdit.SetReadOnly( bReadOnly ); }
     sal_Bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
-
-    //------
-    //manipulate the Button-Text:
-    XubString       GetButtonText() const { return maButtonText; }
-    void            SetButtonText( const XubString& rStr );
 
     //------
     //use this to manipulate the dialog bevore executing it:

@@ -30,9 +30,9 @@
 $(eval $(call gb_Module_Module,tools))
 
 $(eval $(call gb_Module_add_targets,tools,\
+    CustomTarget_reversemap \
     Library_tl \
     Package_inc \
-    Package_reversemap \
     StaticLibrary_ooopathutils \
 ))
 
@@ -46,12 +46,6 @@ $(eval $(call gb_Module_add_targets,tools,\
     Executable_mkunroll \
     Executable_rscdep \
     Executable_so_checksum \
-))
-endif
-
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,tools,\
-	Executable_tools_cppunittester_all \
 ))
 endif
 

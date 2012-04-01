@@ -35,11 +35,29 @@
 
 #include <rtl/strbuf.h>
 #include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 
 #ifdef __cplusplus
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+// helper macro to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#endif
 
 /** A string buffer implements a mutable sequence of characters.
     <p>
@@ -355,10 +373,37 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
     OStringBuffer & append( const sal_Char * str )
     {
         return append( str, rtl_str_getLength( str ) );
     }
+#else
+    template< typename T >
+    typename internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
+    {
+        return append( str, rtl_str_getLength( str ) );
+    }
+
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
+    {
+        return append( str, rtl_str_getLength( str ) );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
+    {
+        RTL_STRING_CONST_FUNCTION
+        rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
+    }
+#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -404,7 +449,7 @@ public:
         The argument is appended to the contents of this string buffer.
         The length of this string buffer increases by <code>1</code>.
 
-        @param   ch   a <code>char</code>.
+        @param   c   a <code>char</code>.
         @return  this string buffer.
      */
     OStringBuffer & append(sal_Char c)
@@ -514,13 +559,40 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
+        @param      str      a character array.
         @return     this string buffer.
      */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
     {
         return insert( offset, str, rtl_str_getLength( str ) );
     }
+#else
+    template< typename T >
+    typename internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    {
+        RTL_STRING_CONST_FUNCTION
+        rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
+    }
+#endif
 
     /**
         Inserts the string representation of the <code>char</code> array
@@ -536,8 +608,8 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
-        @param       len     the number of characters to append.
+        @param      str      a character array.
+        @param      len      the number of characters to append.
         @return     this string buffer.
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
@@ -583,7 +655,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a <code>char</code>.
+        @param      c        a <code>char</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Char c)
@@ -605,7 +677,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        an <code>sal_Int32</code>.
+        @param      i        an <code>sal_Int32</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int32 i, sal_Int16 radix = 10 )
@@ -628,7 +700,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>long</code>.
+        @param      l        a <code>long</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int64 l, sal_Int16 radix = 10 )
@@ -651,7 +723,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>float</code>.
+        @param      f        a <code>float</code>.
         @return     this string buffer.
      */
     OStringBuffer insert(sal_Int32 offset, float f)
@@ -674,7 +746,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>double</code>.
+        @param      d        a <code>double</code>.
         @return     this string buffer.
      */
     OStringBuffer & insert(sal_Int32 offset, double d)
@@ -714,6 +786,14 @@ private:
 };
 
 }
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OStringBuffer OStringBuffer;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
 
 #endif  /* __cplusplus */
 #endif  /* _RTL_STRBUF_HXX_ */

@@ -47,10 +47,11 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( sal_Bool bSaveInto,
         xVBAStg = 0;
         if( bSaveInto )
         {
+#ifndef DISABLE_SCRIPTING
             BasicManager *pBasicMan = rDocSh.GetBasicManager();
             if( pBasicMan && pBasicMan->IsBasicModified() )
                 nRet = ERRCODE_SVX_MODIFIED_VBASIC_STORAGE;
-
+#endif
             SotStorageRef xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, STREAM_STD_READ );
             SotStorageRef xDst = xRoot->OpenSotStorage( rStorageName, STREAM_READWRITE | STREAM_TRUNC );
             xSrc->CopyTo( xDst );

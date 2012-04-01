@@ -277,8 +277,7 @@ void Sane::ReloadOptions()
     if( ! IsOpen() )
         return;
 
-    SANE_Option_Descriptor* pZero = (SANE_Option_Descriptor*)
-        p_get_option_descriptor( maHandle, 0 );
+    const SANE_Option_Descriptor* pZero = p_get_option_descriptor( maHandle, 0 );
     SANE_Word pOptions[2];
     SANE_Status nStatus = p_control_option( maHandle, 0, SANE_ACTION_GET_VALUE,
                                             (void*)pOptions, NULL );
@@ -290,8 +289,8 @@ void Sane::ReloadOptions()
         fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
     if( mppOptions )
         delete [] mppOptions;
-    mppOptions = (const SANE_Option_Descriptor**)new SANE_Option_Descriptor*[ mnOptions ];
-    mppOptions[ 0 ] = (SANE_Option_Descriptor*)pZero;
+    mppOptions = new const SANE_Option_Descriptor*[ mnOptions ];
+    mppOptions[ 0 ] = pZero;
     for( int i = 1; i < mnOptions; i++ )
         mppOptions[ i ] =  (SANE_Option_Descriptor*)
             p_get_option_descriptor( maHandle, i );
@@ -535,14 +534,14 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
 
 sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
 {
-    static SANE_Option_Descriptor** pDescArray = NULL;
-    static SANE_Option_Descriptor*  pZero = NULL;
+    static const SANE_Option_Descriptor** pDescArray = NULL;
+    static const SANE_Option_Descriptor*  pZero = NULL;
 
     if( bInit )
     {
-        pDescArray = (SANE_Option_Descriptor**)mppOptions;
+        pDescArray = mppOptions;
         if( mppOptions )
-            pZero = (SANE_Option_Descriptor*)mppOptions[0];
+            pZero = mppOptions[0];
         return sal_True;
     }
 

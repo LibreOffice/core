@@ -29,9 +29,10 @@
 #ifndef SC_OUTLINETAB_HXX
 #define SC_OUTLINETAB_HXX
 
-
-#include "collect.hxx"
 #include "scdllapi.h"
+#include "address.hxx"
+
+#include <boost/ptr_container/ptr_map.hpp>
 
 #define SC_OL_MAXDEPTH      7
 
@@ -39,7 +40,7 @@ class SvStream;
 class ScTable;
 
 
-class ScOutlineEntry : public ScDataObject
+class ScOutlineEntry
 {
     SCCOLROW    nStart;
     SCSIZE      nSize;
@@ -47,17 +48,22 @@ class ScOutlineEntry : public ScDataObject
     bool        bVisible;
 
 public:
-                            ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
-                                                bool bNewHidden = false );
-                            ScOutlineEntry( const ScOutlineEntry& rEntry );
+    ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden = false );
+    ScOutlineEntry( const ScOutlineEntry& rEntry );
 
-    virtual ScDataObject*       Clone() const;
+    SCCOLROW GetStart() const;
+    SCSIZE GetSize() const;
+    SC_DLLPUBLIC SCCOLROW GetEnd() const;
 
-    SCCOLROW                GetStart() const    { return nStart; }
-    SCSIZE                  GetSize() const     { return nSize; }
-    SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    bool                    IsHidden() const    { return bHidden; }             // group hidden
-    bool                    IsVisible() const   { return bVisible; }            // control visible?
+    /**
+     * @return true is the group is hidden, false otherwise.
+     */
+    SC_DLLPUBLIC bool IsHidden() const;
+
+    /**
+     * @return true if the control is visible, false otherwise.
+     */
+    bool IsVisible() const;
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -66,67 +72,82 @@ public:
     void                    SetVisible( bool bNewVisible );
 };
 
-
-class ScOutlineCollection : public ScSortedCollection
+class ScOutlineCollection
 {
+    typedef boost::ptr_map<SCCOLROW, ScOutlineEntry> MapType;
+    MapType maEntries;
+
 public:
-                            ScOutlineCollection();
+    typedef MapType::iterator iterator;
+    typedef MapType::const_iterator const_iterator;
 
-    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    ScOutlineCollection();
 
-    sal_uInt16                  FindStart( SCCOLROW nMinStart );
+    size_t size() const;
+    void clear();
+    void insert(ScOutlineEntry* pEntry);
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    void erase(iterator pos);
+    bool empty() const;
+
+    iterator FindStart(SCCOLROW nMinStart);
 };
-
 
 class SC_DLLPUBLIC ScOutlineArray
 {
 friend class ScSubOutlineIterator;
 
 private:
-    sal_uInt16                  nDepth;
+    size_t nDepth;
     ScOutlineCollection     aCollections[SC_OL_MAXDEPTH];
 
-    sal_Bool                    DecDepth();
-    void                    FindEntry( SCCOLROW nSearchPos, sal_uInt16& rFindLevel, sal_uInt16& rFindIndex,
-                                        sal_uInt16 nMaxLevel = SC_OL_MAXDEPTH );
-    void                    RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nLevel );
-    void                    PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nStartLevel );
+    bool DecDepth();
+    void FindEntry(
+        SCCOLROW nSearchPos, size_t& rFindLevel, size_t& rFindIndex,
+        size_t nMaxLevel = SC_OL_MAXDEPTH);
+
+    void RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLevel);
+    void PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nStartLevel);
 
 public:
-                            ScOutlineArray();
-                            ScOutlineArray( const ScOutlineArray& rArray );
+    ScOutlineArray();
+    ScOutlineArray( const ScOutlineArray& rArray );
 
-    sal_uInt16                  GetDepth() const         { return nDepth; }
+    size_t GetDepth() const;
 
-    sal_Bool                    FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
-                                                sal_uInt16& rFindLevel ) const;
+    bool FindTouchedLevel(
+        SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const;
 
-    bool                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
-                                    bool bHidden = false, bool bVisible = true );
-    sal_Bool                    Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_Bool& rSizeChanged );
+    bool Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
+                 bool bHidden = false, bool bVisible = true );
+    bool Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSizeChanged );
 
-    ScOutlineEntry*         GetEntry( sal_uInt16 nLevel, sal_uInt16 nIndex ) const;
-    sal_uInt16                  GetCount( sal_uInt16 nLevel ) const;
-    ScOutlineEntry*         GetEntryByPos( sal_uInt16 nLevel, SCCOLROW nPos ) const;
+    ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex);
+    const ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex) const;
+    size_t GetCount(size_t nLevel) const;
+    const ScOutlineEntry* GetEntryByPos(size_t nLevel, SCCOLROW nPos) const;
 
-    sal_Bool                    GetEntryIndex( sal_uInt16 nLevel, SCCOLROW nPos, sal_uInt16& rnIndex ) const;
-    sal_Bool                    GetEntryIndexInRange(
-                                sal_uInt16 nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
-                                sal_uInt16& rnIndex ) const;
+    bool GetEntryIndex(size_t nLevel, SCCOLROW nPos, size_t& rnIndex) const;
+    bool GetEntryIndexInRange(
+        size_t nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rnIndex) const;
 
-    void                    SetVisibleBelow( sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bValue,
-                                                sal_Bool bSkipHidden = false );
+    void SetVisibleBelow(
+        size_t nLevel, size_t nEntry, bool bValue, bool bSkipHidden = false);
 
-    void                    GetRange( SCCOLROW& rStart, SCCOLROW& rEnd ) const;
-    void                    ExtendBlock( sal_uInt16 nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd );
+    void GetRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
+    void ExtendBlock(size_t nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd);
 
-    sal_Bool                    TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const;
-    void                    InsertSpace( SCCOLROW nStartPos, SCSIZE nSize );
-    sal_Bool                    DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize );
+    bool TestInsertSpace(SCSIZE nSize, SCCOLROW nMaxVal) const;
+    void InsertSpace(SCCOLROW nStartPos, SCSIZE nSize);
+    bool DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize);
 
-    bool                    ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, ScTable& rTable, bool bCol );
+    bool ManualAction(
+        SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, const ScTable& rTable, bool bCol);
 
-    void                    RemoveAll();
+    void RemoveAll();
 };
 
 
@@ -160,19 +181,19 @@ private:
     ScOutlineArray*         pArray;
     SCCOLROW                nStart;
     SCCOLROW                nEnd;
-    sal_uInt16                  nSubLevel;
-    sal_uInt16                  nSubEntry;
-    sal_uInt16                  nCount;
-    sal_uInt16                  nDepth;
+    size_t                  nSubLevel;
+    size_t                  nSubEntry;
+    size_t                  nCount;
+    size_t                  nDepth;
 
 public:
-                            ScSubOutlineIterator( ScOutlineArray* pOutlineArray );
-                            ScSubOutlineIterator( ScOutlineArray* pOutlineArray,
-                                                    sal_uInt16 nLevel, sal_uInt16 nEntry );
-    ScOutlineEntry*         GetNext();
-    sal_uInt16                  LastLevel() const;
-    sal_uInt16                  LastEntry() const;
-    void                    DeleteLast();
+    ScSubOutlineIterator( ScOutlineArray* pOutlineArray );
+    ScSubOutlineIterator( ScOutlineArray* pOutlineArray, size_t nLevel, size_t nEntry );
+
+    ScOutlineEntry* GetNext();
+    size_t LastLevel() const;
+    size_t LastEntry() const;
+    void DeleteLast();
 };
 
 #endif

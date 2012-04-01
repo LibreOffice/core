@@ -80,7 +80,7 @@ namespace /* private */
     {
         rtl::OUString altSenddocUrl;
         HKEY hkey;
-        LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\OpenOffice.org\\SendAsEMailClient", &hkey);
+        LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
         if (lret == ERROR_SUCCESS)
         {
             wchar_t buff[MAX_PATH];
@@ -186,7 +186,7 @@ void CSmplMailClient::assembleCommandLine(
     const Reference<XSimpleMailMessage>& xSimpleMailMessage,
     sal_Int32 aFlag, StringList_t& rCommandArgs)
 {
-    OSL_ENSURE(rCommandArgs.size() == 0, "Provided command argument buffer not empty");
+    OSL_ENSURE(rCommandArgs.empty(), "Provided command argument buffer not empty");
 
     rtl::OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)

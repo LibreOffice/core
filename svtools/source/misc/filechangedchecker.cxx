@@ -22,14 +22,9 @@
  * instead of those above.
  */
 
+#include "sal/config.h"
 
 #include "svtools/filechangedchecker.hxx"
-#include <osl/time.h>
-#include "com/sun/star/system/XSystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include <comphelper/processfactory.hxx>
-
-using namespace ::com::sun::star;
 
 FileChangedChecker::FileChangedChecker(const rtl::OUString& rFilename, const ::boost::function0<void>& rCallback) :
     mTimer(),
@@ -95,7 +90,7 @@ bool FileChangedChecker::hasFileChanged()
         return false;
 }
 
-IMPL_LINK(FileChangedChecker, TimerHandler, Timer *, EMPTYARG)
+IMPL_LINK_NOARG(FileChangedChecker, TimerHandler)
 {
     // If the file has changed, then update the graphic in the doc
     OSL_TRACE("Timeout Called");

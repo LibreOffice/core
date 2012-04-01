@@ -661,7 +661,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, SaveCancelHdl_Impl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeOutputPage, SaveCancelHdl_Impl)
 {
     m_bCancelSaving = true;
     return 0;
@@ -891,7 +891,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
 {
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");

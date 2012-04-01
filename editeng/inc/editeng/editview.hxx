@@ -103,7 +103,6 @@ public:
     void            ShowCursor( sal_Bool bGotoCursor = sal_True, sal_Bool bForceVisCursor = sal_True );
     void            HideCursor();
 
-    EESelectionMode GetSelectionMode() const;
     void            SetSelectionMode( EESelectionMode eMode );
 
     void            SetReadOnly( sal_Bool bReadOnly );
@@ -133,10 +132,8 @@ public:
     void                SetVisArea( const Rectangle& rRec );
     const Rectangle&    GetVisArea() const;
 
-    void            SetPointer( const Pointer& rPointer );
     const Pointer&  GetPointer() const;
 
-    void            SetCursor( const Cursor& rCursor );
     Cursor*         GetCursor() const;
 
     void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
@@ -186,7 +183,8 @@ public:
     void            SetEditEngineUpdateMode( sal_Bool bUpdate );
     void            ForceUpdate();
 
-    SfxStyleSheet*  GetStyleSheet() const;
+    const SfxStyleSheet* GetStyleSheet() const;
+    SfxStyleSheet* GetStyleSheet();
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;

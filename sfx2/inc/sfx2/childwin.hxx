@@ -150,7 +150,6 @@ public:
                         { return nContextId; }
 
     FloatingWindow*     GetFloatingWindow() const;
-    SfxChildAlignment   GetAlignment() const;
 
     virtual void        Resizing( Size& rSize );
     virtual sal_Bool        Close();
@@ -308,7 +307,7 @@ public:
                     return pWin; \
                 } \
         sal_uInt16 Class::GetChildWindowId () \
-                { return MyID; } \
+		{ return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
                     SfxChildWinFactory *pFact = new SfxChildWinFactory( \

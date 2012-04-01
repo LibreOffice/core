@@ -37,18 +37,21 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
-#include "table.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
+#include "sortparam.hxx"
 #include "types.hxx"
 #include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "scdllapi.h"
+#include "typedstrdata.hxx"
+#include "compressedarray.hxx"
+#include <tools/fract.hxx>
+#include <tools/gen.hxx>
 
 #include <memory>
 #include <map>
 #include <set>
-#include <list>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -118,8 +121,6 @@ class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
 class ScViewOptions;
-class ScStrCollection;
-class TypedScStrCollection;
 class ScChangeTrack;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
@@ -151,6 +152,11 @@ struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
 struct ScCopyBlockFromClipParams;
+class ScSheetEvents;
+class ScProgress;
+class SvtListener;
+class ScNotes;
+class ScEditDataArray;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -255,7 +261,6 @@ private:
     ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack (end), last cell
     ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
-    ScStrCollection*        pOtherObjects;                  // non-chart OLE objects
     SvMemoryStream*     pClipData;
     ScDetOpList*        pDetOpList;
     ScChangeTrack*      pChangeTrack;
@@ -414,6 +419,10 @@ private:
 
     ::std::set<ScFormulaCell*> maSubTotalCells;
 
+    // quick and ugly hack to fix the ScEditableTester problem in ucalc
+    // write a clean fix for this as soon as possible
+    bool                mbIsInTest;
+
 public:
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
@@ -469,7 +478,6 @@ public:
      * non-empty range name set.
      */
     SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    SC_DLLPUBLIC void SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rRangeNames);
     SC_DLLPUBLIC void SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap);
     SC_DLLPUBLIC void GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC void GetRangeNameMap(std::map<rtl::OUString, ScRangeName*>& rRangeName);
@@ -807,16 +815,9 @@ public:
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    /** Returns the pointer to a cell note object at the passed cell address. */
-    SC_DLLPUBLIC ScPostIt*       GetNote( const ScAddress& rPos );
-    /** Sets the passed note at the cell with the passed cell address. */
-    void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
-    /** Returns and forgets the cell note object at the passed cell address. */
-    ScPostIt*       ReleaseNote( const ScAddress& rPos );
-    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
-    SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
-    /** Deletes the note at the passed cell address. */
-    void            DeleteNote( const ScAddress& rPos );
+    /** Returns a table notes container. */
+    SC_DLLPUBLIC ScNotes*       GetNotes(SCTAB nTab);
+
     /** Creates the captions of all uninitialized cell notes in the specified sheet.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
@@ -864,7 +865,7 @@ public:
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const;
     SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const;
 
-    void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    SC_DLLPUBLIC void GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ::editeng::SvxBorderLine** ppLeft,
                                     const ::editeng::SvxBorderLine** ppTop,
                                     const ::editeng::SvxBorderLine** ppRight,
@@ -938,6 +939,7 @@ public:
                                     SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const;
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
+    SC_DLLPUBLIC void           GetFormattedAndUsedArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                     bool bNotes = true ) const;
     SC_DLLPUBLIC bool           GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
@@ -1105,6 +1107,7 @@ public:
                                 bool bColInfo = false, bool bRowInfo = false );
     SC_DLLPUBLIC void           InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo = false, bool bRowInfo = false );
+    void            SetInTest() { mbIsInTest = true; }
 
                     //  don't use anymore:
     void            CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -1281,7 +1284,7 @@ public:
                             SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                             const rtl::OUString& sValStr, double& nX);
 
-    void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
+    SC_DLLPUBLIC void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                            ScEditDataArray* pDataArray = NULL );
     void            DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
     void            DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark );
@@ -1481,13 +1484,23 @@ public:
                                         SCTAB nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rStr);
 
-    bool            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
-    SC_DLLPUBLIC bool           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates );
-    bool            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedScStrCollection& rStrings, bool bLimit = false );
-    bool            GetFormulaEntries( TypedScStrCollection& rStrings );
+    /**
+     * Get a list of unique strings to use in filtering criteria.  The string
+     * values are sorted, and there are no duplicate values in the list.  The
+     * data range to use to populate the filter entries is inferred from the
+     * database range that contains the specified cell position.
+     */
+    bool GetFilterEntries(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+
+    SC_DLLPUBLIC bool GetFilterEntriesArea(
+        SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
+        std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+
+    bool GetDataEntries(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+        std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
+    bool GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
@@ -1559,8 +1572,7 @@ public:
     bool            GetNoListening() const { return bNoListening; }
     ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
 
-    ScChartListenerCollection* GetChartListenerCollection() const
-                        { return pChartListenerCollection; }
+    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const;
     void            SetChartListenerCollection( ScChartListenerCollection*,
                         bool bSetChartRangeLists = false );
     void            UpdateChart( const rtl::OUString& rName );
@@ -1616,7 +1628,7 @@ private:
     bool                OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpellPos,
                                         sal_uInt16 nMaxTest );
 
-    DECL_LINK( TrackTimeHdl, Timer* );
+    DECL_LINK(TrackTimeHdl, void *);
 
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 

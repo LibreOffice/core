@@ -31,13 +31,17 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     accessibility \
     animations \
+    apple_remote \
+    avmedia \
     basctl \
     basebmp \
     basegfx \
     basic \
     bean \
+    binaryurp \
     canvas \
     chart2 \
+    clucene \
     comphelper \
     configmgr \
     cppcanvas \
@@ -49,8 +53,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     drawinglayer \
     dtrans \
     editeng \
+    embeddedobj \
+    embedserv \
     eventattacher \
-	extensions \
+    extensions \
     fileaccess \
     filter \
     forms \
@@ -61,6 +67,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18npool \
     i18nutil \
     idl \
+    javaunohelper \
+    jvmaccess \
+    jvmfwk \
+    jurt \
     lingucomponent \
     linguistic \
     lotuswordpro \
@@ -70,6 +80,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     np_sdk \
     o3tl \
     offapi \
+    officecfg \
     oovbaapi \
     oox \
     package \
@@ -77,6 +88,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     psprint_config \
     regexp \
     reportdesign \
+    ridljar \
+    rsc \
     sal \
     salhelper \
     sane \
@@ -86,8 +99,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sccomp \
     scripting \
     sd \
+    sdext \
     sfx2 \
     slideshow \
+    smoketest \
     sot \
     starmath \
     stoc \
@@ -96,14 +111,17 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     svx \
     sw \
     swext \
-    twain \
+    test \
     toolkit \
     tools \
+    twain \
     ucb \
     ucbhelper \
     udkapi \
     unixODBC \
     UnoControls \
+    unoil \
+    unotest \
     unotools \
     unoxml \
     ure \

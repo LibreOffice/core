@@ -197,8 +197,8 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
 void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     throw (css::uno::RuntimeException)
 {
-    if ( ! aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnSaveAsDone")
-      && ! aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged"))
+    if ( ! aEvent.EventName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("OnSaveAsDone"))
+      && ! aEvent.EventName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("OnTitleChanged")))
         return;
 
     // SYNCHRONIZED ->
@@ -211,7 +211,7 @@ void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
 
     if (
          aEvent.Source != xOwner ||
-         (aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged") && !xOwner.is())
+         (aEvent.EventName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("OnTitleChanged")) && !xOwner.is())
        )
     {
         return;

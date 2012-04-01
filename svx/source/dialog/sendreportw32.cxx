@@ -77,7 +77,7 @@ static LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName,
 
     if ( ERROR_SUCCESS == lResult )
     {
-        lResult = RegSetValueEx( hKey, lpValueName, NULL, dwType, (CONST sal_uInt8 *)lpData, cbData );
+        lResult = RegSetValueEx( hKey, lpValueName, 0, dwType, (CONST sal_uInt8 *)lpData, cbData );
         RegCloseKey( hKey );
     }
 

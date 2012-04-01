@@ -63,12 +63,6 @@ ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const
     addListeners();
 }
 
-ScVbaShape::ScVbaShape( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape, const uno::Reference< frame::XModel >& xModel ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( uno::Reference< XHelperInterface >(), xContext ), m_xShape( xShape ), m_xModel( xModel )
-{
-    // add listener
-    addListeners();
-}
-
 ScVbaShape::~ScVbaShape()
 {
     // dtor must never ever throw
@@ -711,12 +705,10 @@ ScVbaShape::WrapFormat() throw (uno::RuntimeException)
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaShape::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShape") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShape"));
 }
 
 uno::Sequence< rtl::OUString >

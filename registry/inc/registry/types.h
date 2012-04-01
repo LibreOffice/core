@@ -218,7 +218,7 @@ enum RTValueType {
  */
 union RTConstValueUnion {
     sal_Bool aBool;
-    sal_uInt8 aByte;
+    sal_Int8 aByte;
     sal_Int16 aShort;
     sal_uInt16 aUShort;
     sal_Int32 aLong;

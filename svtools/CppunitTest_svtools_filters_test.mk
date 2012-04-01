@@ -46,7 +46,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,svtools_filters_test, \
 
 $(eval $(call gb_CppunitTest_set_include,svtools_filters_test,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,svtools_filters_test,\

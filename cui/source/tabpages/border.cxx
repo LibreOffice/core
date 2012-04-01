@@ -754,7 +754,7 @@ void SvxBorderTabPage::HideShadowControls()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl)
 {
     const svx::FrameBorderState SHOW = svx::FRAMESTATE_SHOW;
     const svx::FrameBorderState HIDE = svx::FRAMESTATE_HIDE;
@@ -826,7 +826,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxBorderTabPage, SelSdwHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl)
 {
     sal_Bool bEnable = aWndShadows.GetSelectItemId() > 1;
     aFtShadowSize.Enable(bEnable);
@@ -851,7 +851,7 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
     return 0;
 }
 
-IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 aLineWidthMF.GetValue( ),
@@ -1073,7 +1073,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
 {
     if(!mbUseMarginItem && aLeftMF.IsVisible())
     {

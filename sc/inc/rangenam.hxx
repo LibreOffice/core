@@ -31,7 +31,6 @@
 
 #include "global.hxx" // -> enum UpdateRefMode
 #include "address.hxx"
-#include "collect.hxx"
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
 
@@ -154,7 +153,6 @@ public:
     bool                        IsRangeAtBlock( const ScRange& ) const;
 
     void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets);
-    void            TransferTabRef( SCTAB nOldTab, SCTAB nNewTab );
 
     void            ValidateTabRefs();
 

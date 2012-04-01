@@ -2187,7 +2187,7 @@ void CustomAnimationPane::onChangeSpeed()
 }
 
 /// this link is called when the property box is modified by the user
-IMPL_LINK( CustomAnimationPane, implPropertyHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
 {
     onChangeProperty();
     return 0;
@@ -2229,7 +2229,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     return 0;
 }
 
-IMPL_LINK(CustomAnimationPane, lateInitCallback, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback)
 {
     // Call getPresets() to initiate the (expensive) construction of the
     // presets list.

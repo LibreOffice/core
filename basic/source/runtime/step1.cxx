@@ -459,10 +459,16 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     bool bOk = bDefault;
 
     SbxDataType t = refVal->GetType();
+    SbxVariable* pVal = (SbxVariable*)refVal;
+    // we don't know the type of uno properties that are (maybevoid)
+    if ( t == SbxEMPTY && refVal->ISA(SbUnoProperty) )
+    {
+        SbUnoProperty* pProp = (SbUnoProperty*)pVal;
+        t = pProp->getRealType();
+    }
     if( t == SbxOBJECT )
     {
         SbxObject* pObj;
-        SbxVariable* pVal = (SbxVariable*)refVal;
         if( pVal->IsA( TYPE(SbxObject) ) )
             pObj = (SbxObject*) pVal;
         else

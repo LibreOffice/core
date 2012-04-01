@@ -233,13 +233,14 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     nCount = pMgr->GetFldTypeCount();
     SwFieldType* pFldType;
     for ( i = nCount; i; )
-        if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
-            aCategoryBox.GetText() )
+    {
+        pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+        if( pFldType->GetName().equals(aCategoryBox.GetText()) )
         {
             nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
             break;
         }
-
+    }
 
     nCount = pMgr->GetFormatCount(TYP_SEQFLD, sal_False);
     for ( i = 0; i < nCount; ++i )
@@ -334,16 +335,16 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, EMPTYARG )
+IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, pButton )
 
-IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwCaptionDialog, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwCaptionDialog, SelectHdl)
 
-IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     String sFldTypeName = aCategoryBox.GetText();
@@ -365,7 +366,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK(SwCaptionDialog, CaptionHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
     SwCaptionOptDlg aDlg( this, aSet );

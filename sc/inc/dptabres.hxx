@@ -29,17 +29,20 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
+#include "global.hxx"
+#include "dpcachetable.hxx"
+
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "global.hxx"       // enum ScSubTotalFunc
-#include "dpcachetable.hxx"
+
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <vector>
 #include <memory>
+#include <map>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -80,7 +83,6 @@ public:
     long                GetCount() const    { return nCount; }
     const long*         GetSource() const   { return pIndex; }
     const SCROW* GetNameIds() const    { return pData; }
-    SCROW   GetNameIdForIndex( long nIndexValue ) const;
 };
 
 typedef ::std::vector<sal_Int32> ScMemberSortOrder;
@@ -221,8 +223,6 @@ public:
 //  results for a hierarchy dimension
 //
 
-#define SC_DP_RES_GROW  16
-
 class ScDPResultDimension;
 class ScDPDataDimension;
 class ScDPDataMember;
@@ -336,8 +336,6 @@ public:
     bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
     bool                IsNumOrDateGroup( long nDim ) const;
-    bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                   long nBaseDataId, long nBaseIndex ) const;
     bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                    const ScDPItemData& rBaseData, long nBaseIndex ) const;
     bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
@@ -494,32 +492,29 @@ public:
     ScDPDataDimension*          GetChildDimension()         { return pChildDimension; }
 };
 
-//! replace PtrArr with 32-bit array ????
-
-typedef ScDPDataMember* ScDPDataMemberPtr;
-SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW)
+typedef std::vector<ScDPDataMember*> ScDPDataMembers;
 
 
 //  result dimension contains only members
 
 class ScDPResultDimension
 {
-public :
-    typedef std::vector <ScDPResultMember *>                           MemberArray;
-    typedef std::map < SCROW , ScDPResultMember *> MemberHash;
+public:
+    typedef std::vector<ScDPResultMember*>     MemberArray;
+    typedef std::map<SCROW, ScDPResultMember*> MemberHash;
 private:
-        const ScDPResultData*   pResultData;
+    const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
-    sal_Bool                    bInitialized;
-    String                  aDimensionName;     //! or ptr to IntDimension?
-    sal_Bool                    bIsDataLayout;      //! or ptr to IntDimension?
-    sal_Bool                    bSortByData;
-    sal_Bool                    bSortAscending;
+    rtl::OUString           aDimensionName;     //! or ptr to IntDimension?
     long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
-    sal_Bool                    bAutoShow;
-    sal_Bool                    bAutoTopItems;
+    bool                    bIsDataLayout:1;      //! or ptr to IntDimension?
+    bool                    bSortByData:1;
+    bool                    bSortAscending:1;
+    bool                    bAutoShow:1;
+    bool                    bAutoTopItems:1;
+    bool                    bInitialized:1;
     long                    nAutoMeasure;
     long                    nAutoCount;
 
@@ -615,7 +610,7 @@ class ScDPDataDimension
 private:
     const ScDPResultData*       pResultData;
     const ScDPResultDimension* pResultDimension;  // column
-    ScDPDataMembers     aMembers;
+    ScDPDataMembers     maMembers;
     sal_Bool                bIsDataLayout;      //! or ptr to IntDimension?
 
 public:
@@ -646,7 +641,8 @@ public:
     void                DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
 
     long                GetMemberCount() const;
-    ScDPDataMember*     GetMember(long n) const;
+    const ScDPDataMember*     GetMember(long n) const;
+    ScDPDataMember*     GetMember(long n);
 };
 
 // ----------------------------------------------------------------------------

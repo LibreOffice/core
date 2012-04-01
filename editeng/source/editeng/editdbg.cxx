@@ -335,7 +335,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     for ( sal_uInt16 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
     {
 
-        ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions().GetObject(nPortion );
+        ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
         fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), rtl::OUStringToOString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).getStr() );
         fprintf( fp, "\nVorlage:" );
         SfxStyleSheet* pStyle = pPPortion->GetNode()->GetStyleSheet();
@@ -349,21 +349,21 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         sal_uInt16 z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
-            EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
+            const EditCharAttrib& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
             rtl::OStringBuffer aCharAttribs;
             aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM("\nA"));
             aCharAttribs.append(static_cast<sal_Int32>(nPortion));
             aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM(":  "));
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetItem()->Which()));
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetItem()->Which()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetStart()));
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetStart()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetEnd()));
-            if ( pAttr->IsEmpty() )
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetEnd()));
+            if ( rAttr.IsEmpty() )
                 bZeroAttr = sal_True;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
 
-            rtl::OString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
+            rtl::OString aDebStr = DbgOutItem( rPool, *rAttr.GetItem() );
             fprintf( fp, "%s", aDebStr.getStr() );
         }
         if ( bZeroAttr )
@@ -496,19 +496,19 @@ sal_Bool ParaPortion::DbgCheckTextPortions()
 }
 #endif
 
-sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart )
+bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
 {
     sal_uInt16 nPrev = 0;
-    for ( sal_uInt16 nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
+    for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
     {
-        EditCharAttrib* pAttr = rAttribs[nAttr];
-        sal_uInt16 nCur = bStart ? pAttr->GetStart() : pAttr->GetEnd();
+        const EditCharAttrib& rAttr = rAttribs[nAttr];
+        sal_uInt16 nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
         if ( nCur < nPrev )
-            return sal_False;
+            return false;
 
         nPrev = nCur;
     }
-    return sal_True;
+    return true;
 }
 
 #endif

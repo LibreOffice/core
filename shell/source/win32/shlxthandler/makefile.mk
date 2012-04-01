@@ -49,7 +49,7 @@ ALL :
 UWINAPILIB =
 UWINAPILIB_X64 =
 
-CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
+CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE
 .IF "$(COM)" == "MSC"
 CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 .ENDIF
@@ -57,7 +57,11 @@ CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-DDONT_HAVE_GDIPLUS
 .ENDIF
 
-CDEFS+=-D_WIN32_IE=0x501
+CDEFS+=-U_WIN32_IE -D_WIN32_IE=0x501 -U_WIN32_WINNT -D_WIN32_WINNT=0x0501
+
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CDEFS += -DSYSTEM_ZLIB
+.END
 
 # --- Files --------------------------------------------------------
 
@@ -69,11 +73,12 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
     $(SLO)$/thumbviewer.obj\
+    $(SLO)$/stream_helper.obj\
 
 SHL1TARGET=$(TARGET)
 
 .IF "$(COM)"=="GCC"
-SHL1STDLIBS=$(ZLIB3RDLIB) $(EXPAT3RDLIB) $(COMCTL32LIB)
+SHL1STDLIBS=$(ZLIB3RDLIB) $(MINIZIP3RDLIB) $(EXPAT3RDLIB) $(COMCTL32LIB)
 SHL1LIBS=
 .ELSE
 SHL1STDLIBS=
@@ -124,6 +129,7 @@ SLOFILES_X64= \
     $(SLO_X64)$/listviewbuilder.obj\
     $(SLO_X64)$/document_statistic.obj\
     $(SLO_X64)$/thumbviewer.obj\
+    $(SLO_X64)$/stream_helper.obj\
 
 SHL1TARGET_X64=$(TARGET)
 SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\

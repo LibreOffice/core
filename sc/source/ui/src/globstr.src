@@ -365,10 +365,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "~Change Case";
     };
-    String STR_DB_NONAME
-    {
-        Text [ en-US ] = "unnamed" ;
-    };
     String STR_DBNAME_IMPORT
     {
         Text [ en-US ] = "Import" ;
@@ -557,6 +553,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Data" ;
     };
+    String STR_PIVOT_GROUP
+    {
+        Text [ en-US ] = "Group" ;
+    };
     String STR_PIVOTFUNC_SUM
     {
         Text [ en-US ] = "SUM" ;
@@ -687,7 +687,7 @@ Resource RID_GLOBSTR
     };
     String STR_INVALIDTABNAME
     {
-        Text [ en-US ] = "Invalid sheet name." ;
+        Text [ en-US ] = "Invalid sheet name.\nThe sheet name must not be a duplicate of an existing name \nand may not contain the characters [ ] * ? : / \\" ;
     };
     String STR_SCENARIO
     {

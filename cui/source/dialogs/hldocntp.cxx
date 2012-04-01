@@ -414,7 +414,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 {
     rtl::OUString                       aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
     uno::Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

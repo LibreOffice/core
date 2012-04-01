@@ -69,7 +69,6 @@
 #include "cell.hxx"
 #include "document.hxx"
 #include "scextopt.hxx"
-#include "patattr.hxx"
 #include "attrib.hxx"
 #include "progress.hxx"
 #include "dociter.hxx"

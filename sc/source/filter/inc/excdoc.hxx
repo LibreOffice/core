@@ -33,6 +33,7 @@
 #include "excrecds.hxx"
 #include "xeroot.hxx"
 #include "root.hxx"
+#include "xeescher.hxx"
 #include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
@@ -57,6 +58,8 @@ class ExcTable : public XclExpRecordBase, public XclExpRoot
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
     typedef boost::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
+    typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
+    typedef boost::shared_ptr< XclExpNoteList >     XclExpNoteListRef;
 
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;
@@ -67,6 +70,8 @@ private:
     sal_uInt16                      nAktCol;
 
     NameBuffer*                 pTabNames;
+
+    XclExpNoteListRef   mxNoteList;
 
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );

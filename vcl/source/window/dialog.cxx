@@ -426,7 +426,7 @@ Dialog::~Dialog()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Dialog, ImplAsyncCloseHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 {
     Close();
     return 0;

@@ -24,7 +24,6 @@ class Directory
     private:
     rtl::OUString sDirectoryName;
     rtl::OUString sFullName;
-    bool bSkipLinks;
 
     std::vector<Directory>  aDirVec;
     std::vector<File>       aFileVec;
@@ -33,18 +32,15 @@ class Directory
     std::vector<Directory>  getSubDirectories()  { return aDirVec;        }
     std::vector<File>       getFiles()           { return aFileVec;       }
 
-    void readDirectory();
     void readDirectory( const rtl::OUString& sFullpath );
     void scanSubDir( int nLevels = 0 );
 
     rtl::OUString getDirectoryName()            { return sDirectoryName; }
     rtl::OUString getFullName()                 { return sFullName ;     }
-    void setSkipLinks( bool is_skipped );
 
     void dump();
-    Directory(){};
+    Directory(){}
 
-    Directory( const rtl::OUString sFullPath );
     Directory( const rtl::OUString sFullPath , const rtl::OUString sEntry ) ;
 
     static bool lessDir ( const Directory& rKey1, const Directory& rKey2 ) ;

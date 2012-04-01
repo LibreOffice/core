@@ -41,7 +41,6 @@
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 namespace connectivity

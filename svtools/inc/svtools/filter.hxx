@@ -316,9 +316,6 @@ public:
     String          GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     sal_Bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
-    sal_Bool            HasImportDialog( sal_uInt16 nFormat );
-    sal_Bool            DoImportDialog( Window* pWindow, sal_uInt16 nFormat );
-
     sal_Bool            HasExportDialog( sal_uInt16 nFormat );
     sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat );
     sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat, FieldUnit eFieldUnit );

@@ -101,40 +101,6 @@ namespace canvas
 #endif
         }
 
-        void verifyInput( const geometry::RealSize2D&               rSize,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
-        {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
-#if OSL_DEBUG_LEVEL > 0
-            if( !::rtl::math::isFinite( rSize.Width ) )
-            {
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): size.Width value contains infinite or NAN" )),
-                    xIf,
-                    nArgPos );
-            }
-
-            if( !::rtl::math::isFinite( rSize.Height ) )
-            {
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): size.Height value contains infinite or NAN" )),
-                    xIf,
-                    nArgPos );
-            }
-#else
-            if( !::rtl::math::isFinite( rSize.Width ) ||
-                !::rtl::math::isFinite( rSize.Height ) )
-            {
-                throw lang::IllegalArgumentException();
-            }
-#endif
-        }
-
         void verifyInput( const geometry::RealBezierSegment2D&      rSegment,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,
@@ -664,98 +630,6 @@ namespace canvas
                     throw lang::IllegalArgumentException();
 #endif
                 }
-            }
-        }
-
-        void verifyInput( const rendering::FloatingPointBitmapLayout&   bitmapLayout,
-                          const char*                                   pStr,
-                          const uno::Reference< uno::XInterface >&      xIf,
-                          ::sal_Int16                                   nArgPos )
-        {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
-            if( bitmapLayout.ScanLines < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLines is negative" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.ScanLineBytes < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLineBytes is negative" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( !bitmapLayout.ColorSpace.is() )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ColorSpace is invalid" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.NumComponents < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's NumComponents is negative" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.Endianness < util::Endianness::LITTLE ||
-                bitmapLayout.Endianness > util::Endianness::BIG )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's Endianness value is out of range (" )) +
-                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Endianness)) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.Format < rendering::FloatingPointBitmapFormat::HALFFLOAT ||
-                bitmapLayout.Format > rendering::FloatingPointBitmapFormat::DOUBLE )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's Format value is out of range (" )) +
-                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Format)) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
             }
         }
 

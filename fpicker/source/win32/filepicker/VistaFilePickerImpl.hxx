@@ -47,8 +47,8 @@
 #pragma warning(pop)
 #endif
 
-// Without IFileDialog we can't do this
-#ifdef __IFileDialog_INTERFACE_DEFINED__
+// Without IFileDialogCustomize we can't do this
+#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #include "asyncrequests.hxx"
 #include "comptr.hxx"
@@ -269,9 +269,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_sta_EnableControl(const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
-        /** create all needed (optional!) UI controls adressed by the field nFeatures.
+        /** create all needed (optional!) UI controls addressed by the field nFeatures.
          *  The given number nFeatures is used as a flag field. Use const values FEATURE_XXX
-         *  to adress it.
+         *  to address it.
          *
          *  Internal new controls will be added to the dialog. Every control can be accessed
          *  by it's own control id. Those control ID must be one of the const set
@@ -365,7 +365,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 #undef css
 
-#endif // __IFileDialog_INTERFACE_DEFINED__
+#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #endif // FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
 

@@ -706,7 +706,7 @@ sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
-    if( mpImplData && rImageName.getLength() )
+    if( mpImplData && !rImageName.isEmpty() )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
         {
@@ -757,7 +757,7 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
         {
             const rtl::OUString& rName( mpImplData->maImages[ i ]->maName );
-            if( rName.getLength() != 0 )
+            if( !rName.isEmpty())
                 rNames.push_back( rName );
         }
     }

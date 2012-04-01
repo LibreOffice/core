@@ -92,7 +92,7 @@ SvxLineBox::~SvxLineBox()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineBox, DelayHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
 {
     if ( GetEntryCount() == 0 )
     {

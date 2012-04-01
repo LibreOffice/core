@@ -40,9 +40,6 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef DBAUI_ADABASPAGE_HRC
-#include "AdabasPage.hrc"
-#endif
 #include "admincontrols.hrc"
 
 //-------------------------------------------------------------------------
@@ -394,127 +391,6 @@ TabPage PAGE_ODBC
     };
 
     AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
-};
-
-TabPage PAGE_ADABAS
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_ADABAS;
-
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Connection Settings";
-    };
-
-    FixedText FT_HOSTNAME
-    {
-        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "~Host name";
-    };
-    Edit ET_HOSTNAME
-    {
-        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_HOSTNAME";
-        TabStop = TRUE ;
-        Border = TRUE ;
-
-        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT-1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
-    };
-
-    FixedText FT_CACHE_SIZE
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Data ~buffer size (MB)";
-    };
-    NumericField NF_CACHE_SIZE
-    {
-        HelpID = "dbaccess:NumericField:PAGE_ADABAS:NF_CACHE_SIZE";
-        Pos             = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ;
-        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
-        SpinSize        = 1;
-        StrictFormat    = TRUE;
-    };
-
-    FixedText FT_DATA_INCREMENT
-    {
-        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "~Data increment (MB)";
-    };
-    NumericField NF_DATA_INCREMENT
-    {
-        HelpID = "dbaccess:NumericField:PAGE_ADABAS:NF_DATA_INCREMENT";
-        Pos             = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
-        Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
-        Border          = TRUE ;
-        TabStop         = TRUE ;
-        Spin            = TRUE ;
-        SpinSize        = 1;
-        StrictFormat    = TRUE;
-    };
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( 248 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Administration" ;
-    };
-    FixedText FT_CTRLUSERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Control ~user name" ;
-    };
-    Edit ET_CTRLUSERNAME
-    {
-        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_CTRLUSERNAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT-1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_CTRLPASSWORD
-    {
-        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Control ~password" ;
-    };
-    Edit ET_CTRLPASSWORD
-    {
-        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_CTRLPASSWORD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X , 5*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT-1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT) ;
-        TabStop = TRUE ;
-        PassWord = TRUE ;
-    };
-
-    CheckBox CB_SHUTDB
-    {
-        HelpID = "dbaccess:CheckBox:PAGE_ADABAS:CB_SHUTDB";
-        Pos = MAP_APPFONT ( 6 , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( 248 , CHECKBOX_HEIGHT ) ;
-        Text[ en-US ] = "~Shut down service when closing %PRODUCTNAME";
-    };
-
-    PushButton PB_STAT
-    {
-        HelpID = "dbaccess:PushButton:PAGE_ADABAS:PB_STAT";
-        Pos                 = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS ) ;
-        Size                = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text[ en-US ] = "E~xtended...";
-    };
-
-    AUTO_CHARSET( 7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT, PAGE_X )
 };
 
 //.........................................................................

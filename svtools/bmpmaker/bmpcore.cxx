@@ -364,8 +364,6 @@ void BmpCreator::Create( const String& rSRSName,
         rtl::OString aByteText;
         sal_Bool        bLangDep = sal_False;
 
-        using comphelper::string::indexOfL;
-
         do
         {
             do
@@ -373,14 +371,14 @@ void BmpCreator::Create( const String& rSRSName,
                 if (!pSRS->ReadLine(aByteText))
                     break;
             }
-            while ( indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("ImageList")) == -1 );
+            while ( aByteText.indexOfL(RTL_CONSTASCII_STRINGPARAM("ImageList")) == -1 );
 
             do
             {
                 if (!pSRS->ReadLine( aByteText ) )
                     break;
             }
-            while ( indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("File")) == -1 );
+            while ( aByteText.indexOfL(RTL_CONSTASCII_STRINGPARAM("File")) == -1 );
             aText = rtl::OStringToOUString(aByteText, RTL_TEXTENCODING_ASCII_US);
 
             const String aName( aText.GetToken( 1, '"' ) );
@@ -388,7 +386,7 @@ void BmpCreator::Create( const String& rSRSName,
             do
             {
                 if( !bLangDep &&
-                    indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("File")) != -1 &&
+                    aByteText.indexOfL(RTL_CONSTASCII_STRINGPARAM("File")) != -1 &&
                     aByteText.indexOf('[') != -1 &&
                     aByteText.indexOf(']') != -1 )
                 {
@@ -398,7 +396,7 @@ void BmpCreator::Create( const String& rSRSName,
                 if (!pSRS->ReadLine(aByteText))
                     break;
             }
-            while (indexOfL(aByteText, RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
+            while (aByteText.indexOfL(RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
             aText = rtl::OStringToOUString(aByteText, RTL_TEXTENCODING_ASCII_US);
 
             // if image list is not language dependent, don't do anything for languages except german

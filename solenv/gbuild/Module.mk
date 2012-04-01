@@ -34,10 +34,12 @@
 #                              excluding tests             recursive Modules
 # Module/unitcheck            run unit tests               all unit tests
 #                                                          recursive Module/checks
+# Module/slowcheck            run all slow unit tests
 # Module/subsequentcheck      run system tests             all system tests
 #                                                          recursive Module/subsequentchecks
 # build (global)              build the product            top-level Module
 # unitcheck (global)          run unit tests               top-level Module/unitcheck
+# slowcheck (global)          run slow unit tests          top-level Module/slowcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
 # all (global)                default goal                 build unitcheck
 
@@ -48,6 +50,7 @@ gb_Module_ALLMODULES :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
 gb_Module_CHECKTARGETSTACK :=
+gb_Module_SLOWCHECKTARGETSTACK :=
 gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
 
@@ -56,11 +59,18 @@ $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
 
 $(call gb_Module_get_check_target,%) :
 	$(call gb_Output_announce,$*,$(true),CHK,5)
 	$(call gb_Output_announce_title,module $* checks done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
+
+$(call gb_Module_get_slowcheck_target,%) :
+	$(call gb_Output_announce,$*,$(true),SLC,5)
+	$(call gb_Output_announce_title,module $* slowchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
@@ -79,7 +89,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck subsequentcheck dev-install
+.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install
 .DEFAULT_GOAL := all
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
@@ -134,6 +144,11 @@ unitcheck :
 	$(call gb_Output_announce_title,all unittests checked.)
 	$(call gb_Output_announce_bell)
 
+slowcheck :
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SLC,6)
+	$(call gb_Output_announce_title,all slowtests checked.)
+	$(call gb_Output_announce_bell)
+
 # removing the dependency on build for now until we can make a full build with gbuild
 #subsequentcheck : all 
 subsequentcheck : 
@@ -147,7 +162,7 @@ clean :
 	$(call gb_Output_announce_title,all cleared.)
 	$(call gb_Output_announce_bell)
 
-check : unitcheck
+check : unitcheck slowcheck
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
 	
@@ -164,6 +179,7 @@ gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
 gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Module_CHECKTARGETSTACK)
+gb_Module_SLOWCHECKTARGETSTACK := $(call gb_Module_get_slowcheck_target,$(1)) $(gb_Module_SLOWCHECKTARGETSTACK)
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
 
@@ -198,22 +214,18 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
-# We don't build normal unit test dynamic libraries (CppUnit
-# "plugins") for iOS, but instead statically linked unit test
-# executables, so make gb_Module_add_check_target a no-op for iOS.
-
-# As such we could build normal "plugins", as dynamic loading of
-# modules presumably does work on iOS, it is just not allowed in apps
-# distributed through the App Store. Unit testing at LO development
-# time obviously is not anything that would be distributed as
-# apps. But let's not, as we have to make this stuff work without
-# dynamic loading anyway if the App Store is an eventual target, and
-# why shouldn't it be.
-
 define gb_Module_add_check_target
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
 $(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
+
+endef
+
+define gb_Module_add_slowcheck_target
+$(call gb_Module__read_targetfile,$(1),$(2),slowcheck target)
+
+$(call gb_Module_get_slowcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
@@ -230,10 +242,12 @@ define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
 $(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
+$(call gb_Module_get_slowcheck_target,$(1)) : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 $(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
+gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
@@ -246,6 +260,11 @@ endef
 
 define gb_Module_add_check_targets
 $(foreach target,$(2),$(call gb_Module_add_check_target,$(1),$(target)))
+
+endef
+
+define gb_Module_add_slowcheck_targets
+$(foreach target,$(2),$(call gb_Module_add_slowcheck_target,$(1),$(target)))
 
 endef
 
@@ -267,6 +286,7 @@ include $(1)
 
 build : $$(firstword $$(gb_Module_TARGETSTACK))
 unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
+slowcheck : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
@@ -276,10 +296,11 @@ endif
 
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
+gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
-ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),)
+ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 

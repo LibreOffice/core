@@ -45,12 +45,15 @@ typedef ::std::vector< Accelerator* > AccelList;
 class AboutDialog : public SfxModalDialog
 {
 private:
-    OKButton        aOKButton;
     Image           aAppLogo;
 
     MultiLineEdit       aVersionText;
     MultiLineEdit       aCopyrightText;
     svt::FixedHyperlink aInfoLink;
+    svt::FixedHyperlink aTdfLink;
+    svt::FixedHyperlink aFeaturesLink;
+    FixedLine           aButtonsLine;
+    CancelButton        aCancelButton;
 
     String aVersionData;
     String aVersionTextStr;
@@ -58,6 +61,8 @@ private:
     String m_aOracleCopyrightTextStr;
     String m_aAcknowledgementTextStr;
     String m_aLinkStr;
+    String m_aTdfLinkStr;
+    String m_aFeaturesLinkStr;
     String m_sBuildStr;
 
 protected:
@@ -67,7 +72,8 @@ protected:
 public:
     AboutDialog( Window* pParent, const ResId& rId);
 
-    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_LINK(CancelHdl, void *);
+    DECL_LINK(HandleHyperlink, svt::FixedHyperlink *);
 };
 
 #endif // #ifndef _ABOUT_HXX

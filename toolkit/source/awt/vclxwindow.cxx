@@ -288,7 +288,7 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
+IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
 

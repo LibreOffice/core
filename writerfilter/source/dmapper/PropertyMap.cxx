@@ -29,9 +29,10 @@
 #include <ooxml/resourceids.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -986,6 +987,28 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet > xStyle )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    uno::Reference<beans::XMultiPropertySet> const xMultiSet(xStyle,
+            uno::UNO_QUERY);
+    if (xMultiSet.is())
+    {   // FIXME why is "this" a STL container???
+        uno::Sequence<rtl::OUString> names(this->size());
+        uno::Sequence<uno::Any> values(this->size());
+        PropertyMap::iterator it = this->begin();
+        for (size_t i = 0; it != this->end(); ++it, ++i)
+        {
+            names[i] = rPropNameSupplier.GetName(it->first.eId);
+            values[i] = it->second;
+        }
+        try
+        {
+            xMultiSet->setPropertyValues(names, values);
+        }
+        catch( const uno::Exception& )
+        {
+            OSL_FAIL( "Exception in <PageStyle>::setPropertyValue");
+        }
+        return;
+    }
     PropertyMap::iterator aMapIter = begin();
     while( aMapIter != end())
     {

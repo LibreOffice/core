@@ -201,7 +201,7 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( FuncPage, DblClkHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(FuncPage, DblClkHdl)
 {
     aDoubleClickLink.Call(this);
     return 0;

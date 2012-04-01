@@ -57,11 +57,10 @@ void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet >
     xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingRules") ) , uno::makeAny( xNumberingRules ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaListTemplate::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaListTemplate") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListTemplate"));
 }
 
 uno::Sequence< rtl::OUString >

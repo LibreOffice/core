@@ -165,8 +165,6 @@ protected:
 
 private:
 
-    DECL_LINK( AsynchActivate, void* );
-    DECL_LINK( AsynchDeactivate, void* );
     DECL_LINK( DelayedPaste, void* );
     DECL_LINK( CBChangeHdl,ComboBox*);
 
@@ -406,19 +404,6 @@ IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     SaveModified();
-    return 0L;
-}
-//------------------------------------------------------------------------------
-IMPL_LINK(OFieldExpressionControl, AsynchActivate, void*, EMPTYARG)
-{
-    ActivateCell();
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(OFieldExpressionControl, AsynchDeactivate, void*, EMPTYARG)
-{
-    DeactivateCell();
     return 0L;
 }
 

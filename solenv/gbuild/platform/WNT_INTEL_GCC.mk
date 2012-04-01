@@ -34,6 +34,10 @@ gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 include $(GBUILDDIR)/platform/windows.mk
 
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- \
+    '{ print $$1*10000+$$2*100+$$3 }')
+gb_GccLess470 := $(shell expr $(gb_CCVER) \< 40700)
+
 gb_RC := $(WINDRES)
 
 ifeq ($(GXX_INCLUDE_PATH),)
@@ -45,6 +49,14 @@ gb_COMPILERDEFS += \
 	-D_NATIVE_WCHAR_T_DEFINED \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
+
+# Until GCC 4.6, MinGW used __cdecl by default, and BOOST_MEM_FN_ENABLE_CDECL
+# would result in ambiguous calls to overloaded boost::bind; since GCC 4.7,
+# MinGW uses __thiscall by default, so now needs BOOST_MEM_FN_ENABLE_CDECL for
+# uses of boost::bind with functions annotated with SAL_CALL:
+ifeq ($(gb_GccLess470),0)
+gb_COMPILERDEFS += -DBOOST_MEM_FN_ENABLE_CDECL
+endif
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
@@ -58,6 +70,9 @@ gb_CFLAGS += \
 	-Wdeclaration-after-statement \
 	-fno-strict-aliasing \
 
+# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
+# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
+# Feb 1, 2006:
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-Wno-ctor-dtor-privacy \
@@ -75,14 +90,17 @@ endif
 
 ifeq ($(HAVE_CXX0X),TRUE)
 # We can turn on additional useful checks with c++0x
-# FIXME still does not compile fully gb_CXXFLAGS += -std=c++0x
+# FIXME still does not compile fully gb_CXXFLAGS += -std=gnu++0x
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs \
 
+# At least sal defines its own __main, which would cause DLLs linking against
+# sal to pick up sal's __main instead of the one from MinGW's dllcrt2.o:
 gb_LinkTarget_LDFLAGS := \
 	-Wl,--export-all-symbols \
+	-Wl,--exclude-symbols,__main \
 	-Wl,--enable-stdcall-fixup \
 	-Wl,--enable-runtime-pseudo-reloc-v2 \
 	$(subst -L../lib , ,$(SOLARLIB)) \
@@ -91,7 +109,15 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
+# clang does not know -ggdb2
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+GGDB2=-ggdb2
+else
+GGDB2=-g2
+endif
+
+gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline
+gb_DEBUG_CXXFLAGS := -fno-default-inline
 
 gb_STDLIBS := \
 	mingwthrd \
@@ -102,18 +128,15 @@ gb_STDLIBS := \
 
 # Helper class
 
-# For LibreOffice, MinGW is always cross-compilation, so the "native"
-# platform for the BUILD *is* Unix. No Cygwin/Win32 stuff needed.
-
-gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
-gb_Helper_WORKDIR_NATIVE := $(WORKDIR)
-gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
-gb_Helper_REPODIR_NATIVE := $(REPODIR)
-
 # Convert parameters filesystem root to native notation
 # does some real work only on Windows, and this file is for
 # cross-compilation.
 define gb_Helper_convert_native
+$(1)
+endef
+
+# Convert path to native notation
+define gb_Helper_native_path
 $(1)
 endef
 
@@ -129,6 +152,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-I$(dir $(3)) \
@@ -139,12 +163,12 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += -ggdb2
-gb_LinkTarget_CFLAGS += -ggdb2
+gb_LinkTarget_CXXFLAGS += $(GGDB2)
+gb_LinkTarget_CFLAGS += $(GGDB2)
 endif
 
 gb_LinkTarget_INCLUDE +=\
@@ -224,7 +248,7 @@ gb_Library_UDK_MAJORVER := 3
 gb_Library_PLAINEXT := .dll.a
 
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
-gb_Library_RTVEREXT := $(gb_Library_RTEXT)
+gb_Library_RTVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_PLAINEXT)
@@ -232,7 +256,7 @@ gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_PLAINEXT)
 gb_Library_DLLEXT := .dll
 
 gb_Library_RTDLLEXT := gcc3$(gb_Library_DLLEXT)
-gb_Library_RTVERDLLEXT := $(gb_Library_RTDLLEXT)
+gb_Library_RTVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTDLLEXT)
 gb_Library_OOODLLEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNODLLEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
@@ -291,7 +315,7 @@ gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTVEREXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -303,7 +327,7 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVERDLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVERDLLEXT)) \
@@ -439,7 +463,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
 	> $(call gb_WinResTarget_get_dep_target,$(1)))
 endef
 else

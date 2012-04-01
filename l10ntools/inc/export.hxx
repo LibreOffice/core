@@ -29,16 +29,16 @@
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
 
-#include <comphelper/string.hxx>
+#include "sal/config.h"
+
+#include <cstddef>
+#include <fstream>
 
 #ifndef L10NTOOLS_DIRECTORY_HXX
 #define L10NTOOLS_DIRECTORY_HXX
 #include <l10ntools/directory.hxx>
 #endif
 
-#include <tools/string.hxx>
-#include <tools/stream.hxx>
-#include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
@@ -58,13 +58,12 @@
 
 class PFormEntrys;
 class MergeData;
-typedef std::set<rtl::OString> ByteStringSet;
 
 typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash>
-    ByteStringHashMap;
+    OStringHashMap;
 
 typedef boost::unordered_map<rtl::OString, bool, rtl::OStringHash>
-    ByteStringBoolHashMap;
+    OStringBoolHashMap;
 
 typedef boost::unordered_map<rtl::OString, PFormEntrys*, rtl::OStringHash>
     PFormEntrysHashMap;
@@ -75,7 +74,7 @@ typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
 #define SOURCE_LANGUAGE rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))
 #define LIST_REFID  "LIST_REFID"
 
-typedef ByteStringHashMap ExportListEntry;
+typedef OStringHashMap ExportListEntry;
 typedef ::std::vector< ExportListEntry* > ExportListBase;
 
 //
@@ -86,11 +85,11 @@ class ExportList
 {
 private:
     ExportListBase maList;
-    sal_uLong nSourceLanguageListEntryCount;
+    std::size_t nSourceLanguageListEntryCount;
 
 public:
     ExportList() { nSourceLanguageListEntryCount = 0; }
-    sal_uLong GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
+    std::size_t GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
     size_t size() const { return maList.size(); }
     void push_back( ExportListEntry* item ) { maList.push_back( item ); }
@@ -125,7 +124,7 @@ public:
     ~ResData();
     sal_Bool SetId(const rtl::OString &rId, sal_uInt16 nLevel);
 
-    sal_uInt16 nWidth;
+    sal_Int32 nWidth;
     sal_uInt16 nChildIndex;
     sal_uInt16 nIdLevel;
     sal_Bool bChild;
@@ -145,16 +144,16 @@ public:
     rtl::OString sHelpId;
     rtl::OString sFilename;
 
-    ByteStringHashMap sText;
+    OStringHashMap sText;
     sal_uInt16 nTextRefId;
 
-    ByteStringHashMap sHelpText;
+    OStringHashMap sHelpText;
     sal_uInt16 nHelpTextRefId;
 
-    ByteStringHashMap sQuickHelpText;
+    OStringHashMap sQuickHelpText;
     sal_uInt16 nQuickHelpTextRefId;
 
-    ByteStringHashMap sTitle;
+    OStringHashMap sTitle;
     sal_uInt16 nTitleRefId;
 
     rtl::OString sTextTyp;
@@ -166,8 +165,6 @@ public:
     ExportList  *pPairedList;
 
     rtl::OString sPForm;
-
-    void Dump();
 
     ResData(const rtl::OString &rPF, const rtl::OString &rGId)
             :
@@ -195,12 +192,13 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        sGId = comphelper::string::remove(sGId, '\r');
-        sPForm = comphelper::string::remove(sPForm, '\r');
+        sGId = sGId.replaceAll("\r", rtl::OString());
+        sPForm = sPForm.replaceAll("\r", rtl::OString());
     }
 
     ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
             :
+            nWidth( 0 ),
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
             bChild( sal_False ),
@@ -225,8 +223,8 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        sGId = comphelper::string::remove(sGId, '\r');
-        sPForm = comphelper::string::remove(sPForm, '\r');
+        sGId = sGId.replaceAll("\r", rtl::OString());
+        sPForm = sPForm.replaceAll("\r", rtl::OString());
     }
 };
 
@@ -263,32 +261,31 @@ class Export
 private:
     WordTransformer *pWordTransformer;
 
-    SvFileStream aOutput;
+    std::ofstream aOutput;
 
     ResStack aResStack;                 // stack for parsing recursive
 
-    ByteString sActPForm;               // hold cur. system
+    rtl::OString sActPForm;               // hold cur. system
 
     sal_Bool bDefine;                       // cur. res. in a define?
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
-    sal_uLong nLevel;                       // res. recursiv? how deep?
+    std::size_t nLevel; // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
     rtl::OString m_sListLang;
-    sal_uLong nListIndex;
-    sal_uLong nListLevel;
+    std::size_t nListIndex;
+    std::size_t nListLevel;
     bool bSkipFile;
-    ByteString sProject;
-    ByteString sRoot;
-    sal_Bool bEnableExport;
+    rtl::OString sProject;
+    rtl::OString sRoot;
     sal_Bool bMergeMode;
-    ByteString sMergeSrc;
-    ByteString sLastListLine;
+    rtl::OString sMergeSrc;
+    rtl::OString sLastListLine;
     sal_Bool bError;                        // any errors while export?
     sal_Bool bReadOver;
     sal_Bool bDontWriteOutput;
-    ByteString sLastTextTyp;
+    rtl::OString sLastTextTyp;
     static bool isInitialized;
-    ByteString sFilename;
+    rtl::OString sFilename;
 
 
 public:
@@ -296,8 +293,6 @@ public:
     static rtl::OString sLanguages; // public ?
     static rtl::OString sForcedLanguages; // public ?
 
-
-    static bool skipProject( ByteString sPrj ) ;
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
     static std::vector<rtl::OString> GetLanguages();
@@ -306,31 +301,14 @@ public:
     static void SetLanguages( std::vector<rtl::OString> val );
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
     static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
-    static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
-    static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-    static void QuotHTML( ByteString &rString );
-    static bool CopyFile( const ByteString& source , const ByteString& dest );
+    static rtl::OString QuoteHTML( rtl::OString const &rString );
 
-    static void UnquotHTML( ByteString &rString );
+    static rtl::OString UnquoteHTML( rtl::OString const &rString );
 
-    static const char* GetEnv( const char *pVar );
-
-    static bool isSourceLanguage( const ByteString &sLanguage );
-    static bool isAllowed( const ByteString &sLanguage );
+    static bool isSourceLanguage(const rtl::OString &rLanguage);
+    static bool isAllowed(const rtl::OString &rLanguage);
 
     static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
-    static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
-    static void getCurrentDir( std::string& dir );
-
-    static ByteString GetTimeStamp();
-    static sal_Bool ConvertLineEnds( ByteString sSource, ByteString sDestination );
-    static ByteString GetNativeFile( ByteString sSource );
-    static DirEntry GetTempFile();
-
-    static void DumpExportList(const rtl::OString& rListName,
-        ExportList& aList);
-    static ByteString DumpMap(const rtl::OString& rMapName,
-        ByteStringHashMap& aMap);
 
 private:
     static std::vector<rtl::OString> aLanguages;
@@ -338,37 +316,34 @@ private:
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const ByteString &rTyp, sal_Bool bCreateNew = sal_False );
+                        const rtl::OString &rTyp, sal_Bool bCreateNew = sal_False );
 
-    ByteString MergePairedList( ByteString& sLine , ByteString& sText );
+    rtl::OString MergePairedList( rtl::OString const & sLine , rtl::OString const & sText );
 
-    ByteString FullId();                    // creates cur. GID
+    rtl::OString FullId();                    // creates cur. GID
 
-    ByteString GetPairedListID      ( const ByteString& sText );
-    ByteString GetPairedListString  ( const ByteString& sText );
-    ByteString StripList    ( const ByteString& sText );
+    rtl::OString GetPairedListID(const rtl::OString & rText);
+    rtl::OString GetPairedListString(const rtl::OString& rText);
+    rtl::OString StripList(const rtl::OString& rText);
 
-    void InsertListEntry( const ByteString &rText, const ByteString &rLine );
-    void CleanValue( ByteString &rValue );
-    ByteString GetText( const ByteString &rSource, int nToken );
+    void InsertListEntry(const rtl::OString &rText, const rtl::OString &rLine);
+    void CleanValue( rtl::OString &rValue );
+    rtl::OString GetText(const rtl::OString &rSource, int nToken);
 
-    sal_Bool PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
+    sal_Bool PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         rtl::OString &rLangIndex, ResData *pResData);
-
+    void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
-    void ConvertMergeContent( ByteString &rText );
+    void ConvertMergeContent( rtl::OString &rText );
 
-      void WriteToMerged( const ByteString &rText , bool bSDFContent );
+    void WriteToMerged(const rtl::OString &rText , bool bSDFContent);
     void SetChildWithText();
 
-    void CutComment( ByteString &rText );
+    void CutComment( rtl::OString &rText );
 
 public:
-    Export( const ByteString &rOutput, sal_Bool bWrite,
-            const ByteString &rPrj, const ByteString &rPrjRoot , const ByteString& rFile );
-    Export( const ByteString &rOutput, sal_Bool bWrite,
-            const ByteString &rPrj, const ByteString &rPrjRoot,
-            const ByteString &rMergeSource , const ByteString& rFile );
+    Export(const rtl::OString &rOutput);
+    Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput);
     ~Export();
 
     void Init();
@@ -386,38 +361,34 @@ public:
 * Purpose: holds information of data to merge (one pform)
 ******************************************************************************/
 
-class PFormEntrys : public ByteString
+class PFormEntrys
 {
 friend class MergeDataFile;
 private:
-    ByteString sHelpText; // empty string
-    ByteStringHashMap sText;
-    ByteStringBoolHashMap bTextFirst;
-    ByteStringHashMap sQuickHelpText;
-    ByteStringBoolHashMap bQuickHelpTextFirst;
-    ByteStringHashMap sTitle;
-    ByteStringBoolHashMap bTitleFirst;
+    rtl::OString data_; //TODO
+    rtl::OString sHelpText; // empty string
+    OStringHashMap sText;
+    OStringBoolHashMap bTextFirst;
+    OStringHashMap sQuickHelpText;
+    OStringBoolHashMap bQuickHelpTextFirst;
+    OStringHashMap sTitle;
+    OStringBoolHashMap bTitleFirst;
 
 public:
-    PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
-    ByteString Dump();
-    void InsertEntry(
-                    const ByteString &nId ,
-                    const ByteString &rText,
-                    const ByteString &rQuickHelpText,
-                    const ByteString &rTitle
-                    )
-        {
+    PFormEntrys( const rtl::OString &rPForm ) : data_( rPForm ) {};
+    void InsertEntry(const rtl::OString &rId, const rtl::OString &rText,
+        const rtl::OString &rQuickHelpText, const rtl::OString &rTitle)
+    {
 
-            sText[ nId ] = rText;
-            bTextFirst[ nId ] = true;
-            sQuickHelpText[ nId ] = rQuickHelpText;
-            bQuickHelpTextFirst[ nId ] = true;
-            sTitle[ nId ] = rTitle;
-            bTitleFirst[ nId ] = true;
-        }
-     sal_Bool GetText( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
-     sal_Bool GetTransex3Text( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
+        sText[ rId ] = rText;
+        bTextFirst[ rId ] = true;
+        sQuickHelpText[ rId ] = rQuickHelpText;
+        bQuickHelpTextFirst[ rId ] = true;
+        sTitle[ rId ] = rTitle;
+        bTitleFirst[ rId ] = true;
+    }
+    sal_Bool GetText( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
+    sal_Bool GetTransex3Text( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
 
 };
 
@@ -449,7 +420,6 @@ public:
     void Insert( PFormEntrys* pfEntrys );
     PFormEntrys* GetPFObject( const rtl::OString &rPFO );
 
-    rtl::OString Dump();
     sal_Bool operator==( ResData *pData );
 };
 
@@ -465,21 +435,19 @@ class MergeDataFile
 {
     private:
         sal_Bool bErrorLog;
-        ByteString sErrorLog;
-        SvFileStream aErrLog;
+        rtl::OString sErrorLog;
         MergeDataHashMap aMap;
         std::set<rtl::OString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
-        void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-            const ByteString &rPFO,
-            const ByteString &nLang, const ByteString &rTEXT,
-            const ByteString &rQHTEXT, const ByteString &rTITLE,
-            const ByteString &sFilename, bool bCaseSensitive
-            );
-        ByteString Dump();
+        void InsertEntry(const rtl::OString &rTYP, const rtl::OString &rGID,
+            const rtl::OString &rLID, const rtl::OString &rPFO,
+            const rtl::OString &nLang, const rtl::OString &rTEXT,
+            const rtl::OString &rQHTEXT, const rtl::OString &rTITLE,
+            const rtl::OString &sFilename, bool bCaseSensitive);
     public:
-        explicit MergeDataFile( const ByteString &rFileName, const ByteString& rFile, bool bErrLog, bool bCaseSensitive = false );
+        explicit MergeDataFile(const rtl::OString &rFileName,
+            const rtl::OString& rFile, bool bErrLog, bool bCaseSensitive = false);
         ~MergeDataFile();
 
 
@@ -488,16 +456,20 @@ class MergeDataFile
         PFormEntrys *GetPFormEntrys( ResData *pResData );
         PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
-        static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
+        static rtl::OString CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
+            const rtl::OString& rLID, const rtl::OString& rFilename , bool bCaseSensitive = false);
 };
 
 
 class QueueEntry
 {
 public:
-    QueueEntry( int nTypVal , ByteString sLineVal ): nTyp( nTypVal ) , sLine( sLineVal ){};
+    QueueEntry(int nTypVal, const rtl::OString &rLineVal)
+        : nTyp(nTypVal), sLine(rLineVal)
+    {
+    }
     int nTyp;
-    ByteString sLine;
+    rtl::OString sLine;
 };
 
 class ParserQueue

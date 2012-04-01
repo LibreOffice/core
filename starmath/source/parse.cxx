@@ -1112,7 +1112,7 @@ void SmParser::Line()
     //If there's no expression, add an empty one.
     //this is to avoid a formula tree without any caret
     //positions, in visual formula editor.
-    if(ExpressionArray.size() == 0)
+    if(ExpressionArray.empty())
         ExpressionArray.push_back(new SmExpressionNode(SmToken()));
 
     SmStructureNode *pSNode = new SmLineNode(m_aCurToken);
@@ -1914,11 +1914,11 @@ void SmParser::Font()
 
 // gets number used as arguments in Math formulas (e.g. 'size' command)
 // Format: no negative numbers, must start with a digit, no exponent notation, ...
-bool lcl_IsNumber(const UniString& rText)
+bool lcl_IsNumber(const rtl::OUString& rText)
 {
     bool bPoint = false;
-    const sal_Unicode* pBuffer = rText.GetBuffer();
-    for(xub_StrLen nPos = 0; nPos < rText.Len(); nPos++, pBuffer++)
+    const sal_Unicode* pBuffer = rText.getStr();
+    for(sal_Int32 nPos = 0; nPos < rText.getLength(); nPos++, pBuffer++)
     {
         const sal_Unicode cChar = *pBuffer;
         if(cChar == '.')
@@ -1972,8 +1972,8 @@ void SmParser::FontSize()
     Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
-        double    fTmp;
-        if ((fTmp = m_aCurToken.aText.ToDouble()) != 0.0)
+        double fTmp = rtl::OUString(m_aCurToken.aText).toDouble();
+        if (fTmp != 0.0)
         {
             aValue = fTmp;
 
@@ -2424,7 +2424,9 @@ void SmParser::Error(SmParseError eError)
 
     AddError(eError, pSNode);
 
-    NextToken();
+    // Even if the newline token is unexpected, do not skip it. (fdo#41739)
+    if (m_aCurToken.eType != TNEWLINE)
+        NextToken();
 }
 
 
@@ -2443,8 +2445,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 {
     ClearUsedSymbols();
 
-    m_aBufferString = rBuffer;
-    m_aBufferString.ConvertLineEnd( LINEEND_LF );
+    m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
     m_Row           = 1;
@@ -2468,8 +2469,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 
 SmNode *SmParser::ParseExpression(const String &rBuffer)
 {
-    m_aBufferString = rBuffer;
-    m_aBufferString.ConvertLineEnd( LINEEND_LF );
+    m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
     m_Row           = 1;

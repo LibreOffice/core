@@ -152,7 +152,7 @@ private:
     sal_Bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
     void                ResetColor_Impl( const SfxItemSet& rSet );
 
-    DECL_LINK(          UpdateHdl_Impl, Timer* );
+    DECL_LINK(UpdateHdl_Impl, void *);
     DECL_LINK(          FontModifyHdl_Impl, void* );
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
@@ -242,9 +242,9 @@ private:
     sal_Bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          SelectHdl_Impl, ListBox* );
-    DECL_LINK(          CbClickHdl_Impl, CheckBox* );
-    DECL_LINK(          TristClickHdl_Impl, TriStateBox* );
-    DECL_LINK(          UpdatePreview_Impl, ListBox* );
+    DECL_LINK(CbClickHdl_Impl, void *);
+    DECL_LINK(TristClickHdl_Impl, void *);
+    DECL_LINK(UpdatePreview_Impl, void *);
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
@@ -313,14 +313,14 @@ private:
 
     DECL_LINK(          PositionHdl_Impl, RadioButton* );
     DECL_LINK(          RotationHdl_Impl, RadioButton* );
-    DECL_LINK(          FontModifyHdl_Impl, MetricField* );
+    DECL_LINK(FontModifyHdl_Impl, void *);
     DECL_LINK(          AutoPositionHdl_Impl, CheckBox* );
     DECL_LINK(          FitToLineHdl_Impl, CheckBox* );
-    DECL_LINK(          KerningSelectHdl_Impl, ListBox* );
-    DECL_LINK(          KerningModifyHdl_Impl, MetricField* );
-    DECL_LINK(          PairKerningHdl_Impl, CheckBox* );
+    DECL_LINK(KerningSelectHdl_Impl, void *);
+    DECL_LINK(KerningModifyHdl_Impl, void *);
+    DECL_LINK(PairKerningHdl_Impl, void *);
     DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
-    DECL_LINK(          ScaleWidthModifyHdl_Impl, MetricField* );
+    DECL_LINK(ScaleWidthModifyHdl_Impl, void *);
 
 public:
     using SfxTabPage::ActivatePage;
@@ -365,7 +365,7 @@ private:
     void                SelectCharacter( ListBox* pBox );
     void                SetBracket( sal_Unicode cBracket, sal_Bool bStart );
 
-    DECL_LINK(          TwoLinesHdl_Impl, CheckBox* );
+    DECL_LINK(TwoLinesHdl_Impl, void *);
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
 
 public:

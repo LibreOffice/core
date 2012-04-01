@@ -384,12 +384,12 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 
     Note the missing colons between the bracketed arguments.
  */
-#define COMPHELPER_SERVICEDECL_make_exports(varargs_ )  \
+#define COMPHELPER_SERVICEDECL_make_exports(compName, varargs_ ) \
 extern "C" \
 { \
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( sal_Char const*                                pImplName, \
-                                         ::com::sun::star::lang::XMultiServiceFactory*  pServiceManager, \
-                                         ::com::sun::star::registry::XRegistryKey*      pRegistryKey ) \
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL compName##_component_getFactory( sal_Char const* pImplName, \
+                                         ::com::sun::star::lang::XMultiServiceFactory*   pServiceManager, \
+                                         ::com::sun::star::registry::XRegistryKey*       pRegistryKey ) \
     { \
         return component_getFactoryHelper( pImplName, pServiceManager, \
                                            pRegistryKey, \
@@ -397,22 +397,22 @@ extern "C" \
     } \
 }
 
-#define COMPHELPER_SERVICEDECL_EXPORTS1(comp0_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_))
-#define COMPHELPER_SERVICEDECL_EXPORTS2(comp0_,comp1_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_))
-#define COMPHELPER_SERVICEDECL_EXPORTS3(comp0_,comp1_,comp2_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_))
-#define COMPHELPER_SERVICEDECL_EXPORTS4(comp0_,comp1_,comp2_,comp3_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_))
-#define COMPHELPER_SERVICEDECL_EXPORTS5(comp0_,comp1_,comp2_,comp3_,comp4_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_))
-#define COMPHELPER_SERVICEDECL_EXPORTS6(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_))
-#define COMPHELPER_SERVICEDECL_EXPORTS7(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_))
-#define COMPHELPER_SERVICEDECL_EXPORTS8(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_,comp7_) \
-    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_)(comp7_))
+#define COMPHELPER_SERVICEDECL_EXPORTS1(compName,comp0_)    \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_))
+#define COMPHELPER_SERVICEDECL_EXPORTS2(compName,comp0_,comp1_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_))
+#define COMPHELPER_SERVICEDECL_EXPORTS3(compName,comp0_,comp1_,comp2_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_))
+#define COMPHELPER_SERVICEDECL_EXPORTS4(compName,comp0_,comp1_,comp2_,comp3_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_))
+#define COMPHELPER_SERVICEDECL_EXPORTS5(compName,comp0_,comp1_,comp2_,comp3_,comp4_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_))
+#define COMPHELPER_SERVICEDECL_EXPORTS6(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_))
+#define COMPHELPER_SERVICEDECL_EXPORTS7(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_))
+#define COMPHELPER_SERVICEDECL_EXPORTS8(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_,comp7_) \
+    COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_)(comp7_))
 
 #endif //  ! defined(COMPHELPER_SERVICEDECL_HXX_INCLUDED)
 

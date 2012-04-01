@@ -53,8 +53,8 @@ JAVA_PACKAGES=\
 #        com.sun.star.beans \
 
 JAVA_SRC_FILES=\
-        $(JAVA_SRC_DIR)$/jurt_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip \
+        $(JAVA_SRC_DIR)$/jurt_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
         $(JAVA_SRC_DIR)$/unoloader_src.zip
 
@@ -103,7 +103,7 @@ $(CPP_DOCU_INDEX_FILE) .ERRREMOVE : $(CPP_DOCU_CLEANUP_FLAG)
         Doxyfile > $(MISC)/Doxyfile
     $(DOXYGEN) $(MISC)/Doxyfile
 
-$(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
+$(JAVA_SRC_FILES) : $(SOLARCOMMONPCKDIR)$/$$(@:f)
     -$(MKDIRHIER) $(@:d)        
     $(MY_COPY) $< $@
     cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)

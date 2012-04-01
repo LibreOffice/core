@@ -52,7 +52,6 @@
 
 #include <vcl/timer.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>

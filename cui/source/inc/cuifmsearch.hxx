@@ -179,10 +179,10 @@ protected:
 private:
     // Handler for the Controls
     DECL_LINK( OnClickedFieldRadios, Button* );
-    DECL_LINK( OnClickedSearchAgain, Button* );
+    DECL_LINK(OnClickedSearchAgain, void *);
     DECL_LINK( OnClickedSpecialSettings, Button* );
 
-    DECL_LINK( OnSearchTextModified, ComboBox* );
+    DECL_LINK(OnSearchTextModified, void *);
 
     DECL_LINK( OnPositionSelected, ListBox* );
     DECL_LINK( OnFieldSelected, ListBox* );

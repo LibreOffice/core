@@ -56,8 +56,6 @@ namespace basegfx
             multiplications
          */
         BASEGFX_DLLPUBLIC B2DHomMatrix createScaleB2DHomMatrix(double fScaleX, double fScaleY);
-        BASEGFX_DLLPUBLIC B2DHomMatrix createShearXB2DHomMatrix(double fShearX);
-        BASEGFX_DLLPUBLIC B2DHomMatrix createShearYB2DHomMatrix(double fShearY);
         BASEGFX_DLLPUBLIC B2DHomMatrix createRotateB2DHomMatrix(double fRadiant);
         BASEGFX_DLLPUBLIC B2DHomMatrix createTranslateB2DHomMatrix(double fTranslateX, double fTranslateY);
 
@@ -225,9 +223,6 @@ namespace basegfx
             double getShearX() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfShearX; }
         };
     } // end of namespace tools
-
-    /// Returns a string with svg's "matrix(m00,m10,m01,m11,m02,m12)" representation
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix );
 
 } // end of namespace basegfx
 

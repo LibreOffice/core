@@ -111,7 +111,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/registr
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,\
 	AllListenerAdapter \
-	Converter \
 	Engine \
 	Invocation \
 	InvocationAdapterFactory \
@@ -152,6 +151,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	SequenceInputStream \
 	SequenceOutputStream \
 	TempFile \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/script,\
+	Converter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uri,\
 	ExternalUriReferenceTranslator \

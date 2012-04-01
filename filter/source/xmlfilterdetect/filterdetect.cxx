@@ -47,7 +47,6 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>

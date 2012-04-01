@@ -36,8 +36,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <unotools/configmgr.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
 
@@ -73,7 +71,6 @@ GetBuildId()
     if (!sBuildId.isEmpty() && sBuildId.getLength() > 50)
     {
         rtl::OUStringBuffer aBuffer;
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
         sal_Int32 nIndex = 0;
         do
         {
@@ -86,7 +83,7 @@ GetBuildId()
                     if (nIndex % 5)
                         aBuffer.append(static_cast<sal_Unicode>('-'));
                     else
-                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
+                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n"));
                 }
             }
         }
@@ -101,16 +98,20 @@ GetBuildId()
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     SfxModalDialog  ( pParent,  rId ),
-
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
+    aTdfLink        ( this,     ResId( ABOUT_TDFSTR_LINK, *rId.GetResMgr() ) ),
+    aFeaturesLink   ( this,     ResId( ABOUT_FEATURES_LINK, *rId.GetResMgr() ) ),
+    aButtonsLine    ( this,     ResId( ABOUT_BUTTONS_LINE, *rId.GetResMgr() ) ),
+    aCancelButton   ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
     aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aOracleCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT_ORACLE_DERIVED, *rId.GetResMgr())),
     m_aAcknowledgementTextStr(ResId(ABOUT_STR_ACKNOWLEDGEMENT, *rId.GetResMgr())),
     m_aLinkStr(ResId( ABOUT_STR_LINK, *rId.GetResMgr())),
+    m_aTdfLinkStr(ResId( ABOUT_TDF_LINK, *rId.GetResMgr())),
+    m_aFeaturesLinkStr(ResId( ABOUT_FEATURESSTR_LINK, *rId.GetResMgr())),
     m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
 {
     // load image from module path
@@ -151,6 +152,16 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aInfoLink.SetURL(m_aLinkStr);
     aInfoLink.SetBackground();
     aInfoLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
+
+    aTdfLink.SetURL(m_aTdfLinkStr);
+    aTdfLink.SetBackground();
+    aTdfLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
+
+    aFeaturesLink.SetURL(m_aFeaturesLinkStr);
+    aFeaturesLink.SetBackground();
+    aFeaturesLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
+
+    aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
 
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
@@ -223,23 +234,48 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     nY += aCTSize.Height() + nCtrlMargin;
 
+    const int nLineSpace = 4;
     // FixedHyperlink with more info link
-    Size aLTSize = aInfoLink.CalcMinimumSize();
+    Size aLTSize = aTdfLink.CalcMinimumSize();
     Point aLTPnt;
     aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
     aLTPnt.Y() = nY;
+    aTdfLink.SetPosSizePixel( aLTPnt, aLTSize );
+
+    nY += aLTSize.Height();
+
+    aLTSize = aFeaturesLink.CalcMinimumSize();
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
+    aFeaturesLink.SetPosSizePixel( aLTPnt, aLTSize );
+
+    nY += aLTSize.Height() + nLineSpace;
+
+    aLTSize = aInfoLink.CalcMinimumSize();
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
     aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
 
-    nY += aLTSize.Height() + nCtrlMargin;
+    nY += aLTSize.Height();
 
-    // OK-Button-Position (at the bottom and centered)
-    Size aOKSiz = aOKButton.GetSizePixel();
-    Point aOKPnt;
-    aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
-    aOKPnt.Y() = nY;
-    aOKButton.SetPosPixel( aOKPnt );
+    // buttons delimiter line
+    Size aBDSize = aButtonsLine.GetSizePixel();
+    aBDSize.Width() = aOutSiz.Width();
+    Point aBDPnt;
+    aBDPnt.X() = 0;
+    aBDPnt.Y() = nY + nCtrlMargin / 2 + aBDSize.Height() / 2;
+    aButtonsLine.SetPosSizePixel( aBDPnt, aBDSize );
 
-    nY += aOKSiz.Height() + nCtrlMargin;
+    nY += nCtrlMargin + aBDSize.Height();
+
+    // Cancel-Button-Position (at the bottom and in the right)
+    Size aCancelSiz = aCancelButton.GetSizePixel();
+    Point aCancelPnt;
+    aCancelPnt.X() = aOutSiz.Width() - aCancelSiz.Width() - nDlgMargin / 2;
+    aCancelPnt.Y() = nY;
+    aCancelButton.SetPosPixel( aCancelPnt );
+
+    nY += aCancelSiz.Height() + nCtrlMargin / 2;
 
     aOutSiz.Height() = nY;
 
@@ -250,6 +286,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     // explicit Help-Id
     SetHelpId( CMD_SID_ABOUT );
+}
+
+//-----------------------------------------------------------------------
+IMPL_LINK_NOARG(AboutDialog, CancelHdl)
+{
+    Close();
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -266,7 +309,7 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {

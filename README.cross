@@ -155,9 +155,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-nss-module
 --disable-zenity
 --enable-python=system
---with-external-tar=/mnt/hemulen/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
 --with-system-altlinuxhyph
 --with-system-boost
 --with-system-cairo
@@ -210,6 +207,15 @@ $ winedbg soffice.bin
 
 Would be great to be able to use winedbg --gdb, but it was crashing here :-( -
 but maybe you'll be more lucky.
+
+Tricks of some use with winedbg:
+--------------------------------
+
+To examine OUStrings, you might want to use the following trick (prints 50
+unicode characters of rLibName OUString - the +10 is where the buffer starts):
+
+Wine-dbg>x /50u rLibName->pData+10
+0x0909b6c8: vnd.sun.star.expand:$LO_LIB_DIR/abplo.dll
 
 TODO:
 
@@ -271,28 +277,24 @@ thought yet.
 The Apple tool-chain for iOS cross-building is available only for
 Mac OS X.
 
-Here is an autogen.lastrun for iOS (device):
-CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++ -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
-CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
+Here is an autogen.lastrun for iOS (device) using Xcode 4.3 and clang:
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
---with-external-tar=/Volumes/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
+--with-system-nss
 --without-help
 --without-helppack-integration
 --without-myspell-dicts
 
-And here for the iOS simulator:
-CXX=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+And here for the iOS simulator, using Xcode 4.2 and gcc:
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
---with-external-tar=/Volumes/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
+--with-system-nss
 --enable-debug
 --without-help
 --without-helppack-integration
@@ -301,6 +303,26 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 It seems that with the latest iOS SDK one has to do:
 sudo ln -s i686-apple-darwin10 /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk/usr/include/c++/4.2.1/i686-apple-darwin11
 or g++ won't find its headers like <bits/c++config.h>
+
+The --with-system-nss doesn't mean that any Mozilla NSS would be used,
+it's just a trick to bypass some tests in the configure script.
+
+For the iOS simulator, using Xcode 4.3 and gcc (should switch to clang here, too):
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
+--enable-werror
+--with-distro=LibreOfficeiOS
+--with-system-nss
+--without-help
+--without-helppack-integration
+--without-myspell-dicts
+
+Note that you will have to install autoconf and automake yourself
+before running autogen.sh. They are no longer included in Xcode 4.3
+(not even in the add-on "command line tools").
+
 
 Android
 -------
@@ -322,13 +344,12 @@ Here is an autogen.lastrun for Android, when cross-compiling from Mac OS X:
 
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
---with-android-ndk=/Users/tml/android-ndk-r7
+--with-android-ndk=/Users/tml/android-ndk-r7b
 --with-android-sdk=/Users/tml/android-sdk-macosx
 --build=x86_64-apple-darwin11
 --disable-zenity
 --enable-werror
 --with-distro=LibreOfficeAndroid
---with-external-tar=/Volumes/ooo/git/master/src
 --disable-python
 --without-helppack-integration
 --without-myspell-dicts
@@ -338,11 +359,12 @@ And here is an autogen.lastrun for Android when cross-compiling from Linux:
 
 CC_FOR_BUILD=ccache gcc
 CXX_FOR_BUILD=ccache g++
---with-android-ndk=/home/tml/android-ndk-r7
+--with-android-ndk=/home/tml/android-ndk-r7b
+--with-android-sdk=/home/tml/android-sdk-linux_x86
+--with-ant-home=/opt/apache-ant-1.8.2
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
 --with-distro=LibreOfficeAndroid
---with-external-tar=/mnt/hemulen/ooo/git/master/src
 --disable-python
 --with-num-cpus=1
 --with-max-jobs=1
@@ -365,7 +387,7 @@ The activity used for these apps is in android/Bootstrap. See
 README.Android.
 
 To build the complex unit test (for Calc functionality; invokes the
-"ucalc" unit test code from sc) source the environment (. Env.Host.sh)
+"ucalc" unit test code from sc) setup your environment (make cmd cmd=bash)
 and cd to android/qa/sc and run a "make". The Makefile here is
 completely manually written, this stuff is so experimental it doesn't
 make sense yet to try to integrate with the normal gbuild
@@ -406,4 +428,3 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --host=powerpc-apple-darwin10
 --disable-mozilla
 --disable-build-mozilla
---with-external-tar=/Volumes/ooo/git/master/src

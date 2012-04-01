@@ -43,7 +43,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -261,13 +260,13 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
         // pretty printing is confusing for some filters so it is disabled by default
         sal_Bool bPrettyPrint =
-            (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAscii("true"));
+            (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")));
 
         // export of <text:number> element for <text:list-item> elements are
         // needed for certain filters.
         sal_Bool bExportTextNumberElementForListItems =
                             ( msUserData.getLength() > 7 &&
-                              msUserData[7].equalsIgnoreAsciiCaseAscii("true") );
+                              msUserData[7].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;

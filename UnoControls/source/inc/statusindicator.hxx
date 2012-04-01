@@ -54,11 +54,6 @@
 
 namespace unocontrols{
 
-#define CSS_UNO     ::com::sun::star::uno
-#define CSS_AWT     ::com::sun::star::awt
-#define CSS_LANG    ::com::sun::star::lang
-#define CSS_TASK    ::com::sun::star::task
-
 //____________________________________________________________________________________________________________
 //  defines
 //____________________________________________________________________________________________________________
@@ -85,8 +80,8 @@ namespace unocontrols{
 //  class declaration
 //____________________________________________________________________________________________________________
 
-class StatusIndicator   : public CSS_AWT::XLayoutConstrains
-                        , public CSS_TASK::XStatusIndicator
+class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
+                        , public ::com::sun::star::task::XStatusIndicator
                         , public BaseContainerControl
 {
 
@@ -113,7 +108,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror
         */
 
-        StatusIndicator( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
+        StatusIndicator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
         /**_______________________________________________________________________________________________________
             @short
@@ -147,8 +142,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
-            throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+            throw( ::com::sun::star::uno::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
@@ -199,8 +194,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
-            throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+            throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XAggregation
@@ -219,8 +214,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual CSS_UNO::Any SAL_CALL queryAggregation( const CSS_UNO::Type& aType )
-            throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
+            throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XStatusIndicator
@@ -242,7 +237,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
         virtual void SAL_CALL start(
             const ::rtl::OUString&  sText   ,
             sal_Int32 nRange
-        ) throw( CSS_UNO::RuntimeException );
+        ) throw( ::com::sun::star::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -257,7 +252,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL end() throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -272,7 +267,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL reset() throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -287,7 +282,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setText( const ::rtl::OUString& sText ) throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL setText( const ::rtl::OUString& sText ) throw( ::com::sun::star::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -302,7 +297,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XLayoutConstrains
@@ -321,7 +316,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual CSS_AWT::Size SAL_CALL getMinimumSize() throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -336,7 +331,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual CSS_AWT::Size SAL_CALL getPreferredSize() throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -351,8 +346,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual CSS_AWT::Size SAL_CALL calcAdjustedSize( const CSS_AWT::Size& aNewSize )
-            throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
+            throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XControl
@@ -372,9 +367,9 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
         */
 
         virtual void SAL_CALL createPeer(
-            const   CSS_UNO::Reference< CSS_AWT::XToolkit >&    xToolkit    ,
-            const   CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParent
-        ) throw( CSS_UNO::RuntimeException );
+            const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&    xToolkit    ,
+            const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent
+        ) throw( ::com::sun::star::uno::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -389,8 +384,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual sal_Bool SAL_CALL setModel( const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel )
-            throw( CSS_UNO::RuntimeException );
+        virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
+            throw( ::com::sun::star::uno::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -405,8 +400,8 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
-            throw( CSS_UNO::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
+            throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XComponent
@@ -425,7 +420,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XWindow
@@ -448,7 +443,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
                                             sal_Int32   nY      ,
                                             sal_Int32   nWidth  ,
                                             sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( CSS_UNO::RuntimeException );
+                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  BaseControl
@@ -467,7 +462,7 @@ class StatusIndicator   : public CSS_AWT::XLayoutConstrains
             @onerror    -
         */
 
-        static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+        static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -503,8 +498,8 @@ protected:
             @onerror    -
         */
 
-        virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
-            const CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParentPeer
+        virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
         );
 
         /**_______________________________________________________________________________________________________
@@ -523,7 +518,7 @@ protected:
         virtual void impl_paint (
             sal_Int32 nX,
             sal_Int32 nY,
-            const CSS_UNO::Reference< CSS_AWT::XGraphics > & rGraphics
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & rGraphics
         );
 
         /**_______________________________________________________________________________________________________
@@ -539,7 +534,7 @@ protected:
             @onerror    -
         */
 
-        virtual void impl_recalcLayout( const CSS_AWT::WindowEvent& aEvent );
+        virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent );
 
 //____________________________________________________________________________________________________________
 // debug methods
@@ -566,16 +561,10 @@ private:
 
 private:
 
-    CSS_UNO::Reference< CSS_AWT::XFixedText >       m_xText         ;
-    CSS_UNO::Reference< CSS_AWT::XProgressBar >     m_xProgressBar  ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >       m_xText         ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar >     m_xProgressBar  ;
 
 };  // class StatusIndicator
-
-// The name space aliases are only used in the header
-#undef CSS_UNO
-#undef CSS_AWT
-#undef CSS_LANG
-#undef CSS_TASK
 
 }   // namespace unocontrols
 

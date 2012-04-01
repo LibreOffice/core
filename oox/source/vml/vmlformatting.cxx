@@ -150,7 +150,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             fValue *= 360000.0;
         else if( (cChar1 == 'm') && (cChar2 == 'm') )   // 1 mm = 36,000 EMU
             fValue *= 36000.0;
-        else if( (cChar1 == 'p') && (cChar2 == 't') )   // 1 point = 1/72 inch = 12,700 MEU
+        else if( (cChar1 == 'p') && (cChar2 == 't') )   // 1 point = 1/72 inch = 12,700 EMU
             fValue *= 12700.0;
         else if( (cChar1 == 'p') && (cChar2 == 'c') )   // 1 pica = 1/6 inch = 152,400 EMU
             fValue *= 152400.0;

@@ -32,7 +32,6 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
-#include <tools/table.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
 #include <address.hxx>
@@ -108,6 +107,8 @@ struct ScEEParseEntry
 
 class EditEngine;
 
+typedef std::map<SCCOL, sal_uInt16> ColWidthsMap;
+
 class ScEEParser
 {
 protected:
@@ -116,7 +117,7 @@ protected:
     SfxItemPool*        pDocPool;
     ::std::vector< ScEEParseEntry* > maList;
     ScEEParseEntry*     pActEntry;
-    Table*              pColWidths;
+    ColWidthsMap        maColWidths;
     int                 nLastToken;
     SCCOL               nColCnt;
     SCROW               nRowCnt;
@@ -131,7 +132,8 @@ public:
 
     virtual sal_uLong           Read( SvStream&, const String& rBaseURL ) = 0;
 
-    Table*                  GetColWidths() const { return pColWidths; }
+    const ColWidthsMap&     GetColWidths() const { return maColWidths; }
+    ColWidthsMap&           GetColWidths() { return maColWidths; }
     void                    GetDimensions( SCCOL& nCols, SCROW& nRows ) const
                                 { nCols = nColMax; nRows = nRowMax; }
 

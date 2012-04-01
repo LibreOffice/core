@@ -782,44 +782,6 @@ void XSecController::setSAXChainConnector(
     initializeSAXChain( );
 }
 
-void XSecController::setSAXChainConnector(
-    const cssu::Reference< cssxs::XParser >& xParser,
-    const cssu::Reference< cssxs::XDocumentHandler >& xDocumentHandler,
-    const cssu::Reference< cssxc::sax::XElementStackKeeper >& xElementStackKeeper)
-/****** XSecController/setSAXChainConnector ***********************************
- *
- *   NAME
- *  setSAXChainConnector -- configures the components which will
- *  collaborate with the SAXEventKeeper on the SAX chain.
- *
- *   SYNOPSIS
- *  setSAXChainConnector( xParser, xDocumentHandler, xElementStackKeeper );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  xParser             - the previous node on the SAX chain
- *  xDocumentHandler    - the next node on the SAX chain
- *  xElementStackKeeper -the ElementStackKeeper component which reserves
- *                        missed key SAX events for the SAXEventKeeper
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    m_bIsPreviousNodeInitializable = false;
-    m_xPreviousNodeOnSAXChain = xParser;
-    m_xNextNodeOnSAXChain = xDocumentHandler;
-    m_xElementStackKeeper = xElementStackKeeper;
-
-    initializeSAXChain( );
-}
-
 void XSecController::clearSAXChainConnector()
 /****** XSecController/clearSAXChainConnector *********************************
  *
@@ -918,32 +880,6 @@ void XSecController::endMission()
         xSAXEventKeeperStatusChangeBroadcaster
             ->addSAXEventKeeperStatusChangeListener( NULL );
     }
-}
-
-const char* XSecController::getErrorMessage()
-/****** XSecController/getErrorMessage ****************************************
- *
- *   NAME
- *  getErrorMessage -- get the last error message
- *
- *   SYNOPSIS
- *  pErrorMessage = getErrorMessage( );
- *
- *   FUNCTION
- *  see NAME.
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    return m_pErrorMessage;
 }
 
 void XSecController::exportSignature(

@@ -34,10 +34,10 @@
 #include "premac.h"
 #include <TargetConditionals.h>
 #if !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE
-#include <Cocoa/Cocoa.h>
+# include <Cocoa/Cocoa.h>
 #else
-#include <UIKit/UIKit.h>
-#define NSView UIView
+# include <UIKit/UIKit.h>
+# define NSView UIView
 #endif
 #include <cairo-quartz.h>
 #include "postmac.h"
@@ -73,7 +73,6 @@ namespace cairo {
         int getDepth() const;
 
         CGContextRef getCGContext() const;
-
     };
 }
 

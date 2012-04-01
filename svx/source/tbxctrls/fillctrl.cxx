@@ -554,7 +554,7 @@ FillControl::~FillControl()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(FillControl, DelayHdl)
 {
     SelectFillTypeHdl( NULL );
     ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));

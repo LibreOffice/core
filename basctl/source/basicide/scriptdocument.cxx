@@ -147,6 +147,8 @@ namespace basctl
         public:
             FilterDocuments( bool _bFilterInvisible ) : m_bFilterInvisible( _bFilterInvisible ) { }
 
+            virtual ~FilterDocuments() {}
+
             virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const;
 
         private:
@@ -952,11 +954,11 @@ namespace basctl
             Reference< XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY_THROW );
 
             ::rtl::OUString aScheme = xUriRef->getScheme();
-            if ( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+            if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
             {
                 aFileURL = aLinkURL;
             }
-            else if ( aScheme.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.pkg" ) )
+            else if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
             {
                 ::rtl::OUString aAuthority = xUriRef->getAuthority();
                 if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )

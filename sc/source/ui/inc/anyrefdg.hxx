@@ -133,7 +133,7 @@ private:
     Timer               aTimer;
     String              aDocName;               // document on which the dialog was opened
 
-    DECL_LINK( UpdateFocusHdl, Timer* );
+    DECL_LINK( UpdateFocusHdl, void* );
 
 
 protected:

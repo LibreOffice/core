@@ -29,11 +29,7 @@
 #ifndef _SB_HXX
 #define _SB_HXX
 
-#ifndef _SBERRORS_HXX
- #include <basic/sberrors.hxx>
-#endif
-
-
+#include <basic/sberrors.hxx>
 #include <basic/sbdef.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>

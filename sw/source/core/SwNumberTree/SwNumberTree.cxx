@@ -358,7 +358,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetFirstNonPhantomChild()
 void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
                                             SwNumberTreeNode& _rDestNode )
 {
-    if ( mChildren.size() == 0 )
+    if ( mChildren.empty() )
         return;
 
     // determine first child, which has to move to <_rDestNode>

@@ -51,8 +51,6 @@ protected:
     DECL_LINK( SelectHdl, void * );
 
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
     SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxListBoxControl();
 

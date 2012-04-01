@@ -73,10 +73,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetsobj, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsobj,\
-    -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sc/inc) \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sc_spreadsheetsobj,\

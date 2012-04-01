@@ -43,6 +43,12 @@ public:
     void testDataArea();
     void testGetSortDescriptor();
     void testGetSubtotalDescriptor();
+    void testGetImportDescriptor();
+    void testGetFilterDescriptor();
+    void testRefresh();
+
+protected:
+    ~XDatabaseRange() {}
 };
 
 }

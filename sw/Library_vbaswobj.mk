@@ -31,13 +31,11 @@ $(eval $(call gb_Library_Library,vbaswobj))
 $(eval $(call gb_Library_set_componentfile,vbaswobj,sw/util/vbaswobj))
 
 $(eval $(call gb_Library_set_include,vbaswobj,\
-    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(WORKDIR)/Misc/sw/ \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/ \
 ))
 
 $(eval $(call gb_Library_add_api,vbaswobj,\

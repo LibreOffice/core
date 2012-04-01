@@ -163,13 +163,13 @@ void ScDeleteContentsDlg::DisableObjects()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScDeleteContentsDlg, DelAllHdl)
 {
     DisableChecks( aBtnDelAll.IsChecked() );
 
     return 0;
 }
-IMPL_LINK_INLINE_END( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScDeleteContentsDlg, DelAllHdl)
 
 ScDeleteContentsDlg::~ScDeleteContentsDlg()
 {

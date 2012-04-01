@@ -27,7 +27,7 @@
 
 #include "macros.inc"
 
-FolderItem gid_Folderitem_Soffice
+FolderItem gid_Folderitem_LibreOffice
     Name = "%PRODUCTNAME";
     ModuleID = gid_Module_Root;
 #ifdef ENABLE_SILENT_MSI

@@ -130,7 +130,7 @@ SwJavaEditDialog::~SwJavaEditDialog()
     Application::SetDefDialogParent( pOldDefDlgParent );
 }
 
-IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
 {
     SetFld();
     pMgr->GoPrev();
@@ -140,9 +140,9 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, PrevHdl)
 
-IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
 {
     SetFld();
     pMgr->GoNext();
@@ -152,9 +152,9 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, NextHdl)
 
-IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl)
 {
     SetFld();
     EndDialog( RET_OK );
@@ -232,7 +232,7 @@ void SwJavaEditDialog::SetFld()
     if( bIsUrl )
     {
         aText = aUrlED.GetText();
-        if(aText.Len())
+        if (!aText.isEmpty())
         {
             SfxMedium* pMedium = pSh->GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
@@ -246,8 +246,8 @@ void SwJavaEditDialog::SetFld()
     else
         aText = aEditED.GetText();
 
-    if( !aType.Len() )
-        aType = String::CreateFromAscii("JavaScript");
+    if( aType.isEmpty() )
+        aType = "JavaScript";
 }
 
 sal_Bool SwJavaEditDialog::IsUpdate()
@@ -255,7 +255,7 @@ sal_Bool SwJavaEditDialog::IsUpdate()
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
-IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
 {
     sal_Bool bEnable = aUrlRB.IsChecked();
     aUrlPB.Enable(bEnable);
@@ -291,7 +291,7 @@ IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl)
 {
     if ( pFileDlg->GetError() == ERRCODE_NONE )
     {

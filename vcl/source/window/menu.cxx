@@ -113,7 +113,7 @@ static sal_Bool ImplAccelDisabled()
             vcl::SettingsConfigItem::get()->
             getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Menu" ) ),
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuppressAccelerators" ) ) );
-        nAccelDisabled = aStr.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+        nAccelDisabled = aStr.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
     }
     return (nAccelDisabled == 1) ? sal_True : sal_False;
 }
@@ -487,10 +487,10 @@ private:
     sal_Bool            bIgnoreFirstMove;
     sal_Bool            bKeyInput;
 
-                    DECL_LINK( PopupEnd, FloatingWindow* );
+                    DECL_LINK(PopupEnd, void *);
                     DECL_LINK( HighlightChanged, Timer* );
-                    DECL_LINK( SubmenuClose, Timer* );
-                    DECL_LINK( AutoScroll, Timer* );
+                    DECL_LINK(SubmenuClose, void *);
+                    DECL_LINK(AutoScroll, void *);
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType );
@@ -702,9 +702,9 @@ private:
 
     void            ImplInitStyleSettings();
 
-                    DECL_LINK( CloserHdl, PushButton* );
-                    DECL_LINK( FloatHdl, PushButton* );
-                    DECL_LINK( HideHdl, PushButton* );
+                    DECL_LINK(CloserHdl, void *);
+                    DECL_LINK(FloatHdl, void *);
+                    DECL_LINK(HideHdl, void *);
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
@@ -844,7 +844,7 @@ static sal_Bool ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, sal_uInt1
             // use help-index
             String aCommand = pMenu->GetItemCommand( nId );
             rtl::OString aHelpId(  pMenu->GetHelpId( nId ) );
-            if( ! aHelpId.getLength() )
+            if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
             if ( aCommand.Len() )
@@ -975,11 +975,6 @@ void Menu::ImplInit()
     mpFirstDel      = NULL;         // Dtor notification list
     // Native-support: returns NULL if not supported
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar, this );
-}
-
-Menu* Menu::ImplGetStartedFrom() const
-{
-    return pStartedFrom;
 }
 
 void Menu::ImplLoadRes( const ResId& rResId )
@@ -2012,7 +2007,7 @@ const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
     if ( pData )
     {
         if ( !pData->aHelpText.Len() &&
-             (( pData->aHelpId.getLength()  ) || ( pData->aCommandStr.Len() )))
+             (( !pData->aHelpId.isEmpty()  ) || ( pData->aCommandStr.Len() )))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -2020,7 +2015,7 @@ const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
                 if ( pData->aCommandStr.Len() )
                     pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
-                if( !pData->aHelpText.Len() && pData->aHelpId.getLength() )
+                if( !pData->aHelpText.Len() && !pData->aHelpId.isEmpty() )
                     pData->aHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
             }
         }
@@ -2070,7 +2065,7 @@ rtl::OString Menu::GetHelpId( sal_uInt16 nItemId ) const
 
     if ( pData )
     {
-        if ( pData->aHelpId.getLength() )
+        if ( !pData->aHelpId.isEmpty() )
             aRet = pData->aHelpId;
         else
             aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
@@ -2995,7 +2990,7 @@ void Menu::ImplCallHighlight( sal_uInt16 nHighlightedItem )
     }
 }
 
-IMPL_LINK( Menu, ImplCallSelect, Menu*, EMPTYARG )
+IMPL_LINK_NOARG(Menu, ImplCallSelect)
 {
     nEventId = 0;
     Select();
@@ -3281,15 +3276,6 @@ MenuBar::MenuBar( const MenuBar& rMenu ) : Menu( sal_True )
     mbHideBtnVisible    = sal_False;
     *this               = rMenu;
     bIsMenuBar          = sal_True;
-}
-
-MenuBar::MenuBar( const ResId& rResId ) : Menu ( sal_True )
-{
-    mbDisplayable       = sal_True;
-    mbCloserVisible     = sal_False;
-    mbFloatBtnVisible   = sal_False;
-    mbHideBtnVisible    = sal_False;
-    ImplLoadRes( rResId );
 }
 
 MenuBar::~MenuBar()
@@ -4136,7 +4122,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, sal_Bool bM
     }
 }
 
-IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
 {
     // "this" will be deleted before the end of this method!
     Menu* pM = pMenu;
@@ -4185,7 +4171,7 @@ IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MenuFloatingWindow, AutoScroll, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll)
 {
     ImplScroll( GetPointerPosPixel() );
     return 1;
@@ -4254,7 +4240,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
     return 0;
 }
 
-IMPL_LINK( MenuFloatingWindow, SubmenuClose, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
 {
     if( pMenu && pMenu->pStartedFrom )
     {
@@ -5235,7 +5221,7 @@ Size MenuBarWindow::MinCloseButtonSize()
     return aCloser.getMinSize();
 }
 
-IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, CloserHdl)
 {
     if( ! pMenu )
         return 0;
@@ -5298,12 +5284,12 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK( MenuBarWindow, FloatHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, FloatHdl)
 {
     return pMenu ? ((MenuBar*)pMenu)->GetFloatButtonClickHdl().Call( pMenu ) : 0;
 }
 
-IMPL_LINK( MenuBarWindow, HideHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, HideHdl)
 {
     return pMenu ? ((MenuBar*)pMenu)->GetHideButtonClickHdl().Call( pMenu ) : 0;
 }

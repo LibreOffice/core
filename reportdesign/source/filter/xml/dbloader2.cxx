@@ -63,7 +63,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
     if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
-        if ( aURL.GetExtension().equalsIgnoreAsciiCaseAscii("orp") )
+        if ( aURL.GetExtension().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("orp")) )
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
         else
         {

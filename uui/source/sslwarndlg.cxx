@@ -36,7 +36,7 @@
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SSLWarnDialog, OKHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SSLWarnDialog, OKHdl_Impl)
 {
     EndDialog( RET_OK );
     return 1;
@@ -44,7 +44,7 @@ IMPL_LINK( SSLWarnDialog, OKHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SSLWarnDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl_Impl)
 {
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 

@@ -35,6 +35,7 @@
 #include "dpobject.hxx"
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include "dpitemdata.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -63,15 +64,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
-
-static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
-{
-    return rParam.GetEntryCount() > 0 &&
-            rParam.GetEntry(0).bDoQuery;
-}
-
-// ----------------------------------------------------------------------------
-
 bool ScDPCacheTable::RowFlag::isActive() const
 {
     return mbShowByFilter && mbShowByPage;
@@ -83,74 +75,38 @@ ScDPCacheTable::RowFlag::RowFlag() :
 {
 }
 
-ScDPCacheTable::FilterItem::FilterItem() :
-    mfValue(0.0),
-    mbHasValue(false)
+ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
+    maItem(rItem) {}
+
+bool ScDPCacheTable::SingleFilter::match(const ScDPItemData& rCellData) const
 {
+    return maItem == rCellData;
 }
 
-bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
+const ScDPItemData& ScDPCacheTable::SingleFilter::getMatchValue() const
 {
-    if (rCellData.GetString()!= maString &&
-        (!rCellData.IsValue()|| rCellData.GetValue()!=  mfValue))
-            return false;
-    return true;
+    return maItem;
 }
-
-// ----------------------------------------------------------------------------
-
-ScDPCacheTable::SingleFilter::SingleFilter(String aString, double fValue, bool bHasValue)
-{
-    maItem.maString = aString;
-    maItem.mfValue      = fValue;
-    maItem.mbHasValue   = bHasValue;
-}
-
-bool ScDPCacheTable::SingleFilter::match( const  ScDPItemData& rCellData ) const
-{
-      return maItem.match(rCellData);
-}
-
-const String& ScDPCacheTable::SingleFilter::getMatchString()
-{
-    return maItem.maString;
-}
-
-double ScDPCacheTable::SingleFilter::getMatchValue() const
-{
-    return maItem.mfValue;
-}
-
-bool ScDPCacheTable::SingleFilter::hasValue() const
-{
-    return maItem.mbHasValue;
-}
-
-// ----------------------------------------------------------------------------
 
 ScDPCacheTable::GroupFilter::GroupFilter()
 {
 }
 
-bool ScDPCacheTable::GroupFilter::match( const  ScDPItemData& rCellData ) const
+bool ScDPCacheTable::GroupFilter::match(const ScDPItemData& rCellData) const
 {
-    vector<FilterItem>::const_iterator itrEnd = maItems.end();
-        for (vector<FilterItem>::const_iterator itr = maItems.begin(); itr != itrEnd; ++itr)
-        {
-            bool bMatch = itr->match( rCellData);
-            if (bMatch)
-                return  true;
-        }
-        return false;
+    vector<ScDPItemData>::const_iterator it = maItems.begin(), itEnd = maItems.end();
+    for (; it != itEnd; ++it)
+    {
+        bool bMatch = *it == rCellData;
+        if (bMatch)
+            return true;
+    }
+    return false;
 }
 
-void ScDPCacheTable::GroupFilter::addMatchItem(const String& rStr, double fVal, bool bHasValue)
+void ScDPCacheTable::GroupFilter::addMatchItem(const ScDPItemData& rItem)
 {
-    FilterItem aItem;
-    aItem.maString = rStr;
-    aItem.mfValue = fVal;
-    aItem.mbHasValue = bHasValue;
-    maItems.push_back(aItem);
+    maItems.push_back(rItem);
 }
 
 size_t ScDPCacheTable::GroupFilter::getMatchItemCount() const
@@ -205,6 +161,7 @@ void ScDPCacheTable::fillTable(
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
+        maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
@@ -221,9 +178,9 @@ void ScDPCacheTable::fillTable(
                     maRowFlags.back().mbShowByFilter = false;
                 }
 
-                if ( lcl_HasQueryEntry(rQuery) &&
-                    !getCache()->ValidQuery(nRow , rQuery) )
+                if (!getCache()->ValidQuery(nRow, rQuery))
                     continue;
+
                 if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
                     continue;
 
@@ -232,7 +189,6 @@ void ScDPCacheTable::fillTable(
 
                 aAdded[nOrder] = nIndex;
             }
-            maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
                 if ( aAdded[nRow] != -1 )
@@ -260,6 +216,7 @@ void ScDPCacheTable::fillTable()
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
+        maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
@@ -278,7 +235,6 @@ void ScDPCacheTable::fillTable()
 
                 pAdded[nOrder] = nIndex;
             }
-            maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
                 if ( pAdded[nRow] != -1 )
@@ -326,15 +282,17 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
     if (pData)
     {
         rVal.fValue = pData->IsValue() ? pData->GetValue() : 0.0;
-        rVal.nType = pData->GetType();
+        rVal.nType = pData->GetCellType();
     }
     else
         rVal.Set(0.0, SC_VALTYPE_EMPTY);
 }
-String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
+
+rtl::OUString ScDPCacheTable::getFieldName(SCCOL nIndex) const
 {
     if (!mpCache)
-        return String();
+        return rtl::OUString();
+
     return getCache()->GetDimensionName( nIndex );
 }
 

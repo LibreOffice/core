@@ -25,9 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call desktop_Pagein_Pagein,impress))
+$(eval $(call gb_Pagein_Pagein,impress))
 
-$(eval $(call desktop_Pagein_add_libs,impress,\
+$(eval $(call gb_Pagein_add_objects,impress,\
     sd \
     sdui \
     svx \

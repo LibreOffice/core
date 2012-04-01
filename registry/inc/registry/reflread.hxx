@@ -113,7 +113,7 @@ public:
     /** Constructor.
 
         @param buffer points to the binary data block.
-        @param bufferlen specifies the size of the binary data block.
+        @param bufferLen specifies the size of the binary data block.
         @param copyData specifies if the data block should be copied.
                         The block can be copied to ensure that the data
                         is valid for the lifetime of this instance.
@@ -261,7 +261,7 @@ public:
     /** returns the full qualified exception type of the specified exception.
 
         @param index indicates the method
-        @param paramIndex indeciates the exception which typename will be returned.
+        @param excIndex indeciates the exception which typename will be returned.
      */
     inline ::rtl::OUString  getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const;
 
@@ -272,7 +272,6 @@ public:
     /** returns the full qualified exception type of the specified exception.
 
         @param index indicates the method
-        @param paramIndex indeciates the exception which typename will be returned.
      */
     inline RTMethodMode     getMethodMode( sal_uInt16 index ) const;
 

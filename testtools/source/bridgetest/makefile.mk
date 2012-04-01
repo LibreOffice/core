@@ -195,9 +195,9 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro services.rdb \
-        -ro uno_services.rdb -ro uno_types.rdb \
-        -s com.sun.star.test.bridge.BridgeTest \
+    echo '$(AUGMENT_LIBRARY_PATH)' JAVA_HOME='$(JAVA_HOME)' \
+        '$(SOLARBINDIR)'/uno -ro services.rdb -ro uno_services.rdb \
+        -ro uno_types.rdb -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -env:MY_CLASSDIR_URL=$(MY_LOCAL_CLASSDIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@

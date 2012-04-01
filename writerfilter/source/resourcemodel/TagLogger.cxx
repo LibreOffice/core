@@ -143,9 +143,9 @@ namespace writerfilter
             {
                 startElement( "exception" );
 
-                chars("getPropertyValue(\"");
+                chars(std::string("getPropertyValue(\""));
                 chars(sName);
-                chars("\")");
+                chars(std::string("\")"));
 
                 endElement( );
             }

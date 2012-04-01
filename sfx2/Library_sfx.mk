@@ -43,13 +43,11 @@ $(eval $(call gb_Library_add_api,sfx,\
 ))
 
 $(eval $(call gb_Library_set_include,sfx,\
-    -I$(realpath $(SRCDIR)/sfx2/inc) \
-    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
-    -I$(realpath $(SRCDIR)/sfx2/source/inc) \
+    -I$(SRCDIR)/sfx2/inc \
+    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/sfx2/source/inc \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
-    -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sfx,\
@@ -116,6 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/module \
     sfx2/source/appl/newhelp \
     sfx2/source/appl/opengrf \
+    sfx2/source/appl/openuriexternally \
     sfx2/source/appl/sfxhelp \
     sfx2/source/appl/sfxpicklist \
     sfx2/source/appl/shutdownicon \
@@ -245,9 +244,9 @@ $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 
 $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
-    -I$(realpath $(SRCDIR)/sfx2/inc) \
-    -I$(realpath $(SRCDIR)/sfx2/sdi) \
+    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/sfx2/inc \
+    -I$(SRCDIR)/sfx2/sdi \
 ))
 
 ifeq ($(OS),$(filter WNT MACOSX,$(OS)))

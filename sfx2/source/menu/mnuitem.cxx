@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -246,8 +245,6 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
     return new SfxMenuControl( sal_True );
 }
 
-//--------------------------------------------------------------------
-
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
     RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
@@ -301,100 +298,6 @@ PopupMenu* SfxMenuControl::GetPopup () const
         return (PopupMenu*)GetPopupMenu()->GetSVMenu();
     else
         return 0;
-}
-
-long Select_Impl( void* pHdl, void* pVoid );
-
-SFX_IMPL_MENU_CONTROL( SfxAppMenuControl_Impl, SfxStringItem );
-
-SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
-    sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )
-    : SfxMenuControl( nPos, rBindings ), pMenu(0)
-{
-    String aText = rMenu.GetItemText( nPos );
-
-    // Determine the current background color setting for menus
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
-
-    Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-    ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
-    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
-    pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU );
-    if( pMenu )
-    {
-        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
-        pMenu->SetActivateHdl( LINK(this, SfxAppMenuControl_Impl, Activate) );
-        rMenu.SetPopupMenu( nPos, pMenu );
-    }
-}
-
-SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
-{
-    delete pMenu;
-}
-
-IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
-{
-    if ( pActMenu )
-    {
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_uIntPtr nSymbolsStyle = rSettings.GetSymbolsStyle();
-        sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
-
-        if (( nSymbolsStyle != m_nSymbolsStyle ) ||
-            ( bShowMenuImages != m_bShowMenuImages ))
-        {
-            m_nSymbolsStyle         = nSymbolsStyle;
-            m_bShowMenuImages       = bShowMenuImages;
-
-            sal_uInt16 nCount = pActMenu->GetItemCount();
-            for ( sal_uInt16 nSVPos = 0; nSVPos < nCount; nSVPos++ )
-            {
-                sal_uInt16 nItemId = pActMenu->GetItemId( nSVPos );
-                if ( pActMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
-                {
-                    if ( bShowMenuImages )
-                    {
-                        sal_Bool        bImageSet = sal_False;
-                        ::rtl::OUString aImageId;
-                        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
-
-                        if ( pMenuAttributes )
-                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
-
-                        if ( !aImageId.isEmpty() )
-                        {
-                            Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, false );
-                            if ( !!aImage )
-                            {
-                                bImageSet = sal_True;
-                                pActMenu->SetItemImage( nItemId, aImage );
-                            }
-                        }
-
-                        String aCmd( pActMenu->GetItemCommand( nItemId ) );
-                        if ( !bImageSet && aCmd.Len() )
-                        {
-                            Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), false );
-                            if ( !!aImage )
-                                pActMenu->SetItemImage( nItemId, aImage );
-                        }
-                    }
-                    else
-                        pActMenu->SetItemImage( nItemId, Image() );
-                }
-            }
-        }
-
-        return sal_True;
-    }
-
-    return sal_False;
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,

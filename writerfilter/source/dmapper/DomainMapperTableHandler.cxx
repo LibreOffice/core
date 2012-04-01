@@ -719,7 +719,7 @@ void DomainMapperTableHandler::endTable()
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             fprintf( stderr, "Conversion to table error: %s\n",
                     rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-            dmapper_logger->chars("failed to import table!");
+            dmapper_logger->chars(std::string("failed to import table!"));
 #endif
         }
         catch ( const uno::Exception &e )

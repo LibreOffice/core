@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <svtools/fileview.hxx>
 #include <svtools/svtdata.hxx>
@@ -34,6 +35,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
 #include "fileview.hrc"
+#include "fileview.hxx"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -96,7 +98,7 @@ using ::rtl::OUString;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-#define aSeparatorStr  "----------------------------------"
+#define SEPARATOR_STR  "----------------------------------"
 
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
@@ -111,6 +113,9 @@ namespace
     {
     public:
         virtual void onTimeout( CallbackTimer* _pInstigator ) = 0;
+
+    protected:
+        ~ITimeoutHandler() {}
     };
 
     //====================================================================
@@ -182,6 +187,7 @@ private:
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbEnableDelete          : 1;
     sal_Bool                mbEnableRename          : 1;
+    bool                    mbShowHeader;
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
@@ -197,7 +203,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -209,7 +215,7 @@ public:
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
-    DECL_LINK( ResetQuickSearch_Impl, Timer * );
+    DECL_LINK(ResetQuickSearch_Impl, void *);
 
     virtual PopupMenu*  CreateContextMenu( void );
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry );
@@ -656,7 +662,7 @@ inline void SvtFileView_Impl::EndEditing( bool _bCancel )
 
 // functions -------------------------------------------------------------
 
-OUString CreateExactSizeText_Impl( sal_Int64 nSize )
+OUString CreateExactSizeText( sal_Int64 nSize )
 {
     double fSize( ( double ) nSize );
     int nDec;
@@ -717,10 +723,9 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mbResizeDisabled    ( sal_False ),
     mbAutoResize        ( sal_False ),
     mbEnableDelete      ( sal_True ),
-    mbEnableRename      ( sal_True )
-
+    mbEnableRename      ( sal_True ),
+    mbShowHeader        ( (nFlags & FILEVIEW_SHOW_NONE) == 0 )
 {
-    const bool bViewHeader = (nFlags & FILEVIEW_SHOW_NONE) == 0;
     Size aBoxSize = pParentWin->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
@@ -755,7 +760,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
         SetSelectionMode( MULTIPLE_SELECTION );
 
     Show();
-    if( bViewHeader )
+    if( mbShowHeader )
         mpHeaderBar->Show();
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
@@ -781,7 +786,7 @@ ViewTabListBox_Impl::~ViewTabListBox_Impl()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -801,9 +806,13 @@ void ViewTabListBox_Impl::Resize()
     if ( mbResizeDisabled || !aBoxSize.Width() )
         return;
 
-    Size aBarSize = mpHeaderBar->GetSizePixel();
-    aBarSize.Width() = mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width();
-    mpHeaderBar->SetSizePixel( aBarSize );
+    Size aBarSize;
+    if ( mbShowHeader )
+    {
+        aBarSize = mpHeaderBar->GetSizePixel();
+        aBarSize.Width() = mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width();
+        mpHeaderBar->SetSizePixel( aBarSize );
+    }
 
     if ( mbAutoResize )
     {
@@ -1038,7 +1047,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 
 // -----------------------------------------------------------------------
 sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
-                                 const XubString& rNewText )
+                                 const rtl::OUString& rNewText )
 {
     sal_Bool bRet = sal_False;
 
@@ -1078,7 +1087,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
         if ( canRename )
         {
             Any aValue;
-            aValue <<= OUString( rNewText );
+            aValue <<= rNewText;
             aContent.setPropertyValue( aPropName, aValue );
             mpParent->EntryRenamed( aURL, rNewText );
 
@@ -1338,7 +1347,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
     }
     catch( Exception const & )
     {
-        // perhaps an unkown url protocol (e.g. "private:newdoc")
+        // perhaps an unknown url protocol (e.g. "private:newdoc")
     }
 
     return bRet;
@@ -1865,10 +1874,10 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         if ( ::svt::SUCCESS == eResult )
         {
             implEnumerationSuccess();
-            m_pContentEnumerator = NULL;
+            m_pContentEnumerator.clear();
             return eSuccess;
         }
-        m_pContentEnumerator = NULL;
+        m_pContentEnumerator.clear();
         return eFailure;
     }
 
@@ -2126,7 +2135,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
     m_pContentEnumerator->cancel();
     m_bRunningAsyncAction = false;
 
-    m_pContentEnumerator = NULL;
+    m_pContentEnumerator.clear();
     if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
         m_pCancelAsyncTimer->stop();
     m_pCancelAsyncTimer = NULL;
@@ -2156,7 +2165,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
 
-    m_pContentEnumerator = NULL;
+    m_pContentEnumerator.clear();
     if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
         m_pCancelAsyncTimer->stop();
     m_pCancelAsyncTimer = NULL;
@@ -2223,7 +2232,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         aValue += aTab;
         // folders don't have a size
         if ( ! (*aIt)->mbIsFolder )
-            aValue += CreateExactSizeText_Impl( (*aIt)->maSize );
+            aValue += CreateExactSizeText( (*aIt)->maSize );
         aValue += aTab;
         // set the date, but volumes have no date
         if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )
@@ -2272,7 +2281,6 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         // get the title
         pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
         aDisplayText = pEntry->GetTitle();
-        // #83004# --------------------
         ReplaceTabWithString( aDisplayText );
         aDisplayText += aTab;
 
@@ -2329,7 +2337,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         pEntry->maDisplayText = aDisplayText;
 
         // detect the image
-        if( aValue != rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr) ) )
+        if( !aValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SEPARATOR_STR)) )
         {
             INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
             pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );
@@ -2408,7 +2416,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
         switch ( gnColumn )
         {
             case COLUMN_TITLE:
-                // compare case insensitiv first
+                // compare case insensitive first
                 nComp = pCollatorWrapper->compareString( aOne->GetLowerTitle(), aTwo->GetLowerTitle() );
 
                 if ( nComp == 0 )
@@ -2550,7 +2558,6 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     // title, type, size, date
     aValue = pData->GetTitle();
-    // #83004# --------------------
     ReplaceTabWithString( aValue );
     aValue += aTab;
     aValue += pData->maType;
@@ -2639,7 +2646,7 @@ namespace svtools {
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 (
     Window* pParent,
-    const String& rName      // Eintragsname
+    const String& rName      // entry name
 ) :
 
     ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
@@ -2661,7 +2668,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
     _aAllButton.SetClickHdl( aLink );
     _aNoButton.SetClickHdl( aLink );
 
-    // Anzeige der spezifizierten Texte
+    // display specified texts
 
     WinBits nTmpStyle = _aEntry.GetStyle();
     nTmpStyle |= WB_PATHELLIPSIS;

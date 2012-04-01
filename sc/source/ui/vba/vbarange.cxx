@@ -92,7 +92,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 
-#include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hdl>
@@ -390,7 +389,7 @@ public:
 
     virtual uno::Any createCollectionObject( const uno::Any& aSource );
 
-    virtual rtl::OUString& getServiceImplName() { static rtl::OUString sDummy; return sDummy; }
+    virtual rtl::OUString getServiceImplName() { return rtl::OUString(); }
 
     virtual uno::Sequence< rtl::OUString > getServiceNames() { return uno::Sequence< rtl::OUString >(); }
 
@@ -1018,6 +1017,9 @@ class RangeProcessor
 {
 public:
     virtual void process( const uno::Reference< excel::XRange >& xRange ) = 0;
+
+protected:
+    ~RangeProcessor() {}
 };
 
 class RangeValueProcessor : public RangeProcessor
@@ -1025,6 +1027,7 @@ class RangeValueProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    virtual ~RangeValueProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         xRange->setValue( m_aVal );
@@ -1036,6 +1039,7 @@ class RangeFormulaProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    virtual ~RangeFormulaProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         xRange->setFormula( m_aVal );
@@ -1047,6 +1051,7 @@ class RangeCountProcessor : public RangeProcessor
     sal_Int32 nCount;
 public:
     RangeCountProcessor():nCount(0){}
+    virtual ~RangeCountProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         nCount = nCount + xRange->getCount();
@@ -4527,10 +4532,10 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             if ( xCurrent.is() )
             {
                 ScVbaRange* pRange = getImplementation( xCurrent );
-                if ( pRange->isSingleCellRange() )
-                    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't create AutoFilter") ), uno::Reference< uno::XInterface >() );
                 if ( pRange )
                 {
+                    if ( pRange->isSingleCellRange() )
+                       throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't create AutoFilter") ), uno::Reference< uno::XInterface >() );
                     RangeHelper currentRegion( pRange->mxRange );
                     autoFiltAddress = currentRegion.getCellRangeAddressable()->getRangeAddress();
                 }
@@ -5233,7 +5238,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
         if( pOutlineArray )
         {
             SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
-            ScOutlineEntry* pEntry = pOutlineArray->GetEntryByPos( 0, nPos );
+            const ScOutlineEntry* pEntry = pOutlineArray->GetEntryByPos( 0, nPos );
             if( pEntry )
             {
                 bShowDetail = !pEntry->IsHidden();
@@ -6254,11 +6259,10 @@ ScVbaRange::PivotTable() throw (uno::RuntimeException)
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaRange::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaRange") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaRange"));
 }
 
 uno::Sequence< rtl::OUString >

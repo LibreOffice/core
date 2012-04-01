@@ -72,7 +72,7 @@ class ImplErrorDialog : public ModalDialog
 
     OKButton        maButton;
 
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK(SelectHdl, void *);
     public:
     ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     ~ImplErrorDialog();
@@ -89,7 +89,7 @@ private:
 
     Any                         maSelection;
 
-    DECL_LINK( CancelHdl, Button * );
+    DECL_LINK(CancelHdl, void *);
 
 protected:
 //the following data are the configuration used throughout the dialog and pages

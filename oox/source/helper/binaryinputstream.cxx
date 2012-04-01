@@ -57,19 +57,6 @@ const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 
 // ============================================================================
 
-OString BinaryInputStream::readNulCharArray()
-{
-    OStringBuffer aBuffer;
-    for( sal_uInt8 nChar = readuInt8(); !mbEof && (nChar > 0); readValue( nChar ) )
-        aBuffer.append( static_cast< sal_Char >( nChar ) );
-    return aBuffer.makeStringAndClear();
-}
-
-OUString BinaryInputStream::readNulCharArrayUC( rtl_TextEncoding eTextEnc )
-{
-    return OStringToOUString( readNulCharArray(), eTextEnc );
-}
-
 OUString BinaryInputStream::readNulUnicodeArray()
 {
     OUStringBuffer aBuffer;

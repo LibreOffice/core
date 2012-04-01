@@ -134,7 +134,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     aEditED.SetReadOnly( !bEnable );
 
     if( aStr.Len() )
-        aEditED.SetText( aStr.ConvertLineEnd() );
+        aEditED.SetText(convertLineEnd(aStr, GetSystemLineEnd()));
     FreeResource();
 }
 
@@ -155,7 +155,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 
 void SwFldInputDlg::Apply()
 {
-    String aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
+    rtl::OUString aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
 
     rSh.StartAllAction();
     sal_Bool bModified = sal_False;
@@ -163,21 +163,21 @@ void SwFldInputDlg::Apply()
     {
         if(pUsrType)
         {
-            if( aTmp != pUsrType->GetContent() )
+            if( !aTmp.equals(pUsrType->GetContent()) )
             {
                 pUsrType->SetContent(aTmp);
                 pUsrType->UpdateFlds();
                 bModified = sal_True;
             }
         }
-        else if( aTmp != pInpFld->GetPar1() )
+        else if( !aTmp.equals(pInpFld->GetPar1()) )
         {
             pInpFld->SetPar1(aTmp);
             rSh.SwEditShell::UpdateFlds(*pInpFld);
             bModified = sal_True;
         }
     }
-    else if( aTmp != pSetFld->GetPar2() )
+    else if( !aTmp.equals(pSetFld->GetPar2()) )
     {
         pSetFld->SetPar2(aTmp);
         rSh.SwEditShell::UpdateFlds(*pSetFld);
@@ -191,7 +191,7 @@ void SwFldInputDlg::Apply()
 }
 
 
-IMPL_LINK(SwFldInputDlg, NextHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwFldInputDlg, NextHdl)
 {
     EndDialog(RET_OK);
     return 0;

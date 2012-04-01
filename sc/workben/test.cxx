@@ -1534,7 +1534,7 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
     }
 }
 
-IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(MyWindow, CountHdl)
 {
 
     long nCount = aCountField.GetValue();
@@ -1645,7 +1645,7 @@ IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
 
 //-----------------------------------------------------------------------
 
-IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(MyWindow, TextHdl)
 {
     sal_uInt16 nCol = (sal_uInt16)aColField.GetValue();
     sal_uInt16 nRow = (sal_uInt16)aRowField.GetValue();
@@ -1694,7 +1694,7 @@ IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
 
 //-----------------------------------------------------------------------
 
-IMPL_LINK(MyWindow, BlaHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(MyWindow, BlaHdl)
 {
     aTimeText.SetText("...");
 
@@ -1768,7 +1768,7 @@ IMPL_LINK(MyWindow, BlaHdl, PushButton*, EMPTYARG)
 
 //-----------------------------------------------------------------------
 
-IMPL_LINK(MyWindow, TabHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(MyWindow, TabHdl)
 {
     String aResult;
 
@@ -1861,7 +1861,7 @@ void lcl_FillCells(XCellCollectionRef xColl)
     }
 }
 
-IMPL_LINK(MyWindow, ViewHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(MyWindow, ViewHdl)
 {
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
     XInterfaceRef xInt = lcl_GetView();

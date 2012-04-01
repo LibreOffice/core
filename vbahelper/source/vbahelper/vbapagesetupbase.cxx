@@ -310,11 +310,6 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
             mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width")),  aHeight );
             mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height")), aWidth );
         }
-
-        if( isLandscape )
-        {
-            orientation = mnOrientLandscape;
-        }
     }
     catch( uno::Exception& )
     {

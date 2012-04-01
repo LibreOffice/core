@@ -48,7 +48,6 @@ class SVL_DLLPUBLIC SvtListenerIter
     // at the same time.
     static SvtListenerIter *pListenerIters;
     SvtListenerIter *pNxtIter;
-    TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
     SVL_DLLPRIVATE static void RemoveListener( SvtListenerBase& rDel,
                                                SvtListenerBase* pNext );
@@ -61,18 +60,12 @@ public:
           SvtBroadcaster& GetBroadcaster()          { return rRoot; }
 
     SvtListener* GoNext();          // to the next
-    SvtListener* GoPrev();          // to the previous
 
     SvtListener* GoStart();         // to the start of the list
-    SvtListener* GoEnd();           // to the end of the list
 
-    SvtListener* GoRoot();          // to the root
     SvtListener* GetCurr() const;   // returns the current
 
     int IsChanged() const       { return pDelNext != pAkt; }
-
-    SvtListener* First( TypeId nType );
-    SvtListener* Next();
 };
 
 

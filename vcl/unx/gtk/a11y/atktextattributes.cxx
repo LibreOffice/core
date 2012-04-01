@@ -544,7 +544,7 @@ GetString(const uno::Any& rAny)
 {
     rtl::OString aFontName = rtl::OUStringToOString( rAny.get< rtl::OUString > (), RTL_TEXTENCODING_UTF8 );
 
-    if( aFontName.getLength() )
+    if( !aFontName.isEmpty() )
         return g_strdup( aFontName.getStr() );
 
     return NULL;
@@ -555,7 +555,7 @@ SetString( uno::Any& rAny, const gchar * value )
 {
     rtl::OString aFontName( value );
 
-    if( aFontName.getLength() )
+    if( !aFontName.isEmpty() )
     {
         rAny = uno::makeAny( rtl::OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ) );
         return true;

@@ -186,7 +186,7 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
     return 1L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OApplicationSwapWindow, ChangeToLastSelected, void*, EMPTYARG)
+IMPL_LINK_NOARG(OApplicationSwapWindow, ChangeToLastSelected)
 {
     selectContainer(m_eLastType);
     return 0L;

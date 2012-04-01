@@ -180,11 +180,10 @@ SwVbaSections::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaSections::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSections") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSections"));
 }
 
 css::uno::Sequence<rtl::OUString>

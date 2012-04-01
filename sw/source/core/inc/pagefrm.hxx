@@ -58,6 +58,7 @@ enum SwPageChg
     CHG_CHGPAGE
 };
 
+/// A page of the document layout.
 class SwPageFrm: public SwFtnBossFrm
 {
     friend class SwFrm;

@@ -41,22 +41,13 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <memory>
 #include <vector>
 
 // -----------
 // - Defines -
 // -----------
 
-#define ITEM_OFFSET                 4
-#define ITEM_OFFSET_DOUBLE          6
-#define NAME_LINE_OFF_X             2
-#define NAME_LINE_OFF_Y             2
-#define NAME_LINE_HEIGHT            2
-#define NAME_OFFSET                 2
-#define SCRBAR_OFFSET               1
 #define VALUESET_ITEM_NONEITEM      0xFFFE
-#define VALUESET_SCROLL_OFFSET      4
 
 // --------------------
 // - ValueSetItemType -
@@ -79,13 +70,13 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&           mrParent;
-    sal_uInt16              mnId;
-    ValueSetItemType    meType;
+    sal_uInt16          mnId;
+    sal_uInt8           meType;
+    bool                mbVisible;
     Image               maImage;
     Color               maColor;
     XubString           maText;
     void*               mpData;
-    Rectangle           maRect;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ValueSetItem( ValueSet& rParent );
@@ -93,22 +84,6 @@ struct ValueSetItem
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
-};
-
-typedef ::std::vector< ValueSetItem* > ValueItemList;
-
-// -----------------------------------------------------------------------------
-
-struct ValueSet_Impl
-{
-    ::std::auto_ptr< ValueItemList >    mpItemList;
-    bool                                mbIsTransientChildrenDisabled;
-    Link                                maHighlightHdl;
-
-    ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
-                        mbIsTransientChildrenDisabled( false )
-    {
-    }
 };
 
 // ---------------

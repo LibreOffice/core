@@ -7,8 +7,6 @@ CustomerInformation	DlgRadioGroupText	Hide	Version9X
 CustomerInformation	RadioGroup	Hide	NOT Privileged
 CustomerInformation	RadioGroup	Hide	ProductState > 0
 CustomerInformation	RadioGroup	Hide	Version9X
-CustomerInformation	SerialLabel	Show	SERIALNUMSHOW
-CustomerInformation	SerialNumber	Show	SERIALNUMSHOW
 CustomSetup	ChangeFolder	Hide	Installed
 CustomSetup	Details	Hide	Installed
 CustomSetup	InstallLabel	Hide	Installed
@@ -20,14 +18,10 @@ FileTypeDialog	CheckBox3	Enable	&gm_p_Impress=3 OR ( !gm_p_Impress=3 AND &gm_p_I
 FileTypeDialog	CheckBox3	Disable	NOT ( &gm_p_Impress=3 OR ( !gm_p_Impress=3 AND &gm_p_Impress=-1 ) )
 InstallWelcome	Copyright	Hide	SHOWCOPYRIGHT="No"
 InstallWelcome	Copyright	Show	SHOWCOPYRIGHT="Yes"
-LicenseAgreement	Next	Disable	AgreeToLicense <> "Yes"
-LicenseAgreement	Next	Enable	AgreeToLicense = "Yes"
 ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
 ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
 ReadyToInstall	DlgTitle3	Show	ProgressType0="install"
 ReadyToInstall	DesktopLink	Hide	NOT DESKTOPLINKEXISTS
-ReadyToInstall	UpdateCheckBox	Hide	OLDPRODUCTS=""
-ReadyToInstall	UpdateCheckBox	Show	OLDPRODUCTS<>""
 SetupCompleteError	Back	Default	UpdateStarted
 SetupCompleteError	Back	Disable	NOT UpdateStarted
 SetupCompleteError	Back	Enable	UpdateStarted

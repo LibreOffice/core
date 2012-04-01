@@ -37,12 +37,14 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 #include "queryparam.hxx"
+#include "typedstrdata.hxx"
 
 #include <deque>
 #include <vector>
 #include <map>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -51,13 +53,12 @@ class ScRangeData;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class TypedScStrCollection;
 
 class ScFilterDlg : public ScAnyRefDlg
 {
     struct EntryList : boost::noncopyable
     {
-        TypedScStrCollection maList;
+        std::vector<ScTypedStrData> maList;
         size_t mnHeaderPos;
         EntryList();
     };
@@ -126,7 +127,6 @@ private:
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
     const rtl::OUString aStrUndefined;
-    const rtl::OUString aStrNoName;
     const rtl::OUString aStrNone;
 
     const rtl::OUString aStrEmpty;
@@ -173,8 +173,8 @@ private:
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK( CheckBoxHdl,  CheckBox* );
     DECL_LINK( EndDlgHdl,    Button* );
-    DECL_LINK( MoreClickHdl, MoreButton* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( MoreClickHdl, void* );
+    DECL_LINK( ScrollHdl, void* );
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,   Timer* );

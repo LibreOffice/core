@@ -95,7 +95,7 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc ) :
     {
         ImageAryData* pAryData = new ImageAryData( **aIt );
         maImages.push_back( pAryData );
-        if( pAryData->maName.getLength() )
+        if( !pAryData->maName.isEmpty() )
             maNameHash [ pAryData->maName ] = pAryData;
     }
 }
@@ -111,21 +111,16 @@ void ImplImageList::AddImage( const ::rtl::OUString &aName,
 {
     ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );
     maImages.push_back( pImg );
-    if( aName.getLength() )
+    if( !aName.isEmpty() )
         maNameHash [ aName ] = pImg;
 }
 
 void ImplImageList::RemoveImage( sal_uInt16 nPos )
 {
     ImageAryData *pImg = maImages[ nPos ];
-    if( pImg->maName.getLength() )
+    if( !pImg->maName.isEmpty() )
         maNameHash.erase( pImg->maName );
     maImages.erase( maImages.begin() + nPos );
-}
-
-sal_uInt16 ImplImageList::GetImageCount() const
-{
-    return sal::static_int_cast< sal_uInt16 >( maImages.size() );
 }
 
 // -----------------

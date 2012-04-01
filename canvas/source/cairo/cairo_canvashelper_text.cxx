@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
@@ -319,7 +318,7 @@ namespace cairocanvas
                 // change text direction and layout mode
             sal_uLong nLayoutMode(0);
             switch( textDirection )
-                {
+            {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_LTR;
                     // FALLTHROUGH intended
@@ -335,7 +334,7 @@ namespace cairocanvas
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;
                     break;
-                }
+            }
 
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );

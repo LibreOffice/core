@@ -272,11 +272,40 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaComboBox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComboBox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComboBox"));
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaComboBox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
+sal_Bool SAL_CALL ScVbaComboBox::getAutoSize() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getAutoSize();
+}
+
+void SAL_CALL ScVbaComboBox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setAutoSize( bAutoSize );
+}
+
+sal_Bool SAL_CALL ScVbaComboBox::getLocked() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getLocked();
+}
+
+void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setLocked( bLocked );
 }
 
 uno::Sequence< rtl::OUString >

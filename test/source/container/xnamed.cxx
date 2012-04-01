@@ -53,6 +53,10 @@ void XNamed::testSetName()
     CPPUNIT_ASSERT(maName == xNamed->getName());
 }
 
+XNamed::~XNamed()
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,6 @@
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
-#include <toolkit/helper/unomemorystream.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/imagealign.hxx>
@@ -87,7 +86,49 @@ using namespace ::toolkit;
                             } \
 
 
+uno::Reference< graphic::XGraphic >
+ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const ::rtl::OUString& _rURL )
+{
+    if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
+    {
+        // graphic manager uniqueid
+        rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
+        // get the DefaultContext
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        xOutGraphicObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+    }
+    else // linked
+        xOutGraphicObj = NULL; // release the GraphicObject
 
+    return ImageHelper::getGraphicFromURL_nothrow( _rURL );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+{
+    uno::Reference< graphic::XGraphic > xGraphic;
+    if ( _rURL.isEmpty() )
+        return xGraphic;
+
+    try
+    {
+        uno::Reference< graphic::XGraphicProvider > xProvider;
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+        {
+            uno::Sequence< beans::PropertyValue > aMediaProperties(1);
+            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Value <<= _rURL;
+            xGraphic = xProvider->queryGraphic( aMediaProperties );
+        }
+    }
+    catch (const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return xGraphic;
+}
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
@@ -539,42 +580,6 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
-    {
-        uno::Reference< graphic::XGraphic > xGraphic;
-
-        if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
-        {
-            // graphic manager uniqueid
-            rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-            // get the DefaultContext
-            mxGrfObj = graphic::GraphicObject::createWithId( maContext.getUNOContext(), sID );
-        }
-        else // linked
-            mxGrfObj = NULL; // release the GraphicObject
-
-        if ( _rURL.isEmpty() )
-            return xGraphic;
-
-        try
-        {
-            uno::Reference< graphic::XGraphicProvider > xProvider;
-            if ( maContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-            {
-                uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-                aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aMediaProperties[0].Value <<= _rURL;
-                xGraphic = xProvider->queryGraphic( aMediaProperties );
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        return xGraphic;
-    }
-
 void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -591,7 +596,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -2713,14 +2718,7 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-ActionListenerMultiplexer&  UnoListBoxControl::getActionListeners()
-{
-    return maActionListeners;
-}
-ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
-{
-    return maItemListeners;
-}
+
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
@@ -2995,14 +2993,6 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::itemListChanged: invalid peer!" );
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
-}
-ActionListenerMultiplexer&  UnoComboBoxControl::getActionListeners()
-{
-    return maActionListeners;
-}
-ItemListenerMultiplexer&    UnoComboBoxControl::getItemListeners()
-{
-    return maItemListeners;
 }
 
 void UnoComboBoxControl::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)

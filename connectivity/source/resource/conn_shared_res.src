@@ -33,7 +33,6 @@
 #include "resource/file_res.hrc"
 #include "resource/evoab2_res.hrc"
 #include "resource/kab_res.hrc"
-#include "resource/adabas_res.hrc"
 #include "resource/hsqldb_res.hrc"
 
 // ============================================================================
@@ -599,24 +598,6 @@ String STR_NO_MAC_OS_FOUND
     Text [ en-US ] = "No suitable Mac OS installation was found.";
 };
 
-// ADABAS D
-String STR_NO_DISK_SPACE
-{
-    Text [ en-US ] = "The database file '$filename$' could not be created. Please check your disk space.";
-};
-
-String STR_COMMAND_NOT_FOUND
-{
-    Text [ en-US ] = "The database '$databasename$' could not be started because the command '$progname$' could not be executed.";
-};
-String STR_DATABASE_NEEDS_CONVERTING
-{
-    Text [ en-US ] = "The current database need to be converted. Please insert control user and password.";
-};
-String STR_USER_NO_DELETE
-{
-    Text [ en-US ] = "This user couldn't be deleted. Otherwise the database stays in a inconsistent state.";
-};
 // hsqldb
 String STR_NO_STROAGE
 {

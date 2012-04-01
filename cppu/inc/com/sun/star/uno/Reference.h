@@ -105,14 +105,14 @@ public:
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
-        @param rRef another interface
+        @param pInterface another interface
         @return true if both references are null or refer to the same object, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( XInterface * pInterface ) const SAL_THROW(());
     /** Unequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
-        @param rRef another interface
+        @param pInterface another interface
         @return false if both references are null or refer to the same object, true otherwise
     */
     inline sal_Bool SAL_CALL operator != ( XInterface * pInterface ) const SAL_THROW(());

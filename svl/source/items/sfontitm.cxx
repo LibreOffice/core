@@ -77,8 +77,8 @@ SfxPoolItem * SfxFontItem::Create(SvStream & rStream, sal_uInt16) const
     SfxFontItem * pItem = new SfxFontItem(Which());
     {
         VersionCompat aFontCompat(rStream, STREAM_READ);
-        readByteString(rStream, pItem->m_aName);
-        readByteString(rStream, pItem->m_aStyleName);
+        pItem->m_aName = readByteString(rStream);
+        pItem->m_aStyleName = readByteString(rStream);
         rStream >> pItem->m_aSize;
         sal_Int16 nCharSet = 0;
         rStream >> nCharSet;

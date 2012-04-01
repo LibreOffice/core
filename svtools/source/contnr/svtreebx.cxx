@@ -44,11 +44,10 @@ class TabBar;
 using namespace ::com::sun::star::accessibility;
 
 /*
-    Bugs/ToDo
+    Bugs/TODO
 
-    - Berechnung Rectangle beim Inplace-Editing (Bug bei manchen Fonts)
-    - SetSpaceBetweenEntries: Offset wird in SetEntryHeight nicht
-      beruecksichtigt
+    - calculate rectangle when editing in-place (bug with some fonts)
+    - SetSpaceBetweenEntries: offset is not taken into account in SetEntryHeight
 */
 
 #define TREEFLAG_FIXEDHEIGHT        0x0010
@@ -166,17 +165,17 @@ void SvTreeListBox::Resize()
     pImp->ShowCursor( sal_True );
 }
 
-/* Faelle:
+/* Cases:
 
-   A) Entries haben Bitmaps
-       0. Keine Buttons
-       1. Node-Buttons (optional auch an Root-Items)
-       2. Node-Buttons (optional auch an Root-Items) + CheckButton
+   A) entries have bitmaps
+       0. no buttons
+       1. node buttons (can optionally also be on root items)
+       2. node buttons (can optionally also be on root items) + CheckButton
        3. CheckButton
-   B) Entries haben keine Bitmaps  (->ueber WindowBits wg. D&D !!!!!!)
-       0. Keine Buttons
-       1. Node-Buttons (optional auch an Root-Items)
-       2. Node-Buttons (optional auch an Root-Items) + CheckButton
+   B) entries don't have bitmaps  (=>via WindowBits because of D&D!)
+       0. no buttons
+       1. node buttons (can optionally also be on root items)
+       2. node buttons (can optionally also be on root items) + CheckButton
        3. CheckButton
 */
 
@@ -198,7 +197,7 @@ void SvTreeListBox::Resize()
 
 #define TAB_STARTPOS    2
 
-// bei Aenderungen GetTextOffset beruecksichtigen
+// take care of GetTextOffset when doing changes
 void SvTreeListBox::SetTabs()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -240,12 +239,12 @@ void SvTreeListBox::SetTabs()
     switch( nCase )
     {
         case NO_BUTTONS :
-            nStartPos += nContextWidthDIV2;  // wg. Zentrierung
+            nStartPos += nContextWidthDIV2;  // because of centering
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            // Abstand setzen nur wenn Bitmaps da
+            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
+            // only set a distance if there are bitmaps
             if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
+                nStartPos += 5; // distance context bitmap to text
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
@@ -255,10 +254,10 @@ void SvTreeListBox::SetTabs()
             else
                 nStartPos += nContextWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            // Abstand setzen nur wenn Bitmaps da
+            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
+            // only set a distance if there are bitmaps
             if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
+                nStartPos += 5; // distance context bitmap to text
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
@@ -268,28 +267,28 @@ void SvTreeListBox::SetTabs()
             else
                 nStartPos += nCheckWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CHECKBTN );
-            nStartPos += nCheckWidthDIV2;  // rechter Rand des CheckButtons
-            nStartPos += 3;  // Abstand CheckButton Context-Bmp
-            nStartPos += nContextWidthDIV2;  // Mitte der Context-Bmp
+            nStartPos += nCheckWidthDIV2;  // right edge of CheckButton
+            nStartPos += 3;  // distance CheckButton to context bitmap
+            nStartPos += nContextWidthDIV2;  // center of context bitmap
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            // Abstand setzen nur wenn Bitmaps da
+            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
+            // only set a distance if there are bitmaps
             if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
+                nStartPos += 5; // distance context bitmap to text
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
         case CHECK_BUTTONS :
             nStartPos += nCheckWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CHECKBTN );
-            nStartPos += nCheckWidthDIV2;  // rechter Rand CheckButton
-            nStartPos += 3;  // Abstand CheckButton Context-Bmp
-            nStartPos += nContextWidthDIV2;  // Mitte der Context-Bmp
+            nStartPos += nCheckWidthDIV2;  // right edge of CheckButton
+            nStartPos += 3;  // distance CheckButton to context bitmap
+            nStartPos += nContextWidthDIV2;  // center of context bitmap
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            // Abstand setzen nur wenn Bitmaps da
+            nStartPos += nContextWidthDIV2;  // right edge of context bitmap
+            // only set a distance if there are bitmaps
             if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
+                nStartPos += 5; // distance context bitmap to text
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
     }
@@ -574,11 +573,10 @@ void SvTreeListBox::CheckButtonHdl()
 }
 
 //
-//  TODO: Momentan werden die Daten so geklont, dass sie dem
-//  Standard-TreeView-Format entsprechen. Hier sollte eigentlich
-//  das Model als Referenz dienen. Dies fuehrt dazu, dass
-//  SvLBoxEntry::Clone _nicht_ gerufen wird, sondern nur dessen
-//  Basisklasse SvListEntry
+// TODO: Currently all data is cloned so that they conform to the default tree
+// view format. Actually, the model should be used as a reference here. This
+// leads to us _not_ calling SvLBoxEntry::Clone, but only its base class
+// SvListEntry.
 //
 
 SvLBoxEntry* SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
@@ -700,7 +698,7 @@ sal_Bool SvTreeListBox::EditingEntry( SvLBoxEntry*, Selection& )
     return sal_True;
 }
 
-sal_Bool SvTreeListBox::EditedEntry( SvLBoxEntry* /*pEntry*/,const XubString& /*rNewText*/)
+sal_Bool SvTreeListBox::EditedEntry( SvLBoxEntry* /*pEntry*/,const rtl::OUString& /*rNewText*/)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return sal_True;
@@ -715,7 +713,7 @@ void SvTreeListBox::EnableInplaceEditing( sal_Bool bOn )
 void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // unter OS/2 bekommen wir auch beim Editieren Key-Up/Down
+    // under OS/2, we get key up/down even while editing
     if( IsEditingActive() )
         return;
 
@@ -771,7 +769,7 @@ void SvTreeListBox::LoseFocus()
 void SvTreeListBox::ModelHasCleared()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pImp->pCursor = 0; //sonst Absturz beim Inplace-Editieren im GetFocus
+    pImp->pCursor = 0; // else we crash in GetFocus when editing in-place
     delete pEdCtrl;
     pEdCtrl = NULL;
     pImp->Clear();
@@ -808,7 +806,7 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     NotifyBeginScroll();
     if( nDeltaEntries < 0 )
     {
-        // das Fenster nach oben verschieben
+        // move window up
         nDeltaEntries *= -1;
         long nVis = pImp->aVerSBar.GetVisibleSize();
         long nTemp = nThumb + nVis;
@@ -960,7 +958,7 @@ sal_Bool SvTreeListBox::Expand( SvLBoxEntry* pParent )
         nFlags = pParent->GetFlags();
         nFlags |= SV_ENTRYFLAG_NO_NODEBMP;
         pParent->SetFlags( nFlags );
-        GetModel()->InvalidateEntry( pParent ); // neu zeichnen
+        GetModel()->InvalidateEntry( pParent ); // repaint
     }
 
     // #i92103#
@@ -1041,8 +1039,8 @@ void SvTreeListBox::SelectAll( sal_Bool bSelect, sal_Bool )
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SelAllDestrAnch(
         bSelect,
-        sal_True,       // Anker loeschen,
-        sal_True );     // auch bei SINGLE_SELECTION den Cursor deselektieren
+        sal_True,       // delete anchor,
+        sal_True );     // even when using SINGLE_SELECTION, deselect the cursor
 }
 
 void SvTreeListBox::ModelHasInsertedTree( SvListEntry* pEntry )
@@ -1119,8 +1117,7 @@ void SvTreeListBox::SetFont( const Font& rFont )
     aTempFont.SetTransparent( sal_True );
     Control::SetFont( aTempFont );
     AdjustEntryHeight( aTempFont );
-    // immer Invalidieren, sonst fallen wir
-    // bei SetEntryHeight auf die Nase
+    // always invalidate, else things go wrong in SetEntryHeight
     RecalcViewData();
 }
 
@@ -1213,9 +1210,9 @@ void SvTreeListBox::MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop )
 void SvTreeListBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // die einzelnen Items des Entries reinitialisieren
+    // reinitialize the separate items of the entries
     SvLBox::ModelHasEntryInvalidated( pEntry );
-    // repainten
+    // repaint
     pImp->InvalidateEntry( (SvLBoxEntry*)pEntry );
 }
 
@@ -1252,7 +1249,7 @@ void SvTreeListBox::EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
             aSize.Width() = nRight - aPos.X();
     }
     Point aOrigin( GetMapMode().GetOrigin() );
-    aPos += aOrigin; // in Win-Koord umrechnen
+    aPos += aOrigin; // convert to win coordinates
     aSize.Width() -= aOrigin.X();
     Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
@@ -1365,7 +1362,7 @@ void SvTreeListBox::EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 SvLBoxEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    // Scrollen
+    // scroll
     if( rPos.Y() < 12 )
     {
         SvLBox::ImplShowTargetEmphasis( SvLBox::pTargetEntry, sal_False );
@@ -1382,7 +1379,7 @@ SvLBoxEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
     }
 
     SvLBoxEntry* pTarget = pImp->GetEntry( rPos );
-    // bei Droppen in leere Flaeche -> den letzten Eintrag nehmen
+    // when dropping in a vacant space, use the last entry
     if( !pTarget )
         return (SvLBoxEntry*)LastVisible();
     else if( (GetDragDropMode() & SV_DRAGDROP_ENABLE_TOP) &&
@@ -1478,13 +1475,13 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
     short nTempEntryHeight = GetEntryHeight();
     long nWidth = pImp->GetOutputSize().Width();
 
-    // wurde innerhalb des PreparePaints die horizontale ScrollBar
-    // angeschaltet? Wenn ja, muss die ClipRegion neu gesetzt werden
+    // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
+    // the ClipRegion anew.
     if( !bHorSBar && pImp->HasHorScrollBar() )
         SetClipRegion( Region(pImp->GetClipRegionRect()) );
 
     Point aEntryPos( GetMapMode().GetOrigin() );
-    aEntryPos.X() *= -1; // Umrechnung Dokumentkoord.
+    aEntryPos.X() *= -1; // conversion document coordinates
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor( GetTextColor() );
@@ -1493,8 +1490,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
 
     bool bCurFontIsSel = false;
     sal_Bool bInUse = pEntry->HasInUseEmphasis();
-    // wenn eine ClipRegion von aussen gesetzt wird, dann
-    // diese nicht zuruecksetzen
+    // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
     const sal_Bool bResetClipRegion = !bHasClipRegion;
     const sal_Bool bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
@@ -1542,7 +1538,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
 
         long nX;
         if( pTab->nFlags & SV_LBOXTAB_ADJUST_RIGHT )
-            //verhindern, das rechter Rand von der Tabtrennung abgeschnitten wird
+            // avoid cutting the right edge off the tab separation
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos-SV_TAB_BORDER-1) -nTabPos);
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos-nTabPos);
@@ -1557,7 +1553,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
             aEntryPos.X() = nX;
             aEntryPos.Y() = nLine;
 
-            // Hintergrund-Muster & Farbe bestimmen
+            // set background pattern/color
 
             Wallpaper aWallpaper = GetBackground();
 
@@ -1584,7 +1580,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                 }
                 aWallpaper.SetColor( aNewWallColor );
             }
-            else  // keine Selektion
+            else  // no selection
             {
                 if( bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP )
                     aWallpaper.SetColor( rSettings.GetFieldColor() );
@@ -1596,22 +1592,22 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                 }
             }
 
-            // Hintergrund zeichnen
+            // draw background
             if( !(nTreeFlags & TREEFLAG_USESEL))
             {
-                // nur den Bereich zeichnen, den das Item einnimmt
+                // only draw the area that is used by the item
                 aRectSize.Width() = aSize.Width();
                 aRect.SetPos( aEntryPos );
                 aRect.SetSize( aRectSize );
             }
             else
             {
-                // vom aktuellen bis zum naechsten Tab zeichnen
+                // draw from the current to the next tab
                 if( nCurTab != 0 )
                     aRect.Left() = nTabPos;
                 else
-                    // beim nullten Tab immer ab Spalte 0 zeichnen
-                    // (sonst Probleme bei Tabs mit Zentrierung)
+                    // if we're in the 0th tab, always draw from column 0 --
+                    // else we get problems with centered tabs
                     aRect.Left() = 0;
                 aRect.Top() = nLine;
                 aRect.Bottom() = nLine + nTempEntryHeight - 1;
@@ -1626,25 +1622,24 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                 else
                     aRect.Right() = nMaxRight;
             }
-            // bei anwenderdefinierter Selektion, die bei einer Tabposition
-            // groesser 0 beginnt den Hintergrund des 0.ten Items nicht
-            // fuellen, da sonst z.B. TablistBoxen mit Linien nicht
-            // realisiert werden koennen.
+            // A custom selection that starts at a tab position > 0, do not fill
+            // the background of the 0th item, else e.g. we might not be able to
+            // realize tab listboxes with lines.
             if( !(nCurTab==0 && (nTreeFlags & TREEFLAG_USESEL) && nFirstSelTab) )
             {
                 SetFillColor( aWallpaper.GetColor() );
-                // Bei kleinen hor. Resizes tritt dieser Fall auf
+                // this case may occur for smaller horizontal resizes
                 if( aRect.Left() < aRect.Right() )
                     DrawRect( aRect );
             }
-            // Item zeichnen
-            // vertikal zentrieren
+            // draw item
+            // center vertically
             aEntryPos.Y() += ( nTempEntryHeight - aSize.Height() ) / 2;
             pItem->Paint( aEntryPos, *this, pViewDataEntry->GetFlags(), pEntry );
 
-            // Trennungslinie zwischen Tabs
+            // division line between tabs
             if( pNextTab && pItem->IsA() == SV_ITEM_ID_LBOXSTRING &&
-                // nicht am rechten Fensterrand!
+                // not at the right edge of the window!
                 aRect.Right() < nMaxRight )
             {
                 aRect.Left() = aRect.Right() - SV_TAB_BORDER;
@@ -1658,7 +1653,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
     }
     if( pViewDataEntry->IsCursored() && !HasFocus() )
     {
-        // Cursor-Emphasis
+        // cursor emphasis
         SetFillColor();
         Color aOldLineColor = GetLineColor();
         SetLineColor( Color( COL_BLACK ) );
@@ -1681,15 +1676,14 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
     long nDynTabPos = GetTabPos( pEntry, pFirstDynamicTab );
     nDynTabPos += pImp->nNodeBmpTabDistance;
     nDynTabPos += pImp->nNodeBmpWidth / 2;
-    nDynTabPos += 4; // 4 Pixel Reserve, damit die Node-Bitmap
-                     // nicht zu nah am naechsten Tab steht
+    nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
+                     // to the next tab
 
     if( (!(pEntry->GetFlags() & SV_ENTRYFLAG_NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
         ( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() ) )
     {
-        // ersten festen Tab suchen, und pruefen ob die Node-Bitmap
-        // in ihn hineinragt
+        // find first tab and check if the node bitmap extends into it
         sal_uInt16 nNextTab = nFirstDynTabPos;
         SvLBoxTab* pNextTab;
         do
@@ -1808,10 +1802,10 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
             if( !aSize.Width() )
                 aSize.Width() = 15;
             long nX = nTabPos; //GetTabPos( pEntry, pTab );
-            // Ausrichtung
+            // alignment
             nX += pTab->CalcOffset( aSize.Width(), nNextTabPos - nTabPos );
             aRect.Left() = nX;
-            // damit erster & letzter Buchstabe nicht angeknabbert werden
+            // make sure that first and last letter aren't cut off slightly
             aRect.SetSize( aSize );
             if( aRect.Left() > 0 )
                 aRect.Left()--;
@@ -1820,16 +1814,16 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
     }
     else
     {
-        // wenn erster SelTab != 0, dann muessen wir auch rechnen
+        // if SelTab != 0, we have to calculate also
         if( nFocusWidth == -1 || nFirstSelTab )
         {
             sal_uInt16 nLastTab;
             SvLBoxTab* pLastTab = GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
             nLastTab++;
-            if( nLastTab < aTabs.Count() ) // gibts noch einen ?
+            if( nLastTab < aTabs.Count() ) // is there another one?
                 pLastTab = (SvLBoxTab*)aTabs.GetObject( nLastTab );
             else
-                pLastTab = 0;  // ueber gesamte Breite selektieren
+                pLastTab = 0;  // select whole width
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
             nFocusWidth = (short)aSize.Width();
             if( pTab )
@@ -1843,10 +1837,10 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
                 if( nCurTab )
                     aSize.Width() += nTabPos;
                 else
-                    aSize.Width() += pTab->GetPos(); // Tab0 immer ab ganz links
+                    aSize.Width() += pTab->GetPos(); // Tab0 always from the leftmost position
             }
         }
-        // wenn Sel. beim nullten Tab anfaengt, dann ab Spalte 0 sel. zeichnen
+        // if selection starts with 0th tab, draw from column 0 on
         if( nCurTab != 0 )
         {
             aRect.Left() = nTabPos;
@@ -1854,7 +1848,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
         }
         aRect.SetSize( aSize );
     }
-    // rechten Rand anpassen wg. Clipping
+    // adjust right edge because of clipping
     if( aRect.Right() >= nRealWidth )
     {
         aRect.Right() = nRealWidth-1;
@@ -1963,8 +1957,8 @@ void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
         if( nPos >= nFirstSelTab && nPos <= nLastSelTab )
             pTab->nFlags |= SV_LBOXTAB_SHOW_SELECTION;
         else
-            // String-Items werden normalerweise immer selektiert
-            // deshalb explizit ausschalten
+            // string items usually have to be selected -- turn this off
+            // explicitly
             pTab->nFlags &= ~SV_LBOXTAB_SHOW_SELECTION;
     }
 }
@@ -2053,7 +2047,8 @@ void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( nFocusWidth == -1 )
-        // damit Control nicht nach dem Paint ein falsches FocusRect anzeigt
+        // to make sure that the control doesn't show the wrong focus rectangle
+        // after painting
         pImp->RecalcFocusRect();
     NotifyInvalidating();
     SvLBox::Invalidate( nInvalidateFlags );
@@ -2064,7 +2059,8 @@ void SvTreeListBox::Invalidate( const Rectangle& rRect, sal_uInt16 nInvalidateFl
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( nFocusWidth == -1 )
-        // damit Control nicht nach dem Paint ein falsches FocusRect anzeigt
+        // to make sure that the control doesn't show the wrong focus rectangle
+        // after painting
         pImp->RecalcFocusRect();
     NotifyInvalidating();
     SvLBox::Invalidate( rRect, nInvalidateFlags );
@@ -2083,7 +2079,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
         nStart = nEnd;
         nEnd = nTemp;
     }
-    // alle Tabs markieren, die im Bereich liegen
+    // select all tabs that lie within the area
     nTreeFlags |= TREEFLAG_RECALCTABS;
     nFirstSelTab = nStart;
     nLastSelTab = nEnd;
@@ -2234,8 +2230,7 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry
             break;
 
         case LISTACTION_RESORTED:
-            // nach Sortierung den ersten Eintrag anzeigen, dabei die
-            // Selektion erhalten.
+            // after a selection: show first entry and also keep the selection
             MakeVisible( (SvLBoxEntry*)pModel->First(), sal_True );
             SetUpdateMode( sal_True );
             break;

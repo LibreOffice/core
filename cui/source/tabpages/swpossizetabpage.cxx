@@ -1034,7 +1034,7 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
    return nRet;
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
 {
     if(m_bPositioningDisabled)
         return 0;
@@ -1118,7 +1118,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl)
 {
     m_aHoriMirrorCB.Enable(!m_aAsCharRB.IsChecked() && !m_bIsMultiSelection);
 
@@ -1139,7 +1139,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, MirrorHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl)
 {
     short nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
@@ -1307,7 +1307,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, ProtectHdl, TriStateBox *, EMPTYARG)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl)
 {
     m_aSizeCB.Enable(m_aPositionCB.IsEnabled() && !m_aPositionCB.IsChecked());
     return 0;

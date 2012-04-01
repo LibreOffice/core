@@ -52,7 +52,6 @@
 
 #include <map>
 #include <memory>
-#include <iostream>
 
 // defines -------------------------------------------------------------------
 
@@ -60,12 +59,9 @@
     | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 #define ABS_DREF          ABS_SREF \
     | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 //logic
-
-#define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData*       ptrViewData,
@@ -187,8 +183,6 @@ void ScNameDlg::Init()
 
     CheckForEmptyTable();
 
-    //TODO: fix the Add Button
-    //maBtnAdd.Disable();
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -269,10 +263,28 @@ void ScNameDlg::SetActive()
 
 void ScNameDlg::UpdateChecks(ScRangeData* pData)
 {
+    // remove handlers, we only want the handlers to process
+    // user input and not when we are syncing the controls  with our internal
+    // model ( also UpdateChecks is called already from some other event
+    // handlers, triggering handlers while already processing a handler can
+    // ( and does in this case ) corrupt the internal data
+
+    maBtnCriteria.SetToggleHdl( Link() );
+    maBtnPrintArea.SetToggleHdl( Link() );
+    maBtnColHeader.SetToggleHdl( Link() );
+    maBtnRowHeader.SetToggleHdl( Link() );
+
     maBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
     maBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
     maBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
     maBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
+
+    // Restore handlers so user input is processed again
+    Link aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
+    maBtnCriteria.SetToggleHdl( aToggleHandler );
+    maBtnPrintArea.SetToggleHdl( aToggleHandler );
+    maBtnColHeader.SetToggleHdl( aToggleHandler );
+    maBtnRowHeader.SetToggleHdl( aToggleHandler );
 }
 
 bool ScNameDlg::IsNameValid()
@@ -532,54 +544,54 @@ void ScNameDlg::GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRange
     maRangeMap.swap(rRangeMap);
 }
 
-IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl)
 {
     Close();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl)
 {
     CancelPushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl)
 {
     return AddPushed();
 }
 
-IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl)
 {
     RemovePushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, EdModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)
 {
     NameModified();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl)
 {
     EdModifyHdl( &maEdAssign );
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, SelectionChangedHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl)
 {
     SelectionChanged();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, ScopeChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl)
 {
     ScopeChanged();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, MoreBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, MoreBtnHdl)
 {
     MorePushed();
     return 0;

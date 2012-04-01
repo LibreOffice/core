@@ -29,9 +29,7 @@ $(eval $(call gb_Library_Library,sdfilt))
 
 $(eval $(call gb_Library_set_include,sdfilt,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/oox/inc/ \
+    -I$(SRCDIR)/sd/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sdfilt,\
@@ -55,6 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,sdfilt,\
     cppuhelper \
     editeng \
     i18nisolang1 \
+    i18nutil \
     msfilter \
     oox \
     sal \

@@ -36,7 +36,6 @@
 /** === end UNO includes === **/
 
 #include <comphelper/anytostring.hxx>
-#include <comphelper/string.hxx>
 #include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -240,22 +239,25 @@ namespace dbmm
         static void lcl_appendErrorDescription( ::rtl::OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
         {
             const sal_Char* pAsciiErrorDescription( NULL );
-            ::std::vector< const sal_Char* > aAsciiParameterNames;
+            ::std::vector< rtl::OUString > aParameterNames;
             switch ( _rError.eType )
             {
             case ERR_OPENING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "opening '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_CLOSING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "closing '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_STORAGE_COMMIT_FAILED:
                 pAsciiErrorDescription = "committing the changes for document '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_STORING_DATABASEDOC_FAILED:
@@ -268,52 +270,66 @@ namespace dbmm
 
             case ERR_UNEXPECTED_LIBSTORAGE_ELEMENT:
                 pAsciiErrorDescription = "unexpected #lib# storage element in document '#doc#', named '#element#'";
-                aAsciiParameterNames.push_back( "#doc#" );
-                aAsciiParameterNames.push_back( "#libstore#" );
-                aAsciiParameterNames.push_back( "#element#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#libstore#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#element#")));
                 break;
 
             case ERR_CREATING_DBDOC_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "creating the database document's storage for #scripttype# scripts failed";
-                aAsciiParameterNames.push_back( "#scripttype#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
                 break;
 
             case ERR_COMMITTING_SCRIPT_STORAGES_FAILED:
                 pAsciiErrorDescription = "saving the #scripttype# scripts for document '#doc#' failed";
-                aAsciiParameterNames.push_back( "#scripttype#" );
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_GENERAL_SCRIPT_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error while migrating #scripttype# scripts of document '#doc#'";
-                aAsciiParameterNames.push_back( "#scripttype#" );
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_GENERAL_MACRO_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error during macro migration of document '#doc#'";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_TYPE:
                 pAsciiErrorDescription = "unknown script type: #type#";
-                aAsciiParameterNames.push_back( "#type#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#type#")));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_LANGUAGE:
                 pAsciiErrorDescription = "unknown script language: #lang#";
-                aAsciiParameterNames.push_back( "#lang#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#lang#")));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_NAME_FORMAT:
                 pAsciiErrorDescription = "unknown script name format: #script#";
-                aAsciiParameterNames.push_back( "#script#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#script#")));
                 break;
 
             case ERR_SCRIPT_TRANSLATION_FAILURE:
                 pAsciiErrorDescription = "analyzing/translating the script URL failed; script type: #type#; script: #code#";
-                aAsciiParameterNames.push_back( "#type#" );
-                aAsciiParameterNames.push_back( "#code#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#type#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#code#")));
                 break;
 
             case ERR_INVALID_SCRIPT_DESCRIPTOR_FORMAT:
@@ -322,57 +338,72 @@ namespace dbmm
 
             case ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for document '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_ADJUSTING_DIALOG_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for dialog #lib#.#dlg# in document '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
-                aAsciiParameterNames.push_back( "#lib#" );
-                aAsciiParameterNames.push_back( "#dlg#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#lib#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#dlg#")));
                 break;
 
             case ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting form component events for '#doc#' failed";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_BIND_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "binding to the script storage failed for document '#doc#'";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_REMOVE_SCRIPTS_STORAGE_FAILED:
                 pAsciiErrorDescription = "removing a scripts storage failed for document '#doc#'";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_DOCUMENT_BACKUP_FAILED:
                 pAsciiErrorDescription = "backing up the document to #location# failed";
-                aAsciiParameterNames.push_back( "#location#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#location#")));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_FOLDER:
                 pAsciiErrorDescription = "unknown script folder '#name#' in document '#doc#'";
-                aAsciiParameterNames.push_back( "#doc#" );
-                aAsciiParameterNames.push_back( "#name#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#name#")));
                 break;
 
             case ERR_EXAMINING_SCRIPTS_FOLDER_FAILED:
                 pAsciiErrorDescription = "examining the 'Scripts' folder failed for document '#doc#'";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
             case ERR_PASSWORD_VERIFICATION_FAILED:
                 pAsciiErrorDescription = "password verification failed for document '#doc#', #libtype# library '#name#'";
-                aAsciiParameterNames.push_back( "#doc#" );
-                aAsciiParameterNames.push_back( "#libtype#" );
-                aAsciiParameterNames.push_back( "#name#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#libtype#")));
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#name#")));
                 break;
 
             case ERR_NEW_STYLE_REPORT:
                 pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
-                aAsciiParameterNames.push_back( "#doc#" );
+                aParameterNames.push_back(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
                 break;
 
                 // do *not* add a default case here: Without a default, some compilers will warn you when
@@ -382,13 +413,13 @@ namespace dbmm
             if ( pAsciiErrorDescription )
             {
                 ::rtl::OUString sSubstituted( ::rtl::OUString::createFromAscii( pAsciiErrorDescription ) );
-                OSL_ENSURE( aAsciiParameterNames.size() == _rError.aErrorDetails.size(),
+                OSL_ENSURE( aParameterNames.size() == _rError.aErrorDetails.size(),
                     "lcl_appendErrorDescription: unexpected number of error message parameters!" );
 
-                for ( size_t i=0; i < ::std::min( aAsciiParameterNames.size(), _rError.aErrorDetails.size() ); ++i )
+                for ( size_t i=0; i < ::std::min( aParameterNames.size(), _rError.aErrorDetails.size() ); ++i )
                 {
-                    ::comphelper::string::searchAndReplaceAsciiI( sSubstituted, aAsciiParameterNames[i],
-                        _rError.aErrorDetails[i] );
+                    sSubstituted = sSubstituted.replaceFirst(
+                        aParameterNames[i], _rError.aErrorDetails[i]);
                 }
 
                 _inout_rBuffer.append( sSubstituted );

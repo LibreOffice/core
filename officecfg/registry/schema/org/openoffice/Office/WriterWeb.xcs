@@ -40,7 +40,7 @@
 				<info>
 					<desc>Contains settings for the visibility of various elements.</desc>
 				</info>
-				<prop oor:name="GraphicObject" oor:type="xs:boolean">
+				<prop oor:name="GraphicObject" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
@@ -51,7 +51,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean">
+				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
@@ -62,7 +62,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="DrawingControl" oor:type="xs:boolean">
+				<prop oor:name="DrawingControl" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
@@ -73,7 +73,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="FieldCode" oor:type="xs:boolean">
+				<prop oor:name="FieldCode" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
@@ -84,7 +84,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Note" oor:type="xs:boolean">
+				<prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Display -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
@@ -95,7 +95,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="PreventTips" oor:type="xs:boolean">
+				<prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Not accessible via user interface -->
 					<info>
 						<author>OS</author>
@@ -109,7 +109,7 @@
 				<info>
 					<desc>Contains settings for the visibility of various non-printing characters.</desc>
 				</info>
-				<prop oor:name="MetaCharacters" oor:type="xs:boolean">
+				<prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: View - Nonprinting Characters -->
 					<info>
 						<author>OS</author>
@@ -118,7 +118,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
+				<prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
@@ -129,7 +129,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="OptionalHyphen" oor:type="xs:boolean">
+				<prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
@@ -140,7 +140,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Space" oor:type="xs:boolean">
+				<prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
@@ -151,7 +151,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ProtectedSpace" oor:type="xs:boolean">
+				<prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
@@ -162,7 +162,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Break" oor:type="xs:boolean">
+				<prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
@@ -178,7 +178,7 @@
 				<info>
 					<desc>Contains settings for highlighting contents.</desc>
 				</info>
-				<prop oor:name="Field" oor:type="xs:boolean">
+				<prop oor:name="Field" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Content/Highlighting -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
@@ -199,7 +199,7 @@
 				<info>
 					<desc>Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
 				</info>
-				<prop oor:name="Guide" oor:type="xs:boolean">
+				<prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
@@ -210,7 +210,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
+				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
@@ -221,7 +221,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
+				<prop oor:name="LargeControlPoint" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
@@ -237,7 +237,7 @@
 				<info>
 					<desc>Contains various settings for the window, such as scrollbars, rules, etc.</desc>
 				</info>
-				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
+				<prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
@@ -248,7 +248,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="VerticalScroll" oor:type="xs:boolean">
+				<prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
@@ -259,7 +259,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ShowRulers" oor:type="xs:boolean">
+				<prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
 						<author>OS</author>
@@ -268,7 +268,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="HorizontalRuler" oor:type="xs:boolean">
+				<prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
@@ -335,7 +335,7 @@
 						</enumeration>
 					</constraints>
 				</prop>
-				<prop oor:name="VerticalRuler" oor:type="xs:boolean">
+				<prop oor:name="VerticalRuler" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
@@ -402,7 +402,7 @@
 						</enumeration>
 					</constraints>
 				</prop>
-				<prop oor:name="SmoothScroll" oor:type="xs:boolean">
+				<prop oor:name="SmoothScroll" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
@@ -418,7 +418,7 @@
 				<info>
 					<desc>Contains miscellaneous settings.</desc>
 				</info>
-                <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean">
+                <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: none yet -->
                     <info>
                         <author>TL</author>
@@ -489,7 +489,7 @@
 				<info>
 					<desc>Contains zoom specific settings.</desc>
 				</info>
-				<prop oor:name="Type" oor:type="xs:int">
+				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>OS</author>
@@ -515,7 +515,7 @@
 					</constraints>
 					<value>0</value>
 				</prop>
-				<prop oor:name="Value" oor:type="xs:int">
+				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
 						<author>OS</author>
@@ -534,7 +534,7 @@
 				<info>
 					<desc>Contains options for the grid.</desc>
 				</info>
-				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
+				<prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Option -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
@@ -545,7 +545,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="VisibleGrid" oor:type="xs:boolean">
+				<prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Option -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
@@ -556,7 +556,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Synchronize" oor:type="xs:boolean">
+				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Option -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
@@ -572,7 +572,7 @@
 				<info>
 					<desc>Contains settings for specifying the grid resolution.</desc>
 				</info>
-				<prop oor:name="XAxis" oor:type="xs:int">
+				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
@@ -583,7 +583,7 @@
 					</info>
 					<value>1000</value>
 				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int">
+				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
@@ -599,7 +599,7 @@
 				<info>
 					<desc>Contains settings for subdividing of the grid.</desc>
 				</info>
-				<prop oor:name="XAxis" oor:type="xs:int">
+				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
@@ -610,7 +610,7 @@
 					</info>
 					<value>1</value>
 				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int">
+				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
@@ -631,7 +631,7 @@
 				<info>
 					<desc>Contains settings for specifying which content types are printed.</desc>
 				</info>
-				<prop oor:name="Graphic" oor:type="xs:boolean">
+				<prop oor:name="Graphic" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
@@ -642,7 +642,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean">
+				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
@@ -653,7 +653,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Control" oor:type="xs:boolean">
+				<prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
@@ -664,7 +664,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Background" oor:type="xs:boolean">
+				<prop oor:name="Background" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
@@ -675,7 +675,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="PrintBlack" oor:type="xs:boolean">
+				<prop oor:name="PrintBlack" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Contents -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
@@ -686,7 +686,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Note" oor:type="xs:int">
+				<prop oor:name="Note" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
@@ -723,7 +723,7 @@
 				<info>
 					<desc>Specifies which pages are printed and how they are printed.</desc>
 				</info>
-				<prop oor:name="Reversed" oor:type="xs:boolean">
+				<prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
@@ -734,7 +734,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Brochure" oor:type="xs:boolean">
+				<prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Pages -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
@@ -745,7 +745,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-                                <prop oor:name="BrochureRightToLeft" oor:type="xs:boolean">
+                                <prop oor:name="BrochureRightToLeft" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- OldPath: Writer/Print/Pages -->
                                         <!-- OldLocation: Soffice.cfg -->
                                         <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
@@ -761,7 +761,7 @@
 				<info>
 					<desc>Contains output-specific settings.</desc>
 				</info>
-				<prop oor:name="SinglePrintJob" oor:type="xs:boolean">
+				<prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print/Output -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
@@ -772,7 +772,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="Fax" oor:type="xs:string">
+				<prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Print -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
@@ -789,7 +789,7 @@
 				<info>
 					<desc>Contains settings for printers with multiple paper trays.</desc>
 				</info>
-				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
+				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Papertray -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
@@ -810,7 +810,7 @@
 				<info>
 					<desc>Contains settings used when shifting table rows/columns.</desc>
 				</info>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Table/Shift -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
@@ -822,7 +822,7 @@
 					</info>
 					<value>500</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Table/Shift -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
@@ -839,7 +839,7 @@
 				<info>
 					<desc>Contains settings used when inserting table rows/columns.</desc>
 				</info>
-				<prop oor:name="Row" oor:type="xs:int">
+				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Table/Insert -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
@@ -851,7 +851,7 @@
 					</info>
 					<value>500</value>
 				</prop>
-				<prop oor:name="Column" oor:type="xs:int">
+				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Table/Insert -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
@@ -868,7 +868,7 @@
 				<info>
 					<desc>Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
 				</info>
-				<prop oor:name="Effect" oor:type="xs:int">
+				<prop oor:name="Effect" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Table -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
@@ -900,7 +900,7 @@
 				<info>
 					<desc>Contains settings used when inputting text or data in tables.</desc>
 				</info>
-				<prop oor:name="NumberRecognition" oor:type="xs:boolean">
+				<prop oor:name="NumberRecognition" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
@@ -911,7 +911,7 @@
 					</info>
                     <value>true</value>
 				</prop>
-				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
+				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
@@ -922,7 +922,7 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="Alignment" oor:type="xs:boolean">
+				<prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
@@ -943,7 +943,7 @@
 				<info>
 					<desc>Specifies the default settings for inserting tables.</desc>
 				</info>
-				<prop oor:name="Header" oor:type="xs:boolean">
+				<prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
@@ -954,7 +954,7 @@
 					</info>
                                         <value>false</value>
 				</prop>
-				<prop oor:name="RepeatHeader" oor:type="xs:boolean">
+				<prop oor:name="RepeatHeader" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
@@ -965,7 +965,7 @@
 					</info>
                                         <value>false</value>
 				</prop>
-				<prop oor:name="Border" oor:type="xs:boolean">
+				<prop oor:name="Border" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
@@ -990,31 +990,31 @@
 					<author>OS/OS</author>
 					<desc>Specifies the type of object bar that is visible.</desc>
 				</info>
-				<prop oor:name="Graphic" oor:type="xs:int">
+				<prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="Table" oor:type="xs:int">
+				<prop oor:name="Table" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="NumberedList" oor:type="xs:int">
+				<prop oor:name="NumberedList" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="NumberedList_InTable" oor:type="xs:int">
+				<prop oor:name="NumberedList_InTable" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
 					</info>
 					<value>-1</value>
 				</prop>
-				<prop oor:name="BezierObject" oor:type="xs:int">
+				<prop oor:name="BezierObject" oor:type="xs:int" oor:nillable="false">
 					<info>
 						<desc>Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
 					</info>
@@ -1041,7 +1041,7 @@
 			<info>
 				<desc>Contains settings for gallery items that can be added to the document.</desc>
 			</info>
-			<prop oor:name="AddGraphic" oor:type="xs:boolean">
+			<prop oor:name="AddGraphic" oor:type="xs:boolean" oor:nillable="false">
 				<!--OldLocation: Soffice.cfg -->
 				<!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
 				<info>

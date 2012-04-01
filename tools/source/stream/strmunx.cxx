@@ -34,7 +34,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
-#include <stdlib.h> // fuer getenv()
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -500,8 +499,6 @@ void SvFileStream::FlushData()
 // lokal gibt es nicht
 }
 
-static char *pFileLockEnvVar = (char*)1;
-
 /*************************************************************************
 |*
 |*    SvFileStream::LockRange()
@@ -510,11 +507,6 @@ static char *pFileLockEnvVar = (char*)1;
 
 sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
-    struct flock aflock;
-    aflock.l_start = nByteOffset;
-    aflock.l_whence = SEEK_SET;
-    aflock.l_len = nBytes;
-
     int nLockMode = 0;
 
     if ( ! IsOpen() )
@@ -559,47 +551,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         return sal_False;
     }
 
-    // HACK: File-Locking nur via Environmentvariable einschalten
-    // um einen Haenger im Zusammenspiel mit einem Linux
-    // NFS-2-Server (kein Lockdaemon) zu verhindern.
-    // File-Locking ?ber NFS ist generell ein Performancekiller.
-    //                      HR, 22.10.1997 fuer SOLARIS
-    //                      HR, 18.05.1998 Environmentvariable
-
-    if ( pFileLockEnvVar == (char*)1 )
-        pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
-    if ( ! pFileLockEnvVar )
-        return sal_True;
-
-    aflock.l_type = nLockMode;
-    sal_IntPtr iFileHandle;
-    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
-    if (rc != osl_File_E_None)
-    {
-        SetError( ::GetSvError( rc ));
-        return sal_False;
-    }
-    if (fcntl((int)iFileHandle, F_GETLK, &aflock) == -1)
-    {
-    #if defined SOLARIS
-        if (errno == ENOSYS)
-            return sal_True;
-    #endif
-        SetError( ::GetSvError( errno ));
-        return sal_False;
-    }
-    if (aflock.l_type != F_UNLCK)
-    {
-        SetError(SVSTREAM_LOCKING_VIOLATION);
-        return sal_False;
-    }
-
-    aflock.l_type = nLockMode;
-    if (fcntl((int)iFileHandle, F_SETLK, &aflock) == -1)
-    {
-        SetError( ::GetSvError( errno ));
-        return sal_False;
-    }
     return sal_True;
 }
 
@@ -611,38 +562,12 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 
 sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
-
-    struct flock aflock;
-    aflock.l_type = F_UNLCK;
-    aflock.l_start = nByteOffset;
-    aflock.l_whence = SEEK_SET;
-    aflock.l_len = nBytes;
-
     if ( ! IsOpen() )
         return sal_False;
 
     InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
 
-    if ( ! (eStreamMode &
-        (STREAM_SHARE_DENYALL | STREAM_SHARE_DENYREAD | STREAM_SHARE_DENYWRITE)))
-        return sal_True;
-
-    // wenn File Locking ausgeschaltet, siehe SvFileStream::LockRange
-    if ( ! pFileLockEnvVar )
-        return sal_True;
-
-    sal_IntPtr iFileHandle;
-    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
-    if (rc != osl_File_E_None)
-    {
-        SetError( ::GetSvError( rc ));
-        return sal_False;
-    }
-    if (fcntl((int)iFileHandle, F_SETLK, &aflock) != -1)
-        return sal_True;
-
-    SetError( ::GetSvError( errno ));
-    return sal_False;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -687,7 +612,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 //    !!! DirEntry aDirEntry( rFilename );
 //    !!! aFilename = aDirEntry.GetFull();
     aFilename = rFilename;
-    FSysRedirector::DoRedirect( aFilename );
     rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
@@ -704,8 +628,8 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     // FIXME: we really need to switch to a pure URL model ...
     if ( osl::File::getFileURLFromSystemPath( aFilename, aFileURL ) != osl::FileBase::E_None )
         aFileURL = aFilename;
-    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) != osl::FileBase::E_None &&
-                        aItem.getFileStatus( aStatus ) != osl::FileBase::E_None );
+    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) == osl::FileBase::E_None &&
+                        aItem.getFileStatus( aStatus ) == osl::FileBase::E_None );
 
     // SvFileStream can't open a directory
     if( bStatValid && aStatus.getFileType() == osl::FileStatus::Directory )
@@ -791,7 +715,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
 void SvFileStream::Close()
 {
-    InternalStreamLock::UnlockFile( 0, 0, this );
+    UnlockFile();
 
     if ( IsOpen() )
     {

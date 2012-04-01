@@ -45,17 +45,19 @@
     the form of
     <type scope="com::sun::star::sdbc">XResultSet</type>
     objects.
-    You can use the normal <type scope="com::sun::star::sdbc">XResultSet</type>
+    You can use the normal <type scope="com::sun::star::sdbc">XRow</type>
+    (or <type scope="com::sun::star::sdb">XColumn</type>)
     methods such as
-    <member scope="com::sun::star::sdbc">XResultSet::getString()</member>
+    <member scope="com::sun::star::sdbc">XRow::getString()</member>
     and
-    <member scope="com::sun::star::sdbc">XResultSet::getInt()</member>
+    <member scope="com::sun::star::sdbc">XRow::getInt()</member>
     to retrieve the data from these XResultSets. If a given form of
     metadata is not available, these methods should throw a
     <type scope="com::sun::star::sdbc">SQLException</type>
     .
-    That a value of <type scope="com::sun::star::sdbc">XResultSet</type> is <NULL/>
-    can be checked with the method <member scope="com::sun::star::sdbc">XResultSet::wasNull()</member>.
+    After calling one of the getXXX() methods,
+    one can check whether that value is <NULL/>
+    with the method <member scope="com::sun::star::sdbc">XRow::wasNull()</member>.
     In the text only "(may be <NULL/>)" is mentioned for this case.
     </p>
     <p>Some of these methods take arguments that are String patterns. These
@@ -69,7 +71,7 @@
     A
     <type scope="com::sun::star::sdbc">SQLException</type>
     will be thrown if a driver does not support
-    a meta data method. In the case of methods that return an XResultSet,
+    a metadata method. In the case of methods that return an XResultSet,
     either an XResultSet (which may be empty) is returned or a
     SQLException is thrown.</p>
  */

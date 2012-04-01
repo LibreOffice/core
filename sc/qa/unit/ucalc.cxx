@@ -43,6 +43,7 @@
 #include "clipparam.hxx"
 #include "refundo.hxx"
 #include "undoblk.hxx"
+#include "undotab.hxx"
 #include "queryentry.hxx"
 #include "postit.hxx"
 #include "attrib.hxx"
@@ -59,6 +60,8 @@
 #include "dpshttab.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "dpdimsave.hxx"
+#include "dpcache.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -73,6 +76,7 @@
 #include <sfx2/docfile.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <ucbhelper/contentbroker.hxx>
@@ -146,6 +150,22 @@ public:
      */
     void testPivotTableNamedSource();
 
+    /**
+     * Test for pivot table cache.  Each dimension in the pivot cache stores
+     * only unique values that are sorted in ascending order.
+     */
+    void testPivotTableCache();
+
+    /**
+     * Test for pivot table containing data fields that reference the same
+     * source field but different functions.
+     */
+    void testPivotTableDuplicateDataFields();
+
+    void testPivotTableNormalGrouping();
+    void testPivotTableNumberGrouping();
+    void testPivotTableDateGrouping();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -185,6 +205,8 @@ public:
      */
     void testJumpToPrecedentsDependents();
 
+    void testSetBackgroundColor();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
@@ -200,6 +222,11 @@ public:
     CPPUNIT_TEST(testPivotTableDateLabels);
     CPPUNIT_TEST(testPivotTableFilters);
     CPPUNIT_TEST(testPivotTableNamedSource);
+    CPPUNIT_TEST(testPivotTableCache);
+    CPPUNIT_TEST(testPivotTableDuplicateDataFields);
+    CPPUNIT_TEST(testPivotTableNormalGrouping);
+    CPPUNIT_TEST(testPivotTableNumberGrouping);
+    CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -216,6 +243,7 @@ public:
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
+    CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -295,11 +323,11 @@ void Test::testInput()
 
     m_pDoc->SetString(0, 0, 0, numstr);
     m_pDoc->GetString(0, 0, 0, test);
-    bool bTest = test.equalsAscii("10.5");
+    bool bTest = test.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("10.5"));
     CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
     m_pDoc->SetString(0, 0, 0, str);
     m_pDoc->GetString(0, 0, 0, test);
-    bTest = test.equalsAscii("'apple'");
+    bTest = test.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("'apple'"));
     CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
 
     m_pDoc->DeleteTab(0);
@@ -1096,7 +1124,33 @@ struct DPFieldDef
 {
     const char* pName;
     sheet::DataPilotFieldOrientation eOrient;
+
+    /**
+     * Function for data field.  It's used only for data field.  When 0, the
+     * default function (SUM) is used.
+     */
+    int eFunc;
 };
+
+template<size_t _Size>
+ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
+{
+    for (size_t i = 0; i < _Size; ++i)
+    {
+        for (size_t j = 0; j < nRowCount; ++j)
+        {
+            SCCOL nCol = i + rPos.Col();
+            SCROW nRow = j + rPos.Row();
+            pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    ScRange aRange(rPos);
+    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
 
 template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
@@ -1186,7 +1240,6 @@ ScDPObject* createDPFromSourceDesc(
 
     // Check the sanity of the source range.
     const ScRange& rSrcRange = rDesc.GetSourceRange();
-    SCCOL nCol1 = rSrcRange.aStart.Col();
     SCROW nRow1 = rSrcRange.aStart.Row();
     SCROW nRow2 = rSrcRange.aEnd.Row();
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
@@ -1194,15 +1247,18 @@ ScDPObject* createDPFromSourceDesc(
     // Set the dimension information.
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName = pDoc->GetString(nCol1+i, nRow1, rSrcRange.aStart.Tab());
-        ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
+        OUString aDimName = rtl::OUString::createFromAscii(aFields[i].pName);
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aDimName);
         pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
-        pDim->SetShowEmpty(true);
 
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
-            pDim->SetFunction(sheet::GeneralFunction_SUM);
+            sheet::GeneralFunction eFunc = sheet::GeneralFunction_SUM;
+            if (aFields[i].eFunc)
+                eFunc = static_cast<sheet::GeneralFunction>(aFields[i].eFunc);
+
+            pDim->SetFunction(eFunc);
             pDim->SetReferenceValue(NULL);
         }
         else
@@ -1221,20 +1277,6 @@ ScDPObject* createDPFromSourceDesc(
             aShowInfo.ShowItemsMode = 0;
             aShowInfo.ItemCount = 0;
             pDim->SetAutoShowInfo(&aShowInfo);
-
-//          USHORT nFuncs[] = { sheet::GeneralFunction_AUTO };
-//          pDim->SetSubTotals(1, nFuncs);
-        }
-
-        for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
-        {
-            SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
-            rtl::OUString aVal;
-            pDoc->GetString(nCol, nRow, 0, aVal);
-            // This call is just to populate the member list for each dimension.
-            ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
-            pMem->SetShowDetails(true);
-            pMem->SetIsVisible(true);
         }
     }
 
@@ -1257,6 +1299,30 @@ ScDPObject* createDPFromRange(
     ScSheetSourceDesc aSheetDesc(pDoc);
     aSheetDesc.SetSourceRange(rRange);
     return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
+}
+
+ScRange refresh(ScDPObject* pDPObj)
+{
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    return aOutRange;
+}
+
+ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
+{
+    // We need to first create group data in the cache, then the group data in
+    // the object.
+    std::set<ScDPObject*> aRefs;
+    bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("There should be only one table linked to this cache.", aRefs.size() == 1);
+    pDPObj->ReloadGroupTableData();
+
+    return refresh(pDPObj);
 }
 
 class AutoCalcSwitch
@@ -1284,9 +1350,9 @@ void Test::testPivotTable()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
-        { "Score", sheet::DataPilotFieldOrientation_DATA }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
     // Raw data
@@ -1358,7 +1424,7 @@ void Test::testPivotTable()
     pDPs->InsertNewTable(pDPObj2);
 
     aOutRange = pDPObj2->GetOutRange();
-    pDPObj2->ClearSource();
+    pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
     {
         // Expected output table content.  0 = empty cell
@@ -1394,7 +1460,7 @@ void Test::testPivotTable()
     CPPUNIT_ASSERT_MESSAGE("Reloading a cache shouldn't remove any cache.",
                            pDPs->GetSheetCaches().size() == 1);
 
-    pDPObj2->ClearSource();
+    pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
 
     {
@@ -1468,9 +1534,9 @@ void Test::testPivotTableLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA }
+        { "Software", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
     // Raw data
@@ -1497,13 +1563,7 @@ void Test::testPivotTableLabels()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
-
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -1530,9 +1590,9 @@ void Test::testPivotTableDateLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW },
-        { "Date",  sheet::DataPilotFieldOrientation_COLUMN },
-        { "Value", sheet::DataPilotFieldOrientation_DATA }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
     // Raw data
@@ -1559,13 +1619,7 @@ void Test::testPivotTableDateLabels()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
-
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -1612,11 +1666,11 @@ void Test::testPivotTableFilters()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN },
-        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN },
-        { "Group2", sheet::DataPilotFieldOrientation_PAGE },
-        { "Val1",   sheet::DataPilotFieldOrientation_DATA },
-        { "Val2",   sheet::DataPilotFieldOrientation_DATA }
+        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, 0 },
+        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, 0 },
+        { "Group2", sheet::DataPilotFieldOrientation_PAGE, 0 },
+        { "Val1",   sheet::DataPilotFieldOrientation_DATA, 0 },
+        { "Val2",   sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
     // Raw data
@@ -1648,12 +1702,7 @@ void Test::testPivotTableFilters()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1662,9 +1711,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "8" },
-            { "Sum - Val2", "80" },
-            { "Total Sum - Val1", "8" },
-            { "Total Sum - Val2", "80" }
+            { "Sum - Val2", "80" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
@@ -1676,7 +1723,7 @@ void Test::testPivotTableFilters()
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B8")));
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B6")));
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
@@ -1688,8 +1735,7 @@ void Test::testPivotTableFilters()
     OUString aPage(RTL_CONSTASCII_USTRINGPARAM("A"));
     pDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1698,9 +1744,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "4" },
-            { "Sum - Val2", "40" },
-            { "Total Sum - Val1", "4" },
-            { "Total Sum - Val2", "40" }
+            { "Sum - Val2", "40" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
@@ -1720,8 +1764,7 @@ void Test::testPivotTableFilters()
     rEntry.GetQueryItem().mfVal = 1;
     aDesc.SetQueryParam(aQueryParam);
     pDPObj->SetSheetDesc(aDesc);
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1730,9 +1773,7 @@ void Test::testPivotTableFilters()
             { 0, 0 },
             { "Data", 0 },
             { "Sum - Val1", "2" },
-            { "Sum - Val2", "20" },
-            { "Total Sum - Val1", "2" },
-            { "Total Sum - Val2", "20" }
+            { "Sum - Val2", "20" }
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
@@ -1757,9 +1798,9 @@ void Test::testPivotTableNamedSource()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
-        { "Score", sheet::DataPilotFieldOrientation_DATA }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
     // Raw data
@@ -1801,12 +1842,7 @@ void Test::testPivotTableNamedSource()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -1832,7 +1868,7 @@ void Test::testPivotTableNamedSource()
     m_pDoc->MoveTab(1, 0);
     rtl::OUString aTabName;
     m_pDoc->GetName(0, aTabName);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name.", aTabName.equalsAscii("Table"));
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name.", aTabName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Table")));
     CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
                            pDPObj->GetOutRange().aStart.Tab() == 0);
 
@@ -1852,6 +1888,656 @@ void Test::testPivotTableNamedSource()
                            pDPs->GetNameCaches().size() == 0);
 
     pNames->clear();
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableCache()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+
+    // Raw data
+    const char* aData[][3] = {
+        { "F1", "F2", "F3" },
+        { "Z",  "A", "30" },
+        { "R",  "A", "20" },
+        { "A",  "B", "45" },
+        { "F",  "B", "12" },
+        { "Y",  "C",  "8" },
+        { "12", "C", "15" },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPCache aCache(m_pDoc);
+    aCache.InitFromDoc(m_pDoc, aDataRange);
+    long nDimCount = aCache.GetColumnCount();
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension count.", nDimCount == 3);
+    rtl::OUString aDimName = aCache.GetDimensionName(0);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F1"));
+    aDimName = aCache.GetDimensionName(1);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F2"));
+    aDimName = aCache.GetDimensionName(2);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F3"));
+
+    // In each dimension, member ID values also represent their sort order (in
+    // source dimensions only, not in group dimensions). Value items are
+    // sorted before string ones. Also, no duplicate dimension members should
+    // exist.
+
+    // Dimension 0 - a mix of strings and values.
+    long nMemCount = aCache.GetDimMemberCount(0);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 12);
+    pItem = aCache.GetItemDataById(0, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("A"));
+    pItem = aCache.GetItemDataById(0, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("F"));
+    pItem = aCache.GetItemDataById(0, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("R"));
+    pItem = aCache.GetItemDataById(0, 4);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("Y"));
+    pItem = aCache.GetItemDataById(0, 5);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("Z"));
+    pItem = aCache.GetItemDataById(0, 6);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    // Dimension 1 - duplicate values in source.
+    nMemCount = aCache.GetDimMemberCount(1);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 3);
+    pItem = aCache.GetItemDataById(1, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("A"));
+    pItem = aCache.GetItemDataById(1, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("B"));
+    pItem = aCache.GetItemDataById(1, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("C"));
+    pItem = aCache.GetItemDataById(1, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    // Dimension 2 - values only.
+    nMemCount = aCache.GetDimMemberCount(2);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    pItem = aCache.GetItemDataById(2, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 8);
+    pItem = aCache.GetItemDataById(2, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 12);
+    pItem = aCache.GetItemDataById(2, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 15);
+    pItem = aCache.GetItemDataById(2, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 20);
+    pItem = aCache.GetItemDataById(2, 4);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 30);
+    pItem = aCache.GetItemDataById(2, 5);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 45);
+    pItem = aCache.GetItemDataById(2, 6);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    {
+        // Check the integrity of the source data.
+        ScDPItemData aTest;
+        long nDim;
+
+        {
+            // Dimension 0: Z, R, A, F, Y, 12
+            nDim = 0;
+            const char* aChecks[] = { "Z", "R", "A", "F", "Y" };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+
+            pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, 5, false));
+            aTest.SetValue(12);
+            CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+        }
+
+        {
+            // Dimension 1: A, A, B, B, C, C
+            nDim = 1;
+            const char* aChecks[] = { "A", "A", "B", "B", "C", "C" };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+        }
+
+        {
+            // Dimension 2: 30, 20, 45, 12, 8, 15
+            nDim = 2;
+            double aChecks[] = { 30, 20, 45, 12, 8, 15 };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetValue(aChecks[i]);
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableDuplicateDataFields()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A",       "45" },
+        { "A",        "5" },
+        { "A",       "41" },
+        { "A",       "49" },
+        { "A",        "4" },
+        { "B",       "33" },
+        { "B",       "84" },
+        { "B",       "74" },
+        { "B",        "8" },
+        { "B",       "68" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT }
+    };
+
+    ScAddress aPos(2,2,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name", "Data", 0 },
+            { "A", "Sum - Value", "144" },
+            { 0, "Count - Value", "5" },
+            { "B", "Sum - Value", "267" },
+            { 0, "Count - Value", "5" },
+            { "Total Sum - Value", 0, "411" },
+            { "Total Count - Value", 0, "10" },
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Move the data layout dimension from row to column.
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data!?", pSaveData);
+    ScDPSaveDimension* pDataLayout = pSaveData->GetDataLayoutDimension();
+    CPPUNIT_ASSERT_MESSAGE("No data layout dimension.", pDataLayout);
+    pDataLayout->SetOrientation(sheet::DataPilotFieldOrientation_COLUMN);
+    pDPObj->SetSaveData(*pSaveData);
+
+    // Refresh the table output.
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { 0, "Data", 0 },
+            { "Name", "Sum - Value", "Count - Value" },
+            { "A", "144", "5" },
+            { "B", "267", "5" },
+            { "Total Result", "411", "10" }
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScPivotParam aParam;
+    pDPObj->FillLabelData(aParam);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
+                           aParam.maLabelArray.size(), static_cast<size_t>(4));
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNormalGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A", "1" },
+        { "B", "2" },
+        { "C", "3" },
+        { "D", "4" },
+        { "E", "5" },
+        { "F", "6" },
+        { "G", "7" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "1" },
+            { "B", "2" },
+            { "C", "3" },
+            { "D", "4" },
+            { "E", "5" },
+            { "F", "6" },
+            { "G", "7" },
+            { "Total Result", "28" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Initial output without grouping");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("Failed to create dimension data.", pDimData);
+
+    rtl::OUString aGroupPrefix(RTL_CONSTASCII_USTRINGPARAM("Group"));
+    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    rtl::OUString aGroupDimName =
+        pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
+
+    {
+        // Group A, B and C together.
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        rtl::OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
+
+        ScDPSaveGroupItem aGroup(aGroupName);
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("B")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C")));
+        aGroupDim.AddGroupItem(aGroup);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // Set it before the base dimension.
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name2", "Name", 0 },
+            { "D", "D", "4" },
+            { "E", "E", "5" },
+            { "F", "F", "6" },
+            { "G", "G", "7" },
+            { "Group1", "A", "1" },
+            { 0,        "B", "2" },
+            { 0,        "C", "3" },
+            { "Total Result", 0, "28" }
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pSaveData = pDPObj->GetSaveData();
+    pDimData = pSaveData->GetDimensionData();
+
+    {
+        // Group D, E, F together.
+        ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
+        CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
+        rtl::OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group2"));
+
+        ScDPSaveGroupItem aGroup(aGroupName);
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("E")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("F")));
+        pGroupDim->AddGroupItem(aGroup);
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name2", "Name", 0 },
+            { "G", "G", "7" },
+            { "Group1", "A", "1" },
+            { 0,        "B", "2" },
+            { 0,        "C", "3" },
+            { "Group2", "D", "4" },
+            { 0,        "E", "5" },
+            { 0,        "F", "6" },
+            { "Total Result", 0, "28" }
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNumberGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Order", "Score" },
+        { "43", "171" },
+        { "18", "20"  },
+        { "69", "159" },
+        { "95", "19"  },
+        { "96", "163" },
+        { "46", "70"  },
+        { "22", "36"  },
+        { "81", "49"  },
+        { "54", "61"  },
+        { "39", "62"  },
+        { "86", "17"  },
+        { "34", "0"   },
+        { "30", "25"  },
+        { "24", "103" },
+        { "16", "59"  },
+        { "24", "119" },
+        { "15", "86"  },
+        { "69", "170" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Order", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
+
+    {
+        ScDPNumGroupInfo aInfo;
+        aInfo.mbEnable = true;
+        aInfo.mbAutoStart = false;
+        aInfo.mbAutoEnd = false;
+        aInfo.mbDateValues = false;
+        aInfo.mbIntegerOnly = true;
+        aInfo.mfStart = 30;
+        aInfo.mfEnd = 60;
+        aInfo.mfStep = 10;
+        ScDPSaveNumGroupDimension aGroup(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Order")), aInfo);
+        pDimData->AddNumGroupDimension(aGroup);
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    ScRange aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Order", 0 },
+            { "<30",   "423" },
+            { "30-39", "87"  },
+            { "40-49", "241" },
+            { "50-60", "61"  },
+            { ">60",   "577" },
+            { "Total Result", "1389" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableDateGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Date", "Value" },
+        { "2011-01-01", "1" },
+        { "2011-03-02", "2" },
+        { "2012-01-04", "3" },
+        { "2012-02-23", "4" },
+        { "2012-02-24", "5" },
+        { "2012-03-15", "6" },
+        { "2011-09-03", "7" },
+        { "2012-12-25", "8" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Date", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
+
+    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Date"));
+
+    ScDPNumGroupInfo aInfo;
+    aInfo.mbEnable = true;
+    aInfo.mbAutoStart = true;
+    aInfo.mbAutoEnd = true;
+    {
+        // Turn the Date dimension into months.  The first of the date
+        // dimensions is always a number-group dimension which replaces the
+        // original dimension.
+        ScDPSaveNumGroupDimension aGroup(aBaseDimName, aInfo, sheet::DataPilotFieldGroupBy::MONTHS);
+        pDimData->AddNumGroupDimension(aGroup);
+    }
+
+    {
+        // Add quarter dimension.  This will be an additional dimension.
+        rtl::OUString aGroupDimName =
+            pDimData->CreateDateGroupDimName(
+                sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, NULL);
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::QUARTERS);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        // Set orientation.
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+    }
+
+    {
+        // Add year dimension.  This is a new dimension also.
+        rtl::OUString aGroupDimName =
+            pDimData->CreateDateGroupDimName(
+                sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, NULL);
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::YEARS);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        // Set orientation.
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    ScRange aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "Years", "Quarters", "Date", 0 },
+            { "2011", "Q1", "Jan", "1" },
+            { 0, 0,         "Mar", "2" },
+            { 0,      "Q3", "Sep", "7" },
+            { "2012", "Q1", "Jan", "3" },
+            { 0, 0,         "Feb", "9" },
+            { 0, 0,         "Mar", "6" },
+            { 0,      "Q4", "Dec", "8" },
+            { "Total Result", 0, 0, "36" },
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    {
+        // Let's hide year 2012.
+        pSaveData = pDPObj->GetSaveData();
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Years")));
+        CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
+        ScDPSaveMember* pMem = pDim->GetMemberByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2012")));
+        CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
+        pMem->SetIsVisible(false);
+    }
+    pDPObj->SetSaveData(*pSaveData);
+    pDPObj->ReloadGroupTableData();
+    pDPObj->InvalidateData();
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "Years", "Quarters", "Date", 0 },
+            { "2011", "Q1", "Jan", "1" },
+            { 0, 0,         "Mar", "2" },
+            { 0,      "Q3", "Sep", "7" },
+            { "Total Result", 0, 0, "10" },
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -1897,25 +2583,25 @@ void Test::testSheetMove()
 {
     OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab1"));
     m_pDoc->InsertTab(0, aTabName);
-    CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount(), static_cast<SCTAB>(1));
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     //test if inserting before another sheet works
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("TestTab2")));
-    CPPUNIT_ASSERT_MESSAGE("document should have two sheets", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have two sheets", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     // Move and test the result.
     m_pDoc->MoveTab(0, 1);
-    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
     rtl::OUString aName;
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAscii("TestTab1"));
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TestTab1")));
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
@@ -1927,7 +2613,7 @@ void Test::testSheetMove()
 
     // Move the sheet once again.
     m_pDoc->MoveTab(1, 0);
-    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
     bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
@@ -1935,7 +2621,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAscii("TestTab2"));
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TestTab2")));
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -2185,9 +2871,9 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     pDoc->CalcAll();
 
     rtl::OUString aRes = pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAscii("1.2"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.2")));
     aRes = pDoc->GetString(0, 1, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAscii("Foo"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Foo")));
     aRes = pDoc->GetString(0, 2, 0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
@@ -2296,7 +2982,7 @@ void Test::testStreamValid()
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
     m_pDoc->InsertTab(2, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
     m_pDoc->InsertTab(3, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet4")));
-    CPPUNIT_ASSERT_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount() == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount(), static_cast<SCTAB>(4));
 
     OUString a1(RTL_CONSTASCII_USTRINGPARAM("A1"));
     OUString a2(RTL_CONSTASCII_USTRINGPARAM("A2"));
@@ -2839,7 +3525,7 @@ void Test::testGraphicsOnSheetMove()
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
-    CPPUNIT_ASSERT_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(1));
 
     const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
@@ -2847,12 +3533,12 @@ void Test::testGraphicsOnSheetMove()
 
     pPage = pDrawLayer->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
-    CPPUNIT_ASSERT_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(0));
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
     m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTab")));
-    CPPUNIT_ASSERT_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount() == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(3));
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
     pPage = pDrawLayer->GetPage(1);
@@ -2904,35 +3590,35 @@ void Test::testPostIts()
     m_pDoc->InsertTab(0, aTabName);
 
     ScAddress rAddr(2, 2, 0);
-    ScPostIt *pNote = m_pDoc->GetOrCreateNote(rAddr);
+    ScPostIt *pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
     pNote->SetAuthor(aJimBob);
 
-    ScPostIt *pGetNote = m_pDoc->GetNote(rAddr);
+    ScPostIt *pGetNote = m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr);
     CPPUNIT_ASSERT_MESSAGE("note should be itself", pGetNote == pNote );
 
     bool bInsertRow = m_pDoc->InsertRow( 0, 0, 100, 0, 1, 1 );
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncRow();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     bool bInsertCol = m_pDoc->InsertCol( 0, 0, 100, 0, 1, 1 );
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncCol();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->InsertTab(0, aTabName2);
-    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
     rAddr.IncTab();
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
     rAddr.IncTab(-1);
-    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }
@@ -2959,22 +3645,22 @@ void Test::testToggleRefFlag()
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B$100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=$B$100")));
 
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B$100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=B$100")));
 
         // column relative / row absolute -> column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=$B100")));
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=B100")));
     }
 
     {
@@ -2990,22 +3676,22 @@ void Test::testToggleRefFlag()
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C[-3]"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R2C[-3]")));
 
         // column relative / row absolute - > column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C1"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R[-4]C1")));
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C[-3]"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R[-4]C[-3]")));
 
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C1"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R2C1")));
     }
 
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
@@ -3141,7 +3827,7 @@ void Test::testCopyPaste()
     double aValue = 0;
     m_pDoc->GetValue(1, 0, 0, aValue);
     std::cout << "Value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("formula should return 8", aValue == 8);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8, 0.00000001);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -3166,7 +3852,7 @@ void Test::testCopyPaste()
     rtl::OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("copied formula should return 2", aValue == 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2, 0.00000001);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
@@ -3184,15 +3870,15 @@ void Test::testCopyPaste()
     //check undo and redo
     pUndo->Undo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after undo formula should return nothing", aValue == 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0, 0.00000001);
     m_pDoc->GetString(2,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAscii(""));
+    CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula should return 2 after redo", aValue == 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2, 0.00000001);
     m_pDoc->GetString(2,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAscii("test"));
+    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
 
@@ -3217,13 +3903,43 @@ void Test::testMergedCells()
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
+    m_pDoc->SetInTest();
     aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
-    //ScEditableTester won't work without an SfxMedium/XStorage
-    //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
+    CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
+
+void Test::testSetBackgroundColor()
+{
+    //test set background color
+    //TODO: set color1 and set color2 and do an undo to check if color1 is set now.
+
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    Color aColor;
+
+     //test yellow
+    aColor=Color(COL_YELLOW);
+    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set", m_pDoc->GetTabBgColor(0)!= aColor);
+
+
+    Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
+    aColor.SetColor(COL_BLUE);//set BLUE
+    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set the second time", m_pDoc->GetTabBgColor(0)!= aColor);
+
+    //now check for undo
+    SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShRef,0, aOldTabBgColor, aColor);
+    pUndo->Undo();
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aOldTabBgColor);
+    pUndo->Redo();
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aColor);
+    m_pDoc->DeleteTab(0);
+}
+
+
 
 void Test::testUpdateReference()
 {
@@ -3246,42 +3962,42 @@ void Test::testUpdateReference()
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,2, aValue);
     CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, aSheet2);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     m_pDoc->GetValue(2, 0, 0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2, 1, 0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5, 0.00000001);
 
     std::vector<rtl::OUString> aSheets;
     aSheets.push_back(aSheet1);
@@ -3292,9 +4008,9 @@ void Test::testUpdateReference()
     m_pDoc->GetFormula(2,0,2, aFormula);
     std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     std::cout << std::endl << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2, 1, 2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
@@ -3370,8 +4086,8 @@ void Test::testJumpToPrecedentsDependents()
         // C2's precedent should be A1 only.
         ScRangeList aRange(ScRange(2, 1, 0));
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
-        CPPUNIT_ASSERT_MESSAGE("there should only be one reference token.",
-                               aRefTokens.size() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("there should only be one reference token.",
+                               aRefTokens.size(), static_cast<size_t>(1));
         CPPUNIT_ASSERT_MESSAGE("A1 should be a precedent of C1.",
                                hasRange(aRefTokens, ScRange(0, 0, 0)));
     }

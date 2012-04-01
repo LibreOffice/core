@@ -261,7 +261,7 @@ void SvxDateField::Save( SvPersistStream & rStm )
 
 // -----------------------------------------------------------------------
 
-String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
+rtl::OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
     Date aDate( Date::EMPTY );
     if ( eType == SVXDATETYPE_FIX )
@@ -272,7 +272,7 @@ String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType e
     return GetFormatted( aDate, eFormat, rFormatter, eLang );
 }
 
-String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
+rtl::OUString SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
 {
     if ( eFormat == SVXDATEFORMAT_SYSTEM )
     {
@@ -326,7 +326,7 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
     }
 
     double fDiffDate = aDate - *(rFormatter.GetNullDate());
-    String aStr;
+    rtl::OUString aStr;
        Color* pColor = NULL;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
@@ -348,7 +348,7 @@ SvxURLField::SvxURLField()
 
 // -----------------------------------------------------------------------
 
-SvxURLField::SvxURLField( const XubString& rURL, const XubString& rRepres, SvxURLFormat eFmt )
+SvxURLField::SvxURLField( const rtl::OUString& rURL, const rtl::OUString& rRepres, SvxURLFormat eFmt )
     : aURL( rURL ), aRepresentation( rRepres )
 {
     eFormat = eFmt;
@@ -384,16 +384,18 @@ static void write_unicode( SvPersistStream & rStm, const String& rString )
     rStm.Write( rString.GetBuffer(), nL*sizeof(sal_Unicode) );
 }
 
-static void read_unicode( SvPersistStream & rStm, String& rString )
+static void read_unicode( SvPersistStream & rStm, rtl::OUString& rString )
 {
     sal_uInt16 nL = 0;
     rStm >> nL;
+    String aStr;
     if ( nL )
     {
-        rString.AllocBuffer( nL );
-        rStm.Read( rString.GetBufferAccess(), nL*sizeof(sal_Unicode) );
-        rString.ReleaseBufferAccess( nL );
+        aStr.AllocBuffer( nL );
+        rStm.Read( aStr.GetBufferAccess(), nL*sizeof(sal_Unicode) );
+        aStr.ReleaseBufferAccess( nL );
     }
+    rString = aStr;
 }
 
 void SvxURLField::Load( SvPersistStream & rStm )
@@ -424,8 +426,8 @@ MetaAction* SvxURLField::createBeginComment() const
     // #i46618# Adding target URL to metafile comment
     return new MetaCommentAction( "FIELD_SEQ_BEGIN",
                                   0,
-                                  reinterpret_cast<const sal_uInt8*>(aURL.GetBuffer()),
-                                  2*aURL.Len() );
+                                  reinterpret_cast<const sal_uInt8*>(aURL.getStr()),
+                                  2*aURL.getLength() );
 }
 
 // =================================================================
@@ -612,7 +614,7 @@ void SvxExtTimeField::Save( SvPersistStream & rStm )
 
 //----------------------------------------------------------------------------
 
-String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
+rtl::OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
     Time aTime( Time::EMPTY );
     if ( eType == SVXTIMETYPE_FIX )
@@ -622,7 +624,7 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
     return GetFormatted( aTime, eFormat, rFormatter, eLang );
 }
 
-String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
+rtl::OUString SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
 {
     switch( eFormat )
     {
@@ -646,10 +648,10 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
         break;
         case SVXTIMEFORMAT_12_HMSH:
         {   // no builtin format available, try to insert or reuse
-            String aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
+            rtl::OUString aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
             xub_StrLen nCheckPos;
             short nType;
-            /*sal_Bool bInserted = */rFormatter.PutandConvertEntry( aFormatCode,
+            rFormatter.PutandConvertEntry( aFormatCode,
                 nCheckPos, nType, nFormatKey, LANGUAGE_ENGLISH_US, eLang );
             DBG_ASSERT( nCheckPos == 0, "SVXTIMEFORMAT_12_HMSH: could not insert format code" );
             if ( nCheckPos )
@@ -674,7 +676,7 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
     }
 
     double fFracTime = aTime.GetTimeInDays();
-    String aStr;
+    rtl::OUString aStr;
        Color* pColor = NULL;
     rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
@@ -701,7 +703,7 @@ SvxExtFileField::SvxExtFileField()
 
 //----------------------------------------------------------------------------
 
-SvxExtFileField::SvxExtFileField( const XubString& rStr, SvxFileType eT, SvxFileFormat eF )
+SvxExtFileField::SvxExtFileField( const rtl::OUString& rStr, SvxFileType eT, SvxFileFormat eF )
 {
     aFile = rStr;
     eType = eT;
@@ -757,9 +759,9 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
 
 //----------------------------------------------------------------------------
 
-XubString SvxExtFileField::GetFormatted() const
+rtl::OUString SvxExtFileField::GetFormatted() const
 {
-    XubString aString;
+    rtl::OUString aString;
 
     INetURLObject aURLObj( aFile );
 
@@ -829,7 +831,7 @@ XubString SvxExtFileField::GetFormatted() const
         }
     }
 
-    return( aString );
+    return aString;
 }
 
 //----------------------------------------------------------------------------
@@ -848,9 +850,9 @@ SvxAuthorField::SvxAuthorField()
 
 //----------------------------------------------------------------------------
 
-SvxAuthorField::SvxAuthorField( const XubString& rFirstName,
-                                const XubString& rLastName,
-                                const XubString& rShortName,
+SvxAuthorField::SvxAuthorField( const rtl::OUString& rFirstName,
+                                const rtl::OUString& rLastName,
+                                const rtl::OUString& rShortName,
                                     SvxAuthorType eT, SvxAuthorFormat eF )
 {
     aName      = rLastName;
@@ -913,18 +915,20 @@ void SvxAuthorField::Save( SvPersistStream & rStm )
 
 //----------------------------------------------------------------------------
 
-XubString SvxAuthorField::GetFormatted() const
+rtl::OUString SvxAuthorField::GetFormatted() const
 {
-    XubString aString;
+    rtl::OUString aString;
 
     switch( eFormat )
     {
         case SVXAUTHORFORMAT_FULLNAME:
-            aString  = aFirstName;
-            aString += sal_Unicode(' ');
-            aString += aName;
+        {
+            rtl::OUStringBuffer aBuf(aFirstName);
+            aBuf.append(sal_Unicode(' '));
+            aBuf.append(aName);
+            aString = aBuf.makeStringAndClear();
+        }
         break;
-
         case SVXAUTHORFORMAT_NAME:
             aString = aName;
         break;
@@ -938,7 +942,7 @@ XubString SvxAuthorField::GetFormatted() const
         break;
     }
 
-    return( aString );
+    return aString;
 }
 
 static SvClassManager* pClassMgr=0;
@@ -948,14 +952,14 @@ SvClassManager& SvxFieldItem::GetClassManager()
     if ( !pClassMgr )
     {
         pClassMgr = new SvClassManager;
-        pClassMgr->SV_CLASS_REGISTER( SvxFieldData );
-        pClassMgr->SV_CLASS_REGISTER( SvxURLField );
-        pClassMgr->SV_CLASS_REGISTER( SvxDateField );
-        pClassMgr->SV_CLASS_REGISTER( SvxPageField );
-        pClassMgr->SV_CLASS_REGISTER( SvxTimeField );
-        pClassMgr->SV_CLASS_REGISTER( SvxExtTimeField );
-        pClassMgr->SV_CLASS_REGISTER( SvxExtFileField );
-        pClassMgr->SV_CLASS_REGISTER( SvxAuthorField );
+        pClassMgr->Register(SvxFieldData::StaticClassId(),    SvxFieldData::CreateInstance);
+        pClassMgr->Register(SvxURLField::StaticClassId(),     SvxURLField::CreateInstance);
+        pClassMgr->Register(SvxDateField::StaticClassId(),    SvxDateField::CreateInstance);
+        pClassMgr->Register(SvxPageField::StaticClassId(),    SvxPageField::CreateInstance);
+        pClassMgr->Register(SvxTimeField::StaticClassId(),    SvxTimeField::CreateInstance);
+        pClassMgr->Register(SvxExtTimeField::StaticClassId(), SvxExtTimeField::CreateInstance);
+        pClassMgr->Register(SvxExtFileField::StaticClassId(), SvxExtFileField::CreateInstance);
+        pClassMgr->Register(SvxAuthorField::StaticClassId(),  SvxAuthorField::CreateInstance);
     }
 
     return *pClassMgr;
@@ -1027,9 +1031,10 @@ void SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
-String SvxDateTimeField::GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
+rtl::OUString SvxDateTimeField::GetFormatted(
+    Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
 {
-    String aRet;
+    rtl::OUString aRet;
 
     SvxDateFormat eDateFormat = (SvxDateFormat)(eFormat & 0x0f);
 
@@ -1042,10 +1047,15 @@ String SvxDateTimeField::GetFormatted( Date& rDate, Time& rTime, int eFormat, Sv
 
     if(eTimeFormat)
     {
-        if(aRet.Len())
-            aRet += sal_Unicode(' ');
+        rtl::OUStringBuffer aBuf(aRet);
 
-        aRet += SvxExtTimeField::GetFormatted( rTime, eTimeFormat, rFormatter, eLanguage );
+        if (!aRet.isEmpty())
+            aBuf.append(sal_Unicode(' '));
+
+        aBuf.append(
+            SvxExtTimeField::GetFormatted(rTime, eTimeFormat, rFormatter, eLanguage));
+
+        aRet = aBuf.makeStringAndClear();
     }
 
     return aRet;

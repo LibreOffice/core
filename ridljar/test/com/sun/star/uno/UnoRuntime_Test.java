@@ -28,68 +28,55 @@
 package com.sun.star.uno;
 
 import com.sun.star.beans.Optional;
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class UnoRuntime_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "test_generateOid", "test_queryInterface", "test_areSame",
-            "test_completeValue", "test_currentContext" };
-    }
-
-    public void test_generateOid() {
+public final class UnoRuntime_Test {
+    @Test public void test_generateOid() {
         // Test if UnoRuntime generates an OID for a simple class:
-        assure("Test1", UnoRuntime.generateOid(new Test1()) != null);
+        assertNotNull("Test1", UnoRuntime.generateOid(new Test1()));
 
         // Test if UnoRuntime generates an OID for a class implementing
         // IQueryInterface and returning null from getOid:
-        assure("Test2", UnoRuntime.generateOid(new Test2()) != null);
+        assertNotNull("Test2", UnoRuntime.generateOid(new Test2()));
 
         // Test if a delegator object has the same OID as its creator:
         Test4 test4 = new Test4();
         Ifc ifc = UnoRuntime.queryInterface(Ifc.class, test4);
-        assure(
-            "Test4",
-            UnoRuntime.generateOid(test4).equals(UnoRuntime.generateOid(ifc)));
+        assertEquals(
+            "Test4", UnoRuntime.generateOid(ifc),
+            UnoRuntime.generateOid(test4));
     }
 
-    public void test_queryInterface() {
+    @Test public void test_queryInterface() {
         // Test if a query for an interface which is not supported returns null:
-        assure(
-            "Test1",
-            UnoRuntime.queryInterface(Ifc.class, new Test1()) == null);
+        assertNull("Test1", UnoRuntime.queryInterface(Ifc.class, new Test1()));
 
         // Test if a query for an interface which is supported through
         // IQueryInterface succeeds:
-        assure(
-            "Test2",
-            UnoRuntime.queryInterface(Ifc.class, new Test2()) != null);
+        assertNotNull(
+            "Test2", UnoRuntime.queryInterface(Ifc.class, new Test2()));
 
         // Test if a query for an interface which is directly supported (through
         // inheritance) succeeds:
-        assure(
-            "Test3",
-            UnoRuntime.queryInterface(Ifc.class, new Test3()) != null);
+        assertNotNull(
+            "Test3", UnoRuntime.queryInterface(Ifc.class, new Test3()));
     }
 
-    public void test_areSame() {
-        assure(
+    @Test public void test_areSame() {
+        assertTrue(
             UnoRuntime.areSame(
                 new Any(Type.UNSIGNED_LONG, new Integer(3)),
                 new Any(Type.UNSIGNED_LONG, new Integer(3))));
-        assure(
-            !UnoRuntime.areSame(
+        assertFalse(
+            UnoRuntime.areSame(
                 new Any(Type.UNSIGNED_LONG, new Integer(3)), new Integer(3)));
-        assure(!UnoRuntime.areSame(new int[] { 1 }, new int[] { 1, 2 }));
-        assure(
+        assertFalse(UnoRuntime.areSame(new int[] { 1 }, new int[] { 1, 2 }));
+        assertTrue(
             UnoRuntime.areSame(
                 TypeClass.UNSIGNED_LONG,
                 new Any(new Type(TypeClass.class), TypeClass.UNSIGNED_LONG)));
-        assure(
+        assertTrue(
             UnoRuntime.areSame(
                 new Any(
                     new Type("com.sun.star.beans.Optional<unsigned long>"),
@@ -97,33 +84,32 @@ public final class UnoRuntime_Test extends ComplexTestCase {
                 new Any(
                     new Type("com.sun.star.beans.Optional<unsigned long>"),
                     new Optional(false, new Integer(0)))));
-        assure(!UnoRuntime.areSame(new Test1(), new Test2()));
+        assertFalse(UnoRuntime.areSame(new Test1(), new Test2()));
         Test2 test2 = new Test2();
-        assure(
+        assertTrue(
             "Test2",
             UnoRuntime.areSame(
                 UnoRuntime.queryInterface(Ifc.class, test2), test2));
     }
 
-    public void test_completeValue() {
-        assure(
-            UnoRuntime.completeValue(Type.UNSIGNED_LONG, null).equals(
-                new Integer(0)));
+    @Test public void test_completeValue() {
+        assertEquals(
+            new Integer(0), UnoRuntime.completeValue(Type.UNSIGNED_LONG, null));
         Object v = UnoRuntime.completeValue(
             new Type("[][]unsigned long"), null);
-        assure(v instanceof int[][]);
-        assure(((int[][]) v).length == 0);
-        assure(
-            UnoRuntime.completeValue(new Type(TypeClass.class), null) ==
-            TypeClass.VOID);
+        assertTrue(v instanceof int[][]);
+        assertEquals(0, ((int[][]) v).length);
+        assertSame(
+            TypeClass.VOID,
+            UnoRuntime.completeValue(new Type(TypeClass.class), null));
         v = UnoRuntime.completeValue(
             new Type("com.sun.star.beans.Optional<unsigned long>"), null);
-        assure(v instanceof Optional);
-        assure(!((Optional) v).IsPresent);
-        assure(((Optional) v).Value == null);
+        assertTrue(v instanceof Optional);
+        assertFalse(((Optional) v).IsPresent);
+        assertNull(((Optional) v).Value);
     }
 
-    public void test_currentContext() throws InterruptedException {
+    @Test public void test_currentContext() throws InterruptedException {
         TestThread t1 = new TestThread();
         TestThread t2 = new TestThread();
         t1.start();
@@ -132,10 +118,10 @@ public final class UnoRuntime_Test extends ComplexTestCase {
         t2.join();
         Object v1 = t1.context.getValueByName("");
         Object v2 = t2.context.getValueByName("");
-        assure("", t1.context != t2.context);
-        assure("", v1 == t1);
-        assure("", v2 == t2);
-        assure("", v1 != v2);
+        assertFalse(t1.context == t2.context);
+        assertTrue(v1 == t1);
+        assertTrue(v2 == t2);
+        assertFalse(v1 == v2);
     }
 
     private interface Ifc extends XInterface {}
@@ -194,13 +180,14 @@ public final class UnoRuntime_Test extends ComplexTestCase {
 
     private final class TestThread extends Thread {
         public void run() {
-            assure("", UnoRuntime.getCurrentContext() == null);
+            //TODO: JUnit does not notice if these asserts fail:
+            assertNull(UnoRuntime.getCurrentContext());
             context = new TestCurrentContext();
             UnoRuntime.setCurrentContext(context);
-            assure("", UnoRuntime.getCurrentContext() == context);
-            assure("", context.getValueByName("") == this);
+            assertSame(context, UnoRuntime.getCurrentContext());
+            assertSame(this, context.getValueByName(""));
             UnoRuntime.setCurrentContext(null);
-            assure("", UnoRuntime.getCurrentContext() == null);
+            assertNull(UnoRuntime.getCurrentContext());
         }
 
         public XCurrentContext context = null;

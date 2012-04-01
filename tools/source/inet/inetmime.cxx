@@ -1947,7 +1947,7 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
 // static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
-                                    const UniString & rBody,
+                                    const rtl::OUString& rBody,
                                     rtl_TextEncoding ePreferredEncoding,
                                     bool bInitialSpace)
 {
@@ -1959,7 +1959,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         INetMIMEEncodedWordOutputSink::SPACE_ALWAYS :
                         INetMIMEEncodedWordOutputSink::SPACE_NO,
                     ePreferredEncoding);
-        aOutput.write(rBody.GetBuffer(), rBody.GetBuffer() + rBody.Len());
+        aOutput.write(rBody.getStr(), rBody.getStr() + rBody.getLength());
         aOutput.flush();
     }
     else
@@ -1967,8 +1967,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
         enum Brackets { BRACKETS_OUTSIDE, BRACKETS_OPENING, BRACKETS_INSIDE };
         Brackets eBrackets = BRACKETS_OUTSIDE;
 
-        const sal_Unicode * pBodyPtr = rBody.GetBuffer();
-        const sal_Unicode * pBodyEnd = pBodyPtr + rBody.Len();
+        const sal_Unicode * pBodyPtr = rBody.getStr();
+        const sal_Unicode * pBodyEnd = pBodyPtr + rBody.getLength();
         while (pBodyPtr != pBodyEnd)
             switch (*pBodyPtr)
             {
@@ -2757,7 +2757,7 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 
 //============================================================================
 // static
-UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
+rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                           const rtl::OString& rBody)
 {
     // Due to a bug in INetCoreRFC822MessageStream::ConvertTo7Bit(), old

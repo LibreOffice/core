@@ -164,7 +164,7 @@ class ResId
     sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
 
-    static TOOLS_DLLPUBLIC rtl::OUString toString(const ResId& aId);
+    static TOOLS_DLLPUBLIC rtl::OUString toString(const ResId& rId);
 };
 
 #endif // _RESID_HXX

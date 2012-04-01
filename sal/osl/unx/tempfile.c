@@ -31,9 +31,6 @@
 /*****************************************************************/
 
 #include <stdio.h>
-#if defined(NETBSD)
-#include <paths.h>
-#endif
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>

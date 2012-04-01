@@ -86,17 +86,11 @@ public:
                                        Window* pParent, const ResId& rResId );
                         ~SvxContourDlg();
 
-    void                SetExecState( sal_Bool bEnable );
-
-    void                SetGraphic( const Graphic& rGraphic );
-    void                SetGraphicLinked( sal_Bool bLinked );
     const Graphic&      GetGraphic() const;
     sal_Bool                IsGraphicChanged() const;
 
-    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     PolyPolygon         GetPolyPolygon();
 
-    void                SetEditingObject( void* pObj );
     const void*         GetEditingObject() const;
 
     void                Update( const Graphic& rGraphic, sal_Bool bGraphicLinked,
@@ -105,8 +99,6 @@ public:
     static PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const Rectangle* pRect = NULL,
                                             const sal_uIntPtr nFlags = 0L );
-    static void         ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic,
-                                      const MapUnit eUnit, const Size& rDisplaySize );
 };
 
 /*************************************************************************

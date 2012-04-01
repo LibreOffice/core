@@ -234,11 +234,6 @@ namespace drawinglayer
             return mpSdrFillBitmapAttribute->getStretch();
         }
 
-        bool SdrFillBitmapAttribute::getLogSize() const
-        {
-            return mpSdrFillBitmapAttribute->getLogSize();
-        }
-
         FillBitmapAttribute SdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const
         {
             // get logical size of bitmap (before expanding eventually)

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +26,11 @@
 #
 #*************************************************************************
 
+set -o pipefail
+
 # environment setup yet?
 if [ -z "$TARFILE_LOCATION" ]; then
-    . ./config_host.mk && . ./Env.Host.sh
+    . ./config_host.mk
 fi
 
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet

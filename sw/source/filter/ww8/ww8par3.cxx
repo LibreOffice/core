@@ -168,9 +168,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
+        maFieldStack.back().getParameters()["Description"] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()["Name"] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -217,14 +217,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
-                *pPaM, aBookmarkName,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX )) ) );
+                *pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
         OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_NAME))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_HELPTEXT))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
 
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
@@ -291,16 +290,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
         {
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
-                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
-                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN )) ) );
+                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
                 uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = uno::makeAny(nIndex);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);
                 // set field data here...
             }
         }
@@ -360,9 +358,9 @@ struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
 
 struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 {
-    long    nStartAt;       // start at value for this value
-    long    nV6DxaSpace;// Ver6-Compatible: min Space between Num anf text::Paragraph
-    long    nV6Indent;  // Ver6-Compatible: Breite des Prefix Textes; ggfs. zur
+    sal_Int32 nStartAt;       // start at value for this value
+    sal_Int32 nV6DxaSpace;// Ver6-Compatible: min Space between Num anf text::Paragraph
+    sal_Int32 nV6Indent;  // Ver6-Compatible: Breite des Prefix Textes; ggfs. zur
                         // Definition d. Erstzl.einzug nutzen!
     // Absatzattribute aus GrpprlPapx
     sal_uInt16  nDxaLeft;               // linker Einzug
@@ -385,7 +383,7 @@ struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 
 struct WW8LFOLVL
 {
-    long nStartAt;          // start-at value if bFormat==false and bStartAt == true
+    sal_Int32 nStartAt;          // start-at value if bFormat==false and bStartAt == true
                                             // (if bFormat==true, the start-at is stored in the LVL)
     sal_uInt8 nLevel;               // the level to be overridden
     // dieses Byte ist _absichtlich_ nicht in das folgende Byte hineingepackt   !!
@@ -547,8 +545,6 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     sal_uInt8 ixchFollow(0);
     rSt >> ixchFollow;
-    if (ixchFollow == 0)
-        rReader.maTracer.Log(sw::log::eTabInNumbering);
     rSt >> aLVL.nV6DxaSpace;
     rSt >> aLVL.nV6Indent;
     rSt >> aLVL.nLenGrpprlChpx;
@@ -2187,7 +2183,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         {
             if ( iRes != 25 )
                 nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") ) :  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
+            sDefault = ( wDef == 0 ) ? rtl::OUString( "0" ) :  rtl::OUString( "1" );
         }
     }
     // xstzTextFormat
@@ -2400,15 +2396,15 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
 
     uno::Any aTmp;
-    if (sTitle.Len())
-        aTmp <<= rtl::OUString(sTitle);
+    if (!sTitle.isEmpty())
+        aTmp <<= sTitle;
     else
-        aTmp <<= rtl::OUString(sName);
+        aTmp <<= sName;
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
-    if (sToolTip.Len())
+    if (!sToolTip.isEmpty())
     {
-        aTmp <<= rtl::OUString(sToolTip);
+        aTmp <<= sToolTip;
         xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
     }
 
@@ -2468,7 +2464,7 @@ static void lcl_AddToPropertyContainer
         uno::Any aAny(C2U(""));
         xPropContainer->addProperty
             (rPropertyName,
-             static_cast<sal_Int16>(beans::PropertyAttribute::BOUND ||
+             static_cast<sal_Int16>(beans::PropertyAttribute::BOUND |
                                     beans::PropertyAttribute::REMOVABLE),
              aAny);
     }
@@ -2496,19 +2492,19 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     rSz.Height = 16 * hpsCheckBox;
 
     uno::Any aTmp;
-    if (sTitle.Len())
-        aTmp <<= rtl::OUString(sTitle);
+    if (!sTitle.isEmpty())
+        aTmp <<= sTitle;
     else
-        aTmp <<= rtl::OUString(sName);
+        aTmp <<= sName;
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
     aTmp <<= (sal_Int16)nChecked;
     xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
 
-    if( sToolTip.Len() )
+    if (!sToolTip.isEmpty())
         lcl_AddToPropertyContainer(xPropSet, C2U("HelpText"), sToolTip);
 
-    if( sHelp.Len() )
+    if (!sHelp.isEmpty())
         lcl_AddToPropertyContainer(xPropSet, C2U("HelpF1Text"), sHelp);
 
     return sal_True;

@@ -40,7 +40,7 @@ namespace connectivity
         {
         public:
             WpADOTable(_ADOTable* pInt=NULL)    :   WpOLEBase<_ADOTable>(pInt){}
-            WpADOTable(const WpADOTable& rhs){operator=(rhs);}
+            WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
 
             inline WpADOTable& operator=(const WpADOTable& rhs)
                 {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}

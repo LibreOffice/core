@@ -1284,15 +1284,23 @@ void SdXMLStylesContext::EndElement()
 //
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
-    UniString sPrefix(rMaster.GetDisplayName());
-    sPrefix += sal_Unicode('-');
+    const uno::Reference<container::XNameAccess>& rStyleFamilies =
+        GetSdImport().GetLocalDocStyleFamilies();
 
-    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName())) try
+    if (!rStyleFamilies.is())
+        return;
+
+    if (!rStyleFamilies->hasByName(rMaster.GetDisplayName()))
+        return;
+
+    try
     {
-        uno::Reference< container::XNameAccess > xMasterPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
+        rtl::OUString sPrefix(rMaster.GetDisplayName());
+        sPrefix += rtl::OUString(static_cast<sal_Unicode>('-'));
         ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
         OSL_FAIL( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
     }
@@ -1309,8 +1317,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
         const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics")));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
-        UniString aPrefix;
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, aPrefix);
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, rtl::OUString());
     }
     catch( uno::Exception& )
     {
@@ -1325,8 +1332,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
         const OUString sCellStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("cell")));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
 
-        UniString aPrefix;
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, aPrefix);
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString());
     }
     catch( uno::Exception& )
     {
@@ -1337,9 +1343,9 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 //////////////////////////////////////////////////////////////////////////////
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 //
-void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const UniString& rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const rtl::OUString& rPrefix) const
 {
-    xub_StrLen nPrefLen(rPrefix.Len());
+    sal_Int32 nPrefLen(rPrefix.getLength());
 
     sal_uInt32 a;
 

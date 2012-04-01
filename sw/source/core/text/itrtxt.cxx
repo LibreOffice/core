@@ -43,7 +43,6 @@
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"
-#include "txtfrm.hxx"
 
 /*************************************************************************
  *                      SwTxtIter::CtorInitTxtIter()

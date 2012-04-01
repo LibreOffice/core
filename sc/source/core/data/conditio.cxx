@@ -649,7 +649,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             else
             {
                 bIsStr1 = sal_True;
-                pEff1->GetString( aStrVal1 );
+                aStrVal1 = pEff1->GetString();
                 nVal1 = 0.0;
             }
         }
@@ -678,7 +678,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             else
             {
                 bIsStr2 = sal_True;
-                pEff2->GetString( aStrVal2 );
+                aStrVal2 = pEff2->GetString();
                 nVal2 = 0.0;
             }
         }
@@ -716,16 +716,16 @@ static sal_Bool lcl_GetCellContent( ScBaseCell* pCell, sal_Bool bIsStr1, double&
                     if (bVal)
                         rArg = pFCell->GetValue();
                     else
-                        pFCell->GetString(rArgStr);
+                        rArgStr = pFCell->GetString();
                 }
                 break;
             case CELLTYPE_STRING:
             case CELLTYPE_EDIT:
                 bVal = false;
                 if ( eType == CELLTYPE_STRING )
-                    ((ScStringCell*)pCell)->GetString(rArgStr);
+                    rArgStr = ((ScStringCell*)pCell)->GetString();
                 else
-                    ((ScEditCell*)pCell)->GetString(rArgStr);
+                    rArgStr = ((ScEditCell*)pCell)->GetString();
                 break;
 
             default:
@@ -1672,15 +1672,6 @@ void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
     sal_uInt16 nCount = Count();
     for (sal_uInt16 i=0; i<nCount; i++)
         (*this)[i]->SourceChanged( rAddr );
-}
-
-bool ScConditionalFormatList::MarkUsedExternalReferences() const
-{
-    bool bAllMarked = false;
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; !bAllMarked && i<nCount; i++)
-        bAllMarked = (*this)[i]->MarkUsedExternalReferences();
-    return bAllMarked;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

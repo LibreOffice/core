@@ -49,7 +49,7 @@ class HeaderFooterDialog : public TabDialog
 {
 private:
     DECL_LINK( ActivatePageHdl, TabControl * );
-    DECL_LINK( DeactivatePageHdl, TabControl * );
+    DECL_LINK( DeactivatePageHdl, void * );
 
     TabControl      maTabCtrl;
 

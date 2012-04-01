@@ -51,6 +51,11 @@ gb_COMPILERDEFS += \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
 
 
+ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
+gb_COMPILERDEFS += \
+        -DHAVE_SFINAE_ANONYMOUS_BROKEN \
+
+endif
 
 gb_CFLAGS := \
 	-isysroot $(gb_SDKDIR) \
@@ -59,6 +64,9 @@ gb_CFLAGS := \
 	-fno-strict-aliasing \
     #-Wshadow \ break in compiler headers already
 
+# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
+# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
+# Feb 1, 2006:
 gb_CXXFLAGS := \
 	-isysroot $(gb_SDKDIR) \
 	$(gb_CXXFLAGS_COMMON) \
@@ -110,6 +118,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_OBJCXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -127,6 +136,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
 	$(gb_CC) \
 		$(DEFS) $(T_OBJCFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
@@ -155,10 +165,10 @@ $(if $(3),-install_name '$(3)$(1)$(if $(2),.$(2))',
 	$(call gb_Output_error,cannot determine -install_name for $(3)))
 endef
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS)
-gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
+gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CFLAGS += -g

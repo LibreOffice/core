@@ -589,12 +589,6 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
 }
 
 // -----------------------------------------------------------------------
-SymbolAlign Button::ImplGetSymbolAlign() const
-{
-    return mpButtonData->meSymbolAlign;
-}
-
-// -----------------------------------------------------------------------
 void Button::ImplSetSmallSymbol( sal_Bool bSmall )
 {
     mpButtonData->mbSmallSymbol = bSmall;
@@ -1621,12 +1615,6 @@ void PushButton::SetSymbol( SymbolType eSymbol )
 void PushButton::SetSymbolAlign( SymbolAlign eAlign )
 {
     ImplSetSymbolAlign( eAlign );
-}
-
-// -----------------------------------------------------------------------
-SymbolAlign PushButton::GetSymbolAlign() const
-{
-    return ImplGetSymbolAlign();
 }
 
 // -----------------------------------------------------------------------
@@ -3959,14 +3947,6 @@ Size CheckBox::GetOptimalSize(WindowSizeType eType) const
 }
 
 // =======================================================================
-
-ImageButton::ImageButton( WindowType nType ) :
-    PushButton( nType )
-{
-    ImplInitStyle();
-}
-
-// -----------------------------------------------------------------------
 
 ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
     PushButton( pParent, nStyle )

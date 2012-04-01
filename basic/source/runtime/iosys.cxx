@@ -45,8 +45,6 @@
 #include <rtl/textenc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/textenc.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -562,7 +560,7 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
 
 
 SbError SbiStream::Open
-( short nCh, const ByteString& rName, short nStrmMode, short nFlags, short nL )
+( short nCh, const rtl::OString& rName, short nStrmMode, short nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
@@ -571,7 +569,7 @@ SbError SbiStream::Open
     nExpandOnWriteTo = 0;
     if( ( nStrmMode & ( STREAM_READ|STREAM_WRITE ) ) == STREAM_READ )
         nStrmMode |= STREAM_NOCREATE;
-    String aStr( rName, osl_getThreadTextEncoding() );
+    String aStr(rtl::OStringToOUString(rName, osl_getThreadTextEncoding()));
     String aNameStr = getFullPath( aStr );
 
     if( hasUno() )
@@ -642,14 +640,12 @@ SbError SbiStream::Close()
     return nError;
 }
 
-SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerByte )
+SbError SbiStream::Read(rtl::OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
 {
     nExpandOnWriteTo = 0;
     if( !bForceReadingPerByte && IsText() )
     {
-        rtl::OString aBuffer;
-        pStrm->ReadLine(aBuffer);
-        rBuf = aBuffer;
+        pStrm->ReadLine(rBuf);
         nLine++;
     }
     else
@@ -673,13 +669,13 @@ SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerBy
 SbError SbiStream::Read( char& ch )
 {
     nExpandOnWriteTo = 0;
-    if( !aLine.Len() )
+    if (aLine.isEmpty())
     {
         Read( aLine, 0 );
-        aLine += '\n';
+        aLine = aLine + rtl::OString('\n');
     }
-    ch = aLine.GetBuffer()[0];
-    aLine.Erase( 0, 1 );
+    ch = aLine[0];
+    aLine = aLine.copy(1);
     return nError;
 }
 
@@ -705,16 +701,15 @@ void SbiStream::ExpandFile()
 
 namespace
 {
-    void WriteLines(SvStream &rStream, const ByteString& rStr)
+    void WriteLines(SvStream &rStream, const rtl::OString& rStr)
     {
-        ByteString aStr( rStr );
-        aStr.ConvertLineEnd( rStream.GetLineDelimiter() );
-        rStream.Write( aStr.GetBuffer(), aStr.Len() );
+        rtl::OString aStr(convertLineEnd(rStr, rStream.GetLineDelimiter()) );
+        write_uInt8s_FromOString(rStream, rStr);
         endl( rStream );
     }
 }
 
-SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
+SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
 {
     ExpandFile();
     if( IsAppend() )
@@ -722,25 +717,26 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
 
     if( IsText() )
     {
-        aLine += rBuf;
+        aLine = aLine + rBuf;
         // Get it out, if the end is an LF, but strip CRLF before,
         // because the SvStrm adds a CRLF!
-        sal_uInt16 nLineLen = aLine.Len();
-        if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0A )
+        sal_Int32 nLineLen = aLine.getLength();
+        if (nLineLen && aLine[--nLineLen] == 0x0A)
         {
-            aLine.Erase( nLineLen );
-            if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0D )
-                aLine.Erase( nLineLen );
+            aLine = aLine.copy(0, nLineLen);
+            if (nLineLen && aLine[--nLineLen] == 0x0D)
+                aLine = aLine.copy(0, nLineLen);
             WriteLines(*pStrm, aLine);
-            aLine.Erase();
+            aLine = rtl::OString();
         }
     }
     else
     {
-        if( !n ) n = nLen;
+        if( !n )
+            n = nLen;
         if( !n )
             return nError = SbERR_BAD_RECORD_LENGTH;
-        pStrm->Write( rBuf.GetBuffer(), n );
+        pStrm->Write(rBuf.getStr(), n);
         MapError();
     }
     return nError;
@@ -774,8 +770,7 @@ SbError SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open
-    ( short nCh, const ByteString& rName, short nMode, short nFlags, short nLen )
+void SbiIoSystem::Open(short nCh, const rtl::OString& rName, short nMode, short nFlags, short nLen)
 {
     nError = 0;
     if( nCh >= CHANNELS || !nCh )
@@ -824,9 +819,9 @@ void SbiIoSystem::Shutdown()
     }
     nChan = 0;
     // anything left to PRINT?
-    if( aOut.Len() )
+    if( !aOut.isEmpty() )
     {
-        String aOutStr( aOut, osl_getThreadTextEncoding() );
+        rtl::OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
 #if defined GCC
         Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), String(), aOutStr ).Execute();
@@ -834,11 +829,11 @@ void SbiIoSystem::Shutdown()
         MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), String(), aOutStr ).Execute();
 #endif
     }
-    aOut.Erase();
+    aOut = rtl::OString();
 }
 
 
-void SbiIoSystem::Read( ByteString& rBuf, short n )
+void SbiIoSystem::Read(rtl::OString& rBuf, short n)
 {
     if( !nChan )
         ReadCon( rBuf );
@@ -853,13 +848,13 @@ char SbiIoSystem::Read()
     char ch = ' ';
     if( !nChan )
     {
-        if( !aIn.Len() )
+        if( aIn.isEmpty() )
         {
             ReadCon( aIn );
-            aIn += '\n';
+            aIn = aIn + rtl::OString('\n');
         }
-        ch = aIn.GetBuffer()[0];
-        aIn.Erase( 0, 1 );
+        ch = aIn[0];
+        aIn = aIn.copy(1);
     }
     else if( !pChan[ nChan ] )
         nError = SbERR_BAD_CHANNEL;
@@ -868,7 +863,7 @@ char SbiIoSystem::Read()
     return ch;
 }
 
-void SbiIoSystem::Write( const ByteString& rBuf, short n )
+void SbiIoSystem::Write(const rtl::OString& rBuf, short n)
 {
     if( !nChan )
         WriteCon( rBuf );
@@ -876,17 +871,6 @@ void SbiIoSystem::Write( const ByteString& rBuf, short n )
         nError = SbERR_BAD_CHANNEL;
     else
         nError = pChan[ nChan ]->Write( rBuf, n );
-}
-
-short SbiIoSystem::NextChannel()
-{
-    for( short i = 1; i < CHANNELS; i++ )
-    {
-        if( !pChan[ i ] )
-            return i;
-    }
-    nError = SbERR_TOO_MANY_FILES;
-    return CHANNELS;
 }
 
 // nChannel == 0..CHANNELS-1
@@ -921,7 +905,7 @@ void SbiIoSystem::CloseAll(void)
 ***************************************************************************/
 
 
-void SbiIoSystem::ReadCon( ByteString& rIn )
+void SbiIoSystem::ReadCon(rtl::OString& rIn)
 {
     String aPromptStr( aPrompt, osl_getThreadTextEncoding() );
     SbiInputDialog aDlg( NULL, aPromptStr );
@@ -929,27 +913,29 @@ void SbiIoSystem::ReadCon( ByteString& rIn )
         rIn = rtl::OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
     else
         nError = SbERR_USER_ABORT;
-    aPrompt.Erase();
+    aPrompt = rtl::OString();
 }
 
 // output of a MessageBox, if theres a CR in the console-buffer
 
-void SbiIoSystem::WriteCon( const ByteString& rText )
+void SbiIoSystem::WriteCon(const rtl::OString& rText)
 {
     aOut += rText;
-    sal_uInt16 n1 = aOut.Search( '\n' );
-    sal_uInt16 n2 = aOut.Search( '\r' );
-    if( n1 != STRING_NOTFOUND || n2 != STRING_NOTFOUND )
+    sal_Int32 n1 = aOut.indexOf('\n');
+    sal_Int32 n2 = aOut.indexOf('\r');
+    if( n1 != -1 || n2 != -1 )
     {
-        if( n1 == STRING_NOTFOUND ) n1 = n2;
-        else
-        if( n2 == STRING_NOTFOUND ) n2 = n1;
-        if( n1 > n2 ) n1 = n2;
-        ByteString s( aOut.Copy( 0, n1 ) );
-        aOut.Erase( 0, n1 );
-        while( aOut.GetBuffer()[0] == '\n' || aOut.GetBuffer()[0] == '\r' )
-            aOut.Erase( 0, 1 );
-        String aStr( s, osl_getThreadTextEncoding() );
+        if( n1 == -1 )
+            n1 = n2;
+        else if( n2 == -1 )
+            n2 = n1;
+        if( n1 > n2 )
+            n1 = n2;
+        rtl::OString s(aOut.copy(0, n1));
+        aOut = aOut.copy(n1);
+        while (aOut[0] == '\n' || aOut[0] == '\r')
+            aOut = aOut.copy(1);
+        String aStr(rtl::OStringToOUString(s, osl_getThreadTextEncoding()));
         {
             SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),

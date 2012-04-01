@@ -39,7 +39,6 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
     bHori( bHoriz ),
     bAuto( sal_False ),
-    bThumbEnabled( sal_True ),
     bVisible(sal_False),
     bSizeSet(sal_False)
 {
@@ -87,8 +86,7 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
 
     SetVisibleSize( nVisible );
     DocSzChgd(aDocSz);
-    if ( bThumbEnabled )
-        SetThumbPos( nThumb );
+    SetThumbPos( nThumb );
     if(bAuto)
         AutoShow();
 }

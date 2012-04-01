@@ -37,14 +37,33 @@
 #include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
+#include <rtl/stringutils.hxx>
+
 #include "sal/log.hxx"
 
 #if !defined EXCEPTIONS_OFF
 #include <new>
 #endif
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+// helper macro to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#endif
 
 /* ======================================================================= */
 
@@ -143,13 +162,56 @@ public:
     /**
       New string from a character buffer array.
 
+      Note: The argument type is always either char* or const char*. The template is
+      used only for technical reasons, as is the second argument.
+
       @param    value       a NULL-terminated character array.
     */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    // Old gcc can try to convert anonymous enums to OString and give compile error.
+    // So there's no special-cased handling of string literals.
+    // These are inline functions and technically both variants should work
+    // the same in practice, so there should be no compatibility problem.
     OString( const sal_Char * value ) SAL_THROW(())
+     {
+         pData = 0;
+         rtl_string_newFromStr( &pData, value );
+     }
+#else
+    template< typename T >
+    OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
+
+    template< typename T >
+    OString( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a string literal.
+
+      If there are any embedded \0's in the string literal, the result is undefined.
+      Use the overload that explicitly accepts length.
+      @since LibreOffice 3.6
+
+      @param    literal       a string literal
+    */
+    template< typename T >
+    OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
     /**
       New string from a character buffer array.
@@ -187,7 +249,7 @@ public:
         rtl_uString2String( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -210,6 +272,19 @@ public:
     OString & operator=( const OString & str ) SAL_THROW(())
     {
         rtl_string_assign( &pData, str.pData );
+        return *this;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal ) SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -299,7 +374,7 @@ public:
       the strings and return a value indicating their relationship.
       This function can't be used for language specific sorting.
 
-      @param    str         the object to be compared.
+      @param    rObj        the object to be compared.
       @param    maxLength   the maximum count of characters to be compared.
       @return   0 - if both strings are equal
                 < 0 - if this string is less than the string argument
@@ -412,14 +487,46 @@ public:
       127. The ASCII string must be NULL-terminated.
       This function can't be used for language specific comparison.
 
+      Note: The argument type is always either char* or const char*, the return type is bool.
+      The template is used only for technical reasons.
+
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
     sal_Bool equalsIgnoreAsciiCase( const sal_Char * asciiStr ) const SAL_THROW(())
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
+#else
+    template< typename T >
+    typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const SAL_THROW(())
+    {
+        return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
+    }
+
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const SAL_THROW(())
+    {
+        return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
+            return false;
+        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                          literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+    }
+#endif
 
     /**
       Perform a ASCII lowercase comparison of two strings.
@@ -471,6 +578,53 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rtl_str_shortenedCompare_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1) == 0;
+    }
+
+    /**
+      Match against a substring appearing in this string.
+
+      @param str  the substring to be compared; must not be null and must point
+      to memory of at least strLength bytes
+
+      @param strLength  the length of the substring; must be non-negative
+
+      @param fromIndex  the index into this string to start the comparison at;
+      must be non-negative and not greater than this string's length
+
+      @return true if and only if the given str is contained as a substring of
+      this string at the given fromIndex
+
+      @since LibreOffice 3.6
+    */
+    bool matchL(
+        char const * str, sal_Int32 strLength, sal_Int32 fromIndex = 0)
+        const
+    {
+        return rtl_str_shortenedCompare_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            str, strLength, strLength) == 0;
+    }
+
+    // This overload is left undefined, to detect calls of matchL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
+
+    /**
       Match against a substring appearing in this string, ignoring the case of
       ASCII letters.
 
@@ -495,20 +649,69 @@ public:
                                                                    str.pData->length ) == 0;
     }
 
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+    }
+
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWith(OString const & str) const {
+        return str.getLength() <= getLength()
+            && match(str, getLength() - str.getLength());
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
+            && match(literal, getLength() - ( internal::ConstCharArrayDetector< T, void >::size - 1 ));
+    }
+
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared; must not be null and must point
+      to memory of at least strLength bytes
+
+      @param strLength  the length of the substring; must be non-negative
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWithL(char const * str, sal_Int32 strLength) const {
+        return strLength <= getLength()
+            && matchL(str, strLength, getLength() - strLength);
+    }
+
     friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.getLength() == rStr2.getLength() && rStr1.compareTo( rStr2 ) == 0; }
-    friend sal_Bool     operator == ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
-                        { return rStr1.compareTo( pStr2 ) == 0; }
-    friend sal_Bool     operator == ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
-                        { return OString( pStr1 ).compareTo( rStr2 ) == 0; }
-
     friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool     operator != ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
-                        { return !(operator == ( rStr1, pStr2 )); }
-    friend sal_Bool     operator != ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
-                        { return !(operator == ( pStr1, rStr2 )); }
-
     friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) < 0; }
     friend sal_Bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
@@ -517,6 +720,104 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value ) SAL_THROW(())
+    {
+        return rStr1.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value ) SAL_THROW(())
+    {
+        return rStr1.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 ) SAL_THROW(())
+    {
+        return rStr2.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 ) SAL_THROW(())
+    {
+        return rStr2.compareTo( value ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal ) SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr ) SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value ) SAL_THROW(())
+    {
+        return !(operator == ( rStr1, value ));
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value ) SAL_THROW(())
+    {
+        return !(operator == ( rStr1, value ));
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 ) SAL_THROW(())
+    {
+        return !(operator == ( value, rStr2 ));
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 ) SAL_THROW(())
+    {
+        return !(operator == ( value, rStr2 ));
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal ) SAL_THROW(())
+    {
+        return !( rStr == literal );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr ) SAL_THROW(())
+    {
+        return !( literal == rStr );
+    }
 
     /**
       Returns a hashcode for this string.
@@ -601,6 +902,54 @@ public:
                                                        str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
     }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        sal_Int32 n = rtl_str_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
+        return n < 0 ? n : n + fromIndex;
+    }
+
+    /**
+      Returns the index within this string of the first occurrence of the
+      specified substring, starting at the specified index.
+
+      If str doesn't include any character, always -1 is
+      returned. This is also the case, if both strings are empty.
+
+      @param    str         the substring to search for.
+      @param    len         the length of the substring.
+      @param    fromIndex   the index to start the search from.
+      @return   If the string argument occurs one or more times as a substring
+                within this string at the starting index, then the index
+                of the first character of the first such substring is
+                returned. If it does not occur as a substring starting
+                at fromIndex or beyond, -1 is returned.
+
+      @since LibreOffice 3.6
+    */
+    sal_Int32 indexOfL(char const * str, sal_Int32 len, sal_Int32 fromIndex = 0)
+        const SAL_THROW(())
+    {
+        sal_Int32 n = rtl_str_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, str, len);
+        return n < 0 ? n : n + fromIndex;
+    }
+
+    // This overload is left undefined, to detect calls of indexOfL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void indexOfL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
 
     /**
       Returns the index within this string of the last occurrence of
@@ -754,6 +1103,56 @@ public:
     }
 
     /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OString replaceFirst(
+        OString const & from, OString const & to, sal_Int32 * index = 0) const
+    {
+        rtl_String * s = 0;
+        sal_Int32 i = 0;
+        rtl_string_newReplaceFirst(
+            &s, pData, from.pData->buffer, from.pData->length,
+            to.pData->buffer, to.pData->length, index == 0 ? &i : index);
+        return OString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    OString replaceAll(OString const & from, OString const & to) const {
+        rtl_String * s = 0;
+        rtl_string_newReplaceAll(
+            &s, pData, from.pData->buffer, from.pData->length,
+            to.pData->buffer, to.pData->length);
+        return OString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
       Converts from this string all ASCII uppercase characters (65-90)
       to ASCII lowercase characters (97-122).
 
@@ -834,6 +1233,24 @@ public:
         rtl_String * pNew = 0;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
         return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+      Returns a token from the string.
+
+      The same as getToken(sal_Int32, sal_Char, sal_Int32 &), but always passing
+      in 0 as the start index in the third argument.
+
+      @param count  the number of the token to return, starting with 0
+      @param separator  the character which separates the tokens
+
+      @return  the given token, or an empty string
+
+      @since LibreOffice 3.6
+     */
+    OString getToken(sal_Int32 count, char separator) const {
+        sal_Int32 n = 0;
+        return getToken(count, separator, n);
     }
 
     /**
@@ -1012,6 +1429,19 @@ public:
 
 /* ======================================================================= */
 
+} /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OString OString;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
+
+namespace rtl
+{
+
 /** A helper to use OStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
@@ -1028,7 +1458,7 @@ struct OStringHash
         a hash code for the string.  This hash code should not be stored
         persistently, as its computation may change in later revisions.
      */
-    size_t operator()( const rtl::OString& rString ) const
+    size_t operator()( const OString& rString ) const
         { return (size_t)rString.hashCode(); }
 };
 

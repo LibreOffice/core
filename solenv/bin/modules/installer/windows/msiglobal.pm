@@ -202,7 +202,7 @@ sub generate_cab_file_list
             if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
 
             # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+            $sourcepath = make_relative_ddf_path($sourcepath);
 
             # all files with the same cabinetfile have increasing sequencenumbers
 
@@ -224,7 +224,7 @@ sub generate_cab_file_list
                 $sourcepath =  $nextfile->{'sourcepath'};
                 if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
                 # to avoid lines with more than 256 characters, it can be useful to use relative paths
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+                $sourcepath = make_relative_ddf_path($sourcepath);
                 $uniquename =  $nextfile->{'uniquename'};
                 my $localdoinclude = 1;
                 my $nextfilestyles = "";
@@ -296,7 +296,7 @@ sub generate_cab_file_list
             if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
 
             # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+            $sourcepath = make_relative_ddf_path($sourcepath);
 
             my @ddffile = ();
 
@@ -317,7 +317,7 @@ sub generate_cab_file_list
                 $sourcepath =  $nextfile->{'sourcepath'};
                 if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
                 # to avoid lines with more than 256 characters, it can be useful to use relative paths
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+                $sourcepath = make_relative_ddf_path($sourcepath);
                 $uniquename =  $nextfile->{'uniquename'};
                 my $localdoinclude = 1;
                 my $nextfilestyles = "";
@@ -376,7 +376,7 @@ sub generate_cab_file_list
 
 
             # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+            $sourcepath = make_relative_ddf_path($sourcepath);
 
             # all files with the same cabinetfile are directly behind each other in the files collector
 
@@ -397,7 +397,7 @@ sub generate_cab_file_list
                 $sourcepath =  $nextfile->{'sourcepath'};
                 if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
                 # to avoid lines with more than 256 characters, it can be useful to use relative paths
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+                $sourcepath = make_relative_ddf_path($sourcepath);
                 $uniquename =  $nextfile->{'uniquename'};
                 my $localdoinclude = 1;
                 my $nextfilestyles = "";
@@ -459,7 +459,7 @@ sub generate_cab_file_list
             my $uniquename =  $onefile->{'uniquename'};
 
             # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+            $sourcepath = make_relative_ddf_path($sourcepath);
 
             if ( $counter == 1 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
 
@@ -513,7 +513,7 @@ sub generate_cab_file_list
             my $uniquename =  $onefile->{'uniquename'};
 
             # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+            $sourcepath = make_relative_ddf_path($sourcepath);
 
             if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
 
@@ -1111,6 +1111,19 @@ sub create_transforms
         chdir($installdir);
         $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . $windowslanguage;
         system($systemcall);
+        # fdo#46181 - zh-HK and zh-MO should have fallen back to zh-TW not to zh-CN
+        # we need to hack zh-HK and zh-MO LCIDs directly into the MSI
+        if($windowslanguage eq '1028')
+        {
+            rename 1028,3076;
+            $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . 3076;
+            system($systemcall);
+            rename 3076,5124;
+            $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . 5124;
+            system($systemcall);
+            $templatevalue = $templatevalue . "," . 3076 . "," . 5124;
+            rename 5124,1028;
+        }
         chdir($from);
         unlink($transformfile);
 
@@ -1597,14 +1610,11 @@ sub execute_packaging
     $infoline = "chdir: $to \n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # if the ddf file contains relative paths, it is necessary to change into the temp directory
-    if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} )
-    {
-        $to = $installer::globals::temppath;
-        chdir($to);
-        $infoline = "chdir: $to \n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
+    # the ddf file contains relative paths, it is necessary to change into the temp directory
+    $to = $installer::globals::temppath;
+    chdir($to);
+    $infoline = "chdir: $to \n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     # changing the tmp directory, because makecab.exe generates temporary cab files
     my $origtemppath = "";

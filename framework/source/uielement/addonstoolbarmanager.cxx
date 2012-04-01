@@ -421,7 +421,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     AddFrameActionListener();
 }
 
-IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, Click)
 {
     if ( m_bDisposed )
         return 1;
@@ -439,7 +439,7 @@ IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick)
 {
     if ( m_bDisposed )
         return 1;
@@ -457,7 +457,7 @@ IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Command, CommandEvent*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, Command)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -467,7 +467,7 @@ IMPL_LINK( AddonsToolBarManager, Command, CommandEvent*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, Select)
 {
     if ( m_bDisposed )
         return 1;
@@ -486,12 +486,12 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Activate, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, Activate)
 {
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Deactivate, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(AddonsToolBarManager, Deactivate)
 {
     return 1;
 }

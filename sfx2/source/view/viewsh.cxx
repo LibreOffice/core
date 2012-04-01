@@ -39,8 +39,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -75,7 +73,6 @@
 #include <sfx2/dispatch.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/docfac.hxx>
-#include "view.hrc"
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
 #include "sfx2/mailmodelapi.hxx"
@@ -86,15 +83,13 @@
 #include "workwin.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
-
-#include <comphelper/processfactory.hxx>
+#include "openuriexternally.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::system;
 using namespace ::cppu;
 namespace css = ::com::sun::star;
 
@@ -728,28 +723,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     return;
                 }
 
-                ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute( xSMGR->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
-                    css::uno::UNO_QUERY );
-
-                sal_Bool bRet( sal_True );
-                if ( xSystemShellExecute.is() )
-                {
-                    try
-                    {
-                        xSystemShellExecute->execute(
-                            aFileURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        SolarMutexGuard aGuard;
-                        Window *pParent = SFX_APP()->GetTopWindow();
-                        ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
-                        bRet = sal_False;
-                    }
-                }
-
-                rReq.Done(bRet);
+                rReq.Done(sfx2::openUriExternally(aFileURL, true));
                 break;
             }
             else
@@ -1465,7 +1439,7 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
     With this virtual Method can a for example a Dialog be queried, to
     check if something is selected in the current view. If the Parameter
-    is <BOOL> TRUE then it is checked wether some text is selected.
+    is <BOOL> TRUE then it is checked whether some text is selected.
 */
 
 {

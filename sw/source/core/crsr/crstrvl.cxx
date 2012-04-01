@@ -710,7 +710,8 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
-            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex() );
+            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
+                        pDoc->IsClipBoard() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 

@@ -1573,27 +1573,6 @@ const CellPos& SvxTableController::getSelectionEnd()
 
 // --------------------------------------------------------------------
 
-Reference< XCellCursor > SvxTableController::getSelectionCursor()
-{
-    Reference< XCellCursor > xCursor;
-
-    if( mxTable.is() )
-    {
-        if( hasSelectedCells() )
-        {
-            CellPos aStart, aEnd;
-            getSelectedCells( aStart, aEnd );
-            xCursor = mxTable->createCursorByRange( mxTable->getCellRangeByPosition( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow ) );
-        }
-        else
-        {
-            xCursor = mxTable->createCursor();
-        }
-    }
-
-    return xCursor;
-}
-
 void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
 {
     if( mxTable.is() ) try
@@ -1766,13 +1745,6 @@ bool SvxTableController::StopTextEdit()
     {
         return false;
     }
-}
-
-// --------------------------------------------------------------------
-
-void SvxTableController::DeleteTable()
-{
-    //
 }
 
 // --------------------------------------------------------------------
@@ -1963,15 +1935,15 @@ void SvxTableController::updateSelectionOverlay()
                 SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(nIndex);
                 if( pPaintWindow )
                 {
-                    ::sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
-                    if( pOverlayManager )
+                    rtl::Reference < ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
+                    if( xOverlayManager.is() )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
                         sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_TRANSPARENT;
 
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
 
-                        pOverlayManager->add(*pOverlay);
+                        xOverlayManager->add(*pOverlay);
                         mpSelectionOverlay = new ::sdr::overlay::OverlayObjectList;
                         mpSelectionOverlay->append(*pOverlay);
                     }
@@ -2590,7 +2562,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( SvxTableController, UpdateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTableController, UpdateHdl)
 {
     mnUpdateEvent = 0;
 

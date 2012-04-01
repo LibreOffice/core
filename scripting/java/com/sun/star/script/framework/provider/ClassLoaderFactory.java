@@ -31,6 +31,7 @@ import java.net.*;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.uno.XComponentContext;
 
 /**
  *  Class Loader Factory
@@ -42,11 +43,12 @@ public class ClassLoaderFactory
 {
     private ClassLoaderFactory() {}
 
-    public static ClassLoader getURLClassLoader( ScriptMetaData scriptData )
+    public static ClassLoader getURLClassLoader(
+        XComponentContext context, ScriptMetaData scriptData )
         throws NoSuitableClassLoaderException, MalformedURLException
     {
         ClassLoader parent = scriptData.getClass().getClassLoader();
-        URL[] classPath = scriptData.getClassPath();
+        URL[] classPath = scriptData.getClassPath(context);
         LogUtils.DEBUG("Classpath has length " + classPath.length );
         for ( int i=0; i < classPath.length; i++ )
         {
@@ -55,20 +57,8 @@ public class ClassLoaderFactory
         return getURLClassLoader( parent, classPath );
     }
     public static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
-        throws NoSuitableClassLoaderException
     {
-        ClassLoader loader =
-            new URLClassLoader( classpath, parent);
-
-        if (loader != null)
-        {
-            return loader;
-        }
-        else
-        {
-            throw new NoSuitableClassLoaderException(
-                "Unable to create URLClassLoader");
-        }
+        return new URLClassLoader( classpath, parent);
     }
 
 }

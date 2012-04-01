@@ -122,6 +122,9 @@ public:
                         getSymbolProperties( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        getXErrorBarProperties( sal_Int32 index ) const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getYErrorBarProperties( sal_Int32 index ) const;
 
     bool hasPointOwnColor( sal_Int32 index ) const;
@@ -155,7 +158,7 @@ public:
     rtl::OUString       getCID() const;
     rtl::OUString       getSeriesParticle() const;
     rtl::OUString       getPointCID_Stub() const;
-    rtl::OUString       getErrorBarsCID() const;
+    rtl::OUString       getErrorBarsCID( bool bYError ) const;
     rtl::OUString       getLabelsCID() const;
     rtl::OUString       getLabelCID_Stub() const;
     rtl::OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
@@ -182,7 +185,8 @@ private: //methods
 public: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xLabelsGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorBarsGroupShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorXBarsGroupShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorYBarsGroupShape;
 
     //the following group shapes will be created as children of m_xGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
@@ -218,7 +222,7 @@ private: //member
 
     ::com::sun::star::chart2::StackingDirection     m_eStackingDirection;
 
-    sal_Int32               m_nAxisIndex;//indicates wether this is attached to a main or secondary axis
+    sal_Int32               m_nAxisIndex;//indicates whether this is attached to a main or secondary axis
 
     sal_Bool                m_bConnectBars;
 

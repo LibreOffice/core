@@ -708,7 +708,7 @@ public class Helper
                 Object oSystemShell = xContext.getServiceManager().createInstanceWithContext( "com.sun.star.system.SystemShellExecute", xContext );
                 XSystemShellExecute xSystemShell = (XSystemShellExecute)UnoRuntime.queryInterface( XSystemShellExecute.class, oSystemShell );
                 if ( xSystemShell != null )
-                    xSystemShell.execute( sURL, "", SystemShellExecuteFlags.DEFAULTS );
+                    xSystemShell.execute( sURL, "", SystemShellExecuteFlags.URIS_ONLY );
             }
             catch( Exception e )
             {

@@ -86,7 +86,7 @@ public:
     // general field/item access ----------------------------------------------
 
     /** Returns the name of the field, uses the passed visible name if supported. */
-    const String&       GetFieldName( const ScfStringVec& rVisNames ) const;
+    const rtl::OUString& GetFieldName( const ScfStringVec& rVisNames ) const;
 
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
@@ -224,7 +224,7 @@ public:
     explicit            XclImpPTItem( const XclImpPCField* pCacheField );
 
     /** Returns the internal name of the item or 0, if no name could be found. */
-    const String*       GetItemName() const;
+    const rtl::OUString* GetItemName() const;
 
     /** Reads an SXVI record containing data of this item. */
     void                ReadSxvi( XclImpStream& rStrm );
@@ -251,14 +251,14 @@ public:
     /** Returns the corresponding pivot cache field of this field. */
     const XclImpPCField* GetCacheField() const;
     /** Returns the name of this field that is used to create the Calc dimensions. */
-    const String&       GetFieldName() const;
+    rtl::OUString        GetFieldName() const;
     /** Returns the internally set visible name of this field. */
-    const String&       GetVisFieldName() const;
+    rtl::OUString        GetVisFieldName() const;
 
     /** Returns the specified item. */
     const XclImpPTItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the internal name of the specified item. */
-    const String*       GetItemName( sal_uInt16 nItemIdx ) const;
+    const rtl::OUString* GetItemName( sal_uInt16 nItemIdx ) const;
 
     /** Returns the flags of the axes this field is part of. */
     inline sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }
@@ -335,7 +335,7 @@ public:
     const String&       GetFieldName( sal_uInt16 nFieldIdx ) const;
 
     const XclImpPTField* GetDataField( sal_uInt16 nDataFieldIdx ) const;
-    const String&       GetDataFieldName( sal_uInt16 nDataFieldIdx ) const;
+    rtl::OUString GetDataFieldName( sal_uInt16 nDataFieldIdx ) const;
 
     // records ----------------------------------------------------------------
 

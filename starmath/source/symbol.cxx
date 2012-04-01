@@ -271,7 +271,7 @@ void SmSymbolManager::Load()
 
     // now add a %i... symbol to the 'iGreek' set for every symbol found in the 'Greek' set.
     SmLocalizedSymbolData   aLocalizedData;
-    const String aGreekSymbolSetName( aLocalizedData.GetUiSymbolSetName( A2OU("Greek") ) );
+    const String aGreekSymbolSetName( aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ) ));
     const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
     String aSymbolSetName( (sal_Unicode) 'i' );
     aSymbolSetName += aGreekSymbolSetName;
@@ -301,7 +301,7 @@ void SmSymbolManager::Save()
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
         String aSymbolSetName( (sal_Unicode) 'i' );
-        aSymbolSetName += aLocalizedData.GetUiSymbolSetName( A2OU("Greek") );
+        aSymbolSetName += aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ));
 
         SymbolPtrVec_t aTmp( GetSymbols() );
         std::vector< SmSym > aSymbols;

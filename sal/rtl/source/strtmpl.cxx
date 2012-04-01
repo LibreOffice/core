@@ -32,6 +32,7 @@
 /* ======================================================================= */
 
 #include <string.h>
+#include <sal/log.hxx>
 
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
@@ -47,6 +48,12 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
     }
 }
 */
+
+// for instrumentation / diagnostics
+#ifndef RTL_LOG_STRING_NEW
+#  define RTL_LOG_STRING_NEW(s)
+#  define RTL_LOG_STRING_DELETE(s)
+#endif
 
 #define rtl_str_ImplCopy( _pDest, _pSrc, _nCount )                  \
 {                                                                   \
@@ -1013,6 +1020,8 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
     }
 
     *ppThis = pData;
+
+    RTL_LOG_STRING_NEW( pData );
     return pDest;
 }
 
@@ -1054,6 +1063,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
     if ( pThis->refCount == 1 ||
          !osl_decrementInterlockedCount( &(pThis->refCount) ) )
     {
+        RTL_LOG_STRING_DELETE( pThis );
         rtl_freeMemory( pThis );
     }
 }
@@ -1111,8 +1121,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( pStr->length );
     OSL_ASSERT(*ppThis != NULL);
     rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer, pStr->length );
+    RTL_LOG_STRING_NEW( *ppThis );
 
-    /* must be done at least, if pStr == *ppThis */
+    /* must be done last, if pStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1155,7 +1166,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
     }
     while ( *pCharStr );
 
-    /* must be done at least, if pCharStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+
+    /* must be done last, if pCharStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1180,9 +1193,49 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
     OSL_ASSERT(*ppThis != NULL);
     rtl_str_ImplCopy( (*ppThis)->buffer, pCharStr, nLen );
 
-    /* must be done at least, if pCharStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+
+    /* must be done last, if pCharStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
+}
+
+/* ----------------------------------------------------------------------- */
+
+// Used when creating from string literals.
+void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis,
+                                                    const sal_Char* pCharStr,
+                                                    sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
+{
+    if ( !nLen )
+    {
+        IMPL_RTL_STRINGNAME( new )( ppThis );
+        return;
+    }
+
+    if ( *ppThis )
+        IMPL_RTL_STRINGNAME( release )( *ppThis );
+
+    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    assert( *ppThis != NULL );
+    if ( (*ppThis) )
+    {
+        IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
+        sal_Int32 nCount;
+        for( nCount = nLen; nCount > 0; --nCount )
+        {
+            /* Check ASCII range */
+            SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
+                        "rtl_uString_newFromLiteral - Found char > 127" );
+
+            *pBuffer = *pCharStr;
+            pBuffer++;
+            pCharStr++;
+        }
+    }
+
+    RTL_LOG_STRING_NEW( *ppThis );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1243,9 +1296,11 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
         rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
         rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
         *ppThis = pTempStr;
+
+        RTL_LOG_STRING_NEW( *ppThis );
     }
 
-    /* must be done at least, if left or right == *ppThis */
+    /* must be done last, if left or right == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1297,7 +1352,6 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
         return;
     }
 
-    {
     IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
     IMPL_RTL_STRCODE*       pBuffer;
     sal_Int32               nNewLen;
@@ -1323,10 +1377,10 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     }
     rtl_str_ImplCopy( pBuffer, pStr->buffer+nIndex+nCount, pStr->length-nIndex-nCount );
 
-    /* must be done at least, if pStr or pNewSubStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr or pNewSubStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
-    }
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1384,7 +1438,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
         IMPL_RTL_AQUIRE( pStr );
     }
 
-    /* must be done at least, if pStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1445,7 +1500,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
         IMPL_RTL_AQUIRE( pStr );
     }
 
-    /* must be done at least, if pStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1506,7 +1562,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
         IMPL_RTL_AQUIRE( pStr );
     }
 
-    /* must be done at least, if pStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1547,7 +1604,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
             rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
     }
 
-    /* must be done at least, if pStr == *ppThis */
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr == *ppThis */
     if ( pOrg )
         IMPL_RTL_STRINGNAME( release )( pOrg );
 }
@@ -1569,9 +1627,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
 
     // Set ppThis to an empty string and return -1 if either nToken or nIndex is
     // negative:
-    if (nIndex < 0) {
+    if (nIndex < 0)
         nToken = -1;
-    }
 
     pCharStr += nIndex;
     pOrgCharStr = pCharStr;

@@ -95,11 +95,10 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCheckbox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -114,4 +113,33 @@ ScVbaCheckbox::getServiceNames()
     return aServiceNames;
 }
 
+sal_Int32 SAL_CALL ScVbaCheckbox::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaCheckbox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
+sal_Bool SAL_CALL ScVbaCheckbox::getAutoSize() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getAutoSize();
+}
+
+void SAL_CALL ScVbaCheckbox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setAutoSize( bAutoSize );
+}
+
+sal_Bool SAL_CALL ScVbaCheckbox::getLocked() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getLocked();
+}
+
+void SAL_CALL ScVbaCheckbox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setLocked( bLocked );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

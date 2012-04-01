@@ -45,6 +45,82 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
+namespace {
+size_t sqlTypeLen ( SQLSMALLINT _nType )
+{
+    switch (_nType)
+    {
+    case SQL_C_CHAR:
+        return sizeof(SQLCHAR *);
+    case SQL_C_WCHAR:
+        return sizeof(SQLWCHAR *);
+    case SQL_C_SSHORT:
+    case SQL_C_SHORT:
+        return sizeof(SQLSMALLINT);
+    case SQL_C_USHORT:
+        return sizeof(SQLUSMALLINT);
+    case SQL_C_SLONG:
+    case SQL_C_LONG:
+        return sizeof(SQLINTEGER);
+    case SQL_C_ULONG:
+        return sizeof(SQLUINTEGER);
+    case SQL_C_FLOAT:
+        return sizeof(SQLREAL);
+    case SQL_C_DOUBLE:
+        OSL_ENSURE(sizeof(SQLDOUBLE) == sizeof(SQLFLOAT), "SQLDOUBLE/SQLFLOAT confusion");
+        return sizeof(SQLDOUBLE);
+    case SQL_C_BIT:
+        return sizeof(SQLCHAR);
+    case SQL_C_STINYINT:
+    case SQL_C_TINYINT:
+        return sizeof(SQLSCHAR);
+    case SQL_C_UTINYINT:
+        return sizeof(SQLCHAR);
+    case SQL_C_SBIGINT:
+        return sizeof(SQLBIGINT);
+    case SQL_C_UBIGINT:
+        return sizeof(SQLUBIGINT);
+    /* UnixODBC gives this the same value as SQL_C_UBIGINT
+    case SQL_C_BOOKMARK:
+        return sizeof(BOOKMARK); */
+    case SQL_C_BINARY:
+    // UnixODBC gives these the same value
+    //case SQL_C_VARBOOKMARK:
+        return sizeof(SQLCHAR*);
+    case SQL_C_TYPE_DATE:
+    case SQL_C_DATE:
+        return sizeof(SQL_DATE_STRUCT);
+    case SQL_C_TYPE_TIME:
+    case SQL_C_TIME:
+        return sizeof(SQL_TIME_STRUCT);
+    case SQL_C_TYPE_TIMESTAMP:
+    case SQL_C_TIMESTAMP:
+        return sizeof(SQL_TIMESTAMP_STRUCT);
+    case SQL_C_NUMERIC:
+        return sizeof(SQL_NUMERIC_STRUCT);
+    case SQL_C_GUID:
+        return sizeof(SQLGUID);
+    case SQL_C_INTERVAL_YEAR:
+    case SQL_C_INTERVAL_MONTH:
+    case SQL_C_INTERVAL_DAY:
+    case SQL_C_INTERVAL_HOUR:
+    case SQL_C_INTERVAL_MINUTE:
+    case SQL_C_INTERVAL_SECOND:
+    case SQL_C_INTERVAL_YEAR_TO_MONTH:
+    case SQL_C_INTERVAL_DAY_TO_HOUR:
+    case SQL_C_INTERVAL_DAY_TO_MINUTE:
+    case SQL_C_INTERVAL_DAY_TO_SECOND:
+    case SQL_C_INTERVAL_HOUR_TO_MINUTE:
+    case SQL_C_INTERVAL_HOUR_TO_SECOND:
+    case SQL_C_INTERVAL_MINUTE_TO_SECOND:
+        return sizeof(SQL_INTERVAL_STRUCT);
+    default:
+        return static_cast<size_t>(-1);
+    }
+}
+}
+
+
 void OTools::getValue(  OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
@@ -55,6 +131,23 @@ void OTools::getValue(  OConnection* _pConnection,
                         SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getValue" );
+    const size_t properSize = sqlTypeLen(_nType);
+    if ( properSize == static_cast<size_t>(-1) )
+        OSL_FAIL("connectivity::odbc::OTools::getValue: unknown SQL type - cannot check buffer size");
+    else
+    {
+        OSL_ENSURE(static_cast<size_t>(_nSize) == properSize, "connectivity::odbc::OTools::getValue got wrongly sized memory region to write result to");
+        if ( static_cast<size_t>(_nSize) > properSize )
+        {
+            OSL_FAIL("memory region is too big - trying to fudge it");
+            memset(_pValue, 0, _nSize);
+#ifdef OSL_BIGENDIAN
+            // This is skewed in favour of integer types
+            _pValue += _nSize - properSize;
+#endif
+        }
+    }
+    OSL_ENSURE(static_cast<size_t>(_nSize) >= properSize, "memory region is too small");
     SQLLEN pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
                             (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
@@ -88,14 +181,15 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
     SQLULEN nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
+    bool atExec;
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
 
-    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
+    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize, atExec);
     if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
         nColumnSize = 1;
 
-    if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
+    if (atExec)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
@@ -118,10 +212,12 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                         SQLLEN*& pLen,
                         const void* _pValue,
                         rtl_TextEncoding _nTextEncoding,
-                        SQLULEN& _nColumnSize)
+                        SQLULEN& _nColumnSize,
+                        bool &atExec)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindData" );
     _nColumnSize = 0;
+    atExec = false;
 
     switch (_nOdbcType)
     {
@@ -214,6 +310,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                 *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
             }
+            atExec = true;
             break;
         case SQL_LONGVARCHAR:
         {
@@ -226,6 +323,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 nLen = aString.getLength();
             }
             *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
+            atExec = true;
         }   break;
         case SQL_DATE:
             *(DATE_STRUCT*)_pData = *(DATE_STRUCT*)_pValue;

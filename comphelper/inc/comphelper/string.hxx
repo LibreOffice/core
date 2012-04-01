@@ -46,22 +46,6 @@
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
-namespace detail
-{
-    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
-    {
-        //Clearly this is somewhat cosy with the sal implmentation
-
-        //rtl_[u]String contains U buffer[1], so an input of nLen
-        //allocates a buffer of nLen + 1 and we'll ensure a null termination
-        T *newStr = (T*)rtl_allocateMemory(sizeof(T) + sizeof(U) * nLen);
-        newStr->refCount = 1;
-        newStr->length = nLen;
-        newStr->buffer[nLen]=0;
-        return newStr;
-    }
-}
-
 /** Allocate a new string containing space for a given number of characters.
 
     The reference count of the new string will be 1. The length of the string
@@ -82,10 +66,7 @@ namespace detail
     @param len
     the number of characters.
  */
-COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
-{
-    return detail::string_alloc<rtl_uString, sal_Unicode>(nLen);
-}
+COMPHELPER_DLLPUBLIC rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen);
 
 /** Allocate a new string containing space for a given number of characters.
 
@@ -107,118 +88,35 @@ COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 n
     @param len
     the number of characters.
  */
-COMPHELPER_DLLPUBLIC inline rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
-{
-    return detail::string_alloc<rtl_String, sal_Char>(nLen);
-}
-
-/**
-   Replace the first occurrence of a substring with another string.
-
-   @param source
-   The source string, in which the search will take place.
-
-   @param from
-   The ASCII substring to search for.  Must point to at least fromLength ASCII
-   characters.
-
-   @param fromLength
-   The length of the from substring.  Must not be negative.
-
-   @param to
-   The string to use as replacement.
-
-   @param beginAt
-   The index at which to begin the search.  Must be between zero and the length
-   of source, inclusive.
-
-   @param replacedAt
-   If non-null, receives the starting index at which the replacement took place
-   or -1 if from was not found.
-
-   @return
-   The resulting string, in which the replacement has taken place.
-*/
-COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplaceAsciiL(
-    rtl::OUString const & source, char const * from, sal_Int32 fromLength,
-    rtl::OUString const & to, sal_Int32 beginAt = 0,
-    sal_Int32 * replacedAt = NULL);
-
-/** replaces, in the given source string, all occurrences of a given ASCII pattern
-    with another ASCII pattern
-*/
-COMPHELPER_DLLPUBLIC ::rtl::OUString searchAndReplaceAllAsciiWithAscii(
-    const ::rtl::OUString& source, const sal_Char* from, const sal_Char* to,
-    const sal_Int32 beginAt = 0 );
-
-/** does an in-place replacement of the first occurrence of a sub string with
-    another string
-
-    @param source
-        the string to search and replace in.
-    @param asciiPattern
-        the ASCII sub string to search for. Must point to a 0-terminated string.
-    @param replace
-        The string to use as replacement.
-    @param beginAt
-        The index at which to begin the search.  Must be between zero and the length
-        of source, inclusive.
-
-    @param replacedAt
-        If non-null, receives the starting index at which the replacement took place
-        or -1 if from was not found.
-
-    @return
-        a reference to <code>source</code>
-*/
-COMPHELPER_DLLPUBLIC ::rtl::OUString&
-    searchAndReplaceAsciiI( ::rtl::OUString & source, sal_Char const * asciiPattern,
-                            ::rtl::OUString const & replace, sal_Int32 beginAt = 0,
-                            sal_Int32 * replacedAt = NULL );
-
-/** Replaces each substring of this OString that matches the search OString
-    with the specified replacement OString
-
-    @param rIn      The input OString
-    @param rSearch  The substring to be replaced
-    @param rReplace The replacement substring
-
-    @return         The resulting OString
- */
-COMPHELPER_DLLPUBLIC rtl::OString replace(const rtl::OString &rIn,
-    const rtl::OString &rSearch, const rtl::OString &rReplace);
-
-/** Replaces each substring of this OUString that matches the search OUString
-    with the specified replacement OUString
-
-    @param rIn      The input OUString
-    @param rSearch  The substring to be replaced
-    @param rReplace The replacement substring
-
-    @return         The resulting OUString
- */
-COMPHELPER_DLLPUBLIC rtl::OUString replace(const rtl::OUString &rIn,
-    const rtl::OUString &rSearch, const rtl::OUString &rReplace);
+COMPHELPER_DLLPUBLIC rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen);
 
 /** Removes all occurrences of a character from within the source string
+
+    @deprecated  Use rtl::OString::replaceAll(rtl::OString(c), rtl::OString())
+    instead.
 
     @param rIn      The input OString
     @param c        The character to be removed
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC rtl::OString remove(const rtl::OString &rIn,
-    sal_Char c);
+inline rtl::OString remove(const rtl::OString &rIn,
+    sal_Char c)
+{ return rIn.replaceAll(rtl::OString(c), rtl::OString()); }
 
 /** Removes all occurrences of a character from within the source string
+
+    @deprecated  Use
+    rtl::OUString::replaceAll(rtl::OUString(c), rtl::OUString()) instead.
 
     @param rIn      The input OUString
     @param c        The character to be removed
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC rtl::OUString remove(const rtl::OUString &rIn,
-    sal_Unicode c);
+inline rtl::OUString remove(const rtl::OUString &rIn,
+    sal_Unicode c)
+{ return rIn.replaceAll(rtl::OUString(c), rtl::OUString()); }
 
 /** Strips occurrences of a character from the start of the source string
 
@@ -282,32 +180,34 @@ COMPHELPER_DLLPUBLIC rtl::OUString strip(const rtl::OUString &rIn,
 
 /** Returns a token in an OString
 
+    @deprecated  Use rtl::OString::getToken(nToken, cTok) instead.
+
   @param    rIn         the input OString
-  @param    token       the number of the token to return
+  @param    nToken      the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
-COMPHELPER_DLLPUBLIC inline rtl::OString getToken(const rtl::OString &rIn,
+inline rtl::OString getToken(const rtl::OString &rIn,
     sal_Int32 nToken, sal_Char cTok) SAL_THROW(())
 {
-    sal_Int32 nIndex = 0;
-    return rIn.getToken(nToken, cTok, nIndex);
+    return rIn.getToken(nToken, cTok);
 }
 
 /** Returns a token in an OUString
 
+    @deprecated  Use rtl::OUString::getToken(nToken, cTok) instead.
+
   @param    rIn         the input OUString
-  @param    token       the number of the token to return
+  @param    nToken      the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
-COMPHELPER_DLLPUBLIC inline rtl::OUString getToken(const rtl::OUString &rIn,
+inline rtl::OUString getToken(const rtl::OUString &rIn,
     sal_Int32 nToken, sal_Unicode cTok) SAL_THROW(())
 {
-    sal_Int32 nIndex = 0;
-    return rIn.getToken(nToken, cTok, nIndex);
+    return rIn.getToken(nToken, cTok);
 }
 
 /** Returns number of tokens in an OUString
@@ -325,80 +225,6 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char c
   @return   the number of tokens
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok);
-
-/**
-  Match against a substring appearing in another string.
-
-  The result is true if and only if the second string appears as a substring
-  of the first string, at the given position.
-  This function can't be used for language specific comparison.
-
-  @param    rStr        The string that pMatch will be compared to.
-  @param    pMatch      The substring rStr is to be compared against
-  @param    nMatchLen   The length of pMatch
-  @param    fromIndex   The index to start the comparion from.
-                        The index must be greater or equal than 0
-                        and less or equal as the string length.
-  @return   sal_True if pMatch match with the characters in the string
-            at the given position;
-            sal_False, otherwise.
-*/
-COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char *pMatch, sal_Int32 nMatchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
-{
-    return rtl_str_shortenedCompare_WithLength( rStr.pData->buffer+fromIndex,
-        rStr.pData->length-fromIndex, pMatch, nMatchLen, nMatchLen ) == 0;
-}
-
-/**
-  Match against a substring appearing in this string, ignoring the case of
-  ASCII letters.
-
-  The result is true if and only if the second string appears as a substring
-  of this string, at the given position.
-  Character values between 65 and 90 (ASCII A-Z) are interpreted as
-  values between 97 and 122 (ASCII a-z).
-  This function can't be used for language specific comparison.
-
-  @param    rStr        The string that pMatch will be compared to.
-  @param    pMatch      The substring rStr is to be compared against
-  @param    nMatchLen   The length of pMatch
-  @param    fromIndex   the index to start the comparion from.
-                        The index must be greater or equal than 0
-                        and less or equal as the string length.
-  @return   sal_True if str match with the characters in the string
-            at the given position;
-            sal_False, otherwise.
-*/
-COMPHELPER_DLLPUBLIC inline sal_Bool matchIgnoreAsciiCaseL(const rtl::OString& rStr, const char *pMatch, sal_Int32 nMatchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
-{
-    return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( rStr.pData->buffer+fromIndex, rStr.pData->length-fromIndex,
-                                                               pMatch, nMatchLen,
-                                                               nMatchLen ) == 0;
-}
-
-/**
-  Returns the index within this string of the first occurrence of the
-  specified substring, starting at the specified index.
-
-  If str doesn't include any character, always -1 is
-  returned. This is also the case, if both strings are empty.
-
-  @param    rStr        The string that pSearch will be searched within.
-  @param    pSearch     the substring to search for.
-  @param    nSearchLen  the length of pSearch
-  @param    fromIndex   the index to start the search from.
-  @return   If the string argument occurs one or more times as a substring
-            within this string at the starting index, then the index
-            of the first character of the first such substring is
-            returned. If it does not occur as a substring starting
-            at fromIndex or beyond, -1 is returned.
-*/
-COMPHELPER_DLLPUBLIC inline sal_Int32 indexOfL(const rtl::OString& rStr, const char *pSearch, sal_Int32 nSearchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
-{
-    sal_Int32 ret = rtl_str_indexOfStr_WithLength(rStr.pData->buffer+fromIndex,
-        rStr.pData->length-fromIndex, pSearch, nSearchLen);
-    return (ret < 0 ? ret : ret+fromIndex);
-}
 
 namespace detail
 {
@@ -582,66 +408,6 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
                     true otherwise, including for empty string
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
-
-/** Determine if an OString contains solely ASCII alphanumeric chars/digits
-
-    @param rString  An OString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
-
-/** Determine if an OUString contains solely ASCII alphanumeric chars/digits
-
-    @param rString  An OUString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OUString &rString);
-
-/** Determine if an OString contains solely ASCII lower-case chars
-
-    @param rString  An OString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'a'-'z' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OString &rString);
-
-/** Determine if an OUString contains solely ASCII lower-case chars
-
-    @param rString  An OUString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'a'-'z' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OUString &rString);
-
-/** Determine if an OString contains solely ASCII upper-case chars
-
-    @param rString  An OString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'A'-'Z' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OString &rString);
-
-/** Determine if an OUString contains solely ASCII upper-case chars
-
-    @param rString  An OUString
-
-    @return         false if string contains any characters outside
-                    the ASCII 'A'-'Z' ranges
-                    true otherwise, including for empty string
- */
-COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OUString &rString);
 
 COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
 {

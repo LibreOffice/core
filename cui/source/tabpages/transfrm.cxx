@@ -493,7 +493,7 @@ void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxAngleTabPage, ModifiedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxAngleTabPage, ModifiedHdl)
 {
     switch(aMtrAngle.GetValue())
     {
@@ -1156,7 +1156,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
 {
     // #106572# Remember user's last choice
     maTsbSizeProtect.SetState( maTsbPosProtect.GetState() == STATE_CHECK ?  STATE_CHECK : mnProtectSizeState );
@@ -1204,7 +1204,7 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ChangeSizeProtectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
 {
     if( maTsbSizeProtect.IsEnabled() )
     {
@@ -1223,22 +1223,6 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeSizeProtectHdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
-//------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosXHdl, void *, EMPTYARG )
-{
-    return( 0L );
-}
-IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosXHdl, void *, EMPTYARG )
-
-//------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosYHdl, void *, EMPTYARG )
-{
-    return( 0L );
-}
-IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosYHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
@@ -1622,7 +1606,7 @@ Rectangle SvxPositionSizeTabPage::GetRect()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
 {
     if( maCbxScale.IsChecked() && maCbxScale.IsEnabled() )
     {
@@ -1647,7 +1631,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
 {
     if( maCbxScale.IsChecked() && maCbxScale.IsEnabled() )
     {
@@ -1672,7 +1656,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ClickSizeProtectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl)
 {
     UpdateControlStates();
     return( 0L );
@@ -1680,7 +1664,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ClickSizeProtectHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ClickAutoHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
 {
     if( maCbxScale.IsChecked() )
     {

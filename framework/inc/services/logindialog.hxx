@@ -81,7 +81,6 @@ namespace framework{
 #define IPROPERTYARRAYHELPER                ::cppu::IPropertyArrayHelper
 #define OBROADCASTHELPER                    ::cppu::OBroadcastHelper
 #define OPROPERTYSETHELPER                  ::cppu::OPropertySetHelper
-#define OUSTRING                            ::rtl::OUString
 #define OWEAKOBJECT                         ::cppu::OWeakObject
 #define PROPERTY                            ::com::sun::star::beans::Property
 #define REFERENCE                           ::com::sun::star::uno::Reference
@@ -188,34 +187,34 @@ namespace framework{
 
 struct tIMPL_DialogData
 {
-    OUSTRING                sUserName               ;
-    OUSTRING                sPassword               ;
-    SEQUENCE< OUSTRING >    seqServerList           ;
+    ::rtl::OUString         sUserName               ;
+    ::rtl::OUString         sPassword               ;
+    SEQUENCE< ::rtl::OUString > seqServerList       ;
     sal_Int32               nActiveServer           ;
-    OUSTRING                sConnectionType         ;
+    ::rtl::OUString         sConnectionType         ;
     LOCALE                  aLanguage               ;
     sal_Int32               nPortHttp               ;
     sal_Int32               nPortHttps              ;
     ANY                     aParentWindow           ;
-    OUSTRING                sSecurityProxy          ;
-    OUSTRING                sUseProxy               ;
-    OUSTRING                sDialog                 ;
+    ::rtl::OUString         sSecurityProxy          ;
+    ::rtl::OUString         sUseProxy               ;
+    ::rtl::OUString         sDialog                 ;
     sal_Bool                bProxyChanged           ;
 
     // default ctor to initialize empty structure.
     tIMPL_DialogData()
-        :   sUserName               ( OUSTRING()                            )
-        ,   sPassword               ( OUSTRING()                            )
-        ,   seqServerList           ( SEQUENCE< OUSTRING >()                )
+        :   sUserName               ( ::rtl::OUString()                     )
+        ,   sPassword               ( ::rtl::OUString()                     )
+        ,   seqServerList           ( SEQUENCE< ::rtl::OUString >()         )
         ,   nActiveServer           ( 1                                     )
-        ,   sConnectionType         ( OUSTRING()                            )
-        ,   aLanguage               ( OUSTRING(), OUSTRING(), OUSTRING()    )
+        ,   sConnectionType         ( ::rtl::OUString()                     )
+        ,   aLanguage               ( ::rtl::OUString(), ::rtl::OUString(), ::rtl::OUString() )
         ,   nPortHttp               ( 0                                     )
         ,   nPortHttps              ( 0                                     )
         ,   aParentWindow           (                                       )
-        ,   sSecurityProxy          ( OUSTRING()                            )
-        ,   sUseProxy               ( OUSTRING()                            )
-        ,   sDialog                 ( OUSTRING()                            )
+        ,   sSecurityProxy          ( ::rtl::OUString()                     )
+        ,   sUseProxy               ( ::rtl::OUString()                     )
+        ,   sDialog                 ( ::rtl::OUString()                     )
         ,   bProxyChanged           ( sal_False                             )
     {
     }
@@ -362,7 +361,7 @@ class cIMPL_Dialog  :   public ModalDialog
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void            getProxyHostPort( const OUSTRING& aProxyHostPort, OUSTRING& aHost, OUSTRING& aPort );
+        void            getProxyHostPort( const ::rtl::OUString& aProxyHostPort, ::rtl::OUString& aHost, ::rtl::OUString& aPort );
 
         /*-****************************************************************************************************//**
             @short      get a ressource for given id from right ressource file
@@ -419,8 +418,8 @@ class cIMPL_Dialog  :   public ModalDialog
         Point               m_colOKButtonPos            ;
         Point               m_colCancelButtonPos        ;
         Point               m_colAdditionalButtonPos    ;
-        OUSTRING            m_colButtonAddText          ;
-        OUSTRING            m_expButtonAddText          ;
+        ::rtl::OUString     m_colButtonAddText          ;
+        ::rtl::OUString     m_expButtonAddText          ;
         tIMPL_DialogData    m_aDataSet                  ;
 };
 
@@ -531,7 +530,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setTitle( const OUSTRING& sTitle ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw( RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      return the current title of this dialog
@@ -545,7 +544,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual OUSTRING SAL_CALL getTitle() throw( RUNTIMEEXCEPTION );
+        virtual ::rtl::OUString SAL_CALL getTitle() throw( RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      show the dialog and return user reaction
@@ -715,12 +714,12 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_tryToChangeProperty(  const   OUSTRING&               sProperty       ,
+        sal_Bool impl_tryToChangeProperty(  const   ::rtl::OUString&        sProperty       ,
                                             const   ANY&                    aValue          ,
                                                     ANY&                    aOldValue       ,
                                                     ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
 
-        sal_Bool impl_tryToChangeProperty(  const   SEQUENCE< OUSTRING >&   seqProperty     ,
+        sal_Bool impl_tryToChangeProperty(  const   SEQUENCE< ::rtl::OUString >& seqProperty,
                                             const   ANY&                    aValue          ,
                                                     ANY&                    aOldValue       ,
                                                     ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
@@ -794,9 +793,9 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_addServerToHistory(           SEQUENCE< OUSTRING >&   seqHistory      ,
+        void impl_addServerToHistory(           SEQUENCE< ::rtl::OUString >& seqHistory,
                                                 sal_Int32&              nActiveServer   ,
-                                        const   OUSTRING&               sServer         );
+                                        const   ::rtl::OUString&        sServer         );
 
         /*-****************************************************************************************************//**
             @short      helper methods to read/write  properties from/to ini file
@@ -812,27 +811,27 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @onerror    Assertions are shown.
         *//*-*****************************************************************************************************/
 
-        void                    impl_writeUserName              (   const   OUSTRING&               sUserName       );
+        void                    impl_writeUserName              (   const   ::rtl::OUString&        sUserName       );
         void                    impl_writeActiveServer          (           sal_Int32               nActiveServer   );
-        void                    impl_writeServerHistory         (   const   SEQUENCE< OUSTRING >&   lHistory        );
-        void                    impl_writeConnectionType        (   const   OUSTRING&               sConnectionType );
+        void                    impl_writeServerHistory         (   const   SEQUENCE< ::rtl::OUString >& lHistory   );
+        void                    impl_writeConnectionType        (   const   ::rtl::OUString&        sConnectionType );
         void                    impl_writeLanguage              (   const   LOCALE&                 aLanguage       );
         void                    impl_writePortHttp              (           sal_Int32               nPort           );
         void                    impl_writePortHttps             (           sal_Int32               nPort           );
-        void                    impl_writeSecurityProxy         (   const   OUSTRING&               sSecurityProxy  );
-        void                    impl_writeUseProxy              (   const   OUSTRING&               sUseProxy       );
-        void                    impl_writeDialog                (   const   OUSTRING&               sDialog         );
+        void                    impl_writeSecurityProxy         (   const   ::rtl::OUString&        sSecurityProxy  );
+        void                    impl_writeUseProxy              (   const   ::rtl::OUString&        sUseProxy       );
+        void                    impl_writeDialog                (   const   ::rtl::OUString&        sDialog         );
 
-        OUSTRING                impl_readUserName               (                                                   );
+        ::rtl::OUString         impl_readUserName               (                                                   );
         sal_Int32               impl_readActiveServer           (                                                   );
-        SEQUENCE< OUSTRING >    impl_readServerHistory          (                                                   );
-        OUSTRING                impl_readConnectionType         (                                                   );
+        SEQUENCE< ::rtl::OUString > impl_readServerHistory      (                                                   );
+        ::rtl::OUString         impl_readConnectionType         (                                                   );
         LOCALE                  impl_readLanguage               (                                                   );
         sal_Int32               impl_readPortHttp               (                                                   );
         sal_Int32               impl_readPortHttps              (                                                   );
-        OUSTRING                impl_readSecurityProxy          (                                                   );
-        OUSTRING                impl_readUseProxy               (                                                   );
-        OUSTRING                impl_readDialog                 (                                                   );
+        ::rtl::OUString         impl_readSecurityProxy          (                                                   );
+        ::rtl::OUString         impl_readUseProxy               (                                                   );
+        ::rtl::OUString         impl_readDialog                 (                                                   );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -858,7 +857,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
     private:
 
         sal_Bool impldbg_checkParameter_LoginDialog (   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory    );
-        sal_Bool impldbg_checkParameter_setTitle    (   const   OUSTRING&                           sTitle      );
+        sal_Bool impldbg_checkParameter_setTitle    (   const   ::rtl::OUString&                    sTitle      );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -870,7 +869,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
     private:
 
         REFERENCE< XMULTISERVICEFACTORY >       m_xFactory          ;   /// reference to factory, which has created this instance
-        OUSTRING                                m_sININame          ;   /// full qualified path to profile UNC-notation
+        ::rtl::OUString                         m_sININame          ;   /// full qualified path to profile UNC-notation
         Config*                                 m_pINIManager       ;   /// manager for full access to ini file
         sal_Bool                                m_bInExecuteMode    ;   /// protection against setting of properties during showing of dialog
         cIMPL_Dialog*                           m_pDialog           ;   /// VCL dialog

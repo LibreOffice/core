@@ -35,9 +35,7 @@
 #include <svl/svarray.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
-#include <filter/msfilter/msfiltertracer.hxx>
 #include <vcl/graph.hxx>
 #include <string.h>
 #include <map>
@@ -107,10 +105,17 @@ struct DffPropFlags
 
 class SvxMSDffManager;
 
-class MSFILTER_DLLPUBLIC DffPropSet : public Table
+class MSFILTER_DLLPUBLIC DffPropSet
 {
+private:
+    void InitializeProp(sal_uInt32 nKey, sal_uInt32 nContent,
+            DffPropFlags& rFlags, sal_uInt32 nRecordType) const;
+
 protected:
 
+typedef std::map<sal_uInt32, sal_uInt32> RecordTypesMap;
+
+    RecordTypesMap  maRecordTypes;
     sal_uInt32      mpContents[ 1024 ];
     DffPropFlags    mpFlags[ 1024 ];
 
@@ -129,7 +134,6 @@ public:
     bool            GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
     /** Returns a string property. */
     ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-    void            SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
     sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
     void            Merge( DffPropSet& rMasterPropSet ) const;
     void            InitializePropSet() const;
@@ -468,12 +472,14 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 
 protected :
 
+typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
+
     String          maBaseURL;
     sal_uInt32      mnCurMaxShapeId;    // we need this information to
     sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
     FIDCL*          mpFidcls;
-    Table           maDgOffsetTable;    // array of fileoffsets
+    OffsetMap       maDgOffsetTable;    // array of fileoffsets
 
     friend class DffPropertyReader;
 
@@ -520,7 +526,6 @@ protected :
                                 const unsigned long nDrawingContainerId );
 
     bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
-    SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
@@ -531,7 +536,6 @@ protected :
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
@@ -579,7 +583,6 @@ public:
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
 
-    MSFilterTracer*     mpTracer;
     sal_Bool            mbTracing;
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
@@ -622,12 +625,11 @@ public:
                      long      nApplicationScale    =  0,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
                      sal_uLong     nDefaultFontHeight_  = 24,
-                     SvStream* pStData2_            =  0,
-                     MSFilterTracer* pTracer        = NULL );
+                     SvStream* pStData2_            =  0 );
 
     // in PPT werden die Parameter DGGContainerOffset und PicStream
     // mit Hilfe einer Init Routine Uebergeben.
-    SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL, MSFilterTracer* pTracer );
+    SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL );
     void InitSvxMSDffManager(sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags);
     void SetDgContainer( SvStream& rSt );
 
@@ -647,9 +649,6 @@ public:
     void Scale(sal_Int32& rVal) const;
     void Scale(Point& rPos) const;
     void Scale(Size& rSiz) const;
-    void Scale(Rectangle& rRect) const;
-    void Scale(Polygon& rPoly) const;
-    void Scale(PolyPolygon& rPoly) const;
     void ScaleEmu(sal_Int32& rVal) const;
     sal_uInt32 ScalePt( sal_uInt32 nPt ) const;
     sal_Int32 ScalePoint( sal_Int32 nVal ) const;

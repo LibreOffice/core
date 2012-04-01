@@ -46,6 +46,8 @@
 #include <sehandler.hxx>
 #endif
 
+#include <vector>
+
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
@@ -133,15 +135,12 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
         OSL_ASSERT( len > 0 );
 
-        std::auto_ptr< sal_Unicode > lpwchBuff( new sal_Unicode[len] );
+        std::vector< sal_Unicode > lpwchBuff(len);
 
-        if ( NULL != lpwchBuff.get( ) )
-        {
-            len = MultiByteToWideChar(
-                CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(lpwchBuff.get( )), len );
+        len = MultiByteToWideChar(
+            CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(&lpwchBuff[0]), len );
 
-            winCP = OUString( lpwchBuff.get( ), (len - 1) );
-        }
+        winCP = OUString( &lpwchBuff[0], (len - 1) );
     }
 
     return winCP;
@@ -183,8 +182,8 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
                               861, 862, 863, 864, 865, 866,
                               869, 874, 932, 936, 949, 950, 1361 };
 
-    for ( sal_Int8 i = 0; i < ( sizeof( arrOEMCP )/sizeof( sal_uInt32 ) ); ++i )
-        if ( (sal_uInt32) arrOEMCP[i] == codepage )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( arrOEMCP ); ++i )
+        if ( arrOEMCP[i] == codepage )
             return sal_True;
 
     return sal_False;
@@ -385,39 +384,40 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
     {
 #endif
         if ( pFetcLhs != pFetcRhs )
+        {
+            if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
+                ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
+                !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
+            {
+                nMatch = FORMATETC_NO_MATCH;
+            }
 
-        if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
-             ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
-             !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
-        {
-            nMatch = FORMATETC_NO_MATCH;
-        }
+            else if ( pFetcLhs->dwAspect == pFetcRhs->dwAspect )
+                // same aspects; equal
+                ;
+            else if ( ( pFetcLhs->dwAspect & ~pFetcRhs->dwAspect ) != 0 )
+            {
+                // left not subset of aspects of right; not equal
+                nMatch = FORMATETC_NO_MATCH;
+            }
+            else
+                // left subset of right
+                nMatch = FORMATETC_PARTIAL_MATCH;
 
-        else if ( pFetcLhs->dwAspect == pFetcRhs->dwAspect )
-            // same aspects; equal
-            ;
-        else if ( ( pFetcLhs->dwAspect & ~pFetcRhs->dwAspect ) != 0 )
-        {
-            // left not subset of aspects of right; not equal
-            nMatch = FORMATETC_NO_MATCH;
-        }
-        else
-            // left subset of right
-            nMatch = FORMATETC_PARTIAL_MATCH;
-
-        if ( nMatch == FORMATETC_EXACT_MATCH || nMatch == FORMATETC_PARTIAL_MATCH )
-        {
-        if ( pFetcLhs->tymed == pFetcRhs->tymed )
-            // same medium flags; equal
-            ;
-        else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
-        {
-            // left not subset of medium flags of right; not equal
-            nMatch = FORMATETC_NO_MATCH;
-        }
-        else
-            // left subset of right
-            nMatch = FORMATETC_PARTIAL_MATCH;
+            if ( nMatch == FORMATETC_EXACT_MATCH || nMatch == FORMATETC_PARTIAL_MATCH )
+            {
+                if ( pFetcLhs->tymed == pFetcRhs->tymed )
+                    // same medium flags; equal
+                    ;
+                else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
+                {
+                    // left not subset of medium flags of right; not equal
+                    nMatch = FORMATETC_NO_MATCH;
+                }
+                else
+                    // left subset of right
+                    nMatch = FORMATETC_PARTIAL_MATCH;
+            }
         }
     }
 #ifdef __MINGW32__

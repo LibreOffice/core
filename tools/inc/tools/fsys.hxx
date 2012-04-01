@@ -177,7 +177,6 @@ protected:
                     FileStat( SAL_UNUSED_PARAMETER const void *pInfo ); // CInfoPBRec
 
 public:
-                    FileStat();
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
     sal_Bool            Update( const DirEntry& rDirEntry,
@@ -268,10 +267,12 @@ public:
     void                SetExtension( const String& rExt, char cSep = '.' );
     String              GetExtension( char cSep = '.' ) const;
     void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
+    const String        GetNameDirect() const
+    {
+        return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
+    }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
     String              CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    void                SetBase( const String& rBase, char cSep = '.' );
     String              GetBase(char cSep = '.' ) const;
     DirEntry            GetPath() const;
     DirEntry            GetDevice() const;
@@ -281,7 +282,6 @@ public:
                                  sal_uInt16 nMaxChars = STRING_MAXLEN ) const;
 
     DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
-    static const DirEntry& SetTempNameBase( const String &rBaseName );
     sal_Bool                MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
                                        sal_Bool bUseTilde = sal_True,
@@ -424,43 +424,6 @@ public:
     Dir&            operator +=( const Dir& rDir );
     DirEntry&       operator []( size_t nIndex ) const;
 };
-
-//========================================================================
-
-/** FSysRedirector is an abstract base class for a hook to redirect
-    mirrored directory trees.
-
-    <P>One instance of a subclass can be instanciated and registered
-    using the method FSysRedirector::Register(FSysRedirector*).
- */
-
-class FSysRedirector
-{
-    static FSysRedirector*  _pRedirector;
-    static sal_Bool             _bEnabled;
-
-public:
-    //-----------------------------------------------------------------------
-    /** This method is to be used to redirect a file system path.
-
-        <P>It will not redirect while redirection is disabled.
-
-        <P>It may block while another thread is accessing the redirector
-        or another thread has disabled redirections.
-
-        @param String &rPath<BR>
-                This inout-argument accepts a file:-URL even as a native
-                file system path name to redirect in 'rPath'. It returns the
-                redirected (modified) path too, which can be of both formats
-                too.
-
-        @return sal_Bool<BR>
-                sal_True, if the path is redirected
-                sal_False, if the path is not redirected (unchanged)
-     */
-    static void             DoRedirect( String &rPath );
-};
-
 
 #if defined(DBG_UTIL)
 void FSysTest();

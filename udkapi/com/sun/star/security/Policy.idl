@@ -37,10 +37,7 @@ module com {  module sun {  module star {  module security {
 
     @since OOo 1.1.2
 */
-published service Policy
-{
-    interface XPolicy;
-};
+published service Policy : XPolicy;
 
 }; }; }; };
 

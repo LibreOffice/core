@@ -523,7 +523,10 @@ void XPlugin_Impl::loadPlugin()
     }
     const SystemEnvData* pEnvData = getSysChildSysData();
 #if defined( UNX ) && !(defined(QUARTZ))
-    XSync( (Display*)pEnvData->pDisplay, False );
+    if (pEnvData->pDisplay) // headless?
+    {
+        XSync( (Display*)pEnvData->pDisplay, False );
+    }
 #endif
     if( ! getPluginComm() )
     {
@@ -568,8 +571,15 @@ void XPlugin_Impl::loadPlugin()
     // m_aNPWindow is set up in the MacPluginComm from the view
     SetSysPlugDataParentView(*pEnvData);
 #elif defined( UNX )
-    XSync( (Display*)pEnvData->pDisplay, False );
-    m_aNPWindow.window      = (void*)pEnvData->aWindow;
+    if (pEnvData->pDisplay) // headless?
+    {
+        XSync( (Display*)pEnvData->pDisplay, False );
+        m_aNPWindow.window  = (void*)pEnvData->aWindow;
+    }
+    else
+    {
+        m_aNPWindow.window  = NULL;
+    }
     m_aNPWindow.ws_info     = NULL;
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
@@ -675,7 +685,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
     OString aURL  = OUStringToOString( url, m_aEncoding );
 
-    // check wether there is a notifylistener for this stream
+    // check whether there is a notifylistener for this stream
     // this means that the strema is created from the plugin
     // via NPN_GetURLNotify or NPN_PostURLNotify
     std::list<PluginEventListener*>::iterator iter;
@@ -907,9 +917,9 @@ PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
     }
 
     int nPos = rURL.lastIndexOf( (sal_Unicode)'.' );
-    OUString aExt = rURL.copy( nPos ).toAsciiLowerCase();
     if( nPos != -1 )
     {
+        OUString const aExt = rURL.copy( nPos ).toAsciiLowerCase();
         for( int i = 0; i < aDescrs.getLength(); i++ )
         {
             OUString aThisExt = pDescrs[ i ].Extension.toAsciiLowerCase();

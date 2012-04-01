@@ -184,11 +184,11 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
-            if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) )
+            if( rRenderOptions[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFirstPage" ) ) )
                 pFirstPage = &rRenderOptions[ nData ].Value;
-            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) )
+            else if( rRenderOptions[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsLastPage" ) ) )
                 pLastPage = &rRenderOptions[ nData ].Value;
-            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+            else if( rRenderOptions[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportNotesPages" ) ) )
                 rRenderOptions[ nData ].Value >>= bExportNotesPages;
         }
 
@@ -211,7 +211,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
                     for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                     {
-                        if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
+                        if( aRenderer[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
                             aRenderer[ nProperty].Value >>= aPageSize;
                     }
 
@@ -453,107 +453,107 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
-                if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
+                if( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageRange" ) ) )
                     rFilterData[ nData ].Value >>= aPageRange;
-                else if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) ) )
+                else if( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Selection" ) ) )
                     rFilterData[ nData ].Value >>= aSelection;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseLosslessCompression" ) ) )
                     rFilterData[ nData ].Value >>= mbUseLosslessCompression;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Quality" ) ) )
                     rFilterData[ nData ].Value >>= mnQuality;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ReduceImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mbReduceImageResolution;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSkipEmptyPages" ) ) )
                     rFilterData[ nData ].Value >>= mbSkipEmptyPages;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mnMaxImageResolution;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseTaggedPDF" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTaggedPDF;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SelectPdfVersion" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFTypeSelection;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportNotes" ) ) )
                     rFilterData[ nData ].Value >>= mbExportNotes;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportNotesPages" ) ) )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbedStandardFonts" ) ) )
                     rFilterData[ nData ].Value >>= mbEmbedStandardFonts;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseTransitionEffects" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportFormFields" ) ) )
                     rFilterData[ nData ].Value >>= mbExportFormFields;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowDuplicateFieldNames" ) ) )
                     rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
 //viewer properties
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HideViewerToolbar" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerToolbar;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HideViewerMenubar" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerMenubar;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HideViewerWindowControls" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerWindowControls;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResizeWindowToInitialPage" ) ) )
                     rFilterData[ nData ].Value >>= mbFitWindow;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CenterWindow" ) ) )
                     rFilterData[ nData ].Value >>= mbCenterWindow;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenInFullScreenMode" ) ) )
                     rFilterData[ nData ].Value >>= mbOpenInFullScreenMode;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DisplayPDFDocumentTitle" ) ) )
                     rFilterData[ nData ].Value >>= mbDisplayPDFDocumentTitle;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InitialView" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFDocumentMode;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Magnification" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFDocumentAction;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Zoom" ) ) )
                     rFilterData[ nData ].Value >>= mnZoom;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InitialPage" ) ) )
                     rFilterData[ nData ].Value >>= mnInitialPage;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageLayout" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFPageLayout;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstPageOnLeft" ) ) )
                     rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsAddStream" ) ) )
                     rFilterData[ nData ].Value >>= mbAddStream;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Watermark" ) ) )
                 {
                     maWatermark = rFilterData[ nData ].Value;
                     mbWatermark = sal_True;
                 }
 //now all the security related properties...
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncryptFile" ) ) )
                     rFilterData[ nData ].Value >>= mbEncrypt;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentOpenPassword" ) ) )
                     rFilterData[ nData ].Value >>= aOpenPassword;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RestrictPermissions" ) ) )
                     rFilterData[ nData ].Value >>= mbRestrictPermissions;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PermissionPassword" ) ) )
                     rFilterData[ nData ].Value >>= aPermissionPassword;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreparedPasswords" ) ) )
                     rFilterData[ nData ].Value >>= xEnc;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreparedPermissionPassword" ) ) )
                     rFilterData[ nData ].Value >>= aPreparedPermissionPassword;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Printing" ) ) )
                     rFilterData[ nData ].Value >>= mnPrintAllowed;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Changes" ) ) )
                     rFilterData[ nData ].Value >>= mnChangesAllowed;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableCopyingOfContent" ) ) )
                     rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ) )
                     rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
 //--->i56629 links extra (relative links and other related stuff)
-                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ) )
+                 else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportLinksRelativeFsys" ) ) )
                      rFilterData[ nData ].Value >>= mbExportRelativeFsysLinks;
-                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ) )
+                 else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PDFViewSelection" ) ) )
                      rFilterData[ nData ].Value >>= mnDefaultLinkAction;
-                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ) )
+                 else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ) )
                      rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
-                  else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ) )
+                  else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportBookmarksToPDFDestination" ) ) )
                       rFilterData[ nData ].Value >>= mbExportBmkToDest;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportBookmarks" ) ) )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportHiddenSlides" ) ) )
                     rFilterData[ nData ].Value >>= mbExportHiddenSlides;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
+                else if ( rFilterData[ nData ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenBookmarkLevels" ) ) )
                     rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);

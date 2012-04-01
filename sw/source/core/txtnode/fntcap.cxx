@@ -118,8 +118,9 @@ protected:
     SwDrawTextInfo &rInf;
     SwCapitalInfo* pCapInf; // referes to additional information
                            // required by the ::Do function
-public:
     SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
+    ~SwDoCapitals() {}
+public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
     virtual void Do() = 0;
     inline OutputDevice& GetOut() { return rInf.GetOut(); }
@@ -138,6 +139,7 @@ protected:
     Size aTxtSize;
 public:
     SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
+    virtual ~SwDoGetCapitalSize() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
     const Size &GetSize() const { return aTxtSize; }
@@ -198,6 +200,7 @@ public:
         :   SwDoCapitals ( rInfo ), pExtraPos( pExtra ), nTxtWidth( nWidth ),
             nBreak( STRING_LEN )
         { }
+    virtual ~SwDoGetCapitalBreak() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
     xub_StrLen GetBreak() const { return nBreak; }
@@ -288,6 +291,7 @@ public:
     SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
+    virtual ~SwDoDrawCapital() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
     void DrawSpace( Point &rPos );
@@ -386,6 +390,7 @@ public:
     SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
+    virtual ~SwDoCapitalCrsrOfst() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
 
@@ -471,6 +476,8 @@ public:
               nCapWidth( nCapitalWidth ),
               nOrgWidth( rInfo.GetWidth() )
         { }
+
+    virtual ~SwDoDrawStretchCapital() {}
 };
 
 /*************************************************************************

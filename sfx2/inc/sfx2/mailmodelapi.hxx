@@ -134,7 +134,6 @@ public:
                                      const rtl::OUString& rType );
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 
-    sal_Int32           GetCount() const;
     sal_Bool            IsEmpty() const;
 };
 

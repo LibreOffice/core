@@ -69,8 +69,6 @@
 
 #include <tools/multisel.hxx>
 
-#include <svx/svxids.hrc>
-
 #include <svl/numuno.hxx>
 
 #include <svl/itempool.hxx>

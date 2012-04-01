@@ -28,7 +28,6 @@
 package installer::windows::file;
 
 use Digest::MD5;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -358,7 +357,11 @@ sub get_component_from_assigned_file
 {
     my ($gid, $filesref) = @_;
 
-    my $onefile = installer::existence::get_specified_file($filesref, $gid);
+    my ($onefile) = grep {$_->{gid} eq $gid} @{$filesref};
+    if (! defined $onefile) {
+        installer::exiter::exit_program("ERROR: Could not find file $gid in list of files!", "get_component_from_assigned_file");
+    }
+
     my $componentname = "";
     if ( $onefile->{'componentname'} ) { $componentname = $onefile->{'componentname'}; }
     else { installer::exiter::exit_program("ERROR: No component defined for file: $gid", "get_component_from_assigned_file"); }

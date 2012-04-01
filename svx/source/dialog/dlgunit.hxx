@@ -30,7 +30,8 @@
 
 inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
-    String aVal = UniString::CreateFromInt64( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
+    String aVal = rtl::OUString::valueOf(static_cast<sal_Int64>(
+        MetricField::ConvertValue(nVal_100, 2, MAP_100TH_MM, eFieldUnit)));
 
     while( aVal.Len() < 3 )
         aVal.Insert( sal_Unicode('0'), 0 );

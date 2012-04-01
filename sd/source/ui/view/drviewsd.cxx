@@ -51,7 +51,6 @@
 #include "NavigatorChildWindow.hxx"
 #include "navigatr.hxx"
 #include "drawview.hxx"
-#include "slideshow.hxx"
 
 namespace sd {
 

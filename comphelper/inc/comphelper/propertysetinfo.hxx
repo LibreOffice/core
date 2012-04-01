@@ -79,15 +79,6 @@ public:
     */
     void add( PropertyMapEntry* pMap ) throw();
 
-    /** adds an array of PropertyMapEntry to this instance
-
-        <p>At most the number of entries given will be added, if no terminating entry (<code>mpName == <NULL/></code>) is encountered.</p>
-
-        <p>If <arg>nCount</arg> is less than 0, it is ignored and all entries (up to, but not including, the terminating
-        one) are added.</p>
-    */
-    void add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw();
-
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const rtl::OUString& aName ) throw();
 

@@ -2,19 +2,14 @@
 
 if test -z "${SRC_ROOT}"; then
     if test -f ./config_build.mk ; then
-        . ./config_build.mk
+        sed -e 's/^\s*\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' <config_build.mk >config_build.mk.sh
+        . ./config_build.mk.sh
+        rm config_build.mk.sh
     else
         if test -f ./config_host.mk ; then
-            . ./config_host.mk
-        fi
-    fi
-fi
-if test -z "${SOLARENV}"; then
-    if test -f ./Env.Build.sh ; then
-        . ./Env.Build.sh
-    else
-        if test -f ./Env.Host.sh ; then
-            . ./Env.Host.sh
+            sed -e 's/^\s*\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' <config_host.mk >config_host.mk.sh
+            . ./config_host.mk.sh
+            rm config_host.mk.sh
         fi
     fi
 fi
@@ -22,12 +17,6 @@ if test -z "${SOLARENV}"; then
     echo "bootstrap: No environment set!"
     exit 1
 fi
-
-# remove aliases set by Env.Host.sh
-unalias mkout    2> /dev/null
-unalias deliver  2> /dev/null
-unalias build    2> /dev/null
-unalias zipdep   2> /dev/null
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin.

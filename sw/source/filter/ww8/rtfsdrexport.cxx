@@ -29,10 +29,13 @@
 
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
+#include "rtfexportfilter.hxx"
 
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/unoapi.hxx>
+#include <vcl/cvtgrf.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -362,6 +365,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
             case ESCHER_Prop_txflTextFlow:
                 m_aShapeProps.insert(std::pair<OString,OString>(OString("txflTextFlow"), OString::valueOf(sal_Int32(it->nPropValue))));
                 break;
+            case ESCHER_Prop_fillType:
+                m_aShapeProps.insert(std::pair<OString,OString>(OString("fillType"), OString::valueOf(sal_Int32(it->nPropValue))));
+                break;
             default:
                 SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled property: " << nId << " (value: " << it->nPropValue << ")");
                 break;
@@ -419,6 +425,37 @@ void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::r
         .append('{').append(OOO_STRING_SVTOOLS_RTF_SV " ").append(rValue).append('}')
         .append('}');
 }
+
+void RtfSdrExport::impl_writeGraphic()
+{
+    // Get the Graphic object from the Sdr one.
+    uno::Reference<drawing::XShape> xShape = GetXShapeForSdrObject(const_cast<SdrObject*>(m_pSdrObject));
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    OUString sGraphicURL;
+    xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
+    OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
+    const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
+    Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+
+    // Export it to a stream.
+    SvMemoryStream aStream;
+    GraphicConverter::Export(aStream, aGraphic, CVT_PNG);
+    aStream.Seek(STREAM_SEEK_TO_END);
+    sal_uInt32 nSize = aStream.Tell();
+    const sal_uInt8* pGraphicAry = (sal_uInt8*)aStream.GetData();
+
+    Size aMapped(aGraphic.GetPrefSize());
+
+    // Add it to the properties.
+    RtfStringBuffer aBuf;
+    aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH).append(sal_Int32(aMapped.Height())).append(RtfExport::sNewLine);
+    aBuf->append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
+    aBuf->append('}');
+    m_aShapeProps.insert(std::pair<OString,OString>(OString("pib"), aBuf.makeStringAndClear()));
+}
+
 sal_Int32 RtfSdrExport::StartShape()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
@@ -427,6 +464,8 @@ sal_Int32 RtfSdrExport::StartShape()
         return -1;
 
     m_aShapeProps.insert(std::pair<OString,OString>(OString("shapeType"), OString::valueOf(sal_Int32(m_nShapeType))));
+    if (ESCHER_ShpInst_PictureFrame == m_nShapeType)
+        impl_writeGraphic();
 
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHP);
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_IGNORE).append(OOO_STRING_SVTOOLS_RTF_SHPINST);

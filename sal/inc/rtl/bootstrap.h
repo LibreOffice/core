@@ -118,13 +118,13 @@ extern "C" {
 
     <p>
     Must be called before rtl_bootstrap_get(). May not be called twice.
-    If it is never called, a the filename executable.ini (win)
-    or execuablerc (unx) is assumed.
+    If it is never called, the filename is based on the name of the executable,
+    with the suffix ".ini" on Windows or "rc" on Unix.
 
-    @param pName URL of the ini file; must not be null, must not be the empty
+    @param pFileUri URL of the ini file; must not be null, must not be the empty
     string
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
+SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri )
     SAL_THROW_EXTERN_C();
 
 /**

@@ -164,7 +164,7 @@ public:
     {
         string s((*SprmIdToString::Instance())(rId));
 
-        if (s.size() == 0)
+        if (s.empty())
             s = (*QNameToString::Instance())(rId);
 
         return s;

@@ -37,8 +37,9 @@
 #include "helpid.hrc"
 #include "managelang.hrc"
 
+#include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <comphelper/string.hxx>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <svtools/langtab.hxx>
@@ -120,7 +121,7 @@ void ManageLanguageDialog::Init()
     ::rtl::OUString sLibName = pIDEShell->GetCurLibName();
     // set dialog title with library name
     ::rtl::OUString sText = GetText();
-    ::comphelper::string::replace(sText, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$1")), sLibName);
+    sText = sText.replaceAll("$1", sLibName);
     SetText( sText );
     // set handler
     m_aAddPB.SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
@@ -202,7 +203,7 @@ void ManageLanguageDialog::ClearLanguageBox()
     m_aLanguageLB.Clear();
 }
 
-IMPL_LINK( ManageLanguageDialog, AddHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
     SetDefaultLanguageDialog aDlg( this, m_pLocalizationMgr );
     if ( RET_OK == aDlg.Execute() )
@@ -221,7 +222,7 @@ IMPL_LINK( ManageLanguageDialog, AddHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
     QueryBox aQBox( this, IDEResId( RID_QRYBOX_LANGUAGE ) );
     aQBox.SetButtonText( RET_OK, m_sDeleteStr );
@@ -252,7 +253,7 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
 {
     sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
     LanguageEntry* pSelectEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nPos ) );
@@ -271,7 +272,7 @@ IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 {
     sal_uInt16 nCount = m_aLanguageLB.GetEntryCount();
     bool bEmpty = ( !nCount ||

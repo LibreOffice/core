@@ -60,11 +60,10 @@ sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaField::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaField") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaField"));
 }
 
 uno::Sequence<rtl::OUString>
@@ -566,11 +565,10 @@ sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaFields::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFields") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFields"));
 }
 
 // XEnumerationAccess

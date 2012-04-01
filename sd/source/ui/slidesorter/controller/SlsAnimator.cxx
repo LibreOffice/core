@@ -262,7 +262,7 @@ void Animator::RequestNextFrame (const double nFrameStart)
 
 
 
-IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(Animator, TimeoutHandler)
 {
     if (mbIsDisposed)
         return 0;

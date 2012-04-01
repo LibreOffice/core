@@ -68,8 +68,8 @@ using ::rtl::OUString;
 namespace
 {
 
-const OUString lcl_aLabelPrefix( RTL_CONSTASCII_USTRINGPARAM("label "));
-const OUString lcl_aCategoriesRange( RTL_CONSTASCII_USTRINGPARAM("categories"));
+const char aLabelPrefix[] = "label ";
+const char aCategoriesRange[] = "categories";
 
 typedef ::std::multimap< ::rtl::OUString, ::rtl::OUString >
     lcl_tOriginalRangeToInternalRangeMap;
@@ -116,6 +116,9 @@ void lcl_fillRangeMapping(
     sal_Int32 nRowOffset = ( rTable.bHasHeaderRow ? 1 : 0 );
     sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
 
+    const OUString lcl_aCategoriesRange(aCategoriesRange);
+    const OUString lcl_aLabelPrefix(aLabelPrefix);
+
     // Fill range mapping
     const size_t nTableRowCount( rTable.aData.size());
     for( size_t nRow = 0; nRow < nTableRowCount; ++nRow )
@@ -124,7 +127,7 @@ void lcl_fillRangeMapping(
         const size_t nTableColCount( rRow.size());
         for( size_t nCol = 0; nCol < nTableColCount; ++nCol )
         {
-            OUString aRangeId( rRow[nCol].aRangeId );
+            const OUString aRangeId( rRow[nCol].aRangeId );
             if( !aRangeId.isEmpty())
             {
                 if( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
@@ -729,9 +732,9 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )
     {
         SchXMLCell& rCell = mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ];
-        rCell.pComplexString = new Sequence< OUString >();
+        rCell.aComplexString = Sequence< OUString >();
         rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
-        pContext = new SchXMLTextListContext( GetImport(), rLocalName, *rCell.pComplexString );
+        pContext = new SchXMLTextListContext( GetImport(), rLocalName, rCell.aComplexString );
         mbReadText = sal_False;//don't apply text from <text:p>
     }
     // <text:p> element - read text (and range from text:id old version)
@@ -771,12 +774,12 @@ void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >&
         rComplexLabel.realloc(1);
         rComplexLabel[0] = uno::makeAny( rCell.aString );
     }
-    else if( rCell.pComplexString && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
+    else if( rCell.aComplexString.getLength() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
-        sal_Int32 nCount = rCell.pComplexString->getLength();
+        sal_Int32 nCount = rCell.aComplexString.getLength();
         rComplexLabel.realloc( nCount );
         for( sal_Int32 nN=0; nN<nCount; nN++)
-            rComplexLabel[nN] = uno::makeAny((*rCell.pComplexString)[nN]);
+            rComplexLabel[nN] = uno::makeAny((rCell.aComplexString)[nN]);
     }
     else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
     {
@@ -900,6 +903,8 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     lcl_tOriginalRangeToInternalRangeMap aRangeMap;
 
     lcl_fillRangeMapping( rTable, aRangeMap, eDataRowSource );
+
+    const OUString lcl_aCategoriesRange(aCategoriesRange);
 
     bool bCategoriesApplied = false;
     // translate ranges (using the map created before)

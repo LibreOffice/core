@@ -41,14 +41,14 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
     sal_Bool    bValidValue : 1;
     sal_Bool    bDeleted : 1;
     double  nValue;
-    String  aName;
+    rtl::OUString  aName;
     String  aContent;
     sal_uInt16  nType;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const String& );
 
-    virtual const String&   GetName() const;
+    virtual const rtl::OUString&   GetName() const;
     virtual SwFieldType*    Copy() const;
 
     String                  Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
@@ -117,11 +117,11 @@ public:
     virtual String          GetFieldName() const;
 
     // Name cannot be changed.
-    virtual const String&   GetPar1() const;
+    virtual const rtl::OUString& GetPar1() const;
 
     // Content.
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
+    virtual rtl::OUString   GetPar2() const;
+    virtual void            SetPar2(const rtl::OUString& rStr);
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 };

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/table.hxx>
 #include <tools/wldcrd.hxx>
 #include <rtl/instance.hxx>
 #include <svl/inettype.hxx>

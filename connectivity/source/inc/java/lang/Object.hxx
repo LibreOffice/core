@@ -78,29 +78,28 @@ namespace connectivity
     class java_lang_Class;
     class  java_lang_Object
     {
-        // Zuweisungsoperator und Copy Konstruktor sind verboten
+        // operator= and the copy ctor are forbidden
         java_lang_Object& operator= (java_lang_Object&);
         java_lang_Object(java_lang_Object&);
 
-        // nur zum Zerstoeren des C++ Pointers in vom JSbxObject
-        // abgeleiteten Java Objekten
+        // Only to destroy the C++ pointer of Java objects derived from JSbxObject
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     protected:
-        // der JAVA Handle zu dieser Klasse
+        // The Java handle to this class
         jobject object;
-        // Klassendefinition
 
-        // neu in SJ2:
-        static jclass theClass;             // die Klasse braucht nur einmal angefordert werden !
+        // Class definiton
+        // New in SJ2:
+        static jclass theClass; // The class needs to be requested only once!
 
         virtual jclass getMyClass() const;
 
     public:
-        // der Konstruktor, der fuer die abgeleiteten Klassen verwendet
-        // werden soll.
+        // Ctor that should be used for the derived classes
         java_lang_Object( JNIEnv * pEnv, jobject myObj );
-        // der eigentliche Konstruktor
+
+        // The actual ctor
         java_lang_Object(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
 
         virtual ~java_lang_Object();

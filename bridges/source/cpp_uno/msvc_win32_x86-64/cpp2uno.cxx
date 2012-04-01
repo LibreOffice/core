@@ -356,8 +356,6 @@ extern "C" typelib_TypeClass cpp_vtable_call(
         {
             throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No member description found!")),
                                     reinterpret_cast<XInterface *>( pCppI ) );
-            // is here for dummy
-            eRet = typelib_TypeClass_VOID;
         }
     }
 

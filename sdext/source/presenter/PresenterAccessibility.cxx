@@ -1614,16 +1614,9 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
 {
     ThrowIfDisposed();
 
-    if (mpParagraph)
-        return mpParagraph->GetCharacter(nIndex);
-    else
-    {
+    if (!mpParagraph)
         ThrowException("no text support in current mode", ET_IndexOutOfBounds);
-        // The method above throws an exception and the following line is
-        // never reached.  But there is at least one compiler that can not
-        // detect this and we need the return to make it happy.
-        return sal_Unicode();
-    }
+    return mpParagraph->GetCharacter(nIndex);
 }
 
 Sequence<css::beans::PropertyValue> SAL_CALL

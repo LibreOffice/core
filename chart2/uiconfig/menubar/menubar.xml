@@ -51,6 +51,7 @@
                 <menu:menuitem menu:id=".uno:InsertMenuDataLabels" menu:label="" />
                 <menu:menuitem menu:id=".uno:InsertMenuTrendlines" menu:label="" />
                 <menu:menuitem menu:id=".uno:InsertMenuMeanValues" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuXErrorBars" menu:label="" />
                 <menu:menuitem menu:id=".uno:InsertMenuYErrorBars" menu:label="" />
             <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />

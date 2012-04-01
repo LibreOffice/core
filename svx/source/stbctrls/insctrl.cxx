@@ -114,16 +114,4 @@ void SvxInsertStatusBarControl::DrawItemText_Impl()
     GetStatusBar().SetItemText( GetId(), SVX_RESSTR( _nId ) );
 }
 
-sal_uIntPtr SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
-{
-    long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_OVERWRITE_TEXT));
-    long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_INSERT_TEXT));
-
-    if(nWidth1<nWidth2)
-        nWidth1=nWidth2;
-
-    return nWidth1+PAINT_OFFSET;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

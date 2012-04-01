@@ -270,13 +270,10 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     if (eType != GRID_NONE)
         rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
-   //force to set document as standard page mode
+    //force to set document as standard page mode
     sal_Bool bSquaredMode = sal_False;
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );
-
-    //sep.dyaLinePitch
-    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
 
     //Get the size of word's default styles font
     sal_uInt32 nCharWidth=240;
@@ -306,8 +303,14 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     }
 
     aGrid.SetBaseWidth( writer_cast<sal_uInt16>(nCharWidth));
-    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
-    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+
+    //sep.dyaLinePitch
+    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
+    if (nLinePitch >= 1 && nLinePitch <= 31680)
+    {
+        aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
+        aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+    }
 
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
@@ -1457,7 +1460,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
             nSetBorders has a bit set for each location that a sprm set a
             border, so with a sprm set, but no border, then disable the
-            appropiate border
+            appropriate border
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
@@ -1805,7 +1808,6 @@ bool WW8FlyPara::IsEmpty() const
 
 // #i18732# - changes made on behalf of CMC
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
-                            SwWW8ImplReader& rIo,
                             WW8FlyPara& rWW,
                             const sal_uInt32 nWWPgTop,
                             const sal_uInt32 nPgLeft,
@@ -1846,7 +1848,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     if( nWidth <= 10 )                              // Auto-Breite
     {
         bAutoWidth = true;
-        rIo.maTracer.Log(sw::log::eAutoWidthFrame);
         nWidth = nNettoWidth =
             msword_cast<sal_Int16>((nPgWidth ? nPgWidth : 2268)); // 4 cm
     }
@@ -2362,7 +2363,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 
     // <WW8SwFlyPara> constructor has changed - new 4th parameter
     // containing WW8 page top margin.
-    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
+    pSFlyPara = new WW8SwFlyPara( *pPaM, *pWFlyPara,
                                   maSectionManager.GetWWPageTopMargin(),
                                   maSectionManager.GetPageLeft(),
                                   maSectionManager.GetTextAreaWidth(),
@@ -4101,15 +4102,6 @@ sal_uInt16 SwWW8ImplReader::GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing)
         return 280;  //Seems to be always 14points in this case
 }
 
-void SwWW8ImplReader::Read_DontAddEqual(sal_uInt16, const sal_uInt8 *pData, short nLen)
-{
-    if (nLen < 0)
-        return;
-
-    if (*pData)
-        maTracer.Log(sw::log::eDontAddSpaceForEqualStyles);
-}
-
 void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, short nLen)
 {
     if (nLen < 0)
@@ -4202,6 +4194,9 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case     22:
         case 0xA414:
             aUL.SetLower( nPara );
+            break;
+        case 0x246D:
+            aUL.SetContextValue( nPara );
             break;
         default:
             return;
@@ -4727,21 +4722,17 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8* , short nLen)
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
 
-                maTracer.Log(sw::log::eBorderDistOutside);
+                if ((nBorder & WW8_LEFT)==WW8_LEFT)
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), BOX_LINE_LEFT );
 
-        if ((nBorder & WW8_LEFT)==WW8_LEFT) {
-            aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), BOX_LINE_LEFT );
-        }
-        if ((nBorder & WW8_TOP)==WW8_TOP) {
-            aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), BOX_LINE_TOP );
-        }
-        if ((nBorder & WW8_RIGHT)==WW8_RIGHT) {
-            aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), BOX_LINE_RIGHT );
-        }
+                if ((nBorder & WW8_TOP)==WW8_TOP)
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), BOX_LINE_TOP );
 
-        if ((nBorder & WW8_BOT)==WW8_BOT) {
-            aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
-        }
+                if ((nBorder & WW8_RIGHT)==WW8_RIGHT)
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), BOX_LINE_RIGHT );
+
+                if ((nBorder & WW8_BOT)==WW8_BOT)
+                    aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
                 NewAttr( aBox );
 
@@ -6085,7 +6076,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x303C, 0},                                 //undocumented
         {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
         {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para
-        {0x246D, &SwWW8ImplReader::Read_DontAddEqual}//undocumented, para
+        {0x246D, &SwWW8ImplReader::Read_UL}          //"sprmPFContextualSpacing"
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));

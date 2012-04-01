@@ -52,7 +52,7 @@ class SwTableWidthDlg : public SvxStandardDialog
 
 protected:
     virtual void    Apply();
-    DECL_LINK( LoseFocusHdl, Edit* pEdt=0 );
+    DECL_LINK(LoseFocusHdl, void * = 0);
 
 public:
     SwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc );

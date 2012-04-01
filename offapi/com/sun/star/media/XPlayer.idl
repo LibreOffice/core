@@ -77,26 +77,6 @@ interface XPlayer
      */
     double getMediaTime();
 
-    /** sets the time at which to stop reading the stream.
-
-        @param fTime
-            the time at which to stop reading the stream in seconds
-     */
-    void setStopTime( [in] double fTime );
-
-    /** gets the time at which the stream will stop. The result
-        is not guaranteed if no stop time has been set.
-     */
-    double getStopTime();
-
-    /** sets the speed of the stream reading relatively to the normal
-        speed.
-
-        @param fRate
-            the stream reading rate. <code>1.0</code> means normal speed.
-     */
-    void setRate( [in] double fRate );
-
     /** gets the speed of the stream reading relatively to the normal
         reading.
 

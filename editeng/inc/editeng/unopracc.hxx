@@ -53,9 +53,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
-
-    // XServiceName
-    ::rtl::OUString SAL_CALL getServiceName() throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

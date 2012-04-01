@@ -28,7 +28,6 @@
 
 
 #include <svtools/accessibilityoptions.hxx>
-#include "configitems/accessibilityoptions_const.hxx"
 
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -55,6 +54,19 @@ namespace css = com::sun::star;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
+namespace
+{
+    const char s_sAccessibility[] = "org.openoffice.Office.Common/Accessibility";
+    const char s_sAutoDetectSystemHC[] = "AutoDetectSystemHC";
+    const char s_sIsForPagePreviews[] = "IsForPagePreviews";
+    const char s_sIsHelpTipsDisappear[] = "IsHelpTipsDisappear";
+    const char s_sHelpTipSeconds[] = "HelpTipSeconds";
+    const char s_sIsAllowAnimatedGraphics[] = "IsAllowAnimatedGraphics";
+    const char s_sIsAllowAnimatedText[] = "IsAllowAnimatedText";
+    const char s_sIsAutomaticFontColor[] = "IsAutomaticFontColor";
+    const char s_sIsSystemFont[] = "IsSystemFont";
+    const char s_sIsSelectionInReadonly[] = "IsSelectionInReadonly";
+}
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
 
@@ -94,8 +106,8 @@ public:
 
 // initialization of static members --------------------------------------
 
-SvtAccessibilityOptions_Impl* volatile  SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
-sal_Int32                     volatile  SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
+SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
+sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
 
 namespace
 {
@@ -545,11 +557,6 @@ void SvtAccessibilityOptions::Commit()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
-{
-    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
-    return sal_False;
-}
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {
     return sm_pSingleImplConfig->GetAutoDetectSystemHC();

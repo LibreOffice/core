@@ -1579,7 +1579,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  and no color definition (detected by the '[' at the start)
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
     if ( bAutoInt )         // automatic integer digits
@@ -1587,7 +1587,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //! only if two decimal places was set?
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 
@@ -2059,53 +2059,6 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
         if ( pFormat )
             aConditions.append( OUString( pFormat->GetFormatstring() ) );
-
-        aConditions.append( (sal_Unicode) ';' );
-    }
-}
-
-void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData )
-{
-    rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
-    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
-    sal_Int32 nValLen = sValue.getLength();
-
-    if ( rCondition.copy( 0, nValLen ) == sValue )
-    {
-        //! test for valid conditions
-        //! test for default conditions
-
-        OUString sRealCond = rCondition.copy( nValLen, rCondition.getLength() - nValLen );
-        sal_Bool bDefaultCond = sal_False;
-
-        //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
-        //! allow blanks in conditions
-        sal_Bool bFirstCond = ( aConditions.getLength() == 0 );
-        if ( bFirstCond && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
-            bDefaultCond = sal_True;
-
-        if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
-        {
-            //  The third condition in a number format with a text part can only be
-            //  "all other numbers", the condition string must be empty.
-            bDefaultCond = sal_True;
-        }
-
-        if (!bDefaultCond)
-        {
-            sal_Int32 nPos = sRealCond.indexOf( '.' );
-            if ( nPos >= 0 )
-            {   // #i8026# #103991# localize decimal separator
-                const String& rDecSep = rData.getNumDecimalSep();
-                if ( rDecSep.Len() > 1 || rDecSep.GetChar(0) != '.' )
-                    sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
-            }
-            aConditions.append( (sal_Unicode) '[' );
-            aConditions.append( sRealCond );
-            aConditions.append( (sal_Unicode) ']' );
-        }
-
-        aConditions.append( rFormat );
 
         aConditions.append( (sal_Unicode) ';' );
     }

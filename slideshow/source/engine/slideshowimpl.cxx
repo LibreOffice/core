@@ -2450,26 +2450,12 @@ void FrameSynchronization::Deactivate (void)
 } // anon namespace
 
 namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
- sdecl::class_<SlideShowImpl> serviceImpl;
- const sdecl::ServiceDecl slideShowDecl(
-     serviceImpl,
-#else
- const sdecl::ServiceDecl slideShowDecl(
+const sdecl::ServiceDecl slideShowDecl(
      sdecl::class_<SlideShowImpl>(),
-#endif
     "com.sun.star.comp.presentation.SlideShow",
     "com.sun.star.presentation.SlideShow" );
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL slideshow_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, slideShowDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(slideshow, slideShowDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

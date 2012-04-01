@@ -41,6 +41,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "comphelper/configuration.hxx"
 #include "comphelper/processfactory.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "rtl/oustringostreaminserter.hxx"
@@ -50,7 +51,6 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "svl/asiancfg.hxx"
-#include "unotools/configuration.hxx"
 
 namespace {
 
@@ -84,12 +84,12 @@ rtl::OUString toString(css::lang::Locale const & locale) {
 struct SvxAsianConfig::Impl: private boost::noncopyable {
     Impl():
         context(comphelper::getProcessComponentContext()),
-        batch(unotools::ConfigurationChanges::create(context))
+        batch(comphelper::ConfigurationChanges::create(context))
     {}
 
     css::uno::Reference< css::uno::XComponentContext > context;
 
-    boost::shared_ptr< unotools::ConfigurationChanges > batch;
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch;
 };
 
 SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}
@@ -108,7 +108,7 @@ bool SvxAsianConfig::IsKerningWesternTextOnly() const {
 
 void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
     officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::set(
-        impl_->context, impl_->batch, value);
+        value, impl_->batch, impl_->context);
 }
 
 sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
@@ -119,7 +119,7 @@ sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
 
 void SvxAsianConfig::SetCharDistanceCompression(sal_Int16 value) {
     officecfg::Office::Common::AsianLayout::CompressCharacterDistance::set(
-        impl_->context, impl_->batch, value);
+        value, impl_->batch, impl_->context);
 }
 
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
@@ -173,7 +173,7 @@ void SvxAsianConfig::SetStartEndChars(
     assert((startChars == 0) == (endChars == 0));
     css::uno::Reference< css::container::XNameContainer > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
-            impl_->context, impl_->batch));
+            impl_->batch, impl_->context));
     rtl::OUString name(toString(locale));
     if (startChars == 0) {
         try {

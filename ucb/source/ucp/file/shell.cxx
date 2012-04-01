@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_STL_STACK
 #include <stack>
-#define INCLUDED_STL_STACK
-#endif
-
 #include "osl/diagnose.h"
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1912,6 +1908,10 @@ shell::write( sal_Int32 CommandId,
             }
         }
     } while( nReadBytes == nRequestedBytes );
+
+    aFile.sync(); // fsync / flush it to disk.
+    OSL_TRACE( "fsync'd file '%s'\n",
+               rtl::OUStringToOString( aUnqPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     err = aFile.close();
     if( err != osl::FileBase::E_None  )

@@ -158,7 +158,7 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch( const uno::Exception& e )
         {
@@ -1623,7 +1623,7 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl)
 {
     ClickHdl_Impl(&aLinguModulesEditPB);
     return 0;
@@ -1631,7 +1631,7 @@ IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLinguTabPage, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
 {
     ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
     lcl_OpenURL( sURL );
@@ -2463,7 +2463,7 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl)
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(0);
@@ -2472,7 +2472,7 @@ IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxEditModulesDlg, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
+IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl)
 {
     ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
     lcl_OpenURL( sURL );

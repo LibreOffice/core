@@ -64,6 +64,9 @@
 
 #include <unicode/ubidi.h>
 
+#include <set>
+#include <vector>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -71,9 +74,6 @@ using namespace ::rtl;
 typedef TextView* TextViewPtr;
 SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
 // SV_IMPL_PTRARR( TextViews, TextViewPtr );
-
-SV_DECL_VARARR_SORT( TESortedPositions, sal_uLong, 16 )
-SV_IMPL_VARARR_SORT( TESortedPositions, sal_uLong )
 
 #define RESDIFF     10
 #define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
@@ -826,8 +826,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
     else
         aPaM = rCurSel.GetEnd();
 
-    XubString aText( rStr );
-    aText.ConvertLineEnd( LINEEND_LF );
+    XubString aText(convertLineEnd(rStr, LINEEND_LF));
 
     sal_uInt16 nStart = 0;
     while ( nStart < aText.Len() )
@@ -1477,7 +1476,11 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || !pNode->GetText().Len() )
         {
-            if ( pAttrib->Which() == TEXTATTR_FONTCOLOR )
+            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
+            {
+                pAttrib->GetAttr().SetFont(rFont);
+            }
+            else
             {
                 if ( pOutDev )
                     pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
@@ -1582,7 +1585,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
     maInvalidRec = Rectangle();
 }
 
-IMPL_LINK( TextEngine, IdleFormatHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(TextEngine, IdleFormatHdl)
 {
     FormatAndUpdate( mpIdleFormatter->GetView() );
     return 0;
@@ -1823,25 +1826,23 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     TextNode* pNode = pTEParaPortion->GetNode();
     DBG_ASSERT( pNode->GetText().Len(), "CreateTextPortions sollte nicht fuer leere Absaetze verwendet werden!" );
 
-    TESortedPositions aPositions;
-    sal_uLong nZero = 0;
-    aPositions.Insert( nZero );
+    std::set<sal_uInt16> aPositions;
+    std::set<sal_uInt16>::iterator aPositionsIt;
+    aPositions.insert(0);
 
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
 
-        // Start und Ende in das Array eintragen...
-        // Die InsertMethode laesst keine doppelten Werte zu....
-        aPositions.Insert( pAttrib->GetStart() );
-        aPositions.Insert( pAttrib->GetEnd() );
+        aPositions.insert( pAttrib->GetStart() );
+        aPositions.insert( pAttrib->GetEnd() );
     }
-    aPositions.Insert( pNode->GetText().Len() );
+    aPositions.insert( pNode->GetText().Len() );
 
-    const TEWritingDirectionInfos& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
-    for ( sal_uInt16 nD = 0; nD < rWritingDirections.Count(); nD++ )
-        aPositions.Insert( rWritingDirections[nD].nStartPos );
+    const std::vector<TEWritingDirectionInfo>& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
+    for ( std::vector<TEWritingDirectionInfo>::const_iterator it = rWritingDirections.begin(); it != rWritingDirections.end(); ++it )
+        aPositions.insert( (*it).nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
@@ -1850,7 +1851,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )
             {
-                aPositions.Insert( mpIMEInfos->aPos.GetIndex() + n );
+                aPositions.insert( mpIMEInfos->aPos.GetIndex() + n );
                 nLastAttr = mpIMEInfos->pAttribs[n];
             }
         }
@@ -1859,8 +1860,8 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     sal_uInt16 nTabPos = pNode->GetText().Search( '\t', 0 );
     while ( nTabPos != STRING_NOTFOUND )
     {
-        aPositions.Insert( nTabPos );
-        aPositions.Insert( nTabPos + 1 );
+        aPositions.insert( nTabPos );
+        aPositions.insert( nTabPos + 1 );
         nTabPos = pNode->GetText().Search( '\t', nTabPos+1 );
     }
 
@@ -1893,21 +1894,21 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     pTEParaPortion->GetTextPortions().DeleteFromPortion( nInvPortion );
 
     // Eine Portion kann auch durch einen Zeilenumbruch entstanden sein:
-    aPositions.Insert( nPortionStart );
+    aPositions.insert( nPortionStart );
 
-    sal_uInt16 nInvPos;
-    #ifdef DBG_UTIL
-    sal_Bool bFound =
-    #endif
-        aPositions.Seek_Entry( nPortionStart, &nInvPos );
-    DBG_ASSERT( bFound && ( nInvPos < (aPositions.Count()-1) ), "InvPos ?!" );
-    for ( sal_uInt16 i = nInvPos+1; i < aPositions.Count(); i++ )
+    aPositionsIt = aPositions.find( nPortionStart );
+    DBG_ASSERT( aPositionsIt != aPositions.end(), "nPortionStart not found" );
+
+    if ( aPositionsIt != aPositions.end() )
     {
-        TETextPortion* pNew = new TETextPortion( (sal_uInt16)aPositions[i] - (sal_uInt16)aPositions[i-1] );
-        pTEParaPortion->GetTextPortions().Insert( pNew, pTEParaPortion->GetTextPortions().Count());
+        std::set<sal_uInt16>::iterator nextIt = aPositionsIt;
+        for ( ++nextIt; nextIt != aPositions.end(); ++aPositionsIt, ++nextIt )
+        {
+            TETextPortion* pNew = new TETextPortion( *nextIt - *aPositionsIt );
+            pTEParaPortion->GetTextPortions().Insert( pNew, pTEParaPortion->GetTextPortions().Count());
+        }
     }
-
-    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine Portions?!" );
+    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "No Portions?!" );
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
@@ -2256,10 +2257,10 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
     sal_Bool bQuickFormat = sal_False;
 
-    if ( !pTEParaPortion->GetWritingDirectionInfos().Count() )
+    if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
         ImpInitWritingDirections( nPara );
 
-    if ( pTEParaPortion->GetWritingDirectionInfos().Count() == 1 )
+    if ( pTEParaPortion->GetWritingDirectionInfos().size() == 1 )
     {
         if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
         {
@@ -3019,8 +3020,8 @@ void TextEngine::SetRightToLeft( sal_Bool bR2L )
 void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
 {
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
-    TEWritingDirectionInfos& rInfos = pParaPortion->GetWritingDirectionInfos();
-    rInfos.Remove( 0, rInfos.Count() );
+    std::vector<TEWritingDirectionInfo>& rInfos = pParaPortion->GetWritingDirectionInfos();
+    rInfos.clear();
 
     if ( pParaPortion->GetNode()->GetText().Len() )
     {
@@ -3046,7 +3047,7 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         for ( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.Insert( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ), rInfos.Count() );
+            rInfos.push_back( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
             nStart = nEnd;
         }
 
@@ -3054,8 +3055,8 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
     }
 
     // No infos mean no CTL and default dir is L2R...
-    if ( !rInfos.Count() )
-        rInfos.Insert( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().Len() ), rInfos.Count() );
+    if ( rInfos.empty() )
+        rInfos.push_back( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().Len() ) );
 
 }
 
@@ -3067,19 +3068,19 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_u
     if ( pNode && pNode->GetText().Len() )
     {
         TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
-        if ( !pParaPortion->GetWritingDirectionInfos().Count() )
+        if ( pParaPortion->GetWritingDirectionInfos().empty() )
             ImpInitWritingDirections( nPara );
 
-        TEWritingDirectionInfos& rDirInfos = pParaPortion->GetWritingDirectionInfos();
-        for ( sal_uInt16 n = 0; n < rDirInfos.Count(); n++ )
+        std::vector<TEWritingDirectionInfo>& rDirInfos = pParaPortion->GetWritingDirectionInfos();
+        for ( std::vector<TEWritingDirectionInfo>::const_iterator rDirInfosIt = rDirInfos.begin(); rDirInfosIt != rDirInfos.end(); ++rDirInfosIt )
         {
-            if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
+            if ( ( (*rDirInfosIt).nStartPos <= nPos ) && ( (*rDirInfosIt).nEndPos >= nPos ) )
                {
-                nRightToLeft = rDirInfos[n].nType;
+                nRightToLeft = (*rDirInfosIt).nType;
                 if ( pStart )
-                    *pStart = rDirInfos[n].nStartPos;
+                    *pStart = (*rDirInfosIt).nStartPos;
                 if ( pEnd )
-                    *pEnd = rDirInfos[n].nEndPos;
+                    *pEnd = (*rDirInfosIt).nEndPos;
                 break;
             }
         }

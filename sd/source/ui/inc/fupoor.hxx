@@ -139,7 +139,7 @@ protected:
         SfxRequest& rReq);
     virtual ~FuPoor (void);
 
-    DECL_LINK( DelayHdl, Timer * );
+    DECL_LINK( DelayHdl, void * );
 
     void ImpForceQuadratic(Rectangle& rRect);
 
@@ -173,11 +173,11 @@ protected:
     Dialog*         pDialog;
 
     Timer           aScrollTimer;           // fuer Autoscrolling
-    DECL_LINK( ScrollHdl, Timer * );
+    DECL_LINK( ScrollHdl, void * );
     void ForceScroll(const Point& aPixPos);
 
     Timer           aDragTimer;             // fuer Drag&Drop
-    DECL_LINK( DragHdl, Timer * );
+    DECL_LINK(DragHdl, void *);
     sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 

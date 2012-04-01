@@ -128,15 +128,6 @@ namespace vclcanvas
 
             aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
 
-            // #i72417# detecting the 180 degree rotation case manually here.
-            if( aScale.getX() < 0.0 &&
-                aScale.getY() < 0.0 &&
-                basegfx::fTools::equalZero(nRotate) )
-            {
-                aScale *= -1.0;
-                nRotate += M_PI;
-            }
-
             // query font metric _before_ tampering with width and height
             if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
             {

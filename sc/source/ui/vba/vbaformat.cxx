@@ -376,7 +376,7 @@ ScVbaFormat<Ifc1>::getNumberFormatLocal(  ) throw (script::BasicErrorException, 
     uno::Any aRet = uno::makeAny( rtl::OUString() );
     try
     {
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) );
+        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) );
         if (!isAmbiguous( sPropName ))
         {
 
@@ -412,7 +412,7 @@ ScVbaFormat<Ifc1>::setNumberFormat( lang::Locale _aLocale, const rtl::OUString& 
         {
             xNumberFormats->addNew(_sFormatString, _aLocale);
         }
-        mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) ), uno::makeAny( nFormat ) );
+        mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) ), uno::makeAny( nFormat ) );
     }
     catch (const uno::Exception& )
     {
@@ -428,7 +428,7 @@ ScVbaFormat<Ifc1>::setNumberFormatLocal( const uno::Any& _oLocalFormatString ) t
     {
         rtl::OUString sLocalFormatString;
         sal_Int32 nFormat = -1;
-        rtl::OUString sNumFormat( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) );
+        rtl::OUString sNumFormat( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) );
         if ( !(_oLocalFormatString >>= sLocalFormatString )
         || !( mxPropertySet->getPropertyValue(sNumFormat) >>= nFormat ) )
             throw uno::RuntimeException();
@@ -471,7 +471,7 @@ ScVbaFormat<Ifc1>::setNumberFormat( const uno::Any& _oFormatString ) throw (scri
         lang::Locale aRangeLocale;
         xNumberFormats->getByKey(nFormat)->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALE ) ) ) >>= aRangeLocale;
         sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, aRangeLocale);
-        mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) ), uno::makeAny( nNewFormat));
+        mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) ), uno::makeAny( nNewFormat));
     }
     catch (const uno::Exception& )
     {
@@ -742,7 +742,7 @@ ScVbaFormat< Ifc1 >::getNumberFormat(  ) throw (script::BasicErrorException, uno
     try
     {
         sal_Int32 nFormat = -1;
-        rtl::OUString sNumFormat( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) );
+        rtl::OUString sNumFormat( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) );
         if (!isAmbiguous(sNumFormat) &&
             ( mxPropertySet->getPropertyValue(sNumFormat) >>= nFormat) )
         {
@@ -800,11 +800,10 @@ ScVbaFormat<Ifc1>::getXPropertyState() throw ( uno::RuntimeException )
 }
 
 template< typename Ifc1 >
-rtl::OUString&
+rtl::OUString
 ScVbaFormat<Ifc1>::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormat") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormat"));
 }
 
 template< typename Ifc1 >

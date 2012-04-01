@@ -11,7 +11,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/Makefile mi
 diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/win32.mak
 --- misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-14 14:28:59.000000000 +0100
 +++ misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/win32.mak	2011-12-15 09:11:37.000000000 +0100
-@@ -13,18 +13,19 @@
+@@ -13,30 +13,29 @@
  
  # CPU="i386" or CPU environment of nmake.exe (AMD64 or IA64)
  
@@ -33,6 +33,20 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
 -!MESSAGE CPU=i386 or AMD64 or IA64
 +!MESSAGE CPU=I or X
  !ERROR Make aborted.
+ !ENDIF
+ 
+ !IFDEF DEBUG
+-OPT=/Od /Zi /MDd
++OPT=/Od /Zi
+ LOPT=/DEBUG
+-DEBUGDEF=/D _DEBUG
+-OUTFILENAME=libpqd
++OUTFILENAME=libpq
+ !ELSE
+ OPT=/O2 /MD
+ LOPT=
+-DEBUGDEF=/D NDEBUG
+ OUTFILENAME=libpq
  !ENDIF
  
 @@ -56,7 +57,7 @@
@@ -67,7 +81,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
  
  CLEAN :
  	-@erase "$(INTDIR)\getaddrinfo.obj"
-@@ -192,7 +186,7 @@
+@@ -192,10 +186,11 @@
  
  CPP_PROJ=/nologo /W3 /EHsc $(OPT) \
   /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" \
@@ -76,6 +90,10 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
   /D "FRONTEND" $(DEBUGDEF) \
   /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\libpq.pch" \
   /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c  \
++ /D "_CRT_NONSTDC_NO_DEPRECATE" \
+  /D "_CRT_SECURE_NO_DEPRECATE" $(ADD_DEFINES)
+ 
+ !IFDEF USE_SSL
 @@ -230,7 +224,7 @@
  LINK32=link.exe
  LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS) $(LDAP_LIBS) $(KFW_LIBS) $(ADD_SECLIB) \

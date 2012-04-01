@@ -192,7 +192,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
 {
     // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
@@ -602,7 +602,7 @@ void SwFldVarPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    std::vector<String> aList;
+    std::vector<rtl::OUString> aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
     size_t nCount = aList.size();
     size_t nPos;
@@ -632,7 +632,7 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
+                        if (aList[i].equals(((const SwFormulaField*)GetCurField())->GetFormula()))
                             bInsert = sal_True;
                         break;
 
@@ -824,7 +824,7 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 /*--------------------------------------------------------------------
     Description: Modify
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
     String sValue(aValueED.GetText());
     sal_Bool bHasValue = sValue.Len() != 0;
@@ -1098,7 +1098,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
     return sal_True;
 }
 
-IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)
 {
     sal_Bool bEnable = aChapterLevelLB.GetSelectEntryPos() != 0;
 
@@ -1109,7 +1109,7 @@ IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
 {
     sal_Bool bEnable = aSeparatorED.GetText().Len() != 0 ||
                     aChapterLevelLB.GetSelectEntryPos() == 0;
@@ -1167,7 +1167,7 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
         {
             nSubType = (nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
 
-            if (nFormat == ULONG_MAX && aNumFormatLB.GetSelectEntry() == SW_RESSTR(FMT_USERVAR_CMD))
+            if (nFormat == ULONG_MAX && aNumFormatLB.GetSelectEntry().Equals(SW_RESSTR(FMT_USERVAR_CMD)))
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
 
             if (aInvisibleCB.IsChecked())

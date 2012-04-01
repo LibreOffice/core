@@ -28,7 +28,6 @@
 
 #include "sal/config.h"
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/shl.hxx>
 #include <svtools/ctrltool.hxx>
@@ -231,24 +230,22 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
     if(pConfig->IsModified())
         pConfig->Commit();
     pConfig->Apply();
-    boost::shared_ptr< unotools::ConfigurationChanges > batch(
-        unotools::ConfigurationChanges::create(
-            comphelper::getProcessComponentContext()));
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
     if(aFontHeightLB.GetSavedValue() != aFontHeightLB.GetSelectEntryPos())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
-            comphelper::getProcessComponentContext(), batch,
-            static_cast< sal_Int16 >(aFontHeightLB.GetSelectEntry().ToInt32()));
+            static_cast< sal_Int16 >(aFontHeightLB.GetSelectEntry().ToInt32()),
+            batch);
     if(aNonPropFontsOnlyCB.GetSavedValue() != aNonPropFontsOnlyCB.IsChecked())
         officecfg::Office::Common::Font::SourceViewFont::
             NonProportionalFontsOnly::set(
-                comphelper::getProcessComponentContext(), batch,
-                aNonPropFontsOnlyCB.IsChecked());
+                aNonPropFontsOnlyCB.IsChecked(), batch);
     //font name changes cannot be detected by saved values
     rtl::OUString sFontName;
     if(aFontNameLB.GetSelectEntryPos())
         sFontName = aFontNameLB.GetSelectEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
-        comphelper::getProcessComponentContext(), batch, sFontName);
+        boost::optional< rtl::OUString >(sFontName), batch);
     batch->commit();
 
     return sal_False;
@@ -289,20 +286,19 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     //fill font name box first
     aNonPropFontsOnlyCB.Check(
         officecfg::Office::Common::Font::SourceViewFont::
-            NonProportionalFontsOnly::get(
-                comphelper::getProcessComponentContext()));
+        NonProportionalFontsOnly::get());
     NonPropFontsHdl(&aNonPropFontsOnlyCB);
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext()));
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
+        get_value_or(rtl::OUString()));
     if(!sFontName.isEmpty())
         aFontNameLB.SelectEntry(sFontName);
     else
         aFontNameLB.SelectEntryPos(0);
     aFontHeightLB.SelectEntry(
         String::CreateFromInt32(
-            officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-                comphelper::getProcessComponentContext())));
+            officecfg::Office::Common::Font::SourceViewFont::FontHeight::
+            get()));
     aNonPropFontsOnlyCB.SaveValue();
     aFontHeightLB.SaveValue();
 }

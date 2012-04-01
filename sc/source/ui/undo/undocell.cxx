@@ -276,7 +276,7 @@ void ScUndoEnterData::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
         pDoc->PutCell( nCol, nRow, pTabs[i], pNewCell );
 
         if (pHasFormat && pOldFormats)
@@ -409,7 +409,7 @@ void ScUndoEnterValue::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos, pNewCell );
 
@@ -495,7 +495,7 @@ void ScUndoPutCell::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 
@@ -513,7 +513,7 @@ void ScUndoPutCell::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 
@@ -897,9 +897,9 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        OSL_ENSURE( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+        OSL_ENSURE( !rDoc.GetNotes( maPos.Tab() )->findByAddress(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
-        rDoc.TakeNote( maPos, pNote );
+        rDoc.GetNotes(maPos.Tab())->insert( maPos, pNote );
     }
 }
 
@@ -908,8 +908,8 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        OSL_ENSURE( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
-        if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
+        OSL_ENSURE( rDoc.GetNotes( maPos.Tab() )->findByAddress(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+        if( ScPostIt* pNote = rDoc.GetNotes(maPos.Tab())->ReleaseNote( maPos ) )
         {
             /*  Forget pointer to caption object to suppress removing the
                 caption object from the drawing layer while deleting pNote
@@ -936,7 +936,7 @@ ScUndoShowHideNote::~ScUndoShowHideNote()
 void ScUndoShowHideNote::Undo()
 {
     BeginUndo();
-    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( maPos.Tab() )->findByAddress(maPos) )
         pNote->ShowCaption( maPos, !mbShown );
     EndUndo();
 }
@@ -944,7 +944,7 @@ void ScUndoShowHideNote::Undo()
 void ScUndoShowHideNote::Redo()
 {
     BeginRedo();
-    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( maPos.Tab() )->findByAddress(maPos) )
         pNote->ShowCaption( maPos, mbShown );
     EndRedo();
 }
@@ -1028,10 +1028,10 @@ void ScUndoDetective::Undo()
         ScDetOpList* pList = pDoc->GetDetOpList();
         if (pList && pList->Count())
         {
-            sal_uInt16 nPos = pList->Count() - 1;
-            ScDetOpData* pData = (*pList)[nPos];
-            if ( pData->GetOperation() == (ScDetOpType) nAction && pData->GetPos() == aPos )
-                pList->DeleteAndDestroy( nPos, 1 );
+            ScDetOpDataVector& rVec = pList->GetDataVector();
+            ScDetOpDataVector::iterator it = rVec.begin() + rVec.size() - 1;
+            if ( it->GetOperation() == (ScDetOpType) nAction && it->GetPos() == aPos )
+                rVec.erase( it);
             else
             {
                 OSL_FAIL("Detektiv-Eintrag in der Liste nicht gefunden");

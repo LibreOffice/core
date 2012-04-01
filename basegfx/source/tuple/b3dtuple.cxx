@@ -39,12 +39,6 @@ namespace basegfx
         return EmptyTuple::get();
     }
 
-    B3DTuple::B3DTuple(const B3ITuple& rTup)
-    :   mfX( rTup.getX() ),
-        mfY( rTup.getY() ),
-        mfZ( rTup.getZ() )
-    {}
-
     B3ITuple fround(const B3DTuple& rTup)
     {
         return B3ITuple(fround(rTup.getX()), fround(rTup.getY()), fround(rTup.getZ()));

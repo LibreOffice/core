@@ -1399,7 +1399,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const ::rtl::OUString& rNa
     }
     case OWN_ATTR_VALUE_POLYGONKIND:
     {
-        rValue <<= mePolygonKind;
+        rValue <<= GetPolygonKind();
         break;
     }
     default:

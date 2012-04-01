@@ -38,7 +38,6 @@
 #include "convuno.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
-#include "collect.hxx"
 #include "tablink.hxx"
 #include "arealink.hxx"
 #include "hints.hxx"
@@ -418,27 +417,29 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
-    if (pDocShell)
+    if (!pDocShell)
+        return NULL;
+
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    StrSetType aNames;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    sal_Int32 nCount = 0;
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
-        sal_Int32 nCount = 0;
-        ScStrCollection aNames; // um doppelte wegzulassen
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if (pDoc->IsLinked(nTab))
-            {
-                String aLinkDoc = pDoc->GetLinkDoc( nTab );
-                StrData* pData = new StrData(aLinkDoc);
-                if (aNames.Insert(pData))
-                {
-                    if ( nCount == nIndex )
-                        return new ScSheetLinkObj( pDocShell, aLinkDoc );
-                    ++nCount;
-                }
-                else
-                    delete pData;
-            }
+        if (!pDoc->IsLinked(nTab))
+            continue;
+
+        rtl::OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        if (aNames.insert(aLinkDoc).second)
+        {
+            // unique document name.
+            if (nCount == nIndex)
+                return new ScSheetLinkObj( pDocShell, aLinkDoc );
+            ++nCount;
+        }
     }
+
     return NULL;    // kein Dokument oder Index zu gross
 }
 
@@ -478,23 +479,25 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
 
 sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
 {
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+
     SolarMutexGuard aGuard;
+    if (!pDocShell)
+        return 0;
+
     sal_Int32 nCount = 0;
-    if (pDocShell)
+
+    StrSetType aNames;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
-        ScStrCollection aNames; // um doppelte wegzulassen
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if (pDoc->IsLinked(nTab))
-            {
-                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
-                StrData* pData = new StrData(aLinkDoc);
-                if (aNames.Insert(pData))
-                    ++nCount;
-                else
-                    delete pData;
-            }
+        if (!pDoc->IsLinked(nTab))
+            continue;
+
+        rtl::OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        if (aNames.insert(aLinkDoc).second)
+            ++nCount;
     }
     return nCount;
 }
@@ -562,36 +565,33 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
 
 uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::RuntimeException)
 {
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+
     SolarMutexGuard aGuard;
     //  Name ist der Dateiname
 
-    if (pDocShell)
-    {
-        ScStrCollection aNames; // um doppelte wegzulassen
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
-        String aName;
+    if (!pDocShell)
+        return uno::Sequence<rtl::OUString>();
 
-        sal_Int32 nLinkCount = getCount();
-        uno::Sequence<rtl::OUString> aSeq(nLinkCount);
-        rtl::OUString* pAry = aSeq.getArray();
-        sal_uInt16 nPos = 0;
-        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        {
-            if (pDoc->IsLinked(nTab))
-            {
-                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
-                StrData* pData = new StrData(aLinkDoc);
-                if (aNames.Insert(pData))
-                    pAry[nPos++] = aLinkDoc;
-                else
-                    delete pData;
-            }
-        }
-        OSL_ENSURE( nPos==nLinkCount, "verzaehlt" );
-        return aSeq;
+    StrSetType aNames;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+
+    sal_Int32 nLinkCount = getCount();
+    uno::Sequence<rtl::OUString> aSeq(nLinkCount);
+    rtl::OUString* pAry = aSeq.getArray();
+    sal_uInt16 nPos = 0;
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+    {
+        if (!pDoc->IsLinked(nTab))
+            continue;
+
+        rtl::OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        if (aNames.insert(aLinkDoc).second)
+            pAry[nPos++] = aLinkDoc;
     }
-    return uno::Sequence<rtl::OUString>();
+    OSL_ENSURE( nPos==nLinkCount, "verzaehlt" );
+    return aSeq;
 }
 
 //------------------------------------------------------------------------

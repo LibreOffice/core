@@ -31,11 +31,9 @@ $(eval $(call gb_Library_Library,fwk))
 $(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
 
 $(eval $(call gb_Library_set_include,fwk,\
-    -I$(realpath $(SRCDIR)/framework/source/inc) \
-    -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(WORKDIR)/inc/framework/ \
+    -I$(SRCDIR)/framework/source/inc \
+    -I$(SRCDIR)/framework/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/framework \
 ))
 
 $(eval $(call gb_Library_add_api,fwk,\

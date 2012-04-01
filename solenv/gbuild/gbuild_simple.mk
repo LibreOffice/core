@@ -34,7 +34,7 @@ COMMA :=,
 
 include $(GBUILDDIR)/Output.mk
 
-# BuildDirs uses the Output functions already
+# BuildDirs overrides *DIR variables for Windows
 include $(GBUILDDIR)/BuildDirs.mk
 
 # Presumably the common parts in gbuild.mk and gbuild_simple.mk should
@@ -49,11 +49,7 @@ include $(GBUILDDIR)/BuildDirs.mk
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
-ifneq ($(strip $(product)),)
-gb_PRODUCT := $(true)
-else
 gb_PRODUCT := $(false)
-endif
 endif
 
 # These are useful, too, for stuff built in "custom" Makefiles
@@ -81,8 +77,33 @@ gb_SYMBOL := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
+include $(GBUILDDIR)/Tempfile.mk
 
 # Include platform/cpu/compiler specific config/definitions
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
+
+ifeq ($(CROSS_COMPILING),YES)
+# We can safely Assume all cross-compilation is from Unix systems.
+gb_Executable_EXT_for_build :=
+else
+gb_Executable_EXT_for_build := $(gb_Executable_EXT)
+endif
+
+ifeq ($(SYSTEM_PYTHON),YES)
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
+else ifeq ($(OS),MACOSX)
+#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
+#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
+#dirs for in-tree internal python
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
+else ifeq ($(DISABLE_PYTHON),TRUE)
+# Build-time python
+gb_PYTHON := python
+else
+gb_PYTHONTARGET := $(OUTDIR)/bin/python
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+endif
 
 # vim: set noet sw=4 ts=4:

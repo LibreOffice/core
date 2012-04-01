@@ -50,11 +50,10 @@ SwVbaListGallery::ListTemplates( const uno::Any& index ) throw (uno::RuntimeExce
     return uno::makeAny( xCol );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaListGallery::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaListGallery") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListGallery"));
 }
 
 uno::Sequence< rtl::OUString >

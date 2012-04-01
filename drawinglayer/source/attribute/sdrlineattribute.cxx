@@ -130,12 +130,6 @@ namespace drawinglayer
         {
         }
 
-        SdrLineAttribute::SdrLineAttribute(
-            const basegfx::BColor& rColor)
-        :   mpSdrLineAttribute(new ImpSdrLineAttribute(rColor))
-        {
-        }
-
         SdrLineAttribute::SdrLineAttribute()
         :   mpSdrLineAttribute(ImpSdrLineAttribute::get_global_default())
         {
@@ -228,11 +222,6 @@ namespace drawinglayer
         double SdrLineAttribute::getFullDotDashLen() const
         {
             return mpSdrLineAttribute->getFullDotDashLen();
-        }
-
-        bool SdrLineAttribute::isDashed() const
-        {
-            return (0L != getDotDashArray().size());
         }
 
     } // end of namespace attribute

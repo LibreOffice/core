@@ -672,7 +672,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     OSL_ENSURE(0 == rShell.GetTableFmt(), "What to do with a table here?");
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 {
     m_aExampleWIN.Show( sal_True );
     m_aExampleContainerWIN.Show(sal_False);
@@ -737,7 +737,7 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
     {

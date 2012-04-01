@@ -1102,18 +1102,6 @@ void SvxRuler::SetDefTabDist
 }
 
 
-long SvxRuler::GetDefTabDist() const
-
-/* [Description]
-
-   Get value for DefaultTab (is delivered in App-metrics)
-*/
-
-{
-    return lDefTabDist;
-}
-
-
 sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
 
 /* [Description]

@@ -295,29 +295,6 @@ FileStream::FileStream()
 {
 }
 
-FileStream::FileStream(const OString& name, FileAccessMode mode)
-    : m_file(NULL)
-{
-    if ( !name.isEmpty() )
-    {
-        OUString sUrl(convertToFileUrl(name));
-#ifdef SAL_UNX
-        sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
-                           osl_File_Attribute_OwnRead |
-                           osl_File_Attribute_GrpWrite |
-                           osl_File_Attribute_GrpRead |
-                           osl_File_Attribute_OthRead;
-        if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None &&
-            osl_setFileAttributes(sUrl.pData, uAttr) == osl_File_E_None)
-#else
-        if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None)
-#endif
-            m_name = name;
-        else
-            m_file = NULL;
-    }
-}
-
 FileStream::~FileStream()
 {
     if ( isValid() )

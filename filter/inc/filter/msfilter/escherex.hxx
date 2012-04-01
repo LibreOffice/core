@@ -46,7 +46,6 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
-#include <memory>
 #include "filter/msfilter/msfilterdllapi.h"
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/

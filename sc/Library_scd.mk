@@ -25,9 +25,8 @@ $(eval $(call gb_Library_Library,scd))
 $(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
 
 $(eval $(call gb_Library_set_include,scd,\
-        -I$(realpath $(SRCDIR)/sc/inc) \
-        -I$(WORKDIR)/Misc/sc/ \
-        $$(INCLUDE) \
+	-I$(SRCDIR)/sc/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_api,scd,\
@@ -36,18 +35,18 @@ $(eval $(call gb_Library_add_api,scd,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,scd,\
-        comphelper \
-        cppu \
-        cppuhelper \
-        sal \
-        sfx \
-        sot \
-        svl \
-        svt \
-        tl \
-        ucbhelper \
-        vcl \
-        $(gb_STDLIBS) \
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
+	sfx \
+	sot \
+	svl \
+	svt \
+	tl \
+	ucbhelper \
+	vcl \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scd,\

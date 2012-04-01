@@ -39,7 +39,6 @@ $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,utl,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 # add any additional definitions to be set for compilation here
@@ -80,7 +79,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/configmgr \
     unotools/source/config/confignode \
     unotools/source/config/configpathes \
-    unotools/source/config/configuration \
     unotools/source/config/configvaluecontainer \
     unotools/source/config/defaultoptions \
     unotools/source/config/docinfohelper \

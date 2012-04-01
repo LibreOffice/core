@@ -242,7 +242,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 
-    if ( pInputHdl && pInputHdl->GetFormString().Len() )
+    if (pInputHdl && !pInputHdl->GetFormString().isEmpty())
     {
         //  Umschalten waehrend der Funktionsautopilot aktiv ist
         //  -> Inhalt des Funktionsautopiloten wieder anzeigen
@@ -697,7 +697,7 @@ void ScInputWindow::StopEditEngine( sal_Bool bAll )
 
 void ScInputWindow::TextGrabFocus()
 {
-    aTextWindow.GrabFocus();
+    aTextWindow.TextGrabFocus();
 }
 
 void ScInputWindow::TextInvalidate()
@@ -712,12 +712,13 @@ void ScInputWindow::SwitchToTextWin()
     aTextWindow.StartEditEngine();
     if ( SC_MOD()->IsEditMode() )
     {
-        aTextWindow.GrabFocus();
+        aTextWindow.TextGrabFocus();
         EditView* pView = aTextWindow.GetEditView();
         if (pView)
         {
-            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen(0);
-            ESelection aSel( 0, nLen, 0, nLen );
+            sal_uInt16 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
+            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen( nPara );
+            ESelection aSel( nPara, nLen, nPara, nLen );
             pView->SetSelection( aSel );                // set cursor to end of text
         }
     }
@@ -1034,7 +1035,7 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 {
     Window *w=GetParent();
     ScInputWindow *pParent;
@@ -1109,12 +1110,16 @@ void ScInputBarGroup::TriggerToolboxLayout()
     }
 }
 
-IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl)
 {
     aMultiTextWnd.DoScroll();
     return 0;
 }
 
+void ScInputBarGroup::TextGrabFocus()
+{
+    aMultiTextWnd.TextGrabFocus();
+}
 
 //========================================================================
 //                      ScMultiTextWnd
@@ -1608,6 +1613,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
         }
+        else if ( nCommand == COMMAND_WHEEL )
+        {
+            //don't call InputChanged for COMMAND_WHEEL
+        }
         else
             SC_MOD()->InputChanged( pEditView );
     }
@@ -1787,7 +1796,7 @@ void ScTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, EMPTYARG)
+IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
 {
     if (pEditView && !bInputMode)
     {
@@ -2022,6 +2031,10 @@ void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
+void ScTextWnd::TextGrabFocus()
+{
+    GrabFocus();
+}
 
 //========================================================================
 //                          Positionsfenster

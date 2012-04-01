@@ -43,8 +43,10 @@ int SVMain();
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#ifdef ANDROID
+#if defined(ANDROID) || defined(LIBO_HEADLESS)
+#if defined(ANDROID)
     try {
+#endif
         rtl::Bootstrap::setIniFilename(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
 #endif
@@ -68,6 +70,10 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     {
         desktop::displayVersion();
         return EXIT_SUCCESS;
+    }
+    else if ( rCmdLineArgs.HasUnknown() )
+    {
+        return EXIT_FAILURE;
     }
 #endif
     return SVMain();

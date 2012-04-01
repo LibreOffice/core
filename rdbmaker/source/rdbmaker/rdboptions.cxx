@@ -350,8 +350,6 @@ OString RdbOptions::prepareHelp()
     help += "    -L           = specifies that only a text file is generated with the\n";
     help += "                   names of the specified types and their dependencies.\n";
     help += "                   Default is that a registry file will be created\n";
-//  help += "    -X<xmlfile>  = xmlfile specifies the name of an xml description where\n";
-//  help += "                   all types are specified which will be generated.\n";
     help += "    -T<name>     = name specifies a type or a list of types. The output for\n";
     help += "      [t1;...]     this type is generated.\n";
     help += "                   Example: 'com.sun.star.uno.XInterface' is a valid type.\n";

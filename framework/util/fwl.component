@@ -28,7 +28,7 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" prefix="fwl"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sum.star.comp.framework.LanguageSelectionMenuController">
+  <implementation name="com.sun.star.comp.framework.LanguageSelectionMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.DispatchRecorder">

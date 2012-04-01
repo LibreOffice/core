@@ -52,12 +52,12 @@
 //   key: 0xFF UTF8(identifier)
 //   value: UTF8(tempname) 0xFF UTF8(filename) 0xFF UTF8(mediatype)
 
+#if !defined(ANDROID) && !defined(IOS)
+
 namespace {
 
 static char const separator = static_cast< char >(
     static_cast< unsigned char >(0xFF));
-
-static char const legacyPrefix[] = "org.openoffice.legacy.";
 
 ::rtl::OString oldKey(::rtl::OUString const & fileName) {
     return ::rtl::OUStringToOString(fileName, RTL_TEXTENCODING_UTF8);
@@ -119,6 +119,7 @@ static char const legacyPrefix[] = "org.openoffice.legacy.";
 }
 
 }
+#endif
 
 namespace dp_manager {
 

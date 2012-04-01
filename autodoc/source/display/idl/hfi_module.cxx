@@ -214,7 +214,7 @@ HF_IdlModule::produce_ChildList( const String &      i_sName,
                                  const String &      i_sLabel,
                                  const ce_ptr_list & i_list ) const
 {
-    if ( i_list.size() == 0 )
+    if ( i_list.empty() )
         return false;
 
     HF_SubTitleTable

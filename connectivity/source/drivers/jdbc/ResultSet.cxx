@@ -36,7 +36,6 @@
 #include "java/sql/Array.hxx"
 #include "java/sql/Ref.hxx"
 #include "java/sql/Clob.hxx"
-#include "java/sql/Timestamp.hxx"
 #include "java/sql/Blob.hxx"
 #include "java/sql/ResultSetMetaData.hxx"
 #include "java/io/InputStream.hxx"

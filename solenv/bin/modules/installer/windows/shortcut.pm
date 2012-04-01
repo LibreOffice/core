@@ -27,7 +27,6 @@
 
 package installer::windows::shortcut;
 
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -516,7 +515,7 @@ sub get_folderitem_icon
 
     my $sourcepath = $onefile->{'sourcepath'};
 
-    if (! installer::existence::exists_in_array($sourcepath, $iconfilecollector))
+    if (! grep {$_ eq $sourcepath} @{$iconfilecollector})
     {
         push(@{$iconfilecollector}, $sourcepath);
     }
@@ -674,7 +673,7 @@ sub create_shortcut_table
 
         if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon!", "create_shortcut_table"); }
 
-        if (! installer::existence::exists_in_array($$sourcepathref, $iconfilecollector))
+        if (! grep {$_ eq $$sourcepathref} @{$iconfilecollector})
         {
             unshift(@{$iconfilecollector}, $$sourcepathref);
             $installer::globals::sofficeiconadded = 1;

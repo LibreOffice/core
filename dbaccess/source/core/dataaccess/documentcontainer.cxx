@@ -43,7 +43,6 @@
 #include "datasource.hxx"
 #include <comphelper/classids.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/string.hxx>
 #include <connectivity/sqlerror.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
@@ -51,7 +50,6 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -542,8 +540,8 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         ::rtl::OUString sName;
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
-            ::rtl::OUString sMessage( DBA_RES( RID_STR_NAME_NOT_FOUND ) );
-            ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
+            ::rtl::OUString sMessage(
+                DBA_RES(RID_STR_NAME_NOT_FOUND).replaceFirst("$name$", _sURL));
             throw IllegalArgumentException( sMessage, *this, 1 );
         }
 
@@ -611,9 +609,10 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUStrin
 
     if ( !xNameContainer.is() )
     {
-        ::rtl::OUString sMessage( DBA_RES( RID_STR_NO_SUB_FOLDER ) );
         sal_Int32 index = sName.getLength();
-        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$folder$", _sName.getToken(0,'/',index) );
+        ::rtl::OUString sMessage(
+            DBA_RES(RID_STR_NO_SUB_FOLDER).replaceFirst("$folder$",
+                _sName.getToken(0,'/',index)));
         throw IllegalArgumentException( sMessage, *this, 1 );
     }
 

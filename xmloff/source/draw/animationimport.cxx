@@ -394,9 +394,9 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
             }
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException caught!" );
     }
 
     Any aAny;
@@ -738,9 +738,9 @@ AnimationNodeContext::AnimationNodeContext(
             }
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException caught!" );
     }
 }
 
@@ -1257,9 +1257,9 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                 xAnimate->setValues( mpHelper->convertValueSequence( meAttributeName, aValues ) );
         }
     }
-    catch( RuntimeException& )
+    catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException caught!" );
     }
 }
 
@@ -1444,7 +1444,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
             }
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
     }

@@ -125,8 +125,8 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
 
-    DECL_LINK( OkHdl, CheckBox * );
-    DECL_LINK( NameEditHdl, Edit * );
+    DECL_LINK(OkHdl, void *);
+    DECL_LINK(NameEditHdl, void *);
     DECL_LINK( ConditionEditHdl, Edit * );
 
     DECL_LINK( ChangePasswdHdl, Button * );
@@ -134,10 +134,10 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( ChangeHideHdl, TriStateBox * );
     // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
-    DECL_LINK( ChangeDismissHdl, CheckBox * );
+    DECL_LINK(ChangeDismissHdl, void *);
     DECL_LINK( UseFileHdl, CheckBox* );
-    DECL_LINK( FileSearchHdl, PushButton* );
-    DECL_LINK( OptionsHdl, PushButton* );
+    DECL_LINK(FileSearchHdl, void *);
+    DECL_LINK(OptionsHdl, void *);
     DECL_LINK( FileNameHdl, Edit* );
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
@@ -197,12 +197,12 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // #114856# edit in readonly sections
-    DECL_LINK( ChangeEditInReadonlyHdl, CheckBox * );
+    DECL_LINK(ChangeEditInReadonlyHdl, void *);
     DECL_LINK( ChangeProtectHdl, CheckBox * );
     DECL_LINK( ChangePasswdHdl, Button * );
-    DECL_LINK( NameEditHdl, Edit * );
+    DECL_LINK(NameEditHdl, void *);
     DECL_LINK( UseFileHdl, CheckBox* );
-    DECL_LINK( FileSearchHdl, PushButton* );
+    DECL_LINK(FileSearchHdl, void *);
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
 
@@ -274,7 +274,7 @@ class SwSectionIndentTabPage : public SfxTabPage
 
     SvxParaPrevWindow   aPreviewWin;
 
-    DECL_LINK(IndentModifyHdl, MetricField*);
+    DECL_LINK(IndentModifyHdl, void *);
 public:
     SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();

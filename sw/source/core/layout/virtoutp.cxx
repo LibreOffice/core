@@ -68,9 +68,9 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
 
 #endif
 
-/* class SwLayVout verwaltet das virtuelle Outputdevice
- * Es gibt von dieser Klasse einen statischen Member am RootFrm,
- * dieser wird in _FrmInit angelegt und in _FrmFinit zerstoert.
+/* The SWLayVout class manages the virtual output devices.
+ * RootFrm has a static member of this class which is created in _FrmInit
+ * and destroyed in _FrmFinit.
  * */
 
 sal_Bool SwRootFrm::FlushVout()
@@ -136,7 +136,7 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
  *                          SwVOut::DoesFit()
  *************************************************************************/
 
-// rSize muss in Pixel-Koordinaten vorliegen!
+// rSize must be pixel coordinates!
 sal_Bool SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
@@ -197,7 +197,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
         pSh = pShell;
         pOut = NULL;
         OutputDevice *pO = pSh->GetOut();
-// Auf dem Drucker oder einem virt. Outputdevice wird nicht getrickst...
+// We don't cheat on printers or virtual output devices...
         if( OUTDEV_WINDOW != pO->GetOutDevType() )
             return;
 
@@ -211,7 +211,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
         OSL_ENSURE( !pSh->GetWin()->IsReallyVisible() ||
                 aTmpRect.GetWidth() <= pSh->GetWin()->GetOutputSizePixel().Width() + 2,
                 "Paintwidth bigger than visarea?" );
-        // Passt das Rechteck in unseren Buffer ?
+        // Does the rectangle fit in our buffer?
         if( !DoesFit( aTmpRect.GetSize() ) )
         {
             pOut = NULL;

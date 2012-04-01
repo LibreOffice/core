@@ -237,8 +237,6 @@ public:
     const DiagramDataPtr & getStyleData() const
         { return mpStyleData; }
 
-    void layout( const dgm::Points & pTree, const com::sun::star::awt::Point & pt );
-
 private:
     ::rtl::OUString msDefStyle;
     ::rtl::OUString msMinVer;
@@ -302,7 +300,6 @@ public:
     const DiagramColorMap& getColors() const { return maColors; }
 
     void addTo( const ShapePtr & pShape );
-    ::rtl::OUString getLayoutId() const;
 private:
     void build( );
     DiagramDataPtr                             mpData;

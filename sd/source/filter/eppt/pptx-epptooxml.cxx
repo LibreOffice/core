@@ -986,7 +986,11 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     const Sequence< NamedValue > aUserData = rXNode->getUserData();
-    const Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
+
+    // ids start from 1, DFF_ANIM_PROPERTY_ID_COUNT is the highest id
+    // number
+    const Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT + 1];
+
     AnimationExporter::GetUserData( aUserData, pAny, sizeof( pAny ) );
 
     sal_Int16 nType = 0;
@@ -1138,11 +1142,6 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     if( bSingle )
-    pFS->endElementNS( XML_p, XML_cTn );
-}
-
-void PowerPointExport::WriteAnimationNodeCommonPropsEnd( FSHelperPtr pFS )
-{
     pFS->endElementNS( XML_p, XML_cTn );
 }
 
@@ -1537,41 +1536,6 @@ sal_Int32 PowerPointExport::nStyleLevelToken[5] =
     XML_lvl4pPr,
     XML_lvl5pPr
 };
-
-void PowerPointExport::WriteTextStyleLevel( FSHelperPtr pFS, int nInstance, int nLevel )
-{
-    OSL_ASSERT( nLevel >= 0 && nLevel < 5 );
-    OSL_ASSERT( nInstance >= 0 && nInstance < 9 );
-
-    PPTExParaLevel rParaLevel = mpStyleSheet->GetParaSheet( nInstance ).maParaLevel[ nLevel ];
-
-    pFS->startElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ],
-             XML_algn, DrawingML::GetAlignment( rParaLevel.mnOOAdjust ),
-             FSEND );
-
-    pFS->endElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ] );
-}
-
-void PowerPointExport::WriteTextStyle( FSHelperPtr pFS, int nInstance, sal_Int32 xmlToken )
-{
-    pFS->startElementNS( XML_p, xmlToken, FSEND );
-
-    for( int nLevel = 0; nLevel < 5; nLevel ++ )
-    WriteTextStyleLevel( pFS, nInstance, nLevel );
-
-    pFS->endElementNS( XML_p, xmlToken );
-}
-
-void PowerPointExport::WriteTextStyles( FSHelperPtr pFS )
-{
-    pFS->startElementNS( XML_p, XML_txBody, FSEND );
-
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Title, XML_titleStyle );
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Body, XML_bodyStyle );
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Other, XML_otherStyle );
-
-    pFS->endElementNS( XML_p, XML_txBody );
-}
 
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {

@@ -310,7 +310,7 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxOnlineUpdateTabPage, FileDialogHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference < dialogs::XFolderPicker > xFolderPicker(
@@ -336,7 +336,7 @@ IMPL_LINK( SvxOnlineUpdateTabPage, FileDialogHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxOnlineUpdateTabPage, CheckNowHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 

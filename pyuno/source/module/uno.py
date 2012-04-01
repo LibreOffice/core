@@ -35,6 +35,12 @@ try:
 except ImportError:
     import builtins as __builtin__
 
+try:
+    unicode
+except NameError:
+    # Python 3 compatibility
+    unicode = str
+
 import socket # since on Windows sal3.dll no longer calls WSAStartup
 
 # all functions and variables starting with a underscore (_) must be considered private
@@ -159,9 +165,9 @@ class Bool(object):
        Note: This class is deprecated. Use python's True and False directly instead
     """
     def __new__(cls, value):
-        if isinstance(value, str) and value == "true":
+        if isinstance(value, (str, unicode)) and value == "true":
             return True
-        if isinstance(value, str) and value == "false":
+        if isinstance(value, (str, unicode)) and value == "false":
             return False
         if value:
             return True
@@ -171,7 +177,7 @@ class Char:
     "Represents a UNO char, use an instance of this class to explicitly pass a char to UNO"
     # @param value pass a Unicode string with length 1
     def __init__(self,value):
-        assert isinstance(value, str)
+        assert isinstance(value, unicode)
         assert len(value) == 1
         self.value=value
 
@@ -179,7 +185,7 @@ class Char:
         return "<Char instance %s>" % (self.value, )
         
     def __eq__(self, that):
-        if isinstance(that, str):
+        if isinstance(that, (str, unicode)):
             if len(that) > 1:
                 return False
             return self.value == that[0]

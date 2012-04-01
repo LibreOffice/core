@@ -39,10 +39,10 @@ struct SfxPoolVersion_Impl
 {
     sal_uInt16          _nVer;
     sal_uInt16          _nStart, _nEnd;
-    sal_uInt16*         _pMap;
+    const sal_uInt16*         _pMap;
 
                     SfxPoolVersion_Impl( sal_uInt16 nVer, sal_uInt16 nStart, sal_uInt16 nEnd,
-                                         sal_uInt16 *pMap )
+                                         const sal_uInt16 *pMap )
                     :   _nVer( nVer ),
                         _nStart( nStart ),
                         _nEnd( nEnd ),
@@ -56,7 +56,7 @@ struct SfxPoolVersion_Impl
                     {}
 };
 
-typedef std::deque<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
+typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
 
 typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
 typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
@@ -77,7 +77,7 @@ struct SfxItemPool_Impl
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
     std::vector<SfxItemPoolUser*> maSfxItemPoolUsers; /// ObjectUser section
-    UniString                       aName;
+    rtl::OUString                   aName;
     SfxPoolItem**                   ppPoolDefaults;
     SfxPoolItem**                   ppStaticDefaults;
     SfxItemPool*                    mpMaster;
@@ -98,7 +98,7 @@ struct SfxItemPool_Impl
     bool                            bStreaming; // in Load() bzw. Store()
     bool                            mbPersistentRefCounts;
 
-    SfxItemPool_Impl( SfxItemPool* pMaster, const UniString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
+    SfxItemPool_Impl( SfxItemPool* pMaster, const rtl::OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
         : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(NULL))
         , aName(rName)
         , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])

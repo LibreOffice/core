@@ -62,7 +62,7 @@ class ScMarkData;
 class ScPatternAttr;
 class ScStyleSheet;
 class SvtBroadcaster;
-class TypedScStrCollection;
+class ScTypedStrData;
 class ScProgress;
 class ScPostIt;
 struct ScFunctionData;
@@ -158,20 +158,20 @@ public:
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh );
 
-    bool               IsEmptyVisData(bool bNotes) const;              // without Broadcaster
+    bool               IsEmptyVisData() const;              // without Broadcaster
     bool               IsEmptyData() const;
     bool               IsEmptyAttr() const;
     bool               IsEmpty() const;
 
                 // data only:
-    bool               IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes = false) const;
+    bool               IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
     SCSIZE         GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     bool               HasDataAt(SCROW nRow) const;
     bool               HasVisibleDataAt(SCROW nRow) const;
     SCROW              GetFirstDataPos() const;
     SCROW              GetLastDataPos() const;
-    SCROW              GetLastVisDataPos(bool bNotes) const;                           // without Broadcaster
-    SCROW              GetFirstVisDataPos(bool bNotes) const;
+    SCROW              GetLastVisDataPos() const;                           // without Broadcaster
+    SCROW              GetFirstVisDataPos() const;
     bool               GetPrevDataPos(SCROW& rRow) const;
     bool               GetNextDataPos(SCROW& rRow) const;
     void               FindDataAreaPos(SCROW& rRow, long nMovY) const; // (without Broadcaster)
@@ -182,7 +182,7 @@ public:
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
-    bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
+    bool    GetLastVisibleAttr( SCROW& rLastRow, bool bFullFormattedArea = false ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow = 0,
                                     SCROW nEndRow = MAXROW ) const;
@@ -194,7 +194,7 @@ public:
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag );
     void        DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag );
-    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags, bool bCloneNoteCaptions);
+    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags);
     void        CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn);
     void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
@@ -264,15 +264,6 @@ public:
     bool    HasStringData( SCROW nRow ) const;
     bool    HasValueData( SCROW nRow ) const;
     bool    HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
-
-    /** Returns the pointer to a cell note object at the passed row. */
-    ScPostIt*   GetNote( SCROW nRow );
-    /** Sets the passed cell note object at the passed row. Takes ownership! */
-    void        TakeNote( SCROW nRow, ScPostIt* pNote );
-    /** Returns and forgets a cell note object at the passed row. */
-    ScPostIt*   ReleaseNote( SCROW nRow );
-    /** Deletes the note at the passed row. */
-    void        DeleteNote( SCROW nRow );
 
     void        SetDirty();
     void        SetDirty( const ScRange& );
@@ -379,8 +370,8 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
-    bool    GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, bool bLimit);
+    void GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+    bool GetDataEntries(SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable);

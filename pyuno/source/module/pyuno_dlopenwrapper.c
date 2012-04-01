@@ -26,38 +26,75 @@
  *
  ************************************************************************/
 
-#include <rtl/string.h>
+/* make Python.h go first as a hack to work around _POSIX_C_SOURCE redefinition
+   warnings: */
+#include "Python.h"
+
+#include "sal/config.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef LINUX
-#  ifndef __USE_GNU
-#  define __USE_GNU
-#  endif
+#if defined LINUX && !defined __USE_GNU
+#define __USE_GNU
 #endif
 #include <dlfcn.h>
 
-void initpyuno ()
-{
+#include "rtl/string.h"
+
+/* A wrapper around libpyuno.so, making sure the latter is loaded RTLD_GLOBAL
+   so that C++ exception handling works with old GCC versions (that determine
+   RTTI identity by comparing string addresses rather than string content).
+*/
+
+static void * load(void * address, char const * symbol) {
     Dl_info dl_info;
-    void (*func)(void);
-
-    if (dladdr((void*)&initpyuno, &dl_info) != 0) {
-        void* h = 0;
-    size_t len = strrchr(dl_info.dli_fname, '/') - dl_info.dli_fname + 1;
-    char* libname = malloc(len + RTL_CONSTASCII_LENGTH( SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION ) + 1);
-        strncpy(libname, dl_info.dli_fname, len);
-        strcpy(libname + (len), SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION);
-
-        h = dlopen (libname, RTLD_NOW | RTLD_GLOBAL);
-    free(libname);
-        if( h )
-        {
-            func = (void (*)())dlsym (h, "initpyuno");
-            (func) ();
-        }
+    char * slash;
+    size_t len;
+    char * libname;
+    void * h;
+    void * func;
+    if (dladdr(address, &dl_info) == 0) {
+        abort();
     }
+    slash = strrchr(dl_info.dli_fname, '/');
+    if (slash == NULL) {
+        abort();
+    }
+    len = slash - dl_info.dli_fname + 1;
+    libname = malloc(
+        len + RTL_CONSTASCII_LENGTH(SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION)
+        + 1);
+    if (libname == 0) {
+        abort();
+    }
+    strncpy(libname, dl_info.dli_fname, len);
+    strcpy(libname + len, SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION);
+    h = dlopen(libname, RTLD_NOW | RTLD_GLOBAL);
+    free(libname);
+    if (h == NULL) {
+        abort();
+    }
+    func = dlsym(h, symbol);
+    if (func == NULL) {
+        abort();
+    }
+    return func;
 }
+
+#if PY_MAJOR_VERSION >= 3
+
+PyObject * PyInit_pyuno(void) {
+    return
+        ((PyObject * (*)(void)) load((void *) &PyInit_pyuno, "PyInit_pyuno"))();
+}
+
+#else
+
+void initpyuno(void) {
+    ((void (*)(void)) load((void *) &initpyuno, "initpyuno"))();
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

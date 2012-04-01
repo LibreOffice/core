@@ -359,7 +359,7 @@ void ScTabView::ResetTimer()
     pTimerWindow = NULL;
 }
 
-IMPL_LINK( ScTabView, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabView, TimerHdl)
 {
     if (pTimerWindow)
         pTimerWindow->MouseMove( aTimerMEvt );
@@ -897,7 +897,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
         ::std::swap( rBorder.Left(), rBorder.Right() );
 }
 
-IMPL_LINK( ScTabView, TabBarResize, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabView, TabBarResize)
 {
     sal_Bool bHScrollMode = aViewData.IsHScrollMode();
 

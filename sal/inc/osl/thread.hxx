@@ -49,6 +49,13 @@ namespace osl
 */
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
+/**
+   A thread abstraction.
+
+   @deprecated use ::salhelper::Thread instead.  Only the static member
+   functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait, and
+   ::osl::Thread::yield are not deprecated.
+ */
 class Thread
 {
     Thread( const Thread& );
@@ -74,14 +81,13 @@ public:
     sal_Bool SAL_CALL create()
     {
         assert(m_hThread == 0); // only one running thread per instance
-           if (m_hThread)
-            return sal_False;
-
         m_hThread = osl_createSuspendedThread( threadFunc, (void*)this);
-        if ( m_hThread )
-            osl_resumeThread(m_hThread);
-
-        return m_hThread != 0;
+        if (m_hThread == 0)
+        {
+            return false;
+        }
+        osl_resumeThread(m_hThread);
+        return true;
     }
 
     sal_Bool SAL_CALL createSuspended()

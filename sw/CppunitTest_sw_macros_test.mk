@@ -71,10 +71,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_macros_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_macros_test,\
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sw_macros_test,\
@@ -137,6 +136,6 @@ $(eval $(call gb_CppunitTest_set_args,sw_macros_test,\
 $(call gb_CppunitTest_get_target,sw_macros_test) : \
     $(call gb_Library_get_target,localedata_en) \
     $(call gb_Library_get_target,msword) \
-    $(call gb_Library_get_target,vbaswobj) \
+    $(if $(filter SCRIPTING,$(BUILD_TYPE)),$(call gb_Library_get_target,vbaswobj)) \
 
 # vim: set noet sw=4 ts=4:

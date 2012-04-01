@@ -29,14 +29,8 @@
 #ifndef _DATABASES_HXX_
 #define _DATABASES_HXX_
 
-#ifndef INCLUDED_STL_SET
 #include <set>
-#define INCLUDED_STL_SET
-#endif
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <osl/mutex.hxx>

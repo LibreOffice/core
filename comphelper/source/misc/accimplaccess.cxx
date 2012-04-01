@@ -107,18 +107,6 @@ namespace comphelper
             m_pImpl->m_nForeignControlledStates &= ~nBitMask;
     }
 
-    //---------------------------------------------------------------------
-    sal_Bool OAccessibleImplementationAccess::setForeignControlledState( const Reference< XAccessibleContext >& _rxComponent, const sal_Int16 _nState,
-        const sal_Bool  _bSet )
-    {
-        OAccessibleImplementationAccess* pImplementation = getImplementation( _rxComponent );
-
-        if ( pImplementation )
-            pImplementation->setStateBit( _nState, _bSet );
-
-        return ( NULL != pImplementation );
-    }
-
     namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
     //---------------------------------------------------------------------

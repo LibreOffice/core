@@ -31,8 +31,6 @@ COM := GCC
 
 gb_CPUDEFS := -DARM32
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
-
 ifeq ($(CC),)
 $(error You must set CC in the environment. See README.cross for example.)
 endif
@@ -59,16 +57,23 @@ gb_CFLAGS := \
 	-Wshadow \
 	-fno-strict-aliasing \
 
+# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
+# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
+# Feb 1, 2006:
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
 	-fno-strict-aliasing \
-	-fsigned-char \
-	-malign-natural \
-	#-Wshadow \ break in compiler headers already
-	#-fsigned-char \ might be removed?
-	#-malign-natural \ might be removed?
+	-fsigned-char
+
+# No idea if -malign-natural is needed, but macosx.mk uses it...
+# Why it isn't used in gb_CFLAGS I have no idea.
+# Anyway, Clang doesn't have this option.
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+gb_CXXFLAGS += \
+	-malign-natural
+endif
 
 # these are to get gcc to switch to Objective-C++ or Objective-C mode
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
@@ -81,6 +86,8 @@ gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
+gb_DEBUG_CFLAGS += -fno-inline
+
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
@@ -90,6 +97,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_OBJCXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -107,6 +115,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
 	$(gb_CC) \
 		$(DEFS) $(OBJCFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
@@ -118,9 +127,9 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
@@ -181,8 +190,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
-$(if $(filter Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+$(call gb_LinkTarget__command_staticlink,$(1))
 endef
 
 
@@ -202,6 +210,7 @@ gb_Library__FRAMEWORKS := \
     Foundation \
     CoreFoundation \
     CoreGraphics \
+	CoreText \
 
 gb_Library_PLAINLIBS_NONE += \
     objc \
@@ -254,8 +263,8 @@ gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 
-gb_Executable_EXT :=
-gb_Executable_TARGETTYPEFLAGS := -dead_strip
+gb_Executable_EXT := .a
+gb_Executable_TARGETTYPEFLAGS := 
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
@@ -274,24 +283,13 @@ endef
 
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_EXT := .a
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
-
-endef
-
-# JunitTest class
-
-define gb_JunitTest_JunitTest_platform
-$(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice}" \
-	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
-	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
-	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 
 endef
 

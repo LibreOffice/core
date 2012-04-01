@@ -64,10 +64,10 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     ImageButton     aPrevBT;
     ImageButton     aNextBT;
 
-    DECL_LINK( NumberCharHdl, Button * );
+    DECL_LINK(NumberCharHdl, void *);
     DECL_LINK( NumberEditHdl, void * );
-    DECL_LINK( NumberAutoBtnHdl, Button *);
-    DECL_LINK( NumberExtCharHdl, Button *);
+    DECL_LINK(NumberAutoBtnHdl, void *);
+    DECL_LINK(NumberExtCharHdl, void *);
     DECL_LINK( NextPrevHdl, Button * );
 
     virtual void    Apply();

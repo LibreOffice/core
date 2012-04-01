@@ -386,9 +386,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
                             if ( eType == CELLTYPE_STRING )
-                                ((ScStringCell*)pCell)->GetString( aStr );
+                                aStr = ((ScStringCell*)pCell)->GetString();
                             else
-                                ((ScEditCell*)pCell)->GetString( aStr );
+                                aStr = ((ScEditCell*)pCell)->GetString();
                             aString = aStr;
                             nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
                             aStr = aString;
@@ -748,9 +748,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             case CELLTYPE_STRING:
                             case CELLTYPE_EDIT:
                                 if ( eCellType == CELLTYPE_STRING )
-                                    ((ScStringCell*)pSrcCell)->GetString( aValue );
+                                    aValue = ((ScStringCell*)pSrcCell)->GetString();
                                 else
-                                    ((ScEditCell*)pSrcCell)->GetString( aValue );
+                                    aValue = ((ScEditCell*)pSrcCell)->GetString();
                                 if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                                 {
                                     nCellDigits = 0;    // look at each source cell individually
@@ -812,7 +812,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 {
                                     case CELLTYPE_STRING:
                                     case CELLTYPE_EDIT:
-                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
+                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
                                     break;
                                     default:
                                     {
@@ -1012,9 +1012,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     case CELLTYPE_EDIT:
                     {
                         if ( eType == CELLTYPE_STRING )
-                            ((ScStringCell*)pCell)->GetString( aValue );
+                            aValue = ((ScStringCell*)pCell)->GetString();
                         else
-                            ((ScEditCell*)pCell)->GetString( aValue );
+                            aValue = ((ScEditCell*)pCell)->GetString();
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
                         {
                             sal_Int32 nVal;
@@ -1069,9 +1069,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     case CELLTYPE_EDIT:
                     {
                         if ( eType == CELLTYPE_STRING )
-                            ((ScStringCell*)pCell)->GetString( aValue );
+                            aValue = ((ScStringCell*)pCell)->GetString();
                         else
-                            ((ScEditCell*)pCell)->GetString( aValue );
+                            aValue = ((ScEditCell*)pCell)->GetString();
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = (double)nVal;
@@ -1368,7 +1368,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (pDocument->RowFiltered( rInner, nTab))
                             continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
+                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
                     }
                     nProgress += nIMax - nIMin + 1;
                     rProgress.SetStateOnPercent( nProgress );
@@ -1465,9 +1465,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 String aValue;
                 if (eCellType == CELLTYPE_STRING)
-                    ((ScStringCell*)pSrcCell)->GetString( aValue );
+                    aValue = ((ScStringCell*)pSrcCell)->GetString();
                 else
-                    ((ScEditCell*)pSrcCell)->GetString( aValue );
+                    aValue = ((ScEditCell*)pSrcCell)->GetString();
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
@@ -1591,7 +1591,8 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo)
 {
-    ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+    ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
+    ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
     if (pData)
     {
         ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
@@ -1603,7 +1604,8 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
-        ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+        ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
+        ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
         if (pData)
         {
             ScPatternAttr* pPatternAttrs[16];

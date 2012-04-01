@@ -30,15 +30,15 @@
 namespace writerfilter {
 namespace rtftok {
 
-RTFReferenceProperties::RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms)
-    : m_rAttributes(rAttributes),
-    m_rSprms(rSprms)
+RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes, RTFSprms aSprms)
+    : m_aAttributes(aAttributes),
+    m_aSprms(aSprms)
 {
 }
 
-RTFReferenceProperties::RTFReferenceProperties(RTFSprms rAttributes)
-    : m_rAttributes(rAttributes),
-    m_rSprms()
+RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes)
+    : m_aAttributes(aAttributes),
+    m_aSprms()
 {
 }
 
@@ -48,9 +48,9 @@ RTFReferenceProperties::~RTFReferenceProperties()
 
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {
-    for (RTFSprms::Iterator_t i = m_rAttributes->begin(); i != m_rAttributes->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aAttributes->begin(); i != m_aAttributes->end(); ++i)
         rHandler.attribute(i->first, *i->second.get());
-    for (RTFSprms::Iterator_t i = m_rSprms->begin(); i != m_rSprms->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aSprms->begin(); i != m_aSprms->end(); ++i)
     {
         RTFSprm aSprm(i->first, i->second);
         rHandler.sprm(aSprm);

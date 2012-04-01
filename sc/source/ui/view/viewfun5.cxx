@@ -59,7 +59,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
-#include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_CURRENT   SOT_FORMATSTR_ID_STARCALC_50
 
 #include "viewfunc.hxx"
@@ -323,9 +322,15 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
                         aObj.SetExtOptions(aOptions);
                     }
+                    else
+                    {
+                        // prevent error dialog for user cancel action
+                        bRet = true;
+                    }
                 }
+                if(!bRet)
+                    bRet = aObj.ImportStream( *xStream, String(), nFormatId );
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bRet = aObj.ImportStream( *xStream, String(), nFormatId );
             }
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
@@ -650,7 +655,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         {
             //  get size from string the same way as in ScDdeLink::DataChanged
 
-            aDataStr.ConvertLineEnd(LINEEND_LF);
+            aDataStr = convertLineEnd(aDataStr, LINEEND_LF);
             xub_StrLen nLen = aDataStr.Len();
             if (nLen && aDataStr.GetChar(nLen-1) == '\n')
                 aDataStr.Erase(nLen-1);
@@ -698,7 +703,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 
-    if (pExtra && pExtra->equalsAscii("calc:extref"))
+    if (pExtra && pExtra->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc:extref")))
     {
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified

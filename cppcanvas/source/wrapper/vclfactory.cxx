@@ -69,10 +69,6 @@ namespace cppcanvas
     {
     }
 
-    VCLFactory::~VCLFactory()
-    {
-    }
-
     BitmapCanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
         return BitmapCanvasSharedPtr(

@@ -823,10 +823,10 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 {
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-    IDEBaseWindow* pWin = aIDEWindowTable.First();
     DialogWindow* pFoundDlgWin = NULL;
-    while( pWin )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
+        IDEBaseWindow* pWin = it->second;
         if ( !pWin->IsSuspended() && pWin->IsA( TYPE( DialogWindow ) ) )
         {
             DialogWindow* pDlgWin = (DialogWindow*)pWin;
@@ -837,7 +837,6 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
                 break;
             }
         }
-        pWin = aIDEWindowTable.Next();
     }
     return pFoundDlgWin;
 }

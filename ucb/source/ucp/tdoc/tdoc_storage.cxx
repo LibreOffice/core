@@ -72,7 +72,7 @@ StorageElementFactory::StorageElementFactory(
 //=========================================================================
 StorageElementFactory::~StorageElementFactory()
 {
-    OSL_ENSURE( m_aMap.size() == 0,
+    OSL_ENSURE( m_aMap.empty(),
         "StorageElementFactory::~StorageElementFactory - Dangling storages!" );
 }
 

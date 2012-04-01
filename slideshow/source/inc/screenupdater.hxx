@@ -109,7 +109,13 @@ namespace slideshow
              */
             void requestImmediateUpdate();
 
-            class UpdateLock {public: virtual void Activate (void) = 0; };
+            class UpdateLock {
+            public:
+                virtual void Activate (void) = 0;
+
+            protected:
+                ~UpdateLock() {}
+            };
 
             /** Call this method to create a lock instead of calling
                 lockUpdates() and unlockUpdates() directly.

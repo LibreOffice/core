@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
@@ -71,8 +66,8 @@
 #include "docsh.hxx"
 #include "filter.hxx"
 #include "progress.hxx"
-#include "collect.hxx"
 #include "cell.hxx"
+#include "column.hxx"
 #include "editutil.hxx"
 #include "cellform.hxx"
 #include "dbdocutl.hxx"
@@ -87,6 +82,7 @@
 #include "docparam.hxx"
 
 #include <vector>
+#include <boost/unordered_set.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -480,28 +476,27 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
     return nErr;
 }
 
-// -----------------------------------------------------------------------
+namespace {
 
-inline sal_Bool IsAsciiDigit( sal_Unicode c )
+inline bool IsAsciiDigit( sal_Unicode c )
 {
     return 0x30 <= c && c <= 0x39;
 }
 
-inline sal_Bool IsAsciiAlpha( sal_Unicode c )
+inline bool IsAsciiAlpha( sal_Unicode c )
 {
     return (0x41 <= c && c <= 0x5a) || (0x61 <= c && c <= 0x7a);
 }
 
-void lcl_GetColumnTypes( ScDocShell& rDocShell,
-                            const ScRange& rDataRange, sal_Bool bHasFieldNames,
-                            rtl::OUString* pColNames, sal_Int32* pColTypes,
-                            sal_Int32* pColLengths, sal_Int32* pColScales,
-                            sal_Bool& bHasMemo, CharSet eCharSet )
+void lcl_GetColumnTypes(
+    ScDocShell& rDocShell, const ScRange& rDataRange, bool bHasFieldNames,
+    rtl::OUString* pColNames, sal_Int32* pColTypes, sal_Int32* pColLengths,
+    sal_Int32* pColScales, bool& bHasMemo, CharSet eCharSet )
 {
     //  updating of column titles didn't work in 5.2 and isn't always wanted
     //  (saving normally shouldn't modify the document)
     //! read flag from configuration
-    sal_Bool bUpdateTitles = false;
+    bool bUpdateTitles = false;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
@@ -512,14 +507,15 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     SCCOL nLastCol = rDataRange.aEnd.Col();
     SCROW nLastRow = rDataRange.aEnd.Row();
 
-    ScStrCollection aFieldNamesCollection;
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    StrSetType aFieldNames;
 
     long nField = 0;
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
     for ( SCCOL nCol = nFirstCol; nCol <= nLastCol; nCol++ )
     {
-        sal_Bool bTypeDefined = false;
-        sal_Bool bPrecDefined = false;
+        bool bTypeDefined = false;
+        bool bPrecDefined = false;
         sal_Int32 nFieldLen = 0;
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
@@ -602,8 +598,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             aFieldName = aTmpStr;
             if ( aFieldName.Len() > 10 )
                 aFieldName.Erase( 10 );
-            StrData* pStrData = new StrData( aFieldName );
-            if ( !aFieldNamesCollection.Insert( pStrData ) )
+
+            if (!aFieldNames.insert(aFieldName).second)
             {   // doppelter Feldname, numerisch erweitern
                 sal_uInt16 nSub = 1;
                 String aFixPart( aFieldName );
@@ -615,8 +611,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                         aFixPart.Erase( 10 - aVarPart.Len() );
                     aFieldName = aFixPart;
                     aFieldName += aVarPart;
-                    pStrData->SetString( aFieldName );
-                } while ( !aFieldNamesCollection.Insert( pStrData ) );
+                } while (!aFieldNames.insert(aFieldName).second);
             }
         }
         else
@@ -661,8 +656,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 }
             }
         }
-        sal_Bool bSdbLenAdjusted = false;
-        sal_Bool bSdbLenBad = false;
+        bool bSdbLenAdjusted = false;
+        bool bSdbLenBad = false;
         // Feldlaenge
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // maximale Feldbreite bestimmen
@@ -767,7 +762,6 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     }
 }
 
-
 inline void lcl_getLongVarCharEditString( rtl::OUString& rString,
         const ScBaseCell* pCell, ScFieldEditEngine& rEditEngine )
 {
@@ -785,8 +779,9 @@ inline void lcl_getLongVarCharString( rtl::OUString& rString, ScBaseCell* pCell,
     ScCellFormat::GetString( pCell, nFormat, rString, &pColor, rNumFmt );
 }
 
+}
 
-sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, sal_Bool& bHasMemo )
+sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo )
 {
     // remove the file so the dBase driver doesn't find an invalid file
     INetURLObject aDeleteObj( rFullFileName, INET_PROT_FILE );
@@ -1166,6 +1161,5 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
 
     return nErr;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

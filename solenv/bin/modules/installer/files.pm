@@ -27,6 +27,9 @@
 
 package installer::files;
 
+use strict;
+use warnings;
+
 use installer::exiter;
 use installer::logger;
 
@@ -37,8 +40,6 @@ use installer::logger;
 sub check_file
 {
     my ($arg) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::check_file : $arg"); }
 
     if(!( -f $arg ))
     {
@@ -51,14 +52,12 @@ sub read_file
     my ($localfile) = @_;
     my @localfile = ();
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_file : $localfile"); }
-
     open( IN, "<$localfile" ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
 
 #   Don't use "my @localfile = <IN>" here, because
 #   perl has a problem with the internal "large_and_huge_malloc" function
 #   when calling perl using MacOS 10.5 with a perl built with MacOS 10.4
-    while ( $line = <IN> ) {
+    while ( my $line = <IN> ) {
         push @localfile, $line;
     }
 
@@ -74,8 +73,6 @@ sub read_file
 sub save_file
 {
     my ($savefile, $savecontent) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_file : $savefile : $#{$savecontent}"); }
 
     if ( open( OUT, ">$savefile" ) )
     {
@@ -98,89 +95,6 @@ sub save_file
     }
 }
 
-sub save_hash
-{
-    my ($savefile, $hashref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_hash : $savefile"); }
-
-    my @printcontent = ();
-
-    my $itemkey;
-
-    foreach $itemkey ( keys %{$hashref} )
-    {
-        my $line = "";
-        my $itemvalue = $hashref->{$itemkey};
-        $line = $itemkey . "=" . $itemvalue . "\n";
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_hash");
-    print OUT @printcontent;
-    close( OUT);
-}
-
-sub save_array_of_hashes
-{
-    my ($savefile, $arrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_array_of_hashes : $savefile : $#{$arrayref}"); }
-
-    my @printcontent = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $line = "";
-        my $hashref = ${$arrayref}[$i];
-        my $itemkey;
-
-        foreach $itemkey ( keys %{$hashref} )
-        {
-            my $itemvalue = $hashref->{$itemkey};
-            $line = $line . $itemkey . "=" . $itemvalue . "\t";
-        }
-
-        $line = $line . "\n";
-
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
-    print OUT @printcontent;
-    close( OUT);
-}
-
-sub save_array_of_hashes_modules
-{
-    my ($savefile, $arrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_array_of_hashes : $savefile : $#{$arrayref}"); }
-
-    my @printcontent = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $line = "***************************************************\n";
-        my $hashref = ${$arrayref}[$i];
-        my $itemkey;
-
-        foreach $itemkey ( keys %{$hashref} )
-        {
-            my $itemvalue = $hashref->{$itemkey};
-            $line = $line . $itemkey . "=" . $itemvalue . "\n";
-        }
-
-        $line = $line . "\n";
-
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
-    print OUT @printcontent;
-    close( OUT);
-}
-
 ###########################################
 # Binary file operations
 ###########################################
@@ -188,8 +102,6 @@ sub save_array_of_hashes_modules
 sub read_binary_file
 {
     my ($filename) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_binary_file : $filename"); }
 
     my $file;
 
@@ -207,8 +119,6 @@ sub read_binary_file
 sub save_binary_file
 {
     my ($file, $filename) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_binary_file : $filename"); }
 
     open( OUT, ">$filename" ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for writing", "save_binary_file");
     binmode OUT;

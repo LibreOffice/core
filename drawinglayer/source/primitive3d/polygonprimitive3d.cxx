@@ -142,16 +142,6 @@ namespace drawinglayer
         {
         }
 
-        PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
-            const attribute::LineAttribute& rLineAttribute)
-        :   BufferedDecompositionPrimitive3D(),
-            maPolygon(rPolygon),
-            maLineAttribute(rLineAttribute),
-            maStrokeAttribute()
-        {
-        }
-
         bool PolygonStrokePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             if(BufferedDecompositionPrimitive3D::operator==(rPrimitive))

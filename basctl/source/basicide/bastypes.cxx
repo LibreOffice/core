@@ -38,7 +38,6 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -264,7 +263,13 @@ BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
 {
 }
 
-
+BasicDockingWindow::BasicDockingWindow( Window* pParent, const ResId& rResId ) :
+    DockingWindow( pParent, rResId )
+{
+    SetStyle( WB_BORDER | WB_3DLOOK | WB_DOCKABLE | WB_MOVEABLE |
+                            WB_SIZEABLE | WB_ROLLABLE |
+                            WB_DOCKABLE | WB_CLIPCHILDREN );
+}
 
 sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
@@ -345,7 +350,7 @@ ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
     Control::SetLoseFocusHdl( LINK( this, ExtendedEdit, ImplLoseFocusHdl ) );
 }
 
-IMPL_LINK( ExtendedEdit, ImplGetFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl)
 {
     Application::InsertAccel( &aAcc );
     aLoseFocusHdl.Call( this );
@@ -353,7 +358,7 @@ IMPL_LINK( ExtendedEdit, ImplGetFocusHdl, Control*, EMPTYARG )
 }
 
 
-IMPL_LINK( ExtendedEdit, ImplLoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl)
 {
     Application::RemoveAccel( &aAcc );
     return 0;
@@ -457,10 +462,10 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                     if( pBasic )
                     {
                         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-                        IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
-                        if( pWin && pWin->ISA( ModulWindow ) )
+                        IDEWindowTable::const_iterator it = aIDEWindowTable.find( GetCurPageId() );
+                        if( it != aIDEWindowTable.end() && it->second->ISA( ModulWindow ) )
                         {
-                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
+                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
                                 aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
@@ -527,7 +532,7 @@ void BasicIDETabBar::Sort()
             sal_uInt16 nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
             aTabBarSortHelper.aPageText = GetPageText( nId );
-            IDEBaseWindow* pWin = aIDEWindowTable.Get( nId );
+            IDEBaseWindow* pWin = aIDEWindowTable[ nId ];
 
             if ( pWin->IsA( TYPE( ModulWindow ) ) )
             {
@@ -757,7 +762,7 @@ bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
     ::rtl::OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
-    aQuery = ::comphelper::string::replace(aQuery, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XX")), aNameBuf.makeStringAndClear());
+    aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );
 }
@@ -802,7 +807,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         if ( bNewTitle )
         {
             ::rtl::OUString aTitle(ResId::toString(IDEResId(RID_STR_ENTERPASSWORD)));
-            aTitle = ::comphelper::string::replace(aTitle, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XX")), rLibName);
+            aTitle = aTitle.replaceAll("XX", rLibName);
             pDlg->SetText( aTitle );
         }
 

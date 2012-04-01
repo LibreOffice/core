@@ -95,13 +95,6 @@ namespace basegfx
             mfZ( rTup.mfZ )
         {}
 
-        /** Create a copy of a 3D integer Tuple
-
-            @param rTup
-            The 3D Tuple which will be copied.
-        */
-        explicit B3DTuple(const B3ITuple& rTup);
-
         ~B3DTuple()
         {}
 

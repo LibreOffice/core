@@ -749,14 +749,6 @@ bool SchXMLPositonAttributesHelper::isAutomatic() const
 {
     return m_bAutoSize || m_bAutoPosition;
 }
-awt::Point SchXMLPositonAttributesHelper::getPosition() const
-{
-    return m_aPosition;
-}
-awt::Size SchXMLPositonAttributesHelper::getSize() const
-{
-    return m_aSize;
-}
 awt::Rectangle SchXMLPositonAttributesHelper::getRectangle() const
 {
     return awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );

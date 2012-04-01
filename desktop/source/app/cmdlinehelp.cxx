@@ -53,14 +53,14 @@ namespace desktop
     //  __BOTTOM__
     //     [OK]
 
-    const char *aCmdLineHelp_version =
+    const char aCmdLineHelp_version[] =
         "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION\n"\
         "\n";
-    const char *aCmdLineHelp_head =
+    const char aCmdLineHelp_head[] =
         "Usage: %CMDNAME [options] [documents...]\n"\
         "\n"\
         "Options:\n";
-    const char *aCmdLineHelp_left =
+    const char aCmdLineHelp_left[] =
         "--minimized    \n"\
         "--invisible    \n"\
         "--norestore    \n"\
@@ -81,7 +81,7 @@ namespace desktop
         "--web          \n"\
         "-o             \n"\
         "-n             \n";
-    const char *aCmdLineHelp_right =
+    const char aCmdLineHelp_right[] =
         "keep startup bitmap minimized.\n"\
         "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
@@ -102,7 +102,7 @@ namespace desktop
         "create new HTML document.\n"\
         "open documents regardless whether they are templates or not.\n"\
         "always open documents as new files (use as template).\n";
-    const char *aCmdLineHelp_bottom =
+    const char aCmdLineHelp_bottom[] =
         "--display <display>\n"\
         "      Specify X-Display to use in Unix/X11 versions.\n"
         "-p <documents...>\n"\
@@ -134,7 +134,7 @@ namespace desktop
         "          --print-to-file --printer-name nasty_lowres_printer --outdir /home/user *.doc\n"\
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
-    void ReplaceStringHookProc( UniString& rStr );
+    rtl::OUString ReplaceStringHookProc(const rtl::OUString& rStr);
 
     void displayCmdlineHelp()
     {
@@ -145,7 +145,7 @@ namespace desktop
         String aHelpMessage_left(aCmdLineHelp_left, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_right(aCmdLineHelp_right, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_bottom(aCmdLineHelp_bottom, RTL_TEXTENCODING_ASCII_US);
-        ReplaceStringHookProc(aHelpMessage_version);
+        aHelpMessage_version = ReplaceStringHookProc(aHelpMessage_version);
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
 #ifdef UNX
         // on unix use console for output
@@ -181,8 +181,8 @@ namespace desktop
 
     void displayVersion()
     {
-        String aVersionMsg(aCmdLineHelp_version, RTL_TEXTENCODING_ASCII_US);
-        ReplaceStringHookProc(aVersionMsg);
+        rtl::OUString aVersionMsg(aCmdLineHelp_version);
+        aVersionMsg = ReplaceStringHookProc(aVersionMsg);
 #ifdef UNX
         fprintf(stdout, "%s", rtl::OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
 #else

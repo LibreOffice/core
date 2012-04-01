@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -100,7 +100,7 @@ class BigPtrArrayPrinter(object):
                 # accessing this is completely non-obvious...
                 # also, node.dynamic_cast(node.dynamic_type) is null?
                 value = "    TextNode " + \
-                    str(node.cast(node.dynamic_type).dereference()['m_Text'])
+                  unicode(node.cast(node.dynamic_type).dereference()['m_Text'])
             elif str(node.dynamic_type.target()) == "SwOLENode":
                 value = "     OLENode "
             elif str(node.dynamic_type.target()) == "SwGrfNode":

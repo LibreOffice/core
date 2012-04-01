@@ -1,0 +1,20 @@
+--- misc/build/icu/source/extra/uconv/Makefile.in.sav	2010-09-29 20:37:14.000000000 +0200
++++ misc/build/icu/source/extra/uconv/Makefile.in	2011-10-19 01:12:22.000000000 +0200
+@@ -147,7 +147,7 @@ $(UCONVMSG_LIB): resfiles
+ endif
+ 
+ 
+-package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
++package-resfiles: $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
+ 	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+ 
+ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+@@ -159,7 +159,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcd
+ 
+ # no install for static mode
+ ifneq ($(UCONVMSG_MODE),static)
+-install-resfiles: $(RESFILES)
++install-resfiles: $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc 
+ 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
+ 	$(INVOKE) $(TOOLBINDIR)/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+ else

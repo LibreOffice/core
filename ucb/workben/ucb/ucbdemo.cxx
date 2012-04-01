@@ -1197,7 +1197,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
         UniString
             aText( UniString::CreateFromAscii(
                        RTL_CONSTASCII_STRINGPARAM( "Operation took " ) ) );
-        aText += UniString::CreateFromInt64( nTime );
+        aText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTime));
         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ms." ) );
         print( aText );
     }
@@ -1225,7 +1225,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             for ( sal_uInt32 i = aEntry.m_nLevel; i != 0; --i )
                 aText += '=';
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "LEVEL " ) );
-            aText += UniString::CreateFromInt64( aEntry.m_nLevel );
+            aText += rtl::OUString::valueOf(static_cast<sal_Int64>(aEntry.m_nLevel));
 
             uno::Reference< ucb::XContentIdentifier > xID;
             if ( aEntry.m_bUseIdentifier )
@@ -1279,7 +1279,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
         UniString
             aText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                                    "Operation took " ) ) );
-        aText += UniString::CreateFromInt64( nTime );
+        aText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTime));
         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ms." ) );
         print( aText );
     }

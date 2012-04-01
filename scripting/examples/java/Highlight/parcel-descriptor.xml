@@ -8,7 +8,7 @@
                 Text highlighting
             </description>
         </locale>
-        <functionname value="HighlightText.showForm"/>
+        <functionname value="org.libreoffice.example.java_scripts.HighlightText.showForm"/>
         <logicalname value="HighlightText.showForm"/>
         <languagedepprops>
             <prop name="classpath" value="Highlight.jar"/>

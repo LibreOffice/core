@@ -203,11 +203,6 @@ void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
         delete pName;
 }
 
-sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
-{
-    return pNames->Seek_Entry( &rName, 0 );
-}
-
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
     sal_uLong nPos;

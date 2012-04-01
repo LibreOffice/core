@@ -48,6 +48,12 @@ published constants SystemShellExecuteFlags
         method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
      */
     const long NO_SYSTEM_ERROR_MESSAGE = 1;
+
+    /** Only allows opening of absolute URI references.
+
+        @since LibreOffice 3.6
+     */
+    const long URIS_ONLY = 2;
 };
 
 //=============================================================================

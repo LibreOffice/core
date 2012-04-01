@@ -181,13 +181,14 @@ void TableEdgeHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             if(aVisible.count())
                             {
                                 // create overlay object for visible parts
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
-                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                                xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
                             }
 
@@ -197,7 +198,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 // a standard HitTest using the primitives from that overlay object
                                 // (see OverlayTableEdge implementation)
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
-                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                                xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
                             }
                         }
@@ -286,7 +287,8 @@ void TableBorderHdl::CreateB2dIAObject()
 
                 if(rPageWindow.GetPaintWindow().OutputToWindow())
                 {
-                    if(rPageWindow.GetOverlayManager())
+                    rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                    if (xManager.is())
                     {
                         const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
                         sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
@@ -298,7 +300,7 @@ void TableBorderHdl::CreateB2dIAObject()
                             45 * F_PI180,
                             0.0);
 
-                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                        xManager->add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);
                     }
                 }

@@ -116,7 +116,6 @@ namespace dbtools
         ::rtl::OUString     getIanaName() const { return m_aIanaName; }
 
     protected:
-        CharsetIteratorDerefHelper();
         CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName );
 
     };

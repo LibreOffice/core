@@ -46,6 +46,7 @@
 #include <svtools/sfxecode.hxx>
 
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/string.hxx>
 #include <hintids.hxx>
 
 #include <editeng/tstpitem.hxx>
@@ -99,7 +100,6 @@
 #include <mdiexp.hxx>           // Progress
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <swerror.h>            // ERR_WW8_...
-#include <swunodef.hxx>
 #include <unodraw.hxx>
 #include <swtable.hxx>          // class SwTableLines, ...
 // #i18732#
@@ -165,7 +165,6 @@ using namespace nsHdFtFlags;
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -216,13 +215,13 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
 
 rtl::OUString BasicProjImportHelper::getProjectName()
 {
-    rtl::OUString sProjName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    rtl::OUString sProjName( "Standard" );
     uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );
     if ( xProps.is() )
     {
         try
         {
-            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW  );
+            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY_THROW  );
             sProjName = xVBA->getProjectName();
 
         }
@@ -311,8 +310,7 @@ Sttb::getStringAtIndex( sal_uInt32 index )
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
-        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm,
-        rRdr.maTracer.GetTrace()),
+        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm),
     rReader(rRdr), pFallbackStream(0)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );
@@ -366,7 +364,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
         SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
         OSL_ENSURE(rReader.pFormImpl, "No Form Implementation!");
-        STAR_REFERENCE( drawing::XShape ) xShape;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
         if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
             rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {
@@ -772,7 +770,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     {
                         fExtraTextRotation /= 100.0;
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        const rtl::OUString sTextRotateAngle( "TextRotateAngle" );
                         com::sun::star::beans::PropertyValue aPropVal;
                         aPropVal.Name = sTextRotateAngle;
                         aPropVal.Value <<= fExtraTextRotation;
@@ -1238,7 +1236,7 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBk
     sal_uInt16 nSubType;
     if(pFld && (RES_GETREFFLD == pFld->Which())
         && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) || (REF_ENDNOTE  == nSubType))
-        && ((SwGetRefField*)pFld)->GetSetRefName().Len())
+        && !((SwGetRefField*)pFld)->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(
@@ -1486,7 +1484,6 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
 void SwWW8ImplReader::ImportDop()
 {
-    maTracer.EnterEnvironment(sw::log::eDocumentProperties);
     // correct the LastPrinted date in DocumentInfo
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -1517,12 +1514,10 @@ void SwWW8ImplReader::ImportDop()
     // Abst. des ersten und oberem Abst. des zweiten
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true );
-    maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
     rDoc.set(IDocumentSettingAccess::TAB_COMPAT, true);
     // #i24363# tab stops relative to indent
     rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
-    maTracer.Log(sw::log::eTabStopDistance);
     // #i18732# - adjust default of option 'FollowTextFlow'
     rDoc.SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
@@ -1536,12 +1531,6 @@ void SwWW8ImplReader::ImportDop()
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
-
-    if (!pWDop->fUsePrinterMetrics)
-        maTracer.Log(sw::log::ePrinterMetrics);
-
-    if (!pWDop->fNoLeading)
-        maTracer.Log(sw::log::eExtraLeading);
 
     rDoc.set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
     rDoc.set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
@@ -1580,9 +1569,6 @@ void SwWW8ImplReader::ImportDop()
     // COMPATIBILITY FLAGS END
     //
 
-    if (!pWDop->fNoLeading)
-        maTracer.Log(sw::log::eExtraLeading);
-
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
         ImportDopTypography(pWDop->doptypography);
@@ -1603,10 +1589,9 @@ void SwWW8ImplReader::ImportDop()
             sal_Bool bValue = false;
             if (xInfo.is())
             {
-                if (xInfo->hasPropertyByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode"))))
+                if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
-                    xDocProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode")),
-                                                cppu::bool2any(bValue));
+                    xDocProps->setPropertyValue("ApplyFormDesignMode", cppu::bool2any(bValue));
                 }
             }
         }
@@ -1617,8 +1602,6 @@ void SwWW8ImplReader::ImportDop()
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
         rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
-
-    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -2027,7 +2010,6 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
             }
         }
     }
-    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
@@ -2377,7 +2359,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     {
         if (!maFontSrcCharSets.empty())
             eSrcCharSet = maFontSrcCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
             eSrcCharSet = vColl[nCharFmt].GetCharSet();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
             eSrcCharSet = vColl[nAktColl].GetCharSet();
@@ -2439,7 +2421,7 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
             eSrcCharSet = maFontSrcCJKCharSets.top();
         if (!vColl.empty())
         {
-            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
                 eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
             if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && nAktColl < vColl.size())
                 eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
@@ -2645,10 +2627,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     const CharSet eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
         RTL_TEXTENCODING_MS_1252;
 
-    // (re)alloc UniString data
-    String sPlainCharsBuf;
-
-    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer(nStrLen);
+    // allocate unicode string data
+    rtl_uString *pStr = comphelper::string::rtl_uString_alloc(nStrLen);
+    sal_Unicode* pBuffer = pStr->buffer;
     sal_Unicode* pWork = pBuffer;
 
     sal_Char* p8Bits = NULL;
@@ -2683,7 +2664,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         if (pStrm->GetError())
         {
             rPos = WW8_CP_MAX-10;     // -> eof or other error
-            sPlainCharsBuf.ReleaseBufferAccess( 0 );
+            rtl_freeMemory(pStr);
             delete [] p8Bits;
             return true;
         }
@@ -2731,9 +2712,10 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
             if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
 
-        sPlainCharsBuf.ReleaseBufferAccess( nEndUsed );
+        pStr->buffer[nEndUsed] = 0;
+        pStr->length = nEndUsed;
 
-        emulateMSWordAddTextToParagraph(sPlainCharsBuf);
+        emulateMSWordAddTextToParagraph(rtl::OUString(pStr, SAL_NO_ACQUIRE));
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
             bWasParaEnd = false;            //kein CR
@@ -2861,9 +2843,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
         else if (nScript == MSASCII) //Force weak chars in ascii range to use LATIN font
             nLclIdctHint = 0;
 
+        sal_uInt16 nForceFromFontId = 0;
         if (nLclIdctHint != 0xFF)
         {
-            sal_uInt16 nForceFromFontId = 0;
             switch (nLclIdctHint)
             {
                 case 0:
@@ -2878,7 +2860,10 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
                 default:
                     break;
             }
+        }
 
+        if (nForceFromFontId != 0)
+        {
             //Now we know that word would use the nForceFromFontId font for this range
             //Try and determine what script writer would assign this range to
 
@@ -2945,9 +2930,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
 #if OSL_DEBUG_LEVEL > 1
         {
             rtl::OString sText(rtl::OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
-            ::std::clog <<
-                "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>"
-                << ::std::endl;
+            SAL_INFO("sw.ww8", "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>");
         }
 #endif
 
@@ -3444,13 +3427,6 @@ void SwWW8ImplReader::CloseAttrEnds()
 
 bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 {
-    sw::log::Environment eContext = sw::log::eMainText;
-    if (nType == MAN_MAINTEXT)
-        eContext = sw::log::eMainText;
-    else
-        eContext = sw::log::eSubDoc;
-    maTracer.EnterEnvironment(eContext);
-
     bool bJoined=false;
 
     bool bStartLine = true;
@@ -3620,7 +3596,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     CloseAttrEnds();
 
     delete pPlcxMan, pPlcxMan = 0;
-    maTracer.LeaveEnvironment(eContext);
     return bJoined;
 }
 
@@ -3631,7 +3606,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc) :
     mpDocShell(rD.GetDocShell()),
-    maTracer(*(mpDocShell->GetMedium())),
     pStg(pStorage),
     pStrm(pSt),
     pTableStream(0),
@@ -3648,7 +3622,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     maTxtNodesHavingLeftIndentSet(), // #i105414#
     pMSDffManager(0),
     mpAtnNames(0),
-    pAuthorInfos(0),
     sBaseURL(rBaseURL),
     m_bRegardHindiDigits( false ),
     mbNewDoc(bNewDoc),
@@ -4118,8 +4091,7 @@ void wwSectionManager::InsertSegments()
         if (pTxtNd)
         {
             SwNodeIndex aIdx(*pTxtNd);
-            SwPosition aPos(aIdx);
-            SwPaM aTest(aPos);
+            SwPaM aTest(aIdx);
             mrReader.rDoc.DelFullPara(aTest);
             pTxtNd = 0;
         }
@@ -4134,8 +4106,7 @@ void wwExtraneousParas::delete_all_from_doc()
     {
         SwTxtNode *pTxtNode = *aI;
         SwNodeIndex aIdx(*pTxtNode);
-        SwPosition aPos(aIdx);
-        SwPaM aTest(aPos);
+        SwPaM aTest(aIdx);
         m_rDoc.DelFullPara(aTest);
     }
     m_aTxtNodes.clear();
@@ -4145,8 +4116,6 @@ void SwWW8ImplReader::StoreMacroCmds()
 {
     if (pWwFib->lcbCmds)
     {
-        maTracer.Log(sw::log::eContainsWordBasic);
-
         pTableStream->Seek(pWwFib->fcCmds);
 
         uno::Reference < embed::XStorage > xRoot(mpDocShell->GetStorage());
@@ -4336,7 +4305,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
     uno::Sequence< rtl::OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
-    uno::Reference< ucb::XSimpleFileAccess > xSFA( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< ucb::XSimpleFileAccess > xSFA( ::comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );
@@ -4353,7 +4322,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
                 aURL = sGlobalTemplates[ i ];
         else
                 osl::FileBase::getFileURLFromSystemPath( sGlobalTemplates[ i ], aURL );
-        if ( !aURL.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
+        if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
         SotStorageRef rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
@@ -4363,7 +4332,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
         aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocument") ) );
+        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( String::CreateFromAscii( "WordDocument" ));
         refMainStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         WW8Fib aWwFib( *refMainStream, 8 );
         SvStorageStreamRef xTableStream = rRoot->OpenSotStream(String::CreateFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
@@ -4619,7 +4588,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         if (mbNewDoc && pStg && !pGloss) /*meaningless for a glossary, cmc*/
         {
             mpDocShell->SetIsTemplate( pWwFib->fDot ); // point at tgc record
-            maTracer.EnterEnvironment(sw::log::eMacros);
             uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
@@ -4628,7 +4596,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Reference< container::XNameContainer > xPrjNameCache;
             uno::Reference< lang::XMultiServiceFactory> xSF(mpDocShell->GetModel(), uno::UNO_QUERY);
             if ( xSF.is() )
-                xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+                xPrjNameCache.set( xSF->createInstance( "ooo.vba.VBAProjectNameProvider" ), uno::UNO_QUERY );
 
             // Read Global templates
             ReadGlobalTemplateSettings( sCreatedFrom, xPrjNameCache );
@@ -4637,11 +4605,13 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Any aGlobs;
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= mpDocShell->GetModel();
-            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
+            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+
+#ifndef DISABLE_SCRIPTING
             BasicManager *pBasicMan = mpDocShell->GetBasicManager();
             if (pBasicMan)
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-
+#endif
             BasicProjImportHelper aBasicImporter( *mpDocShell );
             // Import vba via oox filter
             bool bRet = aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
@@ -4651,14 +4621,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             aCustomisations.Import( mpDocShell );
 
             if( bRet )
-            {
-                maTracer.Log(sw::log::eContainsVisualBasic);
                 rDoc.SetContainsMSVBasic(true);
-            }
 
             StoreMacroCmds();
-
-            maTracer.LeaveEnvironment(sw::log::eMacros);
         }
         ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
 
@@ -4754,7 +4719,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete pWDop;
     DELETEZ( pFonts );
     delete mpAtnNames;
-    DELETEZ( pAuthorInfos );
     delete mpSprmParser;
     ::EndProgress(mpDocShell);
 
@@ -5500,9 +5464,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "wo ist mein Storage?" );
-    rRef = pStg->OpenSotStream(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
-        STREAM_READ | STREAM_SHARE_DENYALL);
+    rRef = pStg->OpenSotStream( String::CreateFromAscii( "WordDocument" ), STREAM_READ | STREAM_SHARE_DENYALL);
 
     if( rRef.Is() )
     {
@@ -5626,7 +5588,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 {
     bool bRet = false;
 
-    long nPictureId = 0;
+    sal_Int32 nPictureId = 0;
     if (rReader.pStg)
     {
         // dann holen wir uns mal ueber den TextBox-PLCF die richtigen

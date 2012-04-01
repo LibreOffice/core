@@ -75,10 +75,10 @@ class SwFldFuncPage : public SwFldPage
     sal_uLong           nOldFormat;
     bool            bDropDownLBChanged;
 
-    DECL_LINK( TypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( SelectHdl, ListBox* pLB = 0 );
-    DECL_LINK( InsertMacroHdl, ListBox* pLB = 0 );
-    DECL_LINK( ModifyHdl, Edit *pEd = 0 );
+    DECL_LINK(TypeHdl, void *);
+    DECL_LINK(SelectHdl, void * = 0);
+    DECL_LINK(InsertMacroHdl, void *);
+    DECL_LINK(ModifyHdl, void * = 0);
     DECL_LINK( ListModifyHdl, Control*);
     DECL_LINK( ListEnableHdl, void*);
 

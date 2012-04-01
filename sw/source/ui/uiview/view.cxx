@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
@@ -219,7 +218,7 @@ void SwView::GotFocus() const
     a request to put the form shell on the top of the dispatcher
     stack
  --------------------------------------------------------------------*/
-IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
+IMPL_LINK_NOARG(SwView, FormControlActivated)
 {
     // if a form control has been activated, and the form shell is not on the top
     // of the dispatcher stack, then we need to activate it
@@ -490,7 +489,7 @@ extern "C"
     }
 }
 
-IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
+IMPL_LINK_NOARG(SwView, AttrChangedNotify)
 {
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( sal_False );
@@ -539,7 +538,7 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwView, TimeoutHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwView, TimeoutHdl)
 {
     DBG_PROFSTART(viewhdl);
 
@@ -837,7 +836,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
         if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
             aUsrPref.setBrowseMode( sal_True );
-        else if( rDoc.IsLoaded() )
+        else
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
@@ -948,8 +947,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
     SAL_WARN_IF(
-        officecfg::Office::Common::Undo::Steps::get(
-            comphelper::getProcessComponentContext()) <= 0,
+        officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
     pWrtShell->DoUndo( true );
 

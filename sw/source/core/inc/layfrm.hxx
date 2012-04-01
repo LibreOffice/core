@@ -56,6 +56,8 @@ class SwLayoutFrm: public SwFrm
 
     void CopySubtree( const SwLayoutFrm *pDest );
 protected:
+    void Destroy(); // for ~SwRootFrm
+
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void MakeAll();
 
@@ -104,7 +106,7 @@ public:
                                    const sal_Bool bDefaultExpand = sal_True ) const;
 
     SwLayoutFrm( SwFrmFmt*, SwFrm* );
-    ~SwLayoutFrm();
+    virtual ~SwLayoutFrm();
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;

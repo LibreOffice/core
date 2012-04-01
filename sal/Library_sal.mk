@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_package_headers,sal,sal_inc))
 
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sal/inc) \
+	-I$(SRCDIR)/sal/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
@@ -46,7 +46,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 		-DFORCE_SYSALLOC \
 	) \
 	$(if $(filter $(OS),IOS), \
-		-DNO_DL_FUNCTIONS \
 		-DNO_CHILD_PROCESSES \
 	) \
 	$(LFS_CFLAGS) \
@@ -132,6 +131,29 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Library_add_cxxflags,sal,\
+    $(gb_OBJCXXFLAGS) \
+))
+endif
+
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_exception_objects,sal,\
+	sal/textenc/context \
+	sal/textenc/convertbig5hkscs \
+	sal/textenc/converteuctw \
+	sal/textenc/convertgb18030 \
+	sal/textenc/convertiso2022cn \
+	sal/textenc/convertiso2022jp \
+	sal/textenc/convertiso2022kr \
+	sal/textenc/convertsinglebytetobmpunicode \
+	sal/textenc/tables \
+	sal/textenc/tcvtbyte \
+	sal/textenc/tcvtmb \
+	sal/textenc/tcvtutf7 \
+))
+endif
+
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/conditn \
@@ -142,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/file_stat \
 	sal/osl/unx/file_url \
 	sal/osl/unx/file_volume \
+	sal/osl/unx/module \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
 	sal/osl/unx/salinit \
@@ -149,7 +172,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/diagnose \
-	sal/osl/unx/module \
 	sal/osl/unx/mutex \
 	sal/osl/unx/nlsupport \
 	sal/osl/unx/pipe \

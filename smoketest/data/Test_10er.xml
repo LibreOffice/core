@@ -395,7 +395,7 @@ Sub MakeDocTest
 
         gCurrentTestCase = cDocOpen50
         if bMakeOpen50Test and IsFilterAvailable (gCurrentDocTest or cFlt50) then
-            SOLARSRC = ConvertToURL(Environ(&quot;SOLARSRC&quot;))
+            SOLARSRC = ConvertToURL(Environ(&quot;SRC_ROOT&quot;))
             sFileName50 = SOLARSRC+&quot;/qadevOOo/testdocs/ttt.&quot;+GetDocEndings(gCurrentDocTest or cFlt50)
             oDoc = LoadDoc (sFileName50)
 

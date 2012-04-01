@@ -9,6 +9,7 @@ AdjustLuminance
 AdjustmentValues
 Address
 Align
+Anchor
 AnchorPosition
 ApplyFormDesignMode
 AreaLinks
@@ -179,6 +180,7 @@ FooterIsDynamicHeight
 FooterIsOn
 FooterIsShared
 FormulaConvention
+FrameIsAutomaticHeight
 Function
 GapwidthSequence
 Geometry3D
@@ -217,6 +219,7 @@ HelpText
 HideInactiveSelection
 HoriJustify
 HoriJustifyMethod
+HoriOrientPosition
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -416,6 +419,7 @@ Size
 Size100thMM
 SizePixel
 SizeProtect
+SizeType
 SkipDuplicates
 SortInfo
 Sound
@@ -495,6 +499,8 @@ VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+VertOrientPosition
+VertOrientRelation
 ViewBox
 Visible
 VisibleFlag

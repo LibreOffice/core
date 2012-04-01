@@ -803,8 +803,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
-            String aResult;
-            mrScFmlaCell.GetString( aResult );
+            String aResult = mrScFmlaCell.GetString();
             bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
@@ -949,8 +948,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
         case NUMBERFORMAT_TEXT:
         {
-            String aResult;
-            mrScFmlaCell.GetString( aResult );
+            String aResult = mrScFmlaCell.GetString();
             if( aResult.Len() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
             {
                 rStrm << EXC_FORMULA_RES_STRING;
@@ -1302,8 +1300,8 @@ XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) 
         mpScOLArray = bRows ? pOutlineTable->GetRowArray() : pOutlineTable->GetColArray();
 
     if( mpScOLArray )
-        for( sal_uInt16 nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
-            if( ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nLevel, 0 ) )
+        for( size_t nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
+            if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nLevel, 0 ) )
                 maLevelInfos[ nLevel ].mnScEndPos = pEntry->GetEnd();
 }
 
@@ -1312,7 +1310,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
     if( mpScOLArray )
     {
         // find open level index for passed position
-        sal_uInt16 nNewOpenScLevel = 0; // new open level (0-based Calc index)
+        size_t nNewOpenScLevel = 0; // new open level (0-based Calc index)
         sal_uInt8 nNewLevel = 0;    // new open level (1-based Excel index)
 
         if( mpScOLArray->FindTouchedLevel( nScPos, nScPos, nNewOpenScLevel ) )
@@ -1329,7 +1327,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
                     neighbored groups without gap - therefore check ALL levels). */
                 if( maLevelInfos[ nScLevel ].mnScEndPos < nScPos )
                 {
-                    if( ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
+                    if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
                     {
                         maLevelInfos[ nScLevel ].mnScEndPos = pEntry->GetEnd();
                         maLevelInfos[ nScLevel ].mbHidden = pEntry->IsHidden();
@@ -2187,7 +2185,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // find used area (non-empty cells)
     SCCOL nLastUsedScCol;
     SCROW nLastUsedScRow;
-    rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
+    rDoc.GetFormattedAndUsedArea( nScTab, nLastUsedScCol, nLastUsedScRow );
 
     ScRange aUsedRange( 0, 0, nScTab, nLastUsedScCol, nLastUsedScRow, nScTab );
     GetAddressConverter().ValidateRange( aUsedRange, true );
@@ -2339,10 +2337,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         if( xCell )
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
-        // notes
-        const ScPostIt* pScNote = pScCell ? pScCell->GetNote() : 0;
-        if( pScNote || (aAddNoteText.Len() > 0) )
-            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
+        if ( aAddNoteText.Len()  )
+            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, NULL, aAddNoteText ) );
 
         // other sheet contents
         if( pPattern )

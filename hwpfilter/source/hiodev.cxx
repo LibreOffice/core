@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef __GNUG__
-#pragma implementation "hiodev.h"
-#endif
-
 #include <stdio.h>
 #include <errno.h>
 // DVO: add zlib/ prefix
@@ -43,6 +39,8 @@
 #else
 # include <unistd.h>
 #endif
+
+#include <osl/diagnose.h>
 
 #include "hwplib.h"
 #include "hgzip.h"

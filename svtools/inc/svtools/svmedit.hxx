@@ -54,7 +54,7 @@ private:
 
 protected:
 
-    DECL_LINK(      ImpUpdateDataHdl, Timer* );
+    DECL_LINK(      ImpUpdateDataHdl, void* );
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
@@ -65,7 +65,6 @@ protected:
 
     ExtTextEngine*  GetTextEngine() const;
     ExtTextView*    GetTextView() const;
-    ScrollBar*      GetHScrollBar() const;
     ScrollBar*      GetVScrollBar() const;
 
 public:
@@ -89,7 +88,6 @@ public:
     virtual sal_Bool    IsReadOnly() const;
 
     void            EnableFocusSelectionHide( sal_Bool bHide );
-    sal_Bool            IsFocusSelectionHideEnabled() const;
 
     virtual void    SetMaxTextLen( xub_StrLen nMaxLen = 0 );
     virtual xub_StrLen GetMaxTextLen() const;
@@ -111,7 +109,6 @@ public:
                     { SetText( rStr ); SetSelection( rNewSelection ); }
     String          GetText() const;
     String          GetText( LineEnd aSeparator ) const;
-    String          GetTextLines() const;
     String          GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( sal_Bool bRightToLeft );
@@ -138,7 +135,6 @@ public:
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
        void         SetLeftMargin( sal_uInt16 n );
-    sal_uInt16          GetLeftMargin() const;
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >

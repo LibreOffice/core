@@ -269,11 +269,10 @@ ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, 
     }
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaFormatConditions::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatConditions") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatConditions"));
 }
 
 uno::Sequence< rtl::OUString >

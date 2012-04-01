@@ -39,6 +39,8 @@
 #include "address.hxx"
 
 #include "dpcachetable.hxx"
+#include "dptypes.hxx"
+
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -49,18 +51,17 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class Rectangle;
 class SvStream;
 class ScDocument;
-class ScStrCollection;
 
 struct ScDPOutLevelData;
 
 
 struct ScDPGetPivotDataField
 {
-    String maFieldName;
+    rtl::OUString maFieldName;
     com::sun::star::sheet::GeneralFunction meFunction;
 
     bool   mbValIsStr;
-    String maValStr;
+    rtl::OUString maValStr;
     double mnValNum;
 
         ScDPGetPivotDataField() :
@@ -73,15 +74,13 @@ struct ScDPGetPivotDataField
 
 
 
-class ScDPOutput            //! name???
+class ScDPOutput
 {
 private:
-    //! use impl-object?
     ScDocument*             pDoc;
     com::sun::star::uno::Reference<
         com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScAddress               aStartPos;
-    bool                    bDoFilter;
     ScDPOutLevelData*       pColFields;
     ScDPOutLevelData*       pRowFields;
     ScDPOutLevelData*       pPageFields;
@@ -91,9 +90,7 @@ private:
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
-    bool                    bResultsError;
-    bool                    mbHasDataLayout;
-    String                  aDataDescription;
+    rtl::OUString           aDataDescription;
 
     // Number format related parameters
     sal_uInt32*                 pColNumFmt;
@@ -103,12 +100,9 @@ private:
     sal_uInt32                  nSingleNumFmt;
 
     // Output geometry related parameters
-    bool                    bSizesValid;
-    bool                    bSizeOverflow;
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
-    bool                    mbHeaderLayout;  // sal_True : grid, sal_False : standard
     SCCOL                   nTabStartCol;
     SCROW                   nTabStartRow;
     SCCOL                   nMemberStartCol;
@@ -117,14 +111,21 @@ private:
     SCROW                   nDataStartRow;
     SCCOL                   nTabEndCol;
     SCROW                   nTabEndRow;
+    bool                    bDoFilter:1;
+    bool                    bResultsError:1;
+    bool                    mbHasDataLayout:1;
+    bool                    bSizesValid:1;
+    bool                    bSizeOverflow:1;
+    bool                    mbHeaderLayout:1;  // true : grid, false : standard
 
     void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const com::sun::star::sheet::DataResult& rData );
     void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const com::sun::star::sheet::MemberResult& rData,
-                                sal_Bool bColHeader, long nLevel );
-    void            FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
-                               bool bInTable, bool bPopup, bool bHasHiddenMember );
+                                bool bColHeader, long nLevel );
+
+    void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
+
     void            CalcSizes();
 
     /** Query which sub-area of the table the cell is in. See
@@ -152,22 +153,27 @@ public:
         field region. */
     bool            GetDataResultPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
-    sal_Bool            GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
-                                  const std::vector< ScDPGetPivotDataField >& rFilters );
+    /**
+     * @return true on success and stores the result in rTarget, or false if
+     *         rFilters or rTarget describe something that is not visible.
+     */
+    bool GetPivotData( ScDPGetPivotDataField& rTarget,
+                       const std::vector< ScDPGetPivotDataField >& rFilters );
     long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
-    sal_Bool            GetHeaderDrag( const ScAddress& rPos, sal_Bool bMouseLeft, sal_Bool bMouseTop,
-                                    long nDragDim,
-                                    Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
-    sal_Bool            IsFilterButton( const ScAddress& rPos );
+    bool GetHeaderDrag(
+        const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
+        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
+    bool IsFilterButton( const ScAddress& rPos );
 
-    void            GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
     void            SetHeaderLayout(bool bUseGrid);
     bool            GetHeaderLayout() const;
 
-    static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
-                                           const com::sun::star::uno::Reference<
-                                               com::sun::star::uno::XInterface>& xDim );
+    static void GetDataDimensionNames(
+        rtl::OUString& rSourceName, rtl::OUString& rGivenName,
+        const com::sun::star::uno::Reference<
+            com::sun::star::uno::XInterface>& xDim );
 };
 
 

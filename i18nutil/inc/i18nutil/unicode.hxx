@@ -48,19 +48,15 @@ public:
     static sal_Unicode SAL_CALL getUnicodeScriptStart(com::sun::star::i18n::UnicodeScript type);
     static sal_Unicode SAL_CALL getUnicodeScriptEnd(com::sun::star::i18n::UnicodeScript type);
     static sal_uInt8 SAL_CALL getUnicodeDirection( const sal_Unicode ch );
-    static sal_Int32 SAL_CALL getCharType( const sal_Unicode ch );
     static sal_Bool SAL_CALL isUpper( const sal_Unicode ch);
     static sal_Bool SAL_CALL isLower( const sal_Unicode ch);
-    static sal_Bool SAL_CALL isTitle( const sal_Unicode ch);
     static sal_Bool SAL_CALL isDigit( const sal_Unicode ch);
     static sal_Bool SAL_CALL isControl( const sal_Unicode ch);
     static sal_Bool SAL_CALL isPrint( const sal_Unicode ch);
-    static sal_Bool SAL_CALL isBase( const sal_Unicode ch);
     static sal_Bool SAL_CALL isAlpha( const sal_Unicode ch);
     static sal_Bool SAL_CALL isSpace( const sal_Unicode ch);
     static sal_Bool SAL_CALL isWhiteSpace( const sal_Unicode ch);
     static sal_Bool SAL_CALL isAlphaDigit( const sal_Unicode ch);
-    static sal_Bool SAL_CALL isPunctuation( const sal_Unicode ch);
 
     //Map an ISO 15924 script code to Latin/Asian/Complex/Weak
     static sal_Int16 SAL_CALL getScriptClassFromUScriptCode(UScriptCode eScript);

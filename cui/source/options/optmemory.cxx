@@ -30,7 +30,6 @@
 
 #include <algorithm>
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
@@ -184,29 +183,27 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    boost::shared_ptr< unotools::ConfigurationChanges > batch(
-        unotools::ConfigurationChanges::create(
-            comphelper::getProcessComponentContext()));
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
 
     // Undo-Schritte
     if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
         officecfg::Office::Common::Undo::Steps::set(
-            comphelper::getProcessComponentContext(), batch,
-            aUndoEdit.GetValue());
+            aUndoEdit.GetValue(), batch);
 
     // GraphicCache
     sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(
-        comphelper::getProcessComponentContext(), batch, totalCacheSize);
+        totalCacheSize, batch);
     sal_Int32 objectCacheSize = GetNfGraphicObjectCacheVal();
     officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::set(
-        comphelper::getProcessComponentContext(), batch, objectCacheSize);
+        objectCacheSize, batch);
 
     const Time aTime( aTfGraphicObjectTime.GetTime() );
     sal_Int32 objectReleaseTime =
         aTime.GetSec() + aTime.GetMin() * 60 + aTime.GetHour() * 3600;
     officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
-        comphelper::getProcessComponentContext(), batch, objectReleaseTime);
+        objectReleaseTime, batch);
 
     // create a dummy graphic object to get access to the common GraphicManager
     GraphicObject       aDummyObject;
@@ -218,11 +215,9 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     // OLECache
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(
-        comphelper::getProcessComponentContext(), batch,
-        aNfOLECache.GetValue());
+        aNfOLECache.GetValue(), batch);
     officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(
-        comphelper::getProcessComponentContext(), batch,
-        aNfOLECache.GetValue());
+        aNfOLECache.GetValue(), batch);
 
     batch->commit();
 
@@ -242,25 +237,22 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem*  pItem;
 
     // Undo-Schritte
-    aUndoEdit.SetValue(
-        officecfg::Office::Common::Undo::Steps::get(
-            comphelper::getProcessComponentContext()));
+    aUndoEdit.SetValue(officecfg::Office::Common::Undo::Steps::get());
     aUndoEdit.SaveValue();
 
     // GraphicCache
     long n =
-        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get(
-            comphelper::getProcessComponentContext());
+        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
     SetNfGraphicCacheVal( n );
     SetNfGraphicObjectCacheVal(
         std::min(
             GetNfGraphicCacheVal(),
-            officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get(
-                comphelper::getProcessComponentContext())));
+            (officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::
+             get())));
 
     sal_Int32 nTime =
-        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
-            comphelper::getProcessComponentContext());
+        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::
+        get();
     Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
     aTfGraphicObjectTime.SetTime( aTime );
 
@@ -269,10 +261,9 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     // OLECache
     aNfOLECache.SetValue(
         std::max(
-            officecfg::Office::Common::Cache::Writer::OLE_Objects::get(
-                comphelper::getProcessComponentContext()),
-            officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get(
-                comphelper::getProcessComponentContext())));
+            officecfg::Office::Common::Cache::Writer::OLE_Objects::get(),
+            (officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::
+             get())));
 
     SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, sal_False, &pItem );
     if ( SFX_ITEM_SET == eState )
@@ -289,7 +280,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
 {
     sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );

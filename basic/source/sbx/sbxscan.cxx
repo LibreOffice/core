@@ -43,6 +43,7 @@
 
 #include "sbxres.hxx"
 #include <basic/sbxbase.hxx>
+#include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
 #include <svtools/svtools.hrc>
 
@@ -218,11 +219,13 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
     }
+#ifndef DISABLE_SCRIPTING
     else if ( SbiRuntime::isVBAEnabled() )
     {
         OSL_TRACE("Reporting error converting");
         return SbxERR_CONVERSION;
     }
+#endif
     if( pLen )
         *pLen = (sal_uInt16) ( p - pStart );
     if( !bRes )
@@ -445,13 +448,13 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
         // check as string in case of sal_Bool sal_True and sal_False
         case SbxBOOL:
         {
-            if( rSrc.equalsIgnoreAsciiCaseAscii( "true" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
                 bChanged = sal_True;
             }
             else
-            if( rSrc.equalsIgnoreAsciiCaseAscii( "false" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
                 bChanged = sal_True;
@@ -623,7 +626,7 @@ ResMgr* implGetResMgr( void )
     if( !pResMgr )
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
+        pResMgr = ResMgr::CreateResMgr("sb", aLocale );
     }
     return pResMgr;
 }

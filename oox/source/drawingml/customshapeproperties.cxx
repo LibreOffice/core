@@ -147,7 +147,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         {
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
-            aPropertyMap = maPresetsMap[ mnShapePresetType ];
+            CustomShapeProvider *pProvider = maPresetsMap[ mnShapePresetType ];
+            if (pProvider)
+                aPropertyMap = pProvider->getProperties();
 #ifdef DEBUG
             aPropertyMap.dumpCode();
 #endif
@@ -346,7 +348,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Handles ] <<= aHandles;
 
 #ifdef DEBUG
-        //aPropertyMap.dump();
         OSL_TRACE("==cscode== begin");
         aPropertyMap.dumpCode();
         OSL_TRACE("==cscode== end");
@@ -358,14 +359,46 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     }
 }
 
-double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& rGuideList, sal_uInt32 nIndex ) const
+Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pStrings )
 {
-    double fRet = 0.0;
-    if ( nIndex < rGuideList.size() )
-    {
+    Sequence< OUString > aStringSequence( nStrings );
+    for (size_t i = 0; i < nStrings; i++)
+        aStringSequence[i] = ::rtl::OUString::intern(
+                                pStrings[i], strlen( pStrings[i] ),
+                                RTL_TEXTENCODING_ASCII_US );
+    return makeAny( aStringSequence );
+}
 
+com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >
+CustomShapeProvider::createSegmentSequence( size_t nElems, const sal_uInt16 *pValues )
+{
+    Sequence< EnhancedCustomShapeSegment > aSequence( (nElems + 1) / 2 );
+    for (size_t i = 0, j = 0; i < nElems / 2; i++)
+    {
+        aSequence[i].Command = pValues[j++];
+        aSequence[i].Count = pValues[j++];
     }
-    return fRet;
+    return aSequence;
+}
+
+com::sun::star::drawing::EnhancedCustomShapeParameterPair
+CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
+{
+    EnhancedCustomShapeParameterPair aParameterPair;
+    aParameterPair.First.Type = pData->nFirstType;
+    aParameterPair.First.Value = makeAny(pData->nFirstValue);
+    aParameterPair.Second.Type = pData->nSecondType;
+    aParameterPair.Second.Value = makeAny(pData->nSecondValue);
+    return aParameterPair;
+}
+
+com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >
+CustomShapeProvider::createParameterPairSequence( size_t nElems, const ParameterPairData *pData )
+{
+    Sequence< EnhancedCustomShapeParameterPair > aSequence( nElems );
+    for (size_t i = 0; i < nElems; i++)
+        aSequence[i] = createParameterPair( pData + i );
+    return aSequence;
 }
 
 } }

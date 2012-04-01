@@ -1,0 +1,5 @@
+Audio/Video media implementation.
+
+Provides per-platform implementations of multimedia functionality.
+Currently no stream API is provided, only a URI based one, so
+streaming has to be wrapped around it via temp files.

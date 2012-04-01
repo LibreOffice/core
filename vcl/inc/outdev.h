@@ -86,8 +86,8 @@ friend class ImplDevFontList; // TODO: remove soon
     String              maName;             // Fontname (original font family name)
     String              maSearchName;       // normalized font family name
     String              maMapNames;         // fontname aliases
-    sal_uIntPtr               mnTypeFaces;        // Typeface Flags
-    sal_uIntPtr               mnMatchType;        // MATCH - Type
+    sal_uIntPtr         mnTypeFaces;        // Typeface Flags
+    sal_uIntPtr         mnMatchType;        // MATCH - Type
     String              maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width

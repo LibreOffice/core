@@ -97,11 +97,7 @@
 #include "workwin.hxx"
 #include "sfx2/imgmgr.hxx"
 #include "virtmenu.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/module.hxx>
 #include "sfx2/imagemgr.hxx"
-
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -888,7 +884,7 @@ void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxToolBoxControl, PopupModeEndHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
 {
     if ( pImpl->mpPopupWindow->IsVisible() )
     {
@@ -1286,21 +1282,12 @@ void SfxPopupWindow::AddStatusListener( const rtl::OUString& rCommandURL )
 
 //--------------------------------------------------------------------
 
-void SfxPopupWindow::RemoveStatusListener( const rtl::OUString& rCommandURL )
-{
-    GetOrCreateStatusListener();
-    if ( m_xStatusListener.is() )
-        m_pStatusListener->removeStatusListener( rCommandURL );
-}
-
-//--------------------------------------------------------------------
-
 sal_Bool SfxPopupWindow::Close()
 {
     m_bFloating = sal_False;
     FloatingWindow::Close();
 
-    Delete(0);
+    Delete();
     return sal_True;
 }
 
@@ -1328,7 +1315,7 @@ void SfxPopupWindow::DeleteFloatingWindow()
     if ( m_bFloating )
     {
         Hide();
-        Delete(0);
+        Delete();
     }
 }
 
@@ -1412,12 +1399,11 @@ void SfxPopupWindow::StateChanged(
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxPopupWindow, Delete, void *, EMPTYARG )
+void SfxPopupWindow::Delete()
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );
     delete this;
-    return 0;
 }
 
 //--------------------------------------------------------------------

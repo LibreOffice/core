@@ -59,8 +59,8 @@ private:
     HelpButton      aHelpBtn;
 
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( EditHdl_Impl, Edit * );
+    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK(EditHdl_Impl, void *);
 
 public:
     MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );

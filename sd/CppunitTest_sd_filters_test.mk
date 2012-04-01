@@ -42,9 +42,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
     drawinglayer \
     editeng \
     fileacc \
-    for \
-    forui \
     i18nisolang1 \
+    i18nutil \
     msfilter \
     oox \
     sal \
@@ -69,10 +68,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
-    -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sd_filters_test,\
@@ -91,9 +89,9 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     oox/util/oox \
@@ -112,12 +110,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-    xmlsecurity/util/xsec_fw \
-    xmlsecurity/util/xmlsecurity \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
-    embobj \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_filters_test,\

@@ -134,13 +134,13 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     mnColFieldCount(0),
     mnPageFieldCount(0),
     mnDataFieldCount(0),
-    bIsNative(sal_True),
+    bIsNative(true),
     bIgnoreEmptyRows(false),
     bIdentifyCategories(false),
     bTargetRangeAddress(false),
     bSourceCellRange(false),
-    bShowFilter(sal_True),
-    bDrillDown(sal_True),
+    bShowFilter(true),
+    bDrillDown(true),
     bHeaderGridLayout(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -230,7 +230,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     }
 
     pDPObject = new ScDPObject(pDoc);
-     pDPSave = new ScDPSaveData();
+    pDPSave = new ScDPSaveData();
 }
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
@@ -295,13 +295,48 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 n
     return pContext;
 }
 
+namespace {
+
+const ScDPSaveDimension* getDimension(
+    const std::vector<const ScDPSaveDimension*>& rRowDims,
+    const std::vector<const ScDPSaveDimension*>& rColDims,
+    ScDPOutputGeometry::FieldType eType, size_t nPos)
+{
+    switch (eType)
+    {
+        case ScDPOutputGeometry::Column:
+        {
+            if (rColDims.size() <= nPos)
+                return NULL;
+
+            return rColDims[nPos];
+        }
+        case ScDPOutputGeometry::Row:
+        {
+            if (rRowDims.size() <= nPos)
+                return NULL;
+
+            return rRowDims[nPos];
+        }
+        default:
+            ;
+    }
+    return NULL;
+}
+
+}
+
 void ScXMLDataPilotTableContext::SetButtons()
 {
-    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter, ScDPOutputGeometry::ODF);
+    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter);
     aGeometry.setColumnFieldCount(mnColFieldCount);
     aGeometry.setRowFieldCount(mnRowFieldCount);
     aGeometry.setPageFieldCount(mnPageFieldCount);
     aGeometry.setDataFieldCount(mnDataFieldCount);
+
+    std::vector<const ScDPSaveDimension*> aRowDims, aColDims, aPageDims;
+    pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
+    pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
 
     OUString sAddress;
     sal_Int32 nOffset = 0;
@@ -314,19 +349,19 @@ void ScXMLDataPilotTableContext::SetButtons()
             sal_Int32 nAddrOffset(0);
             if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
             {
-                ScDPOutputGeometry::FieldType eType = aGeometry.getFieldButtonType(aScAddress);
+                std::pair<ScDPOutputGeometry::FieldType, size_t> aBtnType = aGeometry.getFieldButtonType(aScAddress);
+                const ScDPSaveDimension* pDim = getDimension(
+                    aRowDims, aColDims, aBtnType.first, aBtnType.second);
+
+                bool bDataLayout = pDim && pDim->IsDataLayout();
+                bool bHasHidden = pDim && pDim->HasInvisibleMember();
 
                 sal_Int16 nMFlag = SC_MF_BUTTON;
-                if (eType == ScDPOutputGeometry::Column || eType == ScDPOutputGeometry::Row)
-                    nMFlag |= SC_MF_BUTTON_POPUP;
-
-                // Use the cell's string value to see if this field contains a
-                // hidden member.  Isn't there a better way?  GetString() is
-                // quite expensive...
-                String aCellStr;
-                pDoc->GetString(aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aCellStr);
-                if (maHiddenMemberFields.count(aCellStr))
+                if (bHasHidden)
                     nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+                if (!bDataLayout)
+                    nMFlag |= SC_MF_BUTTON_POPUP;
 
                 pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
             }
@@ -337,7 +372,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         pDPObject->RefreshAfterLoad();
 }
 
-void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember)
+void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
     if (pDPSave)
     {
@@ -345,40 +380,27 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
-            pDim->SetDupFlag( sal_True );
+            pDim->SetDupFlag(true);
 
-        if (!pDim->IsDataLayout())
+        switch (pDim->GetOrientation())
         {
-            switch (pDim->GetOrientation())
-            {
-                case sheet::DataPilotFieldOrientation_ROW:
-                    ++mnRowFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_COLUMN:
-                    ++mnColFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_PAGE:
-                    ++mnPageFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_DATA:
-                    ++mnDataFieldCount;
-                break;
-                case sheet::DataPilotFieldOrientation_HIDDEN:
-                default:
-                    ;
-            }
-
-            if (bHasHiddenMember)
-            {
-                // the layout name takes priority over the original name,
-                // since this data is used against cell values.
-                const OUString* pLayoutName = pDim->GetLayoutName();
-                if (pLayoutName)
-                    maHiddenMemberFields.insert(*pLayoutName);
-                else
-                    maHiddenMemberFields.insert(pDim->GetName());
-            }
+            case sheet::DataPilotFieldOrientation_ROW:
+                ++mnRowFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_COLUMN:
+                ++mnColFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_PAGE:
+                ++mnPageFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_DATA:
+                ++mnDataFieldCount;
+            break;
+            case sheet::DataPilotFieldOrientation_HIDDEN:
+            default:
+                ;
         }
+
         pDPSave->AddDimension(pDim);
     }
 }
@@ -1015,11 +1037,14 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( sal_uInt16 n
 void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
 {
     if (pDim)
+    {
         pDim->AddMember(pMember);
-
-    if (!pMember->GetIsVisible())
-        // This member is hidden.
-        mbHasHiddenMember = true;
+        if (!pMember->GetIsVisible())
+            // This member is hidden.
+            mbHasHiddenMember = true;
+    }
+    else
+        delete pMember;
 }
 
 void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
@@ -1047,17 +1072,17 @@ void ScXMLDataPilotFieldContext::EndElement()
         {
             pDim->SetCurrentPage(&sSelectedPage);
         }
-        pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
+        pDataPilotTable->AddDimension(pDim);
         if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;
-            aInfo.Enable = sal_True;
-            aInfo.DateValues = bDateValue;
-            aInfo.AutoStart = bAutoStart;
-            aInfo.AutoEnd = bAutoEnd;
-            aInfo.Start = fStart;
-            aInfo.End = fEnd;
-            aInfo.Step = fStep;
+            aInfo.mbEnable = true;
+            aInfo.mbDateValues = bDateValue;
+            aInfo.mbAutoStart = bAutoStart;
+            aInfo.mbAutoEnd = bAutoEnd;
+            aInfo.mfStart = fStart;
+            aInfo.mfEnd = fEnd;
+            aInfo.mfStep = fStep;
             if (!sGroupSource.isEmpty())
             {
                 ScDPSaveGroupDimension aGroupDim(sGroupSource, sName);
@@ -1614,7 +1639,7 @@ void ScXMLDataPilotMemberContext::EndElement()
 {
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
-        ScDPSaveMember* pMember = new ScDPSaveMember(String(sName));
+        ScDPSaveMember* pMember = new ScDPSaveMember(sName);
         if (!maDisplayName.isEmpty())
             pMember->SetLayoutName(maDisplayName);
         pMember->SetIsVisible(bDisplay);

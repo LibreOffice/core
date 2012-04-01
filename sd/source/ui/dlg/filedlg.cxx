@@ -118,7 +118,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
 {
     maUpdateTimer.Stop();
     mnPlaySoundEvent = 0;
@@ -186,7 +186,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
 {
     SolarMutexGuard aGuard;
 

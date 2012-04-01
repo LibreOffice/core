@@ -41,8 +41,12 @@ gb_UnoApiPartTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR
 # invoked with the .idl file corresponding to the .urd in that case.
 # Touch the .urd file, so it is newer than the .done file, causing that to
 # be rebuilt and overwriting the .urd file again.
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_UnoApiPartTarget_get_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 # TODO:
 # - get idlc switch "-P" (generate .urd into package dir)
@@ -68,7 +72,7 @@ $(call gb_UnoApiPartTarget_get_target,%.done) :
 ifeq ($(gb_FULLDEPS),$(true))
 
 $(call gb_UnoApiPartTarget_get_dep_target,%) :
-	$(if $(realpath $@),touch $@,\
+	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_UnoApiPartTarget_get_target,$*.urd)))
 
 endif
@@ -186,6 +190,8 @@ define gb_UnoApiTarget__add_idlfile
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiTarget__add_urdfile,$(1),$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd))
+$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) :| \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl

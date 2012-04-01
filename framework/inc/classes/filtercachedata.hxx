@@ -78,9 +78,9 @@ namespace framework{
 
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
-#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration pathes
-#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formated property strings of types and filters
-#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formated lists as part of our own formated type- or filter-string
+#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
+#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// separator for own formated property strings of types and filters
+#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// separator for own formated lists as part of our own formated type- or filter-string
 #define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 

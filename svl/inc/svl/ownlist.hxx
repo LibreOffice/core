@@ -30,7 +30,6 @@
 #define _OWNLIST_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/stream.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 
@@ -50,17 +49,17 @@ class SvCommand
     aus: Kommando = Argument.
 */
 {
-    String  aCommand;
-    String  aArgument;
+    ::rtl::OUString aCommand;
+    ::rtl::OUString aArgument;
 public:
                     SvCommand() {}
-                    SvCommand( const String & rCommand, const String & rArg )
+    SvCommand( const ::rtl::OUString & rCommand, const ::rtl::OUString & rArg )
                     {
                         aCommand = rCommand;
                         aArgument = rArg;
                     }
-    const String & GetCommand() const { return aCommand; }
-    const String & GetArgument() const { return aArgument; }
+    const ::rtl::OUString & GetCommand() const { return aCommand; }
+    const ::rtl::OUString & GetArgument() const { return aArgument; }
 };
 
 typedef ::std::vector< SvCommand > SvCommandList_impl;
@@ -78,10 +77,10 @@ private:
     SvCommandList_impl  aCommandList;
 
 public:
-    SvCommand&      Append( const String & rCommand, const String & rArg );
-    sal_Bool        AppendCommands( const String & rCmd, sal_uInt16 * pEaten );
+    SvCommand&      Append( const ::rtl::OUString & rCommand, const ::rtl::OUString & rArg );
+    bool        AppendCommands( const ::rtl::OUString & rCmd, sal_Int32 * pEaten );
 
-    sal_Bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
+    bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 
     size_t          size() const { return aCommandList.size(); }

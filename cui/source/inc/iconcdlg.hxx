@@ -184,9 +184,9 @@ private :
     sal_Bool                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
-    DECL_LINK ( OkHdl,             Button * );
-    DECL_LINK ( ResetHdl,          Button * );
-    DECL_LINK ( CancelHdl,         Button * );
+    DECL_LINK(OkHdl, void *);
+    DECL_LINK(ResetHdl, void *);
+    DECL_LINK(CancelHdl, void *);
 
     IconChoicePageData*     GetPageData ( sal_uInt16 nId );
     void                    Start_Impl();

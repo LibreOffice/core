@@ -68,7 +68,7 @@ namespace connectivity
                 // to a Java sal_Int32.  The jdbcodbc 'C' bridge provides an
                 // interface to do this.
 
-                paramLength = new sal_Int8[4];
+                paramLength = new sal_Int8[sizeof(SQLLEN)];
             }
 
             //--------------------------------------------------------------------

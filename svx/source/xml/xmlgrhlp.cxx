@@ -597,7 +597,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
 
-            const sal_Bool bCompressed =  aMimeType.isEmpty() || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) ;
+            const sal_Bool bCompressed =  aMimeType.isEmpty() || ( aMimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image/tiff")) ) ;
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 

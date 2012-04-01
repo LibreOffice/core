@@ -30,22 +30,13 @@
 
 $(eval $(call gb_Library_Library,so_activex))
 
-$(SRCDIR)/extensions/source/activex/so_activex.cxx: $(WORKDIR)/CustomTarget/so_activex/so_activex.tlb
-
-$(WORKDIR)/CustomTarget/so_activex/so_activex.tlb: $(SRCDIR)/extensions/source/activex/so_activex.idl
-	mkdir -p $(WORKDIR)/CustomTarget/so_activex
-	midl.exe -out $(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/so_activex) -Oicf $(call gb_Helper_convert_native,$<) \
-	$(foreach i,$(SOLARINC_FOR_BUILD), $(patsubst -I,/I,$(i)))
-
-$(call gb_Library_get_clean_target,so_activex) : extensions_activex_idlclean
-
-.PHONY: extensions_activex_idlclean
-extensions_activex_idlclean:
-	rm -rf $(WORKDIR)/CustomTarget/so_activex
+$(eval $(call gb_Library_add_package_headers,so_activex,\
+    extensions_so_activex_idl \
+))
 
 $(eval $(call gb_Library_set_include,so_activex,\
 	$$(INCLUDE) \
-	-I$(WORKDIR)/CustomTarget/so_activex \
+	-I$(WORKDIR)/CustomTarget/extensions/source/activex/idl \
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))
 

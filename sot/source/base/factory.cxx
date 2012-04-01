@@ -57,7 +57,15 @@ SotData_Impl::SotData_Impl()
 
 SotData_Impl::~SotData_Impl()
 {
-    delete pDataFlavorList;
+    if (pDataFlavorList)
+    {
+        for( tDataFlavorList::iterator aI = pDataFlavorList->begin(),
+             aEnd = pDataFlavorList->end(); aI != aEnd; ++aI)
+        {
+            delete *aI;
+        }
+        delete pDataFlavorList;
+    }
     delete pFactoryList;
 }
 
@@ -187,23 +195,6 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
     {
         //keine internen und externen Referenzen mehr
     }
-}
-
-
-/*************************************************************************
-|*    SotFactory::TestInvariant()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotFactory::TestInvariant()
-{
-#ifdef TEST_INVARIANT
-    SotData_Impl * pSotData = SOTDATA();
-
-    std::list<SotObject*>::iterator it;
-    for( it = pSotData->aObjectList.begin(); it != pSotData->aObjectList.end(); ++it )
-        (*it)->TestInvariant();
-#endif
 }
 
 /*************************************************************************

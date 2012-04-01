@@ -34,13 +34,17 @@ PACKAGE = connectivity/tools
 .INCLUDE: settings.mk
 
 .IF "$(SOLAR_JAVA)" == ""
+
 all:
-    @echo "Java not available. Build skipped"
+# nothing
+
 .ELSE
 
 .IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/QADEVOOO//)"
+
 all:
-    @echo "QADEVOO not set. Build skipped"
+# nothing
+
 .ELSE
 
 #----- compile .java files -----------------------------------------

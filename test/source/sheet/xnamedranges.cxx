@@ -65,6 +65,10 @@ XNamedRanges::XNamedRanges(const rtl::OUString& rNameToRemove):
 
 }
 
+XNamedRanges::~XNamedRanges()
+{
+}
+
 void XNamedRanges::testAddNewByName()
 {
     uno::Reference< sheet::XNamedRanges > xNamedRanges(init(), UNO_QUERY_THROW);
@@ -180,7 +184,7 @@ void XNamedRanges::testRemoveByName()
         sal_Int32 nInitialCount = xIndex->getCount();
         xNamedRanges->removeByName(maNameToRemove);
         sal_Int32 nNewCount = xIndex->getCount();
-        CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 not removed", nNewCount == nInitialCount - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("NamedRange initial1 not removed", nNewCount, nInitialCount - 1);
         CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present", !xNamedRanges->hasByName(maNameToRemove));
         // try to remove non existing
         rtl::OUString aNr2(RTL_CONSTASCII_USTRINGPARAM("dummyNonExistingNamedRange"));

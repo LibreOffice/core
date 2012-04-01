@@ -38,7 +38,7 @@ namespace connectivity
         {
         public:
             WpADOIndex(_ADOIndex* pInt=NULL)    :   WpOLEBase<_ADOIndex>(pInt){}
-            WpADOIndex(const WpADOIndex& rhs){operator=(rhs);}
+            WpADOIndex(const WpADOIndex& rhs) : WpOLEBase<_ADOIndex>(rhs) {}
 
             inline WpADOIndex& operator=(const WpADOIndex& rhs)
                 {WpOLEBase<_ADOIndex>::operator=(rhs); return *this;}

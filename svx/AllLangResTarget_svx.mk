@@ -38,11 +38,10 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/res))
 
 $(eval $(call gb_SrsTarget_set_include,svx/res,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(WORKDIR)/inc/svx \
-    -I$(realpath $(SRCDIR)/svx/source/inc) \
-    -I$(realpath $(SRCDIR)/svx/source/dialog) \
-    -I$(realpath $(SRCDIR)/svx/inc/) \
+    -I$(SRCDIR)/svx/source/inc \
+    -I$(SRCDIR)/svx/source/dialog \
+    -I$(SRCDIR)/svx/inc/ \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svx/res,\

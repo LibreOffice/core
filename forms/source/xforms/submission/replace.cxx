@@ -58,7 +58,8 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
     try {
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-        if (aReplace.equalsIgnoreAsciiCaseAscii("all") || aReplace.equalsIgnoreAsciiCaseAscii("document")) {
+        if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))
+         || aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("document"))) {
             Reference< XComponentLoader > xLoader;
             if (aFrame.is())
                 xLoader = Reference< XComponentLoader >(aFrame, UNO_QUERY);
@@ -81,7 +82,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
             return CSubmission::SUCCESS;
 
-        } else if (aReplace.equalsIgnoreAsciiCaseAscii("instance")) {
+        } else if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("instance"))) {
             if (aDocument.is()) {
                 // parse the result stream into a new document
                 Reference< XDocumentBuilder > xBuilder(xFactory->createInstance(
@@ -103,7 +104,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
                 // nothing to replace
                 return CSubmission::UNKNOWN_ERROR;
             }
-        } else if (aReplace.equalsIgnoreAsciiCaseAscii("none")) {
+        } else if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("none"))) {
             // do nothing \o/
             return CSubmission::SUCCESS;
         }

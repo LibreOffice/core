@@ -92,7 +92,7 @@ void IcnCursor_Impl::ImplCreate()
         short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
         short nX = (short)( ((rRect.Left()+rRect.Right())/2) / nDeltaWidth );
 
-        // Rundungsfehler abfangen
+        // capture rounding errors
         if( nY >= nRows )
             nY = sal::static_int_cast< short >(nRows - 1);
         if( nX >= nCols )
@@ -279,20 +279,20 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow,sal_uInt16 nLe
 
 
 /*
-    Sucht ab dem uebergebenen Eintrag den naechsten rechts- bzw.
-    linksstehenden. Suchverfahren am Beispiel bRight = sal_True:
+    Searches, starting from the passed value, the next entry to the left/to the
+    right. Example for bRight = sal_True:
 
                   c
                 b c
               a b c
-            S 1 1 1      ====> Suchrichtung
+            S 1 1 1      ====> search direction
               a b c
                 b c
                   c
 
-    S : Startposition
-    1 : erstes Suchrechteck
-    a,b,c : 2., 3., 4. Suchrechteck
+    S : starting position
+    1 : first searched rectangle
+    a,b,c : 2nd, 3rd, 4th searched rectangle
 */
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCtrlEntry, sal_Bool bRight )
@@ -304,7 +304,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     sal_uInt16 nX = pCtrlEntry->nX;
     DBG_ASSERT(nY< nRows,"GoLeftRight:Bad column");
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
-    // Nachbar auf gleicher Zeile ?
+    // neighbor in same row?
     if( bRight )
         pResult = SearchRow(
             nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, sal_True, sal_True );
@@ -423,7 +423,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     DBG_ASSERT(nY<nRows,"GoUpDown:Bad column");
     DBG_ASSERT(nX<nCols,"GoUpDown:Bad row");
 
-    // Nachbar in gleicher Spalte ?
+    // neighbor in same column?
     if( bDown )
         pResult = SearchCol(
             nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, sal_True, sal_True );
@@ -493,7 +493,7 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
     if( !pRefEntry )
     {
         sal_uInt16 nGridRows = (sal_uInt16)(pView->aVirtOutputSize.Height() / pView->nGridDY);
-        nGridRows++; // wg. Abrundung!
+        nGridRows++; // because we round down later!
 
         if( !nGridRows )
             return;
@@ -514,8 +514,8 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
     }
     else
     {
-        // Aufbau eines hor. "Schlauchs" auf der RefEntry-Zeile
-        // UEBERLEGEN: BoundingRect nehmen wg. Ueberlappungen???
+        // build a horizontal "tube" in the RefEntry line
+        // STOP AND THINK: maybe use bounding rectangle because of overlaps?
         Rectangle rRefRect( pView->CalcBmpRect( pRefEntry ) );
         //const Rectangle& rRefRect = pView->GetEntryBoundRect( pRefEntry );
         short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
@@ -723,9 +723,9 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
     }
 }
 
-// ein Eintrag belegt nur das unter seinem Zentrum liegende GridRect
-// diese Variante ist bedeutend schneller als die Belegung ueber das
-// Bounding-Rect, kann aber zu kleinen Ueberlappungen fuehren
+// An entry only means that there's a GridRect lying under its center. This
+// variant is much faster than allocating via the bounding rectangle but can
+// lead to small overlaps.
 void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, sal_Bool bOccupy )
 {
     if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
@@ -776,8 +776,8 @@ void IcnGridMap_Impl::OutputSizeChanged()
     }
 }
 
-// Independendly of the views alignment (TOP or LEFT) the gridmap
-// should contain the data in a continues region, to make it possible
+// Independently of the view's alignment (TOP or LEFT), the gridmap
+// should contain the data in a continuous region, to make it possible
 // to copy the whole block if the gridmap needs to be expanded.
 void IcnGridMap_Impl::GetGridCoord( GridId nId, sal_uInt16& rGridX, sal_uInt16& rGridY )
 {

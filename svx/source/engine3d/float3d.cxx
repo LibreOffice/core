@@ -483,9 +483,9 @@ void Svx3DWin::Reset()
     aCtlLightPreview.GetSvx3DLightControl().SelectLight(0);
 }
 
-bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
+bool Svx3DWin::GetUILightState( const ImageButton& rBtn ) const
 {
-    return (aBtn.GetModeImage() == aImgLightOn);
+    return (rBtn.GetModeImage() == aImgLightOn);
 }
 
 void Svx3DWin::SetUILightState( ImageButton& aBtn, bool bState )
@@ -2325,7 +2325,7 @@ void Svx3DWin::Resize()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
 {
     bUpdate = !aBtnUpdate.IsChecked();
     aBtnUpdate.Check( bUpdate );
@@ -2349,7 +2349,7 @@ IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, ClickAssignHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
 {
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != NULL)
@@ -2718,7 +2718,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             aBtnLightColor.Enable( bEnable );
             pLb->Enable( bEnable );
 
-            ClickLightHdl( pBtn );
+            ClickLight(*pBtn);
             bUpdatePreview = sal_True;
         }
         // Textures
@@ -2950,50 +2950,35 @@ IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
+void Svx3DWin::ClickLight(PushButton& rBtn)
 {
+    sal_uInt16 nLightSource = GetLightSource( &rBtn );
+    ColorLB* pLb = GetLbByButton( &rBtn );
+    Color aColor( pLb->GetSelectEntryColor() );
+    SfxItemSet aLightItemSet(aCtlLightPreview.GetSvx3DLightControl().Get3DAttributes());
+    const bool bOnOff(GetUILightState( (const ImageButton&)rBtn ));
 
-    if( pBtn )
+    switch(nLightSource)
     {
-        sal_uInt16 nLightSource = GetLightSource( pBtn );
-        ColorLB* pLb = GetLbByButton( pBtn );
-        Color aColor( pLb->GetSelectEntryColor() );
-        SfxItemSet aLightItemSet(aCtlLightPreview.GetSvx3DLightControl().Get3DAttributes());
-        const bool bOnOff(GetUILightState( *(ImageButton*)pBtn ));
-
-        switch(nLightSource)
-        {
-            case 0: aLightItemSet.Put(Svx3DLightcolor1Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff1Item(bOnOff)); break;
-            case 1: aLightItemSet.Put(Svx3DLightcolor2Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff2Item(bOnOff)); break;
-            case 2: aLightItemSet.Put(Svx3DLightcolor3Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff3Item(bOnOff)); break;
-            case 3: aLightItemSet.Put(Svx3DLightcolor4Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff4Item(bOnOff)); break;
-            case 4: aLightItemSet.Put(Svx3DLightcolor5Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff5Item(bOnOff)); break;
-            case 5: aLightItemSet.Put(Svx3DLightcolor6Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff6Item(bOnOff)); break;
-            case 6: aLightItemSet.Put(Svx3DLightcolor7Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff7Item(bOnOff)); break;
-            default:
-            case 7: aLightItemSet.Put(Svx3DLightcolor8Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff8Item(bOnOff)); break;
-        }
-
-        aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes(aLightItemSet);
-        aCtlLightPreview.GetSvx3DLightControl().SelectLight(nLightSource);
-        aCtlLightPreview.CheckSelection();
+        case 0: aLightItemSet.Put(Svx3DLightcolor1Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff1Item(bOnOff)); break;
+        case 1: aLightItemSet.Put(Svx3DLightcolor2Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff2Item(bOnOff)); break;
+        case 2: aLightItemSet.Put(Svx3DLightcolor3Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff3Item(bOnOff)); break;
+        case 3: aLightItemSet.Put(Svx3DLightcolor4Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff4Item(bOnOff)); break;
+        case 4: aLightItemSet.Put(Svx3DLightcolor5Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff5Item(bOnOff)); break;
+        case 5: aLightItemSet.Put(Svx3DLightcolor6Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff6Item(bOnOff)); break;
+        case 6: aLightItemSet.Put(Svx3DLightcolor7Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff7Item(bOnOff)); break;
+        default:
+        case 7: aLightItemSet.Put(Svx3DLightcolor8Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff8Item(bOnOff)); break;
     }
-    return( 0L );
-}
 
-
-// -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, EMPTYARG )
-{
-    // and assign
-    ClickAssignHdl( NULL );
-
-    return( 0L );
+    aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes(aLightItemSet);
+    aCtlLightPreview.GetSvx3DLightControl().SelectLight(nLightSource);
+    aCtlLightPreview.CheckSelection();
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 {
     return( 0L );
 }
@@ -3001,7 +2986,7 @@ IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
 {
     const sal_uInt32 nLight(aCtlLightPreview.GetSvx3DLightControl().GetSelectedLight());
     PushButton* pBtn = 0;

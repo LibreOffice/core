@@ -53,7 +53,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 //.........................................................................
 namespace dbtools
@@ -675,19 +674,20 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         Reference< XResultSet > xPrivileges = _xMetaData->getTablePrivileges(aVal, _sSchema, _sTable);
         Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
 
+        const ::rtl::OUString sUserWorkingFor = _xMetaData->getUserName();
+        static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
+        static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
+        static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
+        static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
+        static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
+        static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
+        static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
+        static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
+        static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
+
         if ( xCurrentRow.is() )
         {
-            ::rtl::OUString sUserWorkingFor = _xMetaData->getUserName();
-            static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
-            static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
-            static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
-            static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
-            static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
-            static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
-            static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
-            static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
-            static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
-            // after creation the set is positioned before the first record, per definitionem
+            // after creation the set is positioned before the first record, per definition
 #ifdef DBG_UTIL
             Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
             if ( xSup.is() )
@@ -744,6 +744,56 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             }
         }
         disposeComponent(xPrivileges);
+
+        // Some drivers put a table privilege as soon as any column has the privilege,
+        // some drivers only if all columns have the privilege.
+        // To unifiy the situation, collect column privileges here, too.
+        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+        Reference< XRow > xColumnCurrentRow(xColumnPrivileges, UNO_QUERY);
+        if ( xColumnCurrentRow.is() )
+        {
+            // after creation the set is positioned before the first record, per definition
+            ::rtl::OUString sPrivilege, sGrantee;
+            while ( xColumnPrivileges->next() )
+            {
+#ifdef DBG_UTIL
+                ::rtl::OUString sCat, sSchema, sTableName, sColumnName, sGrantor, sGrantable;
+                sCat        = xColumnCurrentRow->getString(1);
+                sSchema     = xColumnCurrentRow->getString(2);
+                sTableName  = xColumnCurrentRow->getString(3);
+                sColumnName = xColumnCurrentRow->getString(4);
+                sGrantor    = xColumnCurrentRow->getString(5);
+#endif
+                sGrantee    = xColumnCurrentRow->getString(6);
+                sPrivilege  = xColumnCurrentRow->getString(7);
+#ifdef DBG_UTIL
+                sGrantable  = xColumnCurrentRow->getString(8);
+#endif
+
+                if (!sUserWorkingFor.equalsIgnoreAsciiCase(sGrantee))
+                    continue;
+
+                if (sPrivilege.equalsIgnoreAsciiCase(sSELECT))
+                    nPrivileges |= Privilege::SELECT;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sINSERT))
+                    nPrivileges |= Privilege::INSERT;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sUPDATE))
+                    nPrivileges |= Privilege::UPDATE;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sDELETE))
+                    nPrivileges |= Privilege::DELETE;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sREAD))
+                    nPrivileges |= Privilege::READ;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sCREATE))
+                    nPrivileges |= Privilege::CREATE;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sALTER))
+                    nPrivileges |= Privilege::ALTER;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sREFERENCE))
+                    nPrivileges |= Privilege::REFERENCE;
+                else if (sPrivilege.equalsIgnoreAsciiCase(sDROP))
+                    nPrivileges |= Privilege::DROP;
+            }
+        }
+        disposeComponent(xColumnPrivileges);
     }
     catch(const SQLException& e)
     {

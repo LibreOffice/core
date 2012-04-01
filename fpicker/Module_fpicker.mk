@@ -44,7 +44,6 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_odma \
-	Library_fop \
 	Library_fps \
 	Package_xml \
 	WinResTarget_fps \
@@ -63,7 +62,6 @@ endif
 ifeq ($(ENABLE_KDE4),TRUE)
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_kde4 \
-	Package_kde4_moc \
 ))
 endif
 endif

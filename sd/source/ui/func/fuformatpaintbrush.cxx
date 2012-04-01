@@ -40,7 +40,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 
-#define _SD_DLL // fuer SD_MOD()
 #include "sdmod.hxx"
 
 #include "fuformatpaintbrush.hxx"

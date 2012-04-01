@@ -44,6 +44,9 @@ namespace frm
     {
     public:
         virtual void potentialTextChange( ) = 0;
+
+    protected:
+        ~IEngineTextChangeListener() {}
     };
 
     //====================================================================

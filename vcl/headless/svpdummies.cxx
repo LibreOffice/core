@@ -50,10 +50,6 @@ void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}
 void SvpSalObject::Show( sal_Bool ) {}
-void SvpSalObject::Enable( sal_Bool ) {}
-void SvpSalObject::GrabFocus() {}
-void SvpSalObject::SetBackground() {}
-void SvpSalObject::SetBackground( SalColor ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
 void SvpSalObject::InterceptChildWindowKeyDown( sal_Bool ) {}
 

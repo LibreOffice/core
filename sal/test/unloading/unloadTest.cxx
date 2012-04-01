@@ -44,7 +44,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 
-#include <stdio.h>
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -560,7 +559,7 @@ sal_Bool test8()
     for( sal_Int32 i=0; i<seqTypes.getLength(); i++)
     {
         OUString name= seqTypes[i].getTypeName();
-        if( name == OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XUnloadingPreference")))
+        if( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XUnloadingPreference")))
             b_ifaceSupported= sal_True;
     }
 

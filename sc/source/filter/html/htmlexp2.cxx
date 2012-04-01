@@ -71,7 +71,7 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
             {
                 ScHTMLGraphEntry* pE = &aGraphList[ i ];
                 if ( !pE->bInCell )
-                {   // nicht alle in Zellen: einige neben Tabelle
+                {   // not all cells: table next to some
                     bTabAlignedLeft = sal_True;
                     break;
                 }
@@ -198,17 +198,19 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
             const rtl::OString& rImgOptions, sal_uLong nXOutFlags )
 {
-    // embeddete Grafik -> via WriteGraphic schreiben
+    // Embedded graphic -> create an image file
     if( !rLinkName.Len() )
     {
         if( aStreamPath.Len() > 0 )
         {
-            // Grafik als (JPG-)File speichern
+            // Save as a PNG
             String aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                CREATE_STRING( "JPG" ), nXOutFlags );
-            if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
+                CREATE_STRING( "PNG" ), nXOutFlags );
+
+            // If it worked, create a URL for the IMG tag
+            if( !nErr )
             {
                 rLinkName = URIHelper::SmartRel2Abs(
                         INetURLObject(aBaseURL),
@@ -221,6 +223,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
     }
     else
     {
+        // Linked graphic - figure out the URL for the IMG tag
         if( bCopyLocalFileToINet || HasCId() )
         {
             CopyLocalFileToINet( rLinkName, aStreamPath );
@@ -233,8 +236,11 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
                     rLinkName,
                     URIHelper::GetMaybeFileHdl());
     }
+
+    // If a URL was set, output the IMG tag.
+    // <IMG SRC="..."[ rImgOptions]>
     if( rLinkName.Len() )
-    {   // <IMG SRC="..."[ rImgOptions]>
+    {
         rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,

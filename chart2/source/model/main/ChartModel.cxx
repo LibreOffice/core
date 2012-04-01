@@ -30,7 +30,6 @@
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "macros.hxx"
-#include "servicenames.hxx"
 #include "NoWarningThisInCTOR.hxx"
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -634,7 +633,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
 
     //the listeners have had no veto
-    //check wether we self can close
+    //check whether we self can close
     {
         util::CloseVetoException aVetoException = util::CloseVetoException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -1352,6 +1351,18 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
         return xSource->getDataSequences();
 
     return uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >();
+}
+
+//XDumper
+rtl::OUString SAL_CALL ChartModel::dump()
+    throw (uno::RuntimeException)
+{
+    uno::Reference< qa::XDumper > xDumper(
+            this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+    if (xDumper.is())
+        return xDumper->dump();
+
+    return rtl::OUString();
 }
 
 }  // namespace chart

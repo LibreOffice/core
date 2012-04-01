@@ -54,14 +54,14 @@ private:
 
     SvtTmplDlg_Impl*    pImpl;
 
-    DECL_DLLPRIVATE_LINK(           SelectHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           DoubleClickHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           NewFolderHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           SendFocusHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(           SelectHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK(           DoubleClickHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK(           NewFolderHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK(           SendFocusHdl_Impl, void* );
     DECL_DLLPRIVATE_LINK(           OKHdl_Impl, PushButton* );
-    DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, void* );
     DECL_DLLPRIVATE_LINK(           UpdateHdl_Impl, Timer* );
-    DECL_DLLPRIVATE_LINK(           OpenLinkHdl_Impl, svt::FixedHyperlink* );
+    DECL_DLLPRIVATE_LINK(           OpenLinkHdl_Impl, void* );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );

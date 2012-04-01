@@ -78,19 +78,6 @@ namespace basegfx
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         BASEGFX_DLLPUBLIC bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
-        /** get range of PolyPolygon. Control points are included.
-
-            For detailed description look at getRangeWithControlPoints(const B2DPolygon&).
-            This method just expands by the range of every sub-Polygon.
-
-            @param rCandidate
-            The B2DPolyPolygon eventually containing bezier segments
-
-            @return
-            The outer range including control points
-        */
-        BASEGFX_DLLPUBLIC B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate);
-
         /** Get the range of a polyPolygon
 
             For detailed description look at getRange(const B2DPolygon&).
@@ -131,10 +118,15 @@ namespace basegfx
             @param rSvgDAttribute
             A valid SVG-D attribute string
 
+            @param rWrongPositionAfterZ
+            Indicates wheter the generator interprets wrongly
+            the position in the path after Z or z elements
+            https://bugs.freedesktop.org/show_bug.cgi?id=47406
+
             @return true, if the string was successfully parsed
          */
         BASEGFX_DLLPUBLIC bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
-                             const ::rtl::OUString& rSvgDAttribute );
+                             const ::rtl::OUString& rSvgDAttribute, bool bWrongPositionAfterZ = false );
 
         /** Read poly-polygon from SVG.
 
@@ -188,15 +180,9 @@ namespace basegfx
         // corresponding points.
         BASEGFX_DLLPUBLIC B2DPolyPolygon distort(const B2DPolyPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
 
-        // rotate PolyPolygon around given point with given angle.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
-
         // expand all segments (which are not yet) to curve segments. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances on each segment.
         BASEGFX_DLLPUBLIC B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate);
-
-        // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity);
 
         /** Predicate whether a given poly-polygon is a rectangle.
 
@@ -241,24 +227,9 @@ namespace basegfx
         // #i76891# Try to remove existing curve segments if they are simply edges
         BASEGFX_DLLPUBLIC B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
-        /** split each edge of a polyPolygon in exactly nSubEdges equidistant edges
-
-            @param rCandidate
-            The source polyPolygon. If too small (no edges), nSubEdges too small (<2)
-            or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
-            Else for each edge nSubEdges will be created. Closed state is preserved.
-
-            @param nSubEdges
-            @param bHandleCurvedEdges
-            @param bHandleStraightEdges
-            Please take a look at reSegmentPolygonEdges description, these are the same.
-        */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
-
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons
         BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
-        BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         /** snap some polygon coordinates to discrete coordinates
 

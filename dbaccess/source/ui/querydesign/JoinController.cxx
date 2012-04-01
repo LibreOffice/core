@@ -100,6 +100,8 @@ public:
     {
     }
 
+    virtual ~AddTableDialogContext() {}
+
     // IAddTableDialogContext
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     getConnection() const;

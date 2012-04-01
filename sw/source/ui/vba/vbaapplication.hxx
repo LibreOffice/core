@@ -68,7 +68,7 @@ public:
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) throw (css::uno::RuntimeException);
     virtual float SAL_CALL CentimetersToPoints( float _Centimeters ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);

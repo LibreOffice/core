@@ -71,7 +71,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
 }
 
-IMPL_LINK( SwWordCountDialog, OkHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)
 {   
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
     if (pVFrame != NULL)

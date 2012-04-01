@@ -672,11 +672,6 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
     return *this;
 }
 
-::oox::drawingml::chart::ChartConverter* XmlFilterBase::getChartConverter()
-{
-    return 0;
-}
-
 // protected ------------------------------------------------------------------
 
 Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const

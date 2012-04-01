@@ -57,7 +57,7 @@ public:
     virtual CreateSvxBrushTabPage GetBackgroundTabpageCreateFunc() = 0;
     virtual GetSvxBrushTabPageRanges GetBackgroundTabpageRanges() = 0;
     static SfxBrushItemLink* Get() { return *(SfxBrushItemLink**)GetAppData(SHL_BRUSHITEM); }
-    static void Set( SfxBrushItemLink* pLink );
+    //static void Set( SfxBrushItemLink* pLink );
 };
 #endif  // _SFX_BRUSHITEMLINK_DECLARED
 

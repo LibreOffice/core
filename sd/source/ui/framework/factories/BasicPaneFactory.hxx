@@ -40,8 +40,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
-#include "UpdateLockManager.hxx"
-
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -130,8 +128,6 @@ private:
     class PaneDescriptor;
     class PaneContainer;
     ::boost::scoped_ptr<PaneContainer> mpPaneContainer;
-    bool mbFirstUpdateSeen;
-    ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
 
     /** Create a new instance of FrameWindowPane.
         @param rPaneId

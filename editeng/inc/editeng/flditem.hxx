@@ -57,13 +57,11 @@ public:
     virtual MetaAction* createEndComment() const;
 };
 
-/*
-[Description]
-In diesem Item wird ein Feld (SvxFieldData) gespeichert.
-Das Feld gehoert dem Item.
-Das Feld selbst wird durch eine Ableitung von SvxFieldData bestimmt. (RTTI)
-*/
-
+/**
+ * This item stores a field (SvxFieldData).  The field is controlled by or
+ * belongs to the item.  The field itself is determined by a derivation from
+ * SvxFieldData (RTTI)
+ */
 class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 {
 private:
@@ -144,13 +142,10 @@ public:
     SvxDateFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxDateFormat eFmt ) { eFormat = eFmt; }
 
-                            // deprecated, to be removed
-    String                  GetFormatted( LanguageType eLanguage, LanguageType eFormat ) const;
-                            // use this instead
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
-    String                  GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static String           GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    rtl::OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
+    static rtl::OUString    GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -168,24 +163,24 @@ class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
 {
 private:
     SvxURLFormat            eFormat;
-    XubString               aURL;               // URL-Address
-    XubString               aRepresentation;    // What is shown
-    XubString               aTargetFrame;       // In what Frame
+    rtl::OUString           aURL;               // URL-Address
+    rtl::OUString           aRepresentation;    // What is shown
+    rtl::OUString           aTargetFrame;       // In what Frame
 
 public:
                             SV_DECL_PERSIST1( SvxURLField, SvxFieldData, SVX_URLFIELD )
 
                             SvxURLField();
-                            SvxURLField( const XubString& rURL, const XubString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
+                            SvxURLField( const rtl::OUString& rURL, const rtl::OUString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
 
-    const XubString&            GetURL() const { return aURL; }
-    void                    SetURL( const XubString& rURL ) { aURL = rURL; }
+    const rtl::OUString&    GetURL() const { return aURL; }
+    void                    SetURL( const rtl::OUString& rURL ) { aURL = rURL; }
 
-    const XubString&            GetRepresentation() const { return aRepresentation; }
-    void                    SetRepresentation( const XubString& rRep ) { aRepresentation= rRep; }
+    const rtl::OUString&    GetRepresentation() const { return aRepresentation; }
+    void                    SetRepresentation( const rtl::OUString& rRep ) { aRepresentation= rRep; }
 
-    const XubString&            GetTargetFrame() const { return aTargetFrame; }
-    void                    SetTargetFrame( const XubString& rFrm ) { aTargetFrame = rFrm; }
+    const rtl::OUString&    GetTargetFrame() const { return aTargetFrame; }
+    void                    SetTargetFrame( const rtl::OUString& rFrm ) { aTargetFrame = rFrm; }
 
     SvxURLFormat            GetFormat() const { return eFormat; }
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
@@ -284,13 +279,10 @@ public:
     SvxTimeFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxTimeFormat eFmt ) { eFormat = eFmt; }
 
-                            // deprecated, to be removed
-    XubString               GetFormatted( LanguageType eLanguage, LanguageType eFormat ) const;
-                            // use this instead
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
-    String                  GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static String           GetFormatted( Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    rtl::OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
+    static rtl::OUString    GetFormatted( Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -311,19 +303,19 @@ enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT, // File name with Extension
 class EDITENG_DLLPUBLIC SvxExtFileField : public SvxFieldData
 {
 private:
-    XubString               aFile;
+    rtl::OUString           aFile;
     SvxFileType             eType;
     SvxFileFormat           eFormat;
 
 public:
                             SV_DECL_PERSIST1( SvxExtFileField, SvxFieldData, SVX_EXT_FILEFIELD )
                             SvxExtFileField();
-                            SvxExtFileField( const XubString& rString,
+                            SvxExtFileField( const rtl::OUString& rString,
                                 SvxFileType eType = SVXFILETYPE_VAR,
                                 SvxFileFormat eFormat = SVXFILEFORMAT_FULLPATH );
 
-    String                  GetFile() const { return aFile; }
-    void                    SetFile( const XubString& rString ) { aFile = rString; }
+    rtl::OUString           GetFile() const { return aFile; }
+    void                    SetFile( const rtl::OUString& rString ) { aFile = rString; }
 
     SvxFileType             GetType() const { return eType; }
     void                    SetType( SvxFileType eTp ) { eType = eTp; }
@@ -331,7 +323,7 @@ public:
     SvxFileFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxFileFormat eFmt ) { eFormat = eFmt; }
 
-    XubString               GetFormatted() const;
+    rtl::OUString           GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -348,9 +340,9 @@ enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME,   // full name
 class EDITENG_DLLPUBLIC SvxAuthorField : public SvxFieldData
 {
 private:
-    XubString       aName;
-    XubString       aFirstName;
-    XubString       aShortName;
+    rtl::OUString   aName;
+    rtl::OUString   aFirstName;
+    rtl::OUString   aShortName;
     SvxAuthorType   eType;
     SvxAuthorFormat eFormat;
 
@@ -358,20 +350,20 @@ public:
                             SV_DECL_PERSIST1( SvxAuthorField, SvxFieldData, SVX_AUTHORFIELD )
                             SvxAuthorField();
                             SvxAuthorField(
-                                const XubString& rFirstName,
-                                const XubString& rLastName,
-                                const XubString& rShortName,
+                                const rtl::OUString& rFirstName,
+                                const rtl::OUString& rLastName,
+                                const rtl::OUString& rShortName,
                                 SvxAuthorType eType = SVXAUTHORTYPE_VAR,
                                 SvxAuthorFormat eFormat = SVXAUTHORFORMAT_FULLNAME );
 
-    XubString               GetName() const { return aName; }
-    void                    SetName( const XubString& rString ) { aName = rString; }
+    rtl::OUString           GetName() const { return aName; }
+    void                    SetName( const rtl::OUString& rString ) { aName = rString; }
 
-    XubString               GetFirstName() const { return aFirstName; }
-    void                    SetFirstName( const XubString& rString ) { aFirstName = rString; }
+    rtl::OUString           GetFirstName() const { return aFirstName; }
+    void                    SetFirstName( const rtl::OUString& rString ) { aFirstName = rString; }
 
-    XubString               GetShortName() const { return aShortName; }
-    void                    SetShortName( const XubString& rString ) { aShortName = rString; }
+    rtl::OUString           GetShortName() const { return aShortName; }
+    void                    SetShortName( const rtl::OUString& rString ) { aShortName = rString; }
 
     SvxAuthorType           GetType() const { return eType; }
     void                    SetType( SvxAuthorType eTp ) { eType = eTp; }
@@ -379,7 +371,7 @@ public:
     SvxAuthorFormat         GetFormat() const { return eFormat; }
     void                    SetFormat( SvxAuthorFormat eFmt ) { eFormat = eFmt; }
 
-    XubString               GetFormatted() const;
+    rtl::OUString           GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -415,7 +407,7 @@ public:
                             SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, SVX_DATEFIMEFIELD )
                             SvxDateTimeField() {}
 
-    static String           GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static rtl::OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;

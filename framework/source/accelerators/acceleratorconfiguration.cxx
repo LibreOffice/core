@@ -73,12 +73,8 @@
 
 namespace framework
 {
-    const ::rtl::OUString CFG_ENTRY_PRIMARY(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeys"));
-    const ::rtl::OUString CFG_ENTRY_SECONDARY(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeys"));
-    const ::rtl::OUString CFG_ENTRY_GLOBAL(RTL_CONSTASCII_USTRINGPARAM("Global"));
-    const ::rtl::OUString CFG_ENTRY_MODULES(RTL_CONSTASCII_USTRINGPARAM("Modules"));
-    const ::rtl::OUString CFG_PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
-
+    const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
+    const char CFG_PROP_COMMAND[] = "Command";
 
 #ifdef fpc
     #error "Who exports this define? I use it as namespace alias ..."
@@ -1245,14 +1241,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
         ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
-        if ( sGlobalModules.equals(CFG_ENTRY_GLOBAL) )
+        if ( sGlobalModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_GLOBAL)) )
         {
             ::rtl::OUString sModule;
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             if ( !sKey.isEmpty() && !sPath.isEmpty() )
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
-        else if ( sGlobalModules.equals(CFG_ENTRY_MODULES) )
+        else if ( sGlobalModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_MODULES)) )
         {
             ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
@@ -1487,9 +1483,9 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     else
         m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
 
-    if ( m_sGlobalOrModules.equals(CFG_ENTRY_GLOBAL) )
+    if ( m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_GLOBAL)) )
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
-    else if ( m_sGlobalOrModules.equals(CFG_ENTRY_MODULES) )
+    else if ( m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_MODULES)) )
     {
         css::uno::Reference< css::container::XNameContainer > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
@@ -1532,9 +1528,9 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
     else
         m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
 
-    if ( m_sGlobalOrModules.equals(CFG_ENTRY_GLOBAL) )
+    if ( m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_GLOBAL)) )
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
-    else if ( m_sGlobalOrModules.equals(CFG_ENTRY_MODULES) )
+    else if ( m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_MODULES)) )
     {
         css::uno::Reference< css::container::XNameAccess > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
@@ -1554,7 +1550,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
     css::uno::Reference< css::container::XNameContainer > xContainer;
 
     m_xCfg->getByName(sPrimarySecondary) >>= xAccess;
-    if ( sGlobalModules.equals(CFG_ENTRY_GLOBAL) )
+    if ( sGlobalModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_GLOBAL)) )
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
     else
     {
@@ -1602,14 +1598,14 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
         xCommand->getByName(sLocale)       >>= sCommand;
     }
 
-    if (sPrimarySecondary.equals(CFG_ENTRY_PRIMARY))
+    if (sPrimarySecondary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_PRIMARY)))
     {
         if (sCommand.isEmpty())
             m_aPrimaryReadCache.removeKey(aKeyEvent);
         else
             m_aPrimaryReadCache.setKeyCommandPair(aKeyEvent, sCommand);
     }
-    else if (sPrimarySecondary.equals(CFG_ENTRY_SECONDARY))
+    else if (sPrimarySecondary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_SECONDARY)))
     {
         if (sCommand.isEmpty())
             m_aSecondaryReadCache.removeKey(aKeyEvent);

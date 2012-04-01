@@ -81,7 +81,6 @@
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -113,7 +112,6 @@
 #include "app.hrc"
 #include <sfx2/passwd.hxx>
 #include "sfx2/sfxresid.hxx"
-#include "arrdecl.hxx"
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
 #include "sfx2/minfitem.hxx"
@@ -179,6 +177,78 @@ static void showDocument( const char* pBaseName )
     } catch (const ::com::sun::star::uno::Exception &) {
     }
 }
+
+namespace
+{
+    class LicenseDialog : public ModalDialog
+    {
+    private:
+        FixedText aText;
+        OKButton aShow;
+        CancelButton aClose;
+
+        DECL_LINK(CancelHdl, void *);
+        DECL_LINK(ShowHdl, void *);
+    public:
+        LicenseDialog(Window *pParent=NULL);
+    };
+
+    LicenseDialog::LicenseDialog(Window *pParent)
+        : ModalDialog(pParent, SfxResId(DLG_HELP_LICENSING))
+        , aText( this )
+        , aShow( this, SfxResId( PB_LICENSING_SHOW ) )
+        , aClose( this, SfxResId( PB_LICENSING_CLOSE ) )
+    {
+        aClose.SetClickHdl( LINK( this, LicenseDialog, CancelHdl ) );
+        aShow.SetClickHdl( LINK( this, LicenseDialog, ShowHdl ) );
+
+        String aLicensing;
+        for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
+        {
+            if ( i != STR_LICENSING_INFORMATION_1 )
+                aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+            aLicensing += String( SfxResId( i ) );
+        }
+
+        aText.SetText( aLicensing );
+
+        // positions and sizes are computed to always fit the language
+        Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+
+        long nDelimX = 12;
+        long nDelimY = 12;
+        long nWidth = aTextSize.Width() + 2*nDelimX;
+        long nButtonY = aTextSize.Height() + 2*nDelimY;
+        Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
+                std::max( aShowSize.Height(), aCloseSize.Height() ) );
+
+        SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
+        aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
+        aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
+        aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
+
+        aText.Show();
+
+        FreeResource();
+    }
+
+    IMPL_LINK_NOARG(LicenseDialog, CancelHdl)
+    {
+        Close();
+        return 0;
+    }
+
+    IMPL_LINK_NOARG(LicenseDialog, ShowHdl)
+    {
+        EndDialog(RET_OK);
+        showDocument("LICENSE");
+        return 0;
+    }
+
+}
+
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
@@ -367,7 +437,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     ::comphelper::getProcessServiceFactory()->createInstance(
                         DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-                xSystemShellExecute->execute( sURL, ::rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             }
             catch ( uno::Exception& )
             {
@@ -377,43 +447,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SHOW_LICENSE:
         {
-            ModalDialog aDialog( NULL, SfxResId( DLG_HELP_LICENSING ) );
-
-            String aLicensing;
-            for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
-            {
-                if ( i != STR_LICENSING_INFORMATION_1 )
-                    aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
-                aLicensing += String( SfxResId( i ) );
-            }
-
-            FixedText aText( &aDialog );
-            aText.SetText( aLicensing );
-            OKButton aShow( &aDialog, SfxResId( PB_LICENSING_SHOW ) );
-            CancelButton aClose( &aDialog, SfxResId( PB_LICENSING_CLOSE ) );
-
-            // positions and sizes are computed to always fit the language
-            Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-            Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-            Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-
-            long nDelimX = 12;
-            long nDelimY = 12;
-            long nWidth = aTextSize.Width() + 2*nDelimX;
-            long nButtonY = aTextSize.Height() + 2*nDelimY;
-            Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
-                    std::max( aShowSize.Height(), aCloseSize.Height() ) );
-
-            aDialog.SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
-            aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
-            aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
-            aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
-
-            aText.Show();
-
-            if ( aDialog.Execute() == RET_OK )
-                showDocument( "LICENSE" );
-
+            LicenseDialog aDialog;
+            aDialog.Execute();
             break;
         }
 
@@ -532,6 +567,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+#ifndef DISABLE_SCRIPTING
         case SID_BASICSTOP:
             StarBASIC::Stop();
             break;
@@ -539,6 +575,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_BASICBREAK :
             BASIC_DLL()->BasicBreak();
             break;
+#endif
 
         case SID_CRASH :
         {
@@ -586,9 +623,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
                         aValue >>= xLayoutManager;
                     }
-                    catch ( const ::com::sun::star::uno::RuntimeException& e )
+                    catch ( const ::com::sun::star::uno::RuntimeException& )
                     {
-                        throw e;
+                        throw;
                     }
                     catch ( ::com::sun::star::uno::Exception& )
                     {
@@ -666,10 +703,12 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
+#ifndef DISABLE_SCRIPTING
                 case SID_BASICSTOP:
                     if ( !StarBASIC::IsRunning() )
                         rSet.DisableItem(nWhich);
                     break;
+#endif
 
                 case SID_HELPTIPS:
                 {
@@ -889,8 +928,8 @@ static ::rtl::OUString getConfigurationStringValue(
             rKey,
             ::comphelper::ConfigurationHelper::E_READONLY) >>= aDefVal;
     }
-    catch(const com::sun::star::uno::RuntimeException& exRun)
-    { throw exRun; }
+    catch(const com::sun::star::uno::RuntimeException&)
+    { throw; }
     catch(const com::sun::star::uno::Exception&)
     {}
 
@@ -972,7 +1011,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xSystemShell->execute(
                         aURLBuf.makeStringAndClear(),
                         ::rtl::OUString(),
-                        css::system::SystemShellExecuteFlags::DEFAULTS );
+                        css::system::SystemShellExecuteFlags::URIS_ONLY );
                 }
             }
             catch( const ::com::sun::star::uno::Exception& )
@@ -1174,8 +1213,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 String aPLZ = pStringItem->GetValue();
                 bRet = sal_True /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
+#ifndef DISABLE_SCRIPTING
             else
                 SbxBase::SetError( SbxERR_WRONG_ARGS );
+#endif
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
         }
         break;

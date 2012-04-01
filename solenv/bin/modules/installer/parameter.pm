@@ -41,8 +41,6 @@ use installer::systemactions;
 
 sub usage
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::usage"); }
-
     print <<Ende;
 --------------------------------------------------------------------------------
 $installer::globals::prog
@@ -74,7 +72,6 @@ The following parameter are needed:
 -patchinc: Source for the patch include files (Solaris only)
 -dontstrip: No file stripping (Unix only)
 -log : Logging all available information (optional)
--debug : Collecting debug information
 
 Examples for Windows:
 
@@ -98,8 +95,6 @@ Ende
 
 sub saveparameter
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::saveparameter"); }
-
     my $include = "";
 
     installer::logger::globallog("Command line arguments:");
@@ -123,8 +118,6 @@ sub saveparameter
 
 sub getparameter
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::getparameter"); }
-
     while ( $#ARGV >= 0 )
     {
         my $param = shift(@ARGV);
@@ -139,10 +132,8 @@ sub getparameter
         elsif ($param eq "-c") { $installer::globals::compiler = shift(@ARGV); }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
-        elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
         elsif ($param eq "-verbose") { $installer::globals::quiet = 0; }
-        elsif ($param eq "-debug") { $installer::globals::debug = 1; }
         elsif ($param eq "-tab") { $installer::globals::tab = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
         elsif ($param eq "-i") { $installer::globals::rootpath = shift(@ARGV); }
@@ -195,8 +186,6 @@ sub getparameter
 
 sub control_fundamental_parameter
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::control_fundamental_parameter"); }
-
     if ($installer::globals::product eq "")
     {
         installer::logger::print_error( "Product name not set!" );
@@ -207,14 +196,12 @@ sub control_fundamental_parameter
 
 ##########################################################
 # The path parameters can be relative or absolute.
-# This function creates absolute pathes.
+# This function creates absolute paths.
 ##########################################################
 
 sub make_path_absolute
 {
     my ($pathref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::make_path_absolute : $$pathref"); }
 
     if ( $installer::globals::isunix )
     {
@@ -266,8 +253,6 @@ sub make_path_absolute
 
 sub setglobalvariables
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::setglobalvariables"); }
-
     # Setting the installertype directory corresponding to the environment variable PKGFORMAT
     # The global variable $installer::globals::packageformat can only contain one package format.
     # If PKGFORMAT cotains more than one format (for example "rpm deb") this is splitted in the
@@ -286,7 +271,6 @@ sub setglobalvariables
         {
             $installer::globals::issolarispkgbuild = 1;
             $installer::globals::epmoutpath = "packages";
-            $installer::globals::isxpdplatform = 1;
         }
     }
 
@@ -325,7 +309,6 @@ sub setglobalvariables
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::isrpmbuild = 1;
-            $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
         }
         if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
@@ -337,7 +320,6 @@ sub setglobalvariables
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::isrpmbuild = 1;
-            $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
             {
@@ -462,8 +444,6 @@ sub setglobalvariables
 
 sub control_required_parameter
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::control_required_parameter"); }
-
     if (!($installer::globals::is_copy_only_project))
     {
         ##############################################################################################
@@ -574,8 +554,6 @@ sub control_required_parameter
 
 sub outputparameter
 {
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::outputparameter"); }
-
     my $element;
 
     my @output = ();
@@ -612,8 +590,6 @@ sub outputparameter
     if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
     if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
-    if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
-    if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
     else { push(@output, "No file stripping\n"); }

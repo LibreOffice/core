@@ -84,7 +84,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += '-';
-    sMetric += String::CreateFromInt64( nConvVal / 100 );
+    sMetric += rtl::OUString::valueOf(nConvVal / 100);
 
     if( FUNIT_NONE != eOutUnit )
     {
@@ -95,7 +95,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
             nFract *= -1;
         if ( nFract < 10 )
             sMetric += '0';
-        sMetric += String::CreateFromInt64( nFract );
+        sMetric += rtl::OUString::valueOf(nFract);
     }
 
     return sMetric;
@@ -423,20 +423,6 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
     pDev->SetLineColor( aOldLineColor );
     pDev->SetFillColor( aOldFillColor );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uIntPtr SvxPosSizeStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
-{
-    Image aTmpPosImage( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
-    Image aTmpSizeImage( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
-
-    sal_uIntPtr nWidth=PAINT_OFFSET+aTmpPosImage.GetSizePixel().Width();
-    nWidth+=PAINT_OFFSET+aTmpSizeImage.GetSizePixel().Width();
-    nWidth+=2*(PAINT_OFFSET+rStb.GetTextWidth(String::CreateFromAscii("XXXX,XX / XXXX,XX")));
-
-    return nWidth;
 }
 
 

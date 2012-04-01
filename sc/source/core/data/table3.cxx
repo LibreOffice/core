@@ -39,7 +39,6 @@
 
 #include "table.hxx"
 #include "scitems.hxx"
-#include "collect.hxx"
 #include "attrib.hxx"
 #include "cell.hxx"
 #include "document.hxx"
@@ -63,6 +62,7 @@
 #include "subtotalparam.hxx"
 
 #include <vector>
+#include <boost/unordered_set.hpp>
 
 using namespace ::com::sun::star;
 
@@ -385,14 +385,10 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     if (pCell1)
     {
         eType1 = pCell1->GetCellType();
-        if (eType1 == CELLTYPE_NOTE)
-            pCell1 = NULL;
     }
     if (pCell2)
     {
         eType2 = pCell2->GetCellType();
-        if (eType2 == CELLTYPE_NOTE)
-            pCell2 = NULL;
     }
 
     if (pCell1)
@@ -411,11 +407,11 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                 rtl::OUString aStr1;
                 rtl::OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell1)->GetString(aStr1);
+                    aStr1 = ((ScStringCell*)pCell1)->GetString();
                 else
                     GetString(nCell1Col, nCell1Row, aStr1);
                 if (eType2 == CELLTYPE_STRING)
-                    ((ScStringCell*)pCell2)->GetString(aStr2);
+                    aStr2 = ((ScStringCell*)pCell2)->GetString();
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
 
@@ -580,6 +576,40 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             }
         }
     }
+
+    ScNotes aNoteMap(pDocument);
+    ScNotes::iterator itr = maNotes.begin();
+    while(itr != maNotes.end())
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol == nCol1)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol2, nRow);
+        }
+        else if (nCol == nCol2)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol1, nRow);
+
+        }
+    }
+
+    itr = aNoteMap.begin();
+    while(itr != aNoteMap.end())
+    {
+        //we can here assume that there is no note in the target location
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+
+        maNotes.insert(nCol, nRow, pPostIt);
+        aNoteMap.ReleaseNote(nCol, nRow);
+    }
 }
 
 void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
@@ -609,6 +639,40 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         bool bRow2Filtered = RowFiltered(nRow2);
         SetRowFiltered(nRow1, nRow1, bRow2Filtered);
         SetRowFiltered(nRow2, nRow2, bRow1Filtered);
+    }
+
+    ScNotes aNoteMap(pDocument);
+    ScNotes::iterator itr = maNotes.begin();
+    while(itr != maNotes.end())
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nRow == nRow1)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow2);
+        }
+        else if (nRow == nRow2)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow1);
+
+        }
+    }
+
+    itr = aNoteMap.begin();
+    while(itr != aNoteMap.end())
+    {
+        //we can here assume that there is no note in the target location
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+
+        maNotes.insert(nCol, nRow, pPostIt);
+        aNoteMap.ReleaseNote(nCol, nRow);
     }
 }
 
@@ -1763,8 +1827,8 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    ScStrCollection aScStrCollection;
-    StrData*        pStrData = NULL;
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    StrSetType aStrSet;
 
     bool    bStarted = false;
     bool    bOldResult = true;
@@ -1813,26 +1877,20 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                 bResult = true;
             else
             {
-                String aStr;
+                rtl::OUString aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
                     rtl::OUString aCellStr;
                     GetString(k, j, aCellStr);
-                    aStr += aCellStr;
-                    aStr += (sal_Unicode)1;
+                    rtl::OUStringBuffer aBuf(aStr);
+                    aBuf.append(aCellStr);
+                    aBuf.append(static_cast<sal_Unicode>(1));
+                    aStr = aBuf.makeStringAndClear();
                 }
-                pStrData = new StrData(aStr);
 
-                bool bIsUnique = true;
-                if (pStrData)
-                    bIsUnique = aScStrCollection.Insert(pStrData);
-                if (bIsUnique)
-                    bResult = true;
-                else
-                {
-                    delete pStrData;
-                    bResult = false;
-                }
+                std::pair<StrSetType::iterator, bool> r = aStrSet.insert(aStr);
+                bool bIsUnique = r.second; // unique if inserted.
+                bResult = bIsUnique;
             }
         }
         else
@@ -2114,13 +2172,13 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
     return true;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates)
+void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings, rHasDates );
 }
 
 void ScTable::GetFilteredFilterEntries(
-    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates )
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
@@ -2141,7 +2199,7 @@ void ScTable::GetFilteredFilterEntries(
     rHasDates = bHasDates;
 }
 
-bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, bool bLimit)
+bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }

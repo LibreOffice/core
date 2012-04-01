@@ -373,8 +373,6 @@ class XclTokenArray
 public:
     /** Creates an empty token array. */
     explicit            XclTokenArray( bool bVolatile = false );
-    /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false );
     /** Creates a token array, swaps passed token vectors into own data. */
     explicit            XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bool bVolatile = false );
 
@@ -444,7 +442,6 @@ public:
     /** Copy constructor that allows to change the skip-spaces mode. */
     explicit            XclTokenArrayIterator( const XclTokenArrayIterator& rTokArrIt, bool bSkipSpaces );
 
-    void                Init();
     void                Init( const ScTokenArray& rScTokArr, bool bSkipSpaces );
 
     inline bool         Is() const { return mppScToken != 0; }

@@ -85,7 +85,7 @@ SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog()
 {
 }
 
-IMPL_LINK(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
 {
     UpdateButtons();
     return 0;
@@ -135,7 +135,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
 {
     sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
     m_aFieldsLB.RemoveEntry(m_aFieldsLB.GetSelectEntryPos());

@@ -54,6 +54,9 @@ class Flushable
 {
 public:
     virtual void    Flush() = 0;
+
+protected:
+    ~Flushable() {}
 };
 
 

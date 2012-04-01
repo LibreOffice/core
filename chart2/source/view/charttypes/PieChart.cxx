@@ -43,6 +43,8 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <rtl/math.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //.............................................................................
 namespace chart
 {
@@ -429,11 +431,11 @@ void PieChart::createShapes()
 
                 //---------------------------
                 //point color:
-                std::auto_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(0);
+                boost::scoped_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(NULL);
                 {
                     if(!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                     {
-                        apOverwritePropertiesMap = std::auto_ptr< tPropertyNameValueMap >( new tPropertyNameValueMap() );
+                        apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
                         (*apOverwritePropertiesMap)[C2U("FillColor")] = uno::makeAny(
                             m_xColorScheme->getColorByIndex( nPointIndex ));
                     }

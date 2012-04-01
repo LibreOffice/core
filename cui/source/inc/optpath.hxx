@@ -80,10 +80,10 @@ private:
 #ifdef _SVX_OPTPATH_CXX
     void        ChangeCurrentEntry( const String& _rFolder );
 
-    DECL_LINK(  PathHdl_Impl, PushButton * );
-    DECL_LINK(  StandardHdl_Impl, PushButton * );
+    DECL_LINK(PathHdl_Impl, void *);
+    DECL_LINK(StandardHdl_Impl, void *);
 
-    DECL_LINK(  PathSelect_Impl, svx::OptHeaderTabListBox * );
+    DECL_LINK(PathSelect_Impl, void *);
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
     DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
 

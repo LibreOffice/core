@@ -83,8 +83,6 @@ namespace basegfx
             expand(rTuple2);
         }
 
-         BASEGFX_DLLPUBLIC explicit B3DRange(const B3IRange& rRange);
-
         bool isEmpty() const
         {
             return (
@@ -275,12 +273,6 @@ namespace basegfx
 
          BASEGFX_DLLPUBLIC void transform(const B3DHomMatrix& rMatrix);
     };
-
-    /** Round double to nearest integer for 3D range
-
-        @return the nearest integer for this range
-    */
-    BASEGFX_DLLPUBLIC B3IRange fround(const B3DRange& rRange);
 
 } // end of namespace basegfx
 

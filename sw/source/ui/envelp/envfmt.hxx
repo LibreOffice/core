@@ -74,7 +74,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );
-    DECL_LINK( FormatHdl, ListBox * );
+    DECL_LINK(FormatHdl, void *);
 
     void SetMinMax();
 

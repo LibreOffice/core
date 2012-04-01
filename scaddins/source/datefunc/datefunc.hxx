@@ -76,7 +76,6 @@ public:
     inline void*                Next()  { return (nCurr + 1 < nCount) ? pData[ ++nCurr ] : NULL; }
 
     inline void                 Append( void* pNew );
-    void                        Insert( void* pNew, sal_uInt32 nIndex );
 };
 
 

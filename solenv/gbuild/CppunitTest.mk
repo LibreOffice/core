@@ -51,12 +51,14 @@ endif
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+ifneq ($(OS),IOS)
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(if $(G_SLICE),G_SLICE=$(G_SLICE)) $(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) DBGSV_ERROR_OUT=shell STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET)
+endif
+
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 # TODO: move this to platform under suitable name
-gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(1)
+gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip $(1))
 
 gb_CppunitTest__get_uno_type_target = $(OUTDIR)/bin/$(1).rdb
 define gb_CppunitTest__make_args
@@ -83,7 +85,16 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
-        ($(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) $(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))
+		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
+		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
+		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
+		$(if $(DBGSV_ERROR_OUT),DBGSV_ERROR_OUT=$(DBGSV_ERROR_OUT)) \
+		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
+		STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) \
+		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
+		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
+		$(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) \
+		$(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -111,7 +122,15 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
+$(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := shell
+$(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
+
+endef
+
+define gb_CppunitTest_abort_on_assertion
+$(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := abort
+$(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT := TRUE
 
 endef
 
@@ -159,8 +178,22 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 
 endef
 
+# Given a list of component files, filter out those corresponding
+# to libraries not built in this configuration.
+define gb_CppunitTest__filter_not_built_components
+$(filter-out \
+	$(if $(filter SCRIPTING,$(BUILD_TYPE)),, \
+		basic/util/sb \
+	    sw/util/vbaswobj \
+	    scripting/source/basprov/basprov \
+	    scripting/util/scriptframe) \
+	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),, \
+	    dbaccess/util/dba \
+		forms/util/frm),$(1))
+endef
+
 define gb_CppunitTest_add_components
-$(foreach component,$(2),$(call gb_CppunitTest_add_component,$(1),$(component)))
+$(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(call gb_CppunitTest_add_component,$(1),$(component)))
 
 endef
 

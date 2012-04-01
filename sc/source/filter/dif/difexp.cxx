@@ -44,6 +44,7 @@
 #include "progress.hxx"
 #include <rtl/tencinfo.h>
 #include "ftools.hxx"
+#include "rtl/strbuf.hxx"
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const CharSet eNach, sal_uInt32 nDifOption )
@@ -72,9 +73,9 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         rOut.SetStreamCharSet( eCharSet );
 
     sal_Unicode cStrDelim('"');
-    ByteString aStrDelimEncoded;    // only used if not Unicode
-    UniString aStrDelimDecoded;     // only used if context encoding
-    sal_Bool bContextOrNotAsciiEncoding;
+    rtl::OString aStrDelimEncoded;    // only used if not Unicode
+    rtl::OUString aStrDelimDecoded;     // only used if context encoding
+    bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rOut.StartWritingUnicodeText();
@@ -91,7 +92,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
-                aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
+                aStrDelimDecoded = rtl::OStringToOUString(aStrDelimEncoded, eCharSet);
         }
         else
             bContextOrNotAsciiEncoding = false;
@@ -105,7 +106,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
 
     FltError            eRet = eERR_OK;
-    String              aOS;
+    rtl::OUStringBuffer aOS;
     rtl::OUString       aString;
     SCCOL               nEndCol = rRange.aEnd.Col();
     SCROW               nEndRow = rRange.aEnd.Row();
@@ -115,7 +116,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     double              fVal;
 
-    const sal_Bool          bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
+    const bool bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
 
     ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
 
@@ -124,35 +125,35 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     // TABLE
     OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Tabelle nicht vorhanden!" );
 
-    aOS = pKeyTABLE;
-    aOS.AppendAscii( "\n0,1\n\"" );
+    aOS.append(pKeyTABLE);
+    aOS.appendAscii("\n0,1\n\"");
 
     pDoc->GetName( nTab, aString );
-    aOS.Append(String(aString));
-    aOS.AppendAscii( "\"\n" );
-    rOut.WriteUnicodeOrByteText( aOS );
+    aOS.append(aString);
+    aOS.appendAscii("\"\n");
+    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // VECTORS
-    aOS = pKeyVECTORS;
-    aOS.AppendAscii( "\n0," );
-    aOS += String::CreateFromInt32( nNumCols );
-    aOS += sal_Unicode('\n');
-    aOS.AppendAscii( p2DoubleQuotes_LF );
-    rOut.WriteUnicodeOrByteText( aOS );
+    aOS.append(pKeyVECTORS);
+    aOS.appendAscii("\n0,");
+    aOS.append(static_cast<sal_Int32>(nNumCols));
+    aOS.append(sal_Unicode('\n'));
+    aOS.appendAscii(p2DoubleQuotes_LF);
+    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // TUPLES
-    aOS = pKeyTUPLES;
-    aOS.AppendAscii( "\n0," );
-    aOS += String::CreateFromInt32( nNumRows );
-    aOS += sal_Unicode('\n');
-    aOS.AppendAscii( p2DoubleQuotes_LF );
-    rOut.WriteUnicodeOrByteText( aOS );
+    aOS.append(pKeyTUPLES);
+    aOS.appendAscii("\n0,");
+    aOS.append(static_cast<sal_Int32>(nNumRows));
+    aOS.append(sal_Unicode('\n'));
+    aOS.appendAscii(p2DoubleQuotes_LF);
+    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // DATA
-    aOS = pKeyDATA;
-    aOS.AppendAscii( "\n0,0\n" );
-    aOS.AppendAscii( p2DoubleQuotes_LF );
-    rOut.WriteUnicodeOrByteText( aOS );
+    aOS.append(pKeyDATA);
+    aOS.appendAscii("\n0,0\n");
+    aOS.appendAscii(p2DoubleQuotes_LF);
+    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     SCCOL               nColCnt;
     SCROW               nRowCnt;
@@ -160,12 +161,14 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
-        aOS.AssignAscii( pSpecDataType_LF );
-        aOS += pKeyBOT;
-        aOS += sal_Unicode('\n');
-        rOut.WriteUnicodeOrByteText( aOS );
+        OSL_ASSERT(aOS.getLength() == 0);
+        aOS.appendAscii(pSpecDataType_LF);
+        aOS.append(pKeyBOT);
+        aOS.append(sal_Unicode('\n'));
+        rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
+            OSL_ASSERT(aOS.getLength() == 0);
             bool bWriteStringData = false;
             pDoc->GetCell( nColCnt, nRowCnt, nTab, pAkt );
             if( pAkt )
@@ -174,26 +177,26 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 {
                     case CELLTYPE_NONE:
                     case CELLTYPE_NOTE:
-                        aOS.AssignAscii( pEmptyData );
+                        aOS.appendAscii(pEmptyData);
                         break;
                     case CELLTYPE_VALUE:
-                        aOS.AssignAscii( pNumData );
+                        aOS.appendAscii(pNumData);
                         if( bPlain )
                         {
-                            fVal = ( ( ScValueCell * ) pAkt )->GetValue();
-                            aOS += String( ::rtl::math::doubleToUString(
-                                        fVal, rtl_math_StringFormat_G, 14, '.',
-                                        sal_True));
+                            fVal = static_cast<ScValueCell*>(pAkt)->GetValue();
+                            aOS.append(
+                                rtl::math::doubleToUString(
+                                    fVal, rtl_math_StringFormat_G, 14, '.', true));
                         }
                         else
                         {
                             pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                            aOS.Append(String(aString));
+                            aOS.append(aString);
                         }
-                        aOS.AppendAscii( "\nV\n" );
+                        aOS.appendAscii("\nV\n");
                         break;
                     case CELLTYPE_EDIT:
-                        ( ( ScEditCell* ) pAkt )->GetString( aString );
+                        aString = static_cast<ScEditCell*>(pAkt)->GetString();
                         bWriteStringData = true;
                         break;
                     case CELLTYPE_STRING:
@@ -201,51 +204,52 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         bWriteStringData = true;
                         break;
                     case CELLTYPE_FORMULA:
-                        if ( ((ScFormulaCell*)pAkt)->GetErrCode() )
-                            aOS.AssignAscii( pNumDataERROR );
+                        if (static_cast<ScFormulaCell*>(pAkt)->GetErrCode())
+                            aOS.appendAscii(pNumDataERROR);
                         else if( pAkt->HasValueData() )
                         {
-                            aOS.AssignAscii( pNumData );
+                            aOS.appendAscii(pNumData);
                             if( bPlain )
                             {
-                                fVal = ( ( ScFormulaCell * ) pAkt )->GetValue();
-                                aOS += String( ::rtl::math::doubleToUString(
-                                            fVal, rtl_math_StringFormat_G, 14,
-                                            '.', sal_True));
+                                fVal = static_cast<ScFormulaCell*>(pAkt)->GetValue();
+                                aOS.append(
+                                    rtl::math::doubleToUString(
+                                        fVal, rtl_math_StringFormat_G, 14, '.', true));
                             }
                             else
                             {
                                 pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                                aOS.Append(String(aString));
+                                aOS.append(aString);
                             }
-                            aOS.AppendAscii( "\nV\n" );
+                            aOS.appendAscii("\nV\n");
                         }
                         else if( pAkt->HasStringData() )
                         {
-                            static_cast<ScFormulaCell*>(pAkt)->GetString(aString);
+                            aString = static_cast<ScFormulaCell*>(pAkt)->GetString();
                             bWriteStringData = true;
                         }
                         else
-                            aOS.AssignAscii( pNumDataERROR );
+                            aOS.appendAscii(pNumDataERROR);
 
                         break;
                     default:;
                 }
             }
             else
-                aOS.AssignAscii( pEmptyData );
+                aOS.appendAscii(pEmptyData);
 
             if ( !bWriteStringData )
-                rOut.WriteUnicodeOrByteText( aOS );
+                rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
             else
             {
                 // for an explanation why this complicated, see
                 // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
                 // In fact we should create a common method if this would be
                 // needed just one more time..
+                OSL_ASSERT(aOS.getLength() == 0);
                 String aTmpStr = aString;
-                aOS.AssignAscii( pStringData );
-                rOut.WriteUnicodeOrByteText( aOS, eCharSet );
+                aOS.appendAscii(pStringData);
+                rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear(), eCharSet);
                 if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                 {
                     xub_StrLen nPos = aTmpStr.Search( cStrDelim );
@@ -261,16 +265,18 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 else if ( bContextOrNotAsciiEncoding )
                 {
                     // to byte encoding
-                    rtl::OString aStrEnc(rtl::OUStringToOString(aTmpStr, eCharSet));
+                    rtl::OString aStrEnc = rtl::OUStringToOString(aTmpStr, eCharSet);
                     // back to Unicode
-                    UniString aStrDec(rtl::OStringToOUString(aStrEnc, eCharSet));
+                    rtl::OUString aStrDec = rtl::OStringToOUString(aStrEnc, eCharSet);
                     // search on re-decoded string
-                    xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
-                    while ( nPos != STRING_NOTFOUND )
+                    sal_Int32 nPos = aStrDec.indexOf(aStrDelimDecoded);
+                    while (nPos >= 0)
                     {
-                        aStrDec.Insert( aStrDelimDecoded, nPos );
-                        nPos = aStrDec.Search( aStrDelimDecoded,
-                                nPos+1+aStrDelimDecoded.Len() );
+                        rtl::OUStringBuffer aBuf(aStrDec);
+                        aBuf.insert(nPos, aStrDelimDecoded);
+                        aStrDec = aBuf.makeStringAndClear();
+                        nPos = aStrDec.indexOf(
+                            aStrDelimDecoded, nPos+1+aStrDelimDecoded.getLength());
                     }
                     // write byte re-encoded
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
@@ -279,21 +285,21 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 }
                 else
                 {
-                    ByteString aStrEnc(rtl::OUStringToOString(aTmpStr, eCharSet));
+                    rtl::OString aStrEnc = rtl::OUStringToOString(aTmpStr, eCharSet);
                     // search on encoded string
-                    xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
-                    while ( nPos != STRING_NOTFOUND )
+                    sal_Int32 nPos = aStrEnc.indexOf(aStrDelimEncoded);
+                    while (nPos >= 0)
                     {
-                        aStrEnc.Insert( aStrDelimEncoded, nPos );
-                        nPos = aStrEnc.Search( aStrDelimEncoded,
-                                nPos+1+aStrDelimEncoded.Len() );
+                        rtl::OStringBuffer aBuf(aStrEnc);
+                        aBuf.insert(nPos, aStrDelimEncoded);
+                        aStrEnc = aBuf.makeStringAndClear();
+                        nPos = aStrEnc.indexOf(
+                            aStrDelimEncoded, nPos+1+aStrDelimEncoded.getLength());
                     }
                     // write byte encoded
-                    rOut.Write( aStrDelimEncoded.GetBuffer(),
-                            aStrDelimEncoded.Len() );
-                    rOut.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
-                    rOut.Write( aStrDelimEncoded.GetBuffer(),
-                            aStrDelimEncoded.Len() );
+                    rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
+                    rOut.Write(aStrEnc.getStr(), aStrEnc.getLength());
+                    rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                 }
                 rOut.WriteUniOrByteChar( '\n', eCharSet );
             }
@@ -301,10 +307,11 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         aPrgrsBar.SetState( nRowCnt );
     }
 
-    aOS.AssignAscii( pSpecDataType_LF );
-    aOS += pKeyEOD;
-    aOS += sal_Unicode('\n');
-    rOut.WriteUnicodeOrByteText( aOS );
+    OSL_ASSERT(aOS.getLength() == 0);
+    aOS.appendAscii(pSpecDataType_LF);
+    aOS.append(pKeyEOD);
+    aOS.append(sal_Unicode('\n'));
+    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // restore original value
     rOut.SetStreamCharSet( eStreamCharSet );

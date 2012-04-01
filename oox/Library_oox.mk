@@ -36,9 +36,17 @@ $(eval $(call gb_Library_add_package_headers,oox,\
 
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
-    -I$(realpath $(SRCDIR)/oox/inc) \
+    -I$(SRCDIR)/oox/inc \
 ))
+
+ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
+# at least Debian Linux ia64 fails at compile time on
+# link libooxlo.so which is apparently too large
+# for the toolchain to handle with default optimization
+$(eval $(call gb_Library_add_cxxflags,oox,\
+    -Os \
+))
+endif
 
 $(eval $(call gb_Library_add_defs,oox,\
     -DOOX_DLLIMPLEMENTATION \
@@ -57,6 +65,7 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     msfilter \
     sal \
     sax \
+    sfx \
     svl \
     svt \
     svxcore \
@@ -192,12 +201,10 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/themeelementscontext \
     oox/source/drawingml/themefragmenthandler \
     oox/source/drawingml/transform2dcontext \
-    oox/source/dump/biffdumper \
     oox/source/dump/dffdumper \
     oox/source/dump/dumperbase \
     oox/source/dump/oledumper \
     oox/source/dump/pptxdumper \
-    oox/source/dump/xlsbdumper \
     oox/source/export/chartexport \
     oox/source/export/ColorPropertySet \
     oox/source/export/drawingml \
@@ -233,7 +240,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ole/vbainputstream \
     oox/source/ole/vbamodule \
     oox/source/ole/vbaproject \
-    oox/source/ole/vbaprojectfilter \
     oox/source/ppt/animationspersist \
     oox/source/ppt/animationtypes \
     oox/source/ppt/animvariantcontext \
@@ -281,64 +287,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/vml/vmlshape \
     oox/source/vml/vmltextboxcontext \
     oox/source/vml/vmltextbox \
-    oox/source/xls/addressconverter \
-    oox/source/xls/autofilterbuffer \
-    oox/source/xls/autofiltercontext \
-    oox/source/xls/biffcodec \
-    oox/source/xls/biffdetector \
-    oox/source/xls/biffhelper \
-    oox/source/xls/biffinputstream \
-    oox/source/xls/biffoutputstream \
-    oox/source/xls/chartsheetfragment \
-    oox/source/xls/commentsbuffer \
-    oox/source/xls/commentsfragment \
-    oox/source/xls/condformatbuffer \
-    oox/source/xls/condformatcontext \
-    oox/source/xls/connectionsbuffer \
-    oox/source/xls/connectionsfragment \
-    oox/source/xls/defnamesbuffer \
-    oox/source/xls/drawingbase \
-    oox/source/xls/drawingfragment \
-    oox/source/xls/drawingmanager \
-    oox/source/xls/excelchartconverter \
-    oox/source/xls/excelfilter \
-    oox/source/xls/excelhandlers \
-    oox/source/xls/excelvbaproject \
-    oox/source/xls/externallinkbuffer \
-    oox/source/xls/externallinkfragment \
-    oox/source/xls/formulabase \
-    oox/source/xls/formulaparser \
-    oox/source/xls/numberformatsbuffer \
-    oox/source/xls/ooxformulaparser \
-    oox/source/xls/pagesettings \
-    oox/source/xls/pivotcachebuffer \
-    oox/source/xls/pivotcachefragment \
-    oox/source/xls/pivottablebuffer \
-    oox/source/xls/pivottablefragment \
-    oox/source/xls/querytablebuffer \
-    oox/source/xls/querytablefragment \
-    oox/source/xls/richstringcontext \
-    oox/source/xls/richstring \
-    oox/source/xls/scenariobuffer \
-    oox/source/xls/scenariocontext \
-    oox/source/xls/sharedstringsbuffer \
-    oox/source/xls/sharedstringsfragment \
-    oox/source/xls/sheetdatabuffer \
-    oox/source/xls/sheetdatacontext \
-    oox/source/xls/stylesbuffer \
-    oox/source/xls/stylesfragment \
-    oox/source/xls/tablebuffer \
-    oox/source/xls/tablefragment \
-    oox/source/xls/themebuffer \
-    oox/source/xls/unitconverter \
-    oox/source/xls/viewsettings \
-    oox/source/xls/workbookfragment \
-    oox/source/xls/workbookhelper \
-    oox/source/xls/workbooksettings \
-    oox/source/xls/worksheetbuffer \
-    oox/source/xls/worksheetfragment \
-    oox/source/xls/worksheethelper \
-    oox/source/xls/worksheetsettings \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,oox,\

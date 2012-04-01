@@ -41,12 +41,7 @@
 namespace transex
 {
 
-Directory::Directory( const rtl::OUString sFullpath ) : bSkipLinks( false )
-{
-    sFullName = sFullpath;
-}
-
-Directory::Directory( const rtl::OUString sFullPath , const rtl::OUString sEntry ) : bSkipLinks( false )
+Directory::Directory( const rtl::OUString sFullPath , const rtl::OUString sEntry )
 {
     sFullName       = sFullPath;
     sDirectoryName  = sEntry;
@@ -86,16 +81,6 @@ void Directory::scanSubDir( int nLevels )
             ( *iter ).scanSubDir();
         }
     }
-}
-
-void Directory::setSkipLinks( bool is_skipped )
-{
-    bSkipLinks = is_skipped;
-}
-
-void Directory::readDirectory()
-{
-    readDirectory( sFullName );
 }
 
 #ifdef WNT
@@ -247,9 +232,6 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
                             break;
                          }
             case S_IFLNK:
-                        {
-                            if( bSkipLinks )    break;
-                        }
             case S_IFDIR:
                         {
                             transex::Directory aDir(

@@ -300,10 +300,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if( !xChild.is() )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
-            UniString       tmp = SVX_RESSTR( p->nResIdName );
-            ::rtl::OUString     aName( tmp );
-                        tmp = SVX_RESSTR( p->nResIdDescr );
-            ::rtl::OUString     aDescr( tmp );
+            ::rtl::OUString aName(SVX_RESSTR(p->nResIdName));
+            ::rtl::OUString aDescr(SVX_RESSTR(p->nResIdDescr));
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
@@ -670,44 +668,6 @@ void SvxRectCtlAccessibleContext::selectChild( RECT_POINT eButton )
 {
     // no guard -> is done in next selectChild
     selectChild( PointToIndex( eButton, mbAngleMode ) );
-}
-
-void SvxRectCtlAccessibleContext::setName( const ::rtl::OUString& rName )
-{
-    Any                     aPreVal, aPostVal;
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        aPreVal <<= msName;
-        aPostVal <<= rName;
-
-        msName = rName;
-    }
-
-    const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::NAME_CHANGED, aPreVal, aPostVal ) );
-}
-
-void SvxRectCtlAccessibleContext::setDescription( const ::rtl::OUString& rDescr )
-{
-    Any                     aPreVal, aPostVal;
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        aPreVal <<= msDescription;
-        aPostVal <<= rDescr;
-
-        msDescription = rDescr;
-    }
-
-    const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::DESCRIPTION_CHANGED, aPreVal, aPostVal ) );
-}
-
-void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
-{
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()

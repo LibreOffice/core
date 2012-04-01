@@ -80,6 +80,14 @@ sal_Bool operator ==(const Time& _rLeft, const Time& _rRight)
 }
 
 //------------------------------------------------------------------------------
+sal_Int64 getINT64(const Any& _rAny)
+{
+    sal_Int64 nReturn = 0;
+    OSL_VERIFY( _rAny >>= nReturn );
+    return nReturn;
+}
+
+//------------------------------------------------------------------------------
 sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;

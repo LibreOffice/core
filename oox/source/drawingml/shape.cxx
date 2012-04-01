@@ -225,9 +225,6 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
         }
-        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -271,6 +268,25 @@ void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
                 pShapeMap, aTransformation);
 }
 
+struct ActionLockGuard
+{
+    explicit ActionLockGuard(Reference<drawing::XShape> const& xShape)
+        : m_xLockable(xShape, UNO_QUERY)
+    {
+        if (m_xLockable.is()) {
+            m_xLockable->addActionLock();
+        }
+    }
+    ~ActionLockGuard()
+    {
+        if (m_xLockable.is()) {
+            m_xLockable->removeActionLock();
+        }
+    }
+private:
+    Reference<document::XActionLockable> m_xLockable;
+};
+
 // for group shapes, the following method is also adding each child
 void Shape::addChildren(
         XmlFilterBase& rFilterBase,
@@ -299,8 +315,10 @@ void Shape::addChildren(
               aChildTransformation.get(2, 2));
 
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
-    while( aIter != rMaster.maChildren.end() )
+    while( aIter != rMaster.maChildren.end() ) {
+        (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, NULL, pShapeMap );
+    }
 }
 
 Reference< XShape > Shape::createAndInsert(
@@ -365,7 +383,7 @@ Reference< XShape > Shape::createAndInsert(
     aTransformation.scale(1/360.0, 1/360.0);
 
     // special for lineshape
-    if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) )
+    if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -386,7 +404,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
-    else if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")) )
+    else if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -444,9 +462,7 @@ Reference< XShape > Shape::createAndInsert(
             xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
 
-        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->addActionLock();
+        ActionLockGuard const alg(mxShape);
 
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
@@ -528,15 +544,17 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredX( sal_True );
             if ( mbFlipV )
                 mpCustomShapePropertiesPtr->setMirroredY( sal_True );
-            if( mpTextBody.get() )
+            if( getTextBody() )
             {
-                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( mpTextBody->getTextProperties().moRotation.get( 0 ) );
+                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -nTextRotateAngle / 60000 );
             }
 
             OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
+        else if( getTextBody() )
+            getTextBody()->getTextProperties().pushVertSimulation();
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
@@ -558,26 +576,12 @@ Reference< XShape > Shape::createAndInsert(
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
-        if( xLockable.is() )
-            xLockable->removeActionLock();
     }
 
     if( mxShape.is() )
         finalizeXShape( rFilterBase, rxShapes );
 
     return mxShape;
-}
-
-// the properties of rSource which are not part of rDest are being put into rDest
-void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
-{
-    PropertyMap::const_iterator aSourceIter( rSource.begin() );
-    while( aSourceIter != rSource.end() )
-    {
-        if ( rDest.find( (*aSourceIter ).first ) == rDest.end() )
-            rDest[ (*aSourceIter).first ] <<= (*aSourceIter).second;
-        ++aSourceIter;
-    }
 }
 
 void Shape::setTextBody(const TextBodyPtr & pTextBody)

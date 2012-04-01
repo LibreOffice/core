@@ -36,6 +36,7 @@
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/memory.h>
 #include "sal/log.hxx"
 
@@ -45,8 +46,22 @@
 #include <new>
 #endif
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -168,6 +183,86 @@ public:
     }
 
     /**
+      New string from an 8-Bit string literal that is expected to contain only
+      characters in the ASCII set (i.e. first 128 characters). This constructor
+      allows an efficient and convenient way to create OUString
+      instances from ASCII literals. When creating strings from data that
+      is not pure ASCII, it needs to be converted to OUString by explicitly
+      providing the encoding to use for the conversion.
+
+      @param    literal         the 8-bit ASCII string literal
+
+      @since LibreOffice 3.6
+    */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    // Old gcc can try to convert anonymous enums to OUString and give compile error.
+    // So instead have a variant for const and non-const char[].
+    template< int N >
+    OUString( const char (&literal)[ N ] )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, literal, N - 1 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    OUString( char (&value)[ N ] )
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) value; // unused
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+#endif
+#else // HAVE_SFINAE_ANONYMOUS_BROKEN
+    template< typename T >
+    OUString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
+
+
+#ifdef RTL_STRING_UNITTEST
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUString( T&, typename internal::ExceptConstCharArrayDetector< T >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUString( const T&, typename internal::ExceptCharArrayDetector< T >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+#endif
+
+    /**
       New string from a 8-Bit character buffer array.
 
       @param    value           a 8-Bit character array.
@@ -189,7 +284,7 @@ public:
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -256,6 +351,25 @@ public:
     OUString & operator=( const OUString & str ) SAL_THROW(())
     {
         rtl_uString_assign( &pData, str.pData );
+        return *this;
+    }
+
+    /**
+      Assign a new string from an 8-Bit string literal that is expected to contain only
+      characters in the ASCII set (i.e. first 128 characters). This operator
+      allows an efficient and convenient way to assign OUString
+      instances from ASCII literals. When assigning strings from data that
+      is not pure ASCII, it needs to be converted to OUString by explicitly
+      providing the encoding to use for the conversion.
+
+      @param    literal         the 8-bit ASCII string literal
+
+      @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
+    {
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -418,6 +532,20 @@ public:
                                                            str.pData->buffer, str.pData->length ) == 0;
     }
 
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    {
+        if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
+            return sal_False;
+
+        return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, literal ) == 0;
+    }
+
    /**
       Match against a substring appearing in this string.
 
@@ -437,6 +565,18 @@ public:
     {
         return rtl_ustr_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                      str.pData->buffer, str.pData->length, str.pData->length ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -462,6 +602,18 @@ public:
         return rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                     str.pData->buffer, str.pData->length,
                                                                     str.pData->length ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -681,6 +833,14 @@ public:
                                                            asciiStr, asciiStrLength ) == 0;
     }
 
+    // This overload is left undefined, to detect calls of matchAsciiL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchAsciiL(char const *, sal_Int32, rtl_TextEncoding) const;
+#endif
+
     /**
       Match against a substring appearing in this string, ignoring the case of
       ASCII letters.
@@ -711,6 +871,44 @@ public:
                                                                           asciiStr, asciiStrLength ) == 0;
     }
 
+    // This overload is left undefined, to detect calls of
+    // matchIgnoreAsciiCaseAsciiL that erroneously use
+    // RTL_CONSTASCII_USTRINGPARAM instead of RTL_CONSTASCII_STRINGPARAM (but
+    // would lead to ambiguities on 32 bit platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void matchIgnoreAsciiCaseAsciiL(char const *, sal_Int32, rtl_TextEncoding)
+        const;
+#endif
+
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWith(OUString const & str) const {
+        return str.getLength() <= getLength()
+            && match(str, getLength() - str.getLength());
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
+    {
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ), literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1);
+    }
+
     /**
       Check whether this string ends with a given ASCII string.
 
@@ -729,6 +927,41 @@ public:
             && rtl_ustr_asciil_reverseEquals_WithLength(
                 pData->buffer + pData->length - asciiStrLength, asciiStr,
                 asciiStrLength);
+    }
+
+    /**
+      Check whether this string ends with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @return true if this string ends with str, ignoring the case of ASCII
+      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @since LibreOffice 3.6
+    */
+    sal_Bool endsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        return str.getLength() <= getLength()
+            && matchIgnoreAsciiCase(str, getLength() - str.getLength());
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    {
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ),
+                    internal::ConstCharArrayDetector< T, void >::size - 1, literal,
+                    internal::ConstCharArrayDetector< T, void >::size - 1)
+                == 0);
     }
 
     /**
@@ -773,6 +1006,55 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend sal_Bool     operator >= ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since LibreOffice 3.6
+     */
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& string, T& literal )
+    {
+        return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling equalsAsciiL().
+     *
+     * @since LibreOffice 3.6
+     */
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& string )
+    {
+        return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling !equalsAsciiL().
+     *
+     * @since LibreOffice 3.6
+     */
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& string, T& literal )
+    {
+        return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
+    /**
+     * Compare string to an ASCII string literal.
+     *
+     * This operator is equal to calling !equalsAsciiL().
+     *
+     * @since LibreOffice 3.6
+     */
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& string )
+    {
+        return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
 
     /**
       Returns a hashcode for this string.
@@ -859,6 +1141,20 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1);
+        return ret < 0 ? ret : ret + fromIndex;
+    }
+
+    /**
        Returns the index within this string of the first occurrence of the
        specified ASCII substring, starting at the specified index.
 
@@ -889,6 +1185,14 @@ public:
             pData->buffer + fromIndex, pData->length - fromIndex, str, len);
         return ret < 0 ? ret : ret + fromIndex;
     }
+
+    // This overload is left undefined, to detect calls of indexOfAsciiL that
+    // erroneously use RTL_CONSTASCII_USTRINGPARAM instead of
+    // RTL_CONSTASCII_STRINGPARAM (but would lead to ambiguities on 32 bit
+    // platforms):
+#if SAL_TYPES_SIZEOFLONG == 8
+    void indexOfAsciiL(char const *, sal_Int32 len, rtl_TextEncoding) const;
+#endif
 
     /**
       Returns the index within this string of the last occurrence of
@@ -932,6 +1236,18 @@ public:
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfAscii_WithLength(
+            pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
     }
 
     /**
@@ -1067,6 +1383,157 @@ public:
     }
 
     /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceFirst(
+        OUString const & from, OUString const & to, sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirst(
+            &s, pData, from.pData, to.pData, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  ASCII string literal, the substring to be replaced
+
+      @param to  the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceFirst( T& from, OUString const & to,
+                           sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirstAsciiL(
+            &s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
+      @param from  ASCII string literal, the substring to be replaced
+
+      @param to  ASCII string literal, the substring to be replaced
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exit
+      from the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 3.6
+    */
+    template< typename T1, typename T2 >
+    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        replaceFirst( T1& from, T2& to, sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        rtl_uString_newReplaceFirstAsciiLAsciiL(
+            &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1, to,
+            internal::ConstCharArrayDetector< T2, void >::size - 1, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  the substring to be replaced
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    OUString replaceAll(OUString const & from, OUString const & to) const {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAll(&s, pData, from.pData, to.pData);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from ASCII string literal, the substring to be replaced
+
+      @param to  the replacing substring
+
+      @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( T& from, OUString const & to) const
+    {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAllAsciiL(&s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  ASCII string literal, the substring to be replaced
+
+      @param to  ASCII string literal, the substring to be replaced
+
+      @since LibreOffice 3.6
+    */
+    template< typename T1, typename T2 >
+    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        replaceAll( T1& from, T2& to ) const
+    {
+        rtl_uString * s = 0;
+        rtl_uString_newReplaceAllAsciiLAsciiL(
+            &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1,
+            to, internal::ConstCharArrayDetector< T2, void >::size - 1);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
       Converts from this string all ASCII uppercase characters (65-90)
       to ASCII lowercase characters (97-122).
 
@@ -1147,6 +1614,24 @@ public:
         rtl_uString * pNew = 0;
         index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
         return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+      Returns a token from the string.
+
+      The same as getToken(sal_Int32, sal_Unicode, sal_Int32 &), but always
+      passing in 0 as the start index in the third argument.
+
+      @param count  the number of the token to return, starting with 0
+      @param separator  the character which separates the tokens
+
+      @return  the given token, or an empty string
+
+      @since LibreOffice 3.6
+     */
+    OUString getToken(sal_Int32 count, sal_Unicode separator) const {
+        sal_Int32 n = 0;
+        return getToken(count, separator, n);
     }
 
     /**
@@ -1249,7 +1734,7 @@ public:
         rtl_uString_intern( &pNew, pData );
         if (pNew == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -1292,7 +1777,7 @@ public:
                                    convertFlags, pInfo );
         if (pNew == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -1493,6 +1978,9 @@ public:
       all ASCII characters are in the allowed range between 0 and
       127. The ASCII string must be NULL-terminated.
 
+      Note that for string literals it is simpler and more efficient
+      to directly use the OUString constructor.
+
       @param    value       the 8-Bit ASCII character string
       @return   a string with the string representation of the argument.
      */
@@ -1505,6 +1993,18 @@ public:
 };
 
 /* ======================================================================= */
+
+} /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OUString OUString;
+}
+#endif
+
+namespace rtl
+{
 
 /** A helper to use OUStrings with hash maps.
 
@@ -1522,7 +2022,7 @@ struct OUStringHash
         a hash code for the string.  This hash code should not be stored
         persistently, as its computation may change in later revisions.
      */
-    size_t operator()(const rtl::OUString& rString) const
+    size_t operator()(const OUString& rString) const
         { return (size_t)rString.hashCode(); }
 };
 
@@ -1557,7 +2057,7 @@ inline OUString OStringToOUString( const OString & rStr,
     The lengths of the two strings may differ (e.g., for double-byte
     encodings, UTF-7, UTF-8).
 
-    @param rStr
+    @param rUnicode
     an OUString to convert.
 
     @param encoding

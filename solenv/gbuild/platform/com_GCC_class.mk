@@ -32,6 +32,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -51,6 +52,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \

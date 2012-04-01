@@ -40,6 +40,7 @@
 #include "boost/static_assert.hpp"
 
 #include <tools/solar.h>
+#include <osl/endian.h>
 
 #include <comphelper/string.hxx>
 
@@ -62,17 +63,17 @@ DBG_NAME( Stream )
 
 // !!! Nicht inline, wenn Operatoren <<,>> inline sind
 inline static void SwapUShort( sal_uInt16& r )
-    {   r = SWAPSHORT(r);   }
+    {   r = OSL_SWAPWORD(r);   }
 inline static void SwapShort( short& r )
-    {   r = SWAPSHORT(r);   }
+    {   r = OSL_SWAPWORD(r);   }
 inline static void SwapLong( long& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapULong( sal_uInt32& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapLongInt( sal_Int32& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapLongUInt( unsigned int& r )
-    {   r = SWAPLONG(r);   }
+    {   r = OSL_SWAPDWORD(r);   }
 
 inline static void SwapUInt64( sal_uInt64& r )
     {
@@ -87,8 +88,8 @@ inline static void SwapUInt64( sal_uInt64& r )
         s.c[1] ^= s.c[0];
         s.c[0] ^= s.c[1];
         // swap the bytes in the words
-        s.c[0] = SWAPLONG(s.c[0]);
-        s.c[1] = SWAPLONG(s.c[1]);
+        s.c[0] = OSL_SWAPDWORD(s.c[0]);
+        s.c[1] = OSL_SWAPDWORD(s.c[1]);
         r = s.n;
     }
 
@@ -105,8 +106,8 @@ inline static void SwapInt64( sal_Int64& r )
         s.c[1] ^= s.c[0];
         s.c[0] ^= s.c[1];
         // swap the bytes in the words
-        s.c[0] = SWAPLONG(s.c[0]);
-        s.c[1] = SWAPLONG(s.c[1]);
+        s.c[0] = OSL_SWAPDWORD(s.c[0]);
+        s.c[1] = OSL_SWAPDWORD(s.c[1]);
         r = s.n;
     }
 
@@ -120,7 +121,7 @@ inline static void SwapFloat( float& r )
         } s;
 
         s.f = r;
-        s.c = SWAPLONG( s.c );
+        s.c = OSL_SWAPDWORD( s.c );
         r = s.f;
     }
 
@@ -142,8 +143,8 @@ inline static void SwapDouble( double& r )
             s.c[0] ^= s.c[1]; // zwei 32-Bit-Werte in situ vertauschen
             s.c[1] ^= s.c[0];
             s.c[0] ^= s.c[1];
-            s.c[0] = SWAPLONG(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
-            s.c[1] = SWAPLONG(s.c[1]);
+            s.c[0] = OSL_SWAPDWORD(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
+            s.c[1] = OSL_SWAPDWORD(s.c[1]);
             r = s.d;
         }
     }
@@ -720,14 +721,6 @@ sal_Bool SvStream::ReadLine(rtl::OString& rStr)
         bIsEof = sal_False;
     rStr = aBuf.makeStringAndClear();
     return bEnd;
-}
-
-sal_Bool SvStream::ReadLine( ByteString& rStr )
-{
-    rtl::OString aFoo;
-    sal_Bool ret = ReadLine(aFoo);
-    rStr = aFoo;
-    return ret;
 }
 
 sal_Bool SvStream::ReadUniStringLine( String& rStr )
@@ -1386,7 +1379,7 @@ SvStream& SvStream::operator<< ( SvStream& rStream )
 
 // -----------------------------------------------------------------------
 
-String SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
+rtl::OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
@@ -2380,12 +2373,104 @@ rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
         if (rStrm.IsEndianSwap())
         {
             for (sal_Int32 i = 0; i < pStr->length; ++i)
-                pStr->buffer[i] = SWAPSHORT(pStr->buffer[i]);
+                pStr->buffer[i] = OSL_SWAPWORD(pStr->buffer[i]);
         }
     }
 
     //take ownership of buffer and return, otherwise return empty string
     return pStr ? rtl::OUString(pStr, SAL_NO_ACQUIRE) : rtl::OUString();
+}
+
+namespace
+{
+    template <typename T, typename O> T tmpl_convertLineEnd(const T &rIn, LineEnd eLineEnd)
+    {
+        // Zeilenumbrueche ermitteln und neue Laenge berechnen
+        bool            bConvert    = false;       	   // Muss konvertiert werden
+        sal_Int32       nStrLen     = rIn.getLength();
+        sal_Int32       nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
+        sal_Int32       nLen        = 0;               // Ziel-Laenge
+        sal_Int32       i           = 0;               // Source-Zaehler
+
+        while (i < nStrLen)
+        {
+            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            {
+                nLen = nLen + nLineEndLen;
+
+                // Wenn schon gesetzt, dann brauchen wir keine aufwendige Abfrage
+                if ( !bConvert )
+                {
+                    // Muessen wir Konvertieren
+                    if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == _LF)) ||
+                         ((eLineEnd == LINEEND_CRLF) && (rIn[i+1] != _LF)) ||
+                         ((eLineEnd == LINEEND_LF) &&
+                          ((rIn[i] == _CR) || (rIn[i+1] == _CR))) ||
+                         ((eLineEnd == LINEEND_CR) &&
+                          ((rIn[i] == _LF) || (rIn[i+1] == _LF))) )
+                        bConvert = true;
+                }
+
+                // \r\n oder \n\r, dann Zeichen ueberspringen
+                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                     (rIn[i] != rIn[i+1]) )
+                    ++i;
+            }
+            else
+                ++nLen;
+            ++i;
+        }
+
+        if (!bConvert)
+            return rIn;
+
+        // Zeilenumbrueche konvertieren
+        // Neuen String anlegen
+        O aNewData(nLen);
+        i = 0;
+        while (i < nStrLen)
+        {
+            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            {
+                if ( eLineEnd == LINEEND_CRLF )
+                {
+                    aNewData.append(_CR);
+                    aNewData.append(_LF);
+                }
+                else
+                {
+                    if ( eLineEnd == LINEEND_CR )
+                        aNewData.append(_CR);
+                    else
+                        aNewData.append(_LF);
+                }
+
+                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                     (rIn[i] != rIn[i+1]) )
+                    ++i;
+            }
+            else
+            {
+                aNewData.append(rIn[i]);
+            }
+
+            ++i;
+        }
+
+        return aNewData.makeStringAndClear();
+    }
+}
+
+rtl::OString convertLineEnd(const rtl::OString &rIn, LineEnd eLineEnd)
+{
+    return tmpl_convertLineEnd<rtl::OString, rtl::OStringBuffer>(rIn, eLineEnd);
+}
+
+rtl::OUString convertLineEnd(const rtl::OUString &rIn, LineEnd eLineEnd)
+{
+    return tmpl_convertLineEnd<rtl::OUString, rtl::OUStringBuffer>(rIn, eLineEnd);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

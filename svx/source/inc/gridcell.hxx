@@ -1127,8 +1127,6 @@ public:
 
 // helpers for XUnoTunnel
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static FmXFilterCell* getImplementation(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxObject);
 
 //  painting the filter text
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);

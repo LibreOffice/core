@@ -2634,9 +2634,11 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
         // multi selection: API expects sequence of list entry indexes
         if( bMultiSel )
+        {
             for( ScfUInt8Vec::const_iterator aBeg = maSelection.begin(), aIt = aBeg, aEnd = maSelection.end(); aIt != aEnd; ++aIt )
                 if( *aIt != 0 )
                     aSelVec.push_back( static_cast< sal_Int16 >( aIt - aBeg ) );
+        }
         // single selection: mnSelEntry is one-based, API expects zero-based
         else if( mnSelEntry > 0 )
             aSelVec.push_back( static_cast< sal_Int16 >( mnSelEntry - 1 ) );
@@ -2833,7 +2835,7 @@ void XclImpPictureObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     if( (rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord() )
     {
         // page background is stored as hidden picture with name "__BkgndObj"
-        if (IsHidden() && (GetObjName().equalsAscii("__BkgndObj")))
+        if (IsHidden() && (GetObjName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("__BkgndObj"))))
             GetPageSettings().ReadImgData( rStrm );
         else
             maGraphic = XclImpDrawing::ReadImgData( GetRoot(), rStrm );
@@ -3132,7 +3134,7 @@ void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*
 // ----------------------------------------------------------------------------
 
 XclImpSimpleDffConverter::XclImpSimpleDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
-    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
+    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0 ),
     XclImpRoot( rRoot )
 {
     SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );

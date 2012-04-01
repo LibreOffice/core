@@ -35,6 +35,7 @@
 #include "brdcst.hxx"
 #include "document.hxx"
 #include "reftokenhelper.hxx"
+#include "stlalgorithm.hxx"
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -118,12 +119,12 @@ boost::unordered_set<sal_uInt16>& ScChartListener::ExternalRefListener::getAllFi
 
 // ----------------------------------------------------------------------------
 
-ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
+ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
         const ScRange& rRange ) :
-    StrData( rName ),
     SvtListener(),
     mpExtRefListener(NULL),
     mpTokens(new vector<ScTokenRef>),
+    maName(rName),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( false ),
@@ -133,12 +134,12 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     SetRangeList( rRange );
 }
 
-ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
+ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
-    StrData( rName ),
     SvtListener(),
     mpExtRefListener(NULL),
     mpTokens(new vector<ScTokenRef>),
+    maName(rName),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( false ),
@@ -148,11 +149,11 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
-    StrData( rName ),
+ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
     SvtListener(),
     mpExtRefListener(NULL),
     mpTokens(pTokens),
+    maName(rName),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( false ),
@@ -162,10 +163,10 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector
 }
 
 ScChartListener::ScChartListener( const ScChartListener& r ) :
-    StrData( r ),
     SvtListener(),
     mpExtRefListener(NULL),
     mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
+    maName(r.maName),
     pUnoData( NULL ),
     pDoc( r.pDoc ),
     bUsed( false ),
@@ -209,9 +210,14 @@ ScChartListener::~ScChartListener()
     }
 }
 
-ScDataObject* ScChartListener::Clone() const
+const rtl::OUString& ScChartListener::GetName() const
 {
-    return new ScChartListener( *this );
+    return maName;
+}
+
+void ScChartListener::SetName(const rtl::OUString& rName)
+{
+    maName = rName;
 }
 
 void ScChartListener::SetUno(
@@ -264,7 +270,7 @@ void ScChartListener::Update()
     else if ( pDoc->GetAutoCalc() )
     {
         bDirty = false;
-        pDoc->UpdateChart( GetString());
+        pDoc->UpdateChart(GetName());
     }
 }
 
@@ -401,7 +407,7 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
     if (ScRefTokenHelper::intersects(*mpTokens, pToken))
     {
         // force update (chart has to be loaded), don't use ScChartListener::Update
-        pDoc->UpdateChart( GetString());
+        pDoc->UpdateChart(GetName());
     }
 }
 
@@ -410,7 +416,7 @@ void ScChartListener::UpdateSeriesRanges()
 {
     ScRangeListRef pRangeList(new ScRangeList);
     ScRefTokenHelper::getRangeListFromTokens(*pRangeList, *mpTokens);
-    pDoc->SetChartRangeList(GetString(), pRangeList);
+    pDoc->SetChartRangeList(GetName(), pRangeList);
 }
 
 ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
@@ -427,14 +433,14 @@ void ScChartListener::SetUpdateQueue()
     pDoc->GetChartListenerCollection()->StartTimer();
 }
 
-bool ScChartListener::operator==( const ScChartListener& r )
+bool ScChartListener::operator==( const ScChartListener& r ) const
 {
     bool b1 = (mpTokens.get() && !mpTokens->empty());
     bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
 
     if (pDoc != r.pDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
         bSeriesRangesScheduled != r.bSeriesRangesScheduled ||
-        GetString() != r.GetString() || b1 != b2)
+        GetName() != r.GetName() || b1 != b2)
         return false;
 
     if (!b1 && !b2)
@@ -442,6 +448,11 @@ bool ScChartListener::operator==( const ScChartListener& r )
         return true;
 
     return *mpTokens == *r.mpTokens;
+}
+
+bool ScChartListener::operator!=( const ScChartListener& r ) const
+{
+    return !operator==(r);
 }
 
 // ============================================================================
@@ -463,7 +474,6 @@ ScChartListenerCollection::RangeListenerItem::RangeListenerItem(const ScRange& r
 }
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
-    ScStrCollection( 4, 4, false ),
     pDoc( pDocP )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -471,7 +481,6 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
 
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
-    ScStrCollection( rColl ),
     pDoc( rColl.pDoc )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -483,78 +492,167 @@ ScChartListenerCollection::~ScChartListenerCollection()
     //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
     //  to be called if an empty ScNoteCell is deleted
 
-    if (GetCount())
-        FreeAll();
-}
-
-ScDataObject*   ScChartListenerCollection::Clone() const
-{
-    return new ScChartListenerCollection( *this );
+    maListeners.clear();
 }
 
 void ScChartListenerCollection::StartAllListeners()
 {
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
+        it->second->StartListeningTo();
+}
+
+void ScChartListenerCollection::insert(ScChartListener* pListener)
+{
+    rtl::OUString aName = pListener->GetName();
+    maListeners.insert(aName, pListener);
+}
+
+ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName)
+{
+    ListenersType::iterator it = maListeners.find(rName);
+    return it == maListeners.end() ? NULL : it->second;
+}
+
+const ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName) const
+{
+    ListenersType::const_iterator it = maListeners.find(rName);
+    return it == maListeners.end() ? NULL : it->second;
+}
+
+bool ScChartListenerCollection::hasListeners() const
+{
+    return !maListeners.empty();
+}
+
+const ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners() const
+{
+    return maListeners;
+}
+
+ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners()
+{
+    return maListeners;
+}
+
+ScChartListenerCollection::StringSetType& ScChartListenerCollection::getNonOleObjectNames()
+{
+    return maNonOleObjectNames;
+}
+
+rtl::OUString ScChartListenerCollection::getUniqueName(const rtl::OUString& rPrefix) const
+{
+    for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
     {
-        ((ScChartListener*) pItems[ nIndex ])->StartListeningTo();
+        rtl::OUStringBuffer aBuf(rPrefix);
+        aBuf.append(nNum);
+        rtl::OUString aTestName = aBuf.makeStringAndClear();
+        if (maListeners.find(aTestName) == maListeners.end())
+            return aTestName;
     }
+    return rtl::OUString();
 }
 
 void ScChartListenerCollection::ChangeListening( const String& rName,
         const ScRangeListRef& rRangeListRef, bool bDirty )
 {
-    ScChartListener aCLSearcher( rName, pDoc, rRangeListRef );
-    ScChartListener* pCL;
-    sal_uInt16 nIndex;
-    if ( Search( &aCLSearcher, nIndex ) )
+    ScChartListener* pCL = findByName(rName);
+    if (pCL)
     {
-        pCL = (ScChartListener*) pItems[ nIndex ];
         pCL->EndListeningTo();
         pCL->SetRangeList( rRangeListRef );
     }
     else
     {
-        pCL = new ScChartListener( aCLSearcher );
-        Insert( pCL );
+        pCL = new ScChartListener(rName, pDoc, rRangeListRef);
+        insert(pCL);
     }
     pCL->StartListeningTo();
     if ( bDirty )
         pCL->SetDirty( true );
 }
 
+namespace {
+
+class InsertChartListener : public std::unary_function<ScChartListener*, void>
+{
+    ScChartListenerCollection::ListenersType& mrListeners;
+public:
+    InsertChartListener(ScChartListenerCollection::ListenersType& rListeners) :
+        mrListeners(rListeners) {}
+
+    void operator() (ScChartListener* p)
+    {
+        rtl::OUString aName = p->GetName();
+        mrListeners.insert(aName, p);
+    }
+};
+
+}
+
 void ScChartListenerCollection::FreeUnused()
 {
-    // rueckwaerts wg. Pointer-Aufrueckerei im Array
-    for ( sal_uInt16 nIndex = nCount; nIndex-- >0; )
+    std::vector<ScChartListener*> aUsed, aUnused;
+
+    // First, filter each listener into 'used' and 'unused' categories.
     {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        //  Uno-Charts nicht rauskicken
-        //  (werden per FreeUno von aussen geloescht)
-        if ( !pCL->IsUno() )
+        ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+        for (; it != itEnd; ++it)
         {
-            if ( pCL->IsUsed() )
-                pCL->SetUsed( false );
+            ScChartListener* p = it->second;
+            if (p->IsUno())
+            {
+                // We don't delete UNO charts; they are to be deleted separately via FreeUno().
+                aUsed.push_back(p);
+                continue;
+            }
+
+            if (p->IsUsed())
+            {
+                p->SetUsed(false);
+                aUsed.push_back(p);
+            }
             else
-                Free( pCL );
+                aUnused.push_back(p);
         }
     }
+
+    // Release all pointers currently managed by the ptr_map container.
+    maListeners.release().release();
+
+    // Re-insert the listeners we need to keep.
+    std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
+
+    // Now, delete the ones no longer needed.
+    std::for_each(aUnused.begin(), aUnused.end(), ScDeleteObjectByPtr<ScChartListener>());
 }
 
 void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
                                          const uno::Reference< chart::XChartData >& rSource )
 {
-    // rueckwaerts wg. Pointer-Aufrueckerei im Array
-    for ( sal_uInt16 nIndex = nCount; nIndex-- >0; )
+    std::vector<ScChartListener*> aUsed, aUnused;
+
+    // First, filter each listener into 'used' and 'unused' categories.
     {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        if ( pCL->IsUno() &&
-             pCL->GetUnoListener() == rListener &&
-             pCL->GetUnoSource() == rSource )
+        ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+        for (; it != itEnd; ++it)
         {
-            Free( pCL );
+            ScChartListener* p = it->second;
+            if (p->IsUno() && p->GetUnoListener() == rListener && p->GetUnoSource() == rSource)
+                aUnused.push_back(p);
+            else
+                aUsed.push_back(p);
         }
-        //! sollte nur einmal vorkommen?
     }
+
+    // Release all pointers currently managed by the ptr_map container.
+    maListeners.release().release();
+
+    // Re-insert the listeners we need to keep.
+    std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
+
+    // Now, delete the ones no longer needed.
+    std::for_each(aUnused.begin(), aUnused.end(), ScDeleteObjectByPtr<ScChartListener>());
 }
 
 void ScChartListenerCollection::StartTimer()
@@ -563,7 +661,7 @@ void ScChartListenerCollection::StartTimer()
     aTimer.Start();
 }
 
-IMPL_LINK( ScChartListenerCollection, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl)
 {
     if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
@@ -576,12 +674,14 @@ IMPL_LINK( ScChartListenerCollection, TimerHdl, Timer*, EMPTYARG )
 
 void ScChartListenerCollection::UpdateDirtyCharts()
 {
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
     {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        if ( pCL->IsDirty() )
-            pCL->Update();
-        if ( aTimer.IsActive() && !pDoc->IsImportingXML())
+        ScChartListener* p = it->second;
+        if (p->IsDirty())
+            p->Update();
+
+        if (aTimer.IsActive() && !pDoc->IsImportingXML())
             break;                      // da kam einer dazwischen
     }
 }
@@ -589,11 +689,10 @@ void ScChartListenerCollection::UpdateDirtyCharts()
 
 void ScChartListenerCollection::SetDirty()
 {
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        pCL->SetDirty( true );
-    }
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
+        it->second->SetDirty(true);
+
     StartTimer();
 }
 
@@ -602,27 +701,27 @@ void ScChartListenerCollection::SetDiffDirty(
             const ScChartListenerCollection& rCmp, bool bSetChartRangeLists )
 {
     bool bDirty = false;
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
     {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        sal_uInt16 nFound;
-        bool bFound = rCmp.Search( pCL, nFound );
-        if ( !bFound || (*pCL != *((const ScChartListener*) rCmp.pItems[ nFound ])) )
+        ScChartListener* pCL = it->second;
+        OSL_ASSERT(pCL);
+        const ScChartListener* pCLCmp = rCmp.findByName(pCL->GetName());
+        if (!pCLCmp || *pCL != *pCLCmp)
         {
             if ( bSetChartRangeLists )
             {
-                if ( bFound )
+                if (pCLCmp)
                 {
                     const ScRangeListRef& rList1 = pCL->GetRangeList();
-                    const ScRangeListRef& rList2 =
-                        ((const ScChartListener*) rCmp.pItems[ nFound ])->GetRangeList();
+                    const ScRangeListRef& rList2 = pCLCmp->GetRangeList();
                     bool b1 = rList1.Is();
                     bool b2 = rList2.Is();
                     if ( b1 != b2 || (b1 && b2 && (*rList1 != *rList2)) )
-                        pDoc->SetChartRangeList( pCL->GetString(), rList1 );
+                        pDoc->SetChartRangeList( pCL->GetName(), rList1 );
                 }
                 else
-                    pDoc->SetChartRangeList( pCL->GetString(), pCL->GetRangeList() );
+                    pDoc->SetChartRangeList( pCL->GetName(), pCL->GetRangeList() );
             }
             bDirty = true;
             pCL->SetDirty( true );
@@ -636,9 +735,10 @@ void ScChartListenerCollection::SetDiffDirty(
 void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 {
     bool bDirty = false;
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
     {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
+        ScChartListener* pCL = it->second;
         const ScRangeListRef& rList = pCL->GetRangeList();
         if ( rList.Is() && rList->Intersects( rRange ) )
         {
@@ -661,38 +761,41 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 
 void ScChartListenerCollection::UpdateScheduledSeriesRanges()
 {
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        pCL->UpdateScheduledSeriesRanges();
-    }
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
+        it->second->UpdateScheduledSeriesRanges();
 }
 
 
 void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 {
     ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        pCL->UpdateChartIntersecting( aRange );
-    }
+    ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+    for (; it != itEnd; ++it)
+        it->second->UpdateChartIntersecting(aRange);
 }
 
 
-bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
+bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r ) const
 {
     // hier nicht ScStrCollection::operator==() verwenden, der umstaendlich via
     // IsEqual und Compare laeuft, stattdessen ScChartListener::operator==()
-    if ( pDoc != r.pDoc || nCount != r.nCount )
+    if (pDoc != r.pDoc || maListeners.size() != r.maListeners.size())
         return false;
-    for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+
+    ListenersType::const_iterator it = maListeners.begin(), itEnd = maListeners.end();
+    ListenersType::const_iterator it2 = r.maListeners.begin();
+    for (; it != itEnd; ++it, ++it2)
     {
-        if ( *((ScChartListener*) pItems[ nIndex ]) !=
-                *((ScChartListener*) r.pItems[ nIndex ]) )
+        if (*it != *it2)
             return false;
     }
     return true;
+}
+
+bool ScChartListenerCollection::operator!=( const ScChartListenerCollection& r ) const
+{
+    return !operator==(r);
 }
 
 void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )

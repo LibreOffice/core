@@ -29,12 +29,11 @@
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #define _FORBIDDENCHARACTERSTABLE_HXX
 
-#include <tools/table.hxx>
-
 #include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include "editeng/editengdllapi.h"
+#include <map>
 
 namespace com {
 namespace sun {
@@ -43,26 +42,22 @@ namespace lang {
     class XMultiServiceFactory;
 }}}}
 
-struct ForbiddenCharactersInfo
+class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public salhelper::SimpleReferenceObject
 {
-    com::sun::star::i18n::ForbiddenCharacters aForbiddenChars;
-    sal_Bool bTemporary;
-};
-
-DECLARE_TABLE( SvxForbiddenCharactersTableImpl, ForbiddenCharactersInfo* )
-
-class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public salhelper::SimpleReferenceObject
-{
+public:
+    typedef std::map<sal_uInt16, com::sun::star::i18n::ForbiddenCharacters> Map;
 private:
+    Map maMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
 public:
-            SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, sal_uInt16 nISize = 4, sal_uInt16 nGrow = 4 );
-            ~SvxForbiddenCharactersTable();
+    SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
+    ~SvxForbiddenCharactersTable() {}
 
-    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanuage, sal_Bool bGetDefault ) const;
-    void    SetForbiddenCharacters(  sal_uInt16 nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
-    void    ClearForbiddenCharacters( sal_uInt16 nLanuage );
+    Map& GetMap() { return maMap; }
+    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault );
+    void    SetForbiddenCharacters(  sal_uInt16 nLanguage , const com::sun::star::i18n::ForbiddenCharacters& );
+    void    ClearForbiddenCharacters( sal_uInt16 nLanguage );
 };
 
 #endif // _FORBIDDENCHARACTERSTABLE_HXX

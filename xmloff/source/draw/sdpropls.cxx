@@ -619,6 +619,15 @@ SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+SvXMLEnumMapEntry const pXML_FitToSize_Enum_Odf12[] =
+{
+    { XML_FALSE,        drawing::TextFitToSizeType_NONE },
+    { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
+    { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
+    { XML_TRUE,         drawing::TextFitToSizeType_AUTOFIT },
+    { XML_TOKEN_INVALID, 0 }
+};
+
 SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
@@ -1047,7 +1056,19 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
                 break;
             case XML_SD_TYPE_FITTOSIZE:
-                pHdl = new XMLEnumPropertyHdl( pXML_FitToSize_Enum, ::getCppuType((const com::sun::star::drawing::TextFitToSizeType*)0) );
+                {
+                    if (mpExport && (mpExport->getDefaultVersion()
+                                        <= SvtSaveOptions::ODFVER_012))
+                    {
+                        pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum_Odf12,
+                            ::getCppuType(static_cast<const com::sun::star::drawing::TextFitToSizeType*>(0)));
+                    }
+                    else
+                    {
+                        pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum,
+                            ::getCppuType(static_cast<const com::sun::star::drawing::TextFitToSizeType*>(0)));
+                    }
+                }
                 break;
             case XML_SD_TYPE_MEASURE_UNIT:
                 pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::getCppuType((const sal_Int32*)0) );
@@ -1549,17 +1570,6 @@ void XMLShapeExportPropertyMapper::handleElementItem(
             SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty, nFlags, pProperties, nIdx );
             break;
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-XMLPagePropertySetMapper::XMLPagePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
-: XMLPropertySetMapper( aXMLSDPresPageProps, rFactoryRef )
-{
-}
-
-XMLPagePropertySetMapper::~XMLPagePropertySetMapper()
-{
 }
 
 // ----------------------------------------

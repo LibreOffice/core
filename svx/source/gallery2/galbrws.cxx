@@ -268,7 +268,7 @@ sal_Bool GalleryBrowser::IsLinkage() const
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser, SplitHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser, SplitHdl)
 {
     mpSplitter->SetPosPixel( Point( mpSplitter->GetSplitPosPixel(), mpSplitter->GetPosPixel().Y() ) );
     Resize();

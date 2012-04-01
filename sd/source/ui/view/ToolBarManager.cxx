@@ -352,7 +352,7 @@ private:
     ::rtl::OUString GetToolBarResourceName (const ::rtl::OUString& rsBaseName) const;
     bool CheckPlugInMode (const ::rtl::OUString& rsName) const;
 
-    DECL_LINK(UpdateCallback,bool*);
+    DECL_LINK(UpdateCallback, void *);
     DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent*);
     DECL_LINK(SetValidCallback,void*);
 };
@@ -1005,7 +1005,7 @@ ToolBarRules& ToolBarManager::Implementation::GetToolBarRules (void)
 
 
 
-IMPL_LINK(ToolBarManager::Implementation,UpdateCallback,bool*,EMPTYARG)
+IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback)
 {
     mnPendingUpdateCall = 0;
     if (mnLockCount == 0)
@@ -1051,7 +1051,7 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
 
 
 
-IMPL_LINK(ToolBarManager::Implementation, SetValidCallback,void*,EMPTYARG)
+IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
 {
     mnPendingSetValidCall = 0;
     SetValid(true);

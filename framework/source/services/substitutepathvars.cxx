@@ -678,7 +678,7 @@ throw ( NoSuchElementException, RuntimeException )
 //      protected methods
 //_________________________________________________________________________________________________________________
 
-IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNotify*, EMPTYARG )
+IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );

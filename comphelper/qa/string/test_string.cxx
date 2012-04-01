@@ -44,9 +44,7 @@ namespace {
 class TestString: public CppUnit::TestFixture
 {
 public:
-    void testSearchAndReplaceAsciiL();
     void testNatural();
-    void testReplace();
     void testRemove();
     void testStripStart();
     void testStripEnd();
@@ -55,15 +53,10 @@ public:
     void testTokenCount();
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
-    void testIsalnumAsciiString();
-    void testIsupperAsciiString();
     void testIndexOfL();
-    void testMatchIgnoreAsciiCaseL();
 
     CPPUNIT_TEST_SUITE(TestString);
-    CPPUNIT_TEST(testSearchAndReplaceAsciiL);
     CPPUNIT_TEST(testNatural);
-    CPPUNIT_TEST(testReplace);
     CPPUNIT_TEST(testRemove);
     CPPUNIT_TEST(testStripStart);
     CPPUNIT_TEST(testStripEnd);
@@ -72,42 +65,8 @@ public:
     CPPUNIT_TEST(testTokenCount);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
-    CPPUNIT_TEST(testIsalnumAsciiString);
-    CPPUNIT_TEST(testIsupperAsciiString);
-    CPPUNIT_TEST(testIndexOfL);
-    CPPUNIT_TEST(testMatchIgnoreAsciiCaseL);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void TestString::testSearchAndReplaceAsciiL()
-{
-    rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("foobarbar"));
-    sal_Int32 n1;
-    rtl::OUString s2(
-        comphelper::string::searchAndReplaceAsciiL(
-            s1, RTL_CONSTASCII_STRINGPARAM("bar"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baaz")), 0, &n1));
-    CPPUNIT_ASSERT(
-        s2 == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobaazbar")));
-    CPPUNIT_ASSERT(n1 == 3);
-    sal_Int32 n2;
-    rtl::OUString s3(
-        comphelper::string::searchAndReplaceAsciiL(
-            s2, RTL_CONSTASCII_STRINGPARAM("bar"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bz")),
-            n1 + RTL_CONSTASCII_LENGTH("baaz"), &n2));
-    CPPUNIT_ASSERT(
-        s3 == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobaazbz")));
-    CPPUNIT_ASSERT(n2 == 7);
-    sal_Int32 n3;
-    rtl::OUString s4(
-        comphelper::string::searchAndReplaceAsciiL(
-            s3, RTL_CONSTASCII_STRINGPARAM("bar"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baz")),
-            n2 + RTL_CONSTASCII_LENGTH("bz"), &n3));
-    CPPUNIT_ASSERT(s4 == s3);
-    CPPUNIT_ASSERT(n3 == -1);
-}
 
 void TestString::testDecimalStringToNumber()
 {
@@ -131,67 +90,6 @@ void TestString::testIsdigitAsciiString()
 
     rtl::OString s3;
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s3), true);
-}
-
-void TestString::testIsalnumAsciiString()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s1), true);
-
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("1A34"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s2), true);
-
-    rtl::OString s3;
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s3), true);
-
-    rtl::OString s4(RTL_CONSTASCII_STRINGPARAM("1A[4"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s4), false);
-}
-
-void TestString::testIsupperAsciiString()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s1), false);
-
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("aAbB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s2), false);
-
-    rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("AABB"));
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s3), true);
-}
-
-void TestString::testIndexOfL()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("one two three"));
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("one")), static_cast<sal_Int32>(0));
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two")), static_cast<sal_Int32>(4));
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("four")), static_cast<sal_Int32>(-1));
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two"), 5), static_cast<sal_Int32>(-1));
-}
-
-void TestString::testMatchIgnoreAsciiCaseL()
-{
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("one two three"));
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
-        RTL_CONSTASCII_STRINGPARAM("one")), sal_True);
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
-        RTL_CONSTASCII_STRINGPARAM("ONE")), sal_True);
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two")), sal_False);
-
-    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two"), 4), sal_True);
 }
 
 using namespace ::com::sun::star;
@@ -386,41 +284,6 @@ void TestString::testNatural()
     CPPUNIT_ASSERT(
         compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), xCollator, xBI, lang::Locale()) == 0
     );
-}
-
-void TestString::testReplace()
-{
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("aaa"));
-    ::rtl::OString aOut;
-
-    aOut = ::comphelper::string::replace(aIn,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("aa")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("b")));
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ba")));
-
-    aOut = ::comphelper::string::replace(aIn,
-        rtl::OString(),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("whatever")));
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("aaa")));
-
-    aOut = ::comphelper::string::replace(aIn,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa")),
-        rtl::OString());
-    CPPUNIT_ASSERT(aOut.isEmpty());
-
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa foo aaa foo bbb"));
-
-    aOut = ::comphelper::string::replace(aIn,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("foo")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")));
-    CPPUNIT_ASSERT(aOut.equalsL(
-        RTL_CONSTASCII_STRINGPARAM("aaa bar aaa bar bbb")));
-
-    aOut = ::comphelper::string::replace(aIn,
-        rtl::OString(' '),
-        rtl::OString());
-    CPPUNIT_ASSERT(aOut.equalsL(
-        RTL_CONSTASCII_STRINGPARAM("aaafooaaafoobbb")));
 }
 
 void TestString::testRemove()

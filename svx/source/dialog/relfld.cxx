@@ -33,20 +33,6 @@
 
 // -----------------------------------------------------------------------
 
-SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
-    MetricField( pParent, nWinSize )
-{
-    bNegativeEnabled = sal_False;
-    bRelativeMode = sal_False;
-    bRelative     = sal_False;
-
-    SetDecimalDigits( 2 );
-    SetMin( 0 );
-    SetMax( 9999 );
-}
-
-// -----------------------------------------------------------------------
-
 SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     MetricField( pParent, rResId )
 {

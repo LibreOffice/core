@@ -134,6 +134,7 @@
 #define MID_LO_MARGIN       4
 #define MID_UP_REL_MARGIN   5
 #define MID_LO_REL_MARGIN   6
+#define MID_CTX_MARGIN      7
 
 //LRSpaceItem
 #define MID_LR_MARGIN       0
@@ -168,6 +169,8 @@
 #define MID_RIGHT_BORDER            11
 #define MID_TOP_BORDER              12
 #define MID_BOTTOM_BORDER           13
+#define LINE_STYLE                  14
+#define LINE_WIDTH                  15
 
 //BrushItem
 #define MID_BACK_COLOR          0

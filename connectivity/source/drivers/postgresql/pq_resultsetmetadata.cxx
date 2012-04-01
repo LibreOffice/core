@@ -263,7 +263,7 @@ sal_Int32 ResultSetMetaData::getIntColumnProperty( const rtl::OUString & name, i
             set->getPropertyValue( name ) >>= ret;
         }
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
     }
     return ret;
@@ -282,7 +282,7 @@ sal_Bool ResultSetMetaData::getBoolColumnProperty( const rtl::OUString & name, i
             set->getPropertyValue( name ) >>= ret;
         }
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
     }
 
@@ -462,7 +462,7 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
             ret = m_colDesc[column-1].typeName;
         }
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
     }
     return ret;

@@ -32,6 +32,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace core {
@@ -70,7 +71,7 @@ struct Relation
 class Relations;
 typedef ::boost::shared_ptr< Relations > RelationsRef;
 
-class Relations : public ::std::map< ::rtl::OUString, Relation >
+class OOX_DLLPUBLIC Relations : public ::std::map< ::rtl::OUString, Relation >
 {
 public:
     explicit            Relations( const ::rtl::OUString& rFragmentPath );
@@ -87,8 +88,6 @@ public:
 
     /** Returns the external target of the relation with the passed relation identifier. */
     ::rtl::OUString     getExternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
-    /** Returns the external target of the first relation with the passed type. */
-    ::rtl::OUString     getExternalTargetFromFirstType( const ::rtl::OUString& rType ) const;
 
     /** Returns the full fragment path for the target of the passed relation. */
     ::rtl::OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;

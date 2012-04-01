@@ -1,0 +1,2 @@
+# Location of the SDK. This is only used by Ant.
+sdk.dir=@ANDROID_SDK_HOME@

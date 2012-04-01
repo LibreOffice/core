@@ -30,7 +30,6 @@
 
 #include <algorithm>
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -179,13 +178,13 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const rtl
                 if( !mpGlobalMgr )
                 {
                     mpGlobalMgr = new GraphicManager(
-                        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get(
-                            comphelper::getProcessComponentContext()),
-                        officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get(
-                            comphelper::getProcessComponentContext()));
+                        (officecfg::Office::Common::Cache::GraphicManager::
+                         TotalCacheSize::get()),
+                        (officecfg::Office::Common::Cache::GraphicManager::
+                         ObjectCacheSize::get()));
                     mpGlobalMgr->SetCacheTimeout(
-                        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
-                            comphelper::getProcessComponentContext()));
+                        officecfg::Office::Common::Cache::GraphicManager::
+                        ObjectReleaseTime::get());
                 }
 
                 mpMgr = mpGlobalMgr;
@@ -392,12 +391,6 @@ rtl::OString GraphicObject::GetUniqueID() const
 SvStream* GraphicObject::GetSwapStream() const
 {
     return( HasSwapStreamHdl() ? (SvStream*) mpSwapStreamHdl->Call( (void*) this ) : GRFMGR_AUTOSWAPSTREAM_NONE );
-}
-
-// !!! to be removed
-sal_uLong GraphicObject::GetReleaseFromCache() const
-{
-    return 0;
 }
 
 void GraphicObject::SetAttr( const GraphicAttr& rAttr )
@@ -1092,7 +1085,7 @@ void GraphicObject::SetSwapState()
     }
 }
 
-IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
 {
     if( !IsSwappedOut() )
     {

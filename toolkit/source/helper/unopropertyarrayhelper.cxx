@@ -29,6 +29,7 @@
 
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
+#include <map>
 
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper
@@ -39,14 +40,14 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Seq
     sal_Int32 nIDs = rIDs.getLength();
     const sal_Int32* pIDs = rIDs.getConstArray();
     for ( sal_Int32 n = 0; n < nIDs; n++ )
-        maIDs.Insert( pIDs[n], (void*)1L );
+        maIDs.insert( pIDs[n] );
 }
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs )
 {
     std::list< sal_uInt16 >::const_iterator iter;
     for( iter = rIDs.begin(); iter != rIDs.end(); ++iter)
-      maIDs.Insert( *iter, (void*)1L);
+      maIDs.insert( *iter );
 }
 
 sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
@@ -54,7 +55,7 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
 
-    return maIDs.Get( nPropId ) ? sal_True : sal_False;
+    return maIDs.find( nPropId ) != maIDs.end() ? sal_True : sal_False;
 }
 
 // ::cppu::IPropertyArrayHelper
@@ -76,29 +77,28 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
 {
     // Sortiert nach Namen...
 
-    Table aSortedPropsIds;
-    sal_uInt32 nProps = maIDs.Count();
-    for ( sal_uInt32 s = 0; s < nProps; s++ )
+    std::map<sal_Int32, sal_uInt16> aSortedPropsIds;
+    for( std::set<sal_Int32>::const_iterator it =  maIDs.begin(); it != maIDs.end(); ++it)
     {
-        sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
-            maIDs.GetObjectKey( s ));
-        aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uIntPtr)nId );
+        sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(*it);
+        aSortedPropsIds[ 1+GetPropertyOrderNr( nId ) ] = nId;
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // Einzelproperties...
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
-                aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uIntPtr)i );
+                aSortedPropsIds[ 1+GetPropertyOrderNr( i ) ]  = i;
         }
     }
 
-    nProps = aSortedPropsIds.Count();   // koennen jetzt mehr sein
+    sal_uInt32 nProps = aSortedPropsIds.size();   // koennen jetzt mehr sein
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps( nProps );
     ::com::sun::star::beans::Property* pProps = aProps.getArray();
 
-    for ( sal_uInt32 n = 0; n < nProps; n++ )
+    std::map<sal_Int32, sal_uInt16>::const_iterator it = aSortedPropsIds.begin();
+    for ( sal_uInt32 n = 0; n < nProps; n++, ++it )
     {
-        sal_uInt16 nId = (sal_uInt16)(sal_uLong)aSortedPropsIds.GetObject( n );
+        sal_uInt16 nId = it->second;
         pProps[n].Name = GetPropertyName( nId );
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );

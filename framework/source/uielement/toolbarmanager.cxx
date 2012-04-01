@@ -1613,12 +1613,12 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, Click)
 {
     return HandleClick(&XToolbarController::click);
 }
 
-IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, DropdownClick)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1641,7 +1641,7 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, DoubleClick)
 {
     return HandleClick(&XToolbarController::doubleClick);
 }
@@ -2056,7 +2056,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, Select)
 {
     if ( m_bDisposed )
         return 1;
@@ -2076,12 +2076,12 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Activate, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, Activate)
 {
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Deactivate, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, Deactivate)
 {
     return 1;
 }
@@ -2139,7 +2139,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, AsyncUpdateControllersHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!

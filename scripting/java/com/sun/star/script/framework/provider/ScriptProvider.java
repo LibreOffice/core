@@ -148,9 +148,11 @@ public abstract class ScriptProvider
         catch ( Exception e )
         {
             LogUtils.DEBUG( LogUtils.getTrace( e ) );
-            throw new com.sun.star.uno.RuntimeException(
-                "Error constructing  ScriptProvider: "
-                + e.getMessage() );
+            com.sun.star.uno.RuntimeException e2 =
+                new com.sun.star.uno.RuntimeException(
+                    "Error constructing  ScriptProvider: " + e );
+            e2.initCause( e );
+            throw e2;
         }
 
         LogUtils.DEBUG( "ScriptProvider: constructor - finished." );
@@ -383,13 +385,21 @@ public abstract class ScriptProvider
         catch (  com.sun.star.lang.IllegalArgumentException ila )
         {
             // TODO specify the correct error Type
-            throw new ScriptFrameworkErrorException( ila.getMessage(),
-                null, scriptURI, language, ScriptFrameworkErrorType.UNKNOWN );
+            ScriptFrameworkErrorException e2 =
+                new ScriptFrameworkErrorException(
+                    ila.getMessage(), null, scriptURI, language,
+                    ScriptFrameworkErrorType.UNKNOWN );
+            e2.initCause( ila );
+            throw e2;
         }
         catch ( com.sun.star.container.NoSuchElementException nse )
         {
-            throw new ScriptFrameworkErrorException( nse.getMessage(),
-                null, details.function, language, ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+            ScriptFrameworkErrorException e2 =
+                new ScriptFrameworkErrorException(
+                    nse.getMessage(), null, details.function, language,
+                    ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+            e2.initCause( nse );
+            throw e2;
         }
         catch ( com.sun.star.lang.WrappedTargetException wta )
         {
@@ -400,8 +410,12 @@ public abstract class ScriptProvider
             {
                 message = wrapped.getMessage();
             }
-            throw new ScriptFrameworkErrorException( message,
-                null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
+            ScriptFrameworkErrorException e2 =
+                new ScriptFrameworkErrorException(
+                    message, null, details.function, language,
+                    ScriptFrameworkErrorType.UNKNOWN );
+            e2.initCause( wta );
+            throw e2;
         }
 
     }

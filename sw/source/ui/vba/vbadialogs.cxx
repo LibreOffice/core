@@ -41,11 +41,10 @@ SwVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
     return uno::Any( aDialog );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaDialogs::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDialogs") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDialogs"));
 }
 
 uno::Sequence< rtl::OUString >

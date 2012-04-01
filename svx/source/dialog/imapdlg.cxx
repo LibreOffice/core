@@ -306,11 +306,6 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
         maCbbTarget.InsertEntry( *aNewList[ i ] );
 }
 
-const TargetList& SvxIMapDlg::GetTargetList() const
-{
-    return pIMapWnd->GetTargetList();
-}
-
 void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
                          const TargetList* pTargetList, void* pEditingObj )
 {
@@ -709,7 +704,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
 {
     NotifyInfo  aNewInfo;
 
@@ -722,7 +717,7 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
 {
     NotifyInfo      aNewInfo;
     const String    aURLText( maURLBox.GetText() );
@@ -750,7 +745,7 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
 {
     pOwnData->aTimer.Stop();
 
@@ -835,7 +830,7 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)
 {
        SvtMiscOptions aMiscOptions;
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );

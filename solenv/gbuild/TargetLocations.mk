@@ -32,6 +32,7 @@ gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_outdir_target = $(OUTDIR)/bin/$(1).oxt
+gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
 	$(OUTDIR)/idl \
@@ -53,7 +54,8 @@ gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 # outdir targets: $(1) is path
 gb_Configuration_registry = $(OUTDIR)/xml/registry
-gb_XcsTarget_get_outdir_target = $(gb_Configuration_registry)/schema/$(1)
+gb_XcsTarget_get_outdir_target = \
+    $(gb_Configuration_registry)/schema$(if $(1),/)$(1)
 gb_XcuDataTarget_get_outdir_target = $(gb_Configuration_registry)/data/$(1)
 gb_XcuLangpackTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
@@ -85,6 +87,7 @@ gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_Extension_get_target = $(WORKDIR)/Extension/$(1).oxt
+gb_Extension_get_rootdir = $(WORKDIR)/Extension/$(1)/root
 gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExternalLib_get_workdir = $(WORKDIR)/ExternalLib/$(1)
 gb_ExternalLib_get_builddir = $(WORKDIR)/ExternalLib/$(1)/build
@@ -102,12 +105,14 @@ gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
 gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
+gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
+gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).zip
 gb_Pyuno_get_outdir_target = $(OUTDIR)/bin/$(1).zip
 gb_PyunoFile_get_target = $(WORKDIR)/Pyuno/$(1)/contents/$(2)
@@ -173,6 +178,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Module \
 	PackagePart \
 	Package \
+	Pagein \
 	Pyuno \
 	Rdb \
 	ResTarget \
@@ -249,5 +255,9 @@ gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
+
+# static variables declared here because they are used globally
+
+gb_SDFLOCATION := $(WORKDIR)/CustomTarget/translations/translate/sdf
 
 # vim: set noet sw=4:

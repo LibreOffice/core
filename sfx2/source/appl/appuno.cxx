@@ -81,7 +81,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -1766,6 +1765,12 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rURL;
+    (void) rRetval;
+    (void) pSh;
+    return ERRCODE_BASIC_PROC_UNDEFINED;
+#else
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
         // all not full qualified names use the BASIC of the given or current document
@@ -1905,6 +1910,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
 
     SbxBase::ResetError();
     return nErr;
+#endif
 }
 
 SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \

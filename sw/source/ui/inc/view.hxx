@@ -299,10 +299,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          CreateBtns();
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
-    SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
+    SW_DLLPRIVATE DECL_LINK( TimeoutHdl, void* );
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
-    SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, FloatingWindow * );
+    SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, void* );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
@@ -582,10 +582,10 @@ public:
     void            StateTabWin(SfxItemSet&);
 
     // attributes have changed
-    DECL_LINK( AttrChangedNotify, SwWrtShell * );
+    DECL_LINK( AttrChangedNotify, void* );
 
     // form control has been activated
-    DECL_LINK( FormControlActivated, FmFormShell* );
+    DECL_LINK( FormControlActivated, void* );
 
     // edit links
     void            EditLinkDlg();

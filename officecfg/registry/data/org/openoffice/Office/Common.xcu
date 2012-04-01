@@ -138,8 +138,8 @@
         <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
             <value>${STARTCENTER_TEMPLREP_URL}</value>
         </prop>
-        <prop oor:name="StartCenterLayoutStyle" oor:type="xs:int">
-            <value>${STARTCENTER_LAYOUT_STYLE}</value>
+        <prop oor:name="StartCenterHideExternalLinks" oor:type="xs:int">
+            <value>${STARTCENTER_HIDE_EXTERNAL_LINKS}</value>
         </prop>
     </node>
     <node oor:name="Registration">
@@ -594,7 +594,7 @@
   <node oor:name="Save">
     <node oor:name="Document">
       <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="CreateBackup" install:module="gconflockdown">
         <value oor:external=

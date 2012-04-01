@@ -30,10 +30,10 @@ gb_Helper_NULLFILE := /dev/null
 
 gb_Helper_MISC := $(WORKDIR)/Misc
 
-# general propose phony target
+# general purpose phony target
 gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 
-# general propose empty dummy target
+# general purpose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 
 .PHONY : $(WORKDIR)/Misc/PHONY
@@ -41,10 +41,9 @@ $(gb_Helper_MISCDUMMY) :
 	@mkdir -p $(dir $@) && touch $@
 
 define gb_Helper_abbreviate_dirs
-R=$(REPODIR) && \
-$(subst $(REPODIR)/,$$R/,S=$(SRCDIR) && \
+S=$(SRCDIR) && \
 $(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1)))))
+$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 
 define gb_Helper_abbreviate_dirs_native

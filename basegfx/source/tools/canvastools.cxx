@@ -510,45 +510,6 @@ namespace basegfx
                                         rRectangle.X2, rRectangle.Y2 );
         }
 
-        awt::Size awtSizeFromB2ISize( const ::basegfx::B2IVector& rVec )
-        {
-            return awt::Size( rVec.getX(),
-                              rVec.getY() );
-        }
-
-        awt::Point awtPointFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
-        {
-            return awt::Point( rPoint.getX(),
-                               rPoint.getY() );
-        }
-
-        awt::Rectangle awtRectangleFromB2IRectangle( const ::basegfx::B2IRange& rRect )
-        {
-            OSL_ENSURE( rRect.getWidth() < ::std::numeric_limits< sal_Int32 >::max() &&
-                        rRect.getWidth() > ::std::numeric_limits< sal_Int32 >::min(),
-                        "awtRectangleFromB2IRectangle(): width overflow" );
-            OSL_ENSURE( rRect.getHeight() < ::std::numeric_limits< sal_Int32 >::max() &&
-                        rRect.getHeight() > ::std::numeric_limits< sal_Int32 >::min(),
-                        "awtRectangleFromB2IRectangle(): height overflow" );
-
-            return awt::Rectangle( rRect.getMinX(),
-                                   rRect.getMinY(),
-                                   static_cast< sal_Int32 >(rRect.getWidth()),
-                                   static_cast< sal_Int32 >(rRect.getHeight()) );
-        }
-
-        ::basegfx::B2IVector b2ISizeFromAwtSize( const awt::Size& rSize )
-        {
-            return ::basegfx::B2IVector( rSize.Width,
-                                         rSize.Height );
-        }
-
-        ::basegfx::B2IPoint b2IPointFromAwtPoint( const awt::Point& rPoint )
-        {
-            return ::basegfx::B2IPoint( rPoint.X,
-                                        rPoint.Y );
-        }
-
         ::basegfx::B2IRange b2IRectangleFromAwtRectangle( const awt::Rectangle& rRect )
         {
             return ::basegfx::B2IRange( rRect.X,
@@ -581,23 +542,6 @@ namespace basegfx
                                         ceil(rRange.getMaxY()) );
         }
 
-        // Geometry comparisons
-        // ===================================================================
-
-        bool awtSizeAreEqual( const ::com::sun::star::awt::Size& rA, const ::com::sun::star::awt::Size& rB )
-        {
-            return (rA.Width == rB.Width && rA.Height == rB.Height);
-        }
-
-        bool awtPointAreEqual( const ::com::sun::star::awt::Point& rA, const ::com::sun::star::awt::Point& rB )
-        {
-            return (rA.X == rB.X && rA.Y == rB.Y);
-        }
-
-        bool awtRectangleAreEqual( const ::com::sun::star::awt::Rectangle& rA, const ::com::sun::star::awt::Rectangle& rB )
-        {
-            return (rA.X == rB.X && rA.Y == rB.Y && rA.Width == rB.Width && rA.Height == rB.Height);
-        }
     } // namespace bgfxtools
 
 } // namespace canvas

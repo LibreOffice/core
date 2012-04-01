@@ -74,6 +74,7 @@ typedef sal_uInt32 ColorData;
 #define COL_LIGHTCYAN               RGB_COLORDATA( 0x00, 0xFF, 0xFF )
 #define COL_LIGHTRED                RGB_COLORDATA( 0xFF, 0x00, 0x00 )
 #define COL_LIGHTMAGENTA            RGB_COLORDATA( 0xFF, 0x00, 0xFF )
+#define COL_LIGHTGRAYBLUE           RGB_COLORDATA( 0xE0, 0xE0, 0xFF )
 #define COL_YELLOW                  RGB_COLORDATA( 0xFF, 0xFF, 0x00 )
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 #define COL_TRANSPARENT             TRGB_COLORDATA( 0xFF, 0xFF, 0xFF, 0xFF )

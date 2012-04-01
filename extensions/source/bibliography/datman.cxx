@@ -291,7 +291,7 @@ class MappingDialog_Impl : public ModalDialog
 
 
 
-    DECL_LINK(OkHdl, OKButton*);
+    DECL_LINK(OkHdl, void *);
     DECL_LINK(ListBoxSelectHdl, ListBox*);
 
 public:
@@ -519,7 +519,7 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
     return 0;
 }
 
-IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl)
 {
     if(bModified)
     {

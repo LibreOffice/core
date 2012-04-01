@@ -137,11 +137,6 @@ public:
     // Returns true for success.
     bool        Init();
 
-                // Set UriBinding to create input streams to open files.
-                // Default implementation is capable to open files from disk.
-    void        SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding );
-    com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > GetUriBinding() const;
-
     // Set the storage which should be used by the default UriBinding
     // Must be set before StatrtMission().
     //sODFVersion indicates  the ODF version
@@ -154,8 +149,6 @@ public:
 
                 // Get the security environment
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironmentByIndex(sal_Int32 nId);
-    sal_Int32 GetSecurityEnvironmentNumber();
 
                 // After signing/veryfieng, get information about signatures
     SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
@@ -186,14 +179,10 @@ public:
     void SetX509Certificate(sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName,
         const rtl::OUString& ouX509SerialNumber, const rtl::OUString& ouX509Cert);
 
-    void SetX509Certificate(sal_Int32 nSecurityId, sal_Int32 nSecurityEnvironmentIndex,
-        const rtl::OUString& ouX509IssuerName,  const rtl::OUString& ouX509SerialNumber,
-        const rtl::OUString& ouX509Cert);
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
     void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
-    bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
     bool        ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream );
 
     // MT: ??? I think only for adding/removing, not for new signatures...

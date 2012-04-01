@@ -198,36 +198,6 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation > LocaleDataWrapper::getCollatorImplementations() const
-{
-    try
-    {
-        if ( xLD.is() )
-            return xLD->getCollatorImplementations( getLocale() );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "getCollatorImplementations: Exception caught " << e.Message );
-    }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
-}
-
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getTransliterations() const
-{
-    try
-    {
-        if ( xLD.is() )
-            return xLD->getTransliterations( getLocale() );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "getTransliterations: Exception caught " << e.Message );
-    }
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
-}
-
-
 ::com::sun::star::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
 {
     try
@@ -1118,8 +1088,8 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     if (!aGrouping[0])
     {
         i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
-        if (aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "IN") ||    // India
-                aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "BT"))  // Bhutan
+        if (aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IN")) || // India
+            aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("BT")) )  // Bhutan
         {
             aGrouping[0] = 3;
             aGrouping[1] = 2;

@@ -195,63 +195,8 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     return PolyPolygon( XOutBitmap::GetCountour( aBmp, nContourFlags, 128, pRect ) );
 }
 
-void SvxContourDlg::ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic,
-                                  const MapUnit eUnit, const Size& rDisplaySize )
-{
-    DBG_ASSERT( rGraphic.GetType() != GRAPHIC_NONE, "Graphic is not valid!" );
-
-    OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    const MapMode   aDispMap( eUnit );
-    const MapMode   aGrfMap( rGraphic.GetPrefMapMode() );
-    const Size      aGrfSize( rGraphic.GetPrefSize() );
-    Size            aOrgSize;
-    Point           aNewPoint;
-    sal_Bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
-
-    if ( bPixelMap )
-        aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );
-    else
-        aOrgSize = pOutDev->LogicToLogic( aGrfSize, aGrfMap, aDispMap );
-
-    if ( aOrgSize.Width() && aOrgSize.Height() )
-    {
-        double fScaleX = (double) rDisplaySize.Width() / aOrgSize.Width();
-        double fScaleY = (double) rDisplaySize.Height() / aOrgSize.Height();
-
-        for ( sal_uInt16 j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
-        {
-            Polygon& rPoly = rContour[ j ];
-
-            for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
-            {
-                if ( bPixelMap )
-                    aNewPoint = pOutDev->PixelToLogic( rPoly[ i ], aDispMap  );
-                else
-                    aNewPoint = pOutDev->LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
-
-                rPoly[ i ] = Point( FRound( aNewPoint.X() * fScaleX ), FRound( aNewPoint.Y() * fScaleY ) );
-            }
-        }
-    }
-}
-
 // Loop through to super class, no virtual Methods to not become incompatible
 // due to IF changes
-
-void SvxContourDlg::SetExecState( sal_Bool bEnable )
-{
-    pSuperClass->SetExecState( bEnable );
-}
-
-void SvxContourDlg::SetGraphic( const Graphic& rGraphic )
-{
-    pSuperClass->SetGraphic( rGraphic );
-}
-
-void SvxContourDlg::SetGraphicLinked( sal_Bool bGraphicLinked )
-{
-    pSuperClass->SetGraphicLinked( bGraphicLinked );
-}
 
 const Graphic& SvxContourDlg::GetGraphic() const
 {
@@ -263,19 +208,9 @@ sal_Bool SvxContourDlg::IsGraphicChanged() const
     return pSuperClass->IsGraphicChanged();
 }
 
-void SvxContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
-{
-    pSuperClass->SetPolyPolygon( rPolyPoly );
-}
-
 PolyPolygon SvxContourDlg::GetPolyPolygon()
 {
     return pSuperClass->GetPolyPolygon( sal_True );
-}
-
-void SvxContourDlg::SetEditingObject( void* pObj )
-{
-    pSuperClass->SetEditingObject( pObj );
 }
 
 const void* SvxContourDlg::GetEditingObject() const
@@ -671,7 +606,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
 {
     aUpdateTimer.Stop();
 
@@ -697,7 +632,7 @@ IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, EMPTYARG )
     return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
 {
     aCreateTimer.Stop();
 
@@ -865,7 +800,7 @@ void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
             ApplyImageList();
 }
 
-IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, MiscHdl)
 {
        SvtMiscOptions aMiscOptions;
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );

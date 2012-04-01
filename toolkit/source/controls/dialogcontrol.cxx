@@ -59,6 +59,7 @@
 
 #include <vcl/tabctrl.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
+#include "toolkit/controls/unocontrols.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -241,6 +242,23 @@ Reference< XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) thro
     return xInfo;
 }
 
+void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+{
+    ControlModelContainerBase::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    try
+    {
+        if ( nHandle == BASEPROPERTY_IMAGEURL && ImplHasProperty( BASEPROPERTY_GRAPHIC ) )
+        {
+            ::rtl::OUString sImageURL;
+            OSL_VERIFY( rValue >>= sImageURL );
+            setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( mxGrfObj, sImageURL ) ) );
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting ImageURL properties!" );
+    }
+}
 // ============================================================================
 // = class UnoDialogControl
 // ============================================================================
@@ -338,11 +356,12 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( !aImageURL.isEmpty() ))
     {
-        ::rtl::OUString absoluteUrl =
-            getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
-                                 ImplGetPropertyValue( PROPERTY_IMAGEURL ));
+        ::rtl::OUString absoluteUrl = aImageURL;
+        if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+            absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
+                                 uno::makeAny( aImageURL ) );
 
-        xGraphic = ControlContainerBase::Impl_getGraphicFromURL_nothrow( absoluteUrl );
+        xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
         ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
     }
 }
@@ -566,11 +585,13 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
                 ( !aImageURL.isEmpty() ))
             {
-                ::rtl::OUString absoluteUrl =
-                    getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
+                ::rtl::OUString absoluteUrl = aImageURL;
+                if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+
+                    absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
                                          uno::makeAny(aImageURL));
 
-                xGraphic = Impl_getGraphicFromURL_nothrow( absoluteUrl );
+                xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
             }
             ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), sal_True );
             break;

@@ -351,7 +351,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
         if( VERSION_30B == nVersion )
         {
-            long nL;
+            sal_Int32 nL;
             rStream >> cChar;       aFmt.SetStart( (sal_uInt16)cChar );
 
             sStr = rStream.ReadUniOrByteString(eEncoding);
@@ -426,9 +426,11 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     if( VERSION_40A == nVersion && SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
         sal_uInt8 cF;
-        Size aSz;
+        sal_Int32 nWidth(0), nHeight(0);
 
-        rStream >> aSz.Width() >> aSz.Height();
+        rStream >> nWidth >> nHeight;
+
+        Size aSz(nWidth, nHeight);
 
         rStream >> cF;
         if( cF )

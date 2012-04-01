@@ -46,8 +46,9 @@
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <rtl/instance.hxx>
 #include <vcl/toolbox.hxx>
-#include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
@@ -96,7 +97,7 @@ public:
     }
 };
 
-class SvtMatchContext_Impl : public ::osl::Thread
+class SvtMatchContext_Impl: public salhelper::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
@@ -113,34 +114,28 @@ class SvtMatchContext_Impl : public ::osl::Thread
 
     DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
 
-    virtual void SAL_CALL           onTerminated( );
-    virtual void SAL_CALL           run();
-    virtual void SAL_CALL           Cancel();
+    virtual                         ~SvtMatchContext_Impl();
+    virtual void                    execute();
+    void                            doExecute();
     void                            Insert( const String& rCompletion, const String& rURL, sal_Bool bForce = sal_False);
     void                            ReadFolder( const String& rURL, const String& rMatch, sal_Bool bSmart );
     void                            FillPicklist(std::vector<rtl::OUString>& rPickList);
 
 public:
-    static ::osl::Mutex*           GetMutex();
-
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
-                                    ~SvtMatchContext_Impl();
     void                            Stop();
 };
 
-::osl::Mutex* SvtMatchContext_Impl::pDirMutex = 0;
-
-::osl::Mutex* SvtMatchContext_Impl::GetMutex()
+namespace
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !pDirMutex )
-        pDirMutex = new ::osl::Mutex;
-    return pDirMutex;
+    struct theSvtMatchContextMutex
+        : public rtl::Static< ::osl::Mutex, theSvtMatchContextMutex > {};
 }
 
 SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const String& rText )
-    : aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
+    : Thread( "SvtMatchContext_Impl" )
+    , aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
@@ -151,8 +146,6 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     aLink.CreateMutex();
 
     FillPicklist( aPickList );
-
-    create();
 }
 
 SvtMatchContext_Impl::~SvtMatchContext_Impl()
@@ -188,22 +181,15 @@ void SvtMatchContext_Impl::FillPicklist(std::vector<rtl::OUString>& rPickList)
     }
 }
 
-void SAL_CALL SvtMatchContext_Impl::Cancel()
-{
-    // Cancel button pressed
-    terminate();
-}
-
 void SvtMatchContext_Impl::Stop()
 {
     bStop = sal_True;
-
-    if( isRunning() )
-        terminate();
+    terminate();
 }
 
-void SvtMatchContext_Impl::onTerminated( )
+void SvtMatchContext_Impl::execute( )
 {
+    doExecute();
     aLink.Call( this );
 }
 
@@ -220,7 +206,6 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     if( pThis->bStop )
     {
         // completions was stopped, no display
-        delete pThis;
         return 0;
     }
 
@@ -293,8 +278,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 
     // the box has this control as a member so we have to set that member
     // to zero before deleting ourself.
-    pBox->pCtx = NULL;
-    delete pThis;
+    pBox->pCtx.clear();
 
     return 0;
 }
@@ -334,9 +318,9 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                 || (aText.Len() > 1 && aText.Copy( aText.Len() - 2, 2 ).CompareToAscii( "/." ) == COMPARE_EQUAL)
                 || (aText.Len() > 2 && aText.Copy( aText.Len() - 3, 3 ).CompareToAscii( "/.." ) == COMPARE_EQUAL);
 
-    // for pure home pathes ( ~username ) the '.' at the end of rMatch
+    // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
-    // this is done only for file contents since home pathes parsing is usefull only for them
+    // this is done only for file contents since home paths parsing is usefull only for them
     if ( bPureHomePath && rMatch.Equals( String::CreateFromAscii( "file:///." ) ) )
     {
         // a home that refers to /
@@ -567,9 +551,9 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
 }
 
 //-------------------------------------------------------------------------
-void SvtMatchContext_Impl::run()
+void SvtMatchContext_Impl::doExecute()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
     if( bStop )
         // have we been stopped while we were waiting for the mutex?
         return;
@@ -750,19 +734,20 @@ void SvtURLBox::TryAutoComplete( sal_Bool bForce )
     aCurText.Erase( nLen );
     if( aCurText.Len() && bIsAutoCompleteEnabled )
     {
-        if ( pCtx )
+        if ( pCtx.is() )
         {
             pCtx->Stop();
-            pCtx = NULL;
+            pCtx->join();
+            pCtx.clear();
         }
         pCtx = new SvtMatchContext_Impl( this, aCurText );
+        pCtx->launch();
     }
 }
 
 //-------------------------------------------------------------------------
 SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
-        pCtx( 0 ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
         bOnlyDirectories( sal_False ),
@@ -783,7 +768,6 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
 //-------------------------------------------------------------------------
 SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
     :   ComboBox( pParent, _nStyle ),
-        pCtx( 0 ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
         bOnlyDirectories( sal_False ),
@@ -799,7 +783,6 @@ SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
 //-------------------------------------------------------------------------
 SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart )
     :   ComboBox( pParent , _rResId ),
-        pCtx( 0 ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
         bOnlyDirectories( sal_False ),
@@ -828,10 +811,10 @@ void SvtURLBox::ImplInit()
 
 SvtURLBox::~SvtURLBox()
 {
-    if( pCtx )
+    if( pCtx.is() )
     {
         pCtx->Stop();
-        pCtx = NULL;
+        pCtx->join();
     }
 
     delete pImp;
@@ -839,15 +822,19 @@ SvtURLBox::~SvtURLBox()
 
 void SvtURLBox::UpdatePickList( )
 {
-    if( pCtx )
+    if( pCtx.is() )
     {
         pCtx->Stop();
-        pCtx = NULL;
+        pCtx->join();
+        pCtx.clear();
     }
 
     String sText = GetText();
     if ( sText.Len() && bIsAutoCompleteEnabled )
+    {
         pCtx = new SvtMatchContext_Impl( this, sText );
+        pCtx->launch();
+    }
 }
 
 void SvtURLBox::SetSmartProtocol( INetProtocol eProt )
@@ -927,17 +914,18 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
 {
     // every key input stops the current matching thread
-    if( pCtx )
+    if( pCtx.is() )
     {
         pCtx->Stop();
-        pCtx = NULL;
+        pCtx->join();
+        pCtx.clear();
     }
 
     KeyCode aCode( rKey.GetCode() );
     if ( aCode == KEY_RETURN && GetText().Len() )
     {
         // wait for completion of matching thread
-        ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+        ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
         if ( bAutoCompleteMode )
         {
@@ -1043,7 +1031,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( SvtURLBox, AutoCompleteHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
     {
@@ -1068,10 +1056,11 @@ long SvtURLBox::Notify( NotifyEvent &rEvt )
     {
         if( !GetText().Len() )
             ClearModifyFlag();
-        if ( pCtx )
+        if ( pCtx.is() )
         {
             pCtx->Stop();
-            pCtx = NULL;
+            pCtx->join();
+            pCtx.clear();
         }
     }
 
@@ -1103,7 +1092,7 @@ void SvtURLBox::SetNoURLSelection( sal_Bool bSet )
 String SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
-    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     String aText( GetText() );
     if ( MatchesPlaceHolder( aText ) )
@@ -1140,8 +1129,8 @@ String SvtURLBox::GetURL()
 
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
-        aObj.SetURL( aName );
+        rtl::OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
+        aObj.SetURL(aName);
         ::rtl::OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( aURL.isEmpty() )
             // aText itself is invalid, and even together with aBaseURL, it could not
@@ -1150,13 +1139,11 @@ String SvtURLBox::GetURL()
 
         bool bSlash = aObj.hasFinalSlash();
         {
-            static const rtl::OUString aPropName(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CasePreservingURL" )));
+            const rtl::OUString aPropName("CasePreservingURL");
 
             rtl::OUString aFileURL;
 
-            Any aAny =
-                UCBContentHelper::GetProperty(aURL,aPropName);
+            Any aAny = UCBContentHelper::GetProperty(aURL, aPropName);
             sal_Bool success = (aAny >>= aFileURL);
             rtl::OUString aTitle;
             if(success)
@@ -1191,7 +1178,7 @@ void SvtURLBox::DisableHistory()
 
 void SvtURLBox::SetBaseURL( const String& rURL )
 {
-    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     // Reset match lists
     pImp->aCompletions.clear();

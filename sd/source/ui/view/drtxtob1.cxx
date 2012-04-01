@@ -59,7 +59,6 @@
 #include <svx/svdobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/editeng.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svx/svdoutl.hxx>
@@ -114,9 +113,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         {
             if( pArgs )
             {
-                SdDrawDocument* pDoc = mpView->GetDoc();
+                SdDrawDocument& rDoc = mpView->GetDoc();
                 OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
-                FunctionReference xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, pDoc, rReq ) );
+                FunctionReference xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
 
                 if(xFunc.is())
                 {
@@ -200,7 +199,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // JOE einen richtigen Status (DontCare) bekomme;
 
                 // Wird enabled, obwohl es nicht richtig funktioniert (s.o.)
-                SfxItemSet aEditAttr( mpView->GetDoc()->GetPool() );
+                SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_AVAILABLE )
                 {
@@ -303,7 +302,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             mpView->SdrEndTextEdit();
-            SfxItemSet aAttr( mpView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+            SfxItemSet aAttr( mpView->GetDoc().GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
@@ -347,7 +346,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         default:
         {
-            SfxItemSet aEditAttr( mpView->GetDoc()->GetPool() );
+            SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
             mpView->GetAttributes( aEditAttr );
             SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
 
@@ -556,7 +555,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 if (nSlot == SID_ATTR_CHAR_FONT)
                     nScriptType = mpView->GetScriptType();
 
-                SfxItemPool& rPool = mpView->GetDoc()->GetPool();
+                SfxItemPool& rPool = mpView->GetDoc().GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
                 aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
                 aNewAttr.Put( aSvxScriptSetItem.GetItemSet() );

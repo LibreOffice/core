@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include "oox/token/properties.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 
@@ -50,12 +51,12 @@ class PropertyMap;
     com.sun.star.beans.XPropertySet interface then). The reference to the
     property set will be kept as long as the instance of this class is alive.
 
-    The functions getProperties() and setProperties() try to handle all passed
-    values at once, using the com.sun.star.beans.XMultiPropertySet interface.
-    If the implementation does not support the XMultiPropertySet interface, all
+    The functions setProperties() tries to handle all passed values at once,
+    using the com.sun.star.beans.XMultiPropertySet interface.  If the
+    implementation does not support the XMultiPropertySet interface, all
     properties are handled separately in a loop.
  */
-class PropertySet
+class OOX_DLLPUBLIC PropertySet
 {
 public:
     inline explicit     PropertySet() {}
@@ -103,14 +104,6 @@ public:
         @return  true = property contains true; false = property contains false or error occurred. */
     inline bool         getBoolProperty( sal_Int32 nPropId ) const
                             { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
-
-    /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
-        @param orValues  (out-parameter) The related property values.
-        @param rPropNames  The property names. MUST be ordered alphabetically. */
-    void                getProperties(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& orValues,
-                            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropNames ) const;
-
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed any into the property set. */
@@ -131,10 +124,6 @@ public:
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
-
-#if OSL_DEBUG_LEVEL > 0
-    void dump();
-#endif
 
     // ------------------------------------------------------------------------
 private:

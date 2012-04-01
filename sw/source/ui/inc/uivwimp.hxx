@@ -35,7 +35,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <swunodef.hxx>
 #include <cppuhelper/weakref.hxx>
 
 class SwXTextView;
@@ -54,7 +53,7 @@ namespace com{ namespace sun{ namespace star {
 }}}
 
 class SwScannerEventListener : public ::cppu::WeakImplHelper1<
-    STAR_NMSPC::lang::XEventListener >
+    ::com::sun::star::lang::XEventListener >
 {
     SwView* pView;
 
@@ -72,16 +71,16 @@ public:
 
 // --------------------------- Clipboard EventListener ------------------
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
-    CLIP_NMSPC::XClipboardListener >
+    ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
     SwView* pView;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const STAR_NMSPC::lang::EventObject& rEventObject )
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObject )
         throw ( com::sun::star::uno::RuntimeException );
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const CLIP_NMSPC::ClipboardEvent& rEventObject )
+    virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
         throw ( com::sun::star::uno::RuntimeException );
 
 public:
@@ -97,10 +96,10 @@ class SwMailMergeConfigItem;
 
 class SwView_Impl
 {
-    STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
-    STAR_REFERENCE( lang::XEventListener )  xClipEvtLstnr;
-    STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
-    STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xScanEvtLstnr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xClipEvtLstnr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >              *pxXTextView;       // UNO object
     com::sun::star::uno::WeakReference< com::sun::star::lang::XUnoTunnel > xTransferable;
 
     // temporary document for printing text of selection / multi selection

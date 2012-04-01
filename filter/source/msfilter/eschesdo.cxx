@@ -176,9 +176,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             break;
 
         // #i51348# get shape name
-        String aShapeName;
+        rtl::OUString aShapeName;
         if( const SdrObject* pSdrObj = rObj.GetSdrObject() )
-            if( pSdrObj->GetName().Len() > 0 )
+            if (!pSdrObj->GetName().isEmpty())
                 aShapeName = pSdrObj->GetName();
 
         Point aTextRefPoint;
@@ -223,7 +223,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
         // #i51348# shape name
-        if( aShapeName.Len() > 0 )
+        if (!aShapeName.isEmpty())
             aPropOpt.AddOpt( ESCHER_Prop_wzName, aShapeName );
         if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():NULL )
         {

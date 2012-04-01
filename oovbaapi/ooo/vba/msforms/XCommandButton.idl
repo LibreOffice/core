@@ -39,11 +39,12 @@ module ooo {  module vba {  module msforms {
 interface XCommandButton
 {
     [attribute] string Caption;
-    [attribute] boolean AutoSize;
     [attribute] boolean Cancel;
     [attribute] boolean Default;
     [attribute] long BackColor;
     [attribute] long ForeColor;
+    [attribute] boolean AutoSize;
+    [attribute] boolean Locked;
     [attribute, readonly] XNewFont Font;
 };
 

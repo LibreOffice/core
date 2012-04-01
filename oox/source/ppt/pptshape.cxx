@@ -308,9 +308,22 @@ void PPTShape::addShape(
 
             if ( !sServiceName.isEmpty() )
             {
-            // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
                 if ( !aMasterTextListStyle.get() )
-                    aMasterTextListStyle = ( mnSubType && rSlidePersist.getMasterPersist().get() ) ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
+                {
+                    bool isOther = !getTextBody().get() && !sServiceName.equalsAscii("com.sun.star.drawing.GroupShape");
+                    TextListStylePtr aSlideStyle = isOther ? rSlidePersist.getOtherTextStyle() : rSlidePersist.getDefaultTextStyle();
+                    // Combine from MasterSlide details as well.
+                    if( rSlidePersist.getMasterPersist().get() )
+                    {
+                        aMasterTextListStyle = isOther ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getMasterPersist()->getDefaultTextStyle();
+                        if( aSlideStyle.get() )
+                            aMasterTextListStyle->apply( *aSlideStyle.get() );
+                    }
+                    else
+                    {
+                        aMasterTextListStyle = aSlideStyle;
+                    }
+                }
 
             if( aMasterTextListStyle.get() && getTextBody().get() ) {
                 TextListStylePtr aCombinedTextListStyle (new TextListStyle());
@@ -408,13 +421,6 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
         ++aRevIter;
     }
     return aShapePtr;
-}
-
-// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
-oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
-{
-    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, rShapes );
 }
 
 } }

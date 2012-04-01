@@ -68,10 +68,10 @@ private:
     SfxObjectShellRef   aSourceRef;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xSourceObject;
 
-    DECL_LINK( FileHdl, ComboBox* );
-    DECL_LINK( BrowseHdl, PushButton* );
-    DECL_LINK( RangeHdl, MultiListBox* );
-    DECL_LINK( ReloadHdl, CheckBox* );
+    DECL_LINK(FileHdl, void *);
+    DECL_LINK(BrowseHdl, void *);
+    DECL_LINK(RangeHdl, void *);
+    DECL_LINK(ReloadHdl, void *);
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 
     void                UpdateSourceRanges();

@@ -41,7 +41,7 @@
 namespace cppu \
 { \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakComponentImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper##N \
     : public ::cppu::WeakComponentImplHelperBase \
     , public ImplHelperBase##N< __IFC##N > \
 { \
@@ -67,7 +67,7 @@ public: \
         { return getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
-class SAL_NO_VTABLE WeakAggComponentImplHelper##N \
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper##N \
     : public ::cppu::WeakAggComponentImplHelperBase \
     , public ImplHelperBase##N< __IFC##N > \
 { \

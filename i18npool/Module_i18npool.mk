@@ -29,11 +29,15 @@
 $(eval $(call gb_Module_Module,i18npool))
 
 $(eval $(call gb_Module_add_targets,i18npool,\
+	CustomTarget_breakiterator \
+	CustomTarget_collator \
+	CustomTarget_indexentry \
+	CustomTarget_localedata \
+	CustomTarget_textconversion \
 	Library_collator_data \
 	Library_dict_ja \
 	Library_dict_zh \
 	Library_i18nisolang1 \
-	Library_i18npaper \
 	Library_i18npool \
 	Library_i18nsearch \
 	Library_index_data \
@@ -42,7 +46,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_localedata_euro \
 	Library_localedata_others \
 	Library_textconv_dict \
-	Package_generated \
 	Package_inc \
 	Package_xml \
 ))
@@ -60,11 +63,5 @@ endif
 $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
 ))
-
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,i18npool,\
-	Executable_i18npool_cppunittester_all \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

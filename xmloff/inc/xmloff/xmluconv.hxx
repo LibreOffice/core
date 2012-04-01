@@ -115,9 +115,6 @@ public:
     /** sets the default unit for numerical measures */
     void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
 
-    /** gets the default unit for numerical measures */
-    sal_Int16 GetCoreMeasureUnit() const;
-
     /** sets the default unit for textual measures */
     void SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit );
 
@@ -138,12 +135,6 @@ public:
     /** convert measure to string: from meCoreMeasureUnit to meXMLMeasureUnit */
     void convertMeasureToXML( ::rtl::OUStringBuffer& rBuffer,
                          sal_Int32 nMeasure ) const;
-
-    /** convert measure with given unit to string with meXMLMeasureUnit */
-    void convertMeasureToXML( ::rtl::OUStringBuffer&,
-                         sal_Int32 nMeasure,
-                         sal_Int16 eSrcUnit ) const;
-
 
     /** convert string to enum using given enum map, if the enum is
         not found in the map, this method will return false */
@@ -166,16 +157,6 @@ public:
                                  const SvXMLEnumMapEntry *pMap,
                                  enum ::xmloff::token::XMLTokenEnum eDefault =
                                          ::xmloff::token::XML_TOKEN_INVALID );
-
-    /** convert enum to string using given token map with an optional
-        default token. If the enum is not found in the map,
-        this method will either use the given default or return
-        false if not default is set */
-    static sal_Bool convertEnum( ::rtl::OUStringBuffer& rBuffer,
-                                 sal_uInt16 nValue,
-                                 const SvXMLEnumStringMapEntry *pMap,
-                                 sal_Char* pDefault = NULL );
-
 
     /** convert double number to string (using ::rtl::math) and DO
 		convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */

@@ -60,6 +60,8 @@
 
 #include <vector>
 
+using namespace com::sun::star;
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
@@ -104,7 +106,7 @@ void lclSetValue( const XclImpRoot& rRoot, const ScAddress& rScPos, double fValu
 void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScPos ) const
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    if( const String* pText = GetText() )
+    if( const rtl::OUString* pText = GetText() )
         rDoc.SetString( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pText );
     else if( const double* pfValue = GetDouble() )
         rDoc.SetValue( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pfValue );
@@ -197,12 +199,12 @@ XclImpPCField::~XclImpPCField()
 
 // general field/item access --------------------------------------------------
 
-const String& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
+const rtl::OUString& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
 {
     if( IsGroupChildField() && (mnFieldIdx < rVisNames.size()) )
     {
-        const String& rVisName = rVisNames[ mnFieldIdx ];
-        if( rVisName.Len() > 0 )
+        const rtl::OUString& rVisName = rVisNames[ mnFieldIdx ];
+        if (!rVisName.isEmpty())
             return rVisName;
     }
     return maFieldInfo.maName;
@@ -396,7 +398,7 @@ void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
 
 void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
-    if( GetFieldName( rVisNames ).Len() > 0 )
+    if (!GetFieldName(rVisNames).isEmpty())
     {
         if( IsStdGroupField() )
             ConvertStdGroupField( rSaveData, rVisNames );
@@ -457,7 +459,7 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
     {
         case EXC_PCFIELD_DATEGROUP:
         {
-            if( aDateInfo.DateValues )
+            if( aDateInfo.mbDateValues )
             {
                 // special case for days only with step value - create numeric grouping
                 ScDPSaveNumGroupDimension aNumGroupDim( GetFieldName( rVisNames ), aDateInfo );
@@ -495,23 +497,23 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
 ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 {
     ScDPNumGroupInfo aNumInfo;
-    aNumInfo.Enable = sal_True;
-    aNumInfo.DateValues = false;
-    aNumInfo.AutoStart = sal_True;
-    aNumInfo.AutoEnd = sal_True;
+    aNumInfo.mbEnable = sal_True;
+    aNumInfo.mbDateValues = false;
+    aNumInfo.mbAutoStart = sal_True;
+    aNumInfo.mbAutoEnd = sal_True;
 
     if( const double* pfMinValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
-        aNumInfo.Start = *pfMinValue;
-        aNumInfo.AutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
+        aNumInfo.mfStart = *pfMinValue;
+        aNumInfo.mbAutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
     }
     if( const double* pfMaxValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_MAX ) )
     {
-        aNumInfo.End = *pfMaxValue;
-        aNumInfo.AutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
+        aNumInfo.mfEnd = *pfMaxValue;
+        aNumInfo.mbAutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
     }
     if( const double* pfStepValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_STEP ) )
-        aNumInfo.Step = *pfStepValue;
+        aNumInfo.mfStep = *pfStepValue;
 
     return aNumInfo;
 }
@@ -519,26 +521,26 @@ ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
 {
     ScDPNumGroupInfo aDateInfo;
-    aDateInfo.Enable = sal_True;
-    aDateInfo.DateValues = false;
-    aDateInfo.AutoStart = sal_True;
-    aDateInfo.AutoEnd = sal_True;
+    aDateInfo.mbEnable = sal_True;
+    aDateInfo.mbDateValues = false;
+    aDateInfo.mbAutoStart = sal_True;
+    aDateInfo.mbAutoEnd = sal_True;
 
     if( const DateTime* pMinDate = GetDateGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
-        aDateInfo.Start = GetDoubleFromDateTime( *pMinDate );
-        aDateInfo.AutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
+        aDateInfo.mfStart = GetDoubleFromDateTime( *pMinDate );
+        aDateInfo.mbAutoStart = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN );
     }
     if( const DateTime* pMaxDate = GetDateGroupLimit( EXC_SXFIELD_INDEX_MAX ) )
     {
-        aDateInfo.End = GetDoubleFromDateTime( *pMaxDate );
-        aDateInfo.AutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
+        aDateInfo.mfEnd = GetDoubleFromDateTime( *pMaxDate );
+        aDateInfo.mbAutoEnd = ::get_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX );
     }
     // GetDateGroupStep() returns a value for date type "day" in single date groups only
     if( const sal_Int16* pnStepValue = GetDateGroupStep() )
     {
-        aDateInfo.Step = *pnStepValue;
-        aDateInfo.DateValues = sal_True;
+        aDateInfo.mfStep = *pnStepValue;
+        aDateInfo.mbDateValues = sal_True;
     }
 
     return aDateInfo;
@@ -896,12 +898,12 @@ XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
 {
 }
 
-const String* XclImpPTItem::GetItemName() const
+const rtl::OUString* XclImpPTItem::GetItemName() const
 {
     if( mpCacheField )
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
             //! TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
-            return pCacheItem->IsEmpty() ? &String::EmptyString() : pCacheItem->GetText();
+            return pCacheItem->IsEmpty() ? NULL : pCacheItem->GetText();
     return 0;
 }
 
@@ -912,7 +914,7 @@ void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
 
 void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
 {
-    if( const String* pItemName = GetItemName() )
+    if (const rtl::OUString* pItemName = GetItemName())
     {
         ScDPSaveMember& rMember = *rSaveDim.GetMemberByName( *pItemName );
         rMember.SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
@@ -938,16 +940,16 @@ const XclImpPCField* XclImpPTField::GetCacheField() const
     return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
 }
 
-const String& XclImpPTField::GetFieldName() const
+rtl::OUString XclImpPTField::GetFieldName() const
 {
     const XclImpPCField* pField = GetCacheField();
-    return pField ? pField->GetFieldName( mrPTable.GetVisFieldNames() ) : String::EmptyString();
+    return pField ? pField->GetFieldName( mrPTable.GetVisFieldNames() ) : rtl::OUString();
 }
 
-const String& XclImpPTField::GetVisFieldName() const
+rtl::OUString XclImpPTField::GetVisFieldName() const
 {
-    const String* pVisName = maFieldInfo.GetVisName();
-    return pVisName ? *pVisName : String::EmptyString();
+    const rtl::OUString* pVisName = maFieldInfo.GetVisName();
+    return pVisName ? *pVisName : rtl::OUString();
 }
 
 const XclImpPTItem* XclImpPTField::GetItem( sal_uInt16 nItemIdx ) const
@@ -955,7 +957,7 @@ const XclImpPTItem* XclImpPTField::GetItem( sal_uInt16 nItemIdx ) const
     return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
 }
 
-const String* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
+const rtl::OUString* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
 {
     const XclImpPTItem* pItem = GetItem( nItemIdx );
     return pItem ? pItem->GetItemName() : 0;
@@ -1004,12 +1006,9 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
     {
-        const String* pName = GetItemName( maPageInfo.mnSelItem );
+        const rtl::OUString* pName = GetItemName( maPageInfo.mnSelItem );
         if (pName)
-        {
-            const OUString aName(*pName);
-            pSaveDim->SetCurrentPage(&aName);
-        }
+            pSaveDim->SetCurrentPage(pName);
     }
 }
 
@@ -1038,23 +1037,23 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 {
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::ConvertDataField - no data field" );
     OSL_ENSURE( !maDataInfoList.empty(), "XclImpPTField::ConvertDataField - no data field info" );
-    if( !maDataInfoList.empty() )
+    if (maDataInfoList.empty())
+        return;
+
+    rtl::OUString aFieldName = GetFieldName();
+    if (aFieldName.isEmpty())
+        return;
+
+    XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
+
+    ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName(aFieldName);
+    ConvertDataField( rSaveDim, *aIt );
+
+    // multiple data fields -> clone dimension
+    for( ++aIt; aIt != aEnd; ++aIt )
     {
-        const String& rFieldName = GetFieldName();
-        if( rFieldName.Len() > 0 )
-        {
-            XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
-
-            ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
-            ConvertDataField( rSaveDim, *aIt );
-
-            // multiple data fields -> clone dimension
-            for( ++aIt; aIt != aEnd; ++aIt )
-            {
-                ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( rSaveDim );
-                ConvertDataFieldInfo( rDupDim, *aIt );
-            }
-        }
+        ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( rSaveDim );
+        ConvertDataFieldInfo( rDupDim, *aIt );
     }
 }
 
@@ -1101,8 +1100,8 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ConvertFieldInfo( rSaveDim );
 
     // visible name
-    if( const String* pVisName = maFieldInfo.GetVisName() )
-        if( pVisName->Len() > 0 )
+    if (const rtl::OUString* pVisName = maFieldInfo.GetVisName())
+        if (!pVisName->isEmpty())
             rSaveDim.SetLayoutName( *pVisName );
 
     // subtotal function(s)
@@ -1164,31 +1163,31 @@ void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDa
 void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
 {
     // visible name
-    if( const String* pVisName = rDataInfo.GetVisName() )
-        if( pVisName->Len() > 0 )
-            rSaveDim.SetLayoutName( *pVisName );
+    const rtl::OUString* pVisName = rDataInfo.GetVisName();
+    if (pVisName && !pVisName->isEmpty())
+        rSaveDim.SetLayoutName(*pVisName);
 
     // aggregation function
     rSaveDim.SetFunction( static_cast< sal_uInt16 >( rDataInfo.GetApiAggFunc() ) );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
-    if( nRefType != ::com::sun::star::sheet::DataPilotFieldReferenceType::NONE )
+    DataPilotFieldReference aFieldRef;
+    aFieldRef.ReferenceType = nRefType;
+    const XclImpPTField* pRefField = mrPTable.GetField(rDataInfo.mnRefField);
+    if (pRefField)
     {
-        DataPilotFieldReference aFieldRef;
-        aFieldRef.ReferenceType = nRefType;
-
-        if( const XclImpPTField* pRefField = mrPTable.GetField( rDataInfo.mnRefField ) )
+        aFieldRef.ReferenceField = pRefField->GetFieldName();
+        aFieldRef.ReferenceItemType = rDataInfo.GetApiRefItemType();
+        if (aFieldRef.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::NAMED)
         {
-            aFieldRef.ReferenceField = pRefField->GetFieldName();
-            aFieldRef.ReferenceItemType = rDataInfo.GetApiRefItemType();
-            if( aFieldRef.ReferenceItemType == ::com::sun::star::sheet::DataPilotFieldReferenceItemType::NAMED )
-                if( const String* pRefItemName = pRefField->GetItemName( rDataInfo.mnRefItem ) )
-                    aFieldRef.ReferenceItemName = *pRefItemName;
+            const rtl::OUString* pRefItemName = pRefField->GetItemName(rDataInfo.mnRefItem);
+            if (pRefItemName)
+                aFieldRef.ReferenceItemName = *pRefItemName;
         }
-
-        rSaveDim.SetReferenceValue( &aFieldRef );
     }
+
+    rSaveDim.SetReferenceValue(&aFieldRef);
 }
 
 void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
@@ -1236,11 +1235,11 @@ const XclImpPTField* XclImpPivotTable::GetDataField( sal_uInt16 nDataFieldIdx ) 
     return 0;
 }
 
-const String& XclImpPivotTable::GetDataFieldName( sal_uInt16 nDataFieldIdx ) const
+rtl::OUString XclImpPivotTable::GetDataFieldName( sal_uInt16 nDataFieldIdx ) const
 {
     if( const XclImpPTField* pField = GetDataField( nDataFieldIdx ) )
         return pField->GetFieldName();
-    return EMPTY_STRING;
+    return rtl::OUString();
 }
 
 // records --------------------------------------------------------------------
@@ -1404,7 +1403,7 @@ void XclImpPivotTable::Convert()
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
         if( const XclImpPTField* pField = GetField( nField ) )
-            if( (pField->GetAxes() & EXC_SXVD_AXIS_ROWCOLPAGE) == 0 )
+            if (!pField->GetAxes())
                 pField->ConvertHiddenField( aSaveData );
 
     // data fields
@@ -1435,16 +1434,16 @@ void XclImpPivotTable::Convert()
     // create the DataPilot
     ScDPObject* pDPObj = new ScDPObject( GetDocPtr() );
     pDPObj->SetName( maPTInfo.maTableName );
-    if (maPTInfo.maDataName.Len() > 0)
+    if (!maPTInfo.maDataName.isEmpty())
         aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);
 
-    if (maPTViewEx9Info.maGrandTotalName.Len() > 0)
+    if (!maPTViewEx9Info.maGrandTotalName.isEmpty())
         aSaveData.SetGrandTotalName(maPTViewEx9Info.maGrandTotalName);
 
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
-    pDPObj->SetAlive( sal_True );
+    pDPObj->SetAlive(true);
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
     GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
@@ -1468,25 +1467,23 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 {
     // Apply merge flags for varoius datapilot controls.
 
-    ScDPOutputGeometry aGeometry(rOutRange, false, ScDPOutputGeometry::XLS);
+    ScDPOutputGeometry aGeometry(rOutRange, false);
     aGeometry.setColumnFieldCount(maPTInfo.mnColFields);
     aGeometry.setPageFieldCount(maPTInfo.mnPageFields);
     aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
-
-    // Excel includes data layout field in the row field count.  We need to
-    // subtract it.
-    bool bDataLayout = maPTInfo.mnDataFields > 1;
-    aGeometry.setRowFieldCount(maPTInfo.mnRowFields - static_cast<sal_uInt32>(bDataLayout));
+    aGeometry.setRowFieldCount(maPTInfo.mnRowFields);
 
     ScDocument& rDoc = GetDoc();
 
-    vector<ScAddress> aPageBtns;
-    aGeometry.getPageFieldPositions(aPageBtns);
-    vector<ScAddress>::const_iterator itr = aPageBtns.begin(), itrEnd = aPageBtns.end();
+    vector<const ScDPSaveDimension*> aFieldDims;
+    vector<ScAddress> aFieldBtns;
+
+    aGeometry.getPageFieldPositions(aFieldBtns);
+    vector<ScAddress>::const_iterator itr = aFieldBtns.begin(), itrEnd = aFieldBtns.end();
     for (; itr != itrEnd; ++itr)
     {
         sal_uInt16 nMFlag = SC_MF_BUTTON;
-        String aName;
+        rtl::OUString aName;
         rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
         if (rSaveData.HasInvisibleMember(aName))
             nMFlag |= SC_MF_HIDDEN_MEMBER;
@@ -1495,55 +1492,45 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), SC_MF_AUTO);
     }
 
-    vector<ScAddress> aColBtns;
-    aGeometry.getColumnFieldPositions(aColBtns);
-    itr    = aColBtns.begin();
-    itrEnd = aColBtns.end();
-    for (; itr != itrEnd; ++itr)
+    aGeometry.getColumnFieldPositions(aFieldBtns);
+    rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aFieldDims);
+    if (aFieldBtns.size() == aFieldDims.size())
     {
-        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
-        String aName;
-        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
-        if (rSaveData.HasInvisibleMember(aName))
-            nMFlag |= SC_MF_HIDDEN_MEMBER;
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
-    }
-
-    vector<ScAddress> aRowBtns;
-    aGeometry.getRowFieldPositions(aRowBtns);
-    if (aRowBtns.empty())
-    {
-        if (bDataLayout)
+        itr    = aFieldBtns.begin();
+        itrEnd = aFieldBtns.end();
+        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+        for (; itr != itrEnd; ++itr, ++itDim)
         {
-            // No row fields, but the data layout button exists.
-            SCROW nRow = aGeometry.getRowFieldHeaderRow();
-            SCCOL nCol = rOutRange.aStart.Col();
-            SCTAB nTab = rOutRange.aStart.Tab();
-            rDoc.ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
-        }
-    }
-    else
-    {
-        itr    = aRowBtns.begin();
-        itrEnd = aRowBtns.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
-            String aName;
-            rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
-            if (rSaveData.HasInvisibleMember(aName))
+            sal_Int16 nMFlag = SC_MF_BUTTON;
+            const ScDPSaveDimension* pDim = *itDim;
+            if (pDim->HasInvisibleMember())
                 nMFlag |= SC_MF_HIDDEN_MEMBER;
+            if (!pDim->IsDataLayout())
+                nMFlag |= SC_MF_BUTTON_POPUP;
             rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
-        if (bDataLayout)
+    }
+
+    aGeometry.getRowFieldPositions(aFieldBtns);
+    rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aFieldDims);
+    if (aFieldBtns.size() == aFieldDims.size())
+    {
+        itr    = aFieldBtns.begin();
+        itrEnd = aFieldBtns.end();
+        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+        for (; itr != itrEnd; ++itr, ++itDim)
         {
-            --itr; // move back to the last row field position.
-            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+            sal_Int16 nMFlag = SC_MF_BUTTON;
+            const ScDPSaveDimension* pDim = *itDim;
+            if (pDim->HasInvisibleMember())
+                nMFlag |= SC_MF_HIDDEN_MEMBER;
+            if (!pDim->IsDataLayout())
+                nMFlag |= SC_MF_BUTTON_POPUP;
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
     }
 }
 
-// ============================================================================
 // ============================================================================
 
 XclImpPivotTableManager::XclImpPivotTableManager( const XclImpRoot& rRoot ) :

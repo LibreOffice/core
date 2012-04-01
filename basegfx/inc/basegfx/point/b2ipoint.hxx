@@ -118,11 +118,6 @@ namespace basegfx
             contrast to B2DVector, applied.
         */
         B2IPoint& operator*=( const ::basegfx::B2DHomMatrix& rMat );
-
-        static const B2IPoint& getEmptyPoint()
-        {
-            return (const B2IPoint&) ::basegfx::B2ITuple::getEmptyTuple();
-        }
     };
 } // end of namespace basegfx
 

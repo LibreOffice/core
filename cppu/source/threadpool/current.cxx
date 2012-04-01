@@ -47,15 +47,6 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 
-//--------------------------------------------------------------------------------------------------
-class SAL_NO_VTABLE XInterface
-{
-public:
-    virtual void SAL_CALL slot_queryInterface() = 0;
-    virtual void SAL_CALL acquire() throw () = 0;
-    virtual void SAL_CALL release() throw () = 0;
-};
-//--------------------------------------------------------------------------------------------------
 static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 {
     static typelib_InterfaceTypeDescription * s_type_XCurrentContext = 0;

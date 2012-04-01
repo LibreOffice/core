@@ -61,7 +61,6 @@
 #include "olinetab.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
-#include "compiler.hxx"
 #include "viewopti.hxx"
 #include "docoptio.hxx"
 #include "scextopt.hxx"
@@ -1088,7 +1087,7 @@ void ImportExcel::TableOp( void )
     else
     {
         bTabTruncated = sal_True;
-        GetTracer().TraceInvalidRow(GetCurrScTab(), nLastRow, MAXROW);
+        GetTracer().TraceInvalidRow(nLastRow, MAXROW);
     }
 }
 

@@ -39,6 +39,8 @@
 #include <algorithm>
 #include <string.h>
 
+#include <l10ntools/HelpIndexer.hxx>
+
 // Extensible help
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
@@ -2107,84 +2109,57 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
 
                 m_xSFA->kill( aCreateTestFolder );
             }
-            catch (Exception &)
-            {}
+            catch (const Exception &)
+            {
+            }
 
             // TEST
             //bIsWriteAccess = false;
 
-            Reference< script::XInvocation > xInvocation;
-            Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
             try
             {
-                xInvocation = Reference< script::XInvocation >(
-                    m_xContext->getServiceManager()->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.help.HelpIndexer" )), m_xContext ) , UNO_QUERY );
+                rtl::OUString aLang;
+                sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
+                if( nLastSlash != -1 )
+                    aLang = aLangURL.copy( nLastSlash + 1 );
+                else
+                    aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
 
-                if( xInvocation.is() )
+		rtl::OUString aMod(RTL_CONSTASCII_USTRINGPARAM("help"));
+
+                rtl::OUString aZipDir = aLangURL;
+                if( !bIsWriteAccess )
                 {
-                    Sequence<uno::Any> aParamsSeq( bIsWriteAccess ? 6 : 8 );
-
-                    aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" )) );
-
-                    rtl::OUString aLang;
-                    sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
-                    if( nLastSlash != -1 )
-                        aLang = aLangURL.copy( nLastSlash + 1 );
-                    else
-                        aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
-                    aParamsSeq[1] = uno::makeAny( aLang );
-
-                    aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-mod" )) );
-                    aParamsSeq[3] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "help" )) );
-
-                    rtl::OUString aZipDir = aLangURL;
-                    if( !bIsWriteAccess )
+                    rtl::OUString aTempFileURL;
+                    ::osl::FileBase::RC eErr = ::osl::File::createTempFile( 0, 0, &aTempFileURL );
+                    if( eErr == ::osl::FileBase::E_None )
                     {
-                        rtl::OUString aTempFileURL;
-                        ::osl::FileBase::RC eErr = ::osl::File::createTempFile( 0, 0, &aTempFileURL );
-                        if( eErr == ::osl::FileBase::E_None )
+                        rtl::OUString aTempDirURL = aTempFileURL;
+                        try
                         {
-                            rtl::OUString aTempDirURL = aTempFileURL;
-                            try
-                            {
-                                m_xSFA->kill( aTempDirURL );
-                            }
-                            catch (Exception &)
-                            {}
-                            m_xSFA->createFolder( aTempDirURL );
-
-                            aZipDir = aTempDirURL;
-                            o_rbTemporary = true;
+                            m_xSFA->kill( aTempDirURL );
                         }
+                        catch (const Exception &)
+                        {
+                        }
+                        m_xSFA->createFolder( aTempDirURL );
+
+                        aZipDir = aTempDirURL;
+                        o_rbTemporary = true;
                     }
-
-                    aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-zipdir" )) );
-                    rtl::OUString aSystemPath;
-                    osl::FileBase::getSystemPathFromFileURL( aZipDir, aSystemPath );
-                    aParamsSeq[5] = uno::makeAny( aSystemPath );
-
-                    if( !bIsWriteAccess )
-                    {
-                        aParamsSeq[6] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-srcdir" )) );
-                        rtl::OUString aSrcDirVal;
-                        osl::FileBase::getSystemPathFromFileURL( aLangURL, aSrcDirVal );
-                        aParamsSeq[7] = uno::makeAny( aSrcDirVal );
-                    }
-
-                    Sequence< sal_Int16 > aOutParamIndex;
-                    Sequence< uno::Any > aOutParam;
-                    uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "createIndex" )),
-                        aParamsSeq, aOutParamIndex, aOutParam );
-
-                    if( bIsWriteAccess )
-                        aIndexFolder = implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
-                    else
-                        aIndexFolder = aZipDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/help.idxl" ));
                 }
+
+		HelpIndexer aIndexer(aLang, aMod, aLangURL, aZipDir);
+		aIndexer.indexDocuments();
+
+                if( bIsWriteAccess )
+                    aIndexFolder = implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
+                else
+                    aIndexFolder = aZipDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/help.idxl" ));
             }
-            catch (Exception &)
-            {}
+            catch (const Exception &)
+            {
+            }
         }
     }
 
@@ -2201,8 +2176,9 @@ void IndexFolderIterator::deleteTempIndexFolder( const rtl::OUString& aIndexFold
         {
             m_xSFA->kill( aTmpFolder );
         }
-        catch (Exception &)
-        {}
+        catch (const Exception &)
+        {
+        }
     }
 }
 

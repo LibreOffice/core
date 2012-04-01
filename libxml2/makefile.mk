@@ -137,6 +137,10 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(debug)"!=""
 CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
@@ -148,7 +152,7 @@ OUTDIR2INC=include$/libxml
 .IF "$(OS)"=="MACOSX"
 EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
-OUT2BIN+=.libs$/xmllint
+OUT2BIN_NONE+=.libs$/xmllint
 OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=.libs$/libxml2.a

@@ -32,7 +32,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

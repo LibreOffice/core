@@ -38,7 +38,6 @@
 #include <svl/stritem.hxx>
 #include <svtools/svmedit.hxx>
 
-#include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svtools/headbar.hxx>
@@ -212,9 +211,9 @@ private:
     sal_Bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
-    DECL_LINK(          DeleteHdl, PushButton * );
-    DECL_LINK(          SignatureHdl, PushButton * );
-    DECL_LINK( ChangePassHdl, PushButton * );
+    DECL_LINK(DeleteHdl, void *);
+    DECL_LINK(SignatureHdl, void *);
+    DECL_LINK(ChangePassHdl, void *);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
@@ -300,8 +299,8 @@ private:
     DECL_LINK( ClickHdlNoUpdate, Control* );
     DECL_LINK( ClickHdlReload, Control* );
     DECL_LINK( ClickHdlForward, Control* );
-    DECL_LINK( ClickHdlBrowseURL, PushButton* );
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK(ClickHdlBrowseURL, void *);
+    DECL_LINK(DialogClosedHdl, void *);
 
         using TabPage::DeactivatePage;
 
@@ -404,7 +403,7 @@ public:
     CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     ~CustomPropertiesEditButton();
 
-    DECL_LINK(ClickHdl, PushButton*);
+    DECL_LINK(ClickHdl, void *);
 };
 
 class CustomPropertiesRemoveButton : public ImageButton
@@ -494,8 +493,8 @@ private:
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
     //add lose focus handlers of Date/TimeField?
 
-    DECL_LINK(  EditTimeoutHdl, Timer* );
-    DECL_LINK(  BoxTimeoutHdl, Timer* );
+    DECL_LINK(EditTimeoutHdl, void *);
+    DECL_LINK(BoxTimeoutHdl, void *);
 
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
@@ -553,7 +552,7 @@ private:
     PushButton              m_aAddBtn;
     FixedText               m_aPropertiesFT; // Sym2_5121----, Moved by Steve Yin
 
-    DECL_LINK(  AddHdl, PushButton* );
+    DECL_LINK(AddHdl, void *);
 
     using TabPage::DeactivatePage;
 

@@ -298,7 +298,7 @@ private:
     DECL_DLLPRIVATE_LINK(          ImplUpdateHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplResetAutoSizeTriesHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
-    DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, ToolBox* );
+    DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, void* );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);

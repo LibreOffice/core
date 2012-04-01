@@ -216,23 +216,6 @@ void XMLErrors::AddRecord(
     }
 }
 
-void XMLErrors::AddRecord(
-    sal_Int32 nId,
-    const Sequence<OUString> & rParams,
-    const OUString& rExceptionMessage)
-{
-    OUString sEmpty;
-    AddRecord( nId, rParams, rExceptionMessage, -1, -1, sEmpty, sEmpty );
-}
-
-void XMLErrors::AddRecord(
-    sal_Int32 nId,
-    const Sequence<OUString> & rParams)
-{
-    OUString sEmpty;
-    AddRecord( nId, rParams, sEmpty, -1, -1, sEmpty, sEmpty );
-}
-
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
     throw( SAXParseException )
 {

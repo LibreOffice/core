@@ -330,7 +330,7 @@ protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getErrorBarsGroupShape( VDataSeries& rDataSeries
             , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+                ::com::sun::star::drawing::XShapes >& xTarget, bool bYError );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createDataLabel( const ::com::sun::star::uno::Reference<
@@ -377,6 +377,12 @@ protected: //methods
         , double* pfScaledLogicX
         );
 
+    virtual void createErrorBar_X( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+        , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
+        , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget
+        , double* pfScaledLogicX=0 );
+
     virtual void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
@@ -407,7 +413,7 @@ protected: //methods
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap* pOverwriteMap=0 );
 
-    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 
     VDataSeries* getFirstSeries() const;
 

@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -43,20 +45,14 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmlenums.hxx>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-
-#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
-
-//------------------------------------------------------------------
 
 class XMLMyList
 {
@@ -449,23 +445,10 @@ void XMLDocumentSettingsContext::EndElement()
         }
     }
 
-    sal_Bool bLoadDocPrinter( sal_True );
-
-    try
-    {
-        ::comphelper::ConfigurationHelper::readDirectKey(
-            ::comphelper::getProcessServiceFactory(),
-            C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
-            ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
-        if ( !bLoadDocPrinter )
+        if (!officecfg::Office::Common::Save::Document::LoadPrinter::get())
         {
             sal_Int32 i = aSeqConfigProps.getLength() - 1;
             int nFound = 0;

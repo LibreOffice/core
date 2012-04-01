@@ -59,7 +59,7 @@ sal_Bool SAL_CALL SwVbaCheckBox::getValue() throw ( uno::RuntimeException )
     {
         if( mxFormField->getParamName(i).equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX_CHECKED ) )
         {
-            if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAscii("on") )
+            if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
                 bValue = sal_True;
             else
                 bValue = sal_False;
@@ -75,11 +75,10 @@ void SAL_CALL SwVbaCheckBox::setValue( sal_Bool value ) throw ( uno::RuntimeExce
     mxFormField->addParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ECMA_FORMCHECKBOX_CHECKED )), sValue, sal_True );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaCheckBox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaCheckBox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCheckBox"));
 }
 
 uno::Sequence< rtl::OUString >

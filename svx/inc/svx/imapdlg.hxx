@@ -145,7 +145,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
                         DECL_LINK( GraphSizeHdl, IMapWindow* );
                         DECL_LINK( URLModifyHdl, void* );
                         DECL_LINK( URLLoseFocusHdl, void* );
-                        DECL_LINK( UpdateHdl, Timer* );
+                        DECL_LINK(UpdateHdl, void *);
                         DECL_LINK( TbxUpdateHdl, Timer* );
                         DECL_LINK( StateHdl, IMapWindow* );
                         DECL_LINK( MiscHdl, void* );
@@ -173,7 +173,6 @@ public:
     const ImageMap&     GetImageMap() const;
 
     void                SetTargetList( const TargetList& rTargetList );
-    const TargetList&   GetTargetList() const;
 
     void                Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );

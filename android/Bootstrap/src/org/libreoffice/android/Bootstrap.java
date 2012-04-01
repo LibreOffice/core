@@ -41,15 +41,20 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
 
-// We override NativeActivity so that we can get at the intent of the
+// We extend NativeActivity so that we can get at the intent of the
 // activity and its extra parameters, that we use to tell us what
 // actual LibreOffice "program" to run. I.e. something that on desktop
-// OSes would be a program, but for Androis is actually built as a
-// shared object, with an "lo_main" function.
+// OSes would be a program, but for Android is actually built as a
+// shared object, with a "lo_main" function.
 
 public class Bootstrap extends NativeActivity
 {
     private static String TAG = "lo-bootstrap";
+
+    // Native methods in this class are all implemented in
+    // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
+    // System.loadLibrary() and Android's JNI works only to such libraries, it
+    // seems.
 
     private static native boolean setup(String dataDir,
                                         String apkFile,
@@ -78,6 +83,19 @@ public class Bootstrap extends NativeActivity
 
     // Wrapper for putenv()
     public static native void putenv(String string);
+
+    // A wrapper for InitVCL() in libvcl (svmain.cxx), called indirectly
+    // through the lo-bootstrap library
+    public static native void initVCL();
+
+    // A wrapper for osl_setCommandArgs(). Before calling
+    // osl_setCommandArgs(), argv[0] is prefixed with the parent directory of
+    // where the lo-bootstrap library is.
+    public static native void setCommandArgs(String[] argv);
+
+    // A wrapper for InitUCBHelper() in he ucbhelper library
+    // (contentbroker.cxx), also this called indirectly through the lo-bootstrap library
+    public static native void initUCBHelper();
 
     public static void setup(Activity activity)
     {
@@ -136,15 +154,15 @@ public class Bootstrap extends NativeActivity
 
         String[] argv = CommandLine.split(cmdLine);
 
-        // Handle env var assignments in the command line. Actually
-        // not sure if this works, are environments per-thread in
-        // Android? This code runs in a different thread than that in
-        // which lo_main etc will run.
+        // Handle env var assignments in the command line.
         while (argv.length > 0 &&
                argv[0].matches("[A-Z_]+=.*")) {
             putenv(argv[0]);
             argv = Arrays.copyOfRange(argv, 1, argv.length-1);
         }
+
+        // TMPDIR is used by osl_getTempDirURL()
+        putenv("TMPDIR=" + getCacheDir().getAbsolutePath());
 
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
         // pathname of the mainLibrary.

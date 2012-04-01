@@ -66,8 +66,8 @@ private:
     ImageButton         aNextBtn;
     HelpButton          aHelpBtn;
 
-    String              aText;
-    String              aType;
+    rtl::OUString       aText;
+    rtl::OUString       aType;
 
     sal_Bool                bNew;
     sal_Bool                bIsUrl;
@@ -78,12 +78,12 @@ private:
     sfx2::FileDialogHelper* pFileDlg;
     Window*                 pOldDefDlgParent;
 
-    DECL_LINK( OKHdl, Button* );
-    DECL_LINK( PrevHdl, Button* );
-    DECL_LINK( NextHdl, Button* );
-    DECL_LINK( RadioButtonHdl, RadioButton* pBtn );
+    DECL_LINK(OKHdl, void *);
+    DECL_LINK(PrevHdl, void *);
+    DECL_LINK(NextHdl, void *);
+    DECL_LINK(RadioButtonHdl, void *);
     DECL_LINK( InsertFileHdl, PushButton * );
-    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper * );
+    DECL_LINK(DlgClosedHdl, void *);
 
     virtual void    Apply();
 
@@ -97,9 +97,9 @@ public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
-    String              GetText() { return aText; }
+    rtl::OUString       GetText() { return aText; }
 
-    String              GetType() { return aType; }
+    rtl::OUString       GetType() { return aType; }
 
     sal_Bool                IsUrl() { return bIsUrl; }
     sal_Bool                IsNew() { return bNew; }

@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     sal_Bool        bGrfNotFound;
 
     protected:
-        DECL_LINK(FormatHdl_Impl, Timer*);
+        DECL_LINK(FormatHdl_Impl, void *);
 
     void            SetGrfNotFound(sal_Bool bSet) {bGrfNotFound = bSet;}
     sal_Bool            IsGrfNotFound()const {return bGrfNotFound;}

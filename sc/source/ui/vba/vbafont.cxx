@@ -321,10 +321,10 @@ ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException )
     std::vector< rtl::OUString >::iterator it;
     for( it = aTokens.begin(); it != aTokens.end(); ++it )
     {
-        if( (*it).equalsIgnoreAsciiCaseAscii( "Bold" ) )
+        if( (*it).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Bold")) )
             bBold = sal_True;
 
-        if( (*it).equalsIgnoreAsciiCaseAscii( "Italic" ) )
+        if( (*it).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Italic")) )
             bItalic = sal_True;
     }
 
@@ -482,11 +482,10 @@ ScVbaFont::getOutlineFont() throw (uno::RuntimeException)
     return mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharContoured" ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaFont::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFont") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFont"));
 }
 
 uno::Sequence< rtl::OUString >

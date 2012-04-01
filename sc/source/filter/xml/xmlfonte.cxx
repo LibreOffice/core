@@ -38,7 +38,6 @@
 
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include "document.hxx"
 #include "docpool.hxx"

@@ -188,7 +188,7 @@ void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SwInsertGrfRulerDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
     return 0;

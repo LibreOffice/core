@@ -87,7 +87,6 @@
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
 #include <svx/xftsfit.hxx>
-#include <svx/xtextit0.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/drawitem.hxx>
 

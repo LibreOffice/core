@@ -170,7 +170,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             if (*itr == nTab1)
                 maTabs[*itr]->PutCell(nCol1, nRow1, pCell);
             else
-                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
+                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->Clone(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
         }
     }
 
@@ -306,7 +306,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 itr = rMark.begin();
                 for (; itr != itrEnd && *itr < nMax; ++itr)
                 if( maTabs[*itr] )
-                    maTabs[*itr]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
+                    maTabs[*itr]->PutCell( j, k, aRefCell.Clone( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
             }
 }
 

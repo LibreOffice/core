@@ -138,11 +138,10 @@ SwVbaColumns::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaColumns::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaColumns") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaColumns"));
 }
 
 uno::Sequence<rtl::OUString>

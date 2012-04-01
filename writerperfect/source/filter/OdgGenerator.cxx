@@ -46,13 +46,16 @@
 // remove this
 #define MULTIPAGE_WORKAROUND 1
 
+namespace
+{
+
 static inline double getAngle(double bx, double by)
 {
     return fmod(2*M_PI + (by > 0.0 ? 1.0 : -1.0) * acos( bx / sqrt(bx * bx + by * by) ), 2*M_PI);
 }
 
-static void getEllipticalArcBBox(double x1, double y1,
-                                 double rx, double ry, double phi, bool largeArc, bool sweep, double x2, double y2,
+static void getEllipticalArcBBox(double x0, double y0,
+                                 double rx, double ry, double phi, bool largeArc, bool sweep, double x, double y,
                                  double &xmin, double &ymin, double &xmax, double &ymax)
 {
     phi *= M_PI/180;
@@ -63,16 +66,16 @@ static void getEllipticalArcBBox(double x1, double y1,
 
     if (rx == 0.0 || ry == 0.0)
     {
-        xmin = (x1 < x2 ? x1 : x2);
-        xmax = (x1 > x2 ? x1 : x2);
-        ymin = (y1 < y2 ? y1 : y2);
-        ymax = (y1 > y2 ? y1 : y2);
+        xmin = (x0 < x ? x0 : x);
+        xmax = (x0 > x ? x0 : x);
+        ymin = (y0 < y ? y0 : y);
+        ymax = (y0 > y ? y0 : y);
         return;
     }
 
     // F.6.5.1
-    const double x1prime = cos(phi)*(x1 - x2)/2 + sin(phi)*(y1 - y2)/2;
-    const double y1prime = -sin(phi)*(x1 - x2)/2 + cos(phi)*(y1 - y2)/2;
+    const double x1prime = cos(phi)*(x0 - x)/2 + sin(phi)*(y0 - y)/2;
+    const double y1prime = -sin(phi)*(x0 - x)/2 + cos(phi)*(y0 - y)/2;
 
     // F.6.5.2
     double radicant = (rx*rx*ry*ry - rx*rx*y1prime*y1prime - ry*ry*x1prime*x1prime)/(rx*rx*y1prime*y1prime + ry*ry*x1prime*x1prime);
@@ -84,10 +87,10 @@ static void getEllipticalArcBBox(double x1, double y1,
         radicant = y1prime*y1prime + x1prime*x1prime/(ratio*ratio);
         if (radicant < 0.0)
         {
-            xmin = (x1 < x2 ? x1 : x2);
-            xmax = (x1 > x2 ? x1 : x2);
-            ymin = (y1 < y2 ? y1 : y2);
-            ymax = (y1 > y2 ? y1 : y2);
+            xmin = (x0 < x ? x0 : x);
+            xmax = (x0 > x ? x0 : x);
+            ymin = (y0 < y ? y0 : y);
+            ymax = (y0 > y ? y0 : y);
             return;
         }
         ry=sqrt(radicant);
@@ -102,8 +105,8 @@ static void getEllipticalArcBBox(double x1, double y1,
     }
 
     // F.6.5.3
-    double cx = cxprime*cos(phi) - cyprime*sin(phi) + (x1 + x2)/2;
-    double cy = cxprime*sin(phi) + cyprime*cos(phi) + (y1 + y2)/2;
+    double cx = cxprime*cos(phi) - cyprime*sin(phi) + (x0 + x)/2;
+    double cy = cxprime*sin(phi) + cyprime*cos(phi) + (y0 + y)/2;
 
     // now compute bounding box of the whole ellipse
 
@@ -180,8 +183,8 @@ static void getEllipticalArcBBox(double x1, double y1,
         std::swap(ymin,ymax);
         std::swap(tymin,tymax);
     }
-    double angle1 = getAngle(x1 - cx, y1 - cy);
-    double angle2 = getAngle(x2 - cx, y2 - cy);
+    double angle1 = getAngle(x0 - cx, y0 - cy);
+    double angle2 = getAngle(x - cx, y - cy);
 
     // for sweep == 0 it is normal to have delta theta < 0
     // but we don't care about the rotation direction for bounding box
@@ -201,17 +204,120 @@ static void getEllipticalArcBBox(double x1, double y1,
 
     // Check txmin
     if ((!otherArc && (angle1 > txmin || angle2 < txmin)) || (otherArc && !(angle1 > txmin || angle2 < txmin)))
-        xmin = x1 < x2 ? x1 : x2;
+        xmin = x0 < x ? x0 : x;
     // Check txmax
     if ((!otherArc && (angle1 > txmax || angle2 < txmax)) || (otherArc && !(angle1 > txmax || angle2 < txmax)))
-        xmax = x1 > x2 ? x1 : x2;
+        xmax = x0 > x ? x0 : x;
     // Check tymin
     if ((!otherArc && (angle1 > tymin || angle2 < tymin)) || (otherArc && !(angle1 > tymin || angle2 < tymin)))
-        ymin = y1 < y2 ? y1 : y2;
+        ymin = y0 < y ? y0 : y;
     // Check tymax
     if ((!otherArc && (angle1 > tymax || angle2 < tymax)) || (otherArc && !(angle1 > tymax || angle2 < tymax)))
-        ymax = y1 > y2 ? y1 : y2;
+        ymax = y0 > y ? y0 : y;
 }
+
+static inline double quadraticExtreme(double t, double a, double b, double c)
+{
+    return (1.0-t)*(1.0-t)*a + 2.0*(1.0-t)*t*b + t*t*c;
+}
+
+static inline double quadraticDerivative(double a, double b, double c)
+{
+    double denominator = a - 2.0*b + c;
+    if (fabs(denominator) != 0.0)
+        return (a - b)/denominator;
+    return -1.0;
+}
+
+static void getQuadraticBezierBBox(double x0, double y0, double x1, double y1, double x, double y,
+                                   double &xmin, double &ymin, double &xmax, double &ymax)
+{
+    xmin = x0 < x ? x0 : x;
+    xmax = x0 > x ? x0 : x;
+    ymin = y0 < y ? y0 : y;
+    ymax = y0 > y ? y0 : y;
+
+    double t = quadraticDerivative(x0, x1, x);
+    if(t>=0 && t<=1)
+    {
+        double tmpx = quadraticExtreme(t, x0, x1, x);
+        xmin = tmpx < xmin ? tmpx : xmin;
+        xmax = tmpx > xmax ? tmpx : xmax;
+    }
+
+    t = quadraticDerivative(y0, y1, y);
+    if(t>=0 && t<=1)
+    {
+        double tmpy = quadraticExtreme(t, y0, y1, y);
+        ymin = tmpy < ymin ? tmpy : ymin;
+        ymax = tmpy > ymax ? tmpy : ymax;
+    }
+}
+
+static inline double cubicBase(double t, double a, double b, double c, double d)
+{
+    return (1.0-t)*(1.0-t)*(1.0-t)*a + 3.0*(1.0-t)*(1.0-t)*t*b + 3.0*(1.0-t)*t*t*c + t*t*t*d;
+}
+
+#if 0
+static std::vector<double> cubicExtremes(double a, double b, double c, double d)
+{
+    std::vector<double> vec;
+    double u = -a + 2*b - c;
+    double v = sqrt((-a*(c-d) + b*b - b*(c+d) + c*c));
+    double w = -a + 3.0*b - 3.0*c + d;
+    if (w != 0.0)
+    {
+        vec.push_back((u-v)/w);
+        vec.push_back((u+v)/w);
+    }
+    return vec;
+}
+#endif
+
+static void getCubicBezierBBox(double x0, double y0, double x1, double y1, double x2, double y2, double x, double y,
+                               double &xmin, double &ymin, double &xmax, double &ymax)
+{
+    xmin = x0 < x ? x0 : x;
+    xmax = x0 > x ? x0 : x;
+    ymin = y0 < y ? y0 : y;
+    ymax = y0 > y ? y0 : y;
+
+#if 0
+    std::vector<double> extremes = cubicExtremes(x0, x1, x2, x);
+    for(std::vector<double>::iterator iterX = extremes.begin(); iterX != extremes.end(); ++iterX)
+    {
+        if(*iterX >= 0 && *iterX <= 1)
+        {
+            double tmpx = cubicBase(*iterX, x0, x1, x2, x);
+            xmin = tmpx < xmin ? tmpx : xmin;
+            xmax = tmpx > xmax ? tmpx : xmax;
+        }
+    }
+
+    extremes = cubicExtremes(y0, y1, y2, y);
+    for(std::vector<double>::iterator iterY = extremes.begin(); iterY != extremes.end(); ++iterY)
+    {
+        if(*iterY>=0.0 && *iterY<=1.0)
+        {
+            double tmpy = cubicBase(*iterY, y0, y1, y2, y);
+            ymin = tmpy < ymin ? tmpy : ymin;
+            ymax = tmpy > ymax ? tmpy : ymax;
+        }
+    }
+#else
+    for (double t = 0.0; t <= 1.0; t+=0.01)
+    {
+        double tmpx = cubicBase(t, x0, x1, x2, x);
+        xmin = tmpx < xmin ? tmpx : xmin;
+        xmax = tmpx > xmax ? tmpx : xmax;
+        double tmpy = cubicBase(t, y0, y1, y2, y);
+        ymin = tmpy < ymin ? tmpy : ymin;
+        ymax = tmpy > ymax ? tmpy : ymax;
+    }
+#endif
+}
+
 
 static WPXString doubleToString(const double value)
 {
@@ -222,7 +328,7 @@ static WPXString doubleToString(const double value)
 #else
     std::string decimalPoint(".");
 #endif
-    if ((decimalPoint.size() == 0) || (decimalPoint == "."))
+    if (decimalPoint.empty() || (decimalPoint == "."))
         return tempString;
     std::string stringValue(tempString.cstr());
     if (!stringValue.empty())
@@ -233,6 +339,8 @@ static WPXString doubleToString(const double value)
     }
     return WPXString(stringValue.c_str());
 }
+
+} // anonymous namespace
 
 class OdgGeneratorPrivate
 {
@@ -248,6 +356,7 @@ public:
     // graphics styles
     std::vector<DocumentElement *> mGraphicsStrokeDashStyles;
     std::vector<DocumentElement *> mGraphicsGradientStyles;
+    std::vector<DocumentElement *> mGraphicsBitmapStyles;
     std::vector<DocumentElement *> mGraphicsMarkerStyles;
     std::vector<DocumentElement *> mGraphicsAutomaticStyles;
 
@@ -270,6 +379,7 @@ public:
     ::WPXPropertyListVector mxGradient;
     ::WPXPropertyListVector mxMarker;
     int miGradientIndex;
+    int miBitmapIndex;
     int miStartMarkerIndex;
     int miEndMarkerIndex;
     int miDashIndex;
@@ -289,6 +399,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mBodyElements(),
     mGraphicsStrokeDashStyles(),
     mGraphicsGradientStyles(),
+    mGraphicsBitmapStyles(),
     mGraphicsAutomaticStyles(),
     mPageAutomaticStyles(),
     mPageMasterStyles(),
@@ -299,6 +410,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mxStyle(), mxGradient(),
     mxMarker(),
     miGradientIndex(1),
+    miBitmapIndex(1),
     miStartMarkerIndex(1),
     miEndMarkerIndex(1),
     miDashIndex(1),
@@ -340,6 +452,12 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
             iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
     {
         delete((*iterGraphicsGradientStyles));
+    }
+
+    for (std::vector<DocumentElement *>::iterator iterGraphicsBitmapStyles = mGraphicsBitmapStyles.begin();
+            iterGraphicsBitmapStyles != mGraphicsBitmapStyles.end(); ++iterGraphicsBitmapStyles)
+    {
+        delete((*iterGraphicsBitmapStyles));
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsMarkerStyles = mGraphicsMarkerStyles.begin();
@@ -451,6 +569,12 @@ OdgGenerator::~OdgGenerator()
                 iterGraphicsGradientStyles != mpImpl->mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
         {
             (*iterGraphicsGradientStyles)->write(mpImpl->mpHandler);
+        }
+
+        for (std::vector<DocumentElement *>::const_iterator iterGraphicsBitmapStyles = mpImpl->mGraphicsBitmapStyles.begin();
+                iterGraphicsBitmapStyles != mpImpl->mGraphicsBitmapStyles.end(); ++iterGraphicsBitmapStyles)
+        {
+            (*iterGraphicsBitmapStyles)->write(mpImpl->mpHandler);
         }
 
         for (std::vector<DocumentElement *>::const_iterator iterGraphicsMarkerStyles = mpImpl->mGraphicsMarkerStyles.begin();
@@ -847,21 +971,31 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
         qx = (qx < path[k]["svg:x"]->getDouble()) ? path[k]["svg:x"]->getDouble() : qx;
         qy = (qy < path[k]["svg:y"]->getDouble()) ? path[k]["svg:y"]->getDouble() : qy;
 
+        double xmin, xmax, ymin, ymax;
+
         if(path[k]["libwpg:path-action"]->getStr() == "C")
         {
-            px = (px > path[k]["svg:x1"]->getDouble()) ? path[k]["svg:x1"]->getDouble() : px;
-            py = (py > path[k]["svg:y1"]->getDouble()) ? path[k]["svg:y1"]->getDouble() : py;
-            qx = (qx < path[k]["svg:x1"]->getDouble()) ? path[k]["svg:x1"]->getDouble() : qx;
-            qy = (qy < path[k]["svg:y1"]->getDouble()) ? path[k]["svg:y1"]->getDouble() : qy;
-            px = (px > path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : px;
-            py = (py > path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : py;
-            qx = (qx < path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : qx;
-            qy = (qy < path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : qy;
+            getCubicBezierBBox(lastX, lastY, path[k]["svg:x1"]->getDouble(), path[k]["svg:y1"]->getDouble(),
+                               path[k]["svg:x2"]->getDouble(), path[k]["svg:y2"]->getDouble(),
+                               path[k]["svg:x"]->getDouble(), path[k]["svg:y"]->getDouble(), xmin, ymin, xmax, ymax);
+
+            px = (px > xmin ? xmin : px);
+            py = (py > ymin ? ymin : py);
+            qx = (qx < xmax ? xmax : qx);
+            qy = (qy < ymax ? ymax : qy);
+        }
+        if(path[k]["libwpg:path-action"]->getStr() == "Q")
+        {
+            getQuadraticBezierBBox(lastX, lastY, path[k]["svg:x1"]->getDouble(), path[k]["svg:y1"]->getDouble(),
+                                   path[k]["svg:x"]->getDouble(), path[k]["svg:y"]->getDouble(), xmin, ymin, xmax, ymax);
+
+            px = (px > xmin ? xmin : px);
+            py = (py > ymin ? ymin : py);
+            qx = (qx < xmax ? xmax : qx);
+            qy = (qy < ymax ? ymax : qy);
         }
         if(path[k]["libwpg:path-action"]->getStr() == "A")
         {
-            double xmin, xmax, ymin, ymax;
-
             getEllipticalArcBBox(lastX, lastY, path[k]["svg:rx"]->getDouble(), path[k]["svg:ry"]->getDouble(),
                                  path[k]["libwpg:rotate"] ? path[k]["libwpg:rotate"]->getDouble() : 0.0,
                                  path[k]["libwpg:large-arc"] ? path[k]["libwpg:large-arc"]->getInt() : 1,
@@ -921,6 +1055,13 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
             sElement.sprintf("C%i %i %i %i %i %i", (unsigned)((path[i]["svg:x1"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x2"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y2"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
+                             (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
+            sValue.append(sElement);
+        }
+        else if (path[i]["libwpg:path-action"]->getStr() == "Q")
+        {
+            sElement.sprintf("Q%i %i %i %i", (unsigned)((path[i]["svg:x1"]->getDouble()-px)*2540),
+                             (unsigned)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                              (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
@@ -1220,6 +1361,20 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             delete pDrawOpacityElement;
     }
 
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "bitmap" &&
+            mxStyle["draw:fill-image"] && mxStyle["libwpg:mime-type"])
+    {
+        TagOpenElement *pDrawBitmapElement = new TagOpenElement("draw:fill-image");
+        WPXString sValue;
+        sValue.sprintf("Bitmap_%i", miBitmapIndex++);
+        pDrawBitmapElement->addAttribute("draw:name", sValue);
+        mGraphicsBitmapStyles.push_back(pDrawBitmapElement);
+        mGraphicsBitmapStyles.push_back(new TagOpenElement("office:binary-data"));
+        mGraphicsBitmapStyles.push_back(new CharDataElement(mxStyle["draw:fill-image"]->getStr()));
+        mGraphicsBitmapStyles.push_back(new TagCloseElement("office:binary-data"));
+        mGraphicsBitmapStyles.push_back(new TagCloseElement("draw:fill-image"));
+    }
+
     TagOpenElement *pStyleStyleElement = new TagOpenElement("style:style");
     WPXString sValue;
     sValue.sprintf("gr%i",  miGraphicsStyleIndex);
@@ -1311,6 +1466,30 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             else
                 pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
         }
+    }
+
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "bitmap")
+    {
+        if (mxStyle["draw:fill-image"] && mxStyle["libwpg:mime-type"])
+        {
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "bitmap");
+            sValue.sprintf("Bitmap_%i", miBitmapIndex-1);
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-name", sValue);
+            if (mxStyle["svg:width"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-width", mxStyle["svg:width"]->getStr());
+            if (mxStyle["svg:height"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-height", mxStyle["svg:height"]->getStr());
+            if (mxStyle["style:repeat"])
+                pStyleGraphicsPropertiesElement->addAttribute("style:repeat", mxStyle["style:repeat"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point", mxStyle["draw:fill-image-ref-point"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point-x"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-x", mxStyle["draw:fill-image-ref-point-x"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point-y"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-y", mxStyle["draw:fill-image-ref-point-y"]->getStr());
+        }
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
     }
 
 

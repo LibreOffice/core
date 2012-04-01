@@ -1062,11 +1062,10 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) thro
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaChart::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaChart") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChart"));
 }
 
 uno::Sequence< rtl::OUString >

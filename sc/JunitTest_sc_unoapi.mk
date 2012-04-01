@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,sc_unoapi,SRCDIR))
+$(eval $(call gb_JunitTest_JunitTest,sc_unoapi))
 
 $(eval $(call gb_JunitTest_add_classes,sc_unoapi, \
     org.openoffice.test.UnoApiTest \

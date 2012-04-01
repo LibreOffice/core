@@ -391,11 +391,10 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
         return uno::makeAny( xVbShape );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShapeRange") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShapeRange"));
 }
 
 uno::Sequence< rtl::OUString >

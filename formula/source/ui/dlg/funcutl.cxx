@@ -873,7 +873,7 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
 #*  Output:     ---
 #*
 #************************************************************************/
-IMPL_LINK( EditBox, ChangedHdl, EditBox*, EMPTYARG )
+IMPL_LINK_NOARG(EditBox, ChangedHdl)
 {
     if(pMEdit!=NULL)
     {
@@ -999,7 +999,7 @@ void RefEdit::LoseFocus()
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK( RefEdit, UpdateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(RefEdit, UpdateHdl)
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference( GetText() );

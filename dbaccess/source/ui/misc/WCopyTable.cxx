@@ -766,7 +766,7 @@ OCopyTableWizard::~OCopyTableWizard()
     m_aDestTypeInfoIndex.clear();
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( OCopyTableWizard, ImplPrevHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
 {
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
@@ -786,7 +786,7 @@ IMPL_LINK( OCopyTableWizard, ImplPrevHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OCopyTableWizard, ImplNextHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
 {
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
@@ -889,7 +889,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     return bRet;
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 {
     m_ePressed = WIZARD_FINISH;
     sal_Bool bFinish = DeactivatePage() != 0;
@@ -1002,7 +1002,7 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUStri
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
+IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
 {
     OWizardPage* pCurrent = (OWizardPage*)GetPage(GetCurLevel());
     if(pCurrent)
@@ -1430,7 +1430,7 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
                 while ( xRs->next() )
                 {
                     ::rtl::OUString sValue = xRow->getString( 1 );
-                    if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCaseAscii( "View" ) )
+                    if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("View")) )
                     {
                         bSupportsViews = true;
                         break;

@@ -95,21 +95,21 @@ void SwUserField::SetValue( const double& rVal )
     Beschreibung: Name
  --------------------------------------------------------------------*/
 
-const String& SwUserField::GetPar1() const
+const rtl::OUString& SwUserField::GetPar1() const
 {
-    return ((SwUserFieldType*)GetTyp())->GetName();
+    return ((const SwUserFieldType*)GetTyp())->GetName();
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Content
  --------------------------------------------------------------------*/
 
-String SwUserField::GetPar2() const
+rtl::OUString SwUserField::GetPar2() const
 {
     return ((SwUserFieldType*)GetTyp())->GetContent(GetFormat());
 }
 
-void SwUserField::SetPar2(const String& rStr)
+void SwUserField::SetPar2(const rtl::OUString& rStr)
 {
     ((SwUserFieldType*)GetTyp())->SetContent(rStr, GetFormat());
 }
@@ -221,7 +221,7 @@ SwFieldType* SwUserFieldType::Copy() const
     return pTmp;
 }
 
-const String& SwUserFieldType::GetName() const
+const rtl::OUString& SwUserFieldType::GetName() const
 {
     return aName;
 }

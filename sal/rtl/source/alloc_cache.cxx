@@ -483,11 +483,6 @@ rtl_cache_slab_alloc (
             addr = (void*)rtl_cache_hash_insert (cache, bufctl);
         else
             addr = bufctl;
-
-        /* DEBUG ONLY: mark allocated, undefined */
-        /* OSL_DEBUG_ONLY() */ RTL_VALGRIND_IGNORE_VAL VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
-        OSL_DEBUG_ONLY(memset(addr, 0x77777777, cache->m_type_size));
-        VALGRIND_MEMPOOL_ALLOC(cache, addr, cache->m_type_size);
     }
 
     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
@@ -509,11 +504,6 @@ rtl_cache_slab_free (
     rtl_cache_slab_type   * slab;
 
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
-
-    /* DEBUG ONLY: mark unallocated, undefined */
-    VALGRIND_MEMPOOL_FREE(cache, addr);
-    /* OSL_DEBUG_ONLY() */ RTL_VALGRIND_IGNORE_VAL VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
-    OSL_DEBUG_ONLY(memset(addr, 0x33333333, cache->m_type_size));
 
     /* determine slab from addr */
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
@@ -611,13 +601,8 @@ rtl_cache_magazine_clear (
         void * obj = mag->m_objects[mag->m_mag_used - 1];
         mag->m_objects[mag->m_mag_used - 1] = 0;
 
-        /* DEBUG ONLY: mark cached object allocated, undefined */
-        VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
         if (cache->m_destructor != 0)
         {
-            /* DEBUG ONLY: keep constructed object defined */
-            RTL_VALGRIND_IGNORE_VAL VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
-
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
         }
@@ -1107,7 +1092,6 @@ try_alloc:
     if (result != 0)
     {
         rtl_cache_type * cache = result;
-        VALGRIND_CREATE_MEMPOOL(cache, 0, 0);
         (void) rtl_cache_constructor (cache);
 
         if (!source)
@@ -1135,7 +1119,6 @@ try_alloc:
             /* activation failed */
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
-            VALGRIND_DESTROY_MEMPOOL(cache);
             rtl_arena_free (gp_cache_arena, cache, size);
         }
     }
@@ -1161,7 +1144,6 @@ void SAL_CALL rtl_cache_destroy (
     {
         rtl_cache_deactivate (cache);
         rtl_cache_destructor (cache);
-        VALGRIND_DESTROY_MEMPOOL(cache);
         rtl_arena_free (gp_cache_arena, cache, sizeof(rtl_cache_type));
     }
 }
@@ -1204,14 +1186,6 @@ SAL_CALL rtl_cache_alloc (
             if ((curr != 0) && (curr->m_mag_used > 0))
             {
                 obj = curr->m_objects[--curr->m_mag_used];
-#if defined(HAVE_VALGRIND_MEMCHECK_H)
-                VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
-                if (cache->m_constructor != 0)
-                {
-                    /* keep constructed object defined */
-                    RTL_VALGRIND_IGNORE_VAL VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
-                }
-#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_alloc += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1289,9 +1263,6 @@ SAL_CALL rtl_cache_free (
             if ((curr != 0) && (curr->m_mag_used < curr->m_mag_size))
             {
                 curr->m_objects[curr->m_mag_used++] = obj;
-#if defined(HAVE_VALGRIND_MEMCHECK_H)
-                VALGRIND_MEMPOOL_FREE(cache, obj);
-#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_free += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1604,7 +1575,6 @@ rtl_cache_init()
         static rtl_cache_type g_cache_magazine_cache;
 
         assert(gp_cache_magazine_cache == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_cache_magazine_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_magazine_cache);
 
         gp_cache_magazine_cache = rtl_cache_activate (
@@ -1629,7 +1599,6 @@ rtl_cache_init()
         static rtl_cache_type g_cache_slab_cache;
 
         assert(gp_cache_slab_cache == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_cache_slab_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_slab_cache);
 
         gp_cache_slab_cache = rtl_cache_activate (
@@ -1651,7 +1620,6 @@ rtl_cache_init()
         static rtl_cache_type g_cache_bufctl_cache;
 
         assert(gp_cache_bufctl_cache == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_cache_bufctl_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_bufctl_cache);
 
         gp_cache_bufctl_cache = rtl_cache_activate (
@@ -1689,21 +1657,18 @@ rtl_cache_fini()
             cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
-            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_slab_cache != 0)
         {
             cache = gp_cache_slab_cache, gp_cache_slab_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
-            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_magazine_cache != 0)
         {
             cache = gp_cache_magazine_cache, gp_cache_magazine_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
-            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_arena != 0)
         {
@@ -1734,7 +1699,5 @@ rtl_cache_fini()
     }
     // SAL_INFO("sal", "rtl_cache_fini completed");
 }
-
-/* ================================================================= */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

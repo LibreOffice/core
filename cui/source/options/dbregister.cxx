@@ -283,7 +283,7 @@ void DbRegistrationOptionsPage::FillUserData()
 }
 // -----------------------------------------------------------------------
 
-IMPL_LINK( DbRegistrationOptionsPage, DeleteHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 {
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
@@ -295,7 +295,7 @@ IMPL_LINK( DbRegistrationOptionsPage, DeleteHdl, void *, EMPTYARG )
     return 0;
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( DbRegistrationOptionsPage, NewHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
 {
     String sNewName,sNewLocation;
     openLinkDialog(sNewName,sNewLocation);
@@ -304,7 +304,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NewHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( DbRegistrationOptionsPage, EditHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 {
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
     if ( !pEntry )
@@ -383,7 +383,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 }
 // -----------------------------------------------------------------------
 
-IMPL_LINK( DbRegistrationOptionsPage, PathSelect_Impl, SvTabListBox *, EMPTYARG )
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 {
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
 

@@ -62,7 +62,7 @@
 #elif defined(__CYGWIN__) && defined(USE_OPENGL32) /* use native windows opengl32 */
 #  define GLAPI extern
 #  define GLAPIENTRY __stdcall
-#elif defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) >= 303
+#elif defined(__GNUC__)
 #  define GLAPI __attribute__((visibility("default")))
 #  define GLAPIENTRY
 #endif /* WIN32 && !CYGWIN */

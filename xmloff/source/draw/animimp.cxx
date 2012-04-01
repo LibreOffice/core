@@ -664,9 +664,9 @@ void XMLAnimationsEffectContext::EndElement()
             }
         }
     }
-    catch(const Exception&)
+    catch (const Exception&)
     {
-        OSL_FAIL( "exception catched while importing animation information!" );
+        OSL_FAIL( "exception caught while importing animation information!" );
     }
 }
 

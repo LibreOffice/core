@@ -88,7 +88,6 @@
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <svl/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>
@@ -106,7 +105,6 @@ using namespace ::com::sun::star::io;
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/pathoptions.hxx>
@@ -205,7 +203,7 @@ sal_Bool IsOOoLockFileUsed()
 
 bool IsLockingUsed()
 {
-    return officecfg::Office::Common::Misc::UseLocking::get(comphelper::getProcessComponentContext());
+    return officecfg::Office::Common::Misc::UseLocking::get();
 }
 
 } // anonymous namespace
@@ -253,7 +251,7 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 }
 
 //----------------------------------------------------------------
-class SfxMedium_Impl : public SvCompatWeakBase
+class SfxMedium_Impl
 {
 public:
     ::ucbhelper::Content aContent;
@@ -323,8 +321,7 @@ public:
 
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
- :  SvCompatWeakBase( pAntiImplP ),
-    bUpdatePickList(sal_True),
+ :  bUpdatePickList(sal_True),
     bIsTemp( sal_False ),
     bForceSynchron( sal_False ),
     bDownloadDone( sal_True ),
@@ -2959,12 +2956,6 @@ void SfxMedium::SetReferer( const String& rRefer )
 {
     pImp->aReferer = rRefer;
 }
-//----------------------------------------------------------------
-
-const String& SfxMedium::GetReferer( ) const
-{
-    return pImp->aReferer;
-}
 
 //----------------------------------------------------------------
 
@@ -3044,12 +3035,6 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
     }
 
     return pImp->xAttributes;
-}
-//----------------------------------------------------------------
-
-SvCompatWeakHdl* SfxMedium::GetHdl()
-{
-    return pImp->GetHdl();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()

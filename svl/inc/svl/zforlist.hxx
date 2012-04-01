@@ -30,7 +30,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/string.hxx>
-#include <tools/table.hxx>
 #include <i18npool/lang.h>
 #include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -214,10 +213,10 @@ enum NfEvalDateFormat
 };
 
 
-DECLARE_TABLE (SvNumberFormatTable, SvNumberformat*)
-DECLARE_TABLE (SvNumberFormatterIndexTable, sal_uInt32*)
+typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
+typedef std::map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
 
-typedef ::std::map< sal_uInt32, sal_uInt32 > SvNumberFormatterMergeMap;
+typedef ::std::map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
 
 typedef ::std::set< LanguageType > NfInstalledLocales;
 
@@ -248,7 +247,6 @@ private:
 
 public:
 
-                        NfCurrencyEntry();
                         NfCurrencyEntry( const LocaleDataWrapper& rLocaleData,
                             LanguageType eLang );
                         NfCurrencyEntry(
@@ -413,6 +411,10 @@ public:
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
+    bool PutandConvertEntry( rtl::OUString& rString, xub_StrLen& nCheckPos,
+                             short& nType, sal_uInt32& nKey,
+                             LanguageType eLnge, LanguageType eNewLnge );
+
     /** Same as <method>PutandConvertEntry</method> but the format code string
          is considered to be of the System language/country eLnge and is
         converted to another System language/country eNewLnge. In this case
@@ -483,11 +485,22 @@ public:
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
                           String& sOutString, Color** ppColor );
 
+    /// Format a number according to a format index, return string and color
+    void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
+                          rtl::OUString& sOutString, Color** ppColor );
+
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( String& sString, sal_uInt32 nFIndex,
                           String& sOutString, Color** ppColor );
+
+
+    /** Format a string according to a format index, return string and color.
+        Formats only if the format code is of type text or the 4th subcode
+        of a format code is specified, otherwise sOutString will be == "" */
+    void GetOutputString( rtl::OUString& sString, sal_uInt32 nFIndex,
+                          rtl::OUString& sOutString, Color** ppColor );
 
     /** Format a number according to the standard default format matching
         the given format index */
@@ -562,8 +575,7 @@ public:
     sal_uInt32 GetEntryKey( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Return the format for a format index
-    const SvNumberformat* GetEntry(sal_uInt32 nKey) const
-        { return (SvNumberformat*) aFTable.Get(nKey); }
+    const SvNumberformat* GetEntry( sal_uInt32 nKey ) const;
 
     /// Return the format index of the standard default number format for language/country
     sal_uInt32 GetStandardIndex(LanguageType eLnge = LANGUAGE_DONTKNOW);
@@ -801,7 +813,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
     ::com::sun::star::lang::Locale aLocale;
     SvNumberFormatTable aFTable;            // Table of format keys to format entries
-    Table aDefaultFormatKeys;               // Table of default standard to format keys
+    typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
+    DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
     SvNumberFormatTable* pFormatTable;      // For the UI dialog
     SvNumberFormatterIndexTable* pMergeTable;               // List of indices for merging two formatters
     CharClass* pCharClass;                  // CharacterClassification
@@ -913,6 +926,13 @@ private:
         sal_Int32 nCount, bool bCheckCorrectness = true
         );
 
+    // Obtain the format entry for a given key index.
+    SVL_DLLPRIVATE       SvNumberformat* GetFormatEntry( sal_uInt32 nKey );
+    SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry( sal_uInt32 nKey ) const
+    {
+        return GetEntry( nKey);
+    }
+
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
 #ifndef DBG_UTIL
     inline
@@ -998,13 +1018,18 @@ public:
 
 inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
 {
-    sal_uInt32* pU = (pMergeTable && pMergeTable->Count()) ? (sal_uInt32*)pMergeTable->Get( nOldFmt ) : 0;
-    return pU ? *pU : nOldFmt;
+    if (pMergeTable)
+    {
+        SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
+        if (it != pMergeTable->end())
+            return it->second;
+    }
+    return nOldFmt;
 }
 
 inline bool SvNumberFormatter::HasMergeFmtTbl() const
 {
-    return pMergeTable && (0 != pMergeTable->Count());
+    return pMergeTable && !pMergeTable->empty();
 }
 
 

@@ -49,6 +49,7 @@ public:
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
 };
 
+/// Header in the document layout, inside a page.
 class SwHeaderFrm: public SwHeadFootFrm
 {
 public:
@@ -57,6 +58,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrm)
 };
 
+/// Footer in the document layout, inside a page.
 class SwFooterFrm: public SwHeadFootFrm
 {
 public:

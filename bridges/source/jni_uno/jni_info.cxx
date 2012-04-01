@@ -282,7 +282,11 @@ JNI_compound_type_info::JNI_compound_type_info(
 
     // retrieve info for base type
     typelib_TypeDescription * base_td =
-        reinterpret_cast< typelib_TypeDescription * >(
+        type_equals(
+            td->aBase.pWeakRef,
+            jni_info->m_RuntimeException_type.getTypeLibType())
+        ? 0
+        : reinterpret_cast< typelib_TypeDescription * >(
             td->pBaseTypeDescription );
     m_base = (0 == base_td ? 0 : jni_info->get_type_info( jni, base_td ));
 

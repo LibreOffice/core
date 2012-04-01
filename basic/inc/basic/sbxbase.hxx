@@ -33,12 +33,13 @@
 #include "svl/svarray.hxx"
 #include <basic/sbxdef.hxx>
 #include "basicdllapi.h"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SbxFactory;
 class SbxVariable;
 class SbxBasicFormater;
 
-SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5)
+typedef boost::ptr_vector<SbxFactory> SbxFacs;
 
 // AppData structure for SBX:
 struct SbxAppData

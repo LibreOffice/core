@@ -74,10 +74,6 @@ namespace cppcanvas
             virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XSprite >  getUNOSprite() const;
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XGraphicDevice >
-                                                                getGraphicDevice() const;
-
         private:
             // default: disabled copy/assignment
             ImplSprite(const ImplSprite&);

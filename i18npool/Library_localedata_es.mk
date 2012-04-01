@@ -34,26 +34,26 @@ $(eval $(call gb_Library_add_linked_libs,localedata_es,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_es,\
-	CustomTarget/i18npool/source/localedata/localedata_es_AR \
-	CustomTarget/i18npool/source/localedata/localedata_es_BO \
-	CustomTarget/i18npool/source/localedata/localedata_es_CL \
-	CustomTarget/i18npool/source/localedata/localedata_es_CO \
-	CustomTarget/i18npool/source/localedata/localedata_es_CR \
-	CustomTarget/i18npool/source/localedata/localedata_es_DO \
-	CustomTarget/i18npool/source/localedata/localedata_es_EC \
-	CustomTarget/i18npool/source/localedata/localedata_es_ES \
-	CustomTarget/i18npool/source/localedata/localedata_es_GT \
-	CustomTarget/i18npool/source/localedata/localedata_es_HN \
-	CustomTarget/i18npool/source/localedata/localedata_es_MX \
-	CustomTarget/i18npool/source/localedata/localedata_es_NI \
-	CustomTarget/i18npool/source/localedata/localedata_es_PA \
-	CustomTarget/i18npool/source/localedata/localedata_es_PE \
-	CustomTarget/i18npool/source/localedata/localedata_es_PR \
-	CustomTarget/i18npool/source/localedata/localedata_es_PY \
-	CustomTarget/i18npool/source/localedata/localedata_es_SV \
-	CustomTarget/i18npool/source/localedata/localedata_es_UY \
-	CustomTarget/i18npool/source/localedata/localedata_es_VE \
-	CustomTarget/i18npool/source/localedata/localedata_gl_ES \
+	CustomTarget/i18npool/localedata/localedata_es_AR \
+	CustomTarget/i18npool/localedata/localedata_es_BO \
+	CustomTarget/i18npool/localedata/localedata_es_CL \
+	CustomTarget/i18npool/localedata/localedata_es_CO \
+	CustomTarget/i18npool/localedata/localedata_es_CR \
+	CustomTarget/i18npool/localedata/localedata_es_DO \
+	CustomTarget/i18npool/localedata/localedata_es_EC \
+	CustomTarget/i18npool/localedata/localedata_es_ES \
+	CustomTarget/i18npool/localedata/localedata_es_GT \
+	CustomTarget/i18npool/localedata/localedata_es_HN \
+	CustomTarget/i18npool/localedata/localedata_es_MX \
+	CustomTarget/i18npool/localedata/localedata_es_NI \
+	CustomTarget/i18npool/localedata/localedata_es_PA \
+	CustomTarget/i18npool/localedata/localedata_es_PE \
+	CustomTarget/i18npool/localedata/localedata_es_PR \
+	CustomTarget/i18npool/localedata/localedata_es_PY \
+	CustomTarget/i18npool/localedata/localedata_es_SV \
+	CustomTarget/i18npool/localedata/localedata_es_UY \
+	CustomTarget/i18npool/localedata/localedata_es_VE \
+	CustomTarget/i18npool/localedata/localedata_gl_ES \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -235,21 +235,21 @@ private:
 
 void SwUndo::Undo()
 {
-    OSL_ENSURE(false, "SwUndo::Undo(): ERROR: must call Undo(context) instead");
+    assert(false); // SwUndo::Undo(): ERROR: must call UndoWithContext instead
 }
 
 void SwUndo::Redo()
 {
-    OSL_ENSURE(false, "SwUndo::Redo(): ERROR: must call Redo(context) instead");
+    assert(false); // SwUndo::Redo(): ERROR: must call RedoWithContext instead
 }
 
 void SwUndo::UndoWithContext(SfxUndoContext & rContext)
 {
     ::sw::UndoRedoContext *const pContext(
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
-    OSL_ASSERT(pContext);
+    assert(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    UndoRedoRedlineGuard const g(*pContext, *this);
     UndoImpl(*pContext);
 }
 
@@ -257,9 +257,9 @@ void SwUndo::RedoWithContext(SfxUndoContext & rContext)
 {
     ::sw::UndoRedoContext *const pContext(
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
-    OSL_ASSERT(pContext);
+    assert(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    UndoRedoRedlineGuard const g(*pContext, *this);
     RedoImpl(*pContext);
 }
 
@@ -267,7 +267,7 @@ void SwUndo::Repeat(SfxRepeatTarget & rContext)
 {
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));
-    OSL_ASSERT(pRepeatContext);
+    assert(pRepeatContext);
     if (!pRepeatContext) { return; }
     RepeatImpl(*pRepeatContext);
 }
@@ -276,7 +276,7 @@ sal_Bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
 {
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));
-    OSL_ASSERT(pRepeatContext);
+    assert(pRepeatContext);
     if (!pRepeatContext) { return false; }
     return CanRepeatImpl(*pRepeatContext);
 }
@@ -595,7 +595,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =
                     pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
-                OSL_ENSURE( pFtnHnt, "kein FtnAttribut" );
+                assert(pFtnHnt);
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -619,7 +619,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =
                     pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
-                OSL_ENSURE( pFtnHnt, "kein FtnAttribut" );
+                assert(pFtnHnt);
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -659,7 +659,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             pAPos->nNode.GetNode().GetTxtNode();
                         SwTxtAttr* const pFlyHnt = pTxtNd->GetTxtAttrForCharAt(
                             pAPos->nContent.GetIndex());
-                        OSL_ENSURE( pFlyHnt, "kein FlyAttribut" );
+                        assert(pFlyHnt);
                         pHistory->Add( pFlyHnt, 0, false );
                         // n wieder zurueck, damit nicht ein Format uebesprungen wird !
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
@@ -980,8 +980,8 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
     : SwUndRng( rRedl ),
     SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
 {
-    OSL_ENSURE( POS_OUTSIDE == eCmpPos ||
-            !rRedl.GetContentIdx(), "Redline mit Content" );
+    assert( POS_OUTSIDE == eCmpPos ||
+            !rRedl.GetContentIdx() ); // "Redline with Content"
 
     switch( eCmpPos )
     {
@@ -1014,7 +1014,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         break;
 
     default:
-        OSL_ENSURE( !this, "keine gueltigen Daten!" );
+        assert(false);
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1052,8 +1052,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
     bool const bSuccess = rDoc.AppendRedline( pRedl, true );
-    OSL_ENSURE(bSuccess,
-        "SwRedlineSaveData::RedlineToDoc: insert redline failed");
+    assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed
     (void) bSuccess; // unused in non-debug
     rDoc.SetRedlineMode_intern( eOld );
 }
@@ -1131,9 +1130,9 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
-    OSL_ENSURE( (rSData.Count() == 0) ||
-                (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),
-                "redline count not restored properly" );
+    assert((rSData.Count() == 0) ||
+           (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()));
+            // "redline count not restored properly"
 #endif
 
     rDoc.SetRedlineMode_intern( eOld );
@@ -1188,7 +1187,7 @@ sal_Bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 // #111827#
 String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr)
 {
-    OSL_ENSURE( nLength - rFillStr.Len() >= 2, "improper arguments");
+    assert(nLength - rFillStr.Len() >= 2);
 
     String aResult;
 

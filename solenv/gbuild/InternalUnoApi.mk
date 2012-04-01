@@ -47,6 +47,7 @@ $(call gb_UnoApiTarget_set_root,$(1)_out,/)
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
 $(call gb_UnoApiTarget_merge_rdbfile,$(1),$(1)_out)
 
+$(call gb_InternalUnoApi_get_target,$(1)) :| $(dir $(call gb_InternalUnoApi_get_target,$(1))).dir
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1)_out)
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1)_out)
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))

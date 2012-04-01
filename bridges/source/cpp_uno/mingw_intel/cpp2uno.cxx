@@ -378,7 +378,7 @@ unsigned char * codeSnippet(
     !bridges::cpp_uno::shared::isSmallStruct(returnTypeDescr)) {
         functionIndex |= 0x80000000;
     }
-    PrivateSnippetExecutor exec;
+    PrivateSnippetExecutor exec = privateSnippetExecutorGeneral;
     switch (returnTypeClass) {
     case typelib_TypeClass_VOID:
         exec = privateSnippetExecutorVoid;

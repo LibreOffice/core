@@ -422,7 +422,7 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 // Handler:
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTablePage, PageDirHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
 {
     ShowImage();
     return 0;
@@ -446,7 +446,7 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 {
     // controls for "Reduce/enlarge"
     bool bPercent = (aLbScaleMode.GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);

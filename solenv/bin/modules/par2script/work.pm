@@ -28,7 +28,6 @@
 
 package par2script::work;
 
-use par2script::existence;
 use par2script::globals;
 use par2script::remover;
 
@@ -66,14 +65,14 @@ sub analyze_comma_separated_list
 }
 
 ############################################
-# setting list of include pathes
+# setting list of include paths
 ############################################
 
 sub setincludes
 {
     my ($list) = @_;
 
-    # input is the comma separated list of include pathes
+    # input is the comma separated list of include paths
 
     my $includes = analyze_comma_separated_list($list);
 
@@ -131,7 +130,7 @@ sub make_complete_pathes_for_parfiles
 
         if ( ! $foundparfile )
         {
-            die "ERROR: Could not find parfile ${$parfiles}[$i] in includes pathes: $par2script::globals::includepathlist !\n";
+            die "ERROR: Could not find parfile ${$parfiles}[$i] in includes paths: $par2script::globals::includepathlist !\n";
         }
     }
 }

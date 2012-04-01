@@ -214,8 +214,6 @@ class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartDataDescrItem(SvxChartDataDescr eDataDescr /*= CHDESCR_NONE*/,
-                          sal_uInt16 nId );
     SvxChartDataDescrItem(SvStream& rIn,
                           sal_uInt16 nId );
 
@@ -255,8 +253,6 @@ class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartTextOrientItem(SvxChartTextOrient /*eOrient = CHTXTORIENT_STANDARD*/,
-                           sal_uInt16 nId );
     SvxChartTextOrientItem(SvStream& rIn,
                            sal_uInt16 nId );
 

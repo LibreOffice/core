@@ -68,12 +68,12 @@ namespace cppu_threadpool
         void suspend();
         void resume();
 
-        sal_Bool isEmpty();
-        sal_Bool isCallstackEmpty();
+        sal_Bool isEmpty() const;
+        sal_Bool isCallstackEmpty() const;
         sal_Bool isBusy() const;
 
     private:
-        ::osl::Mutex m_mutex;
+        mutable ::osl::Mutex m_mutex;
         JobList      m_lstJob;
         CallStackList m_lstCallstack;
         sal_Int32 m_nToDo;

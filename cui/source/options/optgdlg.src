@@ -188,7 +188,7 @@ TabPage OFA_TP_MISC
     };
     CheckBox CB_EXPERIMENTAL
     {
-        Pos = MAP_APPFONT( COL1, ROW15 );
+        Pos = MAP_APPFONT( COL1, ROW14 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Enable experimental (unstable) features";
     };
@@ -456,7 +456,7 @@ TabPage OFA_TP_VIEW
     {
         HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_SELECTION";
         Pos = MAP_APPFONT ( 139, ROW_CB_SELECTION + (((12 - RSC_CD_CHECKBOX_HEIGHT) / 2) + 1)) ;
-        Size = MAP_APPFONT ( 118 - 34 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 83 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Transparency" ;
     };
 

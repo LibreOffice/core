@@ -241,7 +241,7 @@ void SwFldEditDlg::InsertHdl()
 /*--------------------------------------------------------------------
      Description: kick off changing of the field
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
 {
     if (GetOKButton()->IsEnabled())
     {
@@ -307,7 +307,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     return 0;
 }
 
-IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldEditDlg, AddressHdl)
 {
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
     SwFldMgr& rMgr = pTabPage->GetFldMgr();

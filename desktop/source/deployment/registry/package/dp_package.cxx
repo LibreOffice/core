@@ -405,8 +405,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             else
             {
-                const OUString title( ucbContent.getPropertyValue(
-                                          StrTitle::get() ).get<OUString>() );
+                const OUString title( StrTitle::getTitle( ucbContent ) );
                 if (title.endsWithIgnoreAsciiCaseAsciiL(
                         RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
                     title.endsWithIgnoreAsciiCaseAsciiL(
@@ -437,8 +436,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
@@ -1054,7 +1052,7 @@ void BackendImpl::PackageImpl::exportTo(
     ::ucbhelper::Content sourceContent( m_url_expanded, xCmdEnv );
     OUString title(newTitle);
     if (title.isEmpty())
-        sourceContent.getPropertyValue( StrTitle::get() ) >>= title;
+        sourceContent.getPropertyValue( OUSTR( "Title" ) ) >>= title;
     OUString destURL( makeURL( destFolderURL, ::rtl::Uri::encode(
                                    title, rtl_UriCharClassPchar,
                                    rtl_UriEncodeIgnoreEscapes,
@@ -1565,9 +1563,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 {
     ::ucbhelper::Content ucbContent( url, xCmdEnv );
 
-    // check for platform pathes:
-    const OUString title( ucbContent.getPropertyValue(
-                              StrTitle::get() ).get<OUString>() );
+    // check for platform paths:
+    const OUString title( StrTitle::getTitle( ucbContent ) );
     if (title.endsWithIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM(".plt") ) &&
         !platform_fits( title.copy( 0, title.getLength() - 4 ) )) {
@@ -1577,7 +1574,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
             RTL_CONSTASCII_STRINGPARAM("skip_registration") ))
         skip_registration = true;
 
-    OUString ar [] = { StrTitle::get(), OUSTR("IsFolder") };
+    OUString ar [] = { OUSTR("Title"), OUSTR("IsFolder") };
     Reference<sdbc::XResultSet> xResultSet(
         ucbContent.createCursor(
             Sequence<OUString>( ar, ARLEN(ar) ),

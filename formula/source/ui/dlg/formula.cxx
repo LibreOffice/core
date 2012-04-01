@@ -85,6 +85,8 @@ namespace formula
     public:
         OFormulaToken(bool _bFunction,sal_Int32 _nParaCount) : m_nParaCount(_nParaCount),m_bIsFunction(_bFunction){}
 
+        virtual ~OFormulaToken() {}
+
         virtual bool isFunction() const { return m_bIsFunction; }
         virtual sal_uInt32 getArgumentCount() const { return m_nParaCount; }
     };
@@ -111,6 +113,8 @@ namespace formula
         void            FillDialog(sal_Bool nFlag=sal_True);
         void            EditNextFunc( sal_Bool bForward, xub_StrLen nFStart=NOT_FOUND );
         void            EditThisFunc(xub_StrLen nFStart);
+
+        void            StoreFormEditData(FormEditData* pEditData);
 
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 nInput );
         void            Update();
@@ -142,17 +146,16 @@ namespace formula
         DECL_LINK( ModifyHdl, ParaWin* );
         DECL_LINK( FxHdl, ParaWin* );
 
-        DECL_LINK( MatrixHdl, CheckBox *);
-        DECL_LINK( FormulaHdl, MultiLineEdit* );
-        DECL_LINK( FormulaCursorHdl, EditBox*);
+        DECL_LINK(MatrixHdl, void *);
+        DECL_LINK(FormulaHdl, void *);
+        DECL_LINK(FormulaCursorHdl, void *);
         DECL_LINK( BtnHdl, PushButton* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
         DECL_LINK( GetFxFocusHdl, ArgInput* );
-        DECL_LINK( DblClkHdl, FuncPage* );
-        DECL_LINK( FuncSelHdl, FuncPage*);
-        DECL_LINK( StructSelHdl, StructPage * );
+        DECL_LINK(DblClkHdl, void *);
+        DECL_LINK(FuncSelHdl, void *);
+        DECL_LINK(StructSelHdl, void *);
     public:
-        OModuleClient                                           m_aModuleClient;
         mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
         uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
         ::std::auto_ptr<FormulaTokenArray>                      m_pTokenArray;
@@ -363,7 +366,18 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
         aTimer.Stop();
     }// if(aTimer.IsActive())
     bIsShutDown=sal_True;// Set it in order to PreNotify not to save GetFocus.
-    FormEditData* pData = m_pHelper->getFormEditData();
+
+    aTabCtrl.RemovePage(TP_FUNCTION);
+    aTabCtrl.RemovePage(TP_STRUCT);
+
+    delete pStructPage;
+    delete pFuncPage;
+    delete pParaWin;
+    DeleteArgs();
+}
+
+void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
+{
     if (pData) // it won't be destroyed over Close;
     {
         pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
@@ -376,15 +390,8 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
         pData->SetUndoStr(pMEdit->GetText());
         pData->SetMatrixFlag(aBtnMatrix.IsChecked());
     }
-
-    aTabCtrl.RemovePage(TP_FUNCTION);
-    aTabCtrl.RemovePage(TP_STRUCT);
-
-    delete pStructPage;
-    delete pFuncPage;
-    delete pParaWin;
-    DeleteArgs();
 }
+
 // -----------------------------------------------------------------------------
 void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1029,7 +1036,7 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 
 // Handler for Listboxes
 
-IMPL_LINK( FormulaDlg_Impl, DblClkHdl, FuncPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 {
     sal_uInt16 nFunc = pFuncPage->GetFunction();
 
@@ -1242,7 +1249,7 @@ IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin*, pPtr )
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
 {
 
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1307,7 +1314,7 @@ IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FormulaCursorHdl, EditBox*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData) return 0;
@@ -1537,7 +1544,7 @@ sal_Bool FormulaDlg_Impl::CheckMatrix(String& aFormula)
     aTabCtrl.SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
-IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl)
 {
     bStructUpdate=sal_False;
     if(pStructPage->IsVisible())    aBtnForward.Enable(sal_False); //@New
@@ -1545,13 +1552,13 @@ IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, EMPTYARG )
     bStructUpdate=sal_True;
     return 0;
 }
-IMPL_LINK( FormulaDlg_Impl, MatrixHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, MatrixHdl)
 {
     bUserMatrixFlag=sal_True;
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FuncSelHdl, FuncPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
 {
     sal_uInt16 nCat = pFuncPage->GetCategory();
     if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
@@ -1650,14 +1657,13 @@ FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
-                                            , IFormulaEditorHelper* _pHelper
                                             , IFunctionManager* _pFunctionMgr
                                             , IControlReferenceHandler* _pDlg ) :
         ModalDialog( pParent, ModuleRes(RID_FORMULADLG_FORMULA_MODAL) ),
         m_pImpl( new FormulaDlg_Impl(this,_bSupportFunctionResult
                                             , _bSupportResult
                                             , _bSupportMatrix
-                                            ,_pHelper,_pFunctionMgr,_pDlg))
+                                            ,this,_pFunctionMgr,_pDlg))
 {
     FreeResource();
     SetText(m_pImpl->aTitle1);
@@ -1725,6 +1731,11 @@ long FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
     return ModalDialog::PreNotify(rNEvt);
 }
 
+void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
+{
+    m_pImpl->StoreFormEditData(pData);
+}
+
 //  --------------------------------------------------------------------------
 //      Initialisation / General functions  for Dialog
 //  --------------------------------------------------------------------------
@@ -1733,12 +1744,12 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                             , bool _bSupportFunctionResult
                             , bool _bSupportResult
                             , bool _bSupportMatrix
-                            , IFormulaEditorHelper* _pHelper,IFunctionManager* _pFunctionMgr,IControlReferenceHandler* _pDlg ) :
+                            , IFunctionManager* _pFunctionMgr, IControlReferenceHandler* _pDlg ) :
         SfxModelessDialog( pB, pCW, pParent, ModuleRes(RID_FORMULADLG_FORMULA) ),
         m_pImpl( new FormulaDlg_Impl(this, _bSupportFunctionResult
                                             , _bSupportResult
                                             , _bSupportMatrix
-                                            ,_pHelper,_pFunctionMgr,_pDlg))
+                                            , this, _pFunctionMgr, _pDlg))
 {
     FreeResource();
     if(GetHelpId().isEmpty())    //Hack which hides the HelpId for a model Dialog in SfxModelessDialog
@@ -1842,6 +1853,12 @@ void FormulaDlg::disableOk()
 {
     m_pImpl->aBtnEnd.Disable();
 }
+
+void FormulaDlg::StoreFormEditData(FormEditData* pData)
+{
+    m_pImpl->StoreFormEditData(pData);
+}
+
 // -----------------------------------------------------------------------------
 const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
 {
@@ -1872,7 +1889,7 @@ void FormulaDlg::SetEdSelection()
 {
     m_pImpl->SetEdSelection();
 }
-IMPL_LINK( FormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
 

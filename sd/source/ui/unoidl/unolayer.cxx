@@ -30,7 +30,6 @@
 
 #include "unolayer.hxx"
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>

@@ -62,9 +62,9 @@ class SwFldDokPage : public SwFldPage
     sal_uInt16              nOldSel;
     sal_uLong               nOldFormat;
 
-    DECL_LINK( TypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( FormatHdl, ListBox* pLB = 0 );
-    DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
+    DECL_LINK(TypeHdl, void *);
+    DECL_LINK(FormatHdl, void * = 0);
+    DECL_LINK(SubTypeHdl, void *);
 
     void                AddSubType(sal_uInt16 nTypeId);
     sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);

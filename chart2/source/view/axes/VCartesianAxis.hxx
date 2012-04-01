@@ -66,8 +66,8 @@ public:
     virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
     void createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition );
 
-    ::std::auto_ptr< TickIter > createLabelTickIterator( sal_Int32 nTextLevel );
-    ::std::auto_ptr< TickIter > createMaximumLabelTickIterator( sal_Int32 nTextLevel );
+    TickIter* createLabelTickIterator( sal_Int32 nTextLevel );
+    TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
     sal_Int32 getTextLevelCount() const;
 
     //-------------------------------------------------------------------------

@@ -205,7 +205,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     aStr += aStr2;
 
     // Bereichsueberpruefung
-    double nValue = aStr.ToDouble();
+    double nValue = rtl::OUString(aStr).toDouble();
     if ( bRound )
     {
         if ( !bNegative )
@@ -651,23 +651,6 @@ sal_Bool NumericFormatter::IsValueModified() const
 
 // -----------------------------------------------------------------------
 
-Fraction NumericFormatter::ConvertToFraction( sal_Int64 nValue )
-{
-    // caution: precision loss in double cast (and in fraction anyhow)
-    return Fraction( (double)nValue/(double)ImplPower10( GetDecimalDigits() ) );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 NumericFormatter::ConvertToLong( const Fraction& rValue )
-{
-    Fraction aFract = rValue;
-    aFract *= Fraction( (long)ImplPower10( GetDecimalDigits() ), 1 );
-    return (sal_Int64)(double)aFract;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 {
     return (nValue * ImplPower10( GetDecimalDigits() ) );
@@ -1042,29 +1025,6 @@ void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-void NumericBox::RemoveValue( sal_Int64 nValue )
-{
-    ComboBox::RemoveEntry( CreateFieldText( nValue ) );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 NumericBox::GetValue( sal_uInt16 nPos ) const
-{
-    double nValue = 0;
-    ImplNumericGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
-    return (sal_Int64)nValue;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 NumericBox::GetValuePos( sal_Int64 nValue ) const
-{
-    return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
-}
-
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                        sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
@@ -1238,16 +1198,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
 
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
-{
-    return static_cast<sal_Int64>(
-        nonValueDoubleToValueDouble(
-            ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
-                                     FieldUnit eInUnit, MapUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
         nonValueDoubleToValueDouble(
@@ -2012,16 +1962,6 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPo
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
                                         eInUnit, meUnit );
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void MetricBox::RemoveValue( sal_Int64 nValue, FieldUnit eInUnit )
-{
-    // Umrechnen auf eingestellte Einheiten
-    nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
-                                        eInUnit, meUnit );
-    ComboBox::RemoveEntry( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------

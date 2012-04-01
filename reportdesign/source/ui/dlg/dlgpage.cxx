@@ -28,7 +28,6 @@
 
 
 #include <svx/dialogs.hrc>
-#include <svx/tabarea.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/svxenum.hxx>

@@ -271,7 +271,7 @@ INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkMailTp, Click_SmartProtocol_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
 {
     String aScheme = GetSchemeFromButtons();
     SetScheme( aScheme );
@@ -284,7 +284,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, Click_SmartProtocol_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
 {
     String aScheme = GetSchemeFromURL( maCbbReceiver.GetText() );
     if(aScheme.Len()!=0)
@@ -299,7 +299,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if( pViewFrame )

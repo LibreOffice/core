@@ -47,10 +47,10 @@ using ::rtl::OUString;
 // constants
 //------------------------------------------------------------------------
 
-const OUString TSPECIALS (RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=" ));
-const OUString TOKEN     (RTL_CONSTASCII_USTRINGPARAM("!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~."));
-const OUString SPACE     (RTL_CONSTASCII_USTRINGPARAM(" "));
-const OUString SEMICOLON (RTL_CONSTASCII_USTRINGPARAM(";"));
+const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
+const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
+const char SPACE[] = " ";
+const char SEMICOLON[] = ";";
 
 //------------------------------------------------------------------------
 // ctor
@@ -183,7 +183,7 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
 
 void SAL_CALL CMimeContentType::skipSpaces( void )
 {
-    while ( SPACE == m_nxtSym )
+    while (m_nxtSym.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SPACE)))
         getSym( );
 }
 
@@ -195,14 +195,16 @@ void SAL_CALL CMimeContentType::type( void )
 {
     skipSpaces( );
 
+    rtl::OUString sToken(TOKEN);
+
     // check FIRST( type )
-    if ( !isInRange( m_nxtSym, TOKEN ) )
+    if ( !isInRange( m_nxtSym, sToken ) )
         throw IllegalArgumentException( );
 
     // parse
     while(  !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN ) )
+        if ( isInRange( m_nxtSym, sToken ) )
             m_MediaType += m_nxtSym;
         else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("/ ")) ) )
             break;
@@ -226,13 +228,15 @@ void SAL_CALL CMimeContentType::subtype( void )
 {
     skipSpaces( );
 
+    rtl::OUString sToken(TOKEN);
+
     // check FIRST( subtype )
-    if ( !isInRange( m_nxtSym, TOKEN ) )
+    if ( !isInRange( m_nxtSym, sToken ) )
         throw IllegalArgumentException( );
 
     while( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN ) )
+        if ( isInRange( m_nxtSym, sToken ) )
             m_MediaSubtype += m_nxtSym;
         else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
             break;
@@ -252,6 +256,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 
 void SAL_CALL CMimeContentType::trailer( void )
 {
+    rtl::OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
         if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM("(")) )
@@ -266,7 +271,7 @@ void SAL_CALL CMimeContentType::trailer( void )
             getSym( );
             skipSpaces( );
 
-            if ( !isInRange( m_nxtSym, TOKEN ) )
+            if ( !isInRange( m_nxtSym, sToken ) )
                 throw IllegalArgumentException( );
 
             OUString pname = pName( );
@@ -298,9 +303,10 @@ OUString SAL_CALL CMimeContentType::pName( )
 {
     OUString pname;
 
+    rtl::OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN ) )
+        if ( isInRange( m_nxtSym, sToken ) )
             pname += m_nxtSym;
         else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("= ")) ) )
             break;
@@ -320,6 +326,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 {
     OUString pvalue;
 
+    rtl::OUString sToken(TOKEN);
     // quoted pvalue
     if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
     {
@@ -335,7 +342,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
         if ( pvalue.isEmpty( ) )
             throw IllegalArgumentException( );
     }
-    else if ( isInRange( m_nxtSym, TOKEN ) ) // unquoted pvalue
+    else if ( isInRange( m_nxtSym, sToken ) ) // unquoted pvalue
     {
         pvalue = nonquotedPValue( );
     }
@@ -358,9 +365,14 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
 
     while ( !m_nxtSym.isEmpty( ) )
     {
-        if ( bAfterQuoteSign && ((m_nxtSym == SPACE)||(m_nxtSym == SEMICOLON) ) )
+        if ( bAfterQuoteSign && (
+            (m_nxtSym.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SPACE))) ||
+            (m_nxtSym.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SEMICOLON))))
+           )
+        {
             break;
-        else if ( isInRange( m_nxtSym, TOKEN + TSPECIALS + SPACE ) )
+        }
+        else if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(TSPECIALS) + rtl::OUString(SPACE) ) )
         {
             pvalue += m_nxtSym;
             if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
@@ -384,9 +396,10 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 {
     OUString pvalue;
 
+    rtl::OUString sToken(TOKEN);
     while ( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN ) )
+        if ( isInRange( m_nxtSym, sToken ) )
             pvalue += m_nxtSym;
         else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
             break;
@@ -406,7 +419,7 @@ void SAL_CALL CMimeContentType::comment( void )
 {
     while ( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN + SPACE ) )
+        if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(SPACE) ) )
             getSym( );
         else if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM(")")) )
             break;

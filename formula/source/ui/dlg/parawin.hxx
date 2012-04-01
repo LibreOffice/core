@@ -39,8 +39,8 @@
 
 #include <vector>
 #include "formula/funcutl.hxx"
+#include "formula/omoduleclient.hxx"
 #include "ControlHelper.hxx"
-#include "ModuleHelper.hxx"
 
 namespace formula
 {
@@ -102,7 +102,7 @@ private:
         ::std::vector<String>
                         aParaArray;
 
-        DECL_LINK( ScrollHdl, ScrollBar* );
+        DECL_LINK(ScrollHdl, void *);
         DECL_LINK( ModifyHdl, ArgInput* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
         DECL_LINK( GetFxFocusHdl, ArgInput* );

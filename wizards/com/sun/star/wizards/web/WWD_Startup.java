@@ -476,7 +476,7 @@ public abstract class WWD_Startup extends WWD_General
 
             ConfigSet set = settings.cp_DefaultSession.cp_Publishing;
 
-            // now if path variables are used in publisher pathes, they
+            // now if path variables are used in publisher paths, they
             // are getting replaced here...
             for (int i = 0; i < set.getSize(); i++)
             {

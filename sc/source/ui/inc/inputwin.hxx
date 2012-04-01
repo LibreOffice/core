@@ -65,6 +65,7 @@ public:
     virtual void            MakeDialogEditView() = 0;
     virtual void            SetFormulaMode( sal_Bool bSet ) = 0;
     virtual sal_Bool            IsInputActive() = 0;
+    virtual void            TextGrabFocus() = 0;
 };
 
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
@@ -85,6 +86,8 @@ public:
     virtual void            StartEditEngine();
     virtual void            StopEditEngine( sal_Bool bAll );
 
+    virtual void            TextGrabFocus();
+
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            SetFormulaMode( sal_Bool bSet );
@@ -94,7 +97,7 @@ public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
 
-    DECL_LINK( NotifyHdl, EENotify* );
+    DECL_LINK( NotifyHdl, void* );
 
 protected:
     virtual void    Paint( const Rectangle& rRec );
@@ -225,6 +228,7 @@ public:
     virtual void    Resize();
     virtual const String&   GetTextString() const;
     virtual void            StopEditEngine( sal_Bool bAll );
+    virtual void            TextGrabFocus();
     void            InitEditEngine(SfxObjectShell* pObjSh);
     void            SetFormulaMode( sal_Bool bSet );
     bool            IsFocus();
@@ -241,8 +245,8 @@ private:
     PushButton      aButton;
     ScrollBar       aScrollBar;
     long            nVertOffset;
-    DECL_LINK( ClickHdl,	 PushButton* );
-    DECL_LINK( Impl_ScrollHdl,  ScrollBar* );
+    DECL_LINK( ClickHdl, void* );
+    DECL_LINK( Impl_ScrollHdl, void* );
 
 };
 

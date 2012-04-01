@@ -153,7 +153,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
             aIo.OpenFlagRec();
             aIo.CloseFlagRec();
-            long nX, nY, nW, nH;
+            sal_Int32 nX, nY, nW, nH;
             sal_uInt16 nPgNum;
             aIo.GetStream() >> nPgNum >> nIndex
                     >> nX >> nY >> nW >> nH;
@@ -312,7 +312,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                        if( pFly->Frm().Left() != WEIT_WECH &&
+                        if( pFly->Frm().Left() != FAR_AWAY &&
                             !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
                             const SwContact *pC =
@@ -329,8 +329,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 sal_Int32 nX = rRct.Left() - pPage->Frm().Left();
                                 sal_Int32 nY = rRct.Top() - pPage->Frm().Top();
                                 aIo.GetStream() << nPageNum << nOrdNum
-                                                << nX << nY << rRct.Width()
-                                                << rRct.Height();
+                                                << nX << nY
+                                                << static_cast<sal_Int32>(rRct.Width())
+                                                << static_cast<sal_Int32>(rRct.Height());
                                 /* Close Fly Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
                             }
@@ -658,18 +659,18 @@ sal_Bool SwLayHelper::CheckInsertPage()
                          bNextPageOdd, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
         {
-            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
             do
             {   rpPage = (SwPageFrm*)rpPage->GetNext();
             } while ( rpPage->GetNext() );
         }
         else
         {
-            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
             rpPage = (SwPageFrm*)rpPage->GetNext();
             if ( rpPage->IsEmptyPage() )
             {
-                OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
+                OSL_ENSURE( rpPage->GetNext(), "No new page?" );
                 rpPage = (SwPageFrm*)rpPage->GetNext();
             }
         }
@@ -924,7 +925,6 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         {
                             SwTxtFrm *pNew = new SwTxtFrm( ((SwTxtFrm*)rpFrm)->
                                                             GetTxtNode(), rpFrm );
-                            pNew->_SetIsFollow( sal_True );
                             pNew->ManipOfst( nOfst );
                             pNew->SetFollow( ((SwTxtFrm*)rpFrm)->GetFollow() );
                             ((SwTxtFrm*)rpFrm)->SetFollow( pNew );
@@ -952,8 +952,8 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                 if ( rpActualSection )
                 {
-                    //Hatte der SectionFrm ueberhaupt Inhalt? Wenn
-                    //nicht kann er gleich umgehaengt werden.
+                    //Did the SectionFrm even have a content? If not, we can
+                    //directly put it somewhere else
                     SwSectionFrm *pSct;
                     bool bInit = false;
                     if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
@@ -973,7 +973,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     if( bInit )
                         pSct->Init();
                     pSct->Frm().Pos() = rpLay->Frm().Pos();
-                    pSct->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+                    pSct->Frm().Pos().Y() += 1; //because of the notifications
 
                     rpLay = pSct;
                     if ( rpLay->Lower() && rpLay->Lower()->IsLayoutFrm() )
@@ -1074,7 +1074,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
                 const SwFlyCache* pFlyCache = *aFlyCacheSetIt;
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)*aFlySetIt)->GetFlyFrm();
 
-                if ( pFly->Frm().Left() == WEIT_WECH )
+                if ( pFly->Frm().Left() == FAR_AWAY )
                 {
                     // we get the stored information
                     pFly->Frm().Pos().X() = pFlyCache->Left() +

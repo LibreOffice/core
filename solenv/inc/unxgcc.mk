@@ -51,6 +51,10 @@ CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
+.IF "$(HAVE_SFINAE_ANONYMOUS_BROKEN)" == "TRUE"
+CDEFS += -DHAVE_SFINAE_ANONYMOUS_BROKEN
+.ENDIF # "$(HAVE_SFINAE_ANONYMOUS_BROKEN)" == "TRUE"
+
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -78,7 +82,10 @@ CFLAGSENABLESYMBOLS=-g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
@@ -88,7 +95,7 @@ CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+=-fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 .IF "$(HAVE_CXX0X)" == "TRUE"
-CFLAGSCXX+=-std=c++0x
+CFLAGSCXX+=-std=gnu++0x
 .IF "$(GCCNUMVER)" <= "000400059999"
 CFLAGSCXX+=-Wno-deprecated-declarations
 .ENDIF
@@ -136,11 +143,25 @@ CFLAGSOUTOBJ=-o
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNBOTH=-Wall -Wextra -Wendif-labels
 CFLAGSWARNCC=$(CFLAGSWARNBOTH) -Wdeclaration-after-statement
-CFLAGSWARNCXX=$(CFLAGSWARNBOTH) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor
+CFLAGSWARNCXX=$(CFLAGSWARNBOTH) -Wshadow -Wno-ctor-dtor-privacy
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror -DLIBO_WERROR
+
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+# Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
+# "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
+# GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
+# silence warnings about a protected, non-virtual dtor in a class with virtual
+# members and friends:
+.IF "$(GCCNUMVER)" <= "000400059999"
+CFLAGSWARNCXX += -Wno-non-virtual-dtor
+.ELSE
+CFLAGSWARNCXX += -Wnon-virtual-dtor
+.END
+.ELSE
+CFLAGSWARNCXX += -Wnon-virtual-dtor
+.END
 
 COMPILER_WARN_ERRORS=TRUE
 

@@ -68,14 +68,6 @@
 #include <vector>
 #include <map>
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <ctype.h>
-#if defined( ICC )
-#include <stdlib.h>
-#endif
-
 extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
 extern sal_Char*    pErgebnis;      // -> memory.cxx, Ergebnispuffer
 extern WKTYP        eTyp;           // -> filter.cxx, aktueller Dateityp

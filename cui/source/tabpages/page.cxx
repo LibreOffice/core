@@ -901,7 +901,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
 {
     // innen au\sen umschalten
     const sal_uInt16 nPos = PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() );
@@ -928,7 +928,7 @@ IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
 {
     if ( aPaperTrayBox.GetEntryCount() > 1 )
         // schon gef"ullt
@@ -1040,7 +1040,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPageDescPage, PaperSizeModify_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
@@ -1164,14 +1164,14 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, BorderModify_Impl)
 {
     if ( !bBorderModified )
         bBorderModified = sal_True;
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, BorderModify_Impl)
 
 // -----------------------------------------------------------------------
 
@@ -1456,7 +1456,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
 {
     // Aktuelle Header-Breite/H"ohe aus dem Bsp
     long nHHeight = aBspWin.GetHdHeight();
@@ -1574,14 +1574,14 @@ void SvxPageDescPage::CalcMargin_Impl()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, CenterHdl_Impl)
 {
     aBspWin.SetHorz( aHorzBox.IsChecked() );
     aBspWin.SetVert( aVertBox.IsChecked() );
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, CenterHdl_Impl)
 
 // -----------------------------------------------------------------------
 

@@ -102,7 +102,6 @@ public:
     SfxItemSet*             GetArgs();
     const INetURLObject&    GetURL() const
                             { return aURL; }
-    void                    SetURL( const INetURLObject& rURL );
     void                    SetURL( const String& rURL );
     const INetURLObject&    GetActualURL() const
                             { return aActualURL; }
@@ -149,7 +148,6 @@ public:
 
                             // FrameBorder
     void                    SetWallpaper( const Wallpaper& rWallpaper );
-    const Wallpaper*        GetWallpaper() const;
     sal_Bool                    HasFrameBorder() const;
 
     sal_Bool                    IsFrameBorderOn() const
@@ -176,9 +174,6 @@ public:
                             { return nItemId; }
     void                    SetItemId( sal_uInt16 nId )
                             { nItemId = nId; }
-    sal_uInt16                  GetWinBits() const;
-    long                    GetSize() const;
-    sal_uInt16                  GetItemPos() const;
 
                             // Copy for example for Views
     SfxFrameDescriptor*     Clone( sal_Bool bWithIds = sal_True ) const;

@@ -124,25 +124,25 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
 #endif
         }
     }
-    catch( const beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const beans::PropertyVetoException& ex )
+    catch( const beans::PropertyVetoException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const lang::IllegalArgumentException& ex )
+    catch( const lang::IllegalArgumentException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const lang::WrappedTargetException& ex )
+    catch( const lang::WrappedTargetException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const uno::RuntimeException& ex )
+    catch( const uno::RuntimeException& )
     {
-        throw ex;
+        throw;
     }
     catch( const uno::Exception& ex )
     {
@@ -173,17 +173,17 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 #endif
         }
     }
-    catch( const beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const lang::WrappedTargetException& ex )
+    catch( const lang::WrappedTargetException& )
     {
-        throw ex;
+        throw;
     }
-    catch( const uno::RuntimeException& ex )
+    catch( const uno::RuntimeException& )
     {
-        throw ex;
+        throw;
     }
     catch( const uno::Exception& ex )
     {

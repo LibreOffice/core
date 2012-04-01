@@ -1218,7 +1218,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     }
 }
 
-IMPL_LINK( CombiColumnLineChartDialogController, ChangeLineCountHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);

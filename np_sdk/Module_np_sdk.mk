@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Module_Module,np_sdk))
 
-ifeq ($(WITH_MOZILLA),YES)
+ifneq (,$(filter YES,$(ENABLE_NSPLUGIN) $(WITH_MOZILLA)))
 
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \

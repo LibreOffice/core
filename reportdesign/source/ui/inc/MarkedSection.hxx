@@ -54,6 +54,9 @@ namespace rptui
         * \param _nPos the position is zero based.
         */
         virtual void markSection(const sal_uInt16 _nPos) = 0;
+
+    protected:
+        ~IMarkedSection() {}
     };
 
 } // rptui

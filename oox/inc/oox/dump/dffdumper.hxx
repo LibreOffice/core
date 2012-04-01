@@ -49,8 +49,6 @@ protected:
     inline explicit     DffStreamObject() {}
 
     using               SequenceRecordObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
-    void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
 
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
     virtual void        implWriteExtHeader();
@@ -58,10 +56,7 @@ protected:
     virtual void        implDumpClientAnchor();
 
 private:
-    void                constructDffObj();
-
     sal_uInt32          dumpDffSimpleColor( const String& rName );
-    sal_uInt32          dumpDffColor( const String& rName );
 
     void                dumpDffOpt();
     sal_uInt16          dumpDffOptPropHeader();

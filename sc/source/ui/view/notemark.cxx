@@ -82,7 +82,7 @@ ScNoteMarker::~ScNoteMarker()
     delete pModel;
 }
 
-IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
 {
     if (!bVisible)
     {
@@ -113,7 +113,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             pModel->InsertPage( pPage );
 
         }
-        bVisible = sal_True;
+        bVisible = true;
     }
 
     Draw();

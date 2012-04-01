@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
+#include "sddll.hxx"
 #include "sdmod.hxx"
 #include "unomodule.hxx"
 #include <sfx2/objface.hxx>
@@ -122,7 +123,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SdUnoModule::queryDispatches( const 
 }
 
 // XDispatchProvider
-REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const OUSTRING&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
+REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const rtl::OUString&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
 {
     SolarMutexGuard aGuard;
     SdDLL::Init();
@@ -143,8 +144,8 @@ REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, 
 
 sal_Bool SAL_CALL SdUnoModule::supportsService( const ::rtl::OUString& sServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )

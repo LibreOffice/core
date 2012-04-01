@@ -34,11 +34,10 @@ ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< XHelperInterface >& xParen
 {
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaAxisTitle::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaAxisTitle") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAxisTitle"));
 }
 
 uno::Sequence< rtl::OUString >

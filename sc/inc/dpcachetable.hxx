@@ -32,7 +32,7 @@
 #include "sal/types.h"
 #include "osl/mutex.hxx"
 #include "global.hxx"
-#include "collect.hxx"
+#include "dpitemdata.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -66,21 +66,12 @@ class SC_DLLPUBLIC ScDPCacheTable
         RowFlag();
     };
 public:
-    /** individual filter item used in SingleFilter and GroupFilter. */
-    struct FilterItem
-    {
-        String      maString;
-        double      mfValue;
-        bool        mbHasValue;
-
-        FilterItem();
-        bool match( const  ScDPItemData& rCellData ) const;
-    };
 
     /** interface class used for filtering of rows. */
     class FilterBase
     {
     public:
+        virtual ~FilterBase() {}
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
         virtual bool match( const  ScDPItemData& rCellData ) const = 0;
@@ -90,19 +81,17 @@ public:
     class SingleFilter : public FilterBase
     {
     public:
-        explicit SingleFilter(String aString, double fValue, bool bHasValue);
+        explicit SingleFilter(const ScDPItemData &rItem);
         virtual ~SingleFilter() {}
 
         virtual bool match(const ScDPItemData& rCellData) const;
 
-        const String&   getMatchString();
-        double          getMatchValue() const;
-        bool            hasValue() const;
+        const ScDPItemData& getMatchValue() const;
 
     private:
         explicit SingleFilter();
 
-        FilterItem  maItem;
+        ScDPItemData maItem;
     };
 
     /** multi-item (group) filter. */
@@ -111,12 +100,12 @@ public:
     public:
         GroupFilter();
         virtual ~GroupFilter() {}
-        virtual bool match(  const  ScDPItemData& rCellData ) const;
-        void addMatchItem(const String& rStr, double fVal, bool bHasValue);
+        virtual bool match(const ScDPItemData& rCellData) const;
+        void addMatchItem(const ScDPItemData& rItem);
         size_t getMatchItemCount() const;
 
     private:
-        ::std::vector<FilterItem> maItems;
+        ::std::vector<ScDPItemData> maItems;
     };
 
     /** single filtering criterion. */
@@ -158,7 +147,7 @@ public:
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    String getFieldName( SCCOL  nIndex) const;
+    rtl::OUString getFieldName(SCCOL nIndex) const;
 
    /** Get the unique entries for a field specified by index.  The caller must
        make sure that the table is filled before calling function, or it will

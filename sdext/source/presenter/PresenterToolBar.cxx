@@ -727,7 +727,7 @@ void PresenterToolBar::ProcessEntry (
 void PresenterToolBar::Layout (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
-    if (maElementContainer.size() == 0)
+    if (maElementContainer.empty())
         return;
 
     mbIsLayoutPending = false;

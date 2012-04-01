@@ -324,7 +324,6 @@ void Control::StateChanged( StateChangedType nStateChange )
 {
     if( nStateChange == STATE_CHANGE_INITSHOW   ||
         nStateChange == STATE_CHANGE_VISIBLE    ||
-        nStateChange == STATE_CHANGE_FORMAT     ||
         nStateChange == STATE_CHANGE_ZOOM       ||
         nStateChange == STATE_CHANGE_BORDER     ||
         nStateChange == STATE_CHANGE_CONTROLFONT

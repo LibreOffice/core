@@ -53,7 +53,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 #include <tools/errcode.hxx>
 #include <svl/cntwids.hrc>

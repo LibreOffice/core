@@ -29,14 +29,19 @@
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
+# In the DISABLE_DYNLOADING case we don't need any COMPONENTPREFIX, we
+# put just the static library filename into the uri parameter. For
+# each statically linked app using some subset of LO components, there
+# is a mapping from library filenames to direct pointers to the
+# corresponding PREFIX_component_getFactory functions.
 define gb_ComponentTarget__command
 $(call gb_Output_announce,$(3),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet --stringparam uri \
-		'$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
-		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(realpath $(2)))
+		'$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' -o $(1) \
+		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 endef
 
 
@@ -52,6 +57,10 @@ $(call gb_ComponentTarget_get_target,%) : $(call gb_ComponentTarget_get_source,$
 $(call gb_ComponentTarget_get_target,%) :
 	$(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xsltproc is missing.))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_ComponentTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_ComponentTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
@@ -59,7 +68,8 @@ define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : \
-	$(call gb_ComponentTarget_get_target,$(1))
+	$(call gb_ComponentTarget_get_target,$(1)) \
+	| $(dir $(call gb_ComponentTarget_get_outdir_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)),$(1))
 
 endef

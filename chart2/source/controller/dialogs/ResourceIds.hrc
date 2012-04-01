@@ -71,6 +71,7 @@
 
 #define TP_TRENDLINE    918
 #define TP_YERRORBAR    919
+#define TP_XERRORBAR    923
 
 //-----------------------------------------------------------------------------
 //listbox Ids:

@@ -1017,7 +1017,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             aName = pURLItem->GetName();
             aTarget = pURLItem->GetTargetFrameName();
         }
-        sal_Bool bEvents = pMacItem && pMacItem->GetMacroTable().Count();
+        sal_Bool bEvents = pMacItem && !pMacItem->GetMacroTable().empty();
 
         if( aMapURL.Len() || aName.Len() || aTarget.Len() || bEvents )
         {
@@ -1059,7 +1059,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( pMacItem )
             {
                 const SvxMacroTableDtor& rMacTable = pMacItem->GetMacroTable();
-                if( rMacTable.Count() )
+                if( !rMacTable.empty() )
                     HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable,
                                               aAnchorEventTable,
                                               rHTMLWrt.bCfgStarBasic,
@@ -1161,7 +1161,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     {
         const SvxMacroTableDtor& rMacTable =
             ((const SvxMacroItem *)pItem)->GetMacroTable();
-        if( rMacTable.Count() )
+        if( !rMacTable.empty() )
             HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable, aImageEventTable,
                                       rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );

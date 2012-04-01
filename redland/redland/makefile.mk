@@ -64,18 +64,21 @@ PATCH_FILES=$(OOO_PATCH_FILES) \
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
 redland_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 redland_CC+=-shared-libgcc
 .ENDIF
 redland_LIBS=
-.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-redland_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+
+redland_LDFLAGS=-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2,--export-all-symbols
+.IF "$(ILIB)"!=""
+redland_LDFLAGS+= -L$(ILIB:s/;/ -L/)
 .ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(redland_CC)" CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2,--export-all-symbols -L$(ILIB:s/;/ -L/)" LIBS="$(redland_LIBS)" OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) XSLTLIB="$(XSLTLIB)"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqal=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore --with-regex-library=posix --with-decimal=none --with-www=xml --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) lt_cv_cc_dll_switch="-shared" CC="$(redland_CC)" CPPFLAGS="$(INCLUDE)" LDFLAGS="$(redland_LDFLAGS)" LIBS="$(redland_LIBS)" OBJDUMP="$(WRAPCMD) $(HOST_PLATFORM)-objdump" LIBXML2LIB="$(LIBXML2LIB)" XSLTLIB="$(XSLTLIB)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -115,6 +118,10 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 
 .IF "$(OS)"=="MACOSX"
 LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
+.IF "$(SYSTEM_LIBXML)" != "YES"
+LDFLAGS+:=-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(SOLARLIBDIR)/libxml2.2.dylib
+.ENDIF
+
 .ENDIF
 
 CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
@@ -137,6 +144,10 @@ CONFIGURE_FLAGS+= --disable-static
 .IF "$(OS)"!="ANDROID"
 CONFIGURE_FLAGS+= --with-threads
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF

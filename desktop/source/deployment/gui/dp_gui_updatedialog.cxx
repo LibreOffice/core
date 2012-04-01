@@ -89,6 +89,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/thread.hxx"
 #include "svtools/svlbitm.hxx"
 #include "svtools/svlbox.hxx"
 #include <svtools/controldims.hrc>
@@ -117,7 +118,6 @@
 
 #include "dp_gui.h"
 #include "dp_gui.hrc"
-#include "dp_gui_thread.hxx"
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
@@ -210,7 +210,7 @@ UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, con
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-class UpdateDialog::Thread: public dp_gui::Thread {
+class UpdateDialog::Thread: public salhelper::Thread {
 public:
     Thread(
         uno::Reference< uno::XComponentContext > const & context,
@@ -220,9 +220,6 @@ public:
     void stop();
 
 private:
-    Thread(UpdateDialog::Thread &); // not defined
-    void operator =(UpdateDialog::Thread &); // not defined
-
     virtual ~Thread();
 
     virtual void execute();
@@ -264,6 +261,7 @@ UpdateDialog::Thread::Thread(
     uno::Reference< uno::XComponentContext > const & context,
     UpdateDialog & dialog,
     const std::vector< uno::Reference< deployment::XPackage > > &vExtensionList):
+    salhelper::Thread("dp_gui_updatedialog"),
     m_context(context),
     m_dialog(dialog),
     m_vExtensionList(vExtensionList),
@@ -917,8 +915,6 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
                 dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
                 aItem[1] = aInfoset.getVersion();
             }
-            else if ( p->m_eKind == DISABLED_UPDATE )
-                continue;
             else
                 continue;
 
@@ -1232,7 +1228,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 
 //------------------------------------------------------------------------------
 
-IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {
     rtl::OUStringBuffer b;
     bool bInserted = false;
@@ -1332,7 +1328,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, allHandler)
 {
     if (m_all.IsChecked())
     {
@@ -1375,7 +1371,7 @@ IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, okHandler)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1401,7 +1397,7 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, closeHandler, void *, EMPTYARG) {
+IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
     m_thread->stop();
     EndDialog(RET_CANCEL);
     return 0;
@@ -1423,7 +1419,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
                 m_context), uno::UNO_QUERY_THROW);
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
         xSystemShellExecute->execute(
-                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
+                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

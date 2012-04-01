@@ -48,7 +48,6 @@
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 /** === end UNO includes === **/

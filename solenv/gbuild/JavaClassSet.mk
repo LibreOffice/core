@@ -29,6 +29,10 @@
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS)
 gb_JavaClassSet_JAVACDEBUG :=
 
+# Enforces correct dependency order for possibly generated stuff:
+# generated sources, jars/classdirs etc.
+gb_JavaClassSet_get_preparation_target = $(WORKDIR)/JavaClassSet/$(1)/prepared
+
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_JavaClassSet_JAVACDEBUG := -g
 endif
@@ -36,17 +40,16 @@ endif
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-		$(call gb_Helper_convert_native,\
-		$(if $(filter-out $(JARDEPS),$(3)),\
-	    	$(filter-out $(JARDEPS),$(3)),\
-			$(filter-out $(JARDEPS),$(4))))) && \
-	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
-		$(gb_JavaClassSet_JAVACDEBUG) \
-		-cp "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
-		-d $(call gb_JavaClassSet_get_classdir,$(2)) \
-		@$$RESPONSEFILE &&) \
-	rm -f $$RESPONSEFILE && \
+	$(if $(filter-out $(JARDEPS),$(4)), \
+		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+			$(call gb_Helper_convert_native,\
+			$(filter-out $(JARDEPS),$(4)))) && \
+		$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
+			$(gb_JavaClassSet_JAVACDEBUG) \
+			-cp "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
+			-d $(call gb_JavaClassSet_get_classdir,$(2)) \
+			@$$RESPONSEFILE &&) \
+		rm -f $$RESPONSEFILE &&) \
 	touch $(1))
 
 endef
@@ -60,8 +63,12 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
+$(call gb_JavaClassSet_get_preparation_target,%) :
+	mkdir -p $(dir $@) && touch $@
+
 define gb_JavaClassSet_JavaClassSet
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := $(call gb_JavaClassSet_get_preparation_target,$(1))
 
 endef
 
@@ -85,7 +92,7 @@ endef
 
 define gb_JavaClassSet_add_generated_sourcefile
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_generated_sourcefile,$(2))
-$(call gb_JavaClassSet__get_generated_sourcefile,$(2)) : $(gb_Helper_PHONY)
+$(call gb_JavaClassSet__get_generated_sourcefile,$(2)) :| $(call gb_JavaClassSet_get_preparation_target,$(1))
 
 endef
 
@@ -103,15 +110,15 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(call gb_JavaClassSet_get_target,$(1)) : $(2)
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
+$(2) :| $(gb_Helper_PHONY)
 
 endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
 
 endef
 
@@ -122,6 +129,19 @@ endef
 
 define gb_JavaClassSet_add_system_jars
 $(foreach jar,$(2),$(call gb_JavaClassSet_add_system_jar,$(1),$(jar)))
+
+endef
+
+# gb_JavaClassSet_add_jar_classset: Like gb_JavaClassSet_add_jar, but instead of
+# using the jar, use the directory tree with the class files that make up the
+# jar.  This is sometimes necessary in JunitTests that have test classes in
+# packages that belong to a sealed jar.
+# $1: token identifying this JavaClassSet
+# $2: token identifying the Jar being used
+define gb_JavaClassSet_add_jar_classset
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2)))
 
 endef
 
@@ -136,6 +156,17 @@ endef
 
 define gb_JavaClassSet_use_externals
 $(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
+
+endef
+
+define gb_JavaClassSet_add_package_dependency
+$(call gb_JavaClassSet_get_preparation_target,$(1)) : \
+	$(call gb_Package_get_target,$(2))
+
+endef
+
+define gb_JavaClassSet_add_package_dependencies
+$(foreach dependency,$(2),$(call gb_JavaClassSet_add_package_dependency,$(1),$(dependency)))
 
 endef
 

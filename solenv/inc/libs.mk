@@ -34,6 +34,14 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
+# workaround for MinGW to get the same DLL names as with MSC
+# e.g., uno_salhelper3gcc3.dll (vs. uno_salhelpergcc3.dll)
+.IF "$(GUI)" == "WNT"
+COMID_WITH_VERSION = $(UDK_MAJOR)$(COMID)
+.ELSE
+COMID_WITH_VERSION = $(COMID)
+.ENDIF
+
 .IF "$(GUI)" == "WNT"
 ODMA_LIB_LIB=-lodma_lib
 .ENDIF
@@ -61,9 +69,8 @@ ICUDATALIB=-licudata
 .ENDIF
 I18NUTILLIB=-li18nutil$(COMID)
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
-I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 I18NREGEXPLIB=-li18nregexp$(DLLPOSTFIX)
-SALHELPERLIB=-luno_salhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID_WITH_VERSION)
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp$(COMID)
 CONNECTIVITYLIB=-lconnectivity
@@ -72,7 +79,7 @@ TOOLSLIBST=-latools
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(DLLPOSTFIX)
 CPPULIB=-luno_cppu
-CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+CPPUHELPERLIB=-luno_cppuhelper$(COMID_WITH_VERSION)
 UCBHELPERLIB=-lucbhelper4$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -174,6 +181,11 @@ HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
 LNGLIB=-llng$(DLLPOSTFIX)
+.IF "$(SYSTEM_CLUCENE)"=="YES"
+CLUCENELIB=$(LIBCLUCENE_LIBS)
+.ELSE
+CLUCENELIB=-lclucene
+.ENDIF
 .IF "$(SYSTEM_EXPAT)"=="YES"
 EXPAT3RDLIB=-lexpat
 EXPATASCII3RDLIB=-lexpat
@@ -185,6 +197,12 @@ EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
 ZLIB3RDLIB=-lz
 .ELSE
 ZLIB3RDLIB=-lzlib
+.ENDIF
+.IF "$(SYSTEM_MINIZIP)"=="YES"
+MINIZIP3RDLIB=$(MINIZIP_LIBS)
+.ELSE
+# internally, minizip is included in zlib
+MINIZIP3RDLIB=
 .ENDIF
 .IF "$(SYSTEM_JPEG)"=="YES"
 JPEG3RDLIB=-ljpeg
@@ -202,6 +220,8 @@ NEON3RDLIB=-lneon
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-l$(DB_LIB)
+.ELIF "$(GUI)$(COM)"=="WNTGCC"
+BERKELEYLIB=-ldb47
 .ELSE
 BERKELEYLIB=-ldb-4.7
 .ENDIF
@@ -236,7 +256,7 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-JVMACCESSLIB = -ljvmaccess$(COMID)
+JVMACCESSLIB = -ljvmaccess$(COMID_WITH_VERSION)
 .IF "$(SYSTEM_CPPUNIT)"=="YES"
 CPPUNITLIB = $(CPPUNIT_LIBS)
 .ELSE
@@ -344,7 +364,7 @@ UNOTOOLSLIB+=$(UCBHELPERLIB)
 TOOLSLIB+=$(BASEGFXLIB)
 TOOLSLIB+=$(ZLIB3RDLIB)
 
-VCLLIB+=$(ICUUCLIB) $(I18NPAPERLIB)
+VCLLIB+=$(ICUUCLIB)
 
 .ENDIF
 
@@ -370,7 +390,6 @@ ICUUCLIB=icuuc.lib
 ICUDATALIB=icudt.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
-I18NPAPERLIB=ii18npaper.lib
 I18NREGEXPLIB=ii18nregexp.lib
 SALHELPERLIB=isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
@@ -445,6 +464,7 @@ HM2LIBSH=hmwrpdll.lib
 HM2LIBST=hmwrap.lib
 LINGULIB=$(HM2LIBST)
 LNGLIB=ilng.lib
+CLUCENELIB=iclucene.lib
 EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib

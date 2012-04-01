@@ -31,11 +31,13 @@
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 #include <connectivity/sqlnode.hxx>
+#ifndef DISABLE_DBCONNECTIVITY
 #ifndef YYBISON
 #ifndef FLEX_SCANNER
 #ifndef BISON_INCLUDED
 #define BISON_INCLUDED
 #include "sqlbison.hxx"
+#endif
 #endif
 #endif
 #endif
@@ -46,7 +48,6 @@
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sqlerror.hxx"
 #include <salhelper/singletonref.hxx>
-#include <osl/mutex.hxx>
 
 #include <map>
 
@@ -118,7 +119,6 @@ namespace connectivity
 
         void push_back(OSQLParseNode* _pNode);
         void erase(OSQLParseNode* _pNode);
-        bool empty() const;
         void clear();
         void clearAndDelete();
     };

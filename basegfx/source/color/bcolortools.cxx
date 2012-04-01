@@ -200,17 +200,6 @@ namespace basegfx { namespace tools
         }
     }
 
-    BColor ciexyz2rgb( const BColor& rXYZColor )
-    {
-        // from Poynton color faq, and SMPTE RP 177-1993, Derivation
-        // of Basic Television Color Equations
-        const double x=rXYZColor.getRed(), y=rXYZColor.getGreen(), z=rXYZColor.getBlue();
-        return BColor(
-            3.240479*x - 1.53715*y  - 0.498535*z,
-            -0.969256*x + 1.875991*y + 0.041556*z,
-            0.055648*x - 0.204043*y + 1.057311*z );
-    }
-
     BColor rgb2ciexyz( const BColor& rRGBColor )
     {
         // from Poynton color faq, and SMPTE RP 177-1993, Derivation

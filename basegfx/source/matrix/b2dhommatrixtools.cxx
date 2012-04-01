@@ -34,32 +34,6 @@
 
 namespace basegfx
 {
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix )
-    {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.appendAscii("matrix(");
-
-        aStrBuf.append(rMatrix.get(0,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,2));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,2));
-        aStrBuf.appendAscii(")");
-
-        return aStrBuf.makeStringAndClear();
-    }
-
     namespace tools
     {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)
@@ -117,30 +91,6 @@ namespace basegfx
             if(!fTools::equal(fScaleY, fOne))
             {
                 aRetval.set(1, 1, fScaleY);
-            }
-
-            return aRetval;
-        }
-
-        B2DHomMatrix createShearXB2DHomMatrix(double fShearX)
-        {
-            B2DHomMatrix aRetval;
-
-            if(!fTools::equalZero(fShearX))
-            {
-                aRetval.set(0, 1, fShearX);
-            }
-
-            return aRetval;
-        }
-
-        B2DHomMatrix createShearYB2DHomMatrix(double fShearY)
-        {
-            B2DHomMatrix aRetval;
-
-            if(!fTools::equalZero(fShearY))
-            {
-                aRetval.set(1, 0, fShearY);
             }
 
             return aRetval;

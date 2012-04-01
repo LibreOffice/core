@@ -887,7 +887,7 @@ XubString SvxTabStop::GetValueString() const
     XubString aStr;
 
     aStr += sal_Unicode( '(' );
-    aStr += UniString::CreateFromInt32(nTabPos);
+    aStr += rtl::OUString::valueOf(static_cast<sal_Int32>(nTabPos));
     aStr += cpDelim;
     aStr += XubString( EditResId( RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment ) );
 
@@ -1197,7 +1197,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
     const bool bStoreDefTabs = pPool
-        && pPool->GetName().EqualsAscii("SWG")
+        && pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SWG"))
         && ::IsDefaultItem( this );
 
     const short nTabs = Count();

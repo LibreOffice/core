@@ -96,7 +96,7 @@ struct Bridge
 
     System::Object* map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceTypeDescription* pTD) const;
 
-    System::Object* Bridge::call_uno(uno_Interface * pUnoI,
+    System::Object* call_uno(uno_Interface * pUnoI,
                       typelib_TypeDescription* member_td,
                       typelib_TypeDescriptionReference * return_type,
                       sal_Int32 nParams, typelib_MethodParameter const * pParams,

@@ -41,6 +41,8 @@
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/borderline.hxx>
+#include <dbdata.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -92,31 +94,44 @@ public:
     virtual void tearDown();
 
     //ods, xls, xlsx filter tests
-    void testRangeName();
-    void testFunctions();
-    void testDatabaseRanges();
-    void testFormats();
-    void testMatrix();
+    void testRangeNameXLS();
+    void testRangeNameXLSX();
+    void testFunctionsODS();
+    void testDatabaseRangesODS();
+    void testFormatsODS();
+    void testFormatsXLS();
+    void testFormatsXLSX();
+    void testMatrixODS();
+    void testMatrixXLS();
+    void testBorderODS();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
 
     //misc tests unrelated to the import filters
-    void testPassword();
+    void testPasswordNew();
+    void testPasswordOld();
+
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testRangeName);
-    CPPUNIT_TEST(testFunctions);
-    CPPUNIT_TEST(testDatabaseRanges);
-    CPPUNIT_TEST(testFormats);
-    CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testRangeNameXLS);
+    CPPUNIT_TEST(testRangeNameXLSX);
+    CPPUNIT_TEST(testFunctionsODS);
+    CPPUNIT_TEST(testDatabaseRangesODS);
+    CPPUNIT_TEST(testFormatsODS);
+    CPPUNIT_TEST(testFormatsXLS);
+    CPPUNIT_TEST(testFormatsXLSX);
+    CPPUNIT_TEST(testMatrixODS);
+    CPPUNIT_TEST(testMatrixXLS);
+    CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
-#if !defined(MACOSX) && !defined(DRAGONFLY)
-    CPPUNIT_TEST(testPassword);
+#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
+    CPPUNIT_TEST(testPasswordOld);
+    CPPUNIT_TEST(testPasswordNew);
 #endif
 
 #if TEST_BUG_FILES
@@ -127,6 +142,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    void testPassword_Impl(const rtl::OUString& rFileNameBase);
+    ScDocShellRef loadDoc(const rtl::OUString& rName, sal_Int32 nType);
+
     uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aBaseString;
 };
@@ -165,6 +183,18 @@ bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     if (bLoaded)
         xDocShRef->DoClose();
     return bLoaded;
+}
+
+ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nFormat)
+{
+    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL( rName, aFileExtension, aFileName );
+    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    return xDocSh;
 }
 
 void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
@@ -216,46 +246,40 @@ void testRangeNameImpl(ScDocument* pDoc)
 
 }
 
-void ScFiltersTest::testRangeName()
+void ScFiltersTest::testRangeNameXLS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
-    //XLSX does not work yet
-    for (sal_uInt32 i = 1; i < 3; ++i)
-    {
-        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
-        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName;
-        createFileURL( aFileNameBase, aFileExtension, aFileName );
-        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
-        std::cout << aFileFormats[i].pName << " Test" << std::endl;
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLS);
+    xDocSh->DoHardRecalc(true);
 
-        CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
-        ScDocument* pDoc = xDocSh->GetDocument();
-        testRangeNameImpl(pDoc);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testRangeNameImpl(pDoc);
 
-        rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
-        rtl::OUString aCSVPath;
-        createCSVPath( aSheet2CSV, aCSVPath );
-        // fdo#44587
-        if (i != XLSX)
-            testFile( aCSVPath, pDoc, 1);
+    rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+    rtl::OUString aCSVPath;
+    createCSVPath( aSheet2CSV, aCSVPath );
+    // fdo#44587
+    testFile( aCSVPath, pDoc, 1);
 
-        xDocSh->DoClose();
-    }
+    xDocSh->DoClose();
 }
 
-void ScFiltersTest::testFunctions()
+void ScFiltersTest::testRangeNameXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLSX);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testRangeNameImpl(pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testFunctionsODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("functions."));
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS );
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
@@ -278,19 +302,12 @@ void ScFiltersTest::testFunctions()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testDatabaseRanges()
+void ScFiltersTest::testDatabaseRangesODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load database.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     ScDBCollection* pDBCollection = pDoc->GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("no database collection", pDBCollection);
@@ -322,110 +339,180 @@ void ScFiltersTest::testDatabaseRanges()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testFormats()
+namespace {
+
+void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 nFormat)
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
-    for(int i = 0; i < 3; ++i)
+    //test Sheet1 with csv file
+    rtl::OUString aCSVFileName;
+    pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0, PureString);
+    //need to test the color of B3
+    //it's not a font color!
+    //formatting for B5: # ??/100 gets lost during import
+
+    //test Sheet2
+    const ScPatternAttr* pPattern = NULL;
+    pPattern = pDoc->GetPattern(0,0,1);
+    Font aFont;
+    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
+    CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
+    pPattern = pDoc->GetPattern(0,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
+    pPattern = pDoc->GetPattern(0,2,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
+    pPattern = pDoc->GetPattern(0,4,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
+    pPattern = pDoc->GetPattern(1,0,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
+    pPattern = pDoc->GetPattern(1,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
+    //test double strikeout only for ods
+    if (nFormat == ODS)
     {
-        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
-        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName;
-        createFileURL(aFileNameBase, aFileExtension, aFileName);
-        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
-        std::cout << aFileFormats[i].pName << " Test" << std::endl;
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
-        xDocSh->DoHardRecalc(true);
+        pPattern = pDoc->GetPattern(1,2,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
+        pPattern = pDoc->GetPattern(1,3,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+    }
+    pPattern = pDoc->GetPattern(1,4,1);
+    Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
+    pPattern = pDoc->GetPattern(2,0,1);
+    SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
+    //test alignment
+    pPattern = pDoc->GetPattern(2,1,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned right horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
+    pPattern = pDoc->GetPattern(2,2,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned block horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
 
-        CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
-        ScDocument* pDoc = xDocSh->GetDocument();
-
-        //test Sheet1 with csv file
-        rtl::OUString aCSVFileName;
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
-        testFile(aCSVFileName, pDoc, 0, PureString);
-        //need to test the color of B3
-        //it's not a font color!
-        //formatting for B5: # ??/100 gets lost during import
-
-        //test Sheet2
-        const ScPatternAttr* pPattern = NULL;
-        pPattern = pDoc->GetPattern(0,0,1);
-        Font aFont;
-        pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
-        CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
-        pPattern = pDoc->GetPattern(0,1,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
-        pPattern = pDoc->GetPattern(0,2,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
-        pPattern = pDoc->GetPattern(0,4,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
-        pPattern = pDoc->GetPattern(1,0,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
-        pPattern = pDoc->GetPattern(1,1,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
-        //test double strikeout only for ods
-        if (i == ODS)
-        {
-            pPattern = pDoc->GetPattern(1,2,1);
-            pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-            CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
-            pPattern = pDoc->GetPattern(1,3,1);
-            pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-            CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
-        }
-        pPattern = pDoc->GetPattern(1,4,1);
-        Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
-        CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
-        pPattern = pDoc->GetPattern(2,0,1);
-        SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
-        //test alignment
-        pPattern = pDoc->GetPattern(2,1,1);
-        eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned right horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
-        pPattern = pDoc->GetPattern(2,2,1);
-        eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned block horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
-
-        //test Sheet3 only for ods
-        if ( i == ODS )
-        {
-            rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
-            createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
-            testCondFile(aCSVFileName, pDoc, 2);
-        }
-        xDocSh->DoClose();
+    //test Sheet3 only for ods
+    if ( nFormat == ODS )
+    {
+        rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
+        pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
+        testCondFile(aCSVFileName, pDoc, 2);
     }
 }
 
-void ScFiltersTest::testMatrix()
+}
+
+void ScFiltersTest::testFormatsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testFormats_Impl(this, pDoc, ODS);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testFormatsXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testFormats_Impl(this, pDoc, XLS);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testFormatsXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 2);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testFormats_Impl(this, pDoc, XLSX);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testMatrixODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
-    for (int i = 0; i < 2; ++i)
-    {
-        rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
-        rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName;
-        createFileURL(aFileNameBase, aFileExtension, aFileName);
-        rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
-        std::cout << aFileFormats[1].pName << " Test" << std::endl;
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
 
-        CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
-        ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = xDocSh->GetDocument();
 
-        rtl::OUString aCSVFileName;
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
-        testFile(aCSVFileName, pDoc, 0);
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
 
-        xDocSh->DoClose();
-    }
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testMatrixXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 1);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBorderODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("border."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load border.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const editeng::SvxBorderLine* pLeft = NULL;
+    const editeng::SvxBorderLine* pTop = NULL;
+    const editeng::SvxBorderLine* pRight = NULL;
+    const editeng::SvxBorderLine* pBottom = NULL;
+
+    pDoc->GetBorderLines( 0, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(!pLeft);
+    CPPUNIT_ASSERT(!pTop);
+    CPPUNIT_ASSERT(!pBottom);
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+
+    pDoc->GetBorderLines( 2, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(!pLeft);
+    CPPUNIT_ASSERT(!pTop);
+    CPPUNIT_ASSERT(!pBottom);
+
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),20L);
+
+    pDoc->GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
+
+    CPPUNIT_ASSERT(pLeft);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pBottom);
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),5L);
+    CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesODS()
@@ -442,9 +529,23 @@ void ScFiltersTest::testBugFixesODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 1);
+    {
+        // fdo
+        rtl::OUString aCSVFileName;
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 1);
+    }
+
+    {
+        // fdo#40426
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange1");
+        CPPUNIT_ASSERT(pDBData);
+        CPPUNIT_ASSERT(pDBData->HasHeader());
+        // no header
+        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange2");
+        CPPUNIT_ASSERT(pDBData);
+        CPPUNIT_ASSERT(!pDBData->HasHeader());
+    }
 
     xDocSh->DoClose();
 }
@@ -483,15 +584,13 @@ void ScFiltersTest::testBugFixesXLSX()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testPassword()
+void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
 
     sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
@@ -516,6 +615,21 @@ void ScFiltersTest::testPassword()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
     xDocSh->DoClose();
+
+}
+
+void ScFiltersTest::testPasswordNew()
+{
+    //tests opening a file with new password algorithm
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
+    testPassword_Impl(aFileNameBase);
+}
+
+void ScFiltersTest::testPasswordOld()
+{
+    //tests opening a file with old password algorithm
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("passwordOld."));
+    testPassword_Impl(aFileNameBase);
 }
 
 ScFiltersTest::ScFiltersTest()

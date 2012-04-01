@@ -178,7 +178,6 @@ class SfxDispatchController_Impl : public SfxControllerItem
 
     void                addParametersToArgs( const com::sun::star::util::URL& aURL,
                                              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs ) const;
-    using SfxControllerItem::GetCoreMetric;
     SfxMapUnit          GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
 
 public:

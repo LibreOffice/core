@@ -332,7 +332,7 @@ void ScRetypePassDlg::CheckHashStatus()
     maBtnOk.Disable();
 }
 
-IMPL_LINK( ScRetypePassDlg, OKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScRetypePassDlg, OKHdl)
 {
     EndDialog(RET_OK);
     return 0;
@@ -394,7 +394,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScRetypePassDlg, ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScRetypePassDlg, ScrollHdl)
 {
     ResetTableRows();
     return 0;
@@ -498,7 +498,7 @@ void ScRetypePassInputDlg::CheckPasswordInput()
     maBtnOk.Enable(bPassGood);
 }
 
-IMPL_LINK( ScRetypePassInputDlg, OKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl)
 {
     EndDialog(RET_OK);
     return 0;
@@ -530,13 +530,13 @@ IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, RadioButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScRetypePassInputDlg, CheckBoxHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl)
 {
     CheckPasswordInput();
     return 0;
 }
 
-IMPL_LINK( ScRetypePassInputDlg, PasswordModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(ScRetypePassInputDlg, PasswordModifyHdl)
 {
     CheckPasswordInput();
     return 0;

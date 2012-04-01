@@ -385,12 +385,12 @@ void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 }
 
 void SvMetaModule::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            Table* pTable )
+                            HelpIdTable& rTable )
 {
     for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
-        pClass->WriteHelpIds( rBase, rOutStm, pTable );
+        pClass->WriteHelpIds( rBase, rOutStm, rTable );
     }
 }
 

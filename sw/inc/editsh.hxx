@@ -44,6 +44,7 @@
 #include <tblenum.hxx>
 #include <IMark.hxx>
 
+#include <algorithm>
 #include <vector>
 #include <set>
 #include <swundo.hxx>
@@ -252,6 +253,34 @@ public:
     void SetAttr( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
     void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
 
+    /**
+     * Get the paragraph format attribute(s) of the current selection.
+     *
+     * @see GetPaMParAttr()
+     *
+     * @param rSet
+     * output parameter - the SfxItemSet where the automatic paragraph format attribut(s) will be store.
+     * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limite.
+     *
+     * @return true if the function inspect all the nodes point by the pPaM parameter,
+     * false if the function reach the limit of getMaxLookup number of nodes inspected.
+     */
+    sal_Bool GetCurParAttr( SfxItemSet& rSet ) const;
+    /**
+     * Get the paragraph format attribute(s) of the selection(s) described by a SwPaM.
+     *
+     * @param pPaM
+     * input parameter - the selection where to look for the paragraph format.
+     *
+     * @param rSet
+     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
+     * The attributes aren't invalidated or cleared if the function reaches the getMaxLookup limit.
+     *
+     * @return true if the function inspects all the nodes point by the pPaM parameter,
+     * false if the function reaches the limit of getMaxLookup number of nodes inspected.
+     */
+    sal_Bool GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const;
+
     // Set attribute as new default attribute in document.
     void SetDefault( const SfxPoolItem& );
 
@@ -284,7 +313,7 @@ public:
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
      * GetXXX(i)     returns i-th xxx (ERR_RAISE if beyond range!).
-     * DelXXX(i)     delets i-th xxx  (ERR_RAISE if beyond range!).
+     * DelXXX(i)     deletes i-th xxx  (ERR_RAISE if beyond range!).
      * GetCurXXX()   returns xxx that is valid at cursor or in ranges.
      *               returns 0, if not unanimuous.
      * SetXXX()      sets xxx at cursor or in ranges.
@@ -295,7 +324,25 @@ public:
     SwTxtFmtColl& GetDfltTxtFmtColl() const;
     sal_uInt16 GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( sal_uInt16 nTxtFmtColl) const;
+    /**
+     * Get the named paragraph format of the current selection.
+     *
+     * @see GetPaMTxtFmtColl()
+     *
+     * @return the named paragraph format of the first node that contains one.
+     * Nodes are sort by order of appearance in the selections ;
+     * selections are sort by their order of creation
+     * (last created selection first, oldest selection at last).
+     */
     SwTxtFmtColl* GetCurTxtFmtColl() const;
+    /**
+     * Get the named paragraph format of the selection(s) described by a SwPaM.
+     *
+     * @param pPaM
+     * input parameter - the selection where to look for the paragraph format.
+     *
+     * @return the named paragraph format of the first node that contains one.
+     */
     SwTxtFmtColl* GetPaMTxtFmtColl( SwPaM* pPaM ) const;
 
     // #i62675#
@@ -740,7 +787,7 @@ public:
 
     //  Return names of all references set in document.
     //  If ArrayPointer == 0 then return only whether a RefMark is set in document.
-    sal_uInt16 GetRefMarks( std::vector<String>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<rtl::OUString>* = 0 ) const;
 
     // Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsertMode = sal_True,

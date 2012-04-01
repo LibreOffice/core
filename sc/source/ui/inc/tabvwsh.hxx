@@ -200,11 +200,11 @@ private:
     void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
-    DECL_LINK( SimpleRefClose, String* );
+    DECL_LINK( SimpleRefClose, void* );
     DECL_LINK( SimpleRefDone, String* );
     DECL_LINK( SimpleRefAborted, String* );
     DECL_LINK( SimpleRefChange, String* );
-    DECL_LINK( FormControlActivated, FmFormShell* );
+    DECL_LINK( FormControlActivated, void* );
 
 protected:
     virtual void    Activate(sal_Bool bMDI);

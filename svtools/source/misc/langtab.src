@@ -165,7 +165,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Serbian Cyrillic (Montenegro)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO ; > ;
         < "Serbian Latin (Montenegro)" ; LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO ; > ;
         < "Sindhi" ; LANGUAGE_SINDHI ; > ;
-        < "Slovakian" ; LANGUAGE_SLOVAK ; > ;
+        < "Slovak" ; LANGUAGE_SLOVAK ; > ;
         < "Slovenian" ; LANGUAGE_SLOVENIAN ; > ;
         < "Spanish (Spain)" ; LANGUAGE_SPANISH ; > ;
         < "Spanish (Mexico)" ; LANGUAGE_SPANISH_MEXICAN ; > ;
@@ -344,6 +344,9 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "KeyID" ; LANGUAGE_USER_KEYID ; > ;
         < "Pali Latin" ; LANGUAGE_USER_PALI_LATIN ; > ;
         < "Kyrgyz (China)" ; LANGUAGE_USER_KYRGYZ_CHINA ; > ;
+        < "Komi-Zyrian" ; LANGUAGE_USER_KOMI_ZYRIAN ; > ;
+        < "Komi-Permyak" ; LANGUAGE_USER_KOMI_PERMYAK ; > ;
+        < "Pitjantjatjara" ; LANGUAGE_USER_PITJANTJATJARA ; > ;
     };
 };
 

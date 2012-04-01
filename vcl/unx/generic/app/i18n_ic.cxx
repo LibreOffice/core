@@ -577,7 +577,7 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         aTextEvent.mnTime        = 0;
         aTextEvent.mpTextAttr    = 0;
         aTextEvent.mnCursorPos   = nLength;
-        aTextEvent.maText        = UniString(pText, nLength);
+        aTextEvent.maText        = rtl::OUString(pText, nLength);
         aTextEvent.mnCursorFlags = 0;
         aTextEvent.mnDeltaStart  = 0;
         aTextEvent.mbOnlyCursor  = False;

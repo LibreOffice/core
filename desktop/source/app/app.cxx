@@ -68,10 +68,10 @@
 #include <toolkit/unohlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <officecfg/Office/Recovery.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/uri.hxx>
@@ -291,68 +291,70 @@ namespace
         : public rtl::Static< String, WriterCompatibilityVersionOOo11 > {};
 }
 
-void ReplaceStringHookProc( UniString& rStr )
+rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 {
-    static int nAll = 0, nPro = 0;
+    rtl::OUString sRet(rStr);
 
-    nAll++;
-    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    if ( sRet.indexOf( "%PRODUCT" ) != -1 )
     {
-        String rBrandName = BrandName::get();
-        String rVersion = Version::get();
-        String rAboutBoxVersion = AboutBoxVersion::get();
-        String rAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        String rExtension = Extension::get();
-        String rXMLFileFormatName = XMLFileFormatName::get();
-        String rXMLFileFormatVersion = XMLFileFormatVersion::get();
+        rtl::OUString sBrandName = BrandName::get();
+        rtl::OUString sVersion = Version::get();
+        rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
+        rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+        rtl::OUString sExtension = Extension::get();
+        rtl::OUString sXMLFileFormatName = XMLFileFormatName::get();
+        rtl::OUString sXMLFileFormatVersion = XMLFileFormatVersion::get();
 
-        if ( !rBrandName.Len() )
+        if ( sBrandName.isEmpty() )
         {
-            rBrandName = utl::ConfigManager::getProductName();
-            rXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
-            rXMLFileFormatVersion =
+            sBrandName = utl::ConfigManager::getProductName();
+            sXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
+            sXMLFileFormatVersion =
                 utl::ConfigManager::getProductXmlFileFormatVersion();
-            rVersion = utl::ConfigManager::getProductVersion();
-            rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-            rAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-            if ( !rExtension.Len() )
+            sVersion = utl::ConfigManager::getProductVersion();
+            sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+            sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
+            if ( sExtension.isEmpty() )
             {
-                rExtension = utl::ConfigManager::getProductExtension();
+                sExtension = utl::ConfigManager::getProductExtension();
             }
         }
 
-        nPro++;
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSIONSUFFIX", rAboutBoxVersionSuffix );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
+        sRet = sRet.replaceAll( "%PRODUCTNAME", sBrandName );
+        sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
+        sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
+        sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
+        sRet = sRet.replaceAll( "%PRODUCTEXTENSION", sExtension );
+        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATNAME", sXMLFileFormatName );
+        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATVERSION", sXMLFileFormatVersion );
     }
-    if ( rStr.SearchAscii( "%OOOVENDOR" ) != STRING_NOTFOUND )
-    {
-        String rOOOVendor = OOOVendor::get();
 
-        if ( !rOOOVendor.Len() )
+    if ( sRet.indexOf( "%OOOVENDOR" ) != -1 )
+    {
+        rtl::OUString sOOOVendor = OOOVendor::get();
+
+        if ( sOOOVendor.isEmpty() )
         {
-            rOOOVendor = utl::ConfigManager::getVendor();
+            sOOOVendor = utl::ConfigManager::getVendor();
         }
-        rStr.SearchAndReplaceAllAscii( "%OOOVENDOR" ,rOOOVendor );
+
+        sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
     }
 
-    if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
+    if ( sRet.indexOf( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != -1 )
     {
-        String rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
-        if ( !rWriterCompatibilityVersionOOo11.Len() )
+        rtl::OUString sWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+        if ( sWriterCompatibilityVersionOOo11.isEmpty() )
         {
-            rWriterCompatibilityVersionOOo11 =
+            sWriterCompatibilityVersionOOo11 =
                 utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1();
         }
 
-        rStr.SearchAndReplaceAllAscii( "%WRITERCOMPATIBILITYVERSIONOOO11",
-                                        rWriterCompatibilityVersionOOo11 );
+        sRet = sRet.replaceAll( "%WRITERCOMPATIBILITYVERSIONOOO11",
+                                        sWriterCompatibilityVersionOOo11 );
     }
+
+    return sRet;
 }
 
 static const char      pLastSyncFileName[]     = "lastsynchronized";
@@ -756,7 +758,7 @@ sal_Bool Desktop::QueryExit()
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< ::com::sun::star::frame::XDesktop >
-            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 UNO_QUERY );
 
     Reference < ::com::sun::star::beans::XPropertySet > xPropertySet( xDesktop, UNO_QUERY );
@@ -764,7 +766,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_True;
-        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
 
     sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
@@ -774,7 +776,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_False;
-        xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
     else
     {
@@ -1117,47 +1119,14 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
 void Desktop::retrieveCrashReporterState()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-    static const ::rtl::OUString CFG_PATH_CRASHREPORTER(RTL_CONSTASCII_USTRINGPARAM("CrashReporter"));
-    static const ::rtl::OUString CFG_ENTRY_ENABLED(RTL_CONSTASCII_USTRINGPARAM("Enabled"));
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-
-    sal_Bool bEnabled(sal_False);
-    if ( xSMGR.is() )
-    {
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    xSMGR,
-                                    CFG_PACKAGE_RECOVERY,
-                                    CFG_PATH_CRASHREPORTER,
-                                    CFG_ENTRY_ENABLED,
-                                    ::comphelper::ConfigurationHelper::E_READONLY);
-        aVal >>= bEnabled;
-    }
-    _bCrashReporterEnabled = bEnabled;
+    _bCrashReporterEnabled
+        = officecfg::Office::Recovery::CrashReporter::Enabled::get();
 }
 
 sal_Bool Desktop::isUIOnSessionShutdownAllowed()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-    static const ::rtl::OUString CFG_PATH_SESSION(RTL_CONSTASCII_USTRINGPARAM("SessionShutdown"));
-    static const ::rtl::OUString CFG_ENTRY_UIENABLED(RTL_CONSTASCII_USTRINGPARAM("DocumentStoreUIEnabled"));
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-
-    sal_Bool bResult = sal_False;
-    if ( xSMGR.is() )
-    {
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    xSMGR,
-                                    CFG_PACKAGE_RECOVERY,
-                                    CFG_PATH_SESSION,
-                                    CFG_ENTRY_UIENABLED,
-                                    ::comphelper::ConfigurationHelper::E_READONLY);
-        aVal >>= bResult;
-    }
-
-    return bResult;
+    return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
+        ::get();
 }
 
 //-----------------------------------------------
@@ -1509,23 +1478,22 @@ int Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
     SetSplashScreenProgress(10);
+
+    UserInstall::UserInstallStatus inst_fin = UserInstall::finalize();
+    if (inst_fin != UserInstall::Ok && inst_fin != UserInstall::Created)
     {
-        UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
-        if ( instErr_fin != UserInstall::E_None)
-        {
-            OSL_FAIL("userinstall failed");
-            if ( instErr_fin == UserInstall::E_NoDiskSpace )
-                HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
-            else if ( instErr_fin == UserInstall::E_NoWriteAccess )
-                HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
-            else
-                HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-            return EXIT_FAILURE;
-        }
-        // refresh path information
-        utl::Bootstrap::reloadData();
-        SetSplashScreenProgress(20);
+        OSL_FAIL("userinstall failed");
+        if ( inst_fin == UserInstall::E_NoDiskSpace )
+            HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
+        else if ( inst_fin == UserInstall::E_NoWriteAccess )
+            HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
+        else
+            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+        return EXIT_FAILURE;
     }
+    // refresh path information
+    utl::Bootstrap::reloadData();
+    SetSplashScreenProgress(20);
 
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -1640,6 +1608,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
+#ifndef ANDROID
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
@@ -1656,7 +1625,11 @@ int Desktop::Main()
         // check whether the shutdown is caused by restart
         pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
-        Migration::migrateSettingsIfNecessary();
+        if (inst_fin == UserInstall::Created)
+        {
+            Migration::migrateSettingsIfNecessary();
+        }
+#endif
 
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
@@ -2085,7 +2058,7 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 }
 
 // ========================================================================
-IMPL_LINK( Desktop, AsyncInitFirstRun, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, AsyncInitFirstRun)
 {
     DoFirstRunInitializations();
     return 0L;
@@ -2107,7 +2080,7 @@ class ExitTimer : public Timer
     }
 };
 
-IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
@@ -2130,7 +2103,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 }
 
 // enable acceptos
-IMPL_LINK( Desktop, EnableAcceptors_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, EnableAcceptors_Impl)
 {
     enableAcceptors();
     return 0;
@@ -2488,11 +2461,11 @@ void Desktop::OpenClients()
         try
         {
             Reference< XDispatch > xRecovery(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             Reference< XURLTransformer > xParser(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             css::util::URL aCmd;
@@ -2537,7 +2510,7 @@ void Desktop::OpenClients()
                     May be we can check the desktop if some documents are existing there.
                  */
                 Reference< XFramesSupplier > xTasksSupplier(
-                        ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                         ::com::sun::star::uno::UNO_QUERY_THROW );
                 Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
                 if ( xList->hasElements() )
@@ -2665,7 +2638,7 @@ void Desktop::OpenClients()
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
     Reference< XFramesSupplier > xTasksSupplier(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY_THROW );
     Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
     if ( xList->hasElements() || rArgs.IsServer() )
@@ -2799,7 +2772,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             // find active task - the active task is always a visible task
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                  xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                  xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                             ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
@@ -2925,7 +2898,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
             com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
-                xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 ::com::sun::star::uno::UNO_QUERY );
 
             // check provider ... we know it's weak reference only

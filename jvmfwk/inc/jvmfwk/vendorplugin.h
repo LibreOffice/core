@@ -30,6 +30,7 @@
 #if !defined INCLUDED_JVMFWK_VENDORPLUGIN_H
 #define INCLUDED_JVMFWK_VENDORPLUGIN_H
 
+#include "jvmfwkplugindllapi.h"
 #include "jvmfwk/framework.h"
 #include "rtl/ustring.h"
 #ifdef SOLAR_JAVA
@@ -126,7 +127,7 @@ typedef enum
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
  */
-javaPluginError jfw_plugin_getAllJavaInfos(
+JVMFWK_PLUGIN_DLLPUBLIC javaPluginError jfw_plugin_getAllJavaInfos(
     rtl_uString *sVendor,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
@@ -177,7 +178,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
    does not mean necessarily that there is no JRE. There could be a JRE but it has
    a vendor which is not supported by this API implementation.
  */
-javaPluginError jfw_plugin_getJavaInfoByPath(
+JVMFWK_PLUGIN_DLLPUBLIC javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *sLocation,
     rtl_uString *sVendor,
     rtl_uString *sMinVersion,
@@ -230,7 +231,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     JFW_PLUGIN_E_VM_CREATION_FAILED a VM could not be created. The error was caused
     by the JRE.
  */
-javaPluginError jfw_plugin_startJavaVirtualMachine(
+JVMFWK_PLUGIN_DLLPUBLIC javaPluginError jfw_plugin_startJavaVirtualMachine(
     const JavaInfo *pInfo,
     const JavaVMOption *arOptions,
     sal_Int32 nSizeOptions,
@@ -256,7 +257,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
     JFW_PLUGIN_E_INVALID_ARG pInfo contains invalid data</br>
  */
-javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+JVMFWK_PLUGIN_DLLPUBLIC javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
 #ifdef __cplusplus
 }

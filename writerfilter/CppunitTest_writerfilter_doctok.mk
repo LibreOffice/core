@@ -45,7 +45,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
 
 $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc \
 	-I$(SRCDIR)/writerfilter/inc \
 ))
 

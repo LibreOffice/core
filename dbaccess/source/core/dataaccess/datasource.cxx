@@ -66,7 +66,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -747,8 +746,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
-        aContext.Message = DBACORE_RESSTRING( RID_STR_CONNECTION_REQUEST );
-        ::comphelper::string::searchAndReplaceAsciiI( aContext.Message, "$name$", m_pImpl->m_sConnectURL );
+        aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
+            replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }

@@ -491,13 +491,13 @@ void Container::fire( const EventBroadcastHelper &helper )
             {
                 helper.fire( (XEventListener * ) iterator.next() );
             }
-            catch ( com::sun::star::uno::RuntimeException & e )
+            catch ( com::sun::star::uno::RuntimeException & )
             {
                 OSL_ENSURE( 0, "exception catched" );
                 // loose coupling, a runtime exception shall not break anything
                 // TODO: log away as warning !
             }
-            catch( com::sun::star::uno::Exception & e )
+            catch( com::sun::star::uno::Exception & )
             {
                 OSL_ENSURE( 0, "exception from listener flying through" );
                 throw;

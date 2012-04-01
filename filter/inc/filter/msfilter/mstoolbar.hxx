@@ -88,7 +88,6 @@ public:
     rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
     rtl::OUString MSOTCIDToOOCommand( sal_Int16 msoTCID );
     SfxObjectShell& GetDocShell() { return mrDocSh; }
-    void showToolbar( const rtl::OUString& rName );
     bool createMenu( const rtl::OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc, bool bPersist );
 };
 

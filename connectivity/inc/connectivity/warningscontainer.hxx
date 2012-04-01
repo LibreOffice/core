@@ -50,6 +50,9 @@ namespace dbtools
         virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning) = 0;
         virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
         virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
+
+    protected:
+        ~IWarningsContainer() {}
     };
 
     //====================================================================

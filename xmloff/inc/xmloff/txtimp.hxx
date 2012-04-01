@@ -39,9 +39,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
-
-// xmloff/functional.hxx is obsolete and should be replaced by its comphelper
-// counterpart
 #include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
 
@@ -570,11 +567,6 @@ public:
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
     static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
 
-    static sal_Bool HasDrawNameAttribute(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-        SvXMLNamespaceMap& rNamespaceMap );
-
     SvI18NMap& GetRenameMap();
 
     /// save the start of a range reference
@@ -596,13 +588,11 @@ public:
             o_rpRDFaAttributes);
 
     ::rtl::OUString FindActiveBookmarkName();
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetRangeFor(::rtl::OUString &sName);
 
     void pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type );
     void popFieldCtx();
     void addFieldParam( ::rtl::OUString name, ::rtl::OUString value );
     void setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField);
-    ::rtl::OUString getCurrentFieldName();
     ::rtl::OUString getCurrentFieldType();
     bool hasCurrentFieldCtx();
 

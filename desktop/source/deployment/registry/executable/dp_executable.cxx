@@ -188,8 +188,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    dp_misc::StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {

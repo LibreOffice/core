@@ -54,15 +54,6 @@ TYPEINIT1(SfxDateTimeItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which ) :
-    SfxPoolItem( which ),
-    aDateTime( DateTime::SYSTEM )
-{
-    DBG_CTOR(SfxDateTimeItem, 0);
-}
-
-// -----------------------------------------------------------------------
-
 SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which, const DateTime& rDT ) :
     SfxPoolItem( which ),
     aDateTime( rDT )

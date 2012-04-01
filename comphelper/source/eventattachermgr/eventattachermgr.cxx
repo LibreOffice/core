@@ -98,9 +98,9 @@ class ImplEventAttacherManager
     friend class AttacherAllListener_Impl;
     ::std::deque< AttacherIndex_Impl >  aIndex;
     Mutex aLock;
-    // Container fuer die ScriptListener
+    // Container for the ScriptListener
     OInterfaceContainerHelper           aScriptListeners;
-    // EventAttacher-Instanz
+    // Instance of EventAttacher
     Reference< XEventAttacher2 >        xAttacher;
     Reference< XMultiServiceFactory >   mxSMgr;
     Reference< XIdlReflection >         mxCoreReflection;
@@ -112,7 +112,7 @@ public:
                               const Reference< XMultiServiceFactory > rSMgr );
     ~ImplEventAttacherManager();
 
-    // Methoden von XEventAttacherManager
+    // Methods of XEventAttacherManager
     virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent)
         throw( IllegalArgumentException, RuntimeException );
     virtual void SAL_CALL registerScriptEvents(sal_Int32 Index, const Sequence< ScriptEventDescriptor >& ScriptEvents)
@@ -136,7 +136,7 @@ public:
     virtual void SAL_CALL removeScriptListener(const Reference< XScriptListener >& Listener)
         throw( IllegalArgumentException, RuntimeException );
 
-    // Methoden von XPersistObject
+    // Methods of XPersistObject
     virtual OUString SAL_CALL getServiceName(void) throw( RuntimeException );
     virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) throw( IOException, RuntimeException );
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException );
@@ -157,8 +157,9 @@ private:
 //========================================================================
 //========================================================================
 
-// Implementation eines EventAttacher-bezogenen AllListeners, der
-// nur einzelne Events an einen allgemeinen AllListener weiterleitet
+
+// Implementation of an EventAttacher-subclass 'AllListeners', which
+// only passes individual events of the general AllListeners.
 class AttacherAllListener_Impl : public WeakImplHelper1< XAllListener >
 {
     ImplEventAttacherManager*           mpManager;
@@ -173,11 +174,11 @@ public:
     AttacherAllListener_Impl( ImplEventAttacherManager* pManager_, const OUString &rScriptType_,
                                 const OUString & rScriptCode_ );
 
-    // Methoden von XAllListener
+    // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException );
     virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException );
 
-    // Methoden von XEventListener
+    // Methods of XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException );
 };
 
@@ -198,7 +199,7 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
 
 
 //========================================================================
-// Methoden von XAllListener
+// Methods of XAllListener
 void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     throw( RuntimeException )
 {
@@ -211,7 +212,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     aScriptEvent.ScriptType     = aScriptType;
     aScriptEvent.ScriptCode     = aScriptCode;
 
-    // ueber alle Listener iterieren und Events senden
+    // Iterate over all listeners and pass events.
     OInterfaceIteratorHelper aIt( mpManager->aScriptListeners );
     while( aIt.hasMoreElements() )
         ((XScriptListener *)aIt.next())->firing( aScriptEvent );
@@ -264,7 +265,7 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
 }
 
 //========================================================================
-// Methoden von XAllListener
+// Methods of XAllListener
 Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
     throw( InvocationTargetException, RuntimeException )
 {
@@ -278,7 +279,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     aScriptEvent.ScriptCode     = aScriptCode;
 
     Any aRet;
-    // ueber alle Listener iterieren und Events senden
+    // Iterate over all listeners and pass events.
     OInterfaceIteratorHelper aIt( mpManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
@@ -352,7 +353,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 }
 
 //========================================================================
-// Methoden von XEventListener
+// Methods of XEventListener
 void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
     throw( RuntimeException )
 {
@@ -360,7 +361,7 @@ void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
 }
 
 
-// Create-Methode fuer EventAttacherManager
+// Constructor method for EventAttacherManager
 Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XMultiServiceFactory > & rSMgr )
     throw( Exception )
 {
@@ -415,7 +416,7 @@ ImplEventAttacherManager::~ImplEventAttacherManager()
 Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exception )
 {
     Guard< Mutex > aGuard( aLock );
-    // Haben wir den Service schon? Sonst anlegen
+    // Do we already have a service? If not, create one.
     if( !mxCoreReflection.is() )
     {
         Reference< XInterface > xIFace( mxSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" )) ) );
@@ -474,7 +475,7 @@ public:
 }
 
 //-----------------------------------------------------------------------------
-//*** Methoden von XEventAttacherManager ***
+// Methods of XEventAttacherManager
 void SAL_CALL ImplEventAttacherManager::registerScriptEvent
 (
     sal_Int32 nIndex,
@@ -484,7 +485,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
 {
     Guard< Mutex > aGuard( aLock );
 
-    // Index pruefen und Array anpassen
+    // Examine the index and apply the array
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
@@ -532,7 +533,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
 {
     Guard< Mutex > aGuard( aLock );
 
-    // Index pruefen und Array anpassen
+    // Examine the index and apply the array
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
@@ -657,7 +658,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 
     if( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
     {
-        // alte Dateien lesen
+        // read older files
         if( nVersion == 1 )
         {
             insertEntry( nIndex );
@@ -769,7 +770,7 @@ void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XS
 }
 
 
-// Methoden von XPersistObject
+// Methods of XPersistObject
 OUString SAL_CALL ImplEventAttacherManager::getServiceName(void)
     throw( RuntimeException )
 {
@@ -780,26 +781,26 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
     throw( IOException, RuntimeException )
 {
     Guard< Mutex > aGuard( aLock );
-    // Ohne XMarkableStream laeuft nichts
+    // Don't run without XMarkableStream
     Reference< XMarkableStream > xMarkStream( OutStream, UNO_QUERY );
     if( !xMarkStream.is() )
         return;
 
-    // Version schreiben
+    // Write out the version
     OutStream->writeShort( 2 );
 
-    // Position fuer Laenge merken
+    // Remember position for length
     sal_Int32 nObjLenMark = xMarkStream->createMark();
     OutStream->writeLong( 0L );
 
     OutStream->writeLong( aIndex.size() );
 
-    // Sequences schreiben
+    // Write out sequences
     ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
     ::std::deque<AttacherIndex_Impl>::iterator aEnd = aIndex.end();
     while( aIt != aEnd )
     {
-        // Laenge der Sequence und alle Descriptoren schreiben
+        // Write out the length of the sequence and all descriptions
         OutStream->writeLong( (*aIt).aEventList.size() );
         ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
         ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd = (*aIt).aEventList.end();
@@ -817,7 +818,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
         ++aIt;
     }
 
-    // Die jetzt bekannte Laenge eintragen
+    // The length is now known
     sal_Int32 nObjLen = xMarkStream->offsetToMark( nObjLenMark ) -4;
     xMarkStream->jumpToMark( nObjLenMark );
     OutStream->writeLong( nObjLen );
@@ -829,31 +830,31 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
     throw( IOException, RuntimeException )
 {
     Guard< Mutex > aGuard( aLock );
-    // Ohne XMarkableStream laeuft nichts
+    // Don't run without XMarkableStream
     Reference< XMarkableStream > xMarkStream( InStream, UNO_QUERY );
     if( !xMarkStream.is() )
         return;
 
-    // Version lesen
+    // Read in the version
     nVersion = InStream->readShort();
 
-    // Zunaechst kommen die Daten gemaess Version 1,
-    // muss auch bei hoeheren Versionen beibehalten werden
+    // At first there's the data according to version 1 --
+    // this part needs to be kept in later versions.
     sal_Int32 nLen = InStream->readLong();
 
-    // Position fuer Vergleichszwecke
+    // Position for comparative purposes
     sal_Int32 nObjLenMark = xMarkStream->createMark();
 
-    // Anzahl der zu lesenden Sequences
+    // Number of read sequences
     sal_Int32 nItemCount = InStream->readLong();
 
     for( sal_Int32 i = 0 ; i < nItemCount ; i++ )
     {
         insertEntry( i );
-        // Laenge der Sequence lesen
+        // Read the length of the sequence
         sal_Int32 nSeqLen = InStream->readLong();
 
-        // Sequence anlegen und Descriptoren lesen
+        // Display the sequences and read the descriptions
         Sequence< ScriptEventDescriptor > aSEDSeq( nSeqLen );
         ScriptEventDescriptor* pArray = aSEDSeq.getArray();
         for( sal_Int32 j = 0 ; j < nSeqLen ; j++ )
@@ -868,21 +869,19 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         registerScriptEvents( i, aSEDSeq );
     }
 
-    // Haben wir die angegebene Laenge gelesen?
+    // Have we read the specified length?
     sal_Int32 nRealLen = xMarkStream->offsetToMark( nObjLenMark );
     if( nRealLen != nLen )
     {
-        // Nur wenn die StreamVersion > 1 ist und noch Daten folgen, kann das
-        // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
+        // Only if the StreamVersion is > 1 and the date still follows, can
+        // this be true. Otherwise, something is completely gone.
         if( nRealLen > nLen || nVersion == 1 )
         {
             OSL_FAIL( "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
-        {
-            // TODO: Pruefen, ob Zwischen-Speicherung der Daten sinnvoll sein koennte
-
-            // Vorerst einfach nur Skippen
+        {   // TODO: Examine if caching the dates would be useful
+            // But for now, it's easier to skip it.
             sal_Int32 nSkipCount = nLen - nRealLen;
             InStream->skipBytes( nSkipCount );
         }

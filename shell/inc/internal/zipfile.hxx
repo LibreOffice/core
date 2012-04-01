@@ -33,13 +33,18 @@
 #define _WINDOWS
 #endif
 
-
-#include <external/zlib/unzip.h>
-
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
+#include <external/zlib/zlib.h>
+#endif
 
 #include <string>
 #include <vector>
 #include <memory>
+
+class StreamInterface;
+class ZipFilePrivate;
 
 /** A simple zip content provider based on the zlib
 */
@@ -67,9 +72,9 @@ public:
             IOException if the specified file doesn't exist
             AccessViolationException if read access to the file is denied
     */
-    static bool IsZipFile(const std::string& FileName);
+    static bool IsZipFile(const std::string &FileName);
 
-    static bool IsZipFile(void* stream);
+    static bool IsZipFile(void *stream);
 
 
     /** Returns wheter the version of the specified zip file may be uncompressed with the
@@ -87,9 +92,9 @@ public:
             IOException if the specified file doesn't exist or is no zip file
             AccessViolationException if read access to the file is denied
     */
-    static bool IsValidZipFileVersionNumber(const std::string& FileName);
+    static bool IsValidZipFileVersionNumber(const std::string &FileName);
 
-    static bool IsValidZipFileVersionNumber(void* stream);
+    static bool IsValidZipFileVersionNumber(void *stream);
 
 public:
 
@@ -105,9 +110,9 @@ public:
             WrongZipVersionException if the zip file cannot be uncompressed
             with the used zlib version
     */
-    ZipFile(const std::string& FileName);
+    ZipFile(const std::string &FileName);
 
-    ZipFile(void* stream, zlib_filefunc_def* fa);
+    ZipFile(StreamInterface *stream);
 
 
     /** Destroys a zip file
@@ -132,7 +137,7 @@ public:
                 ZipContentMissException if the specified zip content
                 does not exist in this zip file
     */
-    void GetUncompressedContent(const std::string& ContentName, /*inout*/ ZipContentBuffer_t& ContentBuffer);
+    void GetUncompressedContent(const std::string &ContentName, /*inout*/ ZipContentBuffer_t &ContentBuffer);
 
     /** Returns a list with the content names contained within this file
 
@@ -144,7 +149,7 @@ public:
         iterating over a ZipFileDirectory returned by
         GetDirectory
     */
-    bool HasContent(const std::string& ContentName) const;
+    bool HasContent(const std::string &ContentName) const;
 
 private:
 
@@ -156,7 +161,9 @@ private:
     long GetFileLongestFileNameLength() const;
 
 private:
-    unzFile m_uzFile;
+    StreamInterface *m_pStream;
+    bool m_bShouldFree;
+    long m_iStartOffset;
 };
 
 #endif

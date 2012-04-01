@@ -65,7 +65,7 @@ SwLineNumberingDlg::~SwLineNumberingDlg()
 {
 }
 
-IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
 {
     if (GetOKButton()->IsEnabled())
     {
@@ -193,7 +193,7 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
 /*--------------------------------------------------------------------
     Description: modify
  --------------------------------------------------------------------*/
-IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwLineNumberingPage, ModifyHdl)
 {
     sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
 
@@ -207,7 +207,7 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 /*--------------------------------------------------------------------
     Description: On/Off
  --------------------------------------------------------------------*/
-IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwLineNumberingPage, LineOnOffHdl)
 {
     sal_Bool bEnable = aNumberingOnCB.IsChecked();
 

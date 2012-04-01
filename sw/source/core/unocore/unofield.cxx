@@ -1642,7 +1642,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_MACRO:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_MACROFLD);
-                String aName;
+                rtl::OUString aName;
 
                 // support for Scripting Framework macros
                 if (m_pProps->sPar4.Len() != 0)
@@ -1878,7 +1878,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 
     if(pField)
     {
-        // Sonderbehandlung Serienbrieffeld
+        // special treatment for mail merge fields
         sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
             (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
@@ -1886,43 +1886,39 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
-            // hier muss ein neuer Feldtyp angelegt werden und
-            // das Feld an den neuen Typ umgehaengt werden
+            // here a new field type must be created and the field must
+            // be registered at the new type
             OSL_FAIL("not implemented");
         }
         else
         {
             SwDoc * pDoc = GetDoc();
-
-            if (NULL != pDoc)
-            {
-                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-                if(!pTxtFld)
-                    throw uno::RuntimeException();
-                SwPosition aPosition( pTxtFld->GetTxtNode() );
-                aPosition.nContent = *pTxtFld->GetStart();
-                pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
-            }
+            assert(pDoc);
+            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+            if(!pTxtFld)
+                throw uno::RuntimeException();
+            SwPosition aPosition( pTxtFld->GetTxtNode() );
+            aPosition.nContent = *pTxtFld->GetStart();
+            pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
         }
-        pField->PutValue( rValue, pEntry->nWID );
 
-    //#i100374# notify SwPostIt about new field content
-    if (RES_POSTITFLD== nWhich && pFmtFld)
-    {
-        const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
-    }
+        //#i100374# notify SwPostIt about new field content
+        if (RES_POSTITFLD== nWhich && pFmtFld)
+        {
+            const_cast<SwFmtFld*>(pFmtFld)->Broadcast(
+                    SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+        }
 
-        // changes of the expanded string have to be notified
-        //#to the SwTxtFld
-        if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
+        // fdo#42073 notify SwTxtFld about changes of the expanded string
+        if (pFmtFld->GetTxtFld())
         {
             pFmtFld->GetTxtFld()->Expand();
         }
 
-    //#i100374# changing a document field should set the modify flag
-    SwDoc* pDoc = GetDoc();
-    if (pDoc)
-        pDoc->SetModified();
+        //#i100374# changing a document field should set the modify flag
+        SwDoc* pDoc = GetDoc();
+        if (pDoc)
+            pDoc->SetModified();
 
     }
     else if(m_pProps)

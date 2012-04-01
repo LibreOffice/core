@@ -405,8 +405,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
     }
     else
     {
-        XubString aText( rText );
-        aText.ConvertLineEnd( LINEEND_LF );
+        XubString aText(convertLineEnd(rText, LINEEND_LF));
 
         if( aText.GetChar( aText.Len()-1 ) == '\x0A' )
             aText.Erase( aText.Len()-1, 1 ); // Delete the last break
@@ -1826,7 +1825,7 @@ IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
     return 0;
 }
 
-IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, EMPTYARG )
+IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl)
 {
     DBG_CHKTHIS(Outliner,0);
 

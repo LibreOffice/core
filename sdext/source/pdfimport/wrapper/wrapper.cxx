@@ -63,7 +63,6 @@
 #include "basegfx/tools/unopolypolygon.hxx"
 
 #include <boost/bind.hpp>
-#include <boost/preprocessor/stringize.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
@@ -1017,8 +1016,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
         converterURL.insert(
             0,
             xProvider->getPackageLocation(
-                rtl::OUString::createFromAscii(
-                    BOOST_PP_STRINGIZE(PDFI_IMPL_IDENTIFIER))));
+                rtl::OUString::createFromAscii(PDFI_IMPL_IDENTIFIER)));
     }
 
     // spawn separate process to keep LGPL/GPL code apart.

@@ -40,7 +40,6 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
 #include "osl/mutex.hxx"
-#include "vcl/dialog.hxx"
 #include "cppuhelper/implbase3.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
@@ -69,16 +68,14 @@
 #include "dp_gui.hrc"
 #include "dp_gui_updateinstalldialog.hxx"
 #include "dp_gui_shared.hxx"
-#include "dp_gui_updatedata.hxx"
 #include "dp_ucb.h"
 #include "dp_misc.h"
 #include "dp_version.hxx"
-#include "dp_gui_thread.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
 #include "osl/mutex.hxx"
-#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
+#include "salhelper/thread.hxx"
 #include "com/sun/star/uno/Sequence.h"
 #include "comphelper/anytostring.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
@@ -90,12 +87,12 @@ class Window;
 namespace cssu = ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
+using dp_misc::StrTitle;
 using ::rtl::OUString;
-
 
 namespace dp_gui {
 
-class UpdateInstallDialog::Thread: public dp_gui::Thread {
+class UpdateInstallDialog::Thread: public salhelper::Thread {
     friend class UpdateCommandEnv;
 public:
     Thread(cssu::Reference< cssu::XComponentContext > ctx,
@@ -106,9 +103,6 @@ public:
 
 
 private:
-    Thread(Thread &); // not defined
-    void operator =(Thread &); // not defined
-
     virtual ~Thread();
 
     virtual void execute();
@@ -175,6 +169,7 @@ UpdateInstallDialog::Thread::Thread(
     cssu::Reference< cssu::XComponentContext> xCtx,
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
+    salhelper::Thread("dp_gui_updateinstalldialog"),
     m_dialog(dialog),
     m_xComponentContext(xCtx),
     m_aVecUpdateData(aVecUpdateData),
@@ -334,7 +329,7 @@ void UpdateInstallDialog::setError(OUString const & exceptionMessage)
     m_mle_info.InsertText(exceptionMessage + OUSTR("\n"));
 }
 
-IMPL_LINK(UpdateInstallDialog, cancelHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
 {
     m_thread->stop();
     EndDialog(RET_CANCEL);
@@ -621,8 +616,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     ::ucbhelper::Content sourceContent;
     dp_misc::create_ucb_content( &sourceContent, sDownloadURL, m_updateCmdEnv.get() );
 
-    const OUString sTitle(sourceContent.getPropertyValue(
-                          dp_misc::StrTitle::get() ).get<OUString>() );
+    const OUString sTitle( StrTitle::getTitle( sourceContent ) );
 
     if (destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,

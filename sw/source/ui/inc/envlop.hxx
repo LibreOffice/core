@@ -110,8 +110,8 @@ class SwEnvPage : public SfxTabPage
     ~SwEnvPage();
 
     DECL_LINK( DatabaseHdl, ListBox * );
-    DECL_LINK( FieldHdl, Button * );
-    DECL_LINK( SenderHdl, Button * );
+    DECL_LINK(FieldHdl, void *);
+    DECL_LINK(SenderHdl, void *);
 
     void InitDatabaseBox();
 

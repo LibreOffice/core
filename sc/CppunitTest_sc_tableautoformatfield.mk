@@ -73,10 +73,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_tableautoformatfield, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_tableautoformatfield,\
-    -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sc/inc) \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sc_tableautoformatfield,\

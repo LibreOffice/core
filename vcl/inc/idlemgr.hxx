@@ -57,7 +57,7 @@ public:
                         { if ( maTimer.IsActive() ) maTimer.Start(); }
 
                     // Timer* kann auch NULL sein
-                    DECL_LINK( TimeoutHdl, Timer* );
+                    DECL_LINK(TimeoutHdl, void *);
 };
 
 #endif  // _SV_IDLEMGR_HXX

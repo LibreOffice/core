@@ -361,15 +361,16 @@ namespace
             {
                 const impPathTextPortion* pCandidate = rTextPortions[a];
                 basegfx::B2DVector aFontScaling;
-                const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
-                    drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                        aFontScaling,
-                        pCandidate->getFont(),
-                        pCandidate->isRTL(),
-                        false));
 
                 if(pCandidate && pCandidate->getTextLength())
                 {
+                    const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
+                        drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                            aFontScaling,
+                            pCandidate->getFont(),
+                            pCandidate->isRTL(),
+                            false));
+
                     drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                     aTextLayouter.setFont(pCandidate->getFont());
                     xub_StrLen nUsedTextLength(0);

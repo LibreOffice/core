@@ -47,6 +47,8 @@ typedef const SdrPage* CacheKey;
 class CacheContext
 {
 public:
+    virtual ~CacheContext() {}
+
     /** This method is called when the asynchronous creation of a preview
         has been finished.
         @param aKey

@@ -1124,12 +1124,6 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
     return Insert( aFont, eColorType, bAppFont );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern,
-        sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
-{
-    return Insert( rPattern.GetItemSet(), nScript, eColorType, bAppFont );
-}
-
 void XclExpFontBuffer::Save( XclExpStream& rStrm )
 {
     maFontList.Save( rStrm );

@@ -991,17 +991,17 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
         // swapped
         if( nType > 100L )
         {
-            nType = SWAPLONG( nType );
-            nLen = SWAPLONG( nLen );
-            nWidth = SWAPLONG( nWidth );
-            nHeight = SWAPLONG( nHeight );
-            nMapMode = SWAPLONG( nMapMode );
-            nScaleNumX = SWAPLONG( nScaleNumX );
-            nScaleDenomX = SWAPLONG( nScaleDenomX );
-            nScaleNumY = SWAPLONG( nScaleNumY );
-            nScaleDenomY = SWAPLONG( nScaleDenomY );
-            nOffsX = SWAPLONG( nOffsX );
-            nOffsY = SWAPLONG( nOffsY );
+            nType = OSL_SWAPDWORD( nType );
+            nLen = OSL_SWAPDWORD( nLen );
+            nWidth = OSL_SWAPDWORD( nWidth );
+            nHeight = OSL_SWAPDWORD( nHeight );
+            nMapMode = OSL_SWAPDWORD( nMapMode );
+            nScaleNumX = OSL_SWAPDWORD( nScaleNumX );
+            nScaleDenomX = OSL_SWAPDWORD( nScaleDenomX );
+            nScaleNumY = OSL_SWAPDWORD( nScaleNumY );
+            nScaleDenomY = OSL_SWAPDWORD( nScaleDenomY );
+            nOffsX = OSL_SWAPDWORD( nOffsX );
+            nOffsY = OSL_SWAPDWORD( nOffsY );
         }
 
         aSize = Size( nWidth, nHeight );
@@ -1043,7 +1043,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                 ::utl::TempFile     aTempFile;
                 const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-                if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+                if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
                 {
                     SvStream* pOStm = NULL;
                     try
@@ -1257,7 +1257,7 @@ sal_Bool ImpGraphic::ImplSwapOut()
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-            if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+            if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
             {
                 SvStream* pOStm = NULL;
                 try

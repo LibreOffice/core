@@ -178,7 +178,6 @@ protected:
 
     using               StorageObjectBase::construct;
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
-    void                construct( const ObjectBase& rParent );
 
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
@@ -328,11 +327,6 @@ protected:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName,
-                            const String& rPropNameList,
-                            bool b64BitPropFlags = false );
-    void                construct(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm,
                             const String& rPropNameList,
                             bool b64BitPropFlags = false );
     void                construct(

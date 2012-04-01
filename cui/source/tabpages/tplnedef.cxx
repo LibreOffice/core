@@ -390,18 +390,18 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLineDefTabPage, ChangePreviewHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 {
     FillDash_Impl();
     aCtlPreview.Invalidate();
 
     return( 0L );
 }
-IMPL_LINK_INLINE_END( SvxLineDefTabPage, ChangePreviewHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ChangeNumber1Hdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
 {
     if( aNumFldNumber1.GetValue() == 0L )
     {
@@ -421,7 +421,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeNumber1Hdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ChangeNumber2Hdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 {
     if( aNumFldNumber2.GetValue() == 0L )
     {
@@ -547,7 +547,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
@@ -637,7 +637,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbLineStyles.GetSelectEntryPos();
 
@@ -711,7 +711,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbLineStyles.GetSelectEntryPos();
 
@@ -748,7 +748,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -825,7 +825,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );

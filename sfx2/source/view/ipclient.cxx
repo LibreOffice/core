@@ -56,7 +56,6 @@
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "guisaveas.hxx"
-#include <sfx2/viewfrm.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <vcl/salbtype.hxx>
 #include <svtools/ehdl.hxx>
@@ -133,7 +132,7 @@ public:
     ~SfxInPlaceClient_Impl();
 
     void SizeHasChanged();
-    DECL_LINK           (TimerHdl, Timer*);
+    DECL_LINK(TimerHdl, void *);
     uno::Reference < frame::XFrame > GetFrame() const;
 
     // XEmbeddedClient
@@ -279,9 +278,9 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
                 xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
             }
-            catch ( const uno::RuntimeException& e )
+            catch ( const uno::RuntimeException& )
             {
-                throw e;
+                throw;
             }
             catch ( uno::Exception& )
             {
@@ -309,9 +308,9 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
         }
     }
-    catch ( const uno::RuntimeException& e )
+    catch ( const uno::RuntimeException& )
     {
-        throw e;
+        throw;
     }
     catch ( uno::Exception& )
     {
@@ -618,7 +617,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
 }
 
 //--------------------------------------------------------------------
-IMPL_LINK( SfxInPlaceClient_Impl, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 {
     if ( m_pClient && m_xObject.is() )
         m_pClient->GetViewShell()->CheckIPClient_Impl( m_pClient, m_pClient->GetViewShell()->GetObjectShell()->GetVisArea() );
@@ -733,7 +732,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 
     if ( rObject.is() )
     {
-        // as soon as an object was connected to a client it has to be checked wether the object wants
+        // as soon as an object was connected to a client it has to be checked whether the object wants
         // to be activated
         rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
         rObject->addEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
@@ -873,27 +872,6 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
     {}
 
     return sal_False;
-}
-
-//--------------------------------------------------------------------
-sal_Bool SfxInPlaceClient::IsObjectActive() const
-{
-    try {
-        return ( m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::ACTIVE ) );
-    }
-    catch( uno::Exception& )
-    {}
-
-    return sal_False;
-}
-
-//--------------------------------------------------------------------
-Window* SfxInPlaceClient::GetActiveWindow( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject )
-{
-    SfxInPlaceClient* pClient = GetClient( pDoc, xObject );
-    if ( pClient )
-        return pClient->GetEditWin();
-    return NULL;
 }
 
 //--------------------------------------------------------------------

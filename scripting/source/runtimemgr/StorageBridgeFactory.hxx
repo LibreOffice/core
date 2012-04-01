@@ -41,7 +41,6 @@ namespace scripting_runtimemgr
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
 
 class StorageBridgeFactory
 {
@@ -49,7 +48,7 @@ class StorageBridgeFactory
 public:
     explicit StorageBridgeFactory(
         const css::uno::Reference < css::uno::XComponentContext > & xContext );
-    css::uno::Reference < dcsssf::storage::XScriptInfoAccess >
+    css::uno::Reference < ::drafts::com::sun::star::script::framework::storage::XScriptInfoAccess >
         getStorageInstance( sal_Int32 sid );
 private:
     StorageBridgeFactory(); // No definition for default ctor

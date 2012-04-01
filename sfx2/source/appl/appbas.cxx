@@ -28,7 +28,6 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -86,9 +85,32 @@
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
+#if defined(LIBO_MERGELIBS) || defined(IOS)
+/* Avoid clash with the ones from svx/source/form/typemap.cxx */
+#define aSfxBoolItem_Impl sfx2_source_appl_appbas_aSfxBoolItem_Impl
+#ifdef IOS
+#define aSfxInt16Item_Impl sfx2_source_appl_appbas_aSfxInt16Item_Impl
+#endif
+#define aSfxStringItem_Impl sfx2_source_appl_appbas_aSfxStringItem_Impl
+#define aSfxUInt16Item_Impl sfx2_source_appl_appbas_aSfxUInt16Item_Impl
+#define aSfxUInt32Item_Impl sfx2_source_appl_appbas_aSfxUInt32Item_Impl
+#define aSfxVoidItem_Impl sfx2_source_appl_appbas_aSfxVoidtem_Impl
+#endif
+
 #define SFX_TYPEMAP
 #define Selection
 #include "sfxslots.hxx"
+
+#if defined(LIBO_MERGELIBS) || defined(IOS)
+#undef aSfxBoolItem_Impl
+#ifdef IOS
+#undef aSfxInt16Item_Impl
+#endif
+#undef aSfxStringItem_Impl
+#undef aSfxUInt16Item_Impl
+#undef aSfxUInt32Item_Impl
+#undef aSfxVoidItem_Impl
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -116,48 +138,79 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
            const char *pName, sal_uInt32 nSID, SbxDataType eType, SbxClassType eClassType )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pBas;
+    (void) pObject;
+    (void) pName;
+    (void) nSID;
+    (void) eType;
+    (void) eClassType;
+    return 0;
+#else
     SbxVariable *pVar = pBas->Make( String::CreateFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
     pVar->SetUserData( nSID );
     pVar->SetFlag( SBX_DONTSTORE );
     pObject->StartListening( pVar->GetBroadcaster() );
     return pVar;
+#endif
 }
 
 //--------------------------------------------------------------------
 
 BasicManager* SfxApplication::GetBasicManager()
 {
+#ifdef DISABLE_SCRIPTING
+    return 0;
+#else
     return BasicManagerRepository::getApplicationBasicManager( true );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
+#ifdef DISABLE_SCRIPTING
+    Reference< XLibraryContainer >  dummy;
+    return dummy;
+#else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 {
+#ifdef DISABLE_SCRIPTING
+    Reference< XLibraryContainer >  dummy;
+    return dummy;
+#else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 StarBASIC* SfxApplication::GetBasic()
 {
+#ifdef DISABLE_SCRIPTING
+    return 0;
+#else
     return GetBasicManager()->GetLib(0);
+#endif
 }
 
 //-------------------------------------------------------------------------
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rReq;
+#else
     rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
@@ -182,12 +235,10 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
-            boost::shared_ptr< unotools::ConfigurationChanges > batch(
-                unotools::ConfigurationChanges::create(
-                    comphelper::getProcessComponentContext()));
+            boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Undo::Steps::set(
-                comphelper::getProcessComponentContext(), batch,
-                pCountItem->GetValue());
+                pCountItem->GetValue(), batch);
             batch->commit();
             break;
         }
@@ -224,11 +275,15 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
     }
+#endif
 }
 
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rSet;
+#else
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -254,8 +309,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 rSet.Put(
                     SfxUInt16Item(
                         SID_ATTR_UNDO_COUNT,
-                        officecfg::Office::Common::Undo::Steps::get(
-                            comphelper::getProcessComponentContext())));
+                        officecfg::Office::Common::Undo::Steps::get()));
                 break;
 
             case SID_UPDATE_VERSION:
@@ -269,6 +323,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             }
         }
     }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -833,16 +833,14 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*/ )
 
     const StyleSettings &rSet = GetEditWin().GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
-    if( pVScrollbar->IsVisible(sal_False) )
+    if( pVScrollbar->IsVisible(sal_True) )
     {
         if(bRightVRuler)
             rToFill.Left() = nTmp;
         else
             rToFill.Right()  = nTmp;
     }
-    //#i32913# in browse mode the visibility of the horizontal scrollbar
-    // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->GetViewOptions()->getBrowseMode()) )
+    if ( pHScrollbar->IsVisible(sal_True) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -1309,11 +1307,11 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
     {
-        sal_uInt16 nFact = pWrtShell->GetViewOptions()->GetZoom();
+        long nFact = pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = static_cast< sal_uInt16 >(Max( 20, basegfx::zoomtools::zoomOut( static_cast<int>(nFact) )));
+            nFact = Max( (long) 20, basegfx::zoomtools::zoomOut( nFact ));
         else
-            nFact = static_cast< sal_uInt16 >(Min( 600, basegfx::zoomtools::zoomIn( static_cast<int>(nFact) )));
+            nFact = Min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;

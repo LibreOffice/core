@@ -33,8 +33,9 @@
 #include "mapping.h"
 #include "hwpeq.h"
 #include <iostream>
+#include <list>
 
-extern LinkedList<Node> nodelist;
+extern std::list<Node*> nodelist;
 
 #ifndef DEBUG
 
@@ -645,9 +646,10 @@ int Formula::parse()
           makeMathML( res );
      }
      Node *tmpNode;
-     int count = nodelist.count();
+     int count = nodelist.size();
      for( int i = 0 ; i < count ; i++ ){
-          tmpNode = nodelist.remove(0);
+	  tmpNode = nodelist.front();
+	  nodelist.pop_front();
           delete tmpNode;
      }
 

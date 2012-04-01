@@ -109,7 +109,6 @@
 #include <ndole.hxx>
 #include <swwait.hxx>
 #include <viewopt.hxx>
-#include <swunodef.hxx>
 #include <vcl/sound.hxx>
 #include <swerror.h>
 #include <SwCapObjType.hxx>
@@ -380,7 +379,7 @@ namespace
 
         //It would probably make most sense here to only insert the styles used
         //by the selection, e.g. apply SwDoc::IsUsed on styles ?
-        rDest.ReplaceStyles(rSrc);
+        rDest.ReplaceStyles(rSrc, false);
 
         rSrcWrtShell.Copy(&rDest);
     }
@@ -855,7 +854,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
             for(::std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
                 ppMark != vDdeMarks.end();
-                ppMark++)
+                ++ppMark)
                 pMarkAccess->deleteMark(*ppMark);
         }
 

@@ -84,8 +84,6 @@ public :
 
     void setVisible( const rtl::OUString& rName, sal_Bool bVisible );
 
-    sal_Int32 getMapsFromPixels( sal_Int32 nPixels ) const;
-
     com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const rtl::OUString& rName,
         com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );

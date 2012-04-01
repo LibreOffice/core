@@ -106,7 +106,7 @@ friend class SvxConfigGroupListBox_Impl;
     SvxGroupInfoArr_Impl            aArr;
     SvLBoxEntry*                    m_pDraggingEntry;
 
-    DECL_LINK(                      TimerHdl, Timer* );
+    DECL_LINK(TimerHdl, void *);
     virtual void                    MouseMove( const MouseEvent& rMEvt );
 
 public:

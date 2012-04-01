@@ -802,17 +802,17 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    return A2OU("SmGraphicAccessible");
+    return OUString("SmGraphicAccessible");
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" ) ||
-            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleText" );
+    return  rServiceName == "com::sun::star::accessibility::Accessible" ||
+            rServiceName == "com::sun::star::accessibility::AccessibleComponent" ||
+            rServiceName == "com::sun::star::accessibility::AccessibleContext" ||
+            rServiceName == "com::sun::star::accessibility::AccessibleText";
 }
 
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
@@ -820,10 +820,10 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 {
     Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
-    pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
-    pNames[1] = A2OU( "com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = A2OU( "com::sun::star::accessibility::AccessibleContext" );
-    pNames[3] = A2OU( "com::sun::star::accessibility::AccessibleText" );
+    pNames[0] = "com::sun::star::accessibility::Accessible";
+    pNames[1] = "com::sun::star::accessibility::AccessibleComponent";
+    pNames[2] = "com::sun::star::accessibility::AccessibleContext";
+    pNames[3] = "com::sun::star::accessibility::AccessibleText";
     return aNames;
 }
 
@@ -1009,8 +1009,7 @@ String SmTextForwarder::GetText( const ESelection& rSel ) const
     String aRet;
     if (pEditEngine)
         aRet = pEditEngine->GetText( rSel, LINEEND_LF );
-    aRet.ConvertLineEnd();
-    return aRet;
+    return convertLineEnd(aRet, GetSystemLineEnd());
 }
 
 SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
@@ -1955,16 +1954,16 @@ void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAcce
 OUString SAL_CALL SmEditAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    return A2OU("SmEditAccessible");
+    return OUString("SmEditAccessible");
 }
 
 sal_Bool SAL_CALL SmEditAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" );
+    return  rServiceName == "com::sun::star::accessibility::Accessible" ||
+            rServiceName == "com::sun::star::accessibility::AccessibleComponent" ||
+            rServiceName == "com::sun::star::accessibility::AccessibleContext";
 }
 
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
@@ -1972,9 +1971,9 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
 {
     Sequence< OUString > aNames(3);
     OUString *pNames = aNames.getArray();
-    pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
-    pNames[1] = A2OU( "com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = A2OU( "com::sun::star::accessibility::AccessibleContext" );
+    pNames[0] = "com::sun::star::accessibility::Accessible";
+    pNames[1] = "com::sun::star::accessibility::AccessibleComponent";
+    pNames[2] = "com::sun::star::accessibility::AccessibleContext";
     return aNames;
 }
 

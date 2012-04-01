@@ -163,7 +163,6 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
@@ -199,7 +198,6 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
@@ -1176,11 +1174,10 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     return aRet;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaSelection::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSelection") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSelection"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -45,66 +45,6 @@ namespace vcl {
     class I18nHelper;
 }
 
-// -------------------
-// - ImplMachineData -
-// -------------------
-
-class ImplMachineData
-{
-    friend class MachineSettings;
-
-                                    ImplMachineData();
-                                    ImplMachineData( const ImplMachineData& rData );
-
-private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
-    sal_uLong                           mnScreenOptions;
-    sal_uLong                           mnPrintOptions;
-    long                            mnScreenRasterFontDeviation;
-};
-
-// -------------------
-// - MachineSettings -
-// -------------------
-
-class VCL_DLLPUBLIC MachineSettings
-{
-    void                            CopyData();
-
-private:
-    ImplMachineData*                mpData;
-
-public:
-                                    MachineSettings();
-                                    MachineSettings( const MachineSettings& rSet );
-                                    ~MachineSettings();
-
-    void                            SetOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
-                                        { return mpData->mnOptions; }
-    void                            SetScreenOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnScreenOptions = nOptions; }
-    sal_uLong                           GetScreenOptions() const
-                                        { return mpData->mnScreenOptions; }
-    void                            SetPrintOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnPrintOptions = nOptions; }
-    sal_uLong                           GetPrintOptions() const
-                                        { return mpData->mnPrintOptions; }
-
-    void                            SetScreenRasterFontDeviation( long nDeviation )
-                                        { CopyData(); mpData->mnScreenRasterFontDeviation = nDeviation; }
-    long                            GetScreenRasterFontDeviation() const
-                                        { return mpData->mnScreenRasterFontDeviation; }
-
-    const MachineSettings&          operator =( const MachineSettings& rSet );
-
-    sal_Bool                            operator ==( const MachineSettings& rSet ) const;
-    sal_Bool                            operator !=( const MachineSettings& rSet ) const
-                                        { return !(*this == rSet); }
-};
-
 // -----------------
 // - ImplMouseData -
 // -----------------
@@ -269,58 +209,6 @@ public:
 
     sal_Bool                            operator ==( const MouseSettings& rSet ) const;
     sal_Bool                            operator !=( const MouseSettings& rSet ) const
-                                        { return !(*this == rSet); }
-};
-
-// --------------------
-// - ImplKeyboardData -
-// --------------------
-
-class ImplKeyboardData
-{
-    friend class KeyboardSettings;
-
-                                    ImplKeyboardData();
-                                    ImplKeyboardData( const ImplKeyboardData& rData );
-
-private:
-    sal_uLong                           mnRefCount;
-    Accelerator                     maStandardAccel;
-    sal_uLong                           mnOptions;
-};
-
-// --------------------
-// - KeyboardSettings -
-// --------------------
-
-#define KEYBOARD_OPTION_QUICKCURSOR ((sal_uLong)0x00000001)
-
-class VCL_DLLPUBLIC KeyboardSettings
-{
-    void                            CopyData();
-
-private:
-    ImplKeyboardData*               mpData;
-
-public:
-                                    KeyboardSettings();
-                                    KeyboardSettings( const KeyboardSettings& rSet );
-                                    ~KeyboardSettings();
-
-    void                            SetStandardAccel( const Accelerator& rAccelerator )
-                                        { CopyData(); mpData->maStandardAccel = rAccelerator; }
-    const Accelerator&              GetStandardAccel() const
-                                        { return mpData->maStandardAccel; }
-
-    void                            SetOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
-                                        { return mpData->mnOptions; }
-
-    const KeyboardSettings&         operator =( const KeyboardSettings& rSet );
-
-    sal_Bool                            operator ==( const KeyboardSettings& rSet ) const;
-    sal_Bool                            operator !=( const KeyboardSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -990,60 +878,17 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
+#ifdef WNT
     void                            SetEnableATToolSupport( sal_Bool bEnable );
-    sal_Bool                            GetEnableATToolSupport() const;
-    void                            SetDisablePrinting( sal_Bool bEnable );
-    sal_Bool                            GetDisablePrinting() const;
+#endif
+    sal_Bool                        GetEnableATToolSupport() const;
+    sal_Bool                        GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( sal_Bool bEnable );
-    sal_Bool                            GetEnableLocalizedDecimalSep() const;
+    sal_Bool                        GetEnableLocalizedDecimalSep() const;
     const MiscSettings&             operator =( const MiscSettings& rSet );
 
     sal_Bool                            operator ==( const MiscSettings& rSet ) const;
     sal_Bool                            operator !=( const MiscSettings& rSet ) const
-                                        { return !(*this == rSet); }
-};
-
-// ------------------------
-// - ImplNotificationData -
-// ------------------------
-
-class ImplNotificationData
-{
-    friend class NotificationSettings;
-
-                                    ImplNotificationData();
-                                    ImplNotificationData( const ImplNotificationData& rData );
-
-private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
-};
-
-// ------------------------
-// - NotificationSettings -
-// ------------------------
-
-class VCL_DLLPUBLIC NotificationSettings
-{
-    void                            CopyData();
-
-private:
-    ImplNotificationData*           mpData;
-
-public:
-                                    NotificationSettings();
-                                    NotificationSettings( const NotificationSettings& rSet );
-                                    ~NotificationSettings();
-
-    void                            SetOptions( sal_uLong nOptions )
-                                        { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
-                                        { return mpData->mnOptions; }
-
-    const NotificationSettings&     operator =( const NotificationSettings& rSet );
-
-    sal_Bool                            operator ==( const NotificationSettings& rSet ) const;
-    sal_Bool                            operator !=( const NotificationSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1123,12 +968,9 @@ class ImplAllSettingsData
 
 private:
     sal_uLong                                   mnRefCount;
-    MachineSettings                         maMachineSettings;
     MouseSettings                           maMouseSettings;
-    KeyboardSettings                        maKeyboardSettings;
     StyleSettings                           maStyleSettings;
     MiscSettings                            maMiscSettings;
-    NotificationSettings                    maNotificationSettings;
     HelpSettings                            maHelpSettings;
     ::com::sun::star::lang::Locale          maLocale;
     sal_uLong                                   mnSystemUpdate;
@@ -1148,24 +990,19 @@ private:
 // - AllSettings -
 // ---------------
 
-#define SETTINGS_MACHINE            ((sal_uLong)0x00000001)
-#define SETTINGS_MOUSE              ((sal_uLong)0x00000002)
-#define SETTINGS_KEYBOARD           ((sal_uLong)0x00000004)
-#define SETTINGS_STYLE              ((sal_uLong)0x00000008)
-#define SETTINGS_MISC               ((sal_uLong)0x00000010)
-#define SETTINGS_SOUND              ((sal_uLong)0x00000020)
-#define SETTINGS_NOTIFICATION       ((sal_uLong)0x00000040)
-#define SETTINGS_HELP               ((sal_uLong)0x00000080)
-#define SETTINGS_INTERNATIONAL      ((sal_uLong)0x00000100) /* was for class International, has no effect anymore */
-#define SETTINGS_LOCALE             ((sal_uLong)0x00000200)
-#define SETTINGS_UILOCALE           ((sal_uLong)0x00000400)
-#define SETTINGS_ALLSETTINGS        (SETTINGS_MACHINE |\
-                                     SETTINGS_MOUSE | SETTINGS_KEYBOARD |\
-                                     SETTINGS_STYLE | SETTINGS_MISC |\
-                                     SETTINGS_SOUND | SETTINGS_NOTIFICATION |\
-                                     SETTINGS_HELP |\
-                                     SETTINGS_LOCALE | SETTINGS_UILOCALE )
-#define SETTINGS_IN_UPDATE_SETTINGS ((sal_uLong)0x00000800)   // this flag indicates that the data changed event was created
+const int SETTINGS_MOUSE = 0x00000001;
+const int SETTINGS_STYLE = 0x00000002;
+const int SETTINGS_MISC = 0x00000004;
+const int SETTINGS_SOUND = 0x00000008;
+const int SETTINGS_HELP = 0x00000010;
+const int SETTINGS_LOCALE = 0x00000020;
+const int SETTINGS_UILOCALE = 0x00000040;
+const int SETTINGS_ALLSETTINGS =   ( SETTINGS_MOUSE |
+                                     SETTINGS_STYLE | SETTINGS_MISC |
+                                     SETTINGS_SOUND |
+                                     SETTINGS_HELP |
+                                     SETTINGS_LOCALE | SETTINGS_UILOCALE );
+const int SETTINGS_IN_UPDATE_SETTINGS = 0x00000800;   // this flag indicates that the data changed event was created
                                                           // in Windows::UpdateSettings probably because of a global
                                                           // settings changed
 
@@ -1181,20 +1018,10 @@ public:
                                             AllSettings( const AllSettings& rSet );
                                             ~AllSettings();
 
-    void                                    SetMachineSettings( const MachineSettings& rSet )
-                                                { CopyData(); mpData->maMachineSettings = rSet; }
-    const MachineSettings&                  GetMachineSettings() const
-                                                { return mpData->maMachineSettings; }
-
     void                                    SetMouseSettings( const MouseSettings& rSet )
                                                 { CopyData(); mpData->maMouseSettings = rSet; }
     const MouseSettings&                    GetMouseSettings() const
                                                 { return mpData->maMouseSettings; }
-
-    void                                    SetKeyboardSettings( const KeyboardSettings& rSet )
-                                                { CopyData(); mpData->maKeyboardSettings = rSet; }
-    const KeyboardSettings&                 GetKeyboardSettings() const
-                                                { return mpData->maKeyboardSettings; }
 
     void                                    SetStyleSettings( const StyleSettings& rSet )
                                                 { CopyData(); mpData->maStyleSettings = rSet; }
@@ -1205,11 +1032,6 @@ public:
                                                 { CopyData(); mpData->maMiscSettings = rSet; }
     const MiscSettings&                     GetMiscSettings() const
                                                 { return mpData->maMiscSettings; }
-
-    void                                    SetNotificationSettings( const NotificationSettings& rSet )
-                                                { CopyData(); mpData->maNotificationSettings = rSet; }
-    const NotificationSettings&             GetNotificationSettings() const
-                                                { return mpData->maNotificationSettings; }
 
     void                                    SetHelpSettings( const HelpSettings& rSet )
                                                 { CopyData(); mpData->maHelpSettings = rSet; }

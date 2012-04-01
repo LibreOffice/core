@@ -101,20 +101,6 @@ OStreamSection::~OStreamSection()
     }
 }
 // -----------------------------------------------------------------------------
-sal_Int32 OStreamSection::available()
-{
-    sal_Int32 nBytes = 0;
-    try
-    {   // don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
-        if (m_xInStream.is() &&  m_xMarkStream.is())
-            nBytes = m_xMarkStream->offsetToMark(m_nBlockStart) - sizeof(m_nBlockLen);
-    }
-    catch(const staruno::Exception&)
-    {
-    }
-    return nBytes;
-}
-// -----------------------------------------------------------------------------
 
 }   // namespace comphelper
 

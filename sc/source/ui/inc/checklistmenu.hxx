@@ -60,6 +60,7 @@ public:
     class Action
     {
     public:
+        virtual ~Action() {}
         virtual void execute() = 0;
     };
 
@@ -307,7 +308,7 @@ private:
     void cycleFocus(bool bReverse = false);
 
     DECL_LINK( ButtonHdl, Button* );
-    DECL_LINK( TriStateHdl, TriStateBox* );
+    DECL_LINK( TriStateHdl, void* );
     DECL_LINK( CheckHdl, SvTreeListBox* );
 
 private:

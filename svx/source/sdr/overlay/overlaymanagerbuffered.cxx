@@ -219,6 +219,9 @@ namespace sdr
 
         IMPL_LINK(OverlayManagerBuffered, ImpBufferTimerHandler, AutoTimer*, /*pTimer*/)
         {
+            //Resolves: fdo#46728 ensure this exists until end of scope
+            rtl::Reference<OverlayManager> xRef(this);
+
             // stop timer
             maBufferTimer.Stop();
 
@@ -412,6 +415,15 @@ namespace sdr
             maBufferTimer.SetTimeoutHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
         }
 
+        rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
+            OutputDevice& rOutputDevice,
+            OverlayManager* pOldOverlayManager,
+            bool bRefreshWithPreRendering)
+        {
+            return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice,
+                pOldOverlayManager, bRefreshWithPreRendering));
+        }
+
         OverlayManagerBuffered::~OverlayManagerBuffered()
         {
             // Clear timer
@@ -498,14 +510,6 @@ namespace sdr
                     maBufferRememberedRangePixel.expand(aTopLeft);
                     maBufferRememberedRangePixel.expand(aBottomRight);
                 }
-            }
-        }
-
-        void OverlayManagerBuffered::SetRefreshWithPreRendering(bool bNew)
-        {
-            if((bool)mbRefreshWithPreRendering != bNew)
-            {
-                mbRefreshWithPreRendering = bNew;
             }
         }
     } // end of namespace overlay

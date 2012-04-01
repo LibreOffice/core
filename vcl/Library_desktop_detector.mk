@@ -32,9 +32,8 @@ $(eval $(call gb_Library_Library,desktop_detector))
 
 $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,desktop_detector,\
@@ -56,7 +55,6 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \

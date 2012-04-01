@@ -167,7 +167,7 @@ VSeriesPlotter::~VSeriesPlotter()
     //delete all data series help objects:
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -282,7 +282,7 @@ void VSeriesPlotter::releaseShapes()
 {
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -364,14 +364,18 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSer
 }
 
 uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+                                        , const uno::Reference< drawing::XShapes >& xTarget
+                                        , bool bYError )
 {
-    uno::Reference< drawing::XShapes > xShapes( rDataSeries.m_xErrorBarsGroupShape );
+    uno::Reference< ::com::sun::star::drawing::XShapes > &rShapeGroup =
+            bYError ? rDataSeries.m_xErrorYBarsGroupShape : rDataSeries.m_xErrorXBarsGroupShape;
+
+    uno::Reference< drawing::XShapes > xShapes( rShapeGroup );
     if(!xShapes.is())
     {
         //create a group shape for this series and add to logic target:
-        xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID() );
-        rDataSeries.m_xErrorBarsGroupShape = xShapes;
+        xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
+        rShapeGroup = xShapes;
     }
     return xShapes;
 
@@ -447,7 +451,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 m_pShapeFactory->createGroup2D( this->getLabelsGroupShape(rDataSeries, xTarget)
                     , ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(),nPointIndex ) ) );
 
-        //check wether the label needs to be created and how:
+        //check whether the label needs to be created and how:
         DataPointLabel* pLabel = rDataSeries.getDataPointLabelIfLabel( nPointIndex );
 
         if( !pLabel )
@@ -627,7 +631,8 @@ double lcl_getErrorBarLogicLength(
     uno::Reference< beans::XPropertySet > xProp,
     sal_Int32 nErrorBarStyle,
     sal_Int32 nIndex,
-    bool bPositive )
+    bool bPositive,
+    bool bYError )
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -696,7 +701,7 @@ double lcl_getErrorBarLogicLength(
                 uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
                 if( xErrorBarData.is())
                     fResult = StatisticsHelper::getErrorFromDataSource(
-                        xErrorBarData, nIndex, bPositive);
+                        xErrorBarData, nIndex, bPositive, bYError);
             }
             break;
         }
@@ -841,7 +846,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowPositive )
         {
-            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true, bYError );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -864,7 +869,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowNegative )
         {
-            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false, bYError );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -920,6 +925,28 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
+void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogicPosition
+                            , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
+                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , double* pfScaledLogicX )
+{
+    if(m_nDimension!=2)
+        return;
+    // error bars
+    uno::Reference< beans::XPropertySet > xErrorBarProp(rVDataSeries.getXErrorBarProperties(nPointIndex));
+    if( xErrorBarProp.is())
+    {
+        uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget, false) );
+
+        createErrorBar( xErrorBarsGroup_Shapes
+            , rUnscaledLogicPosition, xErrorBarProp
+            , rVDataSeries, nPointIndex
+            , false /* bYError */
+            , pfScaledLogicX );
+    }
+}
+
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget
@@ -932,7 +959,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     if( xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            this->getErrorBarsGroupShape(rVDataSeries, xTarget) );
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget, true) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -1113,7 +1140,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         chart2::RelativePosition aRelativePosition;
         if( xEquationProperties->getPropertyValue( C2U("RelativePosition")) >>= aRelativePosition )
         {
-            //@todo decide wether x is primary or secondary
+            //@todo decide whether x is primary or secondary
             double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
             double fY = aRelativePosition.Secondary*m_aPageReferenceSize.Height;
             aScreenPosition2D.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
@@ -1352,7 +1379,7 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -2303,8 +2330,9 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             aResult.push_back(aEntry);
         }
 
-        // regression curves
-        if ( 3 == m_nDimension )  // #i63016#
+        // don't show legend entry of regression curve & friends if this type of chart
+        // doesn't support statistics #i63016#, fdo#37197
+        if (!ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ))
             return aResult;
 
         Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );

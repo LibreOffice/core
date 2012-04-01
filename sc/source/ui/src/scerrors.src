@@ -150,6 +150,14 @@ Resource RID_ERRHDLSC
     {
         Text [ en-US ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
     };
+    String SCWARN_EXPORT_MAXCOL & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "The document contains more columns than supported in the selected format.\nAdditional columns were not saved." ;
+    };
+    String SCWARN_EXPORT_MAXTAB & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "The document contains more sheets than supported in the selected format.\nAdditional sheets were not saved." ;
+    };
     String SCWARN_IMPORT_INFOLOST & ERRCODE_RES_MASK
     {
         Text [ en-US ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;

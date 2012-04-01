@@ -178,11 +178,6 @@ namespace drawinglayer
             return (*rCandidate.mpSdrSceneAttribute == *mpSdrSceneAttribute);
         }
 
-        double SdrSceneAttribute::getDistance() const
-        {
-            return mpSdrSceneAttribute->getDistance();
-        }
-
         double SdrSceneAttribute::getShadowSlant() const
         {
             return mpSdrSceneAttribute->getShadowSlant();

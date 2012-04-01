@@ -36,7 +36,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "uno/lbnames.h"
 #include "sal/types.h"
 
 #include "configurationprovider.hxx"
@@ -87,7 +86,7 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL configmgr_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(

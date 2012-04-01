@@ -31,8 +31,7 @@ $(eval $(call gb_Executable_set_targettype_gui,odbcconfig,YES))
 
 $(eval $(call gb_Executable_set_include,odbcconfig,\
     $$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(OUTDIR)/inc \
+	-I$(SRCDIR)/dbaccess/inc \
 ))
 
 $(eval $(call gb_Library_add_api,odbcconfig,\

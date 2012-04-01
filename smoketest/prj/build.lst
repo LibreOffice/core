@@ -1,4 +1,2 @@
-smt smoketest :: codemaker javaunohelper soltools test unoil NULL
-smt smoketest\com\sun\star\comp\smoketest nmake - all smoketest_com_sun_star_comp_smoketest NULL
-smt smoketest\data nmake - all smoketest_data NULL
-smt smoketest nmake - all smoketest_mk smoketest_com_sun_star_comp_smoketest smoketest_data NULL
+smt smoketest :: javaunohelper soltools test unoil NULL
+smt smoketest\prj nmake - all smoketest_prj NULL

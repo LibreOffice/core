@@ -74,11 +74,10 @@ SwVbaSection::PageSetup( ) throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, mxPageProps ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaSection::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSection") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSection"));
 }
 
 uno::Sequence< rtl::OUString >

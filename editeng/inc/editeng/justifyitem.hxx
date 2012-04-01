@@ -103,8 +103,6 @@ public:
 class EDITENG_DLLPUBLIC SvxJustifyMethodItem: public SfxEnumItem
 {
 public:
-    SvxJustifyMethodItem( const sal_uInt16 nId );
-
     SvxJustifyMethodItem(
         const SvxCellJustifyMethod eMethod,
         const sal_uInt16 nId );

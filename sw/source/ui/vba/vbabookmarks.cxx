@@ -213,11 +213,10 @@ SwVbaBookmarks::Exists( const rtl::OUString& rName ) throw (css::uno::RuntimeExc
     return bExist;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaBookmarks::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmarks") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmarks"));
 }
 
 css::uno::Sequence<rtl::OUString>

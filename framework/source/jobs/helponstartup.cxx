@@ -268,8 +268,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     {
         sModuleId = xModuleManager->identify(xDoc);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { sModuleId = ::rtl::OUString(); }
 
@@ -310,8 +310,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
         if (xHelpContent.is())
             sCurrentHelpURL = xHelpContent->getURL();
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { sCurrentHelpURL = ::rtl::OUString(); }
 
@@ -357,8 +357,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
             if (sHelpURL.equals(sHelpURLForModule))
                 return sal_True;
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             {}
     }
@@ -396,8 +396,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
             sHelpURL = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { sHelpURL = ::rtl::OUString(); }
 

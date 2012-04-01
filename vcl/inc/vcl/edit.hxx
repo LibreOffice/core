@@ -93,7 +93,7 @@ private:
     Link                maUpdateDataHdl;
     Link                maAutocompleteHdl;
 
-    DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
+    DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, void* );
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();

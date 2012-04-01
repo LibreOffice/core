@@ -1,0 +1,11 @@
+--- misc/libcmis-0.1.0/src/libcmis/cmis-object.hxx	2011-09-30 20:35:37.000000000 +0200
++++ misc/build/libcmis-0.1.0/src/libcmis/cmis-object.hxx	2012-03-13 21:46:03.985188599 +0100
+@@ -39,6 +39,8 @@
+     class CmisObject
+     {
+         public:
++            virtual ~CmisObject() {}
++
+             virtual std::string getId( ) = 0;
+             virtual std::string getName( ) = 0;
+ 

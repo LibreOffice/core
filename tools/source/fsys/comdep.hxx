@@ -76,8 +76,6 @@ struct DirReader_Impl
                     bReady ( sal_False ),
                     bInUse( sal_False )
                 {
-                    // Redirection
-                    FSysRedirector::DoRedirect( aPath );
 
                     // nur den String der Memer-Var nehmen!
 

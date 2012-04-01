@@ -173,6 +173,8 @@ CFLAGSOUTOBJ=-Fo
 #   (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx)
 # - "warning C4180: qualifier applied to function type has no meaning; ignored"
 #   (frequently seen with a recent boost)
+# - "warning C4265: 'identifier' : class has virtual functions, but destructor is not
+#   virtual"
 # For C, certain warnings from system headers (stdlib.h etc.) have to be
 # disabled globally (for C++, this is not necessary, as the system headers are
 # wrapped by STLport):
@@ -184,7 +186,7 @@ CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4242 -wd4244 -wd4245 -wd4
     -wd4290 -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4555 -wd4611 -wd4625 -wd4626 \
     -wd4640 -wd4675 -wd4686 -wd4706 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 \
     -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005 \
-    -wd4180
+    -wd4180 -wd4265
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)

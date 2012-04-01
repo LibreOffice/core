@@ -50,7 +50,6 @@
 #include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
-#include "vbacommentshape.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -230,11 +229,10 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     return sAnnoText;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaComment::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComment") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComment"));
 }
 
 uno::Sequence< rtl::OUString >

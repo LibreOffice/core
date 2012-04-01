@@ -41,7 +41,7 @@ class ScVbaOLEObject : public OLEObjectImpl_BASE
 {
 protected:
     css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:

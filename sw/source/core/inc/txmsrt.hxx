@@ -58,13 +58,13 @@ struct SwTOXSource
     xub_StrLen nPos;
     sal_Bool bMainEntry;
 
-    SwTOXSource() : pNd(0), nPos(0), bMainEntry(sal_False) {}
     SwTOXSource( const SwCntntNode* pNode, xub_StrLen n, sal_Bool bMain )
         : pNd(pNode), nPos(n), bMainEntry(bMain)
-    {}
+    {
+    }
 };
 
-SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0 )
+typedef std::vector<SwTOXSource> SwTOXSources;
 
 class SwTOXInternational
 {

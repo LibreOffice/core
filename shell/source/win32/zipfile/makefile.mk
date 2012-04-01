@@ -31,11 +31,13 @@ TARGET=zipfile
 ENABLE_EXCEPTIONS=TRUE
 EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
-
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CDEFS += -DSYSTEM_ZLIB
+.END
 
 # --- Files --------------------------------------------------------
 

@@ -241,22 +241,18 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
         uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
         if( xObj.is() )
         {
-            embed::XEmbeddedObject *pObj = xObj.get();
-            sal_uInt32 nPictureId = (sal_uInt32)(sal_uIntPtr)pObj;
+            const embed::XEmbeddedObject *pObj = xObj.get();
+            WW8OleMap& rPointerToObjId = GetOLEMap();
+            //Don't want to use pointer ids, as is traditional, because we need
+            //to put this into a 32bit value, and on 64bit the bottom bits
+            //might collide and two unrelated ole objects end up considered the
+            //same.  Don't want to simply start at 0 which is a special value
+            sal_Int32 nPictureId = SAL_MAX_INT32 - rPointerToObjId.size();
+            WW8OleMap::value_type entry = std::make_pair(pObj, nPictureId);
+            std::pair<WW8OleMap::iterator, bool> aRes = rPointerToObjId.insert(entry);
+            bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
+            nPictureId = aRes.first->second;
             Set_UInt32(pDataAdr, nPictureId);
-
-            WW8OleMap *pMap = new WW8OleMap(nPictureId);
-            bool bDuplicate = false;
-            WW8OleMaps &rOleMap = GetOLEMap();
-            sal_uInt16 nPos;
-            if ( rOleMap.Seek_Entry(pMap, &nPos) )
-            {
-                bDuplicate = true;
-                delete pMap;
-            }
-            else if( 0 == rOleMap.Insert( pMap) )
-                delete pMap;
-
             String sStorageName( '_' );
             sStorageName += String::CreateFromInt32( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
@@ -267,14 +263,14 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 If this object storage has been written already don't
                 waste time rewriting it
                 */
-                if (!bDuplicate)
+                if (bIsNotDuplicate)
                 {
                     sal_Int64 nAspect = rOLENode.GetAspect();
                     svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
                     GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
-                        ::rtl::OUString aObjInfo( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) );
+                        ::rtl::OUString aObjInfo( "\3ObjInfo" );
                         if ( !xOleStg->IsStream( aObjInfo ) )
                         {
                             const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
@@ -353,8 +349,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
-    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::READ );
+    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
     SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
 
     SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(

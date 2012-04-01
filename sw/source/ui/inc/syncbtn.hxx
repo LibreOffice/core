@@ -38,7 +38,7 @@ class SwSyncBtnDlg : public SfxFloatingWindow
 {
     PushButton              aSyncBtn;
 
-    DECL_LINK( BtnHdl,      PushButton* pBtn = 0 );
+    DECL_LINK( BtnHdl, void* );
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, Window *pParent);

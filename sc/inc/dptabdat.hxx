@@ -32,8 +32,10 @@
 #include "address.hxx"
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
-#include "dptablecache.hxx"
-#include <tools/string.hxx>
+#include "dpcache.hxx"
+#include "dpmacros.hxx"
+
+#include "svl/zforlist.hxx"
 
 #include <vector>
 #include <set>
@@ -60,8 +62,8 @@ namespace com { namespace sun { namespace star { namespace sheet {
 #define SC_DAPI_LEVEL_QUARTER   1
 #define SC_DAPI_LEVEL_MONTH     2
 #define SC_DAPI_LEVEL_DAY       3
-#define SC_DAPI_LEVEL_WEEK      1
-#define SC_DAPI_LEVEL_WEEKDAY   2
+#define SC_DAPI_LEVEL_WEEK      4
+#define SC_DAPI_LEVEL_WEEKDAY   5
 
 
 //
@@ -128,6 +130,8 @@ public:
     ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
+    rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
 
                 //! use (new) typed collection instead of ScStrCollection
@@ -135,7 +139,7 @@ public:
 
     virtual long                    GetColumnCount() = 0;
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    virtual String                  getDimensionName(long nColumn) = 0;
+    virtual rtl::OUString           getDimensionName(long nColumn) = 0;
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual sal_Bool                    IsDateDimension(long nDim) = 0;
     virtual sal_uLong                   GetNumberFormat(long nDim);
@@ -168,6 +172,11 @@ public:
     virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
+
+#if DEBUG_PIVOT_TABLE
+    virtual void Dump() const;
+#endif
+
 protected:
     /** This structure stores vector arrays that hold intermediate data for
         each row during cache table iteration. */

@@ -38,8 +38,8 @@
 # CFLAGS from environment override debug/optimization flags
 ifeq ($(gb_DEBUGLEVEL),2)
 CFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
-CXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
-OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
+CXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS)
+OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS)
 else
 CFLAGS ?= $(gb_COMPILEROPTFLAGS)
 CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
@@ -85,7 +85,7 @@ endif
 # require different compiler flags
 define gb_Object__owner
 $$(if $$(OBJECTOWNER),\
-  $$(call gb_Output_warn,$(1) is linked in by $$(OBJECTOWNER) $(2)))$(2)
+  $$(call gb_Output_error,fdo#47246: $(1) is linked in by $$(OBJECTOWNER) $(2)))$(2)
 endef
 
 # For every object there is a dep file (if gb_FULLDEPS is active).
@@ -123,8 +123,6 @@ $(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
 
 endif
 
-gb_CObject_CObject =
-
 
 # CxxObject class
 
@@ -141,8 +139,6 @@ $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
 	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
 
 endif
-
-gb_CxxObject_CxxObject =
 
 
 # GenCObject class
@@ -162,8 +158,6 @@ $(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
 
 endif
 
-gb_GenCObject_GenCObject =
-
 
 # GenCxxObject class
 
@@ -182,7 +176,6 @@ $(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
 
 endif
 
-gb_GenCxxObject_GenCxxObject =
 
 # YaccTarget class
 
@@ -192,6 +185,8 @@ gb_GenCxxObject_GenCxxObject =
 # tries to use it.
 
 gb_YaccTarget_get_source = $(1)/$(2).y
+# defined by platform
+#  gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 .PHONY : $(call gb_YaccTarget_get_clean_target,%)
 $(call gb_YaccTarget_get_clean_target,%) :
@@ -210,9 +205,6 @@ endef
 
 gb_YACC := bison
 
-# YaccTarget class
-# defined by platform
-# gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 # ObjCxxObject class
 #
@@ -231,7 +223,6 @@ $(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
 
 endif
 
-gb_ObjCxxObject_ObjCxxObject =
 
 # ObjCObject class
 #
@@ -240,29 +231,14 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 # defined by platform
 #  gb_ObjCObject__command
 
-# this rule generates an "always rebuild" dep file, to have something to include.
-# the dep file will be overridden on the fly, when the object is compiled
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_ObjCObject__command_dep
-mkdir -p $(dir $(1)) && \
-	echo '$(call gb_ObjCObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_ObjCObject__command_dep =
-endif
-
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
+	$(call gb_ObjCObject__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)
+	$(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*))
 
 endif
-
-gb_ObjCObject_ObjCObject =
-
 
 
 # AsmObject class
@@ -280,8 +256,6 @@ $(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
 	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
 
 endif
-
-gb_AsmObject_AsmObject =
 
 
 # LinkTarget class
@@ -472,6 +446,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -494,6 +469,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCL
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
 endif
 
 endef
@@ -858,7 +834,9 @@ endef
 
 define gb_LinkTarget_add_linktarget_objects
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
+ifneq ($(OS),IOS)
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
+endif
 
 endef
 
@@ -952,6 +930,17 @@ $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
 
 endef
 
+define gb_LinkTarget_add_custom_headers
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
+endif
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_CustomTarget_get_target,$(2)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
+
+endef
+
 define gb_LinkTarget_add_package_headers
 $(foreach package,$(2),$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_Package_get_target,$(package))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_Package_get_clean_target,$(package)))
@@ -979,5 +968,12 @@ endef
 gb_LinkTarget_use_externals = \
  $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
 
+define gb_LinkTarget_set_warnings_not_errors
+$(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+endif
+
+endef
 
 # vim: set noet sw=4:

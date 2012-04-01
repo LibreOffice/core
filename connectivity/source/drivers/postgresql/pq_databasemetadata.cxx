@@ -180,6 +180,7 @@ DatabaseMetaData::DatabaseMetaData(
     m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?" )) )
 {
     init_getReferences_stmt();
+    init_getPrivs_stmt();
 }
 
 sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException)
@@ -724,7 +725,12 @@ sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw (SQLException, Ru
 sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, RuntimeException)
 {
     // LEM: jdbc driver says not, although the comments in it seem old
-    return sal_False;
+    //      fdo#45249 Base query design won't use any aggregate function
+    //      (except COUNT(*) unless we say yes, so say yes.
+    //      Actually, Base assumes *also* support for aggregate functions "collect, fusion, intersection"
+    //      as soon as supportsCoreSQLGrammar() returns true.
+    //      Those are *not* Core SQL, though. They are in optional feature S271 "Basic multiset support"
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsExtendedSQLGrammar(  ) throw (SQLException, RuntimeException)
@@ -1388,21 +1394,19 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
     return ret;
 }
 
-static bool isSystemColumn( const OUString &columnName )
+namespace {
+inline bool isSystemColumn( sal_Int16 attnum )
 {
-    return
-        columnName.compareToAscii( "oid" ) == 0 ||
-        columnName.compareToAscii( "tableoid" ) == 0 ||
-        columnName.compareToAscii( "xmin" ) == 0 ||
-        columnName.compareToAscii( "cmin" ) == 0 ||
-        columnName.compareToAscii( "xmax" ) == 0 ||
-        columnName.compareToAscii( "cmax" ) == 0 ||
-        columnName.compareToAscii( "ctid" ) == 0;
+    return attnum <= 0;
+}
 }
 
 // is not exported by the postgres header
 const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
 
+// Oh, quelle horreur
+// LEM TODO: Need to severely rewrite that!
+// should probably just "do the same" as ODBC or JDBC drivers...
 static void extractPrecisionAndScale(
     sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
 {
@@ -1471,7 +1475,7 @@ static void columnMetaData2DatabaseTypeDescription(
     queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
     while( rs->next() )
     {
-        if( row->getString( 9 ).equalsAscii( "d" ) && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
+        if( row->getString( 9 ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("d")) && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
         {
             oidMap[row->getInt(12)] = DatabaseTypeDescription();
             if( domains )
@@ -1506,7 +1510,6 @@ static void columnMetaData2DatabaseTypeDescription(
 {
     (void) catalog;
     // LEM TODO: review in comparison with JDBC driver
-    //           OK, confirmed it does not return consecutive values in ORDINAL_POSITION; needs to be fixed.
     Statics &statics = getStatics();
 
     // continue !
@@ -1526,7 +1529,9 @@ static void columnMetaData2DatabaseTypeDescription(
     }
 
     // ignore catalog, as a single pq connection
-    // does not support multiple catalogs eitherway
+    // does not support multiple catalogs anyway
+    // We don't use information_schema.columns because it contains
+    // only the columns the current user has any privilege over.
 
     //  1. TABLE_CAT string => table catalog (may be NULL)
     //               => not supported
@@ -1557,8 +1562,7 @@ static void columnMetaData2DatabaseTypeDescription(
     //                      NULLABLE_UNKNOWN - nullability unknown
     //               => pg_attribute.attnotnull
     //  12. REMARKS string => comment describing column (may be NULL )
-    //               => Don't know, there does not seem to exist something like
-    //                  that in postgres
+    //               => pg_description.description
     //  13. COLUMN_DEF string => default value (may be NULL)
     //               => pg_type.typdefault
     //  14. SQL_DATA_TYPE long => unused
@@ -1575,7 +1579,6 @@ static void columnMetaData2DatabaseTypeDescription(
     //                            allow NULL values. An empty string means
     //                            nobody knows.
     //               => pg_attribute.attnotnull
-// select objoid,description,objsubid,pg_attribute.attname from pg_attribute LEFT JOIN pg_description ON pg_attribute.attrelid=pg_description.objoid and pg_attribute.attnum = pg_description.objsubid
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
         ASCII_STR(
@@ -1587,11 +1590,11 @@ static void columnMetaData2DatabaseTypeDescription(
             "pg_attribute.atttypmod, "       // 5
             "pg_attribute.attnotnull, "      // 6
             "pg_type.typdefault, "           // 7
-            "pg_attribute.attnum, "          // 8
-            "pg_type.typtype, "              // 9
-            "pg_attrdef.adsrc, "             // 10
-            "pg_description.description, "    // 11
-            "pg_type.typbasetype "           // 12
+            "pg_type.typtype, "              // 8
+            "pg_attrdef.adsrc, "             // 9
+            "pg_description.description, "   // 10
+            "pg_type.typbasetype, "          // 11
+            "pg_attribute.attnum "           // 12
             "FROM pg_class, "
                  "pg_attribute LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND pg_attribute.attnum = pg_attrdef.adnum "
                               "LEFT JOIN pg_description ON pg_attribute.attrelid = pg_description.objoid AND pg_attribute.attnum=pg_description.objsubid,"
@@ -1599,10 +1602,11 @@ static void columnMetaData2DatabaseTypeDescription(
             "WHERE pg_attribute.attrelid = pg_class.oid "
                    "AND pg_attribute.atttypid = pg_type.oid "
                    "AND pg_class.relnamespace = pg_namespace.oid "
+                   "AND NOT pg_attribute.attisdropped "
                    "AND pg_namespace.nspname LIKE ? "
                    "AND pg_class.relname LIKE ? "
                    "AND pg_attribute.attname LIKE ? "
-            "ORDER BY pg_namespace.nspname || pg_class.relname || pg_attribute.attnum"
+            "ORDER BY pg_namespace.nspname, pg_class.relname, pg_attribute.attnum"
             ) );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
@@ -1618,32 +1622,47 @@ static void columnMetaData2DatabaseTypeDescription(
     Reference< XStatement > domainTypeStmt = m_origin->createStatement();
     columnMetaData2DatabaseTypeDescription( domainMap, rs, domainTypeStmt );
 
+    sal_uInt32 colNum(0);
+    OUString sSchema( ASCII_STR("#invalid#") );
+    OUString sTable(  ASCII_STR("#invalid#") );
+
     while( rs->next() )
     {
-        OUString columnName = xRow->getString(3);
-        if( m_pSettings->showSystemColumns || ! isSystemColumn( columnName ) )
+        if( m_pSettings->showSystemColumns || ! isSystemColumn( xRow->getShort( 12 ) ) )
         {
+            OUString sNewSchema( xRow->getString(1) );
+            OUString sNewTable(  xRow->getString(2) );
+            if ( sNewSchema != sSchema || sNewTable != sTable )
+            {
+                colNum = 1;
+                sSchema = sNewSchema;
+                sTable = sNewTable;
+            }
+            else
+                ++colNum;
             sal_Int32 precision, scale, type;
             Sequence< Any > row( 18 );
             row[0] <<= m_pSettings->catalog;
-            row[1] <<= xRow->getString(1);  //
-            row[2] <<= xRow->getString(2);
-            row[3] <<= columnName;
-            if( xRow->getString(9).equalsAscii( "d" ) )
+            row[1] <<= sNewSchema;
+            row[2] <<= sNewTable;
+            row[3] <<= xRow->getString(3);
+            if( xRow->getString(8).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("d")) )
             {
-                DatabaseTypeDescription desc( domainMap[xRow->getInt(12)] );
+                DatabaseTypeDescription desc( domainMap[xRow->getInt(11)] );
                 type = typeNameToDataType( desc.typeName, desc.typeType );
             }
             else
             {
-                type = typeNameToDataType( xRow->getString(4), xRow->getString(9) );
+                type = typeNameToDataType( xRow->getString(4), xRow->getString(8) );
             }
             extractPrecisionAndScale( type, xRow->getInt(5) , &precision, &scale );
             row[4] <<= type;
             row[5] <<= xRow->getString(4);
             row[6] <<= precision;
+            // row[7] BUFFER_LENGTH not used
             row[8] <<= scale;
-            if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getString(3)) )
+            // row[9] RADIX TODO
+            if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getInt( 12 )) )
             {
                 row[10] <<= OUString::valueOf(com::sun::star::sdbc::ColumnValue::NO_NULLS);
                 row[17] <<= statics.NO;
@@ -1654,12 +1673,13 @@ static void columnMetaData2DatabaseTypeDescription(
                 row[17] <<= statics.YES;
             }
 
-            row[11] <<= xRow->getString( 11 ); // comment
-            row[12] <<= xRow->getString(10); // COLUMN_DEF = pg_type.typdefault
+            row[11] <<= xRow->getString( 10 ); // comment
+            row[12] <<= xRow->getString( 9 ); // COLUMN_DEF = pg_type.typdefault
+            // row[13] SQL_DATA_TYPE    not used
+            // row[14] SQL_DATETIME_SUB not used
             row[15] <<= precision;
-            row[16] <<= xRow->getString(8) ;
+            row[16] <<= colNum ;
 
-            // no description in postgresql AFAIK
             vec.push_back( row );
         }
     }
@@ -1677,14 +1697,31 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
-    (void) catalog; (void) schema; (void) table; (void) columnNamePattern;
-    //LEM TODO: implement! See JDBC driver
-    // In the meantime, maybe better to throw exception SQLException with
-    // SQLState == "IM001"
+    (void) catalog;
+
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+
+    if( isLog( m_pSettings, LogLevel::INFO ) )
+    {
+        rtl::OUStringBuffer buf( 128 );
+        buf.appendAscii( "DatabaseMetaData::getColumnPrivileges got called with " );
+        buf.append( schema );
+        buf.appendAscii( "." );
+        buf.append( table );
+        buf.appendAscii( "." );
+        buf.append( columnNamePattern );
+        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+    }
+
+    Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
+    parameters->setString( 1 , schema );
+    parameters->setString( 2 , table );
+    parameters->setString( 3 , columnNamePattern );
+
+    Reference< XResultSet > rs = m_getColumnPrivs_stmt->executeQuery();
+
+    return rs;
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
@@ -1706,52 +1743,11 @@ static void columnMetaData2DatabaseTypeDescription(
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 
-    Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-        ASCII_STR(
-            "  WITH RECURSIVE roles AS ("
-            "      SELECT oid, rolname, rolinherit, rolsuper FROM pg_catalog.pg_roles"
-            "    UNION ALL"
-            "      VALUES (0, 'PUBLIC', TRUE, FALSE)"
-            "  ), direct_privs_oids AS ("
-            "      SELECT c.relname, c.relnamespace, c.relowner, (aclexplode(c.relacl)).*"
-            "      FROM pg_catalog.pg_class c"
-            "      WHERE c.relkind IN ('r', 'v') AND c.relname LIKE ?"
-            "    UNION ALL"
-            "      SELECT c.relname, c.relnamespace, c.relowner, c.relowner, c.relowner, p.privilege, TRUE"
-            "      FROM pg_catalog.pg_class c,"
-            "           (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege)"
-            "      WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND c.relname LIKE ?"
-            "  ), direct_privs AS ("
-            "    SELECT dpo.relname, pn.nspname, dpo.relowner, pr_grantor.rolname AS grantor, dpo.grantee, dpo.privilege_type, dpo.is_grantable"
-            "    FROM direct_privs_oids dpo INNER JOIN roles pr_grantor ON dpo.grantor = pr_grantor.oid"
-            "       INNER JOIN pg_catalog.pg_namespace pn ON pn.oid = dpo.relnamespace"
-            "    WHERE pn.nspname LIKE ?"
-            "  ), memberships(roleid, membership) AS ("
-            "      SELECT pr.oid, 0"
-            "      FROM pg_catalog.pg_roles pr"
-            "    UNION"
-            "      SELECT pr.oid, pr.oid"
-            "      FROM roles pr"
-            "    UNION"
-            "      SELECT m.roleid, pam.roleid"
-            "      FROM roles pr INNER JOIN pg_catalog.pg_auth_members pam ON pr.oid = pam.member"
-            "           INNER JOIN memberships m ON pam.member = m.membership"
-            "      WHERE pr.rolinherit"
-            "  )"
-            "  SELECT current_database() AS TABLE_CAT, dp.nspname AS TABLE_SCHEM, dp.relname AS TABLE_NAME,"
-            "         dp.grantor AS GRANTOR, pr_grantee.rolname AS GRANTEE, dp.privilege_type AS PRIVILEGE,"
-            "         CASE WHEN dp.is_grantable OR (dp.relowner = pr_grantee.oid) THEN 'YES' ELSE 'NO' END AS IS_GRANTABLE"
-            "  FROM direct_privs dp INNER JOIN memberships m ON dp.grantee = m. membership"
-            "       INNER JOIN roles pr_grantee ON pr_grantee.oid = m.roleid"
-            "  ORDER BY dp.nspname, dp.relname, dp.privilege_type"
-        ));
-
-    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
-    parameters->setString( 3 , schemaPattern );
-    parameters->setString( 1 , tableNamePattern );
+    Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
+    parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
-    Reference< XResultSet > rs = statement->executeQuery();
+    Reference< XResultSet > rs = m_getTablePrivs_stmt->executeQuery();
 
     return rs;
 }
@@ -2071,6 +2067,71 @@ void DatabaseMetaData::init_getReferences_stmt ()
     m_getReferences_stmt[15] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_SOME ));
 }
 
+void DatabaseMetaData::init_getPrivs_stmt ()
+{
+    rtl::OUStringBuffer sSQL(300);
+    sSQL.append( ASCII_STR(
+            " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.privilege, dp.is_grantable "
+            " FROM ("
+            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
+            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
+            "  FROM information_schema.table_privileges") );
+    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
+        // information_schema.table_privileges does not fill in default ACLs when no ACL
+        // assume default ACL is "owner has all privileges" and add it
+        sSQL.append( ASCII_STR(
+            " UNION "
+            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
+            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
+            "  FROM pg_catalog.pg_class c,"
+            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege),"
+            "       pg_catalog.pg_roles ro,"
+            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
+            "         UNION ALL"
+            "          VALUES (0::oid, 'PUBLIC')"
+            "       ) AS rg (oid, rolname),"
+            "       pg_catalog.pg_namespace pn"
+            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
+    sSQL.append( ASCII_STR(
+            " ) dp,"
+            " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
+            " WHERE table_schem LIKE ? AND table_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
+            " ORDER BY table_schem, table_name, privilege" ) );
+
+    m_getTablePrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
+
+    sSQL.append( ASCII_STR(
+            " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.COLUMN_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.PRIVILEGE, dp.IS_GRANTABLE FROM ("
+            "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name, column_name,"
+            "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
+            "  FROM information_schema.column_privileges") );
+    if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
+        // information_schema.table_privileges does not fill in default ACLs when no ACL
+        // assume default ACL is "owner has all privileges" and add it
+        sSQL.append( ASCII_STR(
+            " UNION "
+            "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME, a.attname AS column_name,"
+            "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
+            "  FROM pg_catalog.pg_class c, pg_catalog.pg_attribute a,"
+            "       (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('REFERENCES')) p (privilege),"
+            "       pg_catalog.pg_roles ro,"
+            "       (  SELECT oid, rolname FROM pg_catalog.pg_roles"
+            "         UNION ALL"
+            "          VALUES (0::oid, 'PUBLIC')"
+            "       ) AS rg (oid, rolname),"
+            "       pg_catalog.pg_namespace pn"
+            "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid AND a.attrelid = c.oid AND a.attnum > 0") );
+    sSQL.append( ASCII_STR(
+            " ) dp,"
+            " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
+            " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
+            " ORDER BY column_name, privilege" ) );
+
+    m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
+}
+
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
     const Any& /* primaryCatalog */,
     const OUString& primarySchema,
@@ -2259,7 +2320,7 @@ static void pgTypeInfo2ResultSet(
 
         if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
             ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
-              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCaseAscii( "varchar") ) )
+              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("varchar")) ) )
         {
             // reflect varchar as varchar with upper limit !
             //NOTE: the sql spec requires varchar to have an upper limit, however

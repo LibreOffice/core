@@ -27,6 +27,7 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -35,7 +36,7 @@
 namespace sc_apitest
 {
 
-class ScTableSheetObj : public UnoApiTest, apitest::XSearchable
+class ScTableSheetObj : public UnoApiTest, apitest::XSearchable, apitest::XReplaceable
 {
 public:
     ScTableSheetObj();
@@ -46,6 +47,8 @@ public:
     CPPUNIT_TEST(testFindAll);
     CPPUNIT_TEST(testFindNext);
     CPPUNIT_TEST(testFindFirst);
+    CPPUNIT_TEST(testReplaceAll);
+    CPPUNIT_TEST(testCreateReplaceDescriptor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -57,7 +60,8 @@ sal_Int32 ScTableSheetObj::nTest = 0;
 uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
-    apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")), 4)
+    apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")), 4),
+    apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("searchReplaceString")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("replaceReplaceString")))
 {
 
 }

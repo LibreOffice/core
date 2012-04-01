@@ -42,7 +42,7 @@
 #include "tools/debug.hxx"
 #include "tools/config.hxx"
 
-#include "i18npool/paper.hxx"
+#include "i18nutil/paper.hxx"
 #include <comphelper/string.hxx>
 #include "rtl/strbuf.hxx"
 #include <sal/macros.h>
@@ -325,13 +325,13 @@ void PrinterInfoManager::initialize()
             }
 
             // get the PPDContext of global JobData
-            for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
+            for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
-                ByteString aKey( aConfig.GetKeyName( nKey ) );
-                if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL )
+                rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey( String( aKey.Copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
                     if( pKey )
                     {
                         m_aGlobalDefaults.m_aContext.
@@ -340,10 +340,10 @@ void PrinterInfoManager::initialize()
                         sal_True );
                     }
                 }
-                else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
+                else if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
+                    m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
@@ -533,13 +533,13 @@ void PrinterInfoManager::initialize()
                 // now iterate over all keys to extract multi key information:
                 // 1. PPDContext information
                 // 2. Font substitution table
-                for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
+                for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
-                    ByteString aKey( aConfig.GetKeyName( nKey ) );
-                    if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL && aPrinter.m_aInfo.m_pParser )
+                    rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                    if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.Copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
                         if( pKey )
                         {
                             aPrinter.m_aInfo.m_aContext.
@@ -548,10 +548,10 @@ void PrinterInfoManager::initialize()
                             sal_True );
                         }
                     }
-                    else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
+                    else if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")) )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
+                        aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                     }
                 }
 
@@ -594,7 +594,7 @@ void PrinterInfoManager::initialize()
     aMergeInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) );
     aMergeInfo.m_aFeatures      = String( RTL_CONSTASCII_USTRINGPARAM( "autoqueue" ) );
 
-    if( m_aDefaultPrinter.getLength() )
+    if( !m_aDefaultPrinter.isEmpty() )
     {
         PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
         aMergeInfo.m_bPerformFontSubstitution = aDefaultInfo.m_bPerformFontSubstitution;
@@ -727,13 +727,13 @@ bool PrinterInfoManager::writePrinterConfig()
         while( nIndex != -1 && ! bAutoQueue )
         {
             OUString aToken( it->second.m_aInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.getLength() && aToken.compareToAscii( "autoqueue" ) == 0 )
+            if( !aToken.isEmpty() && aToken.compareToAscii( "autoqueue" ) == 0 )
                 bAutoQueue = true;
         }
         if( bAutoQueue )
             continue;
 
-        if( it->second.m_aFile.getLength() )
+        if( !it->second.m_aFile.isEmpty() )
         {
             // check if file is writable
             if( files.find( it->second.m_aFile ) == files.end() )
@@ -766,7 +766,7 @@ bool PrinterInfoManager::writePrinterConfig()
         else // a new printer, write it to the first file available
             it->second.m_aFile = files.begin()->first;
 
-        if( ! it->second.m_aGroup.getLength() ) // probably a new printer
+        if( it->second.m_aGroup.isEmpty() ) // probably a new printer
             it->second.m_aGroup = OString( it->first.getStr(), it->first.getLength(), RTL_TEXTENCODING_UTF8 );
 
         if( files.find( it->second.m_aFile ) != files.end() )
@@ -903,7 +903,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
     ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
-        if( it->second.m_aFile.getLength() )
+        if( !it->second.m_aFile.isEmpty() )
         {
             // this printer already exists in a config file
 
@@ -1122,7 +1122,7 @@ bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& rPrinterName, c
 FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
-    const rtl::OUString& rCommand       = (bQuickCommand && rPrinterInfo.m_aQuickCommand.getLength() ) ?
+    const rtl::OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
     rtl::OString aShellCommand  = rtl::OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
     aShellCommand += rtl::OString( " 2>/dev/null" );
@@ -1279,7 +1279,7 @@ static void lpgetSysQueueTokenHandler(
                     while( nPos != -1 )
                     {
                         OString aTok( aClean.getToken( 0, ',', nPos ) );
-                        if( aTok.getLength() > 0 )
+                        if( !aTok.isEmpty() )
                             aOnlySet.insert( rtl::OStringToOUString( aTok, aEncoding ) );
                     }
                     break;
@@ -1325,7 +1325,7 @@ static void lpgetSysQueueTokenHandler(
             if( nPos != -1 )
             {
                 rtl::OString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
-                if( aComment.getLength() > 0 )
+                if( !aComment.isEmpty() )
                     o_rQueues.back().m_aComment = rtl::OStringToOUString(aComment, aEncoding);
                 continue;
             }
@@ -1334,7 +1334,7 @@ static void lpgetSysQueueTokenHandler(
             if( nPos != -1 )
             {
                 rtl::OString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
-                if( aLoc.getLength() > 0 )
+                if( !aLoc.isEmpty() )
                     o_rQueues.back().m_aLocation = rtl::OStringToOUString(aLoc, aEncoding);
                 continue;
             }

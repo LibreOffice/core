@@ -28,14 +28,11 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_kde4moc))
+$(eval $(call gb_Library_add_custom_headers,vclplug_kde4,vcl/unx/kde4))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
@@ -67,7 +64,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \
@@ -93,6 +89,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEXLib \
     vcl/unx/kde4/main \
     vcl/unx/kde4/VCLKDEApplication \
+))
+
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde4,\
+    -Wno-shadow \
 ))
 
 ifeq ($(OS),LINUX)

@@ -28,7 +28,6 @@
 package installer::languages;
 
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::remover;
@@ -98,7 +97,7 @@ sub all_elements_of_array1_in_array2
 
     for ( my $i = 0; $i <= $#{$array1}; $i++ )
     {
-        if (! installer::existence::exists_in_array(${$array1}[$i], $array2))
+        if (! grep {$_ eq ${$array1}[$i]} @{$array2})
         {
             $array2_contains_all_elements_of_array1 = 0;
             last;

@@ -50,8 +50,9 @@
 #include <comphelper/uno3.hxx>
 
 #include <list>
+#include <map>
 
-class ImplPropertyTable;
+typedef std::map<sal_uInt16, ::com::sun::star::uno::Any> ImplPropertyTable;
 
 //  ----------------------------------------------------
 //  class UnoControlModel
@@ -71,7 +72,7 @@ class TOOLKIT_DLLPUBLIC UnoControlModel :public UnoControlModel_Base
                                         ,public ::cppu::OPropertySetHelper
 {
 private:
-    ImplPropertyTable*                      mpData;
+    ImplPropertyTable                       maData;
     EventListenerMultiplexer                maDisposeListeners;
 
 protected:
@@ -112,7 +113,6 @@ protected:
 public:
                 UnoControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 UnoControlModel( const UnoControlModel& rModel );
-                ~UnoControlModel();
 
     virtual UnoControlModel*    Clone() const = 0;
 

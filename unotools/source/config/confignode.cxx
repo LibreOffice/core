@@ -297,11 +297,6 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationNode OConfigurationNode::appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw()
-    {
-        return insertNode(_rName,_aNewNode.m_xDirectAccess);
-    }
-    //------------------------------------------------------------------------
     OConfigurationNode OConfigurationNode::openNode(const ::rtl::OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");

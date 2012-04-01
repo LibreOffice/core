@@ -92,12 +92,6 @@ OUString Relations::getExternalTargetFromRelId( const OUString& rRelId ) const
     return (pRelation && pRelation->mbExternal) ? pRelation->maTarget : OUString();
 }
 
-OUString Relations::getExternalTargetFromFirstType( const OUString& rType ) const
-{
-    const Relation* pRelation = getRelationFromFirstType( rType );
-    return (pRelation && pRelation->mbExternal) ? pRelation->maTarget : OUString();
-}
-
 OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) const
 {
     // no target, no fragment path

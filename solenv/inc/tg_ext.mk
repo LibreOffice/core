@@ -47,8 +47,8 @@ PATH!:=.$(PATH_SEPERATOR)$(SOLARBINDIR)$(PATH_SEPERATOR)$(PATH)
 .EXPORT : PATH
 
 #override
-PACKAGE_DIR=$(MISC)/build
-ABS_PACKAGE_DIR:=$(MAKEDIR)/$(MISC)/build
+PACKAGE_DIR*=$(MISC)/build
+ABS_PACKAGE_DIR:=$(MAKEDIR)/$(PACKAGE_DIR)
 
 #MUST match with PACKAGE_DIR
 BACK_PATH=../../../
@@ -174,8 +174,9 @@ $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE
     @-cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @-cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -print0 | xargs -0 chmod a+x
 
-#add new files to patch
+#add new files to patch and remove files from patch
 $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
+    $(RM) $(foreach,i,$(REMOVE_FILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i)
 .IF "$(GUI)"=="WNT"
     @$(TOUCH) $@
 .ELSE			# "$(GUI)"=="WNT"
@@ -252,7 +253,7 @@ $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .IF "$(OUT2LIB)"!=""
     $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(LB)
 .IF "$(OS)"=="MACOSX"
-    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl extshl \
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl \
         $(EXTRPATH) \
         $(shell ls $(foreach,j,$(OUT2LIB) $(LB)/$(j:f)) | \
             (grep -v '\.a$$' || test $$? = 1))
@@ -271,16 +272,31 @@ $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""
     $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(BIN)
-.IF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+.IF "$(OS)"=="MACOSX"
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app \
+        $(EXTRPATH) $(shell ls $(foreach,j,$(OUT2BIN) $(BIN)/$(j:f)))
+.ELIF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
     @noop $(foreach,j,$(foreach,k,$(OUT2BIN) \
         $(shell -ls -1 $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$k | $(GREP) .dll)) \
         $(shell @$(IFEXIST) $(j).manifest $(THEN) mt.exe \
         -manifest $(j).manifest -outputresource:$(BIN)/$(j:f)$(EMQ);2 $(FI)))
 .ENDIF          # "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
 .ENDIF			# "$(OUT2BIN)"!=""
+.IF "$(OUT2BIN_NONE)"!=""
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2BIN_NONE) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(BIN)
+.IF "$(OS)"=="MACOSX"
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app \
+        NONE $(shell ls $(foreach,j,$(OUT2BIN_NONE) $(BIN)/$(j:f)))
+.ELIF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+    @noop $(foreach,j,$(foreach,k,$(OUT2BIN_NONE) \
+        $(shell -ls -1 $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$k | $(GREP) .dll)) \
+        $(shell @$(IFEXIST) $(j).manifest $(THEN) mt.exe \
+        -manifest $(j).manifest -outputresource:$(BIN)/$(j:f)$(EMQ);2 $(FI)))
+.END
+.ENDIF			# "$(OUT2BIN_NONE)"!=""
 .IF "$(OUT2CLASS)"!=""
     $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(CLASSDIR)
-.ENDIF			# "$(OUT2BIN)"!=""
+.ENDIF			# "$(OUT2CLASS)"!=""
     $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
 
 $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack $(PATCH_FILES)

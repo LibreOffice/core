@@ -57,7 +57,7 @@ sub read_file
 }
 
 ###########################################
-# Saving files, arrays and hashes
+# Saving files
 ###########################################
 
 sub save_file
@@ -69,57 +69,6 @@ sub save_file
     print OUT @{$savecontent};
     close( OUT);
     if (! -f $savefile) { pre2par::exiter::exit_program("ERROR: Cannot write file: $savefile", "save_file"); }
-}
-
-sub save_hash
-{
-    my ($savefile, $hashref) = @_;
-
-    my @printcontent = ();
-
-    my ($itemkey, $itemvalue, $line);
-
-    foreach $itemkey ( keys %{$hashref} )
-    {
-        $line = "";
-        $itemvalue = $hashref->{$itemkey};
-        $line = $itemkey . "=" . $itemvalue . "\n";
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" );
-    print OUT @printcontent;
-    close( OUT);
-}
-
-sub save_array_of_hashes
-{
-    my ($savefile, $arrayref) = @_;
-
-    my @printcontent = ();
-
-    my ($itemkey, $itemvalue, $line, $hashref);
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        $line = "";
-        $hashref = ${$arrayref}[$i];
-
-        foreach $itemkey ( keys %{$hashref} )
-        {
-            $itemvalue = $hashref->{$itemkey};
-
-            $line = $line . $itemkey . "=" . $itemvalue . "\t";
-        }
-
-        $line = $line . "\n";
-
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" );
-    print OUT @printcontent;
-    close( OUT);
 }
 
 1;

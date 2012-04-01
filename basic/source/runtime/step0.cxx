@@ -1154,13 +1154,7 @@ void SbiRuntime::StepINPUT()
     else if( err )
     {
         if( pRestart && !pIosys->GetChannel() )
-        {
-            BasResId aId( IDS_SBERR_START + 4 );
-            String aMsg( aId );
-
-
             pCode = pRestart;
-        }
         else
             Error( err );
     }
@@ -1175,11 +1169,11 @@ void SbiRuntime::StepINPUT()
 
 void SbiRuntime::StepLINPUT()
 {
-    ByteString aInput;
+    rtl::OString aInput;
     pIosys->Read( aInput );
     Error( pIosys->GetError() );
     SbxVariableRef p = PopVar();
-    p->PutString( String( aInput, osl_getThreadTextEncoding() ) );
+    p->PutString(rtl::OStringToOUString(aInput, osl_getThreadTextEncoding()));
 }
 
 // end of program

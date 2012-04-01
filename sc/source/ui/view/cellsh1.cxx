@@ -92,7 +92,6 @@
 #include "postit.hxx"
 #include "clipparam.hxx"
 #include "pivot.hxx"
-#include "dpobject.hxx"
 #include "dpsdbtab.hxx"     // ScImportSourceDesc
 #include "dpshttab.hxx"     // ScSheetSourceDesc
 #include "dbdata.hxx"
@@ -102,11 +101,8 @@
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "scabstdlg.hxx"
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -117,7 +113,6 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <boost/scoped_ptr.hpp>
-#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -201,7 +196,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String aFlags;
 
-                    if( IS_AVAILABLE( FID_INS_CELL, &pItem ) )
+                    if( pReqArgs->HasItem( FID_INS_CELL, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
                     if( aFlags.Len() )
                     {
@@ -271,7 +266,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String aFlags;
 
-                    if( IS_AVAILABLE( FID_DELETE_CELL, &pItem ) )
+                    if( pReqArgs->HasItem( FID_DELETE_CELL, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
                     if( aFlags.Len() )
                     {
@@ -354,7 +349,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const   SfxPoolItem* pItem;
                     String  aFlags = 'A';
 
-                    if( IS_AVAILABLE( SID_DELETE, &pItem ) )
+                    if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
@@ -468,7 +463,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const   SfxPoolItem* pItem;
                     String  aFlags = 'A';
 
-                    if( IS_AVAILABLE( FID_FILL_TAB, &pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
@@ -587,17 +582,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     bDoIt=false;
 
-                    if( IS_AVAILABLE( FID_FILL_SERIES, &pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_SERIES, &pItem ) )
                         aFillDir = ((const SfxStringItem*)pItem)->GetValue();
-                    if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                         aFillCmd = ((const SfxStringItem*)pItem)->GetValue();
-                    if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                         aFillDateCmd = ((const SfxStringItem*)pItem)->GetValue();
-                    if( IS_AVAILABLE( FN_PARAM_3, &pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_3, &pItem ) )
                         aFillStep = ((const SfxStringItem*)pItem)->GetValue();
-                    if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
                         aFillStart = ((const SfxStringItem*)pItem)->GetValue();
-                    if( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
+                    if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
                         aFillMax = ((const SfxStringItem*)pItem)->GetValue();
 
                     if( aFillDir.Len() )
@@ -838,7 +833,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
 
-                    if( IS_AVAILABLE( FID_FILL_AUTO, &pItem ) )
+                    if( pReqArgs->HasItem( FID_FILL_AUTO, &pItem ) )
                     {
                         ScAddress aScAddress;
                         String aArg = ((const SfxStringItem*)pItem)->GetValue();
@@ -963,8 +958,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            String aNewDimName( pDlg->GetDimensionName() );
-                            pTabViewShell->SetDataPilotDetails( sal_True, &aNewDimName );
+                            rtl::OUString aNewDimName( pDlg->GetDimensionName() );
+                            pTabViewShell->SetDataPilotDetails( true, &aNewDimName );
                         }
                     }
                     else if ( !pDPObj->IsServiceData() &&
@@ -973,7 +968,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                    aFilters ) )
                         pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
-                        pTabViewShell->SetDataPilotDetails( sal_True );
+                        pTabViewShell->SetDataPilotDetails(true);
                 }
                 else
                     pTabViewShell->ShowMarkedOutlines();
@@ -990,9 +985,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
                 {
                     ScDPNumGroupInfo aNumInfo;
-                    aNumInfo.Enable    = sal_True;
-                    aNumInfo.AutoStart = sal_True;
-                    aNumInfo.AutoEnd   = sal_True;
+                    aNumInfo.mbEnable    = true;
+                    aNumInfo.mbAutoStart = true;
+                    aNumInfo.mbAutoEnd   = true;
                     sal_Int32 nParts = 0;
                     if ( pTabViewShell->HasSelectionForDateGroup( aNumInfo, nParts ) )
                     {
@@ -1029,7 +1024,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     bOk = false;
 
-                    if( IS_AVAILABLE( SID_OUTLINE_MAKE, &pItem ) )
+                    if( pReqArgs->HasItem( SID_OUTLINE_MAKE, &pItem ) )
                     {
                         String aCol = ((const SfxStringItem*)pItem)->GetValue();
                         aCol.ToUpperAscii();
@@ -1091,7 +1086,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     bOk = false;
 
-                    if( IS_AVAILABLE( SID_OUTLINE_REMOVE, &pItem ) )
+                    if( pReqArgs->HasItem( SID_OUTLINE_REMOVE, &pItem ) )
                     {
                         String aCol = ((const SfxStringItem*)pItem)->GetValue();
                         aCol.ToUpperAscii();
@@ -1232,7 +1227,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         const   SfxPoolItem* pItem;
                         String  aFlags = 'A';
 
-                        if( IS_AVAILABLE( FID_INS_CELL_CONTENTS, &pItem ) )
+                        if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                         aFlags.ToUpperAscii();
@@ -1336,9 +1331,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if ( bAsLink && bOtherDoc )
                                 pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE insert
                             else
+                            {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                                     eMoveMode, IDF_NONE, sal_True );    // allow warning dialog
+                            }
                         }
 
                         if( !pReqArgs )
@@ -1372,7 +1369,27 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
             break;
-
+        case SID_PASTE_ONLY_TEXT:
+        case SID_PASTE_ONLY_FORMULA:
+        {
+            Window* pWin = GetViewData()->GetActiveWin();
+            if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
+            {
+                rReq.SetSlot( FID_INS_CELL_CONTENTS );
+                rtl::OUString aFlags;
+                if ( nSlot == SID_PASTE_ONLY_TEXT )
+                    aFlags = "VDS";
+                else
+                    aFlags = "F";
+                rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
+                ExecuteSlot( rReq, GetInterface() );
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = success
+                pTabViewShell->CellContentChanged();
+            }
+            else
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = fail
+            break;
+        }
         case SID_PASTE_SPECIAL:
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
@@ -1685,8 +1702,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     rReq.Done();
                 }
+#ifndef DISABLE_SCRIPTING
                 else if (rReq.IsAPI())
                     SbxBase::SetError(SbxERR_BAD_PARAMETER);
+#endif
             }
             break;
 
@@ -1717,21 +1736,23 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 String  aName, aSymbol, aAttrib;
 
-                if( IS_AVAILABLE( FID_DEFINE_NAME, &pItem ) )
+                if( pReqArgs->HasItem( FID_DEFINE_NAME, &pItem ) )
                     aName = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     aSymbol = ((const SfxStringItem*)pItem)->GetValue();
 
-                if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
+                if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                     aAttrib = ((const SfxStringItem*)pItem)->GetValue();
 
                 if ( aName.Len() && aSymbol.Len() )
                 {
                     if (pTabViewShell->InsertName( aName, aSymbol, aAttrib ))
                         rReq.Done();
+#ifndef DISABLE_SCRIPTING
                     else
                         SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-error
+#endif
                 }
             }
             else
@@ -1745,7 +1766,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
         case FID_ADD_NAME:
             {
-                std::cout << "temp" << std::endl;
                 sal_uInt16          nId  = ScNameDefDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
@@ -1774,7 +1794,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
 
-                    if( IS_AVAILABLE( SID_UPDATECHART, &pItem ) )
+                    if( pReqArgs->HasItem( SID_UPDATECHART, &pItem ) )
                         bAll = ((const SfxBoolItem*)pItem)->GetValue();
                 }
 
@@ -1836,7 +1856,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
                                 std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
-                                if (aNames.size())
+                                if (!aNames.empty())
                                 {
                                     rtl::OUStringBuffer aBuffer;
                                     for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();
@@ -1887,7 +1907,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                if( ScPostIt* pNote = pDoc->GetNote( aPos ) )
+                if( ScPostIt* pNote = pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) )
                 {
                     bool bShow;
                     const SfxPoolItem* pItem;
@@ -2010,7 +2030,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if( IS_AVAILABLE( SID_HYPERLINK_SETLINK, &pItem ) )
+                if( pReqArgs->HasItem( SID_HYPERLINK_SETLINK, &pItem ) )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const String& rName   = pHyper->GetName();
@@ -2030,7 +2050,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if( IS_AVAILABLE( FID_CONDITIONAL_FORMAT, &pItem ) )
+                if( pReqArgs->HasItem( FID_CONDITIONAL_FORMAT, &pItem ) )
                 {
                     // when RefInput has switched to other tabs as data table, switch back
                     if ( GetViewData()->GetTabNo() != GetViewData()->GetRefTabNo() )
@@ -2156,7 +2176,12 @@ bool isDPSourceValid(const ScDPObject& rDPObj)
         if (!pDesc)
             return false;
 
-        const ScDPCache* pCache = pDesc->CreateCache();
+        const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+        const ScDPDimensionSaveData* pDimData = NULL;
+        if (pSaveData)
+            pDimData = pSaveData->GetExistingDimensionData();
+
+        const ScDPCache* pCache = pDesc->CreateCache(pDimData);
         if (!pCache)
             // cashe creation failed, probably due to invalid connection.
             return false;
@@ -2420,7 +2445,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     delete pDlg;
 }
 
-IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
+IMPL_LINK_NOARG(ScCellShell, DialogClosed)
 {
     OSL_ENSURE( pImpl->m_pLinkedDlg, "ScCellShell::DialogClosed(): invalid request" );
     OSL_ENSURE( pImpl->m_pRequest, "ScCellShell::DialogClosed(): invalid request" );

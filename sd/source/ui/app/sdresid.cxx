@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include "sddll.hxx"
+#include "sdmod.hxx"
 #include "sdresid.hxx"
 
 

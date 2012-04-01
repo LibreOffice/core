@@ -91,7 +91,6 @@ public:
     inline void         SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
 
     String              GetSelectedIconURL() const;
-    String              GetSelectedIconText() const;
     String              GetCursorPosIconURL() const;
     String              GetIconText( const String& rURL ) const;
     void                InvalidateIconControl();
@@ -177,16 +176,6 @@ public:
     const String&   GetString( long nId ) const;
 };
 
-class SvtExtendedMultiLineEdit_Impl : public ExtMultiLineEdit
-{
-public:
-    SvtExtendedMultiLineEdit_Impl( Window* pParent,WinBits _nBits );
-    inline ~SvtExtendedMultiLineEdit_Impl() {}
-
-    inline void         Clear() { SetText( String() ); }
-    void                InsertEntry( const String& rTitle, const String& rValue );
-};
-
 class SvtFrameWindow_Impl : public Window
 {
 private:
@@ -257,13 +246,13 @@ private:
 
     virtual void        Resize();
 
-    DECL_LINK(          IconClickHdl_Impl, SvtIconChoiceCtrl* );
-    DECL_LINK(          FileSelectHdl_Impl, SvtFileView* );
-    DECL_LINK(          FileDblClickHdl_Impl, SvtFileView* );
-    DECL_LINK(          NewFolderHdl_Impl, SvtFileView* );
-    DECL_LINK(          TimeoutHdl_Impl, Timer* );
+    DECL_LINK(IconClickHdl_Impl, void *);
+    DECL_LINK(FileSelectHdl_Impl, void *);
+    DECL_LINK(FileDblClickHdl_Impl, void *);
+    DECL_LINK(NewFolderHdl_Impl, void *);
+    DECL_LINK(TimeoutHdl_Impl, void *);
     DECL_LINK(          ClickHdl_Impl, ToolBox* );
-    DECL_LINK(          ResizeHdl_Impl, SplitWindow* );     // used for split and initial setting of toolbar pos
+    DECL_LINK(ResizeHdl_Impl, void *);     // used for split and initial setting of toolbar pos
 
     void                PrintFile( const String& rURL );
     void                AppendHistoryURL( const String& rURL, sal_uLong nGroup );

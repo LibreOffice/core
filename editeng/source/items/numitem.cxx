@@ -259,9 +259,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream << ( sal_uInt16 ) mePositionAndSpaceMode;
     rStream << ( sal_uInt16 ) meLabelFollowedBy;
-    rStream << ( long ) mnListtabPos;
-    rStream << ( long ) mnFirstLineIndent;
-    rStream << ( long ) mnIndentAt;
+    rStream << ( sal_Int32 ) mnListtabPos;
+    rStream << ( sal_Int32 ) mnFirstLineIndent;
+    rStream << ( sal_Int32 ) mnIndentAt;
 
     return rStream;
 }
@@ -756,23 +756,6 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, sal_Boo
         delete aFmts[ i ];
         aFmts[ i ] = new SvxNumberFormat( rNumFmt );
         aFmtsSet[i] = bIsValid;
-    }
-}
-
-void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
-{
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
-
-    if( nLevel < SVX_MAX_NUM )
-    {
-        aFmtsSet[nLevel] = 0 != pFmt;
-        if(pFmt)
-            SetLevel(nLevel, *pFmt);
-        else
-        {
-            delete aFmts[nLevel];
-            aFmts[nLevel] = 0;
-        }
     }
 }
 

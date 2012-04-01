@@ -65,7 +65,6 @@ public:
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
-    SAL_DLLPRIVATE SymbolAlign      ImplGetSymbolAlign() const;
     SAL_DLLPRIVATE void             ImplSetSmallSymbol( sal_Bool bSmall = sal_True );
     SAL_DLLPRIVATE const Rectangle& ImplGetSymbolRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);
@@ -176,7 +175,6 @@ public:
     void            SetSymbol( SymbolType eSymbol );
     SymbolType      GetSymbol() const { return meSymbol; }
     void            SetSymbolAlign( SymbolAlign eAlign );
-    SymbolAlign     GetSymbolAlign() const;
 
     void            SetDropDown( sal_uInt16 nStyle );
     sal_uInt16          GetDropDown() const { return mnDDStyle; }
@@ -508,9 +506,6 @@ private:
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE          ImageButton( const ImageButton & );
     SAL_DLLPRIVATE          ImageButton & operator= ( const ImageButton & );
-
-protected:
-                    ImageButton( WindowType nType );
 
 public:
                     ImageButton( Window* pParent, WinBits nStyle = 0 );

@@ -594,7 +594,7 @@ void DataSourceTabPage::updateControlState()
     isValid();
 }
 
-IMPL_LINK( DataSourceTabPage, SeriesSelectionChangedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     if( m_apLB_SERIES->FirstSelected())
@@ -607,7 +607,7 @@ IMPL_LINK( DataSourceTabPage, SeriesSelectionChangedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, RoleSelectionChangedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     SvLBoxEntry * pEntry = m_aLB_ROLE.FirstSelected();
@@ -634,7 +634,7 @@ IMPL_LINK( DataSourceTabPage, RoleSelectionChangedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, MainRangeButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_RANGE;
@@ -678,7 +678,7 @@ IMPL_LINK( DataSourceTabPage, MainRangeButtonClickedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, CategoriesRangeButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_CATEGORIES;
@@ -693,7 +693,7 @@ IMPL_LINK( DataSourceTabPage, CategoriesRangeButtonClickedHdl, void *, EMPTYARG 
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, AddButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -733,7 +733,7 @@ IMPL_LINK( DataSourceTabPage, AddButtonClickedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, RemoveButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -778,7 +778,7 @@ IMPL_LINK( DataSourceTabPage, RemoveButtonClickedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, UpButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -795,7 +795,7 @@ IMPL_LINK( DataSourceTabPage, UpButtonClickedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, DownButtonClickedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());

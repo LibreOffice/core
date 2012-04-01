@@ -728,11 +728,6 @@ public:
                             PropertySet& rPropSet,
                             const TextCharacterProperties& rTextProps );
 
-    /** Sets automatic line properties to the passed property set. */
-    void                convertAutomaticLine(
-                            PropertySet& rPropSet,
-                            sal_Int32 nSeriesIdx );
-
     /** Sets automatic fill properties to the passed property set. */
     void                convertAutomaticFill(
                             PropertySet& rPropSet,
@@ -1017,15 +1012,6 @@ void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const Te
     maTextFormatter.convertFormatting( rPropSet, &rTextProps );
 }
 
-void ObjectTypeFormatter::convertAutomaticLine( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
-{
-    ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
-    ModelRef< Shape > xShapeProp;
-    maLineFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
-    maEffectFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
-    rPropSet.setProperties( aPropMap );
-}
-
 void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
 {
     ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
@@ -1147,7 +1133,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         }
         else try
         {
-            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAscii( "general" ) ?
+            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("general")) ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
                 mxData->mxNumFmts->addNewConverted( rNumberFormat.maFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )
@@ -1161,21 +1147,10 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     }
 }
 
-void ObjectFormatter::convertAutomaticLine( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )
-{
-    if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
-        pFormat->convertAutomaticLine( rPropSet, nSeriesIdx );
-}
-
 void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )
 {
     if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
         pFormat->convertAutomaticFill( rPropSet, nSeriesIdx );
-}
-
-/*static*/ bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
-{
-    return !rxShapeProp || !rxShapeProp->getLineProperties().maLineFill.moFillType.has();
 }
 
 /*static*/ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )

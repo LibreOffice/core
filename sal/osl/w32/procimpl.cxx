@@ -355,7 +355,7 @@ namespace /* private */
             osl_searchFileURL(exe_name.pData, NULL, &exe_url.pData);
 
         rtl::OUString exe_path;
-        if (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
+        if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return rtl::OUString();
 
         exe_path = getShortPath(exe_path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe")));
@@ -380,9 +380,9 @@ namespace /* private */
     bool is_batch_file(const rtl::OUString& file_name)
     {
         rtl::OUString ext = get_file_extension(file_name);
-        return (ext.equalsIgnoreAsciiCaseAscii("bat") ||
-                ext.equalsIgnoreAsciiCaseAscii("cmd") ||
-                ext.equalsIgnoreAsciiCaseAscii("btm"));
+        return (ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bat")) ||
+                ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("cmd")) ||
+                ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("btm")));
     }
 
     //##########################################################
@@ -504,7 +504,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     }
 
     rtl::OUString cwd;
-    if (ustrDirectory && ustrDirectory->length && (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
+    if (ustrDirectory && ustrDirectory->length && (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
 
     LPCWSTR p_cwd = (cwd.getLength()) ? reinterpret_cast<LPCWSTR>(cwd.getStr()) : NULL;
@@ -517,7 +517,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     startup_info.cb        = sizeof(STARTUPINFO);
     startup_info.dwFlags   = STARTF_USESHOWWINDOW;
-    startup_info.lpDesktop = L"";
+    startup_info.lpDesktop = const_cast<LPWSTR>(L"");
 
     /* Create pipes for redirected IO */
     HANDLE hInputRead  = NULL;

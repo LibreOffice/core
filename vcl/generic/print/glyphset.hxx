@@ -121,7 +121,8 @@ public:
                                 const sal_uInt32* pGlyphIds,
                                 const sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
-                                const sal_Int32* pDeltaArray );
+                                const sal_Int32* pDeltaArray,
+                                sal_Bool bUseGlyphs=sal_True);
     sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
     sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< rtl::OString >& rSuppliedFonts );
 };

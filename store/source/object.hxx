@@ -49,6 +49,9 @@ public:
     /** Replaces dynamic_cast type checking.
      */
     virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId) = 0;
+
+protected:
+    ~IStoreHandle() {}
 };
 
 

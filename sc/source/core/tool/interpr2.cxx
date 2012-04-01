@@ -1613,25 +1613,15 @@ void ScInterpreter::ScBackSolver()
         {
             ScBaseCell* pVCell = GetCell( aValueAdr );
             // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
             ScBaseCell* pFCell = GetCell( aFormulaAdr );
 
-            if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE) || bTempCell)
+            if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE))
                 && pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
                 double fSaveVal; // Original value to be restored later if necessary
-                ScPostIt* pNote = 0;
 
-                if ( bTempCell )
-                {
-                    pNote = pVCell ? pVCell->ReleaseNote() : 0;
-                    fSaveVal = 0.0;
-                    pVCell = new ScValueCell( fSaveVal );
-                    pDok->PutCell( aValueAdr, pVCell );
-                }
-                else
-                    fSaveVal = GetCellValue( aValueAdr, pVCell );
+                fSaveVal = GetCellValue( aValueAdr, pVCell );
 
                 const sal_uInt16 nMaxIter = 100;
                 const double fEps = 1E-10;
@@ -1772,13 +1762,7 @@ void ScInterpreter::ScBackSolver()
                 {
                     nX = fBestX;
                 }
-                if ( bTempCell )
-                {
-                    pVCell = pNote ? new ScNoteCell( pNote ) : 0;
-                    pDok->PutCell( aValueAdr, pVCell );
-                }
-                else
-                    pValue->SetValue( fSaveVal );
+                pValue->SetValue( fSaveVal );
                 pDok->SetDirty( aVRange );
                 pFormula->Interpret();
                 if ( !bDoneIteration )
@@ -2771,11 +2755,6 @@ void ScInterpreter::ScEuroConvert()
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-#define UTF8_STRINGPARAM( ascii )   ascii, static_cast< xub_StrLen >( sizeof( ascii ) - 1 )
-#define UTF8_CREATE( ascii )        rtl::OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
-#define UTF8_APPEND( ascii )        Append( UTF8_STRINGPARAM( ascii ) )
-#define UTF8_PREPEND( ascii )       Insert( UTF8_CREATE( ascii ), 0 )
-
 // local functions ------------------------------------------------------------
 
 namespace {
@@ -2786,20 +2765,20 @@ inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, dou
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
+void lclAppendDigit( rtl::OStringBuffer& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
-        case 0: rText.UTF8_APPEND( UTF8_TH_0 ); break;
-        case 1: rText.UTF8_APPEND( UTF8_TH_1 ); break;
-        case 2: rText.UTF8_APPEND( UTF8_TH_2 ); break;
-        case 3: rText.UTF8_APPEND( UTF8_TH_3 ); break;
-        case 4: rText.UTF8_APPEND( UTF8_TH_4 ); break;
-        case 5: rText.UTF8_APPEND( UTF8_TH_5 ); break;
-        case 6: rText.UTF8_APPEND( UTF8_TH_6 ); break;
-        case 7: rText.UTF8_APPEND( UTF8_TH_7 ); break;
-        case 8: rText.UTF8_APPEND( UTF8_TH_8 ); break;
-        case 9: rText.UTF8_APPEND( UTF8_TH_9 ); break;
+        case 0: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_0) ); break;
+        case 1: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1) ); break;
+        case 2: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_2) ); break;
+        case 3: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_3) ); break;
+        case 4: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_4) ); break;
+        case 5: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_5) ); break;
+        case 6: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_6) ); break;
+        case 7: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_7) ); break;
+        case 8: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_8) ); break;
+        case 9: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_9) ); break;
         default:    OSL_FAIL( "lclAppendDigit - illegal digit" );
     }
 }
@@ -2808,22 +2787,22 @@ void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10( ByteString& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
+void lclAppendPow10( rtl::OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 {
     OSL_ENSURE( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
     lclAppendDigit( rText, nDigit );
     switch( nPow10 )
     {
-        case 2: rText.UTF8_APPEND( UTF8_TH_1E2 );   break;
-        case 3: rText.UTF8_APPEND( UTF8_TH_1E3 );   break;
-        case 4: rText.UTF8_APPEND( UTF8_TH_1E4 );   break;
-        case 5: rText.UTF8_APPEND( UTF8_TH_1E5 );   break;
+        case 2: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E2) );   break;
+        case 3: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E3) );   break;
+        case 4: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E4) );   break;
+        case 5: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E5) );   break;
         default:    OSL_FAIL( "lclAppendPow10 - illegal power" );
     }
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
+void lclAppendBlock( rtl::OStringBuffer& rText, sal_Int32 nValue )
 {
     OSL_ENSURE( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
     if( nValue >= 100000 )
@@ -2855,11 +2834,11 @@ void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
             if( nTen >= 3 )
                 lclAppendDigit( rText, nTen );
             else if( nTen == 2 )
-                rText.UTF8_APPEND( UTF8_TH_20 );
-            rText.UTF8_APPEND( UTF8_TH_10 );
+                rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_20) );
+            rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_10) );
         }
         if( (nTen > 0) && (nOne == 1) )
-            rText.UTF8_APPEND( UTF8_TH_11 );
+            rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_11) );
         else if( nOne > 0 )
             lclAppendDigit( rText, nOne );
     }
@@ -2894,45 +2873,48 @@ void ScInterpreter::ScBahtText()
         sal_Int32 nSatang = 0;
         lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
 
-        ByteString aText;
+        rtl::OStringBuffer aText;
 
         // generate text for Baht value
         if( fBaht == 0.0 )
         {
             if( nSatang == 0 )
-                aText.UTF8_APPEND( UTF8_TH_0 );
+                aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_0) );
         }
         else while( fBaht > 0.0 )
         {
-            ByteString aBlock;
+            rtl::OStringBuffer aBlock;
             sal_Int32 nBlock = 0;
             lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
             if( nBlock > 0 )
                 lclAppendBlock( aBlock, nBlock );
             // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
-                aBlock.UTF8_PREPEND( UTF8_TH_1E6 );
-            aText.Insert( aBlock, 0 );
+                aBlock.insert(
+                    0, rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E6)));
+
+            aText.insert(0, aBlock.makeStringAndClear());
         }
-        if( aText.Len() > 0 )
-            aText.UTF8_APPEND( UTF8_TH_BAHT );
+        if (aText.getLength() > 0)
+            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_BAHT) );
 
         // generate text for Satang value
         if( nSatang == 0 )
         {
-            aText.UTF8_APPEND( UTF8_TH_DOT0 );
+            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_DOT0) );
         }
         else
         {
             lclAppendBlock( aText, nSatang );
-            aText.UTF8_APPEND( UTF8_TH_SATANG );
+            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_SATANG) );
         }
 
         // add the minus sign
         if( bMinus )
-            aText.UTF8_PREPEND( UTF8_TH_MINUS );
+            aText.insert(
+                0, rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_MINUS)));
 
-        PushString( String( aText, RTL_TEXTENCODING_UTF8 ) );
+        PushString( rtl::OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }
 }
 

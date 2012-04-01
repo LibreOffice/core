@@ -53,8 +53,8 @@ public:
     SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent);
     virtual ~SwFldDlg();
 
-    DECL_LINK( OKHdl, Button * );
-    DECL_LINK( CancelHdl, Button * );
+    DECL_LINK(OKHdl, void *);
+    DECL_LINK(CancelHdl, void *);
 
     void                Initialize(SfxChildWinInfo *pInfo);
     void                ReInitDlg();

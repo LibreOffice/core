@@ -38,7 +38,7 @@ namespace connectivity
         {
         public:
             WpADOKey(ADOKey* pInt=NULL) :   WpOLEBase<ADOKey>(pInt){}
-            WpADOKey(const WpADOKey& rhs){operator=(rhs);}
+            WpADOKey(const WpADOKey& rhs) : WpOLEBase<ADOKey>(rhs) {}
 
             inline WpADOKey& operator=(const WpADOKey& rhs)
                 {WpOLEBase<ADOKey>::operator=(rhs); return *this;}

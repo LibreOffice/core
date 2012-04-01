@@ -37,8 +37,8 @@ $(eval $(call gb_AllLangResTarget_add_srs,vcl,\
 $(eval $(call gb_SrsTarget_SrsTarget,vcl/source/src))
 
 $(eval $(call gb_SrsTarget_set_include,vcl/source/src,\
-        $$(INCLUDE) \
-        -I$(realpath $(SRCDIR)/vcl/inc) \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\

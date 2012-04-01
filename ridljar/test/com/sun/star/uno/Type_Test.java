@@ -27,85 +27,92 @@
 
 package com.sun.star.uno;
 
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class Type_Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] { "testZClass", "testIsSupertypeOf" };
+public final class Type_Test {
+    @Test public void testZClass() {
+        assertSame("VOID", void.class, new Type("void").getZClass());
+        assertSame("BOOLEAN", boolean.class, new Type("boolean").getZClass());
+        assertSame("BYTE", byte.class, new Type("byte").getZClass());
+        assertSame("SHORT", short.class, new Type("short").getZClass());
+        assertSame(
+            "UNSIGNED SHORT", short.class,
+            new Type("unsigned short").getZClass());
+        assertSame("LONG", int.class, new Type("long").getZClass());
+        assertSame(
+            "UNSIGNED LONG", int.class, new Type("unsigned long").getZClass());
+        assertSame("HYPER", long.class, new Type("hyper").getZClass());
+        assertSame(
+            "UNSIGNED HYPER", long.class,
+            new Type("unsigned hyper").getZClass());
+        assertSame("FLOAT", float.class, new Type("float").getZClass());
+        assertSame("DOUBLE", double.class, new Type("double").getZClass());
+        assertSame("CHAR", char.class, new Type("char").getZClass());
+        assertSame("STRING", String.class, new Type("string").getZClass());
+        assertSame("TYPE", Type.class, new Type("type").getZClass());
+        assertSame("ANY", Object.class, new Type("any").getZClass());
+        assertSame(
+            "sequence of BOOLEAN", boolean[].class,
+            new Type("[]boolean", TypeClass.SEQUENCE).getZClass());
+        assertSame(
+            "sequence of sequence of XComponentContext",
+            XComponentContext[][].class,
+            (new Type(
+                "[][]com.sun.star.uno.XComponentContext", TypeClass.SEQUENCE).
+             getZClass()));
+        assertSame(
+            "enum TypeClass", TypeClass.class,
+            new Type("com.sun.star.uno.TypeClass", TypeClass.ENUM).getZClass());
+        assertSame(
+            "struct Uik", Uik.class,
+            new Type("com.sun.star.uno.Uik", TypeClass.STRUCT).getZClass());
+        assertSame(
+            "exception Exception", com.sun.star.uno.Exception.class,
+            (new Type("com.sun.star.uno.Exception", TypeClass.EXCEPTION).
+             getZClass()));
+        assertSame(
+            "exception RuntimeException",
+            com.sun.star.uno.RuntimeException.class,
+            (new Type("com.sun.star.uno.RuntimeException", TypeClass.EXCEPTION).
+             getZClass()));
+        assertSame(
+            "exception DeploymentException", DeploymentException.class,
+            (new Type(
+                "com.sun.star.uno.DeploymentException", TypeClass.EXCEPTION).
+             getZClass()));
+        assertSame(
+            "interface XInterface", XInterface.class,
+            (new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE).
+             getZClass()));
+        assertSame(
+            "interface XComponentContext", XComponentContext.class,
+            (new Type(
+                "com.sun.star.uno.XComponentContext", TypeClass.INTERFACE).
+             getZClass()));
+
+        assertSame(boolean.class, new Type(boolean.class).getZClass());
+        assertSame(boolean.class, new Type(Boolean.class).getZClass());
+        assertSame(boolean[].class, new Type(boolean[].class).getZClass());
+        assertSame(boolean[].class, new Type(Boolean[].class).getZClass());
     }
 
-    public void testZClass() {
-        assure("VOID", new Type("void").getZClass() == void.class);
-        assure("BOOLEAN", new Type("boolean").getZClass() == boolean.class);
-        assure("BYTE", new Type("byte").getZClass() == byte.class);
-        assure("SHORT", new Type("short").getZClass() == short.class);
-        assure("UNSIGNED SHORT",
-               new Type("unsigned short").getZClass() == short.class);
-        assure("LONG", new Type("long").getZClass() == int.class);
-        assure("UNSIGNED LONG",
-               new Type("unsigned long").getZClass() == int.class);
-        assure("HYPER", new Type("hyper").getZClass() == long.class);
-        assure("UNSIGNED HYPER",
-               new Type("unsigned hyper").getZClass() == long.class);
-        assure("FLOAT", new Type("float").getZClass() == float.class);
-        assure("DOUBLE", new Type("double").getZClass() == double.class);
-        assure("CHAR", new Type("char").getZClass() == char.class);
-        assure("STRING", new Type("string").getZClass() == String.class);
-        assure("TYPE", new Type("type").getZClass() == Type.class);
-        assure("ANY", new Type("any").getZClass() == Object.class);
-        assure("sequence of BOOLEAN",
-               new Type("[]boolean", TypeClass.SEQUENCE).getZClass()
-               == boolean[].class);
-        assure("sequence of sequence of XComponentContext",
-               new Type("[][]com.sun.star.uno.XComponentContext",
-                        TypeClass.SEQUENCE).getZClass()
-               == XComponentContext[][].class);
-        assure("enum TypeClass",
-               new Type("com.sun.star.uno.TypeClass",
-                        TypeClass.ENUM).getZClass() == TypeClass.class);
-        assure("struct Uik",
-               new Type("com.sun.star.uno.Uik", TypeClass.STRUCT).getZClass()
-               == Uik.class);
-        assure("exception Exception",
-               new Type("com.sun.star.uno.Exception",
-                        TypeClass.EXCEPTION).getZClass()
-               == com.sun.star.uno.Exception.class);
-        assure("exception RuntimeException",
-               new Type("com.sun.star.uno.RuntimeException",
-                        TypeClass.EXCEPTION).getZClass()
-               == com.sun.star.uno.RuntimeException.class);
-        assure("exception DeploymentException",
-               new Type("com.sun.star.uno.DeploymentException",
-                        TypeClass.EXCEPTION).getZClass()
-               == DeploymentException.class);
-        assure("interface XInterface",
-               new Type("com.sun.star.uno.XInterface",
-                        TypeClass.INTERFACE).getZClass() == XInterface.class);
-        assure("interface XComponentContext",
-               new Type("com.sun.star.uno.XComponentContext",
-                        TypeClass.INTERFACE).getZClass()
-               == XComponentContext.class);
-
-        assure(new Type(boolean.class).getZClass() == boolean.class);
-        assure(new Type(Boolean.class).getZClass() == boolean.class);
-        assure(new Type(boolean[].class).getZClass() == boolean[].class);
-        assure(new Type(Boolean[].class).getZClass() == boolean[].class);
-    }
-
-    public void testIsSupertypeOf() {
+    @Test public void testIsSupertypeOf() {
         Type ifc = new Type(com.sun.star.uno.XInterface.class);
         Type ctx = new Type(com.sun.star.uno.XComponentContext.class);
         Type exc = new Type(com.sun.star.uno.RuntimeException.class);
-        assure("LONG :> LONG", Type.LONG.isSupertypeOf(Type.LONG));
-        assure("not ANY :> XInterface", !Type.ANY.isSupertypeOf(ifc));
-        assure("ANY :> ANY", Type.ANY.isSupertypeOf(Type.ANY));
-        assure("not ANY :> LONG", !Type.ANY.isSupertypeOf(Type.LONG));
-        assure("not XInterface :> ANY", !ifc.isSupertypeOf(Type.ANY));
-        assure("XInterface :> XInterface", ifc.isSupertypeOf(ifc));
-        assure("XInterface :> XComponentContext", ifc.isSupertypeOf(ctx));
-        assure("not XComponentContext :> XInterface", !ctx.isSupertypeOf(ifc));
-        assure("XComponentContext :> XComponentContext",
-               ctx.isSupertypeOf(ctx));
-        assure("not XInterface :> RuntimeException", !ifc.isSupertypeOf(exc));
+        assertTrue("LONG :> LONG", Type.LONG.isSupertypeOf(Type.LONG));
+        assertFalse("not ANY :> XInterface", Type.ANY.isSupertypeOf(ifc));
+        assertTrue("ANY :> ANY", Type.ANY.isSupertypeOf(Type.ANY));
+        assertFalse("not ANY :> LONG", Type.ANY.isSupertypeOf(Type.LONG));
+        assertFalse("not XInterface :> ANY", ifc.isSupertypeOf(Type.ANY));
+        assertTrue("XInterface :> XInterface", ifc.isSupertypeOf(ifc));
+        assertTrue("XInterface :> XComponentContext", ifc.isSupertypeOf(ctx));
+        assertFalse(
+            "not XComponentContext :> XInterface", ctx.isSupertypeOf(ifc));
+        assertTrue(
+            "XComponentContext :> XComponentContext", ctx.isSupertypeOf(ctx));
+        assertFalse(
+            "not XInterface :> RuntimeException", ifc.isSupertypeOf(exc));
     }
 }

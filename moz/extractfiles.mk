@@ -348,7 +348,7 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 .ENDIF
 .ENDIF
 .IF "$(OS)"=="MACOSX"
-    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl OOO \
+    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl shl OOO \
         $(RUNTIME_DIR)$/*$(DLLPOST)
 # A crude hack to adapt all the absolute ("@executable_path") dependencies to
 # relative ("@loader_path") ones:
@@ -423,7 +423,7 @@ $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)
     $(LIB_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
 .IF "$(OS)"=="MACOSX"
-    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl OOO \
+    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl shl OOO \
         $(LIB_DIR)$/*$(DLLPOST)
 .ENDIF
 .IF "$(GUI)"=="UNX"

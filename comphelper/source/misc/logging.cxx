@@ -127,44 +127,6 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString& EventLogger::getName() const
-    {
-        return m_pImpl->getName();
-    }
-
-    //--------------------------------------------------------------------
-    sal_Int32 EventLogger::getLogLevel() const
-    {
-        try
-        {
-            if ( m_pImpl->isValid() )
-                return m_pImpl->getLogger()->getLevel();
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "EventLogger::getLogLevel: caught an exception!" );
-        }
-
-        return LogLevel::OFF;
-    }
-
-    //--------------------------------------------------------------------
-    void EventLogger::setLogLevel( const sal_Int32 _nLogLevel ) const
-    {
-        try
-        {
-            if ( m_pImpl->isValid() )
-                m_pImpl->getLogger()->setLevel( _nLogLevel );
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "EventLogger::setLogLevel: caught an exception!" );
-        }
-    }
-
-    //--------------------------------------------------------------------
     bool EventLogger::isLoggable( const sal_Int32 _nLogLevel ) const
     {
         if ( !m_pImpl->isValid() )
@@ -180,44 +142,6 @@ namespace comphelper
             OSL_FAIL( "EventLogger::isLoggable: caught an exception!" );
         }
 
-        return false;
-    }
-
-    //--------------------------------------------------------------------
-    bool EventLogger::addLogHandler( const Reference< XLogHandler >& _rxLogHandler )
-    {
-        try
-        {
-            if ( m_pImpl->isValid() )
-            {
-                m_pImpl->getLogger()->addLogHandler( _rxLogHandler );
-                return true;
-            }
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "EventLogger::addLogHandler: caught an exception!" );
-        }
-        return false;
-    }
-
-    //--------------------------------------------------------------------
-    bool EventLogger::removeLogHandler( const Reference< XLogHandler >& _rxLogHandler )
-    {
-        try
-        {
-            if ( m_pImpl->isValid() )
-            {
-                m_pImpl->getLogger()->removeLogHandler( _rxLogHandler );
-                return true;
-            }
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "EventLogger::removeLogHandler: caught an exception!" );
-        }
         return false;
     }
 
@@ -362,15 +286,6 @@ namespace comphelper
     //====================================================================
     //= ResourceBasedEventLogger
     //====================================================================
-    //--------------------------------------------------------------------
-    ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rResourceBundleBaseName,
-        const ::rtl::OUString& _rLoggerName )
-        :EventLogger( _rxContext, _rLoggerName )
-        ,m_pData( new ResourceBasedEventLogger_Data )
-    {
-        m_pData->sBundleBaseName = _rResourceBundleBaseName;
-    }
-
     //--------------------------------------------------------------------
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
         const sal_Char* _pAsciiLoggerName )

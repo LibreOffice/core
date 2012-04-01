@@ -129,9 +129,9 @@ class SdrItemBrowser: public _SdrItemBrowserWindow {
     bool bDirty;
 private:
     static Window* ImpGetViewWin(SdrView& rView);
-    DECL_LINK(IdleHdl,Timer*);
+    DECL_LINK(IdleHdl, void *);
     DECL_LINK(ChangedHdl,_SdrItemBrowserControl*);
-    DECL_LINK(SetDirtyHdl,_SdrItemBrowserControl*);
+    DECL_LINK(SetDirtyHdl, void *);
 public:
     SdrItemBrowser(SdrView& rView);
     void ForceParent();

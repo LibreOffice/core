@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -48,7 +49,7 @@
 
 #include "uthash.h"
 
-#include "lo-bootstrap.h"
+#include "osl/detail/android-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 
@@ -532,7 +533,43 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     return JNI_TRUE;
 }
 
-// public statuc native boolean setup(int lo_main_ptr,
+static jboolean
+get_jni_string_array(JNIEnv *env,
+                     const char *function_and_parameter_name,
+                     jobject strv,
+                     int *argc,
+                     const char ***argv)
+{
+    jclass StringArray;
+    int i;
+
+    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
+    if (StringArray == NULL) {
+        LOGE("Could not find String[] class");
+        return JNI_FALSE;
+    }
+
+    if (!(*env)->IsInstanceOf(env, strv, StringArray)) {
+        LOGE("%s is not a String[]?", function_and_parameter_name);
+        return JNI_FALSE;
+    }
+
+    *argc = (*env)->GetArrayLength(env, strv);
+    *argv = malloc(sizeof(char *) * (*argc+1));
+
+    for (i = 0; i < *argc; i++) {
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), NULL);
+        (*argv)[i] = strdup(s);
+        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), s);
+        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
+    }
+    (*argv)[*argc] = NULL;
+
+    return JNI_TRUE;
+}
+
+
+// public static native boolean setup(int lo_main_ptr,
 //                                    Object lo_main_argument,
 //                                    int lo_main_delay);
 
@@ -544,34 +581,12 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
                                                                     jobject lo_main_argument,
                                                                     jint lo_main_delay)
 {
-    jclass StringArray;
-    int i;
-
     (void) clazz;
 
     lo_main = lo_main_ptr;
 
-    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
-    if (StringArray == NULL) {
-        LOGE("Could not find String[] class");
+    if (!get_jni_string_array(env, "setup: lo_main_argument", lo_main_argument, &lo_main_argc, &lo_main_argv))
         return JNI_FALSE;
-    }
-
-    if (!(*env)->IsInstanceOf(env, lo_main_argument, StringArray)) {
-        LOGE("lo_main_argument is not a String[]?");
-        return JNI_FALSE;
-    }
-
-    lo_main_argc = (*env)->GetArrayLength(env, lo_main_argument);
-    lo_main_argv = malloc(sizeof(char *) * (lo_main_argc+1));
-
-    for (i = 0; i < lo_main_argc; i++) {
-        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
-        lo_main_argv[i] = strdup(s);
-        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
-        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
-    }
-    lo_main_argv[lo_main_argc] = NULL;
 
     sleep_time = lo_main_delay;
 
@@ -641,7 +656,8 @@ lo_dlneeds(const char *library)
     int i, fd;
     int n_needed;
     char **result;
-    char *shstrtab, *dynstr;
+    char *shstrtab;
+    char *dynstr = NULL;
     Elf32_Ehdr hdr;
     Elf32_Shdr shdr;
     Elf32_Dyn dyn;
@@ -767,7 +783,8 @@ lo_dlneeds(const char *library)
             }
 
             close(fd);
-            free(dynstr);
+            if (dynstr)
+                free(dynstr);
             free(shstrtab);
             result[n_needed] = NULL;
             return result;
@@ -812,6 +829,8 @@ lo_dlopen(const char *library)
     char **needed;
     int i;
     int found;
+
+    struct timeval tv0, tv1, tvdiff;
 
     rover = loaded_libraries;
     while (rover != NULL &&
@@ -867,8 +886,13 @@ lo_dlopen(const char *library)
     }
     free_ptrarray((void **) needed);
 
+    gettimeofday(&tv0, NULL);
     p = dlopen(full_name, RTLD_LOCAL);
-    LOGI("dlopen(%s) = %p", full_name, p);
+    gettimeofday(&tv1, NULL);
+    timersub(&tv1, &tv0, &tvdiff);
+    LOGI("dlopen(%s) = %p, %ld.%03lds",
+         full_name, p,
+         (long) tvdiff.tv_sec, (long) tvdiff.tv_usec / 1000);
     free(full_name);
     if (p == NULL)
         LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
@@ -950,6 +974,19 @@ lo_dladdr(void *addr,
 }
 
 __attribute__ ((visibility("default")))
+int
+lo_dlclose(void *handle)
+{
+    /* As we don't know when the reference count for a dlopened shared
+     * object drops to zero, we wouldn't know when to remove it from
+     * our list, so we can't call dlclose().
+     */
+    LOGI("lo_dlclose(%p)", handle);
+
+    return 0;
+}
+
+__attribute__ ((visibility("default")))
 void *
 lo_apkentry(const char *filename,
             size_t *size)
@@ -1007,9 +1044,19 @@ lo_apk_opendir(const char *dirname)
 
         HASH_FIND(hh, dir, p, (unsigned)(q - p), entry);
 
-        if (entry == NULL) {
+        if (entry == NULL && *q == '/') {
             errno = ENOENT;
             return NULL;
+        } else if (entry == NULL) {
+            /* Empty directories, or directories containing only "hidden"
+             * files (like the .gitignore in sc/qa/unit/qpro/indeterminate)
+             * are not present in the .apk. So we need to pretend that any
+             * directory that doesn't exist as a parent of an entry in the
+             * .apk *does* exist but is empty.
+             */
+            lo_apk_dir *result = malloc(sizeof(*result));
+            result->cur = NULL;
+            return result;
         }
 
         if (entry->kind != DIRECTORY) {
@@ -1079,7 +1126,7 @@ new_stat(const char *path,
     struct tm tm;
 
     memset(statp, 0, sizeof(*statp));
-    statp->st_mode = mode | S_IRUSR | S_IRGRP | S_IROTH;
+    statp->st_mode = mode | S_IRUSR;
     statp->st_nlink = 1;
 
     statp->st_uid = getuid();
@@ -1131,7 +1178,7 @@ lo_apk_lstat(const char *path,
     if (*pn == '/') {
         pn++;
         if (!pn[0])
-            return new_stat(path, statp, NULL, S_IFDIR, 1);
+            return new_stat(path, statp, NULL, S_IFDIR | S_IXUSR, 1);
     }
 
     name_size = strlen(pn);
@@ -1147,7 +1194,7 @@ lo_apk_lstat(const char *path,
         if (letoh16(entry->filename_size) == name_size)
             return new_stat(path, statp, entry, S_IFREG, cdir_entries - count + 1);
         else
-            return new_stat(path, statp, entry, S_IFDIR, cdir_entries - count + 1);
+            return new_stat(path, statp, entry, S_IFDIR | S_IXUSR, cdir_entries - count + 1);
     }
 
     errno = ENOENT;
@@ -1402,7 +1449,7 @@ extract_files(const char *prefix)
 
             apkentry = lo_apkentry(filename, &size);
             if (apkentry == NULL) {
-                LOGE("extract_files: Could not find %s in .apk", newfilename);
+                LOGE("extract_files: Could not find %s in .apk", filename);
                 free(filename);
                 continue;
             }
@@ -1451,15 +1498,104 @@ extract_files(const char *prefix)
     lo_apk_closedir(tree);
 }
 
+// public static native void patch_libgnustl_shared();
+
 __attribute__ ((visibility("default")))
 void
-Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
-                                                              jobject clazz)
+Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
+                                                                jobject clazz)
 {
     (void) env;
     (void) clazz;
 
     patch_libgnustl_shared();
+}
+
+/* Android's JNI works only to libraries loaded through Java's
+ * System.loadLibrary(), it seems. Not to functions loaded by a dlopen() call
+ * in native code. For instance, to call a function in libvcllo.so, we need to
+ * have its JNI wrapper here, and then call the VCL function from it. Oh well,
+ * one could say it's clean to have all the Android-specific JNI functions
+ * here in this file.
+ */
+
+// public static native void initVCL();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_initVCL(JNIEnv* env,
+                                               jobject clazz)
+{
+    void (*InitVCLWrapper)(void);
+    (void) env;
+    (void) clazz;
+
+    /* This obviously should be called only after libvcllo.so has been loaded */
+
+    InitVCLWrapper = dlsym(RTLD_DEFAULT, "InitVCLWrapper");
+    if (InitVCLWrapper == NULL) {
+        LOGE("InitVCL: InitVCLWrapper not found");
+        return;
+    }
+    (*InitVCLWrapper)();
+}
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
+                                                      jobject clazz,
+                                                      jobject argv)
+{
+    char **c_argv;
+    int c_argc;
+    Dl_info lo_bootstrap_info;
+    void (*osl_setCommandArgs)(int, char **);
+
+    (void) clazz;
+
+    if (!get_jni_string_array(env, "setCommandArgs :argv", argv, &c_argc, (const char ***) &c_argv))
+        return;
+
+    if (lo_dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &lo_bootstrap_info) != 0) {
+        char *new_argv0 = malloc(strlen(lo_bootstrap_info.dli_fname) + strlen(c_argv[0]));
+        char *slash;
+        strcpy(new_argv0, lo_bootstrap_info.dli_fname);
+        slash = strrchr(new_argv0, '/');
+        if (slash != NULL)
+            *slash = '\0';
+        slash = strrchr(new_argv0, '/');
+        strcpy(slash+1, c_argv[0]);
+        free(c_argv[0]);
+        c_argv[0] = new_argv0;
+    }
+
+    osl_setCommandArgs = dlsym(RTLD_DEFAULT, "osl_setCommandArgs");
+    if (osl_setCommandArgs == NULL) {
+        LOGE("setCommandArgs: osl_setCommandArgs not found");
+        return;
+    }
+    (*osl_setCommandArgs)(c_argc, c_argv);
+}
+
+// public static native void initUCBhelper();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_initUCBHelper(JNIEnv* env,
+                                                     jobject clazz)
+{
+    void (*InitUCBHelper)(void);
+    (void) env;
+    (void) clazz;
+
+    /* This obviously should be called only after the ucbhelper so has been loaded */
+
+    InitUCBHelper = dlsym(RTLD_DEFAULT, "InitUCBHelper");
+    if (InitUCBHelper == NULL) {
+        LOGE("InitUCBHelper: InitUCBHelper not found");
+        return;
+    }
+    (*InitUCBHelper)();
 }
 
 __attribute__ ((visibility("default")))
@@ -1480,8 +1616,25 @@ __attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {
+    jint nRet;
+    JNIEnv *pEnv = NULL;
     struct engine engine;
     Dl_info lo_main_info;
+    JavaVMAttachArgs aArgs = {
+        JNI_VERSION_1_2,
+        "LibreOfficeThread",
+        NULL
+    };
+
+    fprintf (stderr, "android_main in thread: %d\n", (int)pthread_self());
+
+    if (sleep_time != 0) {
+        LOGI("android_main: Sleeping for %d seconds, start ndk-gdb NOW if that is your intention", sleep_time);
+        sleep(sleep_time);
+    }
+
+    nRet = (*(*state->activity->vm)->AttachCurrentThreadAsDaemon)(state->activity->vm, &pEnv, &aArgs);
+    fprintf (stderr, "attach thread returned %d %p\n", nRet, pEnv);
 
     app = state;
 
@@ -1493,16 +1646,12 @@ android_main(struct android_app* state)
         lo_main_argv[0] = lo_main_info.dli_fname;
     }
 
-    if (sleep_time != 0)
-        sleep(sleep_time);
-
     patch_libgnustl_shared();
 
     extract_files(UNPACK_TREE);
 
     lo_main(lo_main_argc, lo_main_argv);
-
-    exit(0);
+    fprintf (stderr, "exit android_main\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

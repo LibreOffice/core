@@ -51,37 +51,12 @@
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 
 #include "address.hxx"
+#include "boost/ptr_container/ptr_vector.hpp"
 
 class ScTabViewShell;
 class ScPreviewShell;
 
 #define SC_VIEWPANE_ACTIVE  0xFFFF
-
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelectionListener >* XRangeSelectionListenerPtr;
-SV_DECL_PTRARR_DEL( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr, 4 )
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelectionChangeListener >* XRangeSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr, 4 )
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::view::XSelectionChangeListener >* XSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr, 4 )
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener >* XViewPropertyChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr, 4 )
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::awt::XEnhancedMouseClickHandler >* XMouseClickHandlerPtr;
-SV_DECL_PTRARR_DEL( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr, 4 )
-
-typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XActivationEventListener >* XActivationEventListenerPtr;
-SV_DECL_PTRARR_DEL( XActivationEventListenerArr_Impl, XActivationEventListenerPtr, 4 )
-
 
 //  ScViewPaneBase not derived from OWeakObject
 //  to avoid duplicate OWeakObject in ScTabViewObj
@@ -194,13 +169,37 @@ class ScTabViewObj : public ScViewPaneBase,
                      public com::sun::star::sheet::XSelectedSheetsSupplier
 {
 private:
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XRangeSelectionListener > XRangeSelectionListenerUnoRef;
+    typedef boost::ptr_vector<XRangeSelectionListenerUnoRef> XRangeSelectionListenerVector;
+
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XRangeSelectionChangeListener > XRangeSelectionChangeListenerUnoRef;
+    typedef boost::ptr_vector<XRangeSelectionChangeListenerUnoRef> XRangeSelectionChangeListenerVector;
+
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::view::XSelectionChangeListener > XSelectionChangeListenerUnoRef;
+    typedef boost::ptr_vector<XSelectionChangeListenerUnoRef> XSelectionChangeListenerVector;
+
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertyChangeListener > XViewPropertyChangeListenerUnoRef;
+    typedef boost::ptr_vector<XViewPropertyChangeListenerUnoRef> XViewPropertyChangeListenerVector;
+
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::awt::XEnhancedMouseClickHandler > XMouseClickHandlerUnoRef;
+    typedef boost::ptr_vector<XMouseClickHandlerUnoRef> XMouseClickHandlerVector;
+
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XActivationEventListener > XActivationEventListenerUnoRef;
+    typedef boost::ptr_vector<XActivationEventListenerUnoRef> XActivationEventListenerVector;
+
     SfxItemPropertySet                      aPropSet;
-    XSelectionChangeListenerArr_Impl        aSelectionListeners;
-    XRangeSelectionListenerArr_Impl         aRangeSelListeners;
-    XRangeSelectionChangeListenerArr_Impl   aRangeChgListeners;
-    XViewPropertyChangeListenerArr_Impl     aPropertyChgListeners;
-    XMouseClickHandlerArr_Impl              aMouseClickHandlers;
-    XActivationEventListenerArr_Impl        aActivationListeners;
+    XSelectionChangeListenerVector          aSelectionChgListeners;
+    XRangeSelectionListenerVector           aRangeSelListeners;
+    XRangeSelectionChangeListenerVector     aRangeChgListeners;
+    XViewPropertyChangeListenerVector       aPropertyChgListeners;
+    XMouseClickHandlerVector                aMouseClickHandlers;
+    XActivationEventListenerVector          aActivationListeners;
     SCTAB                                   nPreviousTab;
     sal_Bool                                bDrawSelModeSet;
     sal_Bool                                bFilteredRangeSelection;

@@ -195,6 +195,15 @@ typedef void (SAL_CALL * uno_ext_getMappingFunc)(
     struct _uno_Environment * pFrom,
     struct _uno_Environment * pTo );
 
+#ifdef DISABLE_DYNLOADING
+/* Static linking, this is the uno_ext_getMapping function in the C++/UNO bridge */
+void SAL_CALL CPPU_ENV_uno_ext_getMapping(
+    struct _uno_Mapping ** ppMapping,
+    struct _uno_Environment * pFrom,
+    struct _uno_Environment * pTo )
+    SAL_THROW_EXTERN_C();
+#endif
+
 #ifdef __cplusplus
 }
 #endif

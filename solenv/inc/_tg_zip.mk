@@ -3,10 +3,8 @@
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -49,34 +47,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP1TARGET).dpzz : $(ZIP1TARGETN)
 ZIP1HELPVAR=$(BIN)/$(ZIP1TARGET)
 
 $(ZIP1DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP1DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP1DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP1DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP1DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP1DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP1FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP1FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP1DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP1DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP1HELPVAR)_, $(@:db))} $(ZIP1DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP1FLAGS) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT) $(subst,LANGDIR_away/, $(ZIP1LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP1HELPVAR)_, $(@:db))} $(ZIP1DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP1FLAGS) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT) $(subst,LANGDIR_away/, $(ZIP1LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)
 .ELSE			# "$(ZIP1DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP1FLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP1FLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP1TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP1STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -90,10 +79,8 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -136,34 +123,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP2TARGET).dpzz : $(ZIP2TARGETN)
 ZIP2HELPVAR=$(BIN)/$(ZIP2TARGET)
 
 $(ZIP2DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP2DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP2DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP2DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP2DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP2DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP2FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP2FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP2DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP2DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP2HELPVAR)_, $(@:db))} $(ZIP2DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP2FLAGS) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT) $(subst,LANGDIR_away/, $(ZIP2LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP2HELPVAR)_, $(@:db))} $(ZIP2DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP2FLAGS) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT) $(subst,LANGDIR_away/, $(ZIP2LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)
 .ELSE			# "$(ZIP2DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP2FLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP2FLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP2TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP2STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -177,10 +155,8 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -223,34 +199,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP3TARGET).dpzz : $(ZIP3TARGETN)
 ZIP3HELPVAR=$(BIN)/$(ZIP3TARGET)
 
 $(ZIP3DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP3DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP3DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP3DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP3DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP3DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP3FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP3FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP3DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP3DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP3HELPVAR)_, $(@:db))} $(ZIP3DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP3FLAGS) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT) $(subst,LANGDIR_away/, $(ZIP3LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP3HELPVAR)_, $(@:db))} $(ZIP3DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP3FLAGS) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT) $(subst,LANGDIR_away/, $(ZIP3LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)
 .ELSE			# "$(ZIP3DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP3FLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP3FLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP3TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP3STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -264,10 +231,8 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -310,34 +275,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP4TARGET).dpzz : $(ZIP4TARGETN)
 ZIP4HELPVAR=$(BIN)/$(ZIP4TARGET)
 
 $(ZIP4DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP4DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP4DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP4DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP4DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP4DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP4FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP4FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP4DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP4DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP4HELPVAR)_, $(@:db))} $(ZIP4DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP4FLAGS) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT) $(subst,LANGDIR_away/, $(ZIP4LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP4HELPVAR)_, $(@:db))} $(ZIP4DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP4FLAGS) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT) $(subst,LANGDIR_away/, $(ZIP4LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)
 .ELSE			# "$(ZIP4DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP4FLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP4FLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP4TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP4STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -351,10 +307,8 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -397,34 +351,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP5TARGET).dpzz : $(ZIP5TARGETN)
 ZIP5HELPVAR=$(BIN)/$(ZIP5TARGET)
 
 $(ZIP5DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP5DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP5DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP5DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP5DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP5DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP5FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP5FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP5DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP5DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP5HELPVAR)_, $(@:db))} $(ZIP5DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP5FLAGS) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT) $(subst,LANGDIR_away/, $(ZIP5LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP5HELPVAR)_, $(@:db))} $(ZIP5DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP5FLAGS) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT) $(subst,LANGDIR_away/, $(ZIP5LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)
 .ELSE			# "$(ZIP5DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP5FLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP5FLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP5TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP5STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -438,10 +383,8 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -484,34 +427,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP6TARGET).dpzz : $(ZIP6TARGETN)
 ZIP6HELPVAR=$(BIN)/$(ZIP6TARGET)
 
 $(ZIP6DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP6DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP6DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP6DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP6DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP6DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP6FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP6FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP6DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP6DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP6HELPVAR)_, $(@:db))} $(ZIP6DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP6FLAGS) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT) $(subst,LANGDIR_away/, $(ZIP6LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP6HELPVAR)_, $(@:db))} $(ZIP6DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP6FLAGS) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT) $(subst,LANGDIR_away/, $(ZIP6LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)
 .ELSE			# "$(ZIP6DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP6FLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP6FLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP6TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP6STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -525,10 +459,8 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -571,34 +503,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP7TARGET).dpzz : $(ZIP7TARGETN)
 ZIP7HELPVAR=$(BIN)/$(ZIP7TARGET)
 
 $(ZIP7DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP7DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP7DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP7DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP7DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP7DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP7FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP7FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP7DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP7DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP7HELPVAR)_, $(@:db))} $(ZIP7DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP7FLAGS) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT) $(subst,LANGDIR_away/, $(ZIP7LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP7HELPVAR)_, $(@:db))} $(ZIP7DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP7FLAGS) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT) $(subst,LANGDIR_away/, $(ZIP7LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)
 .ELSE			# "$(ZIP7DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP7FLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP7FLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP7TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP7STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -612,10 +535,8 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -658,34 +579,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP8TARGET).dpzz : $(ZIP8TARGETN)
 ZIP8HELPVAR=$(BIN)/$(ZIP8TARGET)
 
 $(ZIP8DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP8DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP8DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP8DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP8DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP8DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP8FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP8FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP8DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP8DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP8HELPVAR)_, $(@:db))} $(ZIP8DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP8FLAGS) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT) $(subst,LANGDIR_away/, $(ZIP8LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP8HELPVAR)_, $(@:db))} $(ZIP8DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP8FLAGS) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT) $(subst,LANGDIR_away/, $(ZIP8LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)
 .ELSE			# "$(ZIP8DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP8FLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP8FLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP8TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP8STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -699,10 +611,8 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -745,34 +655,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP9TARGET).dpzz : $(ZIP9TARGETN)
 ZIP9HELPVAR=$(BIN)/$(ZIP9TARGET)
 
 $(ZIP9DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP9DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP9DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP9DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP9DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP9DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP9FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP9FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP9DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP9DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP9HELPVAR)_, $(@:db))} $(ZIP9DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP9FLAGS) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT) $(subst,LANGDIR_away/, $(ZIP9LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP9HELPVAR)_, $(@:db))} $(ZIP9DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP9FLAGS) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT) $(subst,LANGDIR_away/, $(ZIP9LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)
 .ELSE			# "$(ZIP9DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP9FLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP9FLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP9TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP9STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \
@@ -786,10 +687,8 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
  
 .ENDIF
 
@@ -832,34 +731,25 @@ $(MISC)/$(TARGET).$(PWD:f).$(ZIP10TARGET).dpzz : $(ZIP10TARGETN)
 ZIP10HELPVAR=$(BIN)/$(ZIP10TARGET)
 
 $(ZIP10DEPFILE) :
-    @echo # > $(MISC)/$(@:f)
 .IF "$(ZIP10DIR)" != ""
     $(COMMAND_ECHO)-$(MKDIRHIER) $(ZIP10DIR)
-    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP10DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
+    $(COMMAND_ECHO)$(CDD) $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,/LANGDIR, $(ZIP10DIR)))/ $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(PWD)/$(PRJ)/$(ROUT)/misc/$(@:f)
 .ELSE			# "$(ZIP10DIR)" != ""
-    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP10FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)/$(@:f)
+    $(COMMAND_ECHO)-$(ZIPDEP) $(ZIP10FLAGS) $(subst,/misc/,/bin/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(subst,/misc/,/bin/ $(@:db)))} $j )}") >> $(MISC)/$(@:f)
 .ENDIF			# "$(ZIP10DIR)" != ""
     @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)/$(@:f)
 
 
 $(ZIP10TARGETN) : delzip $(ZIP10DEPS)
-    @echo "Making:   " $(@:f)
+    @echo "[ building ZIP ]" $(@:f)
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
-    @$(eq,$?,$(?:s/delzip/zzz/) noop echo ) rebuilding zipfiles
-    @echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(ZIP10DIR)" != ""
     @@-$(GNUCOPY) -p $@ $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)
-    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP10HELPVAR)_, $(@:db))} $(ZIP10DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP10FLAGS) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT) $(subst,LANGDIR_away/, $(ZIP10LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT) $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT) \
-        $(FI)
+    $(COMMAND_ECHO)-$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP10HELPVAR)_, $(@:db))} $(ZIP10DIR)) $(command_seperator) zip $(ZIP_VERBOSITY) $(ZIP10FLAGS) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT) $(subst,LANGDIR_away/, $(ZIP10LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(CHECKZIPRESULT)
     $(COMMAND_ECHO)$(COPY) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)  $@ 
     $(COMMAND_ECHO)$(RM) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)
 .ELSE			# "$(ZIP10DIR)" != ""
-    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP10FLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(@:db))} $j )) -x delzip $(avoid_cvs_dir) $(CHECKZIPRESULT)
-    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
-        $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
-        $(FI)
+    $(COMMAND_ECHO)zip $(ZIP_VERBOSITY) $(ZIP10FLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,{$(subst,$(BIN)/$(ZIP10TARGET)_, $(@:db))} $j )) -x delzip $(CHECKZIPRESULT)
 .IF "$(ZIP10STRIPLANGUAGETAGS)" != ""
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(SOLARENV)/bin/striplanguagetags.sh $@ \

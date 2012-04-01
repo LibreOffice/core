@@ -463,13 +463,13 @@ LicenseDialog::~LicenseDialog()
 {
 }
 
-IMPL_LINK( LicenseDialog, PageDownHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialog, PageDownHdl)
 {
     aLicenseML.ScrollDown( SCROLL_PAGEDOWN );
     return 0;
 }
 
-IMPL_LINK( LicenseDialog, EndReachedHdl, LicenseView *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialog, EndReachedHdl)
 {
     bEndReached = sal_True;
 
@@ -478,19 +478,19 @@ IMPL_LINK( LicenseDialog, EndReachedHdl, LicenseView *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( LicenseDialog, ScrolledHdl, LicenseView *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialog, ScrolledHdl)
 {
     EnableControls();
 
     return 0;
 }
 
-IMPL_LINK( LicenseDialog, DeclineBtnHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialog, DeclineBtnHdl)
 {
     EndDialog(0);
     return 0;
 }
-IMPL_LINK( LicenseDialog, AcceptBtnHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialog, AcceptBtnHdl)
 {
     EndDialog(1);
     return 0;

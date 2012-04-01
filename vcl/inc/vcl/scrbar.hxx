@@ -95,7 +95,7 @@ private:
     SAL_DLLPRIVATE sal_Bool         ImplDrawNative( sal_uInt16 nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
-    DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, AutoTimer* );
+    DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, void* );
 
 public:
                     ScrollBar( Window* pParent, WinBits nStyle = WB_VERT );
@@ -162,7 +162,6 @@ private:
 
 public:
                     ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
-                    ScrollBarBox( Window* pParent, const ResId& rResId );
 
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

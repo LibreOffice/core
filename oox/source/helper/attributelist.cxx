@@ -122,16 +122,6 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
     return rValue.toInt32( 16 );
 }
 
-sal_uInt32 AttributeConversion::decodeUnsignedHex( const OUString& rValue )
-{
-    return getLimitedValue< sal_uInt32, sal_Int64 >( rValue.toInt64( 16 ), 0, SAL_MAX_UINT32 );
-}
-
-sal_Int64 AttributeConversion::decodeHyperHex( const OUString& rValue )
-{
-    return rValue.toInt64( 16 );
-}
-
 // ============================================================================
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
@@ -202,20 +192,6 @@ OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
     return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeIntegerHex( aValue ) : 0 );
-}
-
-OptValue< sal_uInt32 > AttributeList::getUnsignedHex( sal_Int32 nAttrToken ) const
-{
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return OptValue< sal_uInt32 >( bValid, bValid ? AttributeConversion::decodeUnsignedHex( aValue ) : 0 );
-}
-
-OptValue< sal_Int64 > AttributeList::getHyperHex( sal_Int32 nAttrToken ) const
-{
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return OptValue< sal_Int64 >( bValid, bValid ? AttributeConversion::decodeHyperHex( aValue ) : 0 );
 }
 
 OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
@@ -299,16 +275,6 @@ sal_Int64 AttributeList::getHyper( sal_Int32 nAttrToken, sal_Int64 nDefault ) co
 sal_Int32 AttributeList::getIntegerHex( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
     return getIntegerHex( nAttrToken ).get( nDefault );
-}
-
-sal_uInt32 AttributeList::getUnsignedHex( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const
-{
-    return getUnsignedHex( nAttrToken ).get( nDefault );
-}
-
-sal_Int64 AttributeList::getHyperHex( sal_Int32 nAttrToken, sal_Int64 nDefault ) const
-{
-    return getHyperHex( nAttrToken ).get( nDefault );
 }
 
 bool AttributeList::getBool( sal_Int32 nAttrToken, bool bDefault ) const

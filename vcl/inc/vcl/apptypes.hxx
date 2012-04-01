@@ -51,7 +51,7 @@
 class VCL_DLLPUBLIC ApplicationProperty
 {
 public:
-
+    virtual ~ApplicationProperty() {}
     TYPEINFO();
 };
 

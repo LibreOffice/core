@@ -101,7 +101,6 @@ protected:
 public:
 
     SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    SvxSimpleTable(SvxSimpleTableContainer& rParent, const ResId&);
     ~SvxSimpleTable();
 
     void UpdateViewSize();

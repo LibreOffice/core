@@ -43,6 +43,9 @@ public:
     void testAutoShowInfo();
     void testReference();
     void testIsGroupField();
+
+protected:
+    ~DataPilotField() {}
 };
 
 }

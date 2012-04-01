@@ -63,14 +63,16 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     utl \
     vcl \
     xo \
+	$(if $(filter $(OS),ANDROID), \
+		lo-bootstrap \
+	) \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_filters_test,\
-    -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sc/inc) \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sc_filters_test,\
@@ -92,6 +94,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
@@ -117,10 +120,6 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
-	embobj \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\

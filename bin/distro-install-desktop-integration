@@ -1,6 +1,12 @@
 #!/bin/sh
 
-. ./*[Ee]nv.[Hh]ost.sh
+if test -z "${SRC_ROOT}"; then
+    eval $(sed -e s/\'/\'\\\\\'\'/g -e 's/=\(.\+\)/='\''\1'\'/ ./config_host.mk)
+fi
+if test -z "${SOLARENV}"; then
+    echo "distro-install-clean-up: No environment set!"
+    exit 1
+fi
 
 PRODUCTVERSION_NODOT=`echo $PRODUCTVERSION | sed -e "s/\.//"`
 

@@ -497,9 +497,9 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
     if ( pAction && pDoc )
     {
-        String aDesc;
-        pAction->GetDescription( aDesc, pDoc, sal_True, false );
-        aString += aDesc;
+        rtl::OUString aDesc;
+        pAction->GetDescription(aDesc, pDoc, true, false);
+        aString += String(aDesc);
         aString += '\t';
 
         String aUser = comphelper::string::strip(pAction->GetUser(), ' ');
@@ -555,7 +555,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
     }
 }
 
-IMPL_LINK( ScConflictsDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, SelectHandle)
 {
     if ( mbInSelectHdl || mbInDeselectHdl )
     {
@@ -570,7 +570,7 @@ IMPL_LINK( ScConflictsDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScConflictsDlg, DeselectHandle, SvxRedlinTable*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, DeselectHandle)
 {
     if ( mbInDeselectHdl || mbInSelectHdl )
     {
@@ -584,7 +584,7 @@ IMPL_LINK( ScConflictsDlg, DeselectHandle, SvxRedlinTable*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
 {
     if ( !mpViewData || !mpOwnDoc )
     {
@@ -673,28 +673,28 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     EndDialog( RET_OK );
 }
 
-IMPL_LINK( ScConflictsDlg, KeepMineHandle, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, KeepMineHandle)
 {
     KeepHandler( true );
 
     return 0;
 }
 
-IMPL_LINK( ScConflictsDlg, KeepOtherHandle, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, KeepOtherHandle)
 {
     KeepHandler( false );
 
     return 0;
 }
 
-IMPL_LINK( ScConflictsDlg, KeepAllMineHandle, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, KeepAllMineHandle)
 {
     KeepAllHandler( true );
 
     return 0;
 }
 
-IMPL_LINK( ScConflictsDlg, KeepAllOthersHandle, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle)
 {
     KeepAllHandler( false );
 

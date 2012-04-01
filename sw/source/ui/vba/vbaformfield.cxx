@@ -64,7 +64,7 @@ rtl::OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException
         {
             if( mxFormField->getParamName(i).equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX_CHECKED ) )
             {
-                if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAscii("on") )
+                if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
                     nValue = 1;
                 else
                     nValue = 0;
@@ -116,11 +116,10 @@ uno::Any SAL_CALL SwVbaFormField::CheckBox() throw ( uno::RuntimeException )
     return uno::makeAny( uno::Reference< word::XCheckBox >( new SwVbaCheckBox( this, mxContext, mxModel, mxFormField ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFormField::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFormField") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormField"));
 }
 
 uno::Sequence< rtl::OUString >

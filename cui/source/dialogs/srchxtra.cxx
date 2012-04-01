@@ -203,7 +203,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 {
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = (SfxPoolItem*)-1;

@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*	 -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,12 +65,10 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
-#include "sdresid.hxx"
 #include "stlpool.hxx"
 #include "anminfo.hxx"
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
-#include <editeng/numitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
@@ -112,7 +110,7 @@ lcl_getUnoCtx()
     return aCtx.getUNOContext();
 }
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {
 
     sal_uInt32 nImportFlags = 0;
@@ -144,7 +142,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     delete pSummaryInformation;
 #endif
 
-    PowerPointImportParam aParam( rDocStream, nImportFlags, pTracer );
+    PowerPointImportParam aParam( rDocStream, nImportFlags );
     SvStream* pCurrentUserStream = rStorage.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
@@ -740,7 +738,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( ( pPersist->bStarDrawFiller == sal_False ) )
+            else if ( pPersist->bStarDrawFiller == sal_False )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -761,9 +759,6 @@ sal_Bool ImplSdPPTImport::Import()
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
                 {
-                    if ( mbTracing )
-                        mpTracer->AddAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
-
                     while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
                         DffRecordHeader aHd;
@@ -839,8 +834,6 @@ sal_Bool ImplSdPPTImport::Import()
                         }
                         aHd.SeekToEndOfRecord( rStCtrl );
                     }
-                    if ( mbTracing )
-                        mpTracer->RemoveAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )) );
                 }
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
@@ -1273,7 +1266,7 @@ sal_Bool ImplSdPPTImport::Import()
                 DffRecordHeader aContent;
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, aCuHeader.GetRecEndFilePos(), &aContent ) )
                 {
-                    String aCuShow;
+                    rtl::OUString aCuShow;
                     aContent.SeekToBegOfRecord( rStCtrl );
                     if ( ReadString( aCuShow ) )
                     {
@@ -1301,7 +1294,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
                                                 if ( pPage )
                                                 {
-                                                    pSdCustomShow->Insert( pPage, LIST_APPEND );
+                                                    pSdCustomShow->PagesVector().push_back( pPage );
                                                     nFound++;
                                                 }
                                             }
@@ -1875,7 +1868,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 
 String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
-    String aRetval;
+    rtl::OUString aRetval;
     sal_uInt32 nPosMerk = rStCtrl.Tell();
     DffRecordHeader aDocHd;
     if ( SeekToDocument( &aDocHd ) )
@@ -1892,7 +1885,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
             while( !bDone && SeekToRec( rStCtrl, PPT_PST_Sound, nDataLen, &aSoundRecHd ) )
             {
                 sal_uInt32 nStrLen = aSoundRecHd.GetRecEndFilePos();
-                String aRefStr;
+                rtl::OUString aRefStr;
                 sal_uInt32 nPosMerk2 = rStCtrl.Tell();
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 2 ) )
                 {
@@ -1901,7 +1894,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                 }
                 if ( bRefStrValid )
                 {
-                    if ( UniString::CreateFromInt32( nSoundRef ) == aRefStr )
+                    if ( rtl::OUString::valueOf(static_cast<sal_Int32>(nSoundRef)) == aRefStr )
                     {
                         rStCtrl.Seek( nPosMerk2 );
                         if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 0 ) )
@@ -1922,12 +1915,11 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
                     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
 
-                    for( size_t n = 0; ( n < aSoundList.size() ) && !bSoundExists; n++ )
+                    for( size_t n = 0; ( n < aSoundList.size() ) && !bSoundExists; ++n )
                     {
                         INetURLObject   aURL( aSoundList[ n ] );
-                        String          aSoundName( aURL.GetName() );
 
-                        if( aSoundName == aRetval )
+                        if( aURL.GetName() == aRetval )
                         {
                             aRetval = aSoundList[ n ];
                             bSoundExists = sal_True;
@@ -2020,7 +2012,7 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                         case PPT_PST_CString :
                                         {
                                             aHd.SeekToBegOfRecord( rStCtrl );
-                                            String aStr;
+                                            rtl::OUString aStr;
                                             if ( ReadString( aStr ) )
                                             {
                                                 if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStr, aRetVal ) )
@@ -2629,7 +2621,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case PPT_PST_InteractiveInfo:
                         {
                             sal_uInt32 nFilePosMerk2 = rSt.Tell();
-                            String aMacroName;
+                            rtl::OUString aMacroName;
 
                             if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL, 0 ) )
                                 ReadString(aMacroName);
@@ -2722,19 +2714,14 @@ ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Ref
 // - exported function -
 // ---------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT( const ::rtl::OUString& rConfigPath,
-        uno::Sequence< beans::PropertyValue >* pConfigData,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
         SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {
     sal_Bool bRet = sal_False;
 
-    MSFilterTracer aTracer( rConfigPath, pConfigData );
-    aTracer.StartTracing();
-
-    SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium, &aTracer );
+    SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium );
     bRet = pImport->Import();
 
-    aTracer.EndTracing();
     delete pImport;
 
     return bRet;

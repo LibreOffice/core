@@ -55,6 +55,9 @@ class IEditListener
         virtual void GetFocus() = 0;
         virtual void LoseFocus() = 0;
         virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
+
+    protected:
+        ~IEditListener() {}
 };
 
 class EditToolbarController : public IEditListener,

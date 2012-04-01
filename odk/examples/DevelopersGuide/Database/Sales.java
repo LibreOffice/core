@@ -118,7 +118,7 @@ public class Sales
     // create a scrollable resultset.
     public void retrieveSalesData2() throws com.sun.star.uno.Exception
     {
-        // example for a programmatic way to do updates. This doesn't work with adabas.
+        // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
         XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
 
@@ -153,7 +153,7 @@ public class Sales
     // inserts a row programmatically.
     public void insertRow() throws com.sun.star.uno.Exception
     {
-        // example for a programmatic way to do updates. This doesn't work with adabas.
+        // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
 //      stmt.executeUpdate("INSERT INTO SALES " +
 //                   "VALUES (4, 102, 5, 'FTOP Darjeeling tea', '2002-01-02',150)");
@@ -181,7 +181,7 @@ public class Sales
     // deletes a row programmatically.
     public void deleteRow() throws com.sun.star.uno.Exception
     {
-        // example for a programmatic way to do updates. This doesn't work with adabas.
+        // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
         XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
@@ -198,7 +198,7 @@ public class Sales
     // refresh a row
     public void refreshRow() throws com.sun.star.uno.Exception
     {
-        // example for a programmatic way to do updates. This doesn't work with adabas.
+        // example for a programmatic way to do updates.
         // first we need the 4 row
         insertRow();
 

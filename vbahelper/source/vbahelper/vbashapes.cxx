@@ -116,11 +116,11 @@ ScVbaShapes::getElementType() throw (uno::RuntimeException)
 {
     return ooo::vba::msforms::XShape::static_type(0);
 }
-rtl::OUString&
+
+rtl::OUString
 ScVbaShapes::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShapes") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShapes"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -416,34 +416,6 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, 
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
-uno::Any
-ScVbaShapes::AddShape( const rtl::OUString& sService, const rtl::OUString& sName, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (uno::RuntimeException)
-{
-    sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( _nLeft );
-    sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( _nTop );
-    sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( _nWidth );
-    sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( _nHeight );
-
-    uno::Reference< drawing::XShape > xShape( createShape( sService ), uno::UNO_QUERY_THROW );
-    m_xShapes->add( xShape );
-
-    setDefaultShapeProperties(xShape);
-    setShape_NameProperty( xShape, sName );
-
-    awt::Point aMovePositionIfRange( 0, 0 );
-    awt::Point position;
-    position.X = nXPos - aMovePositionIfRange.X;
-    position.Y = nYPos - aMovePositionIfRange.Y;
-    xShape->setPosition(position);
-
-    awt::Size size;
-    size.Height = nHeight;
-    size.Width = nWidth;
-    xShape->setSize(size);
-
-    ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
-}
 void
 ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape ) throw (uno::RuntimeException)
 {

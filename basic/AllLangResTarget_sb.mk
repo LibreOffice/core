@@ -37,7 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,sb/res))
 
 $(eval $(call gb_SrsTarget_set_include,sb/res,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/basic/inc) \
+    -I$(SRCDIR)/basic/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sb/res,\

@@ -239,68 +239,6 @@ namespace cppcanvas
             return false;
         }
 
-        bool modifyClip( rendering::RenderState&                            o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::Point&                                     rOffset,
-                         const ::basegfx::B2DVector*                        pScaling,
-                         const double*                                      pRotation )
-        {
-            return modifyClip( o_rRenderState,
-                               rOutdevState,
-                               rCanvas,
-                               ::basegfx::B2DPoint( rOffset.X(),
-                                                    rOffset.Y() ),
-                               pScaling,
-                               pRotation );
-        }
-
-        bool modifyClip( rendering::RenderState&                            o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::basegfx::B2DHomMatrix&                     rTransform )
-        {
-            if( !rTransform.isIdentity() ||
-                !rTransform.isInvertible() )
-                return false; // nothing to do
-
-            ::basegfx::B2DPolyPolygon aLocalClip;
-
-            if( rOutdevState.clip.count() )
-            {
-                aLocalClip = rOutdevState.clip;
-            }
-            else if( !rOutdevState.clipRect.IsEmpty() )
-            {
-                const ::Rectangle aLocalClipRect( rOutdevState.clipRect );
-
-                aLocalClip = ::basegfx::B2DPolyPolygon(
-                    ::basegfx::tools::createPolygonFromRect(
-                        ::basegfx::B2DRectangle(
-                            aLocalClipRect.Left(),
-                            aLocalClipRect.Top(),
-                            aLocalClipRect.Right(),
-                            aLocalClipRect.Bottom() ) ) );
-            }
-            else
-            {
-                // empty clip, nothing to do
-                return false;
-            }
-
-            // invert transformation and modify
-            ::basegfx::B2DHomMatrix aLocalTransform( rTransform );
-            aLocalTransform.invert();
-
-            aLocalClip.transform( aLocalTransform );
-
-            o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                rCanvas->getUNOCanvas()->getDevice(),
-                aLocalClip );
-
-            return true;
-        }
-
         // create overline/underline/strikeout line info struct
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )

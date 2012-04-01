@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,unopkgapp,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,unopkgapp,\
-    desktop/source/app/lockfile \
     desktop/source/pkgchk/unopkg/unopkg_app \
     desktop/source/pkgchk/unopkg/unopkg_cmdenv \
     desktop/source/pkgchk/unopkg/unopkg_misc \

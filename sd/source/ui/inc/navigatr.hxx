@@ -145,7 +145,7 @@ private:
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
                                 DECL_LINK( SelectToolboxHdl, void * );
-                                DECL_LINK( ClickToolboxHdl, ToolBox * );
+                                DECL_LINK(ClickToolboxHdl, void *);
                                 DECL_LINK( DropdownClickToolBoxHdl, ToolBox * );
                                 DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK( ClickObjectHdl, void * );

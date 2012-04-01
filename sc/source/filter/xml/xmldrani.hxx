@@ -106,6 +106,8 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     bool            bSubTotalsEnabledUserList;
     bool            bSubTotalsAscending;
     bool            bFilterConditionSourceRange;
+    bool            bHasHeader;
+    bool            bByRow;
     ScDBCollection::RangeType meRangeType;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

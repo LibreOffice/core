@@ -44,7 +44,6 @@
 #include "appdata.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -350,6 +349,9 @@ long SfxObjectShell::DdeExecute
 */
 
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rCmd;
+#else
     StarBASIC* pBasic = GetBasic();
     DBG_ASSERT( pBasic, "Where is the Basic???" ) ;
     SbxVariable* pRet = pBasic->Execute( rCmd );
@@ -358,7 +360,7 @@ long SfxObjectShell::DdeExecute
         SbxBase::ResetError();
         return 0;
     }
-
+#endif
     return 1;
 }
 

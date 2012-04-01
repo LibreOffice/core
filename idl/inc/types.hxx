@@ -32,9 +32,13 @@
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
 #include <basobj.hxx>
+#include <map>
 
 struct SvSlotElement;
 typedef std::vector< SvSlotElement* > SvSlotElementList;
+
+class SvMetaSlot;
+typedef std::map<sal_uLong, SvMetaSlot*> HelpIdTable;
 
 SV_DECL_REF(SvMetaType)
 SV_DECL_REF(SvMetaAttribute)
@@ -118,9 +122,9 @@ public:
     virtual void        Insert( SvSlotElementList&, const rtl::OString& rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  Table * pIdTable );
+                                  HelpIdTable& rIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
-    void                FillIDTable(Table *pIDTable);
+    void                FillIDTable(HelpIdTable& rIDTable);
     rtl::OString        Compare( SvMetaAttribute *pAttr );
 };
 SV_IMPL_REF(SvMetaAttribute)

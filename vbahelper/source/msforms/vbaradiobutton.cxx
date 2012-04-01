@@ -103,11 +103,10 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont() throw (
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaRadioButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaRadioButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaRadioButton"));
 }
 
 uno::Sequence< rtl::OUString >

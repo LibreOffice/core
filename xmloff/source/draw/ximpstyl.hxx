@@ -213,7 +213,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
     void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles,
-        sal_uInt16 nFamily, const UniString& rPrefix) const;
+        sal_uInt16 nFamily, const rtl::OUString& rPrefix) const;
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(

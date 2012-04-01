@@ -31,12 +31,13 @@
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/shapecontext.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { namespace vml { struct OleObjectInfo; } }
 
 namespace oox { namespace drawingml {
 
-class GraphicShapeContext : public ShapeContext
+class OOX_DLLPUBLIC GraphicShapeContext : public ShapeContext
 {
 public:
     GraphicShapeContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
@@ -47,7 +48,7 @@ public:
 
 // ====================================================================
 
-class GraphicalObjectFrameContext : public ShapeContext
+class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
 {
 public:
     GraphicalObjectFrameContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart );

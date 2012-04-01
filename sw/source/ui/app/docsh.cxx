@@ -580,6 +580,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pFlt->GetUserData().EqualsAscii( "HTML") )
     {
+#ifndef DISABLE_SCRIPTING
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
         if( !rHtmlOpt.IsStarBasic() && rHtmlOpt.IsStarBasicWarning() && HasBasic() )
         {
@@ -602,6 +603,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 }
             }
         }
+#endif
         UpdateDocInfoForSave();
     }
 

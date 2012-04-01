@@ -131,9 +131,9 @@ OdfFlatXml::importer(
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
         {
             paramName = sourceData[paramIdx].Name;
-            if (paramName.equalsAscii("InputStream"))
+            if (paramName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
                 sourceData[paramIdx].Value >>= inputStream;
-            else if (paramName.equalsAscii("URL"))
+            else if (paramName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
                 sourceData[paramIdx].Value >>= url;
         }
 
@@ -183,9 +183,9 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
         {
             paramName = sourceData[paramIdx].Name;
-            if (paramName.equalsAscii("OutputStream"))
+            if (paramName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
                 sourceData[paramIdx].Value >>= outputStream;
-            else if (paramName.equalsAscii("URL"))
+            else if (paramName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
                 sourceData[paramIdx].Value >>= targetURL;
         }
 

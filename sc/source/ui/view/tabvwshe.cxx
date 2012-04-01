@@ -111,9 +111,7 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
             aObj.SetFormulas( GetViewData()->GetOptions().GetOption( VOPT_FORMULAS ) );
             rtl::OUString aExportOUString;
             aObj.ExportString( aExportOUString );
-            aStrSelection = aExportOUString;
-
-            aStrSelection.ConvertLineEnd( LINEEND_CR );
+            aStrSelection = convertLineEnd(aExportOUString, LINEEND_CR);
 
             //  Tab/CR durch Space ersetzen, wenn fuer Dialog oder per Basic/SelectionTextExt,
             //  oder wenn es eine einzelne Zeile ist.

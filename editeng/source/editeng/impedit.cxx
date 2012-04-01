@@ -183,7 +183,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     sal_uInt16 nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( pEndNode );
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+        ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
         DBG_ASSERT( pTmpPortion, "Portion in Selection not found!" );
         DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selection not formatted!" );
 
@@ -650,7 +650,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
     if (nPara == USHRT_MAX) // #i94322
         return;
-    ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+
+    const ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions()[nPara];
 
     nShowCursorFlags |= nExtraCursorFlags;
 
@@ -1091,7 +1092,7 @@ void ImpEditView::SetInsertMode( sal_Bool bInsert )
 
 sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong )
 {
-    sal_Bool bIsWrong = sal_False;
+    bool bIsWrong = false;
     if ( rPaM.GetNode()->GetWrongList() )
     {
         EditSelection aSel = pEditEngine->pImpEditEngine->SelectWord( rPaM, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1138,7 +1139,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
                 if (xDic.is())
                     xDic->add( aWord, sal_False, String() );
             }
-            const EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
+            EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
             sal_uInt16 nNodes = rDoc.Count();
             for ( sal_uInt16 n = 0; n < nNodes; n++ )
             {
@@ -1181,21 +1182,23 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
         return 0;
     }
 
-    const CharAttribArray& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
+    const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
     sal_uInt16 nXPos = aPaM.GetIndex();
-    for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+    for (size_t nAttr = rAttrs.size(); nAttr; )
     {
-        EditCharAttrib* pAttr = rAttrs[--nAttr];
-        if ( pAttr->GetStart() == nXPos )
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+        const EditCharAttrib& rAttr = rAttrs[--nAttr];
+        if (rAttr.GetStart() == nXPos)
+        {
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "No FieldItem..." );
+                DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
                 if ( pPara )
                     *pPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 if ( pPos )
-                    *pPos = pAttr->GetStart();
-                return (const SvxFieldItem*)pAttr->GetItem();
+                    *pPos = rAttr.GetStart();
+                return static_cast<const SvxFieldItem*>(rAttr.GetItem());
             }
+        }
     }
     return NULL;
 }
@@ -1216,7 +1219,7 @@ sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
         sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
         Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
-        ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+        const ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions()[nPara];
         nY += pParaPortion->GetFirstLineOffset();
         if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
              ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&
@@ -1310,8 +1313,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
                         ::rtl::OUString aTmpText;
                         aData >>= aTmpText;
-                        String aText( aTmpText );
-                        aText.ConvertLineEnd( LINEEND_LF );
+                        String aText(convertLineEnd(aTmpText, LINEEND_LF));
                         aText.SearchAndReplaceAll( LINE_SEP, ' ' );
                         aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
                     }
@@ -1847,7 +1849,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             if ( pDragAndDropInfo->bOutlinerMode )
             {
                 sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
-                ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+                ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
                 long nDestParaStartY = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
                 long nRel = aDocPos.Y() - nDestParaStartY;
                 if ( nRel < ( pPPortion->GetHeight() / 2 ) )
@@ -1885,7 +1887,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     long nDDYPos;
                     if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->pImpEditEngine->GetEditDoc().Count() )
                     {
-                        ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( pDragAndDropInfo->nOutlinerDropDest );
+                        ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
                         nDDYPos = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
                     }
                     else

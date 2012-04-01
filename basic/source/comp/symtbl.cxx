@@ -110,11 +110,6 @@ SbiSymPool::~SbiSymPool()
 {}
 
 
-void SbiSymPool::Clear()
-{
-    aData.DeleteAndDestroy( 0, aData.Count() );
-}
-
 SbiSymDef* SbiSymPool::First()
 {
     nCur = (sal_uInt16) -1;

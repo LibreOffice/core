@@ -50,8 +50,11 @@ $(eval $(call gb_Library_add_linked_libs,ftransl,\
 	$(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_add_linked_static_libs,ftransl,\
+	dtobj \
+))
+
 $(eval $(call gb_Library_add_exception_objects,ftransl,\
-	dtrans/source/win32/misc/ImplHelper \
 	dtrans/source/win32/ftransl/ftransl \
 	dtrans/source/win32/ftransl/ftranslentry \
 ))

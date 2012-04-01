@@ -27,14 +27,7 @@
 
 $(eval $(call gb_Library_Library,java_uno_accessbridge))
 
-$(eval $(call gb_Library_add_package_headers,java_uno_accessbridge,\
-    accessibility_bridge_inc \
-))
-
-$(eval $(call gb_Library_set_include,java_uno_accessbridge,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/CustomTarget/accessibility/bridge/inc \
-))
+$(eval $(call gb_Library_add_custom_headers,java_uno_accessbridge,accessibility/bridge/inc))
 
 $(eval $(call gb_Library_add_api,java_uno_accessbridge,\
     offapi \

@@ -336,18 +336,6 @@ void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
 
 // class SvxSearchDialog -------------------------------------------------
 
-SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
-
-    SfxModelessDialog( &rBind, NULL, pParent, SVX_RES( RID_SVXDLG_SEARCH ) ),
-
-    INI_LIST()
-
-{
-    Construct_Impl();
-}
-
-// -----------------------------------------------------------------------
-
 SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind ) :
 
     SfxModelessDialog( &rBind, pChildWin, pParent, SVX_RES( RID_SVXDLG_SEARCH ) ),
@@ -1623,7 +1611,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
@@ -2066,7 +2054,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, LoseFocusHdl_Impl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
 {
     SaveToModule_Impl();
     return 0;
@@ -2074,7 +2062,7 @@ IMPL_LINK( SvxSearchDialog, LoseFocusHdl_Impl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -2170,7 +2158,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 {
     aLayoutBtn.SetText( aStylesStr );
     bFormat = sal_False;
@@ -2201,7 +2189,7 @@ IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
 {
     if ( !pSearchList || !pImpl->pRanges )
         return 0;
@@ -2237,36 +2225,6 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
 
     pTimer->Start();
     return 0;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxSearchDialog::GetSearchItems( SfxItemSet& rSet )
-{
-    xub_StrLen nLen;
-
-    if ( !pImpl->bMultiLineEdit )
-        nLen = aSearchAttrText.GetText().Len();
-    else
-        nLen = pImpl->aSearchFormats.GetText().Len();
-
-    if ( nLen && pSearchList )
-        pSearchList->Get( rSet );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxSearchDialog::GetReplaceItems( SfxItemSet& rSet )
-{
-    xub_StrLen nLen;
-
-    if ( !pImpl->bMultiLineEdit )
-        nLen = aReplaceAttrText.GetText().Len();
-    else
-        nLen = pImpl->aReplaceFormats.GetText().Len();
-
-    if ( nLen && pReplaceList )
-        pReplaceList->Get( rSet );
 }
 
 // -----------------------------------------------------------------------

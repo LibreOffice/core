@@ -105,7 +105,6 @@ using ::rtl::OUString;
 // =======================================================================
 
 static char aImplWindows[] = "windows";
-static char aImplDevices[] = "devices";
 static char aImplDevice[]  = "device";
 
 static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
@@ -326,7 +325,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
             // can avoid potential driver crashes as their jobsetups are often not compatible
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
-            ByteString aPrinterNameA= ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
             HANDLE hPrn;
             LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
@@ -392,7 +390,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
 static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
                                    sal_Bool bIn, WinSalFrame* pVisibleDlgParent )
 {
-    ByteString aPrinterNameA = ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
     HANDLE hPrn;
     LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
@@ -464,13 +461,13 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 64 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmDeviceName );
-        if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )/sizeof(sal_Unicode) )
+        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmDeviceName ) )
             memset( ((LPDEVMODEW)pOutDevMode)->dmDeviceName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
     if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 166 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmFormName );
-        if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )/sizeof(sal_Unicode) )
+        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmFormName ) )
             memset( ((LPDEVMODEW)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
 
@@ -1220,7 +1217,7 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
     int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
 
-    if( nRet != GDI_ERROR )
+    if( nRet != sal::static_int_cast<int>( GDI_ERROR ) )
         return nRet * 10;
     else
         return 900; // guess
@@ -1529,6 +1526,7 @@ void WinSalPrinter::markInvalid()
 // since SEH does not mix with standard exception handling's cleanup
 static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
 {
+    (void) pPrt;
     int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::StartDocW( hDC, pInfo );
@@ -1703,14 +1701,13 @@ sal_Bool WinSalPrinter::EndJob()
         // it should be safe to release the yield mutex over the EndDoc
         // call, however the real solution is supposed to be the threading
         // framework yet to come.
-        SalData* pSalData = GetSalData();
-        sal_uLong nAcquire = pSalData->mpFirstInstance->ReleaseYieldMutex();
+        volatile sal_uLong nAcquire = GetSalData()->mpFirstInstance->ReleaseYieldMutex();
         CATCH_DRIVER_EX_BEGIN;
         if( ::EndDoc( hDC ) <= 0 )
-            DWORD err = GetLastError();
+            GetLastError();
         CATCH_DRIVER_EX_END( "exception in EndDoc", this );
 
-        pSalData->mpFirstInstance->AcquireYieldMutex( nAcquire );
+        GetSalData()->mpFirstInstance->AcquireYieldMutex( nAcquire );
         DeleteDC( hDC );
         mhDC = 0;
     }
@@ -1793,7 +1790,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
         if ( pDevModeW != pOrgDevModeW )
             rtl_freeMemory( pDevModeW );
     }
-    int nRet = 0;
+    volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::StartPage( hDC );
     CATCH_DRIVER_EX_END( "exception in StartPage", this );
@@ -1832,7 +1829,7 @@ sal_Bool WinSalPrinter::EndPage()
     if( ! isValid() )
         return FALSE;
 
-    int nRet = 0;
+    volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::EndPage( hDC );
     CATCH_DRIVER_EX_END( "exception in EndPage", this );

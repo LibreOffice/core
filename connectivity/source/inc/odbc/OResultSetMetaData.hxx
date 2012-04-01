@@ -62,7 +62,7 @@ namespace connectivity
             ::rtl::OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor that is needed for returning the object
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt )
                 :m_aStatementHandle( _pStmt )
                 ,m_pConnection(_pConnection)
@@ -95,7 +95,7 @@ namespace connectivity
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
-            /// Avoid ambigous cast error from the compiler.
+            // Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
             { return this; }
 

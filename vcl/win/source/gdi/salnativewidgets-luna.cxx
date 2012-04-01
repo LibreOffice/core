@@ -361,14 +361,9 @@ sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, 
 }
 
 
-Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect, THEMESIZE eTS = TS_TRUE )
+Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
-    RECT rc;
-    rc.left = aRect.nLeft;
-    rc.right = aRect.nRight;
-    rc.top = aRect.nTop;
-    rc.bottom = aRect.nBottom;
     HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
@@ -931,7 +926,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == CTRL_SLIDER )
     {
         iPart = (nPart == PART_TRACK_HORZ_AREA) ? TKP_TRACK : TKP_TRACKVERT;
-        iState = (nPart == PART_TRACK_HORZ_AREA) ? TRS_NORMAL : TRVS_NORMAL;
+        iState = (nPart == PART_TRACK_HORZ_AREA) ? static_cast<int>(TRS_NORMAL) : static_cast<int>(TRVS_NORMAL);
 
         Rectangle aTrackRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
         RECT aTRect = rc;
@@ -1178,28 +1173,6 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
     return bOk;
 }
 
-
-/*
- * DrawNativeControlText()
- *
- *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
- *     Used if text not drawn by DrawNativeControl().
- *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
- */
-sal_Bool WinSalGraphics::drawNativeControlText( ControlType,
-                                ControlPart,
-                                const Rectangle&,
-                                ControlState,
-                                const ImplControlValue&,
-                                const OUString& )
-{
-    return( false );
-}
-
-
 /*
  * GetNativeControlRegion()
  *
@@ -1360,7 +1333,7 @@ sal_Bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if( hTheme )
         {
             int iPart = (nPart == PART_THUMB_HORZ) ? TKP_THUMB : TKP_THUMBVERT;
-            int iState = (nPart == PART_THUMB_HORZ) ? TUS_NORMAL : TUVS_NORMAL;
+            int iState = (nPart == PART_THUMB_HORZ) ? static_cast<int>(TUS_NORMAL) : static_cast<int>(TUVS_NORMAL);
             Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
             if( nPart == PART_THUMB_HORZ )
             {

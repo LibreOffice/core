@@ -32,7 +32,7 @@
 
 #include <fixx11h.h>
 
-#include "warning_guard_qhash.h"
+#include <qhash.h>
 #include <qsocketnotifier.h>
 #include <qtimer.h>
 

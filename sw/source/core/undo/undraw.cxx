@@ -32,7 +32,6 @@
 #include <rtl/string.h>
 #include <rtl/memory.h>
 
-#include <rtl/string.h>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>

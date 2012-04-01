@@ -183,7 +183,7 @@ bool ParseURLAsString(
         }
     } while ( params >= 0 );
 
-    if ( aLanguage.equalsIgnoreAsciiCaseAscii( "basic" ) )
+    if ( aLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("basic")) )
     {
         return sal_True;
     }
@@ -216,7 +216,7 @@ bool ParseURL(
             {
                 OUString aLanguage = xUrl->getParameter( aLanguageKey );
 
-                if ( aLanguage.equalsIgnoreAsciiCaseAscii( "basic" ) )
+                if ( aLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("basic")) )
                 {
                     *pName = xUrl->getName();
 

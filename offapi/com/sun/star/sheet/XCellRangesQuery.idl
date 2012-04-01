@@ -76,7 +76,12 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
 
             <p>Attention: Despite the <type>CellFlags</type> flags are
             <atom>long</atom> values, this method expects a <atom>short</atom>
-            parameter.
+            parameter.</p>
+
+            <p>Attention: Empty cells in the range may be skipped depending on
+            the content flag used.  For instance, when querying for STYLES,
+            the returned ranges may not include empty cells even if styles are
+            applied to those cells.</p>
 
         @returns
             all cells of the current cell range(s) with the specified

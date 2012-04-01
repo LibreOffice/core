@@ -427,7 +427,7 @@ SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
 {
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK);

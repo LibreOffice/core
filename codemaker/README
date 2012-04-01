@@ -1,0 +1,5 @@
+UNO interface declaration/stub generators for:
+- C++: cppumaker generates headers (.hpp and .hdl files) that provide
+  the UNO API C++ binding
+- Java: javamaker generates class files that provide the JVM UNO API binding
+- the one for .Net is in module cli_ure

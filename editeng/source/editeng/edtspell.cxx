@@ -55,7 +55,7 @@ EditSpellWrapper::EditSpellWrapper( Window* _pWin,
         sal_Bool bIsStart, sal_Bool bIsAllRight, EditView* pView ) :
     SvxSpellWrapper( _pWin, xChecker, bIsStart, bIsAllRight )
 {
-    DBG_ASSERT( pView, "One view has to be abandoned!" );
+    SAL_WARN_IF( !pView, "editeng", "One view has to be abandoned!" );
     // Keep IgnoreList, delete ReplaceList...
     if (SvxGetChangeAllList().is())
         SvxGetChangeAllList()->clear();
@@ -207,14 +207,26 @@ void EditSpellWrapper::CheckSpellTo()
 
 //////////////////////////////////////////////////////////////////////
 
-WrongList::WrongList()
+#define NOT_INVALID 0xFFFF
+
+WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(0xFFFF) {}
+
+WrongList::WrongList(const WrongList& r) :
+    maRanges(r.maRanges),
+    nInvalidStart(r.nInvalidStart),
+    nInvalidEnd(r.nInvalidEnd) {}
+
+WrongList::~WrongList() {}
+
+bool WrongList::IsInvalid() const
 {
-    nInvalidStart = 0;
-    nInvalidEnd = 0xFFFF;
+    return nInvalidStart != NOT_INVALID;
 }
 
-WrongList::~WrongList()
+void WrongList::SetValid()
 {
+    nInvalidStart = NOT_INVALID;
+    nInvalidEnd = 0;
 }
 
 void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
@@ -242,52 +254,56 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             nInvalidEnd = nPos+nNew;
     }
 
-    for (WrongList::iterator i = begin(); i != end(); ++i)
+    for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
-        sal_Bool bRefIsValid = sal_True;
-        if (i->nEnd >= nPos)
+        WrongRange& rWrong = maRanges[i];
+        bool bRefIsValid = true;
+        if (rWrong.nEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if (i->nStart > nPos)
+            if (rWrong.nStart > nPos)
             {
-                i->nStart += nNew;
-                i->nEnd += nNew;
+                rWrong.nStart += nNew;
+                rWrong.nEnd += nNew;
             }
             // 1: Starts before and goes until nPos...
-            else if (i->nEnd == nPos)
+            else if (rWrong.nEnd == nPos)
             {
                 // Should be halted at a blank!
                 if ( !bPosIsSep )
-                    i->nEnd += nNew;
+                    rWrong.nEnd += nNew;
             }
             // 2: Starts before and goes until after nPos...
-            else if (i->nStart < nPos && i->nEnd > nPos)
+            else if ((rWrong.nStart < nPos) && (rWrong.nEnd > nPos))
             {
-                i->nEnd += nNew;
+                rWrong.nEnd += nNew;
                 // When a separator remove and re-examine the Wrong
                 if ( bPosIsSep )
                 {
                     // Split Wrong...
-                    WrongRange aNewWrong(i->nStart, nPos);
-                    i->nStart = nPos + 1;
-                    insert(i, aNewWrong);
-                    bRefIsValid = sal_False;    // Reference no longer valid after Insert, the other was inserted in front of this position
+                    WrongRange aNewWrong(rWrong.nStart, nPos);
+                    rWrong.nStart = nPos + 1;
+                    maRanges.insert(maRanges.begin() + i, aNewWrong);
+                    // Reference no longer valid after Insert, the other
+                    // was inserted in front of this position
+                    bRefIsValid = false;
                     ++i; // Not this again...
                 }
             }
             // 3: Attribute starts at position ..
-            else if (i->nStart == nPos)
+            else if (rWrong.nStart == nPos)
             {
-                i->nEnd += nNew;
+                rWrong.nEnd += nNew;
                 if ( bPosIsSep )
-                    ++(i->nStart);
+                    ++(rWrong.nStart);
             }
         }
-        DBG_ASSERT(!bRefIsValid || i->nStart < i->nEnd, "TextInserted, WrongRange: Start >= End?!");
+        SAL_WARN_IF(bRefIsValid && rWrong.nStart >= rWrong.nEnd, "editeng",
+                "TextInserted, WrongRange: Start >= End?!");
         (void)bRefIsValid;
     }
 
-    DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
+    SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
 
 void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
@@ -343,10 +359,11 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
                 i->nEnd -= nDeleted;
             }
         }
-        DBG_ASSERT(i->nStart < i->nEnd, "TextInserted, WrongRange: Start >= End?!" );
+        SAL_WARN_IF(i->nStart >= i->nEnd, "editeng",
+                "TextDeleted, WrongRange: Start >= End?!");
         if ( bDelWrong )
         {
-            i = erase(i);
+            i = maRanges.erase(i);
         }
         else
         {
@@ -354,7 +371,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
         }
     }
 
-    DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
+    SAL_WARN_IF(DbgIsBuggy(), "editeng", "TextDeleted: WrongList broken!");
 }
 
 sal_Bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
@@ -420,7 +437,7 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
             }
             else
             {
-                i = erase(i);
+                i = maRanges.erase(i);
                 // no increment here
             }
         }
@@ -430,7 +447,7 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
         }
     }
 
-    DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
+    SAL_WARN_IF(DbgIsBuggy(), "editeng", "ClearWrongs: WrongList broken!");
 }
 
 void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
@@ -448,7 +465,7 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
                 // and runs along, but not that there are several ranges ...
                 // Exactly in the range is no one allowed to be, otherwise this
                 // Method can not be called!
-                DBG_ASSERT((i->nStart == nStart && i->nEnd > nEnd) || i->nStart > nEnd, "InsertWrong: RangeMismatch!");
+                SAL_WARN_IF((i->nStart != nStart || i->nEnd <= nEnd) && i->nStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
                 if (i->nStart == nStart && i->nEnd > nEnd)
                     i->nStart = nEnd + 1;
             }
@@ -456,27 +473,23 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
         }
     }
 
-    if (nPos != end())
-        insert(nPos, WrongRange(nStart, nEnd));
+    if (nPos != maRanges.end())
+        maRanges.insert(nPos, WrongRange(nStart, nEnd));
     else
-        push_back(WrongRange(nStart, nEnd));
+        maRanges.push_back(WrongRange(nStart, nEnd));
 
-    DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
+    SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
 
 void WrongList::MarkWrongsInvalid()
 {
-    if (!empty())
-        MarkInvalid(front().nStart, back().nEnd );
+    if (!maRanges.empty())
+        MarkInvalid(maRanges.front().nStart, maRanges.back().nEnd );
 }
 
 WrongList* WrongList::Clone() const
 {
-    WrongList* pNew = new WrongList;
-    pNew->reserve(size());
-    for (WrongList::const_iterator i = begin(); i != end(); ++i)
-        pNew->push_back(*i);
-    return pNew;
+    return new WrongList(*this);
 }
 
 // #i102062#
@@ -485,13 +498,13 @@ bool WrongList::operator==(const WrongList& rCompare) const
     // cleck direct members
     if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
-        || size() != rCompare.size())
+        || maRanges.size() != rCompare.maRanges.size())
         return false;
 
-    WrongList::const_iterator rCA = begin();
-    WrongList::const_iterator rCB = rCompare.begin();
+    WrongList::const_iterator rCA = maRanges.begin();
+    WrongList::const_iterator rCB = rCompare.maRanges.begin();
 
-    for (; rCA != end(); ++rCA, ++rCB)
+    for (; rCA != maRanges.end(); ++rCA, ++rCB)
     {
         if(rCA->nStart != rCB->nStart || rCA->nEnd != rCB->nEnd)
             return false;
@@ -500,7 +513,46 @@ bool WrongList::operator==(const WrongList& rCompare) const
     return true;
 }
 
-#ifdef DBG_UTIL
+bool WrongList::empty() const
+{
+    return maRanges.empty();
+}
+
+void WrongList::push_back(const WrongRange& rRange)
+{
+    maRanges.push_back(rRange);
+}
+
+WrongRange& WrongList::back()
+{
+    return maRanges.back();
+}
+
+const WrongRange& WrongList::back() const
+{
+    return maRanges.back();
+}
+
+WrongList::iterator WrongList::begin()
+{
+    return maRanges.begin();
+}
+
+WrongList::iterator WrongList::end()
+{
+    return maRanges.end();
+}
+
+WrongList::const_iterator WrongList::begin() const
+{
+    return maRanges.begin();
+}
+
+WrongList::const_iterator WrongList::end() const
+{
+    return maRanges.end();
+}
+
 sal_Bool WrongList::DbgIsBuggy() const
 {
     // Check if the ranges overlap.
@@ -519,7 +571,6 @@ sal_Bool WrongList::DbgIsBuggy() const
     }
     return bError;
 }
-#endif
 
 //////////////////////////////////////////////////////////////////////
 
@@ -544,7 +595,8 @@ sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
 {
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
     pImpEE->ImpDeleteSelection( aSel );
-    DBG_ASSERT( nCursor >= nEnd, "Cursor in the heart of the action?!" );
+    SAL_WARN_IF(nCursor < nEnd, "editeng",
+            "Cursor in the heart of the action?!");
     nCursor -= ( nEnd-nStt );
     bAllowUndoAction = sal_False;
     return sal_True;
@@ -554,7 +606,8 @@ sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const String& rTxt )
 {
     EditSelection aSel = EditPaM( pCurNode, nPos );
     pImpEE->ImpInsertText( aSel, rTxt );
-    DBG_ASSERT( nCursor >= nPos, "Cursor in the heart of the action?!" );
+    SAL_WARN_IF(nCursor < nPos, "editeng",
+            "Cursor in the heart of the action?!");
     nCursor = nCursor + rTxt.Len();
 
     if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
@@ -596,7 +649,7 @@ sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
 {
     SfxItemPool* pPool = &pImpEE->GetEditDoc().GetItemPool();
     while ( pPool->GetSecondaryPool() &&
-            !pPool->GetName().EqualsAscii( "EditEngineItemPool" ) )
+            !pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")) )
     {
         pPool = pPool->GetSecondaryPool();
 
@@ -624,7 +677,8 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
     String aText = pImpEE->GetSelected( aSel );
     aSel = pImpEE->ImpDeleteSelection( aSel );
-    DBG_ASSERT( nCursor >= nEnd, "Cursor in the heart of the action ?!" );
+    SAL_WARN_IF(nCursor < nEnd, "editeng",
+            "Cursor in the heart of the action?!");
     nCursor -= ( nEnd-nStt );
     SvxFieldItem aField( SvxURLField( rURL, aText, SVXURLFORMAT_REPR ),
                                       EE_FEATURE_FIELD  );
@@ -640,23 +694,23 @@ sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
     sal_uInt16 nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
     sal_uInt16 nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
 
-    CharAttribArray& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
-    sal_uInt16 nAttrs = rAttribs.Count();
-    for ( sal_uInt16 n = 0; n < nAttrs; n++ )
+    const CharAttribList::AttribsType& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
+    CharAttribList::AttribsType::const_iterator it = rAttribs.begin(), itEnd = rAttribs.end();
+    for (; it != itEnd; ++it)
     {
-        EditCharAttrib* pAttr = rAttribs.GetObject( n );
-        if ( pAttr->GetStart() >= nEnd )
-            return sal_False;
+        const EditCharAttrib& rAttr = *it;
+        if (rAttr.GetStart() >= nEnd)
+            return false;
 
-        if ( ( pAttr->Which() == nScriptFontInfoItemId ) &&
-                ( ((SvxFontItem*)pAttr->GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
+        if (rAttr.Which() == nScriptFontInfoItemId &&
+            static_cast<const SvxFontItem*>(rAttr.GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
         {
             // check if the Attribtuteis within range...
-            if ( pAttr->GetEnd() >= nStt )
-                return sal_True;
+            if (rAttr.GetEnd() >= nStt)
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
@@ -717,7 +771,8 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
         EditSelection aSel( EditPaM( pCurNode, rSttPos ),
                             EditPaM( pCurNode, nEndPos ) );
         aSel = pImpEE->ImpDeleteSelection( aSel );
-        DBG_ASSERT( nCursor >= nEndPos, "Cursor in the heart of the action?!" );
+        SAL_WARN_IF(nCursor < nEndPos, "editeng",
+                "Cursor in the heart of the action?!");
         nCursor -= ( nEndPos-rSttPos );
         pImpEE->ImpInsertText( aSel, pFnd->GetLong() );
         nCursor = nCursor + pFnd->GetLong().Len();

@@ -79,18 +79,6 @@ namespace sdr
         OverlayPolyPolygonStriped::~OverlayPolyPolygonStriped()
         {
         }
-
-        void OverlayPolyPolygonStriped::setPolyPolygon(const basegfx::B2DPolyPolygon& rNew)
-        {
-            if(rNew != maPolyPolygon)
-            {
-                // remember new value
-                maPolyPolygon = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 

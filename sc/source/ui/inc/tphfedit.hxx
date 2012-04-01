@@ -111,7 +111,7 @@ private:
     Link            aMLink;
     sal_uInt16          nSelected;
 
-    SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
+    SC_DLLPRIVATE  DECL_LINK( TimerHdl, void*);
 
 protected:
 

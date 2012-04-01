@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 public class NewsGroup
 {
 

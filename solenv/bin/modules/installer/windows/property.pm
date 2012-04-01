@@ -390,29 +390,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    # No more license dialog for selected products
-    if ( $allvariables->{'HIDELICENSEDIALOG'} )
-    {
-        my $onepropertyline = "HIDEEULA" . "\t" . "1" . "\n";
-
-        my $already_defined = 0;
-
-        for ( my $i = 0; $i <= $#{$propertyfile}; $i++ )
-        {
-            if ( ${$propertyfile}[$i] =~ /^\s*HIDEEULA\t/ )
-            {
-                ${$propertyfile}[$i] = $onepropertyline;
-                $already_defined = 1;
-                last;
-            }
-        }
-
-        if ( ! $already_defined )
-        {
-            push(@{$propertyfile}, $onepropertyline);
-        }
-    }
-
     # Setting .NET requirements
     if ( $installer::globals::required_dotnet_version ne "" )
     {

@@ -78,8 +78,6 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-    void ShowTransparentBorder (void);
-
     // XPane
 
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)

@@ -1,0 +1,5 @@
+Style and grammar checker for various languages written in Java, from [http://www.languagetool.org/]
+
+Shipping this is a compile-time option for LibreOffice, but our
+downloadable builds use the light-weight lightproof grammer checker
+instead to avoid the Java bootstrapping performance issues.

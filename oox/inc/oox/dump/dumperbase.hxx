@@ -231,7 +231,6 @@ struct ItemFormat
     explicit            ItemFormat();
 
     void                set( DataType eDataType, FormatType eFmtType, const ::rtl::OUString& rItemName );
-    void                set( DataType eDataType, FormatType eFmtType, const ::rtl::OUString& rItemName, const ::rtl::OUString& rListName );
 
     /** Initializes the struct from a vector of strings containing the item format.
 
@@ -397,13 +396,9 @@ public:
 
     static void         appendToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     static void         appendToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    static void         prependToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    static void         prependToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rIdx );
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, sal_Int64 nIdx );
-    static void         appendIndexedText( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rData, const ::rtl::OUString& rIdx );
-    static void         appendIndexedText( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rData, sal_Int64 nIdx );
 
     static ::rtl::OUString getToken( const ::rtl::OUString& rData, sal_Int32& rnPos, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
@@ -472,43 +467,6 @@ public:
 };
 
 static const String EMPTY_STRING;
-
-// ============================================================================
-// ============================================================================
-
-/** Stack to create a human readable formula string from a UPN token array. */
-class FormulaStack
-{
-public:
-    explicit            FormulaStack();
-
-    inline const ::rtl::OUString& getFormulaString() const { return getString( maFmlaStack ); }
-    inline const ::rtl::OUString& getClassesString() const { return getString( maClassStack ); }
-
-    void                pushOperand( const String& rOp, const ::rtl::OUString& rTokClass );
-    void                pushOperand( const String& rOp );
-    void                pushUnaryOp( const String& rLOp, const String& rROp );
-    void                pushBinaryOp( const String& rOp );
-    void                pushFuncOp( const String& rFunc, const ::rtl::OUString& rTokClass, sal_uInt8 nParamCount );
-
-    inline void         setError() { mbError = true; }
-    void                replaceOnTop( const ::rtl::OUString& rOld, const ::rtl::OUString& rNew );
-
-private:
-    typedef ::std::stack< ::rtl::OUString > StringStack;
-
-    inline bool         check( bool bCond ) { return (mbError |= !bCond) == false; }
-
-    const ::rtl::OUString& getString( const StringStack& rStack ) const;
-    void                pushUnaryOp( StringStack& rStack, const ::rtl::OUString& rLOp, const ::rtl::OUString& rROp );
-    void                pushBinaryOp( StringStack& rStack, const ::rtl::OUString& rOp );
-    void                pushFuncOp( StringStack& rStack, const ::rtl::OUString& rOp, sal_uInt8 nParamCount );
-
-private:
-    StringStack         maFmlaStack;
-    StringStack         maClassStack;
-    bool                mbError;
-};
 
 // ============================================================================
 // ============================================================================
@@ -611,9 +569,6 @@ private:
                             TextInputStream& rStrm,
                             ::rtl::OUString& orKey,
                             ::rtl::OUString& orData ) const;
-
-    LineType            readConfigLine(
-                            TextInputStream& rStrm ) const;
 
     void                processConfigItem(
                             TextInputStream& rStrm,
@@ -915,7 +870,6 @@ public:
     void                eraseNameList( const ::rtl::OUString& rListName );
     NameListRef         getNameList( const ::rtl::OUString& rListName ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     inline bool         isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
@@ -993,8 +947,6 @@ public:
     inline const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
     inline const ::rtl::OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
-    void                setStringOption( const String& rKey, const String& rData );
-
     const ::rtl::OUString& getStringOption( const String& rKey, const ::rtl::OUString& rDefault ) const;
     bool                getBoolOption( const String& rKey, bool bDefault ) const;
     template< typename Type >
@@ -1005,7 +957,6 @@ public:
 
     template< typename ListType >
     ::boost::shared_ptr< ListType > createNameList( const String& rListName );
-    void                setNameList( const String& rListName, const NameListRef& rxList );
     void                eraseNameList( const String& rListName );
     NameListRef         getNameList( const String& rListName ) const;
 
@@ -1016,7 +967,6 @@ public:
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     bool                isPasswordCancelled() const;
 
 protected:
@@ -1092,11 +1042,9 @@ public:
 
     void                incIndent();
     void                decIndent();
-    void                resetIndent();
 
     void                startTable( sal_Int32 nW1 );
     void                startTable( sal_Int32 nW1, sal_Int32 nW2 );
-    void                startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 );
     void                startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 );
     void                startTable( size_t nColCount, const sal_Int32* pnColWidths );
     void                tab();
@@ -1199,8 +1147,6 @@ public:
                             mrOut( *rxOut ) { mrOut.startTable( nW1 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2 ); }
-    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 ) :
-                            mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3, nW4 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, size_t nColCount,
@@ -1254,8 +1200,6 @@ public:
     explicit            StorageIterator( const StorageRef& rxStrg );
     virtual             ~StorageIterator();
 
-    size_t              getElementCount() const;
-
     StorageIterator&    operator++();
 
     ::rtl::OUString     getName() const;
@@ -1295,8 +1239,6 @@ protected:
     virtual void        implDump();
 
     // ------------------------------------------------------------------------
-
-    void                reconstructConfig( const ConfigRef& rxConfig );
 
     inline Config&      cfg() const { return *mxConfig; }
 
@@ -1405,9 +1347,6 @@ protected:
     void                writeCharItem( const String& rName, sal_Unicode cData );
     void                writeStringItem( const String& rName, const ::rtl::OUString& rData );
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    void                writeBoolItem( const String& rName, bool bData );
-    double              writeRkItem( const String& rName, sal_Int32 nRk );
-    void                writeColorABGRItem( const String& rName, sal_Int32 nColor );
     void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const ::rtl::OUString& rGuid );
     void                writeColIndexItem( const String& rName, sal_Int32 nCol );
@@ -1602,7 +1541,6 @@ protected:
     inline void         dumpUnused( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNUSED, nBytes ); }
     inline void         dumpUnknown( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNKNOWN, nBytes ); }
 
-    sal_Unicode         dumpChar( const String& rName, rtl_TextEncoding eTextEnc );
     sal_Unicode         dumpUnicode( const String& rName );
 
     ::rtl::OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul = false );
@@ -1611,8 +1549,6 @@ protected:
     ::rtl::OUString     dumpNullCharArray( const String& rName, rtl_TextEncoding eTextEnc );
     ::rtl::OUString     dumpNullUnicodeArray( const String& rName );
 
-    double              dumpRk( const String& rName = EMPTY_STRING );
-    sal_Int32           dumpColorABGR( const String& rName = EMPTY_STRING );
     ::com::sun::star::util::DateTime dumpFileTime( const String& rName = EMPTY_STRING );
     ::rtl::OUString     dumpGuid( const String& rName = EMPTY_STRING );
 
@@ -1793,10 +1729,6 @@ public:
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName );
 
-    explicit            BinaryStreamObject(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm );
-
 protected:
     void                dumpBinaryStream( bool bShowOffset = true );
 
@@ -1867,10 +1799,6 @@ public:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName );
-
-    explicit            XmlStreamObject(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm );
 
 protected:
     virtual void        implDumpText( TextInputStream& rTextStrm );

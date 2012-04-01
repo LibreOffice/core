@@ -93,7 +93,7 @@ typedef unsigned char       sal_uInt8;
      #error "Could not find 32-bit type, add support for your architecture"
 #endif
 
-#if (_MSC_VER >= 1000)
+#if defined _MSC_VER && _MSC_VER >= 1000
     typedef __int64                  sal_Int64;
     typedef unsigned __int64         sal_uInt64;
 
@@ -255,30 +255,30 @@ typedef void *                   sal_Handle;
 #   define SAL_DLLPUBLIC_IMPORT
 #endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
-#if defined(_MSC_VER)
+#   define SAL_DLLPUBLIC_TEMPLATE
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
-#else
-#   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
-#endif
 #elif defined SAL_UNX
 #   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__SUNPRO_C ) && (__SUNPRO_C  >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 #     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
 #     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#     define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   endif
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
@@ -308,7 +308,7 @@ typedef void *                   sal_Handle;
     Compilers that support a construct of this nature will emit a compile
     time warning on unchecked return value.
 */
-#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#if defined(__GNUC__)
 #   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #else
 #   define SAL_WARN_UNUSED_RESULT
@@ -453,7 +453,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
 #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
-#elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+#elif (__GNUC__)
 #    define SAL_DEPRECATED(message) __attribute__((deprecated))
 #elif defined(_MSC_VER)
 #    define SAL_DEPRECATED(message) __declspec(deprecated(message))

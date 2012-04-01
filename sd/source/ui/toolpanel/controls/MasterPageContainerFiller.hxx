@@ -57,6 +57,9 @@ public:
             to the container via the PutMasterPage() method.
         */
         virtual void FillingDone (void) = 0;
+
+    protected:
+        ~ContainerAdapter() {}
     };
 
     MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);

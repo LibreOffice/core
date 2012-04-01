@@ -34,8 +34,8 @@ $(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
 
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/toolkit/inc) \
-    -I$(realpath $(SRCDIR)/toolkit/source) \
+    -I$(SRCDIR)/toolkit/inc \
+    -I$(SRCDIR)/toolkit/source \
 ))
 
 $(eval $(call gb_Library_add_defs,tk,\
@@ -124,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/registerservices \
     toolkit/source/helper/servicenames \
     toolkit/source/helper/tkresmgr \
-    toolkit/source/helper/unomemorystream \
     toolkit/source/helper/unopropertyarrayhelper \
     toolkit/source/helper/unowrapper \
     toolkit/source/helper/vclunohelper \
@@ -141,10 +140,12 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
 
+ifneq ($(GUIBASE),headless)
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

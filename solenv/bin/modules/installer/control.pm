@@ -252,7 +252,7 @@ sub check_makecab_version
 }
 
 ######################################################################
-# Reading the environment variables for the pathes in ziplist.
+# Reading the environment variables for the paths in ziplist.
 # solarpath, solarenvpath, solarcommonpath, os, osdef, pmiscpath
 ######################################################################
 
@@ -462,17 +462,6 @@ sub check_oxtfiles
             }
         }
     }
-}
-
-#############################################################
-# Check if Java is available to create xpd installer
-#############################################################
-
-sub check_java_for_xpd
-{
-    my ( $allvariables ) = @_;
-
-    if ( ! $installer::globals::solarjavaset ) { $allvariables->{'XPDINSTALLER'} = 0; }
 }
 
 ####################################################################

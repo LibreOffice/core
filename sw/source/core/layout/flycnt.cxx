@@ -94,22 +94,22 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
             (const SfxPoolItem**)&pAnch ))
-        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
+        ;       // The anchor pointer is set at GetItemState!
 
     else if( RES_ANCHOR == nWhich )
     {
-        //Ankerwechsel, ich haenge mich selbst um.
-        //Es darf sich nicht um einen Wechsel des Ankertyps handeln,
-        //dies ist nur ueber die SwFEShell moeglich.
+        //Change anchor, I move myself to a new place.
+        //The anchor type must not change, this is only possible using
+        //SwFEShell.
         pAnch = (const SwFmtAnchor*)pNew;
     }
 
     if( pAnch )
     {
         OSL_ENSURE( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
-                "Unzulaessiger Wechsel des Ankertyps." );
+                "Illegal change of anchor type. " );
 
-        //Abmelden, neuen Anker besorgen und 'dranhaengen.
+        //Unregister, get hold of a new anchor and attach it
         SwRect aOld( GetObjRectWithSpaces() );
         SwPageFrm *pOldPage = FindPageFrm();
         const SwFrm *pOldAnchor = GetAnchorFrm();
@@ -118,19 +118,17 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
         const sal_Bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
-        //Den neuen Anker anhand des NodeIdx suchen, am alten und
-        //neuen NodeIdx kann auch erkannt werden, in welche Richtung
-        //gesucht werden muss.
+        // Search the new anchor using the NodeIdx; the relation between old
+        // and new NodeIdx determines the search direction
         const SwNodeIndex aNewIdx( pAnch->GetCntntAnchor()->nNode );
         SwNodeIndex aOldIdx( *pCntnt->GetNode() );
 
-        //fix: Umstellung, ehemals wurde in der do-while-Schleife nach vorn bzw.
-        //nach hinten gesucht; je nachdem wie welcher Index kleiner war.
-        //Das kann aber u.U. zu einer Endlosschleife fuehren. Damit
-        //wenigstens die Schleife unterbunden wird suchen wir nur in eine
-        //Richtung. Wenn der neue Anker nicht gefunden wird koennen wir uns
-        //immer noch vom Node einen Frame besorgen. Die Change, dass dies dann
-        //der richtige ist, ist gut.
+        //fix: depending on which index was smaller, searching in the do-while
+        //loop previously was done forward or backwards respectively. This however
+        //could lead to an infinite loop. To at least avoid the loop, searching
+        //is now done in only one direction. Getting hold of a frame from the node
+        //is still possible if the new anchor could not be found. Chances are
+        //good that this will be the correct one.
         const bool bNext = aOldIdx < aNewIdx;
         // consider the case that at found anchor frame candidate already a
         // fly frame of the given fly format is registered.
@@ -176,14 +174,14 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, sal_False );
             OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
-        //Flys haengen niemals an einem Follow sondern immer am
-        //Master, den suchen wir uns jetzt.
+        //Flys are never attached to a follow, but always on the master which
+        //we are going to search now.
         SwCntntFrm* pFlow = pCntnt;
         while ( pFlow->IsFollow() )
             pFlow = pFlow->FindMaster();
         pCntnt = pFlow;
 
-        //und schwupp angehaengt das teil...
+        //and *puff* it's attached...
         pCntnt->AppendFly( this );
         if ( pOldPage && pOldPage != FindPageFrm() )
             NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
@@ -204,28 +202,24 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 |*
 |*  SwFlyAtCntFrm::MakeAll()
 |*
-|*  Beschreibung        Bei einem Absatzgebunden Fly kann es durchaus sein,
-|*      das der Anker auf die Veraenderung des Flys reagiert. Auf diese
-|*      Reaktion hat der Fly natuerlich auch wieder zu reagieren.
-|*      Leider kann dies zu Oszillationen fuehren z.b. Der Fly will nach
-|*      unten, dadurch kann der Inhalt nach oben, der TxtFrm wird kleiner,
-|*      der Fly muss wieder hoeher woduch der Text wieder nach unten
-|*      verdraengt wird...
-|*      Um derartige Oszillationen zu vermeiden, wird ein kleiner Positions-
-|*      stack aufgebaut. Wenn der Fly ein Position erreicht, die er bereits
-|*      einmal einnahm, so brechen wir den Vorgang ab. Um keine Risiken
-|*      einzugehen, wird der Positionsstack so aufgebaut, dass er fuenf
-|*      Positionen zurueckblickt.
-|*      Wenn der Stack ueberlaeuft, wird ebenfalls abgebrochen.
-|*      Der Abbruch fuer dazu, dass der Fly am Ende eine unguenste Position
-|*      einnimmt. Damit es nicht durch einen wiederholten Aufruf von
-|*      Aussen zu einer 'grossen Oszillation' kommen kann wird im Abbruch-
-|*      fall das Attribut des Rahmens auf automatische Ausrichtung oben
-|*      eingestellt.
-|*
+|*  Description         With a paragraph-anchored fly it's absolutely possible that
+|*      the anchor reacts to changes of the fly. To this reaction the fly must
+|*      certaily react too. Sadly this can lead to oscillations; for example the
+|*      fly wants to go down therefore the content can go up - this leads to a
+|*      smaller TxtFrm thus the fly needs to go up again whereby the text will
+|*      get pushed down...
+|*      To avoid such oscillations, a small position stack is built. If the fly
+|*      reaches a position which it already had once, the action is stopped.
+|*      To not run into problems, the stack is designed to hold five positions.
+|*      If the stack flows over, the action is stopped too.
+|*      Cancellation leads to the situation that the fly has a bad position in
+|*      the end. In case of cancellation, the frame is set to automatic top
+|*      alignment to not trigger a 'big oscillation' when calling from outside
+|*      again.
 |*************************************************************************/
-//Wir brauchen ein Paar Hilfsklassen zur Kontrolle der Ozillation und ein paar
-//Funktionen um die Uebersicht zu gewaehrleisten.
+//We need some helper classes to monitor the oscillation and a few functions
+//to not get lost.
+
 // #i3317# - re-factoring of the position stack
 class SwOszControl
 {
@@ -503,11 +497,11 @@ void SwFlyAtCntFrm::MakeAll()
 
                 if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
                 {
-                    // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
-                    // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
-                    // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
-                        _InvalidateSize();
-                    bExtra = sal_False; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
+                    // If a multi column frame leaves invalid columns because of
+                    // a position change, we loop once more and format
+                    // our content using FormatWidthCols again.
+                    _InvalidateSize();
+                    bExtra = sal_False; // Ensure only one additional loop run
                 }
             } while ( !IsValid() && !bOsz &&
                       // #i3317#
@@ -566,10 +560,9 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
 |*
 |*  FindAnchor() und Hilfsfunktionen.
 |*
-|*  Beschreibung:       Sucht ausgehend von pOldAnch einen Anker fuer
-|*      Absatzgebundene Objekte.
-|*      Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
-|*      fuer Ankerwechsel benoetigt.
+|*  Description:        Searches an anchor for paragraph bound objects
+|*      starting from pOldAnch. This is used to show anchors as well as changing
+|*      anchors when dragging paragraph bound objects.
 |*
 |*************************************************************************/
 
@@ -593,8 +586,8 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                                          const SwCntntFrm *pCnt )
 {
     rRet.nSub = 0;
-    //Wenn der Point direkt innerhalb des Cnt steht ist die Sache klar und
-    //der Cntnt hat automatisch eine Entfernung von 0
+    //If the point stays inside the Cnt everything is clear already; the Cntnt
+    //automatically has a distance of 0.
     if ( pCnt->Frm().IsInside( rPt ) )
     {
         rRet.nMain = 0;
@@ -603,14 +596,14 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
     else
     {
         const SwLayoutFrm *pUp = pCnt->IsInTab() ? pCnt->FindTabFrm()->GetUpper() : pCnt->GetUpper();
-        // einspaltige Bereiche muessen zu ihrem Upper durchschalten
+        // single column sections need to interconnect to their upper
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
         const bool bVert = pUp->IsVertical();
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         const bool bVertL2R = pUp->IsVertLR();
 
-        //Dem Textflus folgen.
+        //Follow the text flow.
         // #i70582#
         // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
         const SwTwips nTopForObjPos =
@@ -907,9 +900,9 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
                           const SwCntntFrm *& rpCnt,
                           const sal_Bool bBody, const sal_Bool bFtn )
 {
-    //Sucht unterhalb von pLay den dichtesten Cnt zum Point. Der Bezugspunkt
-    //der Cntnts ist immer die linke obere Ecke.
-    //Der Cnt soll moeglichst ueber dem Point liegen.
+    // Searches below pLay the nearest Cnt to the point. The reference point of
+    //the Cntnts is always the left upper corner.
+    //The Cnt should preferably be above the point.
 
 #if OSL_DEBUG_LEVEL > 1
     Point arPoint( rPt );
@@ -931,8 +924,8 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
     {
         do
         {
-            //Jetzt die Entfernung zwischen den beiden Punkten berechnen.
-            //'Delta' X^2 + 'Delta'Y^2 = 'Entfernung'^2
+            //Calculate the distance between those two points.
+            //'delta' X^2 + 'delta' Y^2 = 'distance'^2
             sal_uInt32 dX = Max( pCnt->Frm().Left(), rPt.X() ) -
                        Min( pCnt->Frm().Left(), rPt.X() ),
                   dY = Max( pCnt->Frm().Top(), rPt.Y() ) -
@@ -943,7 +936,8 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
-                {   //Der ist dichter dran
+                {
+                    //This one is the nearer one
                     nDistance = nNearest = nDiff;
                     rpCnt = pNearest = pCnt;
                 }
@@ -970,16 +964,14 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
 const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                                   const sal_Bool bBody, const sal_Bool bFtn )
 {
-    //Sucht ausgehen von pCnt denjenigen CntntFrm, dessen linke obere
-    //Ecke am dichtesten am Point liegt.
-    //Liefert _immer_ einen CntntFrm zurueck.
+    //Starting from pCnt searches the CntntFrm whose left upper corner is the
+    //nearest to the point.
+    //Always returns a CntntFrm.
 
-    //Zunaechst wird versucht den dichtesten Cntnt innerhalt derjenigen
-    //Seite zu suchen innerhalb derer der Cntnt steht.
-    //Ausgehend von der Seite muessen die Seiten in beide
-    //Richtungen beruecksichtigt werden.
-    //Falls moeglich wird ein Cntnt geliefert, dessen Y-Position ueber der
-    //des Point sitzt.
+    //First the nearest Cntnt inside the page which contains the Cntnt is
+    //searched. Starting from this page the pages in both directions need to
+    //be considered. If possible a Cntnt is returned whose Y-position is
+    //above the point.
     const SwCntntFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
     sal_uLong nDist;
@@ -1070,8 +1062,8 @@ void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                               const sal_Bool bBodyOnly )
 {
-    //Zu der angegebenen DokumentPosition wird der dichteste Cnt im
-    //Textfluss gesucht. AusgangsFrm ist der uebergebene Anker.
+    //Search the nearest Cnt around the given document position in the text
+    //flow. The given anchor is the starting Frm.
     const SwCntntFrm* pCnt;
     if ( pOldAnch->IsCntntFrm() )
     {
@@ -1089,16 +1081,15 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         pCnt = pTmpLay->GetCntntPos( aTmp, sal_False, bBodyOnly );
     }
 
-    //Beim Suchen darauf achten, dass die Bereiche sinnvoll erhalten
-    //bleiben. D.h. in diesem Fall nicht in Header/Footer hinein und
-    //nicht aus Header/Footer hinaus.
+    //Take care to use meaningful ranges during search. This means to not enter
+    //or leave header/footer in this case.
     const sal_Bool bBody = pCnt->IsInDocBody() || bBodyOnly;
     const sal_Bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
 
     Point aNew( rNew );
     if ( bBody )
     {
-        //#38848 Vom Seitenrand in den Body ziehen.
+        //#38848 drag from page margin into the body.
         const SwFrm *pPage = pCnt->FindPageFrm();
         ::lcl_PointToPrt( aNew, pPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
@@ -1110,9 +1101,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         return pCnt;
     else if ( pOldAnch->IsInDocBody() || pOldAnch->IsPageFrm() )
     {
-        //Vielleicht befindet sich der gewuenschte Anker ja auf derselben
-        //Seite wie der aktuelle Anker.
-        //So gibt es kein Problem mit Spalten.
+        // Maybe the selected anchor is on the same page as the current anchor.
+        // With this we won't run into problems with the columns.
         Point aTmp( aNew );
         const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
                                         GetCntntPos( aTmp, sal_False, sal_True, sal_False );
@@ -1120,16 +1110,16 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             return pTmp;
     }
 
-    //Ausgehend vom Anker suche ich jetzt in beide Richtungen bis ich
-    //den jeweils dichtesten gefunden habe.
-    //Nicht die direkte Entfernung ist relevant sondern die Strecke die
-    //im Textfluss zurueckgelegt werden muss.
+    //Starting from the anchor we now search in both directions until we found
+    //the nearest one respectively.
+    //Not the direct distance is relevant but the distance which needs to be
+    //traveled through the text flow.
     const SwCntntFrm *pUpLst;
     const SwCntntFrm *pUpFrm = pCnt;
     SwDistance nUp, nUpLst;
     ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
     SwDistance nDown = nUp;
-    sal_Bool bNegAllowed = sal_True;//Einmal aus dem negativen Bereich heraus lassen.
+    sal_Bool bNegAllowed = sal_True;// Make it possible to leave the negative section once.
     do
     {
         pUpLst = pUpFrm; nUpLst = nUp;
@@ -1140,8 +1130,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         if ( pUpFrm )
         {
             ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
-            //Wenn die Distanz innnerhalb einer Tabelle waechst, so lohnt es
-            //sich weiter zu suchen.
+            //It makes sense to search further, if the distance grows inside
+            //a table.
             if ( pUpLst->IsInTab() && pUpFrm->IsInTab() )
             {
                 while ( pUpFrm && ((nUpLst < nUp && pUpFrm->IsInTab()) ||
@@ -1158,8 +1148,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
         {
             bNegAllowed = sal_False;
-            if ( nUpLst.nMain < 0 ) //nicht den falschen erwischen, wenn der Wert
-                                    //gerade von negativ auf positiv gekippt ist.
+            if ( nUpLst.nMain < 0 ) //don't take the wrong one, if the value
+                                    //just changed from negative to positive.
             {   pUpLst = pUpFrm;
                 nUpLst = nUp;
             }
@@ -1183,8 +1173,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             ::lcl_CalcDownDist( nDown, aNew, pDownFrm );
             if ( nDown.nMain < 0 )
                 nDown.nMain = LONG_MAX;
-            //Wenn die Distanz innnerhalb einer Tabelle waechst, so lohnt es
-            //sich weiter zu suchen.
+            //It makes sense to search further, if the distance grows inside
+            //a table.
             if ( pDownLst->IsInTab() && pDownFrm->IsInTab() )
             {
                 while ( pDownFrm && ( ( nDown.nMain != LONG_MAX && pDownFrm->IsInTab()) || bBody != pDownFrm->IsInDocBody() ) )
@@ -1203,10 +1193,9 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     } while ( pDownFrm && nDown <= nDownLst &&
               nDown.nMain != LONG_MAX && nDownLst.nMain != LONG_MAX );
 
-    //Wenn ich in beide Richtungen keinen gefunden habe, so suche ich mir
-    //denjenigen Cntnt dessen linke obere Ecke dem Point am naechsten liegt.
-    //Eine derartige Situation tritt z.b. auf, wenn der Point nicht im Text-
-    //fluss sondern in irgendwelchen Raendern steht.
+    //If we couldn't find one in both directions, we'll search the Cntnt whose
+    //left upper corner is the nearest to the point. Such a situation may
+    //happen, if the point doesn't lay in the text flow but in any margin.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
     {
         // If an OLE objects, which is contained in a fly frame
@@ -1256,7 +1245,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( pCnt->IsInDocBody() )
     {
-        //#38848 Vom Seitenrand in den Body ziehen.
+        //#38848 drag from page margin into the body.
         pTmpPage = pCnt->FindPageFrm();
         ::lcl_PointToPrt( aNew, pTmpPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
@@ -1264,10 +1253,10 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         ::lcl_PointToPrt( aNew, pTmpPage );
     }
 
-    //RelPos einstellen, nur auf Wunsch invalidieren.
-    //rNew ist eine Absolute Position. Um die RelPos korrekt einzustellen
-    //muessen wir uns die Entfernung von rNew zum Anker im Textfluss besorgen.
-//!!!!!Hier kann Optimiert werden: FindAnchor koennte die RelPos mitliefern!
+    //Setup RelPos, only invalidate if requested.
+    //rNew is an absolute position. We need to calculate the distance from rNew
+    //to the anchor inside the text flow to correctly set RelPos.
+//!!!!!We can optimize here: FindAnchor could also return RelPos!
     const SwFrm *pFrm = 0;
     SwTwips nY;
     if ( pCnt->Frm().IsInside( aNew ) )
@@ -1307,8 +1296,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( pCnt->IsFollow() )
     {
-        //Flys haengen niemals an einem Follow sondern immer am
-        //Master, den suchen wir uns jetzt.
+        // Flys are never attached to the follow but always to the master,
+        // which we're going to search now.
         const SwCntntFrm *pOriginal = pCnt;
         const SwCntntFrm *pFollow = pCnt;
         while ( pCnt->IsFollow() )
@@ -1409,7 +1398,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
                                   GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
     {
-        //Das Ankerattribut auf den neuen Cnt setzen.
+        //Set the anchor attribute according to the new Cnt.
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
         SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
         if( IsAutoPos() && pCnt->IsTxtFrm() )

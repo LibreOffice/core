@@ -153,7 +153,7 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
 {
     Update();
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();

@@ -33,7 +33,9 @@
 
 #include <ide_pch.hxx>
 
-
+#include "basidesh.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
 #include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
@@ -877,6 +879,29 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     }
 
     SetCurEntry( pCurEntry );
+}
+
+void BasicTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    SvTreeListBox::MouseButtonDown( rMEvt );
+    if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
+    {
+        BasicEntryDescriptor aDesc( GetEntryDescriptor( GetCurEntry() ) );
+
+        if ( aDesc.GetType() == OBJ_TYPE_METHOD )
+        {
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+            if( pDispatcher )
+            {
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
+                aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
+                pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
+                SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

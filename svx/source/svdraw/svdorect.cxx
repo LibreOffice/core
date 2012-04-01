@@ -186,7 +186,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed  =bNoTextFrame;
     rInfo.bMirror90Allowed  =bNoTextFrame;
 
-    // allow transparence
+    // allow transparency
     rInfo.bTransparenceAllowed = sal_True;
 
     // gradient depends on fillstyle
@@ -448,14 +448,14 @@ String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             if(nRad < 0)
                 nRad = 0;
 
-            XubString aStr;
-
+            rtl::OUString aStr;
             ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
-            aStr.AppendAscii(" (");
-            aStr += GetMetrStr(nRad);
-            aStr += sal_Unicode(')');
+            rtl::OUStringBuffer aBuf(aStr);
+            aBuf.appendAscii(" (");
+            aBuf.append(GetMetrStr(nRad));
+            aBuf.append(sal_Unicode(')'));
 
-            return aStr;
+            return aBuf.makeStringAndClear();
         }
         else
         {
@@ -518,7 +518,7 @@ bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
     return SdrTextObj::DoMacro(rRec);
 }
 
-XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+rtl::OUString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     return SdrTextObj::GetMacroPopupComment(rRec);
 }

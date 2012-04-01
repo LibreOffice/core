@@ -225,7 +225,7 @@ void SwSpellPopup::fillLangPopupMenu(
     OUString    aKeyboardLang( aSeq[2] );
     OUString    aGuessedTextLang( aSeq[3] );
 
-    if (aCurLang != OUString() &&
+    if (!aCurLang.isEmpty() &&
         LANGUAGE_DONTKNOW != aLanguageTable.GetType( aCurLang ))
         aLangItems.insert( aCurLang );
 
@@ -586,7 +586,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
         sal_Int32 i = 0;
         while ( sExplanationLink.isEmpty() && i < aProperties.getLength() )
         {
-            if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+            if ( aProperties[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullCommentURL")) )
             {
                 uno::Any aValue = aProperties[i].Value;
                 aValue >>= sExplanationLink;
@@ -844,7 +844,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 ::comphelper::getProcessServiceFactory()->createInstance(
                     DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
-                    com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                    com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch (const uno::Exception&)
         {

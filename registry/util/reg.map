@@ -20,10 +20,7 @@ UDK_3_0_0 {
         reg_getStringListValue;
         reg_getUnicodeListValue;
         reg_freeValueList;
-        reg_createLink;
-        reg_deleteLink;
         reg_getKeyType;
-        reg_getLinkTarget;
         reg_getResolvedKeyName;
         reg_loadKey;
         reg_saveKey;

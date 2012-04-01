@@ -130,35 +130,6 @@ sub control_parameter
     pre2par::files::check_file($pre2par::globals::prefilename);
 }
 
-##########################################################
-# The path parameters can be relative or absolute.
-# This function creates absolute pathes.
-##########################################################
-
-sub make_path_absolute
-{
-    my ($pathref) = @_;
-
-    if ( $pre2par::globals::isunix )
-    {
-        if (!($$pathref =~ /^\s*\//))   # this is a relative unix path
-        {
-            $$pathref = cwd() . $pre2par::globals::separator . $$pathref;
-        }
-    }
-
-    if ( $pre2par::globals::iswin )
-    {
-        if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path
-        {
-            $$pathref = cwd() . $pre2par::globals::separator . $$pathref;
-            $$pathref =~ s/\//\\/g;
-        }
-    }
-
-    $$pathref =~ s/\Q$pre2par::globals::separator\E\s*$//;  # removing ending slashes
-}
-
 #####################################
 # Writing parameter to shell
 #####################################

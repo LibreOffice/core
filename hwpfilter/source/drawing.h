@@ -31,7 +31,10 @@
 
 #include "precompile.h"
 
+#include <list>
 #include <math.h>
+
+#include <osl/diagnose.h>
 
 #include "hwplib.h"
 #include "hwpfile.h"
@@ -600,12 +603,12 @@ static HWPPara *LoadParaList()
     HWPFile *hwpf = GetCurrentDoc();
     HIODev *hio = hwpf->SetIODevice(hmem);
 
-    LinkedList < HWPPara > plist;
+    std::list < HWPPara* > plist;
 
     hwpf->ReadParaList(plist);
     hwpf->SetIODevice(hio);
 
-    return plist.count()? plist.first() : 0;
+    return plist.size()? plist.front() : 0;
 }
 
 

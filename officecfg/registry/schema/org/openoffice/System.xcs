@@ -37,21 +37,21 @@
 				<author>OBR</author>
 				<desc>Contains localization settings</desc>
 			</info>
-			<prop oor:name="Locale" oor:type="xs:string">
+			<prop oor:name="Locale" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>OBR</author>
 					<desc>Contains the user's desktop locale setting if available.</desc>
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="UILocale" oor:type="xs:string">
+			<prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>OBR</author>
 					<desc>Contains the user's desktop UI language setting if available.</desc>
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="SystemLocale" oor:type="xs:string">
+			<prop oor:name="SystemLocale" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>OBR</author>
 					<desc>Contains the system's default locale setting if available.</desc>

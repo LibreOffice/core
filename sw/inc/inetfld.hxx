@@ -79,12 +79,12 @@ public:
     virtual String   GetFieldName() const;
 
     // URL
-    virtual const String& GetPar1() const;
-    virtual void    SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void    SetPar1(const rtl::OUString& rStr);
 
     // Information text.
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual rtl::OUString  GetPar2() const;
+    virtual void    SetPar2(const rtl::OUString& rStr);
 
     // Current character format.
           SwCharFmt* GetCharFmt();

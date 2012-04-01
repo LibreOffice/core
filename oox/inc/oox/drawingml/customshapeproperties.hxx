@@ -112,6 +112,24 @@ struct Path2D
     Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( sal_True ), extrusionOk( sal_True ) {};
 };
 
+
+class CustomShapeProvider {
+protected:
+    struct ParameterPairData {
+        sal_uInt16 nFirstType;
+        sal_uInt16 nSecondType;
+        sal_uInt32 nFirstValue;
+        sal_uInt32 nSecondValue;
+    };
+    static com::sun::star::uno::Any createStringSequence( size_t nStrings, const char **pStrings );
+    static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > createSegmentSequence( size_t nElems, const sal_uInt16 *pValues );
+    static com::sun::star::drawing::EnhancedCustomShapeParameterPair createParameterPair( const ParameterPairData *pData );
+    static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > createParameterPairSequence( size_t nElems, const ParameterPairData *pData );
+public:
+    virtual ~CustomShapeProvider() {}
+    virtual PropertyMap getProperties() = 0;
+};
+
 class CustomShapeProperties
 {
 public:
@@ -138,7 +156,6 @@ public:
     void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
 
-    double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
     static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName );
 
@@ -160,7 +177,7 @@ private:
     sal_Bool                        mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
 
-    typedef boost::unordered_map< sal_Int32, PropertyMap > PresetsMap;
+    typedef boost::unordered_map< sal_Int32, CustomShapeProvider * > PresetsMap;
 
     static PresetsMap maPresetsMap;
     static void initializePresetsMap();

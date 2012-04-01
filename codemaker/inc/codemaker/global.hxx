@@ -87,7 +87,6 @@ class FileStream
 {
 public:
     FileStream();
-    FileStream(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     virtual ~FileStream();
 
     sal_Bool isValid();

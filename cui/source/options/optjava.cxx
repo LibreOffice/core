@@ -196,7 +196,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, EnableHdl_Impl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 {
     sal_Bool bEnable = m_aJavaEnableCB.IsChecked();
     m_aJavaFoundLabel.Enable( bEnable );
@@ -223,7 +223,7 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
 {
     // set installation directory info
     SvLBoxEntry* pEntry = m_aJavaList.FirstSelected();
@@ -239,7 +239,7 @@ IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 {
     try
     {
@@ -267,7 +267,7 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, ParameterHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 {
     Sequence< ::rtl::OUString > aParameterList;
     if ( !m_pParamDlg )
@@ -315,7 +315,7 @@ IMPL_LINK( SvxJavaOptionsPage, ParameterHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 {
     String sClassPath;
 
@@ -359,7 +359,7 @@ IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, ResetHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ResetHdl_Impl)
 {
     LoadJREs();
     return 0;
@@ -367,7 +367,7 @@ IMPL_LINK( SvxJavaOptionsPage, ResetHdl_Impl, Timer *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, StartFolderPickerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
 {
     try
     {
@@ -745,7 +745,7 @@ SvxJavaParameterDlg::~SvxJavaParameterDlg()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaParameterDlg, ModifyHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
     String sParam = STRIM( m_aParameterEdit.GetText() );
     m_aAssignBtn.Enable( sParam.Len() > 0 );
@@ -755,7 +755,7 @@ IMPL_LINK( SvxJavaParameterDlg, ModifyHdl_Impl, Edit *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaParameterDlg, AssignHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
 {
     String sParam = STRIM( m_aParameterEdit.GetText() );
     if ( sParam.Len() > 0 )
@@ -774,7 +774,7 @@ IMPL_LINK( SvxJavaParameterDlg, AssignHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaParameterDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
 {
     EnableRemoveButton();
     return 0;
@@ -782,7 +782,7 @@ IMPL_LINK( SvxJavaParameterDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaParameterDlg, DblClickHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 {
     sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -792,7 +792,7 @@ IMPL_LINK( SvxJavaParameterDlg, DblClickHdl_Impl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaParameterDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
 {
     sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -909,7 +909,7 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
@@ -946,7 +946,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 {
     rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) );
     Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -984,7 +984,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaClassPathDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
 {
     sal_uInt16 nPos = m_aPathList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1005,7 +1005,7 @@ IMPL_LINK( SvxJavaClassPathDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaClassPathDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl)
 {
     EnableRemoveButton();
     return 0;

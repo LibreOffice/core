@@ -176,9 +176,9 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
     for(sal_uInt32 a(0); a < mrView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = mrView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if(xTargetOverlay.is())
         {
             // buld transfoprmation: translate and rotate so that given edge is
             // on x axis, them mirror in y and translate back
@@ -210,7 +210,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 
-                    pTargetOverlay->add(*pNew);
+                    xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
             }
@@ -223,7 +223,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     aPolyPolygon.transform(aMatrixTransform);
 
                     ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
-                    pTargetOverlay->add(*pNew);
+                    xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
             }

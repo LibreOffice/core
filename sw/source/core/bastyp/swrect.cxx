@@ -292,8 +292,11 @@ void SwRect::SetLowerLeftCorner(  const Point& rNew )
  *************************************************************************/
 SvStream &operator<<( SvStream &rStream, const SwRect &rRect )
 {
-    rStream << '[' << rRect.Top()   << '/' << rRect.Left()
-            << ',' << rRect.Width() << 'x' << rRect.Height() << "] ";
+    rStream << '[' << static_cast<sal_Int32>(rRect.Top())
+            << '/' << static_cast<sal_Int32>(rRect.Left())
+            << ',' << static_cast<sal_Int32>(rRect.Width())
+            << 'x' << static_cast<sal_Int32>(rRect.Height())
+            << "] ";
     return rStream;
 }
 #endif

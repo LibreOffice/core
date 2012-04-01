@@ -277,7 +277,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                 try
 
                 {
-                    xSystemShellExecute->execute( sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    xSystemShellExecute->execute( sURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
                 }
                 catch( Exception& rEx )
                 {

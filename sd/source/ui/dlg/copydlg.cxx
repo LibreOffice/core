@@ -95,7 +95,7 @@ CopyDlg::CopyDlg(
       maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
       mrOutAttrs           ( rInAttrs ),
       mpColorList          ( pColList ),
-      maUIScale(pInView->GetDoc()->GetUIScale()),
+      maUIScale(pInView->GetDoc().GetUIScale()),
       mpView               ( pInView )
 {
     FreeResource();
@@ -120,7 +120,7 @@ CopyDlg::CopyDlg(
     SetFieldUnit( maMtrFldWidth, eFUnit, sal_True );
     SetFieldUnit( maMtrFldHeight, eFUnit, sal_True );
 
-    Reset(0L);
+    Reset();
 }
 
 /*************************************************************************
@@ -133,22 +133,22 @@ CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
-    rStr = UniString::CreateFromInt64( maNumFldCopies.GetValue() );
+    rStr = rtl::OUString::valueOf(static_cast<sal_Int64>(maNumFldCopies.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt64( maMtrFldMoveX.GetValue() );
+    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveX.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt64( maMtrFldMoveY.GetValue() );
+    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveY.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt64( maMtrFldAngle.GetValue() );
+    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldAngle.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt64( maMtrFldWidth.GetValue() );
+    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldWidth.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt64( maMtrFldHeight.GetValue() );
+    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldHeight.GetValue()));
     rStr.Append( TOKEN );
 
     rStr += UniString::CreateFromInt32( (long)maLbStartColor.GetSelectEntryColor().GetColor() );
@@ -163,7 +163,7 @@ CopyDlg::~CopyDlg()
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
+void CopyDlg::Reset()
 {
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
@@ -242,7 +242,6 @@ IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
         maLbEndColor.SelectEntry( Color( nTmp ) );
     }
 
-    return 0;
 }
 
 /*************************************************************************
@@ -285,7 +284,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
 {
     sal_uInt16 nPos = maLbStartColor.GetSelectEntryPos();
 
@@ -303,7 +302,7 @@ IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
 |* Setzt Werte der Selektion
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SetViewData)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
 
@@ -327,7 +326,7 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 |* Setzt Werte auf Standard
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SetDefault)
 {
     maNumFldCopies.SetValue( 1L );
 

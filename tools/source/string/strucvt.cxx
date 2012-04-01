@@ -26,58 +26,15 @@
  *
  ************************************************************************/
 
-
 // =======================================================================
 
-void UniString::InitStringRes( const char* pUTF8Str, sal_Int32 nLen )
+UniString::UniString( const rtl::OString& rByteStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
     DBG_CTOR( UniString, DbgCheckUniString );
-    OSL_ENSURE(nLen <= STRING_MAXLEN, "Overflowing UniString");
 
     mpData = NULL;
     rtl_string2UString( (rtl_uString **)(&mpData),
-                        pUTF8Str, nLen,
-                        RTL_TEXTENCODING_UTF8,
-                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
-                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
-}
-
-// =======================================================================
-
-UniString::UniString( const ByteString& rByteStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_CHKOBJ( &rByteStr, ByteString, DbgCheckByteString );
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        rByteStr.mpData->maStr, rByteStr.mpData->mnLen,
-                        eTextEncoding, nCvtFlags );
-}
-
-// -----------------------------------------------------------------------
-
-UniString::UniString( const ByteString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
-                      rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_CHKOBJ( &rByteStr, ByteString, DbgCheckByteString );
-
-    // Stringlaenge ermitteln
-    if ( nPos > rByteStr.mpData->mnLen )
-        nLen = 0;
-    else
-    {
-        // Laenge korrigieren, wenn noetig
-        sal_Int32 nMaxLen = rByteStr.mpData->mnLen-nPos;
-        if ( nLen > nMaxLen )
-            nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        rByteStr.mpData->maStr+nPos, nLen,
+                        rByteStr.getStr(), rByteStr.getLength(),
                         eTextEncoding, nCvtFlags );
 }
 
@@ -158,63 +115,73 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
     return *this;
 }
 
-UniString UniString::intern() const
-{
-    UniString aStr;
-
-    rtl_uString_intern( reinterpret_cast<rtl_uString **>(&aStr.mpData),
-                        (rtl_uString *)(mpData) );
-
-    return aStr;
-}
-
 // =======================================================================
 
+#include <rtl/ustrbuf.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
 UniString::UniString( const ResId& rResId )
+    : mpData(NULL)
 {
-    rResId.SetRT( RSC_STRING );
-    ResMgr* pResMgr = rResId.GetResMgr();
-    mpData = NULL;
-    if ( pResMgr && pResMgr->GetResource( rResId ) )
+    rtl::OUString sStr(ResId::toString(rResId));
+
+    DBG_CTOR( UniString, DbgCheckUniString );
+
+    OSL_ENSURE(sStr.pData->length < STRING_MAXLEN,
+               "Overflowing rtl::OUString -> UniString cut to zero length");
+
+    if (sStr.pData->length < STRING_MAXLEN)
     {
-        // String laden
-        RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
-        //sal_uInt32 nLen = pResHdr->GetLocalOff() - sizeof( RSHEADER_TYPE );
-
-        sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
-        InitStringRes( (const char*)(pResHdr+1), nStringLen );
-
-        sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
-            + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;
-        nSize += nSize % 2;
-        pResMgr->Increment( nSize );
+        mpData = reinterpret_cast< UniStringData * >(sStr.pData);
+        STRING_ACQUIRE((STRING_TYPE *)mpData);
     }
     else
     {
         STRING_NEW((STRING_TYPE **)&mpData);
-
-#if OSL_DEBUG_LEVEL > 0
-        *this = UniString::CreateFromAscii( "<resource id " );
-        Append( UniString::CreateFromInt32( rResId.GetId() ) );
-        AppendAscii( " not found>" );
-#endif
-        if( pResMgr )
-            pResMgr->PopContext();
     }
 
 
-    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
-    if ( pImplResHookProc )
-        pImplResHookProc( *this );
 }
 
-rtl::OUString ResId::toString(const ResId& aId)
+rtl::OUString ResId::toString(const ResId& rResId)
 {
-    // TODO: Optimize this.
-    return rtl::OUString(UniString(aId));
+    rResId.SetRT( RSC_STRING );
+    ResMgr* pResMgr = rResId.GetResMgr();
+
+    if ( !pResMgr || !pResMgr->GetResource( rResId ) )
+    {
+        rtl::OUString sRet;
+
+#if OSL_DEBUG_LEVEL > 0
+        sRet = rtl::OUStringBuffer().
+            appendAscii(RTL_CONSTASCII_STRINGPARAM("<resource id ")).
+            append(static_cast<sal_Int32>(rResId.GetId())).
+            appendAscii(RTL_CONSTASCII_STRINGPARAM(" not found>")).
+            makeStringAndClear();
+#endif
+
+        if( pResMgr )
+            pResMgr->PopContext();
+
+        return sRet;
+    }
+
+    // String loading
+    RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
+
+    sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
+    rtl::OUString sRet((const char*)(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
+
+    sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
+        + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;
+    nSize += nSize % 2;
+    pResMgr->Increment( nSize );
+
+    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
+    if ( pImplResHookProc )
+        sRet = pImplResHookProc(sRet);
+    return sRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

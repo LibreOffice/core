@@ -31,6 +31,7 @@
 #if !defined INCLUDED_JVMFWK_FRAMEWORK_H
 #define INCLUDED_JVMFWK_FRAMEWORK_H
 
+#include "jvmfwkdllapi.h"
 #include "rtl/ustring.h"
 #include "osl/mutex.h"
 #ifdef SOLAR_JAVA
@@ -142,7 +143,7 @@ extern "C" {
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\sunjavaplugin.dll -register ....
+    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\libsunjavaplugin.dll -register ....
     </p>
     <p>Additionall parameters for the Java VM can be provided. For every parameter
     a seperate bootstrap parameter must be specified. The names are
@@ -305,7 +306,7 @@ typedef struct _JavaInfo JavaInfo;
     @param pInfo
     The object which is to be freed. It can be NULL;
  */
-void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
+JVMFWK_DLLPUBLIC void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
 
 
 /** compares two <code>JavaInfo</code> objects for equality.
@@ -329,7 +330,7 @@ void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
    sal_True - both object represent the same JRE.</br>
    sal_False - the objects represend different JREs
  */
-sal_Bool SAL_CALL jfw_areEqualJavaInfo(
+JVMFWK_DLLPUBLIC sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB);
 
 /** determines if a Java Virtual Machine is already running.
@@ -352,7 +353,7 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALID_ARG the parameter <code>bRunning</code> was NULL.
 */
-javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
 
 /** detects a suitable JRE and configures the framework to use it.
 
@@ -418,7 +419,7 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
  */
-javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
 
 /** provides information about all availabe JRE installations.
 
@@ -447,7 +448,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
 */
-javaFrameworkError SAL_CALL jfw_findAllJREs(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAllJREs(
     JavaInfo ***parInfo, sal_Int32 *pSize);
 
 /** determines if a path points to a Java installation.
@@ -480,7 +481,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(
    JFW_E_FAILED_VERSION a JRE was detected but if failed the version
    requirements as determined by the javavendors.xml
  */
-javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     rtl_uString *pPath, JavaInfo **ppInfo);
 
 
@@ -548,7 +549,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_E_FAILED_VERSION the &quot;Default Mode&quot; is active. The JRE determined by
     <code>JAVA_HOME</code>does not meet the version requirements.
  */
-javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
                                  sal_Int32 nSize, JavaVM **ppVM,
                                  JNIEnv **ppEnv);
 
@@ -578,7 +579,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
 
 
 /** provides information about the JRE that is to be used.
@@ -608,7 +609,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
  */
-javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
 
 
 /** determines if Java can be used.
@@ -627,7 +628,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
 
 /** provides the information if Java can be used.
 
@@ -642,7 +643,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
 /** determines parameters which are passed to VM during its creation.
 
@@ -666,7 +667,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_setVMParameters(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setVMParameters(
     rtl_uString **  arArgs, sal_Int32 nSize);
 
 /** obtains the currently used start parameters.
@@ -691,7 +692,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_getVMParameters(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getVMParameters(
     rtl_uString *** parParameters,
     sal_Int32 * pSize);
 
@@ -713,7 +714,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
 /** provides the value of the current user class path.
 
    <p>The function returns an empty string if no user class path is set.
@@ -732,7 +733,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
 
 /** saves the location of a JRE.
 
@@ -761,7 +762,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
     @see jfw_setJRELocations
  */
-javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
 
 /** saves the locations of a number of JREs.
 
@@ -789,7 +790,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
     @see jfw_addJRELocations
  */
-javaFrameworkError SAL_CALL jfw_setJRELocations(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setJRELocations(
     rtl_uString ** arLocations, sal_Int32 nSize);
 /** obtains an array containing paths to JRE installations.
 
@@ -811,7 +812,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-javaFrameworkError SAL_CALL jfw_getJRELocations(
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJRELocations(
     rtl_uString *** parLocations, sal_Int32 * pSize);
 
 
@@ -833,7 +834,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     JFW_E_INVALID_ARG pInfo contains invalid data</br>
     JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
  */
-javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
 
 /** locks this API so that it cannot be used by other threads.
@@ -851,14 +852,14 @@ javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     The only functions which are not effected by <code>jfw_lock</code> are
     <code>jfw_freeJavaInfo</code> and <code>jfw_areEqualJavaInfo</code>.
  */
-void SAL_CALL jfw_lock();
+JVMFWK_DLLPUBLIC void SAL_CALL jfw_lock();
 
 /** unlocks this API.
 
     <p>This function is called after <code>jfw_lock</code>. It allows other
     threads to use this API concurrently.</p>
 */
-void SAL_CALL jfw_unlock();
+JVMFWK_DLLPUBLIC void SAL_CALL jfw_unlock();
 
 
 #ifdef __cplusplus

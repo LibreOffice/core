@@ -85,10 +85,6 @@
 
 namespace unocontrols{
 
-#define CSS_UNO     ::com::sun::star::uno
-#define CSS_AWT     ::com::sun::star::awt
-#define CSS_LANG    ::com::sun::star::lang
-
 //____________________________________________________________________________________________________________
 //  defines
 //____________________________________________________________________________________________________________
@@ -127,9 +123,9 @@ struct IMPL_TextlistItem
 //  class declaration
 //____________________________________________________________________________________________________________
 
-class ProgressMonitor   : public CSS_AWT::XLayoutConstrains
-                        , public CSS_AWT::XButton
-                        , public CSS_AWT::XProgressMonitor
+class ProgressMonitor   : public ::com::sun::star::awt::XLayoutConstrains
+                        , public ::com::sun::star::awt::XButton
+                        , public ::com::sun::star::awt::XProgressMonitor
                         , public BaseContainerControl
 {
 
@@ -156,7 +152,7 @@ public:
         @onerror
     */
 
-    ProgressMonitor( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
+    ProgressMonitor( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     /**_______________________________________________________________________________________________________
         @short
@@ -190,8 +186,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -242,7 +238,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes() throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XAggregation
@@ -261,8 +257,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Any SAL_CALL queryAggregation( const CSS_UNO::Type& aType )
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XProgressMonitor
@@ -292,7 +288,7 @@ public:
         const ::rtl::OUString& sTopic ,
         const ::rtl::OUString& sText ,
         sal_Bool bbeforeProgress
-    ) throw( CSS_UNO::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -310,7 +306,7 @@ public:
     virtual void SAL_CALL removeText(
         const ::rtl::OUString& sTopic ,
         sal_Bool bbeforeProgress
-    ) throw( CSS_UNO::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -329,7 +325,7 @@ public:
         const ::rtl::OUString&  sTopic ,
         const ::rtl::OUString&  sText ,
         sal_Bool bbeforeProgress
-    ) throw( CSS_UNO::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XProgressBar
@@ -348,7 +344,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -363,7 +359,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -378,7 +374,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -394,7 +390,7 @@ public:
     */
 
     virtual void SAL_CALL setRange( sal_Int32   nMin    ,
-                                    sal_Int32   nMax    ) throw( CSS_UNO::RuntimeException );
+                                    sal_Int32   nMax    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -409,7 +405,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Int32 SAL_CALL getValue() throw( CSS_UNO::RuntimeException );
+    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XButton
@@ -429,8 +425,8 @@ public:
     */
 
     virtual void SAL_CALL addActionListener(
-        const CSS_UNO::Reference< CSS_AWT::XActionListener >& xListener
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& xListener
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -446,8 +442,8 @@ public:
     */
 
     virtual void SAL_CALL removeActionListener(
-        const CSS_UNO::Reference< CSS_AWT::XActionListener >& xListener
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& xListener
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -462,7 +458,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setLabel( const ::rtl::OUString& sLabel ) throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL setLabel( const ::rtl::OUString& sLabel ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -478,7 +474,7 @@ public:
     */
 
     virtual void SAL_CALL setActionCommand( const ::rtl::OUString& sCommand )
-        throw( CSS_UNO::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XLayoutConstrains
@@ -497,7 +493,7 @@ public:
         @onerror    -
     */
 
-    virtual CSS_AWT::Size SAL_CALL getMinimumSize() throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -512,7 +508,7 @@ public:
         @onerror    -
     */
 
-    virtual CSS_AWT::Size SAL_CALL getPreferredSize() throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -527,8 +523,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_AWT::Size SAL_CALL calcAdjustedSize( const CSS_AWT::Size& aNewSize )
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XControl
@@ -548,9 +544,9 @@ public:
     */
 
     virtual void SAL_CALL createPeer(
-        const CSS_UNO::Reference< CSS_AWT::XToolkit     >& xToolkit ,
-        const CSS_UNO::Reference< CSS_AWT::XWindowPeer  >& xParent
-    ) throw( CSS_UNO::RuntimeException );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit     >& xToolkit ,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer  >& xParent
+    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -565,8 +561,8 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL setModel( const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel )
-        throw( CSS_UNO::RuntimeException );
+    virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -581,8 +577,8 @@ public:
         @onerror    -
     */
 
-    virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
-        throw( CSS_UNO::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XComponent
@@ -601,7 +597,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XWindow
@@ -624,7 +620,7 @@ public:
                                         sal_Int32   nY      ,
                                         sal_Int32   nWidth  ,
                                         sal_Int32   nHeight ,
-                                        sal_Int16   nFlags  ) throw( CSS_UNO::RuntimeException );
+                                        sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  BaseControl
@@ -643,7 +639,7 @@ public:
         @onerror    -
     */
 
-    static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+    static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -681,7 +677,7 @@ protected:
 
     virtual void impl_paint( sal_Int32 nX ,
                              sal_Int32 nY ,
-                             const CSS_UNO::Reference< CSS_AWT::XGraphics >& xGraphics );
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics );
 
 //____________________________________________________________________________________________________________
 // private methods
@@ -780,23 +776,18 @@ private:
 
 private:
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Top;         // Elements before progress
-    CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xTopic_Top        ;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
-    CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xText_Top         ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Top        ;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Top         ;
 
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Bottom;      // Elements below of progress
-    CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xTopic_Bottom     ;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
-    CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xText_Bottom      ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom     ;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Bottom      ;
 
-    CSS_UNO::Reference< CSS_AWT::XProgressBar > m_xProgressBar      ;
-    CSS_UNO::Reference< CSS_AWT::XButton >      m_xButton           ;
-    CSS_AWT::Rectangle                          m_a3DLine           ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > m_xProgressBar      ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton >      m_xButton           ;
+    ::com::sun::star::awt::Rectangle                          m_a3DLine           ;
 
 };  // class ProgressMonitor
-
-// The namespaces aliases are only used the this header
-#undef CSS_UNO
-#undef CSS_AWT
-#undef CSS_LANG
 
 }   // namespace unocontrols
 

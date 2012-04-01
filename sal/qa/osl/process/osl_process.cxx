@@ -159,10 +159,10 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         TimeValue timeout;
@@ -171,18 +171,18 @@ public:
 
         osl_error = osl_joinProcessWithTimeout(process, &timeout);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcessWithTimeout returned without timeout failure",
-            osl_Process_E_TimedOut == osl_error
+            osl_Process_E_TimedOut, osl_error
         );
 
         osl_error = osl_terminateProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_terminateProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -209,10 +209,10 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         TimeValue timeout;
@@ -221,10 +221,10 @@ public:
 
         osl_error = osl_joinProcessWithTimeout(process, &timeout);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -249,18 +249,18 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = osl_joinProcessWithTimeout(process, NULL);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -285,18 +285,18 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = ::osl_joinProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -450,11 +450,11 @@ public:
     OUString create_temp_file(OUString &temp_file_url)
     {
         FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
-        CPPUNIT_ASSERT_MESSAGE("createTempFile failed", FileBase::E_None == rc);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("createTempFile failed", FileBase::E_None, rc);
 
         OUString temp_file_path;
         rc = FileBase::getSystemPathFromFileURL(temp_file_url, temp_file_path);
-        CPPUNIT_ASSERT_MESSAGE("getSystemPathFromFileURL failed", FileBase::E_None == rc);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("getSystemPathFromFileURL failed", FileBase::E_None, rc);
 
         return temp_file_path;
     }
@@ -584,18 +584,18 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = ::osl_joinProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -638,18 +638,18 @@ public:
             SAL_N_ELEMENTS(child_env),
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = ::osl_joinProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -685,18 +685,18 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = ::osl_joinProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);
@@ -721,18 +721,18 @@ public:
             0,
             &process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
 
         osl_error = ::osl_joinProcess(process);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
+            osl_Process_E_None, osl_error
         );
 
         osl_freeProcessHandle(process);

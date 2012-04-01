@@ -29,11 +29,23 @@
 
 # PackagePart class
 
-$(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-	$(call gb_Deliver_deliver,$<,$@)
+# a pattern rule with multiple targets is actually executed only once for each
+# match, so define only pattern rules with one target here
+# the .dir is for make 3.81, which ignores trailing /
+define gb_PackagePart__rule
+$(1)/.dir :
+	$$(if $$(wildcard $$(dir $$@)),,mkdir -p $$(dir $$@))
+$(1)/%/.dir :
+	$$(if $$(wildcard $$(dir $$@)),,mkdir -p $$(dir $$@))
+$(1)/% :
+	$$(call gb_Deliver_deliver,$$<,$$@)
+endef
+
+$(foreach destination,$(call gb_PackagePart_get_destinations),$(eval \
+  $(call gb_PackagePart__rule,$(destination))))
 
 define gb_PackagePart_PackagePart
-$(OUTDIR)/$(1) : $(2)
+$(OUTDIR)/$(1) : $(2) | $(dir $(OUTDIR)/$(1)).dir
 $(2) :| $(3)
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2),$(3))
 endef

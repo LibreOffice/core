@@ -39,7 +39,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svl/style.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
@@ -204,7 +203,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( TableDesignPane, implValueSetHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(TableDesignPane, implValueSetHdl)
 {
     mbStyleSelected = true;
     if( !mbModal )
@@ -266,7 +265,7 @@ void TableDesignPane::ApplyStyle()
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( TableDesignPane, implCheckBoxHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(TableDesignPane, implCheckBoxHdl)
 {
     mbOptionsChanged = true;
 

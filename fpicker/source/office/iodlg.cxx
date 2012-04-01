@@ -428,7 +428,7 @@ namespace
     {
         ResMgr * operator ()()
         {
-            return ResMgr::CreateResMgr (CREATEVERSIONRESMGR_NAME(fps_office));
+            return ResMgr::CreateResMgr ("fps_office");
         }
 
         static ResMgr * getOrCreate()
@@ -968,7 +968,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const String& _rFilter )
 }
 
 //-----------------------------------------------------------------------------
-IMPL_LINK( SvtFileDialog, CancelHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
 {
     if ( m_pCurrentAsyncAction.is() )
     {
@@ -1592,11 +1592,11 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
             else if ( !pUserData->mbIsFolder )
             {
                 _pImp->_pEdFileName->SetText( pUserData->maURL );
-                _pImp->_pEdFileName->SetSelection( Selection( 0, pUserData->maURL.Len() ) );
+                _pImp->_pEdFileName->SetSelection( Selection( 0, pUserData->maURL.getLength() ) );
                 _aPath = pUserData->maURL;
             }
             else
-                _pImp->_pEdFileName->SetText( UniString() );
+                _pImp->_pEdFileName->SetText( rtl::OUString() );
         }
         else
         {
@@ -1623,7 +1623,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 
 //*****************************************************************************
 
-IMPL_LINK( SvtFileDialog, DblClickHdl_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
 {
     _pImp->_bDoubleClick = sal_True;
     OpenHdl_Impl( this, NULL );
@@ -1634,7 +1634,7 @@ IMPL_LINK( SvtFileDialog, DblClickHdl_Impl, SvTabListBox*, EMPTYARG )
 
 //*****************************************************************************
 
-IMPL_LINK( SvtFileDialog, EntrySelectHdl_Impl, ComboBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl)
 {
     FileSelect();
 
@@ -1668,7 +1668,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 
 //*****************************************************************************
 
-IMPL_LINK( SvtFileDialog, AutoExtensionHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
@@ -1710,7 +1710,7 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, CheckBox*, pCheckBox )
 
 //*****************************************************************************
 
-IMPL_LINK( SvtFileDialog, PlayButtonHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
@@ -2153,7 +2153,7 @@ short SvtFileDialog::PrepareExecute()
         // if applicable set respectively create filter for all files
         if ( !bHasAll )
         {
-            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, UniString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
+            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
             _pImp->InsertFilterListEntry( pAllFilter );
             _pImp->SetCurFilter( pAllFilter, aAll );
         }
@@ -3348,7 +3348,7 @@ QueryFolderNameDialog::QueryFolderNameDialog
 };
 
 // -----------------------------------------------------------------------
-IMPL_LINK( QueryFolderNameDialog, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 {
     // trim the strings
     aNameEdit.SetText( aNameEdit.GetText().EraseLeadingChars().EraseTrailingChars() );
@@ -3357,7 +3357,7 @@ IMPL_LINK( QueryFolderNameDialog, OKHdl, Button *, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( QueryFolderNameDialog, NameHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
 {
     // trim the strings
     String aName = aNameEdit.GetText();

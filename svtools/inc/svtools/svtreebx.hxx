@@ -36,7 +36,6 @@
 // forward and defines ---------------------------------------------------
 
 class SvImpLBox;
-class SvInplaceEdit;
 class TabBar;
 
 #define SV_TAB_BORDER 8
@@ -251,7 +250,7 @@ public:
     // Editiert das erste StringItem des Entries, 0==Cursor
     void            EditEntry( SvLBoxEntry* pEntry = NULL );
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
     sal_Bool            IsEditingActive() const { return SvLBox::IsEditingActive(); }
     void            EndEditing( sal_Bool bCancel = sal_False ) { SvLBox::EndEditing( bCancel ); }
     sal_Bool            EditingCanceled() const { return SvLBox::EditingCanceled(); }

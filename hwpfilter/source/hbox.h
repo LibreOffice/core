@@ -29,7 +29,7 @@
 #ifndef _HBOX_H_
 #define _HBOX_H_
 
-#include "list.hxx"
+#include <list>
 
 #include "hwplib.h"
 #include "hwpfile.h"
@@ -381,11 +381,11 @@ struct TxtBox: public FBox
 /**
  * Paragraph list
  */
-    LinkedList<HWPPara> *plists;
+    std::list<HWPPara*> *plists;
 /**
  * Caption
  */
-    LinkedList<HWPPara> caption;
+    std::list<HWPPara*> caption;
 
     TxtBox();
     virtual ~TxtBox();
@@ -536,13 +536,13 @@ struct Table
 {
      Table(){};
      ~Table(){
-          LinkedListIterator<TCell> it(&cells);
-          for( ; it.current(); it++)
-                delete it.current();
+          std::list<TCell*>::iterator it = cells.begin();
+          for( ; it != cells.end(); ++it)
+                delete *it;
      };
      Columns columns;
      Rows rows;
-    LinkedList<TCell> cells;
+    std::list<TCell*> cells;
      TxtBox *box;
 };
 
@@ -651,7 +651,7 @@ struct Picture: public FBox
     PicDef    picinfo;
     char      reserved3[9];
 
-    LinkedList<HWPPara> caption;
+    std::list<HWPPara*> caption;
 /**
  * It's for the Drawing object
  */
@@ -697,7 +697,7 @@ struct Hidden: public HBox
     hchar     dummy;
 
     unsigned char info[8];                        // h, next, dummy
-    LinkedList<HWPPara> plist;
+    std::list<HWPPara*> plist;
 
     Hidden();
     virtual ~Hidden();
@@ -726,7 +726,7 @@ struct HeaderFooter: public HBox
 /**
  * Paragraph list of header or footer
  */
-    LinkedList<HWPPara> plist;
+    std::list<HWPPara*> plist;
 
     HeaderFooter();
     virtual ~HeaderFooter();
@@ -759,7 +759,7 @@ struct Footnote: public HBox
 /**
  * Paragraph list of Footnote objects
  */
-    LinkedList<HWPPara> plist;
+    std::list<HWPPara*> plist;
 
     Footnote();
     virtual ~Footnote();

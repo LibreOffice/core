@@ -34,7 +34,6 @@
 
 #include <sal/alloca.h>
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
 
 using namespace psp;
 
@@ -54,7 +53,7 @@ JobData& JobData::operator=(const JobData& rRight)
     m_nPDFDevice            = rRight.m_nPDFDevice;
     m_nColorDevice          = rRight.m_nColorDevice;
 
-    if( ! m_pParser && m_aPrinterName.getLength() )
+    if( !m_pParser && !m_aPrinterName.isEmpty() )
     {
         PrinterInfoManager& rMgr = PrinterInfoManager::get();
         rMgr.setupJobContextData( *this );
@@ -207,54 +206,51 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     const char pslevelEquals[] = "pslevel=";
     const char pdfdeviceEquals[] = "pdfdevice=";
 
-    using comphelper::string::matchL;
-
     while( ! aStream.IsEof() )
     {
         aStream.ReadLine( aLine );
-        if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM("JobData")))
+        if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("JobData")))
             bVersion = true;
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(printerEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(printerEquals)))
         {
             bPrinter = true;
             rJobData.m_aPrinterName = rtl::OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(orientatationEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(orientatationEquals)))
         {
             bOrientation = true;
             rJobData.m_eOrientation = aLine.copy(RTL_CONSTASCII_LENGTH(orientatationEquals)).equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(copiesEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(copiesEquals)))
         {
             bCopies = true;
             rJobData.m_nCopies = aLine.copy(RTL_CONSTASCII_LENGTH(copiesEquals)).toInt32();
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(margindajustmentEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(margindajustmentEquals)))
         {
             bMargin = true;
             rtl::OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
-            using comphelper::string::getToken;
-            rJobData.m_nLeftMarginAdjust = getToken(aValues, 0, ',').toInt32();
-            rJobData.m_nRightMarginAdjust = getToken(aValues, 1, ',').toInt32();
-            rJobData.m_nTopMarginAdjust = getToken(aValues, 2, ',').toInt32();
-            rJobData.m_nBottomMarginAdjust = getToken(aValues, 3, ',').toInt32();
+            rJobData.m_nLeftMarginAdjust = aValues.getToken(0, ',').toInt32();
+            rJobData.m_nRightMarginAdjust = aValues.getToken(1, ',').toInt32();
+            rJobData.m_nTopMarginAdjust = aValues.getToken(2, ',').toInt32();
+            rJobData.m_nBottomMarginAdjust = aValues.getToken(3, ',').toInt32();
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(colordepthEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(colordepthEquals)))
         {
             bColorDepth = true;
             rJobData.m_nColorDepth = aLine.copy(RTL_CONSTASCII_LENGTH(colordepthEquals)).toInt32();
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(colordeviceEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(colordeviceEquals)))
         {
             bColorDevice = true;
             rJobData.m_nColorDevice = aLine.copy(RTL_CONSTASCII_LENGTH(colordeviceEquals)).toInt32();
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(pslevelEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(pslevelEquals)))
         {
             bPSLevel = true;
             rJobData.m_nPSLevel = aLine.copy(RTL_CONSTASCII_LENGTH(pslevelEquals)).toInt32();
         }
-        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(pdfdeviceEquals)))
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(pdfdeviceEquals)))
         {
             bPDFDevice = true;
             rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();

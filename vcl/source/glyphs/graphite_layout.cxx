@@ -71,14 +71,18 @@
 //
 
 #ifdef GRLAYOUT_DEBUG
-static FILE * grLogFile = NULL;
 static FILE * grLog()
 {
 #ifdef WNT
-    std::string logFileName(getenv("TEMP"));
-    logFileName.append("/graphitelayout.log");
-    if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
-    else fflush(grLogFile);
+    static FILE * grLogFile = NULL;
+    if (grLogFile == NULL)
+    {
+        std::string logFileName(getenv("TEMP"));
+        logFileName.append("/graphitelayout.log");
+        grLogFile = fopen(logFileName.c_str(),"w");
+    }
+    else
+        fflush(grLogFile);
     return grLogFile;
 #else
     fflush(stdout);
@@ -399,7 +403,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             mvGlyphs[i].maLinearPos.X() -= nXOffset;
     }
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(), "fillFrom %d glyphs offset %ld width %d\n", mvGlyphs.size(), nXOffset, mnWidth);
+    fprintf(grLog(), "fillFrom %" SAL_PRI_SIZET "u glyphs offset %ld width %ld\n", mvGlyphs.size(), nXOffset, mnWidth);
 #endif
 }
 
@@ -608,7 +612,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         if (pSegment != NULL)
         {
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d,len%d,numchars%d, rtl%d scaling %f:", rArgs.mnMinCharPos,
+            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:", rArgs.mnMinCharPos,
                rArgs.mnEndCharPos, limit, rArgs.mnLength, numchars, bRtl, mfScaling);
             for (int i = mnSegCharOffset; i < limit; ++i)
                 fprintf(grLog(), " %04X", rArgs.mpStr[i]);
@@ -843,7 +847,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
                     assert(nCharIndex > -1);
                     mvCharDxs[nCharIndex-mnMinCharPos] += nOffset;
                     // adjust char dxs for rest of characters in cluster
-                    while (++nCharIndex < static_cast<int>(mvGlyph2Char.size()))
+                    while (++nCharIndex - mnMinCharPos < static_cast<int>(mvChar2BaseGlyph.size()))
                     {
                         int nChar2Base = mvChar2BaseGlyph[nCharIndex-mnMinCharPos];
                         if (nChar2Base == -1 || nChar2Base == static_cast<int>(i))
@@ -859,7 +863,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
     }
     else if (nDeltaWidth < 0)// condense - apply a factor to all glyph positions
     {
-        if (mvGlyphs.size() == 0) return;
+        if (mvGlyphs.empty()) return;
         Glyphs::iterator iLastGlyph = mvGlyphs.begin() + (mvGlyphs.size() - 1);
         // position last glyph using original width
         float fXFactor = static_cast<float>(rArgs.mnLayoutWidth - iLastGlyph->mnOrigWidth) / static_cast<float>(iLastGlyph->maLinearPos.X());

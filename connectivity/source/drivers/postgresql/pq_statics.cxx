@@ -655,9 +655,9 @@ Statics & getStatics()
                 { "numeric", com::sun::star::sdbc::DataType::NUMERIC },
                 { "decimal", com::sun::star::sdbc::DataType::DECIMAL },
 
-                { "date",  com::sun::star::sdbc::DataType::DATE }, // switch to date later
-                { "time",  com::sun::star::sdbc::DataType::TIME }, // switch to time later
-                { "timestamp",  com::sun::star::sdbc::DataType::TIMESTAMP }, // switch to time later
+                { "date",  com::sun::star::sdbc::DataType::DATE },
+                { "time",  com::sun::star::sdbc::DataType::TIME },
+                { "timestamp",  com::sun::star::sdbc::DataType::TIMESTAMP },
 
 //                 { "_bool" , com::sun::star::sdbc::DataType::ARRAY },
 //                 { "_bytea", com::sun::star::sdbc::DataType::ARRAY },

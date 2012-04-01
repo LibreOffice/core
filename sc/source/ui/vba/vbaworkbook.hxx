@@ -81,7 +81,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
     virtual css::uno::Reference< css::frame::XModel >  getDocModel() { return mxModel; }

@@ -28,7 +28,6 @@
 
 #include "JAccess.hxx"
 #include "JoinTableView.hxx"
-#include "JoinTableView.hxx"
 #include "TableWindow.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include "JoinDesignView.hxx"

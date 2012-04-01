@@ -546,6 +546,7 @@ struct SvxULSpace
 {
     INT32               TopMargin       MID_UP_MARGIN;  // % or direct
     INT32               BottomMargin    MID_LO_MARGIN;  // % or direct
+    BOOL                ContextMargin   MID_CTX_MARGIN;
     INT16               TopRelMargin    MID_UP_REL_MARGIN;
     INT16               BottomRelMargin MID_LO_REL_MARGIN;
 };

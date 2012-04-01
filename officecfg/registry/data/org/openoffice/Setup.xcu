@@ -58,12 +58,6 @@
         </prop>
     </node>
     <node oor:name="Office">
-        <prop oor:name="ooSetupInstCompleted">
-            <value>false</value>
-        </prop>
-        <prop oor:name="ooSetupShowIntro">
-            <value>true</value>
-        </prop>
         <node oor:name="Factories">
             <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
                 <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
@@ -773,16 +767,6 @@
                 </prop>
             </node>
         </node>
-    </node>
-    <node oor:name="L10N">
-        <prop oor:name="ooLocale" oor:type="xs:string">
-            <value/>
-        </prop>
-    </node>
-    <node oor:name="Configuration">
-        <prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean">
-            <value>true</value>
-        </prop>
     </node>
   <node oor:name="Migration">
     <node oor:name="SupportedVersions">

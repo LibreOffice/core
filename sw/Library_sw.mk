@@ -33,14 +33,12 @@ $(eval $(call gb_Library_add_sdi_headers,sw,sw/sdi/swslots))
 $(eval $(call gb_Library_set_componentfile,sw,sw/util/sw))
 
 $(eval $(call gb_Library_set_include,sw,\
-    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/inc \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
-    -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sw,\
@@ -63,7 +61,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     i18nisolang1 \
     i18nutil \
     lng \
-    oox \
     sal \
     salhelper \
 	sax \
@@ -565,14 +562,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/config/uinums \
     sw/source/ui/config/usrpref \
     sw/source/ui/config/viewopt \
-    sw/source/ui/dbui/dbmgr \
-    sw/source/ui/dbui/dbtree \
-    sw/source/ui/dbui/dbui \
-    sw/source/ui/dbui/maildispatcher \
-    sw/source/ui/dbui/mailmergechildwindow \
-    sw/source/ui/dbui/mailmergehelper \
-    sw/source/ui/dbui/mmconfigitem \
-    sw/source/ui/dbui/swdbtoolsclient \
     sw/source/ui/dialog/SwSpellDialogChildWindow \
     sw/source/ui/dialog/regionsw \
     sw/source/ui/dialog/swabstdlg \
@@ -740,11 +729,24 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/wrtsh/wrtundo \
 ))
 
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,sw,\
+    sw/source/ui/dbui/dbmgr \
+    sw/source/ui/dbui/dbtree \
+    sw/source/ui/dbui/dbui \
+    sw/source/ui/dbui/maildispatcher \
+    sw/source/ui/dbui/mailmergechildwindow \
+    sw/source/ui/dbui/mailmergehelper \
+    sw/source/ui/dbui/mmconfigitem \
+    sw/source/ui/dbui/swdbtoolsclient \
+))
+endif
+
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
 
 $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
-    -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(realpath $(SRCDIR)/sw/sdi) \
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/sdi \
     $$(INCLUDE) \
 ))
 

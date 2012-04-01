@@ -33,7 +33,7 @@
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
 #include <i18npool/mslangid.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
@@ -1812,8 +1812,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         break;  // sprmPOutLvl
     case NS_sprm::LN_PFBiDi:
-            rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( text::WritingMode2::RL_TB ));
-            rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+        {
+            if (nIntValue != 0)
+            {
+                rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( text::WritingMode2::RL_TB ));
+                rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+            }
+        }
 
         break;  // sprmPFBiDi
     case NS_ooxml::LN_EG_SectPrContents_bidi:
@@ -3141,7 +3146,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_EG_RPrBase_snapToGrid: // "Use document grid  settings for inter-paragraph spacing"
     break;
     case NS_sprm::LN_PContextualSpacing:
-        //TODO: determines whether top/bottom paragraph spacing is added if equal styles are following - unsupported
+        rContext->Insert(PROP_PARA_CONTEXT_MARGIN, true, uno::makeAny( sal_Bool( nIntValue ) ));
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:

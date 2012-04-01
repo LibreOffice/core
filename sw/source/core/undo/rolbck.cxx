@@ -829,7 +829,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     {
         const sal_uInt16 nWhich = aIter.GetCurItem()->Which();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         switch (nWhich)
         {
             case RES_TXTATR_REFMARK:
@@ -845,7 +845,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
                     "\nnot such a good idea");
                 break;
         }
-#endif
+#endif // DBG_UTIL
 
         // Character attribute cannot be inserted into the hints array
         // anymore. Therefore we have to treat them as one RES_TXTATR_AUTOFMT:

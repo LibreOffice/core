@@ -69,6 +69,11 @@ public:
         const Point aMouseModelLocation,
         const bool bIsMouseButtonDown);
 
+    /// Decide whether the button should be drawn at the top, or the bottom.
+    void UpdateButtonPosition(
+        const model::SharedPageDescriptor& rpDescriptor,
+        const Point& rMousePosition);
+
     void ResetPage (void);
 
     bool IsMouseOverBar (void) const;
@@ -143,7 +148,6 @@ private:
     ::std::vector<SharedButton> maRegularButtons;
     ::std::vector<SharedButton> maExcludedButtons;
     BitmapEx maNormalBackground;
-    BitmapEx maButtonDownBackground;
     bool mbIsMouseOverBar;
     ::boost::scoped_ptr<BackgroundTheme> mpBackgroundTheme;
     int mnLockCount;
@@ -151,7 +155,7 @@ private:
     /** Remember the specified page.  If it differs from mpDescriptor then
         the buttons are placed anew.
         @return
-            The returned flag indicates wether the mpDescriptor member
+            The returned flag indicates whether the mpDescriptor member
             is set to a new value.
     */
     bool SetPage (const model::SharedPageDescriptor& rpDescriptor);

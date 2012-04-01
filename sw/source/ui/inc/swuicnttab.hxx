@@ -227,7 +227,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     DECL_LINK(LanguageHdl, ListBox*);
 
     DECL_LINK(CheckBoxHdl,  CheckBox*   );
-    DECL_LINK(RadioButtonHdl, RadioButton* );
+    DECL_LINK(RadioButtonHdl, void *);
     DECL_LINK(ModifyHdl, void*);
 
       void  ApplyTOXDescription();
@@ -443,7 +443,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(ChapterInfoOutlineHdl, NumericField*);
     DECL_LINK(NumberFormatHdl, ListBox*);
 
-    DECL_LINK(AllLevelsHdl, PushButton*);
+    DECL_LINK(AllLevelsHdl, void *);
 
     void            EnableButtons();
     void            WriteBackLevel();
@@ -485,11 +485,11 @@ class SwTOXStylesTabPage : public SfxTabPage
     SwForm*         m_pCurrentForm;
 
     DECL_LINK( EditStyleHdl, Button *);
-    DECL_LINK( StdHdl, Button * );
-    DECL_LINK( EnableSelectHdl, ListBox * );
-    DECL_LINK( DoubleClickHdl, Button * );
-    DECL_LINK( AssignHdl, Button * );
-    DECL_LINK( ModifyHdl, void*);
+    DECL_LINK(StdHdl, void *);
+    DECL_LINK(EnableSelectHdl, void *);
+    DECL_LINK(DoubleClickHdl, void *);
+    DECL_LINK(AssignHdl, void *);
+    void Modify();
 
     SwForm&     GetForm()
         {

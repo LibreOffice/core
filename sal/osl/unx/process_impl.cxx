@@ -60,7 +60,7 @@
 #include "uunxapi.h"
 
 #ifdef ANDROID
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #endif
 
 /***************************************
@@ -77,7 +77,7 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 ) SAL_THROW_EXTERN_C();
 
 
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
 
 oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
@@ -89,11 +89,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     char   buffer[PATH_MAX];
     size_t buflen = sizeof(buffer);
 
-#if __GNUC__ >= 4 && defined(MACOSX)
     if (_NSGetExecutablePath (buffer, (uint32_t*)&buflen) == 0)
-#else
-    if (_NSGetExecutablePath (buffer, &buflen) == 0)
-#endif
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];
@@ -123,7 +119,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     return (result);
 }
 
-#elif !defined(NO_DL_FUNCTIONS)
+#else
 #include <dlfcn.h>
 
 oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
@@ -173,17 +169,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     return (result);
 }
 
-#else  /* NO_DL_FUNCTIONS */
-
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C()
-{
-    /* Fallback to ordinary osl_getExecutableFile(). */
-    return osl_getExecutableFile (ppFileURL);
-}
-
-#endif /* NO_DL_FUNCTIONS */
+#endif
 
 /***************************************
  CommandArgs_Impl.
@@ -284,6 +270,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             }
             if (ppArgs[0] != 0)
             {
+#if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), sal_Unicode('/')) == -1)
                 {
@@ -303,7 +290,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                         rtl_uString_release (pSearchPath);
                     }
                 }
-
+#endif
                 rtl_uString * pArg0 = 0;
                 if (realpath_u (ppArgs[0], &pArg0))
                 {

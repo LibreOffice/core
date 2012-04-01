@@ -29,11 +29,10 @@ $(eval $(call gb_Library_Library,dbu))
 
 $(eval $(call gb_Library_set_include,dbu,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
-    -I$(realpath $(SRCDIR)/dbaccess/source/ui/inc) \
+    -I$(SRCDIR)/dbaccess/inc \
+    -I$(SRCDIR)/dbaccess/source/inc \
+    -I$(SRCDIR)/dbaccess/source/ui/inc \
     -I$(WORKDIR)/inc/dbaccess \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_api,dbu,\
@@ -131,7 +130,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/toolboxcontroller \
     dbaccess/source/ui/control/undosqledit \
     dbaccess/source/ui/control/VertSplitView \
-    dbaccess/source/ui/dlg/AdabasStat \
     dbaccess/source/ui/dlg/admincontrols \
     dbaccess/source/ui/dlg/adminpages \
     dbaccess/source/ui/dlg/adtabdlg \

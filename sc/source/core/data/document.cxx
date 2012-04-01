@@ -95,6 +95,7 @@
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
 #include "stlalgorithm.hxx"
+#include "docoptio.hxx"
 
 #include <map>
 #include <limits>
@@ -142,7 +143,10 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
-        rtl::OUString aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
+        // Get Custom prefix
+        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+        rtl::OUString aString = rDocOpt.GetInitTabPrefix();
+
         aString += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
@@ -308,7 +312,10 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
     {
         // Find new one
 
-        const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
+        // Get Custom prefix
+        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+        rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+
         bool         bOk   = false;
 
         // First test if the prefix is valid, if so only avoid doubles
@@ -353,7 +360,10 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
 {
     aNames.clear();//ensure that the vector is empty
 
-    const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
+    // Get Custom prefix
+    const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+    rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+
     rtl::OUStringBuffer rName;
     bool         bOk   = false;
 
@@ -940,6 +950,19 @@ bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) cons
     rEndCol = 0;
     rEndRow = 0;
     return false;
+}
+
+void ScDocument::GetFormattedAndUsedArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB> (maTabs.size()))
+        if (maTabs[nTab])
+        {
+            maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, true, true );
+            return;
+        }
+
+    rEndCol = 0;
+    rEndRow = 0;
 }
 
 bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const
@@ -1923,7 +1946,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     {
         pClipDoc->ResetClip( this, nTab );
         i = nTab;
-        nEndTab = nTab;
+        nEndTab = nTab + 1;
     }
     else
         pClipDoc->ResetClip(this, pMarks);
@@ -2153,7 +2176,7 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
     {
         SvNumberFormatterIndexTable* pExchangeList =
                  pThisFormatter->MergeFormatter(*(pOtherFormatter));
-        if (pExchangeList->Count() > 0)
+        if (!pExchangeList->empty())
             pFormatExchangeList = pExchangeList;
     }
 }
@@ -2267,7 +2290,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 while ( i + nFollow < nTabEnd
                         && rMark.GetTableSelect( i + nFollow + 1 )
                         && nClipTab + nFollow < MAXTAB
-                        && rClipTabs[nClipTab + nFollow + 1] )
+                        && rClipTabs[(nClipTab + nFollow + 1) % static_cast<SCTAB>(rClipTabs.size())] )
                     ++nFollow;
 
                 if ( pCBFCP->pClipDoc->GetClipParam().mbCutMode )
@@ -3013,10 +3036,10 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-                static_cast<ScStringCell*>(pCell)->GetString(aStr);
+                aStr = static_cast<ScStringCell*>(pCell)->GetString();
             break;
             case CELLTYPE_EDIT:
-                static_cast<ScEditCell*>(pCell)->GetString(aStr);
+                aStr = static_cast<ScEditCell*>(pCell)->GetString();
             break;
             case CELLTYPE_FORMULA:
             {
@@ -3031,7 +3054,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
                     pFormatter->GetInputLineString(fVal, nIndex, aStr);
                 }
                 else
-                    pFCell->GetString(aStr);
+                    aStr = pFCell->GetString();
             }
             break;
             case CELLTYPE_VALUE:
@@ -3249,48 +3272,6 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 
-ScPostIt* ScDocument::GetNote( const ScAddress& rPos )
-{
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) ? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->GetNote( rPos.Col(), rPos.Row() ) : 0;
-}
-
-
-void ScDocument::TakeNote( const ScAddress& rPos, ScPostIt*& rpNote )
-{
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->TakeNote( rPos.Col(), rPos.Row(), rpNote );
-    else
-        DELETEZ( rpNote );
-}
-
-
-ScPostIt* ScDocument::ReleaseNote( const ScAddress& rPos )
-{
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size())? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->ReleaseNote( rPos.Col(), rPos.Row() ) : 0;
-}
-
-
-ScPostIt* ScDocument::GetOrCreateNote( const ScAddress& rPos )
-{
-    ScPostIt* pNote = GetNote( rPos );
-    if( !pNote )
-    {
-        pNote = new ScPostIt( *this, rPos, false );
-        TakeNote( rPos, pNote );
-    }
-    return pNote;
-}
-
-
-void ScDocument::DeleteNote( const ScAddress& rPos )
-{
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->DeleteNote( rPos.Col(), rPos.Row() );
-}
-
-
 void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
 {
     if( ValidTab( nTab ) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[ nTab ] )
@@ -3457,13 +3438,15 @@ void ScDocument::CalcAfterLoad()
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = true;
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CalcAfterLoad();
-    for (it = maTabs.begin(); it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->SetDirtyAfterLoad();
+    {
+        TableContainer::iterator it = maTabs.begin();
+        for (; it != maTabs.end(); ++it)
+            if (*it)
+                (*it)->CalcAfterLoad();
+        for (it = maTabs.begin(); it != maTabs.end(); ++it)
+            if (*it)
+                (*it)->SetDirtyAfterLoad();
+    }
     bCalcingAfterLoad = false;
 
     SetDetectiveDirty(false);   // noch keine wirklichen Aenderungen
@@ -3473,11 +3456,12 @@ void ScDocument::CalcAfterLoad()
     // similar to ScMyShapeResizer::CreateChartListener for loading own files (i104899).
     if (pChartListenerCollection)
     {
-        sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
-        for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+        const ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
+        ScChartListenerCollection::ListenersType::const_iterator it = rListeners.begin(), itEnd = rListeners.end();
+        for (; it != itEnd; ++it)
         {
-            ScChartListener* pChartListener = static_cast<ScChartListener*>(pChartListenerCollection->At(nIndex));
-            InterpretDirtyCells(*pChartListener->GetRangeList());
+            const ScChartListener* p = it->second;
+            InterpretDirtyCells(*p->GetRangeList());
         }
     }
 }
@@ -4782,7 +4766,8 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
+    // TODO: come up with a clean solution for the testing problem
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && (pShell->IsReadOnly()&&!mbIsInTest) )
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = false;
@@ -5762,6 +5747,14 @@ bool ScDocument::IsInVBAMode() const
     catch (const lang::NotInitializedException&) {}
 
     return false;
+}
+
+ScNotes* ScDocument::GetNotes(SCTAB nTab)
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        return maTabs[nTab]->GetNotes();
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -158,13 +158,13 @@ public:
 private:
     virtual ~ChangesListener() {}
 
-    virtual void disposing(lang::EventObject const &) throw (RuntimeException)
+    virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException)
     {
         osl::MutexGuard g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
-    virtual void propertiesChange(
+    virtual void SAL_CALL propertiesChange(
         Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException)
     {
         SolarMutexGuard g;
@@ -195,8 +195,8 @@ EditorWindow::EditorWindow( Window* pParent ) :
     // long as there are no derivations:
     listener_ = new ChangesListener(*this);
     Reference< beans::XMultiPropertySet > n(
-        officecfg::Office::Common::Font::SourceViewFont::get(
-            comphelper::getProcessComponentContext()), UNO_QUERY_THROW);
+        officecfg::Office::Common::Font::SourceViewFont::get(),
+        UNO_QUERY_THROW);
     {
         osl::MutexGuard g(mutex_);
         notifier_ = n;
@@ -816,17 +816,15 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 void EditorWindow::ImplSetFont()
 {
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext() ) );
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
+        get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(
-        0,
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-            comphelper::getProcessComponentContext() ) );
+        0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
     Font aFont( sFontName, aFontSize );
     aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
     SetPointFont( aFont );
@@ -878,7 +876,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
@@ -1202,7 +1200,28 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aXEdit.SetAccessibleName(String(IDEResId( RID_STR_WATCHNAME)));
     aTreeListBox.SetAccessibleName(String(IDEResId(RID_STR_WATCHNAME)));
 
+    long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
+    aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
+    aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
+    aXEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_RETURN ) );
+    aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+    aXEdit.Show();
+
+    aRemoveWatchButton.Disable();
+    aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
+    aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
+    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
+    aSz.Width() += 6;
+    aSz.Height() += 6;
+    aRemoveWatchButton.SetSizePixel( aSz );
+    aRemoveWatchButton.Show();
+
+    long nRWBtnSize = aRemoveWatchButton.GetModeImage().GetSizePixel().Height() + 10;
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
+
+    if ( nRWBtnSize > nVirtToolBoxHeight )
+        nVirtToolBoxHeight = nRWBtnSize;
+
     nHeaderBarHeight = 16;
 
     aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
@@ -1234,24 +1253,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
     aHeaderBar.Show();
 
-    aRemoveWatchButton.Disable();
-
     aTreeListBox.Show();
-
-    long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER;
-    aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
-    aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
-    aXEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_RETURN ) );
-    aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-    aXEdit.Show();
-
-    aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
-    aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
-    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
-    aRemoveWatchButton.SetSizePixel( aSz );
-    aRemoveWatchButton.Show();
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
 
@@ -1452,7 +1454,7 @@ IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
 
 
 
-IMPL_LINK_INLINE_START( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 {
     SvLBoxEntry* pCurEntry = aTreeListBox.GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
@@ -1460,7 +1462,7 @@ IMPL_LINK_INLINE_START( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(WatchWindow, TreeListHdl)
 
 
 IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
@@ -1656,7 +1658,8 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aLineNumberWindow( this, pParent ),
     aEdtWindow( this ),
     aEWVScrollBar( this, WB_VSCROLL | WB_DRAG ),
-    bLineNumberDisplay(false)
+    bLineNumberDisplay(false),
+    bObjectCatalogDisplay(true)
 {
     aEdtWindow.SetModulWindow( pParent );
     aBrkWindow.SetModulWindow( pParent );
@@ -1679,23 +1682,24 @@ void ComplexEditorWindow::Resize()
     long nSBWidth = aEWVScrollBar.GetSizePixel().Width();
 
     Size aBrkSz(nBrkWidth, aSz.Height());
-    aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
 
     Size aLnSz(aLineNumberWindow.GetWidth(), aSz.Height());
-    aLineNumberWindow.SetPosSizePixel(Point(DWBORDER+aBrkSz.Width() - 1, DWBORDER), aLnSz);
 
     if(bLineNumberDisplay)
     {
+        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        aLineNumberWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
         Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
-        aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()+aLnSz.Width()-1, DWBORDER ), aEWSz );
+        aEdtWindow.SetPosSizePixel( Point( DWBORDER + aBrkSz.Width() + aLnSz.Width() - 1, DWBORDER ), aEWSz );
     }
     else
     {
-        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 1, aSz.Height());
+        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height());
         aEdtWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
     }
 
-    aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
+    aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
@@ -1732,15 +1736,18 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ComplexEditorWindow::SetLineNumberDisplay(bool b)
 {
-    if(b == bLineNumberDisplay)
-        return;
+    bLineNumberDisplay = b;
+    Resize();
 
     if(b)
         aLineNumberWindow.Show();
     else
         aLineNumberWindow.Hide();
+}
 
-    bLineNumberDisplay = b;
+void ComplexEditorWindow::SetObjectCatalogDisplay(bool b)
+{
+    bObjectCatalogDisplay = b;
     Resize();
 }
 
@@ -1959,7 +1966,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bEdit;
 }
 
-sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );

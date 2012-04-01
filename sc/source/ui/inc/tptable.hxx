@@ -106,9 +106,9 @@ private:
 private:
     //------------------------------------
     // Handler:
-    DECL_LINK( PageDirHdl,      RadioButton* );
+    DECL_LINK(PageDirHdl, void *);
     DECL_LINK( PageNoHdl,       CheckBox* );
-    DECL_LINK( ScaleHdl,        ListBox* );
+    DECL_LINK(ScaleHdl, void *);
 };
 
 #endif // SC_TPTABLE_HXX

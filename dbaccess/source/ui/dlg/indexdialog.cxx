@@ -104,7 +104,7 @@ namespace dbaui
 
     extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars);
     //------------------------------------------------------------------
-    sal_Bool DbaIndexList::EditedEntry( SvLBoxEntry* _pEntry, const String& _rNewText )
+    sal_Bool DbaIndexList::EditedEntry( SvLBoxEntry* _pEntry, const rtl::OUString& _rNewText )
     {
         // first check if this is valid SQL92 name
         if ( isSQL92CheckEnabled(m_xConnection) )
@@ -112,13 +112,12 @@ namespace dbaui
             Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
             if ( xMeta.is() )
             {
-                ::rtl::OUString sNewName(_rNewText);
-                ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
+                ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(_rNewText, xMeta->getExtraNameCharacters());
                 if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
                         ?
-                        sAlias != sNewName
+                        sAlias != _rNewText
                         :
-                !sNewName.equalsIgnoreAsciiCase(sAlias))
+                !_rNewText.equalsIgnoreAsciiCase(sAlias))
                     return sal_False;
             }
         }

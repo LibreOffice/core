@@ -27,11 +27,6 @@
 
 $(eval $(call gb_Library_Library,subsequenttest))
 
-$(eval $(call gb_Library_set_include,subsequenttest,\
-	-I$(SRCDIR)/tools/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,subsequenttest,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))
@@ -70,17 +65,23 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/container/xelementaccess \
     test/source/container/xindexaccess \
     test/source/container/xnamecontainer \
+    test/source/container/xnamereplace \
     test/source/container/xnamed \
     test/source/sheet/cellproperties \
     test/source/sheet/datapilotfield \
+    test/source/sheet/xcellrangedata \
+    test/source/sheet/xcellrangereferrer \
     test/source/sheet/xcellrangesquery \
     test/source/sheet/xdatabaserange \
     test/source/sheet/xdatapilotdescriptor \
     test/source/sheet/xdatapilotfieldgrouping \
     test/source/sheet/xdatapilottable \
+    test/source/sheet/xdatapilottable2 \
     test/source/sheet/xnamedrange \
     test/source/sheet/xnamedranges \
+    test/source/sheet/xspreadsheetdocument \
     test/source/sheet/xspreadsheets2 \
+    test/source/util/xreplaceable \
     test/source/util/xsearchable \
 ))
 

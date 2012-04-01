@@ -414,11 +414,11 @@ sal_Bool DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelect
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
-    aEntry.aNewText  =rNewText;
+    aEntry.aNewText = rNewText;
     if(m_aEditedHandler.Call(&aEntry) != 0)
     {
         implStopSelectionTimer();

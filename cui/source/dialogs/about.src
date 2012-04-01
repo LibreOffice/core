@@ -33,12 +33,6 @@ ModalDialog RID_DEFAULTABOUT
     Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    OKButton ABOUT_BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
     MultiLineEdit ABOUT_FTXT_VERSION
     {
         Border = FALSE ;
@@ -47,6 +41,9 @@ ModalDialog RID_DEFAULTABOUT
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
     MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
@@ -68,17 +65,33 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 54 , 100 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
     };
+    FixedText ABOUT_TDFSTR_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "The Document Foundation";
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
+    FixedText ABOUT_FEATURES_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Features";
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
     String ABOUT_STR_VERSION
     {
         Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
     };
     String ABOUT_STR_VENDOR
     {
-        Text[ en-US ] = "This product was supplied by %OOOVENDOR.";
+        Text[ en-US ] = "%PRODUCTNAME is a free and open source office suite. This release was supplied by %OOOVENDOR.";
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "LibreOffice is copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "Copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
     };
     String ABOUT_STR_COPYRIGHT_DERIVED
     {
@@ -90,7 +103,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_ACKNOWLEDGEMENT
     {
-        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more information at the links below:";
     };
     String ABOUT_STR_LINK
     {
@@ -99,5 +112,25 @@ ModalDialog RID_DEFAULTABOUT
     String ABOUT_STR_BUILD
     {
         Text[ en-US ] = "Build ID:";
+    };
+    String ABOUT_TDF_LINK
+    {
+        Text[ en-US ] = "http://www.documentfoundation.org/";
+    };
+    String ABOUT_FEATURESSTR_LINK
+    {
+        Text[ en-US ] = "http://www.libreoffice.org/features/";
+    };
+    FixedLine ABOUT_BUTTONS_LINE
+    {
+        Pos = MAP_APPFONT ( 0 , 245 ) ;
+        Size = MAP_APPFONT ( 170 , 2 ) ;
+    };
+    CancelButton ABOUT_BTN_CANCEL
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Close";
     };
 };

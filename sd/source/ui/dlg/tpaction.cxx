@@ -502,7 +502,7 @@ void SdTPAction::OpenFileDialog()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTPAction, ClickSearchHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
 {
     OpenFileDialog();
 
@@ -511,7 +511,7 @@ IMPL_LINK( SdTPAction, ClickSearchHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
 {
     presentation::ClickAction eCA = GetActualClickAction();
 
@@ -688,7 +688,7 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTPAction, SelectTreeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 {
     aEdtBookmark.SetText( aLbTree.GetSelectEntry() );
     return( 0L );
@@ -696,7 +696,7 @@ IMPL_LINK( SdTPAction, SelectTreeHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 {
     String aFile( GetEditText() );
 

@@ -34,11 +34,12 @@
 #include <tools/string.hxx>
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "scdllapi.h"
+#include "dptypes.hxx"
 
 class ScDPGroupTableData;
 class ScDPGroupDimension;
 class ScDPObject;
-class ScStrCollection;
+class ScDPCache;
 class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;
@@ -50,87 +51,104 @@ class ScDPSaveGroupDimension;
 
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
-    String                  aGroupName;     // name of group
-    ::std::vector<String>   aElements;      // names of items in original dimension
+    rtl::OUString aGroupName;     // name of group
+    std::vector<rtl::OUString> aElements;      // names of items in original dimension
+    mutable std::vector<ScDPItemData> maItems; // items converted from the strings.
 
 public:
-                ScDPSaveGroupItem( const String& rName );
-                ~ScDPSaveGroupItem();
+    ScDPSaveGroupItem( const rtl::OUString& rName );
+    ~ScDPSaveGroupItem();
 
-    void    AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const;
+    void AddToData(ScDPGroupDimension& rDataDim) const;
 
-    void    AddElement( const String& rName );
+    void    AddElement( const rtl::OUString& rName );
     void    AddElementsFromGroup( const ScDPSaveGroupItem& rGroup );
-    const String& GetGroupName() const   { return aGroupName; }
-    bool    RemoveElement( const String& rName );   // returns true if found (removed)
+    const rtl::OUString& GetGroupName() const { return aGroupName; }
+    bool    RemoveElement( const rtl::OUString& rName );   // returns true if found (removed)
 
     bool    IsEmpty() const;
     size_t  GetElementCount() const;
-    const String* GetElementByIndex( size_t nIndex ) const;
+    const rtl::OUString* GetElementByIndex(size_t nIndex) const;
 
-    void    Rename( const String& rNewName );
+    void Rename( const rtl::OUString& rNewName );
 
     // remove this group's elements from their groups in rDimension
     // (rDimension must be a different dimension from the one which contains this)
     void    RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimension ) const;
+
+    void ConvertElementsToItems(SvNumberFormatter* pFormatter) const;
+    bool HasInGroup(const ScDPItemData& rItem) const;
 };
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
+/**
+ * Represents a new group dimension whose dimension ID is higher than the
+ * highest source dimension ID.
+ */
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
-    String                  aSourceDim;     // always the real source from the original data
-    String                  aGroupDimName;
+    rtl::OUString           aSourceDim;     // always the real source from the original data
+    rtl::OUString           aGroupDimName;
     ScDPSaveGroupItemVec    aGroups;
-    ScDPNumGroupInfo        aDateInfo;
+    mutable ScDPNumGroupInfo aDateInfo;
     sal_Int32               nDatePart;
 
 public:
-                ScDPSaveGroupDimension( const String& rSource, const String& rName );
-                ScDPSaveGroupDimension( const String& rSource, const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
+                ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName );
+                ScDPSaveGroupDimension( const rtl::OUString& rSource, const rtl::OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
                 ~ScDPSaveGroupDimension();
 
     void    AddToData( ScDPGroupTableData& rData ) const;
-
+    void AddToCache(ScDPCache& rCache) const;
     void    SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 
     void    AddGroupItem( const ScDPSaveGroupItem& rItem );
-    const String& GetGroupDimName() const   { return aGroupDimName; }
-    const String& GetSourceDimName() const  { return aSourceDim; }
+    const rtl::OUString& GetGroupDimName() const { return aGroupDimName; }
+    const rtl::OUString& GetSourceDimName() const { return aSourceDim; }
 
     sal_Int32   GetDatePart() const             { return nDatePart; }
     const ScDPNumGroupInfo& GetDateInfo() const { return aDateInfo; }
 
-    String  CreateGroupName( const String& rPrefix );
-    const ScDPSaveGroupItem* GetNamedGroup( const String& rGroupName ) const;
-    ScDPSaveGroupItem* GetNamedGroupAcc( const String& rGroupName );
-    void    RemoveFromGroups( const String& rItemName );
-    void    RemoveGroup( const String& rGroupName );
+    rtl::OUString CreateGroupName( const rtl::OUString& rPrefix );
+    const ScDPSaveGroupItem* GetNamedGroup( const rtl::OUString& rGroupName ) const;
+    ScDPSaveGroupItem* GetNamedGroupAcc( const rtl::OUString& rGroupName );
+    void    RemoveFromGroups( const rtl::OUString& rItemName );
+    void RemoveGroup(const rtl::OUString& rGroupName);
     bool    IsEmpty() const;
-    bool    HasOnlyHidden( const ScStrCollection& rVisible );
+    bool HasOnlyHidden(const ScDPUniqueStringSet& rVisible);
 
     long    GetGroupCount() const;
     const ScDPSaveGroupItem* GetGroupByIndex( long nIndex ) const;
     ScDPSaveGroupItem* GetGroupAccByIndex( long nIndex );
 
-    void    Rename( const String& rNewName );
+    void    Rename( const rtl::OUString& rNewName );
+
+private:
+    bool IsInGroup(const ScDPItemData& rItem) const;
 };
 
+/**
+ * Represents a group dimension that introduces a new hierarchy for an
+ * existing dimension.  Unlike the ScDPSaveGroupDimension counterpart, it
+ * re-uses the source dimension name and ID.
+ */
 class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
-    String              aDimensionName;
-    ScDPNumGroupInfo    aGroupInfo;
-    ScDPNumGroupInfo    aDateInfo;
+    rtl::OUString       aDimensionName;
+    mutable ScDPNumGroupInfo aGroupInfo;
+    mutable ScDPNumGroupInfo aDateInfo;
     sal_Int32           nDatePart;
 
 public:
-                ScDPSaveNumGroupDimension( const String& rName, const ScDPNumGroupInfo& rInfo );
-                ScDPSaveNumGroupDimension( const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
+                ScDPSaveNumGroupDimension( const rtl::OUString& rName, const ScDPNumGroupInfo& rInfo );
+                ScDPSaveNumGroupDimension( const rtl::OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
                 ~ScDPSaveNumGroupDimension();
 
     void        AddToData( ScDPGroupTableData& rData ) const;
+    void AddToCache(ScDPCache& rCache) const;
 
-    const String& GetDimensionName() const  { return aDimensionName; }
+    const rtl::OUString& GetDimensionName() const  { return aDimensionName; }
     const ScDPNumGroupInfo& GetInfo() const { return aGroupInfo; }
 
     sal_Int32   GetDatePart() const             { return nDatePart; }
@@ -140,6 +158,10 @@ public:
     void        SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 };
 
+/**
+ * This class has to do with handling exclusively grouped dimensions?  TODO:
+ * Find out what this class does and document it here.
+ */
 class SC_DLLPUBLIC ScDPDimensionSaveData
 {
 public:
@@ -150,37 +172,44 @@ public:
 
     void    WriteToData( ScDPGroupTableData& rData ) const;
 
-    String  CreateGroupDimName( const String& rSourceName, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
-    String  CreateDateGroupDimName( sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
+    void WriteToCache(ScDPCache& rCache) const;
+
+    rtl::OUString CreateGroupDimName(
+        const rtl::OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,
+        const ::std::vector<rtl::OUString>* pDeletedNames );
+
+    rtl::OUString CreateDateGroupDimName(
+        sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
+        const ::std::vector<rtl::OUString>* pDeletedNames );
 
     void    AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
     void    ReplaceGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
-    void    RemoveGroupDimension( const String& rGroupDimName );
+    void    RemoveGroupDimension( const rtl::OUString& rGroupDimName );
 
     void    AddNumGroupDimension( const ScDPSaveNumGroupDimension& rGroupDim );
     void    ReplaceNumGroupDimension( const ScDPSaveNumGroupDimension& rGroupDim );
-    void    RemoveNumGroupDimension( const String& rGroupDimName );
+    void    RemoveNumGroupDimension( const rtl::OUString& rGroupDimName );
 
-    const ScDPSaveGroupDimension* GetGroupDimForBase( const String& rBaseDimName ) const;
-    const ScDPSaveGroupDimension* GetNamedGroupDim( const String& rGroupDimName ) const;
-    const ScDPSaveGroupDimension* GetFirstNamedGroupDim( const String& rBaseDimName ) const;
-    const ScDPSaveGroupDimension* GetNextNamedGroupDim( const String& rGroupDimName ) const;
-    const ScDPSaveNumGroupDimension* GetNumGroupDim( const String& rGroupDimName ) const;
+    const ScDPSaveGroupDimension* GetGroupDimForBase( const rtl::OUString& rBaseDimName ) const;
+    const ScDPSaveGroupDimension* GetNamedGroupDim( const rtl::OUString& rGroupDimName ) const;
+    const ScDPSaveGroupDimension* GetFirstNamedGroupDim( const rtl::OUString& rBaseDimName ) const;
+    const ScDPSaveGroupDimension* GetNextNamedGroupDim( const rtl::OUString& rGroupDimName ) const;
+    const ScDPSaveNumGroupDimension* GetNumGroupDim( const rtl::OUString& rGroupDimName ) const;
 
-    ScDPSaveGroupDimension* GetGroupDimAccForBase( const String& rBaseDimName );
-    ScDPSaveGroupDimension* GetNamedGroupDimAcc( const String& rGroupDimName );
-    ScDPSaveGroupDimension* GetFirstNamedGroupDimAcc( const String& rBaseDimName );
-    ScDPSaveGroupDimension* GetNextNamedGroupDimAcc( const String& rGroupDimName );
+    ScDPSaveGroupDimension* GetGroupDimAccForBase( const rtl::OUString& rBaseDimName );
+    ScDPSaveGroupDimension* GetNamedGroupDimAcc( const rtl::OUString& rGroupDimName );
+    ScDPSaveGroupDimension* GetFirstNamedGroupDimAcc( const rtl::OUString& rBaseDimName );
+    ScDPSaveGroupDimension* GetNextNamedGroupDimAcc( const rtl::OUString& rGroupDimName );
 
-    ScDPSaveNumGroupDimension* GetNumGroupDimAcc( const String& rGroupDimName );
+    ScDPSaveNumGroupDimension* GetNumGroupDimAcc( const rtl::OUString& rGroupDimName );
 
     bool    HasGroupDimensions() const;
 
-    sal_Int32 CollectDateParts( const String& rBaseDimName ) const;
+    sal_Int32 CollectDateParts( const rtl::OUString& rBaseDimName ) const;
 
 private:
     typedef ::std::vector< ScDPSaveGroupDimension >         ScDPSaveGroupDimVec;
-    typedef ::std::map< String, ScDPSaveNumGroupDimension > ScDPSaveNumGroupDimMap;
+    typedef ::std::map<rtl::OUString, ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimMap;
 
     ScDPDimensionSaveData& operator=( const ScDPDimensionSaveData& );
 

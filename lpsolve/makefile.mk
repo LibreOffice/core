@@ -65,7 +65,7 @@ lpsolve_LIBS=$(MINGW_SHARED_LIBSTDCPP)
 BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
 .ELSE
 BUILD_ACTION=sh ccc
-OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dll.a
 .ENDIF
 .ELSE
 BUILD_ACTION=cmd /c cvc6.bat

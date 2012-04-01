@@ -26,7 +26,7 @@ public:
     virtual css::uno::Any SAL_CALL getStrikethrough() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShadow() throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif

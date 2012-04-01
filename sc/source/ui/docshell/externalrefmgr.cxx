@@ -194,8 +194,7 @@ public:
         else
         {
             // string cell otherwise.
-            String aVal;
-            pCell->GetString(aVal);
+            rtl::OUString aVal = pCell->GetString();
             mpDoc->PutCell(aPos, new ScStringCell(aVal));
         }
     }
@@ -1289,7 +1288,7 @@ void ScExternalRefLink::SetDoReferesh(bool b)
     mbDoRefresh = b;
 }
 
-IMPL_LINK( ScExternalRefLink, ExternalRefEndEditHdl, ::sfx2::SvBaseLink*, EMPTYARG )
+IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 {
     return 0;
 }
@@ -1308,14 +1307,12 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
     {
         case CELLTYPE_EDIT:
         {
-            String aStr;
-            static_cast<ScEditCell*>(pCell)->GetString(aStr);
+            rtl::OUString aStr = static_cast<ScEditCell*>(pCell)->GetString();
             return new formula::FormulaStringToken(aStr);
         }
         case CELLTYPE_STRING:
         {
-            String aStr;
-            static_cast<ScStringCell*>(pCell)->GetString(aStr);
+            rtl::OUString aStr = static_cast<ScStringCell*>(pCell)->GetString();
             return new formula::FormulaStringToken(aStr);
         }
         case CELLTYPE_VALUE:
@@ -1336,8 +1333,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             }
             else
             {
-                String aStr;
-                pFCell->GetString(aStr);
+                rtl::OUString aStr = pFCell->GetString();
                 return new formula::FormulaStringToken(aStr);
             }
         }
@@ -1410,15 +1406,13 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                 {
                     case CELLTYPE_EDIT:
                     {
-                        String aStr;
-                        static_cast<ScEditCell*>(pCell)->GetString(aStr);
+                        rtl::OUString aStr = static_cast<ScEditCell*>(pCell)->GetString();
                         xMat->PutString(aStr, nC, nR);
                     }
                     break;
                     case CELLTYPE_STRING:
                     {
-                        String aStr;
-                        static_cast<ScStringCell*>(pCell)->GetString(aStr);
+                        rtl::OUString aStr = static_cast<ScStringCell*>(pCell)->GetString();
                         xMat->PutString(aStr, nC, nR);
                     }
                     break;
@@ -1441,8 +1435,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         }
                         else
                         {
-                            String aStr;
-                            pFCell->GetString(aStr);
+                            rtl::OUString aStr = pFCell->GetString();
                             xMat->PutString(aStr, nC, nR);
                         }
                     }

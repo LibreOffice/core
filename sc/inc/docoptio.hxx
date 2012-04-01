@@ -42,9 +42,9 @@ class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // epsilon value dazu
     sal_uInt16 nIterCount;              // number
-    SCTAB nInitTabCount;            // number of Tabs for new Spreadssheet doc
+    SCTAB nInitTabCount;            // number of Tabs for new Spreadsheet doc
+    ::rtl::OUString aInitTabPrefix;   // The Tab prefix name in new Spreadsheet doc
     sal_uInt16 nPrecStandardFormat; // precision for standard format
-    ScOptionsUtil::KeyBindingType eKeyBindingType;
     sal_uInt16 nDay;                    // Null date:
     sal_uInt16 nMonth;
     sal_uInt16 nYear;
@@ -57,13 +57,6 @@ class SC_DLLPUBLIC ScDocOptions
     sal_Bool   bDoAutoSpell;            // auto-spelling
     sal_Bool   bLookUpColRowNames;      // determine column-/row titles automagically
     sal_Bool   bFormulaRegexEnabled;    // regular expressions in formulas enabled
-    bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
-    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
-
-    ::rtl::OUString aFormulaSepArg;
-    ::rtl::OUString aFormulaSepArrayRow;
-    ::rtl::OUString aFormulaSepArrayCol;
-
 public:
                 ScDocOptions();
                 ScDocOptions( const ScDocOptions& rCpy );
@@ -83,6 +76,8 @@ public:
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
     SCTAB GetInitTabCount() const           { return nInitTabCount; }
     void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
+    void   SetInitTabPrefix( ::rtl::OUString& aPrefix) { aInitTabPrefix = aPrefix; }
+    ::rtl::OUString GetInitTabPrefix() const			{ return aInitTabPrefix; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
@@ -102,9 +97,6 @@ public:
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
-    ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
-    void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
-
     sal_Bool    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( sal_Bool bVal ) { bCalcAsShown = bVal; }
 
@@ -114,23 +106,6 @@ public:
     void    SetFormulaRegexEnabled( sal_Bool bVal ) { bFormulaRegexEnabled = bVal; }
     sal_Bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 
-    void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
-    ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
-
-    void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
-    bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
-
-    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
-    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
-
-    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
-    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
-
-    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
-    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
-
-    void ResetFormulaSeparators();
-    static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
@@ -139,9 +114,9 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bIsIter             = rCpy.bIsIter;
     nIterCount          = rCpy.nIterCount;
     nInitTabCount       = rCpy.nInitTabCount;
+    aInitTabPrefix      = rCpy.aInitTabPrefix;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
-    eKeyBindingType     = rCpy.eKeyBindingType;
     nDay                = rCpy.nDay;
     nMonth              = rCpy.nMonth;
     nYear               = rCpy.nYear;
@@ -152,11 +127,6 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
-    bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
-    eFormulaGrammar     = rCpy.eFormulaGrammar;
-    aFormulaSepArg      = rCpy.aFormulaSepArg;
-    aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
-    aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
 
     return *this;
 }
@@ -168,9 +138,9 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bIsIter                == bIsIter
             &&  rOpt.nIterCount             == nIterCount
             &&  rOpt.nInitTabCount          == nInitTabCount
+            &&  rOpt.aInitTabPrefix         == aInitTabPrefix
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
-            &&  rOpt.eKeyBindingType        == eKeyBindingType
             &&  rOpt.nDay                   == nDay
             &&  rOpt.nMonth                 == nMonth
             &&  rOpt.nYear                  == nYear
@@ -181,11 +151,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
-            &&  rOpt.bUseEnglishFuncName    == bUseEnglishFuncName
-            &&  rOpt.eFormulaGrammar        == eFormulaGrammar
-            &&  rOpt.aFormulaSepArg         == aFormulaSepArg
-            &&  rOpt.aFormulaSepArrayRow    == aFormulaSepArrayRow
-            &&  rOpt.aFormulaSepArrayCol    == aFormulaSepArrayCol
             );
 }
 
@@ -224,21 +189,15 @@ private:
 class ScDocCfg : public ScDocOptions
 {
     ScLinkConfigItem    aCalcItem;
-    ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
-    ScLinkConfigItem    aCompatItem;
     ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
-    DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
-    DECL_LINK( CompatCommitHdl, void* );
     DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
 public:

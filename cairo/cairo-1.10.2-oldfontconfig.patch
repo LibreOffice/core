@@ -1,0 +1,11 @@
+--- misc/cairo-1.10.2/configure	2012-02-20 23:25:52.000000000 -0800
++++ misc/build/cairo-1.10.2/configure	2012-02-20 11:53:05.000000000 -0800
+@@ -29672,7 +29672,7 @@
+ fi
+ 
+ 
+-FONTCONFIG_MIN_VERSION=2.2.95
++FONTCONFIG_MIN_VERSION=2.2.3
+ 																	# Check whether --enable-fc was given.
+ if test "${enable_fc+set}" = set; then :
+   enableval=$enable_fc; enable_fc=$enableval

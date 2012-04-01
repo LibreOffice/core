@@ -50,11 +50,9 @@
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
 
-const ::rtl::OUString SERVICENAME_WINPROVIDER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.ContainerWindowProvider"));
-const ::rtl::OUString EXTERNAL_EVENT(RTL_CONSTASCII_USTRINGPARAM("external_event"));
-const ::rtl::OUString BACK_METHOD(RTL_CONSTASCII_USTRINGPARAM("back"));
-const ::rtl::OUString INITIALIZE_METHOD(RTL_CONSTASCII_USTRINGPARAM("initialize"));
-const ::rtl::OUString OK_METHOD(RTL_CONSTASCII_USTRINGPARAM("ok"));
+const char SERVICENAME_WINPROVIDER[] = "com.sun.star.awt.ContainerWindowProvider";
+const char EXTERNAL_EVENT[] = "external_event";
+const char INITIALIZE_METHOD[] = "initialize";
 
 using namespace ::com::sun::star;
 
@@ -131,7 +129,7 @@ void FwkTabPage::CreateDialog()
             }
         }
 
-        CallMethod( INITIALIZE_METHOD );
+        CallMethod( rtl::OUString(INITIALIZE_METHOD) );
     }
     catch ( const lang::IllegalArgumentException& )
     {
@@ -152,7 +150,7 @@ sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), EXTERNAL_EVENT );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), rtl::OUString(EXTERNAL_EVENT) );
         }
         catch ( const uno::Exception& )
         {
@@ -210,7 +208,7 @@ FwkTabWindow::FwkTabWindow( Window* pParent ) :
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
-        xFactory->createInstance( SERVICENAME_WINPROVIDER ), uno::UNO_QUERY );
+        xFactory->createInstance( rtl::OUString(SERVICENAME_WINPROVIDER) ), uno::UNO_QUERY );
 
     SetPaintTransparent(true);
 
@@ -286,7 +284,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
+IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
 {
     const sal_uInt16 nId = m_aTabCtrl.GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl.GetTabPage( nId ) );
@@ -310,7 +308,7 @@ IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
+IMPL_LINK_NOARG(FwkTabWindow, DeactivatePageHdl)
 {
     m_aTabCtrl.BroadcastEvent( VCLEVENT_TABPAGE_DEACTIVATE );
     return 1;

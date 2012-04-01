@@ -140,7 +140,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     aTabBgColorSet.Resize();
 }
 
-IMPL_LINK( ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
 /*
     Handler, called when color selection is changed
 */
@@ -152,7 +152,7 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScTabBgColorDlg, TabBgColorOKHdl_Impl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
 {
 
 //    Handler, called when the OK button is pushed

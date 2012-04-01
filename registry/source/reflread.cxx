@@ -259,7 +259,7 @@ public:
 
     const sal_Char*     readUTF8NameConstant(sal_uInt16 index);
     sal_Bool            readBOOLConstant(sal_uInt16 index);
-    sal_uInt8           readBYTEConstant(sal_uInt16 index);
+    sal_Int8            readBYTEConstant(sal_uInt16 index);
     sal_Int16           readINT16Constant(sal_uInt16 index);
     sal_uInt16          readUINT16Constant(sal_uInt16 index);
     sal_Int32           readINT32Constant(sal_uInt16 index);
@@ -367,15 +367,16 @@ sal_Bool ConstantPool::readBOOLConstant(sal_uInt16 index)
     return aBool;
 }
 
-sal_uInt8 ConstantPool::readBYTEConstant(sal_uInt16 index)
+sal_Int8 ConstantPool::readBYTEConstant(sal_uInt16 index)
 {
-    sal_uInt8 aByte = sal_False;
+    sal_Int8 aByte = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
         if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_BYTE)
         {
-            aByte = readBYTE(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+            aByte = static_cast< sal_Int8 >(
+                readBYTE(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA));
         }
     }
 

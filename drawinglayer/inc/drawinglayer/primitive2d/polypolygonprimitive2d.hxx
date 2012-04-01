@@ -202,62 +202,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// PolyPolygonStrokeArrowPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        /** PolyPolygonStrokePrimitive2D class
-
-            This primitive defines a multi-PolygonStrokeArrowPrimitive2D and is
-            just for convenience. The definition is not different from the single
-            defined PolygonStrokeArrowPrimitive2Ds.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokeArrowPrimitive2D : public PolyPolygonStrokePrimitive2D
-        {
-        private:
-            /// geometric definitions for line start and end
-            attribute::LineStartEndAttribute                maStart;
-            attribute::LineStartEndAttribute                maEnd;
-
-        protected:
-            /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
-        public:
-            /// constructor
-            PolyPolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute,
-                const attribute::StrokeAttribute& rStrokeAttribute,
-                const attribute::LineStartEndAttribute& rStart,
-                const attribute::LineStartEndAttribute& rEnd);
-
-            /// constructor without stroking
-            PolyPolygonStrokeArrowPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute,
-                const attribute::LineStartEndAttribute& rStart,
-                const attribute::LineStartEndAttribute& rEnd);
-
-            /// data read access
-            const attribute::LineStartEndAttribute& getStart() const { return maStart; }
-            const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
-
-            /// provide unique ID
-            DeclPrimitrive2DIDBlock()
-        };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
 // PolyPolygonColorPrimitive2D class
 
 namespace drawinglayer

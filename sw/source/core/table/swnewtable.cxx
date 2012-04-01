@@ -834,7 +834,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // box, the left and right border does not need to be changed.
     // The right and bottom border instead has to be derived from the right-
     // bottom box of the selection. If this is a overlapped cell,
-    // the appropiate master box.
+    // the appropriate master box.
     SwTableBox* pLastBox = 0; // the right-bottom (master) cell
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
     SwPosition aInsPos( *pMergeBox->GetSttNd()->EndOfSectionNode() );
@@ -2068,7 +2068,7 @@ SwSaveRowSpan* SwTable::CleanUpTopRowSpan( sal_uInt16 nSplitLine )
     if( !IsNewModel() )
         return pRet;
     pRet = new SwSaveRowSpan( GetTabLines()[0]->GetTabBoxes(), nSplitLine );
-    if( pRet->mnRowSpans.size() == 0 )
+    if( pRet->mnRowSpans.empty() )
     {
         delete pRet;
         pRet = 0;

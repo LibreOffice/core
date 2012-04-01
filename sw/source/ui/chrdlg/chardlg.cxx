@@ -298,7 +298,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     aINetFmt.SetINetFmtId( nId );
     aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
 
-    if( pINetItem && pINetItem->GetMacroTable().Count() )
+    if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
     if(aVisitedLB.GetSavedValue() != aVisitedLB.GetSelectEntryPos())
@@ -323,7 +323,7 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
     return ( new SwCharURLPage( pParent, rAttrSet ) );
 }
 
-IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)
 {
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
@@ -334,7 +334,7 @@ IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwCharURLPage, EventHdl)
 {
     bModified |= SwMacroAssignDlg::INetFmtDlg( this,
                     ::GetActiveView()->GetWrtShell(), pINetItem );

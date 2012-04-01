@@ -102,6 +102,9 @@ namespace frm
             integer information associated with it.
         */
         virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const = 0;
+
+    protected:
+        ~IFeatureDispatcher() {}
     };
 
 //.........................................................................

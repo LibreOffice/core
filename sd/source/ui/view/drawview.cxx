@@ -95,7 +95,7 @@ TYPEINIT1(DrawView, View);
 \************************************************************************/
 
 DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* pShell)
-: ::sd::View(pDocSh->GetDoc(), pOutDev, pShell)
+: ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
 , mpDocShell(pDocSh)
 , mpDrawViewShell(pShell)
 , mpVDev(NULL)
@@ -140,7 +140,7 @@ void DrawView::ModelHasChanged()
     ::sd::View::ModelHasChanged();
 
     // den Gestalter zur Neudarstellung zwingen
-    SfxStyleSheetBasePool* pSSPool = mpDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pSSPool = mrDoc.GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
 
     if( mpDrawViewShell )
@@ -163,7 +163,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
     // wird eine Masterpage bearbeitet?
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
-        SfxStyleSheetBasePool* pStShPool = mpDoc->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
         String aLayoutName = rPage.GetName();
         SdrTextObj* pEditObject = static_cast< SdrTextObj* >( GetTextEditObject() );
@@ -192,7 +192,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     aTempSet.ClearInvalidItems();
 
                     // Undo-Action
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                     mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                     pSheet->GetItemSet().Put(aTempSet);
@@ -244,7 +244,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         }
 
                         // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet);
@@ -312,7 +312,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         aTempSet.ClearInvalidItems();
 
                         // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet,false);
@@ -357,7 +357,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             aTempSet.ClearInvalidItems();
 
                             // Undo-Action
-                            StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                            StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
                             mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                             pSheet->GetItemSet().Set(aTempSet,false);
@@ -578,7 +578,7 @@ void DrawView::DeleteMarked()
 {
     OSL_TRACE( "DrawView::DeleteMarked() - enter" );
 
-    sd::UndoManager* pUndoManager = mpDoc->GetUndoManager();
+    sd::UndoManager* pUndoManager = mrDoc.GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
     if( pUndoManager )

@@ -479,7 +479,7 @@ void ShapeController::executeDispatch_RenameObject()
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             if ( pSelectedObj )
             {
-                String aName( pSelectedObj->GetName() );
+                rtl::OUString aName = pSelectedObj->GetName();
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -488,8 +488,10 @@ void ShapeController::executeDispatch_RenameObject()
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
-                        pDlg->GetName( aName );
-                        if ( aName != pSelectedObj->GetName() )
+                        String aTmp;
+                        pDlg->GetName(aTmp);
+                        aName = aTmp;
+                        if (pSelectedObj->GetName().equals(aName))
                         {
                             pSelectedObj->SetName( aName );
                         }

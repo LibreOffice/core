@@ -132,9 +132,6 @@ public:
     const String&       GetName() const { return aName; }
     void                SetName( const String& rName ) { aName = rName; }
 
-    // gibt das BoundRect aller IMap-Objekte in 1/100mm zurueck
-    Rectangle           GetBoundRect() const;
-
     // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 

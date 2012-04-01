@@ -325,10 +325,10 @@ public:
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();
 
+#if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
     void pushIgnoreDamage();
     void popIgnoreDamage();
-#if GTK_CHECK_VERSION(3,0,0)
     void renderArea( cairo_t *cr, cairo_rectangle_t *src );
 #endif
     virtual ~GtkSalFrame();
@@ -393,8 +393,6 @@ public:
     // may be LANGUAGE_DONTKNOW if not supported by the OS
     virtual LanguageType        GetInputLanguage();
 
-    virtual SalBitmap*          SnapShot();
-
     virtual void                UpdateSettings( AllSettings& rSettings );
 
     virtual void                Beep( SoundType eSoundType );
@@ -434,7 +432,7 @@ public:
 
     static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
 
-    virtual void damaged (const basegfx::B2IBox& rDamageRect);
+    virtual void                    damaged (const basegfx::B2IBox& rDamageRect);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

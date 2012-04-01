@@ -32,7 +32,6 @@
 
 #include "com/sun/star/beans/XMultiPropertySet.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
-#include "comphelper/processfactory.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "sqledit.hxx"
 #include "QueryTextView.hxx"
@@ -66,14 +65,14 @@ public:
 private:
     virtual ~ChangesListener() {}
 
-    virtual void disposing(css::lang::EventObject const &)
+    virtual void SAL_CALL disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException)
     {
         osl::MutexGuard g(editor_.m_mutex);
         editor_.m_notifier.clear();
     }
 
-    virtual void propertiesChange(
+    virtual void SAL_CALL propertiesChange(
         css::uno::Sequence< css::beans::PropertyChangeEvent > const &)
         throw (css::uno::RuntimeException)
     {
@@ -108,8 +107,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     // long as there are no derivations:
     m_listener = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
-        officecfg::Office::Common::Font::SourceViewFont::get(
-            comphelper::getProcessComponentContext()),
+        officecfg::Office::Common::Font::SourceViewFont::get(),
         css::uno::UNO_QUERY_THROW);
     {
         osl::MutexGuard g(m_mutex);
@@ -181,7 +179,7 @@ void OSqlEdit::GetFocus()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 {
     String aText  =GetText();
     if(aText != m_strOrigText)
@@ -202,7 +200,7 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     return 0L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer)
 {
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
     rController.InvalidateFeature(SID_CUT);
@@ -270,17 +268,15 @@ void OSqlEdit::ImplSetFont()
     AllSettings aSettings = GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
     rtl::OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get(
-            comphelper::getProcessComponentContext() ) );
+        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
+        get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(
-        0,
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get(
-            comphelper::getProcessComponentContext() ) );
+        0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
     Font aFont( sFontName, aFontSize );
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);

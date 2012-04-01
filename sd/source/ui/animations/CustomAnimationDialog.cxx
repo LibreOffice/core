@@ -551,7 +551,7 @@ public:
     virtual Control* getControl();
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
-    DECL_LINK( implModifyHdl, Control* );
+    DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
 
@@ -610,7 +610,7 @@ void TransparencyPropertyBox::updateMenu()
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( TransparencyPropertyBox, implModifyHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric);
@@ -673,7 +673,7 @@ public:
     virtual Control* getControl();
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
-    DECL_LINK( implModifyHdl, Control* );
+    DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
 
@@ -734,7 +734,7 @@ void RotationPropertyBox::updateMenu()
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( RotationPropertyBox, implModifyHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric);
@@ -814,7 +814,7 @@ public:
     virtual Control* getControl();
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
-    DECL_LINK( implModifyHdl, Control* );
+    DECL_LINK(implModifyHdl, void *);
 
     void updateMenu();
 
@@ -874,7 +874,7 @@ void ScalePropertyBox::updateMenu()
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( ScalePropertyBox, implModifyHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
 {
     updateMenu();
     maModifyHdl.Call(mpMetric);
@@ -2104,9 +2104,9 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             break;
         default:
             {
-                String aText( mpCBRepeat->GetText() );
-                if( aText.Len() )
-                    aRepeatCount <<= aText.ToDouble();
+                rtl::OUString aText( mpCBRepeat->GetText() );
+                if( !aText.isEmpty() )
+                    aRepeatCount <<= aText.toDouble();
             }
         }
 
@@ -2135,10 +2135,10 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     }
     else
     {
-        String aText( mpCBDuration->GetText() );
-        if( aText.Len() )
+        rtl::OUString aText( mpCBDuration->GetText() );
+        if( !aText.isEmpty() )
         {
-            fDuration = aText.ToDouble();
+            fDuration = aText.toDouble();
         }
     }
 
@@ -2211,7 +2211,7 @@ public:
     void update( STLPropertySet* pSet );
 
     void updateControlStates();
-    DECL_LINK( implSelectHdl, Control* );
+    DECL_LINK(implSelectHdl, void *);
 
 private:
     FixedText   maFTGroupText;
@@ -2375,7 +2375,7 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     }
 }
 
-IMPL_LINK( CustomAnimationTextAnimTabPage, implSelectHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
 {
     updateControlStates();
     return 0;

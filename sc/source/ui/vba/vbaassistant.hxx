@@ -64,7 +64,7 @@ public:
 
     virtual ::rtl::OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

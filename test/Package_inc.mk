@@ -38,11 +38,17 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xelementaccess.hxx
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamed.hxx,test/container/xnamed.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xindexaccess.hxx,test/container/xindexaccess.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamecontainer.hxx,test/container/xnamecontainer.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/container/xnamereplace.hxx,test/container/xnamereplace.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/cellproperties.hxx,test/sheet/cellproperties.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xcellrangedata.hxx,test/sheet/xcellrangedata.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xcellrangereferrer.hxx,test/sheet/xcellrangereferrer.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilottable.hxx,test/sheet/xdatapilottable.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilottable2.hxx,test/sheet/xdatapilottable2.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilotfieldgrouping.hxx,test/sheet/xdatapilotfieldgrouping.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/datapilotfield.hxx,test/sheet/datapilotfield.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheetdocument.hxx,test/sheet/xspreadsheetdocument.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheets2.hxx,test/sheet/xspreadsheets2.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/util/xreplaceable.hxx,test/util/xreplaceable.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/util/xsearchable.hxx,test/util/xsearchable.hxx))
 
 # vim: set noet sw=4 ts=4:

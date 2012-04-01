@@ -58,7 +58,6 @@
 #include <svl/itempool.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
@@ -108,8 +107,7 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 OLEObjCache::OLEObjCache()
 :   Container( 0 )
 {
-    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get(
-        comphelper::getProcessComponentContext());
+    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     pTimer = new AutoTimer();
     Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 
@@ -174,11 +172,6 @@ void OLEObjCache::UnloadOnDemand()
             }
         }
     }
-}
-
-void OLEObjCache::SetSize(sal_uIntPtr nNewSize)
-{
-    nSize = nNewSize;
 }
 
 void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
@@ -282,6 +275,7 @@ void ContainerSorter::ImpSubSort(long nL, long nR) const
 class ImpUShortContainerSorter: public ContainerSorter {
 public:
     ImpUShortContainerSorter(Container& rNewCont): ContainerSorter(rNewCont) {}
+    virtual ~ImpUShortContainerSorter() {}
     virtual int Compare(const void* pElem1, const void* pElem2) const;
 };
 

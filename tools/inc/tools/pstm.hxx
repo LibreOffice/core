@@ -31,12 +31,11 @@
 #include <boost/unordered_map.hpp>
 #include "tools/toolsdllapi.h"
 
-#include <tools/table.hxx>
-
 #include <tools/unqidx.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
+#include <map>
 
 #define ERRCODE_IO_NOFACTORY ERRCODE_IO_WRONGFORMAT
 
@@ -150,6 +149,8 @@ SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
 DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
 
+typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
+
 //=========================================================================
 class SvStream;
 class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
@@ -191,7 +192,7 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 {
     SvClassManager &        rClassMgr;
     SvStream *              pStm;
-    Table                   aPTable; // Pointer und Key gedreht
+    PersistBaseMap          aPTable; // Pointer und Key gedreht
     SvPersistUIdx           aPUIdx;
     sal_uIntPtr                   nStartIdx;
     const SvPersistStream * pRefStm;
@@ -202,10 +203,6 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     virtual sal_uIntPtr       SeekPos( sal_uIntPtr nPos );
     virtual void        FlushData();
 protected:
-    sal_uIntPtr               GetCurMaxIndex( const SvPersistUIdx & ) const;
-    sal_uIntPtr               GetCurMaxIndex() const
-                        { return GetCurMaxIndex( aPUIdx ); }
-
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
     sal_uInt32              ReadObj( SvPersistBase * & rpObj,
                                 sal_Bool bRegister );
@@ -216,8 +213,6 @@ public:
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          sal_uInt32 nStartIdx = 1 );
-                        SvPersistStream( SvClassManager &, SvStream * pStream,
-                                         const SvPersistStream & rPersStm );
                         ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
@@ -246,8 +241,6 @@ public:
                         // gespeichert werden.
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
     friend SvStream& operator << ( SvStream &, SvPersistStream & );
-    sal_uIntPtr             InsertObj( SvPersistBase * );
-    sal_uIntPtr             RemoveObj( SvPersistBase * );
 };
 
 #endif // _PSTM_HXX

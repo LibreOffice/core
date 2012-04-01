@@ -224,23 +224,6 @@ public:
         // In:- optional - check the contents of Xtransferable
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >* pxTransferable = NULL );
 
-    // same for XTransferable interface
-    static sal_uInt16   GetExchangeAction(
-        // XTransferable
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-        // Ziel der Aktion (EXCHG_DEST_*)
-        sal_uInt16 nDestination,
-        // Aktionen, die Quelle unterstuetzt (EXCHG_SOURCE_...)
-        sal_uInt16 nSourceOptions,
-        // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
-        sal_uInt16 nUserAction,
-        // In:- Out: Zu benutzendes Format
-        sal_uLong& rFormat,
-        // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
-        sal_uInt16& rDefaultAction,
-        // In:- optional - check only for this specific format
-        sal_uLong nOnlyTestFormat = 0 );
-
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );
 };

@@ -39,7 +39,6 @@
 #include "java/sql/SQLWarning.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "connectivity/sqlparse.hxx"
 #include "connectivity/dbexception.hxx"

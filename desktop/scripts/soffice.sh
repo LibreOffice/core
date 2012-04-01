@@ -108,7 +108,8 @@ for arg in $@ $VALGRINDOPT ; do
                     valgrind_skip='--trace-children-skip=*/java'
                 fi
                 # finally set the valgrind check
-                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-exitcode=101"
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no --error-exitcode=101"
+                echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
                 if [ "$VALGRIND" = "memcheck" ] ; then
                     export G_SLICE=always-malloc
@@ -158,8 +159,8 @@ if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
 fi
 
 # do not pass the request for command line help to oosplash
-if test "$#" -eq 1; then
-    case "$1" in
+for arg in $@ ; do
+    case "$arg" in
         -h | --h | --he | --hel | --help)
             "$sd_prog/soffice.bin" --help
             exit 0
@@ -171,7 +172,7 @@ if test "$#" -eq 1; then
         *)
             ;;
     esac
-fi
+done
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
 exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"

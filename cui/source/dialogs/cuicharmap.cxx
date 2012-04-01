@@ -371,7 +371,7 @@ void SvxCharMapData::SetCharFont( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, OKHdl)
 {
     String aStr = aShowText.GetText();
 
@@ -388,7 +388,7 @@ IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, FontSelectHdl)
 {
     sal_uInt16 nPos = aFontLB.GetSelectEntryPos(),
         nFont = (sal_uInt16)(sal_uLong)aFontLB.GetEntryData( nPos );
@@ -450,7 +450,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, SubsetSelectHdl)
 {
     sal_uInt16 nPos = aSubsetLB.GetSelectEntryPos();
     const Subset* pSubset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
@@ -465,7 +465,7 @@ IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, CharDoubleClickHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, CharDoubleClickHdl)
 {
     mpDialog->EndDialog( sal_True );
     return 0;
@@ -473,7 +473,7 @@ IMPL_LINK( SvxCharMapData, CharDoubleClickHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, CharSelectHdl)
 {
     if ( !bOne )
     {
@@ -496,7 +496,7 @@ IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, CharHighlightHdl)
 {
     String aText;
     sal_UCS4 cChar = aShowSet.GetSelectCharacter();
@@ -535,7 +535,7 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, CharPreSelectHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, CharPreSelectHdl)
 {
     // adjust subset selection
     if( pSubsetMap )
@@ -552,7 +552,7 @@ IMPL_LINK( SvxCharMapData, CharPreSelectHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharMapData, DeleteHdl)
 {
     aShowText.SetText( String() );
     aOKBtn.Disable();

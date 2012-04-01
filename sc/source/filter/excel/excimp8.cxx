@@ -109,7 +109,6 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <cppuhelper/component_context.hxx>
-#include <sfx2/app.hxx>
 #include "xltoolbar.hxx"
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
@@ -392,9 +391,11 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
+#ifndef DISABLE_SCRIPTING
     // reading basic has been delayed until sheet objects (codenames etc.) are read
     if( HasBasic() )
         ReadBasic();
+#endif
     // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();

@@ -40,9 +40,8 @@ namespace scripting_runtimemgr
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
 
-class StorageBridge : public ::cppu::WeakImplHelper1< dcsssf::storage::XScriptInfoAccess >
+class StorageBridge : public ::cppu::WeakImplHelper1< ::drafts::com::sun::star::script::framework::storage::XScriptInfoAccess >
 {
     friend class StorageBridgeFactory;
 public:
@@ -57,7 +56,7 @@ public:
      * @return XScriptURI
      *      The URIs of the implementations
      */
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
+    virtual css::uno::Sequence< css::uno::Reference< ::drafts::com::sun::star::script::framework::storage::XScriptInfo > >
         SAL_CALL getImplementations(
             const ::rtl::OUString& queryURI )
         throw ( css::lang::IllegalArgumentException,
@@ -78,7 +77,7 @@ private:
 
     void initStorage() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< dcsssf::storage::XScriptInfoAccess > m_xScriptInfoAccess;
+    css::uno::Reference< ::drafts::com::sun::star::script::framework::storage::XScriptInfoAccess > m_xScriptInfoAccess;
     sal_Int32 m_sid;
 };
 }

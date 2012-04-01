@@ -44,7 +44,6 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
-#include "dpglobal.hxx"
 #include "pivot.hxx"
 
 #include "sc.hrc"

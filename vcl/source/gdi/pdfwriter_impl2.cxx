@@ -1214,14 +1214,14 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const rt
                                                                         )
 {
     uno::Reference< beans::XMaterialHolder > xResult;
-    if( i_rOwnerPassword.getLength() || i_rUserPassword.getLength() )
+    if( !i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty() )
     {
         EncHashTransporter* pTransporter = new EncHashTransporter;
         xResult = pTransporter;
 
         // get padded passwords
         sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
-        padPassword( i_rOwnerPassword.getLength() ? i_rOwnerPassword : i_rUserPassword, aPadOPW );
+        padPassword( i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW );
         padPassword( i_rUserPassword, aPadUPW );
         sal_Int32 nKeyLength = SECUR_40BIT_KEY;
         if( b128Bit )

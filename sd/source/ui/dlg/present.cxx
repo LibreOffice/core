@@ -271,7 +271,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 /*************************************************************************
 |*      Handler: Enabled/Disabled Listbox "Dias"
 \************************************************************************/
-IMPL_LINK( SdStartPresentationDlg, ChangeRangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
 {
     aLbDias.Enable( aRbtAtDia.IsChecked() );
     aLbCustomshow.Enable( aRbtCustomshow.IsChecked() );
@@ -282,7 +282,7 @@ IMPL_LINK( SdStartPresentationDlg, ChangeRangeHdl, void *, EMPTYARG )
 /*************************************************************************
 |*      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
 \************************************************************************/
-IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
 {
     const bool bAuto = aRbtAuto.IsChecked();
     const bool bWindow = aRbtWindow.IsChecked();
@@ -309,7 +309,7 @@ IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG 
 /*************************************************************************
 |*      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
 \************************************************************************/
-IMPL_LINK( SdStartPresentationDlg, ChangePauseHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
 {
     aCbxAutoLogo.Enable( aRbtAuto.IsChecked() && ( aTmfPause.GetTime().GetMSFromTime() > 0 ) );
     return( 0L );

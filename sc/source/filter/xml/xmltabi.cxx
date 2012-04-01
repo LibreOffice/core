@@ -51,7 +51,6 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/formsimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 
@@ -398,28 +397,27 @@ void ScXMLTableContext::EndElement()
     if (pOutlineTable)
     {
         ScOutlineArray* pColArray(pOutlineTable->GetColArray());
-        sal_Int32 nDepth(pColArray->GetDepth());
-        sal_Int32 i;
-        for (i = 0; i < nDepth; ++i)
+        size_t nDepth = pColArray->GetDepth();
+        for (size_t i = 0; i < nDepth; ++i)
         {
-            sal_Int32 nCount(pColArray->GetCount(static_cast<sal_uInt16>(i)));
-            for (sal_Int32 j = 0; j < nCount; ++j)
+            size_t nCount = pColArray->GetCount(i);
+            for (size_t j = 0; j < nCount; ++j)
             {
-                ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
+                const ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
                 if (pEntry->IsHidden())
-                    pColArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
+                    pColArray->SetVisibleBelow(i, j, false);
             }
         }
         ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
         nDepth = pRowArray->GetDepth();
-        for (i = 0; i < nDepth; ++i)
+        for (size_t i = 0; i < nDepth; ++i)
         {
-            sal_Int32 nCount(pRowArray->GetCount(static_cast<sal_uInt16>(i)));
-            for (sal_Int32 j = 0; j < nCount; ++j)
+            size_t nCount = pRowArray->GetCount(i);
+            for (size_t j = 0; j < nCount; ++j)
             {
-                ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
+                const ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
                 if (pEntry->IsHidden())
-                    pRowArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
+                    pRowArray->SetVisibleBelow(i, j, false);
             }
         }
     }

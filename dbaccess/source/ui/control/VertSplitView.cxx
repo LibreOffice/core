@@ -29,6 +29,7 @@
 #include "VertSplitView.hxx"
 
 #include <tools/debug.hxx>
+#include <vcl/split.hxx>
 
 #define SPLITTER_WIDTH  80
 

@@ -35,7 +35,6 @@
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/numuno.hxx>
 #include <svl/smplhint.hxx>
@@ -84,6 +83,7 @@
 #include "docsh.hxx"
 #include "hints.hxx"
 #include "docfunc.hxx"
+#include "postit.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
 #include "drwlayer.hxx"
@@ -97,7 +97,6 @@
 #include "printfun.hxx"
 #include "pfuncache.hxx"
 #include "scmod.hxx"
-#include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 #include "sheetevents.hxx"
 #include "sc.hrc"
@@ -195,6 +194,55 @@ const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
     return aRowsPropertyMap_Impl;
 }
 
+struct OrientationInfo
+{
+    OrientationInfo() : mnVert( 0 ), mnHori( 0 ) {}
+    uno::Reference< beans::XPropertySet > mxShape;
+    sal_Int32 mnVert;
+    sal_Int32 mnHori;
+};
+
+void lcl_captureShapeOrientationInfo( std::vector< OrientationInfo >& infos, ScModelObj& rModel )
+{
+    rtl::OUString sHori( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_HORIPOS ) );
+    rtl::OUString sVert( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VERTPOS ) );
+
+    uno::Reference<container::XIndexAccess> xPages( rModel.getDrawPages(), uno::UNO_QUERY );
+    if ( xPages.is() )
+    {
+        for ( sal_Int32 nIndex = 0, nPages = xPages->getCount(); nIndex < nPages; ++nIndex )
+        {
+            uno::Reference<container::XIndexAccess> xShapes( xPages->getByIndex( nIndex ), uno::UNO_QUERY );
+            for ( sal_Int32 nShapeIndex = 0, nShapes = xShapes->getCount(); nShapeIndex < nShapes; ++nShapeIndex )
+            {
+                uno::Reference< beans::XPropertySet > xShape( xShapes->getByIndex( nShapeIndex ), uno::UNO_QUERY );
+                uno::Reference< table::XCell > xCell( xShape->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ANCHOR ) ) ), uno::UNO_QUERY );
+                // only capture orientation if the shape is anchored to cell
+                if ( xShape.is() && xCell.is() )
+                {
+                    uno::Reference< beans::XPropertySetInfo > xPropInfo = xShape->getPropertySetInfo();
+                    if ( xPropInfo.is() && xPropInfo->hasPropertyByName( sHori ) && xPropInfo->hasPropertyByName( sVert ) )
+                    {
+                        OrientationInfo aShape;
+                        aShape.mxShape = xShape;
+                        xShape->getPropertyValue( sHori ) >>= aShape.mnHori;
+                        xShape->getPropertyValue( sVert ) >>= aShape.mnVert;
+                        infos.push_back( aShape );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void lcl_applyShapeOrientationInfo( std::vector< OrientationInfo >& infos )
+{
+    for ( std::vector< OrientationInfo >::iterator it = infos.begin(), it_end = infos.end(); it != it_end; ++it )
+    {
+        it->mxShape->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_HORIPOS ) ), uno::makeAny( it->mnHori ) );
+        it->mxShape->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VERTPOS ) ), uno::makeAny( it->mnVert ) );
+    }
+}
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
@@ -1683,9 +1731,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             pDoc->EnableUndo( bUndoEnabled );
             pDocShell->GetUndoManager()->SetMaxUndoActionCount(
                 bUndoEnabled
-                ? officecfg::Office::Common::Undo::Steps::get(
-                    comphelper::getProcessComponentContext())
-                : 0);
+                ? officecfg::Office::Common::Undo::Steps::get() : 0);
         }
         else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
         {
@@ -1695,7 +1741,18 @@ void SAL_CALL ScModelObj::setPropertyValue(
             {
                 pDoc->EnableAdjustHeight( bAdjustHeightEnabled );
                 if( bAdjustHeightEnabled )
+                {
+                    // during import ( e.g. oox ) shapes anchored by cell lose
+                    // any additional Hori/Vert orientation ( which offsets the
+                    // shape position relative to the cell ) when
+                    // UpdateAllRowHeights is called. Save Hori/Vert values
+                    // before calling UpdateAllRowHeights and re-apply them
+                    // after
+                    std::vector< OrientationInfo > savedOrientations;
+                    lcl_captureShapeOrientationInfo( savedOrientations, *this );
                     pDocShell->UpdateAllRowHeights();
+                    lcl_applyShapeOrientationInfo( savedOrientations );
+                }
             }
         }
         else if ( aString.EqualsAscii( SC_UNO_ISEXECUTELINKENABLED ) )
@@ -3436,18 +3493,15 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
     {
         sal_Int32 nFound = 0;
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
+        const ScNotes* pNotes = pDoc->GetNotes(nTab);
+        for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
         {
-            if (pCell->HasNote())
+            if (nFound == nIndex)
             {
-                if (nFound == nIndex)
-                {
-                    rPos = ScAddress( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
-                    return true;
-                }
-                ++nFound;
+                rPos = ScAddress( itr->first.first, itr->first.second, nTab );
+                return true;
             }
+            ++nFound;
         }
     }
     return false;
@@ -3518,10 +3572,8 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     sal_uLong nCount = 0;
     if (pDocShell)
     {
-        ScCellIterator aCellIter( pDocShell->GetDocument(), 0,0, nTab, MAXCOL,MAXROW, nTab );
-        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
-            if (pCell->HasNote())
-                ++nCount;
+        ScDocument* pDoc = pDocShell->GetDocument();
+        nCount = pDoc->GetNotes(nTab)->size();
     }
     return nCount;
 }

@@ -84,11 +84,10 @@ void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::Runt
     }
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaAddin::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAddin") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaAddin"));
 }
 
 uno::Sequence< rtl::OUString >

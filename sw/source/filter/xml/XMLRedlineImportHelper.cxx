@@ -330,7 +330,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 {
     // delete all left over (and obviously incomplete) RedlineInfos (and map)
     RedlineMapType::iterator aFind = aRedlineMap.begin();
-    for( ; aRedlineMap.end() != aFind; aFind++ )
+    for( ; aRedlineMap.end() != aFind; ++aFind )
     {
         RedlineInfo* pInfo = aFind->second;
 

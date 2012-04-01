@@ -74,18 +74,6 @@ namespace sdr
             mfRotation(fRotation)
         {
         }
-
-        void OverlayHatchRect::setSecondPosition(const basegfx::B2DPoint& rNew)
-        {
-            if(rNew != maSecondPosition)
-            {
-                // remember new value
-                maSecondPosition = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 

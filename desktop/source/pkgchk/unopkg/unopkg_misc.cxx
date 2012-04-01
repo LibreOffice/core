@@ -31,7 +31,7 @@
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
 #include "../../deployment/gui/dp_gui.hrc"
-#include "../../app/lockfile.hxx"
+#include "lockfile.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "rtl/bootstrap.hxx"
@@ -344,7 +344,7 @@ void printf_packages(
 {
     OSL_ASSERT(allExtensions.size() == vecUnaccepted.size());
 
-    if (allExtensions.size() == 0)
+    if (allExtensions.empty())
     {
         printf_space( level );
         dp_misc::writeConsole("<none>\n");

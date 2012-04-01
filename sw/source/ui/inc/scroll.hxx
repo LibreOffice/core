@@ -34,7 +34,6 @@ class SwScrollbar: public ScrollBar
     Size    aDocSz;
     sal_Bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
     sal_Bool    bAuto       :1;     // for scrolling mode
-    sal_Bool    bThumbEnabled:1;
     sal_Bool    bVisible    :1;     // show/hide should only set this flag
     sal_Bool    bSizeSet    :1;     // was the size already set?
 

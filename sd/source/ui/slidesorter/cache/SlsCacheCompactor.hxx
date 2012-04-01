@@ -92,7 +92,7 @@ private:
     */
     Timer maCompactionTimer;
     bool mbIsCompactionRunning;
-    DECL_LINK(CompactionCallback, Timer*);
+    DECL_LINK(CompactionCallback, void *);
 };
 
 

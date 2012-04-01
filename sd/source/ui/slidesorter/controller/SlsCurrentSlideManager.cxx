@@ -298,7 +298,7 @@ void CurrentSlideManager::HandleModelChange (void)
 
 
 
-IMPL_LINK(CurrentSlideManager, SwitchPageCallback, void*, EMPTYARG)
+IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
 {
     if (mpCurrentSlide)
     {

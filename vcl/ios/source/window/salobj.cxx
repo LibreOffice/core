@@ -202,30 +202,6 @@ void IosSalObject::Show( sal_Bool /*bVisible*/ )
 
 // -----------------------------------------------------------------------
 
-void IosSalObject::Enable( sal_Bool )
-{
-}
-
-// -----------------------------------------------------------------------
-
-void IosSalObject::GrabFocus()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void IosSalObject::SetBackground()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void IosSalObject::SetBackground( SalColor )
-{
-}
-
-// -----------------------------------------------------------------------
-
 const SystemEnvData* IosSalObject::GetSystemData() const
 {
     return &maSysData;

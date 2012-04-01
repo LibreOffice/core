@@ -34,10 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter() throw()
-{
-}
-
 XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter(
         const Reference< XDocumentHandler > & rHandler ) throw() :
     xHandler( rHandler ),

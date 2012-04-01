@@ -51,6 +51,7 @@
 #include "CustomAnimationPane.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
+#include "sdmod.hxx"
 
 #include "helpids.h"
 
@@ -90,7 +91,7 @@ public:
 
     void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
-    DECL_LINK( implDoubleClickHdl, Control* );
+    DECL_LINK(implDoubleClickHdl, void *);
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
@@ -152,7 +153,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( CategoryListBox, implDoubleClickHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
 {
     CaptureMouse();
     return 0;
@@ -608,14 +609,14 @@ double CustomAnimationCreateDialog::getSelectedDuration() const
     return getCurrentPage()->getDuration();
 }
 
-IMPL_LINK( CustomAnimationCreateDialog, implActivatePagekHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(CustomAnimationCreateDialog, implActivatePagekHdl)
 {
     getCurrentPage()->setDuration( mfDuration );
     getCurrentPage()->setIsPreview( mbIsPreview );
     return 1;
 }
 
-IMPL_LINK( CustomAnimationCreateDialog, implDeactivatePagekHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(CustomAnimationCreateDialog, implDeactivatePagekHdl)
 {
     mfDuration = getCurrentPage()->getDuration();
     mbIsPreview = getCurrentPage()->getIsPreview();

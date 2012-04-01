@@ -30,6 +30,7 @@
 #define OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 
 #include "oox/helper/propertymap.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { class ModelObjectHelper; }
 
@@ -74,7 +75,7 @@ enum ShapePropertyId
 
 // ============================================================================
 
-struct ShapePropertyInfo
+struct OOX_DLLPUBLIC ShapePropertyInfo
 {
     const sal_Int32*    mpnPropertyIds;         /// Pointer to array of property identifiers for all SHAPEPROP properties.
     bool                mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
@@ -97,7 +98,7 @@ struct ShapePropertyInfo
 
 // ============================================================================
 
-class ShapePropertyMap : public PropertyMap
+class OOX_DLLPUBLIC ShapePropertyMap : public PropertyMap
 {
 public:
     explicit            ShapePropertyMap(

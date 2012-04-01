@@ -171,7 +171,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
         return 0;
     }
 
-    if ( m_sFileName == ::rtl::OUString() )
+    if ( m_sFileName.isEmpty() )
     {
         return 1;
     }
@@ -225,10 +225,9 @@ Reference< XFoundFiles > SAL_CALL ScVbaFileSearch::getFoundFiles() throw (css::u
     return xFoundFiles;
 }
 
-rtl::OUString& ScVbaFileSearch::getServiceImplName()
+rtl::OUString ScVbaFileSearch::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaFileSearch") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaFileSearch"));
 }
 
 css::uno::Sequence< rtl::OUString > ScVbaFileSearch::getServiceNames()

@@ -51,7 +51,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
-#include <svx/zoomslideritem.hxx>
 #include "prevwsh.hxx"
 #include "preview.hxx"
 #include "printfun.hxx"
@@ -77,8 +76,8 @@
 
 #include <basegfx/tools/zoomtools.hxx>
 #include <svx/zoom_def.hxx>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "sc.hrc"
 #include "scabstdlg.hxx"
 //  for mouse wheel
 #define MINZOOM_SLIDER 10
@@ -309,18 +308,21 @@ void ScPreviewShell::UpdateScrollBars()
             //  page smaller than window -> center (but put scrollbar to 0)
             aOfs.X() = 0;
             pPreview->SetXOffset( nMaxPos / 2 );
+            pHorScroll->Show( sal_False );
         }
         else if (aOfs.X() < 0)
         {
             //  page larger than window -> never use negative offset
             aOfs.X() = 0;
             pPreview->SetXOffset( 0 );
+            pHorScroll->Show( sal_True );
         }
         else if (aOfs.X() > nMaxPos)
         {
             //  limit offset to align with right edge of window
             aOfs.X() = nMaxPos;
             pPreview->SetXOffset(nMaxPos);
+            pHorScroll->Show( sal_True );
         }
         pHorScroll->SetThumbPos( aOfs.X() );
     }
@@ -841,7 +843,11 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
-    rData.aTitle        = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        rData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        rData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )

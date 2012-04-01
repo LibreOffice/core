@@ -489,7 +489,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     if( sDBName.Len() )
     {
         TransferDataContainer* pContainer = new TransferDataContainer;
-        STAR_REFERENCE( datatransfer::XTransferable ) xRef( pContainer );
+        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
         if( sColumnName.Len() )
         {
             // drag database field

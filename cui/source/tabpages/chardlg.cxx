@@ -1257,7 +1257,7 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharNamePage, UpdateHdl_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl)
 {
     UpdatePreview_Impl();
     return 0;
@@ -1820,7 +1820,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharEffectsPage, UpdatePreview_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl)
 {
     bool bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) ||
                      ( m_aOverlineLB.GetSelectEntryPos()  > 0 ) ||
@@ -1833,7 +1833,7 @@ IMPL_LINK( SvxCharEffectsPage, UpdatePreview_Impl, ListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharEffectsPage, CbClickHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl)
 {
     UpdatePreview_Impl();
     return 0;
@@ -1841,7 +1841,7 @@ IMPL_LINK( SvxCharEffectsPage, CbClickHdl_Impl, CheckBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharEffectsPage, TristClickHdl_Impl, TriStateBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl)
 {
     UpdatePreview_Impl();
     return 0;
@@ -2881,7 +2881,7 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, FontModifyHdl_Impl, MetricField*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl)
 {
     sal_uInt8 nEscProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
     short nEsc  = (short)m_aHighLowEdit.GetValue();
@@ -2924,7 +2924,7 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, KerningSelectHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
 {
     if ( m_aKerningLB.GetSelectEntryPos() > 0 )
     {
@@ -2959,7 +2959,7 @@ IMPL_LINK( SvxCharPositionPage, KerningSelectHdl_Impl, ListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, KerningModifyHdl_Impl, MetricField*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
 {
     long nVal = static_cast<long>(m_aKerningEdit.GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
@@ -2982,7 +2982,7 @@ IMPL_LINK( SvxCharPositionPage, KerningModifyHdl_Impl, MetricField*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, PairKerningHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharPositionPage, PairKerningHdl_Impl)
 {
     return 0;
 }
@@ -3016,7 +3016,7 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl)
 {
     m_aPreviewWin.SetFontWidthScale( sal_uInt16( m_aScaleWidthMF.GetValue() ) );
 
@@ -3594,7 +3594,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharTwoLinesPage, TwoLinesHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl)
 {
     sal_Bool bChecked = m_aTwoLinesBtn.IsChecked();
     m_aStartBracketFT.Enable( bChecked );

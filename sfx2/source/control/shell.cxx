@@ -28,7 +28,6 @@
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
-#include <comphelper/processfactory.hxx>
 #include <basic/sbstar.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/oustringostreaminserter.hxx>
@@ -47,7 +46,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -309,45 +307,6 @@ const SfxPoolItem* SfxShell::GetItem
 
 //--------------------------------------------------------------------
 
-void SfxShell::RemoveItem
-(
-    sal_uInt16  nSlotId  // Slot-Id of the deleting <SfxPoolItem>s
-)
-
-/*  [Description]
-
-    With this method the general available subclasses instances of
-    <cSfxPoolItem> from the SfxShell are removed.
-
-    The stored instance is deleted.
-
-    [Cross-reference]
-
-    <SfxShell::PutItem(const SfxPoolItem&)>
-    <SfxShell::GetItem(sal_uInt16)>
-*/
-
-{
-    for ( sal_uInt16 nPos = 0; nPos < pImp->aItems.Count(); ++nPos )
-        if ( pImp->aItems.GetObject(nPos)->Which() == nSlotId )
-        {
-            // Remove and delete Item
-            SfxPoolItem *pItem = pImp->aItems.GetObject(nPos);
-            delete pItem;
-            pImp->aItems.Remove(nPos);
-
-            // if active, notify Bindings
-            SfxDispatcher *pDispat = GetDispatcher();
-            if ( pDispat )
-            {
-                SfxVoidItem aVoid( nSlotId );
-                pDispat->GetBindings()->Broadcast( SfxPoolItemHint( &aVoid ) );
-            }
-        }
-}
-
-//--------------------------------------------------------------------
-
 void SfxShell::PutItem
 (
     const SfxPoolItem&  rItem  /* Instance, of which a copy is created,
@@ -431,20 +390,6 @@ SfxInterface* SfxShell::GetInterface() const
 
 //--------------------------------------------------------------------
 
-SfxBroadcaster* SfxShell::GetBroadcaster()
-
-/*  [Description]
-
-    Returns a SfxBroadcaster for this SfxShell instance until the class of
-    SfxShell is derived by SfxBroadcaster.
-*/
-
-{
-    return pImp;
-}
-
-//--------------------------------------------------------------------
-
 ::svl::IUndoManager* SfxShell::GetUndoManager()
 
 /*  [Description]
@@ -487,8 +432,7 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
         pUndoMgr->SetMaxUndoActionCount(
-            officecfg::Office::Common::Undo::Steps::get(
-                comphelper::getProcessComponentContext()));
+            officecfg::Office::Common::Undo::Steps::get());
 }
 
 //--------------------------------------------------------------------
@@ -498,7 +442,7 @@ SfxRepeatTarget* SfxShell::GetRepeatTarget() const
 /*  [Description]
 
     Returns a pointer to the <SfxRepeatTarget> instance that is used in
-    SID_REPEAT as repeat target when it is adressed from the <SfxUndoManager>
+    SID_REPEAT as repeat target when it is addressed from the <SfxUndoManager>
     supplied by this SfxShell. The return value can be NULL.
 
     [Note]

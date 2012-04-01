@@ -35,9 +35,6 @@
 #include <math.h>
 #include <stdio.h>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 #include <unotools/bootstrap.hxx>
 #include <svl/zforlist.hxx>
 
@@ -51,8 +48,6 @@
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
 
-#include <string.h>
-#include <math.h>
 #include <vector>
 
 using ::std::vector;
@@ -3273,8 +3268,7 @@ void ScInterpreter::ScMatRef()
                 PushDouble( pCell->GetValue() );
             else
             {
-                String aVal;
-                pCell->GetString( aVal );
+                rtl::OUString aVal = pCell->GetString();
                 PushString( aVal );
             }
             pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );

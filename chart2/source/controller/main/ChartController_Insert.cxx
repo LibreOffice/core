@@ -338,56 +338,6 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
     }
 }
 
-void ChartController::executeDispatch_InsertMenu_YErrorBars()
-{
-    //if a series is selected insert error bars for that series only:
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
-    if( xSeries.is())
-    {
-        executeDispatch_InsertYErrorBars();
-        return;
-    }
-
-    //if no series is selected insert error bars for all series
-    UndoGuard aUndoGuard(
-        ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::INSERT, ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_ERRORS ) ),
-        m_xUndoManager );
-
-    try
-    {
-        wrapper::AllSeriesStatisticsConverter aItemConverter(
-            getModel(), m_pDrawModelWrapper->GetItemPool() );
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        aItemConverter.FillItemSet( aItemSet );
-
-        //prepare and open dialog
-        SolarMutexGuard aGuard;
-        InsertErrorBarsDialog aDlg(
-            m_pChartWindow, aItemSet,
-            uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ));
-        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-            InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rtl::OUString() ) );
-
-        if( aDlg.Execute() == RET_OK )
-        {
-            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.FillItemSet( aOutItemSet );
-
-            // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
-            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
-            if( bChanged )
-                aUndoGuard.commit();
-        }
-    }
-    catch(const uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-}
-
 void ChartController::executeDispatch_InsertMeanValue()
 {
     UndoGuard aUndoGuard(
@@ -522,20 +472,27 @@ void ChartController::executeDispatch_InsertTrendline()
     }
 }
 
-void ChartController::executeDispatch_InsertYErrorBars()
+void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 {
+    ObjectType objType = bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
+
+    //if a series is selected insert error bars for that series only:
     uno::Reference< chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+
     if( xSeries.is())
     {
         UndoLiveUpdateGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_ERROR_BARS ))),
+                ActionDescriptionProvider::INSERT,
+                String( SchResId( bYError ? STR_OBJECT_ERROR_BARS_Y : STR_OBJECT_ERROR_BARS_X ))),
             m_xUndoManager );
 
         // add error bars with standard deviation
         uno::Reference< beans::XPropertySet > xErrorBarProp(
-            StatisticsHelper::addErrorBars( xSeries, m_xCC, ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION ));
+            StatisticsHelper::addErrorBars( xSeries, m_xCC,
+                                            ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION,
+                                            bYError));
 
         // get an appropriate item converter
         wrapper::ErrorBarItemConverter aItemConverter(
@@ -545,17 +502,19 @@ void ChartController::executeDispatch_InsertYErrorBars()
 
         // open dialog
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE,bYError));
         aItemConverter.FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
-                OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), m_aSelection.getSelectedCID()));
+                objType, ::rtl::OUString(), m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
         SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                               uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-            InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, m_aSelection.getSelectedCID()));
+            InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
+                                                                             m_xChartView, m_aSelection.getSelectedCID()));
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
@@ -568,6 +527,49 @@ void ChartController::executeDispatch_InsertYErrorBars()
                 aItemConverter.ApplyItemSet( *pOutItemSet );
             }
             aUndoGuard.commit();
+        }
+    }
+    else
+    {
+        //if no series is selected insert error bars for all series
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT,
+                ObjectNameProvider::getName_ObjectForAllSeries( objType ) ),
+            m_xUndoManager );
+
+        try
+        {
+            wrapper::AllSeriesStatisticsConverter aItemConverter(
+                getModel(), m_pDrawModelWrapper->GetItemPool() );
+            SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+            aItemConverter.FillItemSet( aItemSet );
+
+            //prepare and open dialog
+            SolarMutexGuard aGuard;
+            InsertErrorBarsDialog aDlg(
+                m_pChartWindow, aItemSet,
+                uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
+                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
+
+            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rtl::OUString() ) );
+
+            if( aDlg.Execute() == RET_OK )
+            {
+                SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
+                aDlg.FillItemSet( aOutItemSet );
+
+                // lock controllers till end of block
+                ControllerLockGuard aCLGuard( getModel() );
+                bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+                if( bChanged )
+                    aUndoGuard.commit();
+            }
+        }
+        catch(const uno::RuntimeException& e)
+        {
+            ASSERT_EXCEPTION( e );
         }
     }
 }
@@ -674,7 +676,7 @@ void ChartController::executeDispatch_DeleteTrendlineEquation()
     }
 }
 
-void ChartController::executeDispatch_DeleteYErrorBars()
+void ChartController::executeDispatch_DeleteErrorBars( bool bYError )
 {
     uno::Reference< chart2::XDataSeries > xDataSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ));
@@ -684,7 +686,7 @@ void ChartController::executeDispatch_DeleteYErrorBars()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_CURVE ))),
             m_xUndoManager );
-        StatisticsHelper::removeErrorBars( xDataSeries );
+        StatisticsHelper::removeErrorBars( xDataSeries, bYError );
         aUndoGuard.commit();
     }
 }

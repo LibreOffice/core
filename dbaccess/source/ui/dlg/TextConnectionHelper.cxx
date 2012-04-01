@@ -46,7 +46,6 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
 #include <jvmaccess/virtualmachine.hxx>
-#include "AdabasStat.hxx"
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
@@ -62,13 +61,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
-#include <connectivity/CommonTools.hxx>
 
 #include "DBSetupConnectionPages.hxx"
-
-#include "dbu_dlg.hrc"
-
-#include "dbaccess_helpid.hrc"
 
 #include <unotools/pathoptions.hxx>
 

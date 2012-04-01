@@ -43,10 +43,7 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
         for (sal_uLong i = 0; i < mpCustomShowList->Count(); i++)
         {
             SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
-            if( pNewPage == 0 )
-                pCustomShow->RemovePage(pOldPage);
-            else
-                pCustomShow->ReplacePage(pOldPage,pNewPage);
+            pCustomShow->ReplacePage(pOldPage, pNewPage);
         }
     }
 }

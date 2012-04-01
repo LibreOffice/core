@@ -29,6 +29,7 @@
 #if !defined INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 #define INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 
+#include "jvmaccessdllapi.h"
 #include "rtl/ref.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
@@ -47,7 +48,7 @@ namespace jvmaccess {
 
 /** An encapsulating wrapper around a Java virtual machine.
  */
-class VirtualMachine: public salhelper::SimpleReferenceObject
+class JVMACCESS_DLLPUBLIC VirtualMachine: public salhelper::SimpleReferenceObject
 {
 public:
     /** A helper to attach a thread to a Java virtual machine.
@@ -60,12 +61,12 @@ public:
         detach the thread from the virtual machine upon destruction of the guard
         at the bottom of the stack).
      */
-    class AttachGuard
+    class JVMACCESS_DLLPUBLIC AttachGuard
     {
     public:
         /** An exception indicating failure to create an AttachGuard.
          */
-        class CreationException
+        class JVMACCESS_DLLPUBLIC CreationException
         {
         public:
             CreationException();

@@ -77,10 +77,10 @@ private:
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
-    DECL_LINK( HelpCheckHdl_Impl, CheckBox* );
-    DECL_LINK( HelpAgentResetHdl_Impl, PushButton* );
+    DECL_LINK(HelpCheckHdl_Impl, void *);
+    DECL_LINK(HelpAgentResetHdl_Impl, void *);
 #ifdef WNT
-    DECL_LINK( OnFileDlgToggled, CheckBox* );
+    DECL_LINK( OnFileDlgToggled, void* );
 #endif
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );

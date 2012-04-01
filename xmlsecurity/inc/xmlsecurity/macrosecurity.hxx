@@ -124,7 +124,7 @@ private:
     sal_uInt16              mnCurLevel;
 
 protected:
-    DECL_LINK(          RadioButtonHdl, RadioButton* );
+    DECL_LINK(RadioButtonHdl, void *);
 
 public:
                         MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );

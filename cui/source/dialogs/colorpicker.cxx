@@ -1425,7 +1425,7 @@ IMPL_LINK( ColorPickerDialog, ColorModifyHdl, void *, p )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( ColorPickerDialog, ModeModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl)
 {
     ColorMode eMode = HUE;
 

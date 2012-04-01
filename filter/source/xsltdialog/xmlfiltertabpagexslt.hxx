@@ -49,7 +49,6 @@ public:
     void SetInfo(const filter_info_impl* pInfo);
 
     DECL_LINK( ClickBrowseHdl_Impl, PushButton * );
-    DECL_LINK( ToggleXSLTImplHdl, void* );
 
     FixedText       maFTDocType;
     Edit            maEDDocType;

@@ -117,11 +117,6 @@ void SvXMLUnitConverter::SetCoreMeasureUnit(sal_Int16 const eCoreMeasureUnit)
     m_pImpl->m_eCoreMeasureUnit = eCoreMeasureUnit;
 }
 
-sal_Int16 SvXMLUnitConverter::GetCoreMeasureUnit() const
-{
-    return m_pImpl->m_eCoreMeasureUnit;
-}
-
 void SvXMLUnitConverter::SetXMLMeasureUnit(sal_Int16 const eXMLMeasureUnit)
 {
     m_pImpl->m_eXMLMeasureUnit = eXMLMeasureUnit;
@@ -195,16 +190,6 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
                                         m_pImpl->m_eXMLMeasureUnit );
 }
 
-/** convert measure with given unit to string */
-void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
-                                         sal_Int32 nMeasure,
-                                         sal_Int16 eSrcUnit ) const
-{
-    ::sax::Converter::convertMeasure( rString, nMeasure,
-                                        eSrcUnit,
-                                        m_pImpl->m_eXMLMeasureUnit );
-}
-
 /** convert string to enum using given enum map, if the enum is
     not found in the map, this method will return false
 */
@@ -242,37 +227,6 @@ sal_Bool SvXMLUnitConverter::convertEnum(
         ++pMap;
     }
     return sal_False;
-}
-
-/** convert enum to string using given enum map with optional
-    default string. If the enum is not found in the map,
-    this method will either use the given default or return
-    false if not default is set
-*/
-sal_Bool SvXMLUnitConverter::convertEnum( OUStringBuffer& rBuffer,
-                                      sal_uInt16 nValue,
-                                      const SvXMLEnumStringMapEntry *pMap,
-                                      sal_Char * pDefault /* = NULL */ )
-{
-    const sal_Char *pStr = pDefault;
-
-    while( pMap->pName )
-    {
-        if( pMap->nValue == nValue )
-        {
-            pStr = pMap->pName;
-            break;
-        }
-        ++pMap;
-    }
-
-    if( NULL == pStr )
-        pStr = pDefault;
-
-    if( NULL != pStr )
-        rBuffer.appendAscii( pStr );
-
-    return NULL != pStr;
 }
 
 /** convert enum to string using given token map with an optional

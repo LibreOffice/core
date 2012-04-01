@@ -59,7 +59,6 @@ bool implnCopyRange( const css::uno::Reference< css::frame::XModel>& xModel, con
 ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
 ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
 ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
 
 sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const ::rtl::OUString& sRangeStr );
 formula::FormulaGrammar::Grammar GetFormulaGrammar( ScDocument* pDoc, const ScAddress& sAddress, const css::uno::Any& aFormula );

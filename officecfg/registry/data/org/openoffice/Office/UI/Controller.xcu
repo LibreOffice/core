@@ -158,7 +158,7 @@
             <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
       <node oor:name="c14" oor:op="replace">
@@ -169,7 +169,7 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
       <node oor:name="c15" oor:op="replace">
@@ -180,7 +180,7 @@
             <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
     </node>

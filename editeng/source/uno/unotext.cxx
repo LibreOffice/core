@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextField.hdl>
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
@@ -371,8 +370,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     {
         CheckSelection( maSelection, pForwarder );
 
-        String aConverted( aString );
-        aConverted.ConvertLineEnd( LINEEND_LF );  // Simply count the number of line endings
+        String aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
 
         pForwarder->QuickInsertText( aConverted, maSelection );
         mpEditSource->UpdateData();
@@ -1582,14 +1580,6 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxItemPropertySet* _pSet  ) throw()
 {
 }
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet  ) throw()
-: SvxUnoTextBase_Base( pSource, _pSet )
-{
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
-}
-
 SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > xParent ) throw()
 : SvxUnoTextBase_Base( pSource, _pSet )
 {
@@ -1607,25 +1597,6 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
 
 SvxUnoTextBase::~SvxUnoTextBase() throw()
 {
-}
-
-// Internal
-ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
-{
-    SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
-        pForwarder->QuickInsertField( rField, GetSelection() );
-        GetEditSource()->UpdateData();
-
-        //  Adapt selection
-        //! It would be easier if the EditEngine would return the selection
-        //! on QuickInsertText...
-        CollapseToStart();
-        GoRight( 1, sal_True );  // Field is always 1 character
-    }
-
-    return GetSelection();  // Selection with the field
 }
 
 uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection( const ESelection& rSel )
@@ -2188,15 +2159,6 @@ SvxUnoText::SvxUnoText( const SvxUnoText& rText ) throw()
 
 SvxUnoText::~SvxUnoText() throw()
 {
-}
-
-SvxUnoText* SvxUnoText::getImplementation( const uno::Reference< uno::XInterface >& xInt )
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<SvxUnoText*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxUnoText::getUnoTunnelId())));
-    else
-        return NULL;
 }
 
 namespace

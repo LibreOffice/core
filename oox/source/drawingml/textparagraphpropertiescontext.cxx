@@ -64,12 +64,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
 
     // ST_TextAlignType
-    if ( xAttribs->hasAttribute( XML_algn ) )
-    {
-        sal_Int32 nAlign = xAttribs->getOptionalValueToken( XML_algn, XML_l );
-        rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( nAlign );
-    }
-//  OSL_TRACE( "OOX: para adjust %d", GetParaAdjust( nAlign ));
+    rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( xAttribs->getOptionalValueToken( XML_algn, XML_l ) );
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32

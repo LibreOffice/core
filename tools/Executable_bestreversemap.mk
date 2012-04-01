@@ -24,7 +24,6 @@ $(eval $(call gb_Executable_Executable,bestreversemap))
 
 $(eval $(call gb_Executable_set_include,bestreversemap,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/ \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,bestreversemap,\

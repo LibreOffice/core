@@ -69,8 +69,8 @@ SdSnapLineDlg::SdSnapLineDlg(
       aBtnCancel  (this, SdResId(BTN_CANCEL)),
       aBtnHelp    (this, SdResId(BTN_HELP)),
       aBtnDelete  (this, SdResId(BTN_DELETE)),
-      eUIUnit(pView->GetDoc()->GetUIUnit()),
-      aUIScale(pView->GetDoc()->GetUIScale())
+      eUIUnit(pView->GetDoc().GetUIUnit()),
+      aUIScale(pView->GetDoc().GetUIScale())
 {
     FreeResource();
 

@@ -83,11 +83,11 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange
     aDateTime.ConvertToUTC();
 }
 
-ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRange,
-                        const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
-                        const ScChangeActionState eTempState, const DateTime& aTempDateTime,
-                        const String& aTempUser,  const String& aTempComment)
-        :
+ScChangeAction::ScChangeAction(
+    ScChangeActionType eTypeP, const ScBigRange& rRange,
+    const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
+    const ScChangeActionState eTempState, const DateTime& aTempDateTime,
+    const rtl::OUString& aTempUser,  const rtl::OUString& aTempComment) :
         aBigRange( rRange ),
         aDateTime( aTempDateTime ),
         aUser( aTempUser ),
@@ -130,19 +130,48 @@ ScChangeAction::~ScChangeAction()
     RemoveAllLinks();
 }
 
+bool ScChangeAction::IsInsertType() const
+{
+    return eType == SC_CAT_INSERT_COLS || eType == SC_CAT_INSERT_ROWS || eType == SC_CAT_INSERT_TABS;
+}
 
-sal_Bool ScChangeAction::IsVisible() const
+bool ScChangeAction::IsDeleteType() const
+{
+    return eType == SC_CAT_DELETE_COLS || eType == SC_CAT_DELETE_ROWS || eType == SC_CAT_DELETE_TABS;
+}
+
+bool ScChangeAction::IsVirgin() const
+{
+    return eState == SC_CAS_VIRGIN;
+}
+
+bool ScChangeAction::IsAccepted() const
+{
+    return eState == SC_CAS_ACCEPTED;
+}
+
+bool ScChangeAction::IsRejected() const
+{
+    return eState == SC_CAS_REJECTED;
+}
+
+bool ScChangeAction::IsRejecting() const
+{
+    return nRejectAction != 0;
+}
+
+bool ScChangeAction::IsVisible() const
 {
     //! sequence order of execution is significant
     if ( IsRejected() || GetType() == SC_CAT_DELETE_TABS || IsDeletedIn() )
         return false;
     if ( GetType() == SC_CAT_CONTENT )
         return ((ScChangeActionContent*)this)->IsTopContent();
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScChangeAction::IsTouchable() const
+bool ScChangeAction::IsTouchable() const
 {
     //! sequence order of execution is significant
     if ( IsRejected() || GetType() == SC_CAT_REJECT || IsDeletedIn() )
@@ -152,11 +181,11 @@ sal_Bool ScChangeAction::IsTouchable() const
         return ((ScChangeActionContent*)this)->IsTopContent();
     if ( IsRejecting() )
         return false;
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScChangeAction::IsClickable() const
+bool ScChangeAction::IsClickable() const
 {
     //! sequence order of execution is significant
     if ( !IsVirgin() )
@@ -182,13 +211,13 @@ sal_Bool ScChangeAction::IsClickable() const
                 pL = pL->GetNext();
             }
         }
-        return sal_True;    // for Select() a content doesn't have to be touchable
+        return true;    // for Select() a content doesn't have to be touchable
     }
     return IsTouchable();   // Accept()/Reject() only on touchables
 }
 
 
-sal_Bool ScChangeAction::IsRejectable() const
+bool ScChangeAction::IsRejectable() const
 {
     //! sequence order of execution is significant
     if ( !IsClickable() )
@@ -200,14 +229,14 @@ sal_Bool ScChangeAction::IsRejectable() const
         ScChangeActionContent* pNextContent =
             ((ScChangeActionContent*)this)->GetNextContent();
         if ( pNextContent == NULL )
-            return sal_True;        // *this is TopContent
+            return true;        // *this is TopContent
         return pNextContent->IsRejected();      // *this is next rejectable
     }
     return IsTouchable();
 }
 
 
-sal_Bool ScChangeAction::IsInternalRejectable() const
+bool ScChangeAction::IsInternalRejectable() const
 {
     //! sequence order of execution is significant
     if ( !IsVirgin() )
@@ -219,20 +248,20 @@ sal_Bool ScChangeAction::IsInternalRejectable() const
         ScChangeActionContent* pNextContent =
             ((ScChangeActionContent*)this)->GetNextContent();
         if ( pNextContent == NULL )
-            return sal_True;        // *this is TopContent
+            return true;        // *this is TopContent
         return pNextContent->IsRejected();      // *this is next rejectable
     }
     return IsTouchable();
 }
 
 
-sal_Bool ScChangeAction::IsDialogRoot() const
+bool ScChangeAction::IsDialogRoot() const
 {
     return IsInternalRejectable();      // only rejectables in root
 }
 
 
-sal_Bool ScChangeAction::IsDialogParent() const
+bool ScChangeAction::IsDialogParent() const
 {
     //! sequence order of execution is significant
     if ( GetType() == SC_CAT_CONTENT )
@@ -240,36 +269,36 @@ sal_Bool ScChangeAction::IsDialogParent() const
         if ( !IsDialogRoot() )
             return false;
         if ( ((ScChangeActionContent*)this)->IsMatrixOrigin() && HasDependent() )
-            return sal_True;
+            return true;
         ScChangeActionContent* pPrevContent =
             ((ScChangeActionContent*)this)->GetPrevContent();
         return pPrevContent && pPrevContent->IsVirgin();
     }
     if ( HasDependent() )
-        return IsDeleteType() ? sal_True : !IsDeletedIn();
+        return IsDeleteType() ? true : !IsDeletedIn();
     if ( HasDeleted() )
     {
         if ( IsDeleteType() )
         {
             if ( IsDialogRoot() )
-                return sal_True;
+                return true;
             ScChangeActionLinkEntry* pL = pLinkDeleted;
             while ( pL )
             {
                 ScChangeAction* p = pL->GetAction();
                 if ( p && p->GetType() != eType )
-                    return sal_True;
+                    return true;
                 pL = pL->GetNext();
             }
         }
         else
-            return sal_True;
+            return true;
     }
     return false;
 }
 
 
-sal_Bool ScChangeAction::IsMasterDelete() const
+bool ScChangeAction::IsMasterDelete() const
 {
     if ( !IsDeleteType() )
         return false;
@@ -294,9 +323,9 @@ void ScChangeAction::RemoveAllAnyLinks()
 }
 
 
-sal_Bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
+bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
 {
-    sal_Bool bRemoved = false;
+    bool bRemoved = false;
     ScChangeActionLinkEntry* pL = GetDeletedIn();
     while ( pL )
     {
@@ -304,26 +333,29 @@ sal_Bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
         if ( pL->GetAction() == p )
         {
             delete pL;
-            bRemoved = sal_True;
+            bRemoved = true;
         }
         pL = pNextLink;
     }
     return bRemoved;
 }
 
+bool ScChangeAction::IsDeletedIn() const
+{
+    return GetDeletedIn() != NULL;
+}
 
-sal_Bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
+bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
 {
     ScChangeActionLinkEntry* pL = GetDeletedIn();
     while ( pL )
     {
         if ( pL->GetAction() == p )
-            return sal_True;
+            return true;
         pL = pL->GetNext();
     }
     return false;
 }
-
 
 void ScChangeAction::RemoveAllDeletedIn()
 {
@@ -332,8 +364,7 @@ void ScChangeAction::RemoveAllDeletedIn()
         delete pLinkDeletedIn;      // rueckt sich selbst hoch
 }
 
-
-sal_Bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
+bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
 {
     ScChangeAction* p;
     ScChangeActionLinkEntry* pL = GetDeletedIn();
@@ -359,13 +390,22 @@ sal_Bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
         {
             if ( (p = pL->GetAction()) != NULL &&
                     (p->GetType() == eDelType || p->GetType() == eInsType) )
-                return sal_True;
+                return true;
             pL = pL->GetNext();
         }
     }
     return false;
 }
 
+bool ScChangeAction::HasDependent() const
+{
+    return pLinkDependent != NULL;
+}
+
+bool ScChangeAction::HasDeleted() const
+{
+    return pLinkDeleted != NULL;
+}
 
 void ScChangeAction::SetDeletedIn( ScChangeAction* p )
 {
@@ -409,84 +449,98 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
 }
 
 
-void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
-        sal_Bool /* bSplitRange */, bool bWarning ) const
+void ScChangeAction::GetDescription(
+    rtl::OUString& rStr, ScDocument* /* pDoc */, bool /* bSplitRange */, bool bWarning ) const
 {
-    if ( IsRejecting() && bWarning )
+    if (!IsRejecting() || !bWarning)
+        return;
+
+    // Add comment if rejection may have resulted in references
+    // not properly restored in formulas. See specification at
+    // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
+
+    rtl::OUStringBuffer aBuf(rStr); // Take the original string.
+    if (GetType() == SC_CAT_MOVE)
     {
-        // Add comment if rejection may have resulted in references
-        // not properly restored in formulas. See specification at
-        // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
-        if (GetType() == SC_CAT_MOVE)
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (IsInsertType())
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    const ScChangeTrack* pCT = GetChangeTrack();
+    if (!pCT)
+        return;
+
+    ScChangeAction* pReject = pCT->GetActionOrGenerated(GetRejectAction());
+
+    if (!pReject)
+        return;
+
+    if (pReject->GetType() == SC_CAT_MOVE)
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (pReject->IsDeleteType())
+    {
+        aBuf.append(
+            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+        aBuf.append(sal_Unicode(' '));
+        rStr = aBuf.makeStringAndClear();
+        return;
+    }
+
+    if (pReject->HasDependent())
+    {
+        ScChangeActionMap aMap;
+        pCT->GetDependents( pReject, aMap, false, true );
+        ScChangeActionMap::iterator itChangeAction;
+        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
         {
-            rStr += ScGlobal::GetRscString(
-                    STR_CHANGED_MOVE_REJECTION_WARNING);
-            rStr += ' ';
-        }
-        else if (IsInsertType())
-        {
-            rStr += ScGlobal::GetRscString(
-                    STR_CHANGED_DELETE_REJECTION_WARNING);
-            rStr += ' ';
-        }
-        else
-        {
-            const ScChangeTrack* pCT = GetChangeTrack();
-            if (pCT)
+            if( itChangeAction->second->GetType() == SC_CAT_MOVE)
             {
-                ScChangeAction* pReject = pCT->GetActionOrGenerated(
-                        GetRejectAction());
-                if (pReject)
-                {
-                    if (pReject->GetType() == SC_CAT_MOVE)
-                    {
-                        rStr += ScGlobal::GetRscString(
-                                STR_CHANGED_MOVE_REJECTION_WARNING);
-                        rStr += ' ';
-                    }
-                    else if (pReject->IsDeleteType())
-                    {
-                        rStr += ScGlobal::GetRscString(
-                                STR_CHANGED_DELETE_REJECTION_WARNING);
-                        rStr += ' ';
-                    }
-                    else if (pReject->HasDependent())
-                    {
-                        ScChangeActionMap aMap;
-                        pCT->GetDependents( pReject, aMap, false, sal_True );
-                        ScChangeActionMap::iterator itChangeAction;
-                        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
-                        {
-                            if( itChangeAction->second->GetType() == SC_CAT_MOVE)
-                            {
-                                rStr += ScGlobal::GetRscString(
-                                        STR_CHANGED_MOVE_REJECTION_WARNING);
-                                rStr += ' ';
-                                break;  // for
-                            }
-                            else if (pReject->IsDeleteType())
-                            {
-                                rStr += ScGlobal::GetRscString(
-                                        STR_CHANGED_DELETE_REJECTION_WARNING);
-                                rStr += ' ';
-                                break;  // for
-                            }
-                        }
-                    }
-                }
+                aBuf.append(
+                    ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+                aBuf.append(sal_Unicode(' '));
+                rStr = aBuf.makeStringAndClear();
+                return;
+            }
+
+            if (pReject->IsDeleteType())
+            {
+                aBuf.append(
+                    ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+                aBuf.append(sal_Unicode(' '));
+                rStr = aBuf.makeStringAndClear();
+                return;
             }
         }
     }
 }
 
 
-String ScChangeAction::GetRefString( const ScBigRange& rRange,
-        ScDocument* pDoc, sal_Bool bFlag3D ) const
+rtl::OUString ScChangeAction::GetRefString(
+    const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D ) const
 {
-    String aStr;
+    rtl::OUStringBuffer aBuf;
     sal_uInt16 nFlags = ( rRange.IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( !nFlags )
-        aStr = ScGlobal::GetRscString( STR_NOREF_STR );
+        aBuf.append(ScGlobal::GetRscString(STR_NOREF_STR));
     else
     {
         ScRange aTmpRange( rRange.MakeRange() );
@@ -498,12 +552,12 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
                 {
                     rtl::OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aStr = aTmp;
-                    aStr += '.';
+                    aBuf.append(aTmp);
+                    aBuf.append(sal_Unicode('.'));
                 }
-                aStr += ::ScColToAlpha( aTmpRange.aStart.Col() );
-                aStr += ':';
-                aStr += ::ScColToAlpha( aTmpRange.aEnd.Col() );
+                aBuf.append(ScColToAlpha(aTmpRange.aStart.Col()));
+                aBuf.append(sal_Unicode(':'));
+                aBuf.append(ScColToAlpha(aTmpRange.aEnd.Col()));
             break;
             case SC_CAT_INSERT_ROWS :
             case SC_CAT_DELETE_ROWS :
@@ -511,30 +565,54 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
                 {
                     rtl::OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aStr = aTmp;
-                    aStr += '.';
+                    aBuf.append(aTmp);
+                    aBuf.append(sal_Unicode('.'));
                 }
-                aStr += String::CreateFromInt32( aTmpRange.aStart.Row() + 1 );
-                aStr += ':';
-                aStr += String::CreateFromInt32( aTmpRange.aEnd.Row() + 1 );
+                aBuf.append(static_cast<sal_Int32>(aTmpRange.aStart.Row()+1));
+                aBuf.append(sal_Unicode(':'));
+                aBuf.append(static_cast<sal_Int32>(aTmpRange.aEnd.Row()+1));
             break;
             default:
+            {
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= SCA_TAB_3D;
-                aTmpRange.Format( aStr, nFlags, pDoc, pDoc->GetAddressConvention() );
+
+                rtl::OUString aTmp;
+                aTmpRange.Format(aTmp, nFlags, pDoc, pDoc->GetAddressConvention());
+                aBuf.append(aTmp);
+            }
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )
         {
-            aStr.Insert( '(', 0 );
-            aStr += ')';
+            aBuf.insert(0, sal_Unicode('('));
+            aBuf.append(sal_Unicode(')'));
         }
     }
-    return aStr;
+    return aBuf.makeStringAndClear();
 }
 
+const rtl::OUString& ScChangeAction::GetUser() const
+{
+    return aUser;
+}
 
-void ScChangeAction::GetRefString( String& rStr, ScDocument* pDoc,
-        sal_Bool bFlag3D ) const
+void ScChangeAction::SetUser( const rtl::OUString& r )
+{
+    aUser = r;
+}
+
+const rtl::OUString& ScChangeAction::GetComment() const
+{
+    return aComment;
+}
+
+void ScChangeAction::SetComment( const rtl::OUString& rStr )
+{
+    aComment = rStr;
+}
+
+void ScChangeAction::GetRefString(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     rStr = GetRefString( GetBigRange(), pDoc, bFlag3D );
 }
@@ -577,7 +655,7 @@ void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
         }
     }
     SetState( SC_CAS_REJECTED );        // vor UpdateReference fuer Move
-    pTrack->UpdateReference( this, sal_True );      // LinkDeleted freigeben
+    pTrack->UpdateReference( this, true );      // LinkDeleted freigeben
     OSL_ENSURE( !pLinkDeleted, "ScChangeAction::RejectRestoreContents: pLinkDeleted != NULL" );
     // Liste der Contents abarbeiten und loeschen
     ScDocument* pDoc = pTrack->GetDocument();
@@ -655,11 +733,12 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
 }
 
 
-ScChangeActionIns::ScChangeActionIns(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                                const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String& sComment,
-                                                const ScChangeActionType eTypeP)
-        :
-        ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
+ScChangeActionIns::ScChangeActionIns(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
+    const rtl::OUString& sComment, const ScChangeActionType eTypeP) :
+    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
 }
 
@@ -667,9 +746,8 @@ ScChangeActionIns::~ScChangeActionIns()
 {
 }
 
-
-void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionIns::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -686,17 +764,24 @@ void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
             nWhatId = STR_AREA;
     }
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_INSERT ) );
-    xub_StrLen nPos = aRsc.SearchAscii( "#1" );
-    rStr += aRsc.Copy( 0, nPos );
-    rStr += ScGlobal::GetRscString( nWhatId );
-    rStr += ' ';
-    rStr += GetRefString( GetBigRange(), pDoc );
-    rStr += aRsc.Copy( nPos+2 );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        // Construct a range string to replace '#1' first.
+        rtl::OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(GetRefString(GetBigRange(), pDoc));
+        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
+
+        aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
+
+        aBuf.append(rStr).append(aRsc);
+        rStr = aBuf.makeStringAndClear();
+    }
 }
 
-
-sal_Bool ScChangeActionIns::Reject( ScDocument* pDoc )
+bool ScChangeActionIns::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -724,7 +809,7 @@ sal_Bool ScChangeActionIns::Reject( ScDocument* pDoc )
     }
     SetState( SC_CAS_REJECTED );
     RemoveAllLinks();
-    return sal_True;
+    return true;
 }
 
 
@@ -768,18 +853,19 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
 }
 
 
-ScChangeActionDel::ScChangeActionDel(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                    const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
-        :
-        ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-        pTrack( pTrackP ),
-        pFirstCell( NULL ),
-        pCutOff( NULL ),
-        nCutOff( 0 ),
-        pLinkMove( NULL ),
-        nDx( 0 ),
-        nDy( 0 )
+ScChangeActionDel::ScChangeActionDel(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP, const rtl::OUString &sComment,
+    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
+    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
+    pTrack( pTrackP ),
+    pFirstCell( NULL ),
+    pCutOff( NULL ),
+    nCutOff( 0 ),
+    pLinkMove( NULL ),
+    nDx( 0 ),
+    nDy( 0 )
 {
     if (eType == SC_CAT_DELETE_COLS)
         nDx = static_cast<SCsCOL>(nD);
@@ -808,37 +894,37 @@ void ScChangeActionDel::DeleteCellEntries()
 }
 
 
-sal_Bool ScChangeActionDel::IsBaseDelete() const
+bool ScChangeActionDel::IsBaseDelete() const
 {
     return !GetDx() && !GetDy();
 }
 
 
-sal_Bool ScChangeActionDel::IsTopDelete() const
+bool ScChangeActionDel::IsTopDelete() const
 {
     const ScChangeAction* p = GetNext();
     if ( !p || p->GetType() != GetType() )
-        return sal_True;
+        return true;
     return ((ScChangeActionDel*)p)->IsBaseDelete();
 }
 
 
-sal_Bool ScChangeActionDel::IsMultiDelete() const
+bool ScChangeActionDel::IsMultiDelete() const
 {
     if ( GetDx() || GetDy() )
-        return sal_True;
+        return true;
     const ScChangeAction* p = GetNext();
     if ( !p || p->GetType() != GetType() )
         return false;
     const ScChangeActionDel* pDel = (const ScChangeActionDel*) p;
     if ( (pDel->GetDx() > GetDx() || pDel->GetDy() > GetDy()) &&
             pDel->GetBigRange() == aBigRange )
-        return sal_True;
+        return true;
     return false;
 }
 
 
-sal_Bool ScChangeActionDel::IsTabDeleteCol() const
+bool ScChangeActionDel::IsTabDeleteCol() const
 {
     if ( GetType() != SC_CAT_DELETE_COLS )
         return false;
@@ -849,6 +935,14 @@ sal_Bool ScChangeActionDel::IsTabDeleteCol() const
     return p && p->GetType() == SC_CAT_DELETE_TABS;
 }
 
+SCsCOL ScChangeActionDel::GetDx() const { return nDx; }
+SCsROW ScChangeActionDel::GetDy() const { return nDy; }
+
+ScChangeActionDelMoveEntry* ScChangeActionDel::AddCutOffMove(
+    ScChangeActionMove* pMove, short nFrom, short nTo )
+{
+    return new ScChangeActionDelMoveEntry(&pLinkMove, pMove, nFrom, nTo);
+}
 
 void ScChangeActionDel::UpdateReference( const ScChangeTrack* /* pTrack */,
         UpdateRefMode eMode, const ScBigRange& rRange,
@@ -897,8 +991,8 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
 }
 
 
-void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionDel::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -927,22 +1021,30 @@ void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
         aTmpRange.aEnd.SetRow( aTmpRange.aEnd.Row() + GetDy() );
     }
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_DELETE ) );
-    xub_StrLen nPos = aRsc.SearchAscii( "#1" );
-    rStr += aRsc.Copy( 0, nPos );
-    rStr += ScGlobal::GetRscString( nWhatId );
-    rStr += ' ';
-    rStr += GetRefString( aTmpRange, pDoc );
-    rStr += aRsc.Copy( nPos+2 );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        // Build a string to replace with.
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(ScGlobal::GetRscString(nWhatId));
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(GetRefString(aTmpRange, pDoc));
+        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
+        aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
+
+        aBuf.append(rStr).append(aRsc);
+        rStr = aBuf.makeStringAndClear(); // append to the original.
+    }
 }
 
 
-sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc )
+bool ScChangeActionDel::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) && GetType() != SC_CAT_DELETE_TABS )
         return false;
 
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
 
     if ( IsTopDelete() )
     {   // den kompletten Bereich in einem Rutsch restaurieren
@@ -962,9 +1064,9 @@ sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc )
             ScRange aRange( aTmpRange.MakeRange() );
             // InDelete... fuer Formel UpdateReference in Document
             pTrack->SetInDeleteRange( aRange );
-            pTrack->SetInDeleteTop( sal_True );
-            pTrack->SetInDeleteUndo( sal_True );
-            pTrack->SetInDelete( sal_True );
+            pTrack->SetInDeleteTop( true );
+            pTrack->SetInDeleteUndo( true );
+            pTrack->SetInDelete( true );
             switch ( GetType() )
             {
                 case SC_CAT_DELETE_COLS :
@@ -1008,7 +1110,7 @@ sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc )
 
     pTrack->SetInDeleteTop( false );
     RemoveAllLinks();
-    return sal_True;
+    return true;
 }
 
 
@@ -1096,16 +1198,18 @@ void ScChangeActionDel::UndoCutOffInsert()
 
 // --- ScChangeActionMove --------------------------------------------------
 
-ScChangeActionMove::ScChangeActionMove(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                    const ScBigRange& aToBigRange, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScBigRange& aFromBigRange, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
-        :
-        ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-        aFromRange(aFromBigRange),
-        pTrack( pTrackP ),
-        pFirstCell( NULL ),
-        nStartLastCut(0),
-        nEndLastCut(0)
+ScChangeActionMove::ScChangeActionMove(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber, const ScBigRange& aToBigRange,
+    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
+    const rtl::OUString &sComment, const ScBigRange& aFromBigRange,
+    ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
+    ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
+    aFromRange(aFromBigRange),
+    pTrack( pTrackP ),
+    pFirstCell( NULL ),
+    nStartLastCut(0),
+    nEndLastCut(0)
 {
 }
 
@@ -1148,45 +1252,53 @@ void ScChangeActionMove::GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nD
 }
 
 
-void ScChangeActionMove::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionMove::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    sal_Bool bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
+    bool bFlag3D = GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab();
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_MOVE ) );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
 
-    xub_StrLen nPos = 0;
-    String aTmpStr = ScChangeAction::GetRefString( GetFromRange(), pDoc, bFlag3D );
-    nPos = aRsc.SearchAscii( "#1", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+    rtl::OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
+    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
-    aTmpStr = ScChangeAction::GetRefString( GetBigRange(), pDoc, bFlag3D );
-    nPos = aRsc.SearchAscii( "#2", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+    aTmpStr = ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D);
+    nPos = aRsc.indexOfAsciiL("#2", 2, nPos);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
-    rStr += aRsc;
+    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    aBuf.append(aRsc);
+    rStr = aBuf.makeStringAndClear();
 }
 
 
-void ScChangeActionMove::GetRefString( String& rStr, ScDocument* pDoc,
-        sal_Bool bFlag3D ) const
+void ScChangeActionMove::GetRefString(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     if ( !bFlag3D )
         bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
-    rStr = ScChangeAction::GetRefString( GetFromRange(), pDoc, bFlag3D );
-    rStr += ',';
-    rStr += ' ';
-    rStr += ScChangeAction::GetRefString( GetBigRange(), pDoc, bFlag3D );
+
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D));
+    aBuf.append(sal_Unicode(','));
+    aBuf.append(sal_Unicode(' '));
+    aBuf.append(ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D));
+    rStr = aBuf.makeStringAndClear(); // overwrite existing string value.
 }
 
 
-sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc )
+bool ScChangeActionMove::Reject( ScDocument* pDoc )
 {
     if ( !(aBigRange.IsValid( pDoc ) && aFromRange.IsValid( pDoc )) )
         return false;
@@ -1194,7 +1306,7 @@ sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc )
     ScRange aToRange( aBigRange.MakeRange() );
     ScRange aFrmRange( aFromRange.MakeRange() );
 
-    sal_Bool bOk = pDoc->IsBlockEditable( aToRange.aStart.Tab(),
+    bool bOk = pDoc->IsBlockEditable( aToRange.aStart.Tab(),
         aToRange.aStart.Col(), aToRange.aStart.Row(),
         aToRange.aEnd.Col(), aToRange.aEnd.Row() );
     if ( bOk )
@@ -1244,7 +1356,7 @@ sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc )
     }
 
     RemoveAllLinks();
-    return sal_True;
+    return true;
 }
 
 
@@ -1254,9 +1366,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-            const ScBigRange& aBigRangeP, const String& aUserP,
-            const DateTime& aDateTimeP, const String& sComment,
-            ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sOldValue )
+            const ScBigRange& aBigRangeP, const rtl::OUString& aUserP,
+            const DateTime& aDateTimeP, const rtl::OUString& sComment,
+            ScBaseCell* pTempOldCell, ScDocument* pDoc, const rtl::OUString& sOldValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
         aOldValue(sOldValue),
@@ -1270,13 +1382,13 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 {
     if (pOldCell)
         ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
-    if ( sOldValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+    if (!sOldValue.isEmpty())     // #i40704# don't overwrite SetCell result with empty string
         aOldValue = sOldValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             ScBaseCell* pTempNewCell, const ScBigRange& aBigRangeP,
-            ScDocument* pDoc, const String& sNewValue )
+            ScDocument* pDoc, const rtl::OUString& sNewValue )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber),
         aNewValue(sNewValue),
@@ -1289,7 +1401,7 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 {
     if (pNewCell)
         ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
-    if ( sNewValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+    if (!sNewValue.isEmpty())     // #i40704# don't overwrite SetCell result with empty string
         aNewValue = sNewValue; // set again, because SetCell removes it
 }
 
@@ -1372,98 +1484,105 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
     ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
 }
 
-void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted )
+void ScChangeActionContent::SetNewCell(
+    ScBaseCell* pCell, ScDocument* pDoc, const rtl::OUString& rFormatted )
 {
     OSL_ENSURE( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
     ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 
-    // #i40704# allow to set formatted text here - don't call SetNewValue with String from XML filter
-    if ( rFormatted.Len() )
+    // #i40704# allow to set formatted text here - don't call SetNewValue with string from XML filter
+    if (!rFormatted.isEmpty())
         aNewValue = rFormatted;
 }
 
-void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
-        const String& rStr, ScDocument* pDoc )
+void ScChangeActionContent::SetValueString(
+    rtl::OUString& rValue, ScBaseCell*& pCell, const rtl::OUString& rStr, ScDocument* pDoc )
 {
     if ( pCell )
     {
         pCell->Delete();
         pCell = NULL;
     }
-    if ( rStr.Len() > 1 && rStr.GetChar(0) == '=' )
+    if ( rStr.getLength() > 1 && rStr.getStr()[0] == '=' )
     {
-        rValue.Erase();
+        rValue = rtl::OUString();
         pCell = new ScFormulaCell(
-            pDoc, aBigRange.aStart.MakeAddress(), rStr, formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::CONV_OOO );
-        ((ScFormulaCell*)pCell)->SetInChangeTrack( sal_True );
+            pDoc, aBigRange.aStart.MakeAddress(), rStr,
+            formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::CONV_OOO );
+        ((ScFormulaCell*)pCell)->SetInChangeTrack( true );
     }
     else
         rValue = rStr;
 }
 
 
-void ScChangeActionContent::SetOldValue( const String& rOld, ScDocument* pDoc )
+void ScChangeActionContent::SetOldValue( const rtl::OUString& rOld, ScDocument* pDoc )
 {
     SetValueString( aOldValue, pOldCell, rOld, pDoc );
 }
 
 
-void ScChangeActionContent::SetNewValue( const String& rNew, ScDocument* pDoc )
-{
-    SetValueString( aNewValue, pNewCell, rNew, pDoc );
-}
-
-
-void ScChangeActionContent::GetOldString( String& rStr ) const
+void ScChangeActionContent::GetOldString( rtl::OUString& rStr ) const
 {
     GetValueString( rStr, aOldValue, pOldCell );
 }
 
 
-void ScChangeActionContent::GetNewString( String& rStr ) const
+void ScChangeActionContent::GetNewString( rtl::OUString& rStr ) const
 {
     GetValueString( rStr, aNewValue, pNewCell );
 }
 
 
-void ScChangeActionContent::GetDescription( String& rStr, ScDocument* pDoc,
-        sal_Bool bSplitRange, bool bWarning ) const
+void ScChangeActionContent::GetDescription(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    String aRsc( ScGlobal::GetRscString( STR_CHANGED_CELL ) );
+    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_CELL);
 
-    String aTmpStr;
-    GetRefString( aTmpStr, pDoc );
+    rtl::OUString aTmpStr;
+    GetRefString(aTmpStr, pDoc);
 
-    xub_StrLen nPos = 0;
-    nPos = aRsc.SearchAscii( "#1", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+    sal_Int32 nPos = 0;
+    nPos = aRsc.indexOfAsciiL("#1", 2, nPos);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
     GetOldString( aTmpStr );
-    if ( !aTmpStr.Len() )
+    if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
-    nPos = aRsc.SearchAscii( "#2", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
-    nPos = sal::static_int_cast<xub_StrLen>( nPos + aTmpStr.Len() );
+
+    nPos = aRsc.indexOfAsciiL("#2", 2, nPos);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
 
     GetNewString( aTmpStr );
-    if ( !aTmpStr.Len() )
+    if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
-    nPos = aRsc.SearchAscii( "#3", nPos );
-    aRsc.Erase( nPos, 2 );
-    aRsc.Insert( aTmpStr, nPos );
 
-    rStr += aRsc;
+    nPos = aRsc.indexOfAsciiL("#3", 2, nPos);
+    if (nPos >= 0)
+    {
+        aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
+        nPos += aTmpStr.getLength();
+    }
+
+    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    aBuf.append(aRsc);
+    rStr = aBuf.makeStringAndClear();
 }
 
 
-void ScChangeActionContent::GetRefString( String& rStr, ScDocument* pDoc,
-        sal_Bool bFlag3D ) const
+void ScChangeActionContent::GetRefString(
+    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     sal_uInt16 nFlags = ( GetBigRange().IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( nFlags )
@@ -1488,8 +1607,12 @@ void ScChangeActionContent::GetRefString( String& rStr, ScDocument* pDoc,
         aTmpAddress.Format( rStr, nFlags, pDoc, pDoc->GetAddressConvention() );
         if ( IsDeletedIn() )
         {
-            rStr.Insert( '(', 0 );
-            rStr += ')';
+            // Insert the parentheses.
+            rtl::OUStringBuffer aBuf;
+            aBuf.append(sal_Unicode('('));
+            aBuf.append(rStr);
+            aBuf.append(sal_Unicode(')'));
+            rStr = aBuf.makeStringAndClear();
         }
     }
     else
@@ -1497,7 +1620,7 @@ void ScChangeActionContent::GetRefString( String& rStr, ScDocument* pDoc,
 }
 
 
-sal_Bool ScChangeActionContent::Reject( ScDocument* pDoc )
+bool ScChangeActionContent::Reject( ScDocument* pDoc )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -1507,12 +1630,12 @@ sal_Bool ScChangeActionContent::Reject( ScDocument* pDoc )
     SetState( SC_CAS_REJECTED );
     RemoveAllLinks();
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
-        sal_Bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions )
+bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
+        bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -1570,12 +1693,12 @@ sal_Bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
     else
         SetState( SC_CAS_ACCEPTED );
 
-    return sal_True;
+    return true;
 }
 
 
-void ScChangeActionContent::GetStringOfCell( String& rStr,
-        const ScBaseCell* pCell, const ScDocument* pDoc, const ScAddress& rPos )
+void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
+    const ScBaseCell* pCell, const ScDocument* pDoc, const ScAddress& rPos )
 {
     if ( pCell )
     {
@@ -1585,12 +1708,12 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
             GetStringOfCell( rStr, pCell, pDoc, 0 );
     }
     else
-        rStr.Erase();
+        rStr = rtl::OUString();
 }
 
 
-void ScChangeActionContent::GetStringOfCell( String& rStr,
-        const ScBaseCell* pCell, const ScDocument* pDoc, sal_uLong nFormat )
+void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
+    const ScBaseCell* pCell, const ScDocument* pDoc, sal_uLong nFormat )
 {
     if ( ScChangeActionContent::GetContentCellType( pCell ) )
     {
@@ -1604,20 +1727,20 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
             }
             break;
             case CELLTYPE_STRING :
-                ((ScStringCell*)pCell)->GetString( rStr );
+                rStr = ((ScStringCell*)pCell)->GetString();
             break;
             case CELLTYPE_EDIT :
-                ((ScEditCell*)pCell)->GetString( rStr );
+                rStr = ((ScEditCell*)pCell)->GetString();
             break;
             case CELLTYPE_FORMULA :
                 ((ScFormulaCell*)pCell)->GetFormula( rStr );
             break;
             default:
-                rStr.Erase();
+                rStr = rtl::OUString();
         }
     }
     else
-        rStr.Erase();
+        rStr = rtl::OUString();
 }
 
 
@@ -1656,30 +1779,30 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
 }
 
 
-sal_Bool ScChangeActionContent::NeedsNumberFormat( const ScBaseCell* pCell )
+bool ScChangeActionContent::NeedsNumberFormat( const ScBaseCell* pCell )
 {
     return pCell && pCell->GetCellType() == CELLTYPE_VALUE;
 }
 
 
-void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
-        const ScAddress& rPos, const ScBaseCell* pOrgCell,
-        const ScDocument* pFromDoc, ScDocument* pToDoc )
+void ScChangeActionContent::SetValue(
+    rtl::OUString& rStr, ScBaseCell*& pCell, const ScAddress& rPos, const ScBaseCell* pOrgCell,
+    const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
     sal_uLong nFormat = NeedsNumberFormat( pOrgCell ) ? pFromDoc->GetNumberFormat( rPos ) : 0;
     SetValue( rStr, pCell, nFormat, pOrgCell, pFromDoc, pToDoc );
 }
 
-void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
-        sal_uLong nFormat, const ScBaseCell* pOrgCell,
-        const ScDocument* pFromDoc, ScDocument* pToDoc )
+void ScChangeActionContent::SetValue(
+    rtl::OUString& rStr, ScBaseCell*& pCell, sal_uLong nFormat, const ScBaseCell* pOrgCell,
+    const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    rStr.Erase();
+    rStr = rtl::OUString();
     if ( pCell )
         pCell->Delete();
     if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
     {
-        pCell = pOrgCell->CloneWithoutNote( *pToDoc );
+        pCell = pOrgCell->Clone( *pToDoc );
         switch ( pOrgCell->GetCellType() )
         {
             case CELLTYPE_VALUE :
@@ -1690,7 +1813,7 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
             }
             break;
             case CELLTYPE_FORMULA :
-                ((ScFormulaCell*)pCell)->SetInChangeTrack( sal_True );
+                ((ScFormulaCell*)pCell)->SetInChangeTrack( true );
             break;
             default:
             {
@@ -1703,10 +1826,10 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
 }
 
 
-void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
-        sal_uLong nFormat, const ScDocument* pDoc )
+void ScChangeActionContent::SetCell(
+    rtl::OUString& rStr, ScBaseCell* pCell, sal_uLong nFormat, const ScDocument* pDoc )
 {
-    rStr.Erase();
+    rStr = rtl::OUString();
     if ( pCell )
     {
         switch ( pCell->GetCellType() )
@@ -1719,7 +1842,7 @@ void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
             }
             break;
             case CELLTYPE_FORMULA :
-                ((ScFormulaCell*)pCell)->SetInChangeTrack( sal_True );
+                ((ScFormulaCell*)pCell)->SetInChangeTrack( true );
             break;
             default:
             {
@@ -1730,20 +1853,20 @@ void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
 }
 
 
-void ScChangeActionContent::GetValueString( String& rStr,
-        const String& rValue, const ScBaseCell* pCell ) const
+void ScChangeActionContent::GetValueString(
+    rtl::OUString& rStr, const rtl::OUString& rValue, const ScBaseCell* pCell ) const
 {
-    if ( !rValue.Len() )
+    if (rValue.isEmpty())
     {
         if ( pCell )
         {
             switch ( pCell->GetCellType() )
             {
                 case CELLTYPE_STRING :
-                    ((ScStringCell*)pCell)->GetString( rStr );
+                    rStr = ((ScStringCell*)pCell)->GetString();
                 break;
                 case CELLTYPE_EDIT :
-                    ((ScEditCell*)pCell)->GetString( rStr );
+                    rStr = ((ScEditCell*)pCell)->GetString();
                 break;
                 case CELLTYPE_VALUE :   // ist immer in rValue
                     rStr = rValue;
@@ -1758,15 +1881,15 @@ void ScChangeActionContent::GetValueString( String& rStr,
             }
         }
         else
-            rStr.Erase();
+            rStr = rtl::OUString();
     }
     else
         rStr = rValue;
 }
 
 
-void ScChangeActionContent::GetFormulaString( String& rStr,
-        const ScFormulaCell* pCell ) const
+void ScChangeActionContent::GetFormulaString(
+    rtl::OUString& rStr, const ScFormulaCell* pCell ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( aPos == pCell->aPos || IsDeletedIn() )
@@ -1795,15 +1918,16 @@ void ScChangeActionContent::PutNewValueToDoc( ScDocument* pDoc,
 }
 
 
-void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
-        const String& rValue, ScDocument* pDoc, SCsCOL nDx, SCsROW nDy ) const
+void ScChangeActionContent::PutValueToDoc(
+    ScBaseCell* pCell, const rtl::OUString& rValue, ScDocument* pDoc,
+    SCsCOL nDx, SCsROW nDy ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( nDx )
         aPos.IncCol( nDx );
     if ( nDy )
         aPos.IncRow( nDy );
-    if ( !rValue.Len() )
+    if (rValue.isEmpty())
     {
         if ( pCell )
         {
@@ -1839,7 +1963,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                             // nothing
                         break;
                         default:
-                            pDoc->PutCell( aPos, pCell->CloneWithoutNote( *pDoc ) );
+                            pDoc->PutCell( aPos, pCell->Clone( *pDoc ) );
                     }
             }
         }
@@ -1858,19 +1982,19 @@ void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
     {
         rRef1.nCol = SCCOL_MAX;
         rRef1.nRelCol = SCCOL_MAX;
-        rRef1.SetColDeleted( sal_True );
+        rRef1.SetColDeleted( true );
     }
     if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
     {
         rRef1.nRow = SCROW_MAX;
         rRef1.nRelRow = SCROW_MAX;
-        rRef1.SetRowDeleted( sal_True );
+        rRef1.SetRowDeleted( true );
     }
     if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
     {
         rRef1.nTab = SCTAB_MAX;
         rRef1.nRelTab = SCTAB_MAX;
-        rRef1.SetTabDeleted( sal_True );
+        rRef1.SetTabDeleted( true );
     }
     if ( rTok.GetType() == formula::svDoubleRef )
     {
@@ -1879,19 +2003,19 @@ void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
         {
             rRef2.nCol = SCCOL_MAX;
             rRef2.nRelCol = SCCOL_MAX;
-            rRef2.SetColDeleted( sal_True );
+            rRef2.SetColDeleted( true );
         }
         if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
         {
             rRef2.nRow = SCROW_MAX;
             rRef2.nRelRow = SCROW_MAX;
-            rRef2.SetRowDeleted( sal_True );
+            rRef2.SetRowDeleted( true );
         }
         if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
         {
             rRef2.nTab = SCTAB_MAX;
             rRef2.nRelTab = SCTAB_MAX;
-            rRef2.SetTabDeleted( sal_True );
+            rRef2.SetTabDeleted( true );
         }
     }
 }
@@ -1913,8 +2037,8 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     if ( pTrack->IsInDelete() && !pTrack->IsInDeleteTop() )
         return ;        // Formeln nur kompletten Bereich updaten
 
-    sal_Bool bOldFormula = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_FORMULA );
-    sal_Bool bNewFormula = ( pNewCell && pNewCell->GetCellType() == CELLTYPE_FORMULA );
+    bool bOldFormula = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_FORMULA );
+    bool bNewFormula = ( pNewCell && pNewCell->GetCellType() == CELLTYPE_FORMULA );
     if ( bOldFormula || bNewFormula )
     {   // via ScFormulaCell UpdateReference anpassen (dort)
         if ( pTrack->IsInDelete() )
@@ -2015,14 +2139,30 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     }
 }
 
+bool ScChangeActionContent::IsMatrixOrigin() const
+{
+    return GetContentCellType(GetNewCell()) == SC_CACCT_MATORG;
+}
+
+bool ScChangeActionContent::IsOldMatrixReference() const
+{
+    return GetContentCellType(GetOldCell()) == SC_CACCT_MATREF;
+}
 
 // --- ScChangeActionReject ------------------------------------------------
 
-ScChangeActionReject::ScChangeActionReject(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
-                                                const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String& sComment)
-        :
-        ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
+ScChangeActionReject::ScChangeActionReject(
+    const sal_uLong nActionNumber, const ScChangeActionState eStateP,
+    const sal_uLong nRejectingNumber,
+    const ScBigRange& aBigRangeP, const rtl::OUString& aUserP,
+    const DateTime& aDateTimeP, const rtl::OUString& sComment) :
+    ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
+}
+
+bool ScChangeActionReject::Reject(ScDocument* /*pDoc*/)
+{
+    return false;
 }
 
 
@@ -2055,8 +2195,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUserCollection) :
-        aUserCollection(aTempUserCollection),
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<rtl::OUString>& aTempUserCollection) :
+        maUserCollection(aTempUserCollection),
         aFixDateTime( DateTime::SYSTEM ),
         pDoc( pDocP )
 {
@@ -2099,13 +2239,15 @@ void ScChangeTrack::Init()
     bInDeleteUndo = false;
     bInPasteCut = false;
     bUseFixDateTime = false;
-    bTime100thSeconds = sal_True;
+    bTime100thSeconds = true;
 
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
-    aUser = rUserOpt.GetFirstName();
-    aUser += ' ';
-    aUser += (String)rUserOpt.GetLastName();
-    aUserCollection.Insert( new StrData( aUser ) );
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(rUserOpt.GetFirstName());
+    aBuf.append(sal_Unicode(' '));
+    aBuf.append(rUserOpt.GetLastName());
+    maUser = aBuf.makeStringAndClear();
+    maUserCollection.insert(maUser);
 }
 
 
@@ -2165,25 +2307,30 @@ void ScChangeTrack::Clear()
     aMap.clear();
     aGeneratedMap.clear();
     aPasteCutMap.clear();
-    aUserCollection.FreeAll();
-    aUser.Erase();
+    maUserCollection.clear();
+    maUser = rtl::OUString();
     Init();
 }
 
+const std::set<rtl::OUString>& ScChangeTrack::GetUserCollection() const
+{
+    return maUserCollection;
+}
 
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
     {
         const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
-        sal_uInt16 nOldCount = aUserCollection.GetCount();
+        size_t nOldCount = maUserCollection.size();
 
-        String aStr( rUserOptions.GetFirstName() );
-        aStr += ' ';
-        aStr += (String)rUserOptions.GetLastName();
-        SetUser( aStr );
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(rUserOptions.GetFirstName());
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(rUserOptions.GetLastName());
+        SetUser(aBuf.makeStringAndClear());
 
-        if ( aUserCollection.GetCount() != nOldCount )
+        if ( maUserCollection.size() != nOldCount )
         {
             //  New user in collection -> have to repaint because
             //  colors may be different now (#106697#).
@@ -2198,17 +2345,19 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 }
 
 
-void ScChangeTrack::SetUser( const String& rUser )
+void ScChangeTrack::SetUser( const rtl::OUString& rUser )
 {
     if ( IsLoadSave() )
         return ;        // nicht die Collection zerschiessen
 
-    aUser = rUser;
-    StrData* pStrData = new StrData( aUser );
-    if ( !aUserCollection.Insert( pStrData ) )
-        delete pStrData;
+    maUser = rUser;
+    maUserCollection.insert(maUser);
 }
 
+const rtl::OUString& ScChangeTrack::GetUser() const
+{
+    return maUser;
+}
 
 void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
         sal_uLong nStartAction )
@@ -2248,12 +2397,12 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
         }
         if ( !pBlockModifyMsg )
         {
-            sal_Bool bNew = false;
+            bool bNew = false;
             while ( !aMsgStackFinal.empty() )
             {
                 aMsgQueue.push_back( aMsgStackFinal.top() );
                 aMsgStackFinal.pop();
-                bNew = sal_True;
+                bNew = true;
             }
             if ( bNew )
                 aModifiedLink.Call( this );
@@ -2354,7 +2503,7 @@ void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
 {
     if ( nActionMax < nAction )
         nActionMax = nAction;
-    pAppend->SetUser( aUser );
+    pAppend->SetUser( maUser );
     if ( bUseFixDateTime )
         pAppend->SetDateTimeUTC( aFixDateTime );
     pAppend->SetActionNumber( nAction );
@@ -2443,7 +2592,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                         aRange.aStart.SetCol( nCol );
                         aRange.aEnd.SetCol( nCol );
                         if ( nCol == nCol2 )
-                            SetInDeleteTop( sal_True );
+                            SetInDeleteTop( true );
                         AppendOneDeleteRange( aRange, pRefDoc, nCol-nCol1, 0,
                             nTab-nTab1 + nDz, nRejectingInsert );
                     }
@@ -2459,7 +2608,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                         aRange.aStart.SetRow( nRow );
                         aRange.aEnd.SetRow( nRow );
                         if ( nRow == nRow2 )
-                            SetInDeleteTop( sal_True );
+                            SetInDeleteTop( true );
                         AppendOneDeleteRange( aRange, pRefDoc, 0, nRow-nRow1,
                             0, nRejectingInsert );
                     }
@@ -2473,7 +2622,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                     aRange.aStart.SetCol( nCol );
                     aRange.aEnd.SetCol( nCol );
                     if ( nCol == nCol2 )
-                        SetInDeleteTop( sal_True );
+                        SetInDeleteTop( true );
                     AppendOneDeleteRange( aRange, pRefDoc, nCol-nCol1, 0,
                         0, nRejectingInsert );
                 }
@@ -2565,8 +2714,8 @@ void ScChangeTrack::AppendMove( const ScRange& rFromRange,
 }
 
 
-sal_Bool ScChangeTrack::IsMatrixFormulaRangeDifferent( const ScBaseCell* pOldCell,
-        const ScBaseCell* pNewCell )
+bool ScChangeTrack::IsMatrixFormulaRangeDifferent(
+    const ScBaseCell* pOldCell, const ScBaseCell* pNewCell )
 {
     SCCOL nC1, nC2;
     SCROW nR1, nR2;
@@ -2586,13 +2735,12 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
 {
     if ( !pRefDoc )
         pRefDoc = pDoc;
-    String aOldValue;
+    rtl::OUString aOldValue;
     ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, nOldFormat );
-    String aNewValue;
+    rtl::OUString aNewValue;
     ScBaseCell* pNewCell = pDoc->GetCell( rPos );
     ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
-    if ( aOldValue != aNewValue ||
-            IsMatrixFormulaRangeDifferent( pOldCell, pNewCell ) )
+    if (!aOldValue.equals(aNewValue) || IsMatrixFormulaRangeDifferent(pOldCell, pNewCell))
     {   // nur wirkliche Aenderung tracken
         ScRange aRange( rPos );
         ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
@@ -2606,14 +2754,13 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
         ScDocument* pRefDoc )
 {
-    String aOldValue;
+    rtl::OUString aOldValue;
     ScBaseCell* pOldCell = pRefDoc->GetCell( rPos );
     ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, rPos );
-    String aNewValue;
+    rtl::OUString aNewValue;
     ScBaseCell* pNewCell = pDoc->GetCell( rPos );
     ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
-    if ( aOldValue != aNewValue ||
-            IsMatrixFormulaRangeDifferent( pOldCell, pNewCell ) )
+    if (!aOldValue.equals(aNewValue) || IsMatrixFormulaRangeDifferent(pOldCell, pNewCell))
     {   // nur wirkliche Aenderung tracken
         ScRange aRange( rPos );
         ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
@@ -2672,11 +2819,11 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     SCROW nRow2;
     SCTAB nTab2;
     rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-    sal_Bool bDoContents;
+    bool bDoContents;
     if ( eClipMode == SC_CACM_PASTE && HasLastCut() )
     {
         bDoContents = false;
-        SetInPasteCut( sal_True );
+        SetInPasteCut( true );
         // Paste und Cut abstimmen, Paste kann groesserer Range sein
         ScRange aRange( rRange );
         ScBigRange& r = pLastCutMove->GetBigRange();
@@ -2685,21 +2832,21 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         {
             aRange.aEnd.SetCol( aRange.aStart.Col() + nTmpCol );
             nCol1 += nTmpCol + 1;
-            bDoContents = sal_True;
+            bDoContents = true;
         }
         SCROW nTmpRow;
         if ( (nTmpRow = (SCROW) (r.aEnd.Row() - r.aStart.Row())) != (nRow2 - nRow1) )
         {
             aRange.aEnd.SetRow( aRange.aStart.Row() + nTmpRow );
             nRow1 += nTmpRow + 1;
-            bDoContents = sal_True;
+            bDoContents = true;
         }
         SCTAB nTmpTab;
         if ( (nTmpTab = (SCTAB) (r.aEnd.Tab() - r.aStart.Tab())) != (nTab2 - nTab1) )
         {
             aRange.aEnd.SetTab( aRange.aStart.Tab() + nTmpTab );
             nTab1 += nTmpTab + 1;
-            bDoContents = sal_True;
+            bDoContents = true;
         }
         r = aRange;
         Undo( nStartLastCut, nEndLastCut ); // hier werden sich die Cuts gemerkt
@@ -2717,7 +2864,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     }
     else
     {
-        bDoContents = sal_True;
+        bDoContents = true;
         nStartAction = GetActionMax() + 1;
         StartBlockModify( SC_CTM_APPEND, nStartAction );
     }
@@ -2938,10 +3085,10 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
     // also genau richtig
 
     const ScBigRange& rRange = pAct->GetBigRange();
-    sal_Bool bActNoInsert = !pAct->IsInsertType();
-    sal_Bool bActColDel = ( eActType == SC_CAT_DELETE_COLS );
-    sal_Bool bActRowDel = ( eActType == SC_CAT_DELETE_ROWS );
-    sal_Bool bActTabDel = ( eActType == SC_CAT_DELETE_TABS );
+    bool bActNoInsert = !pAct->IsInsertType();
+    bool bActColDel = ( eActType == SC_CAT_DELETE_COLS );
+    bool bActRowDel = ( eActType == SC_CAT_DELETE_ROWS );
+    bool bActTabDel = ( eActType == SC_CAT_DELETE_TABS );
 
     if ( pLinkInsertCol && (eActType == SC_CAT_INSERT_COLS ||
             (bActNoInsert && !bActRowDel && !bActTabDel)) )
@@ -3114,12 +3261,12 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                     if ( j == nEndAction || (pAct != pLast &&
                             ((ScChangeActionDel*)pAct)->IsTopDelete()) )
                     {
-                        SetInDeleteTop( sal_True );
+                        SetInDeleteTop( true );
                         SetInDeleteRange( ((ScChangeActionDel*)pAct)->
                             GetOverAllRange().MakeRange() );
                     }
                 }
-                UpdateReference( pAct, sal_True );
+                UpdateReference( pAct, true );
                 SetInDeleteTop( false );
                 Remove( pAct );
                 if ( IsInPasteCut() )
@@ -3178,13 +3325,13 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
 }
 
 
-sal_Bool ScChangeTrack::MergeIgnore( const ScChangeAction& rAction, sal_uLong nFirstMerge )
+bool ScChangeTrack::MergeIgnore( const ScChangeAction& rAction, sal_uLong nFirstMerge )
 {
     if ( rAction.IsRejected() )
-        return sal_True;                // da kommt noch eine passende Reject-Action
+        return true;                // da kommt noch eine passende Reject-Action
 
     if ( rAction.IsRejecting() && rAction.GetRejectAction() >= nFirstMerge )
-        return sal_True;                // da ist sie
+        return true;                // da ist sie
 
     return false;                   // alles andere
 }
@@ -3207,12 +3354,12 @@ void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge, bool bShared )
                 {
                     if ( ((ScChangeActionDel*)pAct)->IsTopDelete() )
                     {
-                        SetInDeleteTop( sal_True );
+                        SetInDeleteTop( true );
                         SetInDeleteRange( ((ScChangeActionDel*)pAct)->
                             GetOverAllRange().MakeRange() );
                     }
                 }
-                UpdateReference( pAct, sal_True );
+                UpdateReference( pAct, true );
                 SetInDeleteTop( false );
                 pAct->DeleteCellEntries();      // sonst GPF bei Track Clear()
             }
@@ -3233,7 +3380,7 @@ void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool 
         {
             if ( ((ScChangeActionDel*)pAct)->IsTopDelete() )
             {
-                SetInDeleteTop( sal_True );
+                SetInDeleteTop( true );
                 SetInDeleteRange( ((ScChangeActionDel*)pAct)->
                     GetOverAllRange().MakeRange() );
             }
@@ -3245,33 +3392,33 @@ void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool 
 }
 
 
-void ScChangeTrack::UpdateReference( ScChangeAction* pAct, sal_Bool bUndo )
+void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
 {
     ScChangeActionType eActType = pAct->GetType();
     if ( eActType == SC_CAT_CONTENT || eActType == SC_CAT_REJECT )
         return ;
 
     //! Formelzellen haengen nicht im Dokument
-    sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
+    bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );
-    sal_Bool bOldNoListening = pDoc->GetNoListening();
-    pDoc->SetNoListening( sal_True );
+    bool bOldNoListening = pDoc->GetNoListening();
+    pDoc->SetNoListening( true );
     //! Formelzellen ExpandRefs synchronisiert zu denen im Dokument
-    sal_Bool bOldExpandRefs = pDoc->IsExpandRefs();
+    bool bOldExpandRefs = pDoc->IsExpandRefs();
     if ( (!bUndo && pAct->IsInsertType()) || (bUndo && pAct->IsDeleteType()) )
         pDoc->SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
 
     if ( pAct->IsDeleteType() )
     {
         SetInDeleteUndo( bUndo );
-        SetInDelete( sal_True );
+        SetInDelete( true );
     }
     else if ( GetMergeState() == SC_CTMS_OWN )
     {
         // Referenzen von Formelzellen wiederherstellen,
         // vorheriges MergePrepare war bei einem Insert wie ein Delete
         if ( pAct->IsInsertType() )
-            SetInDeleteUndo( sal_True );
+            SetInDeleteUndo( true );
     }
 
     //! erst die generated, als waeren sie vorher getrackt worden
@@ -3290,10 +3437,10 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, sal_Bool bUndo )
 
 
 void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
-        ScChangeAction* pAct, sal_Bool bUndo )
+        ScChangeAction* pAct, bool bUndo )
 {
     ScChangeActionType eActType = pAct->GetType();
-    sal_Bool bGeneratedDelContents =
+    bool bGeneratedDelContents =
         ( ppFirstAction == (ScChangeAction**)&pFirstGeneratedDelContent );
     const ScBigRange& rOrgRange = pAct->GetBigRange();
     ScBigRange aRange( rOrgRange );
@@ -3301,7 +3448,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     sal_Int32 nDx, nDy, nDz;
     nDx = nDy = nDz = 0;
     UpdateRefMode eMode = URM_INSDEL;
-    sal_Bool bDel = false;
+    bool bDel = false;
     switch ( eActType )
     {
         case SC_CAT_INSERT_COLS :
@@ -3320,19 +3467,19 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             aRange.aEnd.SetCol( nInt32Max );
             nDx = -(rOrgRange.aEnd.Col() - rOrgRange.aStart.Col() + 1);
             aDelRange.aEnd.SetCol( aDelRange.aStart.Col() - nDx - 1 );
-            bDel = sal_True;
+            bDel = true;
         break;
         case SC_CAT_DELETE_ROWS :
             aRange.aEnd.SetRow( nInt32Max );
             nDy = -(rOrgRange.aEnd.Row() - rOrgRange.aStart.Row() + 1);
             aDelRange.aEnd.SetRow( aDelRange.aStart.Row() - nDy - 1 );
-            bDel = sal_True;
+            bDel = true;
         break;
         case SC_CAT_DELETE_TABS :
             aRange.aEnd.SetTab( nInt32Max );
             nDz = -(rOrgRange.aEnd.Tab() - rOrgRange.aStart.Tab() + 1);
             aDelRange.aEnd.SetTab( aDelRange.aStart.Tab() - nDz - 1 );
-            bDel = sal_True;
+            bDel = true;
         break;
         case SC_CAT_MOVE :
             eMode = URM_MOVE;
@@ -3374,7 +3521,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             {
                 if ( p == pAct )
                     continue;   // for
-                sal_Bool bUpdate = sal_True;
+                bool bUpdate = true;
                 if ( GetMergeState() == SC_CTMS_OTHER &&
                         p->GetActionNumber() <= GetLastMerge() )
                 {   // Delete in mergendem Dokument, Action im zu mergenden
@@ -3587,7 +3734,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
             {
                 if ( p == pAct )
                     continue;   // for
-                sal_Bool bUpdate = sal_True;
+                bool bUpdate = true;
                 if ( aDelRange.In( p->GetBigRange() ) )
                 {
                     // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
@@ -3623,7 +3770,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     if ( p->GetType() == eActType && pActDel->IsDeletedIn( p ) )
                     {
                         pActDel->RemoveDeletedIn( p );  // "druntergerutscht"
-                        bUpdate = sal_True;
+                        bUpdate = true;
                     }
                 }
                 if ( bUpdate )
@@ -3639,7 +3786,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     else if ( eActType == SC_CAT_MOVE )
     {
         ScChangeActionMove* pActMove = (ScChangeActionMove*) pAct;
-        sal_Bool bLastCutMove = ( pActMove == pLastCutMove );
+        bool bLastCutMove = ( pActMove == pLastCutMove );
         const ScBigRange& rTo = pActMove->GetBigRange();
         const ScBigRange& rFrom = pActMove->GetFromRange();
         if ( !bUndo )
@@ -3689,7 +3836,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
         }
         else
         {   // Undo Move
-            sal_Bool bActRejected = pActMove->IsRejected();
+            bool bActRejected = pActMove->IsRejected();
             for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
             {
                 if ( p == pAct )
@@ -3848,13 +3995,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
 
 
 void ScChangeTrack::GetDependents( ScChangeAction* pAct,
-        ScChangeActionMap& rMap, sal_Bool bListMasterDelete, sal_Bool bAllFlat ) const
+        ScChangeActionMap& rMap, bool bListMasterDelete, bool bAllFlat ) const
 {
     //! bAllFlat==TRUE: intern aus Accept oder Reject gerufen,
     //! => Generated werden nicht aufgenommen
 
-    sal_Bool bIsDelete = pAct->IsDeleteType();
-    sal_Bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
+    bool bIsDelete = pAct->IsDeleteType();
+    bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
     const ScChangeAction* pCur = NULL;
     ::std::stack<ScChangeAction*> cStack;
@@ -4040,7 +4187,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
 }
 
 
-sal_Bool ScChangeTrack::SelectContent( ScChangeAction* pAct, sal_Bool bOldest )
+bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
 {
     if ( pAct->GetType() != SC_CAT_CONTENT )
         return false;
@@ -4080,7 +4227,7 @@ sal_Bool ScChangeTrack::SelectContent( ScChangeAction* pAct, sal_Bool bOldest )
 
     if ( pContent->HasDependent() )
     {
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         ::std::stack<ScChangeActionContent*> aRejectActions;
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
@@ -4130,7 +4277,7 @@ void ScChangeTrack::AcceptAll()
 }
 
 
-sal_Bool ScChangeTrack::Accept( ScChangeAction* pAct )
+bool ScChangeTrack::Accept( ScChangeAction* pAct )
 {
     if ( !pAct->IsClickable() )
         return false;
@@ -4140,7 +4287,7 @@ sal_Bool ScChangeTrack::Accept( ScChangeAction* pAct )
         ScChangeActionMap aActionMap;
         ScChangeActionMap::iterator itChangeAction;
 
-        GetDependents( pAct, aActionMap, false, sal_True );
+        GetDependents( pAct, aActionMap, false, true );
 
         for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
         {
@@ -4148,13 +4295,13 @@ sal_Bool ScChangeTrack::Accept( ScChangeAction* pAct )
         }
     }
     pAct->Accept();
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScChangeTrack::RejectAll()
+bool ScChangeTrack::RejectAll()
 {
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     for ( ScChangeAction* p = GetLast(); p && bOk; p = p->GetPrev() )
     {   //! rueckwaerts, weil abhaengige hinten und RejectActions angehaengt
         if ( p->IsInternalRejectable() )
@@ -4164,7 +4311,7 @@ sal_Bool ScChangeTrack::RejectAll()
 }
 
 
-sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
+bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
 {
     // #i100895# When collaboration changes are reversed, it must be possible
     // to reject a deleted row above another deleted row.
@@ -4178,23 +4325,23 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
     if ( pAct->HasDependent() )
     {
         pMap = new ScChangeActionMap;
-        GetDependents( pAct, *pMap, false, sal_True );
+        GetDependents( pAct, *pMap, false, true );
     }
-    sal_Bool bRejected = Reject( pAct, pMap, false );
+    bool bRejected = Reject( pAct, pMap, false );
     if ( pMap )
         delete pMap;
     return bRejected;
 }
 
 
-sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
-        sal_Bool bRecursion )
+bool ScChangeTrack::Reject(
+    ScChangeAction* pAct, ScChangeActionMap* pMap, bool bRecursion )
 {
     if ( !pAct->IsInternalRejectable() )
         return false;
 
-    sal_Bool bOk = sal_True;
-    sal_Bool bRejected = false;
+    bool bOk = true;
+    bool bRejected = false;
     if ( pAct->IsInsertType() )
     {
         if ( pAct->HasDependent() && !bRecursion )
@@ -4210,7 +4357,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
                 else if ( itChangeAction->second->IsDeleteType() )
                     itChangeAction->second->Accept();        // geloeschtes ins Nirvana
                 else
-                    bOk = Reject( itChangeAction->second, NULL, sal_True );      //! rekursiv
+                    bOk = Reject( itChangeAction->second, NULL, true );      //! rekursiv
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
@@ -4225,12 +4372,13 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
         OSL_ENSURE( !pMap, "ScChangeTrack::Reject: Delete mit map" );
         ScBigRange aDelRange;
         sal_uLong nRejectAction = pAct->GetActionNumber();
-        sal_Bool bTabDel, bTabDelOk;
+        bool bTabDel, bTabDelOk;
         if ( pAct->GetType() == SC_CAT_DELETE_TABS )
         {
-            bTabDel = sal_True;
+            bTabDel = true;
             aDelRange = pAct->GetBigRange();
-            bOk = bTabDelOk = pAct->Reject( pDoc );
+            bTabDelOk = pAct->Reject( pDoc );
+            bOk = bTabDelOk;
             if ( bOk )
             {
                 pAct = pAct->GetPrev();
@@ -4245,7 +4393,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
             aDelRange = pDel->GetOverAllRange();
             bOk = aDelRange.IsValid( pDoc );
         }
-        sal_Bool bOneOk = false;
+        bool bOneOk = false;
         if ( bOk )
         {
             ScChangeActionType eActType = pAct->GetType();
@@ -4266,7 +4414,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
                 }
             }
             ScChangeAction* p = pAct;
-            sal_Bool bLoop = sal_True;
+            bool bLoop = true;
             do
             {
                 pDel = (ScChangeActionDel*) p;
@@ -4293,7 +4441,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
                         }
                     }
                     else
-                        bOneOk = sal_True;
+                        bOneOk = true;
                 }
                 if ( pDel->IsBaseDelete() )
                     bLoop = false;
@@ -4322,7 +4470,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
 
             for( itChangeAction = pMap->rbegin(); itChangeAction != pMap->rend() && bOk; ++itChangeAction )
             {
-                bOk = Reject( itChangeAction->second, NULL, sal_True );      //! rekursiv
+                bOk = Reject( itChangeAction->second, NULL, true );      //! rekursiv
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
@@ -4366,7 +4514,8 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
 }
 
 
-sal_uLong ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& aBigRange, const String& sNewValue )
+sal_uLong ScChangeTrack::AddLoadedGenerated(
+    ScBaseCell* pNewCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue )
 {
     ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pNewCell, aBigRange, pDoc, sNewValue );
     if ( pAct )
@@ -4421,8 +4570,8 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         const ScBaseCell* pNewCell = pContent->GetNewCell();
         if ( pNewCell )
         {
-            ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
-            String aNewValue;
+            ScBaseCell* pClonedNewCell = pNewCell->Clone( *pDocument );
+            rtl::OUString aNewValue;
             pContent->GetNewString( aNewValue );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
             pClonedTrack->AddLoadedGenerated( pClonedNewCell, pGenerated->GetBigRange(), aNewValue );
@@ -4505,8 +4654,8 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
                     OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
                     const ScBaseCell* pOldCell = pContent->GetOldCell();
-                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->CloneWithoutNote( *pDocument ) : 0;
-                    String aOldValue;
+                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->Clone( *pDocument ) : 0;
+                    rtl::OUString aOldValue;
                     pContent->GetOldString( aOldValue );
 
                     ScChangeActionContent* pClonedContent = new ScChangeActionContent(
@@ -4524,7 +4673,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScBaseCell* pNewCell = pContent->GetNewCell();
                     if ( pNewCell )
                     {
-                        ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
+                        ScBaseCell* pClonedNewCell = pNewCell->Clone( *pDocument );
                         pClonedContent->SetNewValue( pClonedNewCell, pDocument );
                     }
 

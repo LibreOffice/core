@@ -88,13 +88,13 @@
       <info>
         <desc>Describes migration steps specific for certain version(s)</desc>
       </info>
-      <prop oor:name="VersionIdentifiers" oor:type="oor:string-list">
+      <prop oor:name="VersionIdentifiers" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>version identifiers, that are supported for migration</desc>
         </info>
         <value/>
       </prop>
-      <prop oor:name="Priority" oor:type="xs:int">
+      <prop oor:name="Priority" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Contains the priority value to specify which migration should be prefered. Higher values are prefered.</desc>
         </info>
@@ -173,14 +173,14 @@
 					<desc>Specifies the URL for opening an empty document in the factory.</desc>
 				</info>
 			</prop>
-			<prop oor:name="ooSetupFactoryIcon" oor:type="xs:int">
+			<prop oor:name="ooSetupFactoryIcon" oor:type="xs:int" oor:nillable="false">
 				<!-- UIHints: setup -->
 				<info>
 					<desc>Specifies the ID of the icon for the factory</desc>
 				</info>
 				<value>0</value>
 			</prop>
-			<prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int">
+			<prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int" oor:nillable="false">
 				<!-- UIHints: setup -->
 				<info>
 					<desc>Specifies the ID of the style filter (Stylist) for the factory</desc>
@@ -232,49 +232,49 @@
 				<desc>Contains common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
-			<prop oor:name="ooName" oor:type="xs:string">
+			<prop oor:name="ooName" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the name of a product.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string">
+			<prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file formats.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooXMLFileFormatName" oor:type="xs:string">
+			<prop oor:name="ooXMLFileFormatName" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the name of the SO6/7 or OOo1.0 xml file formats.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupVersion" oor:type="xs:string">
+			<prop oor:name="ooSetupVersion" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the version number of the product that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string">
+			<prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>PB</author>
 					<desc>Specifies the complete (major.minor.micro) version number of the product that appears only on the about box.</desc>
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string">
+			<prop oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>PMLADEK</author>
 					<desc>Specifies the version suffix (beta1, rc2) of the product that appears only on the about box.</desc>
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="ooVendor" oor:type="xs:string">
+			<prop oor:name="ooVendor" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>IHI</author>
 					<desc>Specifies the vendor who build the product.</desc>
@@ -282,14 +282,14 @@
 				<value/>
 			</prop>
 
-            <prop oor:name="ooSetupExtension" oor:type="xs:string">
+            <prop oor:name="ooSetupExtension" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<desc>Specifies the version number that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-            <prop oor:name="ooOpenSourceContext" oor:type="xs:int">
+            <prop oor:name="ooOpenSourceContext" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc>Specifies the context of the product. A value greater than 0 is specifying an OpenSource context.</desc>
                 </info>
@@ -301,7 +301,7 @@
 			<info>
 				<desc>Specifies the installation location, locales and the available factories for creating documents.</desc>
 			</info>
-			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
+			<prop oor:name="ooSetupInstallPath" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<info>
@@ -312,7 +312,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupInstallURL" oor:type="xs:string">
+			<prop oor:name="ooSetupInstallURL" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<info>
@@ -323,7 +323,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
+			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<info>
@@ -331,6 +331,7 @@
 					<author>IS/BEI</author>
 					<desc>Indicates if the user data is copied successfully.</desc>
 				</info>
+                            <value>false</value>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
 				<!-- OldLocation: setup.inf-->
@@ -348,7 +349,7 @@
 					<desc>Enumerates the application languages that are installed, if a multilingual version is used.</desc>
 				</info>
             </set>
-			<prop oor:name="ooSetupShowIntro" oor:type="xs:boolean">
+			<prop oor:name="ooSetupShowIntro" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Common/Show-Intro -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - View -->
@@ -357,8 +358,9 @@
 					<author>CD</author>
 					<desc>Specifies whether the splash screen is displayed during startup.</desc>
 				</info>
+                            <value>true</value>
 			</prop>
-			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
+			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Common-->
 				<!-- OldLocation: soffice.ini -->
 				<info>
@@ -374,14 +376,14 @@
 					<desc>The xsd:datetime (YYYY-MM-DDTHH:MM:SS) on which the user has accepted the license. If the current installation has a license that is newer then this date, the license has to be accepted again.</desc>
 				</info>
 			</prop>
-			<prop oor:name="FirstStartWizardCompleted" oor:type="xs:boolean">
+			<prop oor:name="FirstStartWizardCompleted" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<author>LO</author>
 					<desc>is set to true, when the FirstStartWizard has been completed</desc>
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="MigrationCompleted" oor:type="xs:boolean">
+			<prop oor:name="MigrationCompleted" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<author>LO</author>
 					<desc>This should be set to true, as soon as settings from
@@ -390,7 +392,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="LastCompatibilityCheckID" oor:type="xs:string">
+			<prop oor:name="LastCompatibilityCheckID" oor:type="xs:string" oor:nillable="false">
 				<info>
 					<author>DV</author>
 					<desc>The build ID of the office. On startup the office will compare this ID with the current build id to decide if the extensions dependencies need to be checked.</desc>
@@ -403,7 +405,7 @@
 					<desc>Contains all of the document factories that were installed during setup.</desc>
 				</info>
             </set>
-            <prop oor:name="OfficeRestartInProgress" oor:type="xs:boolean">
+            <prop oor:name="OfficeRestartInProgress" oor:type="xs:boolean" oor:nillable="false">
                 <info>
                     <author>MAV</author>
                     <desc>The entry specifies that we are in restart process</desc>
@@ -417,7 +419,7 @@
 				<desc>Specifies the installation locales.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
-			<prop oor:name="ooLocale" oor:type="xs:string">
+			<prop oor:name="ooLocale" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: User/Language -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Other -->
@@ -428,9 +430,8 @@
 					<label>Locale</label>
 				</info>
 				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupSystemLocale" oor:type="xs:string">
+			<prop oor:name="ooSetupSystemLocale" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Locale setting -->
 				<info>
 					<author>ER</author>
@@ -439,7 +440,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupCurrency" oor:type="xs:string">
+			<prop oor:name="ooSetupCurrency" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Default currency -->
 				<info>
 					<author>ER</author>
@@ -468,6 +469,7 @@
 					<author>JB</author>
           <desc>Deprecated</desc>
 				</info>
+                            <value>true</value>
 			</prop>
 		</group>
     <group oor:name="Migration">

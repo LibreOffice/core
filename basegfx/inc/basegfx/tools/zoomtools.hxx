@@ -42,8 +42,6 @@ namespace basegfx
     {
         BASEGFX_DLLPUBLIC long zoomOut(long nCurrent);
         BASEGFX_DLLPUBLIC long zoomIn(long nCurrent);
-        BASEGFX_DLLPUBLIC int zoomOut(int nCurrent);
-        BASEGFX_DLLPUBLIC int zoomIn(int nCurrent);
     }
 }
 

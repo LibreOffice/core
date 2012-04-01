@@ -67,14 +67,6 @@ TYPEINIT1(SotStorageStreamFactory,SotFactory);
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorageStream,SotStorageStreamFactory,SotObject,
                         SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
                             0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
-SO2_IMPL_INVARIANT(SotStorageStream)
-
-
-void SotStorageStream::TestMemberObjRef() {}
-
-#ifdef TEST_INVARIANT
-void SotStorageStream::TestMemberInvariant() {}
-#endif
 
 /************************************************************************
 |*    SotStorageStream::SotStorageStream()
@@ -435,20 +427,6 @@ TYPEINIT1(SotStorageFactory,SotFactory);
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorage,SotStorageFactory,SotObject,
                         SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
                             0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
-SO2_IMPL_INVARIANT(SotStorage)
-
-
-/************************************************************************
-|*
-|*    SotStorage::Tes*()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotStorage::TestMemberObjRef() {}
-
-#ifdef TEST_INVARIANT
-void SotStorage::TestMemberInvariant() {}
-#endif
 
 /************************************************************************
 |*

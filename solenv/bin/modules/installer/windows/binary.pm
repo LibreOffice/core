@@ -27,7 +27,6 @@
 
 package installer::windows::binary;
 
-use installer::existence;
 use installer::files;
 use installer::globals;
 

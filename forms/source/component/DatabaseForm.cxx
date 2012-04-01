@@ -493,12 +493,12 @@ ODatabaseForm::~ODatabaseForm()
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-    // Liste von successful Controls fuellen
+    // Fill List of successful Controls
     HtmlSuccessfulObjList aSuccObjList;
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Liste zu ::rtl::OUString zusammensetzen
+    // Aggregate Liste to ::rtl::OUString
     ::rtl::OUStringBuffer aResult;
     ::rtl::OUString aName;
     ::rtl::OUString aValue;
@@ -512,8 +512,7 @@ ODatabaseForm::~ODatabaseForm()
         aValue = pSuccObj->aValue;
         if( pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE && !aValue.isEmpty() )
         {
-            // Bei File-URLs wird der Dateiname und keine URL uebertragen,
-            // weil Netscape dies so macht.
+            // For File URLs we transfer the file name and not a URL, because Netscape does it like that
             INetURLObject aURL;
             aURL.SetSmartProtocol(INET_PROT_FILE);
             aURL.SetSmartURL(aValue);
@@ -554,17 +553,17 @@ ODatabaseForm::~ODatabaseForm()
 Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt, ::rtl::OUString& rContentType)
 {
 
-    // Parent erzeugen
+    // Create Parent
     INetMIMEMessage aParent;
     aParent.EnableAttachChild( INETMSG_MULTIPART_FORM_DATA );
 
 
-    // Liste von successful Controls fuellen
+    // Fill List of successful Controls
     HtmlSuccessfulObjList aSuccObjList;
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Liste zu ::rtl::OUString zusammensetzen
+    // Aggregate Liste to ::rtl::OUString
     ::rtl::OUString aResult;
     for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
@@ -578,15 +577,15 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     }
 
 
-    // Liste loeschen
+    // Delete List
     aSuccObjList.clear();
 
-    // Fuer Parent MessageStream erzeugen
+    // Create MessageStream for parent
     INetMIMEMessageStream aMessStream;
     aMessStream.SetSourceMessage( &aParent );
     aMessStream.GenerateHeader( sal_False );
 
-    // MessageStream in SvStream kopieren
+    // Copy MessageStream to SvStream
     SvMemoryStream aMemStream;
     char* pBuf = new char[1025];
     int nRead;
@@ -622,12 +621,11 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     if (!xComponentSet.is())
         return;
 
-    // MIB 25.6.98: Geschachtelte Formulare abfangen ... oder muesste
-    // man sie submitten?
+    // MIB 25.6.98: Catch nested Forms; or would we need to submit them?
     if (!hasProperty(PROPERTY_CLASSID, xComponentSet))
         return;
 
-    // Namen ermitteln
+    // Get names
     if (!hasProperty(PROPERTY_NAME, xComponentSet))
         return;
 
@@ -637,7 +635,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     xComponentSet->getPropertyValue( PROPERTY_NAME ) >>= aName;
     if( aName.isEmpty() && nClassId != FormComponentType::IMAGEBUTTON)
         return;
-    else    // Name um den Prefix erweitern
+    else    // Extend name with the prefix
         aName = rNamePrefix + aName;
 
     switch( nClassId )
@@ -645,8 +643,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         // Buttons
         case FormComponentType::COMMANDBUTTON:
         {
-            // Es wird nur der gedrueckte Submit-Button ausgewertet
-            // MIB: Sofern ueberhaupt einer uebergeben wurde
+            // We only evaluate the pressed Submit button
+            // MIB: If one is passed at all
             if( rxSubmitButton.is() )
             {
                 Reference<XPropertySet>  xSubmitButtonComponent(rxSubmitButton->getModel(), UNO_QUERY);
@@ -663,8 +661,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         // ImageButtons
         case FormComponentType::IMAGEBUTTON:
         {
-            // Es wird nur der gedrueckte Submit-Button ausgewertet
-            // MIB: Sofern ueberhaupt einer uebergeben wurde
+            // We only evaluate the pressed Submit button
+            // MIB: If one is passed at all
             if( rxSubmitButton.is() )
             {
                 Reference<XPropertySet>  xSubmitButtonComponent(rxSubmitButton->getModel(), UNO_QUERY);
@@ -674,7 +672,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     ::rtl::OUString aLhs = aName;
                     ::rtl::OUString aRhs = ::rtl::OUString::valueOf( MouseEvt.X );
 
-                    // nur wenn ein Name vorhanden ist, kann ein name.x
+                    // Only if a name is available we have a name.x
                     aLhs += !aName.isEmpty() ? UniString::CreateFromAscii(".x") : UniString::CreateFromAscii("x");
                     rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
 
@@ -713,14 +711,13 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if( !hasProperty(PROPERTY_TEXT, xComponentSet) )
                 break;
 
-            // MIB: Spezial-Behandlung fuer Multiline-Edit nur dann, wenn
-            // es auch ein Control dazu gibt.
+            // MIB: Special treatment for multiline edit only if we have a control for it
             Any aTmp = xComponentSet->getPropertyValue( PROPERTY_MULTILINE );
             sal_Bool bMulti =   rxSubmitButton.is()
                             && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
             ::rtl::OUString sText;
-            if ( bMulti )   // Bei MultiLineEdit Text am Control abholen
+            if ( bMulti )   // For multiline edit, get the text at the control
             {
 
                 Reference<XControlContainer>  xControlContainer(rxSubmitButton->getContext(), UNO_QUERY);
@@ -730,7 +727,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 Reference<XControl>  xControl;
                 Reference<XFormComponent>  xControlComponent;
 
-                // Richtiges Control suchen
+                // Find the right control
                 sal_Int32 i;
                 for( i=0; i<aControlSeq.getLength(); i++ )
                 {
@@ -744,7 +741,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                         break;
                     }
                 }
-                // Control nicht gefunden oder nicht existent, (Edit im Grid)
+                // Couldn't find control or it does not exist (edit in the grid)
                 if (i == aControlSeq.getLength())
                     xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= sText;
             }
@@ -769,8 +766,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         case FormComponentType::CURRENCYFIELD:
         case FormComponentType::NUMERICFIELD:
         {
-            // <name>=<wert> // wert wird als double mit Punkt als Decimaltrenner
-                             // kein Wert angegeben (NULL) -> wert leer
+            // <name>=<wert> // Value is a double with dot as decimal delimiter
+                             // no value (NULL) means empty value
             if( hasProperty(PROPERTY_VALUE, xComponentSet) )
             {
                 ::rtl::OUString aText;
@@ -788,8 +785,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         }   break;
         case FormComponentType::DATEFIELD:
         {
-            // <name>=<wert> // Wert wird als Datum im Format (MM-DD-YYYY)
-                             // kein Wert angegeben (NULL) -> wert leer
+            // <name>=<wert> // Value is a Date with the format MM-DD-YYYY
+                             // no value (NULL) means empty value
             if( hasProperty(PROPERTY_DATE, xComponentSet) )
             {
                 ::rtl::OUString aText;
@@ -811,8 +808,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         }   break;
         case FormComponentType::TIMEFIELD:
         {
-            // <name>=<wert> // Wert wird als Zeit im Format (HH:MM:SS) angegeben
-                             // kein Wert angegeben (NULL) -> wert leer
+            // <name>=<wert> // Value is a Time with the format HH:MM:SS
+                             // no value (NULL) means empty value
             if( hasProperty(PROPERTY_TIME, xComponentSet) )
             {
                 ::rtl::OUString aText;
@@ -863,38 +860,36 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         case FormComponentType::LISTBOX:
         {
 
-            // <name>=<Token0>&<name>=<Token1>&...&<name>=<TokenN> (Mehrfachselektion)
+            // <name>=<Token0>&<name>=<Token1>&...&<name>=<TokenN> (multiple selection)
             if (!hasProperty(PROPERTY_SELECT_SEQ, xComponentSet) ||
                 !hasProperty(PROPERTY_STRINGITEMLIST, xComponentSet))
                 break;
 
-            // angezeigte Werte
+            // Displayed values
             Sequence< ::rtl::OUString > aVisibleList;
             xComponentSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aVisibleList;
             sal_Int32 nStringCnt = aVisibleList.getLength();
             const ::rtl::OUString* pStrings = aVisibleList.getConstArray();
 
-            // Werte-Liste
+            // Value list
             Sequence< ::rtl::OUString > aValueList;
             xComponentSet->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueList;
             sal_Int32 nValCnt = aValueList.getLength();
             const ::rtl::OUString* pVals = aValueList.getConstArray();
 
-            // Selektion
+            // Selection
             Sequence<sal_Int16> aSelectList;
             xComponentSet->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectList;
             sal_Int32 nSelCount = aSelectList.getLength();
             const sal_Int16* pSels = aSelectList.getConstArray();
 
-            // Einfach- oder Mehrfach-Selektion
-            // Bei Einfach-Selektionen beruecksichtigt MT nur den ersten Eintrag
-            // in der Liste.
+            // Simple or multiple selection
+            // For simple selections MT only accounts for the list's first entry.
             if (nSelCount > 1 && !getBOOL(xComponentSet->getPropertyValue(PROPERTY_MULTISELECTION)))
                 nSelCount = 1;
 
-            // Die Indizes in der Selektions-Liste koennen auch ungueltig sein,
-            // also muss man die gueltigen erstmal raussuchen um die Laenge
-            // der neuen Liste zu bestimmen.
+            // The indices in the selection list can also be invalid, so we first have to
+            // find the valid ones to determine the length of the new list.
             sal_Int32 nCurCnt = 0;
             sal_Int32 i;
             for( i=0; i<nSelCount; ++i )
@@ -920,8 +915,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         } break;
         case FormComponentType::GRIDCONTROL:
         {
-            // Die einzelnen Spaltenwerte werden verschickt,
-            // der Name wird mit dem Prefix des Names des Grids erweitert
+            // Each of the column values is sent;
+            // the name is extended by the grid's prefix.
             Reference<XIndexAccess>  xContainer(xComponentSet, UNO_QUERY);
             if (!xContainer.is())
                 break;
@@ -947,9 +942,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     const Reference<XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt )
 {
-    // Liste loeschen
+    // Delete list
     rList.clear();
-    // Ueber Components iterieren
+    // Iterate over Components
     Reference<XPropertySet>         xComponentSet;
     ::rtl::OUString aPrefix;
 
@@ -968,31 +963,27 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 {
     ::rtl::OUString aResult;
 
-    // Zeilenendezeichen werden als CR dargestellt
-    UniString sConverter = rString;
-    sConverter.ConvertLineEnd( LINEEND_CR );
-    rString = sConverter;
+    // Line endings are represented as CR
+    rString = convertLineEnd(rString, LINEEND_CR);
 
-
-    // Jeden einzelnen Character ueberpruefen
+    // Check each character
     sal_Int32 nStrLen = rString.getLength();
     sal_Unicode nCharCode;
     for( sal_Int32 nCurPos=0; nCurPos < nStrLen; ++nCurPos )
     {
         nCharCode = rString[nCurPos];
 
-        // Behandlung fuer chars, die kein alphanumerisches Zeichen sind
-        // und CharacterCodes > 127
+        // Handle chars, which are not an alphanumeric character and character codes > 127
         if( (!isalnum(nCharCode) && nCharCode != (sal_Unicode)' ') || nCharCode > 127 )
         {
             switch( nCharCode )
             {
                 case 13:    // CR
-                    aResult += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%0D%0A") ); // Hex-Darstellung CR LF
+                    aResult += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%0D%0A") ); // CR LF in hex
                     break;
 
 
-                // Netscape Sonderbehandlung
+                // Special treatment for Netscape
                 case 42:    // '*'
                 case 45:    // '-'
                 case 46:    // '.'
@@ -1003,7 +994,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 
                 default:
                 {
-                    // In Hex umrechnen
+                    // Convert to hex
                     short nHi = ((sal_Int16)nCharCode) / 16;
                     short nLo = ((sal_Int16)nCharCode) - (nHi*16);
                     if( nHi > 9 ) nHi += (int)'A'-10; else nHi += (int)'0';
@@ -1019,7 +1010,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
     }
 
 
-    // Spaces durch '+' ersetzen
+    // Replace spaces with '+'
     aResult = aResult.replace(' ', '+');
 
     rString = aResult;
@@ -1030,7 +1021,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
     const ::rtl::OUString& rData )
 {
 
-    // Part als Message-Child erzeugen
+    // Create part as MessageChild
     INetMIMEMessage* pChild = new INetMIMEMessage();
 
 
@@ -1065,7 +1056,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
 
     if( aFileName.Len() )
     {
-        // Bisher koennen wir nur File-URLs verarbeiten
+        // We can only process File URLs yet
         INetURLObject aURL;
         aURL.SetSmartProtocol(INET_PROT_FILE);
         aURL.SetSmartURL(rFileName);
@@ -1089,13 +1080,12 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
         }
     }
 
-    // Wenn irgendetwas nicht geklappt hat, legen wir einen leeren
-    // MemoryStream an
+    // If something didn't work, we create an empty MemoryStream
     if( !pStream )
         pStream = new SvMemoryStream;
 
 
-    // Part als Message-Child erzeugen
+    // Create part as MessageChild
     INetMIMEMessage* pChild = new INetMIMEMessage;
 
 
@@ -2139,7 +2129,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        // Sind Controls und eine Submit-URL vorhanden?
+        // Do we have controls and a Submit URL?
         if( !getCount() || m_aTargetURL.isEmpty() )
             return;
     }
@@ -2184,7 +2174,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
 
         // build a sequence from the to-be-submitted string
         rtl::OString a8BitData(rtl::OUStringToOString(aData, _eEncoding));
-            // always ANSI #58641
+        // always ANSI #58641
         Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
@@ -2250,7 +2240,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer") ) ), UNO_QUERY);
     DBG_ASSERT(xTransformer.is(), "ODatabaseForm::submit_impl : could not create an URL transformer !");
 
-    // URL-Encoding
+    // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )
     {
         ::rtl::OUString aData;
@@ -2460,7 +2450,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl() throw(com::sun::star::uno::Ru
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
-    // Sollen Controls in einer TabOrder gruppe zusammengefasst werden?
+    // Should controls be combined into a TabOrder group?
     if (m_aCycle.hasValue())
     {
         sal_Int32 nCycle = 0;
@@ -2479,12 +2469,12 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
-    // TabIndex in der Reihenfolge der Sequence setzen
+    // Set TabIndex in the order of the sequence
     const Reference<XControlModel>* pControls = rControls.getConstArray();
     sal_Int32 nCount = getCount();
     sal_Int32 nNewCount = rControls.getLength();
 
-    // HiddenControls und Formulare werden nicht aufgefuehrt
+    // HiddenControls and forms are not listed
     if (nNewCount <= nCount)
     {
         Any aElement;
@@ -2494,7 +2484,7 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
             Reference<XFormComponent>  xComp(*pControls, UNO_QUERY);
             if (xComp.is())
             {
-                // suchen der Componente in der Liste
+                // Find component in the list
                 for (sal_Int32 j = 0; j < nCount; ++j)
                 {
                     Reference<XFormComponent> xElement;
@@ -2524,8 +2514,8 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // Die Controls werden gruppiert, indem ihr Name dem Namen des ersten
-    // Controls der Sequenz angepasst wird
+    // The controls are grouped by adjusting their names to the name of the
+    // first control of the sequence
     const Reference<XControlModel>* pControls = _rGroup.getConstArray();
     Reference< XPropertySet > xSet;
     ::rtl::OUString sGroupName( Name );
@@ -2682,7 +2672,7 @@ void SAL_CALL ODatabaseForm::reloaded(const EventObject& /*aEvent*/) throw( Runt
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( ODatabaseForm, OnTimeout, void*, EMPTYARG )
+IMPL_LINK_NOARG(ODatabaseForm, OnTimeout)
 {
     reload_impl(sal_True);
     return 1;
@@ -4047,7 +4037,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     _rxInStream->readShort();
 
     // navigation mode was a boolean in version 1
-    // war in der version 1 ein sal_Bool
+    // was a sal_Bool in version 1
     sal_Bool bNavigation = _rxInStream->readBoolean();
     if (nVersion == 1)
         m_eNavigation = bNavigation ? NavigationBarMode_CURRENT : NavigationBarMode_NONE;

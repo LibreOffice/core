@@ -29,6 +29,7 @@
 #ifndef _SVP_SVPFRAME_HXX
 
 #include <vcl/sysdata.hxx>
+#include <basegfx/range/b2ibox.hxx>
 
 #include <salframe.hxx>
 #include "svpelement.hxx"
@@ -41,10 +42,13 @@ class SvpSalGraphics;
 class SvpSalFrame : public SalFrame, public SvpElement
 {
     SvpSalInstance*                     m_pInstance;
-    SvpSalFrame*                    m_pParent;       // pointer to parent frame
+    SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    sal_uLong                         m_nStyle;
+    sal_uLong                           m_nStyle;
     bool                                m_bVisible;
+    bool                                m_bDamageTracking;
+    bool                                m_bTopDown;
+    sal_Int32                           m_nScanlineFormat;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
     long                                m_nMaxWidth;
@@ -60,12 +64,15 @@ public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
                  sal_uLong nSalFrameStyle,
+                 bool      bTopDown,
+                 sal_Int32 nScanlineFormat,
                  SystemParentData* pSystemParent = NULL );
     virtual ~SvpSalFrame();
 
     void GetFocus();
     void LoseFocus();
-    void PostPaint() const;
+    void PostPaint(bool bImmediate) const;
+    void AllocateFrame();
 
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
@@ -74,7 +81,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual sal_Bool            PostEvent( void* pData );
 
     virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
@@ -107,7 +114,6 @@ public:
     virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
-    virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
@@ -122,9 +128,17 @@ public:
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
 
+    // If enabled we can get damage notifications for regions immediately rendered to ...
+    virtual void                enableDamageTracker( bool bOn = true );
+    virtual void                damaged( const basegfx::B2IBox& /* rDamageRect */) {}
+
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
     virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
+    bool IsVisible() { return m_bVisible; }
+
+    static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
+
 };
 #endif // _SVP_SVPFRAME_HXX
 

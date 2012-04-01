@@ -74,16 +74,13 @@ SwBreakIt::~SwBreakIt()
     delete m_pLocale;
     delete m_pForbidden;
 }
+
 void SwBreakIt::createBreakIterator() const
 {
     if ( m_xMSF.is() && !xBreak.is() )
         xBreak.set(m_xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),uno::UNO_QUERY);
 }
-void SwBreakIt::createScriptTypeDetector()
-{
-    if ( m_xMSF.is() && !xCTLDetect.is() )
-        xCTLDetect.set(m_xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ))),uno::UNO_QUERY);
-}
+
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
@@ -100,34 +97,34 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
     m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
-sal_uInt16 SwBreakIt::GetRealScriptOfText( const String& rTxt,
-                                        xub_StrLen nPos ) const
+sal_uInt16 SwBreakIt::GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 nPos ) const
 {
     createBreakIterator();
     sal_uInt16 nScript = i18n::ScriptType::WEAK;
-    if( xBreak.is() && rTxt.Len() )
+    if( xBreak.is() && !rTxt.isEmpty() )
     {
-        if( nPos && nPos == rTxt.Len() )
+        if( nPos && nPos == rTxt.getLength() )
             --nPos;
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos = 0;
-        if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.Len() )
+        if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.getLength() )
         {
             // A weak character followed by a mark may be meant to combine with
             // the mark, so prefer the following character's script
-            switch ( u_charType(rTxt.GetChar(nPos + 1) ) ) {
-            case U_NON_SPACING_MARK:
-            case U_ENCLOSING_MARK:
-            case U_COMBINING_SPACING_MARK:
-                nScript = xBreak->getScriptType( rTxt, nPos+1 );
-                break;
+            switch (u_charType(rTxt[nPos + 1]))
+            {
+                case U_NON_SPACING_MARK:
+                case U_ENCLOSING_MARK:
+                case U_COMBINING_SPACING_MARK:
+                    nScript = xBreak->getScriptType( rTxt, nPos+1 );
+                    break;
             }
         }
         if( i18n::ScriptType::WEAK == nScript && nPos &&
             0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
 
-        if( i18n::ScriptType::WEAK == nScript && rTxt.Len() >
+        if( i18n::ScriptType::WEAK == nScript && rTxt.getLength() >
             ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
             0 <= nChgPos )
             nScript = xBreak->getScriptType( rTxt, nChgPos );
@@ -137,7 +134,7 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const String& rTxt,
     return nScript;
 }
 
-sal_uInt16 SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
+sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
 {
     const sal_uInt16 coAllScripts = ( SCRIPTTYPE_LATIN |
                                   SCRIPTTYPE_ASIAN |
@@ -146,15 +143,15 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
     sal_uInt16 nRet = 0, nScript;
     if( !xBreak.is() )
         nRet = coAllScripts;
-    else if( rTxt.Len() )
+    else if( !rTxt.isEmpty() )
     {
-        for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd;
-                n = static_cast<xub_StrLen>(xBreak->endOfScript( rTxt, n, nScript )) )
+        for( sal_Int32 n = 0, nEnd = rTxt.getLength(); n < nEnd;
+                n = xBreak->endOfScript(rTxt, n, nScript) )
         {
             switch( nScript = xBreak->getScriptType( rTxt, n ) )
             {
-            case i18n::ScriptType::LATIN:       nRet |= SCRIPTTYPE_LATIN;   break;
-            case i18n::ScriptType::ASIAN:       nRet |= SCRIPTTYPE_ASIAN;   break;
+            case i18n::ScriptType::LATIN:   nRet |= SCRIPTTYPE_LATIN;   break;
+            case i18n::ScriptType::ASIAN:   nRet |= SCRIPTTYPE_ASIAN;   break;
             case i18n::ScriptType::COMPLEX: nRet |= SCRIPTTYPE_COMPLEX; break;
             case i18n::ScriptType::WEAK:
                     if( !nRet )

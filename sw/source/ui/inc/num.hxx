@@ -107,15 +107,15 @@ class SwNumPositionTabPage : public SfxTabPage
     void                InitControls();
 
     DECL_LINK( LevelHdl, ListBox * );
-    DECL_LINK( EditModifyHdl, Edit*);
+    DECL_LINK(EditModifyHdl, void *);
     DECL_LINK( DistanceHdl, MetricField * );
     DECL_LINK( RelativeHdl, CheckBox * );
-    DECL_LINK( StandardHdl, PushButton * );
+    DECL_LINK(StandardHdl, void *);
 
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK( LabelFollowedByHdl_Impl, ListBox* );
+    DECL_LINK(LabelFollowedByHdl_Impl, void *);
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
@@ -163,7 +163,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     protected:
         virtual short   Ok();
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
-        DECL_LINK(RemoveNumberingHdl, PushButton*);
+        DECL_LINK(RemoveNumberingHdl, void *);
     public:
         SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,

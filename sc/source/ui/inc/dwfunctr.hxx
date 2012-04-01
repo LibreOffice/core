@@ -108,7 +108,7 @@ private:
                     DECL_LINK( SetSelectionHdl, void* );
                     DECL_LINK( SelHdl, ListBox* );
                     DECL_LINK(SetSplitHdl,ScPrivatSplit*);
-                    DECL_LINK( TimerHdl, Timer*);
+                    DECL_LINK( TimerHdl, void*);
 
 protected:
 

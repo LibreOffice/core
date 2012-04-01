@@ -52,7 +52,7 @@ public:
     virtual css::uno::Any SAL_CALL ListLevels( const css::uno::Any& index ) throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_LISTTEMPLATE_HXX */

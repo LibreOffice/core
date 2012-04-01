@@ -61,12 +61,6 @@ namespace cppcanvas
             virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const;
             virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const;
 
-            SpriteSharedPtr                 createSpriteFromBitmaps(
-                const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::rendering::XBitmap > >&   animationBitmaps,
-                sal_Int8                                                    interpolationMode );
-
             virtual CanvasSharedPtr         clone() const;
 
             virtual ::com::sun::star::uno::Reference<

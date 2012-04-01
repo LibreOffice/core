@@ -60,10 +60,10 @@ XclPCItem::~XclPCItem()
 void XclPCItem::SetEmpty()
 {
     meType = EXC_PCITEM_EMPTY;
-    maText.Erase();
+    maText = rtl::OUString();
 }
 
-void XclPCItem::SetText( const String& rText )
+void XclPCItem::SetText( const rtl::OUString& rText )
 {
     meType = EXC_PCITEM_TEXT;
     maText = rText;
@@ -73,7 +73,7 @@ void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_DOUBLE;
     //! TODO convert double to string
-    maText.Erase();
+    maText = rtl::OUString();
     mfValue = fValue;
 }
 
@@ -81,14 +81,14 @@ void XclPCItem::SetDateTime( const DateTime& rDateTime )
 {
     meType = EXC_PCITEM_DATETIME;
     //! TODO convert date to string
-    maText.Erase();
+    maText = rtl::OUString();
     maDateTime = rDateTime;
 }
 
 void XclPCItem::SetInteger( sal_Int16 nValue )
 {
     meType = EXC_PCITEM_INTEGER;
-    maText = String::CreateFromInt32( nValue );
+    maText = rtl::OUString::valueOf(static_cast<sal_Int32>(nValue));
     mnValue = nValue;
 }
 
@@ -96,7 +96,7 @@ void XclPCItem::SetError( sal_uInt16 nError )
 {
     meType = EXC_PCITEM_ERROR;
     //! TODO convert error to string
-    maText.Erase();
+    maText = rtl::OUString();
     mnError = nError;
 }
 
@@ -104,7 +104,7 @@ void XclPCItem::SetBool( bool bValue )
 {
     meType = EXC_PCITEM_BOOL;
     //! TODO convert boolean to string
-    maText.Erase();
+    maText = rtl::OUString();
     mbValue = bValue;
 }
 
@@ -132,7 +132,7 @@ bool XclPCItem::IsEmpty() const
     return meType == EXC_PCITEM_EMPTY;
 }
 
-const String* XclPCItem::GetText() const
+const rtl::OUString* XclPCItem::GetText() const
 {
     return (meType == EXC_PCITEM_TEXT) ? &maText : 0;
 }
@@ -187,7 +187,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo )
     if( rStrm.GetRecLeft() >= 3 )
         rInfo.maName = rStrm.ReadUniString();
     else
-        rInfo.maName.Erase();
+        rInfo.maName = rtl::OUString();
     return rStrm;
 }
 
@@ -402,7 +402,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName )
     rStrm >> nStrLen;
     rCachedName.mbUseCache = nStrLen == EXC_PT_NOSTRING;
     if( rCachedName.mbUseCache )
-        rCachedName.maName.Erase();
+        rCachedName.maName = rtl::OUString();
     else
         rCachedName.maName = rStrm.ReadUniString( nStrLen );
     return rStrm;
@@ -419,15 +419,15 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
 
 // ----------------------------------------------------------------------------
 
-const String* XclPTVisNameInfo::GetVisName() const
+const rtl::OUString* XclPTVisNameInfo::GetVisName() const
 {
     return HasVisName() ? &maVisName.maName : 0;
 }
 
-void XclPTVisNameInfo::SetVisName( const String& rName )
+void XclPTVisNameInfo::SetVisName( const rtl::OUString& rName )
 {
     maVisName.maName = rName;
-    maVisName.mbUseCache = rName.Len() == 0;
+    maVisName.mbUseCache = rName.isEmpty();
 }
 
 // Field item settings ========================================================

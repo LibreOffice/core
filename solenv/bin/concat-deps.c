@@ -43,7 +43,11 @@
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
+#if defined(__x86_64) || defined(__i386)
 #define USE_MEMORY_ALIGNMENT 64
+#else
+#define USE_MEMORY_ALIGNMENT 4
+#endif
 #else /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define CORE_BIG_ENDIAN 1
@@ -369,10 +373,10 @@ struct hash
 
 static unsigned int hash_compute( struct hash* hash, const char* key, int length)
 {
-unsigned int a;
-unsigned int b;
-unsigned int c;                                          /* internal state */
-const unsigned char* uk = (const unsigned char*)key;
+    unsigned int a;
+    unsigned int b;
+    unsigned int c;                                          /* internal state */
+    const unsigned char* uk = (const unsigned char*)key;
 
     /* Set up the internal state */
     a = b = c = 0xdeadbeef + (length << 2);
@@ -688,6 +692,8 @@ static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_ou
     do
     {
         cursor += 3;
+        while(cursor_out > base && cursor_out[-1] == '/')
+            cursor_out--;
         while(cursor_out > base && *--cursor_out != '/');
     }
     while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
@@ -818,7 +824,6 @@ int rc = 0;
 off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
-char* in_list_end;
 char* in_list_base;
 struct hash* dep_hash;
 char* base_dir;
@@ -838,7 +843,6 @@ char* base_dir;
     if(!rc)
     {
         dep_hash = hash_create( kDEFAULT_HASH_SIZE);
-        in_list_end = in_list + in_list_size;
         in_list_base = in_list_cursor = in_list;
 
         /* extract filename of dep file from a 'space' separated list */

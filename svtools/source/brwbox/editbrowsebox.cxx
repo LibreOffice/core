@@ -187,7 +187,7 @@ namespace svt
     //------------------------------------------------------------------------------
     void EditBrowseBox::Init()
     {
-        // spaetes Construieren,
+        // late construction
     }
 
     //------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(EditBrowseBox, StartEditHdl, void*, EMPTYARG)
+    IMPL_LINK_NOARG(EditBrowseBox, StartEditHdl)
     {
         nStartEvent = 0;
         if (IsEditing())
@@ -1024,7 +1024,7 @@ namespace svt
         nEditCol = nCol;
 
         if ((GetSelectRowCount() && GetSelection() != NULL) || GetSelectColumnCount() ||
-            (aMouseEvent.Is() && (aMouseEvent.IsDown() || aMouseEvent->GetClicks() > 1))) // bei MouseDown passiert noch nichts
+            (aMouseEvent.Is() && (aMouseEvent.IsDown() || aMouseEvent->GetClicks() > 1))) // nothing happens on MouseDown
         {
             return;
         }
@@ -1114,7 +1114,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(EditBrowseBox, EndEditHdl, void*, EMPTYARG)
+    IMPL_LINK_NOARG(EditBrowseBox, EndEditHdl)
     {
         nEndEvent = 0;
         ReleaseController(aOldController, nOldEditRow, nOldEditCol);
@@ -1127,7 +1127,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(EditBrowseBox, ModifyHdl, void*, EMPTYARG)
+    IMPL_LINK_NOARG(EditBrowseBox, ModifyHdl)
     {
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
@@ -1136,7 +1136,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(EditBrowseBox, CellModifiedHdl, void*, EMPTYARG)
+    IMPL_LINK_NOARG(EditBrowseBox, CellModifiedHdl)
     {
         nCellModifiedEvent = 0;
         CellModified();

@@ -41,8 +41,8 @@ using namespace connectivity;
 using namespace connectivity::ado;
 // -------------------------------------------------------------------------
 OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
-                ,m_pConnection(_pCon)
                 ,m_aCatalog(_pCatalog)
+                ,m_pConnection(_pCon)
 {
 }
 // -----------------------------------------------------------------------------
@@ -69,7 +69,8 @@ void OCatalog::refreshTables()
           if ( aElement.IsValid() )
           {
               ::rtl::OUString sTypeName = aElement.get_Type();
-                  if ( !sTypeName.equalsIgnoreAsciiCaseAscii("SYSTEM TABLE") && !sTypeName.equalsIgnoreAsciiCaseAscii("ACCESS TABLE") )
+                  if ( !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSTEM TABLE"))
+                    && !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ACCESS TABLE")) )
                      aVector.push_back(aElement.get_Name());
                }
          }

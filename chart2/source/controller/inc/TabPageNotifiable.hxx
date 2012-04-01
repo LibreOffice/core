@@ -44,6 +44,9 @@ class TabPageNotifiable
 public:
     virtual void setInvalidPage( TabPage * pTabPage ) = 0;
     virtual void setValidPage( TabPage * pTabPage ) = 0;
+
+protected:
+    ~TabPageNotifiable() {}
 };
 
 } //  namespace chart

@@ -78,7 +78,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    // Vergleichen von PropertyInfo
+    // Compare PropertyInfo
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
@@ -166,7 +166,7 @@ namespace pcr
         DEF_INFO_3( ALLOWADDITIONS,    ALLOW_ADDITIONS,    ALLOW_ADDITIONS,   FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_3( ALLOWEDITS,        ALLOW_EDITS,        ALLOW_EDITS,       FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_3( ALLOWDELETIONS,    ALLOW_DELETIONS,    ALLOW_DELETIONS,   FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
-        DEF_INFO_4( INSERTONLY,        DATAENTRY,          DATAENTRY,         FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE, COMPOSEABLE ),
+        DEF_INFO_3( INSERTONLY,        DATAENTRY,          DATAENTRY,         FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_4( NAVIGATION,        NAVIGATION,         NAVIGATION,        FORM_VISIBLE, DATA_PROPERTY, ENUM, COMPOSEABLE ),
         DEF_INFO_4( CYCLE,             CYCLE,              CYCLE,             FORM_VISIBLE, DATA_PROPERTY, ENUM, COMPOSEABLE ),
         DEF_INFO_3( FILTERPROPOSAL,    FILTERPROPOSAL,     FILTERPROPOSAL,    FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
@@ -552,7 +552,7 @@ namespace pcr
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const String& _rName)
     {
-        // intialisierung
+        // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
@@ -573,7 +573,7 @@ namespace pcr
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
-        // intialisierung
+        // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
 

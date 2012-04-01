@@ -166,7 +166,7 @@ private:
     construction, the stream points to the beginning of the passed data
     sequence. The data sequence is expanded automatically while writing to it.
  */
-class SequenceOutputStream : public SequenceSeekableStream, public BinaryOutputStream
+class OOX_DLLPUBLIC SequenceOutputStream : public SequenceSeekableStream, public BinaryOutputStream
 {
 public:
     /** Constructs the wrapper object for the passed data sequence.

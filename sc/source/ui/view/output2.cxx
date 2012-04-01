@@ -205,7 +205,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL) :
     bPixelToLogic( bPTL )
 {
     ScModule* pScMod = SC_MOD();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -785,8 +784,8 @@ void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCe
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
 
-    String aCellText;
-    String aURL;
+    rtl::OUString aCellText;
+    rtl::OUString aURL;
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
     {
         ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
@@ -794,7 +793,7 @@ void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCe
             pFCell->GetURLResult( aURL, aCellText );
     }
 
-    if ( aURL.Len() && pPDFData )
+    if ( !aURL.isEmpty() && pPDFData )
     {
         vcl::PDFExtOutDevBookmarkEntry aBookmark;
         aBookmark.nLinkId = pPDFData->CreateLink( rRect );
@@ -2231,7 +2230,6 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         return;
 
     sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -2325,14 +2323,6 @@ void ScOutputData::DrawEditParam::getEngineSize(ScFieldEditEngine* pEngine, long
 
     rWidth = nEngineWidth;
     rHeight = nEngineHeight;
-}
-
-long ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine* pEngine) const
-{
-    if (mbBreak && meOrient != SVX_ORIENTATION_STACKED && !mbAsianVertical)
-        return 0;
-    else
-        return static_cast<long>(pEngine->CalcTextWidth());
 }
 
 bool ScOutputData::DrawEditParam::hasLineBreak() const
@@ -4676,7 +4666,6 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 

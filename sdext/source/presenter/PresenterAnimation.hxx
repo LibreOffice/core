@@ -83,11 +83,6 @@ public:
 
     typedef ::boost::function<void(void)> Callback;
 
-    /** Add a callback that is executed after Run() is called for the last
-        time.
-    */
-    void AddEndCallback (const Callback& rCallback);
-
     /** Called with nProgress taking on values between 0 and 1.
         @param nProgress
             A value between 0 and 1.
@@ -96,22 +91,10 @@ public:
     */
     virtual void Run (const double nProgress, const sal_uInt64 nCurrentTime) = 0;
 
-    /** Called just before Run() is called for the first time to trigger the
-        callbacks registered via the <method>AddStartCallback()</method>.
-    */
-    void RunStartCallbacks (void);
-
-    /** Called just after Run() is called for the last time to trigger the
-        callbacks registered via the <method>AddEndCallback()</method>.
-    */
-    void RunEndCallbacks (void);
-
 private:
     const sal_uInt64 mnStartTime;
     const sal_uInt64 mnTotalDuration;
     const sal_uInt64 mnStepDuration;
-    ::boost::scoped_ptr<std::vector<Callback> > mpStartCallbacks;
-    ::boost::scoped_ptr<std::vector<Callback> > mpEndCallbacks;
 };
 
 sal_uInt64 GetCurrentTime (void);

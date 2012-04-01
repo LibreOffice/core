@@ -29,12 +29,14 @@
 #define CGM_ELEMENTS_HXX_
 
 #include "main.hxx"
-#include <tools/table.hxx>
+#include "cgmtypes.hxx"
 #include <vector>
+#include <map>
 
 #define nBackGroundColor    aColorTable[ 0 ]
 
 typedef ::std::vector< Bundle* > BundleList;
+typedef ::std::map<sal_uInt32, HatchEntry> HatchMap;
 
 class CGMElements
 {
@@ -124,7 +126,7 @@ class CGMElements
         FillBundle          aFillBundle;
         BundleList          aFillList;
         FloatPoint          aFillRefPoint;
-        Table               aHatchTable;
+        HatchMap            maHatchMap;
 
         Transparency        eTransparency;
 
@@ -137,7 +139,6 @@ class CGMElements
                             ~CGMElements();
         CGMElements&        operator=( CGMElements& );
         void                Init();
-        void                DeleteTable( Table& );
         Bundle*             GetBundleIndex( long nIndex, BundleList&, Bundle& );
         Bundle*             GetBundle( BundleList& rList, long nIndex );
         Bundle*             InsertBundle( BundleList&, Bundle& );

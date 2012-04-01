@@ -111,8 +111,10 @@ $(eval $(foreach method,\
 	add_linked_static_libs \
 	use_external \
 	use_externals \
+	add_custom_headers \
 	add_package_headers \
 	add_sdi_headers \
+	set_warnings_not_errors \
 ,\
 	$(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
 ))

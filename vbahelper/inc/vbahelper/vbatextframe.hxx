@@ -40,7 +40,7 @@ protected:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     virtual void setAsMSObehavior();
     sal_Int32 getMargin( rtl::OUString sMarginType );

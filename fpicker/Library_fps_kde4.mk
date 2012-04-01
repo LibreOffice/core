@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,fps_kde4))
 
-$(eval $(call gb_Library_add_package_headers,fps_kde4,\
-	fpicker_kde4_moc \
-))
-
 $(eval $(call gb_Library_set_componentfile,fps_kde4,fpicker/source/unx/kde4/fps_kde4))
 
 $(eval $(call gb_Library_add_api,fps_kde4,\
@@ -61,8 +57,9 @@ $(eval $(call gb_Library_add_exception_objects,fps_kde4,\
 	fpicker/source/unx/kde4/KDE4FPEntry \
 ))
 
-$(eval $(call gb_Library_add_generated_cxxobjects,fps_kde4,\
-	CustomTarget/fpicker/source/unx/kde4/KDE4FilePicker.moc \
+# KDE/Qt consider -Wshadow more trouble than benefit
+$(eval $(call gb_Library_add_cxxflags,fps_kde4,\
+        -Wno-shadow \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -135,37 +135,37 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
 
 // -------------------------------------------------------------------------
 
-static FontWeight parseWeight( const ByteString& rWeight )
+static FontWeight parseWeight( const rtl::OString& rWeight )
 {
     FontWeight eWeight = WEIGHT_DONTKNOW;
-    if( rWeight.Search( "bold" ) != STRING_NOTFOUND )
+    if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("bold") ) != -1)
     {
-        if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
+        if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("emi")) != -1) // semi, demi
             eWeight = WEIGHT_SEMIBOLD;
-        else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
+        else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("ultra")) != -1)
             eWeight = WEIGHT_ULTRABOLD;
         else
             eWeight = WEIGHT_BOLD;
     }
-    else if( rWeight.Search( "heavy" ) != STRING_NOTFOUND )
+    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("heavy")) != -1)
         eWeight = WEIGHT_BOLD;
-    else if( rWeight.Search( "light" ) != STRING_NOTFOUND )
+    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("light")) != -1)
     {
-        if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
+        if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("emi")) != -1) // semi, demi
             eWeight = WEIGHT_SEMILIGHT;
-        else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
+        else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("ultra")) != -1)
             eWeight = WEIGHT_ULTRALIGHT;
         else
             eWeight = WEIGHT_LIGHT;
     }
-    else if( rWeight.Search( "black" ) != STRING_NOTFOUND )
+    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("black")) != -1)
         eWeight = WEIGHT_BLACK;
-    else if( rWeight.Equals( "demi" ) )
+    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("demi")))
         eWeight = WEIGHT_SEMIBOLD;
-    else if( rWeight.Equals( "book" ) ||
-             rWeight.Equals( "semicondensed" ) )
+    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("book")) ||
+             rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("semicondensed")))
         eWeight = WEIGHT_LIGHT;
-    else if( rWeight.Equals( "medium" ) || rWeight.Equals( "roman" ) )
+    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("medium")) || rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("roman")))
         eWeight = WEIGHT_MEDIUM;
     else
         eWeight = WEIGHT_NORMAL;
@@ -253,11 +253,11 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 {
     bool bSuccess = false;
 
-    ByteString aFile( PrintFontManager::get().getFontFile( this ) );
+    rtl::OString aFile( PrintFontManager::get().getFontFile( this ) );
 
     TrueTypeFont* pTTFont = NULL;
 
-    if( OpenTTFontFile( aFile.GetBuffer(), m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.getStr(), m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         if( ! m_pMetrics )
         {
@@ -643,9 +643,8 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         m_eItalic = ITALIC_NONE;
 
     // weight
-    ByteString aLowerWeight( pInfo->gfi->weight );
-    aLowerWeight.ToLowerAscii();
-    m_eWeight = parseWeight( aLowerWeight );
+    rtl::OString aWeight( pInfo->gfi->weight );
+    m_eWeight = parseWeight( aWeight.toAsciiLowerCase() );
 
     // pitch
     m_ePitch = pInfo->gfi->isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE;
@@ -673,7 +672,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
         m_aEncoding = RTL_TEXTENCODING_ADOBE_STANDARD;
 
-    // try to parse the font name and decide wether it might be a
+    // try to parse the font name and decide whether it might be a
     // japanese font. Who invented this PITA ?
     OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
     if( ! aPSNameLastToken.compareToAscii( "H" )    ||
@@ -1137,16 +1136,16 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     }
     if (eFormat == UNKNOWN)
     {
-        ByteString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
-        if( aExt.EqualsIgnoreCaseAscii( "pfb" ) || aExt.EqualsIgnoreCaseAscii( "pfa" ) )
+        rtl::OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
+        if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pfb")) || aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pfa")) )
             eFormat = TYPE1;
-        else if( aExt.EqualsIgnoreCaseAscii( "afm" ) )
+        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("afm")))
             eFormat = AFM;
-        else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
-             ||  aExt.EqualsIgnoreCaseAscii( "ttc" )
-             ||  aExt.EqualsIgnoreCaseAscii( "tte" ) ) // #i33947# for Gaiji support
+        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ttf"))
+             ||  aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ttc"))
+             ||  aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("tte")) ) // #i33947# for Gaiji support
             eFormat = TRUETYPE;
-        else if( aExt.EqualsIgnoreCaseAscii( "otf" ) ) // check for TTF- and PS-OpenType too
+        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("otf")) ) // check for TTF- and PS-OpenType too
             eFormat = CFF;
     }
 
@@ -1158,29 +1157,26 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 
         for( unsigned int i = 0; i < SAL_N_ELEMENTS(pSuffix); i++ )
         {
-            ByteString aName( rFontFile );
-            aName.Erase( aName.Len()-4 );
-            aName.Append( pSuffix[i] );
+            rtl::OString aName = rtl::OStringBuffer(
+                rFontFile.copy(0, rFontFile.getLength() - 4)).
+                append(pSuffix[i]).makeStringAndClear();
 
             rtl::OStringBuffer aFilePath(aDir);
             aFilePath.append('/').append(aName);
 
-            ByteString aAfmFile;
+            rtl::OString aAfmFile;
             if( access( aFilePath.makeStringAndClear().getStr(), R_OK ) )
             {
                 // try in subdirectory afm instead
-                aFilePath.append(aDir).append("/afm/").append(aName);
+                aFilePath.append(aDir).append(RTL_CONSTASCII_STRINGPARAM("/afm/")).append(aName);
 
-                if( ! access(aFilePath.getStr(), R_OK) )
-                {
-                    aAfmFile = "afm/";
-                    aAfmFile += aName;
-                }
+                if (!access(aFilePath.getStr(), R_OK))
+                    aAfmFile = rtl::OString(RTL_CONSTASCII_STRINGPARAM("afm/")) + aName;
             }
             else
                 aAfmFile = aName;
 
-            if( aAfmFile.Len() )
+            if( !aAfmFile.isEmpty() )
             {
                 Type1FontFile* pFont = new Type1FontFile();
                 pFont->m_nDirectory     = nDirID;
@@ -1510,11 +1506,11 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 {
     bool bSuccess = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    ByteString aFile = getFontFile( pFont );
+    rtl::OString aFile = getFontFile( pFont );
     TrueTypeFont* pTTFont = NULL;
 
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
@@ -1562,7 +1558,9 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         if( aInfo.usubfamily )
             pFont->m_aStyleName = OUString( aInfo.usubfamily );
 
-        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, String( ByteString( aInfo.psname ), aEncoding ), sal_True );
+        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME,
+            rtl::OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding),
+            sal_True );
         switch( aInfo.weight )
         {
             case FW_THIN:           pFont->m_eWeight = WEIGHT_THIN; break;
@@ -1652,7 +1650,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "could not OpenTTFont \"%s\"\n", aFile.GetBuffer() );
+        fprintf( stderr, "could not OpenTTFont \"%s\"\n", aFile.getStr() );
 #endif
 
     return bSuccess;
@@ -2471,8 +2469,8 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
             if( pTTFontFile->m_nTypeFlags & TYPEFLAG_INVALID )
             {
                 TrueTypeFont* pTTFont = NULL;
-                ByteString aFile = getFontFile( pFont );
-                if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+                rtl::OString aFile = getFontFile( pFont );
+                if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
                 {
                     // get type flags
                     TTGlobalFontInfo aInfo;
@@ -2645,11 +2643,11 @@ bool PrintFontManager::createFontSubset(
 
     // prepare system name for read access for subset source file
     // TODO: since this file is usually already mmapped there is no need to open it again
-    const ByteString aFromFile = getFontFile( pFont );
+    const rtl::OString aFromFile = getFontFile( pFont );
 
     TrueTypeFont* pTTFont = NULL; // TODO: rename to SfntFont
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+    if( OpenTTFontFile( aFromFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
     // prepare system name for write access for subset file target
@@ -2657,7 +2655,7 @@ bool PrintFontManager::createFontSubset(
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
         return false;
     const rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    const ByteString aToFile( OUStringToOString( aSysPath, aEncoding ) );
+    const rtl::OString aToFile( OUStringToOString( aSysPath, aEncoding ) );
 
     // do CFF subsetting if possible
     int nCffLength = 0;
@@ -2671,7 +2669,7 @@ bool PrintFontManager::createFontSubset(
             aRequestedGlyphs[i] = pGID[i];
 #endif
         // create subset file at requested path
-        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         // create font subset
         const char* pGlyphSetName = NULL; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
@@ -2717,7 +2715,7 @@ bool PrintFontManager::createFontSubset(
     }
 
     bool bSuccess = ( SF_OK == CreateTTFromTTGlyphs( pTTFont,
-                                                     aToFile.GetBuffer(),
+                                                     aToFile.getStr(),
                                                      pGID,
                                                      pEnc,
                                                      nGlyphs,
@@ -2742,8 +2740,8 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     {
         TrueTypeFont* pTTFont = NULL;
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-        ByteString aFromFile = getFontFile( pFont );
-        if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+        rtl::OString aFromFile = getFontFile( pFont );
+        if( OpenTTFontFile( aFromFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
             return;
         int nGlyphs = GetTTGlyphCount( pTTFont );
         if( nGlyphs > 0 )

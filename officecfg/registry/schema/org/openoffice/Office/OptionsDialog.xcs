@@ -125,7 +125,7 @@
 	  accept input.</desc>
 	</info>
       </prop>
-      <prop oor:name="AllModules" oor:type="xs:boolean">
+      <prop oor:name="AllModules" oor:type="xs:boolean" oor:nillable="false">
 	<info>
 	  <desc>If true then this Node shall be displayed independent of the 
 	    Module for which the options dialog is displayed -  that is, always. 
@@ -139,7 +139,7 @@
 	</info>
 	<value>false</value>
       </prop>
-      <prop oor:name="GroupId" oor:type="xs:string">
+      <prop oor:name="GroupId" oor:type="xs:string" oor:nillable="false">
 	<info>
 	  <desc>Identifies a group of Node|s. All nodes (the tree view elements) 
 	    which refer to the same group are displayed next to each other. If 
@@ -155,7 +155,7 @@
 	</info>
 	<value></value>
       </prop>
-      <prop oor:name="GroupIndex" oor:type="xs:int">
+      <prop oor:name="GroupIndex" oor:type="xs:int" oor:nillable="false">
 	<info>
 	  <desc>The index of the Node within the group. The index starts with 
 	    null. If this property is set then property GroupId must also have 
@@ -211,7 +211,7 @@
 	    provides for saving and reading the respective values.</desc>
 	</info>
       </prop>
-      <prop oor:name="GroupId" oor:type="xs:string">
+      <prop oor:name="GroupId" oor:type="xs:string" oor:nillable="false">
 	<info>
 	  <desc>Identifies a group of Leaf|s. All Leaf|s which have the same 
 	    GroupId form a group and the corresponding entries in the tree view
@@ -230,7 +230,7 @@
 	</info>
 	<value></value>
       </prop>
-      <prop oor:name="GroupIndex" oor:type="xs:int">
+      <prop oor:name="GroupIndex" oor:type="xs:int" oor:nillable="false">
 	<info>
 	  <desc>The index of the Leaf within the group. The index starts with 
 	    null. If this property is set then GroupId must also have 
@@ -250,7 +250,7 @@
 	  index determines the position of the node (the tree view element) in 
 	  the options dialog for a particular Module.</desc>
       </info>
-      <prop oor:name="Index" oor:type="xs:int">
+      <prop oor:name="Index" oor:type="xs:int" oor:nillable="false">
 	<info>
 	  <desc>Determines the position of the node in the options dialog. 
 	    The index starts with null. That is, the corresponding node 

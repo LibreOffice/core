@@ -76,15 +76,15 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if(xTargetOverlay.is())
         {
-            Size aHalfLogicSize(pTargetOverlay->getOutputDevice().PixelToLogic(Size(4, 4)));
+            Size aHalfLogicSize(xTargetOverlay->getOutputDevice().PixelToLogic(Size(4, 4)));
 
             // object
             ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aB2DPolyPolygon);
-            pTargetOverlay->add(*pNew);
+            xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
             // glue points
@@ -109,7 +109,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                     aTempPolyPoly.append(aTempPoly);
 
                     pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aTempPolyPoly);
-                    pTargetOverlay->add(*pNew);
+                    xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
             }
@@ -153,9 +153,9 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             if(pObject)
             {
@@ -163,14 +163,14 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
                 const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
                 sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
-                pOverlayManager->add(*pNew);
+                xOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
 
             if(rPolyPoly.count())
             {
                 ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(rPolyPoly);
-                pOverlayManager->add(*pNew);
+                xOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
         }
@@ -179,7 +179,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
 
 void ImpSdrCreateViewExtraData::HideOverlay()
 {
-    // the clear() call at the list removes all objects from the
+    // the clear() call of the list removes all objects from the
     // OverlayManager and deletes them.
     maObjects.clear();
 }
@@ -449,7 +449,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             Point aPnt(rPnt);
             if (nAktInvent!=SdrInventor || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
                                             nAktIdent!=sal_uInt16(OBJ_FREELINE) &&
-                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // Kein Fang fuer Edge und Freihand!
+                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
                 aPnt=GetSnapPos(aPnt,pCreatePV);
             }
             if (pAktCreate!=NULL)
@@ -468,7 +468,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
                 {
                     SfxItemSet aSet(pMod->GetItemPool());
-                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
+                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
@@ -671,7 +671,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                     if(bDidInsert)
                     {
-                        // delete object, it's content is cloned and inserted
+                        // delete object, its content is cloned and inserted
                         SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
                         bRet = sal_False;
@@ -857,11 +857,11 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
             {
                 SdrPaintWindow* pCandidate = GetPaintWindow(a);
-                sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
 
-                if(pOverlayManager)
+                if (xOverlayManager.is())
                 {
-                    pOverlayManager->flush();
+                    xOverlayManager->flush();
                 }
             }
         }

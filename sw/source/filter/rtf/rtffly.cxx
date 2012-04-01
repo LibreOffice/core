@@ -1092,6 +1092,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         // dann zerstoere den FlySave wieder.
         aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
 
+        // Remove the properties that have been parsed before in the paragraph
+        GetAttrStack().pop_back();
     }
     else
     {
@@ -1282,12 +1284,12 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
             PictPropertyNameValuePairs::const_iterator aEnd = pPicType->aPropertyPairs.end();
             while( aIt != aEnd)
             {
-                if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzDescription") ))
+                if( aIt->first == "wzDescription" )
                 {
                     SwXFrame::GetOrCreateSdrObject( pFlyFmt );
                     pDoc->SetFlyFrmDescription( *(pFlyFmt), aIt->second );
                 }
-                else if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzName") ))
+                else if( aIt->first == "wzName" )
                 {
                     SwXFrame::GetOrCreateSdrObject( pFlyFmt );
                     pDoc->SetFlyFrmTitle( *(pFlyFmt), aIt->second );

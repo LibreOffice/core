@@ -65,8 +65,8 @@ namespace writerfilter {
                 rtl::OUString m_sValue;
                 boost::shared_ptr<RTFSprms> m_pAttributes;
                 boost::shared_ptr<RTFSprms> m_pSprms;
-                uno::Reference<drawing::XShape> m_rShape;
-                uno::Reference<io::XInputStream> m_rStream;
+                uno::Reference<drawing::XShape> m_xShape;
+                uno::Reference<io::XInputStream> m_xStream;
                 bool m_bForceString;
         };
     } // namespace rtftok

@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <cppuhelper/implbase3.hxx>
-
 #include "comphelper/servicedecl.hxx"
 
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
@@ -337,28 +335,6 @@ extern sdecl::ServiceDecl const serviceDecl(
     // a private one:
     "com.sun.star.comp.deployment.PackageInformationProvider",
     "com.sun.star.comp.deployment.PackageInformationProvider" );
-
-//------------------------------------------------------------------------------
-bool singleton_entries(
-    uno::Reference< registry::XRegistryKey > const & xRegistryKey )
-{
-    try {
-        uno::Reference< registry::XRegistryKey > xKey(
-            xRegistryKey->createKey(
-                serviceDecl.getImplementationName() +
-                // xxx todo: use future generated function to get singleton name
-                UNISTRING("/UNO/SINGLETONS/"
-                      "com.sun.star.deployment.PackageInformationProvider") ) );
-        xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
-        return true;
-    }
-    catch (registry::InvalidRegistryException & exc) {
-        (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return false;
-    }
-}
 
 } // namespace dp_info
 

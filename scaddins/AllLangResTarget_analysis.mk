@@ -36,7 +36,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,scaddins/analysis))
 
 $(eval $(call gb_SrsTarget_set_include,scaddins/analysis,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/scaddins/source/analysis) \
+    -I$(SRCDIR)/scaddins/source/analysis \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,scaddins/analysis,\

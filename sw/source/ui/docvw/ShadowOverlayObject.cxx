@@ -188,15 +188,15 @@ ImplPrimitrive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE
         SdrPaintWindow* pPaintWindow = rDocView.GetDrawView()->GetPaintWindow(0);
         if( pPaintWindow )
         {
-            sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
+            rtl::Reference< ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
 
-            if ( pOverlayManager )
+            if ( xOverlayManager.is() )
             {
                 pShadowOverlayObject = new ShadowOverlayObject( basegfx::B2DPoint(0,0),
                                                                 basegfx::B2DPoint(0,0),
                                                                 Color(0,0,0),
                                                                 SS_NORMAL );
-                pOverlayManager->add(*pShadowOverlayObject);
+                xOverlayManager->add(*pShadowOverlayObject);
             }
         }
     }

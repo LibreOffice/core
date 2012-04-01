@@ -165,6 +165,10 @@ class EditEngine;
 class ScDocument;
 class HTMLOption;
 
+// TODO these need better names
+typedef ::std::map<SCROW, SCROW> InnerMap;
+typedef ::std::map<sal_uInt16, InnerMap*> OuterMap;
+
 class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
@@ -173,7 +177,7 @@ private:
     ScHTMLTableStack    aTableStack;
     rtl::OUString       aString;
     ScRangeListRef      xLockedList;        // je Table
-    Table*              pTables;
+    OuterMap*           pTables;
     ScHTMLColOffset*    pColOffset;
     ScHTMLColOffset*    pLocalColOffset;    // je Table
     sal_uLong               nFirstTableCell;    // je Table

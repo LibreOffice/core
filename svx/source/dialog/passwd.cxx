@@ -40,7 +40,7 @@
 
 // class SvxPasswordDialog -----------------------------------------------
 
-IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 {
     sal_Bool bOK = sal_True;
     short nRet = RET_OK;
@@ -71,7 +71,7 @@ IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
 {
     if ( !bEmpty )
     {

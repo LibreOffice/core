@@ -37,11 +37,10 @@ $(eval $(call gb_SrsTarget_SrsTarget,sd/res))
 
 $(eval $(call gb_SrsTarget_set_include,sd/res,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sd/source/ui/slidesorter/inc) \
+    -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/source/ui/slidesorter/inc \
     -I$(WORKDIR)/inc/sd \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sd/res,\

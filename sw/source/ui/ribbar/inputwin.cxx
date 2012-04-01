@@ -28,7 +28,6 @@
 
 #include "sal/config.h"
 
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
 #include <sfx2/imgmgr.hxx>
@@ -243,8 +242,7 @@ void SwInputWindow::ShowWin()
             {
                 m_bResetUndo = true;
                 SAL_WARN_IF(
-                    officecfg::Office::Common::Undo::Steps::get(
-                        comphelper::getProcessComponentContext()) <= 0,
+                    officecfg::Office::Common::Undo::Steps::get() <= 0,
                     "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
 
                 m_bDoesUndo = pWrtShell->DoesUndo();
@@ -344,7 +342,7 @@ static const char * const aStrArr[] = {
     return 0;
 }
 
-IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -492,7 +490,7 @@ void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
     bDelSel = bDelFlag;
 }
 
-IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
+IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
 {
     if (bIsTable && m_bResetUndo)
     {

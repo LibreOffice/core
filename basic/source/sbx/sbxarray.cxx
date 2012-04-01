@@ -767,10 +767,12 @@ void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
 
 sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 {
+#ifndef DISABLE_SCRIPTING
     if( nDim == 0 || !pPar || ( ( nDim != ( pPar->Count() - 1 ) ) && SbiRuntime::isVBAEnabled() ) )
     {
         SetError( SbxERR_BOUNDS ); return 0;
     }
+#endif
     sal_uInt32 nPos = 0;
     sal_uInt16 nOff = 1;    // Non element 0!
     for( SbxDim* p = pFirst; p && !IsError(); p = p->pNext )

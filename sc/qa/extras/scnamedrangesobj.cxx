@@ -63,7 +63,7 @@ uno::Reference< lang::XComponent > ScNamedRangesObj::mxComponent;
 uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods")), aFileURL);
+    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods")), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

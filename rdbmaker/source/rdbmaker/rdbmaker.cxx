@@ -456,11 +456,7 @@ int __cdecl main( int argc, char * argv[] )
                     ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies,
                                       &options, listFile, rootKey, filterTypes);
                 }
-/*
-                // produce only this type
-                ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies,
-                                  &options, listFile, rootKey, filterTypes);
-*/
+
                 if (!ret)
                 {
                     fprintf(stderr, "%s ERROR: %s\n",

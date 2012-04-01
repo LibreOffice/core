@@ -73,7 +73,7 @@ void ScMenuFloatingWindow::SubMenuItemData::reset()
     maTimer.Stop();
 }
 
-IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
 {
     mpParent->handleMenuTimeout(this);
     return 0;
@@ -1018,7 +1018,7 @@ IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScCheckListMenuWindow, TriStateHdl, TriStateBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
 {
     switch (mePrevToggleAllState)
     {
@@ -1164,6 +1164,7 @@ void ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
+    maChecks.SetUpdateMode(false);
     for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
@@ -1188,6 +1189,7 @@ void ScCheckListMenuWindow::initMembers()
         maChkToggleAll.SetState(STATE_DONTKNOW);
         mePrevToggleAllState = STATE_DONTKNOW;
     }
+    maChecks.SetUpdateMode(true);
 }
 
 void ScCheckListMenuWindow::setConfig(const Config& rConfig)

@@ -310,7 +310,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aUseCharUnit.SaveValue();
 }
 
-IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
 {
     const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
@@ -433,12 +433,14 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         nCount = pMgr->GetFldTypeCount();
         SwFieldType* pFldType;
         for ( i = nCount; i; )
-            if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
-                aCategoryBox.GetText() )
+        {
+            pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+            if (pFldType->GetName().equals(aCategoryBox.GetText()))
             {
                 nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
                 break;
             }
+        }
 
         ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), sal_True, sal_True );
     }
@@ -605,7 +607,7 @@ void SwCaptionOptPage::DelUserData()
     }
 }
 
-IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 {
     SvLBoxEntry* pSelEntry = aCheckLB.FirstSelected();
 
@@ -730,7 +732,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwCaptionOptPage, SaveEntryHdl, SvxCheckListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
 {
     SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
 
@@ -772,7 +774,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
     }
 }
 
-IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     String sFldTypeName = aCategoryBox.GetText();
 
@@ -791,12 +793,12 @@ IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwCaptionOptPage, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwCaptionOptPage, SelectHdl)
 
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {

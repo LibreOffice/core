@@ -544,7 +544,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     // API-programs would hang.
     // Moreover the event macro must also not be called in an action
         pWrtShell->StartUndo(UNDO_INSGLOSSARY);
-        if( aStartMacro.GetMacName().Len() )
+        if( aStartMacro.HasMacro() )
             pWrtShell->ExecMacro( aStartMacro );
         if(pWrtShell->HasSelection())
             pWrtShell->DelLeft();
@@ -555,7 +555,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
 
         pWrtShell->InsertGlossary(*pGlossary, aShortName);
         pWrtShell->EndAllAction();
-        if( aEndMacro.GetMacName().Len() )
+        if( aEndMacro.HasMacro() )
         {
             pWrtShell->ExecMacro( aEndMacro );
         }
@@ -590,7 +590,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
     // otherwise the possible Shell change gets delayed and
     // API-programs would hang.
     // Moreover the event macro must also not be called in an action
-    if( aStartMacro.GetMacName().Len() )
+    if( aStartMacro.HasMacro() )
         pWrtShell->ExecMacro( aStartMacro );
     if( pWrtShell->HasSelection() )
         pWrtShell->DelRight();
@@ -601,7 +601,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
 
     pWrtShell->InsertGlossary(*pGlos, rName);
     pWrtShell->EndAllAction();
-    if( aEndMacro.GetMacName().Len() )
+    if( aEndMacro.HasMacro() )
     {
         pWrtShell->ExecMacro( aEndMacro );
     }
@@ -628,9 +628,9 @@ void SwGlossaryHdl::SetMacros(const String& rShortName,
                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
     SvxMacroTableDtor aMacroTbl;
     if( pStart )
-        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, new SvxMacro(*pStart));
+        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, *pStart);
     if( pEnd )
-        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, new SvxMacro(*pEnd));
+        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, *pEnd);
     sal_uInt16 nIdx = pGlos->GetIndex( rShortName );
     if( !pGlos->SetMacroTable( nIdx, aMacroTbl ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );

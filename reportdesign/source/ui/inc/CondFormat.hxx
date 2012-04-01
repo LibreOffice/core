@@ -65,6 +65,9 @@ namespace rptui
         virtual void            moveConditionUp( size_t _nCondIndex ) = 0;
         virtual void            moveConditionDown( size_t _nCondIndex ) = 0;
         virtual ::rtl::OUString getDataField() const = 0;
+
+    protected:
+        ~IConditionalFormatAction() {}
     };
 
     /*************************************************************************

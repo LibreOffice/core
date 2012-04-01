@@ -616,6 +616,9 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     Point aNewPos( 0, 0 );
     GlyphItem aPrevItem;
     rtl_TextEncoding aFontEnc = mrPrinterGfx.GetFontMgr().getFontEncoding( mnFontID );
+
+    Reserve(rArgs.mnLength);
+
     for(;;)
     {
         bool bRightToLeft;
@@ -1319,11 +1322,8 @@ SystemGraphicsData GenPspGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
-SystemFontData GenPspGraphics::GetSysFontData( int nFallbacklevel ) const
+SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
-    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
-    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
-
     return SystemFontData();
 }
 

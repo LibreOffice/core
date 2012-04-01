@@ -172,8 +172,8 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         if (xStyle.is())
             xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { aStyle.sLabel = ::rtl::OUString(); }
 
@@ -212,8 +212,8 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
             else
                 xFamilyInfo->getPropertyValue(STYLEPROP_UINAME) >>= aFamilyInfo.sLabel;
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             { return ::std::vector< SfxStyleInfo_Impl >(); }
 
@@ -236,8 +236,8 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         xFamilies->getByName(sFamily) >>= xStyleSet;
         lStyleNames = xStyleSet->getElementNames();
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { return ::std::vector< SfxStyleInfo_Impl >(); }
 
@@ -259,8 +259,8 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
                 continue;
             xStyle->getPropertyValue(PROP_UINAME) >>= aStyleInfo.sLabel;
         }
-        catch(const css::uno::RuntimeException& exRun)
-            { throw exRun; }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
         catch(const css::uno::Exception&)
             { continue; }
 
@@ -513,8 +513,8 @@ void SfxConfigGroupListBox_Impl::InitModule()
             pEntry->SetUserData(pInfo);
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }
@@ -879,8 +879,8 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
             sUIName = lProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ), ::rtl::OUString());
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(css::uno::Exception&)
         { sUIName = ::rtl::OUString(); }
 

@@ -964,7 +964,11 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     // storing user data into pAny, to allow direct access later
     const Sequence< NamedValue > aUserData = xNode->getUserData();
-    const ::com::sun::star::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
+
+    // ids start from 1, DFF_ANIM_PROPERTY_ID_COUNT is the highest id
+    // number
+    const ::com::sun::star::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT + 1 ];
+
     GetUserData( aUserData, pAny, sizeof( pAny ) );
 
     if( pAny[ DFF_ANIM_AFTEREFFECT ] )

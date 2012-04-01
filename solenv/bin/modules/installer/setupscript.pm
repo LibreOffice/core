@@ -27,13 +27,28 @@
 
 package installer::setupscript;
 
-use installer::existence;
+use base 'Exporter';
+
 use installer::exiter;
 use installer::globals;
-use installer::logger;
+use installer::logger qw(globallog);
 use installer::remover;
 use installer::scriptitems;
 use installer::ziplist;
+
+our @EXPORT_OK = qw(
+    add_forced_properties
+    add_installationobject_to_variables
+    add_lowercase_productname_setupscriptvariable
+    add_predefined_folder
+    get_all_items_from_script
+    get_all_scriptvariables_from_installation_object
+    prepare_non_advertised_files
+    replace_all_setupscriptvariables_in_script
+    replace_preset_properties
+    resolve_lowercase_productname_setupscriptvariable
+    set_setupscript_name
+);
 
 #######################################################
 # Set setup script name, if not defined as parameter
@@ -241,7 +256,7 @@ sub replace_all_setupscriptvariables_in_script
 {
     my ( $scriptref, $variablesref ) = @_;
 
-    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (start)");
+    globallog("Replacing variables in setup script (start)");
 
     # make hash of variables to be substituted if they appear in the script
     my %subs;
@@ -282,7 +297,7 @@ sub replace_all_setupscriptvariables_in_script
         }
     }
 
-    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (end)");
+    globallog("Replacing variables in setup script (end)");
 
     return $scriptref;
 }
@@ -377,23 +392,16 @@ sub add_predefined_folder
 {
     my ( $folderitemref, $folderref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$folderitemref}; $i++ )
-    {
-        my $folderitem = ${$folderitemref}[$i];
-        my $folderid = $folderitem->{'FolderID'};
+    for my $folderid ( map { $_->{FolderID} } @{$folderitemref} ) {
+        # FIXME: Anchor to start of line?
+        next unless ( $folderid =~ /PREDEFINED_/ );
+        next if grep { $_->{gid} eq $folderid } @{$folderref};
 
-        if ( $folderid =~ /PREDEFINED_/ )
-        {
-            if (! installer::existence::exists_in_array_of_hashes("gid", $folderid, $folderref))
-            {
-                my %folder = ();
-                $folder{'ismultilingual'} = "0";
-                $folder{'Name'} = "";
-                $folder{'gid'} = $folderid;
-
-                push(@{$folderref}, \%folder);
-            }
-        }
+        push @{$folderref}, {
+            ismultilingual => 0,
+            Name => "",
+            gid => $folderid,
+        };
     }
 }
 

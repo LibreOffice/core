@@ -212,19 +212,9 @@ bool VbaProject::hasModules() const
     return mxBasicLib.is() && mxBasicLib->hasElements();
 }
 
-bool VbaProject::hasModule( const OUString& rModuleName ) const
-{
-    return mxBasicLib.is() && mxBasicLib->hasByName( rModuleName );
-}
-
 bool VbaProject::hasDialogs() const
 {
     return mxDialogLib.is() && mxDialogLib->hasElements();
-}
-
-bool VbaProject::hasDialog( const OUString& rDialogName ) const
-{
-    return mxDialogLib.is() && mxDialogLib->hasByName( rDialogName );
 }
 
 // protected ------------------------------------------------------------------

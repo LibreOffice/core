@@ -623,7 +623,7 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 {
     if( nSelectedIndex < FirstInView() )
     {
@@ -677,7 +677,9 @@ void SvxShowCharSet::ReleaseAccessible()
     if ( aFind == m_aItems.end() )
     {
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
-        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),sal::static_int_cast< sal_uInt16 >(_nPos)))).first;
+        boost::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
+            m_pAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
+        aFind = m_aItems.insert(ItemsMap::value_type(_nPos, xItem)).first;
         rtl::OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
@@ -685,7 +687,7 @@ void SvxShowCharSet::ReleaseAccessible()
         aFind->second->maRect = Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
     }
 
-    return aFind->second;
+    return aFind->second.get();
 }
 
 // -----------------------------------------------------------------------------

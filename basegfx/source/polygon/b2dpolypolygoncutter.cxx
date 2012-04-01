@@ -233,17 +233,7 @@ namespace basegfx
                     if(aPrevA.equal(aPrevB))
                     {
                         // common edge in same direction
-                        if(aNextA.equal(aNextB))
-                        {
-                            // common edge in same direction continues
-                            return;
-                        }
-                        else
-                        {
-                            // common edge in same direction leave
-                            // action is done on enter
-                            return;
-                        }
+                        return;
                     }
                     else if(aPrevA.equal(aNextB))
                     {
@@ -359,17 +349,7 @@ namespace basegfx
                     if(rPrevA.equal(rPrevB))
                     {
                         // common edge in same direction
-                        if(rNextA.equal(rNextB))
-                        {
-                            // common edge in same direction continues
-                            return;
-                        }
-                        else
-                        {
-                            // common edge in same direction leave
-                            // action is done on enter
-                            return;
-                        }
+                        return;
                     }
                     else if(rPrevA.equal(rNextB))
                     {
@@ -673,14 +653,6 @@ namespace basegfx
             {
                 return rCandidate;
             }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
-        {
-            solver aSolver(rCandidate);
-            return aSolver.getB2DPolyPolygon();
         }
 
         //////////////////////////////////////////////////////////////////////////////

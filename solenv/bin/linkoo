@@ -113,7 +113,8 @@ my $brand_program_dir = 'program';
 my $ure_lib_dir = 'ure-link/lib';
 my $win_ure_lib_dir = 'URE/bin';
 
-my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
+my @exceptions = ( 'libsunjavaplugin', 'libjvmfwk' );
+push @exceptions, 'cppuhelper' if ($TARGET ne 'wntgcci.pro');
 
 my $bin;
 $bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');
@@ -136,7 +137,7 @@ my %replaceable = (
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
-my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3' );
+my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3', 'pythonloader.uno', 'pyuno', 'libpyuno' );
 
 sub sniff_target($)
 {
@@ -413,12 +414,13 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     open ($ooenv, ">$OOO_INSTALL/" . $brand_program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $brand_program_dir . "/ooenv: $!";
     print $ooenv "thisdir=$OOO_INSTALL/" . $brand_program_dir . "/\n";
     print $ooenv $env_script;
-    print $ooenv "# testtool\nexport SRC_ROOT=$OOO_BUILD\n";
     close ($ooenv);
 }
 
 evilness ('do');
 
-print "\nlinkoo finished, please don't forget to source ooenv before ./soffice.\n";
+print "\nlinkoo finished";
+print ", please don't forget to source ooenv before ./soffice." if ($TARGET ne 'wntgcci.pro');
+print "\n";
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

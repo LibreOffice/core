@@ -72,7 +72,7 @@ public:
     SwBlink();
     ~SwBlink();
 
-    DECL_LINK( Blinker, Timer * );
+    DECL_LINK( Blinker, void * );
 
     void Insert( const Point& rPoint, const SwLinePortion* pPor,
                  const SwTxtFrm *pTxtFrm, sal_uInt16 nDir );

@@ -131,45 +131,44 @@ void lcl_DBGCheckStack()
 namespace
 {
 // ODF Style Names:
-const String aTableHeadingName  = String::CreateFromAscii("Table Heading");
-const String aQuotations        = String::CreateFromAscii("Quotations");
-const String aCaption           = String::CreateFromAscii("Caption");
-const String aHeading           = String::CreateFromAscii("Heading");
-const String aQuotation         = String::CreateFromAscii("Quotation");
-const String aSourceText        = String::CreateFromAscii("Source Text");
+const char aTableHeadingName[]  = "Table Heading";
+const char aQuotations[]        = "Quotations";
+const char aCaption[]           = "Caption";
+const char aHeading[]           = "Heading";
+const char aQuotation[]         = "Quotation";
+const char aSourceText[]        = "Source Text";
 
 // PDF Tag Names:
-const String aDocumentString = String::CreateFromAscii("Document");
-const String aDivString = String::CreateFromAscii("Div");
-const String aSectString = String::CreateFromAscii("Sect");
-const String aHString = String::CreateFromAscii("H");
-const String aH1String = String::CreateFromAscii("H1");
-const String aH2String = String::CreateFromAscii("H2");
-const String aH3String = String::CreateFromAscii("H3");
-const String aH4String = String::CreateFromAscii("H4");
-const String aH5String = String::CreateFromAscii("H5");
-const String aH6String = String::CreateFromAscii("H6");
-const String aListString = String::CreateFromAscii("L");
-const String aListItemString = String::CreateFromAscii("LI");
-const String aListBodyString = String::CreateFromAscii("LBody");
-const String aBlockQuoteString = String::CreateFromAscii("BlockQuote");
-const String aCaptionString = String::CreateFromAscii("Caption");
-const String aIndexString = String::CreateFromAscii("Index");
-const String aTOCString = String::CreateFromAscii("TOC");
-const String aTOCIString = String::CreateFromAscii("TOCI");
-const String aTableString = String::CreateFromAscii("Table");
-const String aTRString = String::CreateFromAscii("TR");
-const String aTDString = String::CreateFromAscii("TD");
-const String aTHString = String::CreateFromAscii("TH");
-const String aBibEntryString = String::CreateFromAscii("BibEntry");
-const String aQuoteString = String::CreateFromAscii("Quote");
-const String aSpanString = String::CreateFromAscii("Span");
-const String aCodeString = String::CreateFromAscii("Code");
-const String aFigureString = String::CreateFromAscii("Figure");
-const String aFormulaString = String::CreateFromAscii("Formula");
-const String aLinkString = String::CreateFromAscii("Link");
-const String aNoteString = String::CreateFromAscii("Note");
-const String aEmptyString = String::CreateFromAscii("");
+const char aDocumentString[] = "Document";
+const char aDivString[] = "Div";
+const char aSectString[] = "Sect";
+const char aHString[] = "H";
+const char aH1String[] = "H1";
+const char aH2String[] = "H2";
+const char aH3String[] = "H3";
+const char aH4String[] = "H4";
+const char aH5String[] = "H5";
+const char aH6String[] = "H6";
+const char aListString[] = "L";
+const char aListItemString[] = "LI";
+const char aListBodyString[] = "LBody";
+const char aBlockQuoteString[] = "BlockQuote";
+const char aCaptionString[] = "Caption";
+const char aIndexString[] = "Index";
+const char aTOCString[] = "TOC";
+const char aTOCIString[] = "TOCI";
+const char aTableString[] = "Table";
+const char aTRString[] = "TR";
+const char aTDString[] = "TD";
+const char aTHString[] = "TH";
+const char aBibEntryString[] = "BibEntry";
+const char aQuoteString[] = "Quote";
+const char aSpanString[] = "Span";
+const char aCodeString[] = "Code";
+const char aFigureString[] = "Figure";
+const char aFormulaString[] = "Formula";
+const char aLinkString[] = "Link";
+const char aNoteString[] = "Note";
 
 // returns true if first paragraph in cell frame has 'table heading' style
 bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
@@ -184,7 +183,7 @@ bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
 
         String sStyleName;
         SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
-        bRet = sStyleName == aTableHeadingName;
+        bRet = sStyleName.EqualsAscii(aTableHeadingName);
     }
 
     return bRet;
@@ -299,7 +298,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else if ( mpPorInfo )
             BeginInlineStructureElements();
         else
-            BeginTag( vcl::PDFWriter::NonStructElement, aEmptyString );
+            BeginTag( vcl::PDFWriter::NonStructElement, rtl::OUString() );
 
 #if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
@@ -992,12 +991,12 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const bool bNewItemTag = bNewListTag || pTxtNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
-        BeginTag( vcl::PDFWriter::List, aListString );
+        BeginTag( vcl::PDFWriter::List, rtl::OUString(aListString) );
 
     if ( bNewItemTag )
     {
-        BeginTag( vcl::PDFWriter::ListItem, aListItemString );
-        BeginTag( vcl::PDFWriter::LIBody, aListBodyString );
+        BeginTag( vcl::PDFWriter::ListItem, rtl::OUString(aListItemString) );
+        BeginTag( vcl::PDFWriter::LIBody, rtl::OUString(aListBodyString) );
     }
 }
 
@@ -1033,7 +1032,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Document: Document
             //
             nPDFType = vcl::PDFWriter::Document;
-            aPDFType = aDocumentString;
+            aPDFType = rtl::OUString(aDocumentString);
             break;
 
         case FRM_HEADER :
@@ -1049,7 +1048,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Footnote container: Division
             //
             nPDFType = vcl::PDFWriter::Division;
-            aPDFType = aDivString;
+            aPDFType = rtl::OUString(aDivString);
             break;
 
         case FRM_FTN :
@@ -1059,7 +1058,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = vcl::PDFWriter::Note;
-            aPDFType = aNoteString;
+            aPDFType = rtl::OUString(aNoteString);
             break;
 
         case FRM_SECTION :
@@ -1077,19 +1076,19 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( TOX_INDEX == pTOXBase->GetType() )
                         {
                             nPDFType = vcl::PDFWriter::Index;
-                            aPDFType = aIndexString;
+                            aPDFType = rtl::OUString(aIndexString);
                         }
                         else
                         {
                             nPDFType = vcl::PDFWriter::TOC;
-                            aPDFType = aTOCString;
+                            aPDFType = rtl::OUString(aTOCString);
                         }
                     }
                 }
                 else if ( CONTENT_SECTION == pSection->GetType() )
                 {
                     nPDFType = vcl::PDFWriter::Section;
-                    aPDFType = aSectString;
+                    aPDFType = rtl::OUString(aSectString);
                 }
             }
             break;
@@ -1123,37 +1122,37 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 // Quotations: BlockQuote
                 //
-                if ( sStyleName == aQuotations )
+                if ( sStyleName.EqualsAscii(aQuotations) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::BlockQuote);
-                    aPDFType = aBlockQuoteString;
+                    aPDFType = rtl::OUString(aBlockQuoteString);
                 }
 
                 //
                 // Caption: Caption
                 //
-                else if ( sStyleName == aCaption)
+                else if ( sStyleName.EqualsAscii(aCaption) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
-                    aPDFType = aCaptionString;
+                    aPDFType = rtl::OUString(aCaptionString);
                 }
 
                 //
                 // Caption: Caption
                 //
-                else if ( sParentStyleName == aCaption)
+                else if ( sParentStyleName.EqualsAscii(aCaption) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
-                    aPDFType = sStyleName.Append(aCaptionString);
+                    aPDFType = sStyleName.Append(rtl::OUString(aCaptionString));
                 }
 
                 //
                 // Heading: H
                 //
-                else if ( sStyleName == aHeading )
+                else if ( sStyleName.EqualsAscii(aHeading) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Heading);
-                    aPDFType = aHString;
+                    aPDFType = rtl::OUString(aHString);
                 }
 
                 //
@@ -1169,22 +1168,22 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     switch(nRealLevel)
                     {
                         case 0 :
-                            aPDFType = aH1String;
+                            aPDFType = rtl::OUString(aH1String);
                             break;
                         case 1 :
-                            aPDFType = aH2String;
+                            aPDFType = rtl::OUString(aH2String);
                             break;
                         case 2 :
-                            aPDFType = aH3String;
+                            aPDFType = rtl::OUString(aH3String);
                             break;
                         case 3 :
-                            aPDFType = aH4String;
+                            aPDFType = rtl::OUString(aH4String);
                             break;
                         case 4 :
-                            aPDFType = aH5String;
+                            aPDFType = rtl::OUString(aH5String);
                             break;
                         default:
-                            aPDFType = aH6String;
+                            aPDFType = rtl::OUString(aH6String);
                             break;
                     }
                 }
@@ -1204,7 +1203,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTag( vcl::PDFWriter::TOCI, aTOCIString );
+                            BeginTag( vcl::PDFWriter::TOCI, rtl::OUString(aTOCIString) );
                         }
                     }
                 }
@@ -1216,7 +1215,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // TabFrm: Table
             //
             nPDFType = vcl::PDFWriter::Table;
-            aPDFType = aTableString;
+            aPDFType = rtl::OUString(aTableString);
 
             {
                 // set up table column data:
@@ -1270,7 +1269,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             if ( !static_cast<const SwRowFrm*>(pFrm)->IsRepeatedHeadline() )
             {
                 nPDFType = vcl::PDFWriter::TableRow;
-                aPDFType = aTRString;
+                aPDFType = rtl::OUString(aTRString);
             }
             else
             {
@@ -1287,12 +1286,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTable->IsInHeadline( *pFrm ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrm*>(pFrm) ) )
                 {
                     nPDFType = vcl::PDFWriter::TableHeader;
-                    aPDFType = aTHString;
+                    aPDFType = rtl::OUString(aTHString);
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::TableData;
-                    aPDFType = aTDString;
+                    aPDFType = rtl::OUString(aTDString);
                 }
             }
             break;
@@ -1324,18 +1323,18 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( bFormula )
                     {
                         nPDFType = vcl::PDFWriter::Formula;
-                        aPDFType = aFormulaString;
+                        aPDFType = rtl::OUString(aFormulaString);
                     }
                     else
                     {
                         nPDFType = vcl::PDFWriter::Figure;
-                        aPDFType = aFigureString;
+                        aPDFType = rtl::OUString(aFigureString);
                     }
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::Division;
-                    aPDFType = aDivString;
+                    aPDFType = rtl::OUString(aDivString);
                 }
             }
             break;
@@ -1387,7 +1386,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_HYPHSTR :
         case POR_SOFTHYPHSTR :
             nPDFType = vcl::PDFWriter::Span;
-            aPDFType = aSpanString;
+            aPDFType = rtl::OUString(aSpanString);
             break;
 
         case POR_LAY :
@@ -1414,18 +1413,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 if( pInetFmtAttr )
                 {
                     nPDFType = vcl::PDFWriter::Link;
-                    aPDFType = aLinkString;
+                    aPDFType = rtl::OUString(aLinkString);
                 }
                 // Check for Quote/Code character style:
-                else if ( sStyleName == aQuotation )
+                else if ( sStyleName.EqualsAscii(aQuotation) )
                 {
                     nPDFType = vcl::PDFWriter::Quote;
-                    aPDFType = aQuoteString;
+                    aPDFType = rtl::OUString(aQuoteString);
                 }
-                else if ( sStyleName == aSourceText )
+                else if ( sStyleName.EqualsAscii(aSourceText) )
                 {
                     nPDFType = vcl::PDFWriter::Code;
-                    aPDFType = aCodeString;
+                    aPDFType = rtl::OUString(aCodeString);
                 }
                 else
                 {
@@ -1446,7 +1445,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         if ( sStyleName.Len() > 0 )
                             aPDFType = sStyleName;
                         else
-                            aPDFType = aSpanString;
+                            aPDFType = rtl::OUString(aSpanString);
                     }
                 }
             }
@@ -1454,7 +1453,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         case POR_FTN :
             nPDFType = vcl::PDFWriter::Link;
-            aPDFType = aLinkString;
+            aPDFType = rtl::OUString(aLinkString);
             break;
 
         case POR_FLD :
@@ -1471,12 +1470,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;
-                        aPDFType = aLinkString;
+                        aPDFType = rtl::OUString(aLinkString);
                     }
                     else if ( RES_AUTHORITY == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::BibEntry;
-                        aPDFType = aBibEntryString;
+                        aPDFType = rtl::OUString(aBibEntryString);
                     }
                 }
             }

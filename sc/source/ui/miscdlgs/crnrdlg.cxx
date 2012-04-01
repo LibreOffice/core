@@ -708,7 +708,7 @@ sal_Bool ScColRowNameRangesDlg::IsRefInputMode() const
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
 {
     AddBtnHdl( 0 );
 
@@ -740,12 +740,12 @@ IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK_INLINE_START( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScColRowNameRangesDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScColRowNameRangesDlg, CancelBtnHdl)
 
 
 /*************************************************************************
@@ -764,7 +764,7 @@ IMPL_LINK_INLINE_END( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
 {
     String aNewArea( aEdAssign.GetText() );
     String aNewData( aEdAssign2.GetText() );
@@ -836,7 +836,7 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
 {
     String aRangeStr = aLbRange.GetSelectEntry();
     sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
@@ -914,7 +914,7 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 {
     sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
     sal_uInt16 nCnt = aLbRange.GetEntryCount();
@@ -999,7 +999,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 {
     String aNewArea( aEdAssign.GetText() );
     sal_Bool bValid = false;
@@ -1048,7 +1048,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
 {
     String aNewData( aEdAssign2.GetText() );
     if ( aNewData.Len() > 0 )
@@ -1086,7 +1086,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
 {
     if ( !aBtnColHead.GetSavedValue() )
     {
@@ -1124,7 +1124,7 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 {
     if ( !aBtnRowHead.GetSavedValue() )
     {
@@ -1162,7 +1162,7 @@ IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 }
 
 
-IMPL_LINK( ScColRowNameRangesDlg, LoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseFocusHdl)
 {
     bDlgLostFocus = !IsActive();
     return 0;

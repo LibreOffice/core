@@ -37,12 +37,11 @@ $(eval $(call gb_SrsTarget_SrsTarget,chart2/res))
 
 $(eval $(call gb_SrsTarget_set_include,chart2/res,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/chart2/source/controller/dialogs) \
-    -I$(realpath $(SRCDIR)/chart2/source/controller/inc) \
-    -I$(realpath $(SRCDIR)/chart2/source/controller/main) \
-    -I$(realpath $(SRCDIR)/chart2/source/inc) \
+    -I$(SRCDIR)/chart2/source/controller/dialogs \
+    -I$(SRCDIR)/chart2/source/controller/inc \
+    -I$(SRCDIR)/chart2/source/controller/main \
+    -I$(SRCDIR)/chart2/source/inc \
     -I$(WORKDIR)/inc/chart2 \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,chart2/res,\

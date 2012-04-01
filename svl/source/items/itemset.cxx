@@ -58,12 +58,6 @@ DBG_NAME(SfxItemSet)
 #undef NUMTYPE
 #undef SfxNumRanges
 
-#define NUMTYPE         sal_uLong
-#define SfxNumRanges    SfxULongRanges
-#include "nranges.cxx"
-#undef NUMTYPE
-#undef SfxNumRanges
-
 //========================================================================
 
 #ifdef DBG_UTIL
@@ -544,6 +538,14 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
         }
     } while( bSrchInParent && 0 != ( pAktSet = pAktSet->_pParent ));
     return eRet;
+}
+
+bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
+{
+    bool bRet = SFX_ITEM_SET == GetItemState(nWhich, true, ppItem);
+    if (!bRet && ppItem)
+        *ppItem = NULL;
+    return bRet;
 }
 
 // -----------------------------------------------------------------------

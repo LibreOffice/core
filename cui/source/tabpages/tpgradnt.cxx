@@ -416,7 +416,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
@@ -522,7 +522,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
 
@@ -594,7 +594,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
 
@@ -629,7 +629,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -726,7 +726,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -788,7 +788,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
     XGradient* pGradient = NULL;
     int nPos = aLbGradients.GetSelectEntryPos();

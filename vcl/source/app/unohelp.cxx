@@ -109,7 +109,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
                 while ( aVCLComponentsArray[ nCompCount ].pLibName )
                 {
                     OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
-                    if (aComponentPathString.getLength() )
+                    if (!aComponentPathString.isEmpty() )
                     {
                         try
                         {

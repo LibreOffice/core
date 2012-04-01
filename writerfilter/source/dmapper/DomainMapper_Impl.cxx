@@ -41,6 +41,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -191,8 +193,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
-        m_bIsInShape( false ),
-        m_bRemovedLastAnchored( false ),
         m_pLastSectionContext( ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
@@ -584,37 +584,6 @@ void DomainMapper_Impl::clearDeferredBreaks()
     m_bIsPageBreakDeferred = false;
 }
 
-bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const uno::Reference< drawing::XShape >& rShape, TextContentStack& rAnchoredStack,TextAppendStack&  rTextAppendStack )
-{
-    bool bRet = false;
-    // probably unecessary but just double check that indeed the top of Anchored stack
-    // does contain the shape we intend to remove
-    uno::Reference< drawing::XShape > xAnchorShape(rAnchoredStack.top( ), uno::UNO_QUERY );
-    if ( xAnchorShape == rShape )
-    {
-        // because we only want to process the embedded object and not the associated
-        // shape we need to get rid of that shape from the Draw page and Anchored and
-        // Append stacks  so it wont be processed further
-        try
-        {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(rDoc, uno::UNO_QUERY_THROW);
-            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-            if ( xDrawPage.is() )
-            {
-                xDrawPage->remove( rShape );
-            }
-            rAnchoredStack.pop();
-            rTextAppendStack.pop();
-            bRet = true;
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-    return bRet;
-}
-
-
 
 void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrameProperties,
     uno::Reference<text::XTextRange> xStartTextRange,
@@ -703,7 +672,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             StyleSheetEntryPtr pParaStyle =
                 GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
-            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 9);
+            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 16: 9);
 
             if ( pParaStyle.get( ) )
             {
@@ -723,6 +692,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[12].Name = rPropNameSupplier.GetName(PROP_RIGHT_MARGIN);
                 pFrameProperties[13].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
                 pFrameProperties[14].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
+                pFrameProperties[15].Name = rPropNameSupplier.GetName(PROP_BACK_COLOR_TRANSPARENCY);
 
                 const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                 sal_Int32 nWidth =
@@ -795,6 +765,10 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
                 pFrameProperties[13].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist;
                 pFrameProperties[14].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist;
+                // If there is no fill, the Word default is 100% transparency.
+                // Otherwise CellColorHandler has priority, and this setting
+                // will be ignored.
+                pFrameProperties[15].Value <<= sal_Int32(100);
 
                 lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
@@ -1044,26 +1018,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     xTextAppend->finishParagraph( aProperties );
                 getTableManager( ).handle(xTextRange);
 
-                // Set the anchor of the objects to the created paragraph
-                while ( m_aAnchoredStack.size( ) > 0 && !m_bIsInShape )
-                {
-                    uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( );
-                    try
-                    {
-#if DEBUG
-                        rtl::OUString sText( xTextRange->getString( ) );
-#endif
-                        xObj->attach( xTextRange );
-                    }
-                    catch ( uno::RuntimeException& )
-                    {
-                        // this is normal: the shape is already attached
-                    }
-                    m_aAnchoredStack.pop( );
-                    m_aTextAppendStack.pop( );
-                    m_bRemovedLastAnchored = true;
-                }
-
                 // Get the end of paragraph character inserted
                 uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
                 xCur->gotoEnd( false );
@@ -1202,11 +1156,9 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         // gives a better ( visually ) result
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
-        if ( m_aAnchoredStack.size() > 0 )
-        {
-            if ( lcl_removeShape(  m_xTextDocument, pOLEHandler->getShape(), m_aAnchoredStack, m_aTextAppendStack ) )
-                m_bRemovedLastAnchored = true; // ensure PopShapeContext processing doesn't pop the append stack
-        }
+        m_aAnchoredStack.top( ).bToRemove = true;
+        RemoveLastParagraph();
+        m_aTextAppendStack.pop();
 
         //
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
@@ -1217,6 +1169,7 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         (void)rEx;
         OSL_FAIL( "Exception in creation of OLE object" );
     }
+
 }
 
 void DomainMapper_Impl::appendStarMath( const Value& val )
@@ -1542,12 +1495,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    m_bIsInShape = true;
     try
     {
         // Add the shape to the text append stack
         m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ) );
-        m_bRemovedLastAnchored = false;
 
         // Add the shape to the anchored objects stack
         uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
@@ -1562,6 +1513,13 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
 
+        // If there are position properties, the shape should not be inserted "as character".
+        sal_Int32 nHoriPosition = 0, nVertPosition = 0;
+        xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION)) >>= nHoriPosition;
+        xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION)) >>= nVertPosition;
+        if (nHoriPosition != 0 || nVertPosition != 0)
+            bIsGraphic = false;
+
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
                 uno::makeAny( true ) );
@@ -1575,6 +1533,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         {
             xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         }
+
+        appendTableManager( );
+        getTableManager().startLevel();
     }
     catch ( const uno::Exception& e )
     {
@@ -1586,13 +1547,48 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
 void DomainMapper_Impl::PopShapeContext()
 {
-    if ( !m_bRemovedLastAnchored && m_aAnchoredStack.size() > 0 )
+    if ( m_aAnchoredStack.size() > 0 )
     {
-        RemoveLastParagraph();
-        m_aTextAppendStack.pop();
+        getTableManager().endLevel();
+        popTableManager();
+
+        // For OLE object replacement shape, the text append context was already removed
+        // or the OLE object couldn't be inserted.
+        if ( !m_aAnchoredStack.top().bToRemove )
+        {
+            RemoveLastParagraph();
+            m_aTextAppendStack.pop();
+        }
+
+        uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( ).xTextContent;
+        try
+        {
+            appendTextContent( xObj, uno::Sequence< beans::PropertyValue >() );
+        }
+        catch ( uno::RuntimeException& )
+        {
+            // this is normal: the shape is already attached
+        }
+
+        // Remove the shape if required (most likely replacement shape for OLE object)
+        if ( m_aAnchoredStack.top().bToRemove )
+        {
+            try
+            {
+                uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(m_xTextDocument, uno::UNO_QUERY_THROW);
+                uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                if ( xDrawPage.is() )
+                {
+                    uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
+                    xDrawPage->remove( xShape );
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
         m_aAnchoredStack.pop();
     }
-    m_bIsInShape = false;
 }
 
 
@@ -2408,10 +2404,9 @@ void DomainMapper_Impl::handleToc
     if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
     {
         bFromOutline = true;
-        UniString sParam( sValue );
-        xub_StrLen nIndex = 0;
-        sParam.GetToken( 0, '-', nIndex );
-        nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
+        sal_Int32 nIndex = 0;
+        sValue.getToken( 0, '-', nIndex );
+        nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? sValue.copy(nIndex).toInt32() : 0);
     }
 //                  \p Defines the separator between the table entry and its page number
     if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
@@ -3517,6 +3512,16 @@ void DomainMapper_Impl::ApplySettingsTable()
                                                                 m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))), uno::UNO_QUERY_THROW );
             sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
             xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
+            if (m_pSettingsTable->GetLinkStyles())
+            {
+                PropertyNameSupplier& rSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                // If linked styles are enabled, set paragraph defaults from Word's default template
+                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_BOTTOM_MARGIN), uno::makeAny(ConversionHelper::convertTwipToMM100(200)));
+                style::LineSpacing aSpacing;
+                aSpacing.Mode = style::LineSpacingMode::PROP;
+                aSpacing.Height = sal_Int16(115);
+                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
+            }
         }
         catch(const uno::Exception& )
         {

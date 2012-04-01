@@ -40,7 +40,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <tools/resary.hxx>
-#include <swunodef.hxx>
 #include "swdllapi.h"
 
 class SwOneExampleFrame;
@@ -110,10 +109,10 @@ public:
                     String* pURL = 0);
     ~SwOneExampleFrame();
 
-    STAR_REFERENCE( awt::XControl ) &       GetControl()    {return _xControl; }
-    STAR_REFERENCE( frame::XModel ) &       GetModel()      {return _xModel;}
-    STAR_REFERENCE( frame::XController ) &  GetController() {return _xController;}
-    STAR_REFERENCE( text::XTextCursor ) &   GetTextCursor() {return _xCursor;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > &       GetControl()    {return _xControl; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &       GetModel()      {return _xModel;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
 
     void ClearDocument( sal_Bool bStartTimer = sal_False );
 

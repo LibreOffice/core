@@ -640,7 +640,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
         while( aIter.IsMore() )
         {
             SdrObject* pTempObj = aIter.Next();
-            if ( pObj != pTempObj && pTempObj->GetName() == sNewName )
+            if ( pObj != pTempObj && pTempObj->GetName().equals(sNewName) )
             {
                 nRet = 0;
                 break;

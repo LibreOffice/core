@@ -34,9 +34,6 @@
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-#define CREATEVERSIONRESMGR_NAME( Name )   #Name
-#define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( Name ) )
-
 #include <vector>
 
 class SvStream;
@@ -66,7 +63,7 @@ public:
 // - ResMgr -
 // ----------
 
-typedef void (*ResHookProc)( UniString& rStr );
+typedef rtl::OUString (*ResHookProc)( const rtl::OUString& rStr );
 
 // ----------
 // - ResMgr -

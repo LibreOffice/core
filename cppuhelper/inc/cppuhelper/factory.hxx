@@ -182,9 +182,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
 
     @param rServiceManager      the service manager used by the implementation.
     @param rImplementationName  the implementation name. An empty string is possible.
-    @param ComponentInstantiation the function pointer to create an object.
-    @param rServiceNames            the service supported by the implementation.
-    @param pModCount             for future extension (library unloading concept).
+    @param pCreateFunction      the function pointer to create an object.
+    @param rServiceNames        the service supported by the implementation.
+    @param pModCount            for future extension (library unloading concept).
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 
@@ -207,7 +207,7 @@ createSingleFactory(
     The XComponent interface is not supported!
 
     @param rServiceManager      the service manager used by the implementation.
-    @param xSingleServiceFactory    the wrapped service factory.
+    @param rFactory             the wrapped service factory.
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory.
 
@@ -223,10 +223,10 @@ createFactoryProxy(
 /** Deprecated.  Creates a single service factory which holds the instance created only once.
 
     @param rServiceManager      the service manager used by the implementation.
-    @param rImplementationName  the implementation name. An empty string is possible.
-    @param ComponentInstantiation the function pointer to create an object.
-    @param rServiceNames            the service supported by the implementation.
-    @param pModCount             for future extension (library unloading concept).
+    @param rComponentName       the implementation name. An empty string is possible.
+    @param pCreateFunction      the function pointer to create an object.
+    @param rServiceNames        the service supported by the implementation.
+    @param pModCount            for future extension (library unloading concept).
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 
@@ -262,7 +262,7 @@ createSingleRegistryFactory(
     based on a registry.
 
     @param rServiceManager      the service manager used by the implementation.
-    @param rImplementationName  the implementation name. An empty string is possible.
+    @param rComponentName       the implementation name. An empty string is possible.
     @param rImplementationKey   the registry key of the implementation section.
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.

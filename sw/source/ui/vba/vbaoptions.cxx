@@ -264,12 +264,10 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autof
     // not support in Writer
 }
 
-
-rtl::OUString&
+rtl::OUString
 SwVbaOptions::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaOptions") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaOptions"));
 }
 
 uno::Sequence< rtl::OUString >

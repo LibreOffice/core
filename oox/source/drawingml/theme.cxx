@@ -66,11 +66,6 @@ const LineProperties* Theme::getLineStyle( sal_Int32 nIndex ) const
      return lclGetStyleElement( maLineStyleList, nIndex );
 }
 
-const PropertyMap* Theme::getEffectStyle( sal_Int32 nIndex ) const
-{
-    return lclGetStyleElement( maEffectStyleList, nIndex );
-}
-
 const TextCharacterProperties* Theme::getFontStyle( sal_Int32 nSchemeType ) const
 {
     return maFontScheme.get( nSchemeType ).get();

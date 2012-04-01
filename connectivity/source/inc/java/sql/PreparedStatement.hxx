@@ -49,7 +49,7 @@ namespace connectivity
                                         public  ::com::sun::star::lang::XServiceInfo
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
 
         virtual void createStatement(JNIEnv* _pEnv);
@@ -58,7 +58,7 @@ namespace connectivity
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const;
 
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const ::rtl::OUString& sql );
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

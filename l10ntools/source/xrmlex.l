@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "sal/main.h"
+
 #if defined __GNUC__
 #pragma GCC system_header
 #elif defined __SINPRO_CC
@@ -40,7 +42,6 @@ extern int SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetXrmFile();
 extern int isQuiet();
-extern void removeTempFile();
 extern char* getFilename();
 
 /* forwards */
@@ -191,14 +192,7 @@ void yyerror ( const char *s )
 	SetError();
 }
 
-/*****************************************************************************/
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char* argv[])
-/*****************************************************************************/
-{
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 	/* error level */
 	int nRetValue = 0;
 	char *pOutput;
@@ -238,7 +232,6 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndXrmExport();
 
-    removeTempFile();
 	/* return error level */
 	return nRetValue;
 }

@@ -28,7 +28,6 @@
 
 #define _WIN32_WINNT 0x0500
 
-
 #ifdef WNT
 /************************************************************************
  * Win32 surface backend for OpenOffice.org Cairo Canvas                *
@@ -101,7 +100,8 @@ namespace cairo
     {
         OSL_ASSERT(rBmpData.pDIB == NULL);
 
-        if(rBmpData.pDIB != NULL) {
+        if(rBmpData.pDIB != NULL)
+        {
             // So just leave mpSurface to NULL, little else we can do at
             // this stage. Hopefully the Win32 patch to
             // cairocanvas::DeviceHelper::getSurface(BitmapSystemData&,
@@ -182,8 +182,10 @@ namespace cairo
      **/
     int Win32Surface::getDepth() const
     {
-        if (mpSurface) {
-            switch (cairo_surface_get_content (mpSurface.get())) {
+        if (mpSurface)
+        {
+            switch (cairo_surface_get_content (mpSurface.get()))
+            {
                 case CAIRO_CONTENT_ALPHA:       return 8;  break;
                 case CAIRO_CONTENT_COLOR:       return 24; break;
                 case CAIRO_CONTENT_COLOR_ALPHA: return 32; break;
@@ -295,7 +297,8 @@ namespace cairo
         hdc = CreateCompatibleDC (NULL);
 
         if (!hdc) return 0;
-        if (!SetGraphicsMode (hdc, GM_ADVANCED)) {
+        if (!SetGraphicsMode (hdc, GM_ADVANCED))
+        {
             DeleteDC (hdc);
             return 0;
         }
@@ -305,7 +308,8 @@ namespace cairo
 
         unicode[0] = ucs4;
         unicode[1] = 0;
-        if (GetGlyphIndicesW (hdc, unicode, 1, &glyph_index, 0) == GDI_ERROR) {
+        if (GetGlyphIndicesW (hdc, unicode, 1, &glyph_index, 0) == GDI_ERROR)
+        {
             glyph_index = 0;
         }
 

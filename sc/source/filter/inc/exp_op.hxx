@@ -44,6 +44,8 @@ class SotStorage;
 class ExportTyp
 {
 protected:
+                        ~ExportTyp() {}
+
     SvStream&           aOut;           // Ausgabe-Stream
     ScDocument*         pD;             // Dokument
     CharSet             eZielChar;      // Ziel-Zeichensatz

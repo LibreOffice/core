@@ -51,17 +51,6 @@ namespace basegfx
         // get size of PolyPolygon. Control vectors are included in that ranges.
         BASEGFX_DLLPUBLIC B3DRange getRange(const B3DPolyPolygon& rCandidate);
 
-        /** Apply given LineDashing to given polyPolygon
-
-            For a description see applyLineDashing in b2dpolygontoos.hxx
-        */
-        BASEGFX_DLLPUBLIC void applyLineDashing(
-            const B3DPolyPolygon& rCandidate,
-            const ::std::vector<double>& rDotDashArray,
-            B3DPolyPolygon* pLineTarget,
-            B3DPolyPolygon* pGapTarget = 0,
-            double fFullDashDotLen = 0.0);
-
         /** Create a unit 3D line polyPolygon which defines a cube.
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitCubePolyPolygon();
@@ -148,7 +137,6 @@ namespace basegfx
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D PolyPolygons
         BASEGFX_DLLPUBLIC bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue);
-        BASEGFX_DLLPUBLIC bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB);
 
     } // end of namespace tools
 } // end of namespace basegfx

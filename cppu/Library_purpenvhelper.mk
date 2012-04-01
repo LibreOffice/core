@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_soversion_script,purpenvhelper,3,$(SRCDIR)/cppu/uti
 
 $(eval $(call gb_Library_set_include,purpenvhelper,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/cppu/inc) \
+	-I$(SRCDIR)/cppu/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,purpenvhelper,\

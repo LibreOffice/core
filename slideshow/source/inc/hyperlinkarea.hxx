@@ -96,6 +96,9 @@ namespace slideshow
                     return nPrioL == nPrioR ? rLHS.get() < rRHS.get() : nPrioL < nPrioR;
                 }
             };
+
+        protected:
+            ~HyperlinkArea() {}
        };
 
         typedef boost::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;

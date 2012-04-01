@@ -104,11 +104,13 @@ $(eval $(call gb_Library_use_external,pl,gtk))
 endif # ENABLE_GTK=TRUE
 
 $(eval $(call gb_Library_add_exception_objects,pl,\
-	extensions/source/plugin/unx/mediator \
 	extensions/source/plugin/unx/nppapi \
-	extensions/source/plugin/unx/plugcon \
 	extensions/source/plugin/unx/sysplug \
 	extensions/source/plugin/unx/unxmgr \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,pl,\
+    plugcon \
 ))
 
 $(eval $(call gb_Library_add_libs,pl,\

@@ -31,7 +31,8 @@
 
 #include <vector>
 #include <memory>
-#include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -100,7 +101,7 @@ public:
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, sal_Bool bGotFocus );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, bool bGotFocus );
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
@@ -110,9 +111,8 @@ protected:
     virtual void            Deactivate();
 
 private:
-    typedef boost::shared_ptr< ScDPFuncData >   ScDPFuncDataRef;
-    typedef std::vector< ScDPFuncDataRef >      ScDPFuncDataVec;
-    typedef std::auto_ptr< ScDPObject >         ScDPObjectPtr;
+    typedef boost::ptr_vector<ScDPFuncData> ScDPFuncDataVec;
+    typedef boost::scoped_ptr<ScDPObject> ScDPObjectPtr;
 
     FixedLine               aFlLayout;
     FixedText               aFtPage;
@@ -153,13 +153,13 @@ private:
     PushButton              aBtnOptions;
     MoreButton              aBtnMore;
 
-    const String            aStrUndefined;
-    const String            aStrNewTable;
-    std::vector< String >   aFuncNameArr;
+    const rtl::OUString     aStrUndefined;
+    const rtl::OUString     aStrNewTable;
+    std::vector<rtl::OUString> aFuncNameArr;
 
     ScDPFieldType           eDnDFromType;
     size_t                  nDnDFromIndex;
-    sal_Bool                    bIsDrag;
+    bool                    bIsDrag;
 
     ::formula::RefEdit*     pEditActive;
 
@@ -191,7 +191,8 @@ private:
 
 private:
     void                    Init            (bool bNewOutput);
-    void                    InitWndSelect   ( const ::std::vector<ScDPLabelDataRef>& rLabels );
+    void InitWndSelect(const ScDPLabelDataVec& rLabels);
+    void InitWndData(const std::vector<PivotField>& rFields);
     void                    InitFieldWindow ( const ::std::vector<PivotField>& rFields, ScDPFieldType eType );
     void                    InitFocus       ();
     void                    InitFields      ();
@@ -199,10 +200,10 @@ private:
     void                    AdjustDlgSize();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
-    String                  GetLabelString  ( SCsCOL nCol );
+    rtl::OUString GetLabelString(SCsCOL nCol);
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
-    String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
-    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    rtl::OUString GetFuncString( sal_uInt16& rFuncMask, bool bIsValue = true );
+    bool Contains( ScDPFuncDataVec* pArr, const ScDPFuncData& rData, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 
@@ -240,14 +241,16 @@ private:
     void GetOtherDataArrays(
         ScDPFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2);
 
+    sal_uInt8 GetNextDupCount(const ScDPFuncDataVec& rArr, const ScDPFuncData& rData, size_t nDataIndex) const;
+
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( SelAreaHdl, ListBox * );
-    DECL_LINK( MoreClickHdl, MoreButton * );
-    DECL_LINK( EdModifyHdl, Edit * );
-    DECL_LINK( EdInModifyHdl, Edit * );
-    DECL_LINK( OkHdl, OKButton * );
-    DECL_LINK( CancelHdl, CancelButton * );
+    DECL_LINK( SelAreaHdl, void * );
+    DECL_LINK( MoreClickHdl, void * );
+    DECL_LINK( EdModifyHdl, void * );
+    DECL_LINK( EdInModifyHdl, void * );
+    DECL_LINK( OkHdl, void * );
+    DECL_LINK( CancelHdl, void * );
     DECL_LINK( GetFocusHdl, Control* );
 };
 

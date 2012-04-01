@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/a
 
 $(eval $(call gb_Library_set_include,avmediagst,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/avmedia/source/inc) \
+	-I$(SRCDIR)/avmedia/source/inc \
 	$(shell pkg-config --cflags gstreamer-0.10, gstreamer-plugins-base-0.10) \
 ))
 

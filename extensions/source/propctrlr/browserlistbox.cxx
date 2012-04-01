@@ -126,8 +126,13 @@ namespace pcr
         ::osl::MutexGuard aGuard( getMutex() );
         if ( !s_pNotifier.is() )
         {
-            s_pNotifier.set( new ::comphelper::AsyncEventNotifier );
-            s_pNotifier->create();
+            s_pNotifier.set(
+                new ::comphelper::AsyncEventNotifier("browserlistbox"));
+            s_pNotifier->launch();
+                //TODO: a protocol is missing how to join with the launched
+                // thread before exit(3), to ensure the thread is no longer
+                // relying on any infrastructure while that infrastructure is
+                // being shut down in atexit handlers
         }
         return s_pNotifier;
     }
@@ -470,7 +475,7 @@ namespace pcr
 
         UpdateVScroll();
 
-        sal_Bool bNeedScrollbar = m_aOrderedLines.size() > (sal_uInt32)CalcVisibleLines();
+        sal_Bool bNeedScrollbar = m_aLines.size() > (sal_uInt32)CalcVisibleLines();
         if ( !bNeedScrollbar )
         {
             if ( m_aVScroll.IsVisible() )
@@ -493,7 +498,7 @@ namespace pcr
             m_aVScroll.SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
 
-        for ( sal_uInt16 i = 0; i < m_aOrderedLines.size(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aLines.size(); ++i )
             m_aOutOfDateLines.insert( i );
 
         // repaint
@@ -595,15 +600,16 @@ namespace pcr
 
         aPos.Y() += _nIndex * m_nRowHeight;
 
-        if ( _nIndex < m_aOrderedLines.size() )
+        if ( _nIndex < m_aLines.size() )
         {
-            m_aOrderedLines[ _nIndex ]->second.pLine->SetPosSizePixel( aPos, aSize );
+            BrowserLinePointer pLine = m_aLines[ _nIndex ].pLine;
 
-            m_aOrderedLines[ _nIndex ]->second.pLine->SetTitleWidth( m_nTheNameSize + 2 * FRAME_OFFSET );
+            pLine->SetPosSizePixel( aPos, aSize );
+            pLine->SetTitleWidth( m_nTheNameSize + 2 * FRAME_OFFSET );
 
             // show the line if necessary
-            if ( !m_aOrderedLines[ _nIndex ]->second.pLine->IsVisible() )
-                m_aOrderedLines[ _nIndex ]->second.pLine->Show();
+            if ( !pLine->IsVisible() )
+                pLine->Show();
         }
     }
 
@@ -615,8 +621,8 @@ namespace pcr
                 ++aLoop
              )
         {
-            DBG_ASSERT( *aLoop < m_aOrderedLines.size(), "OBrowserListBox::UpdatePosNSize: invalid line index!" );
-            if ( *aLoop < m_aOrderedLines.size() )
+            DBG_ASSERT( *aLoop < m_aLines.size(), "OBrowserListBox::UpdatePosNSize: invalid line index!" );
+            if ( *aLoop < m_aLines.size() )
                 PositionLine( *aLoop );
         }
         m_aOutOfDateLines.clear();
@@ -629,10 +635,10 @@ namespace pcr
         sal_Int32 nLines = CalcVisibleLines();
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
-        if (nEnd >= m_aOrderedLines.size())
-            nEnd = (sal_uInt16)m_aOrderedLines.size()-1;
+        if (nEnd >= m_aLines.size())
+            nEnd = (sal_uInt16)m_aLines.size()-1;
 
-        if ( !m_aOrderedLines.empty() )
+        if ( !m_aLines.empty() )
         {
             for ( sal_uInt16 i = (sal_uInt16)nThumbPos; i <= nEnd; ++i )
                 m_aOutOfDateLines.insert( i );
@@ -662,18 +668,21 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::SetPropertyValue(const ::rtl::OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
-        ListBoxLines::iterator line = m_aLines.find( _rEntryName );
+        ListBoxLines::iterator line = m_aLines.begin();
+        for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
+            ;
+
         if ( line != m_aLines.end() )
         {
             if ( _bUnknownValue )
             {
-                Reference< XPropertyControl > xControl( line->second.pLine->getControl() );
+                Reference< XPropertyControl > xControl( line->pLine->getControl() );
                 OSL_ENSURE( xControl.is(), "OBrowserListBox::SetPropertyValue: illegal control!" );
                 if ( xControl.is() )
                     xControl->setValue( Any() );
             }
             else
-                impl_setControlAsPropertyValue( line->second, _rValue );
+                impl_setControlAsPropertyValue( *line, _rValue );
         }
     }
 
@@ -681,14 +690,14 @@ namespace pcr
     sal_uInt16 OBrowserListBox::GetPropertyPos( const ::rtl::OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
-        for ( OrderedListBoxLines::const_iterator linePos = m_aOrderedLines.begin();
-              linePos != m_aOrderedLines.end();
+        for ( ListBoxLines::const_iterator linePos = m_aLines.begin();
+              linePos != m_aLines.end();
               ++linePos
             )
         {
-            if ( (*linePos)->first == _rEntryName )
+            if ( linePos->aName == _rEntryName )
             {
-                nRet = (sal_uInt16)( linePos - m_aOrderedLines.begin() );
+                nRet = (sal_uInt16)( linePos - m_aLines.begin() );
                 break;
             }
         }
@@ -699,9 +708,12 @@ namespace pcr
     //------------------------------------------------------------------------
     bool OBrowserListBox::impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const
     {
-        ListBoxLines::const_iterator line = m_aLines.find( _rEntryName );
+        ListBoxLines::const_iterator line = m_aLines.begin();
+        for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
+            ;
+
         if ( line != m_aLines.end() )
-            _out_rpLine = line->second.pLine;
+            _out_rpLine = line->pLine;
         else
             _out_rpLine.reset();
         return ( NULL != _out_rpLine.get() );
@@ -738,21 +750,21 @@ namespace pcr
         // create a new line
         BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, &m_aLinesPlayground ) );
 
-        ListBoxLine aNewLine( pBrowserLine, _rPropertyData.xPropertyHandler );
-        ::std::pair< ListBoxLines::iterator, bool > insertPoint =
-            m_aLines.insert( ListBoxLines::value_type( _rPropertyData.sName, aNewLine ) );
-        OSL_ENSURE( insertPoint.second, "OBrowserListBox::InsertEntry: already have another line for this name!" );
+        // check that the name is unique
+        ListBoxLines::iterator it = m_aLines.begin();
+        for ( ; it != m_aLines.end() && ( it->aName != _rPropertyData.sName ); ++it )
+            ;
+        OSL_ENSURE( it == m_aLines.end(), "OBrowserListBox::InsertEntry: already have another line for this name!" );
 
+        ListBoxLine aNewLine( _rPropertyData.sName, pBrowserLine, _rPropertyData.xPropertyHandler );
         sal_uInt16 nInsertPos = _nPos;
-        if ( nInsertPos > m_aOrderedLines.size() )
-            nInsertPos = EDITOR_LIST_APPEND;
-        if ( EDITOR_LIST_APPEND == nInsertPos )
+        if ( _nPos >= m_aLines.size() )
         {
-            nInsertPos = (sal_uInt16)m_aOrderedLines.size();
-            m_aOrderedLines.push_back( insertPoint.first );
+            nInsertPos = static_cast< sal_uInt16 >( m_aLines.size() );
+            m_aLines.push_back( aNewLine );
         }
         else
-            m_aOrderedLines.insert( m_aOrderedLines.begin() + nInsertPos, insertPoint.first );
+            m_aLines.insert( m_aLines.begin() + _nPos, aNewLine );
 
         pBrowserLine->SetTitleWidth(m_nTheNameSize);
         if (m_bUpdate)
@@ -766,7 +778,7 @@ namespace pcr
 
         // update the positions of possibly affected lines
         sal_uInt16 nUpdatePos = nInsertPos;
-        while ( nUpdatePos < m_aOrderedLines.size() )
+        while ( nUpdatePos < m_aLines.size() )
             m_aOutOfDateLines.insert( nUpdatePos++ );
         UpdatePosNSize( );
 
@@ -799,7 +811,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::ShowEntry(sal_uInt16 _nPos)
     {
-        if ( _nPos < m_aOrderedLines.size() )
+        if ( _nPos < m_aLines.size() )
         {
             sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
 
@@ -966,12 +978,10 @@ namespace pcr
     //------------------------------------------------------------------
     sal_uInt16 OBrowserListBox::impl_getControlPos( const Reference< XPropertyControl >& _rxControl ) const
     {
-        for (   OrderedListBoxLines::const_iterator search = m_aOrderedLines.begin();
-                search != m_aOrderedLines.end();
-                ++search
-            )
-            if ( (*search)->second.pLine->getControl().get() == _rxControl.get() )
-                return sal_uInt16( search - m_aOrderedLines.begin() );
+        for ( ListBoxLines::const_iterator search = m_aLines.begin(); search != m_aLines.end(); ++search )
+            if ( search->pLine->getControl().get() == _rxControl.get() )
+                return sal_uInt16( search - m_aLines.begin() );
+
         OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
         return (sal_uInt16)-1;
     }
@@ -1006,7 +1016,7 @@ namespace pcr
 
         if ( m_pLineListener )
         {
-            const ListBoxLine& rLine = impl_getControlLine( _rxControl );
+            const ListBoxLine& rLine = m_aLines[ impl_getControlPos( _rxControl ) ];
             m_pLineListener->Commit(
                 rLine.pLine->GetEntryName(),
                 impl_getControlAsPropertyValue( rLine )
@@ -1023,18 +1033,16 @@ namespace pcr
 
         // cycle forwards, 'til we've the next control which can grab the focus
         ++nLine;
-        while ( (size_t)nLine < m_aOrderedLines.size() )
+        while ( static_cast< size_t >( nLine ) < m_aLines.size() )
         {
-            if ( m_aOrderedLines[nLine]->second.pLine->GrabFocus() )
+            if ( m_aLines[nLine].pLine->GrabFocus() )
                 break;
             ++nLine;
         }
 
-        if  (   ( (size_t)nLine >= m_aOrderedLines.size() )
-            &&  ( m_aOrderedLines.size() > 0 )
-            )
-            // wrap around
-            m_aOrderedLines[0]->second.pLine->GrabFocus();
+        // wrap around?
+        if ( ( static_cast< size_t >( nLine ) >= m_aLines.size() ) && ( m_aLines.size() > 0 ) )
+            m_aLines[0].pLine->GrabFocus();
     }
 
     //------------------------------------------------------------------
@@ -1062,40 +1070,33 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::Clear()
     {
-        for (   ListBoxLines::iterator loop = m_aLines.begin();
-                loop != m_aLines.end();
-                ++loop
-            )
+        for ( ListBoxLines::iterator loop = m_aLines.begin(); loop != m_aLines.end(); ++loop )
         {
             // hide the line
-            loop->second.pLine->Hide();
+            loop->pLine->Hide();
             // reset the listener
-            lcl_implDisposeControl_nothrow( loop->second.pLine->getControl() );
+            lcl_implDisposeControl_nothrow( loop->pLine->getControl() );
         }
 
         clearContainer( m_aLines );
-        clearContainer( m_aOrderedLines );
     }
 
     //------------------------------------------------------------------
     sal_Bool OBrowserListBox::RemoveEntry( const ::rtl::OUString& _rName )
     {
-        sal_uInt16 nPos = GetPropertyPos( _rName );
-        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+        sal_uInt16 nPos = 0;
+        ListBoxLines::iterator it = m_aLines.begin();
+        for ( ; it != m_aLines.end() && ( it->aName != _rName ); ++it, ++nPos )
+            ;
+
+        if ( it == m_aLines.end() )
             return sal_False;
 
-        OrderedListBoxLines::iterator orderedPos = m_aOrderedLines.begin() + nPos;
-        BrowserLinePointer pLine = (*orderedPos)->second.pLine;
-        pLine->Hide();
-        lcl_implDisposeControl_nothrow( pLine->getControl() );
-
-        m_aLines.erase( *orderedPos );
-        m_aOrderedLines.erase( orderedPos );
-        m_aOutOfDateLines.erase( (sal_uInt16)m_aOrderedLines.size() );
-            // this index *may* have been out of date, which is obsoleted now by m_aOrderedLines shrinking
+        m_aLines.erase( it );
+        m_aOutOfDateLines.erase( (sal_uInt16)m_aLines.size() );
 
         // update the positions of possibly affected lines
-        while ( nPos < m_aOrderedLines.size() )
+        while ( nPos < m_aLines.size() )
             m_aOutOfDateLines.insert( nPos++ );
         UpdatePosNSize( );
 
@@ -1112,14 +1113,14 @@ namespace pcr
         if ( nPos == EDITOR_LIST_REPLACE_EXISTING )
             nPos = GetPropertyPos( _rPropertyData.sName );
 
-        if ( nPos < m_aOrderedLines.size() )
+        if ( nPos < m_aLines.size() )
         {
             Window* pRefWindow = NULL;
             if ( nPos > 0 )
-                pRefWindow = m_aOrderedLines[nPos-1]->second.pLine->GetRefWindow();
+                pRefWindow = m_aLines[nPos-1].pLine->GetRefWindow();
 
             // the current line and control
-            ListBoxLine& rLine = m_aOrderedLines[nPos]->second;
+            ListBoxLine& rLine = m_aLines[nPos];
 
             // the old control and some data about it
             Reference< XPropertyControl > xControl = rLine.pLine->getControl();
@@ -1257,9 +1258,9 @@ namespace pcr
                     nFocusControlPos = (sal_uInt16)nNewThumbPos + CalcVisibleLines() - 1;
                 if ( nFocusControlPos )
                 {
-                    if ( nFocusControlPos < m_aOrderedLines.size() )
+                    if ( nFocusControlPos < m_aLines.size() )
                     {
-                        m_aOrderedLines[ nFocusControlPos ]->second.pLine->GrabFocus();
+                        m_aLines[ nFocusControlPos ].pLine->GrabFocus();
                     }
                     else
                         OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );

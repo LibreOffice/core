@@ -603,7 +603,7 @@ BaseContent::addProperty(
            lang::IllegalArgumentException,
            RuntimeException)
 {
-    if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name == rtl::OUString() )
+    if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name.isEmpty() )
     {
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
     }

@@ -39,8 +39,6 @@ class ScXMLExportDDELinks
 {
     ScXMLExport&        rExport;
 
-    bool                CellsEqual(const bool bPrevEmpty, const bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                                    const bool bEmpty, const bool bString, const String& sValue, const double& fValue) const;
     void                WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat);
     void                WriteTable(const sal_Int32 nPos);
 public:

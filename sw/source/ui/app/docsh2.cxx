@@ -69,7 +69,6 @@
 #include <basic/basmgr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
-#include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
 #include <view.hxx>         // for the current view
@@ -1115,7 +1114,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         TransferDataContainer* pClipCntnr =
                                                     new TransferDataContainer;
-                        STAR_REFERENCE( datatransfer::XTransferable )
+                        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
@@ -1584,6 +1583,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     // there are some from Meta-Tags dublicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
+#ifndef DISABLE_SCRIPTING
     // The Document-Basic also bites the dust ...
     // A EnterBasicCall is not needed here, because nothing is called and
     // there can't be any Dok-Basic, that has not yet been loaded inside
@@ -1624,6 +1624,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Deleting Basics didn't work" );
         }
     }
+#endif
     sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 

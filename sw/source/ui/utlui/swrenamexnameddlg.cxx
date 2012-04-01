@@ -95,7 +95,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
     aOk.Enable(sal_False);
 }
 
-IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
 {
     try
     {

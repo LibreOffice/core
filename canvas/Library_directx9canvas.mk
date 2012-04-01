@@ -61,37 +61,26 @@ $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
 	d3d9 \
 	gdi32 \
 	gdiplus \
 ))
-endif
+
+$(eval $(call gb_Library_add_linked_static_libs,directx9canvas,\
+	directxcanvas \
+))
 
 $(eval $(call gb_Library_add_exception_objects,directx9canvas,\
 	canvas/source/directx/dx_9rm \
-	canvas/source/directx/dx_bitmap \
-	canvas/source/directx/dx_bitmapcanvashelper \
-	canvas/source/directx/dx_canvasbitmap \
 	canvas/source/directx/dx_canvascustomsprite \
-	canvas/source/directx/dx_canvasfont \
-	canvas/source/directx/dx_canvashelper \
-	canvas/source/directx/dx_canvashelper_texturefill \
 	canvas/source/directx/dx_config \
-	canvas/source/directx/dx_devicehelper \
-	canvas/source/directx/dx_gdiplususer \
-	canvas/source/directx/dx_impltools \
-	canvas/source/directx/dx_linepolypolygon \
 	canvas/source/directx/dx_spritecanvas \
 	canvas/source/directx/dx_spritecanvashelper \
 	canvas/source/directx/dx_spritedevicehelper \
 	canvas/source/directx/dx_spritehelper \
 	canvas/source/directx/dx_surfacebitmap \
 	canvas/source/directx/dx_surfacegraphics \
-	canvas/source/directx/dx_textlayout \
-	canvas/source/directx/dx_textlayout_drawhelper \
-	canvas/source/directx/dx_vcltools \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -28,7 +28,6 @@
 
 #include <sal/types.h>
 
-//#     #include <rtl/tres.h>
 #include <testshl/tresstatewrapper.hxx>
 #include "stringhelper.hxx"
 #include <rtl/string.hxx>
@@ -235,9 +234,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getLength(
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)},
-        {"length of empty string (string arg = '\\0')", 0,
+        {"length of empty string (string arg = \"\\0\"')", 1,
          new OUString( "\0",
-                       0,
+                       1,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)}
     };
@@ -302,7 +301,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
          new OUString(aUStr1),
          new OUString()
         },
-        {"two empty strings(string arg = '\\0')", sal_True,
+        {"two empty strings(string arg = \"\")", sal_True,
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
@@ -312,14 +311,14 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString)
         },
-        {"empty(string arg = '\\0') and non empty", sal_False,
+        {"empty(string arg = \"\") and non empty", sal_False,
          new OUString( "",
                        0,
                        kEncodingRTLTextUSASCII,
                        kConvertFlagsOStringToOUString),
          new OUString(aUStr2)
         },
-        {"non empty and empty(string arg = '\\0')", sal_False,
+        {"non empty and empty(string arg = \"\")", sal_False,
          new OUString(aUStr1),
          new OUString( "",
                        0,

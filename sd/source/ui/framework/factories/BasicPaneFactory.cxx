@@ -133,9 +133,7 @@ BasicPaneFactory::BasicPaneFactory (
       mxComponentContext(rxContext),
       mxConfigurationControllerWeak(),
       mpViewShellBase(NULL),
-      mpPaneContainer(new PaneContainer),
-      mbFirstUpdateSeen(false),
-      mpUpdateLockManager()
+      mpPaneContainer(new PaneContainer)
 {
 }
 
@@ -199,7 +197,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
                         (sal::static_int_cast<sal_uIntPtr>(
                             xTunnel->getSomething(DrawController::getUnoTunnelId()))));
                 mpViewShellBase = pController->GetViewShellBase();
-                mpUpdateLockManager = mpViewShellBase->GetUpdateLockManager();
             }
             catch(RuntimeException&)
             {}
@@ -400,35 +397,10 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 //===== XConfigurationChangeListener ==========================================
 
 void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
+    const ConfigurationChangeEvent& /* rEvent */ )
     throw (RuntimeException)
 {
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
-    {
-        case gnConfigurationUpdateStartEvent:
-            // Lock UI updates while we are switching the views except for
-            // the first time after creation.  Outherwise this leads to
-            // problems after reload (missing resizes for the side panes).
-            if (mbFirstUpdateSeen)
-            {
-            }
-            else
-                mbFirstUpdateSeen = true;
-            break;
-
-        case gnConfigurationUpdateEndEvent:
-            // Unlock the update lock here when only the visibility of
-            // windows but not the view shells displayed in them have
-            // changed.  Otherwise the UpdateLockManager takes care of
-            // unlocking at the right time.
-            if (mpUpdateLockManager.get() != NULL)
-            {
-                ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-            }
-            break;
-    }
+	// FIXME: nothing to do
 }
 
 

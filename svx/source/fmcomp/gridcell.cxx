@@ -92,9 +92,8 @@ using namespace ::com::sun::star::form;
 using ::com::sun::star::util::XNumberFormatter;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
-String INVALIDTEXT     = String::CreateFromAscii("###");
-String OBJECTTEXT      = String::CreateFromAscii("<OBJECT>");
-    // TODO: resource
+const char INVALIDTEXT[] = "###";
+const char OBJECTTEXT[] = "<OBJECT>";
 
 //==================================================================
 //= helper
@@ -423,7 +422,7 @@ String DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumber
         return aText;
 
     if (!pRow || !pRow->IsValid())
-        aText  = INVALIDTEXT;
+        aText = rtl::OUString(INVALIDTEXT);
     else if (pRow->HasField(m_nFieldPos))
     {
         aText = GetCellText( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
@@ -441,7 +440,7 @@ String DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColumn
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
-            aText = OBJECTTEXT;
+            aText = rtl::OUString(OBJECTTEXT);
     }
     return aText;
 }
@@ -476,7 +475,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
-            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(INVALIDTEXT), nStyle);
         }
         else if (m_bAutoValue && pRow->IsNew())
         {
@@ -512,14 +511,14 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
-            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(INVALIDTEXT), nStyle);
         }
         else if (pRow->HasField(m_nFieldPos) && m_bObject)
         {
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
-            rDev.DrawText(rRect, OBJECTTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(OBJECTTEXT), nStyle);
         }
     }
     else if ( m_pCell->ISA( FmXFilterCell ) )
@@ -3194,7 +3193,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 }
 
 //------------------------------------------------------------------
-IMPL_LINK( DbFilterField, OnClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(DbFilterField, OnClick)
 {
     TriState eState = ((CheckBoxControl*)m_pWindow)->GetBox().GetState();
     String aText;
@@ -4429,7 +4428,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _
 
 
 //------------------------------------------------------------------
-IMPL_LINK( FmXListBoxCell, OnDoubleClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
 {
     if (m_pBox)
     {
@@ -4703,16 +4702,6 @@ const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 }
 
 //------------------------------------------------------------------------------
-FmXFilterCell* FmXFilterCell::getImplementation(const Reference< ::com::sun::star::awt::XControl >& _rxObject)
-{
-    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
-        _rxObject, UNO_QUERY);
-    if (xTunnel.is())
-        return reinterpret_cast<FmXFilterCell*>(xTunnel->getSomething(getUnoTunnelId()));
-    return NULL;
-}
-
-//------------------------------------------------------------------------------
 void FmXFilterCell::PaintCell( OutputDevice& rDev, const Rectangle& rRect )
 {
     static_cast< DbFilterField* >( m_pCellControl )->PaintCell( rDev, rRect );
@@ -4825,7 +4814,7 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( FmXFilterCell, OnCommit, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmXFilterCell, OnCommit)
 {
     ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
     ::com::sun::star::awt::TextEvent aEvt;

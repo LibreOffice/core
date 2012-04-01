@@ -94,7 +94,6 @@ public:
     void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
 
     ::rtl::Reference< EncryptionData > GetEncryptionData( bool bWinEncoding = false );
-    void SetBaseEncryptionData( const ::rtl::Reference< BaseEncryptionData >& xData );
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetEncryptionKey( bool bWinEncoding = false );
 

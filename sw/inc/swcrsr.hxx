@@ -52,6 +52,9 @@ struct SwFindParas
 {
     virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, sal_Bool ) = 0;
     virtual int IsReplaceMode() const = 0;
+
+protected:
+    ~SwFindParas() {}
 };
 
 typedef sal_uInt16 SwCursorSelOverFlags;

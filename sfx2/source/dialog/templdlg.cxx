@@ -37,7 +37,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -332,7 +331,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
-IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, EMPTYARG )
+IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop)
 {
     pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
     return 0;

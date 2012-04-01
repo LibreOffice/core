@@ -335,7 +335,7 @@ public:
     const NamedGraphMap_t::iterator SAL_CALL clearGraph(
             const uno::Reference< rdf::XURI > & i_xName,
             bool i_Internal = false );
-    void SAL_CALL addStatementGraph(
+    void addStatementGraph(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject,
@@ -343,14 +343,14 @@ public:
             bool i_Internal = false );
 //        throw (uno::RuntimeException, lang::IllegalArgumentException,
 //            container::NoSuchElementException, rdf::RepositoryException);
-    void SAL_CALL removeStatementsGraph(
+    void removeStatementsGraph(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject,
             const uno::Reference< rdf::XURI > & i_xName );
 //        throw (uno::RuntimeException, lang::IllegalArgumentException,
 //            container::NoSuchElementException, rdf::RepositoryException);
-    uno::Reference< container::XEnumeration > SAL_CALL getStatementsGraph(
+    uno::Reference< container::XEnumeration > getStatementsGraph(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject,
@@ -1728,7 +1728,7 @@ const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
     return iter;
 }
 
-void SAL_CALL librdf_Repository::addStatementGraph(
+void librdf_Repository::addStatementGraph(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject,
@@ -1796,7 +1796,7 @@ void SAL_CALL librdf_Repository::addStatementGraph(
     }
 }
 
-void SAL_CALL librdf_Repository::removeStatementsGraph(
+void librdf_Repository::removeStatementsGraph(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject,
@@ -1865,7 +1865,7 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
     }
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration >
 librdf_Repository::getStatementsGraph(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,

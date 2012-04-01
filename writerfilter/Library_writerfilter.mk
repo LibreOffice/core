@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,writerfilter))
 
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
+    -I$(SRCDIR)/writerfilter/inc \
 ))
 
 $(eval $(call gb_Library_add_api,writerfilter,\
@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_api,writerfilter,\
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_add_defs,writerfilter,\
 	-DWRITERFILTER_WRITERFILTER_DLLIMPLEMENTATION \
@@ -53,7 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter,\
     cppuhelper \
 	doctok \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     oox \
     ooxml \
     rtftok \

@@ -80,12 +80,12 @@ String ScSelEntryDlg::GetSelectEntry() const
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScSelEntryDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScSelEntryDlg, DblClkHdl)
 {
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScSelEntryDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScSelEntryDlg, DblClkHdl)
 
 //------------------------------------------------------------------------
 

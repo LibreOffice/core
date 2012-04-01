@@ -34,42 +34,42 @@
     <templates>
 		<group oor:name="Type">
             <info><desc>Lists the types that represent common content formats in Office.</desc></info>
-			<prop oor:name="UIOrder" oor:type="xs:int">
+			<prop oor:name="UIOrder" oor:type="xs:int" oor:nillable="false">
                 <info><desc>Used to sort types inside dialogs. Only values &gt;0 are recognized. Types with an order value &lt;1 will be sorted alphabeticly.</desc></info>
 				<value>0</value>
 			</prop>
-            <prop oor:name="URLPattern" oor:type="oor:string-list">
+            <prop oor:name="URLPattern" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>List of URL pattern (with simple wildcards */?) which match to this type.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="Extensions" oor:type="oor:string-list">
+            <prop oor:name="Extensions" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>List of file extensions, which match to this type.</desc></info>
 				<value/>
             </prop>
-			<prop oor:name="DocumentIconID" oor:type="xs:int">
+			<prop oor:name="DocumentIconID" oor:type="xs:int" oor:nillable="false">
                 <info><desc>Global ID of an icon, which represent this tye at the UI.</desc></info>
 				<value>0</value>
 			</prop>
-            <prop oor:name="MediaType" oor:type="xs:string">
+            <prop oor:name="MediaType" oor:type="xs:string" oor:nillable="false">
                 <info><desc>Corresponding mime type.</desc></info>
 				<value/>
             </prop>
-			<prop oor:name="Preferred" oor:type="xs:boolean">
+			<prop oor:name="Preferred" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>In case of ambigoues registrations (e.g. for extensions doc/txt) it specify the prefererred type.</desc></info>
 				<value>false</value>
 			</prop>
-            <prop oor:name="PreferredFilter" oor:type="xs:string">
+            <prop oor:name="PreferredFilter" oor:type="xs:string" oor:nillable="false">
                 <info><desc>An optimization! Points directly to the preferred filter for this type. No search across all filters is neccessary ...</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
                 <info><desc>Localized name of this type for showing it at the UI.</desc></info>
             </prop>
-            <prop oor:name="ClipboardFormat" oor:type="xs:string">
+            <prop oor:name="ClipboardFormat" oor:type="xs:string" oor:nillable="false">
                 <info><desc>Unique identifier, which can be searched inside the stream to detect this format.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="DetectService" oor:type="xs:string">
+            <prop oor:name="DetectService" oor:type="xs:string" oor:nillable="false">
                 <info><desc>An optimization! Points directly to the deep detection service, which can verify a flat detection.</desc></info>
 				<value/>
             </prop>

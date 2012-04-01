@@ -82,7 +82,7 @@ public:
                             ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~ScFilterDetect();
 
-    SFX_DECL_XSERVICEINFO
+    SFX_DECL_XSERVICEINFO_NOFACTORY
 
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect

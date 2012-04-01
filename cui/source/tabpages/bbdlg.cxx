@@ -61,8 +61,7 @@ SvxBorderBackgroundDlg::~SvxBorderBackgroundDlg()
 
 void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
-    // Umschalten zwischen Farbe/Grafik ermoeglichen:
-
+    // Make it possible to switch between color/graphic:
     if ( bEnableBackgroundSelector && (RID_SVXPAGE_BACKGROUND == nPageId) )
         ((SvxBackgroundTabPage&)rTabPage).ShowSelector( );
 }

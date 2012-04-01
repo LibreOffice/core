@@ -629,12 +629,12 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
         // activate page here so the conbtrols can be switched
         // also set the help id of the parent window to that of the tab page
-        if ( !GetHelpId().getLength() )
+        if ( GetHelpId().isEmpty() )
         {
             mbRestoreHelpId = sal_True;
             pCtrlParent->SetHelpId( pPage->GetHelpId() );
         }
-        if ( !pCtrlParent->GetUniqueId().getLength() )
+        if ( pCtrlParent->GetUniqueId().isEmpty() )
         {
             mbRestoreUnqId = sal_True;
             pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
@@ -1014,7 +1014,7 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl)
 {
     SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
     return 0;
@@ -1379,7 +1379,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
-            if ( aHelpId.getLength() )
+            if ( !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -2030,7 +2030,7 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 
     if ( pItem )
     {
-        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )

@@ -358,7 +358,7 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScTabOpDlg, LoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
 {
     bDlgLostFocus = !IsActive();
     return 0;

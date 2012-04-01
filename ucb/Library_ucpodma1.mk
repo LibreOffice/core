@@ -43,12 +43,15 @@ $(eval $(call gb_Library_add_linked_libs,ucpodma1,\
 	$(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_add_linked_static_libs,ucpodma1,\
+	odma_lib \
+))
+
 $(eval $(call gb_Library_add_exception_objects,ucpodma1,\
 	ucb/source/ucp/odma/odma_contentcaps \
 	ucb/source/ucp/odma/odma_content \
 	ucb/source/ucp/odma/odma_datasupplier \
 	ucb/source/ucp/odma/odma_inputstream \
-	ucb/source/ucp/odma/odma_lib \
 	ucb/source/ucp/odma/odma_provider \
 	ucb/source/ucp/odma/odma_resultset \
 	ucb/source/ucp/odma/odma_services \

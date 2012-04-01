@@ -74,8 +74,6 @@ public:
     SbiSymPool( SbiStringPool&, SbiSymScope );
    ~SbiSymPool();
 
-    void Clear();
-
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
     void   SetProcId( short n )         { nProcId = n;      }
     sal_uInt16 GetSize() const              { return aData.Count(); }

@@ -87,7 +87,7 @@ class SwNumNamesDlg: public ModalDialog
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK( DoubleClickHdl, ListBox * );
+    DECL_LINK(DoubleClickHdl, void *);
 
 public:
     SwNumNamesDlg(Window *pParent);
@@ -143,12 +143,12 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 /*------------------------------------------------------------------------
  Description:  DoubleClickHdl
 ------------------------------------------------------------------------*/
-IMPL_LINK_INLINE_START( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwNumNamesDlg, DoubleClickHdl)
 
 SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
@@ -253,7 +253,7 @@ void    SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
     }
 }
 
-IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl)
 {
     if (!bModified)
         rWrtSh.ResetModified();
@@ -671,7 +671,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus)
 {
     for( sal_uInt8 i = 0; i < MAXLEVEL; ++i)
         aSaveCollNames[i] =  pCollNames[i];
@@ -697,7 +697,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -732,7 +732,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 {
     String sEntry = aCharFmtLB.GetSelectEntry();
     sal_uInt16 nMask = 1;

@@ -109,8 +109,8 @@ class SfxStyleSheetBasePool_Impl
 
 // Konstruktoren
 
-SfxStyleSheetBase::SfxStyleSheetBase( const XubString& rName, SfxStyleSheetBasePool& r, SfxStyleFamily eFam, sal_uInt16 mask )
-    : rPool( r )
+SfxStyleSheetBase::SfxStyleSheetBase( const XubString& rName, SfxStyleSheetBasePool* p, SfxStyleFamily eFam, sal_uInt16 mask )
+    : pPool( p )
     , nFamily( eFam )
     , aName( rName )
     , aParent()
@@ -127,7 +127,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const XubString& rName, SfxStyleSheetBaseP
 
 SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
     : comphelper::OWeakTypeObject()
-    , rPool( r.rPool )
+    , pPool( r.pPool )
     , nFamily( r.nFamily )
     , aName( r.aName )
     , aParent( r.aParent )
@@ -144,25 +144,6 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
         pSet = bMySet ? new SfxItemSet( *r.pSet ) : r.pSet;
     else
         pSet = NULL;
-}
-
-static SfxStyleSheetBasePool& implGetStaticPool()
-{
-    static SfxStyleSheetBasePool* pSheetPool = 0;
-    static SfxItemPool* pBasePool = 0;
-    if( !pSheetPool )
-    {
-        UniString aName;
-        pBasePool = new SfxItemPool( aName, 0, 0, 0 );
-        pSheetPool = new SfxStyleSheetBasePool(*pBasePool);
-    }
-    return *pSheetPool;
-}
-
-SfxStyleSheetBase::SfxStyleSheetBase()
-: comphelper::OWeakTypeObject()
-, rPool( implGetStaticPool() )
-{
 }
 
 SfxStyleSheetBase::~SfxStyleSheetBase()
@@ -197,22 +178,22 @@ sal_Bool SfxStyleSheetBase::SetName( const XubString& rName )
     if( aName != rName )
     {
         String aOldName = aName;
-        SfxStyleSheetBase *pOther = rPool.Find( rName, nFamily ) ;
+        SfxStyleSheetBase *pOther = pPool->Find( rName, nFamily ) ;
         if ( pOther && pOther != this )
             return sal_False;
 
-        SfxStyleFamily eTmpFam=rPool.GetSearchFamily();
-        sal_uInt16 nTmpMask=rPool.GetSearchMask();
+        SfxStyleFamily eTmpFam = pPool->GetSearchFamily();
+        sal_uInt16 nTmpMask = pPool->GetSearchMask();
 
-        rPool.SetSearchMask(nFamily);
+        pPool->SetSearchMask(nFamily);
 
         if ( aName.Len() )
-            rPool.ChangeParent( aName, rName, sal_False );
+            pPool->ChangeParent( aName, rName, sal_False );
         if ( aFollow.Equals( aName ) )
             aFollow = rName;
         aName = rName;
-        rPool.SetSearchMask(eTmpFam, nTmpMask);
-        rPool.Broadcast( SfxStyleSheetHintExtended(
+        pPool->SetSearchMask(eTmpFam, nTmpMask);
+        pPool->Broadcast( SfxStyleSheetHintExtended(
             SFX_STYLESHEET_MODIFIED, aOldName, *this ) );
     }
     return sal_True;
@@ -249,7 +230,7 @@ sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
 
     if( aParent != rName )
     {
-        SfxStyleSheetBase* pIter = rPool.Find(rName, nFamily);
+        SfxStyleSheetBase* pIter = pPool->Find(rName, nFamily);
         if( rName.Len() && !pIter )
         {
             OSL_FAIL( "StyleSheet-Parent nicht gefunden" );
@@ -261,11 +242,11 @@ sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
             {
                 if(pIter->GetName() == aName)
                     return sal_False;
-                pIter = rPool.Find(pIter->GetParent(), nFamily);
+                pIter = pPool->Find(pIter->GetParent(), nFamily);
             }
         aParent = rName;
     }
-    rPool.Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
+    pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
     return sal_True;
 }
 
@@ -280,14 +261,14 @@ sal_Bool SfxStyleSheetBase::SetFollow( const XubString& rName )
 {
     if( aFollow != rName )
     {
-        if( !rPool.Find( rName, nFamily ) )
+        if( !pPool->Find( rName, nFamily ) )
         {
             OSL_FAIL( "StyleSheet-Follow nicht gefunden" );
             return sal_False;
         }
         aFollow = rName;
     }
-    rPool.Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
+    pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
     return sal_True;
 }
 
@@ -297,7 +278,7 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
 {
     if( !pSet )
     {
-        pSet = new SfxItemSet( rPool.GetPool() );
+        pSet = new SfxItemSet( pPool->GetPool() );
         bMySet = sal_True;
     }
     return *pSet;
@@ -368,7 +349,7 @@ XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
         XubString aItemPresentation;
 
         if ( !IsInvalidItem( pItem ) &&
-             rPool.GetPool().GetPresentation(
+             pPool->GetPool().GetPresentation(
                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                 eMetric, aItemPresentation, &aIntlWrapper ) )
         {
@@ -653,7 +634,7 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create
     sal_uInt16 mask
 )
 {
-    return new SfxStyleSheetBase( rName, *this, eFam, mask );
+    return new SfxStyleSheetBase( rName, this, eFam, mask );
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
@@ -875,7 +856,7 @@ SfxStyleSheet::SfxStyleSheet(const XubString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,
                              sal_uInt16 mask ):
-    SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool& >( r_Pool ), eFam, mask)
+    SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool* >( &r_Pool ), eFam, mask)
 {}
 
 SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
@@ -883,10 +864,6 @@ SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
     SfxListener( rStyle ),
     SfxBroadcaster( rStyle )
 {}
-
-SfxStyleSheet::SfxStyleSheet()
-{
-}
 
 SfxStyleSheet::~SfxStyleSheet()
 {
@@ -903,14 +880,14 @@ sal_Bool SfxStyleSheet::SetParent( const XubString& rName )
             // aus der Benachrichtigungskette des alten
             // Parents gfs. austragen
         if(aOldParent.Len()) {
-            SfxStyleSheet *pParent = (SfxStyleSheet *)rPool.Find(aOldParent, nFamily, 0xffff);
+            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aOldParent, nFamily, 0xffff);
             if(pParent)
                 EndListening(*pParent);
         }
             // in die Benachrichtigungskette des neuen
             // Parents eintragen
         if(aParent.Len()) {
-            SfxStyleSheet *pParent = (SfxStyleSheet *)rPool.Find(aParent, nFamily, 0xffff);
+            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aParent, nFamily, 0xffff);
             if(pParent)
                 StartListening(*pParent);
         }

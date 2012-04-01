@@ -95,9 +95,6 @@ void DiagramData::dump()
                   boost::bind( &dgm::Point::dump, _1 ) );
 }
 
-void DiagramLayout::layout( const dgm::Points & /*pTree*/, const awt::Point & /*pt*/ )
-{
-}
 
 void Diagram::setData( const DiagramDataPtr & pData)
 {
@@ -340,17 +337,8 @@ void Diagram::addTo( const ShapePtr & pParentShape )
 
     // create Shape hierarchy
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
-    mpLayout->getNode()->accept(aCreationVisitor);
-}
-
-OUString Diagram::getLayoutId() const
-{
-    OUString sLayoutId;
-    if( mpLayout )
-    {
-        sLayoutId = mpLayout->getUniqueId();
-    }
-    return sLayoutId;
+    if( mpLayout->getNode() )
+        mpLayout->getNode()->accept( aCreationVisitor );
 }
 
 uno::Reference<xml::dom::XDocument> loadFragment(

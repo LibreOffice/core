@@ -58,6 +58,9 @@ public:
     virtual sal_Int32 getRight() = 0;
     virtual sal_Int32 getBottom() = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XTable > getTable() = 0;
+
+protected:
+    ~ICellRange() {}
 };
 
 // -----------------------------------------------------------------------------

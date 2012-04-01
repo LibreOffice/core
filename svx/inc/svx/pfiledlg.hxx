@@ -53,8 +53,6 @@ public:
     ErrCode                  Execute();
     String                   GetPath() const;
 
-    static bool IsAvailable (sal_uInt16 nKind);
-
     void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };
 

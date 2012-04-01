@@ -50,6 +50,11 @@ TARFILE_MD5=a7d6c5f2fe2d481149ed3ba807b5c043
 .IF "$(OS)"=="MACOSX"
 
 PATCH_FILES=gdk-pixbuf-2.23.0.patch
+
+LOADER_PATTERN:=-Wl,-dylib_file,@loader_path/REPLACEME:$(SOLARLIBDIR)/REPLACEME
+LOADER_LIBS:=glib-2.0.0 gmodule-2.0.0 gobject-2.0.0 gthread-2.0.0
+EXTRA_LINKFLAGS+=$(foreach,lib,$(LOADER_LIBS) $(subst,REPLACEME,lib$(lib).dylib $(LOADER_PATTERN)))
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
@@ -60,7 +65,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  CPPFLAGS="$(EXTRA_CDEFS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/libpng -I$(SOLARINCDIR)/external/jpeg" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" \
                  LDFLAGS="$(EXTRA_LINKFLAGS) -L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
-                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+                 --prefix=/@.__________________________________________________$(EXTRPATH) \
                  --disable-nls \
                  --disable-modules \
                  --with-included-loaders=ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif,bmp,gif,ico,jpeg \
@@ -72,8 +77,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
-                
-EXTRPATH=LOADER
+
 OUT2LIB+=gdk-pixbuf/.libs/libgdk_pixbuf-2.0.0.dylib
 
 OUT2INC+=gdk-pixbuf/gdk-pixbuf-animation.h

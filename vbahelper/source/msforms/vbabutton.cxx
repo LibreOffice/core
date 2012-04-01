@@ -55,11 +55,22 @@ ScVbaButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star
 
 sal_Bool SAL_CALL ScVbaButton::getAutoSize() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaButton::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
 {
+    ScVbaControl::setAutoSize( bAutoSize );
+}
+
+sal_Bool SAL_CALL ScVbaButton::getLocked() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getLocked();
+}
+
+void SAL_CALL ScVbaButton::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setLocked( bLocked );
 }
 
 sal_Bool SAL_CALL ScVbaButton::getCancel() throw (uno::RuntimeException)
@@ -82,16 +93,17 @@ void SAL_CALL ScVbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::Runti
 
 sal_Int32 SAL_CALL ScVbaButton::getBackColor() throw (uno::RuntimeException)
 {
-    return 0;
+    return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaButton::setBackColor( sal_Int32 /*nBackColor*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaButton::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
 {
+    ScVbaControl::setBackColor( nBackColor );
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getForeColor() throw (uno::RuntimeException)
 {
-    return 0;
+    return ScVbaControl::getForeColor();
 }
 
 void SAL_CALL ScVbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
@@ -103,11 +115,10 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaButton::getFont() throw (uno::
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaButton"));
 }
 
 uno::Sequence< rtl::OUString >

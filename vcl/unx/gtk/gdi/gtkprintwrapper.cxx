@@ -58,8 +58,6 @@ GtkPrintWrapper::GtkPrintWrapper()
     , m_print_unix_dialog_set_manual_capabilities(0)
     , m_print_unix_dialog_get_settings(0)
     , m_print_unix_dialog_set_settings(0)
-    , m_print_operation_set_support_selection(0)
-    , m_print_operation_set_has_selection(0)
     , m_print_unix_dialog_set_support_selection(0)
     , m_print_unix_dialog_set_has_selection(0)
 {
@@ -105,8 +103,6 @@ void GtkPrintWrapper::impl_load()
     m_print_unix_dialog_set_manual_capabilities = reinterpret_cast<print_unix_dialog_set_manual_capabilities_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_set_manual_capabilities"));
     m_print_unix_dialog_get_settings = reinterpret_cast<print_unix_dialog_get_settings_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_get_settings"));
     m_print_unix_dialog_set_settings = reinterpret_cast<print_unix_dialog_set_settings_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_set_settings"));
-    m_print_operation_set_support_selection = reinterpret_cast<print_operation_set_support_selection_t>(m_aModule.getFunctionSymbol("gtk_print_operation_set_support_selection"));
-    m_print_operation_set_has_selection = reinterpret_cast<print_operation_set_has_selection_t>(m_aModule.getFunctionSymbol("gtk_print_operation_set_has_selection"));
     m_print_unix_dialog_set_support_selection = reinterpret_cast<print_unix_dialog_set_support_selection_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_set_support_selection"));
     m_print_unix_dialog_set_has_selection = reinterpret_cast<print_unix_dialog_set_has_selection_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_set_has_selection"));
 }
@@ -145,8 +141,6 @@ bool GtkPrintWrapper::supportsPrintSelection() const
 #if !GTK_CHECK_VERSION(3,0,0)
     return
         supportsPrinting()
-        && m_print_operation_set_support_selection
-        && m_print_operation_set_has_selection
         && m_print_unix_dialog_set_support_selection
         && m_print_unix_dialog_set_has_selection
         ;
@@ -322,26 +316,6 @@ void GtkPrintWrapper::print_unix_dialog_set_settings(GtkPrintUnixDialog* dialog,
     (*m_print_unix_dialog_set_settings)(dialog, settings);
 #else
     gtk_print_unix_dialog_set_settings(dialog, settings);
-#endif
-}
-
-void GtkPrintWrapper::print_operation_set_support_selection(GtkPrintOperation* op, gboolean support_selection) const
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-    assert(m_print_operation_set_support_selection);
-    (*m_print_operation_set_support_selection)(op, support_selection);
-#else
-    gtk_print_operation_set_support_selection(op, support_selection);
-#endif
-}
-
-void GtkPrintWrapper::print_operation_set_has_selection(GtkPrintOperation* op, gboolean has_selection) const
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-    assert(m_print_operation_set_has_selection);
-    (*m_print_operation_set_has_selection)(op, has_selection);
-#else
-    gtk_print_operation_set_has_selection(op, has_selection);
 #endif
 }
 

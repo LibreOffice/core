@@ -82,7 +82,7 @@ public:
                             SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SdFilterDetect();
 
-    SFX_DECL_XSERVICEINFO
+    SFX_DECL_XSERVICEINFO_NOFACTORY
 
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect

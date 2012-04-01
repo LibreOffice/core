@@ -181,7 +181,7 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
     aOkBtn.Enable(pShell->GetTblStyle( sTblName ) == 0);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, EMPTYARG )
+IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, pEdit )
 
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {
@@ -226,7 +226,7 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
     return 0;
 }
 
-IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl)
 {
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     ReapeatHeaderCheckBoxHdl();
@@ -234,14 +234,14 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl)
 {
     aRepeatHeaderCombo.Enable(aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked());
 
     return 0;
 }
 
-IMPL_LINK(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl)
 {
     nEnteredValRepeatHeaderNF = aRepeatHeaderNF.GetValue();
     return 0;

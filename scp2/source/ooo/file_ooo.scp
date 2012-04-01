@@ -124,6 +124,28 @@ End
 #endif
 #endif
 
+File gid_File_Bin_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "gengal.bin";
+  #else
+    Name = "gengal.exe";
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Script_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "gengal";
+End
+
+#endif
+
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
@@ -201,7 +223,7 @@ File gid_File_Bin_Senddoc
   #endif
 End
 
-#if defined(UNX) && !defined(QUARTZ)
+#if defined(UNX) && !defined(QUARTZ) && !defined(LIBO_HEADLESS)
 
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;
@@ -379,27 +401,6 @@ File gid_File_Help_Schart_Zip
 End
 #endif
 
-#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
-
-File gid_File_Jar_Accessbridge
-    TXT_FILE_BODY;
-    Name = "java_uno_accessbridge.jar";
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
-End
-
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef SYSTEM_LUCENE
-STD_JAR_FILE( gid_File_Jar_Lucene_Core, lucene-core-2.3 )
-STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
-#endif
 
 #ifdef SOLAR_JAVA
 
@@ -426,6 +427,10 @@ STD_JAR_FILE( gid_File_Jar_Fax, fax )
 STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
 STD_JAR_FILE( gid_File_Jar_Query, query )
 STD_JAR_FILE( gid_File_Jar_Web, web )
+#endif
+
+#if defined SOLAR_JAVA && defined WNT
+STD_JAR_FILE( gid_File_Jar_Accessbridge, java_uno_accessbridge )
 #endif
 
 #ifdef SOLAR_JAVA

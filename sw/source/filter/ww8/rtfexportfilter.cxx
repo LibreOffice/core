@@ -123,12 +123,12 @@ void RtfExportFilter::setSourceDocument( const uno::Reference< lang::XComponent 
 
 OUString RtfExport_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFEXPORT ) );
+    return OUString( IMPL_NAME_RTFEXPORT );
 }
 
 uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ) );
+    const OUString aServiceName( "com.sun.star.document.ExportFilter" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

@@ -358,7 +358,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 {
     if( aCbxRotate.IsChecked() )
         aMtrFldAngle.Enable();
@@ -384,7 +384,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl)
 {
     bAttrModified = sal_True;
     return 0;

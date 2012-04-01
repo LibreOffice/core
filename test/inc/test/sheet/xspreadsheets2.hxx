@@ -43,6 +43,7 @@ class OOO_DLLPUBLIC_TEST XSpreadsheets2
 {
 public:
     XSpreadsheets2();
+    virtual ~XSpreadsheets2();
 
     // XSpreadsheets2
     void testImportedSheetNameAndIndex();

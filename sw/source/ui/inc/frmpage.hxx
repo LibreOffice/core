@@ -141,17 +141,17 @@ class SwFrmPage: public SfxTabPage
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
 
-    DECL_LINK( RangeModifyHdl, Edit * );
-    DECL_LINK( AnchorTypeHdl, RadioButton * );
+    DECL_LINK(RangeModifyHdl, void *);
+    DECL_LINK(AnchorTypeHdl, void *);
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
     void            InitPos(RndStdIds eId, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
 
-    DECL_LINK( RealSizeHdl, Button * );
+    DECL_LINK(RealSizeHdl, void *);
     DECL_LINK( RelSizeClickHdl, CheckBox * );
-    DECL_LINK( MirrorHdl, CheckBox * );
+    DECL_LINK(MirrorHdl, void *);
 
     DECL_LINK( AutoWidthClickHdl, void* );
     DECL_LINK( AutoHeightClickHdl, void* );
@@ -227,8 +227,8 @@ class SwGrfExtPage: public SfxTabPage
     sal_Bool            bHtmlMode;
 
     // handler for mirroring
-    DECL_LINK( MirrorHdl, CheckBox * );
-    DECL_LINK( BrowseHdl, Button * );
+    DECL_LINK(MirrorHdl, void *);
+    DECL_LINK(BrowseHdl, void *);
 
     virtual void    ActivatePage(const SfxItemSet& rSet);
     SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
@@ -263,7 +263,7 @@ class SwFrmURLPage : public SfxTabPage
     CheckBox        aServerCB;
     CheckBox        aClientCB;
 
-    DECL_LINK( InsertFileHdl, PushButton * );
+    DECL_LINK(InsertFileHdl, void *);
 
 
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
@@ -311,7 +311,7 @@ class SwFrmAddPage : public SfxTabPage
     sal_Bool        bFormat;
     sal_Bool        bNew;
 
-    DECL_LINK(EditModifyHdl, Edit*);
+    DECL_LINK(EditModifyHdl, void *);
     DECL_LINK(ChainModifyHdl, ListBox*);
 
     SwFrmAddPage(Window *pParent, const SfxItemSet &rSet);

@@ -53,8 +53,7 @@
 |*
 |*  FindBodyCont, FindLastBodyCntnt()
 |*
-|*  Beschreibung        Sucht den ersten/letzten CntntFrm im BodyText unterhalb
-|*      der Seite.
+|*  Description     Searches the first/last CntntFrm in BodyText below the page.
 |*
 |*************************************************************************/
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
@@ -80,20 +79,19 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 |*
 |*  SwLayoutFrm::ContainsCntnt
 |*
-|*  Beschreibung            Prueft, ob der Frame irgendwo in seiner
-|*          untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
-|*          Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
+|*  Description     Checks if the frame contains one or more CntntFrm's
+|*          anywhere in his subsidiary structure; if so the first found CntntFrm
+|*          is returned
 |*
 |*************************************************************************/
 
 const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 {
-    //LayoutBlatt nach unten hin suchen und wenn dieses keinen Inhalt hat
-    //solange die weiteren Blatter abklappern bis Inhalt gefunden oder der
-    //this verlassen wird.
-    //Sections: Cntnt neben Sections wuerde so nicht gefunden (leere Section
-    //direct neben CntntFrm), deshalb muss fuer diese Aufwendiger rekursiv gesucht
-    //werden.
+    //Search downwards the layout leaf and if there is no content, jump to the
+    //next leaf until content is found or we leave "this".
+    //Sections: Cntnt next to sections would not be found this way (empty
+    //sections directly next to CntntFrm) therefore we need to recursively
+    //search for them even if it's more complex.
 
     const SwLayoutFrm *pLayLeaf = this;
     do
@@ -132,11 +130,10 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 |*
 |*  SwLayoutFrm::FirstCell
 |*
-|*  Beschreibung    ruft zunaechst ContainsAny auf, um in die innerste Zelle
-|*                  hineinzukommen. Dort hangelt es sich wieder hoch zum
-|*                  ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
-|*                  ContainsCntnt()->GetUpper() mehr...
-|*
+|*  Description     Calls ContainsAny first to reach the innermost cell. From
+|*                  there we walk back up to the first SwCellFrm. Since we use
+|*                  SectionFrms ContainsCntnt()->GetUpper() is not enough any
+|*                  more.
 |*************************************************************************/
 
 const SwCellFrm *SwLayoutFrm::FirstCell() const
@@ -151,9 +148,8 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 |*
 |*  SwLayoutFrm::ContainsAny
 |*
-|*  Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
-|*          Bereiche und Tabellen zurueckgegeben werden.
-|*
+|*  like ComtainsCntnt, but does not only return CntntFrms but
+|*  also sections and tables.
 |*************************************************************************/
 
 // #130797#
@@ -161,10 +157,9 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 // content of footnotes for sections.
 const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
 {
-    //LayoutBlatt nach unten hin suchen und wenn dieses keinen Inhalt hat
-    //solange die weiteren Blatter abklappern bis Inhalt gefunden oder der
-    //this verlassen wird.
-    // Oder bis wir einen SectionFrm oder TabFrm gefunden haben
+    //Search downwards the layout leaf and if there is no content, jump to the
+    //next leaf until content is found, we leave "this" or until we found
+    //a SectionFrm or a TabFrm.
 
     const SwLayoutFrm *pLayLeaf = this;
     // #130797#
@@ -179,8 +174,8 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
         if( ( pLayLeaf->IsTabFrm() || pLayLeaf->IsSctFrm() )
             && pLayLeaf != this )
         {
-            // Wir liefern jetzt auch "geloeschte" SectionFrms zurueck,
-            // damit diese beim SaveCntnt und RestoreCntnt mitgepflegt werden.
+            // Now we also return "deleted" SectionFrms so they can be
+            // maintained on SaveCntnt and RestoreCntnt
             return pLayLeaf;
         }
         else if ( pLayLeaf->Lower() )
@@ -383,20 +378,16 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 |*
 |*    SwFrm::ImplGetNextCntntFrm( bool )
 |*
-|*      Rueckwaertswandern im Baum: Den untergeordneten Frm greifen,
-|*      wenn es einen gibt und nicht gerade zuvor um eine Ebene
-|*      aufgestiegen wurde (das wuerde zu einem endlosen Auf und Ab
-|*      fuehren!). Damit wird sichergestellt, dass beim
-|*      Rueckwaertswandern alle Unterbaeume durchsucht werden. Wenn
-|*      abgestiegen wurde, wird zuerst an das Ende der Kette gegangen,
-|*      weil im weiteren ja vom letzten Frm innerhalb eines anderen
-|*      Frms rueckwaerts gegangen wird.
-|*      Vorwaetzwander funktioniert analog.
-|*
+|*      Walk back inside the tree: grab the subordinate Frm if one exists and
+|*      the last step was not moving up a level (this would lead to an infinite
+|*      up/down loop!). With this we ensure that during walking back we search
+|*      through all sub trees. If we walked downwards we have to go to the end
+|*      of the chain first because we go backwards from the last Frm inside
+|*      another Frm. Walking forward works the same.
 |*************************************************************************/
 
-// Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
-// die weiter oben stehende Methode lcl_NextFrm(..) eingepflegt werden
+// Caution: fixes in ImplGetNextCntntFrm() may also need to be applied to the
+// lcl_NextFrm(..) method above
 const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
@@ -469,8 +460,8 @@ SwPageFrm* SwFrm::FindPageFrm()
 SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
 {
     SwFrm *pRet = this;
-    // Innerhalb einer Tabelle gibt es keine Fussnotenbosse, auch spaltige
-    // Bereiche enthalten dort keine Fussnotentexte
+    // Footnote bosses can't exist inside a table; also sections with columns
+    // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrm();
     while ( pRet && !pRet->IsFtnBossFrm() )
@@ -570,7 +561,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;
     do
-    {   if ( pRet->GetType() & 0x0018 ) //Header und Footer
+    {   if ( pRet->GetType() & 0x0018 ) //header and footer
             return pRet;
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
@@ -648,26 +639,23 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 /*************************************************************************
 |*
 |*  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
-|*         _FindNextCnt() geht in Tabellen und Bereiche hineinund liefert
-|*         nur SwCntntFrms.
+|*         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.
 |*
-|*  Beschreibung        Invalidiert die Position des Naechsten Frames.
-|*      Dies ist der direkte Nachfolger, oder bei CntntFrm's der naechste
-|*      CntntFrm der im gleichen Fluss liegt wie ich:
-|*      - Body,
-|*      - Fussnoten,
-|*      - Bei Kopf-/Fussbereichen ist die Benachrichtigung nur innerhalb des
-|*        Bereiches weiterzuleiten.
-|*      - dito fuer Flys.
-|*      - Cntnts in Tabs halten sich ausschliesslich innerhalb ihrer Zelle
-|*        auf.
-|*      - Tabellen verhalten sich prinzipiell analog zu den Cntnts
-|*      - Bereiche ebenfalls
-|*
+|*  Description         Invalidates the position of the next frame.
+|*      This is the direct successor or in case of CntntFrms the next
+|*      CntntFrm which sits in the same flow as I do:
+|*      - body,
+|*      - footnote,
+|*      - in headers/footers the notification only needs to be forwarded
+|*        inside the section
+|*      - same for Flys
+|*      - Cntnts in tabs remain only inside their cell
+|*      - in principle tables behave exactly like the Cntnts
+|*      - sections also
 |*************************************************************************/
 
-// Diese Hilfsfunktion ist ein Aequivalent zur ImplGetNextCntntFrm()-Methode,
-// sie liefert allerdings neben ContentFrames auch TabFrms und SectionFrms.
+// This helper function is an equivalent to the ImplGetNextCntntFrm() method,
+// besides ContentFrames this function also returns TabFrms and SectionFrms.
 SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
@@ -704,9 +692,9 @@ SwFrm *SwFrm::_FindNext()
 
     if ( IsTabFrm() )
     {
-        //Der letzte Cntnt der Tabelle wird
-        //gegriffen und dessen Nachfolger geliefert. Um die Spezialbeh.
-        //Fuer Tabellen (s.u.) auszuschalten wird bIgnoreTab gesetzt.
+        //The last Cntnt of the table gets picked up and his follower is
+        //returned. To be able to deactivate the special case for tables
+        //(see below) bIgnoreTab will be set.
         if ( ((SwTabFrm*)this)->GetFollow() )
             return ((SwTabFrm*)this)->GetFollow();
 
@@ -717,8 +705,7 @@ SwFrm *SwFrm::_FindNext()
     }
     else if ( IsSctFrm() )
     {
-        //Der letzte Cntnt des Bereichs wird gegriffen und dessen Nachfolger
-        // geliefert.
+        //The last Cntnt of the section gets picked and his follower is returned.
         if ( ((SwSectionFrm*)this)->GetFollow() )
             return ((SwSectionFrm*)this)->GetFollow();
 
@@ -798,7 +785,7 @@ SwFrm *SwFrm::_FindNext()
                 pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
                                             : (SwFrm*)pNxtCnt;
             }
-            else    //Fuss-/oder Kopfbereich
+            else    //footer-/or header section
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
@@ -819,8 +806,8 @@ SwFrm *SwFrm::_FindNext()
     if( pRet && pRet->IsInSct() )
     {
         SwSectionFrm* pSct = pRet->FindSctFrm();
-        //Fussnoten in spaltigen Rahmen duerfen nicht den Bereich
-        //liefern, der die Fussnoten umfasst
+        //Footnotes in frames with columns must not return the section which
+        //contains the footnote
         if( !pSct->IsAnLower( this ) &&
             (!bFtn || pSct->IsInFtn() ) )
             return pSct;
@@ -1089,9 +1076,9 @@ SwFrm *SwFrm::_FindPrev()
 
     if ( IsTabFrm() )
     {
-        //Der erste Cntnt der Tabelle wird
-        //gegriffen und dessen Vorgaenger geliefert. Um die Spezialbeh.
-        //Fuer Tabellen (s.u.) auszuschalten wird bIgnoreTab gesetzt.
+        //The first Cntnt of the table gets picked up and his predecessor is
+        //returnd. To be able to deactivate the special case for tables
+        //(see below) bIgnoreTab will be set.
         if ( ((SwTabFrm*)this)->IsFollow() )
             return ((SwTabFrm*)this)->FindMaster();
         else
@@ -1109,7 +1096,7 @@ SwFrm *SwFrm::_FindPrev()
             SwLayoutFrm *pUp = pThis->GetUpper();
             while ( !pUp->IsCellFrm() )
                 pUp = pUp->GetUpper();
-            OSL_ENSURE( pUp, "Cntnt in Tabelle aber nicht in Zelle." );
+            OSL_ENSURE( pUp, "Cntnt in table but not in cell." );
             if ( pUp->IsAnLower( pPrvCnt ) )
                 return pPrvCnt;
         }
@@ -1138,7 +1125,7 @@ SwFrm *SwFrm::_FindPrev()
                                             : (SwFrm*)pPrvCnt;
                 return pRet;
             }
-            else    //Fuss-/oder Kopfbereich oder Fly
+            else // footer or header or Fly
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pPrvCnt->GetUpper();
@@ -1184,8 +1171,9 @@ void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
             if( pFrm )
             {
                 if ( pFrm->IsSctFrm())
-                { // Damit der Inhalt eines Bereichs die Chance erhaelt,
-                  // die Seite zu wechseln, muss er ebenfalls invalidiert werden.
+                {
+                    // We need to invalidate the section's content so it gets
+                    // the chance to flow to a different page.
                     SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
@@ -1257,9 +1245,9 @@ void SwFrm::InvalidateNextPrtArea()
 /*************************************************************************
 |*
 |*    lcl_IsInColSect()
-|*      liefert nur sal_True, wenn der Frame _direkt_ in einem spaltigen Bereich steht,
-|*      nicht etwa, wenn er in einer Tabelle steht, die in einem spaltigen Bereich ist.
 |*
+|* returns true if the frame _directly_ sits in a section with columns
+|* but not if it sits in a table which itself sits in a section with columns.
 |*************************************************************************/
 
 sal_Bool lcl_IsInColSct( const SwFrm *pUp )
@@ -1363,8 +1351,8 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 |*************************************************************************/
 void SwFrm::SetInfFlags()
 {
-    if ( !IsFlyFrm() && !GetUpper() ) //noch nicht gepastet, keine Informationen
-        return;                       //lieferbar
+    if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
+        return;
 
     bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = sal_False;
 
@@ -1372,7 +1360,8 @@ void SwFrm::SetInfFlags()
     if( IsFtnContFrm() )
         bInfFtn = sal_True;
     do
-    {   // bInfBody wird nur am Seitenbody, nicht im ColumnBody gesetzt
+    {
+        // bInfBody is only set in the page body, but not in the column body
         if ( pFrm->IsBodyFrm() && !bInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
             bInfBody = sal_True;
@@ -1389,7 +1378,7 @@ void SwFrm::SetInfFlags()
 
         pFrm = pFrm->GetUpper();
 
-    } while ( pFrm && !pFrm->IsPageFrm() ); //Oberhalb der Seite kommt nix
+    } while ( pFrm && !pFrm->IsPageFrm() ); //there is nothing above the page
 }
 
 /*
@@ -1436,7 +1425,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
             const SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
 
-            OSL_ENSURE( pAsk != this, "Autsch! Stack overflow is about to happen" );
+            OSL_ENSURE( pAsk != this, "Oops! Stack overflow is about to happen" );
 
             if( pAsk )
                 bRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;

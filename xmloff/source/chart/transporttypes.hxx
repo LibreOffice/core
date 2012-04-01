@@ -45,30 +45,13 @@ enum SchXMLCellType
 struct SchXMLCell
 {
     rtl::OUString aString;
-    ::com::sun::star::uno::Sequence< rtl::OUString >* pComplexString;
+    ::com::sun::star::uno::Sequence< rtl::OUString > aComplexString;
     double fValue;
     SchXMLCellType eType;
     rtl::OUString aRangeId;
 
-    SchXMLCell() : pComplexString(0), fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
+    SchXMLCell(): fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
     {}
-
-    SchXMLCell( const SchXMLCell& rOther )
-        : aString( rOther.aString )
-        , pComplexString( rOther.pComplexString ? new ::com::sun::star::uno::Sequence< rtl::OUString >( *rOther.pComplexString ) : 0 )
-        , fValue( rOther.fValue )
-        , eType( rOther.eType )
-        , aRangeId( rOther.aRangeId )
-    {}
-
-    ~SchXMLCell()
-    {
-        if(pComplexString)
-        {
-            delete pComplexString;
-            pComplexString=0;
-        }
-    }
 };
 
 struct SchXMLTable

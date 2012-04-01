@@ -93,10 +93,6 @@ public:
         const css::awt::Rectangle& rBox1,
         const css::awt::Rectangle& rBox2);
 
-    static css::awt::Rectangle Union (
-        const css::awt::Rectangle& rBox1,
-        const css::awt::Rectangle& rBox2);
-
     static css::geometry::RealRectangle2D Union (
         const css::geometry::RealRectangle2D& rBox1,
         const css::geometry::RealRectangle2D& rBox2);

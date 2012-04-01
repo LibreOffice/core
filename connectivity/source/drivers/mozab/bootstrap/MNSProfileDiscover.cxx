@@ -66,9 +66,10 @@
 #include <rmsdef.h>
 #endif
 
+#include "pre_include_mozilla.h"
 #include "nsICharsetConverterManager.h"
 #include "nsIPlatformCharset.h"
-
+#include "post_include_mozilla.h"
 
 #if defined (XP_UNIX)
 #   define USER_ENVIRONMENT_VARIABLE "USER"
@@ -281,7 +282,7 @@ namespace connectivity
             sal_Int32 i=0;
             for(ProfileList::iterator itor=m_Product.mProfileList.begin();
                 itor != m_Product.mProfileList.end();
-                itor++)
+                ++itor)
             {
                 ProfileStruct * aProfile = (*itor).second;
                 list[i] = aProfile->getProfileName();
@@ -300,7 +301,7 @@ namespace connectivity
                 //default profile setted in mozilla registry
                 return m_Product.mCurrentProfileName;
             }
-            if (m_Product.mProfileList.size() == 0)
+            if (m_Product.mProfileList.empty())
             {
                 //there are not any profiles
                 return ::rtl::OUString();

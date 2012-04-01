@@ -76,6 +76,8 @@ protected:
     bool mbIsPresenterViewActive;
 
     CachablePresenterView (void);
+
+    ~CachablePresenterView() {}
 };
 
 /** Factory of the presenter screen specific views.  The supported set of

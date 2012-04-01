@@ -1464,26 +1464,12 @@ public:
 }
 
 namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
- sdecl::class_<OGLTransitionFactoryImpl> serviceImpl;
- const sdecl::ServiceDecl OGLTransitionFactoryDecl(
-     serviceImpl,
-#else
  const sdecl::ServiceDecl OGLTransitionFactoryDecl(
      sdecl::class_<OGLTransitionFactoryImpl>(),
-#endif
     "com.sun.star.comp.presentation.OGLTransitionFactory",
     "com.sun.star.presentation.TransitionFactory" );
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL ogltrans_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-        return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, OGLTransitionFactoryDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(ogltrans, OGLTransitionFactoryDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

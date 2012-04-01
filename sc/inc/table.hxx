@@ -37,8 +37,10 @@
 #include "column.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
+#include "postit.hxx"
 
 #include <set>
+#include <map>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -66,7 +68,6 @@ class ScDrawLayer;
 class ScEditDataArray;
 class ScFormulaCell;
 class ScOutlineTable;
-class ScPostIt;
 class ScPrintSaverTab;
 class ScProgress;
 class ScRangeList;
@@ -167,6 +168,8 @@ private:
     sal_uInt16          nScenarioFlags;
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
+
+    ScNotes         maNotes;
 
     bool            bScenario:1;
     bool            bLayoutRTL:1;
@@ -336,14 +339,7 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
-    /** Returns the pointer to a cell note object at the passed cell address. */
-    ScPostIt*   GetNote( SCCOL nCol, SCROW nRow );
-    /** Sets the passed cell note object at the passed cell address. Takes ownership! */
-    void        TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote );
-    /** Returns and forgets the cell note object at the passed cell address. */
-    ScPostIt*   ReleaseNote( SCCOL nCol, SCROW nRow );
-    /** Deletes the note at the passed cell address. */
-    void        DeleteNote( SCCOL nCol, SCROW nRow );
+    ScNotes*    GetNotes();
     /** Creates the captions of all uninitialized cell notes.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void        InitializeNoteCaptions( bool bForced = false );
@@ -405,7 +401,7 @@ public:
 
     bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
     bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
-    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const;
+    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bFullFormattedArea = false ) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rEndCol, bool bNotes ) const;
     bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
@@ -761,9 +757,9 @@ public:
     SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
-    void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates);
-    void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates );
-    bool        GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, bool bLimit);
+    void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+    void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<ScTypedStrData>& rStrings, bool& rHasDates );
+    bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
     bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );

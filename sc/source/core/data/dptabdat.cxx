@@ -31,6 +31,14 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include "dptabdat.hxx"
+
+#include "global.hxx"
+#include "dpcachetable.hxx"
+#include "dptabres.hxx"
+#include "document.hxx"
+#include "dpobject.hxx"
+
 #include <stdio.h>
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
@@ -39,17 +47,11 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
-#include "dptabdat.hxx"
-#include "global.hxx"
-#include "dpcachetable.hxx"
-#include "dptabres.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
+
 // ---------------------------------------------------------------------------
 
 ScDPTableData::CalcInfo::CalcInfo() :
@@ -69,6 +71,12 @@ ScDPTableData::ScDPTableData(ScDocument* pDoc) :
 
 ScDPTableData::~ScDPTableData()
 {
+}
+
+rtl::OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+{
+    const ScDPCache* pCache = GetCacheTable().getCache();
+    return pCache->GetFormattedString(nDim, rItem);
 }
 
 long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
@@ -186,16 +194,16 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
 {
     if (!bAutoShow)
     {
-            LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, false );
-            LateInitParams  aRowParams ( rInfo.aRowDims, rInfo.aRowLevels, sal_True );
+            LateInitParams  aColParams(rInfo.aColDims, rInfo.aColLevels, false);
+            LateInitParams  aRowParams(rInfo.aRowDims, rInfo.aRowLevels, true);
             // root always init child
-            aColParams.SetInitChild( sal_True );
+            aColParams.SetInitChild(true);
             aColParams.SetInitAllChildren( false);
-            aRowParams.SetInitChild( sal_True );
+            aRowParams.SetInitChild(true);
             aRowParams.SetInitAllChildren( false);
 
-            rInfo.pColRoot->LateInitFrom( aColParams, rData.aColData,0, *rInfo.pInitState);
-            rInfo.pRowRoot->LateInitFrom( aRowParams, rData.aRowData, 0, *rInfo.pInitState);
+            rInfo.pColRoot->LateInitFrom(aColParams, rData.aColData, 0, *rInfo.pInitState);
+            rInfo.pRowRoot->LateInitFrom(aRowParams, rData.aRowData, 0, *rInfo.pInitState);
     }
 
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
@@ -204,7 +212,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
         //! single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
-            vector</*ScDPItemData*/ SCROW > aEmptyData;
+            vector<SCROW> aEmptyData;
             rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
         }
 
@@ -228,7 +236,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
 }
 
 void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
-                                const vector<long>& rDims, vector< SCROW/*ScDPItemData*/>& rItemData)
+                                const vector<long>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
     for (sal_Int32 i = 0; i < nDimSize; ++i)
@@ -247,7 +255,6 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
 
         SCROW nId= rCacheTable.getCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         rItemData.push_back( nId );
-
     }
 }
 
@@ -273,7 +280,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
 {
 
-    return GetCacheTable().getCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
+    return GetCacheTable().getCache()->GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
 SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
@@ -306,6 +313,11 @@ long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
     else
         return -1;
 }
-// -----------------------------------------------------------------------
+
+#if DEBUG_PIVOT_TABLE
+void ScDPTableData::Dump() const
+{
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

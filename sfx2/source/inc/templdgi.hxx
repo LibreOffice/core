@@ -63,7 +63,7 @@ namespace com { namespace sun { namespace star { namespace frame { class XModule
 class DropListBox_Impl : public SvTreeListBox
 {
 private:
-    DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
+    DECL_LINK(OnAsyncExecuteDrop, void *);
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;
@@ -111,6 +111,7 @@ private:
         SfxCommonTemplateDialog_Impl* pDialog;
     public:
         ISfxTemplateCommon_Impl( SfxCommonTemplateDialog_Impl* pDialogP ) : pDialog( pDialogP ) {}
+        virtual ~ISfxTemplateCommon_Impl() {}
         virtual SfxStyleFamily GetActualFamily() const { return pDialog->GetActualFamily(); }
         virtual String GetSelectedEntry() const { return pDialog->GetSelectedEntry(); }
     };

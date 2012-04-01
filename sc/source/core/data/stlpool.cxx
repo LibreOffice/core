@@ -198,9 +198,12 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                  rSourceSet.GetItemState( ATTR_VALUE_FORMAT, false, &pItem ) == SFX_ITEM_SET )
             {
                 sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDoc->GetFormatExchangeList()->Get( nOldFormat ));
-                if (pNewFormat)
-                    rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
+                SvNumberFormatterIndexTable::const_iterator it = pDoc->GetFormatExchangeList()->find(nOldFormat);
+                if (it != pDoc->GetFormatExchangeList()->end())
+                {
+                    sal_uInt32 nNewFormat = it->second;
+                    rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                }
             }
         }
     }

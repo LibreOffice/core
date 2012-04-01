@@ -671,11 +671,6 @@ void OleStorageObject::construct( const ObjectBase& rParent, const StorageRef& r
     StorageObjectBase::construct( rParent, rxStrg, rSysPath );
 }
 
-void OleStorageObject::construct( const ObjectBase& rParent )
-{
-    StorageObjectBase::construct( rParent );
-}
-
 void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\001CompObj" ) ) )
@@ -1047,13 +1042,6 @@ void AxPropertyObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, const String& rPropNameList, bool b64BitPropFlags )
 {
     OleInputObjectBase::construct( rParent, rxStrm, rSysFileName );
-    constructAxPropObj( rPropNameList, b64BitPropFlags );
-}
-
-void AxPropertyObjectBase::construct( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxStrm, const String& rPropNameList, bool b64BitPropFlags )
-{
-    OleInputObjectBase::construct( rParent, rxStrm );
     constructAxPropObj( rPropNameList, b64BitPropFlags );
 }
 

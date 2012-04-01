@@ -3,6 +3,7 @@
         if 0;
 
 use strict;
+use Cwd ('cwd', 'realpath');
 
 sub clean()
 {
@@ -86,6 +87,14 @@ sub invalid_distro($$)
     closedir ($dirh);
 }
 
+# Handle help arguments first, so we don't clobber autogen.lastrun
+for my $arg (@ARGV) {
+    if ($arg =~ /^(--help|-h|-\?)$/) {
+        system ("./configure --help");
+        exit;
+    }
+}
+
 my @cmdline_args = ();
 if (!@ARGV) {
     my $lastrun = "autogen.lastrun";
@@ -123,9 +132,23 @@ chomp $system;
 
 sanity_checks ($system) unless($system eq 'Darwin');
 
+# since this looks crazy, if you have a symlink on a path up to and including
+# the current directory, we need our configure to run in the realpath of that
+# such that compiled (realpath'd) dependency filenames match the filenames
+# used in our makefiles - ie. this gets dependencies right via SRC_ROOT
+my $cwd_str = realpath(cwd());
+chdir ($cwd_str);
+# more amazingly, if you don't clobber 'PWD' shells will re-assert their
+# old path from the environment, not cwd.
+$ENV{PWD} = $cwd_str;
+
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
-$aclocal_flags = "-I ./m4/mac" if (($aclocal_flags eq "") && ($system eq 'Darwin'));
+if ($aclocal_flags eq "")
+{
+    $aclocal_flags = "-I ./m4";
+    $aclocal_flags .= " -I ./m4/mac" if ($system eq 'Darwin');
+}
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
@@ -140,6 +163,15 @@ if (defined $ENV{NOCONFIGURE}) {
     # Save autogen.lastrun only if we did get some arguments on the command-line
     if (@ARGV) {
         if (scalar(@cmdline_args) > 0) {
+            # if there's already an autogen.lastrun, make a backup first
+            if (-e "autogen.lastrun") {
+                open (my $fh, "autogen.lastrun") || warn "can't open autogen.lastrun. \n";
+                open (BAK, ">autogen.lastrun.bak") || warn "can't create backup file. \n";
+                while (<$fh>) {
+                    print BAK;
+                }
+                close (BAK) && close ($fh);
+            }
             # print "writing args to autogen.lastrun\n";
             my $fh;
             open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
@@ -151,7 +183,8 @@ if (defined $ENV{NOCONFIGURE}) {
     }
     elsif ( ! -e "autogen.lastrun")
     {
-        system("touch autogen.lastrun");
+        open (my $fh, ">autogen.lastrun") || die "can't create autogen.lastrun";
+        close ($fh);
     }
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";

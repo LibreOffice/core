@@ -108,13 +108,15 @@ namespace writerfilter {
             DESTINATION_ANNOTATIONDATE,
             DESTINATION_ANNOTATIONAUTHOR,
             DESTINATION_FALT,
-            DESTINATION_FLYMAINCONTENT
+            DESTINATION_FLYMAINCONTENT,
+            DESTINATION_DRAWINGOBJECT
         };
 
         enum RTFBorderState
         {
             BORDER_NONE,
             BORDER_PARAGRAPH,
+            BORDER_PARAGRAPH_BOX,
             BORDER_CELL,
             BORDER_PAGE
         };
@@ -150,6 +152,12 @@ namespace writerfilter {
             FORMFIELD_LIST
         };
 
+        enum RTFBmpStyles
+        {
+            BMPSTYLE_NONE,
+            BMPSTYLE_PNG
+        };
+
         /// A buffer storing dmapper calls.
         typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
 
@@ -174,6 +182,15 @@ namespace writerfilter {
                 int nBottom;
         };
 
+        /// Stores the properties of a drawing object.
+        class RTFDrawingObject : public RTFShape
+        {
+            public:
+                uno::Reference<drawing::XShape> xShape;
+                uno::Reference<beans::XPropertySet> xPropertySet;
+                std::vector<beans::PropertyValue> aPendingProperties;
+        };
+
         /// Stores the properties of a picture.
         class RTFPicture
         {
@@ -184,28 +201,44 @@ namespace writerfilter {
                 sal_uInt16 nScaleX, nScaleY;
                 short nCropT, nCropB, nCropL, nCropR;
                 sal_uInt16 eWMetafile;
+                RTFBmpStyles nStyle;
         };
+
+        class RTFParserState;
 
         /// Stores the properties of a frame
         class RTFFrame
         {
-            public:
-                RTFFrame();
+            private:
+                RTFParserState* m_pParserState;
                 sal_Int32 nX, nY, nW, nH;
                 sal_Int32 nHoriPadding, nVertPadding;
                 sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
+                Id nHRule;
+            public:
+                RTFFrame(RTFParserState* pParserState);
                 sal_Int16 nAnchorType;
 
                 /// Convert the stored properties to Sprms
                 RTFSprms getSprms();
+                /// Store a property
+                void setSprm(Id nId, Id nValue);
                 bool hasProperties();
+                /// If we got tokens indicating we're in a frame.
+                bool inFrame();
         };
+
+        class RTFDocumentImpl;
 
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
             public:
-                RTFParserState();
+                RTFParserState(RTFDocumentImpl* pDocumentImpl);
+                /// Resets aFrame.
+                void resetFrame();
+
+                RTFDocumentImpl* m_pDocumentImpl;
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 RTFBorderState nBorderState;
@@ -255,6 +288,7 @@ namespace writerfilter {
 
                 RTFPicture aPicture;
                 RTFShape aShape;
+                RTFDrawingObject aDrawingObject;
                 RTFFrame aFrame;
 
                 /// Current cellx value.
@@ -296,6 +330,7 @@ namespace writerfilter {
 
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
+                void setSuperstream(RTFDocumentImpl *pSuperstream);
                 void setAuthor(rtl::OUString& rAuthor);
                 bool isSubstream() const;
                 void finishSubstream();
@@ -324,10 +359,20 @@ namespace writerfilter {
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
+                /// If this is the first run of the document, starts the initial paragraph.
+                void checkFirstRun();
+                /// If the initial paragraph is started.
+                bool getFirstRun();
+                /// If we need to add a dummy paragraph before a section break.
+                void setNeedPar(bool bNeedPar);
+                /// Return the dmapper index of an RTF index for fonts.
+                int getFontIndex(int nIndex);
+                /// Return the encoding associated with a dmapper font index.
+                rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
+
             private:
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
-                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 RTFSprms mergeSprms();
                 RTFSprms mergeAttributes();
                 void resetSprms();
@@ -338,15 +383,11 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
                 void parBreak();
                 void tableBreak();
-                /// If this is the first run of the document, starts the initial paragraph.
-                void checkFirstRun();
                 void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
-                /// If we got tokens indicating we're in a frame.
-                bool inFrame();
-                /// If we have some unicode characters to send.
-                void checkUnicode();
+                /// If we have some unicode or hex characters to send.
+                void checkUnicode(bool bUnicode = true, bool bHex = true);
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -376,7 +417,6 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
-                /// If we need to add a dummy paragraph before a section break.
                 bool m_bNeedPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
@@ -398,6 +438,8 @@ namespace writerfilter {
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
+                /// Superstream of this substream.
+                RTFDocumentImpl *m_pSuperstream;
                 std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
@@ -431,8 +473,12 @@ namespace writerfilter {
                 bool m_bWasInFrame;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;
+                /// If we should reset the page break property when we start the next paragraph.
+                bool m_bHasPage;
                 // Unicode characters are collected here so we don't have to send them one by one.
                 rtl::OUStringBuffer m_aUnicodeBuffer;
+                /// Same for hex characters.
+                rtl::OStringBuffer m_aHexBuffer;
         };
     } // namespace rtftok
 } // namespace writerfilter

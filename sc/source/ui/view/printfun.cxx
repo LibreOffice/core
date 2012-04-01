@@ -83,6 +83,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #define ZOOM_MIN    10
 
@@ -1037,7 +1038,11 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     SetDateTime( Date( Date::SYSTEM ), Time( Time::SYSTEM ) );
 
-    aFieldData.aTitle       = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        aFieldData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        aFieldData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( aFieldData.aLongDocName.Len() )
@@ -1868,8 +1873,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
         {
             ScAddress &rPos = aNotePosList[ nNoteStart + nCount ];
 
-            ScBaseCell* pCell = pDoc->GetCell( rPos);
-            if( const ScPostIt* pNote = pCell->GetNote() )
+            if( const ScPostIt* pNote = pDoc->GetNotes(rPos.Tab())->findByAddress( rPos ) )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
                     pEditEngine->SetText(*pEditText);
@@ -2473,8 +2477,6 @@ long ScPrintFunc::CountNotePages()
         return 0;
 
     long nCount=0;
-    SCCOL nCol;
-    SCROW nRow;
 
     sal_Bool bError = false;
     if (!aAreaParam.bPrintArea)
@@ -2504,17 +2506,20 @@ long ScPrintFunc::CountNotePages()
 
         if (bDoThis)
         {
-            ScHorizontalCellIterator aIter( pDoc, nPrintTab, nStartCol,nStartRow, nEndCol,nEndRow );
-            ScBaseCell* pCell = aIter.GetNext( nCol, nRow );
-            while (pCell)
+            ScNotes::const_iterator itr = pDoc->GetNotes(nPrintTab)->begin();
+            ScNotes::const_iterator itrEnd = pDoc->GetNotes(nPrintTab)->end();
+            for (; itr != itrEnd; ++itr)
             {
-                if (pCell->HasNote())
-                {
-                    aNotePosList.push_back( ScAddress( nCol,nRow,nPrintTab ) );
-                    ++nCount;
-                }
+                SCCOL nCol = itr->first.first;
+                SCROW nRow = itr->first.second;
+                if (nCol > nEndCol || nRow > nEndRow)
+                    continue;
 
-                pCell = aIter.GetNext( nCol, nRow );
+                if (nCol < nStartCol || nRow < nStartRow)
+                    continue;
+
+                aNotePosList.push_back( ScAddress( nCol, nRow, nPrintTab ) );
+                ++nCount;
             }
         }
     }

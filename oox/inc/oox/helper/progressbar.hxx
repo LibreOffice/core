@@ -31,6 +31,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include "oox/dllapi.h"
 
 namespace rtl { class OUString; }
 
@@ -92,7 +93,7 @@ public:
 
 /** A simple progress bar.
  */
-class ProgressBar : public IProgressBar
+class OOX_DLLPUBLIC ProgressBar : public IProgressBar
 {
 public:
     explicit            ProgressBar(
@@ -116,7 +117,7 @@ private:
 
 /** A progress bar containing several independent segments.
  */
-class SegmentProgressBar : public ISegmentProgressBar
+class OOX_DLLPUBLIC SegmentProgressBar : public ISegmentProgressBar
 {
 public:
     explicit            SegmentProgressBar(

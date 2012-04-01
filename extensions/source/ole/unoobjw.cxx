@@ -1007,7 +1007,7 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
         if (pvarResult)
             anyToVariant(pvarResult, returnValue);
     }
-    catch(const UnknownPropertyException e) //XInvocation::getValue
+    catch(const UnknownPropertyException& e) //XInvocation::getValue
     {
         writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_MEMBERNOTFOUND;

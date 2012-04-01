@@ -56,7 +56,6 @@ class SfxHintPoster: public SvRefBase
     GenLink         aLink;
 
 private:
-    void            RegisterEvent();
                     DECL_LINK( DoEvent_Impl, SfxHint * );
 
 protected:
@@ -64,7 +63,6 @@ protected:
     virtual void    Event( SfxHint* pPostedHint );
 
 public:
-                    SfxHintPoster();
                     SfxHintPoster( const GenLink& rLink );
 
     void            Post( SfxHint* pHint = 0 );

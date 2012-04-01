@@ -281,12 +281,9 @@ sal_uInt16 CntBoolItem::GetValueCount() const
 
 //============================================================================
 // virtual
-UniString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
+rtl::OUString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
-    return
-        bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
+    return bTheValue ?  rtl::OUString("TRUE") : rtl::OUString("FALSE");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

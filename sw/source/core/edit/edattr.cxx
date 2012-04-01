@@ -72,6 +72,7 @@ const sal_uInt16& getMaxLookup()
 sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
+    // ??? pPaM can be different from the Cursor ???
     if( GetCrsrCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
@@ -115,8 +116,8 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-            nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
+            std::swap(nSttNd, nEndNd);
+            std::swap(nSttCnt, nEndCnt);
         }
 
         if( nEndNd - nSttNd >= getMaxLookup() )
@@ -175,6 +176,63 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
     return GetPaMAttr( GetCrsr(), rSet, bMergeIndentValuesOfNumRule );
 }
 
+sal_Bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
+{
+    return GetPaMParAttr( GetCrsr(), rSet );
+}
+
+sal_Bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
+{
+    // number of nodes the function has explored so far
+    sal_uInt16 numberOfLookup = 0;
+
+    SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
+    SfxItemSet* pSet = &rSet;
+
+    SwPaM* pStartPaM = pPaM;
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+
+        // reverse start and end if there number aren't sorted correctly
+        if( nSttNd > nEndNd )
+            std::swap(nSttNd, nEndNd);
+
+        // for all the nodes in the current selection
+        // get the node (paragraph) attributes
+        // and merge them in rSet
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        {
+            // get the node
+            SwNode* pNd = GetDoc()->GetNodes()[ n ];
+
+            if( pNd->IsTxtNode() )
+            {
+                // get the node (paragraph) attributes
+                static_cast<SwCntntNode*>(pNd)->GetAttr(*pSet);
+
+                if( pSet != &rSet && aSet.Count() )
+                {
+                    rSet.MergeValues( aSet );
+                    aSet.ClearItem();
+                }
+
+                pSet = &aSet;
+            }
+
+            ++numberOfLookup;
+
+            // if the maximum number of node that can be inspected has been reached
+            if (numberOfLookup >= getMaxLookup())
+                return sal_False;
+        }
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+
+    return sal_True;
+}
+
 SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
 {
     return GetPaMTxtFmtColl( GetCrsr() );
@@ -182,44 +240,46 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
 
 SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 {
-    SwTxtFmtColl *pFmt = 0;
-
-    if ( GetCrsrCnt() > getMaxLookup() )
-        return 0;
+    // number of nodes the function have explored so far
+    sal_uInt16 numberOfLookup = 0;
 
     SwPaM* pStartPaM = pPaM;
-    do {
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
         sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
               nEndNd = pPaM->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = pPaM->GetMark()->nContent.GetIndex(),
-                   nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
 
-        if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
-        {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-            nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
-        }
+        // reverse start and end if they aren't sorted correctly
+        if( nSttNd > nEndNd )
+            std::swap(nSttNd, nEndNd);
 
-        if( nEndNd - nSttNd >= getMaxLookup() )
-        {
-            pFmt = 0;
-            break;
-        }
-
+        // for all the nodes in the current Point and Mark
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
+            // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
+
+            ++numberOfLookup;
+
+            // if the maximum number of node that can be inspected has been reached
+            if (numberOfLookup >= getMaxLookup())
+                return NULL;
+
             if( pNd->IsTxtNode() )
             {
-                if( !pFmt )
-                    pFmt = ((SwTxtNode*)pNd)->GetTxtColl();
-                else if( pFmt == ((SwTxtNode*)pNd)->GetTxtColl() ) // ???
-                    break;
+                // if it's a text node get its named paragraph format
+                SwTxtFmtColl* pFmt = static_cast<SwTxtNode*>(pNd)->GetTxtColl();
+
+                // if the paragraph format exist stop here and return it
+                if( pFmt != NULL )
+                    return pFmt;
             }
         }
-    } while ( ( pPaM = ( SwPaM* )pPaM->GetNext() ) != pStartPaM );
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
 
-    return pFmt;
+    // if none of the selected node contain a named paragraph format
+    return NULL;
 }
 
 
@@ -336,9 +396,7 @@ sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) con
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
 
         if( nSttNd > nEndNd )
-        {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-        }
+            std::swap(nSttNd, nEndNd);
 
         SwCntntNode* pCNd;
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )

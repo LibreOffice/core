@@ -157,7 +157,7 @@
 			<info>
 				<desc>Contains general settings for the linguistic configurations.</desc>
 			</info>
-			<prop oor:name="UILocale" oor:type="xs:string">
+			<prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
 				<!-- OldLocation: NEW -->
 				<!-- UIHints: Tools - Options - General - Language Settings - Languages -->
 				<info>
@@ -166,7 +166,7 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean">
+			<prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldLocation: NEW -->
 				<info>
 					<author>TL</author>
@@ -174,7 +174,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="DefaultLocale" oor:type="xs:string">
+			<prop oor:name="DefaultLocale" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: DefaultLanguage -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -186,7 +186,7 @@
                 <value/>
                 <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="DefaultLocale_CJK" oor:type="xs:string">
+			<prop oor:name="DefaultLocale_CJK" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: DefaultLanguage -->
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
@@ -197,7 +197,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="DefaultLocale_CTL" oor:type="xs:string">
+			<prop oor:name="DefaultLocale_CTL" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: DefaultLanguage -->
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
@@ -212,7 +212,7 @@
 				<info>
 					<desc>Defines which personal dictionaries are used.</desc>
 				</info>
-				<prop oor:name="ActiveDictionaries" oor:type="oor:string-list">
+				<prop oor:name="ActiveDictionaries" oor:type="oor:string-list" oor:nillable="false">
 					<!-- OldPath: Active-Dictionaries -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- UIHints: Tools - Options - General - Language -->
@@ -223,7 +223,7 @@
 					</info>
 					<value oor:separator=";">IgnoreAllList;en-US.dic;en-GB.dic;sl.dic;technical.dic</value>
 				</prop>
-				<prop oor:name="IsUseDictionaryList" oor:type="xs:boolean">
+				<prop oor:name="IsUseDictionaryList" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldLocation: NEW -->
 					<info>
 						<author>TL</author>
@@ -237,7 +237,7 @@
             <info>
                     <desc>Defines settings used by the text conversion.</desc>
             </info>
-            <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list">
+            <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies the user dictionaries to be used. </desc>
@@ -245,7 +245,7 @@
                     </info>
                     <value/>
             </prop>
-            <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean">
+            <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies if post positionals should be ignored when looking for Korean entries.</desc>
@@ -253,7 +253,7 @@
                     </info>
                     <value>true</value>
             </prop>
-            <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean">
+            <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies if the dialog should be closed automatically after the conversion of the current text portion is processed.</desc>
@@ -261,7 +261,7 @@
                     </info>
                     <value>false</value>
             </prop>
-            <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean">
+            <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies if entries that were recently used as replacements should be listed first.</desc>
@@ -269,7 +269,7 @@
                     </info>
                     <value>false</value>
             </prop>
-            <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean">
+            <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies if entries for which have only one possible replacement should be replaced automatically.</desc>
@@ -284,7 +284,7 @@
                             <label>Direction to simplified</label>
                     </info>
             </prop>
-            <prop oor:name="IsUseCharacterVariants" oor:type="xs:boolean">
+            <prop oor:name="IsUseCharacterVariants" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies wether Taiwan, Hongkong SAR, and Macao SAR character variants should be used for translation.</desc>
@@ -292,7 +292,7 @@
                     </info>
                     <value>false</value>
             </prop>
-            <prop oor:name="IsTranslateCommonTerms" oor:type="xs:boolean">
+            <prop oor:name="IsTranslateCommonTerms" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>Specifies wether common terms should be detected and translated as whole words.</desc>
@@ -300,7 +300,7 @@
                     </info>
                     <value>false</value>
             </prop>
-            <prop oor:name="IsReverseMapping" oor:type="xs:boolean">
+            <prop oor:name="IsReverseMapping" oor:type="xs:boolean" oor:nillable="false">
                     <!-- OldLocation: NEW -->
                     <info>
                             <desc>If Reverse Mapping is active than every dictionary entry added or modified will also be added or modified within the dictionary in the opposite mapping direction.</desc>
@@ -313,7 +313,7 @@
 			<info>
 				<desc>Contains spell checking-relevant settings.</desc>
 			</info>
-			<prop oor:name="IsSpellUpperCase" oor:type="xs:boolean">
+			<prop oor:name="IsSpellUpperCase" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -324,7 +324,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="IsSpellWithDigits" oor:type="xs:boolean">
+			<prop oor:name="IsSpellWithDigits" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -335,7 +335,7 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="IsSpellCapitalization" oor:type="xs:boolean">
+			<prop oor:name="IsSpellCapitalization" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -346,7 +346,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsSpellAuto" oor:type="xs:boolean">
+			<prop oor:name="IsSpellAuto" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -357,7 +357,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsSpellSpecial" oor:type="xs:boolean">
+			<prop oor:name="IsSpellSpecial" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -368,7 +368,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsReverseDirection" oor:type="xs:boolean">
+			<prop oor:name="IsReverseDirection" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -384,7 +384,7 @@
       <info>
         <desc>Contains grammar checking relevant settings.</desc>
       </info>
-      <prop oor:name="IsAutoCheck" oor:type="xs:boolean">
+      <prop oor:name="IsAutoCheck" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <author>OS</author>
           <desc>determines if grammar is automatically checked.</desc>
@@ -392,7 +392,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean">
+      <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <author>OS</author>
           <desc>determines if grammar is check in the spelling and grammar dialog.</desc>
@@ -405,7 +405,7 @@
 			<info>
 				<desc>Contains hyphenation relevant settings.</desc>
 			</info>
-			<prop oor:name="MinLeading" oor:type="xs:short">
+			<prop oor:name="MinLeading" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: HyphMinLeading -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -428,7 +428,7 @@
 				</constraints>
 				<value>2</value>
 			</prop>
-			<prop oor:name="MinTrailing" oor:type="xs:short">
+			<prop oor:name="MinTrailing" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: HyphMinTrailing -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -451,7 +451,7 @@
 				</constraints>
 				<value>2</value>
 			</prop>
-			<prop oor:name="MinWordLength" oor:type="xs:short">
+			<prop oor:name="MinWordLength" oor:type="xs:short" oor:nillable="false">
 				<!-- OldPath: HyphMinWordLength -->
 				<!-- OldLocation: soffice.ini -->
 				<info>
@@ -473,7 +473,7 @@
 				</constraints>
 				<value>5</value>
 			</prop>
-			<prop oor:name="IsHyphSpecial" oor:type="xs:boolean">
+			<prop oor:name="IsHyphSpecial" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -484,7 +484,7 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsHyphAuto" oor:type="xs:boolean">
+			<prop oor:name="IsHyphAuto" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: MiscOptions -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - Language -->
@@ -539,7 +539,7 @@
                 </info>
             </set>
 
-            <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int">
+            <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <author>TL</author>
                     <desc>Value used to check if the data files of the linguistic have changed and thus the configuration needs to be updated.</desc>

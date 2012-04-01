@@ -50,12 +50,6 @@
 
 #include "vcl/svapp.hxx"
 
-//------------------------------------------------------------------
-
-#define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
-
-
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {
     ScViewData* pData = GetViewData();
@@ -69,9 +63,9 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     if ( pReqArgs != NULL )
     {
         const   SfxPoolItem* pItem;
-        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+        if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
             nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
-        if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
+        if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
             bSel = ((const SfxBoolItem*)pItem)->GetValue();
     }
     else
@@ -231,7 +225,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     if ( pReqArgs != NULL )
     {
         const SfxPoolItem* pItem;
-        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+        if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
             nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
     }
 
@@ -419,7 +413,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     if ( pReqArgs != NULL )
     {
         const   SfxPoolItem* pItem;
-        if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
+        if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
             bSel = ((const SfxBoolItem*)pItem)->GetValue();
     }
     else

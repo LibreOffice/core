@@ -47,7 +47,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
 
 $(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,hwpfilter_test_hwpfilter,\
@@ -69,6 +68,7 @@ $(eval $(call gb_CppunitTest_add_components,hwpfilter_test_hwpfilter,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
+    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))

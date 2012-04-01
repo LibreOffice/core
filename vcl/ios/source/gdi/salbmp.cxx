@@ -292,6 +292,7 @@ class ImplPixelFormat
 protected:
     sal_uInt8* pData;
 public:
+    virtual ~ImplPixelFormat() { }
     static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
 
     virtual void StartLine( sal_uInt8* pLine ) { pData = pLine; }

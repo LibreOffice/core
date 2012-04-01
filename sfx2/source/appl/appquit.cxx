@@ -90,6 +90,7 @@ void SfxApplication::Deinitialize()
     if ( pAppData_Impl->bDowning )
         return;
 
+#ifndef DISABLE_SCRIPTING
     StarBASIC::Stop();
 
     // Save BASIC if possible
@@ -98,6 +99,7 @@ void SfxApplication::Deinitialize()
         SaveBasicManager();
 
     SaveBasicAndDialogContainer();
+#endif
 
     pAppData_Impl->bDowning = sal_True; // due to Timer from DecAliveCount and QueryExit
 
@@ -122,9 +124,12 @@ void SfxApplication::Deinitialize()
 
     // Release Controller and others
     // then the remaining components should alse disapear ( Beamer! )
+
+#ifndef DISABLE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
         // this will also delete pBasMgr
+#endif
 
     DBG_ASSERT( pAppData_Impl->pViewFrame == 0, "active foreign ViewFrame" );
 

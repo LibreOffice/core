@@ -227,7 +227,7 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 //------------------------------------------------------------------------
 // Handler:
 // ========
-IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 {
     bAutoReOpen=false;
     String aResult=aEdAssign.GetText();
@@ -239,7 +239,7 @@ IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( ScSimpleRefDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
     String aResult=aEdAssign.GetText();

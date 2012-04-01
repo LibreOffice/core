@@ -365,7 +365,7 @@ End
 File gid_File_Dl_Sunjavaplugin
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_BARE("sunjavaplugin");
+    Name = SCP2_URE_DL_NORMAL("sunjavaplugin");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0AC6C688-876C-40C5-B24E-9257003FDC3E";
 End
@@ -880,36 +880,6 @@ File gid_File_Dl_Stlport
 End
 #endif
 
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
-	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
-File gid_File_Dl_GccS
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-#ifdef AIX
-    Name = "libgcc_s.a";
-#else
-    Name = SCP2_URE_DL_VER("gcc_s", STRING(SHORTSTDC3));
-#endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "C601D04B-2194-4F1B-BB09-7B4930D6E1DB";
-End
-#endif
-
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
-	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
-File gid_File_Dl_Stdcpp
-    Dir = SCP2_URE_DL_DIR;
-    LIB_FILE_BODY;
-#ifdef AIX
-    Name = "libstdc++.a";
-#else
-    Name = SCP2_URE_DL_VER("stdc++", STRING(SHORTSTDCPP3));
-#endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "89740D6A-38EE-41AF-A6A2-A8F7ABBE4996";
-End
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -1133,8 +1103,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Uuresolver,
             gid_File_Dl_Libxml2,
             gid_File_Dl_Stlport,
-            gid_File_Dl_GccS,
-            gid_File_Dl_Stdcpp,
             gid_File_Lib_Mingw_GccS_Ure,
             gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Dl_Unicows,
@@ -1170,7 +1138,7 @@ End
 RegistryItem gid_Regitem_Path
     ModuleID = gid_Module_Root;
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "Software\OpenOffice.org\%PRODUCTNAME";
+    Subkey = "Software\LibreOffice\%PRODUCTNAME";
     Name = "Path";
     Value = "[INSTALLLOCATION]";
 End

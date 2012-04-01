@@ -234,7 +234,6 @@ protected:
     virtual void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
     void        ImplUpdateResourceResolver();
     void        ImplStartListingForResourceEvents();
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > Impl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
 
     ControlContainerBase();
 

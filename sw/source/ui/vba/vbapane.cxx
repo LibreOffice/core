@@ -56,11 +56,10 @@ SwVbaPane::Close( ) throw ( css::uno::RuntimeException )
     dispatchRequests( mxModel,url );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaPane::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaPane") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaPane"));
 }
 
 uno::Sequence< rtl::OUString >

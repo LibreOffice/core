@@ -7,9 +7,6 @@ sc.ScAreaLinksObj::com::sun::star::sheet::XAreaLinks
 ### i84711 ###
 sc.ScAreaLinkObj::com::sun::star::util::XRefreshable
 
-### i84697 ###
-sc.ScNamedRangesObj::com::sun::star::sheet::XNamedRanges
-
 ### i84674 ###
 sc.ScCellTextCursor::com::sun::star::beans::XMultiPropertyStates
 sc.ScHeaderFooterTextCursor::com::sun::star::beans::XMultiPropertyStates
@@ -192,9 +189,6 @@ sc.ScAnnotationsObj::com::sun::star::container::XElementAccess
 sc.ScCellObj::com::sun::star::sheet::XSheetAnnotationAnchor
 sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
 
-### i110862 ###
-sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
-
 ### i111032 ###
 sc.ScAccessibleCell::com::sun::star::accessibility::XAccessibleText
 
@@ -206,33 +200,35 @@ sc.ScCellCursorObj::com::sun::star::sheet::XCellRangesQuery
 sc.ScCellObj::com::sun::star::table::CellProperties
 sc.ScCellObj::com::sun::star::style::CharacterProperties
 sc.ScCellObj::com::sun::star::beans::XPropertySet
-sc.ScCellRangeObj::com::sun::star::table::CellProperties
-sc.ScCellRangeObj::com::sun::star::util::XReplaceable
-sc.ScCellRangeObj::com::sun::star::sheet::XCellRangesQuery
 sc.ScCellRangesObj::com::sun::star::table::CellProperties
 sc.ScCellRangesObj::com::sun::star::beans::XPropertySet
-sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
 
 ### fdo43309 ###
 sc.ScCellRangeObj::com::sun::star::chart::XChartData
-
-### fdo43376 ###
-sc.ScDDELinksObj
-sc.ScDDELinkObj
 
 ### fdo44167 ###
 sc.ScDatabaseRangeObj::com::sun::star::sheet::XDatabaseRange
 sc.ScDatabaseRangeObj::com::sun::star::util::XRefreshable
 
 ### c++ based tests ###
+sc.ScCellRangeObj::com::sun::star::sheet::sheet::XCellRangesQuery
+sc.ScCellRangeObj::com::sun::star::table::CellProperties
+sc.ScCellRangeObj::com::sun::star::util::XSearchable
+sc.ScCellRangeObj::com::sun::star::sheet::XCellRangesQuery
+sc.ScCellRangeObj::com::sun::star::util::XReplaceable
+sc.ScCellRangeObj::com::sun::star::sheet::XCellRangeData
+sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
 sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
 sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotDescriptor
 sc.ScDataPilotTableObj::com::sun::star::container::XNamed
-sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
-sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
 sc.ScNamedRangeObj::com::sun::star::sheet::XNamedRange
+sc.ScNamedRangeObj::com::sun::star::container::XNamed
+sc.ScNamedRangeObj::com::sun::star::sheet::XCellRangeReferrer
 sc.ScNamedRangesObj::com::sun::star::sheet::XNamedRanges
+sc.ScTableSheetObj::com::sun::star::util::XSearchable
+sc.ScTableSheetObj::com::sun::star::util::XReplaceable
 sc.ScTableSheetsObj::com::sun::star::container::XNamedContainer
 sc.ScTableSheetsObj::com::sun::star::sheet::XSpreadsheet2
-sc.ScCellRangeObj::com::sun::star::sheet::sheet::XCellRangesQuery
-sc.ScCellRangeObj::com::sun::star::table::CellProperties

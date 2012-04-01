@@ -44,7 +44,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
@@ -293,12 +292,13 @@ struct AnnotatingVisitor
                     maCurrState.maViewBox.getWidth() != 0.0 &&
                     maCurrState.maViewBox.getHeight() != 0.0 )
                 {
-                    // transform aViewBox into viewport, such that they
-                    // coincide
+                    // transform aViewBox into viewport, keep aspect ratio
                     aLocalTransform.translate(-maCurrState.maViewBox.getMinX(),
                                               -maCurrState.maViewBox.getMinY());
-                    aLocalTransform.scale(maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth(),
-                                          maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight());
+                    double scaleW = maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth();
+                    double scaleH = maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight();
+                    double scale = (scaleW < scaleH) ? scaleW : scaleH;
+                    aLocalTransform.scale(scale,scale);
                 }
                 maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
 
@@ -1771,6 +1771,9 @@ static void writeShapes( StatePool&                                        rStat
     visitElements(aVisitor, xElem);
 }
 
+} // namespace
+
+
 #if OSL_DEBUG_LEVEL > 2
 struct DumpingVisitor
 {
@@ -1812,8 +1815,6 @@ static void dumpTree( const uno::Reference<xml::dom::XElement> xElem )
     visitElements(aVisitor, xElem);
 }
 #endif
-
-} // namespace
 
 
 SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServiceFactory,
@@ -2768,7 +2769,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     svgi::visitElements(aVisitor, xDocElem);
 
 #if OSL_DEBUG_LEVEL > 2
-    dumpTree(xDocElem);
+    svgi::dumpTree(xDocElem);
 #endif
 
     // render all shapes to mtf

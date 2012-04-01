@@ -1168,17 +1168,6 @@ void PresenterWindowManager::Invalidate (void)
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
-
-Reference<awt::XWindow> PresenterWindowManager::GetParentWindow (void) const
-{
-    return mxParentWindow;
-}
-
-Reference<rendering::XCanvas> PresenterWindowManager::GetParentCanvas (void) const
-{
-    return mxParentCanvas;
-}
-
 void PresenterWindowManager::Update (void)
 {
     mxClipPolygon = NULL;
@@ -1199,36 +1188,6 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-namespace {
-
-//===== ModeChangeAnimation ===================================================
-
-class ModeChangeAnimation : public PresenterAnimation
-{
-public:
-    ModeChangeAnimation (
-        const ::boost::shared_ptr<PresenterSprite>& rpSprite,
-        const Reference<rendering::XSpriteCanvas>& rxCanvas)
-        : PresenterAnimation (0, 1000, 20),
-          mpSprite(rpSprite),
-          mxCanvas(rxCanvas)
-    {
-    }
-
-    virtual void Run (const double nProgress, const sal_uInt64 nCurrentTime)
-    {
-        (void)nCurrentTime;
-        mpSprite->SetAlpha(1.0 - nProgress);
-        mxCanvas->updateScreen(sal_False);
-    }
-
-private:
-    ::boost::shared_ptr<PresenterSprite> mpSprite;
-    Reference<rendering::XSpriteCanvas> mxCanvas;
-};
-
-} // end of anonymous namespace
 
 } } // end of namespace ::sdext::presenter
 

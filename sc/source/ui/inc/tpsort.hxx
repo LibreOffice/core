@@ -51,7 +51,7 @@ class ScSortDlg;
 struct ScSortParam;
 
 //========================================================================
-// Kriterien (Sort Criteria)
+// Sort Criteria
 
 class ScTabPageSortFields : public SfxTabPage
 {
@@ -62,11 +62,11 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
-// fuer Datenaustausch (sollte noch umgestellt werden!)
+// for data exchange (TODO: should be changed!)
 //  virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -93,16 +93,16 @@ private:
     String          aStrColumn;
     String          aStrRow;
 
-    const sal_uInt16        nWhichSort;
+    const sal_uInt16    nWhichSort;
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
     const ScSortParam&  rSortData;
     SCCOLROW            nFieldArr[SC_MAXFIELDS];
-    sal_uInt16              nFieldCount;
+    sal_uInt16          nFieldCount;
     SCCOL               nFirstCol;
     SCROW               nFirstRow;
-    sal_Bool                bHasHeader;
-    sal_Bool                bSortByRows;
+    sal_Bool            bHasHeader;
+    sal_Bool            bSortByRows;
 
     ListBox*            aSortLbArr[3];
     RadioButton*        aDirBtnArr[3][2];
@@ -122,7 +122,7 @@ private:
 };
 
 //========================================================================
-// Sortieroptionen (Sort Options)
+// Sort Options
 
 class ScDocument;
 class ScRangeData;
@@ -140,11 +140,11 @@ public:
 #define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
-// fuer Datenaustausch (sollte noch umgestellt werden!)
+// for data exchange (TODO: should be changed!)
 //  virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -174,14 +174,12 @@ private:
     RadioButton         aBtnTopDown;
     RadioButton         aBtnLeftRight;
 
-//     FixedText           aFtAreaLabel;
-//  FixedInfo           aFtArea;
-    String aStrRowLabel;
-    String aStrColLabel;
-    String aStrUndefined;
+    String              aStrRowLabel;
+    String              aStrColLabel;
+    String              aStrUndefined;
     String              aStrAreaLabel;
 
-    const sal_uInt16        nWhichSort;
+    const sal_uInt16    nWhichSort;
     const ScSortParam&  rSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;

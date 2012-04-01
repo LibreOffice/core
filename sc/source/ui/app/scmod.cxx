@@ -958,8 +958,6 @@ sal_uInt16 ScModule::GetOptDigitLanguage()
 //                      und SID_AUTOSPELL_CHECK
 //
 
-#define IS_AVAILABLE(w,item) (SFX_ITEM_SET==rOptSet.GetItemState((w),sal_True,&item))
-
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
     sal_uInt16 nOldSpellLang, nOldCjkLang, nOldCtlLang;
@@ -989,6 +987,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     sal_Bool                    bCalcAll            = false;
     sal_Bool                    bSaveAppOptions     = false;
     sal_Bool                    bSaveInputOptions   = false;
+    sal_Bool                    bUpdateDocFormat    = false;
 
     //--------------------------------------------------------------------------
 
@@ -996,30 +995,112 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //  Linguistik nicht mehr
 
-    if ( IS_AVAILABLE(SID_ATTR_METRIC,pItem) )
+    if (rOptSet.HasItem(SID_ATTR_METRIC, &pItem))
     {
         PutItem( *pItem );
         pAppCfg->SetAppMetric( (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue() );
         bSaveAppOptions = sal_True;
     }
 
-    if ( IS_AVAILABLE(SCITEM_USERLIST,pItem) )
+    if (rOptSet.HasItem(SCITEM_USERLIST, &pItem))
     {
         ScGlobal::SetUserList( ((const ScUserListItem*)pItem)->GetUserList() );
         bSaveAppOptions = sal_True;
     }
 
-    if ( IS_AVAILABLE(SID_SC_OPT_SYNCZOOM,pItem) )
+    if (rOptSet.HasItem(SID_SC_OPT_SYNCZOOM, &pItem))
     {
         pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveAppOptions = sal_True;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
+    {
+        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        ScOptionsUtil::KeyBindingType eOld = pAppCfg->GetKeyBindingType();
+        ScOptionsUtil::KeyBindingType eNew = static_cast<ScOptionsUtil::KeyBindingType>(nVal);
+        if (eOld != eNew)
+        {
+            pAppCfg->SetKeyBindingType(eNew);
+            bSaveAppOptions = true;
+            pDocSh->ResetKeyBindings(eNew);
+        }
+    }
+
+    //============================================
+    // FormulaOptions
+    //============================================
+
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, &pItem))
+    {
+        pAppCfg->SetUseEnglishFuncName( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_GRAMMAR, &pItem))
+    {
+        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        ::formula::FormulaGrammar::Grammar eOld = pAppCfg->GetFormulaSyntax();
+        ::formula::FormulaGrammar::Grammar eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
+
+        switch (nVal)
+        {
+        case 0:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
+            break;
+        case 1:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
+            break;
+        case 2:
+            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+            break;
+        default:
+            ;
+        }
+
+        if (eOld != eNew)
+        {
+            pAppCfg->SetFormulaSyntax(eNew);
+            bSaveAppOptions = true;
+            bUpdateDocFormat = true;
+        }
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARG, &pItem))
+    {
+        pAppCfg->SetFormulaSepArg( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, &pItem))
+    {
+        pAppCfg->SetFormulaSepArrayRow( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_COL, &pItem))
+    {
+        pAppCfg->SetFormulaSepArrayCol( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        bSaveAppOptions = true;
+        bUpdateDocFormat = true;
+    }
+
+    // Do all the format updates on open documents in one go
+    if ( bUpdateDocFormat && pDocSh )
+    {
+        pDocSh->SetFormulaOptions( *pAppCfg );
+        pDocSh->SetDocumentModified();
     }
 
     //============================================
     // ViewOptions
     //============================================
 
-    if ( IS_AVAILABLE(SID_SCVIEWOPTIONS,pItem) )
+    if (rOptSet.HasItem(SID_SCVIEWOPTIONS, &pItem))
     {
         const ScViewOptions& rNewOpt = ((const ScTpViewItem*)pItem)->GetViewOptions();
 
@@ -1051,7 +1132,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // da GridOptions Member der ViewOptions ist!
     //============================================
 
-    if ( IS_AVAILABLE(SID_ATTR_GRID_OPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,&pItem) )
     {
         ScGridOptions aNewGridOpt( (const SvxOptionsGrid&)((const SvxGridItem&)*pItem) );
 
@@ -1085,17 +1166,13 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // DocOptions
     //============================================
 
-    if ( IS_AVAILABLE(SID_SCDOCOPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_SCDOCOPTIONS,&pItem) )
     {
         const ScDocOptions& rNewOpt = ((const ScTpCalcItem*)pItem)->GetDocOptions();
 
         if ( pDoc )
         {
             const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
-            ScOptionsUtil::KeyBindingType eKeyOld = rOldOpt.GetKeyBindingType();
-            ScOptionsUtil::KeyBindingType eKeyNew = rNewOpt.GetKeyBindingType();
-            if (eKeyOld != eKeyNew)
-                pDocSh->ResetKeyBindings(eKeyNew);
 
             bRepaint = ( bRepaint || ( rOldOpt != rNewOpt )   );
             bCalcAll =   bRepaint &&
@@ -1117,7 +1194,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     // nach den eigentlichen DocOptions auch noch die TabDistance setzen
-    if ( IS_AVAILABLE(SID_ATTR_DEFTABSTOP,pItem) )
+    if ( rOptSet.HasItem(SID_ATTR_DEFTABSTOP,&pItem) )
     {
         sal_uInt16 nTabDist = ((SfxUInt16Item*)pItem)->GetValue();
         ScDocOptions aOpt(GetDocOptions());
@@ -1137,7 +1214,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //  AutoSpell nach den Doc-Options (weil Member)
 
-    if ( IS_AVAILABLE(SID_AUTOSPELL_CHECK,pItem) )              // an Doc-Options
+    if ( rOptSet.HasItem(SID_AUTOSPELL_CHECK,&pItem) )              // an Doc-Options
     {
         sal_Bool bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -1183,43 +1260,43 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // InputOptions
     //============================================
 
-    if ( IS_AVAILABLE(SID_SC_INPUT_SELECTIONPOS,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
         pInputCfg->SetMoveDir( ((const SfxUInt16Item*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_SELECTION,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_SELECTION,&pItem) )
     {
         pInputCfg->SetMoveSelection( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_EDITMODE,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_EDITMODE,&pItem) )
     {
         pInputCfg->SetEnterEdit( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_FMT_EXPAND,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_FMT_EXPAND,&pItem) )
     {
         pInputCfg->SetExtendFormat( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_RANGEFINDER,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_RANGEFINDER,&pItem) )
     {
         pInputCfg->SetRangeFinder( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_REF_EXPAND,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_REF_EXPAND,&pItem) )
     {
         pInputCfg->SetExpandRefs( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_MARK_HEADER,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,&pItem) )
     {
         pInputCfg->SetMarkHeader( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
         bUpdateMarks = sal_True;
     }
-    if ( IS_AVAILABLE(SID_SC_INPUT_TEXTWYSIWYG,pItem) )
+    if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
         sal_Bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
         if ( bNew != pInputCfg->GetTextWysiwyg() )
@@ -1229,7 +1306,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bUpdateRefDev = sal_True;
         }
     }
-    if( IS_AVAILABLE( SID_SC_INPUT_REPLCELLSWARN, pItem ) )
+    if( rOptSet.HasItem( SID_SC_INPUT_REPLCELLSWARN, &pItem ) )
     {
         pInputCfg->SetReplaceCellsWarn( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = sal_True;
@@ -1239,7 +1316,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // PrintOptions
     //============================================
 
-    if ( IS_AVAILABLE(SID_SCPRINTOPTIONS,pItem) )
+    if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
     {
         const ScPrintOptions& rNewOpt = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
         SetPrintOptions( rNewOpt );
@@ -1334,8 +1411,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 }
-
-#undef IS_AVAILABLE
 
 //------------------------------------------------------------------
 //
@@ -1477,7 +1552,7 @@ String ScModule::InputGetFormulaStr()
     ScInputHandler* pHdl = GetInputHdl();
     String aStr;
     if ( pHdl )
-        aStr = pHdl->InputGetFormulaStr();
+        aStr = pHdl->GetFormString();
     return aStr;
 }
 
@@ -1819,7 +1894,7 @@ void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     }
 }
 
-IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScModule, IdleHandler)
 {
     if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
@@ -1874,7 +1949,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
 {
     if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
@@ -1917,7 +1992,17 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             //
                             SID_ATTR_METRIC,        SID_ATTR_METRIC,
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
+                            // TP_COMPATIBILITY
+                            SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
+                            // TP_FORMULA
+                            SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
+                            SID_SC_OPT_FORMULA_GRAMMAR, SID_SC_OPT_FORMULA_GRAMMAR,
+                            SID_SC_OPT_FORMULA_SEP_ARG, SID_SC_OPT_FORMULA_SEP_ARG,
+                            SID_SC_OPT_FORMULA_SEP_ARRAY_COL, SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
+                            SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
                             0 );
+
+        const ScAppOptions& rAppOpt = GetAppOptions();
 
         ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
                                             SfxObjectShell::Current());
@@ -1937,7 +2022,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         //  SFX_APP()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
-                        sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
+                        sal::static_int_cast<sal_uInt16>(rAppOpt.GetAppMetric()) ) );
 
         // TP_CALC
         pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP,
@@ -1946,7 +2031,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 
         // TP_VIEW
         pRet->Put( ScTpViewItem( SID_SCVIEWOPTIONS, aViewOpt ) );
-        pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, GetAppOptions().GetSynchronizeZoom() ) );
+        pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, rAppOpt.GetSynchronizeZoom() ) );
 
         // TP_INPUT
         const ScInputOptions& rInpOpt = GetInputOptions();
@@ -1980,6 +2065,38 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         // TP_USERLISTS
         if ( pUL )
             aULItem.SetUserList( *pUL );
+
+        // TP_COMPATIBILITY
+        pRet->Put( SfxUInt16Item( SID_SC_OPT_KEY_BINDING_COMPAT,
+                                   rAppOpt.GetKeyBindingType() ) );
+
+        // TP_FORMULA
+        pRet->Put( SfxBoolItem( SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
+                                rAppOpt.GetUseEnglishFuncName() ) );
+
+        sal_uInt16 nVal = 0;
+        switch (rAppOpt.GetFormulaSyntax())
+        {
+            case formula::FormulaGrammar::GRAM_NATIVE:
+                nVal = 0;
+            break;
+            case formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
+                nVal = 1;
+            break;
+            case formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
+                nVal = 2;
+            break;
+            default:
+                ;
+        }
+        pRet->Put( SfxUInt16Item( SID_SC_OPT_FORMULA_GRAMMAR, nVal ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARG,
+                                  rAppOpt.GetFormulaSepArg() ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
+                                  rAppOpt.GetFormulaSepArrayCol() ) );
+        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
+                                  rAppOpt.GetFormulaSepArrayRow() ) );
+
         pRet->Put( aULItem );
 
     }
@@ -2162,7 +2279,7 @@ sal_Bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 
     rlRefWindow.erase( i );
 
-    if( !rlRefWindow.size() )
+    if( rlRefWindow.empty() )
         m_mapRefWindow.erase( nSlotId );
 
     return sal_True;

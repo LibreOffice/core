@@ -299,29 +299,6 @@ double MediaWindowBaseImpl::getMediaTime() const
 
 // ---------------------------------------------------------------------
 
-void MediaWindowBaseImpl::setStopTime( double fTime )
-{
-    if( mxPlayer.is() )
-        mxPlayer->setStopTime( fTime );
-}
-
-// ---------------------------------------------------------------------
-
-double MediaWindowBaseImpl::getStopTime() const
-{
-    return( mxPlayer.is() ? mxPlayer->getStopTime() : 0.0 );
-}
-
-// ---------------------------------------------------------------------
-
-void MediaWindowBaseImpl::setRate( double fRate )
-{
-    if( mxPlayer.is() )
-        mxPlayer->setRate( fRate );
-}
-
-// ---------------------------------------------------------------------
-
 double MediaWindowBaseImpl::getRate() const
 {
     return( mxPlayer.is() ? mxPlayer->getRate() : 0.0 );

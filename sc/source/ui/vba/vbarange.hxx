@@ -317,7 +317,7 @@ public:
     // XErrorQuery
     virtual ::sal_Bool SAL_CALL hasError(  ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SC_VBA_RANGE_HXX */

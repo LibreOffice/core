@@ -121,45 +121,45 @@ SwFilterDetect::~SwFilterDetect()
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TypeName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FilterName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ReadOnly")) )
             nIndexOfReadOnlyFlag = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UCBContent")) )
             nIndexOfContent = nProperty;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AsTemplate")) )
         {
             lDescriptor[nProperty].Value >>= bOpenAsTemplate;
             nIndexOfTemplateFlag = nProperty;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InteractionHandler")) )
         {
             lDescriptor[nProperty].Value >>= xInteraction;
             nIndexOfInteractionHandler = nProperty;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RepairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
+        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DocumentTitle")) )
             nIndexOfDocumentTitle = nProperty;
     }
 
@@ -423,19 +423,17 @@ SwFilterDetect::~SwFilterDetect()
     return aTypeName;
 }
 
-SFX_IMPL_SINGLEFACTORY( SwFilterDetect )
-
 /* XServiceInfo */
-UNOOUSTRING SAL_CALL SwFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+rtl::OUString SAL_CALL SwFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SwFilterDetect::supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SwFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
-    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -447,15 +445,15 @@ sal_Bool SAL_CALL SwFilterDetect::supportsService( const UNOOUSTRING& sServiceNa
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+UNOSEQUENCE< rtl::OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< UNOOUSTRING > SwFilterDetect::impl_getStaticSupportedServiceNames()
+UNOSEQUENCE< rtl::OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 3 );
+    UNOSEQUENCE< rtl::OUString > seqServiceNames( 3 );
     seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
     seqServiceNames.getArray() [1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.FormatDetector"  ));
     seqServiceNames.getArray() [2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.W4WFormatDetector"  ));
@@ -463,7 +461,7 @@ UNOSEQUENCE< UNOOUSTRING > SwFilterDetect::impl_getStaticSupportedServiceNames()
 }
 
 /* Helper for XServiceInfo */
-UNOOUSTRING SwFilterDetect::impl_getStaticImplementationName()
+rtl::OUString SwFilterDetect::impl_getStaticImplementationName()
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.writer.FormatDetector" ));
 }

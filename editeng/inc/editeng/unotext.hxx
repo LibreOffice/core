@@ -54,7 +54,6 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -423,14 +422,11 @@ protected:
 public:
     SvxUnoTextBase( ) throw();
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
     virtual ~SvxUnoTextBase() throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
-
-    ESelection InsertField( const SvxFieldItem& rField ) throw();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
 
@@ -488,12 +484,12 @@ public:
     virtual ~SvxUnoText() throw();
 
     // Internal
-    UNO3_GETIMPLEMENTATION_DECL( SvxUnoText )
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(::com::sun::star::uno::RuntimeException);
 };
 
 // ====================================================================
-
-#include <cppuhelper/implbase1.hxx>
 
 class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
 {
@@ -539,7 +535,6 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxUnoTextContent() throw();
     SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw();
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
     virtual ~SvxUnoTextContent() throw();

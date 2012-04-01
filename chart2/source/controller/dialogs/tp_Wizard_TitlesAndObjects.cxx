@@ -165,7 +165,7 @@ void TitlesAndObjectsTabPage::commitToModel()
     }
 }
 
-IMPL_LINK( TitlesAndObjectsTabPage, ChangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeHdl)
 {
     if( m_bCommitToModel )
         commitToModel();

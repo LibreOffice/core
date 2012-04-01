@@ -87,7 +87,7 @@ struct ImageAryData
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
 
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && maName.getLength(); }
+    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
     void Load(const rtl::OUString &rPrefix);
 
     ImageAryData&   operator=( const ImageAryData& rData );
@@ -114,7 +114,6 @@ struct ImplImageList
     void AddImage( const ::rtl::OUString &aName,
                    sal_uInt16 nId, const BitmapEx &aBitmapEx );
     void RemoveImage( sal_uInt16 nPos );
-    sal_uInt16 GetImageCount() const;
 };
 
 // --------------------

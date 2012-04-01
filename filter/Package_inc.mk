@@ -24,7 +24,6 @@ $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/countryid.hxx,f
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/escherex.hxx,filter/msfilter/escherex.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/mscodec.hxx,filter/msfilter/mscodec.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msdffimp.hxx,filter/msfilter/msdffimp.hxx))
-$(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msfiltertracer.hxx,filter/msfilter/msfiltertracer.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msocximex.hxx,filter/msfilter/msocximex.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msoleexp.hxx,filter/msfilter/msoleexp.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/mstoolbar.hxx,filter/msfilter/mstoolbar.hxx))

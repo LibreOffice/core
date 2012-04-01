@@ -228,7 +228,7 @@ private:
     bool                bPagebreak:1;               // Seitenumbruch-Vorschaumodus
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
-    SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, EditStatus*);
+    SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, void*);
     SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
 
     SC_DLLPRIVATE void          CalcPPT();

@@ -49,11 +49,7 @@
     </ul>
  */
 published service ImplementationRegistration
-{
-    // DocMerge: empty anyway
-    interface com::sun::star::registry::XImplementationRegistration;
-
-};
+  : com::sun::star::registry::XImplementationRegistration;
 
 //=============================================================================
 

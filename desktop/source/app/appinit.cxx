@@ -56,7 +56,6 @@
 #include <rtl/bootstrap.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
-#include <cppuhelper/bootstrap.hxx>
 #include <tools/rcid.h>
 
 #include <rtl/logfile.hxx>
@@ -71,10 +70,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/internaloptions.hxx>
 
-
-#define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
-#define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
 using namespace desktop;
 using namespace ::com::sun::star::uno;

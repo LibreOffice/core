@@ -405,6 +405,21 @@
       {
         assign_value(expr, is_reference_predicate());
       }
+@@ -846,12 +846,12 @@
+ 
+ template<class T>
+ inline
+-bool operator == ( none_t x, optional<T> const& y )
++bool operator == ( __attribute__ ((unused)) none_t x, optional<T> const& y )
+ { return equal_pointees(optional<T>() ,y); }
+ 
+ template<class T>
+ inline
+-bool operator < ( none_t x, optional<T> const& y )
++bool operator < ( __attribute__ ((unused)) none_t x, optional<T> const& y )
+ { return less_pointees(optional<T>() ,y); }
+ 
+ template<class T>
 --- misc/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2012-01-20 12:44:07.124316347 +0100
 @@ -63,8 +63,8 @@
@@ -867,3 +882,27 @@
      typedef boost::date_time::all_date_names_put<greg_facet_config, wchar_t> facet_def;
      return std::locale(loc, new facet_def(w_short_month_names,
                                            w_long_month_names,
+--- misc/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
+@@ -61,7 +61,7 @@
+ { 
+     default_deleter() { }
+     template<typename TT>
+-    default_deleter(default_deleter<TT> tt) { }
++    default_deleter(__attribute__ ((unused)) default_deleter<TT> tt) { }
+ };
+ 
+ } } } // End namespaces ptr_container_detail, move_ptrs, boost.
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
+@@ -664,8 +664,8 @@
+             
+         }
+ 
+-        void range_check_impl( iterator first, iterator last, 
+-                               std::bidirectional_iterator_tag )
++        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last, 
++                               std::bidirectional_iterator_tag )
+         { /* do nothing */ }
+ 
+         void range_check_impl( iterator first, iterator last,

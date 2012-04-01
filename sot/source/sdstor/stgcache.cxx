@@ -91,7 +91,7 @@ void StgPage::SetPage( short nOff, sal_Int32 nVal )
     if( ( nOff < (short) ( nData / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
-      nVal = SWAPLONG(nVal);
+      nVal = OSL_SWAPDWORD(nVal);
 #endif
         ((sal_Int32*) pData )[ nOff ] = nVal;
         bDirty = sal_True;

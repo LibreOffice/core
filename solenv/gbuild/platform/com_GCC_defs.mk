@@ -107,14 +107,24 @@ gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
 gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
 endif
 
+ifeq ($(MERGELIBS),TRUE)
+gb_CFLAGS_COMMON += -DLIBO_MERGELIBS
+gb_CXXFLAGS_COMMON += -DLIBO_MERGELIBS
+endif
+
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Library_LTOFLAGS := -flto
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
+	-fexceptions
+
+# Clang doesn't have this option
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+gb_LinkTarget_EXCEPTIONFLAGS += \
+	-fno-enforce-eh-specs
+endif
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
@@ -159,4 +169,14 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# Convert path to native notation
+define gb_Helper_native_path
+$(1)
+endef
+
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
+gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
+
+gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
+
+gb_Helper_get_rcfile = $(1)rc

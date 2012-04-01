@@ -101,6 +101,12 @@ $(call gb_XcsTarget_get_clean_target,%) :
 		rm -f $(call gb_XcsTarget_get_target,$*) \
 			  $(call gb_XcsTarget_get_outdir_target,$(XCSFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcsTarget_get_outdir_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcsTarget_get_outdir_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcsTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -142,6 +148,12 @@ $(call gb_XcuDataTarget_get_clean_target,%) :
 		rm -f $(call gb_XcuDataTarget_get_target,$*) \
 			  $(call gb_XcuDataTarget_get_outdir_target,$(XCUFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuDataTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcuDataTarget_get_outdir_target,)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcuDataTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -179,6 +191,10 @@ $(call gb_XcuModuleTarget_get_clean_target,%) :
 		rm -f $(call gb_XcuModuleTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$(XCUFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuModuleTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcuModuleTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -214,6 +230,12 @@ $(call gb_XcuLangpackTarget_get_clean_target,%) :
 			  $(call gb_XcuLangpackTarget__get_target_with_lang,$*,$(lang)) \
 			  $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(XCUFILE),$(lang))))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuLangpackTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcuLangpackTarget_get_outdir_target,)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -223,7 +245,6 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target,cfgex)
 gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_CFGEXTARGET)
-gb_XcuMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
@@ -238,7 +259,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-l all)
 endef
 
-$(call gb_XcuMergeTarget_get_target,%) : | $(gb_XcuMergeTarget_CFGEXTARGET)
+$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
 	$(if $(SDF),$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
@@ -250,9 +271,9 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(realpath $(gb_XcuMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+	$(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	SDF := $(realpath $(gb_XcuMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+	SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 endef
 
 
@@ -344,7 +365,8 @@ $(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcsTarget_get_outdir_target,$(3))
 $(call gb_XcsTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcsTarget_get_target,$(2)/$(3))
+	$(call gb_XcsTarget_get_target,$(2)/$(3)) \
+	| $(dir $(call gb_XcsTarget_get_outdir_target,$(3))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
 	$(call gb_XcsTarget_get_target,$(2)/$(3)),$(2)/$(3))
 
@@ -369,7 +391,8 @@ ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_outdir_target,$(3))
 $(call gb_XcuDataTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcuDataTarget_get_target,$(2)/$(3))
+	$(call gb_XcuDataTarget_get_target,$(2)/$(3)) \
+	| $(dir $(call gb_XcuDataTarget_get_outdir_target,$(3))).dir
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuDataTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3)),\
@@ -399,7 +422,8 @@ ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_outdir_target,$(3))
 $(call gb_XcuModuleTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcuModuleTarget_get_target,$(2)/$(3))
+	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)) \
+	| $(dir $(call gb_XcuModuleTarget_get_outdir_target,$(3))).dir
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)),\
@@ -429,7 +453,8 @@ $(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : \
 $(call gb_XcuLangpackTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : LANG := $(4)
 $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)) : \
-	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4))
+	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) \
+	| $(dir $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4))).dir
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)),\
 	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)),\

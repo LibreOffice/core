@@ -182,7 +182,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
 
     ::std::list< ::rtl::OUString > aList = tokenize( rCommand );
 
-    if ( aList.size() == 0 )
+    if ( aList.empty() )
         return;
 
     ::rtl::OUString aCommandName = aList.front();
@@ -219,7 +219,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
 
         if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bool" ) ) )
         {
-            sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCaseAscii( "true" );
+            sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
 
             m_aGetValue <<= bValue;
             m_aGetValueCondition.set();

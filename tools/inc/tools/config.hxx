@@ -69,7 +69,7 @@ public:
     sal_Bool HasGroup(const rtl::OString& rGroup) const;
 
     rtl::OString ReadKey(const rtl::OString& rKey) const;
-    UniString           ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const;
+    rtl::OUString ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const;
     rtl::OString ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const;
     void                WriteKey(const rtl::OString& rKey, const rtl::OString& rValue);
     void DeleteKey(const rtl::OString& rKey);

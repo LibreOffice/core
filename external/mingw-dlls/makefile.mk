@@ -41,7 +41,50 @@ dummy:
 
 .ELSE
 
-MINGW_DLLS:=$(MINGW_EXTERNAL_DLLS)
+MINGW_DLLS:= \
+    $(MINGW_CAIRO_DLL) \
+    $(MINGW_CRYPTO_DLL) \
+    $(MINGW_CURL_DLL) \
+    $(MINGW_DB_DLL) \
+    $(MINGW_EXPAT_DLL) \
+    $(MINGW_FONTCONFIG_DLL) \
+    $(MINGW_FREETYPE_DLL) \
+    $(MINGW_GCRYPT_DLL) \
+    $(MINGW_GNUTLS_DLL) \
+    $(MINGW_GPG_ERROR_DLL) \
+    $(MINGW_GRAPHITE2_DLL) \
+    $(MINGW_HUNSPELL_DLL) \
+    $(MINGW_HYPHEN_DLL) \
+    $(MINGW_ICONV_DLL) \
+    $(MINGW_ICUDATA_DLL) \
+    $(MINGW_ICUI18N_DLL) \
+    $(MINGW_ICUUC_DLL) \
+    $(MINGW_IDN_DLL) \
+    $(MINGW_INTL_DLL) \
+    $(MINGW_JPEG_DLL) \
+    $(MINGW_LCMS2_DLL) \
+    $(MINGW_LIBXML_DLL) \
+    $(MINGW_LIBXSLT_DLL) \
+    $(MINGW_LPSOLVE_DLL) \
+    $(MINGW_MINIZIP_DLL) \
+    $(MINGW_MYTHES_DLL) \
+    $(MINGW_NEON_DLL) \
+    $(MINGW_NSPR4_DLL) \
+    $(MINGW_NSS3_DLL) \
+    $(MINGW_NSSUTIL3_DLL) \
+    $(MINGW_PIXMAN_DLL) \
+    $(MINGW_PLC4_DLL) \
+    $(MINGW_PLDS4_DLL) \
+    $(MINGW_PNG15_DLL) \
+    $(MINGW_RAPTOR_DLL) \
+    $(MINGW_RASQAL_DLL) \
+    $(MINGW_REDLAND_DLL) \
+    $(MINGW_SQLITE3_DLL) \
+    $(MINGW_SSH2_DLL) \
+    $(MINGW_SSL3_DLL) \
+    $(MINGW_SSL_DLL) \
+    $(MINGW_TASN1_DLL) \
+    $(MINGW_ZLIB_DLL)
 
 .IF "$(MINGW_SHARED_GCCLIB)" == "YES"
 MINGW_DLLS+=$(MINGW_GCCDLL)
@@ -54,8 +97,8 @@ MINGW_DLLS+=$(MINGW_GXXDLL)
 # Guesstimate where the DLLs can be
 
 POTENTIAL_MINGW_RUNTIME_BINDIRS = \
-	$(COMPATH)/i686-w64-mingw32/sys-root/mingw/bin \
-	/usr/i686-w64-mingw32/sys-root/mingw/bin \
+	$(COMPATH)/$(HOST_PLATFORM)/sys-root/mingw/bin \
+	/usr/$(HOST_PLATFORM)/sys-root/mingw/bin \
 
 all:
 	@for DLL in $(MINGW_DLLS) ; do \

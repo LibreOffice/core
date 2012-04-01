@@ -30,14 +30,11 @@ package com.sun.star.lib.uno.bridges.java_remote;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class BridgedObject_Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public void test() {
+public final class BridgedObject_Test {
+    @Test public void test() {
         RequestHandler handler = new RequestHandler() {
                 public Object sendRequest(
                     String oid, Type type, String operation, Object[] args)
@@ -52,9 +49,9 @@ public final class BridgedObject_Test extends ComplexTestCase {
         Object object0 = new Object();
         Object object1 = factory1.create("", new Type(XInterface.class));
         Object object2 = factory2.create("", new Type(XInterface.class));
-        assure(BridgedObject.getBridge(object0) == null);
-        assure(BridgedObject.getBridge(object1) == bridge1);
-        assure(BridgedObject.getBridge(object2) == bridge2);
+        assertNull(BridgedObject.getBridge(object0));
+        assertSame(bridge1, BridgedObject.getBridge(object1));
+        assertSame(bridge2, BridgedObject.getBridge(object2));
     }
 
     private static final class TestBridge implements XBridge {

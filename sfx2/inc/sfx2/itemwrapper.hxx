@@ -105,6 +105,8 @@ public:
 
     inline explicit     SingleItemWrapper( sal_uInt16 nSlot ) : mnSlot( nSlot ) {}
 
+    virtual             ~SingleItemWrapper() {}
+
     /** Returns the SID this wrapper works on. */
     inline sal_uInt16       GetSlotId() const { return mnSlot; }
 
@@ -146,6 +148,8 @@ public:
     inline explicit     ValueItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, ValueT >( nSlot ) {}
 
+    virtual             ~ValueItemWrapper() {}
+
     virtual ValueT      GetItemValue( const ItemT& rItem ) const
                             { return static_cast< ValueT >( rItem.GetValue() ); }
     virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const
@@ -170,6 +174,8 @@ class IdentItemWrapper : public SingleItemWrapper< ItemT, const ItemT& >
 public:
     inline explicit     IdentItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, const ItemT& >( nSlot ) {}
+
+    virtual             ~IdentItemWrapper() {}
 
     virtual const ItemT& GetItemValue( const ItemT& rItem ) const
                             { return rItem; }

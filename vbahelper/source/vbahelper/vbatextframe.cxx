@@ -146,11 +146,10 @@ VbaTextFrame::Characters() throw (uno::RuntimeException)
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString&
+rtl::OUString
 VbaTextFrame::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaTextFrame") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaTextFrame"));
 }
 
 uno::Sequence< rtl::OUString >

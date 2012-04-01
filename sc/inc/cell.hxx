@@ -92,17 +92,13 @@ public:
     /** Base copy constructor. Does NOT clone cell note or broadcaster! */
                     ScBaseCell( const ScBaseCell& rCell );
 
-    /** Returns a clone of this cell at the same position, cell note and
+    /** Returns a clone of this cell at the same position,
         broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    ScBaseCell*     Clone( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
-    /** Returns a clone of this cell for the passed document position, cell
-        note and broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
-
-    /** Returns a clone of this cell, clones cell note and caption object too
-        (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    /** Returns a clone of this cell for the passed document position,
+        broadcaster will not be cloned. */
+    ScBaseCell*     Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
         deletes the cell by calling the appropriate d'tor of the derived class. */
@@ -112,7 +108,7 @@ public:
 
     /** Returns true, if the cell is empty (neither value nor formula nor cell note).
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
-    bool            IsBlank( bool bIgnoreNotes = false ) const;
+    bool            IsBlank() const;
 
 // for idle-calculations
     inline sal_uInt16   GetTextWidth() const { return nTextWidth; }
@@ -120,19 +116,6 @@ public:
 
     inline sal_uInt8     GetScriptType() const { return nScriptType; }
     inline void     SetScriptType( sal_uInt8 nNew ) { nScriptType = nNew; }
-
-    /** Returns true, if the cell contains a note. */
-    inline bool     HasNote() const { return mpNote != 0; }
-    /** Returns the pointer to a cell note object (read-only). */
-    inline const ScPostIt* GetNote() const { return mpNote; }
-    /** Returns the pointer to a cell note object. */
-    inline ScPostIt* GetNote() { return mpNote; }
-    /** Takes ownership of the passed cell note object. */
-    void            TakeNote( ScPostIt* pNote );
-    /** Returns and forgets the own cell note object. Caller takes ownership! */
-    ScPostIt*       ReleaseNote();
-    /** Deletes the own cell note object. */
-    void            DeleteNote();
 
     /** Returns true, if the cell contains a broadcaster. */
     inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
@@ -146,7 +129,7 @@ public:
     void            DeleteBroadcaster();
 
                         // String- oder EditCell
-    static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
+    static ScBaseCell* CreateTextCell( const rtl::OUString& rString, ScDocument* );
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void            StartListeningTo( ScDocument* pDoc );
@@ -161,7 +144,7 @@ public:
     bool            HasEmptyData() const;
     bool            HasValueData() const;
     bool            HasStringData() const;
-    String          GetStringData() const;          // only real strings
+    rtl::OUString   GetStringData() const;          // only real strings
 
     static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -169,7 +152,6 @@ private:
     ScBaseCell&     operator=( const ScBaseCell& );
 
 private:
-    ScPostIt*       mpNote;         /// The cell note. Cell takes ownership!
     SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
 
 protected:
@@ -189,8 +171,6 @@ public:
 
     /** Cell takes ownership of the passed broadcaster. */
     explicit        ScNoteCell( SvtBroadcaster* pBC = 0 );
-    /** Cell takes ownership of the passed note and broadcaster. */
-    explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
 
 #if OSL_DEBUG_LEVEL > 0
                     ~ScNoteCell();
@@ -228,26 +208,24 @@ public:
 #endif
 
                     ScStringCell();
-    explicit        ScStringCell( const String& rString );
+    explicit        ScStringCell(const rtl::OUString& rString);
 
 #if OSL_DEBUG_LEVEL > 0
                     ~ScStringCell();
 #endif
 
-    inline void     SetString( const String& rString ) { maString = rString; }
-    inline void     GetString( String& rString ) const { rString = maString; }
-    inline void     GetString( rtl::OUString& rString ) const { rString = maString; }
-    inline const String& GetString() const { return maString; }
+    inline void     SetString( const rtl::OUString& rString ) { maString = rString; }
+    inline const    rtl::OUString& GetString() const { return maString; }
 
 private:
-    String          maString;
+    rtl::OUString   maString;
 };
 
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
-    String*             pString;        // for faster access to formulas
+    mutable rtl::OUString* pString;        // for faster access to formulas
     ScDocument*         pDoc;           // for EditEngine access with Pool
 
     void            SetTextObject( const EditTextObject* pObject,
@@ -268,13 +246,12 @@ public:
                                 const SfxItemPool* pFromPool /* = NULL */ );
                     ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
                     // for line breaks
-                    ScEditCell( const String& rString, ScDocument* );
+                    ScEditCell( const rtl::OUString& rString, ScDocument* );
 
     void            SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
     void            GetData( const EditTextObject*& rpObject ) const;
-    void            GetString( String& rString ) const;
-    void            GetString( rtl::OUString& rString ) const;
+    rtl::OUString   GetString() const;
 
     const EditTextObject* GetData() const   { return pData; }
 
@@ -375,7 +352,6 @@ public:
     ScAddress       aPos;
 
                     ~ScFormulaCell();
-                    ScFormulaCell();
 
     /** Empty formula cell, or with a preconstructed token array. */
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
@@ -387,14 +363,12 @@ public:
         also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefor uses the address
         convention associated with rPos::nTab by default. */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                    const String& rFormula,
+                    const rtl::OUString& rFormula,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     sal_uInt8 cMatInd = MM_NONE );
 
     ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
-    void            GetFormula( String& rFormula,
-                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUStringBuffer& rBuffer,
@@ -411,7 +385,7 @@ public:
     void            ResetDirty() { bDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
-    void            Compile(const String& rFormula,
+    void            Compile(const rtl::OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            CompileTokenArray( bool bNoListening = false );
@@ -451,7 +425,7 @@ public:
     void            UpdateInsertTabAbs(SCTAB nTable);
     bool            UpdateDeleteTab(SCTAB nTable, bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
-    void            UpdateRenameTab(SCTAB nTable, const String& rName);
+    void            UpdateRenameTab(SCTAB nTable, const rtl::OUString& rName);
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
@@ -465,8 +439,7 @@ public:
     bool            IsValue();      // also true if formula::svEmptyCell
     double          GetValue();
     double          GetValueAlways();   // ignore errors
-    void            GetString( String& rString );
-    void            GetString( rtl::OUString& rString );
+    rtl::OUString   GetString();
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
@@ -523,13 +496,13 @@ public:
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridFormula( const String& r,
+    void            SetHybridFormula( const rtl::OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
     void            SetErrCode( sal_uInt16 n );
     inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject* CreateURLObject() ;
-    void            GetURLResult( String& rURL, String& rCellText );
+    void            GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();

@@ -28,6 +28,7 @@
 
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/textcharacterproperties.hxx"
 
 #include <rtl/ustring.hxx>
 #include "oox/helper/propertyset.hxx"
@@ -111,8 +112,14 @@ void TextParagraph::insertAt(
         float fCharacterSize = nCharHeight > 0 ? GetFontHeight( nCharHeight ) :  18;
         if ( pTextParagraphStyle.get() )
         {
-            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
+            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, fCharacterSize );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( fCharacterSize );
+
+            // bullets have same color as following texts by default
+            if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
+                && (*maRuns.begin())->getTextCharacterProperties().maCharColor.isUsed() )
+                aioBulletList[ PROP_BulletColor ] <<= (*maRuns.begin())->getTextCharacterProperties().maCharColor.getColor( rFilterBase.getGraphicHelper() );
+
             maProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
         }
 

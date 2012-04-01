@@ -64,7 +64,7 @@ private:
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
-    DECL_LINK( SpinHdl, MetricField* );
+    DECL_LINK(SpinHdl, void *);
     DECL_LINK( ViewLayoutUserHdl, RadioButton* );
     DECL_LINK( ViewLayoutSpinHdl, MetricField* );
     DECL_LINK( ViewLayoutCheckHdl, CheckBox* );

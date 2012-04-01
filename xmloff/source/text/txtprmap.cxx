@@ -101,6 +101,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaTopMarginRelative",  FO, MARGIN_TOP,         XML_TYPE_PERCENT16, CTF_PARATOPMARGIN_REL ),
     MP_E( "ParaBottomMargin",       FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
     MP_E( "ParaBottomMarginRelative",FO,    MARGIN_BOTTOM,      XML_TYPE_PERCENT16, CTF_PARABOTTOMMARGIN_REL ),
+    { "ParaContextMargin", sizeof("ParaContextMargin")-1, XML_NAMESPACE_STYLE, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0, SvtSaveOptions::ODFVER_LATEST },
     // RES_CHRATR_CASEMAP
     MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     MT_E( "CharCaseMap",        FO,     TEXT_TRANSFORM,     XML_TYPE_TEXT_CASEMAP,  0 ),

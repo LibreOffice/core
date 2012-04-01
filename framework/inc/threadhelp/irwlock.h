@@ -81,6 +81,8 @@ class IRWLock
         virtual void releaseWriteAccess   () =0;
         virtual void downgradeWriteAccess () =0;
 
+    protected:
+        ~IRWLock() {}
 };      //  class IRWLock
 
 }       //  namespace framework

@@ -86,6 +86,7 @@ const SfxItemPropertySet* lcl_GetCellStyleSet()
     {
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,       &::getCppuType((const table::BorderLine2*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &::getCppuType((const util::CellProtection*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &::getCppuType((const sal_Int32*)0),            0, 0 },
@@ -131,13 +132,16 @@ const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&::getCppuType((const float*)0),           0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR2), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DISPNAME), SC_WID_UNO_DISPNAME,&::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &::getCppuType((const table::CellHoriJustify*)0),   0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,       &::getCppuType((const table::BorderLine2*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &::getCppuType((const sal_Int32*)0),            0, 0 },
 //      {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &::getCppuType((const table::CellOrientation*)0),   0, 0 },
@@ -153,12 +157,15 @@ const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &::getCppuType((const sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &::getCppuType((const sal_Int32*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &::getCppuType((const table::TableBorder*)0),       0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD2, &::getCppuType((const table::TableBorder2*)0),       0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER2),ATTR_BORDER,        &::getCppuType((const table::BorderLine2*)0),        0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &::getCppuType((const sal_Int32*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
@@ -1346,7 +1353,7 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
     if ( pItemSet && pResultEntry )
     {
         sal_uInt16 nWhich = pResultEntry->nWID;
-        if ( nWhich == SC_WID_UNO_TBLBORD )
+        if ( nWhich == SC_WID_UNO_TBLBORD || nWhich == SC_WID_UNO_TBLBORD2 )
         {
             nWhich = ATTR_BORDER;
         }
@@ -1473,18 +1480,17 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
             switch ( nWhich )
             {
                 case SC_WID_UNO_TBLBORD:
+                case SC_WID_UNO_TBLBORD2:
                     {
                         const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
                         if ( pItem )
                         {
                             SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
                             SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
-                            table::TableBorder aBorder;
-                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
-                            aBorder.IsHorizontalLineValid = false;
-                            aBorder.IsVerticalLineValid = false;
-                            aBorder.IsDistanceValid = false;
-                            aAny <<= aBorder;
+                            if (nWhich == SC_WID_UNO_TBLBORD2)
+                                ScHelperFunctions::AssignTableBorder2ToAny( aAny, aOuter, aInner, true);
+                            else
+                                ScHelperFunctions::AssignTableBorderToAny( aAny, aOuter, aInner, true);
                         }
                     }
                     break;
@@ -1922,6 +1928,25 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                 }
                             }
                             break;
+                        case SC_WID_UNO_TBLBORD2:
+                            {
+                                if (pValue)
+                                {
+                                    table::TableBorder2 aBorder2;
+                                    if ( *pValue >>= aBorder2 )
+                                    {
+                                        SvxBoxItem aOuter( ATTR_BORDER );
+                                        SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
+                                        ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder2 );
+                                        rSet.Put( aOuter );
+                                    }
+                                }
+                                else
+                                {
+                                    rSet.ClearItem( ATTR_BORDER );
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -2062,18 +2087,17 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 switch ( nWhich )
                 {
                     case SC_WID_UNO_TBLBORD:
+                    case SC_WID_UNO_TBLBORD2:
                         {
                             const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
                             if ( pItem )
                             {
                                 SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
                                 SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
-                                table::TableBorder aBorder;
-                                ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
-                                aBorder.IsHorizontalLineValid = false;
-                                aBorder.IsVerticalLineValid = false;
-                                aBorder.IsDistanceValid = false;
-                                aAny <<= aBorder;
+                                if (nWhich == SC_WID_UNO_TBLBORD2)
+                                    ScHelperFunctions::AssignTableBorder2ToAny( aAny, aOuter, aInner, true);
+                                else
+                                    ScHelperFunctions::AssignTableBorderToAny( aAny, aOuter, aInner, true);
                             }
                         }
                         break;

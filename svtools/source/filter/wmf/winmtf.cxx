@@ -658,13 +658,6 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetFont( const Font& rFont )
-{
-    maFont = rFont;
-}
-
-//-----------------------------------------------------------------------------------
-
 const Font& WinMtfOutput::GetFont() const
 {
     return maFont;
@@ -675,13 +668,6 @@ const Font& WinMtfOutput::GetFont() const
 void WinMtfOutput::SetTextLayoutMode( const sal_uInt32 nTextLayoutMode )
 {
     mnTextLayoutMode = nTextLayoutMode;
-}
-
-//-----------------------------------------------------------------------------------
-
-sal_uInt32 WinMtfOutput::GetTextLayoutMode() const
-{
-    return mnTextLayoutMode;
 }
 
 //-----------------------------------------------------------------------------------
@@ -1147,15 +1133,6 @@ void WinMtfOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
         mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
     }
     maActPos = aDest;
-}
-
-//-----------------------------------------------------------------------------------
-
-void WinMtfOutput::DrawLine( const Point& rSource, const Point& rDest )
-{
-    UpdateClipRegion();
-    UpdateLineStyle();
-    mpGDIMetaFile->AddAction( new MetaLineAction( ImplMap( rSource), ImplMap( rDest ), maLineStyle.aLineInfo ) );
 }
 
 //-----------------------------------------------------------------------------------
@@ -2250,6 +2227,10 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     // add transformation matrix to be used in vcl's metaact.cxx for
     // rotate and scale operations
     mem << one << zero << zero << one << zero << zero;
+
+    // need to flush the stream, otherwise GetEndOfData will return 0
+    // on windows where the function parameters are probably resolved in reverse order
+    mem.Flush();
 
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const sal_uInt8*) mem.GetData(), mem.GetEndOfData() ) );
     mpGDIMetaFile->UseCanvas( sal_True );

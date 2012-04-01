@@ -56,7 +56,6 @@
 #include <osl/process.h>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>

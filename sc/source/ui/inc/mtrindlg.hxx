@@ -65,8 +65,8 @@ private:
     long            nCurrentValue;
 
     void CalcPositions();
-    DECL_LINK( SetDefValHdl, CheckBox * );
-    DECL_LINK( ModifyHdl, MetricField * );
+    DECL_LINK(SetDefValHdl, void *);
+    DECL_LINK(ModifyHdl, void *);
 };
 
 #endif // SC_MTRINDLG_HXX

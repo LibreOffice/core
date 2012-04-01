@@ -565,7 +565,7 @@ public class FunctionHelper
                 OfficeConnect.getOfficeContext();
 
             // First prepare frame for loading
-            // We must adress it inside the frame tree without any complications.
+            // We must address it inside the frame tree without any complications.
             // So we set an unambigous (we hope it) name and use it later.
             // Don't forget to reset original name after that.
                    sOldName = xFrame.getName();

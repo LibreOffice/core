@@ -176,9 +176,8 @@ IMAPOBJ_SETEVENT:
                 String sTmp( rOption.GetString() );
                 if( sTmp.Len() )
                 {
-                    sTmp.ConvertLineEnd();
-                    aMacroTbl.Insert( nEvent,
-                        new SvxMacro( sTmp, sEmpty, eScrpType ));
+                    sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
+                    aMacroTbl.Insert( nEvent, SvxMacro( sTmp, sEmpty, eScrpType ));
                 }
             }
             break;
@@ -198,7 +197,7 @@ IMAPOBJ_SETEVENT:
                             aCoords[2], aCoords[3] );
             IMapRectangleObject aMapRObj( aRec, aHRef, aAlt, String(), aTarget, aName,
                                           !bNoHRef );
-            if( aMacroTbl.Count() )
+            if( !aMacroTbl.empty() )
                 aMapRObj.SetMacroTable( aMacroTbl );
             pImageMap->InsertIMapObject( aMapRObj );
         }
@@ -209,7 +208,7 @@ IMAPOBJ_SETEVENT:
             Point aPoint( aCoords[0], aCoords[1] );
             IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, String(),
                                        aTarget, aName, !bNoHRef );
-            if( aMacroTbl.Count() )
+            if( !aMacroTbl.empty() )
                 aMapCObj.SetMacroTable( aMacroTbl );
             pImageMap->InsertIMapObject( aMapCObj );
         }
@@ -223,7 +222,7 @@ IMAPOBJ_SETEVENT:
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
             IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, String(), aTarget, aName,
                                         !bNoHRef );
-            if( aMacroTbl.Count() )
+            if( !aMacroTbl.empty() )
                 aMapPObj.SetMacroTable( aMacroTbl );
             pImageMap->InsertIMapObject( aMapPObj );
         }

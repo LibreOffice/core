@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_package_headers,sax,\
 
 $(eval $(call gb_Library_set_include,sax,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sax/inc) \
+	-I$(SRCDIR)/sax/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sax,\
@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,sax,\
 	sax/source/tools/fastattribs \
 	sax/source/tools/fastserializer \
 	sax/source/tools/fshelper \
+	sax/source/expatwrap/xml2utf \
 ))
 
 # vim: set noet sw=4 ts=4:

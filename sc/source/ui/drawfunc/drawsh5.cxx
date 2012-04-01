@@ -500,7 +500,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
-                        String aName(pSelected->GetName());
+                        rtl::OUString aName = pSelected->GetName();
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -512,14 +512,16 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         if(RET_OK == pDlg->Execute())
                         {
                             ScDocShell* pDocSh = pViewData->GetDocShell();
-                            pDlg->GetName(aName);
+                            String aTmp;
+                            pDlg->GetName(aTmp);
+                            aName = aTmp;
 
-                            if(aName != pSelected->GetName())
+                            if (!aName.equals(pSelected->GetName()))
                             {
                                 // handle name change
                                 const sal_uInt16 nObjType(pSelected->GetObjIdentifier());
 
-                                if(OBJ_GRAF == nObjType && 0L == aName.Len())
+                                if (OBJ_GRAF == nObjType && aName.isEmpty())
                                 {
                                     //  graphics objects must have names
                                     //  (all graphics are supposed to be in the navigator)

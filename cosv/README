@@ -1,0 +1,3 @@
+"Common Services" part of autodoc.
+
+Part of the SDK; to build you need to add --enable-odk.

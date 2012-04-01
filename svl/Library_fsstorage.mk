@@ -28,15 +28,12 @@
 
 $(eval $(call gb_Library_Library,fsstorage))
 
+$(eval $(call gb_Library_add_package_headers,fsstorage,svl_inc))
+
 $(eval $(call gb_Library_set_componentfile,fsstorage,svl/source/fsstor/fsstorage))
 
 $(eval $(call gb_Library_set_include,fsstorage,\
-    -I$(WORKDIR)/inc/svl \
-    -I$(WORKDIR)/inc/ \
-    -I$(realpath $(SRCDIR)/svl/inc) \
-    -I$(realpath $(SRCDIR)/svl/inc/svl) \
-    -I$(realpath $(SRCDIR)/svl/source/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/svl/source/inc \
     $$(INCLUDE) \
 ))
 

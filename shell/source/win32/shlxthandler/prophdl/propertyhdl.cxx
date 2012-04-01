@@ -63,11 +63,11 @@ struct PROPERTYMAP
 
 PROPERTYMAP g_rgPROPERTYMAP[] =
 {
-    { PKEY_Title,          L"OpenOffice.org",          L"Title" },
-    { PKEY_Author,         L"OpenOffice.org",          L"Author" },
-    { PKEY_Subject,        L"OpenOffice.org",          L"Subject" },
-    { PKEY_Keywords,       L"OpenOffice.org",          L"Keyword" },
-    { PKEY_Comment,        L"OpenOffice.org",          L"Comments" },
+    { PKEY_Title,          L"LibreOffice",          L"Title" },
+    { PKEY_Author,         L"LibreOffice",          L"Author" },
+    { PKEY_Subject,        L"LibreOffice",          L"Subject" },
+    { PKEY_Keywords,       L"LibreOffice",          L"Keyword" },
+    { PKEY_Comment,        L"LibreOffice",          L"Comments" },
 };
 
 size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
@@ -228,14 +228,13 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
 #endif
             OutputDebugStringFormat( "CPropertyHdl::Initialize: PSCreateMemoryPropertyStore failed" );
 
-        zlib_filefunc_def z_filefunc;
-        pStream = PrepareIStream( pStream, z_filefunc );
+        BufferStream tmpStream(pStream);
 
         CMetaInfoReader *pMetaInfoReader = NULL;
 
         try
         {
-            pMetaInfoReader = new CMetaInfoReader( (void*)pStream, &z_filefunc );
+            pMetaInfoReader = new CMetaInfoReader( &tmpStream );
             LoadProperties( pMetaInfoReader );
             delete pMetaInfoReader;
         }

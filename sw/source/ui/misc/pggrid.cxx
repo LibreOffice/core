@@ -514,7 +514,7 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwTextGridPage, DisplayGridHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl)
 {
     sal_Bool bChecked = aDisplayCB.IsChecked();
     aPrintCB.Enable(bChecked);
@@ -522,7 +522,7 @@ IMPL_LINK(SwTextGridPage, DisplayGridHdl, CheckBox*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwTextGridPage, GridModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwTextGridPage, GridModifyHdl)
 {
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemSet aSet(rOldSet);

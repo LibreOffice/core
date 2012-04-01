@@ -77,10 +77,10 @@ Writer::Item::Item(
 {}
 
 Writer::Writer(rtl::Reference< Bridge > const  & bridge):
-    bridge_(bridge), marshal_(bridge, state_), stop_(false)
+    Thread("binaryurpWriter"), bridge_(bridge), marshal_(bridge, state_),
+    stop_(false)
 {
     OSL_ASSERT(bridge.is());
-    acquire();
 }
 
 void Writer::sendDirectRequest(
@@ -148,8 +148,7 @@ void Writer::stop() {
 
 Writer::~Writer() {}
 
-void Writer::run() {
-    setName("binaryurpWriter");
+void Writer::execute() {
     try {
         unblocked_.wait();
         for (;;) {
@@ -197,10 +196,6 @@ void Writer::run() {
         OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
     }
     bridge_->terminate();
-}
-
-void Writer::onTerminated() {
-    release();
 }
 
 void Writer::sendRequest(

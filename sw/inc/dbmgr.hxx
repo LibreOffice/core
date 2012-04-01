@@ -309,7 +309,7 @@ public:
     sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
     sal_Bool            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
-                            String& rResult, double* pNumber);
+                            rtl::OUString& rResult, double* pNumber);
     //create and store or find an already stored connection to a data source for use
     //in SwFldMgr and SwDBTreeList
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
@@ -324,7 +324,7 @@ public:
     void            CloseAll(sal_Bool bIncludingMerge = sal_True);
 
     sal_Bool            GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
-                                String &rResult, double *pNumber, sal_uInt32 *pFormat);
+                                rtl::OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
     sal_Bool            ToNextMergeRecord();
     sal_Bool            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
 

@@ -167,7 +167,13 @@ bool ScNameDefDlg::IsNameValid()
     }
 
     maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
-    if (!ScRangeData::IsNameValid( aName, mpDoc ))
+    if ( aName.isEmpty() )
+    {
+        maBtnAdd.Disable();
+        maFtInfo.SetText(maStrInfoDefault);
+        return false;
+    }
+    else if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
         maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrInvalidNameStr);
@@ -303,7 +309,7 @@ sal_Bool ScNameDefDlg::IsRefInputMode() const
 void ScNameDefDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(&maEdRange);
+    IsNameValid();
 }
 
 void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
@@ -346,7 +352,7 @@ void ScNameDefDlg::MorePushed()
     Size nSize = GetSizePixel();
 
     //depending on the state of the button, move all elements below up/down
-    long nPixel = 75;
+    long nPixel = 65;
     if (!maBtnMore.GetState())
     {
         nPixel *= -1;
@@ -369,37 +375,31 @@ void ScNameDefDlg::MorePushed()
     MoveWindow(maFlDiv, nPixel);
 }
 
-IMPL_LINK( ScNameDefDlg, CancelBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl)
 {
     CancelPushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, AddBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, AddBtnHdl)
 {
     AddPushed();
     return 0;
 };
 
-IMPL_LINK( ScNameDefDlg, NameModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
 {
     IsNameValid();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, EdModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl)
 {
     IsNameValid();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, AssignGetFocusHdl, void *, EMPTYARG )
-{
-    EdModifyHdl( &maEdRange );
-    return 0;
-}
-
-IMPL_LINK( ScNameDefDlg, MoreBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, MoreBtnHdl)
 {
     MorePushed();
     return 0;

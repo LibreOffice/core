@@ -298,21 +298,21 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         aTempSet.Put(SdrShadowXDistItem(0L));
         aTempSet.Put(SdrShadowYDistItem(0L));
 
-        // line color and transparence like shadow
+        // line color and transparency like shadow
         if(bLineUsed)
         {
             aTempSet.Put(XLineColorItem(String(), aShadowColor));
             aTempSet.Put(XLineTransparenceItem(nShadowTransparence));
         }
 
-        // fill color and transparence like shadow
+        // fill color and transparency like shadow
         if(bSolidFillUsed)
         {
             aTempSet.Put(XFillColorItem(String(), aShadowColor));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 
-        // gradient and transparence like shadow
+        // gradient and transparency like shadow
         if(bGradientFillUsed)
         {
             XGradient aGradient(((XFillGradientItem&)(rOriginalSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
@@ -556,7 +556,7 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
-        if ( aR.Width || aR.Height )
+        if ( aR.Width > 1 && aR.Height > 1 )
         {
             rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
             bRet = sal_True;
@@ -1369,7 +1369,7 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
                 // set path and poly conversion if one is possible since
                 // this object will first be broken
-                const sal_Bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
+                const bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
                 if(rInfo.bCanConvToPath != bCanConvToPathOrPoly)
                 {
                     rInfo.bCanConvToPath = bCanConvToPathOrPoly;
@@ -1836,7 +1836,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 // be a result of GetGluePointList and thus the list is copied
                 if(pPlusData)
                 {
-                    *pPlusData->pGluePoints = aNewList;
+                    pPlusData->SetGluePoints(aNewList);
                 }
             }
         }

@@ -37,8 +37,9 @@ $(call gb_Zip_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),ZIP,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Zip_get_target,$*) && \
-		rm -f $(call gb_Zip_get__preparation_target,$*) && \
+		rm -f $(call gb_Zip__get_preparation_target,$*) && \
 		rm -f $(call gb_Zip_get_final_target,$*) && \
+		$(if $(CLEAR_LOCATION),rm -rf $(gb_Package_Location_$*) &&) \
 		rm -f $(call gb_Zip_get_outdir_target,$*))
 
 # rule to create zip package in workdir
@@ -71,22 +72,27 @@ $(call gb_Zip__get_preparation_target,%) :
 define gb_Zip_Zip
 $(call gb_Zip_get_target,$(1)) : FILES :=
 $(call gb_Zip_get_target,$(1)) : LOCATION := $(2)
+$(call gb_Zip_get_clean_target,$(1)) : CLEAR_LOCATION :=
 gb_Package_Location_$(1) := $(2)
 $(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
-$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1))
+$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1)) \
+	| $(dir $(call gb_Zip_get_outdir_target,$(1))).dir
 
 endef
 
 # adding a file creates a dependency to it
 # the full path name of the file needs access to the package location
 # as scoped variables only exist in rules, we use a postfixed name to refer to the location
+#
 # if package location is in $(WORKDIR) we can specify third parameter and copy file from different place
+# then we need also remove the location on make clean
 define gb_Zip_add_file
 $(call gb_Zip_get_target,$(1)) : FILES += $(2)
 $(call gb_Zip_get_target,$(1)) : $(gb_Package_Location_$(1))/$(2)
 $(gb_Package_Location_$(1))/$(2) :| $(call gb_Zip__get_preparation_target,$(1))
 ifneq ($(3),)
+$(call gb_Zip_get_clean_target,$(1)) : CLEAR_LOCATION := TRUE
 $(gb_Package_Location_$(1))/$(2) : $(3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
@@ -107,6 +113,11 @@ endef
 
 define gb_Zip_add_dependencies
 $(foreach dependency,$(2),$(call gb_Zip_add_dependency,$(1),$(dependency)))
+
+endef
+
+define gb_Zip_add_commandoptions
+$(call gb_Zip_get_target,$(1)) : gb_Zip_ZIPCOMMAND += $(2)
 
 endef
 

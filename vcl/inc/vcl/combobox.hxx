@@ -78,6 +78,7 @@ protected:
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
+    SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
 
 protected:
                     ComboBox( WindowType nType );

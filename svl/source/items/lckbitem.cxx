@@ -49,14 +49,6 @@ SfxLockBytesItem::SfxLockBytesItem()
 
 // -----------------------------------------------------------------------
 
-SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvLockBytes *pLockBytes )
-:   SfxPoolItem( nW ),
-    _xVal( pLockBytes )
-{
-}
-
-// -----------------------------------------------------------------------
-
 SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
 {

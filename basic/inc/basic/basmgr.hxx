@@ -87,6 +87,9 @@ public:
     virtual String getLibraryPassword( const String& rLibraryName ) = 0;
     virtual void clearLibraryPassword( const String& rLibraryName ) = 0;
     virtual sal_Bool hasLibraryPassword( const String& rLibraryName ) = 0;
+
+protected:
+    ~OldBasicPassword() {}
 };
 
 struct LibraryContainerInfo

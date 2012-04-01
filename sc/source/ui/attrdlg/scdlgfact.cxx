@@ -1175,7 +1175,7 @@ AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg 
 
 AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,
                                                                 int nId,
-                                                                const ScDPLabelDataVector& rLabelVec,
+                                                                const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData )
 {

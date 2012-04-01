@@ -71,17 +71,15 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/thread.hxx"
 #include "ucbhelper/content.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "comphelper/anytostring.hxx"
-#include "comphelper/string.hxx"
 #include "vcl/msgbox.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
-#include "comphelper/processfactory.hxx"
 
 #include "dp_gui.h"
-#include "dp_gui_thread.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_dialog2.hxx"
@@ -232,7 +230,7 @@ struct ExtensionCmd
 typedef ::boost::shared_ptr< ExtensionCmd > TExtensionCmd;
 
 //------------------------------------------------------------------------------
-class ExtensionCmdQueue::Thread: public dp_gui::Thread
+class ExtensionCmdQueue::Thread: public salhelper::Thread
 {
 public:
     Thread( DialogHelper *pDialogHelper,
@@ -251,13 +249,9 @@ public:
     bool isBusy();
 
 private:
-    Thread( Thread & ); // not defined
-    void operator =( Thread & ); // not defined
-
     virtual ~Thread();
 
     virtual void execute();
-    virtual void SAL_CALL onTerminated();
 
     void _insert(const TExtensionCmd& rExtCmd);
 
@@ -292,7 +286,6 @@ private:
     osl::Condition   m_wakeup;
     osl::Mutex       m_mutex;
     Input            m_eInput;
-    bool             m_bTerminated;
     bool             m_bStopped;
     bool             m_bWorking;
 };
@@ -626,6 +619,7 @@ void ProgressCmdEnv::pop()
 ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
                                    TheExtensionManager *pManager,
                                    const uno::Reference< uno::XComponentContext > & rContext ) :
+    salhelper::Thread( "dp_gui_extensioncmdqueue" ),
     m_xContext( rContext ),
     m_pDialogHelper( pDialogHelper ),
     m_pManager( pManager ),
@@ -636,7 +630,6 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_sDefaultCmd( DialogHelper::getResourceString( RID_STR_ADD_PACKAGES ) ),
     m_sAcceptLicense( DialogHelper::getResourceString( RID_STR_ACCEPT_LICENSE ) ),
     m_eInput( NONE ),
-    m_bTerminated( false ),
     m_bStopped( false ),
     m_bWorking( false )
 {
@@ -899,7 +892,8 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     rCmdEnv->setWarnUser( bWarnUser );
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = comphelper::string::replace(m_sAddingPackages, OUSTR("%EXTENSION_NAME"), sName);
+    OUString sTitle(
+        m_sAddingPackages.replaceAll("%EXTENSION_NAME", sName));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -926,7 +920,9 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 {
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = comphelper::string::replace(m_sRemovingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
+    OUString sTitle(
+        m_sRemovingPackages.replaceAll("%EXTENSION_NAME",
+            xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     OUString id( dp_misc::getIdentifier( xPackage ) );
@@ -1009,7 +1005,9 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = comphelper::string::replace(m_sEnablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
+    OUString sTitle(
+        m_sEnablingPackages.replaceAll("%EXTENSION_NAME",
+            xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1031,7 +1029,9 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = comphelper::string::replace(m_sDisablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
+    OUString sTitle(
+        m_sDisablingPackages.replaceAll("%EXTENSION_NAME",
+            xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1053,7 +1053,9 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = comphelper::string::replace(m_sAcceptLicense, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
+    OUString sTitle(
+        m_sAcceptLicense.replaceAll("%EXTENSION_NAME",
+            xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1064,13 +1066,6 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
     }
     catch ( const ::ucb::CommandAbortedException & )
     {}
-}
-
-//------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::onTerminated()
-{
-    ::osl::MutexGuard g(m_mutex);
-    m_bTerminated = true;
 }
 
 void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)

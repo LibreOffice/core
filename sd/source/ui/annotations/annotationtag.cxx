@@ -237,7 +237,8 @@ void AnnotationHdl::CreateB2dIAObject()
                         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
                         SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                        if(rPaintWindow.OutputToWindow() && rPageWindow.GetOverlayManager() )
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if(rPaintWindow.OutputToWindow() && xManager.is() )
                         {
                             ::sdr::overlay::OverlayObject* pOverlayObject = 0;
 
@@ -259,7 +260,7 @@ void AnnotationHdl::CreateB2dIAObject()
                                 pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
                             }
 
-                            rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                            xManager->add(*pOverlayObject);
                             maOverlayGroup.append(*pOverlayObject);
                         }
                     }
@@ -753,7 +754,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_True;
 }
 
-IMPL_LINK( AnnotationTag, ClosePopupHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl)
 {
     mnClosePopupEvent = 0;
     ClosePopup();

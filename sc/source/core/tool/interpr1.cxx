@@ -2330,11 +2330,11 @@ void ScInterpreter::ScCellExternal()
     ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
 
-    if (aInfoType.equalsAscii("COL"))
+    if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COL")))
         PushInt(nCol + 1);
-    else if (aInfoType.equalsAscii("ROW"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ROW")))
         PushInt(nRow + 1);
-    else if (aInfoType.equalsAscii("SHEET"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SHEET")))
     {
         // For SHEET, No idea what number we should set, but let's always set
         // 1 if the external sheet exists, no matter what sheet.  Excel does
@@ -2344,7 +2344,7 @@ void ScInterpreter::ScCellExternal()
         else
             SetError(errNoName);
     }
-    else if (aInfoType.equalsAscii("ADDRESS"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ADDRESS")))
     {
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
         ScTokenArray aArray;
@@ -2355,7 +2355,7 @@ void ScInterpreter::ScCellExternal()
         aComp.CreateStringFromTokenArray(aStr);
         PushString(aStr);
     }
-    else if (aInfoType.equalsAscii("FILENAME"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FILENAME")))
     {
         // 'file URI'#$SheetName
 
@@ -2374,7 +2374,7 @@ void ScInterpreter::ScCellExternal()
         aBuf.append(aTabName);
         PushString(aBuf.makeStringAndClear());
     }
-    else if (aInfoType.equalsAscii("CONTENTS"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CONTENTS")))
     {
         switch (pToken->GetType())
         {
@@ -2391,7 +2391,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(ScGlobal::GetEmptyString());
         }
     }
-    else if (aInfoType.equalsAscii("TYPE"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TYPE")))
     {
         sal_Unicode c = 'v';
         switch (pToken->GetType())
@@ -2407,14 +2407,14 @@ void ScInterpreter::ScCellExternal()
         }
         PushString(rtl::OUString(c));
     }
-    else if (aInfoType.equalsAscii("FORMAT"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FORMAT")))
     {
         String aFmtStr;
         sal_uLong nFmt = aFmt.mbIsSet ? aFmt.mnIndex : 0;
         getFormatString(pFormatter, nFmt, aFmtStr);
         PushString(aFmtStr);
     }
-    else if (aInfoType.equalsAscii("COLOR"))
+    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COLOR")))
     {
         // 1 = negative values are colored, otherwise 0
         int nVal = 0;
@@ -2425,7 +2425,7 @@ void ScInterpreter::ScCellExternal()
         }
         PushInt(nVal);
     }
-    else if(aInfoType.equalsAscii("PARENTHESES"))
+    else if(aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PARENTHESES")))
     {
         // 1 = format string contains a '(' character, otherwise 0
         int nVal = 0;
@@ -2569,7 +2569,7 @@ void ScInterpreter::ScIsFormula()
 void ScInterpreter::ScFormula()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFormula" );
-    String aFormula;
+    rtl::OUString aFormula;
     switch ( GetStackType() )
     {
         case svDoubleRef :

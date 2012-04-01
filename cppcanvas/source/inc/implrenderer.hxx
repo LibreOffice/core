@@ -184,9 +184,6 @@ static float GetSwapFloat( SvStream& rSt )
             ImplRenderer( const CanvasSharedPtr&    rCanvas,
                           const GDIMetaFile&        rMtf,
                           const Parameters&         rParms );
-            ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const BitmapEx&           rBmpEx,
-                          const Parameters&         rParms );
 
             virtual ~ImplRenderer();
 
@@ -218,12 +215,10 @@ static float GetSwapFloat( SvStream& rSt )
 
             /* EMF+ */
             void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags = 0);
-            void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags = 0);
+            void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags);
             void MapToDevice (double &x, double &y);
-            ::basegfx::B2DPoint Map (::basegfx::B2DPoint& p);
             ::basegfx::B2DPoint Map (double ix, double iy);
             ::basegfx::B2DSize MapSize (double iwidth, double iheight);
-            ::basegfx::B2DRange MapRectangle (double ix, double iy, double iwidth, double iheight);
 
         private:
             // default: disabled copy/assignment
@@ -276,7 +271,7 @@ static float GetSwapFloat( SvStream& rSt )
                                    ActionVector::const_iterator& o_rRangeBegin,
                                    ActionVector::const_iterator& o_rRangeEnd ) const;
 
-            void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags);
+            void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_Bool bUseWholeStream = sal_False);
             void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
             void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 

@@ -201,11 +201,10 @@ SwVbaCells::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaCells::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaCells") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCells"));
 }
 
 uno::Sequence<rtl::OUString>

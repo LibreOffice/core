@@ -57,7 +57,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/imagemgr.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
@@ -851,7 +850,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
     }
 }
 
-IMPL_LINK(AnnotationManagerImpl,UpdateTagsHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl)
 {
     mnUpdateTagsEvent  = 0;
     DisposeTags();

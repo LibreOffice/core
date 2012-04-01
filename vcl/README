@@ -1,3 +1,5 @@
+Visual Components Library is responsible for the widgets (windowing, buttons, controls, etc.) operating system abstraction, including basic rendering (e.g. the output device).
+
 Welcome to the Visual Class Libraries (vcl) code
 
 source/

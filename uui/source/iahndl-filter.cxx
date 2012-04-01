@@ -65,8 +65,7 @@ executeFilterDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
 
         std::auto_ptr< uui::FilterDialog > xDialog(
             new uui::FilterDialog(pParent, xManager.get()));

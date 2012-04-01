@@ -86,7 +86,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 /*------------------------------------------------------------------------
      Description: callback to delete a text mark
  -----------------------------------------------------------------------*/
-IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
 {
     // remove text marks from the ComboBox
 

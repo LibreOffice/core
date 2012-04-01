@@ -58,6 +58,7 @@ static struct {
     { "nologo",     0, 1, 0, 0, NULL },
     { "headless",   0, 1, 0, 0, NULL },
     { "invisible",  0, 1, 0, 0, NULL },
+    { "quickstart", 0, 1, 0, 0, NULL },
     { "minimized",  0, 1, 0, 0, NULL },
 
     /* pagein bits */

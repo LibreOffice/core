@@ -626,33 +626,6 @@ bool EquidistantTickIter::gotoNext()
     return true;
 }
 
-bool EquidistantTickIter::gotoIndex( sal_Int32 nTickIndex )
-{
-    if( nTickIndex < 0 )
-        return false;
-    if( nTickIndex >= m_nTickCount )
-        return false;
-
-    if( nTickIndex < m_nCurrentPos )
-        if( !gotoFirst() )
-            return false;
-
-    while( nTickIndex > m_nCurrentPos )
-        if( !gotoNext() )
-            return false;
-
-    return true;
-}
-
-sal_Int32 EquidistantTickIter::getCurrentIndex() const
-{
-    return m_nCurrentPos;
-}
-sal_Int32 EquidistantTickIter::getMaxIndex() const
-{
-    return m_nTickCount-1;
-}
-
 double* EquidistantTickIter::nextValue()
 {
     if( gotoNext() )

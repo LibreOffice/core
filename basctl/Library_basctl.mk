@@ -31,9 +31,9 @@ $(eval $(call gb_Library_Library,basctl))
 $(eval $(call gb_Library_set_componentfile,basctl,basctl/util/basctl))
 
 $(eval $(call gb_Library_set_include,basctl,\
-	-I$(realpath $(SRCDIR)/basctl/inc) \
-	-I$(realpath $(SRCDIR)/basctl/sdi) \
-	-I$(realpath $(SRCDIR)/basctl/source/inc) \
+	-I$(SRCDIR)/basctl/inc \
+	-I$(SRCDIR)/basctl/sdi \
+	-I$(SRCDIR)/basctl/source/inc \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/SdiTarget/basctl/sdi \
 ))

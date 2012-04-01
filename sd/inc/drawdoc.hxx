@@ -39,8 +39,6 @@
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 
 #include <svx/svdundo.hxx>
 
@@ -204,8 +202,8 @@ private:
     void                FillOnlineSpellingList(SdPage* pPage);
     void                SpellObject(SdrTextObj* pObj);
 
-                        DECL_LINK(WorkStartupHdl, Timer*);
-                        DECL_LINK(OnlineSpellingHdl, Timer*);
+                        DECL_LINK(WorkStartupHdl, void *);
+                        DECL_LINK(OnlineSpellingHdl, void *);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< rtl::OUString > maAnnotationAuthors;

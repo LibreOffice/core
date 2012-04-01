@@ -53,9 +53,7 @@
 
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#define _SD_DLL                 // fuer SD_MOD()
 #include "sdmod.hxx"
-#include "sddll.hxx"
 #include "app.hrc"
 #include "glob.hrc"
 #include "strings.hrc"
@@ -77,7 +75,6 @@
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "sdabstdlg.hxx"
-#include "tpoption.hrc"
 #include "prntopts.hrc"
 #include <svl/intitem.hxx>
 

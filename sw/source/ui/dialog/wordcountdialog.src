@@ -131,11 +131,13 @@ ModelessDialog DLG_WORDCOUNT
     };
         HelpButton      PB_HELP
     {
+        HelpID = HID_DLG_WORDCOUNT ;
         Pos = MAP_APPFONT ( 5 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 15 ) ;
     };
     OKButton        PB_OK
     {
+        HelpID = HID_DLG_WORDCOUNT ;
         Pos = MAP_APPFONT ( 115 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 15 ) ;
         DefButton = TRUE ;

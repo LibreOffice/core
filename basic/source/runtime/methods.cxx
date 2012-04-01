@@ -120,6 +120,11 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #undef GradientSyle_RECT
 #endif
 
+#ifndef DISABLE_SCRIPTING
+
+// forward decl.
+sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+
 // from source/classes/sbxmod.cxx
 Reference< XModel > getDocumentModel( StarBASIC* );
 
@@ -143,20 +148,7 @@ static void FilterWhiteSpace( String& rStr )
     rStr = aRet.makeStringAndClear();
 }
 
-static long GetDayDiff( const Date& rDate )
-{
-    Date aRefDate( 1,1,1900 );
-    long nDiffDays;
-    if ( aRefDate > rDate )
-    {
-        nDiffDays = (long)(aRefDate - rDate);
-        nDiffDays *= -1;
-    }
-    else
-        nDiffDays = (long)(rDate - aRefDate);
-    nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
-    return nDiffDays;
-}
+static long GetDayDiff( const Date& rDate );
 
 static const CharClass& GetCharClass( void )
 {
@@ -1761,68 +1753,7 @@ sal_Int16 implGetDateMonth( double aDate )
     return nRet;
 }
 
-sal_Int16 implGetDateYear( double aDate )
-{
-    Date aRefDate( 1,1,1900 );
-    long nDays = (long) aDate;
-    nDays -= 2; // standardize: 1.1.1900 => 0.0
-    aRefDate += nDays;
-    sal_Int16 nRet = (sal_Int16)( aRefDate.GetYear() );
-    return nRet;
-}
-
-sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
-{
-    if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
-        nYear += 2000;
-    else if ( nYear < 100 )
-        nYear += 1900;
-    Date aCurDate( nDay, nMonth, nYear );
-    if ((nYear < 100 || nYear > 9999) )
-    {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        return sal_False;
-    }
-    if ( !SbiRuntime::isVBAEnabled() )
-    {
-        if ( (nMonth < 1 || nMonth > 12 )||
-        (nDay < 1 || nDay > 31 ) )
-        {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-            return sal_False;
-        }
-    }
-    else
-    {
-        // grab the year & month
-        aCurDate = Date( 1, (( nMonth % 12 ) > 0 ) ? ( nMonth % 12 ) : 12 + ( nMonth % 12 ), nYear );
-
-        // adjust year based on month value
-        // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
-        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
-        if( ( nMonth < 1 ) || ( nMonth > 12 ) )
-        {
-            // inacurrate around leap year, don't use days to calculate,
-            // just modify the months directory
-            sal_Int16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
-            if ( nMonth <=0 )
-                nYearAdj = ( ( nMonth -12 ) / 12 );
-            aCurDate.SetYear( aCurDate.GetYear() + nYearAdj );
-        }
-
-        // adjust day value,
-        // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
-        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
-        if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
-            aCurDate += nDay - 1;
-        else
-            aCurDate.SetDay( nDay );
-    }
-
-    long nDiffDays = GetDayDiff( aCurDate );
-    rdRet = (double)nDiffDays;
-    return sal_True;
-}
+sal_Int16 implGetDateYear( double aDate );
 
 // Function to convert date to ISO 8601 date format
 RTLFUNC(CDateToIso)
@@ -2077,17 +2008,7 @@ RTLFUNC(Hour)
     }
 }
 
-sal_Int16 implGetMinute( double dDate )
-{
-    if( dDate < 0.0 )
-        dDate *= -1.0;
-    double nFrac = dDate - floor( dDate );
-    nFrac *= 86400.0;
-    sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
-    sal_Int16 nTemp = (sal_Int16)(nSeconds % 3600);
-    sal_Int16 nMin = nTemp / 60;
-    return nMin;
-}
+sal_Int16 implGetMinute( double dDate );
 
 RTLFUNC(Minute)
 {
@@ -4426,6 +4347,110 @@ RTLFUNC(Partition)
     }
     aRetStr.append( aUpperValue );
     rPar.Get(0)->PutString( String(aRetStr.makeStringAndClear()) );
+}
+
+#endif
+
+static long GetDayDiff( const Date& rDate )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDiffDays;
+    if ( aRefDate > rDate )
+    {
+        nDiffDays = (long)(aRefDate - rDate);
+        nDiffDays *= -1;
+    }
+    else
+        nDiffDays = (long)(rDate - aRefDate);
+    nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
+    return nDiffDays;
+}
+
+sal_Int16 implGetDateYear( double aDate )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDays = (long) aDate;
+    nDays -= 2; // standardize: 1.1.1900 => 0.0
+    aRefDate += nDays;
+    sal_Int16 nRet = (sal_Int16)( aRefDate.GetYear() );
+    return nRet;
+}
+
+sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
+{
+#ifndef DISABLE_SCRIPTING
+    if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
+        nYear += 2000;
+    else
+#endif
+        if ( nYear < 100 )
+            nYear += 1900;
+    Date aCurDate( nDay, nMonth, nYear );
+    if ((nYear < 100 || nYear > 9999) )
+    {
+#ifndef DISABLE_SCRIPTING
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+#endif
+        return sal_False;
+    }
+
+#ifndef DISABLE_SCRIPTING
+    if ( !SbiRuntime::isVBAEnabled() )
+#endif
+    {
+        if ( (nMonth < 1 || nMonth > 12 )||
+        (nDay < 1 || nDay > 31 ) )
+        {
+#ifndef DISABLE_SCRIPTING
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+#endif
+            return sal_False;
+        }
+    }
+#ifndef DISABLE_SCRIPTING
+    else
+    {
+        // grab the year & month
+        aCurDate = Date( 1, (( nMonth % 12 ) > 0 ) ? ( nMonth % 12 ) : 12 + ( nMonth % 12 ), nYear );
+
+        // adjust year based on month value
+        // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
+        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
+        if( ( nMonth < 1 ) || ( nMonth > 12 ) )
+        {
+            // inacurrate around leap year, don't use days to calculate,
+            // just modify the months directory
+            sal_Int16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
+            if ( nMonth <=0 )
+                nYearAdj = ( ( nMonth -12 ) / 12 );
+            aCurDate.SetYear( aCurDate.GetYear() + nYearAdj );
+        }
+
+        // adjust day value,
+        // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
+        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
+        if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
+            aCurDate += nDay - 1;
+        else
+            aCurDate.SetDay( nDay );
+    }
+#endif
+
+    long nDiffDays = GetDayDiff( aCurDate );
+    rdRet = (double)nDiffDays;
+    return sal_True;
+}
+
+sal_Int16 implGetMinute( double dDate )
+{
+    if( dDate < 0.0 )
+        dDate *= -1.0;
+    double nFrac = dDate - floor( dDate );
+    nFrac *= 86400.0;
+    sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
+    sal_Int16 nTemp = (sal_Int16)(nSeconds % 3600);
+    sal_Int16 nMin = nTemp / 60;
+    return nMin;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

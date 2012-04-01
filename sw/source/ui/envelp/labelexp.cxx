@@ -123,7 +123,7 @@ void SwVisitingCardPage::InitFrameControl()
     }
 }
 
-IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 {
     SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
     String sEntry;

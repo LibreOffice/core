@@ -258,9 +258,9 @@ ImplPrimitrive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE
         SdrPaintWindow* pPaintWindow = rDocView.GetDrawView()->GetPaintWindow(0);
         if( pPaintWindow )
         {
-            sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
+            rtl::Reference< ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
 
-            if ( pOverlayManager )
+            if ( xOverlayManager.is() )
             {
                 pAnchorOverlayObject = new AnchorOverlayObject(
                     basegfx::B2DPoint( aAnchorRect.Left() , aAnchorRect.Bottom()-5*15),
@@ -273,7 +273,7 @@ ImplPrimitrive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE
                     aColorAnchor,
                     false,
                     false);
-                pOverlayManager->add(*pAnchorOverlayObject);
+                xOverlayManager->add(*pAnchorOverlayObject);
             }
         }
     }

@@ -134,7 +134,7 @@ void OWizColumnSelect::ActivatePage( )
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
     // if there are no dest columns reset the left side with the origibnal columns
-    if(m_pParent->getDestColumns()->size() == 0)
+    if(m_pParent->getDestColumns()->empty())
         Reset();
 
     clearListBox(m_lbNewColumnNames);

@@ -88,7 +88,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
     bool                m_bStop;
 
     void                Test();
-    DECL_LINK(StopHdl, PushButton*);
+    DECL_LINK(StopHdl, void *);
     DECL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*);
 public:
     SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
@@ -129,9 +129,9 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
 
     SwMailMergeConfigItem& rConfigItem;
 
-    DECL_LINK( OKHdl_Impl, OKButton*);
+    DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK( CheckBoxHdl_Impl, CheckBox*);
-    DECL_LINK( RadioButtonHdl_Impl, RadioButton*);
+    DECL_LINK(RadioButtonHdl_Impl, void *);
 
 
 public:
@@ -236,14 +236,14 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailConfigPage, AuthenticationHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl)
 {
     SwAuthenticationSettingsDialog aDlg(this, *m_pConfigItem);
     aDlg.Execute();
     return 0;
 }
 
-IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailConfigPage, TestHdl)
 {
     SwTestAccountSettingsDialog(this).Execute();
     return 0;
@@ -317,7 +317,7 @@ SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
 {
 }
 
-IMPL_LINK(SwTestAccountSettingsDialog, StopHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl)
 {
     m_bStop = true;
     return 0;
@@ -522,7 +522,7 @@ SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
 {
 }
 
-IMPL_LINK( SwAuthenticationSettingsDialog, OKHdl_Impl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
 {
     rConfigItem.SetAuthentication( m_aAuthenticationCB.IsChecked() );
     rConfigItem.SetSMTPAfterPOP(m_aSMTPAfterPOPRB.IsChecked());
@@ -548,7 +548,7 @@ IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-IMPL_LINK( SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, RadioButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
 {
     sal_Bool bSeparate = m_aSeparateAuthenticationRB.IsChecked();
     sal_Bool bIsEnabled = m_aSeparateAuthenticationRB.IsEnabled();

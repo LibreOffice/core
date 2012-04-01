@@ -449,7 +449,7 @@ void SalXLib::Init()
         }
     }
 
-    if (!pDisp && !aDisplay.getLength())
+    if (!pDisp && aDisplay.isEmpty())
     {
         // Open $DISPLAY or default...
         char *pDisplay = getenv("DISPLAY");

@@ -87,7 +87,7 @@ SwEnvPrtPage::~SwEnvPrtPage()
 {
 }
 
-IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
 {
     if (aBottomButton.IsChecked())
     {
@@ -130,7 +130,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
 {
     if (aAlignBox.GetCurItemId())
     {

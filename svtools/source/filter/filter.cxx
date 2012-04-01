@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -77,8 +76,6 @@
 
 #define IMPORT_FUNCTION_NAME    "GraphicImport"
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
-#define IMPDLG_FUNCTION_NAME    "DoImportDialog"
-#define EXPDLG_FUNCTION_NAME    "DoExportDialog"
 
 // -----------
 // - statics -
@@ -926,9 +923,6 @@ struct ImpFilterLibCacheEntry
     int                     operator==( const String& rFiltername ) const { return maFiltername == rFiltername; }
 
     PFilterCall             GetImportFunction();
-    PFilterDlgCall          GetImportDlgFunction();
-    PFilterCall             GetExportFunction() { return (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) ); }
-    PFilterDlgCall          GetExportDlgFunction() { return (PFilterDlgCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) ); }
 };
 
 // ------------------------------------------------------------------------
@@ -953,14 +947,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 }
 
 // ------------------------------------------------------------------------
-
-PFilterDlgCall ImpFilterLibCacheEntry::GetImportDlgFunction()
-{
-    if( !mpfnImportDlg )
-        mpfnImportDlg = (PFilterDlgCall)maLibrary.getFunctionSymbol( UniString::CreateFromAscii( IMPDLG_FUNCTION_NAME ) );
-
-    return mpfnImportDlg;
-}
 
 // ---------------------
 // - ImpFilterLibCache -
@@ -1961,7 +1947,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                                         if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
                                         {
                                             std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();
-                                            if ( rChunkData.size() )
+                                            if ( !rChunkData.empty() )
                                             {
                                                 sal_uInt32 nChunkLen = aByteSeq.getLength();
 
@@ -2092,22 +2078,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 sal_Bool GraphicFilter::Setup( sal_uInt16 )
 {
     return sal_False;
-}
-
-/* ------------------------------------------------------------------------
-    No Import filter has a dialog, so
-   the following two methods are obsolete */
-
-sal_Bool GraphicFilter::HasImportDialog( sal_uInt16 )
-{
-    return sal_True;
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GraphicFilter::DoImportDialog( Window*, sal_uInt16 )
-{
-    return sal_True;
 }
 
 // ------------------------------------------------------------------------

@@ -60,6 +60,9 @@ EXTRA_CDEFS+:=-isysroot $(MACOSX_SDK_PATH)  -DMAC_OS_X_VERSION_MIN_REQUIRED=$(MA
 CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
+.IF "$(HAVE_SFINAE_ANONYMOUS_BROKEN)" == "TRUE"
+CDEFS += -DHAVE_SFINAE_ANONYMOUS_BROKEN
+.ENDIF # "$(HAVE_SFINAE_ANONYMOUS_BROKEN)" == "TRUE"
 
 # MacOS X specific Java compilation/link flags
 SOLAR_JAVA*=TRUE
@@ -103,7 +106,10 @@ OBJCFLAGS=-fobjc-exceptions
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 
 # Comp Flags for files that do not need exceptions enabled (C and C++)
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions

@@ -296,7 +296,7 @@ void ODesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
 {
 }
 //----------------------------------------------------------------------------
-IMPL_LINK( ODesignView, MarkTimeout, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(ODesignView, MarkTimeout)
 {
     if ( m_pPropWin && m_pPropWin->IsVisible() )
     {

@@ -166,11 +166,11 @@ ScVbaOLEObjects::getElementType() throw (uno::RuntimeException)
 {
     return ooo::vba::excel::XOLEObject::static_type(0);
 }
-rtl::OUString&
+
+rtl::OUString
 ScVbaOLEObjects::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObjects") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObjects"));
 }
 
 uno::Sequence< rtl::OUString >

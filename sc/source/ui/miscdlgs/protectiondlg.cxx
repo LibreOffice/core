@@ -146,13 +146,13 @@ IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, CheckBox*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScTableProtectionDlg, OKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl)
 {
     EndDialog(RET_OK);
     return 0;
 }
 
-IMPL_LINK( ScTableProtectionDlg, PasswordModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl)
 {
     String aPass1 = maPassword1Edit.GetText();
     String aPass2 = maPassword2Edit.GetText();

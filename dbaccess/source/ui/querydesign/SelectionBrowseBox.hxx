@@ -87,6 +87,7 @@ namespace dbaui
 
         String                              m_aFunctionStrings;
         sal_uInt16                          m_nVisibleCount;                // Anzahl der max sichtbaren Zeilen
+        sal_uInt32                          m_nLastSortColumn;              // index of last (highest) sort column
         sal_Bool                            m_bOrderByUnRelated;
         sal_Bool                            m_bGroupByUnRelated;
         sal_Bool                            m_bStopTimer;
@@ -255,7 +256,7 @@ namespace dbaui
             @param  _sFieldName
                 The field name inserted by the user.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
@@ -279,7 +280,7 @@ namespace dbaui
             @param  _xMetaData
                 Use to parse the node to a string.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return

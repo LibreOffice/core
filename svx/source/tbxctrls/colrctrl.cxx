@@ -105,20 +105,6 @@ sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, 
 |*
 \************************************************************************/
 
-SvxColorValueSet::SvxColorValueSet( Window* _pParent, WinBits nWinStyle ) :
-    ValueSet( _pParent, nWinStyle ),
-    DragSourceHelper( this ),
-    bLeft (sal_True)
-{
-    SetAccessibleName(String( SVX_RES( STR_COLORTABLE ) ) );
-}
-
-/*************************************************************************
-|*
-|* SvxColorValueSet: Ctor
-|*
-\************************************************************************/
-
 SvxColorValueSet::SvxColorValueSet( Window* _pParent, const ResId& rResId ) :
     ValueSet( _pParent, rResId ),
     DragSourceHelper( this ),
@@ -470,7 +456,7 @@ sal_Bool SvxColorDockingWindow::Close()
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxColorDockingWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = aColorSet.GetSelectItemId();

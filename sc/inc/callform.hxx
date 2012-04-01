@@ -29,9 +29,9 @@
 #ifndef SC_CALLFORM_HXX
 #define SC_CALLFORM_HXX
 
-#include "collect.hxx"
-
 #include <rtl/ustring.hxx>
+
+#include <boost/ptr_container/ptr_map.hpp>
 
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
@@ -57,61 +57,65 @@ enum ParamType
 };
 
 class ModuleData;
-class FuncData : public ScDataObject
+
+class FuncData
 {
-friend class FuncCollection;
+    friend class FuncCollection;
+
     const ModuleData* pModuleData;
-    String      aInternalName;
-    String      aFuncName;
+    rtl::OUString aInternalName;
+    rtl::OUString aFuncName;
     sal_uInt16      nNumber;
     sal_uInt16      nParamCount;
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
-private:
-    FuncData(const String& rIName);
 public:
     FuncData(const ModuleData*pModule,
-             const String&    rIName,
-             const String&    rFName,
+             const rtl::OUString& rIName,
+             const rtl::OUString& rFName,
                    sal_uInt16     nNo,
                    sal_uInt16     nCount,
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
-    virtual ScDataObject*   Clone() const { return new FuncData(*this); }
 
-    const   String&     GetModuleName() const;
-    const   String&     GetInternalName() const { return aInternalName; }
-    const   String&     GetFuncName() const { return aFuncName; }
+    const rtl::OUString& GetModuleName() const;
+    const rtl::OUString& GetInternalName() const { return aInternalName; }
+    const rtl::OUString& GetFuncName() const { return aFuncName; }
             sal_uInt16      GetParamCount() const { return nParamCount; }
             ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
             ParamType   GetReturnType() const { return eParamType[0]; }
             ParamType   GetAsyncType() const { return eAsyncType; }
-            sal_Bool        Call(void** ppParam);
-            sal_Bool        Unadvice(double nHandle);
+    bool        Call(void** ppParam) const;
+    bool        Unadvice(double nHandle);
 
-                        // name and description of parameter nParam.
-                        // nParam==0 => Desc := function description,
-                        // Name := n/a
-            bool        getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam );
-
+                // name and description of parameter nParam.
+                // nParam==0 => Desc := function description,
+                // Name := n/a
+    bool getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
 
-class FuncCollection : public ScSortedCollection
+class FuncCollection
 {
+    typedef boost::ptr_map<rtl::OUString, FuncData> MapType;
+    MapType maData;
 public:
-    FuncCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
-    FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
+    typedef MapType::const_iterator const_iterator;
 
-    virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
-            FuncData*   operator[]( const sal_uInt16 nIndex) const {return (FuncData*)At(nIndex);}
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            sal_Bool        SearchFunc( const String& rName, sal_uInt16& rIndex ) const;
+    FuncCollection();
+    FuncCollection(const FuncCollection& r);
+
+    const FuncData* findByName(const rtl::OUString& rName) const;
+    FuncData* findByName(const rtl::OUString& rName);
+    void insert(FuncData* pNew);
+
+    const_iterator begin() const;
+    const_iterator end() const;
 };
 
 
-sal_Bool InitExternalFunc(const rtl::OUString& rModuleName);
+bool InitExternalFunc(const rtl::OUString& rModuleName);
 void ExitExternalFunc();
 
 #endif

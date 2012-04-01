@@ -158,12 +158,6 @@ namespace drawinglayer
         {
         }
 
-        Sdr3DObjectAttribute::Sdr3DObjectAttribute()
-        :   mpSdr3DObjectAttribute(ImpSdr3DObjectAttribute::get_global_default())
-        {
-            mpSdr3DObjectAttribute->mnRefCount++;
-        }
-
         Sdr3DObjectAttribute::Sdr3DObjectAttribute(const Sdr3DObjectAttribute& rCandidate)
         :   mpSdr3DObjectAttribute(rCandidate.mpSdr3DObjectAttribute)
         {

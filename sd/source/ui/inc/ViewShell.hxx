@@ -33,7 +33,6 @@
 
 #include <vcl/field.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vcl/field.hxx>
 #include <vcl/prntypes.hxx>
 #include <svtools/transfer.hxx>
 #include <comphelper/implementationreference.hxx>

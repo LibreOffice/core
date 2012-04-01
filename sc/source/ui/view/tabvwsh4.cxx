@@ -38,7 +38,6 @@
 #include <editeng/boxitem.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <svx/prtqry.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -90,12 +89,13 @@
 #include "drawview.hxx"
 #include "fupoor.hxx"
 #include "navsett.hxx"
-#include "sc.hrc"
 #include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
 #include "docoptio.hxx"
 #include "markdata.hxx"
 #include "preview.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1018,7 +1018,7 @@ void ScTabViewShell::SetFormShellAtTop( sal_Bool bSet )
     }
 }
 
-IMPL_LINK( ScTabViewShell, FormControlActivated, FmFormShell*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated)
 {
     // a form control got the focus, so the form shell has to be on top
     SetFormShellAtTop( sal_True );
@@ -1125,7 +1125,7 @@ void ScTabViewShell::StopEditShell()
 
 // close handler to ensure function of dialog:
 
-IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
 {
     SfxInPlaceClient* pClient = GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )
@@ -1824,7 +1824,11 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
-    rData.aTitle        = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        rData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        rData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )

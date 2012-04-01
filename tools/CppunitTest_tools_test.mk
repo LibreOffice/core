@@ -31,10 +31,11 @@
 $(eval $(call gb_CppunitTest_CppunitTest,tools_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
-    tools/qa/cppunit/test_reversemap \
+    tools/qa/cppunit/test_inetmime \
     tools/qa/cppunit/test_pathutils \
+    tools/qa/cppunit/test_reversemap \
     tools/qa/cppunit/test_stream \
-	tools/qa/urlobj/tools_urlobj_test \
+    tools/qa/cppunit/test_urlobj \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,tools_test, \
@@ -54,7 +55,7 @@ $(eval $(call gb_CppunitTest_add_linked_static_libs,tools_test, \
 
 $(eval $(call gb_CppunitTest_set_include,tools_test,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/tools/inc) \
+    -I$(SRCDIR)/tools/inc \
 ))
 
 # vim: set noet sw=4 ts=4:

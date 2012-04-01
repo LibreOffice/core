@@ -142,9 +142,6 @@ public:
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& rCaption );
-    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                               ControlState nState, const ImplControlValue& aValue,
-                                               const rtl::OUString& rCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& rCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );

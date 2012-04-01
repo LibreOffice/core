@@ -35,7 +35,6 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/xmlement.hxx>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <tools/debug.hxx>
 
 namespace dbaxml

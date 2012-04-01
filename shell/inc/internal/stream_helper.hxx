@@ -31,7 +31,29 @@
 
 #include "internal/types.hxx"
 
-IStream* PrepareIStream( IStream* pStream, zlib_filefunc_def &zFileFunc );
+class BufferStream : public StreamInterface
+{
+public:
+    BufferStream(IStream *str);
+    ~BufferStream();
+    unsigned long sread (unsigned char *vuf, unsigned long size);
+    long stell ();
+    long sseek (unsigned long offset, int origin);
+private:
+    IStream *stream;
+};
+
+class FileStream : public StreamInterface
+{
+public:
+    FileStream(const char *filename);
+    ~FileStream();
+    unsigned long sread (unsigned char *buf, unsigned long size);
+    long stell ();
+    long sseek (unsigned long offset, int origin);
+private:
+    FILE *file;
+};
 
 #endif
 

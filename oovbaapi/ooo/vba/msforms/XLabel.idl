@@ -42,6 +42,8 @@ interface XLabel
     [attribute] string Caption;
     [attribute] any Value;
     [attribute] string Accelerator;
+    [attribute] long BackColor;
+    [attribute] boolean AutoSize;
     [attribute, readonly] XNewFont Font;
 };
 

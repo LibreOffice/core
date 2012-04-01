@@ -31,7 +31,6 @@
 #include "queryview.hxx"
 #include "querycontainerwindow.hxx"
 
-class Splitter;
 namespace dbaui
 {
     class OSqlEdit;

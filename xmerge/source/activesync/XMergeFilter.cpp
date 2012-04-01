@@ -338,8 +338,6 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     HKEY hKey = NULL;
     HKEY hDataKey = NULL;
 
-    TCHAR szClassName[_MAX_PATH] = "\0";
-    TCHAR szKeyName[_MAX_PATH]   = "\0";
     TCHAR szCurrentJava[_MAX_PATH] = "\0";
     DWORD dwClassName            = _MAX_PATH;
     DWORD dwKeyName              = _MAX_PATH;

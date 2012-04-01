@@ -124,6 +124,9 @@ public:
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< rtl::OUString > &rSvcImplNames ) = 0;
     virtual css::uno::Sequence< rtl::OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
     virtual DspType GetDspType() const = 0;
+
+protected:
+    ~LinguDispatcher() {}
 };
 
 

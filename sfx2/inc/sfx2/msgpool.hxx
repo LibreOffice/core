@@ -65,7 +65,6 @@ public:
     void                RegisterInterface( SfxInterface& rFace );
     void                ReleaseInterface( SfxInterface& rFace );
     SfxInterface*       FirstInterface();
-    SfxInterface*       NextInterface();
 
     static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=NULL );
 

@@ -111,7 +111,7 @@ public:
     {
         string s((*QNameToString::Instance())(rId));
 
-        if (s.size() == 0)
+        if (s.empty())
             s = "(fasttoken)" + fastTokenToId(rId);
         else
             s = "(qname)" + s;
@@ -417,7 +417,7 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
     static char sBuffer[128];
     snprintf(sBuffer, sizeof(sBuffer), "%p", this);
 
-    pLogger->attribute("parent", sBuffer);
+    pLogger->attribute("parent", std::string(sBuffer));
     pLogger->attribute("type", getType());
     pLogger->attribute("resource", resourceToString(getResource()));
     pLogger->attribute("token", fastTokenToId(getToken()));
@@ -428,7 +428,7 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
     if (pVal.get() != NULL)
         pLogger->attribute("value", pVal->toString());
     else
-        pLogger->attribute("value", "(null)");
+        pLogger->attribute("value", std::string("(null)"));
 
     pLogger->propertySet(getPropertySet(),
             IdToString::Pointer_t(new OOXMLIdToString()));
@@ -448,7 +448,7 @@ void OOXMLFastContextHandler::setId(Id rId)
     static char sBuffer[256];
     snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, rId);
 
-    debug_logger->attribute("id", sBuffer);
+    debug_logger->attribute("id", std::string(sBuffer));
     debug_logger->attribute("name", (*QNameToString::Instance())(rId));
     debug_logger->endElement();
 #endif
@@ -1052,9 +1052,9 @@ void OOXMLFastContextHandler::setForwardEvents(bool bForwardEvents)
     debug_logger->startElement("contexthandler.setForwardEvents");
 
     if (bForwardEvents)
-        debug_logger->chars("true");
+        debug_logger->chars(std::string("true"));
     else
-        debug_logger->chars("false");
+        debug_logger->chars(std::string("false"));
 
     debug_logger->endElement();
 #endif
@@ -1315,7 +1315,7 @@ void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLog
     static char sBuffer[128];
     snprintf(sBuffer, sizeof(sBuffer), "%p", this);
 
-    pLogger->attribute("parent", sBuffer);
+    pLogger->attribute("parent", std::string(sBuffer));
     pLogger->attribute("type", getType());
     pLogger->attribute("resource", resourceToString(getResource()));
     pLogger->attribute("token", fastTokenToId(getToken()));
@@ -1326,7 +1326,7 @@ void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLog
     if (pVal.get() != NULL)
         pLogger->attribute("value", pVal->toString());
     else
-        pLogger->attribute("value", "(null)");
+        pLogger->attribute("value", std::string("(null)"));
 
     pLogger->attribute("resolve", mbResolve ? "resolve" : "noResolve");
 
@@ -1438,7 +1438,7 @@ void OOXMLFastContextHandlerProperties::setParent
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("setParent");
-    debug_logger->chars("OOXMLFastContextHandlerProperties");
+    debug_logger->chars(std::string("OOXMLFastContextHandlerProperties"));
     debug_logger->endElement();
 #endif
 
@@ -1926,7 +1926,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
         else
         {
             debug_logger->startElement("error");
-            debug_logger->chars("failed to get shape handler");
+            debug_logger->chars(std::string("failed to get shape handler"));
             debug_logger->endElement();
         }
 #endif

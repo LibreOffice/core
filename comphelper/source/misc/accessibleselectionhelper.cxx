@@ -46,6 +46,8 @@ namespace comphelper
     {
     }
 
+    OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
+
     //--------------------------------------------------------------------
     void SAL_CALL OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -115,11 +117,6 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleSelectionHelper
     //=====================================================================
-    //---------------------------------------------------------------------
-    OAccessibleSelectionHelper::OAccessibleSelectionHelper( )
-    {
-    }
-
     //--------------------------------------------------------------------
     OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
     {

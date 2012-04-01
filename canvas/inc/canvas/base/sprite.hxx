@@ -99,11 +99,14 @@ namespace canvas
         /** Query sprite priority
          */
         virtual double              getPriority() const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 
     /** Functor providing a StrictWeakOrdering for sprite references
      */
-    struct SpriteComparator
+    struct SpriteWeakOrder
     {
         bool operator()( const Sprite::Reference& rLHS,
                          const Sprite::Reference& rRHS )

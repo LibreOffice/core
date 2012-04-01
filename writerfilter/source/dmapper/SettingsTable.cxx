@@ -75,6 +75,7 @@ struct SettingsTable_Impl
     ::rtl::OUString     m_sCryptProviderTypeExtSource;
     ::rtl::OUString     m_sHash;
     ::rtl::OUString     m_sSalt;
+    bool                m_bLinkStyles;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -91,6 +92,7 @@ struct SettingsTable_Impl
     , m_nCryptAlgorithmClass(NS_ooxml::LN_Value_wordprocessingml_ST_AlgClass_hash)
     , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
     , m_nCryptSpinCount(0)
+    , m_bLinkStyles(false)
     {}
 
 };
@@ -162,6 +164,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
     m_pImpl->m_nDefaultTabStop = nIntValue;
     break;
+    case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
+    m_pImpl->m_bLinkStyles = nIntValue;
+    break;
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
     m_pImpl->m_bNoPunctuationKerning = nIntValue ? true : false;
     break;
@@ -215,6 +220,11 @@ void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::
 int SettingsTable::GetDefaultTabStop() const
 {
     return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );
+}
+
+bool SettingsTable::GetLinkStyles() const
+{
+    return m_pImpl->m_bLinkStyles;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )

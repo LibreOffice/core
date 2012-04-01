@@ -920,7 +920,7 @@ static sal_Bool UCBOpenContentSync(
     if(xContId.is())
         aScheme = xContId->getContentProviderScheme();
 
-    // now determine wether we use a timeout or not;
+    // now determine whether we use a timeout or not;
     if( ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("http"))                &&
         ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("https"))               &&
         ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.webdav")) &&
@@ -1591,7 +1591,7 @@ void UcbLockBytes::Cancel()
 }
 
 //----------------------------------------------------------------------------
-IMPL_LINK( UcbLockBytes, DataAvailHdl, SAL_UNUSED_PARAMETER void*, EMPTYARG )
+IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
     if ( hasInputStream_Impl() && m_xHandler.Is() )
         m_xHandler->Handle( UcbLockBytesHandler::DATA_AVAILABLE, this );

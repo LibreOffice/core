@@ -200,7 +200,6 @@ public:
 public:
     virtual void SetText( const XubString& rStr );
     virtual void SetText( const XubString& rStr, const Selection& rNewSelection );
-    void    SetValidateText(const XubString& rText, const String* pErrorText = NULL);
 
     // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf sal_False sitzt
     /** nehmen wir mal an, irgendjemand will das ganze schoene double-Handling gar nicht haben, sondern

@@ -27,11 +27,12 @@
  ************************************************************************/
 #include <string.h>
 
+#include <algorithm>
+
 #include <sal/types.h>
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
-
 
 #include <com/sun/star/io/XInputStream.hpp>
 
@@ -54,8 +55,9 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
         throw NotConnectedException();
     }
     if( ! m_bStarted ) {
-        nMaxToRead = Max( 512 , nMaxToRead );   // it should be possible to find the encoding attribute
-                                                 // within the first 512 bytes == 128 chars in UCS-4
+        // it should be possible to find the encoding attribute
+        // within the first 512 bytes == 128 chars in UCS-4
+        nMaxToRead = ::std::max( sal_Int32(512) , nMaxToRead );
     }
 
     sal_Int32 nRead;

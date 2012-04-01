@@ -383,27 +383,13 @@ namespace
     };
 
     namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
-    sdecl::class_<SimpleCanvasImpl, sdecl::with_args<true> > serviceImpl;
-    const sdecl::ServiceDecl simpleCanvasDecl(
-        serviceImpl,
-#else
     const sdecl::ServiceDecl simpleCanvasDecl(
         sdecl::class_<SimpleCanvasImpl, sdecl::with_args<true> >(),
-#endif
         "com.sun.star.comp.rendering.SimpleCanvas",
         SERVICE_NAME );
 }
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL simplecanvas_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, simpleCanvasDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(simplecanvas, simpleCanvasDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

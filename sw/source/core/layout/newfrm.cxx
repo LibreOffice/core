@@ -356,8 +356,8 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 // #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
 
-TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
-TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
+TYPEINIT1(SwFrm,SwClient);      //rtti for SwFrm
+TYPEINIT1(SwCntntFrm,SwFrm);    //rtti for SwCntntFrm
 
 
 void _FrmInit()
@@ -376,12 +376,12 @@ void _FrmInit()
 void _FrmFinit()
 {
 #if OSL_DEBUG_LEVEL > 0
-    // im Chache duerfen nur noch 0-Pointer stehen
+    // The cache may only contain null pointers at this time.
     for( sal_uInt16 n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
-            OSL_ENSURE( !pObj, "Wer hat sich nicht ausgetragen?");
+            OSL_ENSURE( !pObj, "Who didn't derregister?");
         }
 #endif
     delete SwRootFrm::pVout;
@@ -390,7 +390,7 @@ void _FrmFinit()
 
 /*************************************************************************
 |*
-|*  RootFrm::Alles was so zur CurrShell gehoert
+|*  RootFrm::Everything that belongs to CurrShell
 |*
 |*************************************************************************/
 
@@ -400,7 +400,7 @@ SV_IMPL_PTRARR_SORT(SwCurrShells,CurrShellPtr)
 
 CurrShell::CurrShell( ViewShell *pNew )
 {
-    OSL_ENSURE( pNew, "0-Shell einsetzen?" );
+    OSL_ENSURE( pNew, "insert 0-Shell?" );
     pRoot = pNew->GetLayout();
     if ( pRoot )
     {
@@ -438,15 +438,15 @@ void SetShell( ViewShell *pSh )
 
 void SwRootFrm::DeRegisterShell( ViewShell *pSh )
 {
-    //Wenn moeglich irgendeine Shell aktivieren
+    // Activate some shell if possible
     if ( pCurrShell == pSh )
         pCurrShell = pSh->GetNext() != pSh ? (ViewShell*)pSh->GetNext() : 0;
 
-    //Das hat sich eruebrigt
+    // Doesn't matter anymore
     if ( pWaitingCurrShell == pSh )
         pWaitingCurrShell = 0;
 
-    //Referenzen entfernen.
+    // Remove references
     for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
     {
         CurrShell *pC = (*pCurrShells)[i];
@@ -465,10 +465,10 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*
 |*  SwRootFrm::SwRootFrm()
 |*
-|*  Beschreibung:
-|*      Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
-|*      FrmFmt geben. Dieses loescht er dann selbst im DTor.
-|*      Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
+|*  Description:
+|*      The RootFrm requests an own FrmFmt from the document, which it is
+|*      going to delete again in the dtor. The own FrmFmt is derived from
+|*      the passed FrmFmt.
 |*
 |*************************************************************************/
 
@@ -483,7 +483,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
-    nBrowseWidth( MM50*4 ), //2cm Minimum
+    nBrowseWidth( MM50*4 ), //2cm minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
     pCurrShell( pSh ),
@@ -508,8 +508,8 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
-    bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
+    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     // Helps creating the Flys by MakeFrms()   //swmod 071108//swmod 071225
+    bCallbackActionEnabled = sal_False; // needs to be set to sal_True before leaving!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
@@ -522,10 +522,9 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         pDrawPage->SetSize( Frm().SSize() );
     }
 
-    //Initialisierung des Layouts: Seiten erzeugen. Inhalt mit cntnt verbinden
-    //usw.
-    //Zuerst einiges initialiseren und den ersten Node besorgen (der wird
-    //fuer den PageDesc benoetigt).
+    // Initialize the layout: create pages, link content with Cntnt etc.
+    // First, initialize some stuff, then get hold of the first
+    // node (which will be needed for the PageDesc).
 
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
@@ -533,8 +532,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     // #123067# pNode = 0 can really happen
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
 
-    //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
-    //initialen.)
+    // Get hold of PageDesc (either via FrmFmt of the first node or the initial one).
     SwPageDesc *pDesc = 0;
     sal_uInt16 nPgNum = 1;
 
@@ -542,14 +540,14 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     {
         const SwFmtPageDesc &rDesc = pTblNd->GetTable().GetFrmFmt()->GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
-        //#19104# Seitennummeroffset beruecksictigen!!
+        //#19104# respect the page number offset!!
         bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
     }
     else if ( pNode )
     {
         const SwFmtPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
-        //#19104# Seitennummeroffset beruecksictigen!!
+        //#19104# respect the page number offset!!
         bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
     }
     else
@@ -559,17 +557,17 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
             &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
     const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
-    //Eine Seite erzeugen und in das Layout stellen
+    // Create a page and put it in the layout
     SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, sal_False, sal_False, 0 );
 
-    //Erstes Blatt im Bodytext-Bereich suchen.
+    // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
     while( pLay->Lower() )
         pLay = (SwLayoutFrm*)pLay->Lower();
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), sal_True );
-    //Noch nicht ersetzte Master aus der Liste entfernen.
+    //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( pDrawPage );
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         pFieldsAccess->UpdateRefFlds( NULL );
@@ -610,7 +608,7 @@ SwRootFrm::~SwRootFrm()
     // also searches backwards to find the master of footnotes, they must be
     // considered to be owned by the SwRootFrm and also be destroyed here,
     // before tearing down the (now footnote free) rest of the layout.
-    AllRemoveFtns();
+    RemoveFtns(0, false, true);
 
     if(pBlink)
         pBlink->FrmDelete( this );
@@ -624,13 +622,20 @@ SwRootFrm::~SwRootFrm()
     delete pDestroy;
     pDestroy = 0;
 
-    //Referenzen entfernen.
+    // Remove references
     for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
         (*pCurrShells)[i]->pRoot = 0;
 
     delete pCurrShells;
+    pCurrShells = 0;
 
-    OSL_ENSURE( 0==nAccessibleShells, "Some accessible shells are left" );
+    // Some accessible shells are left => problems on second SwFrm::Destroy call
+    assert(0 == nAccessibleShells);
+
+    // manually call base classes Destroy because it could call stuff
+    // that accesses members of this
+    SwLayoutFrm::Destroy();
+    SwFrm::Destroy();
 }
 
 /*************************************************************************
@@ -642,7 +647,7 @@ SwRootFrm::~SwRootFrm()
 
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
-    //Alle Masterobjekte aus der Page entfernen. Nicht loeschen!!
+    // Remove all master objects from the Page. But don't delete!
     for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );

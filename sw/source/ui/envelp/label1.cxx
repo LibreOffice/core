@@ -64,6 +64,8 @@ void SwLabRec::SetFromItem( const SwLabItem& rItem )
     lUpper  = rItem.lUpper;
     nCols   = rItem.nCols;
     nRows   = rItem.nRows;
+    lPWidth  = rItem.lPWidth;
+    lPHeight = rItem.lPHeight;
     bCont   = rItem.bCont;
 }
 
@@ -76,6 +78,8 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.lLeft   = lLeft;
     rItem.lUpper  = lUpper;
     rItem.nCols   = nCols;
+    rItem.lPWidth  = lPWidth;
+    rItem.lPHeight = lPHeight;
     rItem.nRows   = nRows;
 }
 
@@ -164,7 +168,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pRecs->C40_INSERT( SwLabRec, pRec, 0 );
 
     sal_uInt16 nLstGroup = 0;
-    const UNO_NMSPC::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const ::com::sun::star::uno::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
     const rtl::OUString* pMan = rMan.getConstArray();
     for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
     {
@@ -351,14 +355,14 @@ void SwLabPage::SetToBusinessCard()
     aTypeBox.SetPosPixel(aLBPos);
 };
 
-IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, AddrHdl)
 {
     String aWriting;
 
     if ( aAddrBox.IsChecked() )
-        aWriting = MakeSender();
+        aWriting = convertLineEnd(MakeSender(), GetSystemLineEnd());
 
-    aWritingEdit.SetText( aWriting.ConvertLineEnd() );
+    aWritingEdit.SetText( aWriting );
     aWritingEdit.GrabFocus();
     return 0;
 }
@@ -376,7 +380,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
@@ -394,14 +398,14 @@ IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwLabPage, PageHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabPage, PageHdl)
 {
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabPage, PageHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabPage, PageHdl)
 
-IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, MakeHdl)
 {
     WaitObject aWait( GetParent() );
 
@@ -455,13 +459,13 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabPage, TypeHdl)
 {
     DisplayFormat();
     aItem.aType = aTypeBox.GetSelectEntry();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {
@@ -506,7 +510,7 @@ void SwLabPage::InitDatabaseBox()
     if( GetNewDBMgr() )
     {
         aDatabaseLB.Clear();
-        UNO_NMSPC::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        ::com::sun::star::uno::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const rtl::OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);
@@ -570,10 +574,10 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
     String sDBName  = aItem.sDBName;
 
-    String aWriting( aItem.aWriting );
+    String aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
 
     aAddrBox    .Check      ( aItem.bAddr );
-    aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
+    aWritingEdit.SetText    ( aWriting );
 
     for(std::vector<rtl::OUString>::const_iterator i = GetParent()->Makes().begin(); i != GetParent()->Makes().end(); ++i)
     {

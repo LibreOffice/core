@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class ScDPDimension;
 class ScDPItemData;
+class ScDPDimensionSaveData;
 
 /**
  * This class contains authoritative information on the internal reference
@@ -78,7 +79,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    SC_DLLPUBLIC const ScDPCache* CreateCache() const;
+    SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
 
     /**
      * Check the sanity of the data source range.
@@ -87,7 +88,6 @@ public:
      *         returned.
      */
     sal_uLong CheckSourceRange() const;
-    long GetCacheId() const;
 
 private:
     mutable ScRange maSourceRange;
@@ -114,7 +114,7 @@ public:
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
+    virtual rtl::OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual sal_uLong                   GetNumberFormat(long nDim);

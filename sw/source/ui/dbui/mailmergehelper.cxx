@@ -230,7 +230,7 @@ SwAddressPreview::~SwAddressPreview()
 {
 }
 
-IMPL_LINK(SwAddressPreview, ScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl)
 {
     Invalidate();
     return 0;

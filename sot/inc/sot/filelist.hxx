@@ -62,10 +62,6 @@ public:
     SOT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const FileList& rFileList );
     SOT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, FileList& rFileList );
 
-    // Clipboard, D&D usw.
-    static sal_uLong        GetFormat();
-
-
     // Liste fuellen/abfragen
     void AppendFile( const String& rStr );
     String GetFile( size_t i ) const;

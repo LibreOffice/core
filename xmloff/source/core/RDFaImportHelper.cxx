@@ -34,8 +34,6 @@
 
 #include <comphelper/sequenceasvector.hxx>
 
-#include <tools/string.hxx> // for GetAbsoluteReference
-
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
@@ -238,7 +236,7 @@ RDFaReader::ReadCURIEs(::rtl::OUString const & i_rCURIEs) const
       }
     }
     while (!CURIEs.isEmpty());
-    if (!vec.size())
+    if (vec.empty())
     {
         OSL_TRACE( "ReadCURIEs: invalid CURIEs" );
     }

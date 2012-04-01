@@ -95,12 +95,7 @@ public:
     }
 
     sal_Bool IsEmpty() const;
-    sal_Bool IsFull() const;
 
-    sal_uInt16 GetSetCount() const;
-    sal_uInt8 GetSetBit(sal_uInt16 nNum) const;
-    sal_uInt16 GetClearCount() const;
-    sal_uInt8 GetClearBit(sal_uInt16 nNum) const;
     void operator&=(const SetOfByte& r2ndSet);
     void operator|=(const SetOfByte& r2ndSet);
 

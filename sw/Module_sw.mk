@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,sw,\
     Package_xml \
 ))
 
-ifneq (IOS,$(OS))
+ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,sw,\
     Library_vbaswobj \
@@ -48,9 +48,14 @@ $(eval $(call gb_Module_add_targets,sw,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,sw,\
+    CppunitTest_sw_swdoc_test \
+))
+
+$(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_filters_test \
     CppunitTest_sw_macros_test \
-    CppunitTest_sw_swdoc_test \
+    CppunitTest_sw_subsequent_ooxmltok \
+    CppunitTest_sw_subsequent_rtftok \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\

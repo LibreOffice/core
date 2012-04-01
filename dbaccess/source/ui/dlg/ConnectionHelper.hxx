@@ -118,8 +118,6 @@ namespace dbaui
 
     private:
         DECL_LINK(OnBrowseConnections, PushButton*);
-        StringBag   getInstalledAdabasDBDirs(const String &_rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude);
-        StringBag   getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
         String      impl_getURL( sal_Bool _bPrefix ) const;
         void        impl_setURL( const String& _rURL, sal_Bool _bPrefix );
         void        implUpdateURLDependentStates() const;

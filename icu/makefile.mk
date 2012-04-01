@@ -53,7 +53,9 @@ PATCH_FILES=\
     icu4c-warnings.patch \
     icu4c-escapespace.patch \
     icu4c-strict-c.patch \
-    CVE-2011-4599.patch
+    CVE-2011-4599.patch \
+    arm-assembler.patch \
+    icu4c-parallel-buid.patch
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
@@ -147,6 +149,11 @@ icu_LDFLAGS+=-lgnustl_shared
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
 ./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) $(LIBRARY_SUFFIX)'
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_ACTION += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 CONFIGURE_FLAGS=
 
 # Use of
@@ -190,7 +197,7 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
     $(BUILD_DIR)$/lib$/libicutu$(DLLPOST)
 
-OUT2BIN= \
+OUT2BIN_NONE= \
     $(BUILD_DIR)$/bin$/genccode \
     $(BUILD_DIR)$/bin$/genbrk \
     $(BUILD_DIR)$/bin$/gencmn

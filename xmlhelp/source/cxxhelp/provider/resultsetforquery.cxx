@@ -33,14 +33,12 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#ifndef INCLUDED_STL_ALGORITHM
+#include <l10ntools/HelpSearch.hxx>
+
+#include <rtl/oustringostreaminserter.hxx>
+
 #include <algorithm>
-#define INCLUDED_STL_ALGORITHM
-#endif
-#ifndef INCLUDED_STL_SET
 #include <set>
-#define INCLUDED_STL_SET
-#endif
 
 #include <qe/Query.hxx>
 #include <qe/DocGenerator.hxx>
@@ -94,11 +92,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                            aLocale );
 
-    // Access Lucene via XInvocation
-    Reference< script::XInvocation > xInvocation(
-        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.HelpSearch" )) ),
-        UNO_QUERY );
-
     vector< vector< rtl::OUString > > queryList;
     {
         sal_Int32 idx;
@@ -130,228 +123,193 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     }
 
     vector< rtl::OUString > aCompleteResultVector;
-    if( xInvocation.is() )
+    rtl::OUString scope = m_aURLParameter.get_scope();
+    bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
+    sal_Int32 hitCount = m_aURLParameter.get_hitCount();
+
+    IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
+    rtl::OUString idxDir;
+    bool bExtension = false;
+    int iDir = 0;
+    vector< vector<HitItem>* > aIndexFolderResultVectorVector;
+
+    bool bTemporary;
+    while( !(idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).isEmpty() )
     {
-        rtl::OUString scope = m_aURLParameter.get_scope();
-        bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
-        sal_Int32 hitCount = m_aURLParameter.get_hitCount();
+        vector<HitItem> aIndexFolderResultVector;
 
-        IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
-        rtl::OUString idxDir;
-        bool bExtension = false;
-        int iDir = 0;
-        vector< vector<HitItem>* > aIndexFolderResultVectorVector;
-
-        bool bTemporary;
-        while( !(idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).isEmpty() )
+        try
         {
-            vector<HitItem> aIndexFolderResultVector;
+            vector< vector<HitItem>* > aQueryListResultVectorVector;
+            set< rtl::OUString > aSet,aCurrent,aResultSet;
 
-            try
+            int nQueryListSize = queryList.size();
+            if( nQueryListSize > 1 )
+                hitCount = 2000;
+
+            for( int i = 0; i < nQueryListSize; ++i )
             {
-                vector< vector<HitItem>* > aQueryListResultVectorVector;
-                set< rtl::OUString > aSet,aCurrent,aResultSet;
-
-                int nQueryListSize = queryList.size();
+                vector<HitItem>* pQueryResultVector;
                 if( nQueryListSize > 1 )
-                    hitCount = 2000;
-
-                for( int i = 0; i < nQueryListSize; ++i )
                 {
-                    vector<HitItem>* pQueryResultVector;
-                    if( nQueryListSize > 1 )
+                    pQueryResultVector = new vector<HitItem>();
+                    aQueryListResultVectorVector.push_back( pQueryResultVector );
+                }
+                else
+                {
+                    pQueryResultVector = &aIndexFolderResultVector;
+                }
+                pQueryResultVector->reserve( hitCount );
+
+                rtl::OUString aLang = m_aURLParameter.get_language();
+                const std::vector< rtl::OUString >& aListItem = queryList[i];
+                ::rtl::OUString aNewQueryStr = aListItem[0];
+
+                vector<float> aScoreVector;
+                vector<rtl::OUString> aPathVector;
+
+                try
+                {
+                    HelpSearch searcher(aLang, idxDir);
+                    searcher.query(aNewQueryStr, bCaptionsOnly, aPathVector, aScoreVector);
+                }
+                catch (CLuceneError &e)
+                {
+                    SAL_WARN("xmlhelp", "CLuceneError: " << e.what());
+                }
+
+                if( nQueryListSize > 1 )
+                    aSet.clear();
+
+                for (unsigned j = 0; j < aPathVector.size(); ++j) {
+                    pQueryResultVector->push_back(HitItem(aPathVector[j], aScoreVector[j]));
+                    if (nQueryListSize > 1)
+                        aSet.insert(aPathVector[j]);
+                }
+
+                // intersect
+                if( nQueryListSize > 1 )
+                {
+                    if( i == 0 )
                     {
-                        pQueryResultVector = new vector<HitItem>();
-                        aQueryListResultVectorVector.push_back( pQueryResultVector );
+                        aResultSet = aSet;
                     }
                     else
                     {
-                        pQueryResultVector = &aIndexFolderResultVector;
-                    }
-                    pQueryResultVector->reserve( hitCount );
-
-                    int nParamCount = bCaptionsOnly ? 7 : 6;
-                    Sequence<uno::Any> aParamsSeq( nParamCount );
-
-                    aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" )) );
-                    aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
-
-                    aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-index" )) );
-                    rtl::OUString aSystemPath;
-                    osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
-                    aParamsSeq[3] = uno::makeAny( aSystemPath );
-
-                    aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-query" )) );
-
-                    const std::vector< rtl::OUString >& aListItem = queryList[i];
-                    ::rtl::OUString aNewQueryStr = aListItem[0];
-                    aParamsSeq[5] = uno::makeAny( aNewQueryStr );
-
-                    if( bCaptionsOnly )
-                        aParamsSeq[6] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-caption" )) );
-
-                    Sequence< sal_Int16 > aOutParamIndex;
-                    Sequence< uno::Any > aOutParam;
-
-                    uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "search" )),
-                        aParamsSeq, aOutParamIndex, aOutParam );
-
-                    Sequence< float > aScoreSeq;
-                    int nScoreCount = 0;
-                    int nOutParamCount = aOutParam.getLength();
-                    if( nOutParamCount == 1 )
-                    {
-                        const uno::Any* pScoreAnySeq = aOutParam.getConstArray();
-                        if( pScoreAnySeq[0] >>= aScoreSeq )
-                            nScoreCount = aScoreSeq.getLength();
-                    }
-
-                    Sequence<rtl::OUString> aRetSeq;
-                    if( aRet >>= aRetSeq )
-                    {
-                        if( nQueryListSize > 1 )
-                            aSet.clear();
-
-                        const rtl::OUString* pRetSeq = aRetSeq.getConstArray();
-                        int nCount = aRetSeq.getLength();
-                        if( nCount > hitCount )
-                            nCount = hitCount;
-                        for( int j = 0 ; j < nCount ; ++j )
-                        {
-                            float fScore = 0.0;
-                            if( j < nScoreCount )
-                                fScore = aScoreSeq[j];
-
-                            rtl::OUString aURL = pRetSeq[j];
-                            pQueryResultVector->push_back( HitItem( aURL, fScore ) );
-                            if( nQueryListSize > 1 )
-                                aSet.insert( aURL );
-                        }
-                    }
-
-                    // intersect
-                    if( nQueryListSize > 1 )
-                    {
-                        if( i == 0 )
-                        {
-                            aResultSet = aSet;
-                        }
-                        else
-                        {
-                            aCurrent = aResultSet;
-                            aResultSet.clear();
-                            set_intersection( aSet.begin(),aSet.end(),
-                                              aCurrent.begin(),aCurrent.end(),
-                                              inserter(aResultSet,aResultSet.begin()));
-                        }
+                        aCurrent = aResultSet;
+                        aResultSet.clear();
+                        set_intersection( aSet.begin(),aSet.end(),
+                                          aCurrent.begin(),aCurrent.end(),
+                                          inserter(aResultSet,aResultSet.begin()));
                     }
                 }
+            }
 
-                // Combine results in aIndexFolderResultVector
-                if( nQueryListSize > 1 )
+            // Combine results in aIndexFolderResultVector
+            if( nQueryListSize > 1 )
+            {
+                for( int n = 0 ; n < nQueryListSize ; ++n )
                 {
-                    for( int n = 0 ; n < nQueryListSize ; ++n )
-                    {
-                        vector<HitItem>* pQueryResultVector = aQueryListResultVectorVector[n];
-                        vector<HitItem>& rQueryResultVector = *pQueryResultVector;
+                    vector<HitItem>* pQueryResultVector = aQueryListResultVectorVector[n];
+                    vector<HitItem>& rQueryResultVector = *pQueryResultVector;
 
-                        int nItemCount = rQueryResultVector.size();
-                        for( int i = 0 ; i < nItemCount ; ++i )
+                    int nItemCount = rQueryResultVector.size();
+                    for( int i = 0 ; i < nItemCount ; ++i )
+                    {
+                        const HitItem& rItem = rQueryResultVector[ i ];
+                        set< rtl::OUString >::iterator it;
+                        if( (it = aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
                         {
-                            const HitItem& rItem = rQueryResultVector[ i ];
-                            set< rtl::OUString >::iterator it;
-                            if( (it = aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
+                            HitItem aItemCopy( rItem );
+                            aItemCopy.m_fScore /= nQueryListSize;   // To get average score
+                            if( n == 0 )
                             {
-                                HitItem aItemCopy( rItem );
-                                aItemCopy.m_fScore /= nQueryListSize;   // To get average score
-                                if( n == 0 )
+                                // Use first pass to create entry
+                                aIndexFolderResultVector.push_back( aItemCopy );
+                            }
+                            else
+                            {
+                                // Find entry in vector
+                                int nCount = aIndexFolderResultVector.size();
+                                for( int j = 0 ; j < nCount ; ++j )
                                 {
-                                    // Use first pass to create entry
-                                    aIndexFolderResultVector.push_back( aItemCopy );
-                                }
-                                else
-                                {
-                                    // Find entry in vector
-                                    int nCount = aIndexFolderResultVector.size();
-                                    for( int j = 0 ; j < nCount ; ++j )
+                                    HitItem& rFindItem = aIndexFolderResultVector[ j ];
+                                    if( rFindItem.m_aURL.equals( aItemCopy.m_aURL ) )
                                     {
-                                        HitItem& rFindItem = aIndexFolderResultVector[ j ];
-                                        if( rFindItem.m_aURL.equals( aItemCopy.m_aURL ) )
-                                        {
-                                            rFindItem.m_fScore += aItemCopy.m_fScore;
-                                            break;
-                                        }
+                                        rFindItem.m_fScore += aItemCopy.m_fScore;
+                                        break;
                                     }
                                 }
                             }
                         }
-
-                        delete pQueryResultVector;
                     }
 
-                    sort( aIndexFolderResultVector.begin(), aIndexFolderResultVector.end() );
+                    delete pQueryResultVector;
                 }
 
-                vector<HitItem>* pIndexFolderHitItemVector = new vector<HitItem>( aIndexFolderResultVector );
-                aIndexFolderResultVectorVector.push_back( pIndexFolderHitItemVector );
-                aIndexFolderResultVector.clear();
-            }
-            catch( const Exception& )
-            {
+                sort( aIndexFolderResultVector.begin(), aIndexFolderResultVector.end() );
             }
 
-            ++iDir;
-
-            if( bTemporary )
-                aIndexFolderIt.deleteTempIndexFolder( idxDir );
-
-        }   // Iterator
-
-
-        int nVectorCount = aIndexFolderResultVectorVector.size();
-        vector<HitItem>::size_type* pCurrentVectorIndex = new vector<HitItem>::size_type[nVectorCount];
-        for( int j = 0 ; j < nVectorCount ; ++j )
-            pCurrentVectorIndex[j] = 0;
-
-        sal_Int32 nTotalHitCount = m_aURLParameter.get_hitCount();
-        sal_Int32 nHitCount = 0;
-        while( nHitCount < nTotalHitCount )
+            vector<HitItem>* pIndexFolderHitItemVector = new vector<HitItem>( aIndexFolderResultVector );
+            aIndexFolderResultVectorVector.push_back( pIndexFolderHitItemVector );
+            aIndexFolderResultVector.clear();
+        }
+        catch (const Exception &e)
         {
-            int iVectorWithBestScore = -1;
-            float fBestScore = 0.0;
-            for( int k = 0 ; k < nVectorCount ; ++k )
+            SAL_WARN("xmlhelp", "Exception: " << e.Message);
+        }
+
+        ++iDir;
+
+        if( bTemporary )
+            aIndexFolderIt.deleteTempIndexFolder( idxDir );
+
+    }   // Iterator
+
+
+    int nVectorCount = aIndexFolderResultVectorVector.size();
+    vector<HitItem>::size_type* pCurrentVectorIndex = new vector<HitItem>::size_type[nVectorCount];
+    for( int j = 0 ; j < nVectorCount ; ++j )
+        pCurrentVectorIndex[j] = 0;
+
+    sal_Int32 nTotalHitCount = m_aURLParameter.get_hitCount();
+    sal_Int32 nHitCount = 0;
+    while( nHitCount < nTotalHitCount )
+    {
+        int iVectorWithBestScore = -1;
+        float fBestScore = 0.0;
+        for( int k = 0 ; k < nVectorCount ; ++k )
+        {
+            vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[k];
+            if( pCurrentVectorIndex[k] < rIndexFolderVector.size() )
             {
-                vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[k];
-                if( pCurrentVectorIndex[k] < rIndexFolderVector.size() )
+                const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[k] ];
+
+                if( fBestScore < rItem.m_fScore )
                 {
-                    const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[k] ];
-
-                    if( fBestScore < rItem.m_fScore )
-                    {
-                        fBestScore = rItem.m_fScore;
-                        iVectorWithBestScore = k;
-                    }
+                    fBestScore = rItem.m_fScore;
+                    iVectorWithBestScore = k;
                 }
             }
-
-            if( iVectorWithBestScore == -1 )    // No item left at all
-                break;
-
-            vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[iVectorWithBestScore];
-            const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[iVectorWithBestScore] ];
-
-            pCurrentVectorIndex[iVectorWithBestScore]++;
-
-            aCompleteResultVector.push_back( rItem.m_aURL );
-            ++nHitCount;
         }
 
-        delete[] pCurrentVectorIndex;
-        for( int n = 0 ; n < nVectorCount ; ++n )
-        {
-            vector<HitItem>* pIndexFolderVector = aIndexFolderResultVectorVector[n];
-            delete pIndexFolderVector;
-        }
+        if( iVectorWithBestScore == -1 )    // No item left at all
+            break;
+
+        vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[iVectorWithBestScore];
+        const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[iVectorWithBestScore] ];
+
+        pCurrentVectorIndex[iVectorWithBestScore]++;
+
+        aCompleteResultVector.push_back( rItem.m_aURL );
+        ++nHitCount;
+    }
+
+    delete[] pCurrentVectorIndex;
+    for( int n = 0 ; n < nVectorCount ; ++n )
+    {
+        vector<HitItem>* pIndexFolderVector = aIndexFolderResultVectorVector[n];
+        delete pIndexFolderVector;
     }
 
     sal_Int32 replIdx = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" )).getLength();

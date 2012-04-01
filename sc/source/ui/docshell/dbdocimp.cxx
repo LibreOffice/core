@@ -66,6 +66,7 @@
 #include "hints.hxx"
 #include "miscuno.hxx"
 #include "chgtrack.hxx"
+#include "column.hxx"
 
 using namespace com::sun::star;
 

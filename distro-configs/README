@@ -1,0 +1,14 @@
+Pre-canned distribution / platform configurations
+
+When the software is configured for a platform, since we run on so
+many platforms, detecting the best sequence of configure options to
+get it building is hard.
+
+Instead we have a text file containing the recommended (often the
+distributed) version of these parameters, one per distribution or
+significant platform. These are interpreted by autogen.sh and
+eventually end up passed to configure. Thus:
+
+./autogen.sh --with-distro=LibreOfficeAndroid
+
+might build a version tweaked for Android.

@@ -41,7 +41,7 @@
 #include "frmtool.hxx"
 #include "colfrm.hxx"
 #include "pagefrm.hxx"
-#include "bodyfrm.hxx"   // ColumnFrms jetzt mit BodyFrm
+#include "bodyfrm.hxx"   // ColumnFrms now with BodyFrm
 #include "rootfrm.hxx"   // wg. RemoveFtns
 #include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
 #include "switerator.hxx"
@@ -60,7 +60,7 @@ SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
 {
     nType = FRMC_COLUMN;
     SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
-    pColBody->InsertBehind( this, 0 ); // ColumnFrms jetzt mit BodyFrm
+    pColBody->InsertBehind( this, 0 ); // ColumnFrms now with BodyFrm
     SetMaxFtnHeight( LONG_MAX );
 }
 
@@ -70,8 +70,8 @@ SwColumnFrm::~SwColumnFrm()
     SwDoc *pDoc;
     if ( !(pDoc = pFmt->GetDoc())->IsInDtor() && pFmt->IsLastDepend() )
     {
-        //Ich bin der einzige, weg mit dem Format.
-        //Vorher ummelden, damit die Basisklasse noch klarkommt.
+        //I'm the only one, delete the format.
+        //Get default format before, so the base class can cope with it.
         pDoc->GetDfltFrmFmt()->Add( this );
         pDoc->DelFrmFmt( pFmt );
     }
@@ -100,7 +100,7 @@ void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
     {
         SwColumnFrm *pTmp = (SwColumnFrm*)pColumn->GetPrev();
         pColumn->Cut();
-        delete pColumn; //Format wird ggf. im DTor mit vernichtet.
+        delete pColumn; //format is going to be destroyed in the DTor if needed.
         pColumn = pTmp;
     }
 }
@@ -128,11 +128,10 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
     const sal_Bool bMod = pDoc->IsModified();
 
-    //Format sollen soweit moeglich geshared werden. Wenn es also schon einen
-    //Nachbarn mit den selben Spalteneinstellungen gibt, so koennen die
-    //Spalten an die selben Formate gehaengt werden.
-    //Der Nachbar kann ueber das Format gesucht werden, wer der Owner des Attributes
-    //ist, ist allerdings vom Frametyp abhaengig.
+    //Formats should be shared whenever possible. If a neighbour already has
+    //the same column settings we can add them to the same format.
+    //The neighbour can be searched using the format, however the owner of the
+    //attribute depends on the frame type.
     SwLayoutFrm *pAttrOwner = pCont;
     if ( pCont->IsBodyFrm() )
         pAttrOwner = pCont->FindPageFrm();
@@ -228,24 +227,22 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     else
         bAtEnd = sal_False;
 
-    //Einstellung der Spaltenbreiten ist nur bei neuen Formaten notwendig.
+    //Setting the column width is only needed for new formats.
     sal_Bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
 
-    //Wenn die Spaltenanzahl unterschiedlich ist, wird der Inhalt
-    //gesichert und restored.
+    //The content is saved and restored if the column count is different.
     SwFrm *pSave = 0;
     if( nOldNum != nNewNum || bChgFtn )
     {
         SwDoc *pDoc = GetFmt()->GetDoc();
-        OSL_ENSURE( pDoc, "FrmFmt gibt kein Dokument her." );
-        // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
-        // und im normalen Textfluss unterbringen.
+        OSL_ENSURE( pDoc, "FrmFmt doesn't return a document." );
+        // SaveCntnt would also suck up the content of the footnote container
+        // and store it within the normal text flow.
         if( IsPageBodyFrm() )
             pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );    //swmod 080218
         pSave = ::SaveCntnt( this );
 
-        //Wenn Spalten existieren, jetzt aber eine Spaltenanzahl von
-        //0 oder eins gewuenscht ist, so werden die Spalten einfach vernichtet.
+        //If columns exist, they get deleted if a column count of 0 or 1 is requested.
         if ( nNewNum == 1 && !bAtEnd )
         {
             ::lcl_RemoveColumns( this, nOldNum );
@@ -296,11 +293,11 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         }
     }
 
-    //Sodele, jetzt koennen die Spalten bequem eingestellt werden.
+    //The columns can now be easily adjusted.
     AdjustColumns( &rNew, bAdjustAttributes );
 
-    //Erst jetzt den Inhalt restaurieren. Ein frueheres Restaurieren wuerde
-    //unnuetzte Aktionen beim Einstellen zur Folge haben.
+    //Don't restore the content before. An earlier restore would trigger useless
+    //actions during setup.
     if ( pSave )
     {
         OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
@@ -329,9 +326,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
-    //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
-    //so stellen wir auf jeden Fall die Spaltenbreiten ein. Andernfalls
-    //checken wir, ob eine Einstellung notwendig ist.
+    //If we have a pointer or we have to configure an attribute, we set the
+    //column widths in any case. Otherwise we check if a configuration is needed.
     if ( !pAttr )
     {
         pAttr = &GetFmt()->GetCol();
@@ -347,9 +343,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
         }
     }
 
-    //Sodele, jetzt koennen die Spalten bequem eingestellt werden.
-    //Die Breiten werden mitgezaehlt, damit wir dem letzten den Rest geben
-    //koennen.
+    //The columns can now be easily adjusted.
+    //The widths get counted so we can give the reminder to the last one.
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
     const sal_Bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
@@ -377,10 +372,10 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
 
             pCol->ChgSize( aColSz );
 
-            // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und
-            // ihr bFixHeight-Flag wird gesetzt, damit sie nicht schrumpfen/wachsen.
-            // Bei Rahmenspalten hingegen soll das Flag _nicht_ gesetzt werden,
-            // da BodyFrms in Rahmenspalten durchaus wachsen/schrumpfen duerfen.
+            // With this, the ColumnBodyFrms from page columns gets adjusted and
+            // their bFixHeight flag is set so they won't shrink/grow.
+            // Don't use the flag with frame columns because BodyFrms in frame
+            // columns can grow/shrink.
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
 
@@ -393,10 +388,10 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
             const SwAttrSet* pSet = pCol->GetAttrSet();
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
 
-            //Damit die Trennlinien Platz finden, muessen sie hier
-            //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen
-            //wird jeweils rechts bzw. links ein Sicherheitsabstand von 20 plus
-            //der halben Penbreite einkalkuliert.
+            //In order to have enough space for the separation lines, we have to
+            //take them into account here. Every time two columns meet we
+            //calculate a clearance of 20 + half the pen width on the left or
+            //right side, respectively.
             const sal_uInt16 nLeft = pC->GetLeft();
             const sal_uInt16 nRight = pC->GetRight();
 

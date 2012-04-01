@@ -70,12 +70,13 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     rStrm << nMacroEvents;
 
     // store macros
-    sal_uInt16 nCnt = pMacroTable ? (sal_uInt16)pMacroTable->Count() : 0;
+    sal_uInt16 nCnt = pMacroTable ? (sal_uInt16)pMacroTable->size() : 0;
     sal_uInt16 nMax = nCnt;
     if( nCnt )
     {
-        for( SvxMacro* pMac = pMacroTable->First(); pMac; pMac = pMacroTable->Next() )
-            if( STARBASIC != pMac->GetScriptType() )
+        for ( SvxMacroTable::const_iterator it = pMacroTable->begin();
+              it != pMacroTable->end(); ++it)
+            if( STARBASIC != it->second.GetScriptType() )
                 --nCnt;
     }
 
@@ -84,17 +85,19 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     if( nCnt )
     {
         // 1. StarBasic-Macros
-        for( SvxMacro* pMac = pMacroTable->First(); pMac; pMac = pMacroTable->Next() )
+        for ( SvxMacroTable::const_iterator it = pMacroTable->begin();
+              it != pMacroTable->end(); ++it)
         {
-            if( STARBASIC == pMac->GetScriptType() )
+            const SvxMacro& rMac = it->second;
+            if( STARBASIC == rMac.GetScriptType() )
             {
-                rStrm << (sal_uInt16)pMacroTable->GetCurKey();
+                rStrm << (sal_uInt16)it->first;
 
                 // UNICODE: rStrm << pMac->GetLibName();
-                rStrm.WriteUniOrByteString(pMac->GetLibName(), rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
 
                 // UNICODE: rStrm << pMac->GetMacName();
-                rStrm.WriteUniOrByteString(pMac->GetMacName(), rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(rMac.GetMacName(), rStrm.GetStreamCharSet());
             }
         }
     }
@@ -104,19 +107,21 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     if( nCnt )
     {
         // 2. ::com::sun::star::script::JavaScript-Macros
-        for( SvxMacro* pMac = pMacroTable->First(); pMac; pMac = pMacroTable->Next() )
+        for ( SvxMacroTable::const_iterator it = pMacroTable->begin();
+              it != pMacroTable->end(); ++it)
         {
-            if( STARBASIC != pMac->GetScriptType() )
+            const SvxMacro& rMac = it->second;
+            if( STARBASIC != rMac.GetScriptType() )
             {
-                rStrm << (sal_uInt16)pMacroTable->GetCurKey();
+                rStrm << (sal_uInt16)it->first;
 
                 // UNICODE: rStrm << pMac->GetLibName();
-                rStrm.WriteUniOrByteString(pMac->GetLibName(), rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
 
                 // UNICODE: rStrm << pMac->GetMacName();
-                rStrm.WriteUniOrByteString(pMac->GetMacName(), rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(rMac.GetMacName(), rStrm.GetStreamCharSet());
 
-                rStrm << (sal_uInt16)pMac->GetScriptType();
+                rStrm << (sal_uInt16)rMac.GetScriptType();
             }
         }
     }
@@ -254,29 +259,14 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxMacroTableDtor* pOther = ((SvxHyperlinkItem&)rAttr).pMacroTable;
     if( !pMacroTable )
-        return ( !pOther || !pOther->Count() );
+        return ( !pOther || pOther->empty() );
     if( !pOther )
-        return 0 == pMacroTable->Count();
+        return pMacroTable->empty();
 
     const SvxMacroTableDtor& rOwn = *pMacroTable;
     const SvxMacroTableDtor& rOther = *pOther;
 
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
-    if( rOwn.Count() != rOther.Count() )
-        return sal_False;
-
-    // einzeln vergleichen; wegen Performance ist die Reihenfolge wichtig
-    for( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
-    {
-        const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
-        const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
-                pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
-                pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return sal_False;
-    }
-
-    return sal_True;
+    return rOwn == rOther;
 }
 
 void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
@@ -300,14 +290,7 @@ void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     if( !pMacroTable )
         pMacroTable = new SvxMacroTableDtor;
 
-    SvxMacro *pOldMacro;
-    if( 0 != ( pOldMacro = pMacroTable->Get( nEvent )) )
-    {
-        delete pOldMacro;
-        pMacroTable->Replace( nEvent, new SvxMacro( rMacro ) );
-    }
-    else
-        pMacroTable->Insert( nEvent, new SvxMacro( rMacro ) );
+    pMacroTable->Insert( nEvent, rMacro);
 }
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )

@@ -71,11 +71,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     SvNumberFormatter*      GetNumberFormatter() const { return pFormatter; }
-    void                    SetNumberFormatter( SvNumberFormatter* pNumFrmt );
     const String&           GetValueString() const { return aStringVal; }
-    void                    SetStringValue( const String& rNewVal );
     double                  GetValueDouble() const  { return nDoubleVal; }
-    void                    SetDoubleValue( const double& rNewVal );
 
     const sal_uInt32*       GetDelArray() const { return pDelFormatArr; }
     void                    SetDelFormatArray( const sal_uInt32* pData,

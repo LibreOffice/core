@@ -60,14 +60,14 @@ const int UIELEMENT_PROPHANDLE_XMENUBAR         = 6;
 const int UIELEMENT_PROPHANDLE_CONFIGLISTENER   = 7;
 const int UIELEMENT_PROPHANDLE_NOCLOSE          = 8;
 const int UIELEMENT_PROPCOUNT                   = 8;
-const rtl::OUString UIELEMENT_PROPNAME_CONFIGLISTENER( RTL_CONSTASCII_USTRINGPARAM( "ConfigListener" ));
-const rtl::OUString UIELEMENT_PROPNAME_CONFIGSOURCE( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
-const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-const rtl::OUString UIELEMENT_PROPNAME_PERSISTENT( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
-const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
-const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
-const rtl::OUString UIELEMENT_PROPNAME_XMENUBAR( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ));
-const rtl::OUString UIELEMENT_PROPNAME_NOCLOSE( RTL_CONSTASCII_USTRINGPARAM( "NoClose" ));
+const char UIELEMENT_PROPNAME_CONFIGLISTENER[] = "ConfigListener";
+const char UIELEMENT_PROPNAME_CONFIGSOURCE[] = "ConfigurationSource";
+const char UIELEMENT_PROPNAME_FRAME[] = "Frame";
+const char UIELEMENT_PROPNAME_PERSISTENT[] = "Persistent";
+const char UIELEMENT_PROPNAME_RESOURCEURL[] = "ResourceURL";
+const char UIELEMENT_PROPNAME_TYPE[] = "Type";
+const char UIELEMENT_PROPNAME_XMENUBAR[] = "XMenuBar";
+const char UIELEMENT_PROPNAME_NOCLOSE[] = "NoClose";
 using ::rtl::OUString;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
@@ -131,13 +131,6 @@ UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
 }
 
 // XComponent
-void SAL_CALL UIConfigElementWrapperBase::dispose() throw (::com::sun::star::uno::RuntimeException)
-{
-    // must be implemented by derived class
-    ResetableGuard aLock( m_aLock );
-    m_bDisposed = sal_True;
-}
-
 void SAL_CALL UIConfigElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
@@ -168,19 +161,19 @@ throw ( Exception, RuntimeException )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_CONFIGSOURCE ))
+                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_CONFIGSOURCE)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGSOURCE, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_FRAME ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_FRAME)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_FRAME, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_PERSISTENT ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_PERSISTENT)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_PERSISTENT, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_RESOURCEURL ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_RESOURCEURL)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_RESOURCEURL, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_TYPE ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_TYPE)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_TYPE, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_CONFIGLISTENER ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_CONFIGLISTENER)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGLISTENER, aPropValue.Value );
-                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_NOCLOSE ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_NOCLOSE)))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_NOCLOSE, aPropValue.Value );
             }
         }
@@ -479,14 +472,14 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
 
     const com::sun::star::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE  , UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< ::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_FRAME         , UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((const Reference< com::sun::star::frame::XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_NOCLOSE       , UIELEMENT_PROPHANDLE_NOCLOSE        , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_PERSISTENT    , UIELEMENT_PROPHANDLE_PERSISTENT     , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_RESOURCEURL   , UIELEMENT_PROPHANDLE_RESOURCEURL    , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_TYPE          , UIELEMENT_PROPHANDLE_TYPE           , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_XMENUBAR      , UIELEMENT_PROPHANDLE_XMENUBAR       , ::getCppuType((const Reference< com::sun::star::awt::XMenuBar >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_CONFIGLISTENER), UIELEMENT_PROPHANDLE_CONFIGLISTENER , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_CONFIGSOURCE), UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< ::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_FRAME), UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((const Reference< com::sun::star::frame::XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_NOCLOSE), UIELEMENT_PROPHANDLE_NOCLOSE        , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_PERSISTENT), UIELEMENT_PROPHANDLE_PERSISTENT     , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_RESOURCEURL), UIELEMENT_PROPHANDLE_RESOURCEURL    , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_TYPE), UIELEMENT_PROPHANDLE_TYPE           , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
+        com::sun::star::beans::Property( rtl::OUString(UIELEMENT_PROPNAME_XMENUBAR), UIELEMENT_PROPHANDLE_XMENUBAR       , ::getCppuType((const Reference< com::sun::star::awt::XMenuBar >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
     };
     // Use it to initialize sequence!
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );

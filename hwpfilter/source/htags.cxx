@@ -28,10 +28,6 @@
 
 #include "precompile.h"
 
-#ifdef __GNUG__
-#pragma implementation "htags.h"
-#endif
-
 #include <string.h>
 
 #include "hwplib.h"

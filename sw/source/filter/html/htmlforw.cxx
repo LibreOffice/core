@@ -1336,7 +1336,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         }
         if( sVal.Len() )
         {
-            sVal.ConvertLineEnd( LINEEND_LF );
+            sVal = convertLineEnd(sVal, LINEEND_LF);
             xub_StrLen nPos = 0;
             while ( nPos != STRING_NOTFOUND )
             {

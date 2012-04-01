@@ -672,7 +672,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<String*>& rLi
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -717,7 +717,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rL
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -801,7 +801,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -842,10 +842,12 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
 
     if(nCurCategory!=NUMBERFORMAT_ALL)
     {
-        pNumEntry   = pCurFmtTable->First();
-        while ( pNumEntry )
+        SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+
+        while ( it != pCurFmtTable->end() )
         {
-            sal_uInt32 nKey = pCurFmtTable->GetCurKey();
+            sal_uInt32 nKey = it->first;
+            pNumEntry   = it->second;
 
             if ( !IsRemoved_Impl( nKey ))
             {
@@ -876,7 +878,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
                     aCurEntryList.push_back( nKey );
                 }
             }
-            pNumEntry = pCurFmtTable->Next();
+            ++it;
         }
     }
     return nSelPos;
@@ -943,11 +945,11 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,true);
     }
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-
-    while ( pNumEntry )
+    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+    while ( it != pCurFmtTable->end() )
     {
-        sal_uInt32 nKey = pCurFmtTable->GetCurKey();
+        sal_uInt32 nKey = it->first;
+        const SvNumberformat* pNumEntry = it->second;
 
         if ( !IsRemoved_Impl( nKey ) )
         {
@@ -962,7 +964,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
                 bool bInsFlag = false;
                 if ( pNumEntry->HasNewCurrency() )
                 {
-                    bInsFlag = true;	// merge locale formats into currency selection
+                    bInsFlag = true;    // merge locale formats into currency selection
                 }
                 else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
                    (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
@@ -992,7 +994,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
                 }
             }
         }
-        pNumEntry = pCurFmtTable->Next();
+        ++it;
     }
 
     NfWSStringsDtor aWSStringsDtor;
@@ -1090,7 +1092,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
     String          aStrComment;
     String          aNewFormNInfo;
     String          aPrevString;
@@ -1100,9 +1101,11 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != NUMBERFORMAT_ALL);
 
-    while ( pNumEntry )
+    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
+    while ( it != pCurFmtTable->end() )
     {
-        sal_uInt32 nKey = pCurFmtTable->GetCurKey();
+        sal_uInt32 nKey = it->first;
+        const SvNumberformat* pNumEntry = it->second;
 
         if ( !IsRemoved_Impl( nKey ) )
         {
@@ -1131,7 +1134,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
                 }
             }
         }
-        pNumEntry = pCurFmtTable->Next();
+        ++it;
     }
     return nSelPos;
 }
@@ -1615,14 +1618,6 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList,
     delete pLanguageTable;
 }
 
-bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
-{
-    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
-    sal_uInt16 nCount=rCurrencyTable.Count();
-
-    return (nPos>nCount);
-}
-
 void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
@@ -1651,11 +1646,6 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 sal_uInt32 SvxNumberFormatShell::GetCurrencySymbol()
 {
     return nCurCurrencyEntryPos;
-}
-
-NfCurrencyEntry* SvxNumberFormatShell::GetCurCurrencyEntry()
-{
-    return pCurCurrencyEntry;
 }
 
 void SvxNumberFormatShell::SetCurCurrencyEntry(NfCurrencyEntry* pCEntry)

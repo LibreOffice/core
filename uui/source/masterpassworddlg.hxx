@@ -47,7 +47,7 @@ class MasterPasswordDialog : public ModalDialog
     HelpButton      aHelpBtn;
 
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
+    DECL_LINK(OKHdl_Impl, void *);
 
 public:
     MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );

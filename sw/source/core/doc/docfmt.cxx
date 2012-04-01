@@ -2134,7 +2134,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     }
 }
 
-void SwDoc::ReplaceStyles( const SwDoc& rSource )
+void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 {
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
@@ -2145,26 +2145,38 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource )
     CopyFmtArr( *rSource.pTxtFmtCollTbl, *pTxtFmtCollTbl,
                 &SwDoc::_MakeTxtFmtColl, *pDfltTxtFmtColl );
 
-    // and now the page templates
-    sal_uInt16 nCnt = rSource.aPageDescs.Count();
-    if( nCnt )
+    sal_uInt16 nCnt;
+
+    //To-Do:
+    //  a) in rtf export don't export our hideous pgdsctbl
+    //  extension to rtf anymore
+    //  b) in sd rtf import (View::InsertData) don't use
+    //  a super-fragile test for mere presence of \trowd to
+    //  indicate import of rtf into a table
+    //  c) then drop use of bIncludePageStyles
+    if (bIncludePageStyles)
     {
-        // a different Doc -> Number formatter needs to be merged
-        SwTblNumFmtMerge aTNFM( rSource, *this );
-
-        // 1st step: Create all formats (skip the 0th - it's the default!)
-        while( nCnt )
+        // and now the page templates
+        nCnt = rSource.aPageDescs.Count();
+        if( nCnt )
         {
-            SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
-            if( 0 == ::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ) )
-                MakePageDesc( pSrc->GetName() );
-        }
+            // a different Doc -> Number formatter needs to be merged
+            SwTblNumFmtMerge aTNFM( rSource, *this );
 
-        // 2nd step: Copy all attributes, set the right parents
-        for( nCnt = rSource.aPageDescs.Count(); nCnt; )
-        {
-            SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
-            CopyPageDesc( *pSrc, *::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ));
+            // 1st step: Create all formats (skip the 0th - it's the default!)
+            while( nCnt )
+            {
+                SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
+                if( 0 == ::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ) )
+                    MakePageDesc( pSrc->GetName() );
+            }
+
+            // 2nd step: Copy all attributes, set the right parents
+            for( nCnt = rSource.aPageDescs.Count(); nCnt; )
+            {
+                SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
+                CopyPageDesc( *pSrc, *::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ));
+            }
         }
     }
 

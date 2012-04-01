@@ -46,7 +46,7 @@ namespace connectivity
         class ADOS
         {
         public:
-            // Auch hier: BSTR mit SysFreeString() freigeben!
+            // Also here: Free BSTR with SysFreeString()!
             static OLEString& GetKeyStr();
 
             static const CLSID  CLSID_ADOCATALOG_25;

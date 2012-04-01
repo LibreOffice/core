@@ -39,7 +39,6 @@
 #include <editeng/editdata.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <filter/msfilter/msfiltertracer.hxx>
 #include <editeng/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <editeng/flditem.hxx>
@@ -92,10 +91,9 @@ struct MSFILTER_DLLPUBLIC PowerPointImportParam
 {
     SvStream&           rDocStream;
     sal_uInt32          nImportFlags;
-    MSFilterTracer*     pTracer;
     PptCurrentUserAtom  aCurrentUserAtom;
 
-    PowerPointImportParam( SvStream& rDocStream, sal_uInt32 nImportFlags, MSFilterTracer* pTracer );
+    PowerPointImportParam( SvStream& rDocStream, sal_uInt32 nImportFlags );
 };
 
 struct SdHyperlinkEntry
@@ -425,7 +423,7 @@ protected:
     sal_Bool            bTimesNewRomanChecked   : 1;
     sal_Bool            bTimesNewRomanAvailable : 1;
 
-    sal_Bool            ReadString( String& rStr ) const;
+    sal_Bool            ReadString( rtl::OUString& rStr ) const;
     // nur fuer PowerPoint-Filter:
     virtual const PptSlideLayoutAtom* GetSlideLayoutAtom() const;
 

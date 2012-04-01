@@ -64,7 +64,6 @@ class XMLTextFrameContext : public SvXMLImportContext
     sal_Bool m_HasAutomaticStyleWithoutParentStyle;
     sal_Bool m_bSupportsReplacement;
 
-    sal_Bool CreateIfNotThere();
     sal_Bool CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet );
 

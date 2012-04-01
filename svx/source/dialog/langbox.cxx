@@ -132,14 +132,6 @@ sal_uInt16 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
     return nPos;
 }
 
-//-----------------------------------------------------------------------
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, sal_Bool bCheck ) :
-    ListBox( pParent, nWinStyle ),
-    m_pSpellUsedLang( NULL ),
-    m_bWithCheckmark( bCheck )
-{
-    Init();
-}
 //------------------------------------------------------------------------
 SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, sal_Bool bCheck ) :
     ListBox( pParent, rResId ),

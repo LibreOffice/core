@@ -106,6 +106,8 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
     int nGlyphWidth = 0;
     GlyphItem aPrevItem;
     bool bRightToLeft;
+
+    rLayout.Reserve(rArgs.mnLength);
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         sal_UCS4 cChar = rArgs.mpStr[ nCharPos ];
@@ -408,6 +410,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
     // allocate temporary arrays, note: round to even
     int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos ) | 15) + 1;
+
+    rLayout.Reserve(nGlyphCapacity);
 
     struct IcuPosition{ float fX, fY; };
     const int nAllocSize = sizeof(LEGlyphID) + sizeof(le_int32) + sizeof(IcuPosition);

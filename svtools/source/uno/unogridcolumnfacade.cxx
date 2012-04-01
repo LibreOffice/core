@@ -147,7 +147,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL ColumnChangeMultiplexer::columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException)
     {
-        if ( i_event.AttributeName.equalsAscii( "DataColumnIndex" ) )
+        if ( i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataColumnIndex")) )
         {
             SolarMutexGuard aGuard;
             if ( m_pColumnImplementation != NULL )
@@ -157,15 +157,15 @@ namespace svt { namespace table
 
         ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
 
-        if ( i_event.AttributeName.equalsAscii( "HorizontalAlign" ) )
+        if ( i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HorizontalAlign")) )
             nChangedAttributes |= COL_ATTRS_APPEARANCE;
 
-        if  (   i_event.AttributeName.equalsAscii( "ColumnWidth" )
-            ||  i_event.AttributeName.equalsAscii( "MaxWidth" )
-            ||  i_event.AttributeName.equalsAscii( "MinWidth" )
-            ||  i_event.AttributeName.equalsAscii( "PreferredWidth" )
-            ||  i_event.AttributeName.equalsAscii( "Resizeable" )
-            ||  i_event.AttributeName.equalsAscii( "Flexibility" )
+        if  (   i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ColumnWidth"))
+            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MaxWidth"))
+            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinWidth"))
+            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PreferredWidth"))
+            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Resizeable"))
+            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Flexibility"))
             )
             nChangedAttributes |= COL_ATTRS_WIDTH;
 

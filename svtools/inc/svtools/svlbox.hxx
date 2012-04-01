@@ -54,7 +54,6 @@ class SvLBox;
 class SvLBoxEntry;
 class SvViewDataItem;
 class SvViewDataEntry;
-class SvInplaceEdit;
 class SvInplaceEdit2;
 class SvLBoxString;
 class SvLBoxButton;
@@ -152,7 +151,6 @@ public:
     virtual             ~SvLBoxItem();
     virtual sal_uInt16      IsA() = 0;
     const Size&         GetSize( SvLBox* pView, SvLBoxEntry* pEntry );
-    const Size&         GetSize( SvLBoxEntry*, SvViewDataEntry* );
     const Size&         GetSize( SvViewDataEntry* pData, sal_uInt16 nItemPos )
                         {
                             SvViewDataItem* pIData=pData->pItemData+nItemPos;
@@ -268,7 +266,7 @@ class SVT_DLLPUBLIC SvLBox
 {
     friend class SvLBoxEntry;
 
-    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2 * );
+    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
     // Handler, der von TreeList zum Clonen eines Entries aufgerufen wird
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvListEntry* );
 
@@ -582,33 +580,6 @@ struct SvLBoxDDInfo
     sal_uLong           nRes1,nRes2,nRes3,nRes4;
 };
 
-class SvInplaceEdit : public Edit
-{
-    Link        aCallBackHdl;
-    Accelerator aAccReturn;
-    Accelerator aAccEscape;
-    Timer       aTimer;
-    sal_Bool        bCanceled;
-    sal_Bool        bAlreadyInCallBack;
-
-    void        CallCallBackHdl_Impl();
-    DECL_LINK( Timeout_Impl, Timer * );
-    DECL_LINK( ReturnHdl_Impl, Accelerator * );
-    DECL_LINK( EscapeHdl_Impl, Accelerator * );
-
-public:
-    SvInplaceEdit( Window* pParent, const Point& rPos, const Size& rSize,
-                   const String& rData, const Link& rNotifyEditEnd,
-                   const Selection& );
-    ~SvInplaceEdit();
-
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    LoseFocus();
-    sal_Bool            EditingCanceled() const { return bCanceled; }
-    String          GetText() const { return Edit::GetText(); }
-    void            StopEditing( sal_Bool bCancel = sal_False );
-};
-
 class SvInplaceEdit2
 {
     Link        aCallBackHdl;
@@ -621,9 +592,9 @@ class SvInplaceEdit2
     sal_Bool        bMultiLine;
 
     void        CallCallBackHdl_Impl();
-    DECL_LINK( Timeout_Impl, Timer * );
-    DECL_LINK( ReturnHdl_Impl, Accelerator * );
-    DECL_LINK( EscapeHdl_Impl, Accelerator * );
+    DECL_LINK( Timeout_Impl, void * );
+    DECL_LINK( ReturnHdl_Impl, void * );
+    DECL_LINK( EscapeHdl_Impl, void * );
 
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,

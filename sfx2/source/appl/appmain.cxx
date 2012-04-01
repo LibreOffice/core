@@ -118,10 +118,6 @@ void SfxApplication::PreInit( )
 {
 }
 
-void SfxApplication::Main( )
-{
-}
-
 //-------------------------------------------------------------------------
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()

@@ -245,7 +245,7 @@ public class ScTableSheetObj extends TestCase {
         // do not execute com::sun::star::sheets::XCellSeries::fillAuto()
         tEnv.addObjRelation("XCELLSERIES_FILLAUTO", new Boolean(false));
 
-        // set the adress ranges of the cells (see values set above): for e.g. XSheetOutline test
+        // set the address ranges of the cells (see values set above): for e.g. XSheetOutline test
         tEnv.addObjRelation("CellRangeAddress",
             new CellRangeAddress((short)0, 6, 6, 8, 8));
         tEnv.addObjRelation("CellRangeSubAddress",
@@ -256,7 +256,7 @@ public class ScTableSheetObj extends TestCase {
         tEnv.addObjRelation("XSheetAuditing.DependentCellAddress", new CellAddress((short)0, 9, 6));
 
         // add an existing sheet for linking
-        tEnv.addObjRelation("XSheetLinkable.LinkSheet", "ScSheetLinksObj.sdc");
+        tEnv.addObjRelation("XSheetLinkable.LinkSheet", "ScSheetLinksObj.ods");
 
         //adding Scenario and with that a ScenarioSheet-Relation for Scenario and XScenarioEnhanced
         XScenariosSupplier scene = (XScenariosSupplier) UnoRuntime.queryInterface(

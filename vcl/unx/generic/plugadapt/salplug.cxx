@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include "comphelper/processfactory.hxx"
-
 #include "officecfg/Office/Common.hxx"
+
+#include "comphelper/processfactory.hxx"
 
 #include "osl/module.h"
 #include "osl/process.h"
@@ -52,14 +52,18 @@ typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 
 static oslModule pCloseModule = NULL;
 
-static SalInstance* tryInstance( const OUString& rModuleBase )
+static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     SalInstance* pInst = NULL;
-#ifndef ANDROID
-    // Disable gtk3 plugin load except in experimental mode for now.
-    if( rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
-        !officecfg::Office::Common::Misc::ExperimentalMode::get( comphelper::getProcessComponentContext() ) )
-        return NULL;
+#if !defined(ANDROID)
+    if (!bForce && rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")))
+    {
+        // Disable gtk3 plugin load except in experimental mode for now.
+        using namespace com::sun::star;
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+            return NULL;
+    }
 #endif
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
@@ -91,17 +95,13 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * not access the 'gnome_accessibility_module_shutdown' anymore.
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
+                 * #i109007# KDE3 seems to have the same problem.
+		 * And same applies for KDE4.
                  */
                 if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) ||
-                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")) )
-                {
-                    pCloseModule = NULL;
-                }
-                /*
-                 * #i109007# KDE3 seems to have the same problem; an atexit cleanup
-                 * handler, which cannot be resolved anymore if the plugin is already unloaded.
-                 */
-                else if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
+                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")) ||
+		    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) ||
+		    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -130,7 +130,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     return pInst;
 }
 
-#ifndef ANDROID
+#if !defined(ANDROID)
 
 static DesktopType get_desktop_environment()
 {
@@ -234,7 +234,7 @@ SalInstance *CreateSalInstance()
     pInst = check_headless_plugin();
 
     if( !pInst && pUsePlugin && *pUsePlugin )
-        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
+        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ), true );
 
     if( ! pInst )
         pInst = autodetect_plugin();

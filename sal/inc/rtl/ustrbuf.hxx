@@ -36,9 +36,23 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
+#include <rtl/stringutils.hxx>
+
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
 
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
 
 /** A string buffer implements a mutable sequence of characters.
     <p>
@@ -361,6 +375,19 @@ public:
     }
 
     /**
+        @overload
+        This function accepts an ASCII string literal as its argument.
+        @since LibreOffice 3.6
+     */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
+    {
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
+    }
+
+    /**
         Appends a 8-Bit ASCII character string to this string buffer.
 
        Since this method is optimized for performance. the ASCII
@@ -404,7 +431,6 @@ public:
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
-
 
     /**
         Appends the string representation of the <code>sal_Bool</code>
@@ -605,6 +631,19 @@ public:
     {
         // insert behind the last character
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
+        return *this;
+    }
+
+    /**
+        @overload
+        This function accepts an ASCII string literal as its argument.
+        @since LibreOffice 3.6
+     */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    {
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, offset, literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -847,6 +886,13 @@ private:
 };
 
 }
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OUStringBuffer OUStringBuffer;
+}
+#endif
 
 #endif  /* _RTL_USTRBUF_HXX_ */
 

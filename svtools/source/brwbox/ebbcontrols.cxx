@@ -281,7 +281,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( CheckBoxControl, OnClick, void*, EMPTYARG )
+    IMPL_LINK_NOARG(CheckBoxControl, OnClick)
     {
         m_aClickLink.Call(pBox);
         return m_aModifyLink.Call(pBox);

@@ -53,7 +53,7 @@ private:
 
     Link            aCheckNameHdl;
 #if _SOLAR__PRIVATE
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK(ModifyHdl, void *);
 #endif
 
 public:
@@ -62,7 +62,7 @@ public:
     void    GetName( String& rName ){rName = aEdtName.GetText();}
 
     /** add a callback Link that is called whenever the content of the edit
-        field is changed.  The Link result determines wether the OK
+        field is changed.  The Link result determines whether the OK
         Button is enabled (> 0) or disabled (== 0).
 
         @param rLink a Callback declared with DECL_LINK and implemented with
@@ -109,7 +109,7 @@ private:
     // callback link for name uniqueness
     Link            aCheckNameHdl;
 #if _SOLAR__PRIVATE
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK(ModifyHdl, void *);
 #endif
 
 public:
@@ -180,8 +180,8 @@ private:
     FixedImage      aFtImage;
     Image*          pImage;
 #if _SOLAR__PRIVATE
-    DECL_LINK( Button1Hdl, Button * );
-    DECL_LINK( Button2Hdl, Button * );
+    DECL_LINK(Button1Hdl, void *);
+    DECL_LINK(Button2Hdl, void *);
 #endif
 public:
     SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg = NULL );

@@ -106,12 +106,12 @@ namespace connectivity
             sal_uInt16 getRowPos() const {return m_nRowPos;}
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
-            void bindValue(const OValueRefRow& _pRow);                      // Bindung an den Wert, den der Operand repraesentiert
+            void bindValue(const OValueRefRow& _pRow); // Bind to the value that the operand represents
 
             TYPEINFO();
         };
 
-        // Attribute aus einer Ergebniszeile
+        // Attributes from a result row
         class OOO_DLLPUBLIC_FILE OOperandAttr : public OOperandRow
         {
         protected:
@@ -126,17 +126,15 @@ namespace connectivity
             TYPEINFO();
         };
 
-        // Parameter fuer ein Praedikat
+        // Parameter for a predicate
         class OOperandParam : public OOperandRow
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
-            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::rtl::Reference<connectivity::OSQLColumns> _xParamColumns);
-
             TYPEINFO();
         };
 
-        // WerteOperanden
+        // Value operands
         class OOperandValue : public OOperand
         {
         protected:
@@ -158,7 +156,7 @@ namespace connectivity
         };
 
 
-        // Konstanten
+        // Constants
         class OOperandConst : public OOperandValue
         {
         public:
@@ -168,7 +166,7 @@ namespace connectivity
         };
 
 
-        // Ergebnis Operanden
+        // Result operands
         class OOperandResult : public OOperandValue
         {
         protected:
@@ -213,19 +211,18 @@ namespace connectivity
             TYPEINFO();
         };
 
-        // Operatoren
+        // Operators
         class OOO_DLLPUBLIC_FILE OOperator : public OCode
         {
         public:
             virtual void Exec(OCodeStack&) = 0;
-            virtual sal_uInt16 getRequestedOperands() const;    // Anzahl benoetigter Operanden
-                                                                // Standard ist 2
+            virtual sal_uInt16 getRequestedOperands() const;    // Count of requested operands
+                                                                // Defaults to 2
             TYPEINFO();
         };
 
 
-        // boolsche Operatoren
-
+        // Boolean operators
         class OOO_DLLPUBLIC_FILE OBoolOperator : public OOperator
         {
         public:
@@ -315,8 +312,7 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
-        // numerische Operatoren
-
+        // Numerical operators
         class ONumOperator : public OOperator
         {
         public:
@@ -357,7 +353,7 @@ namespace connectivity
             return getValue().getDouble() != double(0.0);
         }
 
-        // operator
+        // Operator
         class ONthOperator : public OOperator
         {
         public:

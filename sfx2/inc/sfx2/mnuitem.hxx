@@ -126,23 +126,6 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
-
-
-class SfxAppMenuControl_Impl : public SfxMenuControl
-{
-    PopupMenu*  pMenu;
-    sal_uIntPtr       m_nSymbolsStyle;
-    sal_Bool        m_bShowMenuImages;
-
-protected:
-    DECL_LINK( Activate, Menu * );
-
-public:
-    SFX_DECL_MENU_CONTROL();
-    SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
-    ~SfxAppMenuControl_Impl();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

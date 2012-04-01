@@ -97,7 +97,7 @@ ScrollPanel::~ScrollPanel (void)
         TreeNode* pControl = pNode;
         // When the node has been created as TitledControl then use its
         // control instead of pNode directly.
-        TitledControl* pTitledControl = static_cast<TitledControl*>(pNode);
+        TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pNode);
         if (pTitledControl != NULL)
             pControl = pTitledControl->GetControl();
 
@@ -637,7 +637,7 @@ sal_Int32 ScrollPanel::SetupHorizontalScrollBar (bool bShow, sal_Int32 nRange)
 }
 
 
-IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScrollPanel, ScrollBarHandler)
 {
     maScrollOffset.X() -= maHorizontalScrollBar.GetDelta();
     maScrollOffset.Y() -= maVerticalScrollBar.GetDelta();

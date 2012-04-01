@@ -234,7 +234,7 @@ namespace basprov
                         for ( sal_Int32 i = 0; i < nProps; ++i )
                         {
                             // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
+                            if ( pProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
                             {
                                 pProps[i].Value >>= sDocURL;
                                 break;

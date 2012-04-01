@@ -52,7 +52,6 @@
 #include "rangelst.hxx"
 #include "chartarr.hxx"
 #include "chartlock.hxx"
-#include "compiler.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"
@@ -66,7 +65,6 @@
 #include "dociter.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"
-#include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "chartlis.hxx"
 #include "sc.hrc"           // SID_LINK
@@ -76,7 +74,7 @@
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #include "dpshttab.hxx"
-#include "dptablecache.hxx"
+#include "dpcache.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
@@ -87,6 +85,28 @@
 #include <memory>
 
 using namespace com::sun::star;
+
+namespace {
+
+void sortAndRemoveDuplicates(std::vector<ScTypedStrData>& rStrings, bool bCaseSens)
+{
+    if (bCaseSens)
+    {
+        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseSensitive());
+        std::vector<ScTypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseSensitive());
+        rStrings.erase(it, rStrings.end());
+    }
+    else
+    {
+        std::sort(rStrings.begin(), rStrings.end(), ScTypedStrData::LessCaseInsensitive());
+        std::vector<ScTypedStrData>::iterator it =
+            std::unique(rStrings.begin(), rStrings.end(), ScTypedStrData::EqualCaseInsensitive());
+        rStrings.erase(it, rStrings.end());
+    }
+}
+
+}
 
 void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 {
@@ -105,23 +125,6 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
         aNames.insert(ScRangeName::TabNameCopyMap::value_type(i, p));
     }
     rNames.swap(aNames);
-}
-
-void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
-{
-    // Remove all existing range names first.
-    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
-    {
-        if (!maTabs[i])
-            // no more tables to iterate through.
-            break;
-
-        maTabs[i]->SetRangeName(NULL);
-    }
-
-    ScRangeName::TabNameCopyMap::const_iterator itr = rNames.begin(), itrEnd = rNames.end();
-    for (; itr != itrEnd; ++itr)
-        SetRangeName(itr->first, new ScRangeName(*itr->second));
 }
 
 void ScDocument::SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
@@ -355,6 +358,11 @@ void ScDocument::StopTemporaryChartLock()
 {
     if( apTemporaryChartLock.get() )
         apTemporaryChartLock->StopLocking();
+}
+
+ScChartListenerCollection* ScDocument::GetChartListenerCollection() const
+{
+    return pChartListenerCollection;
 }
 
 void ScDocument::SetChartListenerCollection(
@@ -1420,7 +1428,7 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //
 
 bool ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1440,7 +1448,6 @@ bool ScDocument::GetFilterEntries(
 
             ScQueryParam aParam;
             pDBData->GetQueryParam( aParam );
-            rStrings.SetCaseSensitive( aParam.bCaseSens );
 
             // return all filter entries, if a filter condition is connected with a boolean OR
             if ( bFilter )
@@ -1466,6 +1473,7 @@ bool ScDocument::GetFilterEntries(
                 maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
+            sortAndRemoveDuplicates(rStrings, aParam.bCaseSens);
             return true;
         }
     }
@@ -1477,12 +1485,14 @@ bool ScDocument::GetFilterEntries(
 //  GetFilterEntriesArea - Eintraege fuer Filter-Dialog
 //
 
-bool ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
+bool ScDocument::GetFilterEntriesArea(
+    SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
+    std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
+        sortAndRemoveDuplicates(rStrings, bCaseSens);
         return true;
     }
 
@@ -1493,8 +1503,9 @@ bool ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRo
 //  GetDataEntries - Eintraege fuer Auswahlliste-Listbox (keine Zahlen / Formeln)
 //
 
-bool ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    TypedScStrCollection& rStrings, bool bLimit )
+bool ScDocument::GetDataEntries(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
+    std::vector<ScTypedStrData>& rStrings, bool bLimit )
 {
     if( !bLimit )
     {
@@ -1506,23 +1517,34 @@ bool ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             const ScValidationData* pData = GetValidationEntry( nValidation );
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
+            {
+                if (pData->GetListType() == ValidListType::SORTEDASCENDING)
+                    sortAndRemoveDuplicates(rStrings, bCaseSens);
+
                 return true;
+            }
         }
     }
 
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()))
+        return false;
+
+    if (!maTabs[nTab])
+        return false;
+
+    std::set<ScTypedStrData> aStrings;
+    bool bRet = maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
+    rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
+    sortAndRemoveDuplicates(rStrings, bCaseSens);
+
+    return bRet;
 }
 
 //
 //  GetFormulaEntries - Eintraege fuer Formel-AutoEingabe
 //
 
-//  Funktionen werden als 1 schon vom InputHandler eingefuegt
-#define SC_STRTYPE_NAMES        2
-#define SC_STRTYPE_DBNAMES      3
-#define SC_STRTYPE_HEADERS      4
-
-bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
+bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
     //
     //  Bereichsnamen
@@ -1532,11 +1554,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
     {
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
-        {
-            TypedStrData* pNew = new TypedStrData(itr->second->GetName(), 0.0, SC_STRTYPE_NAMES);
-            if (!rStrings.Insert(pNew))
-                delete pNew;
-        }
+            rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
     //
@@ -1548,11 +1566,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-        {
-            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_DBNAMES);
-            if ( !rStrings.Insert(pNew) )
-                delete pNew;
-        }
+            rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
     //
@@ -1575,9 +1589,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
                     if ( pCell->HasStringData() )
                     {
                         rtl::OUString aStr = pCell->GetStringData();
-                        TypedStrData* pNew = new TypedStrData( aStr, 0.0, SC_STRTYPE_HEADERS );
-                        if ( !rStrings.Insert(pNew) )
-                            delete pNew;
+                        rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
                     }
             }
     }
@@ -1924,36 +1936,9 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
     OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
-    bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
 
     *pDocOptions = rOpt;
-
     xPoolHelper->SetFormTableOpt(rOpt);
-
-    SetGrammar( rOpt.GetFormulaSyntax() );
-
-    if (bUpdateFuncNames)
-    {
-        // This needs to be called first since it may re-initialize the entire
-        // opcode map.
-        if (rOpt.GetUseEnglishFuncName())
-        {
-            // switch native symbols to English.
-            ScCompiler aComp(NULL, ScAddress());
-            ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
-            ScCompiler::SetNativeSymbols(xMap);
-        }
-        else
-            // re-initialize native symbols with localized function names.
-            ScCompiler::ResetNativeSymbols();
-
-        // Force re-population of function names for the function wizard, function tip etc.
-        ScGlobal::ResetFunctionList();
-    }
-
-    // Update the separators.
-    ScCompiler::UpdateSeparatorsNative(
-        rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

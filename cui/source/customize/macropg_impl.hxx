@@ -59,7 +59,7 @@ private:
 
     ::rtl::OUString maURL;
 
-    DECL_LINK(ButtonHandler, Button *);
+    DECL_LINK(ButtonHandler, void *);
 
 public:
     AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL );

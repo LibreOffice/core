@@ -27,6 +27,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sal_osl_module))
 
+# the test uses the library created by Module_DLL
+$(call gb_CppunitTest_get_target,sal_osl_module) : \
+    $(call gb_CppunitTest_get_target,Module_DLL)
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module,\
     sal/qa/osl/module/osl_Module \
 ))

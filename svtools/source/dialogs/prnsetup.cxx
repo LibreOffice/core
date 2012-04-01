@@ -300,7 +300,7 @@ void PrinterSetupDialog::ImplSetInfo()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PrinterSetupDialog, ImplStatusHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 {
     QueueInfo aInfo;
     ImplPrnDlgUpdateQueueInfo( &maLbName, aInfo );
@@ -311,7 +311,7 @@ IMPL_LINK( PrinterSetupDialog, ImplStatusHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PrinterSetupDialog, ImplPropertiesHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 {
     if ( !mpTempPrinter )
         mpTempPrinter = new Printer( mpPrinter->GetJobSetup() );
@@ -322,7 +322,7 @@ IMPL_LINK( PrinterSetupDialog, ImplPropertiesHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PrinterSetupDialog, ImplChangePrinterHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
 {
     mpTempPrinter = ImplPrnDlgListBoxSelect( &maLbName, &maBtnProperties,
                                              mpPrinter, mpTempPrinter );

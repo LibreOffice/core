@@ -88,9 +88,6 @@
 #include <comphelper/processfactory.hxx>
 #include "SchXMLSeriesHelper.hxx"
 #include "ColorPropertySet.hxx"
-#include "oox/xls/formulaparser.hxx"
-#include "oox/xls/workbookhelper.hxx"
-#include "oox/xls/addressconverter.hxx"
 #include <set>
 #include <time.h>
 
@@ -344,35 +341,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     return bResult;
 }
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
-{
-    OUString aResult = rRange;
-
-    if( !xDoc.is() )
-        return aResult;
-    Reference< chart2::data::XRangeXMLConversion > xConversion(
-        xDoc->getDataProvider(), uno::UNO_QUERY );
-    if( xConversion.is())
-        aResult = xConversion->convertRangeToXML( rRange );
-    OSL_TRACE("lcl_ConvertRange, the originla formula is %s, the new formula is %s ", rtl::OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
-    return aResult;
-}
-
 typedef ::std::pair< OUString, OUString > tLabelAndValueRange;
-
-sal_Int32 lcl_getSequenceLengthByRole(
-    const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aSeqCnt,
-    const OUString & rRole )
-{
-    Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-        lcl_getDataSequenceByRole( aSeqCnt, rRole ));
-    if( xLabeledSeq.is())
-    {
-        Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getValues());
-        return xSeq->getData().getLength();
-    }
-    return 0;
-}
 
 OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
 {
@@ -435,26 +404,6 @@ void lcl_fillCategoriesIntoStringVector(
     }
 }
 
-double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > & xSeq, sal_Int32 nIndex )
-{
-    double fResult = 0.0;
-    ::rtl::math::setNan( &fResult );
-    Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-    if( xNumSeq.is())
-    {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
-        if( nIndex < aValues.getLength() )
-            fResult = aValues[nIndex];
-    }
-    else
-    {
-        Sequence< uno::Any > aAnies( xSeq->getData());
-        if( nIndex < aAnies.getLength() )
-            aAnies[nIndex] >>= fResult;
-    }
-    return fResult;
-}
-
 ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
@@ -477,31 +426,6 @@ double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > 
     }
     return aResult;
 }
-
-bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
-{
-    if( !xDataSequence.is() )
-        return false;
-    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        uno::Sequence< sal_Int32 > aHiddenValues;
-        try
-        {
-            xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenValues" ) ) ) >>= aHiddenValues;
-            if( !aHiddenValues.getLength() )
-                return true;
-        }
-        catch( uno::Exception& )
-        {
-            return true;
-        }
-    }
-    if( xDataSequence->getData().getLength() )
-        return true;
-    return false;
-}
-
 
 sal_Int32 lcl_getChartType( const OUString& sChartType )
 {
@@ -1773,27 +1697,6 @@ void ChartExport::exportCandleStickSeries(
 
 
 
-void ChartExport::exportDataSeq( const Reference< chart2::data::XDataSequence > & xValueSeq, sal_Int32 elementTokenId )
-{
-    FSHelperPtr pFS = GetFS();
-    Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
-    pFS->startElement( FSNS( XML_c, elementTokenId ),
-            FSEND );
-
-    sal_Int32 eTokenId1 = elementTokenId == XML_val ? XML_numRef:XML_strRef;
-    OUString aCellRange = lcl_ConvertRange( xValueSeq->getSourceRangeRepresentation(), xNewDoc );
-    pFS->startElement( FSNS( XML_c, eTokenId1 ),
-            FSEND );
-
-    pFS->startElement( FSNS( XML_c, XML_f ),
-            FSEND );
-    pFS->writeEscaped( aCellRange );
-    pFS->endElement( FSNS( XML_c, XML_f ) );
-
-    pFS->endElement( FSNS( XML_c, eTokenId1 ) );
-    pFS->endElement( FSNS( XML_c, elementTokenId ) );
-}
-
 void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
@@ -2125,113 +2028,6 @@ void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
         }
     }
 
-
-    _exportAxis( xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, aAxisIdPair );
-}
-
-void ChartExport::exportXAxis( AxisIdPair aAxisIdPair )
-{
-    // get some properties from document first
-    sal_Bool bHasXAxisTitle = sal_False,
-        bHasSecondaryXAxisTitle = sal_False;
-    sal_Bool bHasXAxisMajorGrid = sal_False,
-        bHasXAxisMinorGrid = sal_False;
-
-       Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
-
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisTitle"))) >>= bHasXAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasSecondaryXAxisTitle"))) >>=  bHasSecondaryXAxisTitle;
-
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisGrid"))) >>=  bHasXAxisMajorGrid;
-
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisHelpGrid"))) >>=  bHasXAxisMinorGrid;
-
-    // catAx
-    Reference< ::com::sun::star::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
-    if( !xAxisXSupp.is())
-        return;
-
-    Reference< XPropertySet > xAxisProp = xAxisXSupp->getXAxis();
-    if( !xAxisProp.is() )
-        return;
-
-    sal_Int32 nAxisType = XML_catAx;
-    sal_Int32 eChartType = getChartType( );
-    if( (eChartType == chart::TYPEID_SCATTER)
-        || (eChartType == chart::TYPEID_BUBBLE) )
-        nAxisType = XML_valAx;
-    else if( eChartType == chart::TYPEID_STOCK )
-        nAxisType = XML_dateAx;
-
-    Reference< drawing::XShape > xAxisTitle;
-    if( bHasXAxisTitle )
-        xAxisTitle.set( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY );
-
-    // FIXME: axPos, need to check axis direction
-    const char* sAxPos = "b";
-    // major grid line
-    Reference< beans::XPropertySet > xMajorGrid;
-    if( bHasXAxisMajorGrid )
-        xMajorGrid.set( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY );
-
-    // minor grid line
-    Reference< beans::XPropertySet > xMinorGrid;
-    if( bHasXAxisMinorGrid )
-        xMinorGrid.set( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY );
-
-    _exportAxis( xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, aAxisIdPair );
-}
-
-void ChartExport::exportYAxis( AxisIdPair aAxisIdPair )
-{
-    // get some properties from document first
-    sal_Bool bHasYAxisTitle = sal_False,
-        bHasSecondaryYAxisTitle = sal_False;
-    sal_Bool bHasYAxisMajorGrid = sal_False,
-        bHasYAxisMinorGrid = sal_False;
-
-       Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
-
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisTitle"))) >>=  bHasYAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasSecondaryYAxisTitle"))) >>=  bHasSecondaryYAxisTitle;
-
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisGrid"))) >>=  bHasYAxisMajorGrid;
-    xDiagramProperties->getPropertyValue(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisHelpGrid"))) >>=  bHasYAxisMinorGrid;
-
-    Reference< ::com::sun::star::chart::XAxisYSupplier > xAxisYSupp( mxDiagram, uno::UNO_QUERY );
-    if( !xAxisYSupp.is())
-        return;
-
-    Reference< XPropertySet > xAxisProp = xAxisYSupp->getYAxis();
-    if( !xAxisProp.is() )
-        return;
-
-    sal_Int32 nAxisType = XML_valAx;
-
-    Reference< drawing::XShape > xAxisTitle;
-    if( bHasYAxisTitle )
-        xAxisTitle.set( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY );
-
-    // FIXME: axPos
-    const char* sAxPos = "l";
-
-    // major grid line
-    Reference< beans::XPropertySet > xMajorGrid;
-    if( bHasYAxisMajorGrid )
-        xMajorGrid.set( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY );
-
-    // minor grid line
-    Reference< beans::XPropertySet > xMinorGrid;( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
-    if( bHasYAxisMinorGrid )
-        xMinorGrid.set(  xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
 
     _exportAxis( xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, aAxisIdPair );
 }

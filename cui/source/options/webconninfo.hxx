@@ -67,9 +67,9 @@ namespace svx
         sal_Int32           m_nPos;
 
     DECL_LINK( HeaderBarClickedHdl, SvxSimpleTable* );
-    DECL_LINK( RemovePasswordHdl, PushButton* );
-    DECL_LINK( RemoveAllPasswordsHdl, PushButton* );
-    DECL_LINK( ChangePasswordHdl, PushButton* );
+    DECL_LINK(RemovePasswordHdl, void *);
+    DECL_LINK(RemoveAllPasswordsHdl, void *);
+    DECL_LINK(ChangePasswordHdl, void *);
     DECL_LINK( EntrySelectedHdl, void* );
 
     void FillPasswordList();

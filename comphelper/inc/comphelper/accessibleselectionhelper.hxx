@@ -32,7 +32,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include "comphelper/comphelperdllapi.h"
 
@@ -55,6 +54,8 @@ namespace comphelper
     protected:
 
         OCommonAccessibleSelection();
+
+        ~OCommonAccessibleSelection();
 
     protected:
 
@@ -100,8 +101,6 @@ namespace comphelper
                                        public OAccessibleSelectionHelper_Base
     {
     protected:
-
-        OAccessibleSelectionHelper( );
 
         /// see the respective base class ctor for an extensive comment on this, please
         OAccessibleSelectionHelper( IMutex* _pExternalLock );

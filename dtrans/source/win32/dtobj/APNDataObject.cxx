@@ -34,6 +34,9 @@
 
 #include <systools/win32/comtools.hxx>
 #ifdef __MINGW32__
+#if defined __uuidof
+#undef __uuidof
+#endif
 #define __uuidof(I) IID_##I
 #endif
 

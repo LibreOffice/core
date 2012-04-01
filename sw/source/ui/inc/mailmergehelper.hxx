@@ -101,7 +101,7 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     virtual void        StateChanged( StateChangedType nStateChange );
     void                UpdateScrollBar();
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK(ScrollHdl, void*);
 
 public:
     SwAddressPreview(Window* pParent, const ResId rResId);

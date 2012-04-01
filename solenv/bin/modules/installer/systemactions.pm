@@ -1295,7 +1295,7 @@ sub find_new_content_in_directory
         if (( -f $completeentry ) || ( -d $completeentry ))
         {
             push(@allcontent, $completeentry);
-            if (! installer::existence::exists_in_array($completeentry, $oldcontent))
+            if (! grep {$_ eq $completeentry} @{$oldcontent})
             {
                 push(@newcontent, $completeentry);
             }

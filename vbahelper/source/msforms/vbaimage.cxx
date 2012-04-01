@@ -37,11 +37,10 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaImage::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaImage") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaImage"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -54,6 +53,16 @@ ScVbaImage::getServiceNames()
         aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Image" ) );
     }
     return aServiceNames;
+}
+
+sal_Int32 SAL_CALL ScVbaImage::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaImage::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

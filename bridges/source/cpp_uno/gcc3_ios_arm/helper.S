@@ -24,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include "codesnippets.S"
+
 #ifdef __arm
 @ ARM support code for LibreOffice C++/UNO bridging
 @
@@ -35,16 +38,15 @@
 	.file	"helper.S"
 	.text
 	.align	4
-	.globl privateSnippetExecutor
 
-privateSnippetExecutor:
+_privateSnippetExecutor:
 	stmfd sp!, {r0-r3}         @ follow other parameters on stack
 	mov   r0, ip               @ r0 points to functionoffset/vtable
 	mov   r1, sp               @ r1 points to this and params
 	                           @ (see cpp2uno.cxx:codeSnippet())
 	stmfd sp!, {r4,lr}         @ save return address 
 	                           @ (r4 pushed to preserve stack alignment)
-	bl    cpp_vtable_call
+	bl    _cpp_vtable_call
 
 	add   sp, sp, #4           @ no need to restore r4 (we didn't touch it)
 	ldr   pc, [sp], #20        @ return, discarding function arguments
@@ -53,7 +55,6 @@ privateSnippetExecutor:
     .text
 
 .align 1, 0x90
-.globl _privateSnippetExecutorGeneral
 _privateSnippetExecutorGeneral:
 LFBg:
     movl    %esp,%ecx
@@ -74,7 +75,6 @@ LFEg:
     .long   .-_privateSnippetExecutorGeneral
 
 .align 1, 0x90
-.globl _privateSnippetExecutorVoid
 _privateSnippetExecutorVoid:
 LFBv:
     movl    %esp,%ecx
@@ -94,7 +94,6 @@ LFEv:
     .long   .-_privateSnippetExecutorVoid
 
 .align 1, 0x90
-.globl _privateSnippetExecutorHyper
 _privateSnippetExecutorHyper:
 LFBh:
     movl    %esp,%ecx
@@ -116,7 +115,6 @@ LFEh:
     .long   .-_privateSnippetExecutorHyper
 
 .align 1, 0x90
-.globl _privateSnippetExecutorFloat
 _privateSnippetExecutorFloat:
 LFBf:
     movl    %esp,%ecx
@@ -137,7 +135,6 @@ LFEf:
     .long   .-_privateSnippetExecutorFloat
 
 .align 1, 0x90
-.globl _privateSnippetExecutorDouble
 _privateSnippetExecutorDouble:
 LFBd:
     movl    %esp,%ecx
@@ -158,7 +155,6 @@ LFEd:
     .long   .-_privateSnippetExecutorDouble
 
 .align 1, 0x90
-.globl _privateSnippetExecutorClass
 _privateSnippetExecutorClass:
 LFBc:
     movl    %esp,%ecx
@@ -201,7 +197,6 @@ LSCIE1:
     .byte   1
     .align 2
 LECIE1:
-    .globl _privateSnippetExecutorGeneral.eh
 _privateSnippetExecutorGeneral.eh:
 LSFDEg:
     .set L$set$g1,LEFDEg-LASFDEg
@@ -224,7 +219,6 @@ LASFDEg:
     .byte   4
     .align 2
 LEFDEg:
-    .globl _privateSnippetExecutorVoid.eh
 _privateSnippetExecutorVoid.eh:
 LSFDEv:
     .set L$set$v1,LEFDEv-LASFDEv
@@ -247,7 +241,6 @@ LASFDEv:
     .byte   4
     .align 2
 LEFDEv:
-    .globl _privateSnippetExecutorHyper.eh
 _privateSnippetExecutorHyper.eh:
 LSFDEh:
     .set L$set$h1,LEFDEh-LASFDEh
@@ -270,7 +263,6 @@ LASFDEh:
     .byte   4
     .align 2
 LEFDEh:
-    .globl _privateSnippetExecutorFloat.eh
 _privateSnippetExecutorFloat.eh:
 LSFDEf:
     .set L$set$f1,LEFDEf-LASFDEf
@@ -293,7 +285,6 @@ LASFDEf:
     .byte   4
     .align 2
 LEFDEf:
-    .globl _privateSnippetExecutorDouble.eh
 _privateSnippetExecutorDouble.eh:
 LSFDEd:
     .set L$set$d1,LEFDEd-LASFDEd
@@ -316,7 +307,6 @@ LASFDEd:
     .byte   4
     .align 2
 LEFDEd:
-    .globl _privateSnippetExecutorClass.eh
 _privateSnippetExecutorClass.eh:
 LSFDEc:
     .set L$set$c1,LEFDEc-LASFDEc

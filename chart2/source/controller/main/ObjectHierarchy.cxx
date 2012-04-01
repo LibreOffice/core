@@ -488,7 +488,21 @@ void ImplObjectHierarchy::createDataSeriesTree(
                                 {
                                     aSeriesSubContainer.push_back(
                                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                            OBJECTTYPE_DATA_ERRORS, OUString(), aSeriesParticle ) ) );
+                                            OBJECTTYPE_DATA_ERRORS_Y, OUString(), aSeriesParticle ) ) );
+                                }
+                            }
+
+                            if( xSeriesProp.is() &&
+                                (xSeriesProp->getPropertyValue( C2U("ErrorBarX")) >>= xErrorBarProp) &&
+                                xErrorBarProp.is())
+                            {
+                                sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                                if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
+                                    ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
+                                {
+                                    aSeriesSubContainer.push_back(
+                                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(
+                                            OBJECTTYPE_DATA_ERRORS_X, OUString(), aSeriesParticle ) ) );
                                 }
                             }
                         }

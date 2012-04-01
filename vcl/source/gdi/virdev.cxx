@@ -48,9 +48,6 @@ using namespace ::com::sun::star::uno;
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
-    DBG_ASSERT( nBitCount <= 1,
-                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
-
     if ( nDX < 1 )
         nDX = 1;
 
@@ -138,7 +135,9 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
@@ -149,7 +148,9 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
@@ -160,11 +161,14 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
+                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
+    SAL_INFO( "vcl.gdi",
+            "VirtualDevice::VirtualDevice( " << nBitCount << ", " << nAlphaBitCount << " )" );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
-    // #110958# Enable alpha channel
+    // Enable alpha channel
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
@@ -174,7 +178,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
@@ -183,7 +187,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 
 VirtualDevice::~VirtualDevice()
 {
-    OSL_TRACE( "VirtualDevice::~VirtualDevice()" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::~VirtualDevice()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -208,7 +212,9 @@ VirtualDevice::~VirtualDevice()
 
 sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
 {
-    OSL_TRACE( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
+    SAL_INFO( "vcl.gdi",
+            "VirtualDevice::ImplSetOutputSizePixel( " << rNewSize.Width() << ", "
+            << rNewSize.Height() << ", " << bErase << " )" );
 
     if ( !mpVirDev )
         return sal_False;

@@ -211,7 +211,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
     return bThreadStarted;
 }
 
-IMPL_LINK( ThreadManager, TryToStartNewThread, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread)
 {
     osl::MutexGuard aGuard(maMutex);
 

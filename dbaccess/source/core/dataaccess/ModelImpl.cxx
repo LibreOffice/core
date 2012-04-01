@@ -1079,12 +1079,6 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "AutoIncrementCreation",      makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( (sal_Bool)sal_False ) ),
-        // known Adabas D driver setting
-        AsciiPropertyValue( "ShutdownDatabase",           makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "DataCacheSizeIncrement",     makeAny( (sal_Int32)20 ) ),
-        AsciiPropertyValue( "DataCacheSize",              makeAny( (sal_Int32)20 ) ),
-        AsciiPropertyValue( "ControlUser",                makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "ControlPassword",            makeAny( ::rtl::OUString() ) ),
         // known LDAP driver settings
         AsciiPropertyValue( "HostName",                   makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),

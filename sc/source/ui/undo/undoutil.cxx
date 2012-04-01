@@ -97,7 +97,7 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
         if ( pUndoData )
         {
             const ::rtl::OUString& aName = pUndoData->GetName();
-            if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+            if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
                 bWasTemp = true;
         }
         OSL_ENSURE(bWasTemp, "Undo: didn't find database range");

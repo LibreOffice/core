@@ -652,7 +652,7 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
 {
     sal_Bool bEnable = !(aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled());
 

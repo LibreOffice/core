@@ -301,15 +301,12 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                      ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
                      bDisableDataTableDialog )
                 {
-                    ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
-                    ScRange aEmptyRange;
-                    ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
-                    sal_uInt16 nIndex = 0;
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
-                    if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
+                    if (pCollection)
                     {
-                        ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
-                        if ( pListener )
+                        ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
+                        const ScChartListener* pListener = pCollection->findByName(aChartName);
+                        if (pListener)
                         {
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
                             if ( rRangeList.Is() )
@@ -396,16 +393,13 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             {
                                 if ( bSameDoc )
                                 {
-                                    ScRange aEmptyRange;
-                                    ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                                    sal_uInt16 nIndex = 0;
                                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                                    if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
+                                    if (pCollection && !pCollection->findByName(aChartName))
                                     {
                                         ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
                                         ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
                                         ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
-                                        pCollection->Insert( pChartListener );
+                                        pCollection->insert( pChartListener );
                                         pChartListener->StartListeningTo();
                                     }
                                 }

@@ -29,24 +29,23 @@
 #ifndef ANALYSISDEFS_HXX
 #define ANALYSISDEFS_HXX
 
-#define CSS                 ::com::sun::star
-#define XPROPSET            CSS::beans::XPropertySet
-#define REF(c)              CSS::uno::Reference< c >
+#define XPROPSET            ::com::sun::star::beans::XPropertySet
+#define REF(c)              ::com::sun::star::uno::Reference< c >
 #define constREFXPS         const REF(XPROPSET)
-#define SEQ(c)              CSS::uno::Sequence< c >
-#define SEQSEQ(c)           CSS::uno::Sequence< CSS::uno::Sequence< c > >
-#define SEQofLocName        SEQ( CSS::sheet::LocalizedName )
-#define ANY                 CSS::uno::Any
+#define SEQ(c)              ::com::sun::star::uno::Sequence< c >
+#define SEQSEQ(c)           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< c > >
+#define SEQofLocName        SEQ( ::com::sun::star::sheet::LocalizedName )
+#define ANY                 ::com::sun::star::uno::Any
 #define SEQ_ANY             SEQ(ANY)
 #define STRING              ::rtl::OUString
 #define STRFROMASCII(s)     STRING::createFromAscii( s )
 #define STRFROMANSI(s)      STRING( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-#define THROWDEF_RTE        throw(CSS::uno::RuntimeException)
-#define THROW_RTE           throw CSS::uno::RuntimeException()
-#define THROWDEF_RTE_IAE    throw(CSS::uno::RuntimeException,CSS::lang::IllegalArgumentException)
-#define THROW_IAE           throw CSS::lang::IllegalArgumentException()
-#define THROWDEF_RTE_IAE_NCE    throw(CSS::uno::RuntimeException,CSS::lang::IllegalArgumentException,CSS::sheet::NoConvergenceException)
-#define THROW_NCE           throw CSS::sheet::NoConvergenceException()
+#define THROWDEF_RTE        throw(::com::sun::star::uno::RuntimeException)
+#define THROW_RTE           throw ::com::sun::star::uno::RuntimeException()
+#define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)
+#define THROW_IAE           throw ::com::sun::star::lang::IllegalArgumentException()
+#define THROWDEF_RTE_IAE_NCE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException,::com::sun::star::sheet::NoConvergenceException)
+#define THROW_NCE           throw ::com::sun::star::sheet::NoConvergenceException()
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) THROW_IAE

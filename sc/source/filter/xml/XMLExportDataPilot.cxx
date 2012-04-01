@@ -558,49 +558,49 @@ void ScXMLExportDataPilot::WriteDatePart(sal_Int32 nPart)
 
 void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
 {
-    OSL_ENSURE(rGroupInfo.Enable, "group dimension should be enabled");
-    if (rGroupInfo.DateValues)
+    OSL_ENSURE(rGroupInfo.mbEnable, "group dimension should be enabled");
+    if (rGroupInfo.mbDateValues)
     {
-        if (rGroupInfo.AutoStart)
+        if (rGroupInfo.mbAutoStart)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_START, XML_AUTO);
         else
         {
             rtl::OUStringBuffer sDate;
-            rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.Start);
+            rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.mfStart);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_START, sDate.makeStringAndClear());
         }
-        if (rGroupInfo.AutoEnd)
+        if (rGroupInfo.mbAutoEnd)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_END, XML_AUTO);
         else
         {
             rtl::OUStringBuffer sDate;
-            rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.End);
+            rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.mfEnd);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_END, sDate.makeStringAndClear());
         }
     }
     else
     {
-        if (rGroupInfo.AutoStart)
+        if (rGroupInfo.mbAutoStart)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START, XML_AUTO);
         else
         {
-            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.Start,
+            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStart,
                         rtl_math_StringFormat_Automatic,
                         rtl_math_DecimalPlaces_Max, '.', true));
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START, sValue);
         }
-        if (rGroupInfo.AutoEnd)
+        if (rGroupInfo.mbAutoEnd)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END, XML_AUTO);
         else
         {
             rtl::OUStringBuffer sDate;
-            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.End,
+            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfEnd,
                         rtl_math_StringFormat_Automatic,
                         rtl_math_DecimalPlaces_Max, '.', true));
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END, sValue);
         }
     }
-    rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.Step,
+    rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStep,
                 rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true));
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STEP, sValue);
@@ -668,7 +668,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
                         sal_Int32 nElemCount = pGroup->GetElementCount();
                         for(sal_Int32 j = 0; j < nElemCount; ++j)
                         {
-                            const String* pElem = pGroup->GetElementByIndex( j );
+                            const rtl::OUString* pElem = pGroup->GetElementByIndex(j);
                             if (pElem)
                             {
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);

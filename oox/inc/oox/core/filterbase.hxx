@@ -121,16 +121,9 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Returns the specified argument passed through the XInitialization interface. */
-    ::com::sun::star::uno::Any getArgument( const ::rtl::OUString& rArgName ) const;
-
     /** Returns the component context passed in the filter constructor (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                         getComponentContext() const;
-
-    /** Returns the component service factory (always existing). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >&
-                        getComponentFactory() const;
 
     /** Returns the multi service factory of the component (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
@@ -155,10 +148,6 @@ public:
     /** Returns the status indicator (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
                         getStatusIndicator() const;
-
-    /** Returns the status interaction handler (may be null). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
-                        getInteractionHandler() const;
 
     /** Returns the media descriptor. */
     ::comphelper::MediaDescriptor& getMediaDescriptor() const;

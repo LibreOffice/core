@@ -161,7 +161,6 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_nOldVThumb( 0 )
     ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
-    ,nDelayedGrabFocusEvent(0)
     ,m_bAdded(sal_False)
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
@@ -211,7 +210,6 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_nOldVThumb( 0 )
     ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
-    ,nDelayedGrabFocusEvent(0)
     ,m_bAdded(sal_False)
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
@@ -275,9 +273,6 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpColumnName );
     DeactivateAggregate( tpType );
     DeactivateAggregate( tpAutoIncrementValue );
-
-    if(nDelayedGrabFocusEvent)
-        Application::RemoveUserEvent(nDelayedGrabFocusEvent);
 }
 
 //------------------------------------------------------------------------------
@@ -1559,15 +1554,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     ScrollAllAggregates();
 
     SetReadOnly( bRead );
-}
-//------------------------------------------------------------------------
-IMPL_LINK(OFieldDescControl, DelayedGrabFocus, Control**, ppControl)
-{
-    nDelayedGrabFocusEvent = 0;
-    if (*ppControl)
-        (*ppControl)->GrabFocus();
-
-    return 0L;
 }
 
 //------------------------------------------------------------------------------

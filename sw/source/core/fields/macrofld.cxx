@@ -93,14 +93,14 @@ String SwMacroField::GetLibName() const
         return String();
     }
 
-    if (aMacro.Len())
+    if (!aMacro.isEmpty())
     {
-        sal_uInt16 nPos = aMacro.Len();
+        sal_Int32 nPos = aMacro.getLength();
 
-        for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
-            while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
+        for (sal_Int32 i = 0; i < 3 && nPos > 0; i++)
+            while (aMacro[--nPos] != '.' && nPos > 0) ;
 
-        return aMacro.Copy(0, nPos );
+        return aMacro.copy(0, nPos);
     }
 
     OSL_FAIL("Kein Macroname vorhanden");
@@ -109,20 +109,20 @@ String SwMacroField::GetLibName() const
 
 String SwMacroField::GetMacroName() const
 {
-    if (aMacro.Len())
+    if (!aMacro.isEmpty())
     {
         if (bIsScriptURL)
         {
-            return aMacro.Copy( 0 );
+            return aMacro;
         }
         else
         {
-            sal_uInt16 nPos = aMacro.Len();
+            sal_Int32 nPos = aMacro.getLength();
 
-            for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
-                while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
+            for (sal_Int32 i = 0; i < 3 && nPos > 0; i++)
+                while (aMacro[--nPos] != '.' && nPos > 0) ;
 
-            return aMacro.Copy( ++nPos );
+            return aMacro.copy( ++nPos );
         }
     }
 
@@ -146,13 +146,13 @@ SvxMacro SwMacroField::GetSvxMacro() const
     Beschreibung: LibName und MacroName
  --------------------------------------------------------------------*/
 
-void SwMacroField::SetPar1(const String& rStr)
+void SwMacroField::SetPar1(const rtl::OUString& rStr)
 {
     aMacro = rStr;
     bIsScriptURL = isScriptURL(aMacro);
 }
 
-const String& SwMacroField::GetPar1() const
+const rtl::OUString& SwMacroField::GetPar1() const
 {
     return aMacro;
 }
@@ -161,12 +161,12 @@ const String& SwMacroField::GetPar1() const
     Beschreibung: Macrotext
  --------------------------------------------------------------------*/
 
-void SwMacroField::SetPar2(const String& rStr)
+void SwMacroField::SetPar2(const rtl::OUString& rStr)
 {
     aText = rStr;
 }
 
-String SwMacroField::GetPar2() const
+rtl::OUString SwMacroField::GetPar2() const
 {
     return aText;
 }
@@ -195,20 +195,22 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    String sTmp;
+    rtl::OUString sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        CreateMacroString( aMacro, ::GetString(rAny, sTmp), GetLibName());
+        rAny >>= sTmp;
+        CreateMacroString( aMacro, sTmp, GetLibName());
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, aText );
+        rAny >>= aText;
         break;
     case FIELD_PROP_PAR3:
-        CreateMacroString(aMacro, GetMacroName(), ::GetString(rAny, sTmp) );
+        rAny >>= sTmp;
+        CreateMacroString(aMacro, GetMacroName(), sTmp );
         break;
     case FIELD_PROP_PAR4:
-        ::GetString(rAny, aMacro);
+        rAny >>= aMacro;
         bIsScriptURL = isScriptURL(aMacro);
         break;
     default:
@@ -220,14 +222,14 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // create an internally used macro name from the library and macro name parts
 void SwMacroField::CreateMacroString(
-    String& rMacro,
+    rtl::OUString& rMacro,
     const String& rMacroName,
     const String& rLibraryName )
 {
     // concatenate library and name; use dot only if both strings have content
     rMacro = rLibraryName;
     if ( rLibraryName.Len() > 0 && rMacroName.Len() > 0 )
-        rMacro += '.';
+        rMacro += rtl::OUString('.');
     rMacro += rMacroName;
 }
 

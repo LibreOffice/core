@@ -32,28 +32,33 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"
-#include "collect.hxx"
 #include "dpoutput.hxx"
+#include "dptypes.hxx"
 #include "pivot.hxx"
+#include "dpmacros.hxx"
+
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
 #include <set>
+#include <vector>
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace com { namespace sun { namespace star { namespace sheet {
+namespace com { namespace sun { namespace star {
 
-    struct DataPilotTablePositionData;
-    struct DataPilotTableHeaderData;
+    namespace container {
+        class XIndexAccess;
+    }
 
-}}}}
-
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
+    namespace sheet {
+        struct DataPilotTablePositionData;
+        struct DataPilotTableHeaderData;
+        struct DataPilotFieldFilter;
+    }
+}}}
 
 class Rectangle;
 class SvStream;
@@ -64,11 +69,10 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
-class ScStrCollection;
-class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
 class ScDPTableData;
+class ScDPDimensionSaveData;
 
 struct ScDPServiceDesc
 {
@@ -112,6 +116,11 @@ private:
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
+    SC_DLLPRIVATE void ClearSource();
+    SC_DLLPRIVATE bool FillLabelDataForDimension(
+        const com::sun::star::uno::Reference<
+            com::sun::star::container::XIndexAccess>& xDims,
+        sal_Int32 nDim, ScDPLabelData& rLabelData);
 
 public:
     ScDPObject(ScDocument* pD);
@@ -129,8 +138,9 @@ public:
     void                SetAllowMove(bool bSet);
 
     void                InvalidateData();
-    void                ClearSource();
-
+    void ClearTableData();
+    void ReloadGroupTableData();
+    bool HasGroups() const;
 
     void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );
@@ -191,13 +201,14 @@ public:
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const ::rtl::OUString& rFilterList );
 
-    void                GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
-    void                FillPageList( TypedScStrCollection& rStrings, long nField );
+    void FillPageList( std::vector<rtl::OUString>& rStrings, long nField );
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
     bool                FillOldParam(ScPivotParam& rParam) const;
+    bool                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
     bool                FillLabelData(ScPivotParam& rParam);
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, sal_Bool bSetSource);
 
@@ -239,15 +250,21 @@ public:
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 
-    static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
-                            const com::sun::star::uno::Reference<
-                                com::sun::star::sheet::XDimensionsSupplier>& xSource,
-                            ::std::vector<PivotField>* pRefColFields = NULL,
-                            ::std::vector<PivotField>* pRefRowFields = NULL,
-                            ::std::vector<PivotField>* pRefPageFields = NULL );
+    static void ConvertOrientation(
+        ScDPSaveData& rSaveData,
+        const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
+        const com::sun::star::uno::Reference<
+            com::sun::star::sheet::XDimensionsSupplier>& xSource,
+        const ScDPLabelDataVec& rLabels,
+        std::vector<PivotField>* pRefColFields = NULL,
+        std::vector<PivotField>* pRefRowFields = NULL,
+        std::vector<PivotField>* pRefPageFields = NULL );
 
     static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
+
+#if DEBUG_PIVOT_TABLE
+    void DumpCache() const;
+#endif
 };
 
 
@@ -270,14 +287,16 @@ public:
     public:
         SheetCaches(ScDocument* pDoc);
         bool hasCache(const ScRange& rRange) const;
-        const ScDPCache* getCache(const ScRange& rRange);
+        const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
 
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     private:
-        void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+        ScDPCache* getExistingCache(const ScRange& rRange);
+
+        void updateCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -293,10 +312,15 @@ public:
     public:
         NameCaches(ScDocument* pDoc);
         bool hasCache(const rtl::OUString& rName) const;
-        const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
+        const ScDPCache* getCache(
+            const ::rtl::OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
     private:
-        void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+        ScDPCache* getExistingCache(const rtl::OUString& rName);
+
+        void updateCache(
+            const rtl::OUString& rName, const ScRange& rRange,
+            const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -329,14 +353,19 @@ public:
     public:
         DBCaches(ScDocument* pDoc);
         bool hasCache(sal_Int32 nSdbType, const rtl::OUString& rDBName, const rtl::OUString& rCommand) const;
-        const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        const ScDPCache* getCache(
+            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+            const ScDPDimensionSaveData* pDimData);
 
     private:
+        ScDPCache* getExistingCache(
+            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
 
         void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
-                         std::set<ScDPObject*>& rRefs);
+                         const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -345,6 +374,7 @@ public:
     ~ScDPCollection();
 
     sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);

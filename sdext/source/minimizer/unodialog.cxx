@@ -321,29 +321,6 @@ void UnoDialog::setControlProperty( const OUString& rControlName, const OUString
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 UnoDialog::getMapsFromPixels( sal_Int32 nPixels ) const
-{
-    double dMaps = 0;
-    try
-    {
-        sal_Int32 nMapWidth = 0;
-        const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-        if ( mxDialogModelPropertySet->getPropertyValue( sWidth  ) >>= nMapWidth )
-        {
-            Reference< XWindow > xWindow( mxDialog, UNO_QUERY_THROW );
-            double pxWidth = xWindow->getPosSize().Width;
-            double mapRatio = ( pxWidth / nMapWidth );
-            dMaps = nPixels / mapRatio;
-        }
-    }
-    catch ( Exception& )
-    {
-    }
-    return static_cast< sal_Int32 >( dMaps );
-}
-
-// -----------------------------------------------------------------------------
-
 Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString& rPropertyName )
 {
     Any aRet;

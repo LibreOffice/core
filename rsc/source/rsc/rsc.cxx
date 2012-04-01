@@ -75,7 +75,6 @@ using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using comphelper::string::getToken;
 using comphelper::string::getTokenCount;
-using comphelper::string::indexOfL;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -1171,7 +1170,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                 aOStm.WriteLine(aLine);
             }
-            else if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("ImageList")) != -1)
+            else if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("ImageList")) != -1)
             {
                 ::std::vector< ::std::pair< rtl::OString, sal_Int32 > > aEntryVector;
 
@@ -1186,7 +1185,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         if( !aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("Prefix")) == -1);
+                    while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("Prefix")) == -1);
 
                     const rtl::OString aPrefix( getToken(aLine, 1, '"') );
                     aIStm.Seek( nImgListStartPos );
@@ -1196,7 +1195,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         if (!aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
+                    while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
 
                     // scan all ids and collect images
                     while (aLine.indexOf('}') == -1)
@@ -1231,7 +1230,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     {
                         aIStm.ReadLine( aLine );
 
-                        if (indexOfL(aLine, RTL_CONSTASCII_STRINGPARAM("IdList")) != -1)
+                        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("IdList")) != -1)
                         {
                             while (aLine.indexOf('}') == -1)
                                 aIStm.ReadLine(aLine);

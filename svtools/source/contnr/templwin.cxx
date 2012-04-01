@@ -43,7 +43,6 @@
 #include <svtools/svtools.hrc>
 #include "templwin.hrc"
 #include <svtools/helpid.hrc>
-#include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "unotools/configmgr.hxx"
@@ -97,7 +96,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
 using namespace svtools;
 
-extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
 #define aSeparatorStr   "----------------------------------"
 
 #define SPLITSET_ID         0
@@ -128,163 +126,6 @@ struct FolderHistory
 };
 
 typedef ::std::vector< ::rtl::OUString* > NewDocList_Impl;
-
-ODocumentInfoPreview::ODocumentInfoPreview( Window* pParent ,WinBits _nBits) : Window(pParent,WB_DIALOGCONTROL)
-{
-    m_pEditWin = new SvtExtendedMultiLineEdit_Impl(this,_nBits);
-    m_pEditWin->Show();
-    m_pEditWin->EnableCursor( sal_False );
-    m_pInfoTable = new SvtDocInfoTable_Impl();
-    // detect application language
-    m_aLocale = SvtPathOptions().GetLocale();
-}
-// -----------------------------------------------------------------------------
-ODocumentInfoPreview::~ODocumentInfoPreview()
-{
-    delete m_pEditWin;
-    delete m_pInfoTable;
-}
-// -----------------------------------------------------------------------------
-void ODocumentInfoPreview::Resize()
-{
-    Size aOutputSize( GetOutputSize() );
-    m_pEditWin->SetPosSizePixel( Point(0,0),aOutputSize);
-}
-// -----------------------------------------------------------------------------
-void ODocumentInfoPreview::Clear()
-{
-    m_pEditWin->Clear();
-}
-// -----------------------------------------------------------------------------
-
-void lcl_insertDateTimeEntry(SvtExtendedMultiLineEdit_Impl* i_pEditWin,
-    const ::rtl::OUString & i_rName, const util::DateTime & i_rUDT)
-{
-    DateTime aToolsDT =
-        DateTime( Date( i_rUDT.Day, i_rUDT.Month, i_rUDT.Year ),
-                Time( i_rUDT.Hours, i_rUDT.Minutes,
-                      i_rUDT.Seconds, i_rUDT.HundredthSeconds ) );
-    if ( aToolsDT.IsValidAndGregorian() )
-    {
-        LocaleDataWrapper aLocaleWrapper(
-            ::comphelper::getProcessServiceFactory(),
-            Application::GetSettings().GetLocale() );
-        String aDateStr = aLocaleWrapper.getDate( aToolsDT );
-        aDateStr += String( RTL_CONSTASCII_USTRINGPARAM(", ") );
-        aDateStr += aLocaleWrapper.getTime( aToolsDT );
-        i_pEditWin->InsertEntry( i_rName, aDateStr );
-    }
-}
-
-void ODocumentInfoPreview::fill(
-    const Reference< XDocumentProperties >& i_xDocProps, const String& i_rURL)
-{
-    if (!i_xDocProps.is()) throw RuntimeException();
-
-    ::rtl::OUString aStr;
-    m_pEditWin->SetAutoScroll( sal_False );
-
-    aStr = i_xDocProps->getTitle();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_TITLE ), aStr );
-    }
-
-    aStr = i_xDocProps->getAuthor();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_FROM ), aStr );
-    }
-
-    lcl_insertDateTimeEntry(m_pEditWin,
-            m_pInfoTable->GetString( DI_DATE ),
-            i_xDocProps->getCreationDate());
-
-    aStr = i_xDocProps->getModifiedBy();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString(DI_MODIFIEDBY), aStr );
-    }
-
-    lcl_insertDateTimeEntry(m_pEditWin,
-            m_pInfoTable->GetString( DI_MODIFIEDDATE ),
-            i_xDocProps->getModificationDate());
-
-    aStr = i_xDocProps->getPrintedBy();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_PRINTBY ), aStr );
-    }
-
-    lcl_insertDateTimeEntry(m_pEditWin,
-            m_pInfoTable->GetString( DI_PRINTDATE ),
-            i_xDocProps->getPrintDate());
-
-    aStr = i_xDocProps->getSubject();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_THEME ), aStr );
-    }
-
-    aStr =
-        ::comphelper::string::convertCommaSeparated(i_xDocProps->getKeywords());
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_KEYWORDS ), aStr );
-    }
-
-    aStr = i_xDocProps->getDescription();
-    if (!aStr.isEmpty()) {
-        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_DESCRIPTION ),
-            aStr );
-    }
-
-    // size
-    if ( i_rURL.Len() > 0 )
-    {
-        m_pEditWin->InsertEntry(
-            m_pInfoTable->GetString( DI_SIZE ),
-            CreateExactSizeText_Impl( utl::UCBContentHelper::GetSize( i_rURL ) ) );
-    }
-
-    // MIMEType
-    if ( i_rURL.Len() > 0 )
-    {
-        INetContentType eTypeID =
-            INetContentTypes::GetContentTypeFromURL( i_rURL );
-        if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM ) {
-            aStr = INetContentTypes::GetPresentation( eTypeID, m_aLocale );
-        } else {
-            aStr = SvFileInformationManager::GetDescription(
-                        INetURLObject(i_rURL) );
-        }
-        if (!aStr.isEmpty()) {
-            m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_MIMETYPE ),
-                aStr );
-        }
-    }
-
-    // user-defined (custom) properties
-    Reference< XPropertySet > xUserDefined(
-        i_xDocProps->getUserDefinedProperties(), UNO_QUERY_THROW );
-    Reference< XPropertySetInfo > xUDInfo = xUserDefined->getPropertySetInfo();
-    Sequence< Property > props = xUDInfo->getProperties();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-        const ::rtl::OUString name = props[i].Name;
-        uno::Any aAny;
-        try {
-            aAny = xUserDefined->getPropertyValue(name);
-            uno::Reference < script::XTypeConverter > xConverter(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    ASCII_STR("com.sun.star.script.Converter")),
-                UNO_QUERY );
-            uno::Any aNew;
-            aNew = xConverter->convertToSimpleType( aAny, TypeClass_STRING );
-            if ((aNew >>= aStr) && !aStr.isEmpty()) {
-                m_pEditWin->InsertEntry( name, aStr);
-            }
-        } catch (uno::Exception &) {
-            // ignore
-        }
-    }
-
-    m_pEditWin->SetSelection( Selection( 0, 0 ) );
-    m_pEditWin->SetAutoScroll( sal_True );
-}
 
 // class SvtDummyHeaderBar_Impl ------------------------------------------
 
@@ -459,12 +300,6 @@ String SvtIconWindow_Impl::GetSelectedIconURL() const
     return aURL;
 }
 
-String SvtIconWindow_Impl::GetSelectedIconText() const
-{
-    sal_uLong nPos;
-    return MnemonicGenerator::EraseAllMnemonicChars( aIconCtrl.GetSelectedEntry( nPos )->GetText() );
-}
-
 String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
 {
     String aText;
@@ -592,7 +427,6 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
     aFileView.SetHelpId( HID_TEMPLATEDLG_FILEVIEW );
     aFileView.Show();
-    aFileView.SetPosPixel( Point( 0, 0 ) );
     aFileView.EnableAutoResize();
     aFileView.EnableContextMenu( sal_False );
     aFileView.EnableDelete( sal_False );
@@ -693,14 +527,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
 
 void SvtFileViewWindow_Impl::Resize()
 {
-    Size aWinSize = GetOutputSizePixel();
-
-    static int  x = 0;
-    static int  y = 0;
-
-    aWinSize.nA += x;
-    aWinSize.nB += y;
-    aFileView.SetSizePixel( aWinSize );
+    aFileView.SetSizePixel(GetOutputSizePixel());
 }
 
 String SvtFileViewWindow_Impl::GetSelectedFile() const
@@ -766,35 +593,6 @@ SvtDocInfoTable_Impl::SvtDocInfoTable_Impl() :
 
 {
 }
-// -----------------------------------------------------------------------------
-// class SvtExtendedMultiLineEdit_Impl --------------------------------------------
-SvtExtendedMultiLineEdit_Impl::SvtExtendedMultiLineEdit_Impl( Window* pParent,WinBits _nBits ) :
-
-    ExtMultiLineEdit( pParent, _nBits )
-
-{
-    SetLeftMargin( 10 );
-}
-// -----------------------------------------------------------------------------
-void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const String& rValue )
-{
-    String aText( '\n' );
-    aText += rTitle;
-    aText += ':';
-    InsertText( aText );
-    sal_uLong nPara = GetParagraphCount() - 1;
-    SetAttrib( TextAttribFontWeight( WEIGHT_BOLD ), nPara, 0, aText.Len() );
-
-    aText = '\n';
-    aText += rValue;
-    InsertText( aText );
-    nPara = GetParagraphCount() - 1;
-    SetAttrib( TextAttribFontWeight( WEIGHT_NORMAL ), nPara, 0, aText.Len() );
-
-    InsertText( String( '\n' ) );
-}
-// -----------------------------------------------------------------------------
-
 // -----------------------------------------------------------------------
 
 const String& SvtDocInfoTable_Impl::GetString( long nId ) const
@@ -902,7 +700,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         aCurrentURL = rURL;
 
     ViewNonEmptyWin();
-    pEditWin->Clear();
+    pEditWin->clear();
 
     if ( rURL.Len() > 0 && bPreview && m_xDocProps.is() )
         ShowDocInfo( rURL );
@@ -1088,7 +886,7 @@ SvtTemplateWindow::~SvtTemplateWindow()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , IconClickHdl_Impl)
 {
     String aURL = pIconWin->GetSelectedIconURL();
     if ( !aURL.Len() )
@@ -1104,7 +902,7 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, EMPTYARG
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , FileSelectHdl_Impl)
 {
     aSelectTimer.Start();
     return 0;
@@ -1112,7 +910,7 @@ IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
 {
     if ( aSelectTimer.IsActive() )
         aSelectTimer.Stop();
@@ -1131,7 +929,7 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
 {
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
@@ -1146,7 +944,7 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , TimeoutHdl_Impl)
 {
     aSelectHdl.Call( this );
     String sURL = pFileWin->GetSelectedFile();
@@ -1176,7 +974,7 @@ IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , ResizeHdl_Impl, SplitWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , ResizeHdl_Impl)
 {
     Resize();
     return 0;
@@ -1742,7 +1540,7 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SelectHdl_Impl)
 {
     aEditBtn.Enable( pImpl->pWin->IsTemplateFolderOpen() && CanEnableEditBtn() );
     aOKBtn.Enable( pImpl->pWin->IsFileSelected() );
@@ -1751,7 +1549,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMP
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , DoubleClickHdl_Impl)
 {
     EndDialog( RET_OK );
 
@@ -1762,7 +1560,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , NewFolderHdl_Impl)
 {
     String aNewTitle( pImpl->aTitle );
     aNewTitle += String( ASCII_STR(" - ") );
@@ -1775,7 +1573,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, 
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , SendFocusHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SendFocusHdl_Impl)
 {
     if ( pImpl->pWin->HasIconWinFocus() )
         aHelpBtn.GrabFocus();
@@ -1808,7 +1606,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 {
     Window* pOldDefWin = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -1883,7 +1681,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
 {
     ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
     if ( !sURL.isEmpty() )
@@ -1898,7 +1696,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, E
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );
         }
         catch( const uno::Exception& e )

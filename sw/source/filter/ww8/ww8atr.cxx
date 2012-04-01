@@ -857,7 +857,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     pOutFmtNode = pOldMod;
 }
 
-bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo )
+bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo )
 {
     const SwTxtNode* pNd;
 
@@ -893,7 +893,7 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const String* pName, sal
     return false;
 }
 
-String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo )
+String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo )
 {
     String sRet;
     switch ( nTyp )
@@ -2911,7 +2911,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         font size and fill in the defaults as up == half the font size and
         down == a fifth the font size
         */
-        xub_StrLen nAbove = (pFld->GetPar1().Len()+1)/2;
+        xub_StrLen nAbove = (pFld->GetPar1().getLength()+1)/2;
         sStr = FieldString(ww::eEQ);
         sStr.APPEND_CONST_ASC("\\o (\\s\\up ");
         sStr += String::CreateFromInt32(nHeight/2);
@@ -2922,7 +2922,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         sStr += String::CreateFromInt32(nHeight/5);
 
         sStr.Append('(');
-        sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().Len()-nAbove);
+        sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().getLength()-nAbove);
         sStr.APPEND_CONST_ASC("))");
         GetExport().OutputField(pFld, ww::eEQ, sStr);
         }
@@ -3885,6 +3885,12 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         else
             m_rWW8Export.pO->push_back( 22 );
         m_rWW8Export.InsUInt16( rUL.GetLower() );
+        // sprmPFContextualSpacing
+        if (m_rWW8Export.bWrtWW8 && rUL.GetContext())
+        {
+            m_rWW8Export.InsUInt16(NS_sprm::LN_PContextualSpacing);
+            m_rWW8Export.InsUInt16(rUL.GetContext());
+        }
     }
 }
 

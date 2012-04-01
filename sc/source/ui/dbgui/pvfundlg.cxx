@@ -166,7 +166,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 // ============================================================================
 
 ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId ) :
-    MultiListBox( pParent, rResId )
+    ListBox( pParent, rResId )
 {
     FillFunctionNames();
 }
@@ -200,7 +200,7 @@ void ScDPFunctionListBox::FillFunctionNames()
 // ============================================================================
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        Window* pParent, const ScDPLabelDataVec& rLabelVec,
         const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATAFIELD ) ),
     maFlFunc        ( this, ScResId( FL_FUNC ) ),
@@ -421,7 +421,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
     return 0;
 }
 
-IMPL_LINK( ScDPFunctionDlg, DblClickHdl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
 {
     maBtnOk.Click();
     return 0;
@@ -516,7 +516,7 @@ IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScDPSubtotalDlg, DblClickHdl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
 {
     maBtnOk.Click();
     return 0;

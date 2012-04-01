@@ -65,8 +65,8 @@ class SwEnvPrtPage : public SfxTabPage
      SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwEnvPrtPage();
 
-    DECL_LINK( ClickHdl, Button * );
-    DECL_LINK( AlignHdl, ToolBox * );
+    DECL_LINK(ClickHdl, void *);
+    DECL_LINK(AlignHdl, void *);
     DECL_LINK( ButtonHdl, Button * );
 
     using Window::GetParent;

@@ -70,7 +70,6 @@
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
 #include <svx/sdrpagewindow.hxx>
-#include <svl/itempool.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -78,7 +77,6 @@
 #include <canvas/elapsedtime.hxx>
 
 //#define DEBUG_TIMING
-#include <svl/itempool.hxx>
 #ifdef DEBUG_TIMING
 #include <vector>
 #endif
@@ -147,7 +145,7 @@ TYPEINIT1(SlideSorterView, ::sd::View);
 
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-          rSlideSorter.GetModel().GetDocument(),
+          *rSlideSorter.GetModel().GetDocument(),
           rSlideSorter.GetContentWindow().get(),
           rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),
@@ -958,7 +956,7 @@ void SlideSorterView::UpdatePageUnderMouse (
     const bool bAnimate)
 {
     // Update the page under the mouse.
-    SetPageUnderMouse(rpDescriptor, bAnimate);
+    SetPageUnderMouse(rpDescriptor, bAnimate, rMousePosition);
 
     // Tell the button bar about the new mouse position.
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
@@ -986,7 +984,8 @@ void SlideSorterView::UpdatePageUnderMouse (
 
 void SlideSorterView::SetPageUnderMouse (
     const model::SharedPageDescriptor& rpDescriptor,
-    const bool bAnimate)
+    const bool bAnimate,
+    const Point& rMousePosition)
 {
     if (mpPageUnderMouse != rpDescriptor)
     {
@@ -996,7 +995,7 @@ void SlideSorterView::SetPageUnderMouse (
         mpPageUnderMouse = rpDescriptor;
 
         if (mpPageUnderMouse)
-            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true, bAnimate);
+            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true, bAnimate, rMousePosition);
 
         // Change the quick help text to display the name of the page under
         // the mouse.
@@ -1011,7 +1010,8 @@ bool SlideSorterView::SetState (
     const model::SharedPageDescriptor& rpDescriptor,
     const PageDescriptor::State eState,
     const bool bStateValue,
-    const bool bAnimate)
+    const bool bAnimate,
+    const Point& rMousePosition)
 {
     model::SharedPageDescriptor pDescriptor (rpDescriptor);
     if ( ! pDescriptor)
@@ -1039,7 +1039,11 @@ bool SlideSorterView::SetState (
         if (eState == PageDescriptor::ST_MouseOver)
         {
             if (bStateValue)
+            {
+                if (bAnimate)
+                    GetButtonBar().UpdateButtonPosition(rpDescriptor, rMousePosition);
                 GetButtonBar().RequestFadeIn(rpDescriptor, bAnimate);
+            }
             else
                 GetButtonBar().RequestFadeOut(rpDescriptor, bAnimate);
         }

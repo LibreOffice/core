@@ -2176,7 +2176,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 mrStCtrl >> nBits;
                 mrStCtrl >> nCommandType;
 
-                if( nBits && 1 )
+                if( nBits & 1 )
                 {
                     dump( " type=\"%s\"", (nCommandType == 0) ? "event" : ( nCommandType == 1) ? "call" : "verb" );
                 }
@@ -2187,7 +2187,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             {
                 if ( importAttributeValue( pChildAtom, aValue ) )
                 {
-                    if( nBits && 2 )
+                    if( nBits & 2 )
                     {
                         dump( " cmd=\"" );
                         dump( aValue );

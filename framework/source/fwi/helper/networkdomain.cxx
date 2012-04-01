@@ -28,9 +28,6 @@
 
 #include <helper/networkdomain.hxx>
 
-namespace framework
-{
-
 #ifdef WNT
 //_________________________________________________________________________________________________________________
 //  Windows
@@ -67,6 +64,9 @@ static rtl::OUString GetUserDomain()
 //  Windows
 //_________________________________________________________________________________________________________________
 
+namespace framework
+{
+
 rtl::OUString NetworkDomain::GetYPDomainName()
 {
     return ::rtl::OUString();
@@ -75,6 +75,8 @@ rtl::OUString NetworkDomain::GetYPDomainName()
 rtl::OUString NetworkDomain::GetNTDomainName()
 {
     return GetUserDomain();
+}
+
 }
 
 #elif defined( UNIX )
@@ -192,6 +194,9 @@ static rtl_uString *getDomainName()
 //  Unix
 //_________________________________________________________________________________________________________________
 
+namespace framework
+{
+
 rtl::OUString NetworkDomain::GetYPDomainName()
 {
     rtl_uString* pResult = getDomainName();
@@ -206,11 +211,16 @@ rtl::OUString NetworkDomain::GetNTDomainName()
     return ::rtl::OUString();
 }
 
+}
+
 #else /* UNIX */
 
 //_________________________________________________________________________________________________________________
 //  Other operating systems (non-Windows and non-Unix)
 //_________________________________________________________________________________________________________________
+
+namespace framework
+{
 
 rtl::OUString NetworkDomain::GetYPDomainName()
 {
@@ -222,8 +232,8 @@ rtl::OUString NetworkDomain::GetNTDomainName()
     return rtl::OUString();
 }
 
-#endif
+}
 
-} // namespace framework
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,10 +36,7 @@
 #include <cosv/tpl/dyn.hxx>
 
 #include <ctype.h>
-#include <cosv/comfunc.hxx>
-#include <cosv/string.hxx>
 #include <cosv/x.hxx>
-#include <cosv/std_outp.hxx>
 
 
 

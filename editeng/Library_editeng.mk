@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_package_headers,editeng,editeng_inc))
 
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/editeng/inc) \
+    -I$(SRCDIR)/editeng/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,editeng,\
@@ -151,7 +151,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     sal \
     salhelper \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     $(gb_STDLIBS) \
 ))
 

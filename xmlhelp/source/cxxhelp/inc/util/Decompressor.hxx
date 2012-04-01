@@ -28,13 +28,9 @@
 #ifndef _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
 #define _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
 
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
 #include <excep/XmlSearchExceptions.hxx>
 #include <util/RandomAccessStream.hxx>
-
 
 namespace xmlsearch {
 

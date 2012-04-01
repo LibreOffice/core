@@ -35,7 +35,6 @@
 #include "glob.hrc"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "helpids.h"
 #include "sdattr.hxx"
 #include "sdabstdlg.hxx"
@@ -177,7 +176,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             else
             {
+#ifndef DISABLE_SCRIPTING
                 StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+#endif
                 rRequest.Ignore ();
                 break;
             }
@@ -189,7 +190,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else
         {
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             rRequest.Ignore ();
             break;
         }
@@ -395,7 +398,7 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
 
 
 
-IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,EMPTYARG)
+IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
 {
     // If possible then release the lock now.  Otherwise start the timer
     // and try again later.

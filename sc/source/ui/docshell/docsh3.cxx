@@ -432,6 +432,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
+    ScAppOptions  aAppOpt  = pScMod->GetAppOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
 
@@ -448,6 +449,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
+    SetFormulaOptions( aAppOpt );
 
     //  Druck-Optionen werden jetzt direkt vor dem Drucken gesetzt
 
@@ -782,11 +784,11 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
                 pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
              pAction->GetBigRange() == pA->GetBigRange() )
         {
-            String aActionDesc;
-            pAction->GetDescription( aActionDesc, pDoc, sal_True );
-            String aADesc;
-            pA->GetDescription( aADesc, pSearchDoc, sal_True );
-            if ( aActionDesc.Equals( aADesc ) )
+            rtl::OUString aActionDesc;
+            pAction->GetDescription(aActionDesc, pDoc, true);
+            rtl::OUString aADesc;
+            pA->GetDescription(aADesc, pSearchDoc, true);
+            if (aActionDesc.equals(aADesc))
             {
                 OSL_FAIL( "lcl_FindAction(): found equal action!" );
                 return true;
@@ -955,7 +957,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
 #if OSL_DEBUG_LEVEL > 0
-                String aValue;
+                rtl::OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                 rtl::OStringBuffer aError(rtl::OUStringToOString(aValue,
@@ -1021,7 +1023,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            String aValue;
+                            rtl::OUString aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                             sal_uInt8 eMatrix = MM_NONE;
                             const ScBaseCell* pCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
@@ -1039,8 +1041,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     ((const ScFormulaCell*)pCell)->GetMatColsRows( nCols, nRows );
                                     aSourceRange.aEnd.SetCol( aPos.Col() + nCols - 1 );
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
-                                    aValue.Erase( 0, 1 );
-                                    aValue.Erase( aValue.Len()-1, 1 );
+                                    aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.
                                     GetDocFunc().EnterMatrix( aSourceRange,
                                         NULL, NULL, aValue, false, false,
                                         EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );

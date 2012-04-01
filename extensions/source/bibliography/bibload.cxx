@@ -53,6 +53,7 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
@@ -242,13 +243,27 @@ void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeExcep
 }
 
 // -----------------------------------------------------------------------
+namespace
+{
+    // lp#527938, debian#602953, fdo#33266, i#105408
+    static bool lcl_isBaseAvailable()
+    {
+        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+        Reference< XAggregation > xAggregate = Reference< XAggregation >( xMgr->createInstance(C2U("com.sun.star.sdbc.RowSet")), UNO_QUERY);
+        return xAggregate.is();
+    }
+}
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException)
 {
-    //!
+    // lp#527938, debian#602953, fdo#33266, i#105408
+    // make sure we actually can instanciate services from base first
+    if(!lcl_isBaseAvailable())
+        return;
 
     SolarMutexGuard aGuard;
+    
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );

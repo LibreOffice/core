@@ -78,7 +78,7 @@ namespace abp
 
     private:
         DECL_LINK( OnNameModified, Edit* );
-        DECL_LINK( OnRegister, CheckBox* );
+        DECL_LINK(OnRegister, void *);
 
         sal_Bool    isValidName() const;
         void        implCheckName();

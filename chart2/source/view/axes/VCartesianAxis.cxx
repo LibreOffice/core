@@ -51,7 +51,7 @@
 #include <svx/unoshtxt.hxx>
 
 #include <algorithm>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //.............................................................................
 namespace chart
@@ -473,11 +473,11 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         rAllTickInfos.clear();
         sal_Int32 nLevel=0;
         sal_Int32 nLevelCount = m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoryLevelCount();
+        sal_Int32 nCatIndex = 0;
         for( ; nLevel<nLevelCount; nLevel++ )
         {
             ::std::vector< TickInfo > aTickInfoVector;
             std::vector< ComplexCategory > aComplexCategories( m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel( nLevel ) );
-            sal_Int32 nCatIndex = 0;
             std::vector< ComplexCategory >::const_iterator aIt(aComplexCategories.begin());
             std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
             for(;aIt!=aEnd;++aIt)
@@ -553,17 +553,14 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
         VAxisBase::createAllTickInfos(rAllTickInfos);
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< TickIter > VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
+TickIter* VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
     if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
-        return ::std::auto_ptr< TickIter >( new PureTickIter( m_aAllTickInfos[nTextLevel] ) );
-    return ::std::auto_ptr< TickIter >();
+        return new PureTickIter( m_aAllTickInfos[nTextLevel] );
+    return NULL;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< TickIter > VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
+TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
 {
     if( isComplexCategoryAxis() || isDateAxis() )
     {
@@ -576,13 +573,12 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             if( !m_aAllTickInfos.empty() )
             {
                 sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
-                return ::std::auto_ptr< TickIter >( new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex ) );
+                return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }
     }
-    return ::std::auto_ptr< TickIter >();
+    return NULL;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 sal_Int32 VCartesianAxis::getTextLevelCount() const
 {
@@ -1332,20 +1328,13 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
         B2DVector aCummulatedLabelsDistance(0,0);
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            if(apTickIter.get())
+            boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+            if(apTickIter)
             {
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                if( nTextLevel>0 )
-                {
-                    lcl_shiftLables( *apTickIter.get(), aCummulatedLabelsDistance );
-                    fRotationAngleDegree = 0.0;
-                }
                 aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
-                    , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
-                    , fRotationAngleDegree );
+                        , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
+                        , fRotationAngleDegree );
             }
         }
     }
@@ -1372,9 +1361,7 @@ void VCartesianAxis::createLabels()
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
         TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
         if( !pTickFactory2D )
             return;
@@ -1393,10 +1380,8 @@ void VCartesianAxis::createLabels()
         sal_Int32 nScreenDistanceBetweenTicks = -1;
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            if(apTickIter.get())
+            boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+            if(apTickIter)
             {
                 if(nTextLevel==0)
                 {
@@ -1408,18 +1393,9 @@ void VCartesianAxis::createLabels()
                 AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
                 if( m_aAxisProperties.m_bComplexCategories )
                 {
-                    if( nTextLevel==0 )
-                    {
-                        aComplexProps.bLineBreakAllowed = true;
-                        aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
-                    }
-                    else
-                    {
-                        aComplexProps.bOverlapAllowed = true;
-                        aComplexProps.bRhythmIsFix = true;
-                        aComplexProps.nRhythm = 1;
-                        aComplexProps.fRotationAngleDegree = 0.0;
-                    }
+                    aComplexProps.bLineBreakAllowed = true;
+                    aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+
                 }
                 AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
                 while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
@@ -1442,9 +1418,7 @@ void VCartesianAxis::createMaximumLabels()
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
         TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
         if( !pTickFactory2D )
             return;
@@ -1464,10 +1438,8 @@ void VCartesianAxis::createMaximumLabels()
         sal_Int32 nTextLevelCount = getTextLevelCount();
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< TickIter > apTickIter = createMaximumLabelTickIterator( nTextLevel );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            if(apTickIter.get())
+            boost::scoped_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
+            if(apTickIter)
             {
                 while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
                 {
@@ -1484,9 +1456,7 @@ void VCartesianAxis::updatePositions()
     //update positions of labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
         TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
         if( !pTickFactory2D )
             return;
@@ -1497,7 +1467,7 @@ void VCartesianAxis::updatePositions()
 
         ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
         const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; aDepthIter++, nDepth++ )
+        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
         {
             ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
@@ -1515,8 +1485,6 @@ void VCartesianAxis::updatePositions()
                         ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    if( nDepth>0 )
-                        fRotationAngleDegree = 0.0;
 
                     // #i78696# use mathematically correct rotation now
                     const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
@@ -1583,9 +1551,7 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
     TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1609,14 +1575,10 @@ void VCartesianAxis::createShapes()
             sal_Int32 nTextLevelCount = getTextLevelCount();
             for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
-                SAL_WNODEPRECATED_DECLARATIONS_POP
-                if( apTickIter.get() )
+                boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+                if( apTickIter )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    if( nTextLevel>0 )
-                        fRotationAngleDegree = 0.0;
                     B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
@@ -1627,7 +1589,7 @@ void VCartesianAxis::createShapes()
             sal_Int32 nTickmarkPropertiesCount = aTickmarkPropertiesList.size();
             ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aComplexTickInfos.begin();
             const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aComplexTickInfos.end();
-            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
+            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
             {
                 if(nDepth==0 && !m_aAxisProperties.m_nMajorTickmarks)
                     continue;
@@ -1652,7 +1614,7 @@ void VCartesianAxis::createShapes()
                 return;
 
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
-            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
+            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
                 createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
         }
         //-----------------------------------------

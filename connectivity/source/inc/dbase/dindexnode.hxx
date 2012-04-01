@@ -51,8 +51,8 @@ namespace connectivity
         class ONDXKey : public ONDXKey_BASE
         {
             friend class ONDXNode;
-            sal_uInt32          nRecord;                /* Satzzeiger               */
-            ORowSetValue    xValue;                 /* Schluesselwert           */
+            sal_uInt32      nRecord;                /* Record pointer */
+            ORowSetValue    xValue;                 /* Key values     */
 
         public:
             ONDXKey(sal_uInt32 nRec=0);
@@ -91,9 +91,9 @@ namespace connectivity
 
 
         //==================================================================
-        // Index Seitenverweis
+        // Index Page Pointer
         //==================================================================
-        SV_DECL_REF(ONDXPage) // Basisklasse da weitere Informationen gehalten werden muessen
+        SV_DECL_REF(ONDXPage) // Base class - because we need to store additional information
 
 
         class ONDXPagePtr : public ONDXPageRef
@@ -101,7 +101,7 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-            sal_uInt32  nPagePos;       // Position in der Indexdatei
+            sal_uInt32  nPagePos;       // Position in the index file
 
         public:
             ONDXPagePtr(sal_uInt32 nPos = 0):nPagePos(nPos){}
@@ -116,7 +116,7 @@ namespace connectivity
             //  sal_Bool Is() const { return isValid(); }
         };
         //==================================================================
-        // Index Seite
+        // Index Page
         //==================================================================
         class ONDXPage : public SvRefBase
         {
@@ -125,17 +125,17 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
-            sal_uInt32      nPagePos;               // Position in der Indexdatei
+            sal_uInt32      nPagePos;       // Position in the index file
             sal_Bool        bModified : 1;
             sal_uInt16      nCount;
 
-            ONDXPagePtr aParent,            // VaterSeite
-                        aChild;             // Zeiger auf rechte ChildPage
+            ONDXPagePtr aParent,            // Parent page
+                        aChild;             // Pointer to the right child page
             ODbaseIndex& rIndex;
-            ONDXNode*  ppNodes;             // array von Knoten
+            ONDXNode*  ppNodes;             // Array of nodes
 
         public:
-            // Knoten Operationen
+            // Node operations
             sal_uInt16  Count() const {return nCount;}
 
             sal_Bool    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
@@ -146,11 +146,11 @@ namespace connectivity
             void    Release(sal_Bool bSave = sal_True);
             void    ReleaseFull(sal_Bool bSave = sal_True);
 
-            // Aufteilen und Zerlegen
+            // Split and merge
             ONDXNode Split(ONDXPage& rPage);
             void Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage);
 
-            // Zugriffsoperationen
+            // Access operators
             ONDXNode& operator[] (sal_uInt16 nPos);
             const ONDXNode& operator[] (sal_uInt16 nPos) const;
 
@@ -165,12 +165,12 @@ namespace connectivity
             sal_uInt32 GetPagePos() const {return nPagePos;}
             ONDXPagePtr& GetChild(ODbaseIndex* pIndex = 0);
 
-            // Parent braucht nicht nachgeladen zu werden
+            // Parent does not need to be reloaded
             ONDXPagePtr GetParent();
             ODbaseIndex& GetIndex() {return rIndex;}
             const ODbaseIndex& GetIndex() const {return rIndex;}
 
-            // Setzen des Childs, ueber Referenz, um die PagePos zu erhalten
+            // Setting the child, via reference to retain the PagePos
             void SetChild(ONDXPagePtr aCh);
             void SetParent(ONDXPagePtr aPa);
 
@@ -187,7 +187,7 @@ namespace connectivity
             void SetModified(sal_Bool bMod) {bModified = bMod;}
             void SetPagePos(sal_uInt32 nPage) {nPagePos = nPage;}
 
-            sal_Bool Find(const ONDXKey&);  // rek. Abstieg
+            sal_Bool Find(const ONDXKey&);  // Descend recursively
             sal_uInt16 FindPos(const ONDXKey& rKey) const;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -225,12 +225,12 @@ namespace connectivity
         typedef ::std::vector<ONDXPage*>    ONDXPageList;
 
         //==================================================================
-        // Index Knoten
+        // Index Node
         //==================================================================
         class ONDXNode
         {
             friend class ONDXPage;
-            ONDXPagePtr aChild;             /* naechster Seitenverweis  */
+            ONDXPagePtr aChild;             /* Next page reference */
             ONDXKey   aKey;
 
         public:
@@ -239,15 +239,15 @@ namespace connectivity
                        ONDXPagePtr aPagePtr = ONDXPagePtr())
                        :aChild(aPagePtr),aKey(rKey) {}
 
-            // verweist der Knoten auf eine Seite
+            // Does the node point to a page?
             sal_Bool            HasChild() const {return aChild.HasPage();}
-            // Ist ein Index angegeben, kann gegebenfalls die Seite nachgeladen werden
+            // If an index is provided, we may be able to retrieve the page
             ONDXPagePtr&    GetChild(ODbaseIndex* pIndex = NULL, ONDXPage* = NULL);
 
             const ONDXKey& GetKey() const   { return aKey;}
             ONDXKey&       GetKey()         { return aKey;}
 
-            // Setzen des Childs, ueber Referenz, um die PagePos zu erhalten
+            // Setting the child, via reference to retain the PagePos
             void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = NULL);
             void            SetKey(ONDXKey& rKey) {aKey = rKey;}
 

@@ -87,6 +87,9 @@ public:
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                 CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar ) = 0;
+
+protected:
+    ~UnoWrapperBase() {}
 };
 
 #endif  // _VCL_UNOWRAP_HXX

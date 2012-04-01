@@ -79,7 +79,6 @@ $(eval $(call gb_Library_add_exception_objects,deploymentgui,\
     desktop/source/deployment/gui/dp_gui_extlistbox \
     desktop/source/deployment/gui/dp_gui_service \
     desktop/source/deployment/gui/dp_gui_theextmgr \
-    desktop/source/deployment/gui/dp_gui_thread \
     desktop/source/deployment/gui/dp_gui_updatedialog \
     desktop/source/deployment/gui/dp_gui_updateinstalldialog \
     desktop/source/deployment/gui/license_dialog \

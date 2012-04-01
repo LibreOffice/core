@@ -61,7 +61,7 @@ void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
     const OUString msg_(buf.makeStringAndClear());
     OSL_FAIL( rtl::OUStringToOString(
                     msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
-    throw RuntimeException( msg_, Reference<XInterface>() );
+    throw RuntimeException( msg_, uno::Reference<XInterface>() );
 }
 
 //______________________________________________________________________________
@@ -78,9 +78,10 @@ PersistentMap::~PersistentMap()
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap( OUString const & url )
-    : m_db( 0, 0 )
+    : m_db( 0 )
 {
-    try {
+    try
+    {
         rtl::OUString fileURL = expandUnoRcUrl(url);
         if ( File::getSystemPathFromFileURL( fileURL, m_sysPath ) != File::E_None )
             OSL_ASSERT( false );
@@ -94,14 +95,15 @@ PersistentMap::PersistentMap( OUString const & url )
         if (err != 0)
             throw_rtexc(err);
     }
-    catch (DbException & exc) {
+    catch (const DbException & exc)
+    {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
 }
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap()
-    : m_db( 0, 0 )
+    : m_db( 0 )
 {
     try {
         // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used

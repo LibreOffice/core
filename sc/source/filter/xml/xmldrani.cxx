@@ -148,6 +148,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsEnabledUserList(false),
     bSubTotalsAscending(true),
     bFilterConditionSourceRange(false),
+    bHasHeader(true),
+    bByRow(false),
     meRangeType(ScDBCollection::GlobalNamed)
 {
     nSourceType = sheet::DataImportMode_NONE;
@@ -190,12 +192,14 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION :
             {
-                mpQueryParam->bByRow = !IsXMLToken(sValue, XML_COLUMN);
+                bByRow = !IsXMLToken(sValue, XML_COLUMN);
+                mpQueryParam->bByRow = bByRow;
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
             {
-                mpQueryParam->bHasHeader = IsXMLToken(sValue, XML_TRUE);
+                bHasHeader = IsXMLToken(sValue, XML_TRUE);
+                mpQueryParam->bHasHeader = bHasHeader;
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS :
@@ -303,7 +307,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDBData> pData(
-        new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row()));
+        new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row(), bByRow, bHasHeader));
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     pData->SetAutoFilter(bAutoFilter);

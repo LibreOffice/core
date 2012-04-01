@@ -30,11 +30,11 @@
 $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    Library_vcl \
-    StaticLibrary_vclmain \
-    Package_inc \
-	Package_afmhash \
     AllLangResTarget_vcl \
+    CustomTarget_afm_hash \
+    Library_vcl \
+    Package_inc \
+    StaticLibrary_vclmain \
 ))
 
 ifeq ($(GUIBASE),unx)
@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_svp \
     Library_vclplug_gen \
     Library_desktop_detector \
+    StaticLibrary_headless \
 ))
 
 ifneq ($(ENABLE_GTK),)
@@ -61,27 +62,28 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 ifneq ($(ENABLE_KDE4),)
 $(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_kde4_moc \
     Library_vclplug_kde4 \
-    Package_kde4moc \
 ))
 endif
 endif
 
+ifeq ($(GUIBASE),headless)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Library_vclplug_svp \
+    StaticLibrary_headless \
+))
+endif
+
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,vcl,\
-    Package_osx \
+    Zip_osxres \
 ))
 endif
 
 ifeq ($(GUIBASE),WIN)
 $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
-))
-endif
-
-ifeq ($(GUIBASE),android)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_svp \
 ))
 endif
 

@@ -33,6 +33,7 @@
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include "oox/dllapi.h"
 
 namespace rtl { class OUString; }
 
@@ -73,7 +74,7 @@ typedef ::std::vector< ValueRange > ValueRangeVector;
 /** An ordered list of value ranges. The insertion operation will merge
     consecutive value ranges.
  */
-class ValueRangeSet
+class OOX_DLLPUBLIC ValueRangeSet
 {
 public:
     inline explicit     ValueRangeSet() {}
@@ -164,7 +165,7 @@ private:
 // ============================================================================
 
 /** Static helper functions for improved API container handling. */
-class ContainerHelper
+class OOX_DLLPUBLIC ContainerHelper
 {
 public:
     // com.sun.star.container.XIndexContainer ---------------------------------
@@ -172,22 +173,6 @@ public:
     /** Creates a new index container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
                         createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-    /** Inserts an object into an indexed container.
-
-        @param rxIndexContainer  com.sun.star.container.XIndexContainer
-            interface of the indexed container.
-
-        @param nIndex  Insertion index for the object.
-
-        @param rObject  The object to be inserted.
-
-        @return  True = object successfully inserted.
-     */
-    static bool         insertByIndex(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rxIndexContainer,
-                            sal_Int32 nIndex,
-                            const ::com::sun::star::uno::Any& rObject );
 
     // com.sun.star.container.XNameContainer ----------------------------------
 

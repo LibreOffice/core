@@ -407,7 +407,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 {
     sal_uInt16 nDataAreaCount = aLbConsAreas.GetEntryCount();
 

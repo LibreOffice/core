@@ -498,13 +498,6 @@ sal_uInt16 ImplEntryList::GetSelectEntryPos( sal_uInt16 nIndex ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplEntryList::IsEntrySelected( const XubString& rStr ) const
-{
-    return IsEntryPosSelected( FindEntry( rStr ) );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ImplEntryList::IsEntryPosSelected( sal_uInt16 nIndex ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nIndex );
@@ -2383,7 +2376,7 @@ void ImplListBox::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplListBox, MRUChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImplListBox, MRUChanged)
 {
     StateChanged( STATE_CHANGE_DATA );
     return 1;
@@ -2391,7 +2384,7 @@ IMPL_LINK( ImplListBox, MRUChanged, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplListBox, LBWindowScrolled, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
 {
     long nSet = GetTopEntry();
     if( nSet > mpVScrollBar->GetRangeMax() )

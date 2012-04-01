@@ -243,12 +243,6 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
     {
         lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
     }
-    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:adabas:",sizeof("sdbc:adabas:")-1) )
-    {
-        if ( comphelper::string::getTokenCount(sUrl, ':') == 2 )
-            _rsHostname = sUrl.GetToken(0,':');
-        _sDatabaseName = sUrl.GetToken(comphelper::string::getTokenCount(sUrl, ':') - 1, ':');
-    }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:mysqlc:",sizeof("sdbc:mysql:mysqlc:")-1) || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:jdbc:",sizeof("sdbc:mysql:jdbc:")-1) )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
@@ -422,7 +416,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     {
         KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
         KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
-        KnownPrefix( "sdbc:adabas:",        DST_ADABAS,             false ),
         KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
         KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
         KnownPrefix( "sdbc:mysql:odbc:",    DST_MYSQL_ODBC,         false ),
@@ -489,9 +482,6 @@ void ODsnTypeCollection::fillPageIds(const ::rtl::OUString& _sURL,::std::vector<
             break;
         case DST_ORACLE_JDBC:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ORACLE);
-            break;
-        case DST_ADABAS:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ADABAS);
             break;
         case DST_LDAP:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);

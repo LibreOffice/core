@@ -71,7 +71,7 @@ protected:
 public:
     SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, sal_Bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
-    ~SwSectionFrm();
+    virtual ~SwSectionFrm();
 
     void Init();
     virtual void  CheckDirection( sal_Bool bVert );

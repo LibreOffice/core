@@ -188,7 +188,7 @@ protected:
     SAL_DLLPRIVATE void             ImplSelect();
     SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
-    DECL_DLLPRIVATE_LINK(           ImplCallSelect, Menu* );
+    DECL_DLLPRIVATE_LINK(           ImplCallSelect, void* );
 
     SAL_DLLPRIVATE void             ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu*         ImplGetSalMenu() { return mpSalMenu; }
@@ -207,7 +207,7 @@ protected:
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
-    SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
+    SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
 
                             Menu();
                             Menu( sal_Bool bMenuBar );
@@ -399,7 +399,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 
 public:
                         MenuBar();
-                        MenuBar( const ResId& rResId );
                         MenuBar( const MenuBar& rMenu );
                         ~MenuBar();
 

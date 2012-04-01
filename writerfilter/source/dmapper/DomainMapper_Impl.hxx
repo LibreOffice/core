@@ -183,13 +183,22 @@ struct TextAppendContext
         xTextAppend( xAppend ){}
 };
 
+struct AnchoredContext
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >       xTextContent;
+    bool                                                                           bToRemove;
+
+    AnchoredContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent ) :
+        xTextContent( xContent ), bToRemove( false ) {}
+};
+
 typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
 
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
 typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
-typedef std::stack< com::sun::star::uno::Reference< com::sun::star::text::XTextContent > >  TextContentStack;
+typedef std::stack< AnchoredContext >           TextContentStack;
 
 
 
@@ -285,8 +294,7 @@ private:
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
-    TextContentStack
-              m_aAnchoredStack;
+    TextContentStack                                                                m_aAnchoredStack;
 
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bFieldMode;
@@ -294,8 +302,6 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
-    bool                                                                            m_bIsInShape;
-    bool                                                                            m_bRemovedLastAnchored;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -474,7 +480,7 @@ public:
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
-    bool        IsInShape()const { return m_bIsInShape;}
+    bool        IsInShape()const { return m_aAnchoredStack.size() > 0;}
 
     void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     void PopShapeContext();

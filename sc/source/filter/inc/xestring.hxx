@@ -131,8 +131,6 @@ public:
 
     // formatting runs --------------------------------------------------------
 
-    /** Sets new formatting runs for the current text. */
-    void                SetFormats( const XclFormatRunVec& rFormats );
     /** Appends a formatting run. nChar must be greater than last contained character index. */
     void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate = true );
     /** Appends a trailing formatting run with the passed font index. */

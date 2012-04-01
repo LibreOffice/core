@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,date,scaddins/source/datefunc/date))
 
 $(eval $(call gb_Library_set_include,date,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/scaddins/source/datefunc) \
+	-I$(WORKDIR)/UnoApiHeaders/offapi \
 ))
 
 $(eval $(call gb_Library_add_internal_comprehensive_api,date,\

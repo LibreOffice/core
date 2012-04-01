@@ -261,7 +261,7 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
 {
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
@@ -279,7 +279,7 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwEnvPage, SenderHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
 {
     const sal_Bool bEnable = aSenderBox.IsChecked();
     GetParent()->aEnvItem.bSend = bEnable;
@@ -356,8 +356,8 @@ sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 void SwEnvPage::Reset(const SfxItemSet& rSet)
 {
     SwEnvItem aItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAddrEdit  .SetText(String(aItem.aAddrText).ConvertLineEnd());
-    aSenderEdit.SetText(String(aItem.aSendText).ConvertLineEnd());
+    aAddrEdit  .SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
+    aSenderEdit.SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
     aSenderBox .Check  (aItem.bSend);
     aSenderBox.GetClickHdl().Call(&aSenderBox);
 }

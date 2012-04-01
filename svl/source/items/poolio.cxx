@@ -559,7 +559,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
     // Einzel-Header
     int bOwnPool = sal_True;
-    UniString aExternName;
+    rtl::OUString aExternName;
     {
         // Header-Record suchen
         SfxMiniRecordReader aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER );
@@ -571,7 +571,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
         // Header-lesen
         rStream >> pImp->nLoadingVersion;
-        SfxPoolItem::readByteString(rStream, aExternName);
+        aExternName = SfxPoolItem::readByteString(rStream);
         bOwnPool = aExternName == pImp->aName;
 
         //! solange wir keine fremden Pools laden k"onnen
@@ -714,7 +714,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
     // wenn nicht own-Pool, dann kein Name
     if ( aExternName != pImp->aName )
-        pImp->aName.Erase();
+        pImp->aName = rtl::OUString();
 
     pImp->bStreaming = sal_False;
     return rStream;
@@ -743,10 +743,10 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     }
     sal_uInt32 nAttribSize(0);
     int bOwnPool = sal_True;
-    UniString aExternName;
+    rtl::OUString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
         rStream >> pImp->nLoadingVersion;
-    SfxPoolItem::readByteString(rStream, aExternName);
+    aExternName = SfxPoolItem::readByteString(rStream);
     bOwnPool = aExternName == pImp->aName;
     pImp->bStreaming = sal_True;
 
@@ -1020,7 +1020,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     }
 
     if ( aExternName != pImp->aName )
-        pImp->aName.Erase();
+        pImp->aName = rtl::OUString();
 
     pImp->bStreaming = sal_False;
     return rStream;
@@ -1092,7 +1092,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     // auf jeden Fall aufgel"ost werden.
     if ( !pRefPool )
         pRefPool = this;
-    bool bResolvable = pRefPool->GetName().Len() > 0;
+    bool bResolvable = !pRefPool->GetName().isEmpty();
     if ( !bResolvable )
     {
         // Bei einem anders aufgebauten Pool im Stream, mu\s die SlotId
@@ -1267,7 +1267,7 @@ void SfxItemPool::SetVersionMap
     sal_uInt16  nVer,               /*  neue Versionsnummer */
     sal_uInt16  nOldStart,          /*  alte erste Which-Id */
     sal_uInt16  nOldEnd,            /*  alte letzte Which-Id */
-    sal_uInt16* pOldWhichIdTab      /*  Array mit genau dem Aufbau der Which-Ids
+    const sal_uInt16* pOldWhichIdTab /*  Array mit genau dem Aufbau der Which-Ids
                                     der vorhergehenden Version, in denen
                                     die jeweils neue Which-Id steht. */
 )

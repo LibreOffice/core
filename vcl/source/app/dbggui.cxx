@@ -520,7 +520,7 @@ DbgWindow::DbgWindow() :
         SetWindowState( aState );
     }
 
-    SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "StarView Debug Window" ) ) );
+    SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarView Debug Window")));
     Show();
     Update();
 }
@@ -603,16 +603,18 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
                     GetAssertionEntryRange( maLstBox.GetSelectEntryPos(), nAssertionFirst, nAssertionLast );
 
                     // build the string to copy to the clipboard
-                    String sAssertion;
-                    String sLineFeed = String::CreateFromAscii( "\n" );
-                    sLineFeed.ConvertLineEnd( GetSystemLineEnd() );
+                    rtl::OUStringBuffer sAssertion;
+                    rtl::OUString sLineFeed = convertLineEnd(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        GetSystemLineEnd());
                     while ( nAssertionFirst < nAssertionLast )
                     {
-                        sAssertion += maLstBox.GetEntry( nAssertionFirst++ );
-                        sAssertion += sLineFeed;
+                        sAssertion.append(maLstBox.GetEntry( nAssertionFirst++ ));
+                        sAssertion.append(sLineFeed);
                     }
 
-                    ::vcl::unohelper::TextDataObject::CopyStringTo( sAssertion, GetClipboard() );
+                    ::vcl::unohelper::TextDataObject::CopyStringTo(
+                        sAssertion.makeStringAndClear(), GetClipboard());
                 }
             }
             return 1;   // handled
@@ -625,8 +627,7 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
 
 void DbgWindow::InsertLine( const XubString& rLine )
 {
-    XubString aStr = rLine;
-    aStr.ConvertLineEnd( LINEEND_LF );
+    XubString aStr = convertLineEnd(rLine, LINEEND_LF);
     xub_StrLen  nPos = aStr.Search( _LF );
     sal_Bool bFirstEntry = sal_True;
     while ( nPos != STRING_NOTFOUND )
@@ -695,7 +696,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorThis.Show();
-    maXtorThis.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "T~his" ) ) );
+    maXtorThis.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("T~his" )));
     if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
         maXtorThis.Check( sal_True );
     maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
@@ -704,7 +705,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorFunc.Show();
-    maXtorFunc.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Function" ) ) );
+    maXtorFunc.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Function")));
     if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
         maXtorFunc.Check( sal_True );
     maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
@@ -713,7 +714,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorExit.Show();
-    maXtorExit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "E~xit" ) ) );
+    maXtorExit.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("E~xit")));
     if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
         maXtorExit.Check( sal_True );
     maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
@@ -722,7 +723,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorReport.Show();
-    maXtorReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Report" ) ) );
+    maXtorReport.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Report")));
     if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
         maXtorReport.Check( sal_True );
     maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
@@ -731,7 +732,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorTrace.Show();
-    maXtorTrace.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Trace" ) ) );
+    maXtorTrace.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Trace")));
     if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
         maXtorTrace.Check( sal_True );
     maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
@@ -740,14 +741,14 @@ DbgDialog::DbgDialog() :
 
     {
     maBox1.Show();
-    maBox1.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Object Tests" ) ) );
+    maBox1.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Object Tests")));
     maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
 
     {
     maProf.Show();
-    maProf.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Profiling" ) ) );
+    maProf.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Profiling")));
     if ( pData->nTestFlags & DBG_TEST_PROFILING )
         maProf.Check( sal_True );
     maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
@@ -756,7 +757,7 @@ DbgDialog::DbgDialog() :
 
     {
     maRes.Show();
-    maRes.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Resourcen" ) ) );
+    maRes.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Resourcen")));
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
         maRes.Check( sal_True );
     maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
@@ -765,7 +766,7 @@ DbgDialog::DbgDialog() :
 
     {
     maDialog.Show();
-    maDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Dialog" ) ) );
+    maDialog.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Dialog")));
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
         maDialog.Check( sal_True );
     maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
@@ -774,7 +775,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBoldAppFont.Show();
-    maBoldAppFont.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Bold AppFont" ) ) );
+    maBoldAppFont.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Bold AppFont")));
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
         maBoldAppFont.Check( sal_True );
     maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
@@ -784,14 +785,14 @@ DbgDialog::DbgDialog() :
 
     {
     maBox3.Show();
-    maBox3.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Test Options" ) ) );
+    maBox3.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test Options")));
     maBox3.SetPosSizePixel( LogicToPixel( Point( 5, 85 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
 
     {
     maDebugName.Show();
-    maDebugName.SetText( XubString( pData->aDebugName, RTL_TEXTENCODING_UTF8 ) );
+    maDebugName.SetText(rtl::OStringToOUString(pData->aDebugName, RTL_TEXTENCODING_UTF8));
     maDebugName.SetMaxTextLen( sizeof( pData->aDebugName ) );
     maDebugName.SetPosSizePixel( LogicToPixel( Point( 10, 130 ), aAppMap ),
                                  LogicToPixel( Size( 185, 14 ), aAppMap ) );
@@ -799,7 +800,7 @@ DbgDialog::DbgDialog() :
 
     {
     maOverwrite.Show();
-    maOverwrite.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Overwrite ~File" ) ) );
+    maOverwrite.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite ~File")));
     if ( pData->bOverwrite )
         maOverwrite.Check( sal_True );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
@@ -808,7 +809,7 @@ DbgDialog::DbgDialog() :
 
     {
     maHookOSLBox.Show();
-    maHookOSLBox.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Reroute osl debug ~messages" ) ) );
+    maHookOSLBox.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Reroute osl debug ~messages")));
     if ( pData->bHookOSLAssert )
         maHookOSLBox.Check( sal_True );
     maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
@@ -817,14 +818,14 @@ DbgDialog::DbgDialog() :
 
     {
     maInclClassText.Show();
-    maInclClassText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Include-ObjectTest-Filter" ) ) );
+    maInclClassText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Include-ObjectTest-Filter")));
     maInclClassText.SetPosSizePixel( LogicToPixel( Point( 10, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
     maInclClassFilter.Show();
-    maInclClassFilter.SetText( XubString( pData->aInclClassFilter, RTL_TEXTENCODING_UTF8 ) );
+    maInclClassFilter.SetText(rtl::OStringToOUString(pData->aInclClassFilter, RTL_TEXTENCODING_UTF8));
     maInclClassFilter.SetMaxTextLen( sizeof( pData->aInclClassFilter ) );
     maInclClassFilter.SetPosSizePixel( LogicToPixel( Point( 10, 160 ), aAppMap ),
                                        LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -832,14 +833,14 @@ DbgDialog::DbgDialog() :
 
     {
     maExclClassText.Show();
-    maExclClassText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Exclude-ObjectTest-Filter" ) ) );
+    maExclClassText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Exclude-ObjectTest-Filter")));
     maExclClassText.SetPosSizePixel( LogicToPixel( Point( 115, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
     maExclClassFilter.Show();
-    maExclClassFilter.SetText( XubString( pData->aExclClassFilter, RTL_TEXTENCODING_UTF8 ) );
+    maExclClassFilter.SetText(rtl::OStringToOUString(pData->aExclClassFilter, RTL_TEXTENCODING_UTF8));
     maExclClassFilter.SetMaxTextLen( sizeof( pData->aExclClassFilter ) );
     maExclClassFilter.SetPosSizePixel( LogicToPixel( Point( 115, 160 ), aAppMap ),
                                        LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -847,14 +848,14 @@ DbgDialog::DbgDialog() :
 
     {
     maInclText.Show();
-    maInclText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Include-Filter" ) ) );
+    maInclText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Include-Filter")));
     maInclText.SetPosSizePixel( LogicToPixel( Point( 10, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
     maInclFilter.Show();
-    maInclFilter.SetText( XubString( pData->aInclFilter, RTL_TEXTENCODING_UTF8 ) );
+    maInclFilter.SetText(rtl::OStringToOUString(pData->aInclFilter, RTL_TEXTENCODING_UTF8));
     maInclFilter.SetMaxTextLen( sizeof( pData->aInclFilter ) );
     maInclFilter.SetPosSizePixel( LogicToPixel( Point( 10, 190 ), aAppMap ),
                                   LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -862,14 +863,14 @@ DbgDialog::DbgDialog() :
 
     {
     maExclText.Show();
-    maExclText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Exclude-Filter" ) ) );
+    maExclText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Exclude-Filter")));
     maExclText.SetPosSizePixel( LogicToPixel( Point( 115, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
     maExclFilter.Show();
-    maExclFilter.SetText( XubString( pData->aExclFilter, RTL_TEXTENCODING_UTF8 ) );
+    maExclFilter.SetText(rtl::OStringToOUString(pData->aExclFilter, RTL_TEXTENCODING_UTF8));
     maExclFilter.SetMaxTextLen( sizeof( pData->aExclFilter ) );
     maExclFilter.SetPosSizePixel( LogicToPixel( Point( 115, 190 ), aAppMap ),
                                   LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -877,20 +878,20 @@ DbgDialog::DbgDialog() :
 
     {
     maTraceText.Show();
-    maTraceText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Trace" ) ) );
+    maTraceText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Trace" )));
     maTraceText.SetPosSizePixel( LogicToPixel( Point( 10, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Window" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Shell" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("None" )));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("File")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Window")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shell")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MessageBox")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestTool")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Debugger")));
+    maTraceBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Abort")));
     ImplAppendUserDefinedChannels( maTraceBox );
     ImplSelectChannel( maTraceBox, pData->nTraceOut, 0 );
     maTraceBox.Show();
@@ -900,20 +901,20 @@ DbgDialog::DbgDialog() :
 
     {
     maWarningText.Show();
-    maWarningText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Warning" ) ) );
+    maWarningText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Warning")));
     maWarningText.SetPosSizePixel( LogicToPixel( Point( 115, 210 ), aAppMap ),
                                    LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
 
     {
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Window" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Shell" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("None")));
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Window" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shell" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
+    maWarningBox.InsertEntry(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
     ImplAppendUserDefinedChannels( maWarningBox );
     ImplSelectChannel( maWarningBox, pData->nWarningOut, 0 );
     maWarningBox.Show();
@@ -923,7 +924,7 @@ DbgDialog::DbgDialog() :
 
     {
     maErrorText.Show();
-    maErrorText.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Error" ) ) );
+    maErrorText.SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "~Error" ) ) );
     maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -931,18 +932,18 @@ DbgDialog::DbgDialog() :
     {
     if ( DbgIsAllErrorOut() )
     {
-        maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
-        maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) );
-        maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Window" ) ) );
-        maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Shell" ) ) );
+        maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+        maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) );
+        maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Window" ) ) );
+        maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shell" ) ) );
         mnErrorOff = 0;
     }
     else
         mnErrorOff = 4;
-    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
-    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
-    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
+    maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
+    maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
+    maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
+    maErrorBox.InsertEntry( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
     ImplAppendUserDefinedChannels( maErrorBox );
     ImplSelectChannel( maErrorBox, pData->nErrorOut, mnErrorOff );
     maErrorBox.Show();
@@ -952,7 +953,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBox4.Show();
-    maBox4.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Output" ) ) );
+    maBox4.SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Output" ) ) );
     maBox4.SetPosSizePixel( LogicToPixel( Point( 5, 120 ), aAppMap ),
                             LogicToPixel( Size( 330, 135 ), aAppMap ) );
     }
@@ -971,7 +972,7 @@ DbgDialog::DbgDialog() :
     {
     maInfoButton.Show();
     maInfoButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maInfoButton.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Info..." ) ) );
+    maInfoButton.SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "~Info..." ) ) );
     maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
@@ -982,7 +983,7 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL Debug Options" ) ) );
+    SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL Debug Options" ) ) );
     SetOutputSizePixel( LogicToPixel( Size( 340, 280 ), aAppMap ) );
     }
 }
@@ -1089,7 +1090,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aDbgInfoBuf[0] = '\0';
         DbgXtorInfo( aDbgInfoBuf );
         XubString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
-        aInfoDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug InfoReport" ) ) );
+        aInfoDialog.SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Debug InfoReport" ) ) );
         aInfoDialog.SetInfoText( aInfoText );
         aInfoDialog.Execute();
     }
@@ -1111,7 +1112,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
             aHelpText.AppendAscii( *pHelpStrs );
             pHelpStrs++;
         }
-        aInfoDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug Hilfe" ) ) );
+        aInfoDialog.SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Debug Hilfe" ) ) );
         aInfoDialog.SetInfoText( aHelpText );
         aInfoDialog.Execute();
     }
@@ -1148,8 +1149,7 @@ void DbgInfoDialog::SetInfoText( const XubString& rStr )
 {
     maListBox.SetUpdateMode( sal_False );
     maListBox.Clear();
-    XubString aStr = rStr;
-    aStr.ConvertLineEnd( LINEEND_LF );
+    XubString aStr = convertLineEnd(rStr, LINEEND_LF);
     sal_uInt16 nStrIndex = 0;
     sal_uInt16 nFoundIndex;
     do
@@ -1684,7 +1684,7 @@ void DbgPrintMsgBox( const char* pLine )
     if ( aMessageBox.didTimeout() )
         DbgPrintShell( pLine );
     else if ( nResult == RET_YES )
-        GetpApp()->Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
+        GetpApp()->Abort( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
     else if ( nResult == RET_CANCEL )
         DbgCoreDump();
 }
@@ -1799,7 +1799,7 @@ void DbgGUIStart()
     else
     {
         ErrorBox( 0, WB_OK,
-                  XubString( RTL_CONSTASCII_USTRINGPARAM( "TOOLS Library has no Debug-Routines" ) ) ).Execute();
+                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TOOLS Library has no Debug-Routines" ) ) ).Execute();
     }
 }
 

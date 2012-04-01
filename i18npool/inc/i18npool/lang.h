@@ -538,6 +538,9 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KEYID                 0x0666  /* key id pseudolanguage */
 #define LANGUAGE_USER_PALI_LATIN            0x0667
 #define LANGUAGE_USER_KYRGYZ_CHINA          0x0668  /* not derived from LANGUAGE_KIRGHIZ as these may be different scripts, see http://www.omniglot.com/writing/kirghiz.htm */
+#define LANGUAGE_USER_KOMI_ZYRIAN           0x0669
+#define LANGUAGE_USER_KOMI_PERMYAK          0x066A
+#define LANGUAGE_USER_PITJANTJATJARA        0x066B
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 

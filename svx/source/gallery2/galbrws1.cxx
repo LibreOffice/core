@@ -645,7 +645,7 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
 {
     ::std::vector< sal_uInt16 > aExecVector;
     ImplGetExecuteVector(aExecVector);
@@ -684,7 +684,7 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
 {
     ( (GalleryBrowser*) GetParent() )->ThemeSelectionHasChanged();
     return 0L;
@@ -692,7 +692,7 @@ IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
 {
     String  aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
     String  aName( aNewTheme );

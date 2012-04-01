@@ -29,13 +29,15 @@ PRJ		= ..$/..
 PRJNAME = l10ntools
 TARGET  = HelpLinker
 LIBBASENAME = helplinker
-PACKAGE = com$/sun$/star$/help
 TARGETTYPE=CUI
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
 .INCLUDE : helplinker.pmk
+
+CFLAGS+=-DL10N_DLLIMPLEMENTATION
  
 .IF "$(SYSTEM_LIBXSLT)" == "YES"
 CFLAGS+= $(LIBXSLT_CFLAGS)
@@ -52,16 +54,19 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
+        $(OBJ)$/HelpCompiler.obj \
+        $(OBJ)$/HelpIndexer.obj \
+        $(OBJ)$/HelpIndexer_main.obj \
+	$(OBJ)$/HelpSearch.obj \
+	$(OBJ)$/LuceneHelper.obj
+
 SLOFILES=\
         $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
+        $(SLO)$/HelpCompiler.obj \
+	$(SLO)$/LuceneHelper.obj \
+        $(SLO)$/HelpIndexer.obj \
+	$(SLO)$/HelpSearch.obj
 
-EXCEPTIONSFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj \
-        $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
 .IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
 # There appears to be a GCC 4.0.1 optimization error causing _file:good() to
 # report true right before the call to writeOut at HelpLinker.cxx:1.12 l. 954
@@ -79,6 +84,14 @@ APP1OBJS=\
 APP1RPATH = NONE
 APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
 
+APP2TARGET=HelpIndexer
+APP2OBJS=\
+      $(OBJ)$/LuceneHelper.obj \
+      $(OBJ)$/HelpIndexer.obj \
+      $(OBJ)$/HelpIndexer_main.obj
+APP2RPATH = NONE
+APP2STDLIBS+=$(SALLIB) $(CLUCENELIB)
+
 SHL1TARGET	=$(LIBBASENAME)$(DLLPOSTFIX)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 .IF "$(COM)" == "MSC"
@@ -87,32 +100,13 @@ SHL1IMPLIB	=i$(LIBBASENAME)
 SHL1IMPLIB	=$(LIBBASENAME)$(DLLPOSTFIX)
 .ENDIF
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
-SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
+SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB) $(CLUCENELIB)
 SHL1USE_EXPORTS	=ordinal
 
 DEF1NAME	=$(SHL1TARGET) 
 DEFLIB1NAME	=$(TARGET)
 
-JAVAFILES = \
-    HelpIndexerTool.java			        \
-    HelpFileDocument.java
 
-
-JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexerTool.class			        \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
-
-.IF "$(SYSTEM_LUCENE)" == "YES"
-EXTRAJARFILES += $(LUCENE_CORE_JAR) $(LUCENE_ANALYZERS_JAR)
-.ELSE
-JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
-.ENDIF
-JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JARCLASSDIRS	   = $(PACKAGE)/*
-JARTARGET	       = HelpIndexerTool.jar
-JARCOMPRESS        = TRUE 
- 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

@@ -61,18 +61,13 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/compbase9.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 class BasicManager;
 
@@ -348,8 +343,8 @@ protected:
     BasicManager* getBasicManager( void );
     ::rtl::OUString createAppLibraryFolder( SfxLibrary* pLib, const ::rtl::OUString& aName );
 
-    sal_Bool init( const ::rtl::OUString& rInitialDocumentURL,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+    void init( const ::rtl::OUString& rInitialDocumentURL,
+               const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const = 0;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const = 0;
@@ -383,8 +378,8 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    sal_Bool init_Impl( const ::rtl::OUString& rInitialDocumentURL,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+    void init_Impl( const ::rtl::OUString& rInitialDocumentURL,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions( void );
 
 public:
@@ -756,11 +751,6 @@ class ScriptExtensionIterator
 public:
     ScriptExtensionIterator( void );
     rtl::OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
-
-private:
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetScriptPackageFromPackage
-        ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-          bool& rbPureDialogLib );
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >

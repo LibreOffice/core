@@ -1402,7 +1402,7 @@ sub create_msp_patch
     if ( $installer::globals::languagepack ) { $pcpfilename =~ s/.pcp\s*$/languagepack.pcp/; }
     elsif ( $installer::globals::helppack ) { $pcpfilename =~ s/.pcp\s*$/helppack.pcp/; }
 
-    # Searching the pcp file in the include pathes
+    # Searching the pcp file in the include paths
     my $fullpcpfilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$pcpfilename, $includepatharrayref, 1);
     if ( $$fullpcpfilenameref eq "" ) { installer::exiter::exit_program("ERROR: pcp file not found: $pcpfilename !", "create_msp_patch"); }
     my $fullpcpfilenamesource = $$fullpcpfilenameref;

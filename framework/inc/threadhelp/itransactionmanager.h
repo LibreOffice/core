@@ -143,6 +143,8 @@ class ITransactionManager
         virtual void         registerTransaction    ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
         virtual void         unregisterTransaction  (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
 
+    protected:
+        ~ITransactionManager() {}
 };      //  class ITransactionManager
 
 }       //  namespace framework

@@ -206,12 +206,12 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
 
-    // Steht das Control in einem Formular mit einer Submit-URL?
+    // Is the Control in a form with a submit URL?
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
 
-    // nicht fuer multiline edits
+    // Not for  multiline edits
     Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
     if ((aTmp.getValueType().equals(::getBooleanCppuType())) && getBOOL(aTmp))
         return;
@@ -244,14 +244,14 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
                 getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
-                // Noch ein weiteres Edit gefunden ==> dann nicht submitten
+                // Found another Edit -> then do not submit!
                 if (xFCSet != xSet)
                     return;
             }
         }
     }
 
-    // Da wir noch im Haender stehen, submit asynchron ausloesen
+    // Because we're still in the header, trigger submit asynchronously
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
     m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,OnKeyPressed) );
@@ -556,9 +556,9 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
 {
     Any aCurrentText;
     sal_Int16 nOldTextLen = 0;
-    // bin ich gerade loaded und habe dazu zeitweilig die MaxTextLen umgesetzt ?
+    // Am I loaded at the moment and did I switch MaxTextLen temporarily?
     if ( m_bMaxTextLenModified )
-    {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
+    {   // -> for the duration of saving, make my aggregated model believe the old TextLen
 
         // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
@@ -570,7 +570,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     OEditBaseModel::write(_rxOutStream);
 
     if ( m_bMaxTextLenModified )
-    {   // wieder zuruecksetzen
+    {   // Reset again
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(nOldTextLen));
         // and reset the text
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
@@ -655,7 +655,7 @@ void OEditModel::onDisconnectedDbColumn()
     if ( hasField() && m_bMaxTextLenModified )
     {
         Any aVal;
-        aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
+        aVal <<= (sal_Int16)0;  // Only if it was 0, I switched it in onConnectedDbColumn
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
         m_bMaxTextLenModified = sal_False;
     }
@@ -664,7 +664,7 @@ void OEditModel::onDisconnectedDbColumn()
 //------------------------------------------------------------------------------
 sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
-    // if we act as rich text curently, we do not allow binding to a database column
+    // if we act as rich text currently, we do not allow binding to a database column
     if ( implActsAsRichText() )
         return sal_False;
 

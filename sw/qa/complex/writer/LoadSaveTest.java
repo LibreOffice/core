@@ -27,7 +27,6 @@
 
 package complex.writer;
 
-import complexlib.ComplexTestCase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
@@ -47,6 +46,15 @@ import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import com.sun.star.text.XTextDocument;
 
+import org.openoffice.test.OfficeConnection;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -55,8 +63,20 @@ import java.io.File;
  * a small program to load documents from one directory (recursively)
  * and store them in another, implemented as a complex test.
  */
-public class LoadSaveTest extends ComplexTestCase
+public class LoadSaveTest
 {
+    private static final OfficeConnection connection = new OfficeConnection();
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
     private XMultiServiceFactory m_xMSF = null;
     private XComponentContext m_xContext = null;
     private XDocumentEventBroadcaster m_xGEB = null;
@@ -67,37 +87,24 @@ public class LoadSaveTest extends ComplexTestCase
     private String m_SourceDir = "FIXME";
     private String m_TargetDir = "/tmp/out";
 
-    public String[] getTestMethodNames() {
-        return new String[] { "testLoadStore" };
-    }
-
-    public void before() throws Exception
+    @Before public void before() throws Exception
     {
-        m_xMSF = (XMultiServiceFactory) param.getMSF();
-        XPropertySet xPropertySet = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, m_xMSF);
-        Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
-        m_xContext = (XComponentContext)
-            UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
-        assure("could not get component context.", m_xContext != null);
+        m_xContext = connection.getComponentContext();
+        assertNotNull("could not get component context.", m_xContext);
+        m_xMSF = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, m_xContext.getServiceManager());
         Object oGEB = m_xMSF.createInstance(
                 "com.sun.star.frame.GlobalEventBroadcaster");
         m_xGEB = (XDocumentEventBroadcaster)
             UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, oGEB);
-        assure("could not get global event broadcaster.", m_xGEB != null);
+        assertNotNull("could not get global event broadcaster.", m_xGEB);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
-        log.println("tempdir: " + m_TmpDir);
-        log.println("sourcedir: " + m_SourceDir);
-        log.println("targetdir: " + m_TargetDir);
+        System.out.println("tempdir: " + m_TmpDir);
+        System.out.println("sourcedir: " + m_SourceDir);
+        System.out.println("targetdir: " + m_TargetDir);
     }
 
-    /*
-    public void after()
-    {
-    }
-    */
-
-    public void testLoadStore() throws Exception
+    @Test public void testLoadStore() throws Exception
     {
         Pair<List<String>, List<String>> dirsFiles =
             getDirAndFileNames(m_SourceDir);
@@ -119,7 +126,7 @@ public class LoadSaveTest extends ComplexTestCase
         try {
             m_xGEB.addDocumentEventListener(xListener);
 
-            log.println("Loading document: " + fileName + " ...");
+            System.out.println("Loading document: " + fileName + " ...");
 
             PropertyValue[] loadProps = new PropertyValue[1];
             loadProps[0] = new PropertyValue();
@@ -130,7 +137,7 @@ public class LoadSaveTest extends ComplexTestCase
 
             xDoc = util.DesktopTools.loadDoc(m_xMSF, sourceFile, loadProps);
 
-            log.println("... done");
+            System.out.println("... done");
 
             {
                 // apparently OnLayoutFinished is not sent for every doc???
@@ -141,11 +148,11 @@ public class LoadSaveTest extends ComplexTestCase
                     time += 100;
                 }
                 if (time >= 30000) {
-                    log.println("timeout: no OnLayoutFinished received!");
+                    System.out.println("timeout: no OnLayoutFinished received");
                 }
             }
 
-            log.println("Storing document: " + fileName + " ...");
+            System.out.println("Storing document: " + fileName + " ...");
 
             XStorable xStor = (XStorable) UnoRuntime.queryInterface(
                         XStorable.class, xDoc);
@@ -154,7 +161,7 @@ public class LoadSaveTest extends ComplexTestCase
 
             xStor.storeToURL(targetFile, new PropertyValue[0]);
 
-            log.println("... done");
+            System.out.println("... done");
 
         } finally {
             if (xDoc != null) {
@@ -172,12 +179,12 @@ public class LoadSaveTest extends ComplexTestCase
         boolean IsLayoutFinished() { return m_isLayoutFinished; }
         public void documentEventOccured(DocumentEvent Event)
         {
-//            log.println("event: " + Event.EventName);
+//            System.out.println("event: " + Event.EventName);
             if ("OnLayoutFinished".equals(Event.EventName))
             {
                 // we only have one doc at any time, so no need to check
                 m_isLayoutFinished = true;
-//                log.println("received OnLayoutFinished");
+//                System.out.println("received OnLayoutFinished");
             }
         }
         public void disposing(EventObject Event) { }
@@ -187,24 +194,24 @@ public class LoadSaveTest extends ComplexTestCase
     {
         if (e instanceof WrappedTargetException)
         {
-            log.println("Cause:");
+            System.out.println("Cause:");
             Exception cause = (Exception)
                 (((WrappedTargetException)e).TargetException);
-            log.println(cause.toString());
+            System.out.println(cause.toString());
             report2(cause);
         } else if (e instanceof WrappedTargetRuntimeException) {
-            log.println("Cause:");
+            System.out.println("Cause:");
             Exception cause = (Exception)
                 (((WrappedTargetRuntimeException)e).TargetException);
-            log.println(cause.toString());
+            System.out.println(cause.toString());
             report2(cause);
         }
     }
 
     void report(Exception e) {
-        log.println("Exception occurred:");
-        log.println(e.toString());
-        e.printStackTrace((java.io.PrintWriter) log);
+        System.out.println("Exception occurred:");
+        System.out.println(e.toString());
+        e.printStackTrace(System.out);
         report2(e);
 //        failed();
     }
@@ -221,7 +228,7 @@ public class LoadSaveTest extends ComplexTestCase
     void getDirAndFileNames(File file, String relPath,
             List<String> dirs, List<String> files)
     {
-        assure("does not exist: " + relPath, file.exists());
+        assertTrue("does not exist: " + relPath, file.exists());
         if (file.isDirectory()) {
             dirs.add(relPath);
             File[] subfiles = file.listFiles();

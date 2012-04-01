@@ -29,7 +29,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
-#include <tools/table.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storinfo.hxx>
@@ -58,7 +57,6 @@
 #include <editeng/unolingu.hxx>
 #include "vcl/window.hxx"
 #include <helpid.hrc>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <unotools/streamwrap.hxx>

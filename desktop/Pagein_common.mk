@@ -25,10 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call desktop_Pagein_Pagein,common))
+$(eval $(call gb_Pagein_Pagein,common))
 
 # sorted in approx. reverse load order (ld.so.1)
-$(eval $(call desktop_Pagein_add_libs,common,\
+$(eval $(call gb_Pagein_add_objects,common,\
     i18npool \
     $(if $(findstring YES,$(SYSTEM_ICU)),,\
         icui18n \
@@ -52,9 +52,6 @@ $(eval $(call desktop_Pagein_add_libs,common,\
     sot \
     xcr \
     sb \
-))
-
-$(eval $(call desktop_Pagein_add_libs_with_dir,common,\
     stocservices \
     bootstrap \
     reg \
@@ -63,10 +60,6 @@ $(eval $(call desktop_Pagein_add_libs_with_dir,common,\
     cppuhelper \
     cppu \
     sal \
-    ,../ure-link/lib \
-))
-
-$(eval $(call desktop_Pagein_add_libs,common,\
     ucbhelper \
     comphelper \
     tl \
@@ -74,33 +67,18 @@ $(eval $(call desktop_Pagein_add_libs,common,\
     svl \
     vcl \
     tk \
-))
-
-$(eval $(call desktop_Pagein_add_objects,common,\
     ../ure-link/share/misc/types.rdb \
     services.rdb \
     oovbaapi.rdb \
-))
-
-# TODO: Hmm, so it looks like there are duplicates in the list... Moreover,
-# some that are conditional above are not conditional here (e.g., icule).
-# I have doubts about gconfbe, desktopbe and localebe too.
-$(eval $(call desktop_Pagein_add_libs,common,\
     deployment \
     deploymentmisc \
-    ucb1 \
     xstor \
-    package2 \
     filterconfig \
     uui \
-    lng \
     svt \
     spl \
-    basegfx \
     avmedia \
     helplinker \
-    vclplug_gen \
-    icule \
     sax \
     gconfbe \
     fsstorage \

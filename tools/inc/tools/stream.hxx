@@ -380,7 +380,6 @@ public:
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
 
-    sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
     sal_Bool        WriteLine( const rtl::OString& rStr );
 
@@ -408,7 +407,7 @@ public:
     sal_Bool        ReadUniStringLine( String& rStr );
                 /// Read a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise read a 16bit length prefixed sequence of bytes and convert from eSrcCharSet
-    String          ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
+    rtl::OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
                 /// Write a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise convert to eSrcCharSet and write a 16bit length prefixed sequence of bytes
     SvStream&       WriteUniOrByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
@@ -643,7 +642,6 @@ private:
     sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
     sal_Bool LockFile();
     sal_Bool UnlockFile();
-
 protected:
 
     virtual sal_Size    GetData( void* pData, sal_Size nSize );

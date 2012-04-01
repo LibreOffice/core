@@ -34,35 +34,35 @@
     <templates>
 		<group oor:name="Filter">
             <info><desc>Lists filters that can import or export content.</desc></info>
-			<prop oor:name="FileFormatVersion" oor:type="xs:int">
+			<prop oor:name="FileFormatVersion" oor:type="xs:int" oor:nillable="false">
                 <info><desc>An unique ID, which is used internal to differ between file formats of same type.</desc></info>
 				<value>0</value>
 			</prop>
-            <prop oor:name="Type" oor:type="xs:string">
+            <prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
                 <info><desc>Supported content type of this filter. Must be an internal type name.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="DocumentService" oor:type="xs:string">
+            <prop oor:name="DocumentService" oor:type="xs:string" oor:nillable="false">
                 <info><desc>The uno service name of the supported office document type.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="UIComponent" oor:type="xs:string">
+            <prop oor:name="UIComponent" oor:type="xs:string" oor:nillable="false">
                 <info><desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="UserData" oor:type="oor:string-list">
+            <prop oor:name="UserData" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>Filter specific data.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="FilterService" oor:type="xs:string">
+            <prop oor:name="FilterService" oor:type="xs:string" oor:nillable="false">
                 <info><desc>The uno implementation name of the filter service.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="TemplateName" oor:type="xs:string">
+            <prop oor:name="TemplateName" oor:type="xs:string" oor:nillable="false">
                 <info><desc>Name of a corresponding template, which is merged together with the style seets of the loaded document.</desc></info>
 				<value/>
             </prop>
-            <prop oor:name="Flags" oor:type="oor:string-list">
+            <prop oor:name="Flags" oor:type="oor:string-list" oor:nillable="false">
                 <info><desc>Specify the filter in some further properties (e.g. import/export/..).</desc></info>
 				<value/>
             </prop>

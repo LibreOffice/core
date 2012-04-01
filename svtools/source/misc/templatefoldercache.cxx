@@ -693,6 +693,17 @@ namespace svt
         {
             String sTemplatePath( aDirs.getToken(0, ';', nIndex) );
             sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
+
+            // Make sure excess ".." path segments (from expanding bootstrap
+            // variables in paths) are normalized in the same way they are
+            // normalized for paths read from the .templdir.cache file (where
+            // paths have gone through makeRelocatable URL on writing out and
+            // then through makeAbsoluteURL when reading back in), as otherwise
+            // equalStates() in needsUpdate() could erroneously consider
+            // m_aCurrentState and m_aPreviousState as different:
+            sTemplatePath = getOfficeInstDirs()->makeAbsoluteURL(
+                getOfficeInstDirs()->makeRelocatableURL(sTemplatePath));
+
             // create a new entry
             m_aCurrentState.push_back( new TemplateContent( INetURLObject( sTemplatePath ) ) );
             TemplateFolderContent::iterator aCurrentRoot = m_aCurrentState.end();

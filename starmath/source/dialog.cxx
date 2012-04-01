@@ -1291,7 +1291,7 @@ void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
     if (nSymbol < aSymbolSet.size())
         nSelectSymbol = nSymbol;
 
-    if (aSymbolSet.size() == 0)
+    if (aSymbolSet.empty())
         nSelectSymbol = SYMBOL_NONE;
 
     if (nSelectSymbol != SYMBOL_NONE)
@@ -1848,7 +1848,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
 {
    sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 
@@ -1869,8 +1869,8 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
     UpdateButtons();
 
     // display Unicode position as symbol name while iterating over characters
-    const String aHex( String::CreateFromInt64( cChar, 16 ).ToUpperAscii() );
-    const String aPattern( A2OU( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
+    const String aHex(rtl::OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
+    const String aPattern( OUString::createFromAscii( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
     String aUnicodePos( aPattern.Copy( 0, aPattern.Len() - aHex.Len() ) );
     aUnicodePos += aHex;
     aSymbols.SetText( aUnicodePos );

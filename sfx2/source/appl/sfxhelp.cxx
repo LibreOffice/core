@@ -690,7 +690,7 @@ static bool impl_showOnlineHelp( const String& rURL )
 
         if ( xSystemShell.is() )
         {
-            xSystemShell->execute( aHelpLink, rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            xSystemShell->execute( aHelpLink, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
             return true;
         }
     }

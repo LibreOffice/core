@@ -85,6 +85,9 @@ class SVL_DLLPUBLIC SfxItemPoolUser
 {
 public:
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
+
+protected:
+    ~SfxItemPoolUser() {}
 };
 
 class SVL_DLLPUBLIC SfxItemPool
@@ -141,7 +144,7 @@ protected:
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
                                                  sal_Bool bCloneStaticDefaults = sal_False );
-                                    SfxItemPool( const UniString &rName,
+                                    SfxItemPool( const rtl::OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
                                                  SfxPoolItem **pDefaults = 0,
@@ -170,7 +173,7 @@ public:
                                         const IntlWrapper * pIntlWrapper
                                          = 0 ) const;
     virtual SfxItemPool*            Clone() const;
-    const UniString&                GetName() const;
+    const rtl::OUString&            GetName() const;
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );
@@ -222,7 +225,7 @@ public:
 
     void                            SetVersionMap( sal_uInt16 nVer,
                                                    sal_uInt16 nOldStart, sal_uInt16 nOldEnd,
-                                                   sal_uInt16 *pWhichIdTab );
+                                                   const sal_uInt16 *pWhichIdTab );
     sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
     sal_uInt16                      GetVersion() const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );

@@ -184,6 +184,8 @@ namespace sfx2
         {
         }
 
+        virtual ~SolarMutexFacade() {}
+
         virtual void acquire()
         {
             Application::GetSolarMutex().acquire();

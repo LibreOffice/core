@@ -207,7 +207,7 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
     const OutputDevice* pRef = rInf.GetRefDev();
     OSL_ENSURE( pOut && pRef, "ChkOutDev: invalid output devices" );
 }
-#endif  // PRODUCT
+#endif
 
 
 inline xub_StrLen GetMinLen( const SwTxtSizeInfo &rInf )

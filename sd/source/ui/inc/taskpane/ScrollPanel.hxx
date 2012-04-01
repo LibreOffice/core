@@ -175,7 +175,7 @@ private:
     sal_Int32 SetupVerticalScrollBar (bool bShow, sal_Int32 nRange);
     sal_Int32 SetupHorizontalScrollBar (bool bShow, sal_Int32 nRange);
 
-    DECL_LINK(ScrollBarHandler, ScrollBar*);
+    DECL_LINK(ScrollBarHandler, void *);
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 
     using Window::GetWindow;

@@ -216,8 +216,6 @@ public:
     sal_Bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
-    Fraction                ConvertToFraction( sal_Int64 nValue );
-    sal_Int64               ConvertToLong( const Fraction& rValue );
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 };
@@ -574,8 +572,6 @@ public:
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                           FieldUnit eInUnit, FieldUnit eOutUnit );
     static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
-                                          FieldUnit eInUnit, MapUnit eOutUnit );
-    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                           MapUnit eInUnit, FieldUnit eOutUnit );
 
     // for backwards compatibility
@@ -739,10 +735,6 @@ public:
     virtual void            ReformatAll();
 
     void                    InsertValue( sal_Int64 nValue, sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveValue( sal_Int64 nValue );
-    using NumericFormatter::GetValue;
-    sal_Int64               GetValue( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetValuePos( sal_Int64 nPos ) const;
 };
 
 
@@ -768,7 +760,6 @@ public:
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
                                          sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE );
     sal_Int64               GetValue( sal_uInt16 nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
     sal_uInt16                  GetValuePos( sal_Int64 nValue,
                                          FieldUnit eInUnit = FUNIT_NONE ) const;

@@ -66,7 +66,7 @@ private:
 
     CacheConfiguration (void);
 
-    DECL_LINK(TimerCallback, Timer*);
+    DECL_LINK(TimerCallback, void *);
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

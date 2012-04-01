@@ -89,7 +89,6 @@ namespace drawinglayer
             const basegfx::B2DVector& getRectPoint() const;
             bool getTiling() const;
             bool getStretch() const;
-            bool getLogSize() const;
 
             // FillBitmapAttribute generator
             FillBitmapAttribute getFillBitmapAttribute(const basegfx::B2DRange& rRange) const;

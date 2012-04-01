@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <canvas/debug.hxx>
 
 #include <com/sun/star/rendering/PanoseProportion.hpp>

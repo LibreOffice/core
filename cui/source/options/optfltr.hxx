@@ -53,8 +53,8 @@ class OfaMSFilterTabPage : public SfxTabPage
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
 
-    DECL_LINK( LoadWordBasicCheckHdl_Impl, CheckBox* );
-    DECL_LINK( LoadExcelBasicCheckHdl_Impl, CheckBox* );
+    DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
+    DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
 public:
 
     static SfxTabPage*  Create( Window* pParent,

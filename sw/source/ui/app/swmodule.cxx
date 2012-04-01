@@ -349,13 +349,13 @@ void SwDLL::RegisterControls()
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
     SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
-    SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
-    SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
+    SvxColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
+    SvxColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_BACKGROUND_COLOR, pMod );
+    SvxColorExtToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
-    SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
+    SvxColorExtToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
 
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );

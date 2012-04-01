@@ -161,7 +161,8 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
         Point           aPos( PixelToLogic( rEvt.maPosPixel ) );
-        sal_uInt16          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( aPos ) ), sal_False );
+        sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
+            GetPageText( GetPageId( aPos ) ), sal_False );
 
         nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
@@ -180,7 +181,8 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
-    sal_uInt16          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), sal_False );
+    sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
+        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), sal_False );
     sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
     EndSwitchPage();
@@ -234,9 +236,9 @@ long LayerTabBar::AllowRenaming()
 
     // Ueberpruefung auf schon vorhandene Namen
     ::sd::View* pView = pDrViewSh->GetView();
-    SdDrawDocument* pDoc = pView->GetDoc();
+    SdDrawDocument& rDoc = pView->GetDoc();
     String aLayerName = pView->GetActiveLayer();
-    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
     String aNewName( GetEditText() );
 
     if ( aNewName.Len() == 0 ||
@@ -276,9 +278,9 @@ void LayerTabBar::EndRenaming()
         ::sd::View* pView = pDrViewSh->GetView();
         DrawView* pDrView = PTR_CAST( DrawView, pView );
 
-        SdDrawDocument* pDoc = pView->GetDoc();
+        SdDrawDocument& rDoc = pView->GetDoc();
         String aLayerName = pView->GetActiveLayer();
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
         SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
 
         if (pLayer)
@@ -288,9 +290,9 @@ void LayerTabBar::EndRenaming()
             DBG_ASSERT( pDrView, "Rename layer undo action is only working with a SdDrawView" );
             if( pDrView )
             {
-                ::svl::IUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+                ::svl::IUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
                 SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
-                    pDoc,
+                    &rDoc,
                     pLayer,
                     aLayerName,
                     pLayer->GetTitle(),
@@ -313,7 +315,7 @@ void LayerTabBar::EndRenaming()
             // schon bekannt sein muss.
             pView->SetActiveLayer(aNewName);
             pLayer->SetName(aNewName);
-            pDoc->SetChanged(sal_True);
+            rDoc.SetChanged(sal_True);
         }
     }
 }

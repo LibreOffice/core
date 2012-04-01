@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -43,6 +44,17 @@ import xmlrpclib
 from xml.dom import minidom
 from xml.sax.saxutils import escape
 
+def urlopen_retry(url):
+    maxretries = 3
+    for i in range(maxretries + 1):
+        try:
+            return urllib.urlopen(url)
+        except IOError as e:
+            print "caught IOError: ", e
+            if maxretries == i:
+                raise
+            print "retrying..."
+
 def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
     print "id is", prefix, id, suffix
@@ -50,12 +62,12 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
         print "assuming", id, "is up to date"
     else:
         print "parsing", id
-        sock = urllib.urlopen(url+"&ctype=xml")
+        sock = urlopen_retry(url+"&ctype=xml")
         dom = minidom.parse(sock)
         sock.close()
         attachmentid=1
         for attachment in dom.getElementsByTagName('attachment'):
-            print " mimetype is", 
+            print " mimetype is",
             for node in attachment.childNodes:
                 if node.nodeName == 'type':
                     print node.firstChild.nodeValue,
@@ -68,8 +80,8 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                     f = open(download, 'w')
                     f.write(base64.b64decode(node.firstChild.nodeValue))
                     f.close()
-                    attachmentid += 1
                     break
+            attachmentid += 1
 
 def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     try:
@@ -87,7 +99,7 @@ def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
             url = showurl + str(bug['bug_id'])
             get_from_bug_url_via_xml(url, mimetype, prefix, suffix)
     except xmlrpclib.Fault, err:
-            print "A fault occurred"
+        print "A fault occurred"
         print "Fault code: %s" % err.faultCode
         print err.faultString
 
@@ -107,31 +119,138 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix):
 
 
 freedesktop = 'http://bugs.freedesktop.org/buglist.cgi'
-openoffice = 'http://openoffice.org/bugzilla/buglist.cgi'
+openoffice = 'https://issues.apache.org/ooo/buglist.cgi'
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
 redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 novell = 'https://bugzilla.novell.com/buglist.cgi'
 mozilla = 'https://bugzilla.mozilla.org/buglist.cgi'
 
-get_through_rss_query(freedesktop, 'application/msword', "fdo", "doc")
-get_through_rss_query(freedesktop, 'application/rtf', "fdo", "rtf")
-get_through_rss_query(freedesktop, 'text/rtf', "fdo", "rtf")
-get_through_rss_query(freedesktop, 'text/spreadsheet', "fdo", "slk")
-get_through_rss_query(freedesktop, 'application/vnd.ms-powerpoint', "fdo", "ppt")
+mimetypes = [
+# ODF
+    ('application/vnd.oasis.opendocument.base', 'odb'),
+    ('application/vnd.oasis.opendocument.database', 'odb'),
+    ('application/vnd.oasis.opendocument.chart', 'odc'),
+    ('application/vnd.oasis.opendocument.chart-template', 'otc'),
+    ('application/vnd.oasis.opendocument.formula', 'odf'),
+    ('application/vnd.oasis.opendocument.formula-template', 'otf'),
+    ('application/vnd.oasis.opendocument.graphics', 'odg'),
+    ('application/vnd.oasis.opendocument.graphics-template', 'otg'),
+    ('application/vnd.oasis.opendocument.graphics-flat-xml', 'fodg'),
+    ('application/vnd.oasis.opendocument.presentation', 'odp'),
+    ('application/vnd.oasis.opendocument.presentation-template', 'otp'),
+    ('application/vnd.oasis.opendocument.presentation-flat-xml', 'fodp'),
+    ('application/vnd.oasis.opendocument.spreadsheet', 'ods'),
+    ('application/vnd.oasis.opendocument.spreadsheet-template', 'ots'),
+    ('application/vnd.oasis.opendocument.spreadsheet-flat-xml', 'fods'),
+    ('application/vnd.oasis.opendocument.text', 'odt'),
+    ('application/vnd.oasis.opendocument.text-flat-xml', 'fodt'),
+    ('application/vnd.oasis.opendocument.text-master', 'odm'),
+    ('application/vnd.oasis.opendocument.text-template', 'ott'),
+    ('application/vnd.oasis.opendocument.text-web', 'oth'),
+# OOo XML
+    ('application/vnd.sun.xml.base', 'odb'),
+    ('application/vnd.sun.xml.calc', 'sxc'),
+    ('application/vnd.sun.xml.calc.template', 'stc'),
+    ('application/vnd.sun.xml.chart', 'sxs'),
+    ('application/vnd.sun.xml.draw', 'sxd'),
+    ('application/vnd.sun.xml.draw.template', 'std'),
+    ('application/vnd.sun.xml.impress', 'sxi'),
+    ('application/vnd.sun.xml.impress.template', 'sti'),
+    ('application/vnd.sun.xml.math', 'sxm'),
+    ('application/vnd.sun.xml.writer', 'sxw'),
+    ('application/vnd.sun.xml.writer.global', 'sxg'),
+    ('application/vnd.sun.xml.writer.template', 'stw'),
+    ('application/vnd.sun.xml.writer.web', 'stw'),
+# MSO
+    ('application/rtf', 'rtf'),
+    ('text/rtf', 'rtf'),
+    ('application/msword', 'doc'),
+    ('application/vnd.ms-powerpoint', 'ppt'),
+    ('application/vnd.ms-excel', 'xls'),
+    ('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xlsx'),
+    ('application/vnd.openxmlformats-officedocument.spreadsheetml.template', 'xltx'),
+    ('application/vnd.openxmlformats-officedocument.presentationml.presentation', 'pptx'),
+    ('application/vnd.openxmlformats-officedocument.presentationml.template', 'ppotx'),
+    ('application/vnd.openxmlformats-officedocument.presentationml.slideshow', 'ppsx'),
+    ('application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'),
+    ('application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'dotx'),
+    ('application/vnd.visio', 'vsd'),
+# W3C
+    ('application/xhtml+xml', 'xhtml'),
+    ('application/mathml+xml', 'mml'),
+    ('text/html', 'html'),
+    ('application/docbook+xml', 'docbook'),
+# misc
+    ('text/spreadsheet', 'slk'),
+    ('application/pdf', 'pdf'),
+    ('application/vnd.corel-draw', 'cdr'),
+    ('application/vnd.lotus-wordpro', 'lwp'),
+    ('application/vnd.lotus-1-2-3', 'wks'),
+    ('application/vnd.wordperfect', 'wpd'),
+    ('application/vnd.ms-works', 'wps'),
+    ('application/x-hwp', 'hwp'),
+    ('application/x-aportisdoc', 'pdb'),
+    ('application/x-pocket-word', 'psw'),
+    ('application/x-t602', '602'),
+# binfilter
+    ('application/x-starcalc', 'sdc'),
+    ('application/vnd.stardivision.calc', 'sdc5'),
+    ('application/x-starchart', 'sds'),
+    ('application/vnd.stardivision.chart', 'sds5'),
+    ('application/x-stardraw', 'sdd_d'),
+    ('application/vnd.stardivision.draw', 'sda5'),
+    ('application/x-starimpress', 'sdd_i'),
+    ('application/vnd.stardivision.impress', 'sdd5'),
+    ('application/vnd.stardivision.impress-packed', 'sdp5'),
+    ('application/x-starmath', 'smf'),
+    ('application/vnd.stardivision.math', 'smf5'),
+    ('application/x-starwriter', 'sdw'),
+    ('application/vnd.stardivision.writer', 'sdw5'),
+    ('application/vnd.stardivision.writer-global', 'sgl5'),
+# unusual image mimetypes
+    ('image/cgm', 'cgm'),
+    ('image/x-targa', 'tga'),
+]
 
-get_through_rpc_query(redhatrpc, redhatbug, 'application/msword', "rhbz", "doc")
-get_through_rpc_query(redhatrpc, redhatbug, 'application/rtf', "rhbz", "rtf")
-get_through_rpc_query(redhatrpc, redhatbug, 'text/rtf', "rhbz", "rtf")
-get_through_rpc_query(redhatrpc, redhatbug, 'text/spreadsheet', "rhbz", "slk")
-get_through_rpc_query(redhatrpc, redhatbug, 'application/vnd.ms-powerpoint', "rhbz", "ppt")
+# disabled for now, this would download gigs of pngs/jpegs...
+common_image_mimetypes = [
+# graphics
+    ('image/svg+xml', 'svg'),
+    ('image/x-MS-bmp', 'bmp'),
+    ('image/x-wpg', 'wpg'),
+    ('image/vnd.dxf', 'dxf'),
+    ('image/x-emf', 'emf'),
+    ('image/x-eps', 'eps'),
+    ('image/x-met', 'met'),
+    ('image/x-portable-bitmap', 'pbm'),
+    ('image/x-photo-cd', 'pcd'),
+    ('image/x-pict', 'pict'),
+    ('image/x-pcx', 'pcx'),
+    ('image/x-portable-graymap', 'pgm'),
+    ('image/x-portable-pixmap', 'ppm'),
+    ('image/vnd.adobe.photoshop', 'psd'),
+    ('image/x-cmu-raster', 'ras'),
+    ('image/x-sgf', 'sgf'),
+    ('image/x-svm', 'svm'),
+    ('image/tiff', 'tiff'),
+    ('image/x-wmf', 'wmf'),
+    ('image/x-xbitmap', 'xbm'),
+    ('image/x-xpixmap', 'xpm'),
+    ('image/gif', 'gif'),
+    ('image/jpeg', 'jpeg'),
+    ('image/png', 'png'),
+]
+
+for (mimetype,extension) in mimetypes:
+    get_through_rss_query(freedesktop, mimetype, "fdo", extension)
+
+for (mimetype,extension) in mimetypes:
+    get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
 
 #to-do, get attachments some other way, not inline in xml
 #get_through_rss_query(novell, 'application/msword', "n", "doc")
 
-get_through_rss_query(openoffice, 'application/msword', "ooo", "doc")
-get_through_rss_query(openoffice, 'application/rtf', "ooo", "rtf")
-get_through_rss_query(openoffice, 'text/rtf', "ooo", "rtf")
-get_through_rss_query(openoffice, 'text/spreadsheet', "ooo", "slk")
-get_through_rss_query(openoffice, 'application/vnd.ms-powerpoint', "ooo", "ppt")
+for (mimetype,extension) in mimetypes:
+    get_through_rss_query(openoffice, mimetype, "ooo", extension)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -151,7 +151,6 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 // the reading of the parameter is done using the special service ::com::sun::star::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
 // for now the set of acceptable characters has to be hardcoded, in future it should be part of the service that creates the mimetype
-const ::rtl::OUString aQuotedParamChars = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. " ) );
 
 static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
@@ -181,9 +180,12 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
         for ( sal_Int32 nBInd = 0; nBInd < 128; nBInd++ )
             pToAccept[nBInd] = sal_False;
 
-        for ( sal_Int32 nInd = 0; nInd < aQuotedParamChars.getLength(); nInd++ )
+        const char aQuotedParamChars[] =
+            "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+
+        for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
         {
-            sal_Unicode nChar = aQuotedParamChars.getStr()[nInd];
+            sal_Unicode nChar = aQuotedParamChars[nInd];
             if ( nChar < 128 )
                 pToAccept[nChar] = sal_True;
         }
@@ -2005,10 +2007,10 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                 if( pFDesc->cItems )
                 {
-                    ByteString          aDesc( pFDesc->fgd[ 0 ].cFileName );
+                    rtl::OString aDesc( pFDesc->fgd[ 0 ].cFileName );
                     rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
 
-                    if( ( aDesc.Len() > 4 ) && aDesc.Copy( aDesc.Len() - 4 ).EqualsIgnoreCaseAscii( ".URL" ) )
+                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL")) )
                     {
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( String( aDesc, eTextEncoding ) ).GetMainURL( INetURLObject::NO_DECODE ),
                                                                                   STREAM_STD_READ );
@@ -2031,17 +2033,17 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                         if( pStream )
                         {
-                            ByteString  aLine;
+                            rtl::OString aLine;
                             sal_Bool    bSttFnd = sal_False;
 
                             while( pStream->ReadLine( aLine ) )
                             {
-                                if( aLine.EqualsIgnoreCaseAscii( "[InternetShortcut]" ) )
+                                if (aLine.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("[InternetShortcut]")))
                                     bSttFnd = sal_True;
-                                else if( bSttFnd && aLine.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "URL=" ) )
+                                else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("URL=")))
                                 {
-                                    rBmk = INetBookmark( String( aLine.Erase( 0, 4 ), eTextEncoding ),
-                                                         String( aDesc.Erase( aDesc.Len() - 4 ), eTextEncoding ) );
+                                    rBmk = INetBookmark( String( aLine.copy(4), eTextEncoding ),
+                                                         String( aDesc.copy(0, aDesc.getLength() - 4), eTextEncoding ) );
                                     bRet = sal_True;
                                     break;
                                 }

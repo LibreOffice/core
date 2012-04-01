@@ -57,9 +57,9 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
     SwCSVData*              m_pNewData;
 
     DECL_LINK(AddRenameHdl_Impl, PushButton*);
-    DECL_LINK(DeleteHdl_Impl, PushButton*);
+    DECL_LINK(DeleteHdl_Impl, void *);
     DECL_LINK(UpDownHdl_Impl, PushButton*);
-    DECL_LINK(ListBoxSelectHdl_Impl, ListBox*);
+    DECL_LINK(ListBoxSelectHdl_Impl, void *);
 
     void UpdateButtons();
 public:

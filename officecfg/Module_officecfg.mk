@@ -20,14 +20,19 @@
 $(eval $(call gb_Module_Module,officecfg))
 
 $(eval $(call gb_Module_add_targets,officecfg,\
-        Package_cppheader \
-	Package_misc \
-	Package_tools \
-	Configuration_officecfg \
+    Package_cppheader \
+    Package_misc \
+    Package_tools \
+    Configuration_officecfg \
 ))
 
-$(eval $(call gb_Module_add_check_targets,officecfg,\
-        CppunitTest_officecfg_cppheader_test \
-))
+# this does not work, subsequenttest s a runtime dep, that is it postpone the run of the unittest, not the build of it
+# and that test need a bunch of include that are not there and there is no rule to teach make about the
+# dependency of these generated headers
+# disabled for now
+# The cppheader test depends on comphelper so can only be a subsequentcheck:
+#$(eval $(call gb_Module_add_subsequentcheck_targets,officecfg,\
+#    CppunitTest_officecfg_cppheader_test \
+#))
 
 # vim: set noet sw=4 ts=4:

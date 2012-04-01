@@ -139,16 +139,10 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int3
 
 
 LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
-LNG_DLLPUBLIC sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 
 inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
-inline sal_Bool        IsLower( const String &rText, sal_Int16 nLanguage )     { return IsLower( rText, 0, rText.Len(), nLanguage ); }
 
 String      ToLower( const String &rText, sal_Int16 nLanguage );
-String      ToUpper( const String &rText, sal_Int16 nLanguage );
-String      ToTitle( const String &rText, sal_Int16 nLanguage );
-sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage );
-sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage );
 LNG_DLLPUBLIC sal_Bool      HasDigits( const ::rtl::OUString &rText );
 LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 

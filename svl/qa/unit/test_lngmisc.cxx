@@ -155,14 +155,14 @@ namespace
 
   void LngMiscTest::testGetThesaurusReplaceText()
   {
-    const static ::rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM(""));
-    const static ::rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
-    const static ::rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("asdf (abc)"));
-    const static ::rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM("asdf*"));
-    const static ::rtl::OUString str5(RTL_CONSTASCII_USTRINGPARAM("asdf * "));
-    const static ::rtl::OUString str6(RTL_CONSTASCII_USTRINGPARAM("asdf (abc) *"));
-    const static ::rtl::OUString str7(RTL_CONSTASCII_USTRINGPARAM("asdf asdf * (abc)"));
-    const static ::rtl::OUString str8(RTL_CONSTASCII_USTRINGPARAM(" * (abc) asdf *"));
+    const ::rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM(""));
+    const ::rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
+    const ::rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("asdf (abc)"));
+    const ::rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM("asdf*"));
+    const ::rtl::OUString str5(RTL_CONSTASCII_USTRINGPARAM("asdf * "));
+    const ::rtl::OUString str6(RTL_CONSTASCII_USTRINGPARAM("asdf (abc) *"));
+    const ::rtl::OUString str7(RTL_CONSTASCII_USTRINGPARAM("asdf asdf * (abc)"));
+    const ::rtl::OUString str8(RTL_CONSTASCII_USTRINGPARAM(" * (abc) asdf *"));
 
     ::rtl::OUString r = linguistic::GetThesaurusReplaceText(str1);
     CPPUNIT_ASSERT(r.isEmpty());

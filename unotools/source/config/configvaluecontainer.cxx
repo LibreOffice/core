@@ -68,7 +68,6 @@ namespace utl
         NodeValueAccessor( const ::rtl::OUString& _rNodePath );
 
         void bind( void* _pLocation, const Type& _rType );
-        void bind( Any* _pLocation );
 
         bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
         const ::rtl::OUString&  getPath( ) const        { return sRelativePath; }
@@ -101,15 +100,6 @@ namespace utl
         eLocationType = ltSimplyObjectInstance;
         pLocation = _pLocation;
         aDataType = _rType;
-    }
-
-    void NodeValueAccessor::bind( Any* _pLocation )
-    {
-        DBG_ASSERT( !isBound(), "NodeValueAccessor::bind: already bound!" );
-
-        eLocationType = ltAnyInstance;
-        pLocation = _pLocation;
-        aDataType = ::getCppuType( _pLocation );
     }
 
     #ifndef UNX
@@ -259,11 +249,6 @@ namespace utl
     OConfigurationValueContainer::~OConfigurationValueContainer()
     {
         delete m_pImpl;
-    }
-
-    const Reference< XMultiServiceFactory >& OConfigurationValueContainer::getServiceFactory( ) const
-    {
-        return m_pImpl->xORB;
     }
 
     void OConfigurationValueContainer::implConstruct( const ::rtl::OUString& _rConfigLocation,

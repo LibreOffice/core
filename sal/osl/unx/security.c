@@ -276,7 +276,7 @@ static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* psz
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
 
-    if (pSecImpl == NULL)
+    if (pSecImpl == NULL || pSecImpl->m_pPasswd.pw_name == NULL)
         return sal_False;
 
     strncpy(pszName, pSecImpl->m_pPasswd.pw_name, nMax);
@@ -364,14 +364,17 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
         pStr = getenv("HOME");
 #endif
 
-        if ((pStr != NULL) && (strlen(pStr) > 0) &&
-            (access(pStr, 0) == 0))
+        if (pStr != NULL && strlen(pStr) > 0 && access(pStr, 0) == 0)
             strncpy(pszDirectory, pStr, nMax);
-        else
+        else if (pSecImpl->m_pPasswd.pw_dir != NULL)
             strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
+        else
+            return sal_False;
     }
-    else
+    else if (pSecImpl->m_pPasswd.pw_dir != NULL)
         strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
+    else
+        return sal_False;
 
     return sal_True;
 }
@@ -403,8 +406,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
-    if ((pStr == NULL) || (strlen(pStr) == 0) ||
-        (access(pStr, 0) != 0))
+    if (pStr == NULL || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
         size_t n = 0;
         // a default equal to $HOME/.config should be used.
@@ -460,9 +462,9 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         return sal_False;
 
     if (pSecImpl->m_pPasswd.pw_uid != 0)
-        return (sal_False);
+        return sal_False;
 
-    return (sal_True);
+    return sal_True;
 }
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)

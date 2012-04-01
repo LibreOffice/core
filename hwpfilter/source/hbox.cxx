@@ -30,6 +30,8 @@
 
 #include <ctype.h>
 
+#include <osl/diagnose.h>
+
 #include "hwpfile.h"
 #include "hbox.h"
 #include "hpara.h"
@@ -55,7 +57,7 @@ HBox::~HBox()
 
 int HBox::WSize(void)
 {
-    static int wsize[32] =
+    static const int wsize[32] =
     {
         1, 4, 4, 4, 4, 4, 4, 42,                  /* dateform */
         48, 4, 4, 4, 4, 1, 4, 4,                  /* hidden */
@@ -152,7 +154,8 @@ DateCode::DateCode(void):HBox(CH_DATE_CODE)
 
 int DateCode::GetString(hchar * hstr, int slen)
 {
-    hchar *fmt, *d;
+    const hchar *fmt;
+    hchar *d;
     int i, num;
     const char *form;
     char cbuf[256];
@@ -334,14 +337,20 @@ TxtBox::~TxtBox(void)
 
     for (int ii = 0; ii < nCell; ++ii)
     {
-        LinkedListIterator < HWPPara > it(&plists[ii]);
-        for (; it.current(); it++)
-            delete it.current();
+        std::list < HWPPara* >::iterator it = plists[ii].begin();
+        for (; it != plists[ii].end(); ++it)
+        {
+            HWPPara* pPara = *it;
+            delete pPara;
+        }
     }
 
-    LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); it++)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = caption.begin();
+    for (; it != caption.end(); ++it)
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 
     delete[]plists;
 }
@@ -368,9 +377,12 @@ Picture::~Picture(void)
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete (HWPDrawingObject *) picinfo.picdraw.hdo;
 
-    LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); it++)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = caption.begin();
+    for (; it != caption.end(); ++it)
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
@@ -390,27 +402,36 @@ hunit Picture::Height(CharShape * sty)
 // hidden(15)
 Hidden::~Hidden(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
 // header/footer(16)
 HeaderFooter::~HeaderFooter(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
 // footnote(17)
 Footnote::~Footnote(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); it++)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
@@ -438,10 +459,10 @@ int MailMerge::GetString(hchar * hstr, int )
 
 static hchar olHanglJaso(int num, int type)
 {
-    static unsigned char han_init[] =
-        { "\x88\x90\x94\x9c\xa0\xa4\xac\xb4\xb8\xc0\xc4\xc8\xcc\xd0" };
-    static unsigned char jung[] = { 3, 5, 7, 11, 13, 19, 20, 26, 27, 29, 30 };
-    static unsigned char jung2[] = { 3, 7, 13, 20, 27, 29, 30 };
+    static const unsigned char han_init[] =
+        { 0x88, 0x90, 0x94, 0x9c, 0xa0, 0xa4, 0xac, 0xb4, 0xb8, 0xc0, 0xc4, 0xc8, 0xcc, 0xd0 };
+    static const unsigned char jung[] = { 3, 5, 7, 11, 13, 19, 20, 26, 27, 29, 30 };
+    static const unsigned char jung2[] = { 3, 7, 13, 20, 27, 29, 30 };
 
     hchar hh = 0;
 
@@ -470,9 +491,9 @@ static hchar olHanglJaso(int num, int type)
 }
 
 
-static hchar *GetOutlineStyleChars(int style)
+static const hchar *GetOutlineStyleChars(int style)
 {
-    static hchar out_bul_style_entry[5][8] =      // extern
+    static const hchar out_bul_style_entry[5][8] =      // extern
     {
         {                                         // 0 OLSTY_BULLET1
             0x2f18, 0x2f12, 0x2f08, 0x2f02, 0x2f06, 0x2f00, 0x2043, 0x0000
@@ -503,7 +524,7 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
         U_ROM = 0x01, L_ROM = 0x02, U_ENG = 0x04, L_ENG = 0x08,
         HAN = 0x10, NUM = 0x20, L_BR = 0x40, R_BR = 0x80
     };
-    static unsigned char type_tbl[][MAX_OUTLINE_LEVEL] =
+    static const unsigned char type_tbl[][MAX_OUTLINE_LEVEL] =
     {
         {
             U_ROM, HAN, NUM, HAN | R_BR, L_BR | NUM | R_BR,
@@ -570,7 +591,7 @@ enum
  */
 hchar *Outline::GetUnicode(hchar * hstr, int)
 {
-    hchar *p;
+    const hchar *p;
      hchar buffer[255];
 
     buffer[0] = 0;

@@ -27,11 +27,11 @@
 
 package installer::ziplist;
 
-use installer::existence;
+use File::Spec::Functions qw(rel2abs);
+
 use installer::exiter;
 use installer::globals;
 use installer::logger;
-use installer::parameter;
 use installer::remover;
 use installer::systemactions;
 
@@ -383,7 +383,7 @@ sub remove_multiples_from_ziplist
             $itemname = $1;
         }
 
-        if (! installer::existence::exists_in_array($itemname, \@itemarray))
+        if (! grep {$_ eq $itemname} @itemarray)
         {
             push(@itemarray, $itemname);
         }
@@ -518,7 +518,7 @@ sub replace_packagetype_in_pathes
 }
 
 ####################################################
-# Removing ending separators in pathes
+# Removing ending separators in paths
 ####################################################
 
 sub remove_ending_separator
@@ -546,7 +546,7 @@ sub replace_languages_in_pathes
 {
     my ( $patharrayref, $languagesref ) = @_;
 
-    installer::logger::include_header_into_logfile("Replacing languages in include pathes:");
+    installer::logger::include_header_into_logfile("Replacing languages in include paths:");
 
     my @patharray = ();
     my $infoline = "";
@@ -570,7 +570,7 @@ sub replace_languages_in_pathes
 
                 installer::remover::remove_leading_and_ending_whitespaces(\$newline);
 
-                # Is it necessary to refresh the global array, containing all files of all include pathes?
+                # Is it necessary to refresh the global array, containing all files of all include paths?
                 if ( -d $newdir )
                 {
                     # Checking if $newdir is empty
@@ -703,10 +703,10 @@ sub resolve_relative_pathes
 {
     my ( $patharrayref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    for my $path ( @{$patharrayref} )
     {
-        installer::parameter::make_path_absolute(\${$patharrayref}[$i]);
-        simplify_path(\${$patharrayref}[$i]);
+        $path = rel2abs($path);
+        simplify_path(\$path);
     }
 }
 

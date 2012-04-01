@@ -162,16 +162,16 @@ private:
     ::rtl::OUString m_sModuleShortName;
     ::rtl::OUString m_sModuleUIName;
 
-    DECL_LINK(                  ChangeHdl, Button * );
-    DECL_LINK(                  RemoveHdl, Button * );
+    DECL_LINK(ChangeHdl, void *);
+    DECL_LINK(RemoveHdl, void *);
     DECL_LINK(                  SelectHdl, Control * );
-    DECL_LINK(                  Save, Button * );
-    DECL_LINK(                  Load, Button * );
-    DECL_LINK(                  Default, PushButton * );
-    DECL_LINK(                  RadioHdl, RadioButton* );
+    DECL_LINK(Save, void *);
+    DECL_LINK(Load, void *);
+    DECL_LINK(Default, void *);
+    DECL_LINK(RadioHdl, void *);
 
-    DECL_LINK(                  LoadHdl, sfx2::FileDialogHelper* );
-    DECL_LINK(                  SaveHdl, sfx2::FileDialogHelper* );
+    DECL_LINK(LoadHdl, void *);
+    DECL_LINK(SaveHdl, void *);
 
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();

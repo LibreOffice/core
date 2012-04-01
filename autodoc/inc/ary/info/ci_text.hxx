@@ -62,7 +62,7 @@ class DocuText
                                                 { aTokens.push_back(&let_drToken); }
     const TokenList &   Tokens() const          { return aTokens; }
     bool                IsNoHtml() const        { return NOT bUsesHtml; }
-    bool                IsEmpty() const         { return aTokens.size() == 0; }
+    bool                IsEmpty() const         { return aTokens.empty(); }
 
   private:
     TokenList           aTokens;

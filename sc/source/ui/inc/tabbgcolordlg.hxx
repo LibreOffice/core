@@ -70,8 +70,8 @@ private:
 
     void            FillColorValueSets_Impl();
 
-    DECL_LINK( TabBgColorDblClickHdl_Impl, ValueSet* );
-    DECL_LINK( TabBgColorOKHdl_Impl, OKButton* pBtn );
+    DECL_LINK(TabBgColorDblClickHdl_Impl, void *);
+    DECL_LINK(TabBgColorOKHdl_Impl, void *);
 };
 
 #endif // SC_TABBGCOLORDLG_HXX

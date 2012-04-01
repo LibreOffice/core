@@ -29,7 +29,6 @@ $(eval $(call gb_Library_Library,OGLTrans))
 
 $(eval $(call gb_Library_set_include,OGLTrans,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 ifeq ($(strip $(VERBOSE)),TRUE)

@@ -27,31 +27,24 @@
 
 package com.sun.star.uno;
 
-import complexlib.ComplexTestCase;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.junit.Test;
 import util.WaitUnreachable;
+import static org.junit.Assert.*;
 
-public final class WeakReference_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public void test() {
+public final class WeakReference_Test {
+    @Test public void test() {
         Object o = new MockWeak();
         WeakReference r1 = new WeakReference(o);
         WeakReference r2 = new WeakReference(r1);
-        assure("", r1.get() == o);
-        assure("", r2.get() == o);
+        assertSame(o, r1.get());
+        assertSame(o, r2.get());
         WaitUnreachable u = new WaitUnreachable(o);
         o = null;
         u.waitUnreachable();
-        assure("a3", r1.get() == null);
-        assure("a4", r2.get() == null);
+        assertNull("a3", r1.get());
+        assertNull("a4", r2.get());
     }
 
     private static final class MockWeak implements XWeak {

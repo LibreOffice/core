@@ -244,7 +244,6 @@ public:
 
     void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
 
-    const SfxPoolItem* GetCellItem( const CellPos& rPos, sal_uInt16 nWhich ) const;
 //  void GetBorderLines( const CellPos& rPos, const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop, const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
     void operator=( const SdrTableObjImpl& rSource );
@@ -694,17 +693,6 @@ void SdrTableObjImpl::UpdateCells( Rectangle& rArea )
         mpLayouter->updateCells( rArea );
         mxTable->setModified(sal_True);
     }
-}
-
-// -----------------------------------------------------------------------------
-
-const SfxPoolItem* SdrTableObjImpl::GetCellItem( const CellPos& rPos, sal_uInt16 nWhich ) const
-{
-    CellRef xCell( getCell( rPos  ) );
-    if( xCell.is() )
-        return xCell->GetItemSet().GetItem( nWhich );
-    else
-        return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -1160,66 +1148,6 @@ const SfxItemSet& SdrTableObj::GetActiveCellItemSet() const
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::InsertRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
-{
-    if( mpImpl->mxTable.is() ) try
-    {
-        Reference< XTableRows > xRows( mpImpl->mxTable->getRows(), UNO_QUERY_THROW );
-        xRows->insertByIndex( nIndex, nCount );
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("SdrTableObj::InsertRows(), exception caught!");
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::InsertColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
-{
-    if( mpImpl->mxTable.is() ) try
-    {
-        Reference< XTableColumns > xColumns( mpImpl->mxTable->getColumns(), UNO_QUERY_THROW );
-        xColumns->insertByIndex( nIndex, nCount );
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("SdrTableObj::InsertColumns(), exception caught!");
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::DeleteRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
-{
-    if( mpImpl->mxTable.is() ) try
-    {
-        Reference< XTableRows > xRows( mpImpl->mxTable->getRows(), UNO_QUERY_THROW );
-        xRows->removeByIndex( nIndex, nCount );
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("SdrTableObj::DeleteRows(), exception caught!");
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::DeleteColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
-{
-    if( mpImpl->mxTable.is() ) try
-    {
-        Reference< XTableColumns > xColumns( mpImpl->mxTable->getColumns(), UNO_QUERY_THROW );
-        xColumns->removeByIndex( nIndex, nCount );
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("SdrTableObj::DeleteColumns(), exception caught!");
-    }
-}
-
-// --------------------------------------------------------------------
-
 void SdrTableObj::setTableStyle( const Reference< XIndexAccess >& xTableStyle )
 {
     if( mpImpl && (mpImpl->mxTableStyle != xTableStyle) )
@@ -1342,13 +1270,6 @@ const TableLayouter& SdrTableObj::getTableLayouter() const
 {
     OSL_ENSURE(mpImpl && mpImpl->mpLayouter, "getTableLayouter() error: no mpImpl or mpLayouter (!)");
     return *(mpImpl->mpLayouter);
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::FitFrameToTextSize()
-{
-    // todo
 }
 
 // --------------------------------------------------------------------
@@ -1817,16 +1738,6 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
 OutlinerParaObject* SdrTableObj::GetEditOutlinerParaObject() const
 {
     return SdrTextObj::GetEditOutlinerParaObject();
-}
-
-// --------------------------------------------------------------------
-
-SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const CellPos& rPos ) const
-{
-    if( pEdtOutl && mpImpl && (mpImpl->maEditPos == rPos) )
-        return pEdtOutl;
-    else
-        return 0;
 }
 
 // --------------------------------------------------------------------

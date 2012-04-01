@@ -28,15 +28,25 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sal_rtl_strings))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_strings,\
+    sal/qa/rtl/strings/test_strings_replace \
+    sal/qa/rtl/strings/test_ostring_stringliterals \
     sal/qa/rtl/strings/test_oustring_compare \
     sal/qa/rtl/strings/test_oustring_convert \
     sal/qa/rtl/strings/test_oustring_endswith \
     sal/qa/rtl/strings/test_oustring_noadditional \
+    sal/qa/rtl/strings/test_oustring_stringliterals \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_strings,\
     sal \
     $(gb_STDLIBS) \
 ))
+
+# The test uses O(U)String capabilities that dlopen this lib
+ifneq ($(OS),ANDROID)
+# Except that on Android we don't build it separately
+$(call gb_CppunitTest_get_target,sal_rtl_strings) : \
+    $(call gb_Library_get_target,sal_textenc)
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -497,7 +497,6 @@ srrm::IMessage* UnoInterfaceProxy::Invoke(srrm::IMessage* callmsg)
                         method_td->pParams, args, argTypes, &pExc);
                     return constructReturnMessage(cli_ret, args, method_td,
                                                   callmsg, pExc);
-                    break;
                 }
             }
             else

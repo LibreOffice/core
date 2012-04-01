@@ -230,9 +230,7 @@ private:
     DECL_LINK( ClickColorHdl, PushButton * );
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( ModifyHdl, void * );
-    DECL_LINK( ClickLightHdl, PushButton * );
-
-    DECL_LINK( DoubleClickHdl, void * );
+    void ClickLight(PushButton &rBtn);
 
     DECL_LINK( ChangeLightCallbackHdl, void * );
     DECL_LINK( ChangeSelectionCallbackHdl, void * );
@@ -244,7 +242,7 @@ private:
     SVX_DLLPRIVATE sal_uInt16           GetLightSource( const PushButton* pBtn = NULL );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = NULL );
 
-    SVX_DLLPRIVATE bool         GetUILightState( ImageButton& aBtn ) const;
+    SVX_DLLPRIVATE bool         GetUILightState( const ImageButton& rBtn ) const;
     SVX_DLLPRIVATE void         SetUILightState( ImageButton& aBtn, bool bState );
 
 protected:

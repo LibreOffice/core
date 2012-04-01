@@ -85,7 +85,6 @@ private:
     String                  m_sRM_TextText;
     String                  m_sRM_MSAccessText;
     String                  m_sRM_LDAPText;
-    String                  m_sRM_ADABASText;
     String                  m_sRM_ADOText;
     String                  m_sRM_JDBCText;
     String                  m_sRM_MySQLNativePageTitle;

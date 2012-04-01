@@ -281,8 +281,8 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
         delete pColOffset;
     if ( pTables )
     {
-        for ( Table* pT = (Table*) pTables->First(); pT; pT = (Table*) pTables->Next() )
-            delete pT;
+        for( OuterMap::const_iterator it = pTables->begin(); it != pTables->end(); ++it)
+            delete it->second;
         delete pTables;
     }
 }
@@ -331,7 +331,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
     {
         aSize.Width() = *pOff - nOff;
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
-        pColWidths->Insert( j-1, (void*)aSize.Width() );
+        maColWidths[ j-1 ] = aSize.Width();
         nOff = *pOff;
     }
     return nErr;
@@ -538,7 +538,7 @@ void ScHTMLLayoutParser::Adjust()
     SCROW nNextRow = 0;
     SCROW nCurRow = 0;
     sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
-    Table* pTab = NULL;
+    InnerMap* pTab = NULL;
     for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
     {
         ScEEParseEntry* pE = maList[ i ];
@@ -555,7 +555,12 @@ void ScHTMLLayoutParser::Adjust()
             }
             delete pS;
             nTab = pE->nTab;
-            pTab = (pTables ? (Table*) pTables->Get( nTab ) : NULL);
+            if (pTables)
+            {
+                OuterMap::const_iterator it = pTables->find( nTab );
+                if ( it != pTables->end() )
+                    pTab = it->second;
+            }
 
         }
         SCROW nRow = pE->nRow;
@@ -565,8 +570,14 @@ void ScHTMLLayoutParser::Adjust()
                 pE->nRow = nCurRow = nNextRow;
             else
                 nCurRow = nNextRow = pE->nRow;
-            SCROW nR;
-            if ( pTab && ((nR = (SCROW)(sal_uLong)pTab->Get( nCurRow )) != 0) )
+            SCROW nR = 0;
+            if ( pTab )
+            {
+                InnerMap::const_iterator it = pTab->find( nCurRow );
+                if ( it != pTab->end() )
+                    nR = it->second;
+            }
+            if ( nR )
                 nNextRow += nR;
             else
                 nNextRow++;
@@ -579,10 +590,21 @@ void ScHTMLLayoutParser::Adjust()
             aStack.push( new ScHTMLAdjustStackEntry(
                 nLastCol, nNextRow, nCurRow ) );
             nTab = pE->nTab;
-            pTab = (pTables ? (Table*) pTables->Get( nTab ) : NULL);
+            if ( pTables )
+            {
+                OuterMap::const_iterator it = pTables->find( nTab );
+                if ( it != pTables->end() )
+                    pTab = it->second;
+            }
             // neuer Zeilenabstand
-            SCROW nR;
-            if ( pTab && ((nR = (SCROW)(sal_uLong)pTab->Get( nCurRow )) != 0) )
+            SCROW nR = 0;
+            if ( pTab )
+            {
+                InnerMap::const_iterator it = pTab->find( nCurRow );
+                if ( it != pTab->end() )
+                    nR = it->second;
+            }
+            if ( nR )
                 nNextRow = nCurRow + nR;
             else
                 nNextRow = nCurRow + 1;
@@ -596,7 +618,10 @@ void ScHTMLLayoutParser::Adjust()
                 SCROW nRowSpan = pE->nRowOverlap;
                 for ( SCROW j=0; j < nRowSpan; j++ )
                 {   // aus merged Zeilen resultierendes RowSpan
-                    SCROW nRows = (SCROW)(sal_uLong)pTab->Get( nRow+j );
+                    SCROW nRows = 0;
+                    InnerMap::const_iterator it = pTab->find( nRow+j );
+                    if ( it != pTab->end() )
+                        nRows = it->second;
                     if ( nRows > 1 )
                     {
                         pE->nRowOverlap += nRows - 1;
@@ -1228,14 +1253,17 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                 SCROW nRow = pS->nRowCnt;
                 sal_uInt16 nTab = pS->nTable;
                 if ( !pTables )
-                    pTables = new Table;
+                    pTables = new OuterMap;
                 // Hoehen der aeusseren Table
-                Table* pTab1 = (Table*) pTables->Get( nTab );
-                if ( !pTab1 )
+                OuterMap::const_iterator it = pTables->find( nTab );
+                InnerMap* pTab1;
+                if ( it == pTables->end() )
                 {
-                    pTab1 = new Table;
-                    pTables->Insert( nTab, pTab1 );
+                    pTab1 = new InnerMap;
+                    (*pTables)[ nTab ] = pTab1;
                 }
+                else
+                    pTab1 = it->second;
                 SCROW nRowSpan = pE->nRowOverlap;
                 SCROW nRowKGV;
                 SCROW nRowsPerRow1;    // aeussere Table
@@ -1252,11 +1280,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                     nRowKGV = nRowsPerRow1 = nRows;
                     nRowsPerRow2 = 1;
                 }
-                Table* pTab2 = NULL;
+                InnerMap* pTab2 = NULL;
                 if ( nRowsPerRow2 > 1 )
                 {   // Hoehen der inneren Table
-                    pTab2 = new Table;
-                    pTables->Insert( nTable, pTab2 );
+                    pTab2 = new InnerMap;
+                    (*pTables)[ nTable ] = pTab2;
                 }
                 // void* Data-Entry der Table-Class fuer das
                 // Hoehen-Mapping missbrauchen
@@ -1267,11 +1295,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                         for ( SCROW j=0; j < nRowSpan; j++ )
                         {
                             sal_uLong nRowKey = nRow + j;
-                            SCROW nR = (SCROW)(sal_uLong)pTab1->Get( nRowKey );
+                            SCROW nR = (*pTab1)[ nRowKey ];
                             if ( !nR )
-                                pTab1->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
+                                (*pTab1)[ nRowKey ] = nRowsPerRow1;
                             else if ( nRowsPerRow1 > nR )
-                                pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
+                                (*pTab1)[ nRowKey ] = nRowsPerRow1;
                                 //2do: wie geht das noch besser?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
@@ -1280,11 +1308,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                 nR += nAdd;
                                 if ( (nR % nRows) == 0 )
                                 {   // nur wenn abbildbar
-                                    SCROW nR2 = (SCROW)(sal_uLong)pTab1->Get( nRowKey+1 );
+                                    SCROW nR2 = (*pTab1)[ nRowKey+1 ];
                                     if ( nR2 > nAdd )
                                     {   // nur wenn wirklich Platz
-                                        pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nR );
-                                        pTab1->Replace( nRowKey+1, (void*)(sal_IntPtr)(nR2 - nAdd) );
+                                        (*pTab1)[ nRowKey ] = nR;
+                                        (*pTab1)[ nRowKey+1 ] = nR2 - nAdd;
                                         nRowsPerRow2 = nR / nRows;
                                     }
                                 }
@@ -1295,17 +1323,13 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                     {   // innen
                         if ( !pTab2 )
                         {   // nRowsPerRow2 kann erhoeht worden sein
-                            pTab2 = new Table;
-                            pTables->Insert( nTable, pTab2 );
+                            pTab2 = new InnerMap;
+                            (*pTables)[ nTable ] = pTab2;
                         }
                         for ( SCROW j=0; j < nRows; j++ )
                         {
                             sal_uLong nRowKey = nRow + j;
-                            SCROW nR = (SCROW)(sal_uLong)pTab2->Get( nRowKey );
-                            if ( !nR )
-                                pTab2->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
-                            else if ( nRowsPerRow2 > nR )
-                                pTab2->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
+                            (*pTab2)[ nRowKey ] = nRowsPerRow2;
                         }
                     }
                 }

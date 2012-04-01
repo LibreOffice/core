@@ -51,11 +51,10 @@ ScVbaProgressBar::setValue( const uno::Any& _value ) throw (::com::sun::star::un
     m_xProps->setPropertyValue( SVALUE,  _value );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaProgressBar::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaProgressBar") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaProgressBar"));
 }
 
 uno::Sequence< rtl::OUString >

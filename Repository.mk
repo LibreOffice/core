@@ -38,6 +38,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     genindex_data \
     mkunroll \
     osl_process_child \
+    pdf2xml \
+    pdfunzip \
     rsc \
     rscdep \
     saxparser \
@@ -45,6 +47,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svidl \
     typesconfig \
     xml2cmp \
+    xpdfimport \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
@@ -58,6 +61,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_executables,OOO,\
 	crashrep_com \
+	gengal \
 	guiloader \
 	guistdio \
 	odbcconfig \
@@ -79,11 +83,18 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	unopkgio \
 ))
 
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	directxcanvas \
+	winextendloaderenv \
+	winlauncher \
+))
+
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\
     soffice.bin \
     unopkg.bin \
+    gengal.bin \
 ))
 
 ifeq ($(OS),MACOSX)
@@ -114,13 +125,14 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 
 endif
 
-ifeq ($(WITH_MOZILLA),YES)
-$(eval $(call gb_Helper_register_executables,OOO,\
-    pluginapp.bin \
+ifneq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_executables,UREBIN,\
+	javaldx \
 ))
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    pl \
-))
+
+endif
+
 ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
     nsplugin \
@@ -129,6 +141,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     npsoplugin \
 ))
 endif
+
+ifeq ($(WITH_MOZILLA),YES)
+$(eval $(call gb_Helper_register_executables,OOO,\
+    pluginapp.bin \
+))
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    pl \
+))
 endif # WITH_MOZILLA
 
 
@@ -143,8 +163,6 @@ endif
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     PptImporter \
     abp \
-    adabas \
-    adabasui \
     acc \
     agg \
     analysis \
@@ -187,6 +205,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     editeng \
     egi \
     eme \
+    emser \
     epb \
     epg \
     epp \
@@ -209,7 +228,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     helplinker \
     hwp \
     hyphen \
-    i18npaper \
     i18nregexp \
     icd \
     icg \
@@ -315,20 +333,39 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    affine_uno \
+    jpipe \
+    juh \
+    juhx \
+    log_uno \
+    reg \
     sal_textenc \
+    store \
+    sunjavaplugin \
+    unsafe_uno \
     xmlreader \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipx \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    affine_uno \
     avmediagst \
     avmediawin \
     cached1 \
+    clucene \
     collator_data \
     deployment \
     deploymentgui \
     dict_ja \
     dict_zh \
+    embobj \
+    emboleobj \
     fileacc \
     index_data \
     java_uno_accessbridge \
@@ -336,14 +373,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_es \
     localedata_euro \
     localedata_others \
-    log_uno \
     mcnttype \
     package2 \
-    reg \
     scriptframe \
+    smoketest \
     sofficeapp \
     srtrs1 \
-    store \
     subsequenttest \
     test \
     textconv_dict \
@@ -353,9 +388,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpftp1 \
     ucphier1 \
     ucppkg1 \
+    unoexceptionprotector \
     unopkgapp \
     unotest \
-    unsafe_uno \
     updchk \
     xmlsecurity \
     xsec_fw \
@@ -377,6 +412,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     fop \
     fps \
     ftransl \
+    inprocserv \
     so_activex \
     so_activex_x64 \
     sysdtrans \
@@ -393,19 +429,18 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
-    jvmaccess \
     ucbhelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
+    jvmaccess \
     purpenvhelper \
     salhelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     basprov \
-    bootstrap \
     cairocanvas \
     canvasfactory \
     configmgr \
@@ -429,9 +464,12 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
+    pdfimport \
+    PresenterScreen \
     simplecanvas \
     slideshow \
     stringresource \
+	SunPresentationMinimizer \
     ucpcmis1 \
     ucpexpand1 \
     ucpext \
@@ -475,6 +513,7 @@ endif
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     acceptor \
     binaryurp \
+    bootstrap \
     connector \
     introspection \
     invocadapt \
@@ -499,8 +538,12 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
     dtobj \
+    headless \
     libeay32 \
+    npsoenv \
     nputils \
+    pdfimport_s \
+    plugcon \
     ssleay32 \
     ooopathutils \
     sample \

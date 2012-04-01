@@ -124,10 +124,13 @@ FltError ExportBiff5::Write()
             sfx2::SaveOlePropertySet(xDocProps, xRootStrg );
     }
 
-    //! TODO: separate warnings for columns and sheets
     const XclExpAddressConverter& rAddrConv = GetAddressConverter();
-    if( rAddrConv.IsColTruncated() || rAddrConv.IsRowTruncated() || rAddrConv.IsTabTruncated() )
+    if( rAddrConv.IsRowTruncated() )
         return SCWARN_EXPORT_MAXROW;
+    if( rAddrConv.IsColTruncated() )
+        return SCWARN_EXPORT_MAXCOL;
+    if( rAddrConv.IsTabTruncated() )
+        return SCWARN_EXPORT_MAXTAB;
 
     return eERR_OK;
 }

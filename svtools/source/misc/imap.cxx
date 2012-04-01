@@ -989,24 +989,6 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 |*
 \******************************************************************************/
 
-Rectangle ImageMap::GetBoundRect() const
-{
-    Rectangle   aBoundRect;
-    size_t      nCount = maList.size();
-
-    for ( size_t i = 0; i < nCount; i++ )
-        aBoundRect.Union( maList[ i ]->GetBoundRect() );
-
-    return aBoundRect;
-}
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
 void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
     size_t nCount = maList.size();

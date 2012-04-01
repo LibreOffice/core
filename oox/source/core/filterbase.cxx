@@ -246,22 +246,9 @@ OoxmlVersion FilterBase::getVersion() const
     return mxImpl->meVersion;
 }
 
-// ----------------------------------------------------------------------------
-
-Any FilterBase::getArgument( const OUString& rArgName ) const
-{
-    SequenceAsHashMap::const_iterator aIt = mxImpl->maArguments.find( rArgName );
-    return (aIt == mxImpl->maArguments.end()) ? Any() : aIt->second;
-}
-
 const Reference< XComponentContext >& FilterBase::getComponentContext() const
 {
     return mxImpl->mxComponentContext;
-}
-
-const Reference< XMultiComponentFactory >& FilterBase::getComponentFactory() const
-{
-    return mxImpl->mxComponentFactory;
 }
 
 const Reference< XMultiServiceFactory >& FilterBase::getServiceFactory() const
@@ -292,11 +279,6 @@ const Reference< XShape >& FilterBase::getParentShape() const
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 {
     return mxImpl->mxStatusIndicator;
-}
-
-const Reference< XInteractionHandler >& FilterBase::getInteractionHandler() const
-{
-    return mxImpl->mxInteractionHandler;
 }
 
 MediaDescriptor& FilterBase::getMediaDescriptor() const

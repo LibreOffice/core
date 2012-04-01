@@ -79,7 +79,6 @@ public:
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorageStream,SOTDATA())
-                        SO2_DECL_INVARIANT()
 
     using SvStream::SyncSvStream;
     virtual void        SyncSvStream();
@@ -143,7 +142,6 @@ public:
                         SotStorage( SvStream * pStm, sal_Bool bDelete );
                         SotStorage();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorage,SOTDATA())
-                        SO2_DECL_INVARIANT()
 
     SvMemoryStream *    CreateMemoryStream();
     const SvStream *    GetSvStream();

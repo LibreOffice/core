@@ -43,7 +43,6 @@
 #include "formula/formula.hxx"
 #include "IAnyRefDialog.hxx"
 #include "anyrefdg.hxx"
-#include <formula/IFunctionDescription.hxx>
 
 class ScViewData;
 class ScDocument;
@@ -57,8 +56,7 @@ typedef ScTabViewShell* PtrTabViewShell;
 //============================================================================
 
 class ScFormulaDlg : public formula::FormulaDlg,
-                     public IAnyRefDialog,
-                     public formula::IFormulaEditorHelper
+                     public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;
     ScFormulaCell*  pCell;

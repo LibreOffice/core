@@ -182,30 +182,26 @@ void SwPageBreakWin::Paint( const Rectangle& )
     aSeq[2] = Primitive2DReference( new DiscreteBitmapPrimitive2D(
             aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
 
-    // Paint the symbol if not readonly button
-    if ( IsEnabled() )
-    {
-        double nTop = double( aRect.getHeight() ) / 2.0;
-        double nBottom = nTop + 4.0;
-        double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
-        if ( bRtl )
-            nLeft = ARROW_WIDTH - 2.0;
-        double nRight = nLeft + 8.0;
+    double nTop = double( aRect.getHeight() ) / 2.0;
+    double nBottom = nTop + 4.0;
+    double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
+    if ( bRtl )
+        nLeft = ARROW_WIDTH - 2.0;
+    double nRight = nLeft + 8.0;
 
-        B2DPolygon aTriangle;
-        aTriangle.append( B2DPoint( nLeft, nTop ) );
-        aTriangle.append( B2DPoint( nRight, nTop ) );
-        aTriangle.append( B2DPoint( ( nLeft + nRight ) / 2.0, nBottom ) );
-        aTriangle.setClosed( true );
+    B2DPolygon aTriangle;
+    aTriangle.append( B2DPoint( nLeft, nTop ) );
+    aTriangle.append( B2DPoint( nRight, nTop ) );
+    aTriangle.append( B2DPoint( ( nLeft + nRight ) / 2.0, nBottom ) );
+    aTriangle.setClosed( true );
 
-        BColor aTriangleColor = Color( COL_BLACK ).getBColor( );
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            aTriangleColor = Color( COL_WHITE ).getBColor( );
+    BColor aTriangleColor = Color( COL_BLACK ).getBColor( );
+    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        aTriangleColor = Color( COL_WHITE ).getBColor( );
 
-        aSeq.realloc( aSeq.getLength() + 1 );
-        aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                   B2DPolyPolygon( aTriangle ), aTriangleColor ) );
-    }
+    aSeq.realloc( aSeq.getLength() + 1 );
+    aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+               B2DPolyPolygon( aTriangle ), aTriangleColor ) );
 
     Primitive2DSequence aGhostedSeq( 1 );
     double nFadeRate = double( m_nFadeRate ) / 100.0;
@@ -337,9 +333,13 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     }
 
     const SwPageFrm* pPageFrm = GetPageFrame();
-    const SwFrm* pPrevPage = pPageFrm->GetPrev();
-    while ( pPrevPage && ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) ) )
+    const SwFrm* pPrevPage = pPageFrm;
+    do
+    {
         pPrevPage = pPrevPage->GetPrev();
+    }
+    while ( pPrevPage && ( ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) )
+                || static_cast< const SwPageFrm* >( pPrevPage )->IsEmptyPage( ) ) );
 
     Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrm->GetBoundRect().SVRect() );
     Rectangle aFrmRect = GetEditWin()->LogicToPixel( pPageFrm->Frm().SVRect() );
@@ -419,7 +419,7 @@ const SwPageFrm* SwPageBreakWin::GetPageFrame( )
 
 void SwPageBreakWin::SetReadonly( bool bReadonly )
 {
-    Enable( !bReadonly );
+    ShowAll( !bReadonly );
 }
 
 void SwPageBreakWin::Fade( bool bFadeIn )
@@ -434,14 +434,14 @@ void SwPageBreakWin::Fade( bool bFadeIn )
         m_aFadeTimer.Start( );
 }
 
-IMPL_LINK( SwPageBreakWin, HideHandler, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwPageBreakWin, HideHandler)
 {
     Fade( false );
 
     return 0;
 }
 
-IMPL_LINK( SwPageBreakWin, FadeHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler)
 {
     const int TICKS_BEFORE_WE_APPEAR = 10;
     if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )

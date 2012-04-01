@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include "oox/core/contexthandler.hxx"
 #include "oox/core/relations.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
@@ -84,7 +85,7 @@ struct RecordInfo
 
 typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
 
-class FragmentHandler : public FragmentHandler_BASE
+class OOX_DLLPUBLIC FragmentHandler : public FragmentHandler_BASE
 {
 public:
     explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath );

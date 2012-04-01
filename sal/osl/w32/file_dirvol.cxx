@@ -224,24 +224,6 @@ namespace /* private */
 //#####################################################
 
 //#####################################################
-oslFileError SAL_CALL osl_unmountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    if ( Handle )
-        return osl_File_E_None;
-    else
-        return osl_File_E_INVAL;
-}
-
-//#####################################################
-oslFileError SAL_CALL osl_automountVolumeDevice( oslVolumeDeviceHandle Handle )
-{
-    if ( Handle )
-        return osl_File_E_None;
-    else
-        return osl_File_E_INVAL;
-}
-
-//#####################################################
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
     if ( Handle )
@@ -405,7 +387,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
         sal_uInt32 nLen = rtl_uString_getLength( pPath );
         if ( nLen )
         {
-            TCHAR* pSuffix = 0;
+            const TCHAR* pSuffix = 0;
             sal_uInt32 nSuffLen = 0;
 
             if ( pPath->buffer[nLen - 1] != L'\\' )
@@ -1765,7 +1747,6 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         if ( !pItemImpl->bFullPathNormalized )
         {
-            sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
                                                       ::osl::mingw_reinterpret_cast<LPTSTR>( aBuffer ),

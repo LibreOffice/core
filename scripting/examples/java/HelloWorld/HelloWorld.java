@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;

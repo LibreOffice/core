@@ -260,9 +260,8 @@ typedef sal_uInt16 StateChangedType;
 #define STATE_CHANGE_CONTROLFOREGROUND  ((StateChangedType)14)
 #define STATE_CHANGE_CONTROLBACKGROUND  ((StateChangedType)15)
 #define STATE_CHANGE_READONLY           ((StateChangedType)16)
-#define STATE_CHANGE_FORMAT             ((StateChangedType)17)
-#define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)18)
-#define STATE_CHANGE_MIRRORING          ((StateChangedType)19)
+#define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)17)
+#define STATE_CHANGE_MIRRORING          ((StateChangedType)18)
 #define STATE_CHANGE_USER               ((StateChangedType)10000)
 
 // GetFocusFlags
@@ -525,7 +524,6 @@ public:
     DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplTrackTimerHdl, Timer* );
     DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplAsyncStateChangedHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
 
@@ -624,7 +622,6 @@ public:
     sal_Bool                PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     void                RemoveUserEvent( sal_uLong nUserEvent );
-    void                PostStateChanged( StateChangedType nState );
 
     void                IncrementLockCount();
     void                DecrementLockCount();
@@ -949,8 +946,6 @@ public:
 
     void                SetData( void* pNewData );
     void*               GetData() const;
-
-    Bitmap              SnapShot( sal_Bool bBorder = sal_True ) const;
 
     void                ShowFocus( const Rectangle& rRect );
     void                HideFocus();

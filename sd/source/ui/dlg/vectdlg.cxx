@@ -38,7 +38,6 @@
 #include "DrawDocShell.hxx"
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
-#include "DrawDocShell.hxx"
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 #include <vcl/bmpacc.hxx>
@@ -293,7 +292,7 @@ IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ClickPreviewHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl)
 {
     Calculate( aBmp, aMtf );
     aMtfWin.SetGraphic( aMtf );
@@ -304,7 +303,7 @@ IMPL_LINK( SdVectorizeDlg, ClickPreviewHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ClickOKHdl, OKButton*, EMPTYARG )
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl)
 {
     if( aBtnPreview.IsEnabled() )
         Calculate( aBmp, aMtf );
@@ -337,7 +336,7 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ModifyHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
 {
     aBtnPreview.Enable();
     return 0L;

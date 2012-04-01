@@ -47,8 +47,6 @@ public:
 
     SvxSelectionModeControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
-    static  sal_uIntPtr GetDefItemWidth(const StatusBar& rStb);
-
 private:
     sal_uInt16  nState;
 

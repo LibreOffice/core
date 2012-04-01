@@ -868,7 +868,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 |*
 \************************************************************************/
 
-IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
 {
     if (mpOnlineSpellingList!=NULL
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))

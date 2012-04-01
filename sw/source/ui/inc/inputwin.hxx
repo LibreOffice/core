@@ -79,7 +79,7 @@ friend class InputEdit;
     void CleanupUglyHackWithUndo();
 
     void DelBoxCntnt();
-    DECL_LINK( ModifyHdl, InputEdit* );
+    DECL_LINK( ModifyHdl, void* );
 
     using Window::IsActive;
 
@@ -87,7 +87,7 @@ protected:
     virtual void    Resize();
     virtual void    Click();
     DECL_LINK( MenuHdl, Menu * );
-    DECL_LINK( DropdownClickHdl, ToolBox* );
+    DECL_LINK( DropdownClickHdl, void* );
     void            ApplyFormula();
     void            CancelFormula();
 

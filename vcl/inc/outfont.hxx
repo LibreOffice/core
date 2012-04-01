@@ -228,18 +228,17 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
-    //used by 2-level font fallback
-    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
+    ImplDevFontListData*    ImplFindByTokenNames(const rtl::OUString& rTokenStr) const;
 
 protected:
     void                    InitMatchData() const;
     bool                    AreMapNamesAvailable() const { return mbMapNames; }
 
-    ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
-    ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
+    ImplDevFontListData*    ImplFindByAliasName(const rtl::OUString& rSearchName,
+        const rtl::OUString& rShortName) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes( sal_uLong nSearchType, FontWeight, FontWidth,
-                                FontFamily, FontItalic, const String& rSearchFamily ) const;
+    ImplDevFontListData*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
+                                FontItalic, const rtl::OUString& rSearchFamily) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
 private:

@@ -434,7 +434,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName().Len() )
+                    if (!pTemp->GetName().isEmpty())
                         nMemberCount++;
                 }
             }
@@ -658,10 +658,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
         break;
         case CONTENT_TYPE_REFERENCE:
         {
-            std::vector<String> aRefMarks;
+            std::vector<rtl::OUString> aRefMarks;
             nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
 
-            for(std::vector<String>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
+            for(std::vector<rtl::OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
             {
                 //Referenzen nach Alphabet sortiert
                 SwContent* pCnt = new SwContent(this, *i, 0);
@@ -766,7 +766,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName().Len() )
+                    if (!pTemp->GetName().isEmpty())
                     {
                         SwContact* pContact = (SwContact*)pTemp->GetUserCall();
                         long nYPos = 0;
@@ -1329,7 +1329,7 @@ sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
 /***************************************************************************
     Beschreibung:   Auch auf Doppelclick wird zunaechst nur aufgeklappt
 ***************************************************************************/
-IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
+IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     // ist es ein Inhaltstyp?
@@ -2227,7 +2227,7 @@ void    SwContentTree::HideTree()
 /***************************************************************************
     Beschreibung:   Kein Idle mit Focus oder waehrend des Dragging
 ***************************************************************************/
-IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 {
     // kein Update waehrend D&D
     // Viewabfrage, da der Navigator zu spaet abgeraeumt wird
@@ -3052,7 +3052,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
-                    if ( pTemp->GetName() == pCnt->GetName() )
+                    if (pTemp->GetName().equals(pCnt->GetName()))
                     {
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if( pPV )

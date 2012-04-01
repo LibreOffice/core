@@ -5,7 +5,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:dep="http://openoffice.org/extensions/description/2006">
 
-    <identifier value="UPDATED_IDENTIFIER"/>
+    <identifier value="com.sun.star.PresentationMinimizer-@PLATFORM@"/>
 
     <dependencies>
         <OpenOffice.org-minimal-version value="2.3" dep:name="OpenOffice.org 2.3"/>
@@ -13,7 +13,7 @@
 
     <version value="1.0.3"/>
 
-    <platform value="UPDATED_SUPPORTED_PLATFORM"/>
+    <platform value="@PLATFORM@"/>
 
     <publisher>
         <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>

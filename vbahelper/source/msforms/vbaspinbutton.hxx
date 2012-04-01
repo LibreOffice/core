@@ -48,7 +48,7 @@ public:
     virtual void SAL_CALL setMin( ::sal_Int32 _min ) throw (css::uno::RuntimeException);
 
     //XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif //SC_VBA_SPINBUTTON_HXX

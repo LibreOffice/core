@@ -27,11 +27,9 @@
 
 package installer::windows::feature;
 
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
-use installer::sorter;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
@@ -244,8 +242,7 @@ sub collect_modules_recursive
     {
         if ( $directparent->{$modulegid} eq $parentid )
         {
-            my %childhash = ( "gid" => "$modulegid", "Sortkey" => "$directsortkey->{$modulegid}");
-            push(@allchildren, \%childhash);
+            push @allchildren, [ $directsortkey->{$modulegid}, $modulegid ];
             $childrenexist = 1;
         }
     }
@@ -255,14 +252,13 @@ sub collect_modules_recursive
     if ( $childrenexist )
     {
         # Sort children
-        installer::sorter::sort_array_of_hashes_numerically(\@allchildren, "Sortkey");
+        @allchildren = map { $_->[1] }
+                       sort { $a->[0] <=> $b->[0] }
+                       @allchildren;
 
         # Adding children to new array
-        my $childhashref;
-        foreach $childhashref ( @allchildren )
+        foreach my $gid ( @allchildren )
         {
-            my $gid = $childhashref->{'gid'};
-
             # Saving all lines, that have this 'gid'
 
             my $unique;
@@ -412,7 +408,7 @@ sub create_feature_table
             push(@featuretable, $oneline);
 
             # collecting all feature in global feature collector (so that properties can be set in property table)
-            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+            if ( ! grep {$_ eq $feature{'feature'}} @installer::globals::featurecollector )
             {
                 push(@installer::globals::featurecollector, $feature{'feature'});
             }

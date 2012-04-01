@@ -917,7 +917,7 @@ void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
     pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
 }
 
-IMPL_LINK( SwNavigationPI, PopupModeEndHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
 {
     if ( pPopupWindow->IsVisible() )
     {
@@ -1322,14 +1322,14 @@ sal_Bool    SwNavigationPI::IsGlobalDoc() const
     return bRet;
 }
 
-IMPL_LINK( SwNavigationPI, ChangePageHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl)
 {
     EditAction(&GetPageEdit());
     GetPageEdit().GrabFocus();
     return 0;
 }
 
-IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl)
 {
     if(aPageChgTimer.IsActive())
         aPageChgTimer.Stop();

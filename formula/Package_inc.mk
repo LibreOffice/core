@@ -40,6 +40,7 @@ $(eval $(call gb_Package_add_file,formula_inc,inc/formula/funcutl.hxx,funcutl.hx
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/grammar.hxx,grammar.hxx))
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/IControlReferenceHandler.hxx,IControlReferenceHandler.hxx))
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/IFunctionDescription.hxx,IFunctionDescription.hxx))
+$(eval $(call gb_Package_add_file,formula_inc,inc/formula/omoduleclient.hxx,omoduleclient.hxx))
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/opcode.hxx,opcode.hxx))
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/tokenarray.hxx,tokenarray.hxx))
 $(eval $(call gb_Package_add_file,formula_inc,inc/formula/token.hxx,token.hxx))

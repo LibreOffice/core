@@ -128,11 +128,10 @@ SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaHeadersFooters::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaHeadersFooters") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaHeadersFooters"));
 }
 
 uno::Sequence<rtl::OUString>

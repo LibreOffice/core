@@ -64,14 +64,7 @@ public:
     void Hide (void);
 
     void Resize (const css::geometry::RealSize2D& rSize);
-    css::geometry::RealSize2D GetSize (void) const;
-
     void MoveTo (const css::geometry::RealPoint2D& rLocation);
-    css::geometry::RealPoint2D GetLocation (void) const;
-
-    void Transform (const css::geometry::AffineMatrix2D& rTransform);
-
-    void SetAlpha (const double nAlpha);
 
     void Update (void);
 
@@ -80,7 +73,6 @@ private:
     ::css::uno::Reference<css::rendering::XCustomSprite> mxSprite;
     css::geometry::RealSize2D maSize;
     css::geometry::RealPoint2D maLocation;
-    css::geometry::AffineMatrix2D maTransform;
     bool mbIsVisible;
     double mnPriority;
     double mnAlpha;

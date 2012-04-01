@@ -76,9 +76,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 
-
-SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
-
 /*************************************************************************
 |*
 |*  SwDoc::GroupSelection / SwDoc::UnGroupSelection

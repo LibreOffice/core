@@ -34,10 +34,6 @@
 #ifndef _HIODEV_H_
 #define _HIODEV_H_
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #include <stdio.h>
 #include "hwplib.h"
 /**

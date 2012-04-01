@@ -438,7 +438,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
     return pAddrSet;
 }
 
-IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
 {
     long lWidth;
     long lHeight;

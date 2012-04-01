@@ -243,7 +243,7 @@ void RenderGraphicRasterizer::InitializeRasterizer()
                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VCL_SERVICENAME_RASTERIZER_SVG ) );
             }
 
-            if( aServiceName.getLength() )
+            if( !aServiceName.isEmpty() )
             {
                 mxRasterizer.set( xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
 

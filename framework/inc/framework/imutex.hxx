@@ -63,6 +63,8 @@ class SAL_NO_VTABLE IMutex
         virtual void acquire() = 0;
         virtual void release() = 0;
 
+    protected:
+        ~IMutex() {}
 };      //  class IMutex
 
 }       //  namespace framework

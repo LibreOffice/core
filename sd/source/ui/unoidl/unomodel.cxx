@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
@@ -60,7 +59,6 @@
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
 #include <editeng/flditem.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/unolingu.hxx>
@@ -1804,9 +1802,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
-            if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+            if( rxOptions[ nProperty ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RenderDevice")) )
                 rxOptions[ nProperty ].Value >>= xRenderDevice;
-            else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+            else if ( rxOptions[ nProperty ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ExportNotesPages")) )
             {
                 rxOptions[ nProperty].Value >>= bExportNotesPages;
                 if ( bExportNotesPages )

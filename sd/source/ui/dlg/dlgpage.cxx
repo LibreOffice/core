@@ -33,7 +33,6 @@
 
 #include <svl/intitem.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/tabarea.hxx>
 #include <svx/drawitem.hxx>
 
 #include "sdresid.hxx"

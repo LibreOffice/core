@@ -29,10 +29,9 @@ $(eval $(call gb_Library_Library,rpt))
 
 $(eval $(call gb_Library_set_include,rpt,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/reportdesign/inc) \
-    -I$(realpath $(SRCDIR)/reportdesign/source/inc) \
-    -I$(realpath $(SRCDIR)/reportdesign/source/core/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/reportdesign/inc \
+    -I$(SRCDIR)/reportdesign/source/inc \
+    -I$(SRCDIR)/reportdesign/source/core/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,rpt,\

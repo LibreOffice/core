@@ -69,10 +69,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_regression_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_regression_test,\
-    -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sd_regression_test,\
@@ -92,6 +91,7 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     desktop/source/deployment/deployment \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     filter/source/svg/svgfilter \
@@ -120,10 +120,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     unoxml/source/service/unoxml \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sd_regression_test,\
-    embobj \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_regression_test,\

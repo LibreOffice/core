@@ -244,8 +244,8 @@ BackendImpl::BackendImpl(
             }
             catch (const Exception &e)
             {
-                rtl::OStringBuffer aStr( "Exception loading legacy package database: '" );
-                aStr.append( rtl::OUStringToOString( e.Message, osl_getThreadTextEncoding() ) );
+                rtl::OUStringBuffer aStr( "Exception loading legacy package database: '" );
+                aStr.append( e.Message );
                 aStr.append( "' - ignoring file, please remove it.\n" );
                 dp_misc::writeConsole( aStr.getStr() );
             }
@@ -322,8 +322,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            const OUString title( ucbContent.getPropertyValue(
-                                      StrTitle::get() ).get<OUString>() );
+            const OUString title( StrTitle::getTitle( ucbContent ) );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(".xcu") )) {
                 mediaType = OUSTR("application/"
@@ -351,8 +350,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
 
             ::ucbhelper::Content ucbContent( url, xCmdEnv );

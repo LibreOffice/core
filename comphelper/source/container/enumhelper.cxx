@@ -97,7 +97,7 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
         m_xAccess.clear();
     }
 
-    if (!aRes.hasValue())       // es gibt kein Element mehr
+    if (!aRes.hasValue())       //There are no more elements
         throw starcontainer::NoSuchElementException();
 
     return aRes;
@@ -201,7 +201,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
         }
     }
 
-    if (!aRes.hasValue())       // es gibt kein Element mehr
+    if (!aRes.hasValue())
         throw starcontainer::NoSuchElementException();
     return aRes;
 }

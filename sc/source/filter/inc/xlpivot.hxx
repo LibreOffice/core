@@ -41,7 +41,7 @@
 #include "xladdress.hxx"
 #include "dpobject.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class XclImpStream;
 class XclExpStream;
@@ -386,7 +386,7 @@ public:
     /** Sets the item to 'empty' type. */
     void                SetEmpty();
     /** Sets the item to 'text' type and adds the passed text. */
-    void                SetText( const String& rText );
+    void                SetText( const rtl::OUString& rText );
     /** Sets the item to 'double' type and adds the passed value. */
     void                SetDouble( double fValue );
     /** Sets the item to 'date/time' type and adds the passed date. */
@@ -401,7 +401,7 @@ public:
     /** Returns the current item type. */
     inline XclPCItemType GetType() const { return meType; }
     /** Returns the text representation of the item. */
-    inline const String& ConvertToText() const { return maText; }
+    inline const rtl::OUString& ConvertToText() const { return maText; }
 
     /** Returns true, if the passed iterm equals this item. */
     bool                IsEqual( const XclPCItem& rItem ) const;
@@ -409,7 +409,7 @@ public:
     /** Returns true, if the item type is 'empty'. */
     bool                IsEmpty() const;
     /** Returns pointer to text, if the item type is 'text', otherwise 0. */
-    const String*       GetText() const;
+    const rtl::OUString* GetText() const;
     /** Returns pointer to value, if the item type is 'double', otherwise 0. */
     const double*       GetDouble() const;
     /** Returns pointer to date, if the item type is 'date/time', otherwise 0. */
@@ -423,7 +423,7 @@ public:
 
 private:
     XclPCItemType       meType;         /// Type of the item.
-    String              maText;         /// Text representation of the item.
+    rtl::OUString       maText;         /// Text representation of the item.
     DateTime            maDateTime;     /// Value of a date/time item.
     union
     {
@@ -442,7 +442,7 @@ inline bool operator!=( const XclPCItem& rLeft, const XclPCItem& rRight ) { retu
 /** Contains data for a pivot cache field (SXFIELD record). */
 struct XclPCFieldInfo
 {
-    String              maName;         /// Name of the pivot cache field.
+    rtl::OUString       maName;         /// Name of the pivot cache field.
     sal_uInt16          mnFlags;        /// Various flags.
     sal_uInt16          mnGroupChild;   /// Field containing grouping info for this field.
     sal_uInt16          mnGroupBase;    /// Base field if this field contains grouping info.
@@ -541,7 +541,7 @@ struct XclPCInfo
     sal_uInt16          mnStdFields;    /// Number of standard pivot cache fields.
     sal_uInt16          mnTotalFields;  /// Number of all fields (standard, grouped, calculated).
     sal_uInt16          mnSrcType;      /// Database type.
-    String              maUserName;     /// Name of user who last modified the cache.
+    rtl::OUString       maUserName;     /// Name of user who last modified the cache.
 
     explicit            XclPCInfo();
 };
@@ -558,7 +558,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo );
 /** A name for various pivot table info structs. Includes 'use cache' state. */
 struct XclPTCachedName
 {
-    String              maName;         /// The visible name, if used.
+    rtl::OUString       maName;         /// The visible name, if used.
     bool                mbUseCache;     /// true = Use name in cache instead of maName.
 
     inline explicit     XclPTCachedName() : mbUseCache( true ) {}
@@ -577,9 +577,9 @@ struct XclPTVisNameInfo
     /** Returns true, if the name is set explicitly (maVisName.mbUseCache is false). */
     inline bool         HasVisName() const { return !maVisName.mbUseCache; }
     /** Returns the name, if set explicitly (maVisName.mbUseCache is false). */
-    const String*       GetVisName() const;
+    const rtl::OUString* GetVisName() const;
     /** Sets the visible name and enables usage of cache if name is empty. */
-    void                SetVisName( const String& rName );
+    void                SetVisName( const rtl::OUString& rName );
 };
 
 // Field item settings ========================================================
@@ -637,9 +637,7 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
     sal_uInt16          mnNumFmt;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<rtl::OUString> mpFieldTotalName;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<rtl::OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 
@@ -720,8 +718,8 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
 /** Contains data for a pivot table (SXVIEW record). */
 struct XclPTInfo
 {
-    String              maTableName;        /// The name of the pivot table.
-    String              maDataName;         /// The visible name of the data field.
+    rtl::OUString       maTableName;        /// The name of the pivot table.
+    rtl::OUString       maDataName;         /// The visible name of the data field.
     XclRange            maOutXclRange;      /// Output range.
     XclAddress          maDataXclPos;       /// First cell containing data.
     sal_uInt16          mnFirstHeadRow;     /// First heading row.
@@ -771,7 +769,7 @@ struct XclPTViewEx9Info
     sal_uInt32          mbReport;           /// 2 for report* fmts ?
     sal_uInt8           mnAutoFormat;       /// AutoFormat ID
     sal_uInt8           mnGridLayout;       /// 0 == gridlayout, 0x10 == modern
-    String              maGrandTotalName;
+    rtl::OUString       maGrandTotalName;
 
     explicit            XclPTViewEx9Info();
     void                Init( const ScDPObject& rDPObj );

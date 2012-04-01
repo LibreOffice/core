@@ -203,7 +203,7 @@ private:
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
 
-    DECL_LINK( PopupModeEndHdl, FloatingWindow* );
+    DECL_LINK( PopupModeEndHdl, void* );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo* );
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
@@ -310,7 +310,7 @@ public:
     ~ScGridWindow();
 
     // #i70788# flush and get overlay
-    ::sdr::overlay::OverlayManager* getOverlayManager();
+    rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
     void flushOverlayManager();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

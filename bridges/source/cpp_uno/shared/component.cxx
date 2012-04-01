@@ -196,7 +196,7 @@ static void SAL_CALL environmentDisposing(
         &bridges::cpp_uno::shared::g_moduleCount.modCnt );
 }
 
-#ifndef IOS
+#ifndef DISABLE_DYNLOADING
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
     return bridges::cpp_uno::shared::g_moduleCount.canUnload(
@@ -205,8 +205,8 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SA
 
 #endif
 
-#ifdef IOS
-#define uno_initEnvironment gcc3_uno_initEnvironment
+#ifdef DISABLE_DYNLOADING
+#define uno_initEnvironment CPPU_ENV_uno_initEnvironment
 #endif
 
 void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
@@ -226,6 +226,10 @@ void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
     ((uno_ExtEnvironment *)pCppEnv)->releaseInterface = releaseInterface;
     pCppEnv->environmentDisposing = environmentDisposing;
 }
+
+#ifdef DISABLE_DYNLOADING
+#define uno_ext_getMapping CPPU_ENV_uno_ext_getMapping
+#endif
 
 void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)

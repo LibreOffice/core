@@ -280,13 +280,6 @@ void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 
 DBG_NAME(SvLBoxBmp);
 
-SvLBoxBmp::SvLBoxBmp( SvLBoxEntry* pEntry, sal_uInt16 nFlags, Image aBitmap ) :
-    SvLBoxItem( pEntry, nFlags )
-{
-    DBG_CTOR(SvLBoxBmp,0);
-    SetBitmap( pEntry, aBitmap);
-}
-
 SvLBoxBmp::SvLBoxBmp() : SvLBoxItem()
 {
     DBG_CTOR(SvLBoxBmp,0);
@@ -301,12 +294,6 @@ sal_uInt16 SvLBoxBmp::IsA()
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
     return SV_ITEM_ID_LBOXBMP;
-}
-
-void SvLBoxBmp::SetBitmap( SvLBoxEntry*, Image aBitmap)
-{
-    DBG_CHKTHIS(SvLBoxBmp,0);
-    aBmp = aBitmap;
 }
 
 void SvLBoxBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
@@ -478,7 +465,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
         if( bNativeOK )
         {
             Size aContentSize( aNativeContent.GetSize() );
-            // leave a little space around the box image (looks better
+            // leave a little space around the box image (looks better)
             if( aContentSize.Height() + 2 > io_rSize.Height() )
                 io_rSize.Height() = aContentSize.Height() + 2;
         }

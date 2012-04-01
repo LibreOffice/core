@@ -60,10 +60,6 @@ public:
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
-    sal_Bool        isValidNatNum(
-                        const ::com::sun::star::lang::Locale& rLocale,
-                        sal_Int16 nNativeNumberMode ) const;
-
     ::com::sun::star::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;

@@ -48,8 +48,8 @@ private:
 
 protected:
     DECL_LINK( EditAccHdl, Accelerator * );
-    DECL_LINK( ImplGetFocusHdl, Control* );
-    DECL_LINK( ImplLoseFocusHdl, Control* );
+    DECL_LINK(ImplGetFocusHdl, void *);
+    DECL_LINK(ImplLoseFocusHdl, void *);
 
 public:
                     ExtendedEdit( Window* pParent, IDEResId nRes );

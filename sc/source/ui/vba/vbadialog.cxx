@@ -85,11 +85,10 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
     return rtl::OUString();
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaDialog::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaDialog") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaDialog"));
 }
 
 uno::Sequence< rtl::OUString >

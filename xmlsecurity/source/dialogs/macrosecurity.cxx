@@ -60,7 +60,7 @@
 using namespace ::com::sun::star;
 
 
-IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl)
 {
     mpLevelTP->ClosePage();
     mpTrustSrcTP->ClosePage();
@@ -158,7 +158,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 
 }
 
-IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
 {
     sal_uInt16 nNewLevel = 0;
     if( maVeryHighRB.IsChecked() )
@@ -193,7 +193,7 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 }
 
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 {
     if( maTrustCertLB.FirstSelected() )
     {
@@ -219,7 +219,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl)
 {
     if( maTrustCertLB.FirstSelected() )
     {
@@ -233,7 +233,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
 {
     try
     {
@@ -274,7 +274,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
 {
     sal_uInt16  nSel = maTrustFileLocLB.GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
@@ -295,13 +295,13 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl)
 {
     ImplCheckButtons();
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl)
 {
     ImplCheckButtons();
     return 0;

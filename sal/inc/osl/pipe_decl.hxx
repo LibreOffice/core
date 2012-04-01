@@ -185,7 +185,7 @@ public:
     /** Attaches the oslPipe to this object. If the object
         already was attached to an oslPipe, the old one will
         be closed and destroyed.
-        @param Pipe.
+        @param Pipe
     */
     inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
 

@@ -48,7 +48,7 @@
 #include <table.hrc>
 
 
-IMPL_LINK_INLINE_START( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
 {
     sal_uInt16 nId = (sal_uInt16)aColEdit.GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
@@ -56,7 +56,7 @@ IMPL_LINK_INLINE_START( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
     aWidthEdit.SetMax(aWidthEdit.Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwTableWidthDlg, LoseFocusHdl)
 
 
 

@@ -36,12 +36,10 @@
 #include "dpshttab.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
-#include "collect.hxx"
 #include "cell.hxx"
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
-#include "dpglobal.hxx"
 #include "rangenam.hxx"
 #include "queryentry.hxx"
 
@@ -99,7 +97,7 @@ long ScSheetDPData::GetColumnCount()
     return aCacheTable.getColSize();
 }
 
-String ScSheetDPData::getDimensionName(long nColumn)
+rtl::OUString ScSheetDPData::getDimensionName(long nColumn)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
@@ -111,11 +109,11 @@ String ScSheetDPData::getDimensionName(long nColumn)
     else if (nColumn >= aCacheTable.getColSize())
     {
         OSL_FAIL("getDimensionName: invalid dimension");
-        return String();
+        return rtl::OUString();
     }
     else
     {
-        return  aCacheTable.getFieldName((SCCOL)nColumn);
+        return aCacheTable.getFieldName(static_cast<SCCOL>(nColumn));
     }
 }
 
@@ -301,7 +299,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-const ScDPCache* ScSheetSourceDesc::CreateCache() const
+const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
 {
     if (!mpDoc)
         return NULL;
@@ -319,16 +317,11 @@ const ScDPCache* ScSheetSourceDesc::CreateCache() const
     {
         // Name-based data source.
         ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
-        return rCaches.getCache(GetRangeName(), GetSourceRange());
+        return rCaches.getCache(GetRangeName(), GetSourceRange(), pDimData);
     }
 
     ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
-    return rCaches.getCache(GetSourceRange());
-}
-
-long ScSheetSourceDesc::GetCacheId() const
-{
-    return -1;
+    return rCaches.getCache(GetSourceRange(), pDimData);
 }
 
 sal_uLong ScSheetSourceDesc::CheckSourceRange() const

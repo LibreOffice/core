@@ -74,7 +74,7 @@ class OPasswordDialog : public ModalDialog
     HelpButton      aHelpBtn;
 
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
+    DECL_LINK( OKHdl_Impl, void * );
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
@@ -112,7 +112,7 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
     aEDOldPassword.SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
 {
     if( aEDPassword.GetText() == aEDPasswordRepeat.GetText() )
         EndDialog( RET_OK );

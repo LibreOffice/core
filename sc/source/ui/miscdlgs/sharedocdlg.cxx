@@ -100,7 +100,7 @@ ScShareDocumentDlg::~ScShareDocumentDlg()
 {
 }
 
-IMPL_LINK( ScShareDocumentDlg, ToggleHandle, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle)
 {
     maFtWarning.Enable( maCbShare.IsChecked() );
 

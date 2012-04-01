@@ -47,7 +47,6 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "EApi.h"
 
@@ -190,8 +189,6 @@ namespace connectivity
             virtual ~OCommonStatement();
 
         protected:
-            void         reset () throw( ::com::sun::star::sdbc::SQLException);
-            void         clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
             void         parseSql( const ::rtl::OUString& sql, QueryData& _out_rQueryData );
             EBookQuery  *whereAnalysis( const OSQLParseNode*  parseTree );
             void         orderByAnalysis( const OSQLParseNode* _pOrderByClause, SortDescriptor& _out_rSort );

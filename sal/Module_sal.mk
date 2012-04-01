@@ -29,13 +29,15 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
-	Executable_osl_process_child \
-	$(if $(filter $(OS),IOS),,\
-		Executable_cppunittester) \
+	CustomTarget_generated \
+	$(if $(filter $(OS),IOS),, \
+		Executable_osl_process_child) \
+	Executable_cppunittester \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
-	Library_sal_textenc \
+	$(if $(filter $(OS),ANDROID),, \
+		Library_sal_textenc) \
 	$(if $(filter $(OS),WNT), \
 		Library_uwinapi) \
 	Package_inc \
@@ -53,7 +55,8 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_old_test_file \
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl_thread \
-	CppunitTest_sal_osl_process \
+	$(if $(filter $(OS),IOS),, \
+		CppunitTest_sal_osl_process) \
 	CppunitTest_sal_rtl_alloc \
 	CppunitTest_sal_rtl_cipher \
 	CppunitTest_sal_rtl_crc32 \

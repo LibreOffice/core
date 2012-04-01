@@ -30,17 +30,21 @@
 define gb_CustomTarget__command
 +$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
-	O='$(OUTDIR)' R='$(REPODIR)' S='$(SRCDIR)' W='$(WORKDIR)' gb_AWK='$(gb_AWK)' \
-	gb_SourceEnvAndRecurse_STAGE=gbuild \
+	O='$(OUTDIR)' S='$(SRCDIR)' W='$(WORKDIR)' gb_AWK='$(gb_AWK)' \
 	gb_XSLTPROC='$(gb_XSLTPROC)' GBUILDDIR='$(GBUILDDIR)' SRCDIR='$(SRCDIR)' \
 	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
 	touch $(1))
 
 endef
 
+# the .dir is for make 3.81, which ignores trailing /
+$(call gb_CustomTarget_get_workdir,%)/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CustomTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),MAK,3)
-	$(call gb_CustomTarget__command,$@,$*)
+	$(if $(NEW_STYLE),touch $@,\
+	$(call gb_CustomTarget__command,$@,$*))
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
@@ -54,8 +58,13 @@ $(SRCDIR)/$(1)/Makefile
 endef
 
 define gb_CustomTarget_CustomTarget
+$(call gb_CustomTarget_get_target,$(1)) : NEW_STYLE := $(2)
+ifeq ($(2),)
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$(1))
+else
+$$(eval $$(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
+endif
 
 endef
 

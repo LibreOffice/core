@@ -1348,7 +1348,7 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 // Handler
 //-----------------------------------------------------------------------
 
-IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
+IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
 /*
     Handler, called when color selection is changed
 */
@@ -1365,7 +1365,7 @@ IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
     if ( 0 == aLbSelect.GetSelectEntryPos() )
     {
@@ -1446,7 +1446,7 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
+IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
 /*  [Beschreibung]
 

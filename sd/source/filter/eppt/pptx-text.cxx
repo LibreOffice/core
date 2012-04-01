@@ -37,7 +37,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -46,19 +45,19 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
-#include <svl/languageoptions.hxx>
-#include <sfx2/app.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
+#include <i18nutil/scripttypedetector.hxx>
+#include <sfx2/app.hxx>
+#include <svl/languageoptions.hxx>
+#include <oox/export/drawingml.hxx> // for SubstituteBullet
 #include <unotools/fontcvt.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <comphelper/processfactory.hxx>
-#include <oox/export/drawingml.hxx> // for SubstituteBullet
 
 com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xPPTBreakIter;
-com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xScriptTypeDetector;
 
 PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                 FontCollection& rFontCollection ) :
@@ -206,7 +205,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
     }
 }
 
-PortionObj::PortionObj( PortionObj& rPortionObj )
+PortionObj::PortionObj( const PortionObj& rPortionObj )
 : PropStateValue( rPortionObj )
 {
     ImplConstruct( rPortionObj );
@@ -434,7 +433,7 @@ void PortionObj::ImplClear()
     delete[] mpText;
 }
 
-void PortionObj::ImplConstruct( PortionObj& rPortionObj )
+void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
 {
     mbLastPortion = rPortionObj.mbLastPortion;
     mnTextSize = rPortionObj.mnTextSize;
@@ -628,7 +627,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     return nRetValue;
 }
 
-PortionObj& PortionObj::operator=( PortionObj& rPortionObj )
+PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 {
     if ( this != &rPortionObj )
     {
@@ -704,7 +703,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     }
 }
 
-ParagraphObj::ParagraphObj( ParagraphObj& rObj )
+ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
 : List()
 , PropStateValue()
 , SOParagraph()
@@ -930,8 +929,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAscii("starsymbol") ||
-                            aFontDesc.Name.equalsIgnoreAsciiCaseAscii("opensymbol") )
+                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
+                            aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )
                         {
                             String sFontName = aFontDesc.Name;
                             String sNumStr = cBulletId;
@@ -1174,7 +1173,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     meBiDi = ePropState;
 }
 
-void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
+void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 {
     mnTextSize = rParagraphObj.mnTextSize;
     mnTextAdjust = rParagraphObj.mnTextAdjust;
@@ -1187,8 +1186,11 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
-        Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
+    {
+        ParagraphObj& rConstApiLossage = const_cast<ParagraphObj&>(rParagraphObj);
+        for ( const void* pPtr = rConstApiLossage.First(); pPtr; pPtr = rConstApiLossage.Next() )
+            Insert( new PortionObj( *static_cast<const PortionObj*>(pPtr) ), LIST_APPEND );
+    }
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -1221,7 +1223,7 @@ sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosi
     return mnTextSize;
 }
 
-ParagraphObj& ParagraphObj::operator=( ParagraphObj& rParagraphObj )
+ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
 {
     if ( this != &rParagraphObj )
     {
@@ -1282,9 +1284,9 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
     ImplCalculateTextPositions();
 }
 
-TextObj::TextObj( TextObj& rTextObj )
+TextObj::TextObj( const TextObj& rTextObj )
 {
-    mpImplTextObj = rTextObj.mpImplTextObj;
+    mpImplTextObj = const_cast<TextObj&>(rTextObj).mpImplTextObj;
     mpImplTextObj->mnRefCount++;
 }
 
@@ -1292,18 +1294,6 @@ TextObj::~TextObj()
 {
     if ( ! ( --mpImplTextObj->mnRefCount ) )
         delete mpImplTextObj;
-}
-
-void TextObj::Write( SvStream* pStrm )
-{
-    sal_uInt32 nSize, nPos = pStrm->Tell();
-    *pStrm << (sal_uInt32)( EPP_TextCharsAtom << 16 ) << (sal_uInt32)0;
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        ((ParagraphObj*)pPtr)->Write( pStrm );
-    nSize = pStrm->Tell() - nPos;
-    pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
-    *pStrm << (sal_uInt32)( nSize - 8 );
-    pStrm->SeekRel( nSize - 8 );
 }
 
 void TextObj::ImplCalculateTextPositions()
@@ -1348,7 +1338,6 @@ FontCollection::~FontCollection()
 {
     delete pVDev;
     xPPTBreakIter = NULL;
-    xScriptTypeDetector = NULL;
 }
 
 FontCollection::FontCollection() :
@@ -1361,21 +1350,11 @@ FontCollection::FontCollection() :
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
-
-    xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ) ) );
-    if ( xInterface.is() )
-        xScriptTypeDetector = com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector >
-            ( xInterface, com::sun::star::uno::UNO_QUERY );
 }
 
-short FontCollection::GetScriptDirection( const String& rString ) const
+short FontCollection::GetScriptDirection( const rtl::OUString& rString ) const
 {
-    short nRet = com::sun::star::i18n::ScriptDirection::NEUTRAL;
-    if ( xScriptTypeDetector.is() )
-    {
-        const rtl::OUString sT( rString );
-        nRet = xScriptTypeDetector->getScriptDirection( sT, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
-    }
+    short nRet = ScriptTypeDetector::getScriptDirection( rString, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
     return nRet;
 }
 

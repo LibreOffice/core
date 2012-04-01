@@ -109,10 +109,10 @@ private:
     Link                aNextHdlLink;
 
 #ifdef _SVX_POSTDLG_CXX
-    DECL_LINK( Stamp, Button* );
-    DECL_LINK( OKHdl, Button* );
-    DECL_LINK( PrevHdl, Button* );
-    DECL_LINK( NextHdl, Button* );
+    DECL_LINK(Stamp, void *);
+    DECL_LINK(OKHdl, void *);
+    DECL_LINK(PrevHdl, void *);
+    DECL_LINK(NextHdl, void *);
 #endif
 };
 

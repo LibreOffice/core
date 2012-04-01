@@ -76,7 +76,8 @@ namespace connectivity
         public:
             // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
-                    :   m_pRecordSet(_pRecordSet),m_vMapping(_pRes->getColumnMapping()),
+                    :   m_vMapping(_pRes->getColumnMapping()),
+                        m_pRecordSet(_pRecordSet),
                         m_nColCount(m_vMapping.size()-1)
             {
                 if(m_pRecordSet)

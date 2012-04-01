@@ -32,24 +32,6 @@
 
 namespace basegfx
 {
-    B1DRange::B1DRange( const B1IRange& rRange ) :
-        maRange()
-    {
-        if( !rRange.isEmpty() )
-        {
-            maRange = rRange.getMinimum();
-            expand(rRange.getMaximum());
-        }
-    }
-
-    B1IRange fround(const B1DRange& rRange)
-    {
-        return rRange.isEmpty() ?
-            B1IRange() :
-            B1IRange( fround( rRange.getMinimum()),
-                      fround( rRange.getMaximum()) );
-    }
-
 } // end of namespace basegfx
 
 // eof

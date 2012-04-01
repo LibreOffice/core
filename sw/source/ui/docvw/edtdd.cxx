@@ -492,7 +492,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 }
 
 
-IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, DDHandler)
 {
     bDDTimerStarted = sal_False;
     aTimer.Stop();

@@ -30,7 +30,6 @@
 
 #include <svtools/langtab.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <tools/table.hxx>
 #include <svx/checklbx.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
@@ -178,7 +177,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     SvLBoxButtonData*   pCheckButtonData;
 
         DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
-        DECL_LINK(EditHdl, PushButton*);
+        DECL_LINK(EditHdl, void *);
         SvLBoxEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
 
 
@@ -216,9 +215,15 @@ class AutoCorrEdit : public Edit
 
 // class OfaAutocorrReplacePage ------------------------------------------
 
-class DoubleStringArray;
-typedef DoubleStringArray* DoubleStringArrayPtr;
-DECLARE_TABLE(DoubleStringTable, DoubleStringArrayPtr)
+
+struct DoubleString
+{
+    String  sShort;
+    String  sLong;
+    void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
+};
+typedef std::vector<DoubleString> DoubleStringArray;
+typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
@@ -226,6 +231,8 @@ class OfaAutocorrReplacePage : public SfxTabPage
         using TabPage::DeactivatePage;
 
 private:
+
+        
         CheckBox        aTextOnlyCB;
         FixedText       aShortFT;
         AutoCorrEdit    aShortED;
@@ -274,9 +281,14 @@ public:
 
 // class OfaAutocorrExceptPage ---------------------------------------------
 
-struct StringsArrays;
-typedef StringsArrays* StringsArraysPtr;
-DECLARE_TABLE(StringsTable, StringsArraysPtr)
+struct StringsArrays
+{
+    std::vector<rtl::OUString> aAbbrevStrings;
+    std::vector<rtl::OUString> aDoubleCapsStrings;
+
+    StringsArrays() { }
+};
+typedef std::map<LanguageType, StringsArrays> StringsTable;
 
 class OfaAutocorrExceptPage : public SfxTabPage
 {
@@ -446,7 +458,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
 
     void CopyToClipboard() const;
-    DECL_LINK( DeleteHdl, PushButton* );
+    DECL_LINK(DeleteHdl, void *);
 };
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------
@@ -486,21 +498,21 @@ private:
         Enables/disables all controls in the tab page (except from the
         check box.
     */
-    DECL_LINK( CheckHdl, CheckBox* );
+    DECL_LINK(CheckHdl, void *);
 
     /** Handler for the push button
 
         Calls the displayPropertyPage function of the smart tag recognizer
         associated with the currently selected smart tag type.
     */
-    DECL_LINK( ClickHdl, PushButton* );
+    DECL_LINK(ClickHdl, void *);
 
     /** Handler for the list box
 
         Enables/disables the properties push button if selection in the
         smart tag types list box changes.
     */
-    DECL_LINK( SelectHdl, SvxCheckListBox* );
+    DECL_LINK(SelectHdl, void *);
 
 public:
 

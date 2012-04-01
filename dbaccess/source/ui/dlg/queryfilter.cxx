@@ -43,13 +43,11 @@
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "moduledbu.hxx"
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
 #include "queryfilter.hrc"
 #include "dbustrings.hrc"
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 using namespace dbaui;
 using namespace connectivity;

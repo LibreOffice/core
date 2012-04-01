@@ -83,6 +83,11 @@ LDFLAGS:=$(ARCH_FLAGS)
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS+=--without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 .IF "$(OS)$(CPU)"=="MACOSXP"
 CXXFLAGS+=-malign-natural
 .EXPORT: CXXFLAGS

@@ -1,9 +1,9 @@
 # MACOSX - start
 mkdir: %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6
 
-..\%__SRC%\misc\build\python-inst\OOoPython.framework\OOoPython %_DEST%\lib\OOoPython.framework\OOoPython
-..\%__SRC%\misc\build\python-inst\OOoPython.framework\Versions\2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\*
-..\%__SRC%\misc\build\python-inst\OOoPython.framework\Versions\2.6\include\python2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6\*
+..\%__SRC%\misc\build\@__________________________________________________OOO\OOoPython.framework\OOoPython %_DEST%\lib\OOoPython.framework\OOoPython
+..\%__SRC%\misc\build\@__________________________________________________OOO\OOoPython.framework\Versions\2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\*
+..\%__SRC%\misc\build\@__________________________________________________OOO\OOoPython.framework\Versions\2.6\include\python2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6\*
 ..\%__SRC%\misc\OOoPython.framework.zip %_DEST%\bin\OOoPython.framework.zip
 # MACOSX - end
 

@@ -740,7 +740,7 @@ public:
     bool MapName(String& rName);
     String GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
-    String GetUniqueBookmarkName(String &suggestedName);
+    String GetUniqueBookmarkName(const rtl::OUString &rSuggestedName);
 };
 
 /*

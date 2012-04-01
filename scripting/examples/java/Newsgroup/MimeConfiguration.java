@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;

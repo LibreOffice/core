@@ -29,10 +29,11 @@
 #ifndef SD_PRES_LAYOUT_DLG_HXX
 #define SD_PRES_LAYOUT_DLG_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <tools/list.hxx>
 #include <svtools/valueset.hxx>
 
 class SfxItemSet;
@@ -75,7 +76,7 @@ private:
 
     const SfxItemSet&   mrOutAttrs;
 
-    List*               mpLayoutNames;
+    boost::ptr_vector<String> maLayoutNames;
 
     String              maName;          // Layoutname oder Dateiname
     long                mnLayoutCount;  // Anzahl, der im Dokument vorhandenen MasterPages

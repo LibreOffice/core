@@ -69,7 +69,7 @@ class NeonLockStore
 {
     osl::Mutex         m_aMutex;
     ne_lock_store    * m_pNeonLockStore;
-    TickerThread     * m_pTickerThread;
+    rtl::Reference< TickerThread > m_pTickerThread;
     LockInfoMap        m_aLockInfoMap;
 
 public:

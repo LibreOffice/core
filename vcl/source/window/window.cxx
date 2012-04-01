@@ -236,7 +236,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
     // platforms
     if( pSVData->maNWFData.mbNoFocusRects )
     {
-        // try to find out wether there is a large correction
+        // try to find out whether there is a large correction
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
@@ -2488,7 +2488,7 @@ void Window::ImplPostPaint()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplHandlePaintHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
     // save paint events until resizing is done
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
@@ -2500,7 +2500,7 @@ IMPL_LINK( Window, ImplHandlePaintHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplHandleResizeTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
@@ -3756,7 +3756,7 @@ void Window::ImplGenerateMouseMove()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplGenerateMouseMoveHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
     Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
@@ -5320,23 +5320,6 @@ void Window::RemoveUserEvent( sal_uLong nUserEvent )
     }
 
     pSVEvent->mbCall = sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( Window, ImplAsyncStateChangedHdl, void*, pState )
-{
-    StateChanged( (StateChangedType)(sal_uLong)pState );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-void Window::PostStateChanged( StateChangedType nState )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    PostUserEvent( LINK( this, Window, ImplAsyncStateChangedHdl ), (void*)(sal_uLong)nState );
 }
 
 // -----------------------------------------------------------------------
@@ -8321,10 +8304,10 @@ uno::Reference< XDragSource > Window::GetDragSource()
                         aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
                         aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
-                        if( aDragSourceSN.getLength() )
+                        if( !aDragSourceSN.isEmpty() )
                             mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
 
-                        if( aDropTargetSN.getLength() )
+                        if( !aDropTargetSN.isEmpty() )
                             mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
                     }
                 }

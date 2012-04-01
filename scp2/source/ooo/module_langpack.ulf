@@ -260,10 +260,16 @@ en-US = "Northern Sotho"
 en-US = "Installs the Northern Sotho user interface"
 
 [STR_NAME_MODULE_LANGPACK_BN]
-en-US = "Bengali"
+en-US = "Bengali (Bangladesh)"
 
 [STR_DESC_MODULE_LANGPACK_BN]
-en-US = "Installs the Bengali user interface"
+en-US = "Installs the Bengali (Bangladesh) user interface"
+
+[STR_NAME_MODULE_LANGPACK_BN_IN]
+en-US = "Bengali (India)"
+
+[STR_DESC_MODULE_LANGPACK_BN]
+en-US = "Installs the Bengali (India) user interface"
 
 [STR_NAME_MODULE_LANGPACK_OR]
 en-US = "Oriya"
@@ -672,6 +678,12 @@ en-US = "Luxembourgish"
 
 [STR_DESC_MODULE_LANGPACK_LB]
 en-US = "Installs the Luxembourgish user interface"
+
+[STR_NAME_MODULE_LANGPACK_AM]
+en-US = "Amharic"
+
+[STR_DESC_MODULE_LANGPACK_AM]
+en-US = "Installs the Amharic user interface"
 
 [STR_NAME_MODULE_LANGPACK_QTZ]
 en-US = "KeyID"

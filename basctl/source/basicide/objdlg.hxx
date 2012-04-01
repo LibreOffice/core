@@ -39,18 +39,6 @@
 
 class StarBASIC;
 
-class ObjectTreeListBox : public BasicTreeListBox
-{
-private:
-
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-
-public:
-            ObjectTreeListBox( Window* pParent, const ResId& rRes );
-            ~ObjectTreeListBox();
-};
-
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
@@ -64,10 +52,10 @@ private:
     ImageList m_aImagesNormal;
 };
 
-class ObjectCatalog : public FloatingWindow
+class ObjectCatalog : public BasicDockingWindow
 {
 private:
-    ObjectTreeListBox   aMacroTreeList;
+    BasicTreeListBox   aMacroTreeList;
     ObjectCatalogToolBox_Impl aToolBox;
     FixedText           aMacroDescr;
     Link                aCancelHdl;
@@ -80,6 +68,7 @@ protected:
     virtual void        Move();
     virtual sal_Bool        Close();
     virtual void        Resize();
+    virtual void    Paint( const Rectangle& rRect );
 
 public:
     ObjectCatalog( Window * pParent );
@@ -87,7 +76,6 @@ public:
 
     void                UpdateEntries();
     void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
-
     void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
 };
 

@@ -77,12 +77,6 @@ struct TypeReader_Impl
 
 class TypeReader
 {
-/*
-    inline TypeReader(const RegistryTypeReader_Api* pApi,
-                              const sal_uInt8* buffer,
-                              sal_uInt32 bufferLen,
-                              sal_Bool copyData);
-*/
 public:
     inline TypeReader()
         : m_pImpl(NULL)

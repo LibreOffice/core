@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/ofa))
 
 $(eval $(call gb_SrsTarget_set_include,svx/ofa,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(SRCDIR)/svx/inc/ \
 ))
 

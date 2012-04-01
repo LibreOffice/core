@@ -36,28 +36,28 @@
 #include "basidesh.hrc"
 #include "iderdll.hxx"
 
-#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
 // FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
 // numbers, whereas BreakPoint supports sal_uLong?
 
-bool lcl_ParseText( const String &rText, size_t& rLineNr )
+bool lcl_ParseText(rtl::OUString const &rText, size_t& rLineNr )
 {
     // aText should look like "# n" where
     // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
     // All spaces are ignored, so there can even be spaces within the
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
-    String aText = comphelper::string::remove(rText, ' ');
-    sal_Unicode cFirst = aText.GetChar(0);
+    rtl::OUString aText(
+        rText.replaceAll(" ", rtl::OUString()));
+    sal_Unicode cFirst = aText[0];
     if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
         return false;
     if (cFirst == '#')
-        aText.Erase(0, 1);
+        aText = aText.copy(1);
     // XXX Assumes that sal_uInt16 is contained within sal_Int32:
-    sal_Int32 n = aText.ToInt32();
+    sal_Int32 n = aText.toInt32();
     if ( n <= 0 )
         return false;
     rLineNr = static_cast< size_t >(n);

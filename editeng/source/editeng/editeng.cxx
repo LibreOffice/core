@@ -503,7 +503,7 @@ sal_uInt16 EditEngine::GetScriptType( const ESelection& rSelection ) const
 LanguageType EditEngine::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
     return pNode ? pImpEditEngine->GetLanguage( EditPaM( pNode, nPos ) ) : LANGUAGE_DONTKNOW;
 }
@@ -1320,10 +1320,10 @@ EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nPara
 {
     DBG_CHKTHIS( EditEngine, 0 );
     DBG_ASSERT( nPara < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Startpara out of Range" );
-    DBG_ASSERT( nPara+nParas-1 < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Endpara out of Range" );
+    DBG_ASSERT( nParas <= pImpEditEngine->GetEditDoc().Count() - nPara, "CreateTextObject: Endpara out of Range" );
 
-    ContentNode* pStartNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
-    ContentNode* pEndNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara+nParas-1 );
+    ContentNode* pStartNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pEndNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara+nParas-1 );
     DBG_ASSERT( pStartNode, "Start-Paragraph does not exist: CreateTextObject" );
     DBG_ASSERT( pEndNode, "End-Paragraph does not exist: CreateTextObject" );
 
@@ -1344,8 +1344,8 @@ void EditEngine::RemoveParagraph( sal_uInt16 nPara )
     if( pImpEditEngine->GetEditDoc().Count() <= 1 )
         return;
 
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
-    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
     DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
     if ( pNode && pPortion )
     {
@@ -1360,7 +1360,7 @@ void EditEngine::RemoveParagraph( sal_uInt16 nPara )
 sal_uInt16 EditEngine::GetTextLen( sal_uInt16 nPara ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     DBG_ASSERT( pNode, "Paragraph not found: GetTextLen" );
     if ( pNode )
         return pNode->Len();
@@ -1535,7 +1535,7 @@ Font EditEngine::GetStandardFont( sal_uInt16 nPara )
 SvxFont EditEngine::GetStandardSvxFont( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     return pNode->GetCharAttribs().GetDefFont();
 }
 
@@ -1557,7 +1557,7 @@ void EditEngine::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList )
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatFullDoc();
 
-    ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+    const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
     if ( pParaPortion )
     {
         sal_uInt16 nEnd = 0;
@@ -1639,8 +1639,8 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                 for ( sal_uInt16 n = 0; n < nNodes; n++ )
                 {
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-                    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().GetObject( n );
-                    sal_Bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : sal_False;
+                    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
+                    bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : false;
                     if ( bSpellingChanged )
                         pNode->DestroyWrongList();
                     if ( bWrongs )
@@ -1669,13 +1669,13 @@ long EditEngine::GetFirstLineStartX( sal_uInt16 nParagraph )
     DBG_CHKTHIS( EditEngine, 0 );
 
     long nX = 0;
-    ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nParagraph );
     if ( pPPortion )
     {
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatDoc();
-        EditLine* pFirstLine = pPPortion->GetLines()[0];
+        const EditLine* pFirstLine = pPPortion->GetLines()[0];
         nX = pFirstLine->GetStartPosX();
     }
     return nX;
@@ -1695,7 +1695,7 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
     Point aPoint;
     if ( pPPortion )
@@ -1758,7 +1758,7 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
         if ( aPaM.GetNode() )
         {
-            ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
+            const ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
 
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
@@ -1803,7 +1803,7 @@ void EditEngine::QuickMarkInvalid( const ESelection& rSel )
     DBG_ASSERT( rSel.nEndPara < pImpEditEngine->GetEditDoc().Count(), "MarkInvalid: End out of Range!" );
     for ( sal_uInt16 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
-        ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+        ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
         if ( pPortion )
             pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->Len() );
     }
@@ -1832,7 +1832,7 @@ void EditEngine::QuickDelete( const ESelection& rSel )
 void EditEngine::QuickMarkToBeRepainted( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
     if ( pPortion )
         pPortion->SetMustRepaint( sal_True );
 }
@@ -1881,7 +1881,13 @@ void EditEngine::SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle )
     pImpEditEngine->SetStyleSheet( nPara, pStyle );
 }
 
-SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara ) const
+const SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetStyleSheet( nPara );
+}
+
+SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetStyleSheet( nPara );
@@ -2040,15 +2046,15 @@ sal_Bool EditEngine::ShouldCreateBigTextObject() const
 sal_uInt16 EditEngine::GetFieldCount( sal_uInt16 nPara ) const
 {
     sal_uInt16 nFields = 0;
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     if ( pNode )
     {
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
+        for (; it != itEnd; ++it)
         {
-            EditCharAttrib* pAttr = rAttrs[nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
-                nFields++;
+            if (it->Which() == EE_FEATURE_FIELD)
+                ++nFields;
         }
     }
 
@@ -2057,24 +2063,26 @@ sal_uInt16 EditEngine::GetFieldCount( sal_uInt16 nPara ) const
 
 EFieldInfo EditEngine::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
 {
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     if ( pNode )
     {
         sal_uInt16 nCurrentField = 0;
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
+        for (; it != itEnd; ++it)
         {
-            EditCharAttrib* pAttr = rAttrs[nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            const EditCharAttrib& rAttr = *it;
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )
                 {
-                    EFieldInfo aInfo( *(const SvxFieldItem*)pAttr->GetItem(), nPara, pAttr->GetStart() );
-                    aInfo.aCurrentText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                    const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
+                    EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
+                    aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     return aInfo;
                 }
 
-                nCurrentField++;
+                ++nCurrentField;
             }
         }
     }
@@ -2102,18 +2110,18 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
     for ( sal_uInt16 nPara = 0; nPara < nParas; nPara++  )
     {
         ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            const EditCharAttrib* pAttr = rAttrs[--nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                const SvxFieldData* pFldData = ((const SvxFieldItem*)pAttr->GetItem())->GetField();
+                const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
                 if ( pFldData && ( !aType || ( pFldData->IsA( aType ) ) ) )
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "no field item..." );
-                    EditSelection aSel( EditPaM( pNode, pAttr->GetStart() ), EditPaM( pNode, pAttr->GetEnd() ) );
-                    String aFieldText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                    DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
+                    EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
+                    String aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );
                 }
             }
@@ -2168,7 +2176,7 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 {
     Rectangle aBounds;
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( rPos.nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( rPos.nPara );
 
     // Check against index, not paragraph
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )

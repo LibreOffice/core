@@ -68,10 +68,7 @@
 #include <com/sun/star/beans/PropertyValues.hdl>
 #include <com/sun/star/lang/Locale.hpp>
 #include <linguistic/lngprops.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/lingucfg.hxx>
-#include <sal/macros.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -241,7 +238,7 @@ void EditView::SetSelection( const ESelection& rESel )
     PIMPEE->CheckIdleFormatter();
 
     // Selection may not start/end at an invisible paragraph:
-    ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
+    const ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
     if ( !pPortion->IsVisible() )
     {
         pPortion = PIMPEE->GetPrevVisPortion( pPortion );
@@ -362,23 +359,10 @@ const Rectangle& EditView::GetOutputArea() const
     return pImpEditView->GetOutputArea();
 }
 
-void EditView::SetPointer( const Pointer& rPointer )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->SetPointer( rPointer );
-}
-
 const Pointer& EditView::GetPointer() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetPointer();
-}
-
-void EditView::SetCursor( const Cursor& rCursor )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    delete pImpEditView->pCursor;
-    pImpEditView->pCursor = new Cursor( rCursor );
 }
 
 Cursor* EditView::GetCursor() const
@@ -629,12 +613,6 @@ Point EditView::GetWindowPosTopLeft( sal_uInt16 nParagraph )
     return pImpEditView->GetWindowPos( aDocPos );
 }
 
-EESelectionMode EditView::GetSelectionMode() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    return pImpEditView->GetSelectionMode();
-}
-
 void EditView::SetSelectionMode( EESelectionMode eMode )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -749,7 +727,7 @@ void EditView::ForceUpdate()
     PIMPEE->SetUpdateMode( sal_True, this, sal_True );
 }
 
-SfxStyleSheet* EditView::GetStyleSheet() const
+SfxStyleSheet* EditView::GetStyleSheet()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -769,6 +747,11 @@ SfxStyleSheet* EditView::GetStyleSheet() const
         pStyle = pTmpStyle;
     }
     return pStyle;
+}
+
+const SfxStyleSheet* EditView::GetStyleSheet() const
+{
+    return const_cast< EditView* >( this )->GetStyleSheet();
 }
 
 sal_Bool EditView::IsInsertMode() const
@@ -1244,16 +1227,16 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
            ( aSel.Max().GetIndex() == aSel.Min().GetIndex()+1 ) ) )
     {
         EditPaM aPaM = aSel.Min();
-        const CharAttribArray& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
+        const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
         sal_uInt16 nXPos = aPaM.GetIndex();
-        for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+        for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            EditCharAttrib* pAttr = rAttrs[--nAttr];
-            if ( pAttr->GetStart() == nXPos )
-                if ( pAttr->Which() == EE_FEATURE_FIELD )
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
+            if (rAttr.GetStart() == nXPos)
+                if (rAttr.Which() == EE_FEATURE_FIELD)
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "No FeldItem..." );
-                    return (const SvxFieldItem*)pAttr->GetItem();
+                    DBG_ASSERT(rAttr.GetItem()->ISA( SvxFieldItem ), "No FeldItem...");
+                    return static_cast<const SvxFieldItem*>(rAttr.GetItem());
                 }
         }
     }

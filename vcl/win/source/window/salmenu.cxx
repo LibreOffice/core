@@ -202,7 +202,7 @@ void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
         if( nPos == MENU_APPEND )
         {
             nPos = ::GetMenuItemCount( mhMenu );
-            if( nPos == -1 )
+            if( nPos == static_cast<unsigned>( -1 ) )
                 return;
         }
 
@@ -299,7 +299,7 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
 void WinSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
-    if( -1 != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
+    if( static_cast<unsigned>( -1 ) != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
         ImplDrawMenuBar( this );
 }
 

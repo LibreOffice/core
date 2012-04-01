@@ -32,6 +32,7 @@
 
 #include "attributeoutputbase.hxx"
 #include "rtfexport.hxx"
+#include "rtfstringbuffer.hxx"
 
 #include <rtl/strbuf.hxx>
 
@@ -43,6 +44,7 @@ class SwFlyFrmFmt;
 /// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
 {
+    friend class RtfStringBufferValue;
 public:
     /// Export the state of RTL/CJK.
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript );
@@ -412,7 +414,7 @@ protected:
 private:
 
     /// Output graphic fly frames.
-    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode );
+    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode );
     void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
     void FlyFrameOLEData( SwOLENode& rOLENode );
 
@@ -446,8 +448,8 @@ private:
      * This is needed because the call order is: run text, run properties, paragraph properties.
      * What we need is the opposite.
      */
-    rtl::OStringBuffer m_aRun;
-    rtl::OStringBuffer m_aRunText;
+    RtfStringBuffer m_aRun;
+    RtfStringBuffer m_aRunText;
     /*
      * This is written after runs.
      */
@@ -533,6 +535,12 @@ private:
      * If we had a field result in the URL.
      */
     bool m_bHadFieldResult;
+
+    /// If we ended a table row without starting a new one.
+    bool m_bTableRowEnded;
+
+    /// Number of cells from the table definition, by depth.
+    std::map<sal_uInt32,sal_uInt32> m_aCells;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 
@@ -561,6 +569,11 @@ public:
 
     /// Font pitch.
     void FontPitchType( FontPitch ePitch ) const;
+
+    /// Writes binary data as a hex dump.
+    static rtl::OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
+    static rtl::OString WriteHex(sal_Int32 nNum);
+    static rtl::OString WriteHex(rtl::OString sString);
 };
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_

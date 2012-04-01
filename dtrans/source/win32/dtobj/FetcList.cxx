@@ -120,7 +120,7 @@ sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
 
 sal_Bool CFormatEtcContainer::hasElements( ) const
 {
-    return ( m_FormatMap.size( ) > 0 );
+    return !m_FormatMap.empty();
 }
 
 //------------------------------------------------------------------------

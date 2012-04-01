@@ -87,7 +87,6 @@
 #include <editeng/outlobj.hxx>
 #include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -179,7 +178,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbAddExtLeading = sal_False;
     mnHandoutPageCount = 0;
 
-    mnCharCompressType = officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get(comphelper::getProcessComponentContext());
+    mnCharCompressType =
+        officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
+        get();
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
@@ -1232,7 +1233,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not lose decimal places
@@ -1270,7 +1271,8 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_
         nKomma = nNumDigits;
     }
 
-    rStr = UniString::CreateFromInt32(static_cast<sal_Int32>(fLocalValue + 0.5));
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(static_cast<sal_Int32>(fLocalValue + 0.5));
 
     if(nKomma < 0)
     {
@@ -1278,40 +1280,42 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_
         sal_Int32 nAnz(-nKomma);
 
         for(sal_Int32 i=0; i<nAnz; i++)
-            rStr += sal_Unicode('0');
+            aBuf.append(sal_Unicode('0'));
 
         nKomma = 0;
     }
 
     // the second condition needs to be <= since inside this loop
     // also the leading zero is inserted.
-    if(nKomma > 0 && rStr.Len() <= nKomma)
+    if (nKomma > 0 && aBuf.getLength() <= nKomma)
     {
         // if necessary, add zeros before the decimal point
-        sal_Int32 nAnz(nKomma - rStr.Len());
+        sal_Int32 nAnz = nKomma - aBuf.getLength();
 
         if(nAnz >= 0 && rLoc.isNumLeadingZero())
             nAnz++;
 
         for(sal_Int32 i=0; i<nAnz; i++)
-            rStr.Insert(sal_Unicode('0'), 0);
+            aBuf.insert(0, sal_Unicode('0'));
     }
 
     sal_Unicode cDec( rLoc.getNumDecimalSep().GetChar(0) );
 
     // insert KommaChar (decimal point character)
-    sal_Int32 nVorKomma(rStr.Len() - nKomma);
+    sal_Int32 nVorKomma = aBuf.getLength() - nKomma;
 
     if(nKomma > 0)
-        rStr.Insert(cDec, (xub_StrLen) nVorKomma);
+        aBuf.insert(nVorKomma, cDec);
 
     if(!rLoc.isNumTrailingZeros())
     {
-        while(rStr.Len() && rStr.GetChar(rStr.Len() - 1) == sal_Unicode('0'))
-            rStr.Erase(rStr.Len() - 1);
+        // Remove all trailing zeros.
+        while (aBuf.getLength() && aBuf[aBuf.getLength()-1] == sal_Unicode('0'))
+            aBuf.remove(aBuf.getLength()-1, 1);
 
-        if(rStr.Len() && rStr.GetChar(rStr.Len() - 1) == cDec)
-            rStr.Erase(rStr.Len() - 1);
+        // Remove decimal if it's the last character.
+        if (aBuf.getLength() && aBuf[aBuf.getLength()-1] == cDec)
+            aBuf.remove(aBuf.getLength()-1, 1);
     }
 
     // if necessary, add separators before every third digit
@@ -1325,53 +1329,55 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_
 
             while(i > 0)
             {
-                rStr.Insert(cTho, (xub_StrLen)i);
+                aBuf.insert(i, cTho);
                 i -= 3;
             }
         }
     }
 
-    if(!rStr.Len())
-    {
-        rStr = String();
-        rStr += sal_Unicode('0');
-    }
+    if (!aBuf.getLength())
+        aBuf.append(sal_Unicode('0'));
 
     if(bNegative)
     {
-        rStr.Insert(sal_Unicode('-'), 0);
+        aBuf.insert(0, sal_Unicode('-'));
     }
 
     if(!bNoUnitChars)
-        rStr += aUIUnitStr;
+        aBuf.append(aUIUnitStr);
+
+    rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeWinkStr(long nWink, XubString& rStr, bool bNoDegChar) const
+void SdrModel::TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar) const
 {
-    sal_Bool bNeg(nWink < 0);
+    bool bNeg = nWink < 0;
 
     if(bNeg)
         nWink = -nWink;
 
-    rStr = UniString::CreateFromInt32(nWink);
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(static_cast<sal_Int32>(nWink));
 
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
-    xub_StrLen nAnz(2);
+    sal_Int32 nAnz = 2;
 
     if(rLoc.isNumLeadingZero())
         nAnz++;
 
-    while(rStr.Len() < nAnz)
-        rStr.Insert(sal_Unicode('0'), 0);
+    while(aBuf.getLength() < nAnz)
+        aBuf.insert(0, sal_Unicode('0'));
 
-    rStr.Insert(rLoc.getNumDecimalSep().GetChar(0), rStr.Len() - 2);
+    aBuf.insert(aBuf.getLength()-2, rLoc.getNumDecimalSep().GetChar(0));
 
     if(bNeg)
-        rStr.Insert(sal_Unicode('-'), 0);
+        aBuf.insert(0, sal_Unicode('-'));
 
     if(!bNoDegChar)
-        rStr += DEGREE_CHAR;
+        aBuf.append(DEGREE_CHAR);
+
+    rStr = aBuf.makeStringAndClear();
 }
 
 void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPercentChar) const
@@ -1701,7 +1707,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     bMPgNumsDirty=sal_True;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
-                    OSL_FAIL("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
+                    OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
                 }
             }
         }

@@ -259,7 +259,7 @@ public:
 
 private:
     unsigned char*  mpRawBytes;
-    int             mnByteCount;
+    unsigned        mnByteCount;
 };
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
@@ -277,7 +277,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
     mpRawBytes = new unsigned char[ mnByteCount ];
 
     // get raw data in chunks small enough for GetFontData()
-    int nRawDataOfs = 0;
+    unsigned nRawDataOfs = 0;
     DWORD nMaxChunkSize = 0x100000;
     for(;;)
     {
@@ -544,6 +544,20 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     return bHasMatches;
 }
 
+namespace
+{
+    //used by 2-level font fallback
+    ImplDevFontListData* findDevFontListByLocale(const ImplDevFontList &rDevFontList,
+        const com::sun::star::lang::Locale& rLocale )
+    {
+        // get the default font for a specified locale
+        const utl::DefaultFontConfiguration& rDefaults =
+            utl::DefaultFontConfiguration::get();
+        const rtl::OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
+        return rDevFontList.ImplFindByTokenNames(aDefault);
+    }
+}
+
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and prefered?
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, rtl::OUString& rMissingChars ) const
@@ -571,7 +585,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
     const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
-    /*const*/ ImplDevFontListData* pDevFont = pDevFontList->ImplFindByLocale( aLocale );
+    /*const*/ ImplDevFontListData* pDevFont = findDevFontListByLocale(*pDevFontList, aLocale);
     if( pDevFont )
     {
         const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
@@ -585,7 +599,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     // are the missing characters symbols?
     pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
                     rFontSelData.meWeight, rFontSelData.meWidthType,
-                    rFontSelData.meFamily, rFontSelData.meItalic, rFontSelData.maSearchName );
+                    rFontSelData.meItalic, rFontSelData.maSearchName );
     if( pDevFont )
     {
         const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
@@ -1011,45 +1025,6 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
-{
-    String aFontName( ImplSalGetUniString( rLogFont.lfFaceName ) );
-    if ( aFontName.Len() )
-    {
-        rFont.SetName( aFontName );
-        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
-
-        long nFontHeight = rLogFont.lfHeight;
-        if ( nFontHeight < 0 )
-            nFontHeight = -nFontHeight;
-        long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-        if( !nDPIY )
-            nDPIY = 600;
-        nFontHeight *= 72;
-        nFontHeight += nDPIY/2;
-        nFontHeight /= nDPIY;
-        rFont.SetSize( Size( 0, nFontHeight ) );
-        rFont.SetOrientation( (short)rLogFont.lfEscapement );
-        if ( rLogFont.lfItalic )
-            rFont.SetItalic( ITALIC_NORMAL );
-        else
-            rFont.SetItalic( ITALIC_NONE );
-        if ( rLogFont.lfUnderline )
-            rFont.SetUnderline( UNDERLINE_SINGLE );
-        else
-            rFont.SetUnderline( UNDERLINE_NONE );
-        if ( rLogFont.lfStrikeOut )
-            rFont.SetStrikeout( STRIKEOUT_SINGLE );
-        else
-            rFont.SetStrikeout( STRIKEOUT_NONE );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
     XubString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );
@@ -1267,8 +1242,6 @@ sal_IntPtr ImplWinFontData::GetFontId() const
 // -----------------------------------------------------------------------
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 // -----------------------------------------------------------------------
@@ -1502,28 +1475,6 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 {
     *((bool*)(void*)lParam) = true;
     return 0;
-}
-
-// -----------------------------------------------------------------------
-
-bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
-{
-    // Test, if Font available
-    LOGFONTW aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-
-    UINT nNameLen = rName.Len();
-    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-    memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    aLogFont.lfFaceName[nNameLen] = 0;
-
-    bool bAvailable = false;
-    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
-                         (LPARAM)(void*)&bAvailable, 0 );
-
-    return bAvailable;
 }
 
 // -----------------------------------------------------------------------
@@ -1824,138 +1775,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
-}
-
-// -----------------------------------------------------------------------
-
-int CALLBACK SalEnumCharSetsProcExA( const ENUMLOGFONTEXA* pLogFont,
-                                     const NEWTEXTMETRICEXA* /*pMetric*/,
-                                     DWORD /*nFontType*/, LPARAM lParam )
-{
-    WinSalGraphics* pData = (WinSalGraphics*)lParam;
-    // Charset already in the list?
-    for ( BYTE i = 0; i < pData->mnFontCharSetCount; i++ )
-    {
-        if ( pData->mpFontCharSets[i] == pLogFont->elfLogFont.lfCharSet )
-            return 1;
-    }
-    pData->mpFontCharSets[pData->mnFontCharSetCount] = pLogFont->elfLogFont.lfCharSet;
-    pData->mnFontCharSetCount++;
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplGetAllFontCharSets( WinSalGraphics* pData )
-{
-    if ( !pData->mpFontCharSets )
-        pData->mpFontCharSets = new BYTE[256];
-
-    LOGFONTA aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-    GetTextFaceA( pData->mhDC, sizeof( aLogFont.lfFaceName ), aLogFont.lfFaceName );
-    EnumFontFamiliesExA( pData->mhDC, &aLogFont, (FONTENUMPROCA)SalEnumCharSetsProcExA,
-                         (LPARAM)(void*)pData, 0 );
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplAddKerningPairs( WinSalGraphics* pData )
-{
-    sal_uLong nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
-    if ( !nPairs )
-        return;
-
-    CHARSETINFO aInfo;
-    if ( !TranslateCharsetInfo( (DWORD*)(sal_uLong)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
-        return;
-
-    if ( !pData->mpFontKernPairs )
-        pData->mpFontKernPairs = new KERNINGPAIR[nPairs];
-    else
-    {
-        KERNINGPAIR* pOldPairs = pData->mpFontKernPairs;
-        pData->mpFontKernPairs = new KERNINGPAIR[nPairs+pData->mnFontKernPairCount];
-        memcpy( pData->mpFontKernPairs, pOldPairs,
-                pData->mnFontKernPairCount*sizeof( KERNINGPAIR ) );
-        delete[] pOldPairs;
-    }
-
-    UINT            nCP = aInfo.ciACP;
-    sal_uLong           nOldPairs = pData->mnFontKernPairCount;
-    KERNINGPAIR*    pTempPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
-    nPairs = ::GetKerningPairsA( pData->mhDC, nPairs, pTempPair );
-    for ( sal_uLong i = 0; i < nPairs; i++ )
-    {
-        unsigned char   aBuf[2];
-        wchar_t         nChar;
-        int             nLen;
-        sal_Bool            bAdd = TRUE;
-
-        // None-ASCII?, then we must convert the char
-        if ( (pTempPair->wFirst > 125) || (pTempPair->wFirst == 92) )
-        {
-            if ( pTempPair->wFirst < 256 )
-            {
-                aBuf[0] = (unsigned char)pTempPair->wFirst;
-                nLen = 1;
-            }
-            else
-            {
-                aBuf[0] = (unsigned char)(pTempPair->wFirst >> 8);
-                aBuf[1] = (unsigned char)(pTempPair->wFirst & 0xFF);
-                nLen = 2;
-            }
-            if ( MultiByteToWideChar( nCP, MB_PRECOMPOSED | MB_USEGLYPHCHARS,
-                                      (const char*)aBuf, nLen, &nChar, 1 ) )
-                pTempPair->wFirst = nChar;
-            else
-                bAdd = FALSE;
-        }
-        if ( (pTempPair->wSecond > 125) || (pTempPair->wSecond == 92) )
-        {
-            if ( pTempPair->wSecond < 256 )
-            {
-                aBuf[0] = (unsigned char)pTempPair->wSecond;
-                nLen = 1;
-            }
-            else
-            {
-                aBuf[0] = (unsigned char)(pTempPair->wSecond >> 8);
-                aBuf[1] = (unsigned char)(pTempPair->wSecond & 0xFF);
-                nLen = 2;
-            }
-            if ( MultiByteToWideChar( nCP, MB_PRECOMPOSED | MB_USEGLYPHCHARS,
-                                      (const char*)aBuf, nLen, &nChar, 1 ) )
-                pTempPair->wSecond = nChar;
-            else
-                bAdd = FALSE;
-        }
-
-        // TODO: get rid of linear search!
-        KERNINGPAIR* pTempPair2 = pData->mpFontKernPairs;
-        for ( sal_uLong j = 0; j < nOldPairs; j++ )
-        {
-            if ( (pTempPair2->wFirst == pTempPair->wFirst) &&
-                 (pTempPair2->wSecond == pTempPair->wSecond) )
-            {
-                bAdd = FALSE;
-                break;
-            }
-            pTempPair2++;
-        }
-
-        if ( bAdd )
-        {
-            KERNINGPAIR* pDestPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
-            if ( pDestPair != pTempPair )
-                memcpy( pDestPair, pTempPair, sizeof( KERNINGPAIR ) );
-            pData->mnFontKernPairCount++;
-        }
-
-        pTempPair++;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -2291,8 +2110,8 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     ::DeleteFileA( aResourceName );
 
     // retrieve font family name from byte offset 0x4F6
-    int i = 0x4F6;
-    int nNameOfs = i;
+    sal_uInt64 i = 0x4F6;
+    sal_uInt64 nNameOfs = i;
     while( (i < nBytesRead) && (aBuffer[i++] != 0) );
     // skip full name
     while( (i < nBytesRead) && (aBuffer[i++] != 0) );
@@ -2844,7 +2663,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     }
 
     // get raw font file data
-    const RawFontData xRawFontData( mhDC, NULL );
+    const RawFontData xRawFontData( mhDC, 0 );
     if( !xRawFontData.get() )
         return FALSE;
 

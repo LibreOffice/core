@@ -962,7 +962,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
             long nDiv=aSiz.Width();
             if (Abs(nXDiff)<=2*nXKorr) {
                 if (nMul>nDiv) nDiv+=(nMul-nDiv)/2; // but only add half of what we calculated,
-                else nMul+=(nDiv-nMul)/2;           // because the EE calculates wrongly later on
+                else nMul+=(nDiv-nMul)/2;           // because the EditEngine calculates wrongly later on
             }
             nX=nX*nMul/nDiv;
             if (bNoStretching) nY=nX;

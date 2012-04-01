@@ -1,0 +1,3 @@
+lcms	lcms2	: soltools ZLIB:zlib NULL
+lcms	lcms2	usr1	-	all	lcms_mkout NULL
+lcms	lcms2	nmake	-	all	lcms_libwpd NULL

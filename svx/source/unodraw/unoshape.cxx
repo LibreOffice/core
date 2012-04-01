@@ -257,7 +257,7 @@ SvxShape::~SvxShape() throw()
         mpImpl->mpMaster->dispose();
 
     if ( mpObj.is() )
-        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(NULL);
 
     if( HasSdrObjectOwnership() && mpObj.is() )
     {
@@ -385,7 +385,7 @@ void SvxShape::impl_initFromSdrObject()
 
     osl_incrementInterlockedCount( &m_refCount );
     {
-        mpObj->setUnoShape( *this, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(*this);
     }
     osl_decrementInterlockedCount( &m_refCount );
 
@@ -1382,7 +1382,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
             }
         }
 
-        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+        mpObj->setUnoShape(NULL);
 
         if ( bFreeSdrObject )
         {
@@ -2162,7 +2162,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_FILLFLOATTRANSPARENCE:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                    if( ( pItem == NULL ) )
+                    if ( pItem == NULL )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
                 break;
@@ -3994,12 +3994,6 @@ void SvxShape::updateShapeKind()
 /***********************************************************************
 * class SvxShapeText                                                   *
 ***********************************************************************/
-SvxShapeText::SvxShapeText() throw ()
-: SvxShape(NULL, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
-{
-}
-
-//----------------------------------------------------------------------
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {

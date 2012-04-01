@@ -606,7 +606,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
 {
     // Write the start bookmarks
     for ( std::vector< OString >::const_iterator it = m_rMarksStart.begin(), end = m_rMarksStart.end();
-          it < end; ++it )
+          it != end; ++it )
     {
         const OString& rName = *it;
 
@@ -622,7 +622,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
 
     // export the end bookmarks
     for ( std::vector< OString >::const_iterator it = m_rMarksEnd.begin(), end = m_rMarksEnd.end();
-          it < end; ++it )
+          it != end; ++it )
     {
         const OString& rName = *it;
 
@@ -649,11 +649,11 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         rtl::OUString sName, sHelp, sToolTip, sSelected;
 
         FieldMarkParamsHelper params( rFieldmark );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY) ), vListEntries );
+        params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
         sName = params.getName();
         sal_Int32 nSelectedIndex = 0;
 
-        if ( params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT) ), nSelectedIndex ) )
+        if ( params.extractParam( ODF_FORMDROPDOWN_RESULT, nSelectedIndex ) )
         {
             if (nSelectedIndex < vListEntries.getLength() )
                 sSelected = vListEntries[ nSelectedIndex ];
@@ -667,7 +667,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         bool bChecked = false;
 
         FieldMarkParamsHelper params( rFieldmark );
-        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_NAME ) ), sName );
+        params.extractParam( ODF_FORMCHECKBOX_NAME, sName );
 
         const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )
@@ -1102,7 +1102,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
                 rNode.GetLang( nPos ) ) );
     OUString sLang( aLocale.Language );
     if ( !aLocale.Country.isEmpty() )
-        sLang += OUString(RTL_CONSTASCII_USTRINGPARAM( "-" )) + OUString( aLocale.Country );
+        sLang += OUString( "-" ) + OUString( aLocale.Country );
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
@@ -2229,7 +2229,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
     {
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
         if( xPropSet.is() )
-            xChartDoc.set( xPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")) ), uno::UNO_QUERY );
+            xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
     }
 
     if( xChartDoc.is() )
@@ -2254,7 +2254,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
 
         // should get the unique id
         sal_Int32 nID = 1;
-        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Object 1"));
+        OUString sName("Object 1");
         uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
         if( xNamed.is() )
             sName = xNamed->getName();
@@ -3455,14 +3455,14 @@ void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFie
 void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         std::vector< OUString >& rEnds )
 {
-    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rMarksStart.push_back( rName );
     }
     rStarts.clear();
 
-    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rMarksEnd.push_back( rName );
@@ -4007,6 +4007,10 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 OString::valueOf( (sal_Int32)rULSpace.GetUpper() ) );
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
                 OString::valueOf( (sal_Int32)rULSpace.GetLower() ) );
+        if (rULSpace.GetContext())
+            m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
+        else
+            m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSNS( XML_w, XML_val ), "false", FSEND );
     }
 }
 

@@ -31,16 +31,12 @@
 
 #include <boost/shared_ptr.hpp>
 
-#ifndef INCLUDED_FUNCTIONAL
 #include <functional>
-#define INCLUDED_FUNCTIONAL
-#endif
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 
 #include <list>
-#include <functional>
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>

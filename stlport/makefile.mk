@@ -49,7 +49,8 @@ all:
     PATCH_FILES=\
                 STLport-4.5.patch \
                 STLport-4.5-gcc43_warnings.patch \
-                STLport-4.5-cxx0x.patch
+                STLport-4.5-cxx0x.patch \
+                STLport-4.5-clang_locale_h.patch
 .ELIF "$(GUI)"=="WNT"
     TARFILE_NAME=STLport-4.5-0119
     TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
@@ -82,12 +83,19 @@ all:
         # stl/_epilog.h.)
 .ENDIF
 
+EXTRPATH=URELIB
+
 ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
     src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
 
 
 CONFIGURE_ACTION=none
 CONFIGURE_FLAGS=
+
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 
 BUILD_DIR=src
 

@@ -88,7 +88,7 @@ public:
     /** Test whether the parameters contain a key.
 
         @param
-        A (case insensitive) key.
+        rKey A (case insensitive) key.
 
         @return
         True if the parameters contain a matching key/value pair.
@@ -98,7 +98,7 @@ public:
     /** Return the parameter value for a key.
 
         @param
-        A (case insensitive) key.
+        rKey A (case insensitive) key.
 
         @return
         The (case sensitive) value associated with the given key, or an empty

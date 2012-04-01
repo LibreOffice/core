@@ -60,7 +60,11 @@ namespace apitest {
 XSpreadsheets2::XSpreadsheets2():
     aSrcSheetName(RTL_CONSTASCII_USTRINGPARAM("SheetToCopy")),
     aSrcFileName(RTL_CONSTASCII_USTRINGPARAM("rangenamessrc.ods")),
-    aDestFileBase(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods"))
+    aDestFileBase(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods"))
+{
+}
+
+XSpreadsheets2::~XSpreadsheets2()
 {
 }
 
@@ -92,7 +96,7 @@ void XSpreadsheets2::testImportString()
     uno::Reference< text::XTextRange > xDestTextRange(xDestCell, UNO_QUERY_THROW);
     rtl::OUString aDestString = xDestTextRange->getString();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong string imported", aDestString.equals(aSrcString));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string imported", aDestString, aSrcString);
 }
 
 void XSpreadsheets2::testImportValue()
@@ -108,7 +112,7 @@ void XSpreadsheets2::testImportValue()
     uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(1,0);
     sal_Int32 aDestValue = xDestCell->getValue();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong value imported", aSrcValue == aDestValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value imported", aSrcValue, aDestValue);
 }
 
 void XSpreadsheets2::testImportFormulaBasicMath()
@@ -126,7 +130,7 @@ void XSpreadsheets2::testImportFormulaBasicMath()
 
     // potential problem later: formulas might be adjusted
     // add some tests that the formulas are correctly adjusted
-    CPPUNIT_ASSERT_MESSAGE("Wrong formula imported", aDestFormula.equals(aSrcFormula));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula imported", aDestFormula, aSrcFormula);
 }
 
 void XSpreadsheets2::testImportFormulaWithNamedRange()
@@ -142,7 +146,7 @@ void XSpreadsheets2::testImportFormulaWithNamedRange()
     uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(3,0);
     rtl::OUString aDestFormula = xDestCell->getFormula();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong Namedrange formula imported", aDestFormula.equals(aSrcFormula));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong Namedrange formula imported", aDestFormula, aSrcFormula);
 }
 
 void XSpreadsheets2::testImportOverExistingNamedRange()
@@ -166,7 +170,7 @@ void XSpreadsheets2::testImportOverExistingNamedRange()
     rtl::OUString aExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$1"));
 
     std::cout << "testImportSheet : initial1 aNrDestContent " << aNrDestContent << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Wrong address for initial1", aNrDestContent.equals(aExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for initial1", aNrDestContent, aExpectedContent);
 
 }
 
@@ -191,7 +195,7 @@ void XSpreadsheets2::testImportNamedRangeDefinedInSource()
 
     std::cout << "testImportSheet : InSheetRangeName content " << aNewInSheetNrDestContent << std::endl;
     std::cout << "testImportSheet : InSheetRangeName expected " << aNewInSheetExpectedContent << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Wrong address for InSheetRangeName", aNewInSheetNrDestContent.equals(aNewInSheetExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for InSheetRangeName", aNewInSheetNrDestContent, aNewInSheetExpectedContent);
 }
 
 void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
@@ -213,7 +217,7 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
     rtl::OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
     rtl::OUString aRedefinedInSheetExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$2"));
     std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetNrDestContent.equals(aRedefinedInSheetExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetNrDestContent, aRedefinedInSheetExpectedContent);
 }
 
 void XSpreadsheets2::testImportNewNamedRange()
@@ -267,7 +271,7 @@ void XSpreadsheets2::testImportCellStyle()
     rtl::OUString aDestStyleName;
     CPPUNIT_ASSERT(xDestCellPropSet->getPropertyValue(aCellProperty) >>= aDestStyleName);
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong imported Cell Style", aDestStyleName.equals(aSrcStyleName));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong imported Cell Style", aDestStyleName, aSrcStyleName);
 
     uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier (xDestDoc, UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xFamiliesNameAccess (xFamiliesSupplier->getStyleFamilies(), UNO_QUERY_THROW);
@@ -326,7 +330,7 @@ void XSpreadsheets2::importSheetToCopy()
         uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
         sal_Int32 nDestPos = 0;
         sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, aSrcSheetName, nDestPos);
-        CPPUNIT_ASSERT_MESSAGE("Wrong sheet index", nDestPosEffective == nDestPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
     }
     else
     {

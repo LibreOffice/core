@@ -54,6 +54,7 @@ namespace writerfilter {
         {
             public:
                 RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
+                virtual ~RTFSprm() {}
                 virtual sal_uInt32 getId() const;
                 virtual Value::Pointer_t getValue();
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();

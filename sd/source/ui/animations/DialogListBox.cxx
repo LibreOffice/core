@@ -100,7 +100,7 @@ void DialogListBox::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( DialogListBox, ScrollBarHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(DialogListBox, ScrollBarHdl)
 {
     ImplResizeChild();
     return 1;

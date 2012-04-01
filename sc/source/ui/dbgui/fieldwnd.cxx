@@ -41,6 +41,7 @@
 #include "scresid.hxx"
 #include "pivot.hrc"
 
+using namespace com::sun::star;
 using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Reference;
@@ -48,6 +49,20 @@ using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::accessibility::XAccessible;
 
 const size_t INVALID_INDEX = static_cast<size_t>(-1);
+
+ScDPFieldControlBase::FieldName::FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount) :
+    maText(rText), mbFits(bFits), mnDupCount(nDupCount) {}
+
+ScDPFieldControlBase::FieldName::FieldName(const FieldName& r) :
+    maText(r.maText), mbFits(r.mbFits), mnDupCount(r.mnDupCount) {}
+
+rtl::OUString ScDPFieldControlBase::FieldName::getDisplayedText() const
+{
+    rtl::OUStringBuffer aBuf(maText);
+    if (mnDupCount > 0)
+        aBuf.append(static_cast<sal_Int32>(mnDupCount+1));
+    return aBuf.makeStringAndClear();
+}
 
 ScDPFieldControlBase::ScrollBar::ScrollBar(Window* pParent, WinBits nStyle) :
     ::ScrollBar(pParent, nStyle),
@@ -110,12 +125,13 @@ bool ScDPFieldControlBase::IsExistingIndex( size_t nIndex ) const
     return nIndex < maFieldNames.size();
 }
 
-void ScDPFieldControlBase::AddField( const String& rText, size_t nNewIndex )
+void ScDPFieldControlBase::AddField( const rtl::OUString& rText, size_t nNewIndex )
 {
     OSL_ENSURE( nNewIndex == maFieldNames.size(), "ScDPFieldWindow::AddField - invalid index" );
     if( IsValidIndex( nNewIndex ) )
     {
-        maFieldNames.push_back( FieldName( rText, true ) );
+        sal_uInt8 nDupCount = GetNextDupCount(rText);
+        maFieldNames.push_back(FieldName(rText, true, nDupCount));
         if (pAccessible)
         {
             com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -127,7 +143,8 @@ void ScDPFieldControlBase::AddField( const String& rText, size_t nNewIndex )
     }
 }
 
-bool ScDPFieldControlBase::AddField( const String& rText, const Point& rPos, size_t& rnIndex )
+bool ScDPFieldControlBase::AddField(
+    const rtl::OUString& rText, const Point& rPos, size_t& rnIndex, sal_uInt8& rnDupCount)
 {
     size_t nNewIndex = 0;
     if( GetFieldIndex( rPos, nNewIndex ) )
@@ -135,11 +152,13 @@ bool ScDPFieldControlBase::AddField( const String& rText, const Point& rPos, siz
         if( nNewIndex > maFieldNames.size() )
             nNewIndex = maFieldNames.size();
 
-        maFieldNames.insert( maFieldNames.begin() + nNewIndex, FieldName( rText, true ) );
+        sal_uInt8 nDupCount = GetNextDupCount(rText);
+        maFieldNames.insert(maFieldNames.begin() + nNewIndex, FieldName(rText, true, nDupCount));
         mnFieldSelected = nNewIndex;
         ResetScrollBar();
         Redraw();
         rnIndex = nNewIndex;
+        rnDupCount = nDupCount;
 
         if (pAccessible)
         {
@@ -156,12 +175,61 @@ bool ScDPFieldControlBase::AddField( const String& rText, const Point& rPos, siz
     return false;
 }
 
-bool ScDPFieldControlBase::AppendField(const String& rText, size_t& rnIndex)
+bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex)
+{
+    if (nCurPos >= maFieldNames.size())
+        // out-of-bound
+        return false;
+
+    size_t nNewIndex = 0;
+    if (!GetFieldIndex(rPos, nNewIndex))
+        return false;
+
+    if (nNewIndex == nCurPos)
+        // Nothing to do.
+        return true;
+
+    FieldName aName = maFieldNames[nCurPos];
+    if (nNewIndex >= maFieldNames.size())
+    {
+        // Move to the back.
+        maFieldNames.erase(maFieldNames.begin()+nCurPos);
+        maFieldNames.push_back(aName);
+        rnIndex = maFieldNames.size()-1;
+    }
+    else
+    {
+        maFieldNames.erase(maFieldNames.begin()+nCurPos);
+        size_t nTmp = nNewIndex; // we need to keep the original index for accessible.
+        if (nNewIndex > nCurPos)
+            --nTmp;
+
+        maFieldNames.insert(maFieldNames.begin()+nTmp, aName);
+        rnIndex = nTmp;
+    }
+
+    ResetScrollBar();
+    Redraw();
+
+    if (pAccessible)
+    {
+        uno::Reference<accessibility::XAccessible> xTempAcc = xAccessible;
+        if (xTempAcc.is())
+            pAccessible->MoveField(nCurPos, nNewIndex);
+        else
+            pAccessible = NULL;
+    }
+
+    return true;
+}
+
+bool ScDPFieldControlBase::AppendField(const rtl::OUString& rText, size_t& rnIndex)
 {
     if (!IsValidIndex(maFieldNames.size()))
         return false;
 
-    maFieldNames.push_back(FieldName(rText, true));
+    sal_uInt8 nDupCount = GetNextDupCount(rText);
+    maFieldNames.push_back(FieldName(rText, true, nDupCount));
     mnFieldSelected = maFieldNames.size() - 1;
     ResetScrollBar();
     Redraw();
@@ -213,11 +281,11 @@ void ScDPFieldControlBase::ClearFields()
     maFieldNames.clear();
 }
 
-void ScDPFieldControlBase::SetFieldText( const String& rText, size_t nIndex )
+void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount)
 {
     if( IsExistingIndex( nIndex ) )
     {
-        maFieldNames[ nIndex ] = FieldName( rText, true );
+        maFieldNames[nIndex] = FieldName(rText, true, nDupCount);
         Redraw();
 
         if (pAccessible)
@@ -231,11 +299,11 @@ void ScDPFieldControlBase::SetFieldText( const String& rText, size_t nIndex )
     }
 }
 
-const String& ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
+rtl::OUString ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
 {
     if( IsExistingIndex( nIndex ) )
-        return maFieldNames[ nIndex ].first;
-    return EMPTY_STRING;
+        return maFieldNames[nIndex].maText;
+    return rtl::OUString();
 }
 
 void ScDPFieldControlBase::GetExistingIndex( const Point& rPos, size_t& rnIndex )
@@ -252,11 +320,6 @@ void ScDPFieldControlBase::GetExistingIndex( const Point& rPos, size_t& rnIndex 
 size_t ScDPFieldControlBase::GetSelectedField() const
 {
     return mnFieldSelected;
-}
-
-void ScDPFieldControlBase::SetSelectedField(size_t nSelected)
-{
-    mnFieldSelected = nSelected;
 }
 
 vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNames()
@@ -525,7 +588,8 @@ void ScDPFieldControlBase::DrawField(
     // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
     aVirDev.EnableRTL( IsRTLEnabled() );
 
-    String aText = rText.first;
+    rtl::OUString aText = rText.getDisplayedText();
+
     Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
     long    nHeight      = aDevSize.Height();
@@ -533,16 +597,18 @@ void ScDPFieldControlBase::DrawField(
     long    nLabelHeight = rDev.GetTextHeight();
 
     // #i31600# if text is too long, cut and add ellipsis
-    rText.second = nLabelWidth + 6 <= nWidth;
-    if( !rText.second )
+    rText.mbFits = nLabelWidth + 6 <= nWidth;
+    if (!rText.mbFits)
     {
-        xub_StrLen nMinLen = 0;
-        xub_StrLen nMaxLen = aText.Len();
+        sal_Int32 nMinLen = 0;
+        sal_Int32 nMaxLen = aText.getLength();
         bool bFits = false;
         do
         {
-            xub_StrLen nCurrLen = (nMinLen + nMaxLen) / 2;
-            aText = String( rText.first, 0, nCurrLen ).AppendAscii( "..." );
+            sal_Int32 nCurrLen = (nMinLen + nMaxLen) / 2;
+            rtl::OUStringBuffer aBuf(rText.maText.copy(0, nCurrLen));
+            aBuf.appendAscii("...");
+            aText = aBuf.makeStringAndClear();
             nLabelWidth = rDev.GetTextWidth( aText );
             bFits = nLabelWidth + 6 <= nWidth;
             (bFits ? nMinLen : nMaxLen) = nCurrLen;
@@ -594,7 +660,7 @@ void ScDPFieldControlBase::DrawInvertSelection()
     Size aFldSize = GetFieldSize();
     long nFldWidth = aFldSize.Width();
     long nSelWidth = std::min<long>(
-        GetTextWidth(maFieldNames[mnFieldSelected].first) + 4, nFldWidth - 6);
+        GetTextWidth(maFieldNames[mnFieldSelected].getDisplayedText()) + 4, nFldWidth - 6);
 
     Point aPos = GetFieldPosition(nPos);
     aPos += Point((nFldWidth - nSelWidth) / 2, 3);
@@ -612,14 +678,14 @@ Size ScDPFieldControlBase::GetStdFieldBtnSize() const
 bool ScDPFieldControlBase::IsShortenedText( size_t nIndex ) const
 {
     const FieldNames& rFields = GetFieldNames();
-    return (nIndex < rFields.size()) && !rFields[nIndex].second;
+    return (nIndex < rFields.size()) && !rFields[nIndex].mbFits;
 }
 
 void ScDPFieldControlBase::MoveField( size_t nDestIndex )
 {
     if (nDestIndex != mnFieldSelected)
     {
-        swap(maFieldNames[nDestIndex], maFieldNames[mnFieldSelected]);
+        std::swap(maFieldNames[nDestIndex], maFieldNames[mnFieldSelected]);
         mnFieldSelected = nDestIndex;
     }
 }
@@ -674,6 +740,22 @@ void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     SetSelection( nNewIndex );
+}
+
+sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const rtl::OUString& rFieldText) const
+{
+    sal_uInt8 nMax = 0;
+    FieldNames::const_iterator it = maFieldNames.begin(), itEnd = maFieldNames.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->maText != rFieldText)
+            continue;
+
+        sal_uInt8 nNextUp = it->mnDupCount + 1;
+        if (nMax < nNextUp)
+            nMax = nNextUp;
+    }
+    return nMax;
 }
 
 void ScDPFieldControlBase::SelectNext()
@@ -937,13 +1019,13 @@ void ScDPHorFieldControl::HandleScroll()
     Redraw();
 }
 
-IMPL_LINK(ScDPHorFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPHorFieldControl, ScrollHdl)
 {
     HandleScroll();
     return 0;
 }
 
-IMPL_LINK(ScDPHorFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
 {
     HandleScroll();
     return 0;
@@ -1213,13 +1295,13 @@ void ScDPRowFieldControl::HandleScroll()
     Redraw();
 }
 
-IMPL_LINK(ScDPRowFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPRowFieldControl, ScrollHdl)
 {
     HandleScroll();
     return 0;
 }
 
-IMPL_LINK(ScDPRowFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
 {
     HandleScroll();
     return 0;

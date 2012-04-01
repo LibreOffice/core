@@ -49,7 +49,6 @@
 #include <svx/svdoole2.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/fmshell.hxx>
-#include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/dialogs.hrc>

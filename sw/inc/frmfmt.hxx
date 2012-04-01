@@ -44,6 +44,7 @@ class SwRect;
 class SwContact;
 class SdrObject;
 
+/// Style of a layout element.
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;

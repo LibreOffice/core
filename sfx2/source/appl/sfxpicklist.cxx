@@ -164,6 +164,52 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
+void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
+{
+    SfxMedium *pMed = pDocSh->GetMedium();
+    if( !pMed )
+        return;
+
+    // Unnamed Documents and embedded-Documents not in Picklist
+    if ( !pDocSh->HasName() ||
+            SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
+        return;
+
+    // Help not in History
+    INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
+    if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+        return;
+
+    // only add r/w document into picklist
+    if ( pDocSh->IsReadOnly() || !pMed->IsUpdatePickList() )
+        return;
+
+    // add no document that forbids this (for example Message-Body)
+    SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
+    if ( pPicklistItem && !pPicklistItem->GetValue() )
+        return;
+
+    // ignore hidden documents
+    if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
+        return;
+
+    ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+    ::rtl::OUString  aFilter;
+    const SfxFilter* pFilter = pMed->GetOrigFilter();
+    if ( pFilter )
+        aFilter = pFilter->GetFilterName();
+
+    // add to svtool history options
+    SvtHistoryOptions().AppendItem( ePICKLIST,
+            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+            aFilter,
+            aTitle,
+            SfxStringEncode( aURL.GetPass() ) );
+
+    if ( aURL.GetProtocol() == INET_PROT_FILE )
+        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : ::rtl::OUString() );
+}
+
 SfxPickList& SfxPickList::Get()
 {
     static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
@@ -375,55 +421,30 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
             break;
 
+            case SFX_EVENT_SAVEDOCDONE:
+            case SFX_EVENT_SAVEASDOCDONE:
+            case SFX_EVENT_SAVETODOCDONE:
             case SFX_EVENT_CLOSEDOC:
             {
-                SfxMedium *pMed = pDocSh->GetMedium();
-                if( !pMed )
+                AddDocumentToPickList(pDocSh);
+            }
+            break;
+
+            case SFX_EVENT_SAVEASDOC:
+            {
+                SfxMedium *pMedium = pDocSh->GetMedium();
+                if (!pMedium)
                     return;
 
-                // Unnamed Documents and embedded-Documents not im Pickliste
-                if ( !pDocSh->HasName() ||
-                     SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
-                    return;
-
-                // Help not in History
-                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
-                if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
-                    return;
-
-                // only add r/w document into picklist
-                if ( pDocSh->IsReadOnly() || !pMed->IsUpdatePickList() )
-                    return;
-
-                // add no document that forbids this (for example Message-Body)
-                SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
-                if (
-                    (pPicklistItem && !pPicklistItem->GetValue()) ||
-                    (!(pDocSh->Get_Impl()->bWaitingForPicklist) )
-                   )
-                    return;
-
-                // ignore hidden documents
-                if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
-                    return;
-
-                ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                ::rtl::OUString  aFilter;
-                const SfxFilter* pFilter = pMed->GetOrigFilter();
-                if ( pFilter )
-                    aFilter = pFilter->GetFilterName();
-
-                // add to svtool history options
-                SvtHistoryOptions().AppendItem( ePICKLIST,
-                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                        aFilter,
-                        aTitle,
-                        SfxStringEncode( aURL.GetPass() ) );
-
-                pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
-
-                if ( aURL.GetProtocol() == INET_PROT_FILE )
-                    Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : ::rtl::OUString() );
+                // We're starting a "Save As". Add the current document (if it's
+                // not a "new" document) to the "Recent Documents" list before we
+                // switch to the new path.
+                // If the current document is new, path will be empty.
+                rtl::OUString path = pMedium->GetOrigURL();
+                if (!path.isEmpty())
+                {
+                    AddDocumentToPickList(pDocSh);
+                }
             }
             break;
         }

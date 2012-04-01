@@ -55,19 +55,6 @@ namespace comphelper
         ::std::auto_ptr< ResourceBundle_Impl >  m_pImpl;
 
     public:
-        /** constructs a resource bundle
-            @param  _context
-                the component context to operate in
-            @param  _bundleBaseName
-                the base name of the resource file which should be accessed (*without* the SUPD!)
-            @raises ::com::sun::star::lang::NullPointerException
-                if the given component context is <NULL/>
-        */
-        OfficeResourceBundle(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _context,
-            const ::rtl::OUString& _bundleBaseName
-        );
-
         /** constructs a resource bundle with the resource bundle given as 8-bit ASCII name
 
             This is a convenience constructor only, it does nothing different than the constructor

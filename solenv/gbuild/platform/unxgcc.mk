@@ -32,6 +32,9 @@ gb_Executable_EXT:=
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
+gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
+
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 ifneq ($(origin AR),default)
@@ -61,7 +64,21 @@ gb_CXXFLAGS := \
 	-Wshadow \
 	-Wsign-promo \
 	-Woverloaded-virtual \
-	-Wno-non-virtual-dtor \
+
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+# Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
+# "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
+# GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
+# silence warnings about a protected, non-virtual dtor in a class with virtual
+# members and friends:
+ifeq ($(gb_GccLess460),1)
+gb_CXXFLAGS += -Wno-non-virtual-dtor
+else
+gb_CXXFLAGS += -Wnon-virtual-dtor
+endif
+else
+gb_CXXFLAGS += -Wnon-virtual-dtor
+endif
 
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_COMPILERDEFS += \
@@ -81,15 +98,18 @@ endif
 
 endif
 
+ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
+gb_COMPILERDEFS += \
+        -DHAVE_SFINAE_ANONYMOUS_BROKEN \
+
+endif
+
 # enable debug STL
 ifeq ($(gb_PRODUCT),$(false))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 
 endif
-
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
-gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
 
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
 #junk, so only strict-alias on >= 4.6.0
@@ -103,7 +123,7 @@ endif
 ifeq ($(HAVE_CXX0X),TRUE)
 #Currently, as well as for its own merits, c++11/c++0x mode allows use to use
 #a template for SAL_N_ELEMENTS to detect at compiler time its misuse
-gb_CXXFLAGS += -std=c++0x
+gb_CXXFLAGS += -std=gnu++0x
 
 #We have so many std::auto_ptr uses that we need to be able to disable
 #warnings for those so that -Werror continues to be useful, seeing as moving
@@ -161,7 +181,15 @@ gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
+# clang does not know -ggdb2
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+GGDB2=-ggdb2
+else
+GGDB2=-g2
+endif
+
+gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline
+gb_DEBUG_CXXFLAGS := -fno-default-inline
 
 gb_COMPILERNOOPTFLAGS := -O0
 
@@ -200,12 +228,12 @@ gb_LinkTarget__RPATHS := \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
 	NONE:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += -ggdb2
-gb_LinkTarget_CFLAGS += -ggdb2
+gb_LinkTarget_CXXFLAGS += $(GGDB2)
+gb_LinkTarget_CFLAGS += $(GGDB2)
 endif
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
@@ -393,7 +421,7 @@ endef
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
-printf ". $(OUTDIR)/installation/opt/program/ooenv\\n" > $${OFFICESCRIPT} && \
+printf 'if [ -e $(OUTDIR)/installation/opt/program/ooenv ]; then . $(OUTDIR)/installation/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
 printf "gdb --tui $(OUTDIR)/installation/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(OUTDIR)/installation/\"" >> $${OFFICESCRIPT} && \
 printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \

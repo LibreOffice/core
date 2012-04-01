@@ -324,31 +324,34 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
 {
     Type eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
-    sal_uInt16 nIndex;
-    String aUnoName;
-    String aFuncName( ScGlobal::pCharClass->uppercase( pToken->GetExternal()));
-    if ( ScGlobal::GetFuncCollection()->SearchFunc( aFuncName, nIndex) )
+    rtl::OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {
-        FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(
-                nIndex);
-        if ( nParameter >= pFuncData->GetParamCount() )
-            eRet = Bounds;
-        else
+        const FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
+        if (pFuncData)
         {
-            switch ( pFuncData->GetParamType( nParameter) )
+            if ( nParameter >= pFuncData->GetParamCount() )
+                eRet = Bounds;
+            else
             {
-                case PTR_DOUBLE:
-                case PTR_STRING:
-                    eRet = Value;
-                break;
-                default:
-                    eRet = Reference;
-                    // also array types are created using an area reference
+                switch ( pFuncData->GetParamType( nParameter) )
+                {
+                    case PTR_DOUBLE:
+                    case PTR_STRING:
+                        eRet = Value;
+                    break;
+                    default:
+                        eRet = Reference;
+                        // also array types are created using an area reference
+                }
             }
+            return eRet;
         }
     }
-    else if ( (aUnoName = ScGlobal::GetAddInCollection()->FindFunction(
-                    aFuncName, false)).Len() )
+
+    rtl::OUString aUnoName =
+        ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false);
+
+    if (!aUnoName.isEmpty())
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =

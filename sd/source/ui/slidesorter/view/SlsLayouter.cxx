@@ -34,14 +34,6 @@
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-namespace {
-    sal_Int32 RoundToInt (const double nValue)
-    {
-        return sal_Int32(::rtl::math::round(nValue));
-    }
-}
-
-
 namespace sd { namespace slidesorter { namespace view {
 
 class Layouter::Implementation

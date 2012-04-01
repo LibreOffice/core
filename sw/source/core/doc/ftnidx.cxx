@@ -192,10 +192,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
             if( nSectNo )
             {
-                if( rFtn.IsEndNote() )
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-                else
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
             }
         }
     }
@@ -207,8 +204,7 @@ void SwFtnIdxs::UpdateAllFtn()
     if( !Count() )
         return;
 
-    // besorge erstmal das Nodes-Array ueber den StartIndex der
-    // ersten Fussnote
+    // Get the NodesArray via the StartIndex of the first Footnote
     SwDoc* pDoc = (SwDoc*) (*this)[ 0 ]->GetTxtNode().GetDoc();
     SwTxtFtn* pTxtFtn;
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
@@ -218,26 +214,25 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();//swmod 080305
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-    //Fuer normale Fussnoten werden Chapter- und Dokumentweise Nummerierung
-    //getrennt behandelt. Fuer Endnoten gibt es nur die Dokumentweise
-    //Nummerierung.
+    // For normal Footnotes per-chapter and per-document numbering are treated separately.
+    // For Endnotes we only have document-wise numbering.
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nNo = 1,         // Nummer fuer die Fussnoten
-               nFtnIdx = 0;     // Index in das FtnIdx-Array
+        sal_uInt16 nNo = 1,     // Number for the Footnotes
+               nFtnIdx = 0;     // Index into theFtnIdx array
         for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
         {
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
-                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
+                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
                 for( ; nFtnIdx < Count(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
                     if( pTxtFtn->GetTxtNode().GetIndex() >= nCapStt )
                         break;
 
-                    // Endnoten nur Dokumentweise
+                    // Endnotes are per-document only
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
                     if( !rFtn.IsEndNote() && !rFtn.GetNumStr().Len() &&
                         !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
@@ -245,14 +240,14 @@ void SwFtnIdxs::UpdateAllFtn()
                                             &rFtn.GetNumStr() );
                 }
                 if( nFtnIdx >= Count() )
-                    break;          // ok alles geupdatet
+                    break;          // ok, everything is updated
                 nNo = 1;
             }
         }
 
         for( nNo = 1; nFtnIdx < Count(); ++nFtnIdx )
         {
-            //Endnoten nur Dokumentweise
+            // Endnotes are per-document
             pTxtFtn = (*this)[ nFtnIdx ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
             if( !rFtn.IsEndNote() && !rFtn.GetNumStr().Len() &&
@@ -263,8 +258,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
     }
 
-    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
-    // durchlaufen.
+    // We use sal_Bool here, so that we also iterate through the Endnotes with a chapter setting.
     const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     sal_uInt16 nFtnNo = 0, nEndNo = 0;
     for( sal_uInt16 nPos = 0; nPos < Count(); ++nPos )
@@ -281,10 +275,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
             if( nSectNo )
             {
-                if( rFtn.IsEndNote() )
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-                else
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
             }
         }
     }

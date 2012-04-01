@@ -68,16 +68,16 @@ ScAddInAsync::ScAddInAsync() :
 
 
 
-ScAddInAsync::ScAddInAsync( sal_uLong nHandleP, sal_uInt16 nIndex, ScDocument* pDoc ) :
+ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* pDoc) :
     SvtBroadcaster(),
     pStr( NULL ),
+    mpFuncData(pFuncData),
     nHandle( nHandleP ),
+    meType(pFuncData->GetAsyncType()),
     bValid( false )
 {
     pDocs = new ScAddInDocs( 1 );
     pDocs->Insert( pDoc );
-    pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
-    eType = pFuncData->GetAsyncType();
     theAddInAsyncTbl.Insert( this );
 }
 
@@ -89,8 +89,8 @@ ScAddInAsync::~ScAddInAsync()
     if ( nHandle )
     {
         // im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
-        pFuncData->Unadvice( (double)nHandle );
-        if ( eType == PTR_STRING && pStr )      // mit Typvergleich wg. Union!
+        mpFuncData->Unadvice( (double)nHandle );
+        if ( meType == PTR_STRING && pStr )      // mit Typvergleich wg. Union!
             delete pStr;
         delete pDocs;
     }
@@ -124,7 +124,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
         delete p;
         return ;
     }
-    switch ( p->eType )
+    switch ( p->meType )
     {
         case PTR_DOUBLE :
             p->nVal = *(double*)pData;

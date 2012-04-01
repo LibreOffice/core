@@ -182,7 +182,7 @@ void FileControl::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FileControl, ButtonHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(FileControl, ButtonHdl)
 {
     ImplBrowseFile( );
 
@@ -206,15 +206,6 @@ void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     GetEdit().Draw( pDev, rPos, rSize, nFlags );
     if ( GetStyle() & WB_BORDER )
         GetEdit().SetStyle( nOldEditStyle );
-}
-
-// -----------------------------------------------------------------------
-
-void FileControl::SetButtonText( const XubString& rStr )
-{
-    mnInternalFlags &= ~FILECTRL_ORIGINALBUTTONTEXT;
-    maButtonText = rStr;
-    Resize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

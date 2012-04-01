@@ -47,7 +47,7 @@ public:
     InsertErrorBarsDialog( Window* pParent, const SfxItemSet& rMyAttrs,
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-                           ErrorBarResources::tErrorBarType eType = ErrorBarResources::ERROR_BAR_Y );
+                           ErrorBarResources::tErrorBarType eType );
     virtual ~InsertErrorBarsDialog();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );

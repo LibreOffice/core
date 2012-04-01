@@ -49,6 +49,9 @@ namespace tdoc_ucp {
     public:
         virtual void notifyDocumentOpened( const rtl::OUString & rDocId ) = 0;
         virtual void notifyDocumentClosed( const rtl::OUString & rDocId ) = 0;
+
+    protected:
+        ~OfficeDocumentsEventListener() {}
     };
 
     //=======================================================================

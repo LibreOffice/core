@@ -283,7 +283,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
             // start mail client
             // Because there is no notofocation about success - we use case of
             // no detected exception as SUCCESS - FAILED otherwhise.
-            xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+            xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
             bSuccess = sal_True;
         }
         catch (const css::lang::IllegalArgumentException&)

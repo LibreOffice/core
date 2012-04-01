@@ -172,7 +172,7 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<rtl::OUStr
     }
 }
 
-IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG )
+IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
 {
     DBG_ASSERT( m_pFileDlg, "DocumentInserter::DialogClosedHdl(): no file dialog" );
 
@@ -192,7 +192,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD == nDlgType
             || TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
 
-        // check, wether or not we have to display a password box
+        // check, whether or not we have to display a password box
         if ( bHasPassword && m_pFileDlg->IsPasswordEnabled() )
         {
             try

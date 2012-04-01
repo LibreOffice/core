@@ -51,6 +51,7 @@ public:
     virtual void SAL_CALL disposing();
 
     void AddField(sal_Int32 nNewIndex);
+    void MoveField(sal_Int32 nOldIndex, sal_Int32 nNewIndex);
     void RemoveField(sal_Int32 nOldIndex);
     void FieldFocusChange(sal_Int32 nOldIndex, sal_Int32 nNewIndex);
     void FieldNameChange(sal_Int32 nIndex);

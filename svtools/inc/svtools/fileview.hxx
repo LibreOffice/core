@@ -215,9 +215,9 @@ protected:
 struct SvtContentEntry
 {
     sal_Bool    mbIsFolder;
-    UniString   maURL;
+    rtl::OUString maURL;
 
-    SvtContentEntry( const UniString& rURL, sal_Bool bIsFolder ) :
+    SvtContentEntry( const rtl::OUString& rURL, sal_Bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}
 };
 

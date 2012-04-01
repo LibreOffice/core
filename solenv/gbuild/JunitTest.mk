@@ -52,7 +52,6 @@ $(call gb_JunitTest_get_target,%) :
             org.junit.runner.JUnitCore \
             $(CLASSES) > $@.log 2>&1 || \
 		(grep -v -e 'at org.junit.' \
-			-e 'at com.sun.star.lib.uno.' \
 			-e 'at java.lang.reflect.' \
 			-e 'at sun.reflect.' $@.log \
 		&& echo "see full error log at $@.log" \
@@ -69,11 +68,12 @@ $(call gb_JunitTest_get_target,%) :
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $(if $(value XCLASSPATH),$(value XCLASSPATH)$(gb_CLASSPATHSEP))$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_JunitTest_platform,$(1))
 
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
+$(call gb_JavaClassSet_add_system_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(OOO_JUNIT_JAR))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))
 $(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
 endef
@@ -104,19 +104,33 @@ $(foreach sourcefile,$(2),$(call gb_JunitTest_add_sourcefile,$(1),$(sourcefile))
 
 endef
 
-define gb_JunitTest_set_classpath
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $(2)
-
-endef
-
 define gb_JunitTest_add_jar
+$(call gb_JavaClassSet_add_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(2)
 $(call gb_JunitTest_get_target,$(1)) : $(2)
+$(2) :| $(gb_Helper_PHONY)
 
 endef
 
 define gb_JunitTest_add_jars
 $(foreach jar,$(2),$(call gb_JunitTest_add_jar,$(1),$(jar)))
+
+endef
+
+# see gb_JavaClassSet_add_jar_classset
+define gb_JunitTest_add_jar_classset
+$(call gb_JavaClassSet_add_jar_classset,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2)))
+
+endef
+
+define gb_JunitTest_add_package_dependency
+$(call gb_JavaClassSet_add_package_dependency,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_JunitTest_add_package_dependencies
+$(call gb_JavaClassSet_add_package_dependencies,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 
 endef
 
@@ -136,9 +150,10 @@ gb_JunitTest_add_classes :=
 gb_JunitTest_add_class :=
 gb_JunitTest_add_sourcefile :=
 gb_JunitTest_add_sourcefiles :=
-gb_JunitTest_set_classpath :=
 gb_JunitTest_add_jar :=
 gb_JunitTest_add_jars :=
+gb_JunitTest_add_package_dependency :=
+gb_JunitTest_add_package_dependencies :=
 
 endif # OOO_JUNIT_JAR
 # vim: set noet sw=4:

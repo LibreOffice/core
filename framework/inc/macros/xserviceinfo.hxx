@@ -207,7 +207,8 @@ ________________________________________________________________________________
 //  public
 //  declaration of XServiceInfo and helper functions
 //*****************************************************************************************************************
-#define DECLARE_XSERVICEINFO                                                                                                                                                                                                            \
+
+#define DECLARE_XSERVICEINFO_NOFACTORY                                                                                                                                                                                                  \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
     virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );   \
     virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );   \
@@ -215,11 +216,14 @@ ________________________________________________________________________________
     /* Helper for XServiceInfo */                                                                                                                                                                                                       \
     static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );                                       \
     static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );                                       \
+    /* Helper for initialization of service by using own reference! */                                                                                                                                                                  \
+    virtual void                                                   SAL_CALL impl_initService                   (                                                                               );                                       \
+
+#define DECLARE_XSERVICEINFO                                                                                                                                                                                                            \
+    DECLARE_XSERVICEINFO_NOFACTORY \
     /* Helper for registry */                                                                                                                                                                                                           \
     static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );          \
     static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );                                       \
-    /* Helper for initialization of service by using own reference! */                                                                                                                                                                  \
-    virtual void                                                   SAL_CALL impl_initService                   (                                                                               );                                       \
 
 //*****************************************************************************************************************
 //  public

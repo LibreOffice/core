@@ -180,8 +180,8 @@ sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
     sal_Int32 nAngle = nStdAngle;
     switch( static_cast< SvxCellOrientation >( GetValue() ) )
     {
-        case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;
-        case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;
+        case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;break;
+        case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;break;
         default: ; //prevent warning
     }
     return nAngle;

@@ -85,11 +85,10 @@ SwVbaVariable::getIndex() throw ( css::uno::RuntimeException )
     return 0;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaVariable::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaVariable") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaVariable"));
 }
 
 uno::Sequence< rtl::OUString >

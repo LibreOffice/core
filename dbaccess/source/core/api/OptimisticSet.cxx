@@ -44,7 +44,6 @@
 #include "dbastrings.hrc"
 #include "apitools.hxx"
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
@@ -59,7 +58,6 @@
 #include "querycomposer.hxx"
 #include "composertools.hxx"
 #include <tools/debug.hxx>
-#include <string.h>
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;
@@ -450,16 +448,6 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUS
         m_aKeyMap.erase(nBookmark);
         m_bDeleted = sal_True;
     }
-}
-
-::rtl::OUString OptimisticSet::getComposedTableName(const ::rtl::OUString& /*_sCatalog*/,
-                                              const ::rtl::OUString& /*_sSchema*/,
-                                              const ::rtl::OUString& /*_sTable*/)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::getComposedTableName" );
-    ::rtl::OUString aComposedName;
-
-    return aComposedName;
 }
 
 void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_aJoinColumns)

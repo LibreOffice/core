@@ -104,6 +104,7 @@ public:
 
     // static helper api
     static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument* pDocument );
+    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument& rDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase& rBase );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > GetSlideShowController(ViewShellBase& rBase );

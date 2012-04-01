@@ -46,7 +46,7 @@ namespace osl
     public:
 
         /** Creates a semaphore.<BR>
-            @param InitialCount denotes the starting value the semaphore. If you set it to
+            @param initialCount denotes the starting value the semaphore. If you set it to
             zero, the first acquire() blocks. Otherwise InitialCount acquire()s  are
             immedeatly  successfull.
             @return 0 if the semaphore could not be created, otherwise a handle to the sem.

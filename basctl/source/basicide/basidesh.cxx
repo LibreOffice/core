@@ -206,6 +206,8 @@ void BasicIDEShell::Init()
     pObjectCatalog = 0;
     bCreatingWindow = sal_False;
 
+    bObjectCatalogDisplay = sal_True;
+
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
     bTabBarSplitted = sal_False;
@@ -243,15 +245,13 @@ BasicIDEShell::~BasicIDEShell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
-    IDEBaseWindow* pWin = aIDEWindowTable.First();
-    while ( pWin )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
         // no store; does already happen when the BasicManagers are destroyed
-        delete pWin;
-        pWin = aIDEWindowTable.Next();
+        delete it->second;
     }
 
-    aIDEWindowTable.Clear();
+    aIDEWindowTable.clear();
     delete pTabBar;
     delete pObjectCatalog;
     DestroyModulWindowLayout();
@@ -314,11 +314,12 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
 
     bool bSetCurWindow = false;
     bool bSetCurLib = ( _rDocument == m_aCurDocument );
+    std::vector<IDEBaseWindow*> aDeleteVec;
 
     // remove all windows which belong to this document
-    for ( sal_uLong nWin = aIDEWindowTable.Count(); nWin; )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+        IDEBaseWindow* pWin = it->second;
         if ( pWin->IsDocument( _rDocument ) )
         {
             if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
@@ -330,13 +331,17 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
                 pWin->BasicStopped();
             }
             else
-            {
-                pWin->StoreData();
-                if ( pWin == pCurWin )
-                    bSetCurWindow = true;
-                RemoveWindow( pWin, sal_True, sal_False );
-            }
+                aDeleteVec.push_back( pWin );
         }
+    }
+    // delete windows outside main loop so we don't invalidate the original iterator
+    for( std::vector<IDEBaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    {
+        IDEBaseWindow* pWin = *it;
+        pWin->StoreData();
+        if ( pWin == pCurWin )
+            bSetCurWindow = true;
+        RemoveWindow( pWin, sal_True, sal_False );
     }
 
     // remove lib info
@@ -360,9 +365,9 @@ void BasicIDEShell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/
 
 void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 {
-    for ( sal_uLong nWin = aIDEWindowTable.Count(); nWin; )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+        IDEBaseWindow* pWin = it->second;
         if ( pWin->IsDocument( _rDocument ) && _rDocument.isDocument() )
             pWin->SetReadOnly( _rDocument.isReadOnly() );
     }
@@ -370,9 +375,9 @@ void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 
 void BasicIDEShell::StoreAllWindowData( sal_Bool bPersistent )
 {
-    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+        IDEBaseWindow* pWin = it->second;
         DBG_ASSERT( pWin, "PrepareClose: NULL-Pointer in Table?" );
         if ( !pWin->IsSuspended() )
             pWin->StoreData();
@@ -412,9 +417,9 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     else
     {
         sal_Bool bCanClose = sal_True;
-        for ( sal_uLong nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
+        for ( sal_uLong nWin = 0; bCanClose && ( nWin < aIDEWindowTable.size() ); nWin++ )
         {
-            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+            IDEBaseWindow* pWin = aIDEWindowTable[ nWin ];
             if ( !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
@@ -482,7 +487,7 @@ IMPL_LINK_INLINE_END( BasicIDEShell, TabBarSplitHdl, TabBar *, pTBar )
 IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
-    IDEBaseWindow* pWin = aIDEWindowTable.Get( nCurId );
+    IDEBaseWindow* pWin = aIDEWindowTable[ nCurId ];
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
 
@@ -503,7 +508,7 @@ sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
 
     if ( nPos < pTabBar->GetPageCount() )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.Get( pTabBar->GetPageId( nPos ) );
+        IDEBaseWindow* pWin = aIDEWindowTable[ pTabBar->GetPageId( nPos ) ];
         SetCurWindow( pWin, sal_True );
         bRet = sal_True;
     }
@@ -650,14 +655,14 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                         m_pCurLocalizationMgr->handleBasicStarted();
                     }
 
-                    IDEBaseWindow* pWin = aIDEWindowTable.First();
-                    while ( pWin )
+                    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin();
+                         it != aIDEWindowTable.end(); ++it )
                     {
+                        IDEBaseWindow* pWin = it->second;
                         if ( nHintId == SBX_HINT_BASICSTART )
                             pWin->BasicStarted();
                         else
                             pWin->BasicStopped();
-                        pWin = aIDEWindowTable.Next();
                     }
                 }
             }
@@ -670,17 +675,20 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 void BasicIDEShell::CheckWindows()
 {
     sal_Bool bSetCurWindow = sal_False;
-    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    std::vector<IDEBaseWindow*> aDeleteVec;
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+        IDEBaseWindow* pWin = it->second;
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
-        {
-            pWin->StoreData();
-            if ( pWin == pCurWin )
-                bSetCurWindow = sal_True;
-            RemoveWindow( pWin, sal_True, sal_False );
-            nWin--;
-        }
+            aDeleteVec.push_back( pWin );
+    }
+    for ( std::vector<IDEBaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    {
+        IDEBaseWindow* pWin = *it;
+        pWin->StoreData();
+        if ( pWin == pCurWin )
+            bSetCurWindow = sal_True;
+        RemoveWindow( pWin, sal_True, sal_False );
     }
     if ( bSetCurWindow )
         SetCurWindow( FindApplicationWindow(), sal_True );
@@ -691,17 +699,20 @@ void BasicIDEShell::CheckWindows()
 void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, sal_Bool bDestroy )
 {
     sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
-    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    std::vector<IDEBaseWindow*> aDeleteVec;
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+        IDEBaseWindow* pWin = it->second;
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
-        {
-            if ( pWin == pCurWin )
-                bChangeCurWindow = sal_True;
-            pWin->StoreData();
-            RemoveWindow( pWin, bDestroy, sal_False );
-            nWin--;
-        }
+            aDeleteVec.push_back( pWin );
+    }
+    for ( std::vector<IDEBaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    {
+        IDEBaseWindow* pWin = *it;
+        if ( pWin == pCurWin )
+            bChangeCurWindow = sal_True;
+        pWin->StoreData();
+        RemoveWindow( pWin, bDestroy, sal_False );
     }
     if ( bChangeCurWindow )
         SetCurWindow( FindApplicationWindow(), sal_True );
@@ -715,9 +726,10 @@ void BasicIDEShell::UpdateWindows()
     sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
     if ( !m_aCurLibName.isEmpty() )
     {
-        for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+        std::vector<IDEBaseWindow*> aDeleteVec;
+        for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
         {
-            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+            IDEBaseWindow* pWin = it->second;
             if ( !pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName )
             {
                 if ( pWin == pCurWin )
@@ -727,11 +739,12 @@ void BasicIDEShell::UpdateWindows()
                 // Window is frozen at first, later the windows should be changed
                 // anyway to be marked as hidden instead of being deleted.
                 if ( !(pWin->GetStatus() & ( BASWIN_TOBEKILLED | BASWIN_RUNNINGBASIC | BASWIN_SUSPENDED ) ) )
-                {
-                    RemoveWindow( pWin, sal_False, sal_False );
-                    nWin--;
-                }
+                    aDeleteVec.push_back( pWin );
             }
+        }
+        for ( std::vector<IDEBaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+        {
+            RemoveWindow( *it, sal_False, sal_False );
         }
     }
 
@@ -857,9 +870,9 @@ void BasicIDEShell::UpdateWindows()
 void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow )
 {
     DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
-    sal_uLong nKey = aIDEWindowTable.GetKey( pWindow_ );
+    sal_uLong nKey = GetIDEWindowId( pWindow_ );
     pTabBar->RemovePage( (sal_uInt16)nKey );
-    aIDEWindowTable.Remove( nKey );
+    aIDEWindowTable.erase( nKey );
     if ( pWindow_ == pCurWin )
     {
         if ( bAllowChangeCurWindow )
@@ -893,7 +906,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
                 // there will be no notify...
                 pWindow_->BasicStopped();
             }
-            aIDEWindowTable.Insert( nKey, pWindow_ );   // jump in again
+            aIDEWindowTable[ nKey ] = pWindow_;   // jump in again
         }
     }
     else
@@ -901,7 +914,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
         pWindow_->Hide();
         pWindow_->AddStatus( BASWIN_SUSPENDED );
         pWindow_->Deactivating();
-        aIDEWindowTable.Insert( nKey, pWindow_ );   // jump in again
+        aIDEWindowTable[ nKey ] = pWindow_;   // jump in again
     }
 
 }
@@ -911,7 +924,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
 sal_uInt16 BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
 {
     nCurKey++;
-    aIDEWindowTable.Insert( nCurKey, pNewWin );
+    aIDEWindowTable[ nCurKey ] = pNewWin;
     return nCurKey;
 }
 

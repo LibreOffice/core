@@ -308,23 +308,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
         sal_Int16 const eDefaultFieldUnit );
 
-    // #110680#
-    //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::frame::XModel > &,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::document::XGraphicObjectResolver > &,
-    //           sal_Int16 eDfltUnit );
-    SvXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
-        sal_Int16 const eDefaultFieldUnit );
-
     virtual ~SvXMLExport();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
@@ -542,9 +525,6 @@ public:
         sal_Int32 nId,
         const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams);
 
-    /** return list of errors */
-    XMLErrors* GetErrors();
-
     /** return current error flags (logical 'or' of all error flags so far) */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
 
@@ -698,12 +678,6 @@ public:
                         sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
 
     // Thes constructors do nothing if bDoSomething is not set
-    SvXMLElementExport( SvXMLExport& rExp, sal_Bool bDoSomething,
-                        sal_uInt16 nPrefix, const sal_Char *pName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
-    SvXMLElementExport( SvXMLExport& rExp, sal_Bool bDoSomething,
-                        sal_uInt16 nPrefix, const ::rtl::OUString& rName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_Bool bDoSomething,
                         sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,

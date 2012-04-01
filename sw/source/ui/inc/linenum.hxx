@@ -48,7 +48,7 @@ class SwLineNumberingDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
 
-    DECL_LINK( OKHdl, Button * );
+    DECL_LINK(OKHdl, void *);
 
 public:
     inline SwWrtShell* GetWrtShell() const { return pSh; }
@@ -91,8 +91,8 @@ class SwLineNumberingPage : public SfxTabPage
     SwLineNumberingPage( Window* pParent, const SfxItemSet& rSet );
     ~SwLineNumberingPage();
 
-    DECL_LINK( LineOnOffHdl, CheckBox *pCB = 0 );
-    DECL_LINK( ModifyHdl, Edit *pED = 0 );
+    DECL_LINK(LineOnOffHdl, void * = 0);
+    DECL_LINK(ModifyHdl, void * = 0);
 
 public:
 

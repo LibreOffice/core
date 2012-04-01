@@ -99,25 +99,25 @@ SmPrintUIOptions::SmPrintUIOptions()
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage" );
 
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TitleRow:CheckBox" ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
+                                                  ".HelpID:vcl:PrintDialog:TitleRow:CheckBox",
+                                                  PRTUIOPT_TITLE_ROW,
                                                   pConfig->IsPrintTitle() );
     // create a bool option for formula text (matches to SID_PRINTTEXT)
     m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:FormulaText:CheckBox" ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
+                                                  ".HelpID:vcl:PrintDialog:FormulaText:CheckBox",
+                                                  PRTUIOPT_FORMULA_TEXT,
                                                   pConfig->IsPrintFormulaText() );
     // create a bool option for border (matches to SID_PRINTFRAME)
     m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Border:CheckBox" ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
+                                                  ".HelpID:vcl:PrintDialog:Border:CheckBox",
+                                                  PRTUIOPT_BORDER,
                                                   pConfig->IsPrintFrame() );
 
     // create subgroup for print format
@@ -129,10 +129,10 @@ SmPrintUIOptions::SmPrintUIOptions()
     aChoices[1] = aLocalizedStrings.GetString( 7 );
     aChoices[2] = aLocalizedStrings.GetString( 8 );
     Sequence< rtl::OUString > aHelpIds( 3 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0" ) );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1" ) );
-    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2" ) );
-    OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0";
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1";
+    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2";
+    OUString aPrintFormatProp( PRTUIOPT_PRINT_FORMAT );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
                                                     aHelpIds,
                                                     aPrintFormatProp,
@@ -142,15 +142,15 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField" ) ),
-                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
+                                                     ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
+                                                     PRTUIOPT_PRINT_SCALE,
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
                                                      aRangeOpt );
 
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
-    aHintNoLayoutPage[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HintNoLayoutPage" ) );
+    aHintNoLayoutPage[0].Name = "HintNoLayoutPage";
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
     m_aUIProperties[8].Value <<= aHintNoLayoutPage;
 
@@ -413,14 +413,14 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 
 ::rtl::OUString SmModel::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.math.FormulaDocument"));
+    return rtl::OUString("com.sun.star.comp.math.FormulaDocument");
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
-            rServiceName == A2OU("com.sun.star.document.OfficeDocument"  ) ||
-            rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
+            rServiceName == "com.sun.star.document.OfficeDocument" ||
+            rServiceName == "com.sun.star.formula.FormulaProperties"
            );
 }
 
@@ -435,8 +435,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = A2OU("com.sun.star.document.OfficeDocument");
-    pArray[1] = A2OU("com.sun.star.formula.FormulaProperties");
+    pArray[0] = "com.sun.star.document.OfficeDocument";
+    pArray[1] = "com.sun.star.formula.FormulaProperties";
     return aRet;
 }
 
@@ -1004,7 +1004,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
-    rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+    rValue.Name  = "PageSize";
     rValue.Value <<= aPageSize;
 
     if (!m_pPrintUIOptions)
@@ -1033,7 +1033,7 @@ void SAL_CALL SmModel::render(
     uno::Reference< awt::XDevice >  xRenderDevice;
     for (sal_Int32 i = 0, nCount = rxOptions.getLength();  i < nCount;  ++i)
     {
-        if( rxOptions[i].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+        if( rxOptions[i].Name == "RenderDevice" )
             rxOptions[i].Value >>= xRenderDevice;
     }
 

@@ -395,7 +395,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                 pDoc->GetCell( nCol, nRow, i, pDocCell );
                 if ( pDocCell )
                 {
-                    ppOldCells[nUndoPos] = pDocCell->CloneWithoutNote( *pDoc );
+                    ppOldCells[nUndoPos] = pDocCell->Clone( *pDoc );
                     if ( pDocCell->GetCellType() == CELLTYPE_EDIT )
                         bEditDeleted = sal_True;
 
@@ -707,7 +707,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
                                     nCol,nRow,nTab, nCol,nRow,nTab, HASATTR_NEEDHEIGHT );
 
             //  undo
-            ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->CloneWithoutNote( *pDoc ) : 0;
+            ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->Clone( *pDoc ) : 0;
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
@@ -802,7 +802,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                 pTabs[nPos] = *itr;
                 ScBaseCell* pDocCell;
                 pDoc->GetCell( nCol, nRow, *itr, pDocCell );
-                ppOldCells[nPos] = pDocCell ? pDocCell->CloneWithoutNote( *pDoc ) : 0;
+                ppOldCells[nPos] = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
                 ++nPos;
             }
 

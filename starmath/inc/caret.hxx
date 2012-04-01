@@ -365,7 +365,7 @@ private:
  * For up and down movement, we also iterator over all caret positions and use SmCaretPos2LineVisitor
  * to find a line for each caret position. Then we compute the distance from the current
  * caret position to every other caret position and chooses the one closest that is either
- * above or below the current caret position, depending on wether we're doing up or down movement.
+ * above or below the current caret position, depending on whether we're doing up or down movement.
  *
  * This result of this approach to caret movement is that we have logically predictable
  * movement for left and right, whilst leftclick, up and down movement depends on the sizes

@@ -28,14 +28,13 @@
 
 $(eval $(call gb_Library_Library,index_data))
 
-$(eval $(call gb_Library_add_package_headers,index_data,i18npool_generated))
-
 $(eval $(call gb_Library_add_linked_libs,index_data,\
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,index_data,\
-	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/indexentry/*.cxx))) \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/indexentry/data/*.txt),\
+		CustomTarget/i18npool/indexentry/$(notdir $(basename $(txt)))) \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -63,7 +63,6 @@
 #include "filter.hxx"
 #include "global.hxx"
 #include "document.hxx"
-#include "scitems.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "stlpool.hxx"
@@ -770,7 +769,11 @@ void ScHTMLExport::WriteTables()
             while( nCol <= nEndCol )
             {
                 if( pDoc->ColHidden(nCol, nTab) )
+                {
+                    ++nCol;
                     continue;
+                }
+
                 if( nWidth != ToPixel( pDoc->GetColWidth( nCol, nTab ) ) )
                 {
                     if( nSpan != 0 )

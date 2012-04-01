@@ -637,6 +637,9 @@ sal_Bool AccessibleTreeNode::IsDisposed (void)
 
 IMPL_LINK(AccessibleTreeNode, StateChangeListener, TreeNodeStateChangeEvent*, pEvent)
 {
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return 1; // mrTreeNode is probably dead
+
     OSL_ASSERT(pEvent!=NULL);
     OSL_ASSERT(&pEvent->mrSource==&mrTreeNode);
 
@@ -669,6 +672,9 @@ IMPL_LINK(AccessibleTreeNode, StateChangeListener, TreeNodeStateChangeEvent*, pE
 
 IMPL_LINK(AccessibleTreeNode, WindowEventListener, VclWindowEvent*, pEvent)
 {
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return 1; // mrTreeNode is probably dead
+
     switch (pEvent->GetId())
     {
         case VCLEVENT_WINDOW_HIDE:

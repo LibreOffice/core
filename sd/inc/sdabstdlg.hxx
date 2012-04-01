@@ -224,6 +224,9 @@ public:
     virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() = 0;
+
+protected:
+    ~SdAbstractDialogFactory() {}
 };
 #endif
 

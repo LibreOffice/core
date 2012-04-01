@@ -70,6 +70,10 @@ void XDataPilotTable::testRefresh()
     CPPUNIT_ASSERT_MESSAGE("value needs to change", aOldData != aNewData);
 }
 
+XDataPilotTable::~XDataPilotTable()
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

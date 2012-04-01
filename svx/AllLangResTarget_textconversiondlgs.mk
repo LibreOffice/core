@@ -38,7 +38,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/textconversiondlgs))
 
 $(eval $(call gb_SrsTarget_set_include,svx/textconversiondlgs,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(SRCDIR)/svx/inc/ \
 ))
 

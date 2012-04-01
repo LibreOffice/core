@@ -1039,8 +1039,6 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getProcedures(
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
-
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
     Reference< XResultSet > xRef = pResult;
 

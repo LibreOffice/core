@@ -58,7 +58,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/moduleoptions.hxx>

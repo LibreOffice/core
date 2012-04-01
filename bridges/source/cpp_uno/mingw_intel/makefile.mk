@@ -63,6 +63,7 @@ SLOFILES= \
     $(SLO)$/dllinit.obj		\
     $(SLO)$/smallstruct.obj		\
     $(SLO)$/except.obj		\
+    $(SLO)$/callvirtualmethod.obj \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj \
     $(SLO)$/call.obj

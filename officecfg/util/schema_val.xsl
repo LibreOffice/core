@@ -41,7 +41,6 @@
 <xsl:param name="componentName"/>
 
 	<xsl:template match = "/">
-		<xsl:message terminate="no">CHECKING CONSISTENCY ...</xsl:message>
 		<xsl:apply-templates/>
 	</xsl:template>
 	

@@ -208,8 +208,8 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     {
         sModuleName = xModuleManager->identify(xFrame);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { sModuleName = ::rtl::OUString(); }
 
@@ -239,8 +239,8 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
                                                                                       sKey,
                                                                                       ::comphelper::ConfigurationHelper::E_READONLY) >>= sWindowState;
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { sWindowState = ::rtl::OUString(); }
 
@@ -270,8 +270,8 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
                                                           css::uno::makeAny(sWindowState),
                                                           ::comphelper::ConfigurationHelper::E_STANDARD);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 }

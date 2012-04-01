@@ -46,11 +46,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
-
-#include <canvas/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -279,6 +276,22 @@ namespace cppcanvas
                 aTotalTransform.set( 0, 2, 0.0 );
                 aTotalTransform.set( 1, 2, 0.0 );
 
+                // determine total scaling factor of the
+                // transformation matrix - need to make the bitmap
+                // large enough
+                ::basegfx::B2DTuple aScale;
+                ::basegfx::B2DTuple aTranslate;
+                double              nRotate;
+                double              nShearX;
+                if( !aTotalTransform.decompose( aScale,
+                                                aTranslate,
+                                                nRotate,
+                                                nShearX ) )
+                {
+                    OSL_FAIL( "TransparencyGroupAction::render(): non-decomposable transformation" );
+                    return false;
+                }
+
                 // if there's no buffer bitmap, or as soon as the
                 // total transformation changes, we've got to
                 // re-render the bitmap
@@ -288,22 +301,6 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != maLastSubset.mnSubsetEnd )
                 {
                     DBG_TESTSOLARMUTEX();
-
-                    // determine total scaling factor of the
-                    // transformation matrix - need to make the bitmap
-                    // large enough
-                    ::basegfx::B2DTuple aScale;
-                    ::basegfx::B2DTuple aTranslate;
-                    double              nRotate;
-                    double              nShearX;
-                    if( !aTotalTransform.decompose( aScale,
-                                                    aTranslate,
-                                                    nRotate,
-                                                    nShearX ) )
-                    {
-                        OSL_FAIL( "TransparencyGroupAction::render(): non-decomposable transformation" );
-                        return false;
-                    }
 
                     // output size of metafile
                     ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getX() ),
@@ -452,12 +449,8 @@ namespace cppcanvas
                 // Translation*Rotation*Shear*Scale. Thus, to neutralize
                 // the contained scaling, we've got to right-multiply with
                 // the inverse.
-                ::basegfx::B2ISize aBmpSize(
-                    ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBufferBitmap->getSize() ) );
-
                 ::basegfx::B2DHomMatrix aScaleCorrection;
-                aScaleCorrection.scale( (double)maDstSize.getX() / aBmpSize.getX(),
-                                        (double)maDstSize.getY() / aBmpSize.getY() );
+                aScaleCorrection.scale( 1/aScale.getX(), 1/aScale.getY() );
                 aTransform = aTransform * aScaleCorrection;
 
                 rendering::RenderState aLocalState( maState );
@@ -555,25 +548,6 @@ namespace cppcanvas
             }
 
         }
-
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
-                                                                                       const Renderer::Parameters&  rParms,
-                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
-                                                                                       const ::basegfx::B2DVector&  rDstSize,
-                                                                                       double                       nAlpha,
-                                                                                       const CanvasSharedPtr&       rCanvas,
-                                                                                       const OutDevState&           rState )
-        {
-            return ActionSharedPtr( new TransparencyGroupAction(rGroupMtf,
-                                                                rParms,
-                                                                rDstPoint,
-                                                                rDstSize,
-                                                                nAlpha,
-                                                                rCanvas,
-                                                                rState ) );
-        }
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,

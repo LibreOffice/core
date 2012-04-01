@@ -977,7 +977,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         // at this point now we will insert the non-empty text 'normally' some lines below...
     }
 
-    if ( aNewText.getLength() )
+    if ( !aNewText.isEmpty() )
         maText.Insert( String( aNewText ), (xub_StrLen)aSelection.Min() );
 
     if ( !pNewSel )
@@ -2516,7 +2516,7 @@ void Edit::UpdateData()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Edit, ImplUpdateDataHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
 {
     UpdateData();
     return 0;
@@ -3079,7 +3079,7 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     {
         sal_Int32 nIndex = 0;
         rtl::OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
-        if( aMimetype.equalsAscii( "text/plain" ) )
+        if( aMimetype.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text/plain")) )
         {
             mpDDInfo->bIsStringSupported = sal_True;
             break;

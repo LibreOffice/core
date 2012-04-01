@@ -108,37 +108,6 @@ SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
     SvHeaderTabListBox::Show();
 }
 
-SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent,const ResId& rResId):
-        SvHeaderTabListBox(&rParent,rResId),
-        m_rParentTableContainer(rParent),
-        aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
-        nHeaderItemId(1),
-        bResizeFlag(sal_True),
-        bPaintFlag(sal_True)
-{
-    SetStyle(GetStyle()|WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
-    m_rParentTableContainer.SetTable(this);
-
-    bSortDirection=sal_True;
-    nOldPos=0;
-    nSortCol=0xFFFF;
-
-    aHeaderBar.SetStartDragHdl(LINK( this, SvxSimpleTable, StartDragHdl));
-    aHeaderBar.SetDragHdl(LINK( this, SvxSimpleTable, DragHdl));
-    aHeaderBar.SetEndDragHdl(LINK( this, SvxSimpleTable, EndDragHdl));
-    aHeaderBar.SetSelectHdl(LINK( this, SvxSimpleTable, HeaderBarClick));
-    aHeaderBar.SetDoubleClickHdl(LINK( this, SvxSimpleTable, HeaderBarDblClick));
-
-    UpdateViewSize();
-
-    EnableCellFocus();
-    DisableTransientChildren();
-    InitHeaderBar( &aHeaderBar );
-
-    aHeaderBar.Show();
-    SvHeaderTabListBox::Show();
-}
-
 SvxSimpleTable::~SvxSimpleTable()
 {
 }

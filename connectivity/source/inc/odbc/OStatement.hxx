@@ -97,15 +97,16 @@ namespace connectivity
             ::rtl::OUString getCursorName()     const;
             sal_Bool isUsingBookmarks()         const;
             sal_Bool getEscapeProcessing()      const;
-            template < typename T, SQLINTEGER BufferLength > T getStmtOption (short fOption) const;
+            template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
 
-            void setQueryTimeOut(sal_Int32 _par0)           ;
-            void setMaxFieldSize(sal_Int32 _par0)           ;
-            void setMaxRows(sal_Int32 _par0)                ;
+            void setQueryTimeOut(sal_Int64 _par0)           ;
+            void setMaxFieldSize(sal_Int64 _par0)           ;
+            void setMaxRows(sal_Int64 _par0)                ;
             void setFetchDirection(sal_Int32 _par0)         ;
             void setFetchSize(sal_Int32 _par0)              ;
             void setCursorName(const ::rtl::OUString &_par0);
             void setEscapeProcessing( const sal_Bool _bEscapeProc );
+            template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
             virtual void setResultSetType(sal_Int32 _par0)          ;
@@ -231,7 +232,7 @@ namespace connectivity
         protected:
             virtual ~OStatement(){}
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor that is needed for returning the object
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
             DECLARE_SERVICE_INFO();
 

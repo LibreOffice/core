@@ -260,7 +260,7 @@ public:
     sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  Table * pIdTable );
+                                  HelpIdTable& rIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
 };
 SV_DECL_IMPL_REF(SvMetaSlot)

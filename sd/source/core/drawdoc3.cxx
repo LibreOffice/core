@@ -52,7 +52,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/msgbox.hxx>
-#include <sot/storage.hxx>
 #include <sot/formats.hxx>
 
 #include <set>
@@ -1007,7 +1006,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
 
     if (!pBookmarkList)
     {
-        pBMView = new ::sd::View(pBookmarkDoc, (OutputDevice*) NULL);
+        pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
         pBMView->EndListening(*pBookmarkDoc);
         pBMView->MarkAll();
     }
@@ -1038,7 +1037,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
                 if (!pBMView)
                 {
                     // View erstmalig erzeugen
-                    pBMView = new ::sd::View(pBookmarkDoc, (OutputDevice*) NULL);
+                    pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
                     pBMView->EndListening(*pBookmarkDoc);
                 }
 
@@ -1065,7 +1064,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         /**********************************************************************
         * Selektierte Objekte einfuegen
         **********************************************************************/
-        ::sd::View* pView = new ::sd::View(this, (OutputDevice*) NULL);
+        ::sd::View* pView = new ::sd::View(*this, (OutputDevice*) NULL);
         pView->EndListening(*this);
 
         // Seite bestimmen, auf der die Objekte eingefuegt werden sollen
@@ -1112,13 +1111,13 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         }
 
         if (bOLEObjFound)
-            pBMView->GetDoc()->SetAllocDocSh(sal_True);
+            pBMView->GetDoc().SetAllocDocSh(sal_True);
 
         SdDrawDocument* pTmpDoc = (SdDrawDocument*) pBMView->GetAllMarkedModel();
         bOK = pView->Paste(*pTmpDoc, aObjPos, pPage);
 
         if (bOLEObjFound)
-            pBMView->GetDoc()->SetAllocDocSh(sal_False);
+            pBMView->GetDoc().SetAllocDocSh(sal_False);
 
         if (!bOLEObjFound)
             delete pTmpDoc;             // Wird ansonsten von der DocShell zerstoert

@@ -111,7 +111,7 @@ void addRecipient(
 /** @internal */
 void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 {
-    OSL_ASSERT(pMapiRecipientList->size() == 0);
+    OSL_ASSERT(pMapiRecipientList->empty());
 
     // add to recipients
     StringListIterator_t iter = gTo.begin();
@@ -135,7 +135,7 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 /** @internal */
 void initAttachementList(MapiAttachmentList_t* pMapiAttachmentList)
 {
-    OSL_ASSERT(pMapiAttachmentList->size() == 0);
+    OSL_ASSERT(pMapiAttachmentList->empty());
 
     StringListIterator_t iter = gAttachments.begin();
     StringListIterator_t iter_end = gAttachments.end();
@@ -155,7 +155,7 @@ void initMapiOriginator(MapiRecipDesc* pMapiOriginator)
     ZeroMemory(pMapiOriginator, sizeof(MapiRecipDesc));
 
     pMapiOriginator->ulRecipClass = MAPI_ORIG;
-    pMapiOriginator->lpszName = "";
+    pMapiOriginator->lpszName = const_cast<char*>("");
     pMapiOriginator->lpszAddress = const_cast<char*>(gFrom.c_str());
 }
 
@@ -187,7 +187,7 @@ void initMapiMessage(
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 
-char* KnownParameter[] =
+const char* KnownParameter[] =
 {
     "--to",
     "--cc",

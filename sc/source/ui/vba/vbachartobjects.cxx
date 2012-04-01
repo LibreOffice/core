@@ -174,11 +174,10 @@ ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaChartObjects::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObjects") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObjects"));
 }
 
 css::uno::Sequence<rtl::OUString>

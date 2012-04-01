@@ -71,7 +71,7 @@
 
 #define CCLASS_ALL
 #include <characterclassificationImpl.hxx>
-#include <scripttypedetector.hxx>
+#include <unoscripttypedetector.hxx>
 #include <cclass_unicode.hxx>
 
 #define COLLATOR_ALL
@@ -157,7 +157,7 @@ IMPL_CREATEINSTANCE( Collator_Unicode )
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
 IMPL_CREATEINSTANCE_MSF( TransliterationImpl )
-IMPL_CREATEINSTANCE( ScriptTypeDetector )
+IMPL_CREATEINSTANCE( UnoScriptTypeDetector )
 
 IMPL_CREATEINSTANCE_MSF( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
@@ -388,7 +388,7 @@ static const struct InstancesArray {
         &Collator_Unicode_CreateInstance },
     {   "com.sun.star.i18n.ScriptTypeDetector",
         "com.sun.star.i18n.ScriptTypeDetector",
-        &ScriptTypeDetector_CreateInstance },
+        &UnoScriptTypeDetector_CreateInstance },
     {   "com.sun.star.i18n.CharacterClassification",
         "com.sun.star.i18n.CharacterClassification",
         &CharacterClassificationImpl_CreateInstance },

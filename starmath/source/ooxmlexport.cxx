@@ -30,6 +30,7 @@
 #include "ooxmlexport.hxx"
 
 #include <oox/token/tokens.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 
 using namespace oox;
 using namespace oox::core;
@@ -58,7 +59,7 @@ bool SmOoxmlExport::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serialize
 
 void SmOoxmlExport::HandleNode( const SmNode* pNode, int nLevel )
 {
-//    fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
+    SAL_INFO( "starmath.ooxml", "Node: " << nLevel << " " << int( pNode->GetType()) << " " << pNode->GetNumSubNodes());
     switch(pNode->GetType())
     {
         case NATTRIBUT:
@@ -202,7 +203,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
     }
     m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
-//    fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO( "starmath.ooxml", "Text:" << rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
     for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
     {
 #if 0
@@ -281,7 +282,7 @@ void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char
 void SmOoxmlExport::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
-//    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
+    SAL_INFO( "starmath.ooxml", "Unary: " << int( pNode->GetToken().eType ));
 
 // Avoid MSVC warning C4065: switch statement contains 'default' but no 'case' labels
 //    switch( pNode->GetToken().eType )
@@ -294,7 +295,7 @@ void SmOoxmlExport::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
 {
-//    fprintf(stderr,"BINARY %d\n", pNode->Symbol()->GetToken().eType );
+    SAL_INFO( "starmath.ooxml", "Binary: " << int( pNode->Symbol()->GetToken().eType ));
     // update HandleMath() when adding new items
     switch( pNode->Symbol()->GetToken().eType )
     {
@@ -372,7 +373,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleMath( const SmNode* pNode, int nLevel )
 {
-//    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
+    SAL_INFO( "starmath.ooxml", "Math: " << int( pNode->GetToken().eType ));
     switch( pNode->GetToken().eType )
     {
         case TDIVIDEBY:
@@ -418,7 +419,7 @@ static rtl::OString mathSymbolToString( const SmNode* node )
 
 void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
 {
-//    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
+    SAL_INFO( "starmath.ooxml", "Operator: " << int( pNode->GetToken().eType ));
     switch( pNode->GetToken().eType )
     {
         case TINT:
@@ -678,7 +679,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
 {
-//    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
+    SAL_INFO( "starmath.ooxml", "Vertical: " << int( pNode->GetToken().eType ));
     switch( pNode->GetToken().eType )
     {
         case TOVERBRACE:

@@ -1643,7 +1643,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
 /*--------------------------------------------------------------------
     Description: swap left/right with inside/outside
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFrmPage, MirrorHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmPage, MirrorHdl)
 {
     RndStdIds eId = GetAnchor();
     InitPos( eId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
@@ -1680,7 +1680,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
 /*--------------------------------------------------------------------
     Description:    range check
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
 {
     if (bNoModifyHdl)
         return 0;
@@ -1807,7 +1807,7 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmPage, AnchorTypeHdl)
 {
     aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
 
@@ -1975,7 +1975,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwFrmPage, RealSizeHdl)
 {
     aWidthED.SetUserValue( aWidthED. NormalizePercent(aGrfSize.Width() ), FUNIT_TWIP);
     aHeightED.SetUserValue(aHeightED.NormalizePercent(aGrfSize.Height()), FUNIT_TWIP);
@@ -1983,16 +1983,16 @@ IMPL_LINK_INLINE_START( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
     UpdateExample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwFrmPage, RealSizeHdl)
 
-IMPL_LINK( SwFrmPage, AutoWidthClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmPage, AutoWidthClickHdl)
 {
     if( !IsInGraficMode() )
         HandleAutoCB( aAutoWidthCB.IsChecked(), aWidthFT, aWidthAutoFT );
     return 0;
 }
 
-IMPL_LINK( SwFrmPage, AutoHeightClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmPage, AutoHeightClickHdl)
 {
     if( !IsInGraficMode() )
         HandleAutoCB( aAutoHeightCB.IsChecked(), aHeightFT, aHeightAutoFT );
@@ -2463,7 +2463,7 @@ int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
     return sal_True;
 }
 
-IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
 {
     if(!pGrfDlg)
     {
@@ -2513,7 +2513,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl)
 {
     sal_Bool bEnable = aMirrorHorzBox.IsChecked();
 
@@ -2725,7 +2725,7 @@ SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwFrmURLPage( pParent, rSet );
 }
 
-IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
 {
     FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     uno::Reference < ui::dialogs::XFilePicker > xFP = aDlgHelper.GetFilePicker();
@@ -3063,7 +3063,7 @@ sal_uInt16* SwFrmAddPage::GetRanges()
     return aAddPgRg;
 }
 
-IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
+IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)
 {
     sal_Bool bEnable = 0 != aNameED.GetText().Len();
     aAltNameED.Enable(bEnable);

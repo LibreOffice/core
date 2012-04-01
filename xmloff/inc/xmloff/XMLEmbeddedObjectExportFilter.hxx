@@ -45,7 +45,6 @@ class XMLEmbeddedObjectExportFilter : public ::cppu::WeakImplHelper3<
         ::com::sun::star::xml::sax::XExtendedDocumentHandler > xExtHandler;
 
 public:
-    XMLEmbeddedObjectExportFilter() throw();
     XMLEmbeddedObjectExportFilter( const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler > & rHandler ) throw();
     virtual ~XMLEmbeddedObjectExportFilter () throw();

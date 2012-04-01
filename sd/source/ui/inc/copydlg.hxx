@@ -56,7 +56,7 @@ public:
     ~CopyDlg();
 
     void    GetAttr( SfxItemSet& rOutAttrs );
-    DECL_LINK( Reset, void* );
+    void Reset();
 
 private:
     FixedText           maFtCopies;

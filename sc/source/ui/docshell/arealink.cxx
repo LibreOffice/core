@@ -504,14 +504,14 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 }
 
 
-IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, EMPTYARG )
+IMPL_LINK_NOARG(ScAreaLink, RefreshHdl)
 {
     long nRes = Refresh( aFileName, aFilterName, aSourceArea,
         GetRefreshDelay() ) != 0;
     return nRes;
 }
 
-IMPL_LINK( ScAreaLink, AreaEndEditHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl)
 {
     //  #i76514# can't use link argument to access the dialog,
     //  because it's the ScLinkedAreaDlg, not AbstractScLinkedAreaDlg

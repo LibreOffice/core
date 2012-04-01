@@ -63,8 +63,8 @@
 // ______________________________________________
 //  non exported const
 
-const ::rtl::OUString CFGPROP_USERPATHES(RTL_CONSTASCII_USTRINGPARAM("UserPaths"));
-const ::rtl::OUString CFGPROP_WRITEPATH(RTL_CONSTASCII_USTRINGPARAM("WritePath"));
+#define CFGPROP_USERPATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserPaths"))
+#define CFGPROP_WRITEPATH rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath"))
 
 /*
     0 : old style              "Template"              string using ";" as seperator
@@ -73,13 +73,13 @@ const ::rtl::OUString CFGPROP_WRITEPATH(RTL_CONSTASCII_USTRINGPARAM("WritePath")
     3 : write path             "Template_write"        string
  */
 
-const ::rtl::OUString POSTFIX_INTERNAL_PATHES(RTL_CONSTASCII_USTRINGPARAM("_internal"));
-const ::rtl::OUString POSTFIX_USER_PATHES(RTL_CONSTASCII_USTRINGPARAM("_user"));
-const ::rtl::OUString POSTFIX_WRITE_PATH(RTL_CONSTASCII_USTRINGPARAM("_writable"));
+#define POSTFIX_INTERNAL_PATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_internal"))
+#define POSTFIX_USER_PATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_user"))
+#define POSTFIX_WRITE_PATH rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_writable"))
 
 const sal_Int32 IDGROUP_OLDSTYLE        = 0;
-const sal_Int32 IDGROUP_INTERNAL_PATHES = 1;
-const sal_Int32 IDGROUP_USER_PATHES     = 2;
+const sal_Int32 IDGROUP_INTERNAL_PATHS = 1;
+const sal_Int32 IDGROUP_USER_PATHS     = 2;
 const sal_Int32 IDGROUP_WRITE_PATH      = 3;
 
 const sal_Int32 IDGROUP_COUNT           = 4;
@@ -270,8 +270,8 @@ OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& sPath)
 {
-    const static ::rtl::OUString CFGPROP_INTERNALPATHES(RTL_CONSTASCII_USTRINGPARAM("InternalPaths"));
-    const static ::rtl::OUString CFGPROP_ISSINGLEPATH(RTL_CONSTASCII_USTRINGPARAM("IsSinglePath"));
+    const ::rtl::OUString CFGPROP_INTERNALPATHS(RTL_CONSTASCII_USTRINGPARAM("InternalPaths"));
+    const ::rtl::OUString CFGPROP_ISSINGLEPATH(RTL_CONSTASCII_USTRINGPARAM("IsSinglePath"));
 
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew();
 
@@ -283,11 +283,11 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
-    xPath->getByName(CFGPROP_INTERNALPATHES) >>= xIPath;
+    xPath->getByName(CFGPROP_INTERNALPATHS) >>= xIPath;
     aPathVal.lInternalPaths << xIPath->getElementNames();
 
     // read user defined path list
-    aPathVal.lUserPaths << xPath->getByName(CFGPROP_USERPATHES);
+    aPathVal.lUserPaths << xPath->getByName(CFGPROP_USERPATHS);
 
     // read the writeable path
     xPath->getByName(CFGPROP_WRITEPATH) >>= aPathVal.sWritePath;
@@ -304,7 +304,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
-        // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
+        // all states simple as READONLY ! But because all realy needed paths are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
         aPathVal.bIsReadonly = bFinalized;
     }
@@ -323,7 +323,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 
     // try to replace path-parts with well known and uspported variables.
     // So an office can be moved easialy to another location without loosing
-    // it's related pathes.
+    // it's related paths.
     PathInfo aResubstPath(aPath);
     impl_subst(aResubstPath, sal_True);
 
@@ -332,7 +332,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     {
         ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                             aResubstPath.sPathName,
-                                                            CFGPROP_USERPATHES,
+                                                            CFGPROP_USERPATHS,
                                                             css::uno::makeAny(aResubstPath.lUserPaths.getAsConstList()));
     }
 
@@ -348,7 +348,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     // on loading time realy represent an user setting !!!
 
     // Check if the given path exists inside the old configuration.
-    // Because our new configuration knows more then the list of old pathes ... !
+    // Because our new configuration knows more then the list of old paths ... !
     if (xCfgOld->hasByName(aResubstPath.sPathName))
     {
         css::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, css::uno::UNO_QUERY_THROW);
@@ -360,7 +360,6 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 }
 
 //-----------------------------------------------------------------------------
-#ifdef MIGRATE_OLD_USER_PATHES
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                           const OUStringList&           lOld )
 {
@@ -389,7 +388,6 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         }
     }
 }
-#endif // MIGRATE_OLD_USER_PATHES
 
 //-----------------------------------------------------------------------------
 PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPath          ,
@@ -408,40 +406,38 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         aPath = impl_readNewFormat(sPath);
         aPath.sPathName = sPath;
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(aPath, sal_False);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::container::NoSuchElementException&)
         { eOp = PathSettings::E_REMOVED; }
-    catch(const css::uno::Exception& exAny)
-        { throw exAny; }
+    catch(const css::uno::Exception&)
+        { throw; }
 
-    #ifdef MIGRATE_OLD_USER_PATHES
     try
     {
         // migration of old user defined values on demand
         // can be disabled for a new major
         OUStringList lOldVals = impl_readOldFormat(sPath);
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(lOldVals, fa_getSubstitution(), sal_False);
         impl_mergeOldUserPaths(aPath, lOldVals);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     // Normal(!) exceptions can be ignored!
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation
     // we cant find a value for it inside the "old" configuration. So a NoSuchElementException
     // will be normal .-)
     catch(const css::uno::Exception&)
         {}
-    #endif // MIGRATE_OLD_USER_PATHES
 
     PathSettings::PathHash::iterator pPath = m_lPaths.find(sPath);
     if (eOp == PathSettings::E_UNDEFINED)
@@ -504,8 +500,8 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
 css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rtl::OUString& sPath)
 {
     ::rtl::OUString sOldStyleProp = sPath;
-    ::rtl::OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHES;
-    ::rtl::OUString sUserProp     = sPath+POSTFIX_USER_PATHES;
+    ::rtl::OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHS;
+    ::rtl::OUString sUserProp     = sPath+POSTFIX_USER_PATHS;
     ::rtl::OUString sWriteProp    = sPath+POSTFIX_WRITE_PATH;
 
     // Attention: The default set of IDs is fix and must follow these schema.
@@ -518,8 +514,8 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rt
 
     css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
     lIDs[0] = IDGROUP_OLDSTYLE       ;
-    lIDs[1] = IDGROUP_INTERNAL_PATHES;
-    lIDs[2] = IDGROUP_USER_PATHES    ;
+    lIDs[1] = IDGROUP_INTERNAL_PATHS;
+    lIDs[2] = IDGROUP_USER_PATHS    ;
     lIDs[3] = IDGROUP_WRITE_PATH     ;
 
     sal_Int32 c = m_lPropDesc.getLength();
@@ -532,10 +528,10 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rt
             lIDs[IDGROUP_OLDSTYLE] = rProp.Handle;
         else
         if (rProp.Name.equals(sInternalProp))
-            lIDs[IDGROUP_INTERNAL_PATHES] = rProp.Handle;
+            lIDs[IDGROUP_INTERNAL_PATHS] = rProp.Handle;
         else
         if (rProp.Name.equals(sUserProp))
-            lIDs[IDGROUP_USER_PATHES] = rProp.Handle;
+            lIDs[IDGROUP_USER_PATHS] = rProp.Handle;
         else
         if (rProp.Name.equals(sWriteProp))
             lIDs[IDGROUP_WRITE_PATH] = rProp.Handle;
@@ -586,7 +582,7 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
                  }
                  break;
 
-            case IDGROUP_INTERNAL_PATHES :
+            case IDGROUP_INTERNAL_PATHS :
                  {
                     if (pPathOld)
                         lOldVals[0] <<= pPathOld->lInternalPaths.getAsConstList();
@@ -595,7 +591,7 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
                  }
                  break;
 
-            case IDGROUP_USER_PATHES :
+            case IDGROUP_USER_PATHS :
                  {
                     if (pPathOld)
                         lOldVals[0] <<= pPathOld->lUserPaths.getAsConstList();
@@ -768,7 +764,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         ++i;
 
         pProp             = &(m_lPropDesc[i]);
-        pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHES;
+        pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHS;
         pProp->Handle     = i;
         pProp->Type       = ::getCppuType((css::uno::Sequence< ::rtl::OUString >*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND   |
@@ -776,7 +772,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         ++i;
 
         pProp             = &(m_lPropDesc[i]);
-        pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHES;
+        pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHS;
         pProp->Handle     = i;
         pProp->Type       = ::getCppuType((css::uno::Sequence< ::rtl::OUString >*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
@@ -819,13 +815,13 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
              }
              break;
 
-        case IDGROUP_INTERNAL_PATHES :
+        case IDGROUP_INTERNAL_PATHS :
              {
                 aVal <<= pPath->lInternalPaths.getAsConstList();
              }
              break;
 
-        case IDGROUP_USER_PATHES :
+        case IDGROUP_USER_PATHS :
              {
                 aVal <<= pPath->lUserPaths.getAsConstList();
              }
@@ -886,14 +882,14 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              }
              break;
 
-        case IDGROUP_INTERNAL_PATHES :
+        case IDGROUP_INTERNAL_PATHS :
              {
                 if (aChangePath.bIsSinglePath)
                 {
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -906,14 +902,14 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              }
              break;
 
-        case IDGROUP_USER_PATHES :
+        case IDGROUP_USER_PATHS :
              {
                 if (aChangePath.bIsSinglePath)
                 {
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -968,7 +964,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
     // allow empty path to reset a path.
-// idea by LLA to support empty pathes
+// idea by LLA to support empty paths
 //    if (sPath.getLength() == 0)
 //    {
 //        return sal_True;
@@ -982,10 +978,10 @@ sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
     sal_Int32 i = -1;
 
-    i = sPropName.indexOf(POSTFIX_INTERNAL_PATHES);
+    i = sPropName.indexOf(POSTFIX_INTERNAL_PATHS);
     if (i > -1)
         return sPropName.copy(0, i);
-    i = sPropName.indexOf(POSTFIX_USER_PATHES);
+    i = sPropName.indexOf(POSTFIX_USER_PATHS);
     if (i > -1)
         return sPropName.copy(0, i);
     i = sPropName.indexOf(POSTFIX_WRITE_PATH);
@@ -1113,7 +1109,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
-    const static ::rtl::OUString CFG_NODE_OLD(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Path/Current"));
+    const ::rtl::OUString CFG_NODE_OLD(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Path/Current"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1143,7 +1139,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
-    const static ::rtl::OUString CFG_NODE_NEW(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths/Paths"));
+    const ::rtl::OUString CFG_NODE_NEW(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths/Paths"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);

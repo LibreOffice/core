@@ -211,7 +211,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
      Description: kick off inserting of new fields
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDlg, OKHdl)
 {
     if (GetOKButton().IsEnabled())
     {
@@ -224,7 +224,7 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldDlg, CancelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDlg, CancelHdl)
 {
     Close();
     return 0;

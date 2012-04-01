@@ -48,7 +48,7 @@ public:
     virtual rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_TEMPLATE_HXX */

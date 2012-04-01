@@ -438,7 +438,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     return true;
 }
 
-IMPL_LINK( ScTableLink, RefreshHdl, ScTableLink*, EMPTYARG )
+IMPL_LINK_NOARG(ScTableLink, RefreshHdl)
 {
     long nRes = Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ) != 0;
     return nRes;

@@ -53,7 +53,6 @@
 #include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"
-#include "scitems.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
 #include "autoform.hxx"
@@ -104,7 +103,8 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     bFmtInserted    ( false )
 {
     Init();
-    pWndPreview->NotifyChange( (*pFormat)[0] );
+    ScAutoFormat::iterator it = pFormat->begin();
+    pWndPreview->NotifyChange(it->second);
     FreeResource();
 }
 
@@ -119,9 +119,6 @@ ScAutoFormatDlg::~ScAutoFormatDlg()
 
 void ScAutoFormatDlg::Init()
 {
-    sal_uInt16 nCount;
-    String aEntry;
-
     aLbFormat    .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
     aBtnNumFormat.SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
     aBtnBorder   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
@@ -145,15 +142,11 @@ void ScAutoFormatDlg::Init()
     aBtnMore.AddWindow( &aBtnAdjust );
     aBtnMore.AddWindow( &aFlFormatting );
 
-    nCount = pFormat->GetCount();
+    ScAutoFormat::const_iterator it = pFormat->begin(), itEnd = pFormat->end();
+    for (; it != itEnd; ++it)
+        aLbFormat.InsertEntry(it->second->GetName());
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
-    {
-        ((*pFormat)[i])->GetName( aEntry );
-        aLbFormat.InsertEntry( aEntry );
-    }
-
-    if ( nCount == 1 )
+    if (pFormat->size() == 1)
         aBtnRemove.Disable();
 
     aLbFormat.SelectEntryPos( 0 );
@@ -167,7 +160,7 @@ void ScAutoFormatDlg::Init()
     {
         aBtnAdd.Disable();
         aBtnRemove.Disable();
-        bFmtInserted = sal_True;
+        bFmtInserted = true;
     }
 }
 
@@ -175,7 +168,7 @@ void ScAutoFormatDlg::Init()
 
 void ScAutoFormatDlg::UpdateChecks()
 {
-    ScAutoFormatData* pData = (*pFormat)[nIndex];
+    const ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
 
     aBtnNumFormat.Check( pData->GetIncludeValueFormat() );
     aBtnBorder   .Check( pData->GetIncludeFrame() );
@@ -203,7 +196,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 {
     if ( bCoreDataChanged )
         ScGlobal::GetOrCreateAutoFormat()->Save();
@@ -211,14 +204,14 @@ IMPL_LINK_INLINE_START( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 
 //------------------------------------------------------------------------
 
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
-    ScAutoFormatData* pData  = (*pFormat)[nIndex];
-    sal_Bool              bCheck = ((CheckBox*)pBtn)->IsChecked();
+    ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
+    bool bCheck = ((CheckBox*)pBtn)->IsChecked();
 
     if ( pBtn == &aBtnNumFormat )
         pData->SetIncludeValueFormat( bCheck );
@@ -236,7 +229,7 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     if ( !bCoreDataChanged )
     {
         aBtnCancel.SetText( aStrClose );
-        bCoreDataChanged = sal_True;
+        bCoreDataChanged = true;
     }
 
     pWndPreview->NotifyChange( pData );
@@ -246,14 +239,14 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
     if ( !bFmtInserted && pSelFmtData )
     {
         String              aStrStandard( SfxResId(STR_STANDARD) );
         rtl::OUString aFormatName;
         ScStringInputDlg*   pDlg;
-        sal_Bool                bOk = false;
+        bool bOk = false;
 
         while ( !bOk )
         {
@@ -273,20 +266,21 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
                         = new ScAutoFormatData( *pSelFmtData );
 
                     pNewData->SetName( aFormatName );
-                    bFmtInserted = pFormat->Insert( pNewData );
+                    bFmtInserted = pFormat->insert(pNewData);
 
                     if ( bFmtInserted )
                     {
-                        sal_uInt16 nAt = pFormat->IndexOf( pNewData );
-
-                        aLbFormat.InsertEntry( aFormatName, nAt );
+                        ScAutoFormat::const_iterator it = pFormat->find(pNewData);
+                        ScAutoFormat::const_iterator itBeg = pFormat->begin();
+                        size_t nPos = std::distance(itBeg, it);
+                        aLbFormat.InsertEntry(aFormatName, nPos);
                         aLbFormat.SelectEntry( aFormatName );
                         aBtnAdd.Disable();
 
                         if ( !bCoreDataChanged )
                         {
                             aBtnCancel.SetText( aStrClose );
-                            bCoreDataChanged = sal_True;
+                            bCoreDataChanged = true;
                         }
 
                         SelFmtHdl( 0 );
@@ -319,7 +313,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
     if ( (nIndex > 0) && (aLbFormat.GetEntryCount() > 0) )
     {
@@ -340,10 +334,12 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
             if ( !bCoreDataChanged )
             {
                 aBtnCancel.SetText( aStrClose );
-                bCoreDataChanged = sal_True;
+                bCoreDataChanged = true;
             }
 
-            pFormat->AtFree( nIndex ); // in der Core loeschen
+            ScAutoFormat::iterator it = pFormat->begin();
+            std::advance(it, nIndex);
+            pFormat->erase(it);
             nIndex--;
 
             SelFmtHdl( 0 );
@@ -355,7 +351,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
 {
     sal_Bool bOk = false;
     while( !bOk )
@@ -371,57 +367,57 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                                          HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
         if( pDlg->Execute() == RET_OK )
         {
-            sal_Bool bFmtRenamed = false;
+            bool bFmtRenamed = false;
             pDlg->GetInputString( aFormatName );
-            sal_uInt16 n;
 
             if (!aFormatName.isEmpty())
             {
-                for( n = 0; n < pFormat->GetCount(); ++n )
+                ScAutoFormat::iterator it = pFormat->begin(), itEnd = pFormat->end();
+                for (; it != itEnd; ++it)
                 {
-                    (*pFormat)[n]->GetName(aEntry);
+                    aEntry = it->second->GetName();
                     if (aFormatName.equals(aEntry))
                         break;
                 }
-                if( n >= pFormat->GetCount() )
+                if (it == itEnd)
                 {
                     // Format mit dem Namen noch nicht vorhanden, also
                     // umbenennen
 
                     aLbFormat.RemoveEntry(nIndex );
-                    ScAutoFormatData* p=(*pFormat)[ nIndex ];
+                    const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
                     ScAutoFormatData* pNewData
                         = new ScAutoFormatData(*p);
 
-                    pFormat->AtFree( nIndex );
+                    it = pFormat->begin();
+                    std::advance(it, nIndex);
+                    pFormat->erase(it);
 
                     pNewData->SetName( aFormatName );
 
-                    pFormat->Insert( pNewData);
-
-                    sal_uInt16 nCount = pFormat->GetCount();
+                    pFormat->insert(pNewData);
 
                     aLbFormat.SetUpdateMode(false);
                     aLbFormat.Clear();
-                    for ( sal_uInt16 i = 0; i < nCount; i++ )
+                    for (it = pFormat->begin(); it != itEnd; ++it)
                     {
-                        ((*pFormat)[i])->GetName( aEntry );
+                        aEntry = it->second->GetName();
                         aLbFormat.InsertEntry( aEntry );
                     }
 
-                    aLbFormat.SetUpdateMode( sal_True);
+                    aLbFormat.SetUpdateMode(true);
                     aLbFormat.SelectEntry( aFormatName);
 
                     if ( !bCoreDataChanged )
                     {
                         aBtnCancel.SetText( aStrClose );
-                        bCoreDataChanged = sal_True;
+                        bCoreDataChanged = true;
                     }
 
 
                     SelFmtHdl( 0 );
-                    bOk = sal_True;
-                    bFmtRenamed = sal_True;
+                    bOk = true;
+                    bFmtRenamed = true;
                 }
             }
             if( !bFmtRenamed )
@@ -433,7 +429,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
             }
         }
         else
-            bOk = sal_True;
+            bOk = true;
         delete pDlg;
     }
 
@@ -442,7 +438,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
     nIndex = aLbFormat.GetSelectEntryPos();
     UpdateChecks();
@@ -458,20 +454,18 @@ IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
         aBtnRemove.Enable();
     }
 
-    pWndPreview->NotifyChange( (*pFormat)[nIndex] );
+    ScAutoFormatData* p = pFormat->findByIndex(nIndex);
+    pWndPreview->NotifyChange(p);
 
     return 0;
 }
 
 //------------------------------------------------------------------------
 
-String ScAutoFormatDlg::GetCurrFormatName()
+rtl::OUString ScAutoFormatDlg::GetCurrFormatName()
 {
-    String  aResult;
-
-    ((*pFormat)[nIndex])->GetName( aResult );
-
-    return aResult;
+    const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
+    return p ? p->GetName() : rtl::OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

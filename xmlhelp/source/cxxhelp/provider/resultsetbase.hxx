@@ -28,10 +28,7 @@
 #ifndef _RESULTSETBASE_HXX
 #define _RESULTSETBASE_HXX
 
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

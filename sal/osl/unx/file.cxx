@@ -59,7 +59,7 @@
 #endif /* MACOSX */
 
 #ifdef ANDROID
-#include <lo-bootstrap.h>
+#include <osl/detail/android-bootstrap.h>
 #endif
 
 #ifdef DEBUG_OSL_FILE
@@ -837,7 +837,7 @@ struct Locking_Impl
     Locking_Impl() : m_enabled(0)
     {
 #ifndef HAVE_O_EXLOCK
-        m_enabled = ((getenv("SAL_ENABLE_FILE_LOCKING") != 0) || (getenv("STAR_ENABLE_FILE_LOCKING") != 0));
+        m_enabled = (getenv("SAL_ENABLE_FILE_LOCKING") != 0);
 #endif /* HAVE_O_EXLOCK */
     }
 };
@@ -907,6 +907,8 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         void *address;
         size_t size;
         address = lo_apkentry(cpFilePath, &size);
+        OSL_TRACE("osl_openFile(%s): %p",
+                  cpFilePath, address);
         if (address == NULL)
         {
             errno = ENOENT;

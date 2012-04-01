@@ -70,6 +70,9 @@ public:
     storeError removePageAt (
         sal_uInt32 nOffset);
 
+protected:
+    ~PageCache() {}
+
 private:
     /** Implementation (abstract).
      */

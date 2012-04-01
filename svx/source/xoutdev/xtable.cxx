@@ -91,21 +91,6 @@ XPropertyList::~XPropertyList()
         SfxItemPool::Free(pXPool);
 }
 
-void XPropertyList::Clear()
-{
-    for( size_t i = 0, n = aList.size(); i < n; ++i ) {
-        delete aList[ i ];
-    }
-    aList.clear();
-    if( pBmpList )
-    {
-        for ( size_t i = 0, n = pBmpList->size(); i < n; ++i ) {
-            delete (*pBmpList)[ i ];
-        }
-        pBmpList->clear();
-    }
-}
-
 long XPropertyList::Count() const
 {
     if( bListDirty )

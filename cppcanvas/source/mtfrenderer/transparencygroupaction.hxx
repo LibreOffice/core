@@ -75,34 +75,6 @@ namespace cppcanvas
 
                 @param rGroupMtf
                 Metafile that groups all actions to be rendered
-                transparent
-
-                @param rParms
-                Render parameters
-
-                @param rDstPoint
-                Left, top edge of destination, in current state
-                coordinate system
-
-                @param rDstSize
-                Size of the transparency group object, in current
-                state coordinate system.
-
-                @param nAlpha
-                Alpha value, must be in the range [0,1]
-             */
-            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
-                                                                  const Renderer::Parameters&   rParms,
-                                                                  const ::basegfx::B2DPoint&    rDstPoint,
-                                                                  const ::basegfx::B2DVector&   rDstSize,
-                                                                  double                        nAlpha,
-                                                                  const CanvasSharedPtr&        rCanvas,
-                                                                  const OutDevState&            rState );
-
-            /** Create new transparency group action.
-
-                @param rGroupMtf
-                Metafile that groups all actions to be rendered
                 transparent.
 
                 @param rAlphaGradient

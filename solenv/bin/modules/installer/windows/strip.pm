@@ -29,7 +29,6 @@ package installer::windows::strip;
 
 use File::Temp qw(tmpnam);
 use installer::converter;
-use installer::existence;
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
@@ -97,7 +96,7 @@ sub strip_binaries
 
     my $strippeddirbase = installer::systemactions::create_directories("stripped", $languagestringref);
 
-    if (! installer::existence::exists_in_array($strippeddirbase, \@installer::globals::removedirs))
+    if (! grep {$_ eq $strippeddirbase} @installer::globals::removedirs)
     {
         push(@installer::globals::removedirs, $strippeddirbase);
     }

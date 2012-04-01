@@ -635,7 +635,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
     return 0;
 };
 
-IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SfxSaveTabPage, ODFVersionHdl_Impl)
 {
     long nVersion = long( aODFVersionLB.GetEntryData( aODFVersionLB.GetSelectEntryPos() ) );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;

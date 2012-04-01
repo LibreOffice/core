@@ -104,13 +104,13 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegf
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if (xTargetOverlay.is())
         {
             ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(
                 rPolyPolygon);
-            pTargetOverlay->add(*pNew);
+            xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
         }
     }
@@ -1062,7 +1062,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
     sal_Bool bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
     SdrHdl* pHdl=aVEvt.pHdl;
-    // now check the pointers for draggingNun die Pointer fuer Dragging checken
+    // now check the pointers for dragging
     if (pHdl!=NULL || bMarkHit) {
         SdrHdlKind eHdl= pHdl!=NULL ? pHdl->GetKind() : HDL_MOVE;
         sal_Bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();

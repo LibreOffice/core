@@ -120,6 +120,8 @@ namespace dbaui
         {
         }
 
+        virtual ~OslMutexFacade() {}
+
         virtual void acquire();
         virtual void release();
 

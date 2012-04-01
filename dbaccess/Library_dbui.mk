@@ -157,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,dbui,\
 	dbaccess/source/ui/dlg/DBSetupConnectionPages \
 	dbaccess/source/ui/dlg/UserAdminDlg \
 	dbaccess/source/ui/dlg/UserAdmin \
-	dbaccess/source/ui/dlg/AdabasStat \
 	dbaccess/source/ui/dlg/tablespage \
 	dbaccess/source/ui/dlg/DbAdminImpl \
 	dbaccess/source/ui/dlg/TablesSingleDlg \

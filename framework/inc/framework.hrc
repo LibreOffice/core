@@ -46,14 +46,12 @@
 
 // ResIds for BackingWindow
 #define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)
-#define STR_BACKING_WELCOME                 1
-#define STR_BACKING_WELCOMEPRODUCT          2
-#define STR_BACKING_CREATE                  3
-#define STR_BACKING_TEMPLATE                4
-#define STR_BACKING_FILE                    5
-#define STR_BACKING_EXTHELP                 6
-#define STR_BACKING_INFOHELP                7
-#define STR_BACKING_TPLREP                  8
+#define STR_BACKING_CREATE                  1
+#define STR_BACKING_TEMPLATE                2
+#define STR_BACKING_FILE                    3
+#define STR_BACKING_EXTHELP                 4
+#define STR_BACKING_INFOHELP                5
+#define STR_BACKING_TPLREP                  6
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 

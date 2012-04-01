@@ -49,7 +49,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sot_test_sot, \
 
 $(eval $(call gb_CppunitTest_set_include,sot_test_sot,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,sot_test_sot,\

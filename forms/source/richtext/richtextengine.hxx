@@ -47,6 +47,9 @@ namespace frm
     {
     public:
         virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) = 0;
+
+    protected:
+        ~IEngineStatusListener() {}
     };
 
     //====================================================================

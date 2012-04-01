@@ -137,8 +137,6 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent, FwkResId( DLG_BACKING ) ),
-    maWelcome( this, WB_LEFT ),
-    maProduct( this, WB_LEFT ),
     maWriterButton( this, STC_BUTTON_STYLE ),
     maCalcButton( this, STC_BUTTON_STYLE ),
     maImpressButton( this, STC_BUTTON_STYLE ),
@@ -148,13 +146,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maMathButton( this, STC_BUTTON_STYLE ),
     maTemplateButton( this, STC_BUTTON_STYLE ),
     maToolbox( this, WB_DIALOGCONTROL ),
-    maWelcomeString( FwkResId( STR_BACKING_WELCOME ) ),
-    maProductString( FwkResId( STR_BACKING_WELCOMEPRODUCT ) ),
     maOpenString( FwkResId( STR_BACKING_FILE ) ),
     maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
     maButtonImageSize( 10, 10 ),
     mbInitControls( false ),
-    mnLayoutStyle( 0 ),
+    mnHideExternalLinks( 0 ),
     mpAccExec( NULL ),
     mnBtnPos( 120 ),
     mnBtnTop( 150 ),
@@ -179,8 +175,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             if( xNameAccess.is() )
             {
                 //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                Any value( xNameAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCenterLayoutStyle"))) );
-                mnLayoutStyle = value.get<sal_Int32>();
+                Any value( xNameAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCenterHideExternalLinks"))) );
+                mnHideExternalLinks = value.get<sal_Int32>();
             }
         }
     }
@@ -195,8 +191,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
-    maWelcome.SetPaintTransparent( sal_True );
-    maProduct.SetPaintTransparent( sal_True );
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -399,12 +393,6 @@ void BackingWindow::initBackground()
     SetBackground();
 
     bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
-    if( bDark )
-        maWelcomeTextColor = maLabelTextColor = Color( COL_WHITE );
-    else if( mnLayoutStyle == 1 )
-        maWelcomeTextColor = maLabelTextColor = Color( COL_BLACK );
-    else
-        maWelcomeTextColor = maLabelTextColor = Color( 0x26, 0x35, 0x42 );
 
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
@@ -438,19 +426,6 @@ void BackingWindow::initBackground()
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
     maToolbox.SetItemImage( nItemId_TplRep, BitmapEx( FwkResId( BMP_BACKING_TPLREP ) ) );
 
-    maWelcome.SetControlForeground( maWelcomeTextColor );
-    maWelcome.SetBackground();
-    maProduct.SetControlForeground( maWelcomeTextColor );
-    maProduct.SetBackground();
-
-    if( mnLayoutStyle == 1 )
-    {
-        if( Application::GetSettings().GetLayoutRTL() )
-            mnBtnPos = maBackgroundRight.GetSizePixel().Width() + 40;
-        else
-            mnBtnPos = maBackgroundLeft.GetSizePixel().Width() + 40;
-    }
-
     // get icon images from fwk resource and set them on the appropriate buttons
     loadImage( FwkResId( BMP_BACKING_WRITER ), maWriterButton );
     loadImage( FwkResId( BMP_BACKING_CALC ), maCalcButton );
@@ -482,56 +457,12 @@ void BackingWindow::initControls()
     maControlRect.Bottom() -= nShadowBottom;
 
     long nYPos = 0;
-    // set bigger welcome string
-    maWelcome.SetText( maWelcomeString );
-    maTextFont = GetSettings().GetStyleSettings().GetLabelFont();
-    maTextFont.SetSize( Size( 0, 18 ) );
-    maTextFont.SetWeight( WEIGHT_BOLD );
-    maWelcome.SetFont( maTextFont );
-    // get metric to get correct width factor and adjust
-    long nW = (maWelcome.GetFontMetric().GetWidth()*95)/100;
-    maTextFont.SetSize( Size( nW, 18 ) );
 
-    maWelcome.SetFont( maTextFont );
-    maWelcome.SetControlFont( maTextFont );
-    maWelcomeSize = Size( maWelcome.GetTextWidth( maWelcomeString ), maWelcome.GetTextHeight() );
-    maWelcomeSize.Width() = (maWelcomeSize.Width() * 20)/19;
+    if( maControlRect.GetWidth() < mnBtnPos + 20 )
+        maControlRect.Right() = maControlRect.Left() + mnBtnPos + 20;
 
-    nYPos += (maWelcomeSize.Height()*3)/2;
-
-    if( maControlRect.GetWidth() < mnBtnPos + maWelcomeSize.Width() + 20 )
-        maControlRect.Right() = maControlRect.Left() + maWelcomeSize.Width() + mnBtnPos + 20;
-
-    nYPos += maWelcomeSize.Height();
-
-    // set product string
-    maTextFont.SetSize( Size( 0, 30 ) );
-    maProduct.SetFont( maTextFont );
-
-    // get metric to get correct width factor and adjust
-    nW = (maProduct.GetFontMetric().GetWidth()*95)/100;
-    maTextFont.SetSize( Size( nW, 28 ) );
-
-    maProduct.SetFont( maTextFont );
-    maProduct.SetControlFont( maTextFont );
-    maProduct.SetText( maProductString );
-    maProductSize = Size( maProduct.GetTextWidth( maProductString ), maProduct.GetTextHeight() );
-    maProductSize.Width() = (maProductSize.Width() * 20)/19;
-
-    if( maControlRect.GetWidth() < maProductSize.Width() + mnBtnPos + 10 )
-        maControlRect.Right() = maControlRect.Left() + maProductSize.Width() + mnBtnPos + 10;
-
-    if( mnLayoutStyle == 1 )
-    {
-        maWelcome.Show();
-        maProduct.Show();
-    }
-
-    nYPos += (maProductSize.Height()*3)/2;
-
-    // set a slighly larger font than normal labels on the texts
-    maTextFont.SetSize( Size( 0, 11 ) );
-    maTextFont.SetWeight( WEIGHT_NORMAL );
+    if( maControlRect.GetWidth() < mnBtnPos + 10 )
+        maControlRect.Right() = maControlRect.Left() + mnBtnPos + 10;
 
     // collect the URLs of the entries in the File/New menu
     SvtModuleOptions    aModuleOptions;
@@ -629,7 +560,7 @@ void BackingWindow::initControls()
     }
 
     maToolbox.SetSelectHdl( LINK( this, BackingWindow, ToolboxHdl ) );
-    if( mnLayoutStyle == 0 )
+    if( mnHideExternalLinks == 0 )
         maToolbox.Show();
 
     // scale middle map to formatted width
@@ -847,17 +778,12 @@ void BackingWindow::Resize()
     // #i93631# squeeze controls so they fit into the box
     // this can be necessary due to application font height which has small deviations
     // from the size set
-    const long nWDelta    = maWelcomeSize.Height();
-    const long nW2Delta   = (maWelcomeSize.Height()*3)/2;
-    const long nPDelta    = (maProductSize.Height()*3)/2;
     const long nBDelta    = maButtonImageSize.Height() + 10;
     const long nB2Delta   = 3*maButtonImageSize.Height()/2;
     const long nLastDelta = maButtonImageSize.Height();
     long nDiff = 0;
-    while( ( maControlRect.Top()   +
-                 (nWDelta - nDiff) +
-                 (nW2Delta- nDiff) +
-                 (nPDelta - nDiff) +
+    while( ( maControlRect.Top()   -
+             3 * nDiff +
              3 * (nBDelta - nDiff) +
                  (nB2Delta- nDiff) +
                  nLastDelta
@@ -866,18 +792,7 @@ void BackingWindow::Resize()
         nDiff++;
     }
 
-    long nYPos = maControlRect.Top();
-    nYPos += nW2Delta - nDiff;
-    maWelcome.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ),
-                                Size( maControlRect.GetWidth() - mnBtnPos - 5, (maWelcomeSize.Height()*20)/19 ) );
-    nYPos += nWDelta - nDiff;
-    maProduct.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( maControlRect.GetWidth() - mnBtnPos - 5, (maProductSize.Height()*20)/19 ) );
-    nYPos += nPDelta - nDiff;
-
-    nYPos += nWDelta/2 - nDiff;
-
-    if( mnLayoutStyle != 1 )
-        nYPos = maControlRect.Top() + mnBtnTop;
+    long nYPos = maControlRect.Top() + mnBtnTop;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
@@ -893,7 +808,7 @@ void BackingWindow::Resize()
     maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
 }
 
-IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
 {
     const char* pNodePath = NULL;
     const char* pNode = NULL;
@@ -943,7 +858,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                         UNO_QUERY_THROW);
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
+                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
             }
         }

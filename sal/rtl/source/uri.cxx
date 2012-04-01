@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#include "rtl/uri.h"
-
 #include "surrogates.hxx"
 
 #include "osl/diagnose.h"

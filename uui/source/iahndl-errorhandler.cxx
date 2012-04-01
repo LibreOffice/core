@@ -160,11 +160,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
     rtl::OUString aMessage;
     {
         enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
-        static char const * const aManager[4]
-            = { CREATEVERSIONRESMGR_NAME(ofa),
-                CREATEVERSIONRESMGR_NAME(cnt),
-                CREATEVERSIONRESMGR_NAME(svx),
-                CREATEVERSIONRESMGR_NAME(uui) };
+        static char const * const aManager[4] = { "ofa", "cnt", "svx", "uui" };
         static sal_uInt16 const aId[4]
             = { RID_ERRHDL,
                 RID_CHAOS_START + 12,

@@ -76,6 +76,9 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
     case XML_blipFill:
         xRet.set( new BlipFillContext( *this, xAttribs, mpShapePtr->getGraphicProperties().maBlipProps ) );
         break;
+    case XML_wavAudioFile:
+        getEmbeddedWAVAudioFile( getRelations(), xAttribs, mpShapePtr->getGraphicProperties().maAudio );
+        break;
     }
 
     if ((getNamespace( aElementToken ) == NMSP_vml) && mpShapePtr)

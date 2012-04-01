@@ -30,7 +30,9 @@
 #include "svx/txencbox.hxx"
 #include "svx/txenctab.hxx"
 #include <svx/dialogs.hrc>
+#ifndef DISABLE_DBCONNECTIVITY
 #include "svx/dbcharsethelper.hxx"
+#endif
 #include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
@@ -124,6 +126,11 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
         sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
+#ifdef DISABLE_DBCONNECTIVITY
+    (void)bExcludeImportSubsets;
+    (void)nExcludeInfoFlags;
+    (void)nButIncludeInfoFlags;
+#else
     rtl_TextEncodingInfo aInfo;
     aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
     svxform::ODataAccessCharsetHelper aCSH;
@@ -171,6 +178,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                 InsertTextEncoding( nEnc );
         }
     }
+#endif
 }
 
 //------------------------------------------------------------------------

@@ -905,7 +905,7 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
         vcl::SettingsConfigItem* pItem = vcl::SettingsConfigItem::get();
         rtl::OUString aSetting( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WM" ) ),
                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShouldSwitchWorkspace" ) ) ) );
-        if( aSetting.getLength() == 0 )
+        if( aSetting.isEmpty() )
         {
             if( m_aWMName.EqualsAscii( "awesome" ) )
             {
@@ -1008,12 +1008,12 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
         ::rtl::OUString aCountry( pLocale->Country );
         ::rtl::OUString aVariant( pLocale->Variant );
 
-        if( aCountry.getLength() )
+        if( !aCountry.isEmpty() )
         {
             aLocaleString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
             aLocaleString += aCountry;
         }
-        if( aVariant.getLength() )
+        if( !aVariant.isEmpty() )
             aLocaleString += aVariant;
         aWMLocale = ::rtl::OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
     }

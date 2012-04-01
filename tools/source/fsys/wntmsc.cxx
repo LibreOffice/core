@@ -43,11 +43,9 @@
 #include <tools/fsys.hxx>
 #include <vector>
 
+#define INIT_WIN32_FIND_DATAA { 0, { 0, 0 }, { 0, 0 }, { 0, 0 }, 0, 0, 0, 0, { 0 }, { 0 } }
+
 int Sys2SolarError_Impl( int nSysErr );
-
-static sal_Bool   bLastCaseSensitive    = sal_False;
-
-//--------------------------------------------------------------------
 
 rtl::OString Upper_Impl(const rtl::OString &rStr)
 {
@@ -153,13 +151,13 @@ String DirEntry::GetVolume() const
 
     String aRet;
     const DirEntry *pTop = ImpGetTopPtr();
-    rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();
+    rtl::OString aTopName = rtl::OString(pTop->aName).toAsciiLowerCase();
 
     if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
            pTop->eFlag == FSYS_FLAG_RELROOT ||
            pTop->eFlag == FSYS_FLAG_VOLUME )
-         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
-         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
+         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
+         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
     {
         char sFileSysName[256];
         char sVolumeName[256];
@@ -666,7 +664,6 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         // Redirect
         String aPath( rDirEntry.GetFull() );
-        FSysRedirector::DoRedirect( aPath );
         DirEntry aDirEntry( aPath );
 
         // ist ein Medium im Laufwerk?
@@ -678,11 +675,13 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
                 pTop->eFlag == FSYS_FLAG_RELROOT ||
                 pTop->eFlag == FSYS_FLAG_VOLUME ) )
+        {
             if ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
                  aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) )
                 bAccess = sal_False;
             else
                 OSL_TRACE( "FSys: will access removable device!" );
+        }
         if ( bAccess && ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
                           aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) ) )
         {
@@ -735,7 +734,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         // Statusinformation vom Betriebssystem holen
         HANDLE h; //()
-        _WIN32_FIND_DATAA aEntry = {};
+        _WIN32_FIND_DATAA aEntry = INIT_WIN32_FIND_DATAA;
         DirEntry aAbsEntry( aDirEntry );
         if ( bAccess && aAbsEntry.ToAbs() )
         {
@@ -772,9 +771,9 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 }
 
                 // UNC-Volume?
-                DirEntry *pTop = aAbsEntry.ImpGetTopPtr();
-                if ( pTop->GetFlag() == FSYS_FLAG_ABSROOT &&
-                     ( pTop->aName.getLength() > 1 && (pTop->aName[1] != ':' )) )
+                DirEntry *pTop2 = aAbsEntry.ImpGetTopPtr();
+                if ( pTop2->GetFlag() == FSYS_FLAG_ABSROOT &&
+                     ( pTop2->aName.getLength() > 1 && (pTop2->aName[1] != ':' )) )
                 {
                     if ( bForceAccess )
                     {

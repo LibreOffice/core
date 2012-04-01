@@ -280,7 +280,7 @@ void LayeredDevice::Repaint (const Region& rRepaintRegion)
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
 {
-    if (mpLayers->size() == 0)
+    if (mpLayers->empty())
         return;
     else if (mpLayers->size() == 1)
     {

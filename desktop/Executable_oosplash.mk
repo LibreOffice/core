@@ -58,10 +58,12 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 
 endif
 
+ifneq ($(GUIBASE),headless)
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Executable_add_libs,oosplash,\
     -lX11 \
 ))
+endif
 endif
 
 ifeq ($(ENABLE_QUICKSTART_LIBPNG),TRUE)

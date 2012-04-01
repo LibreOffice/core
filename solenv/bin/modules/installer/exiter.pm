@@ -27,6 +27,9 @@
 
 package installer::exiter;
 
+use strict;
+use warnings;
+
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -91,11 +94,11 @@ sub exit_program
         installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
     }
     installer::logger::print_error("$message\nin function: $function");
-    installer::logger::print_error("Saved logfile: $installer::globals::logfilename\n");
-
-    # Saving the debug info
-
-    if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
+    print("ERROR, saved logfile $installer::globals::logfilename is:\n");
+    open(LOG, "<", $installer::globals::logfilename);
+    print ": $_" while (<LOG>);
+    print "\n";
+    close(LOG);
 
     installer::logger::stoptime();
 

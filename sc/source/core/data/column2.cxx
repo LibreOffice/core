@@ -56,7 +56,6 @@
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "cellform.hxx"
-#include "collect.hxx"
 #include "stlsheet.hxx"
 #include "rechead.hxx"
 #include "brdcst.hxx"
@@ -934,7 +933,6 @@ void ScColumn::RemoveAutoSpellObj()
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
-                pNewCell->TakeNote( pOldCell->ReleaseNote() );
                 maItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1004,7 +1002,6 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
-                pNewCell->TakeNote( pOldCell->ReleaseNote() );
                 maItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1125,7 +1122,7 @@ bool ScColumn::IsEmptyData() const
     return (maItems.empty());
 }
 
-bool ScColumn::IsEmptyVisData(bool bNotes) const
+bool ScColumn::IsEmptyVisData() const
 {
     if ( maItems.empty() )
         return true;
@@ -1135,9 +1132,7 @@ bool ScColumn::IsEmptyVisData(bool bNotes) const
         SCSIZE i;
         for (i=0; i<maItems.size() && !bVisData; i++)
         {
-            ScBaseCell* pCell = maItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
-                bVisData = true;
+            bVisData = true;
         }
         return !bVisData;
     }
@@ -1152,8 +1147,7 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
     Search( nStartRow, nIndex );
     while ( nIndex < maItems.size() && maItems[nIndex].nRow <= nEndRow )
     {
-        if ( maItems[nIndex].nRow >= nStartRow &&
-             maItems[nIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+        if ( maItems[nIndex].nRow >= nStartRow )
         {
             ++nVisCount;
         }
@@ -1162,7 +1156,7 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
     return nVisCount;
 }
 
-SCROW ScColumn::GetLastVisDataPos(bool bNotes) const
+SCROW ScColumn::GetLastVisDataPos() const
 {
     SCROW nRet = 0;
     if ( !maItems.empty() )
@@ -1172,18 +1166,14 @@ SCROW ScColumn::GetLastVisDataPos(bool bNotes) const
         for (i=maItems.size(); i>0 && !bFound; )
         {
             --i;
-            ScBaseCell* pCell = maItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
-            {
-                bFound = true;
-                nRet = maItems[i].nRow;
-            }
+            bFound = true;
+            nRet = maItems[i].nRow;
         }
     }
     return nRet;
 }
 
-SCROW ScColumn::GetFirstVisDataPos(bool bNotes) const
+SCROW ScColumn::GetFirstVisDataPos() const
 {
     SCROW nRet = 0;
     if ( !maItems.empty() )
@@ -1192,12 +1182,8 @@ SCROW ScColumn::GetFirstVisDataPos(bool bNotes) const
         bool bFound = false;
         for (i=0; i<maItems.size() && !bFound; i++)
         {
-            ScBaseCell* pCell = maItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
-            {
-                bFound = true;
-                nRet = maItems[i].nRow;
-            }
+            bFound = true;
+            nRet = maItems[i].nRow;
         }
     }
     return nRet;
@@ -1226,7 +1212,7 @@ bool ScColumn::IsEmpty() const
     return (IsEmptyData() && IsEmptyAttr());
 }
 
-bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
+bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 {
     if ( maItems.empty() )
         return true;
@@ -1235,7 +1221,7 @@ bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) c
     Search( nStartRow, nIndex );
     while ( nIndex < maItems.size() && maItems[nIndex].nRow <= nEndRow )
     {
-        if ( !maItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
+        if ( !maItems[nIndex].pCell->IsBlank() )   // found a cell
             return false;                           // not empty
         ++nIndex;
     }
@@ -1443,14 +1429,14 @@ bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
         return false;
 }
 
-bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow, bool bFullFormattedArea ) const
 {
     if (pAttrArray)
     {
         // row of last cell is needed
-        SCROW nLastData = GetLastVisDataPos( true );    // always including notes, 0 if none
+        SCROW nLastData = GetLastVisDataPos();    // always including notes, 0 if none
 
-        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
+        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData, bFullFormattedArea );
     }
     else
         return false;

@@ -26,7 +26,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <algorithm>
+#include <cassert>
+
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -83,6 +87,7 @@ using namespace ::com::sun::star::uno;
 SearchThread::SearchThread( SearchProgress* pProgess,
                             TPGalleryThemeProperties* pBrowser,
                             const INetURLObject& rStartURL ) :
+        Thread      ( "cuiSearchThread" ),
         mpProgress  ( pProgess ),
         mpBrowser   ( pBrowser ),
         maStartURL  ( rStartURL )
@@ -97,7 +102,7 @@ SearchThread::~SearchThread()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL SearchThread::run()
+void SearchThread::execute()
 {
     const String aFileType( mpBrowser->aCbbFileType.GetText() );
 
@@ -120,12 +125,7 @@ void SAL_CALL SearchThread::run()
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
-}
 
-// ------------------------------------------------------------------------
-
-void SAL_CALL SearchThread::onTerminated()
-{
     Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ) );
 }
 
@@ -227,7 +227,7 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
     aFtSearchType   ( this, CUI_RES( FT_SEARCH_TYPE ) ),
     aFLSearchType  ( this, CUI_RES( FL_SEARCH_TYPE ) ),
     aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    maSearchThread  ( this, (TPGalleryThemeProperties*) pParent, rStartURL )
+    parent_(pParent), startUrl_(rStartURL)
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
@@ -237,12 +237,15 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
 
 void SearchProgress::Terminate()
 {
-    maSearchThread.terminate();
+    if (maSearchThread.is()) {
+        maSearchThread->terminate();
+        maSearchThread->join();
+    }
 }
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn)
 {
     Terminate();
     return 0L;
@@ -250,7 +253,7 @@ IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
 {
     EndDialog( RET_OK );
     delete this;
@@ -271,7 +274,10 @@ short SearchProgress::Execute()
 
 void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
-    maSearchThread.create();
+    assert(!maSearchThread.is());
+    maSearchThread = new SearchThread(
+        this, static_cast< TPGalleryThemeProperties * >(parent_), startUrl_);
+    maSearchThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
@@ -284,6 +290,7 @@ TakeThread::TakeThread(
     TPGalleryThemeProperties* pBrowser,
     TokenList_impl& rTakenList
 ) :
+    Thread      ( "cuiTakeThread" ),
     mpProgress  ( pProgess ),
     mpBrowser   ( pBrowser ),
     mrTakenList ( rTakenList )
@@ -298,7 +305,7 @@ TakeThread::~TakeThread()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL TakeThread::run()
+void TakeThread::execute()
 {
     String              aName;
     INetURLObject       aURL;
@@ -341,12 +348,7 @@ void SAL_CALL TakeThread::run()
         pThm->UnlockBroadcaster();
         delete pStatusProgress;
     }
-}
 
-// ------------------------------------------------------------------------
-
-void SAL_CALL TakeThread::onTerminated()
-{
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ) );
 }
 
@@ -359,8 +361,7 @@ TakeProgress::TakeProgress( Window* pWindow ) :
     aFtTakeFile     ( this, CUI_RES( FT_TAKE_FILE ) ),
     aFLTakeProgress( this, CUI_RES( FL_TAKE_PROGRESS ) ),
     aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList )
-
+    window_(pWindow)
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
@@ -371,12 +372,15 @@ TakeProgress::TakeProgress( Window* pWindow ) :
 
 void TakeProgress::Terminate()
 {
-    maTakeThread.terminate();
+    if (maTakeThread.is()) {
+        maTakeThread->terminate();
+        maTakeThread->join();
+    }
 }
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
 {
     Terminate();
     return 0L;
@@ -384,7 +388,7 @@ IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
@@ -449,7 +453,10 @@ short TakeProgress::Execute()
 
 void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
-    maTakeThread.create();
+    assert(!maTakeThread.is());
+    maTakeThread = new TakeThread(
+        this, static_cast< TPGalleryThemeProperties * >(window_), maTakenList);
+    maTakeThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
@@ -490,7 +497,7 @@ short ActualizeProgress::Execute()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( ActualizeProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn)
 {
     pTheme->AbortActualize();
     EndDialog( RET_OK );
@@ -577,7 +584,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 {
     Gallery*    pGal = pThm->GetParent();
     const sal_uLong nId = GetId();
@@ -1008,7 +1015,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 {
     String aText( aCbbFileType.GetText() );
 
@@ -1044,7 +1051,7 @@ void TPGalleryThemeProperties::SearchFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
 {
     if( bInputAllowed )
     {
@@ -1107,7 +1114,7 @@ void TPGalleryThemeProperties::TakeFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickPreviewHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
 {
     if ( bInputAllowed )
     {
@@ -1158,7 +1165,7 @@ void TPGalleryThemeProperties::DoPreview()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
 {
     if( bInputAllowed )
     {
@@ -1185,7 +1192,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl)
 {
     if( bInputAllowed )
     {
@@ -1199,7 +1206,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 {
     if( bInputAllowed )
     {
@@ -1232,7 +1239,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
 {
     if( bInputAllowed )
     {
@@ -1247,7 +1254,7 @@ IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl)
 {
     aPreviewTimer.Stop();
     DoPreview();
@@ -1256,7 +1263,7 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 {
   if( !aFoundList.empty() )
   {

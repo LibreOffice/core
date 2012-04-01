@@ -66,7 +66,7 @@ friend class SfxOrganizeDlg_Impl;
 
 protected:
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection & );
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
     virtual sal_Bool NotifyMoving(SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent, sal_uIntPtr &);

@@ -30,6 +30,7 @@
 // my own includes
 
 #include <services/sessionlistener.hxx>
+#include <services/desktop.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <protocols.h>
@@ -136,10 +137,12 @@ SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiSer
         , m_bAllowUserInteractionOnQuit( sal_False )
         , m_bTerminated( sal_False )
 {
+    SAL_INFO("fwk.session", "SessionListener::SessionListener");
 }
 
 SessionListener::~SessionListener()
 {
+    SAL_INFO("fwk.session", "SessionListener::~SessionListener");
     if (m_rSessionManager.is())
     {
         css::uno::Reference< XSessionManagerListener> me(this);
@@ -149,6 +152,7 @@ SessionListener::~SessionListener()
 
 void SessionListener::StoreSession( sal_Bool bAsync )
 {
+    SAL_INFO("fwk.session", "SessionListener::StoreSession");
     ResetableGuard aGuard(m_aLock);
     try
     {
@@ -182,6 +186,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
 
 void SessionListener::QuitSessionQuietly()
 {
+    SAL_INFO("fwk.session", "SessionListener::QuitSessionQuietly");
     ResetableGuard aGuard(m_aLock);
     try
     {
@@ -206,11 +211,13 @@ void SessionListener::QuitSessionQuietly()
 
 void SAL_CALL SessionListener::disposing(const com::sun::star::lang::EventObject&) throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::disposing");
 }
 
 void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::initialize");
 
     OUString aSMgr(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
     if (args.getLength() > 0)
@@ -242,6 +249,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
     throw (css::uno::RuntimeException)
 {
+   SAL_INFO("fwk.session", "SessionListener::statusChanged");
    if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionRestore")))
     {
         if (event.FeatureDescriptor.compareToAscii("update")==0)
@@ -262,6 +270,7 @@ void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
 sal_Bool SAL_CALL SessionListener::doRestore()
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::doRestore");
     ResetableGuard aGuard(m_aLock);
     m_bRestored = sal_False;
     try {
@@ -288,6 +297,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelable*/ )
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::doSave");
     if (bShutdown)
     {
         m_bSessionStoreRequested = sal_True; // there is no need to protect it with mutex
@@ -304,6 +314,7 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
 void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::approveInteraction");
     // do AutoSave as the first step
     ResetableGuard aGuard(m_aLock);
 
@@ -316,7 +327,19 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             StoreSession( sal_False );
 
             css::uno::Reference< css::frame::XDesktop > xDesktop( m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-            m_bTerminated = xDesktop->terminate();
+            // honestly: how many implementations of XDesktop will we ever have?
+            // so casting this directly to the implementation
+            Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));
+            if(pDesktop)
+            {
+                SAL_INFO("fwk.session", "XDesktop is a framework::Desktop -- good.");
+                m_bTerminated = pDesktop->terminateQuickstarterToo();
+            }
+            else
+            {
+                SAL_WARN("fwk.session", "XDesktop is not a framework::Desktop -- this should never happen.");
+                m_bTerminated = xDesktop->terminate();
+            }
 
             if ( m_rSessionManager.is() )
             {
@@ -345,6 +368,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
 void SessionListener::shutdownCanceled()
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::shutdownCanceled");
     // set the state back
     m_bSessionStoreRequested = sal_False; // there is no need to protect it with mutex
 }
@@ -352,6 +376,7 @@ void SessionListener::shutdownCanceled()
 void SessionListener::doQuit()
     throw (RuntimeException)
 {
+    SAL_INFO("fwk.session", "SessionListener::doQuit");
     if ( m_bSessionStoreRequested && !m_bTerminated )
     {
         // let the session be closed quietly in this case

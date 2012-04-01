@@ -28,7 +28,7 @@
 -->
 
 <!-- Generate a .hxx file with type-safe C++ abstractions (based on
-     unotools/configuration.hxx) for all the <prop> and <set> elements in an
+     comphelper/configuration.hxx) for all the <prop> and <set> elements in an
      .xcs file.
 
      Takes up to three parameters ns1, ns2, ns3 that represent the .xcs file's
@@ -95,7 +95,8 @@
     <xsl:text>#include "sal/config.h"&#xA;</xsl:text>
     <xsl:text>&#xA;</xsl:text>
     <xsl:if test=".//prop or .//set">
-      <xsl:if test=".//prop/@oor:nillable = 'true'">
+      <xsl:if
+          test=".//prop[count(@oor:nillable) = 0 or @oor:nillable = 'true']">
         <xsl:text>#include "boost/optional.hpp"&#xA;</xsl:text>
       </xsl:if>
       <xsl:if test=".//prop/@oor:type = 'oor:any'">
@@ -109,7 +110,7 @@
       <xsl:if test=".//prop/@oor:type = 'xs:short' or .//prop/@oor:type = 'xs:int' or .//prop/@oor:type = 'xs:long' or .//prop/@oor:type = 'xs:hexBinary'">
         <xsl:text>#include "sal/types.h"&#xA;</xsl:text>
       </xsl:if>
-      <xsl:text>#include "unotools/configuration.hxx"&#xA;</xsl:text>
+      <xsl:text>#include "comphelper/configuration.hxx"&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:text>namespace officecfg { namespace </xsl:text>
       <xsl:value-of select="$ns1"/>
@@ -144,7 +145,7 @@
       <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
       <xsl:text>struct </xsl:text>
       <xsl:value-of select="$name"/>
-      <xsl:text>: public unotools::ConfigurationGroup&lt; </xsl:text>
+      <xsl:text>: public comphelper::ConfigurationGroup&lt; </xsl:text>
       <xsl:value-of select="$name"/>
       <xsl:text>&gt; {&#xA;</xsl:text>
       <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
@@ -178,7 +179,7 @@
     <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
     <xsl:text>struct </xsl:text>
     <xsl:value-of select="$name"/>
-    <xsl:text>: public unotools::ConfigurationSet&lt; </xsl:text>
+    <xsl:text>: public comphelper::ConfigurationSet&lt; </xsl:text>
     <xsl:value-of select="$name"/>
     <xsl:text>&gt; {&#xA;</xsl:text>
     <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
@@ -203,7 +204,7 @@
     <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
     <xsl:text>struct </xsl:text>
     <xsl:value-of select="$name"/>
-    <xsl:text>: public unotools::</xsl:text>
+    <xsl:text>: public comphelper::</xsl:text>
     <xsl:choose>
       <xsl:when test="@oor:localized = 'true'">
         <xsl:text>ConfigurationLocalizedProperty</xsl:text>
@@ -215,7 +216,7 @@
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="$name"/>
     <xsl:text>, </xsl:text>
-    <xsl:if test="@oor:nillable = 'true'">
+    <xsl:if test="not(@oor:nillable = 'false')">
       <xsl:text>boost::optional&lt;</xsl:text>
     </xsl:if>
     <xsl:choose>
@@ -266,7 +267,7 @@
         -->com::sun::star::uno::Sequence&lt;sal_Int8&gt; &gt; </xsl:text>
       </xsl:when>
     </xsl:choose>
-    <xsl:if test="@oor:nillable = 'true'">
+    <xsl:if test="not(@oor:nillable = 'false')">
       <xsl:text>&gt; </xsl:text>
     </xsl:if>
     <xsl:text>&gt; {&#xA;</xsl:text>

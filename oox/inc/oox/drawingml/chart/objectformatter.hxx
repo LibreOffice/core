@@ -142,20 +142,12 @@ public:
                             const NumberFormat& rNumberFormat,
                             bool bPercentFormat = false );
 
-    /** Sets automatic line properties to the passed property set. */
-    void                convertAutomaticLine(
-                            PropertySet& rPropSet,
-                            ObjectType eObjType,
-                            sal_Int32 nSeriesIdx = -1 );
-
     /** Sets automatic fill properties to the passed property set. */
     void                convertAutomaticFill(
                             PropertySet& rPropSet,
                             ObjectType eObjType,
                             sal_Int32 nSeriesIdx = -1 );
 
-    /** Returns true, if the passed shape properties have automatic line mode. */
-    static bool         isAutomaticLine( const ModelRef< Shape >& rxShapeProp );
     /** Returns true, if the passed shape properties have automatic fill mode. */
     static bool         isAutomaticFill( const ModelRef< Shape >& rxShapeProp );
 

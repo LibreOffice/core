@@ -63,7 +63,6 @@
 #include "glob.hrc"
 #include "sdpage.hxx"
 #include "strmname.h"
-#include "strings.hrc"
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "DrawDocShell.hxx"

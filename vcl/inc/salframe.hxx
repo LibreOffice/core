@@ -103,16 +103,6 @@ struct SystemEnvData;
 // the window containing the intro bitmap, aka splashscreen
 #define SAL_FRAME_STYLE_INTRO               ((sal_uLong)0x80000000)
 
-/*
-#define SAL_FRAME_STYLE_MINABLE             ((sal_uLong)0x00000008)
-#define SAL_FRAME_STYLE_MAXABLE             ((sal_uLong)0x00000010)
-#define SAL_FRAME_STYLE_BORDER              ((sal_uLong)0x00000040)
-#define SAL_FRAME_STYLE_DOC                 ((sal_uLong)0x00004000)
-#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00008000)
-#define SAL_FRAME_STYLE_TOOL                ((sal_uLong)0x00010000)
-#define SAL_FRAME_STYLE_FULLSIZE            ((sal_uLong)0x00020000)
-*/
-
 // ----------------------------------------
 // - extended frame style                 -
 // - (sal equivalent to extended WinBits) -
@@ -222,8 +212,6 @@ public:
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS
     virtual LanguageType        GetInputLanguage() = 0;
-
-    virtual SalBitmap*          SnapShot() = 0;
 
     virtual void                UpdateSettings( AllSettings& rSettings ) = 0;
 

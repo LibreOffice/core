@@ -128,27 +128,11 @@ oslProcess raiseProcess( ::rtl::OUString const & appURL,
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void writeConsole(::rtl::OUString const & sText);
 
-/** writes the argument string to the console.
-    On Linux/Unix/etc. the string is passed into fprintf without any conversion.
-    On Windows the string is converted to UTF16 assuming the argument is UTF8
-    encoded. The UTF16 string is written to stdout with WriteFile. unopkg.com
-    reads the data and prints them out using WriteConsoleW.
-*/
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsole(::rtl::OString const & sText);
-
 /** writes the argument to the console using the error stream.
     Otherwise the same as writeConsole.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void writeConsoleError(::rtl::OUString const & sText);
-
-
-/** writes the argument to the console using the error stream.
-    Otherwise the same as writeConsole.
-*/
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsoleError(::rtl::OString const & sText);
 
 
 /** reads from the console.
@@ -165,8 +149,6 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OUString const & sText);
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void TRACE(::rtl::OString const & sText);
 
 /** registers or revokes shared or bundled extensions which have been
     recently added or removed.

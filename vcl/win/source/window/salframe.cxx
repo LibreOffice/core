@@ -420,10 +420,10 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             {
                 // Document Windows are also maximized, if the current Document Window
                 // is also maximized
-                HWND hWnd = GetForegroundWindow();
-                if ( hWnd && IsMaximized( hWnd ) &&
-                     (GetWindowInstance( hWnd ) == pInst->mhInst) &&
-                     ((GetWindowStyle( hWnd ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
+                HWND hWnd2 = GetForegroundWindow();
+                if ( hWnd2 && IsMaximized( hWnd2 ) &&
+                     (GetWindowInstance( hWnd2 ) == pInst->mhInst) &&
+                     ((GetWindowStyle( hWnd2 ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
                     pFrame->mnShowState = SW_SHOWMAXIMIZED;
             }
         }
@@ -1107,11 +1107,7 @@ void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
-    if ( !SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) ) )
-    {
-        ByteString aAnsiTitle = ImplSalGetWinAnsiString( rTitle );
-        SetWindowTextA( mhWnd, aAnsiTitle.GetBuffer() );
-    }
+    SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
 }
 
 // -----------------------------------------------------------------------
@@ -1437,18 +1433,18 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         {
             POINT pt;
             GetCursorPos( &pt );
-            RECT aRect;
-            aRect.left = pt.x;
-            aRect.top = pt.y;
-            aRect.right = pt.x+2;
-            aRect.bottom = pt.y+2;
+            RECT aRect2;
+            aRect2.left = pt.x;
+            aRect2.top = pt.y;
+            aRect2.right = pt.x+2;
+            aRect2.bottom = pt.y+2;
 
             // dualmonitor support:
             // Get screensize of the monitor whith the mouse pointer
-            ImplSalGetWorkArea( mhWnd, &aRect, &aRect );
+            ImplSalGetWorkArea( mhWnd, &aRect2, &aRect2 );
 
-            nX = ((aRect.right-aRect.left)-nWidth)/2 + aRect.left;
-            nY = ((aRect.bottom-aRect.top)-nHeight)/2 + aRect.top;
+            nX = ((aRect2.right-aRect2.left)-nWidth)/2 + aRect2.left;
+            nY = ((aRect2.bottom-aRect2.top)-nHeight)/2 + aRect2.top;
         }
 
 
@@ -2449,7 +2445,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
 rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
-    static const int nMaxKeyLen = 350;
+    static const UINT nMaxKeyLen = 350;
     sal_Unicode aKeyBuf[ nMaxKeyLen ];
     UINT        nKeyBufLen = 0;
     UINT        nSysCode = 0;
@@ -2477,7 +2473,7 @@ rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     sal_uInt16      nCode = nKeyCode & 0x0FFF;
     sal_uLong       nSysCode2 = 0;
-    sal_Char*   pReplace = NULL;
+    const sal_Char*   pReplace = NULL;
     sal_Unicode cSVCode = 0;
     sal_Char    aFBuf[4];
     nSysCode = 0;
@@ -2958,39 +2954,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );
-}
-
-// -----------------------------------------------------------------------
-
-SalBitmap* WinSalFrame::SnapShot()
-{
-    WinSalBitmap* pSalBitmap = NULL;
-
-    RECT aRect;
-    GetWindowRect( mhWnd, &aRect );
-
-    int     nDX = aRect.right-aRect.left;
-    int     nDY = aRect.bottom-aRect.top;
-    HDC     hDC = GetWindowDC( mhWnd );
-    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
-    HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
-    sal_Bool    bRet;
-
-    bRet = BitBlt( hBmpDC, 0, 0, nDX, nDY, hDC, 0, 0, SRCCOPY ) ? TRUE : FALSE;
-    ImplReleaseCachedDC( CACHED_HDC_1 );
-
-    if ( bRet )
-    {
-        pSalBitmap = new WinSalBitmap;
-
-        if ( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
-        {
-            delete pSalBitmap;
-            pSalBitmap = NULL;
-        }
-    }
-
-    return pSalBitmap;
 }
 
 // -----------------------------------------------------------------------
@@ -3476,32 +3439,13 @@ static sal_uInt16 ImplSalGetKeyCode( WPARAM wParam )
 
 // -----------------------------------------------------------------------
 
-static UINT ImplStrToNum( const sal_Char* pStr )
-{
-    sal_uInt16 n = 0;
-
-    // Solange es sich um eine Ziffer handelt, String umwandeln
-    while( (*pStr >= 48) && (*pStr <= 57) )
-    {
-        n *= 10;
-        n += ((*pStr) - 48);
-        pStr++;
-    }
-
-    return n;
-}
-
-// -----------------------------------------------------------------------
-
 static void ImplUpdateInputLang( WinSalFrame* pFrame )
 {
-    sal_Bool bLanguageChange = FALSE;
     UINT nLang = LOWORD( GetKeyboardLayout( 0 ) );
     if ( nLang && nLang != pFrame->mnInputLang )
     {
         // keep input lang up-to-date
         pFrame->mnInputLang = nLang;
-        bLanguageChange = TRUE;
     }
 
     // We are on Windows NT so we use Unicode FrameProcs and get
@@ -3538,10 +3482,9 @@ LanguageType WinSalFrame::GetInputLanguage()
 sal_Bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
 {
     sal_Bool bRet = FALSE;
-    HKL hkl = 0;
-
+    sal_IntPtr nLangType = aLangType;
     // just use the passed language identifier, do not try to load additional keyboard support
-    hkl = (HKL) aLangType;
+    HKL hkl = (HKL) nLangType;
 
     if( hkl )
     {
@@ -4801,10 +4744,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             clrPrevText = SetTextColor( pDI->hDC, GetSysColor( fSelected ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT ) );
 
         DWORD colBackground = GetSysColor( fSelected ? COLOR_HIGHLIGHT : COLOR_MENU );
-        if ( fSelected )
-            clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
-        else
-            clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
+        clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
 
         hbrOld = (HBRUSH)SelectObject( pDI->hDC, CreateSolidBrush( GetBkColor( pDI->hDC ) ) );
 
@@ -5318,10 +5258,10 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
 
             if ( pAttrBuf )
             {
-                xub_StrLen nTextLen = aEvt.maText.Len();
-                pSalAttrAry = new sal_uInt16[nTextLen];
-                memset( pSalAttrAry, 0, nTextLen*sizeof( sal_uInt16 ) );
-                for ( xub_StrLen i = 0; (i < nTextLen) && (i < nAttrLen); i++ )
+                xub_StrLen nTextLen2 = aEvt.maText.Len();
+                pSalAttrAry = new sal_uInt16[nTextLen2];
+                memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
+                for ( xub_StrLen i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf[i];
                     sal_uInt16   nSalAttr;
@@ -5515,8 +5455,8 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
             pFrame->mbCandidateMode = TRUE;
             ImplHandleIMEComposition( hWnd, GCS_CURSORPOS );
 
-            HWND hWnd = pFrame->mhWnd;
-            HIMC hIMC = ImmGetContext( hWnd );
+            HWND hWnd2 = pFrame->mhWnd;
+            HIMC hIMC = ImmGetContext( hWnd2 );
             if ( hIMC )
             {
                 LONG nBufLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 );
@@ -5538,7 +5478,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
                     ImmSetCandidateWindow( hIMC, &aForm );
                 }
 
-                ImmReleaseContext( hWnd, hIMC );
+                ImmReleaseContext( hWnd2, hIMC );
             }
         }
 
@@ -5563,7 +5503,7 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     LRESULT nRet = 0;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = UniString();
+    aEvt.maText = rtl::OUString();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_SETCOMPSTR );
@@ -5617,7 +5557,7 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = UniString();
+    aEvt.maText = rtl::OUString();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
@@ -5904,7 +5844,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                 if( !wParam )
                 {
-                    ImplSVData* pSVData = ImplGetSVData();
                     pSVData->maAppData.mnModalMode++;
 
                     ImplHideSplash();
@@ -6205,14 +6144,14 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
                 if( first )
                 {
                     first = 0;
-                    fprintf( fp, "Process ID: %d (0x%x)\n", GetCurrentProcessId(), GetCurrentProcessId() );
+                    fprintf( fp, "Process ID: %ld (0x%lx)\n", GetCurrentProcessId(), GetCurrentProcessId() );
                 }
                 time_t aclock;
                 time( &aclock );                           // Get time in seconds
                 struct tm *newtime = localtime( &aclock ); // Convert time to struct tm form
                 fprintf( fp, asctime( newtime ) );         // print time stamp
 
-                fprintf( fp, "%s returned %u (0x%x)\n", szApiCall, lastError, lastError );
+                fprintf( fp, "%s returned %lu (0x%lx)\n", szApiCall, lastError, lastError );
                 bSuccess = TRUE;    // may be FormatMessage fails but we wrote at least the error code
 
                 LPVOID lpMsgBuf;

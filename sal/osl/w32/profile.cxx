@@ -103,8 +103,6 @@ typedef struct _osl_TFile
     HANDLE  m_Handle;
     sal_Char*   m_pReadPtr;
     sal_Char    m_ReadBuf[512];
-/*      sal_Char*   m_pWritePtr; */
-/*      sal_Char    m_WriteBuf[512]; */
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
@@ -216,7 +214,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 #ifdef DEBUG_OSL_PROFILE
     Flags=osl_Profile_FLUSHWRITE;
 
-    // OSL_TRACE("opening '%s'\n",FileName);
     if ( Flags == osl_Profile_DEFAULT )
     {
         OSL_TRACE("with osl_Profile_DEFAULT");
@@ -233,10 +230,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
     {
         OSL_TRACE("with osl_Profile_WRITELOCK");
     }
-/*      if ( Flags & osl_Profile_READWRITE ) */
-/*      { */
-/*          OSL_TRACE("with osl_Profile_READWRITE \n"); */
-/*      } */
     if ( Flags & osl_Profile_FLUSHWRITE )
     {
         OSL_TRACE("with osl_Profile_FLUSHWRITE");
@@ -260,7 +253,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
     pProfile->m_Flags = Flags & FLG_USER;
     osl_getSystemPathFromFileURL(strProfileName, &pProfile->m_strFileName);
-//  rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
 
     if (Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ))
         pProfile->m_pFile = pFile;
@@ -305,9 +297,6 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         {
             if ( !( pProfile->m_Flags & osl_Profile_READLOCK )  && ( pProfile->m_Flags & FLG_MODIFIED ) )
             {
-/*                  if (pProfile->m_pFile == NULL) */
-/*                      pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
-
                 storeProfile(pProfile, sal_False);
             }
         }
@@ -349,13 +338,10 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         }
         if ( pProfile->m_Sections != 0 )
         {
-            /*osl_TProfileSection* pSections=pProfile->m_Sections;*/
             for ( index = 0 ; index < pProfile->m_NoSections ; ++index )
             {
                 if ( pProfile->m_Sections[index].m_Entries != 0 )
-                {
                     free(pProfile->m_Sections[index].m_Entries);
-                }
             }
             free(pProfile->m_Sections);
         }
@@ -389,7 +375,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     }
 
     pFile = pProfile->m_pFile;
-    if ( !( pFile != 0 && pFile->m_Handle >= 0 ) )
+    if ( pFile == 0 || pFile->m_Handle == INVALID_HANDLE_VALUE )
     {
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_flushProfile() [invalid file]");
@@ -428,20 +414,13 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
         return sal_False;
     }
 
-#ifdef DEBUG_OSL_PROFILE
-/*    OSL_TRACE("File Buffer in writeProfileImpl '%s' size == '%i' '%i'(%i)\n",
-      pFile->m_pWriteBuf,pFile->m_nWriteBufLen,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
-#endif
-
     bRet=WriteFile(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree,&BytesWritten,NULL);
 
     if ( bRet == 0 || BytesWritten <= 0 )
     {
         OSL_ENSURE(bRet,"WriteFile failed!!!");
-
         OSL_TRACE("write failed '%s'",strerror(errno));
 
-/*        OSL_TRACE("Out osl_writeProfileImpl() [write '%s']\n",strerror(errno));*/
         return (sal_False);
     }
 
@@ -479,7 +458,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_readProfileString [pProfile==0]");
 #endif
-
 
         return (sal_False);
     }
@@ -520,16 +498,12 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
         OSL_TRACE("Out osl_readProfileString [pStr==0]");
 #endif
 
-
         return (sal_False);
     }
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out osl_readProfileString [ok]");
 #endif
-
-
-
 
     return (sal_True);
 }
@@ -1156,8 +1130,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
 }
 
 
-
-
 /*****************************************************************************/
 /* Static Module Functions */
 /*****************************************************************************/
@@ -1208,64 +1180,11 @@ static sal_Bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption ProfileFlags )
 {
     osl_TFile* pFile = reinterpret_cast< osl_TFile*>( calloc( 1, sizeof(osl_TFile) ) );
     sal_Bool bWriteable = sal_False;
 
-/*    if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE | osl_Profile_READWRITE ) )*/
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
     {
 #ifdef DEBUG_OSL_PROFILE
@@ -1312,18 +1231,8 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
         lockFile(pFile, bWriteable ? write_lock : read_lock);
     }
 
-    /* mfe: new WriteBuf obsolete */
-/*  pFile->m_pWritePtr = pFile->m_Buf;*/
-/*  pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
-
     return (pFile);
 }
-
-
-
-
-
-
 
 
 
@@ -1338,17 +1247,6 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile)
 
     if (pFile->m_Handle != INVALID_HANDLE_VALUE)
     {
-       /* mfe: new WriteBuf obsolete */
-        /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*      if (pFile->m_pWritePtr > pFile->m_Buf)*/
-/*      {*/
-/*          DWORD Bytes;*/
-
-/*          WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf,*/
-/*                    &Bytes, NULL);*/
-/*      }*/
-
         stamp = getFileStamp(pFile);
 
         lockFile(pFile, un_lock);
@@ -1368,29 +1266,10 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile)
 }
 
 
-
-
-
-
-
-
 static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 {
     if (pFile->m_Handle != INVALID_HANDLE_VALUE)
     {
-        /* mfe: new WriteBuf obsolete */
-        /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*      if (pFile->m_pWritePtr > pFile->m_WriteBuf)*/
-/*      {*/
-/*          DWORD Bytes;*/
-
-/*          WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf,*/
-/*                    &Bytes, NULL);*/
-
-/*          pFile->m_pWritePtr = pFile->m_WriteBuf;*/
-/*      }*/
-
         pFile->m_pReadPtr = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
         SetFilePointer(pFile->m_Handle, 0, NULL, FILE_BEGIN);
@@ -1401,14 +1280,6 @@ static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 
     return (sal_True);
 }
-
-
-
-
-
-
-
-
 
 
 static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
@@ -1491,19 +1362,11 @@ static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
 }
 
 
-
-
-
-
-
-
-
-
 static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
-    if ( pFile == 0 || pFile->m_Handle < 0 )
+    if ( pFile == 0 || pFile->m_Handle == INVALID_HANDLE_VALUE )
     {
         return (sal_False);
     }
@@ -1546,7 +1409,6 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 }
 
 /* platform specific end */
-
 
 static const sal_Char* stripBlanks(const sal_Char* String, sal_uInt32* pLen)
 {
@@ -1960,7 +1822,6 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
         else
         {
             /* new section */
-
             if (! addSection(pProfile, i, pStr + 1, pChar - pStr - 1))
                 return (sal_False);
         }
@@ -1968,9 +1829,6 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
     return (sal_True);
 }
-
-
-
 
 
 static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
@@ -2024,9 +1882,6 @@ static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
             closeFileImpl(pTmpFile);
 
             osl_ProfileSwapProfileNames(pProfile);
-
-/*          free(pProfile->m_pFile);*/
-/*          free(pTmpFile);*/
 
             pProfile->m_pFile = openFileImpl(pProfile->m_strFileName,pProfile->m_Flags);
 
@@ -2169,7 +2024,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
     if ( bWriteable )
     {
-/*          PFlags = osl_Profile_DEFAULT | osl_Profile_READWRITE; */
         PFlags = osl_Profile_DEFAULT | osl_Profile_WRITELOCK;
     }
     else
@@ -2183,8 +2037,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 #ifdef DEBUG_OSL_PROFILE
         OSL_TRACE("AUTOOPEN MODE");
 #endif
-
-
 
         if ( ( pProfile = (osl_TProfileImpl*)osl_openProfile( NULL, PFlags ) ) != NULL )
         {
@@ -2450,11 +2302,11 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                     else
                     {
                         ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
-                        int n;
+                        int nLen = 0;
 
-                        if ((n = WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL)) > 0)
+                        if ((nLen = WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL)) > 0)
                         {
-                            strcpy(aTmpPath + n, SVERSION_USER);
+                            strcpy(aTmpPath + nLen, SVERSION_USER);
                             if (access(aTmpPath, 0) >= 0)
                             {
                                 dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, reinterpret_cast<LPWSTR>(aPath + dwPathLen), aPath.getBufSizeInSymbols() - dwPathLen );
@@ -2542,9 +2394,9 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
             if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
             {
-                static sal_Char *SubDirs[] = SVERSION_DIRS;
+                static const sal_Char *SubDirs[] = SVERSION_DIRS;
 
-                int i = 0;
+                unsigned i = 0;
                 pStr = aTmpPath + nPos;
 
                 for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
@@ -2652,16 +2504,16 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             }
                             else
                             {
-                                ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+                                ::osl::LongPathBuffer< sal_Char > aTmpPath2( MAX_LONG_PATH );
                                 int n;
 
                                 if ((n = WideCharToMultiByte(
-                                         CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath,
-                                         aTmpPath.getBufSizeInSymbols(), NULL, NULL))
+                                         CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath2,
+                                         aTmpPath2.getBufSizeInSymbols(), NULL, NULL))
                                     > 0)
                                 {
-                                    strcpy(aTmpPath + n, SVERSION_USER);
-                                    if (access(aTmpPath, 0) >= 0)
+                                    strcpy(aTmpPath2 + n, SVERSION_USER);
+                                    if (access(aTmpPath2, 0) >= 0)
                                     {
                                         dwPathLen += MultiByteToWideChar(
                                             CP_ACP, 0, SVERSION_USER, -1,

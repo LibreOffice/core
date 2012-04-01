@@ -48,6 +48,9 @@ namespace utl
     public:
         virtual bool    queryTermination() const = 0;
         virtual void    notifyTermination() = 0;
+
+    protected:
+        ~ITerminationListener() {}
     };
 
     //====================================================================

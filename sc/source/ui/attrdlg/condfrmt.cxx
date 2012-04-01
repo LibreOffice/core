@@ -595,7 +595,7 @@ sal_Bool ScConditionalFormatDlg::Close()
 // Handler:
 
 //----------------------------------------------------------------------------
-IMPL_LINK( ScConditionalFormatDlg, ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ScrollHdl)
 {
     SliderMoved();
     return 0;
@@ -619,7 +619,7 @@ sal_uInt16 ScConditionalFormatDlg::GetSliderPos()
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition1-Controls
 
-IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ClickCond1Hdl)
 {
     sal_Bool bChecked = aCbxCond1.IsChecked();
     CondChecked( bChecked, aCbxCond1, aLbCond11, aLbCond12, aEdtCond11, aRbCond11, aFtCond1And, aEdtCond12, aRbCond12,
@@ -630,7 +630,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // Zellwert/Formel
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond11Hdl)
 {
     sal_uInt16 nPos = aLbCond11.GetSelectEntryPos();
 
@@ -647,6 +647,8 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
         aRbCond12.Hide();
         aRbCond11.SetPosPixel( aRBtn1Pos2 );
         aEdtCond11.SetPosSizePixel( aCond1Pos1, aCond1Size1 );
+        aEdtCond11.Show();
+        aRbCond11.Show();
     }
 
     ChangeCond12Hdl( NULL );
@@ -657,7 +659,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond12Hdl)
 {
     if( aLbCond12.IsVisible() )
     {
@@ -696,7 +698,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond1TemplateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond1TemplateHdl)
 {
     String aStyleName = aLbCond1Template.GetSelectEntry();
     SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
@@ -714,7 +716,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond1TemplateHdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition2-Controls
 
-IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ClickCond2Hdl)
 {
     sal_Bool bChecked = aCbxCond2.IsChecked();
     CondChecked( bChecked, aCbxCond2, aLbCond21, aLbCond22, aEdtCond21, aRbCond21, aFtCond2And, aEdtCond22, aRbCond22,
@@ -725,7 +727,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // Zellwert/Formel
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond21Hdl)
 {
     sal_uInt16 nPos = aLbCond21.GetSelectEntryPos();
 
@@ -742,6 +744,8 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
         aRbCond22.Hide();
         aRbCond21.SetPosPixel( aRBtn2Pos2 );
         aEdtCond21.SetPosSizePixel( aCond2Pos1, aCond2Size1 );
+        aEdtCond21.Show();
+        aRbCond21.Show();
     }
 
     ChangeCond22Hdl( NULL );
@@ -752,7 +756,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond22Hdl)
 {
     if( aLbCond22.IsVisible() )
     {
@@ -791,7 +795,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond2TemplateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond2TemplateHdl)
 {
     String aStyleName = aLbCond2Template.GetSelectEntry();
     SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
@@ -809,7 +813,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond2TemplateHdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition3-Controls
 
-IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ClickCond3Hdl)
 {
     sal_Bool bChecked = aCbxCond3.IsChecked();
     CondChecked( bChecked, aCbxCond3, aLbCond31, aLbCond32, aEdtCond31, aRbCond31, aFtCond3And, aEdtCond32, aRbCond32,
@@ -822,7 +826,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // Zellwert/Formel
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond31Hdl)
 {
     sal_uInt16 nPos = aLbCond31.GetSelectEntryPos();
 
@@ -839,6 +843,8 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
         aRbCond32.Hide();
         aRbCond31.SetPosPixel( aRBtn3Pos2 );
         aEdtCond31.SetPosSizePixel( aCond3Pos1, aCond3Size1 );
+        aEdtCond31.Show();
+        aRbCond31.Show();
     }
 
     ChangeCond32Hdl( NULL );
@@ -849,7 +855,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond32Hdl)
 {
     if( aLbCond32.IsVisible() )
     {
@@ -888,7 +894,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, ChangeCond3TemplateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond3TemplateHdl)
 {
     String aStyleName = aLbCond3Template.GetSelectEntry();
     SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
@@ -930,7 +936,7 @@ IMPL_LINK( ScConditionalFormatDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScConditionalFormatDlg, LoseFocusHdl)
 {
     bDlgLostFocus = !IsActive();
     return 0;

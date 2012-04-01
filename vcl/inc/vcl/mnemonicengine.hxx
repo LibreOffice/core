@@ -119,6 +119,9 @@ namespace vcl
                 to <member>FirstSearchEntry</member> or <member>NextSearchEntry</member>.
         */
         virtual void    ExecuteSearchEntry( const void* _pEntry ) const = 0;
+
+    protected:
+        ~IMnemonicEntryList() {}
     };
 
     //====================================================================

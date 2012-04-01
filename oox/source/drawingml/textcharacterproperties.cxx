@@ -69,7 +69,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
 }
 
-    void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
+void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
 {
     OUString aFontName;
     sal_Int16 nFontPitch = 0;

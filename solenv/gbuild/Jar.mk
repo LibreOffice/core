@@ -59,13 +59,13 @@ define gb_Jar__command
 	$(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
-	echo "Class-Path: $(JARCLASSPATH)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
+	$(if $(JARCLASSPATH),echo "Class-Path: $(strip $(JARCLASSPATH))" >> $(call gb_Jar_get_manifest_target,$(1)) &&) \
 	echo "Solar-Version: $(RSCREVISION)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	cat $(if $(MANIFEST),$(MANIFEST),$(gb_Helper_MISCDUMMY)) >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	mkdir -p $(dir $(2)) && cd $(call gb_Jar_get_workdir,$(1)) && \
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
 		META-INF $(PACKAGEROOTS) $(PACKAGEFILES) \
-	$(foreach root,$(PACKAGEDIRS),&& $(gb_Jar_JARCOMMAND) uf $(2) -C $(dir $(root)) $(notdir $(root))) \
+	$(foreach root,$(PACKAGEDIRS),&& cd $(dir $(root)) && $(gb_Jar_JARCOMMAND) uf $(2) $(notdir $(root))) \
 	|| (rm $(2); false) )
 endef
 
@@ -201,6 +201,16 @@ $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
+define gb_Jar_add_package_dependency
+$(call gb_JavaClassSet_add_package_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_Jar_add_package_dependencies
+$(call gb_JavaClassSet_add_package_dependencies,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
 # possible directories for jar files containing UNO services 
 gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_JAVA_DIR/ \
@@ -221,6 +231,5 @@ $(call gb_Jar_get_target,$(1)) : \
 $(call gb_Jar_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
 endef
-
 
 # vim: set noet sw=4 ts=4:

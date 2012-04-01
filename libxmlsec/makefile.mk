@@ -163,6 +163,11 @@ CONFIGURE_FLAGS+=--with-openssl=$(SOLARVER)/$(INPATH)
 CONFIGURE_FLAGS+=--with-openssl=no
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....

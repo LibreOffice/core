@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas
 
 $(eval $(call gb_Library_set_include,vclcanvas,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/canvas/inc) \
+	-I$(SRCDIR)/canvas/inc \
 ))
 
 $(eval $(call gb_Library_add_api,vclcanvas,\

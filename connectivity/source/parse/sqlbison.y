@@ -770,7 +770,7 @@ fetch_statement:
 	;
 
 insert_statement:
-		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_node opt_column_commalist values_or_query_spec
+		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_node opt_column_commalist query_exp
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -1830,7 +1830,7 @@ unsigned_value_spec:
 general_value_spec:
 		parameter
 	| SQL_TOKEN_USER
-	/*	  | SQL_TOKEN_NULL*/
+	| SQL_TOKEN_NULL
 	| SQL_TOKEN_FALSE
 	| SQL_TOKEN_TRUE
 	| SQL_TOKEN_VALUE
@@ -4046,7 +4046,6 @@ else_clause:
 	;
 result:
 		result_expression
-	|	SQL_TOKEN_NULL
 	;
 result_expression:
 	value_exp

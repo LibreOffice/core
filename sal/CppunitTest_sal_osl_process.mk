@@ -36,4 +36,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_process,\
     $(gb_STDLIBS) \
 ))
 
+# Depend on to be tested executable
+$(call gb_CppunitTest_get_target,sal_osl_process) : \
+	$(call gb_Executable_get_target,osl_process_child)
+
 # vim: set noet sw=4 ts=4:

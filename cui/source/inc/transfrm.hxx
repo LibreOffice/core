@@ -147,8 +147,6 @@ private:
 #if _SOLAR__PRIVATE
     DECL_LINK( ChangePosProtectHdl, void * );
     DECL_LINK( ChangeSizeProtectHdl, void * );
-    DECL_LINK( ChangePosXHdl, void * );
-    DECL_LINK( ChangePosYHdl, void * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);

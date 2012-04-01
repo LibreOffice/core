@@ -62,7 +62,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK(OPropertyBrowserView, OnPageActivation, void*, EMPTYARG)
+    IMPL_LINK_NOARG(OPropertyBrowserView, OnPageActivation)
     {
         m_nActivePage = m_pPropBox->GetCurPage();
         if (m_aPageActivationHandler.IsSet())

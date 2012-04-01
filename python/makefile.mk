@@ -83,18 +83,24 @@ python_LDFLAGS+=$(ARCH_FLAGS)
 python_CFLAGS=-g0
 .ENDIF
 
-CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
+.IF "$(OS)" == "MACOSX"
+my_prefix = @__________________________________________________$(EXTRPATH)
+.ELSE
+my_prefix = python-inst
+.END
+
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=/$(my_prefix) --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 
 .IF "$(OS)" == "MACOSX"
-PATCH_FILES+=Python-2.6.1-py8067.patch Python-2.6.1-dylib_dynload.patch
+PATCH_FILES+=Python-2.6.1-py8067.patch
 # don't build dual-arch version as OOo itself is not universal binary either
 PATCH_FILES+=Python-2.6.1-arch_$(eq,$(CPU),I i386 ppc).patch
 
-CONFIGURE_ACTION+=--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/python-inst --with-framework-name=OOoPython
+CONFIGURE_ACTION+=--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/$(my_prefix) --with-framework-name=OOoPython
 ALLTAR: $(MISC)/OOoPython.framework.zip
 
 .ENDIF
@@ -102,7 +108,7 @@ ALLTAR: $(MISC)/OOoPython.framework.zip
 .IF "$(OS)"=="AIX"
 CONFIGURE_ACTION += --disable-ipv6 --with-threads
 .ENDIF
-BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install DESTDIR=$(MYCWD) && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install DESTDIR=$(MYCWD) && chmod -R ug+w $(MYCWD)/$(my_prefix) && chmod g+w Include
 .ELSE
 # ----------------------------------
 # WINDOWS
@@ -117,7 +123,7 @@ python_LDFLAGS=-mno-cygwin -mthreads
 python_LDFLAGS+=-shared-libgcc
 .ENDIF
 python_LDFLAGS+=-shared-libgcc -Wl,--enable-runtime-pseudo-reloc-v2
-CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
+CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/$(my_prefix) --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE
 
@@ -200,11 +206,11 @@ ALLTAR : $(PYVERSIONFILE)
 $(PACKAGE_DIR)/fixscripts: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 	@echo remove build installdir from scripts
 	$(COMMAND_ECHO)for file in \
-	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/2to3 \
-	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/idle$(PYMAJOR).$(PYMINOR) \
-	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/pydoc$(PYMAJOR).$(PYMINOR) \
-	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/python$(PYMAJOR).$(PYMINOR)-config \
-	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/smtpd$(PYMAJOR).$(PYMINOR).py ; do \
+	        $(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/2to3 \
+	        $(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/idle$(PYMAJOR).$(PYMINOR) \
+	        $(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/pydoc$(PYMAJOR).$(PYMINOR) \
+	        $(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/python$(PYMAJOR).$(PYMINOR)-config \
+	        $(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/smtpd$(PYMAJOR).$(PYMINOR).py ; do \
 	{{ rm "$$file" && awk '\
 		BEGIN {{print "\
 #!/bin/bash\n\
@@ -220,15 +226,15 @@ cd \"$$origpath\"\n\
 $(PACKAGE_DIR)/fixinstallnames: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 	@echo remove build installdir from OOoPython
 	$(COMMAND_ECHO)install_name_tool -change \
-		/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython \
+		/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython \
 		@executable_path/../../../../OOoPython \
-		$(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/Resources/Python.app/Contents/MacOS/OOoPython
+		$(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/Resources/Python.app/Contents/MacOS/OOoPython
 	@touch $@
 
 $(MISC)/OOoPython.framework.zip: $(PACKAGE_DIR)/fixinstallnames $(PACKAGE_DIR)/fixscripts
 	@-rm -f $@
 	@echo creating $@
-	$(COMMAND_ECHO)cd $(MISC)/build/python-inst && find OOoPython.framework \
+	$(COMMAND_ECHO)cd $(MISC)/build/$(my_prefix) && find OOoPython.framework \
 		-not -type l -not -name Info.plist.in \
 		-not -name pythonw$(PYMAJOR).$(PYMINOR) \
 		-not -name python$(PYMAJOR).$(PYMINOR) -print0 | \

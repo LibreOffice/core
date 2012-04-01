@@ -39,7 +39,7 @@ public:
             ~ScAutoFormatDlg();
 
     sal_uInt16 GetIndex() const { return nIndex; }
-    String GetCurrFormatName();
+    rtl::OUString GetCurrFormatName();
 
 private:
     FixedLine       aFlFormat;
@@ -70,8 +70,8 @@ private:
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;
     sal_uInt16                  nIndex;
-    sal_Bool                    bCoreDataChanged;
-    sal_Bool                    bFmtInserted;
+    bool                    bCoreDataChanged;
+    bool                    bFmtInserted;
 
     void Init           ();
     void UpdateChecks   ();

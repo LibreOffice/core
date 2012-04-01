@@ -48,6 +48,10 @@ public:
     /** @see osl_decrementInterlockedCount.
      */
     virtual oslInterlockedCount SAL_CALL release() = 0;
+
+protected:
+    ~IReference() {}
+        // avoid warnings about virtual members and non-virtual dtor
 };
 
 

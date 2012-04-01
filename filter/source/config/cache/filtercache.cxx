@@ -77,9 +77,8 @@ namespace css = ::com::sun::star;
 // Error message in case filter config seems to be corrupted.
 // Note: Dont tell user something about "setup -repair"!
 // Its no longer supported by using native installers ...
-static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG( RTL_CONSTASCII_USTRINGPARAM( "The filter configuration appears to be defective. Please install the office suite again." ));
-
-
+const char MESSAGE_CORRUPTED_FILTERCONFIG[] =
+    "The filter configuration appears to be defective. Please install the office suite again.";
 
 FilterCache::FilterCache()
     : BaseLock    (                                        )
@@ -931,8 +930,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
     {
         aValue = xAccess->getByName(sKey);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     #else
@@ -998,7 +997,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     catch(const css::uno::Exception& ex)
     {
         throw css::document::CorruptedFilterConfigurationException(
-                MESSAGE_CORRUPTED_FILTERCONFIG,
+                rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                 css::uno::Reference< css::uno::XInterface >(),
                 ex.Message);
     }
@@ -1043,7 +1042,7 @@ void FilterCache::impl_validateAndOptimize()
        )
     {
         throw css::document::CorruptedFilterConfigurationException(
-                MESSAGE_CORRUPTED_FILTERCONFIG,
+                rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                 css::uno::Reference< css::uno::XInterface >(),
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The list of types or filters is empty." )));
     }
@@ -1307,7 +1306,7 @@ void FilterCache::impl_validateAndOptimize()
     OSL_ENSURE(!nErrors, ::rtl::OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
     if (nErrors>0)
         throw css::document::CorruptedFilterConfigurationException(
-                MESSAGE_CORRUPTED_FILTERCONFIG,
+                rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                 css::uno::Reference< css::uno::XInterface >(),
                 sLogOut);
     OSL_ENSURE(!nWarnings, ::rtl::OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
@@ -1558,7 +1557,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     catch(const css::uno::Exception& ex)
     {
         throw css::document::CorruptedFilterConfigurationException(
-                MESSAGE_CORRUPTED_FILTERCONFIG,
+                rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                 css::uno::Reference< css::uno::XInterface >(),
                 ex.Message);
     }
@@ -1587,7 +1586,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 catch(const css::uno::Exception& ex)
                 {
                     throw css::document::CorruptedFilterConfigurationException(
-                            MESSAGE_CORRUPTED_FILTERCONFIG,
+                            rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                             css::uno::Reference< css::uno::XInterface >(),
                             ex.Message);
                 }
@@ -1616,7 +1615,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 catch(const css::uno::Exception& ex)
                 {
                     throw css::document::CorruptedFilterConfigurationException(
-                            MESSAGE_CORRUPTED_FILTERCONFIG,
+                            rtl::OUString(MESSAGE_CORRUPTED_FILTERCONFIG),
                             css::uno::Reference< css::uno::XInterface >(),
                             ex.Message);
                 }

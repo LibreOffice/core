@@ -105,14 +105,14 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     _rxOutStream->writeShort(0);    // obsolete
     _rxOutStream << m_aDefaultText;
 
-    // Maskierung fuer any
+    // Masking for any
     sal_uInt16 nAnyMask = 0;
     if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= DEFAULT_LONG;
     else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
 
-    if (m_bFilterProposal)  // da boolean, kein Wert speichern
+    if (m_bFilterProposal)  // Don't save a value, because it's boolean
         nAnyMask |= FILTERPROPOSAL;
 
     _rxOutStream->writeBoolean(m_bEmptyIsNull);
@@ -151,7 +151,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // Version eigene Versionsnummer
+    // Version's own version number
     sal_uInt16 nVersion = _rxInStream->readShort();
     m_nLastReadVersion = nVersion;
 
@@ -189,7 +189,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     if (bHandleCommonProps)
         readCommonEditProperties(_rxInStream);
 
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // After reading, display default values
     if ( !getControlSource().isEmpty() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then)
         resetNoBroadcast();
@@ -316,7 +316,7 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bFilterProposal = getBOOL(rValue);
             break;
-        // Aenderung der defaultwerte fuehrt zu reset
+        // Changing the default values causes a reset
         case PROPERTY_ID_DEFAULT_TEXT:
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aDefaultText;
@@ -333,7 +333,7 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     }
 }
 
-//XPropertyState
+// XPropertyState
 //------------------------------------------------------------------------------
 Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {

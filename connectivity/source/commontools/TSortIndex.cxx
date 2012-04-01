@@ -143,19 +143,6 @@ void OSortIndex::Freeze()
     m_bFrozen = sal_True;
 }
 
-//------------------------------------------------------------------
-sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
-{
-    OSL_ENSURE(nPos > 0,"OSortIndex::GetValue: nPos == 0");
-    OSL_ENSURE((size_t)nPos <= m_aKeyValues.size(),"OSortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
-
-    if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
-    {
-        OSL_FAIL("OSortIndex::GetValue: Invalid use of index!");
-        return 0;
-    }
-    return m_aKeyValues[nPos-1].first;
-}
 // -----------------------------------------------------------------------------
 OKeyValue::OKeyValue()
 {

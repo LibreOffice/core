@@ -660,7 +660,7 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
  return 0;
 }
 
-IMPL_LINK( SwMailMergeDlg, ModifyHdl, NumericField *, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
 {
     aFromRB.Check();
     return (0);
@@ -780,7 +780,7 @@ bool SwMailMergeDlg::ExecQryShell()
     return true;
 }
 
-IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
 {
     String sPath( aPathED.GetText() );
     if( !sPath.Len() )
@@ -810,7 +810,7 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeDlg, AttachFileHdl)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)

@@ -248,7 +248,6 @@ public:
     sal_uInt16 GetRulerFlags() const { return nFlags; }
 
     void SetDefTabDist(long);
-    long GetDefTabDist() const;
 
     // set/get NullOffset in logic units
     void SetNullOffsetLogic(long lOff = 0);

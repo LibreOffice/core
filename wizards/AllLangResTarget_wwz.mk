@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,wwz/res))
 
 $(eval $(call gb_SrsTarget_set_include,wwz/res,\
 	$$(INCLUDE) \
-	-I$(WORKDIR)/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,wwz/res,\

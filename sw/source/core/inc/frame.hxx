@@ -250,6 +250,13 @@ enum MakePageType
 };
 
 
+/**
+ * Base class of the Writer layout elements.
+ *
+ * This includes not only fly frames, but everything down to the paragraph
+ * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
+ * instances are used.)
+ */
 class SwFrm: public SwClient, public SfxBroadcaster
 {
     //Der verkappte Frm
@@ -400,6 +407,8 @@ protected:
 
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
+
+    void Destroy(); // for ~SwRootFrm
 
     // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
@@ -900,7 +909,8 @@ public:
 public:
     /** if writer is NULL, dumps the layout structure as XML in layout.xml
       */
-    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL );
+    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL);
+    virtual void dumpInfosAsXml(xmlTextWriterPtr writer);
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
     void dumpChildrenAsXml(xmlTextWriterPtr writer);
     bool IsCollapse() const;

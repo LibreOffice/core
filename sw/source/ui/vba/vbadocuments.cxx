@@ -159,11 +159,10 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
     return aRet;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaDocuments::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDocuments") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDocuments"));
 }
 
 uno::Sequence<rtl::OUString>

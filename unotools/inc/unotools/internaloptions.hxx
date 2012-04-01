@@ -35,7 +35,6 @@
 #include <unotools/options.hxx>
 
 #define MUTEX           ::osl::Mutex
-#define OUSTRING        ::rtl::OUString
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -101,8 +100,8 @@ class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
         sal_Bool    SlotCFGEnabled      () const;
         sal_Bool    MailUIEnabled      () const;
 
-        OUSTRING    GetCurrentTempURL() const;
-        void        SetCurrentTempURL( const OUSTRING& aNewCurrentTempURL );
+        ::rtl::OUString GetCurrentTempURL() const;
+        void            SetCurrentTempURL( const ::rtl::OUString& aNewCurrentTempURL );
 
     private:
 

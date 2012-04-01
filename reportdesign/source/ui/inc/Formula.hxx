@@ -30,7 +30,6 @@
 #define RPTUI_FORMULA_HXX
 
 #include <formula/formula.hxx>
-#include <formula/IFunctionDescription.hxx>
 #include <formula/IControlReferenceHandler.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,7 +45,6 @@ class OAddFieldWindow;
 
 //============================================================================
 class FormulaDialog : public formula::FormulaModalDialog,
-                      public formula::IFormulaEditorHelper,
                       public formula::IControlReferenceHandler
 {
     ::boost::shared_ptr< formula::IFunctionManager > m_aFunctionManager;

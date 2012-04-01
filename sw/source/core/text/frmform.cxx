@@ -680,8 +680,8 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         }
     }
     pFoll->Cut();
+    SetFollow(pNxt);
     delete pFoll;
-    pFollow = pNxt;
     return pNxt;
 }
 
@@ -697,7 +697,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     // Damit meine Daten nicht verschwinden, locke ich mich.
     SwTxtFrmLocker aLock( this );
     SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm( this ));
-    pNew->bIsFollow = sal_True;
 
     pNew->SetFollow( GetFollow() );
     SetFollow( pNew );
@@ -1773,26 +1772,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
-#if OSL_DEBUG_LEVEL > 1
-    const XubString aXXX = GetTxtNode()->GetTxt();
-    const SwTwips nDbgY = Frm().Top();
-    (void)nDbgY;
-    const SwPageFrm *pDbgPage = FindPageFrm();
-    const MSHORT nDbgPageNr = pDbgPage->GetPhyPageNum();
-    (void)nDbgPageNr;
-    // Um zu gucken, ob es einen Ftn-Bereich gibt.
-    const SwFrm *pDbgFtnCont = (const SwFrm*)(FindPageFrm()->FindFtnCont());
-    (void)pDbgFtnCont;
-
-    // nStopAt laesst sich vom CV bearbeiten.
-    static MSHORT nStopAt = 0;
-    if( nStopAt == GetFrmId() )
-    {
-        int i = GetFrmId();
-        (void)i;
-    }
-#endif
-
     SWRECTFN( this )
 
     CalcAdditionalFirstLineOffset();
@@ -1952,35 +1931,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if ( pPara )
            pPara->SetPrepMustFit( sal_False );
 
-#if OSL_DEBUG_LEVEL > 1
-    // Hier ein Instrumentarium, um ungewoehnlichen Master/Follow-Kombinationen,
-    // insbesondere bei Fussnoten, auf die Schliche zu kommen
-    if( IsFollow() || GetFollow() )
-    {
-        SwTxtFrm *pTmpFrm = IsFollow() ? FindMaster() : this;
-        const SwPageFrm *pTmpPage = pTmpFrm->FindPageFrm();
-        MSHORT nPgNr = pTmpPage->GetPhyPageNum();
-        MSHORT nLast;
-        MSHORT nDummy = 0; // nur zum Breakpoint setzen
-        while( pTmpFrm->GetFollow() )
-        {
-            pTmpFrm = pTmpFrm->GetFollow();
-            nLast = nPgNr;
-            pTmpPage = pTmpFrm->FindPageFrm();
-            nPgNr = pTmpPage->GetPhyPageNum();
-            if( nLast > nPgNr )
-                ++nDummy; // schon fast eine Assertion wert
-            else if( nLast == nPgNr )
-                ++nDummy; // bei Spalten voellig normal, aber sonst!?
-            else if( nLast < nPgNr - 1 )
-                ++nDummy; // kann schon mal temporaer vorkommen
-        }
-    }
-#endif
-
     CalcBaseOfstForFly();
-    // OD 2004-03-17 #i11860#
-    _CalcHeightOfLastLine();
+    _CalcHeightOfLastLine(); // #i11860#
 }
 
 /*************************************************************************
@@ -2065,7 +2017,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         return sal_False;
     }
 
-    if( pFollow && nStart != ((SwTxtFrm*)pFollow)->GetOfst() )
+    if (m_pFollow && nStart != (static_cast<SwTxtFrm*>(m_pFollow))->GetOfst())
         return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
 
     // Geschafft, wir sind durch ...

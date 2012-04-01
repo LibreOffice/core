@@ -729,7 +729,7 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(::com::sun::star::uno::RuntimeE
 }
 
 
-IMPL_LINK( VCLXFileControl, ModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
 {
     ::com::sun::star::awt::TextEvent aEvent;
     aEvent.Source = (::cppu::OWeakObject*)this;

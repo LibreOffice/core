@@ -51,6 +51,7 @@
 #include "rangenam.hxx"
 #include "olinetab.hxx"
 #include "dpobject.hxx"
+#include "dpsave.hxx"
 #include "dociter.hxx"      // for lcl_EmptyExcept
 #include "cell.hxx"         // for lcl_EmptyExcept
 #include "editable.hxx"
@@ -60,6 +61,8 @@
 #include "hints.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+
+#include <set>
 
 using namespace ::com::sun::star;
 
@@ -89,7 +92,7 @@ bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRang
     bool bOk;
     if ( bCompile )
         pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
     {
         pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
         bOk = true;
@@ -209,7 +212,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     bool bUndo = pDoc->IsUndoEnabled();
 
     ScDBData* pData = NULL;
-    if (rtl::OUString(rNewData.GetName())==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (rNewData.GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
     {
         ScRange aRange;
         rNewData.GetArea(aRange);
@@ -1192,14 +1195,14 @@ sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange
     return sal_True;        // nothing found - empty
 }
 
-sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove )
+bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                                   bool bRecord, bool bApi, bool bAllowMove )
 {
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    sal_Bool bDone = false;
-    sal_Bool bUndoSelf = false;
+    bool bDone = false;
+    bool bUndoSelf = false;
     sal_uInt16 nErrId = 0;
 
     ScDocument* pOldUndoDoc = NULL;
@@ -1265,7 +1268,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
             rDocShell.PostPaint(aRange, PAINT_GRID);
-            bDone = sal_True;
+            bDone = true;
         }
         else if ( pNewObj )
         {
@@ -1322,8 +1325,9 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 // (and re-read column entry collections)
                 // so all changes take effect
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
-                    pDestObj->ClearSource();
+                    pDestObj->ClearTableData();
 
+                pDestObj->ReloadGroupTableData();
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
@@ -1352,7 +1356,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 {
                     //  like with STR_PROTECTIONERR, use undo to reverse everything
                     OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                    bUndoSelf = sal_True;
+                    bUndoSelf = true;
                     nErrId = STR_PIVOT_ERROR;
                 }
                 else
@@ -1374,7 +1378,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 //  test if new output area is empty except for old area
                 if ( !bApi )
                 {
-                    sal_Bool bEmpty;
+                    bool bEmpty;
                     if ( pOldObj )  // OutRange of pOldObj (pDestObj) is still old area
                         bEmpty = lcl_EmptyExcept( pDoc, aNewOut, pOldObj->GetOutRange() );
                     else
@@ -1390,7 +1394,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                         {
                             //! like above (not editable), use undo to reverse everything
                             OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                            bUndoSelf = sal_True;
+                            bUndoSelf = true;
                         }
                     }
                 }
@@ -1406,7 +1410,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 pDestObj->Output( aNewOut.aStart );
 
                 rDocShell.PostPaintGridAll();           //! only necessary parts
-                bDone = sal_True;
+                bDone = true;
             }
         }
         // else nothing (no old, no new)
@@ -1449,6 +1453,64 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
         rDocShell.ErrorMessage( nErrId );
 
     return bDone;
+}
+
+sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
+{
+    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    if (!pDPs)
+        return 0;
+
+    std::set<ScDPObject*> aRefs;
+    sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
+    if (nErrId)
+        return nErrId;
+
+    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPObject* pObj = *it;
+
+        // This action is intentionally not undoable since it modifies cache.
+        DataPilotUpdate(pObj, pObj, false, bApi);
+    }
+
+    return 0;
+}
+
+void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
+{
+    if (!pDPObj)
+        return;
+
+    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    if (!pDPs)
+        return;
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if (!pSaveData)
+        return;
+
+    std::set<ScDPObject*> aRefs;
+    if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
+        return;
+
+    // We allow pDimData being NULL.
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPObject* pObj = *it;
+        if (pObj != pDPObj)
+        {
+            pSaveData = pObj->GetSaveData();
+            if (pSaveData)
+                pSaveData->SetDimensionData(pDimData);
+        }
+
+        // This action is intentionally not undoable since it modifies cache.
+        DataPilotUpdate(pObj, pObj, false, false);
+    }
 }
 
 //==================================================================

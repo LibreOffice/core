@@ -26,8 +26,6 @@
         osl_getProfileSections;
 
 #    2) VolumeDevice class and all this sub C API:
-        osl_unmountVolumeDevice;
-        osl_automountVolumeDevice;
         osl_releaseVolumeDeviceHandle;
 
         osl_acquireVolumeDeviceHandle;

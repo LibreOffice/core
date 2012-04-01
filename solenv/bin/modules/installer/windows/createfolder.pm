@@ -27,7 +27,6 @@
 
 package installer::windows::createfolder;
 
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -94,10 +93,14 @@ sub get_createfolder_component
     my $globalfilegid = $allvariableshashref->{'GLOBALFILEGID'};
     if ( $installer::globals::patch ) { $globalfilegid = $allvariableshashref->{'GLOBALPATCHFILEGID'}; }
 
-    my $onefile = "";
+    my $onefile;
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
-    elsif ( $installer::globals::helppack ) { $onefile = installer::existence::get_specified_file($filesref, 'gid_File_Help_Common_Zip'); }
-    else { $onefile = installer::existence::get_specified_file($filesref, $globalfilegid); }
+    elsif ( $installer::globals::helppack ) { ($onefile) = grep {$_->{gid} eq 'gid_File_Help_Common_Zip'} @{$filesref} }
+    else { ($onefile) = grep {$_->{gid} eq $globalfilegid} @{$filesref} }
+
+    if (! defined $onefile) {
+        installer::exiter::exit_program("ERROR: Could not find file!", "get_createfolder_component");
+    }
 
     return $onefile->{'componentname'};
 }

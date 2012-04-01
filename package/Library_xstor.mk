@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,xstor,package/source/xstor/xstor))
 
 $(eval $(call gb_Library_set_include,xstor,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/package/inc) \
+	-I$(SRCDIR)/package/inc \
 ))
 
 $(eval $(call gb_Library_add_api,xstor,\

@@ -1603,8 +1603,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // remove the addtional paragraphs in the end
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            SwTableNode *const pSartTableNode(pStartStartNode->FindTableNode());
-            const SwNodeIndex aTblIdx(  *pSartTableNode, -1 );
+            SwTableNode *const pStartTableNode(pStartStartNode->FindTableNode());
+            const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTblIdx);
             bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
             aStartPam.DeleteMark();
@@ -1665,6 +1665,18 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     aStartPam.SetMark();
     *aStartPam.End() = *pEndPam->End();
     pEndPam.reset(0);
+
+    // see if there are frames already anchored to this node
+    std::vector<SwFrmFmt*> aAnchoredFrames;
+    for (int i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->Count(); ++i)
+    {
+        SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
+        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+        if (FLY_AT_PARA == rAnchor.GetAnchorId() &&
+                aStartPam.GetNode()->GetIndex() == rAnchor.GetCntntAnchor()->nNode.GetIndex())
+            aAnchoredFrames.push_back(pFrmFmt);
+    }
+
     SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
     const uno::Reference< text::XTextFrame > xNewFrame = pNewFrame;
     pNewFrame->SetSelection( aStartPam );
@@ -1700,6 +1712,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     aNewAnchor.SetAnchor( aMovePam.Start() );
                     m_pImpl->m_pDoc->SetAttr(
                         aNewAnchor, *pNewFrame->GetFrmFmt() );
+
+                    // also move frames anchored to us
+                    for (std::vector<SwFrmFmt*>::iterator i = aAnchoredFrames.begin(); i != aAnchoredFrames.end(); ++i)
+                    {
+                        // copy the anchor to the next paragraph
+                        SwFmtAnchor aAnchor((*i)->GetAnchor());
+                        aAnchor.SetAnchor(aMovePam.Start());
+                        m_pImpl->m_pDoc->SetAttr(aAnchor, *(*i));
+                    }
                 }
             }
             m_pImpl->m_pDoc->DelFullPara(aStartPam);

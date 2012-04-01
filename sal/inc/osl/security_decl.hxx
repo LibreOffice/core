@@ -74,7 +74,7 @@ public:
                                        const rtl::OUString & strFileServer);
 
     /** get the ident of the logged in user.
-        @param[out] strName is the OUString which returns the name
+        @param[out] strIdent is the OUString which returns the name
         @return True, if any user is successfuly logged in, otherwise False
     */
     inline sal_Bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;

@@ -138,8 +138,6 @@ DataSupplier::~DataSupplier()
 
         maResults[ nIndex ]->aId = aId;
         return aId;
-
-        return aId;
     }
 
     return ::rtl::OUString();

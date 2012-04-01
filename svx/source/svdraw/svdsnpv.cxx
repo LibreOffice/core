@@ -64,13 +64,13 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if (xTargetOverlay.is())
         {
             ::sdr::overlay::OverlayCrosshairStriped* aNew = new ::sdr::overlay::OverlayCrosshairStriped(
                 maPosition);
-            pTargetOverlay->add(*aNew);
+            xTargetOverlay->add(*aNew);
             maObjects.append(*aNew);
         }
     }
@@ -142,13 +142,13 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if (xTargetOverlay.is())
         {
             ::sdr::overlay::OverlayHelplineStriped* aNew = new ::sdr::overlay::OverlayHelplineStriped(
                 maPosition, meHelpLineKind);
-            pTargetOverlay->add(*aNew);
+            xTargetOverlay->add(*aNew);
             maObjects.append(*aNew);
         }
     }

@@ -206,7 +206,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
     if( pPolyPoly )
     {
         pPolyPoly->setCompositeOp( cppcanvas::CanvasGraphic::SOURCE );
-        pPolyPoly->setRGBAFillColor( 0x00000000U );
+        pPolyPoly->setRGBAFillColor( 0xFFFFFF00U );
         pPolyPoly->draw();
     }
 
@@ -557,20 +557,27 @@ private:
 
     virtual void clear() const
     {
-        // keep layer clip
-        clearRect(getCanvas()->clone(),
-                  maLayerBoundsPixel);
+        // grab canvas - that also lazy-initializes maLayerBoundsPixel
+        cppcanvas::CanvasSharedPtr pCanvas=getCanvas()->clone();
+
+        // clear whole canvas
+        const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
+        clearRect(pCanvas,
+                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
     virtual void clearAll() const
     {
+        // grab canvas - that also lazy-initializes maLayerBoundsPixel
         ::cppcanvas::CanvasSharedPtr pCanvas( getCanvas()->clone() );
 
         // clear layer clip, to clear whole area
         pCanvas->setClip();
 
+        // clear whole canvas
+        const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
         clearRect(pCanvas,
-                  maLayerBoundsPixel);
+                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
     virtual bool isOnView(boost::shared_ptr<View> const& rView) const

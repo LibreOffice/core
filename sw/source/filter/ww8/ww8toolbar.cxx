@@ -64,12 +64,12 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
 {
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    msoToOOcmd[ 0x20b ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc") );
-    msoToOOcmd[ 0x50 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Open") );
+    msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
+    msoToOOcmd[ 0x50 ] = ".uno:Open";
 
    // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-   tcidToOOcmd[ 0x9d9 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Print") );
+   tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 }
 
 rtl::OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
@@ -241,8 +241,8 @@ bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ), uno::UNO_QUERY_THROW );
-            CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) ) );
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ), uno::UNO_QUERY_THROW );
+            CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( "com.sun.star.text.TextDocument" ) );
             helper.setMSOCommandMap( new MSOWordCommandConvertor() );
 
             if ( !(*it).ImportCustomToolBar( *this, helper ) )
@@ -342,9 +342,9 @@ bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper&
                 if ( pCust )
                 {
                     // currently only support built-in menu
-                    rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
+                    rtl::OUString sMenuBar( "private:resource/menubar/" );
 
-                    sMenuBar = sMenuBar.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("menubar") ) );
+                    sMenuBar = sMenuBar.concat( "menubar" );
                     // Get menu name
                     TBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
                     if ( !pTBC )
@@ -371,16 +371,16 @@ bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper&
 
                     uno::Reference< lang::XSingleComponentFactory > xSCF( xIndexContainer, uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
+                    uno::Reference< uno::XComponentContext > xContext(  xProps->getPropertyValue( "DefaultContext" ), uno::UNO_QUERY_THROW );
                     // create the popup menu
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-                    aPopupMenu[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-                    aPopupMenu[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.openoffice.org:") ) + sMenuName );
-                    aPopupMenu[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Label") );
+                    aPopupMenu[0].Name = "CommandURL";
+                    aPopupMenu[0].Value = uno::makeAny( rtl::OUString( "vnd.openoffice.org:" ) + sMenuName );
+                    aPopupMenu[1].Name = "Label";
                     aPopupMenu[1].Value <<= sMenuName;
-                    aPopupMenu[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type" ) );
+                    aPopupMenu[2].Name = "Type";
                     aPopupMenu[2].Value <<= sal_Int32( 0 );
-                    aPopupMenu[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer") );
+                    aPopupMenu[3].Name = "ItemDescriptorContainer";
                     uno::Reference< container::XIndexContainer > xMenuContainer( xSCF->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                     aPopupMenu[3].Value <<= xMenuContainer;
                     if ( pCust->customizationDataCTB.get() && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
@@ -565,7 +565,7 @@ CTB::Print( FILE* fp )
 
 bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    static rtl::OUString sToolbarPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/custom_" ) );
+    static rtl::OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
     try
     {
@@ -577,7 +577,7 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
 
         // set UI name for toolbar
-        xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ), uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
 
         rtl::OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< TBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
@@ -711,7 +711,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
             {
                 beans::PropertyValue aProp;
 
-                aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
+                aProp.Name = "CommandURL";
                 aProp.Value <<= sCommand;
                 props.push_back( aProp );
             }
@@ -733,7 +733,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
             {
                  uno::Reference< container::XIndexContainer > xMenuDesc;
                  uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                 xMenuDesc.set( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.IndexedPropertyValues" ) ) ), uno::UNO_QUERY_THROW );
+                 xMenuDesc.set( xMSF->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY_THROW );
                 if ( !pCustTB->ImportMenuTB( rWrapper,xMenuDesc, helper ) )
                     return false;
                 if ( !bIsMenuBar )
@@ -744,7 +744,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
                 else
                 {
                     beans::PropertyValue aProp;
-                    aProp.Name =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer") );
+                    aProp.Name = "ItemDescriptorContainer";
                     aProp.Value <<= xMenuDesc;
                     props.push_back( aProp );
                 }
@@ -755,7 +755,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
         {
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type") );
+            sProps[ 0 ].Name = "Type";
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }

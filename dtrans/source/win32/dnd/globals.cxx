@@ -83,7 +83,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     {
         ret= ACTION_LINK;
     }
-    else if ( grfKeyState & MK_RBUTTON |
+    else if ( grfKeyState & MK_RBUTTON ||
               grfKeyState & MK_ALT)
     {
         ret= ACTION_COPY_OR_MOVE | ACTION_LINK;

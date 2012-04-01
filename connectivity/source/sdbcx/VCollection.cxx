@@ -231,7 +231,8 @@ namespace
         // -----------------------------------------------------------------------------
     };
 }
-// -----------------------------------------------------------------------------
+
+IObjectCollection::~IObjectCollection() {}
 
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 

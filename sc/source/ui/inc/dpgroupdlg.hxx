@@ -50,6 +50,9 @@ public:
     double              GetValue() const;
     void                SetValue( bool bAuto, double fValue );
 
+protected:
+    ~ScDPGroupEditHelper() {}
+
 private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
@@ -71,6 +74,8 @@ public:
                             RadioButton& rRbAuto, RadioButton& rRbMan,
                             ScDoubleField& rEdValue );
 
+    virtual ~ScDPNumGroupEditHelper() {}
+
 private:
     virtual bool        ImplGetValue( double& rfValue ) const;
     virtual void        ImplSetValue( double fValue );
@@ -87,6 +92,8 @@ public:
     explicit            ScDPDateGroupEditHelper(
                             RadioButton& rRbAuto, RadioButton& rRbMan,
                             DateField& rEdValue, const Date& rNullDate );
+
+    virtual ~ScDPDateGroupEditHelper() {}
 
 private:
     virtual bool        ImplGetValue( double& rfValue ) const;

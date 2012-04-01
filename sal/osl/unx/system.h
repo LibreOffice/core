@@ -120,34 +120,7 @@
 #endif
 
 #ifdef NETBSD
-#   include <sys/param.h>
-#       ifndef ETIME
-#     define  ETIME ETIMEDOUT
-#       endif
-#   define _POSIX_THREAD_SYSCALL_SOFT 1
-#   include <pthread.h>
-#   include <netdb.h>
-#   include <sys/sem.h>
-#   include <sys/exec.h>
-#   include <sys/filio.h>
-#   include <sys/ioctl.h>
-#   include <sys/time.h>
-#   include <sys/un.h>
-#   include <netinet/tcp.h>
-#   include <dlfcn.h>
-#   include <machine/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN_OO
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN_OO
-#   endif
-#   define  IORESOURCE_TRANSFER_BSD
-#   define  IOCHANNEL_TRANSFER_BSD_RENO
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_PRIORITY
-#     define  NO_PTHREAD_SEMAPHORES
 #   define  NO_PTHREAD_RTL
-#   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 
 #ifdef FREEBSD
@@ -182,7 +155,6 @@
 
 #ifdef OPENBSD
 #   define  ETIME ETIMEDOUT
-#   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <sys/sem.h>
 #   include <semaphore.h>
@@ -206,7 +178,7 @@
 #       define  PTHREAD_SIGACTION                       pthread_sigaction
 #endif
 
-#ifdef DRAGONFLY
+#if defined(DRAGONFLY) || defined(NETBSD)
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
@@ -343,24 +315,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   error "Target platform not specified!"
 #endif
 
-#if defined(NETBSD)
-#if defined _LITTLE_ENDIAN_OO
-#   define _OSL_BIGENDIAN
-#elif defined _BIG_ENDIAN_OO
-#   define _OSL_LITENDIAN
-#else
-#   error undetermined endianess
-#endif
-#else
-#if defined _LITTLE_ENDIAN
-#   define _OSL_BIGENDIAN
-#elif defined _BIG_ENDIAN
-#   define _OSL_LITENDIAN
-#else
-#   error undetermined endianess
-#endif
-#endif
-
 #ifndef PTR_FD_SET
 #   define PTR_FD_SET(s)                (&(s))
 #endif
@@ -390,9 +344,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define PTHREAD_VALUE(t)             (t)
 #endif
 #ifndef PTHREAD_NONE
-# if (__GNUC__ < 4) && !defined(MACOSX)
-extern pthread_t _pthread_none_;
-# endif
 #   define PTHREAD_NONE                 _pthread_none_
 #   ifndef PTHREAD_NONE_INIT
 #       define PTHREAD_NONE_INIT        ((pthread_t)-1)

@@ -33,6 +33,6 @@
 #import <UIKit/UIKit.h>
 #include "postmac.h"
 
-#endif _IOSVCLTYPES_H
+#endif /* _IOSVCLTYPES_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

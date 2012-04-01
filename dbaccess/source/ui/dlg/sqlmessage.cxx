@@ -397,7 +397,7 @@ OExceptionChainDialog::~OExceptionChainDialog()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
+IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
 {
     SvLBoxEntry* pSelected = m_aExceptionList.FirstSelected();
     OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");

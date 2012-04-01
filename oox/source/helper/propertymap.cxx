@@ -120,7 +120,6 @@ typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropert
 class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
 {
 public:
-    explicit            GenericPropertySet();
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
 
     // XPropertySet
@@ -143,10 +142,6 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-
-GenericPropertySet::GenericPropertySet()
-{
-}
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
@@ -228,15 +223,9 @@ PropertyMap::PropertyMap() :
     return StaticPropertyNameVector::get()[ nPropId ];
 }
 
-const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
-{
-    const_iterator aIt = find( nPropId );
-    return (aIt == end()) ? 0 : &aIt->second;
-}
-
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
 {
-    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); it++ )
+    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); ++it )
         (*this)[it->first] = it->second;
 }
 
@@ -442,6 +431,7 @@ static void lclDumpAnyValue( Any value)
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
 }
 
+#ifdef DBG_UTIL
 void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
@@ -460,16 +450,89 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
         }
     }
 }
-
-void PropertyMap::dump()
-{
-    dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
-}
+#endif
 
 static void printLevel (int level)
 {
     for (int i=0; i<level; i++)
         fprintf (stderr, "    ");
+}
+
+static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
+{
+    const char* type;
+    switch (nType) {
+    case EnhancedCustomShapeParameterType::NORMAL:
+        type = "EnhancedCustomShapeParameterType::NORMAL";
+        break;
+    case EnhancedCustomShapeParameterType::EQUATION:
+        type = "EnhancedCustomShapeParameterType::EQUATION";
+        break;
+    case EnhancedCustomShapeParameterType::ADJUSTMENT:
+        type = "EnhancedCustomShapeParameterType::ADJUSTMENT";
+        break;
+    case EnhancedCustomShapeParameterType::LEFT:
+        type = "EnhancedCustomShapeParameterType::LEFT";
+        break;
+    case EnhancedCustomShapeParameterType::TOP:
+        type = "EnhancedCustomShapeParameterType::TOP";
+        break;
+    case EnhancedCustomShapeParameterType::RIGHT:
+        type = "EnhancedCustomShapeParameterType::RIGHT";
+        break;
+    case EnhancedCustomShapeParameterType::BOTTOM:
+        type = "EnhancedCustomShapeParameterType::BOTTOM";
+        break;
+    case EnhancedCustomShapeParameterType::XSTRETCH:
+        type = "EnhancedCustomShapeParameterType::XSTRETCH";
+        break;
+    case EnhancedCustomShapeParameterType::YSTRETCH:
+        type = "EnhancedCustomShapeParameterType::YSTRETCH";
+        break;
+    case EnhancedCustomShapeParameterType::HASSTROKE:
+        type = "EnhancedCustomShapeParameterType::HASSTROKE";
+        break;
+    case EnhancedCustomShapeParameterType::HASFILL:
+        type = "EnhancedCustomShapeParameterType::HASFILL";
+        break;
+    case EnhancedCustomShapeParameterType::WIDTH:
+        type = "EnhancedCustomShapeParameterType::WIDTH";
+        break;
+    case EnhancedCustomShapeParameterType::HEIGHT:
+        type = "EnhancedCustomShapeParameterType::HEIGHT";
+        break;
+    case EnhancedCustomShapeParameterType::LOGWIDTH:
+        type = "EnhancedCustomShapeParameterType::LOGWIDTH";
+        break;
+    case EnhancedCustomShapeParameterType::LOGHEIGHT:
+        type = "EnhancedCustomShapeParameterType::LOGHEIGHT";
+        break;
+    default:
+        type = "unknown";
+        break;
+    }
+    return type;
+}
+
+static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &pp)
+{
+    // These are always sal_Int32s so lets depend on that for our packing ...
+    sal_Int32 nFirstValue, nSecondValue;
+    if (!(pp.First.Value >>= nFirstValue))
+        assert (false);
+    if (!(pp.Second.Value >>= nSecondValue))
+        assert (false);
+
+    printLevel (level);
+    fprintf (stderr, "{\n");
+    printLevel (level + 1);
+    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.First.Type));
+    printLevel (level + 1);
+    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
+    printLevel (level + 1);
+    fprintf (stderr, "%d, %d\n", (int)nFirstValue, (int)nSecondValue);
+    printLevel (level);
+    fprintf (stderr, "}");
 }
 
 static const char* lclDumpAnyValueCode( Any value, int level = 0)
@@ -510,13 +573,18 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             fprintf (stderr,"OUString str = CREATE_OUSTRING (\"%s\");\n", USS( strValue ) );
             return "Any (str)";
     } else if( value >>= strArray ) {
+            if (strArray.getLength() == 0)
+                return "Sequence< OUString >(0)";
+
             printLevel (level);
-            fprintf (stderr,"Sequence< OUString > aStringSequence (%" SAL_PRIdINT32 ");\n", strArray.getLength());
+            fprintf (stderr,"static const char *aStrings[] = {\n");
             for( int i=0; i<strArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr,"aStringSequence[%d] = CREATE_OUSTRING (\"%s\");\n", i, USS( strArray[i] ) );
+                printLevel (level + 1);
+                fprintf (stderr,"\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
             }
-            return "aStringSequence";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+            return "createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings )";
         } else if( value >>= propArray ) {
             printLevel (level);
             fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%" SAL_PRIdINT32 ");\n", propArray.getLength());
@@ -578,18 +646,21 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             }
             return "aAdjSequence";
         } else if( value >>= segArray ) {
+            if (segArray.getLength() == 0)
+                return "Sequence< EnhancedCustomShapeSegment >(0)";
+
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeSegment > aSegmentSeq (%" SAL_PRIdINT32 ");\n", segArray.getLength());
-            for( int i=0; i<segArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr, "{\n");
-                const char *var = lclDumpAnyValueCode (makeAny (segArray[i]), level + 1);
+            fprintf (stderr,"static const sal_uInt16 nValues[] = {\n");
+            printLevel (level);
+            fprintf (stderr,"// Command, Count\n");
+            for( int i = 0; i < segArray.getLength(); i++ ) {
                 printLevel (level + 1);
-                fprintf (stderr, "aSegmentSeq [%d] = %s;\n", i, var);
-                printLevel (level);
-                fprintf (stderr, "}\n");
+                fprintf (stderr,"%d,%d%s\n", segArray[i].Command,
+                         segArray[i].Count, i < segArray.getLength() - 1 ? "," : "");
             }
-            return "aSegmentSeq";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+            return "createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
         } else if( value >>= segTextFrame ) {
             printLevel (level);
             fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%" SAL_PRIdINT32 ");\n", segTextFrame.getLength());
@@ -605,17 +676,18 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aTextFrameSeq";
         } else if( value >>= ppArray ) {
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%" SAL_PRIdINT32 ");\n", ppArray.getLength());
-            for( int i=0; i<ppArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr, "{\n");
-                const char *var = lclDumpAnyValueCode (makeAny (ppArray[i]), level + 1);
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPairSeq [%d] = %s;\n", i, var);
-                printLevel (level);
-                fprintf (stderr, "}\n");
+            if (ppArray.getLength() == 0)
+                return "Sequence< EnhancedCustomShapeParameterPair >(0)";
+
+            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData[] = {\n");
+            for( int i = 0; i < ppArray.getLength(); i++ ) {
+                printParameterPairData(level + 1, ppArray[i]);
+                fprintf (stderr,"%s\n", i < ppArray.getLength() - 1 ? "," : "");
             }
-            return "aParameterPairSeq";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+
+            return "createParameterPairSequence(SAL_N_ELEMENTS(aData), aData)";
         } else if( value >>= segment ) {
             printLevel (level);
             fprintf (stderr, "EnhancedCustomShapeSegment aSegment;\n");
@@ -651,96 +723,20 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aTextFrame";
         } else if( value >>= pp ) {
             printLevel (level);
-            fprintf (stderr, "EnhancedCustomShapeParameterPair aParameterPair;\n");
-            printLevel (level);
-            fprintf (stderr, "{\n");
-            if (!pp.First.Value.getValueTypeName().equals(sVoid)) {
-                const char* var = lclDumpAnyValueCode( makeAny (pp.First), level + 1 );
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.First = %s;\n", var);
-            } else {
-                printLevel (level + 1);
-                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.First = aParameter;\n");
-            }
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData =\n");
+            printParameterPairData(level, pp);
+            fprintf (stderr, ";\n");
 
-            printLevel (level);
-            fprintf (stderr, "{\n");
-            if (!pp.Second.Value.getValueTypeName().equals(sVoid)) {
-                const char* var = lclDumpAnyValueCode( makeAny (pp.Second), level + 1 );
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.Second = %s;\n", var);
-            } else {
-                printLevel (level + 1);
-                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.Second = aParameter;\n");
-            }
-            printLevel (level);
-            fprintf (stderr, "}\n");
-            return "aParameterPair";
+            return "createParameterPair(&aData)";
         } else if( value >>= par ) {
             printLevel (level);
             fprintf (stderr,"EnhancedCustomShapeParameter aParameter;\n");
             const char* var = lclDumpAnyValueCode( par.Value, level );
             printLevel (level);
             fprintf (stderr,"aParameter.Value = %s;\n", var);
-            const char* type;
-            switch (par.Type) {
-                case EnhancedCustomShapeParameterType::NORMAL:
-                    type = "EnhancedCustomShapeParameterType::NORMAL";
-                    break;
-                case EnhancedCustomShapeParameterType::EQUATION:
-                    type = "EnhancedCustomShapeParameterType::EQUATION";
-                    break;
-                case EnhancedCustomShapeParameterType::ADJUSTMENT:
-                    type = "EnhancedCustomShapeParameterType::ADJUSTMENT";
-                    break;
-                case EnhancedCustomShapeParameterType::LEFT:
-                    type = "EnhancedCustomShapeParameterType::LEFT";
-                    break;
-                case EnhancedCustomShapeParameterType::TOP:
-                    type = "EnhancedCustomShapeParameterType::TOP";
-                    break;
-                case EnhancedCustomShapeParameterType::RIGHT:
-                    type = "EnhancedCustomShapeParameterType::RIGHT";
-                    break;
-                case EnhancedCustomShapeParameterType::BOTTOM:
-                    type = "EnhancedCustomShapeParameterType::BOTTOM";
-                    break;
-                case EnhancedCustomShapeParameterType::XSTRETCH:
-                    type = "EnhancedCustomShapeParameterType::XSTRETCH";
-                    break;
-                case EnhancedCustomShapeParameterType::YSTRETCH:
-                    type = "EnhancedCustomShapeParameterType::YSTRETCH";
-                    break;
-                case EnhancedCustomShapeParameterType::HASSTROKE:
-                    type = "EnhancedCustomShapeParameterType::HASSTROKE";
-                    break;
-                case EnhancedCustomShapeParameterType::HASFILL:
-                    type = "EnhancedCustomShapeParameterType::HASFILL";
-                    break;
-                case EnhancedCustomShapeParameterType::WIDTH:
-                    type = "EnhancedCustomShapeParameterType::WIDTH";
-                    break;
-                case EnhancedCustomShapeParameterType::HEIGHT:
-                    type = "EnhancedCustomShapeParameterType::HEIGHT";
-                    break;
-                case EnhancedCustomShapeParameterType::LOGWIDTH:
-                    type = "EnhancedCustomShapeParameterType::LOGWIDTH";
-                    break;
-                case EnhancedCustomShapeParameterType::LOGHEIGHT:
-                    type = "EnhancedCustomShapeParameterType::LOGHEIGHT";
-                    break;
-                default:
-                    type = "unknown";
-                    break;
-            }
             printLevel (level);
-            fprintf (stderr,"aParameter.Type = %s;\n", type);
+            fprintf (stderr,"aParameter.Type = %s;\n",
+                     lclGetEnhancedParameterType(par.Type));
             return "aParameter";
         } else if( value >>= longValue ) {
             printLevel (level);

@@ -194,8 +194,8 @@ public:
     const SwWrtShell*   GetActiveWrtShell() {return pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
 
-    DECL_LINK( ContentDoubleClickHdl, SwContentTree * );
-    DECL_LINK( TimerUpdate, Timer * );
+    DECL_LINK( ContentDoubleClickHdl, void * );
+    DECL_LINK( TimerUpdate, void * );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
     virtual void    RequestingChildren( SvLBoxEntry* pParent );
@@ -296,8 +296,8 @@ protected:
     void            Clear();
 
     DECL_LINK(      PopupHdl, Menu* );
-    DECL_LINK(      Timeout, Timer* );
-    DECL_LINK(      DoubleClickHdl, SwGlobalTree * );
+    DECL_LINK(      Timeout, void* );
+    DECL_LINK(      DoubleClickHdl, void* );
 
     sal_Bool            IsInternalDrag() const {return bIsInternalDrag != 0;}
     SwNavigationPI* GetParentWindow()

@@ -150,9 +150,7 @@ void ViewClipboard::AssignMasterPage (
     if (pPage == NULL)
         return;
 
-    SdDrawDocument* pDocument = mrView.GetDoc();
-    if (pDocument == NULL)
-        return;
+    SdDrawDocument& rDocument = mrView.GetDoc();
 
     if ( ! rTransferable.HasPageBookmarks())
         return;
@@ -175,7 +173,7 @@ void ViewClipboard::AssignMasterPage (
         sLayoutSuffix))
         sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
 
-    pDocument->SetMasterPage (
+    rDocument.SetMasterPage (
         pPage->GetPageNum() / 2,
         sLayoutName,
         pSourceDocument,
@@ -190,15 +188,15 @@ void ViewClipboard::AssignMasterPage (
 sal_uInt16 ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
-    SdDrawDocument* pDoc = mrView.GetDoc();
-    sal_uInt16 nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
+    SdDrawDocument& rDoc = mrView.GetDoc();
+    sal_uInt16 nPgCnt = rDoc.GetSdPageCount( PK_STANDARD );
 
     // Insert position is the behind the last selected page or behind the
     // last page when the selection is empty.
-    sal_uInt16 nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
+    sal_uInt16 nInsertPos = rDoc.GetSdPageCount( PK_STANDARD ) * 2 + 1;
     for( sal_uInt16 nPage = 0; nPage < nPgCnt; nPage++ )
     {
-        SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
+        SdPage* pPage = rDoc.GetSdPage( nPage, PK_STANDARD );
 
         if( pPage->IsSelected() )
             nInsertPos = nPage * 2 + 3;
@@ -214,10 +212,10 @@ sal_uInt16 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
     sal_uInt16 nInsertPosition)
 {
-    SdDrawDocument* pDoc = mrView.GetDoc();
+    SdDrawDocument& rDoc = mrView.GetDoc();
 
     sal_uInt16 nInsertPgCnt = 0;
-    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
+    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
     const List* pBookmarkList;
@@ -250,7 +248,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         if( bWait )
             pWin->LeaveWait();
 
-        pDoc->InsertBookmarkAsPage(
+        rDoc.InsertBookmarkAsPage(
             const_cast<List*>(pBookmarkList),
             NULL,
             sal_False,

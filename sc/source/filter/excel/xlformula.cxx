@@ -483,12 +483,6 @@ XclTokenArray::XclTokenArray( bool bVolatile ) :
 {
 }
 
-XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile ) :
-    mbVolatile( bVolatile )
-{
-    maTokVec.swap( rTokVec );
-}
-
 XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bool bVolatile ) :
     mbVolatile( bVolatile )
 {
@@ -596,11 +590,6 @@ XclTokenArrayIterator::XclTokenArrayIterator( const XclTokenArrayIterator& rTokA
     mbSkipSpaces( bSkipSpaces )
 {
     SkipSpaces();
-}
-
-void XclTokenArrayIterator::Init()
-{
-    mppScTokenBeg = mppScTokenEnd = mppScToken = 0;
 }
 
 void XclTokenArrayIterator::Init( const ScTokenArray& rScTokArr, bool bSkipSpaces )

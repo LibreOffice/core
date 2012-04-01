@@ -298,6 +298,22 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
     else
     {
         SetStyle( nStyle );
+        if (nOut == 0 && nIn > 0)
+        {
+            // If only inner width is given swap inner and outer widths for
+            // single line styles, otherwise GuessWidth() marks this as invalid
+            // and returns a 0 width.
+            switch (nStyle)
+            {
+                case SOLID:
+                case DOTTED:
+                case DASHED:
+                    ::std::swap( nOut, nIn);
+                    break;
+                default:
+                    ;   // nothing
+            }
+        }
         m_nWidth = m_aWidthImpl.GuessWidth( nOut, nIn, nDist );
     }
 }
@@ -476,29 +492,20 @@ bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
     const sal_uInt16 nThisSize = GetOutWidth() + GetDistance() + GetInWidth();
     const sal_uInt16 nOtherSize = rOtherLine.GetOutWidth() + rOtherLine.GetDistance() + rOtherLine.GetInWidth();
 
-    if (nThisSize > nOtherSize)
+    if ( nThisSize > nOtherSize )
     {
         return true;
     }
-    else if (nThisSize < nOtherSize)
+    else if ( nThisSize < nOtherSize )
     {
         return false;
     }
-    else
+    else if ( rOtherLine.GetInWidth() && !GetInWidth() )
     {
-        if ( rOtherLine.GetInWidth() && !GetInWidth() )
-        {
-            return true;
-        }
-        else if ( GetInWidth() && !rOtherLine.GetInWidth() )
-        {
-            return false;
-        }
-        else
-        {
-            return false;
-        }
+        return true;
     }
+
+    return false;
 }
 
 } // namespace editeng

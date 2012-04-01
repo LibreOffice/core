@@ -54,7 +54,7 @@ PATCH_FILES=gettext-0.18.1.1.stpncpy.patch
 .IF "$(OS)"=="MACOSX"
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules)
+CONFIGURE_ACTION=./configure --prefix=/@.__________________________________________________$(EXTRPATH) $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules)
 CONFIGURE_FLAGS=--disable-dependeny-tracking --disable-acl --disable-curses --without-emacs --without-git --disable-java
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 
@@ -65,7 +65,6 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-EXTRPATH=LOADER
 OUT2LIB+=gettext-tools/intl/.libs/libintl.*.dylib
 OUT2LIB+=gettext-runtime/libasprintf/.libs/libasprintf.*.dylib
 OUT2LIB+=gettext-tools/gnulib-lib/.libs/libgettextlib-*.dylib
@@ -76,22 +75,22 @@ OUT2INC+=gettext-tools/intl/libintl.h
 OUT2INC+=gettext-runtime/libasprintf/autosprintf.h
 OUT2INC+=gettext-tools/libgettextpo/gettext-po.h
 
-OUT2BIN+=gettext-tools/src/.libs/msgattrib
-OUT2BIN+=gettext-tools/src/.libs/msgcat
-OUT2BIN+=gettext-tools/src/.libs/msgcmp
-OUT2BIN+=gettext-tools/src/.libs/msgcomm
-OUT2BIN+=gettext-tools/src/.libs/msgconv
-OUT2BIN+=gettext-tools/src/.libs/msgen
-OUT2BIN+=gettext-tools/src/.libs/msgexec
-OUT2BIN+=gettext-tools/src/.libs/msgfilter
-OUT2BIN+=gettext-tools/src/.libs/msgfmt
-OUT2BIN+=gettext-tools/src/.libs/msggrep
-OUT2BIN+=gettext-tools/src/.libs/msginit
-OUT2BIN+=gettext-tools/src/.libs/msgmerge
-OUT2BIN+=gettext-tools/src/.libs/msgunfmt
-OUT2BIN+=gettext-tools/src/.libs/msguniq
-OUT2BIN+=gettext-tools/src/.libs/urlget
-OUT2BIN+=gettext-tools/src/.libs/xgettext
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgattrib
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgcat
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgcmp
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgcomm
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgconv
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgen
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgexec
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgfilter
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgfmt
+OUT2BIN_NONE+=gettext-tools/src/.libs/msggrep
+OUT2BIN_NONE+=gettext-tools/src/.libs/msginit
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgmerge
+OUT2BIN_NONE+=gettext-tools/src/.libs/msgunfmt
+OUT2BIN_NONE+=gettext-tools/src/.libs/msguniq
+OUT2BIN_NONE+=gettext-tools/src/.libs/urlget
+OUT2BIN_NONE+=gettext-tools/src/.libs/xgettext
 
 .ELIF "$(OS)"=="IOS"
 

@@ -61,6 +61,9 @@ public:
             false   if not
     */
     static sal_Bool createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
+
+protected:
+    ~SvxUnoDrawMSFactory() {}
 };
 
 #endif

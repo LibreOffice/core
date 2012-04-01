@@ -46,6 +46,9 @@ namespace dbaui
         virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue) = 0;
         virtual void moveToInsertRow() = 0;
         virtual void insertRow() = 0;
+
+    protected:
+        ~IUpdateHelper() {}
     };
 }
 

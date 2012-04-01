@@ -1238,7 +1238,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
  * Hier wird der State fuer SID_IMAP / SID_CONTOUR behandelt,
  * wenn die Grafik ausgeswappt ist
  * --------------------------------------------------*/
-IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , EMPTYARG )
+IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
 {
     sal_uInt16 nGrfType;
     SwWrtShell &rSh = GetShell();
@@ -1927,6 +1927,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor
  --------------------------------------------------------------------*/
+
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),

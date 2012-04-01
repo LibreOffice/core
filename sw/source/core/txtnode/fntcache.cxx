@@ -382,6 +382,8 @@ sal_uInt16 SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& r
     {
         if ( USHRT_MAX == nGuessedLeading || USHRT_MAX == nExtLeading )
         {
+            SolarMutexGuard aGuard;
+
             const Font aOldFnt( rOut.GetFont() );
             ((OutputDevice&)rOut).SetFont( *pPrtFont );
             const FontMetric aMet( rOut.GetFontMetric() );

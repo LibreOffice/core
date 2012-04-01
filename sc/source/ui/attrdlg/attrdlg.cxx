@@ -125,7 +125,7 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScAttrDlg, OkHandler, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
 {
     ((Link&)GetOKButton().GetClickHdl()).Call( NULL );
 

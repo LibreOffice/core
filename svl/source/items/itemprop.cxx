@@ -373,12 +373,6 @@ Sequence< Property > SAL_CALL
     return m_pImpl->m_pOwnMap->getProperties();
 }
 
-const SfxItemPropertyMap* SfxItemPropertySetInfo::getMap() const
-{
-    return m_pImpl->m_pOwnMap;
-}
-
-
 SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
 {
     delete m_pImpl->m_pOwnMap;

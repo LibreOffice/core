@@ -79,12 +79,12 @@ SwField* SwScriptField::Copy() const
     Beschreibung: Type setzen
  --------------------------------------------------------------------*/
 
-void SwScriptField::SetPar1( const String& rStr )
+void SwScriptField::SetPar1( const rtl::OUString& rStr )
 {
     sType = rStr;
 }
 
-const String& SwScriptField::GetPar1() const
+const rtl::OUString& SwScriptField::GetPar1() const
 {
     return sType;
 }
@@ -93,13 +93,13 @@ const String& SwScriptField::GetPar1() const
     Beschreibung: Code setzen
  --------------------------------------------------------------------*/
 
-void SwScriptField::SetPar2( const String& rStr )
+void SwScriptField::SetPar2( const rtl::OUString& rStr )
 {
     sCode = rStr;
 }
 
 
-String SwScriptField::GetPar2() const
+rtl::OUString SwScriptField::GetPar2() const
 {
     return sCode;
 }
@@ -128,10 +128,10 @@ bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        ::GetString( rAny, sType );
+        rAny >>= sType;
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, sCode );
+        rAny >>= sCode;
         break;
     case FIELD_PROP_BOOL1:
         bCodeURL = *(sal_Bool*)rAny.getValue();

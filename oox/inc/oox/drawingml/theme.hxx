@@ -33,6 +33,7 @@
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textfont.hxx"
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace drawingml {
@@ -50,7 +51,7 @@ typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 
 // ============================================================================
 
-class Theme
+class OOX_DLLPUBLIC Theme
 {
 public:
     explicit            Theme();
@@ -76,8 +77,6 @@ public:
 
     inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
     inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
-    /** Returns the effect properties of the passed one-based themed style index. */
-    const PropertyMap*              getEffectStyle( sal_Int32 nIndex ) const;
 
     inline FontScheme&              getFontScheme() { return maFontScheme; }
     inline const FontScheme&        getFontScheme() const { return maFontScheme; }

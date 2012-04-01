@@ -42,7 +42,20 @@
     @since LibreOffice 3.5.
 */
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
 
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(

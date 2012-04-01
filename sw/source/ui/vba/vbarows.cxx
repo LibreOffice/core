@@ -360,11 +360,10 @@ SwVbaRows::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaRows::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRows") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRows"));
 }
 
 uno::Sequence<rtl::OUString>

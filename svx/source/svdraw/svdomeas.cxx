@@ -120,7 +120,9 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
-                pModel->TakeMetricStr(nLen, rStr, sal_True, nNumDigits);
+                rtl::OUString aTmp;
+                pModel->TakeMetricStr(nLen, aTmp, true, nNumDigits);
+                rStr = aTmp;
 
                 if(!aFact.IsValid())
                 {
@@ -388,7 +390,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     bool bPfeileAussen = false;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
+    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // line width
     rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
     nArrow1Wdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();

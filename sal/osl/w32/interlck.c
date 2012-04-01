@@ -42,6 +42,10 @@ extern int osl_isSingleCPU;
    on every x86-Windows-Platform the inline assembler implementation.
 */
 
+#if defined __MINGW32__
+#pragma GCC diagnostic warning "-Wreturn-type"
+#endif
+
 /*****************************************************************************/
 /* osl_incrementInterlockedCount */
 /*****************************************************************************/

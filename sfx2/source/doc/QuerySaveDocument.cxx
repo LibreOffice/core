@@ -33,9 +33,14 @@
 #include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 // -----------------------------------------------------------------------------
 short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
 {
+    if (Application::IsHeadlessModeEnabled())
+    {   // don't block Desktop::terminate() if there's no user to ask
+        return RET_NO;
+    }
     String aText( SfxResId( STR_QUERY_SAVE_DOCUMENT ) );
     aText.SearchAndReplace( DEFINE_CONST_UNICODE( "$(DOC)" ),
                             _rTitle );

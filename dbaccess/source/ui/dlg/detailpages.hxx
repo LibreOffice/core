@@ -257,47 +257,6 @@ namespace dbaui
     };
 
     //========================================================================
-    //= OAdabasDetailsPage
-    //========================================================================
-    class OAdabasDetailsPage : public OCommonBehaviourTabPage
-    {
-    public:
-        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
-
-        OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
-    protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
-
-    private:
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedLine           m_aFL_1;
-        FixedText           m_FT_CACHE_SIZE;
-        NumericField        m_NF_CACHE_SIZE;
-
-        FixedText           m_FT_DATA_INCREMENT;
-        NumericField        m_NF_DATA_INCREMENT;
-
-        FixedLine           m_aFL_2;
-        FixedText           m_FT_CTRLUSERNAME;
-        Edit                m_ET_CTRLUSERNAME;
-        FixedText           m_FT_CTRLPASSWORD;
-        Edit                m_ET_CTRLPASSWORD;
-
-        CheckBox            m_CB_SHUTDB;
-        PushButton          m_PB_STAT;
-        String              m_sUser;
-        sal_Bool                bAttrsChanged;
-
-        DECL_LINK( AttributesChangedHdl,    void * );
-        DECL_LINK( UserSettingsHdl,         void * );
-        DECL_LINK( LoseFocusHdl,            Edit * );
-        DECL_LINK( PBClickHdl,              Button *);
-    };
-
-    //========================================================================
     //= OOdbcDetailsPage
     //========================================================================
     class OLDAPDetailsPage : public OCommonBehaviourTabPage

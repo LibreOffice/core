@@ -613,7 +613,7 @@ const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
     return pEntry->GetAuthorField( eField );
 }
 
-void    SwAuthorityField::SetPar1(const String& rStr)
+void    SwAuthorityField::SetPar1(const rtl::OUString& rStr)
 {
     SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
     pInitType->RemoveField(m_nHandle);

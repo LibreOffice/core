@@ -132,7 +132,7 @@ SvParserState EditRTFParser::CallParser()
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         sal_uInt16 nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
-        ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara-1 );
+        ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara-1 );
         DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
         EditSelection aSel;
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
@@ -178,7 +178,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     sal_uInt16 nEndPara = pImpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+        ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
         DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
             pNode->GetContentAttribs().GetItems().Put( aFontItem );
@@ -296,7 +296,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
-    ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SaveGetObject( nCurPara );
+    ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SafeGetObject( nCurPara );
     DBG_ASSERT( pPrevNode, "pPrevNode = 0!" );
     rpNodePos = new EditNodeIdx( pImpEditEngine, pPrevNode );
     rCntPos = pPrevNode->Len();
@@ -371,10 +371,11 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
-        SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-        DBG_ASSERT( pS, "Template not defined in RTF!" );
-        if ( pS )
+        SvxRTFStyleTbl::iterator it = GetStyleTbl().find( rSet.StyleNo() );
+        DBG_ASSERT( it != GetStyleTbl().end(), "Template not defined in RTF!" );
+        if ( it != GetStyleTbl().end() )
         {
+            SvxRTFStyleType* pS = it->second;
             pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pS->sName, SFX_STYLE_FAMILY_ALL ) );
             nOutlLevel = pS->nOutlineNo;
         }
@@ -387,7 +388,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // All Complete paragraphs are paragraph attributes ...
     for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node does not exist yet(RTF)" );
+        DBG_ASSERT( pImpEditEngine->GetEditDoc().SafeGetObject( z ), "Node does not exist yet(RTF)" );
         pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
     }
 
@@ -425,7 +426,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         for ( sal_uInt16 n = nStartNode; n <= nEndNode; n++ )
         {
-            ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( n );
+            ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
         }
     }
@@ -433,11 +434,14 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
 SvxRTFStyleType* EditRTFParser::FindStyleSheet( const XubString& rName )
 {
-    SvxRTFStyleType* pS = GetStyleTbl().First();
-    while ( pS && ( pS->sName != rName ) )
-        pS = GetStyleTbl().Next();
-
-    return pS;
+    SvxRTFStyleTbl& rTable = GetStyleTbl();
+    for ( SvxRTFStyleTbl::iterator it = rTable.begin(); it != rTable.end(); ++it )
+    {
+        SvxRTFStyleType* pS = it->second;
+        if ( pS->sName == rName )
+            return pS;
+    }
+    return NULL;
 }
 
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
@@ -451,9 +455,13 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     String aParent;
     if ( pRTFStyle->nBasedOn )
     {
-        SvxRTFStyleType* pS = GetStyleTbl().Get( pRTFStyle->nBasedOn );
-        if ( pS && ( pS !=pRTFStyle ) )
-            aParent = pS->sName;
+        SvxRTFStyleTbl::iterator it = GetStyleTbl().find( pRTFStyle->nBasedOn );
+        if ( it != GetStyleTbl().end())
+        {
+            SvxRTFStyleType* pS = it->second;
+            if ( pS && ( pS !=pRTFStyle ) )
+                aParent = pS->sName;
+        }
     }
 
     pStyle = (SfxStyleSheet*) &pImpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA );
@@ -484,12 +492,10 @@ void EditRTFParser::CreateStyleSheets()
     // the SvxRTFParser haa  now created the template...
     if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
-        SvxRTFStyleType* pRTFStyle = GetStyleTbl().First();
-        while ( pRTFStyle )
+        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
         {
+            SvxRTFStyleType* pRTFStyle = it->second;
             CreateStyleSheet( pRTFStyle );
-
-            pRTFStyle = GetStyleTbl().Next();
         }
     }
 }

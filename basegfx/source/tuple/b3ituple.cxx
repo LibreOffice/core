@@ -33,10 +33,6 @@ namespace { struct EmptyTuple : public rtl::Static<basegfx::B3ITuple, EmptyTuple
 
 namespace basegfx
 {
-    const B3ITuple& B3ITuple::getEmptyTuple()
-    {
-        return EmptyTuple::get();
-    }
 } // end of namespace basegfx
 
 // eof

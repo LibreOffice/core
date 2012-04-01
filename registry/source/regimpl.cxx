@@ -242,9 +242,7 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
                 break;
 
             case RT_TYPE_BYTE:
-                printf(
-                    "byte 0x%02X",
-                    static_cast< unsigned int >(value.m_value.aByte));
+                printf("byte %d", static_cast< int >(value.m_value.aByte));
                 break;
 
             case RT_TYPE_INT16:

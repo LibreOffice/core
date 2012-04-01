@@ -2179,7 +2179,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             HANDLE_SQL_ERRORS(
                 xParser->setOrder(::rtl::OUString()); xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
-                UniString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
+                ResId::toString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
@@ -2251,7 +2251,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendHavingClauseByColumn(xField,sal_True,nOp),
                     bParserSuccess,
-                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    ResId::toString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }
@@ -2260,7 +2260,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendFilterByColumn(xField,sal_True,nOp),
                     bParserSuccess,
-                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    ResId::toString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }
@@ -2486,7 +2486,7 @@ void SbaXDataBrowserController::CellDeactivated()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( SbaXDataBrowserController, OnClipboardChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnClipboardChanged)
 {
     SolarMutexGuard aGuard;
     return OnInvalidateClipboard( NULL );
@@ -2657,7 +2657,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnAsyncGetCellFocus)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this

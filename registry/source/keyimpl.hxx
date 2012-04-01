@@ -46,7 +46,6 @@ public:
     sal_uInt32  release()
         { return --m_refCount; }
 
-    RegError    acquireKey(RegKeyHandle hKey);
     RegError    releaseKey(RegKeyHandle hKey);
 
     RegError    createKey(const rtl::OUString& keyName, RegKeyHandle* phNewKey);

@@ -566,7 +566,11 @@ void EMFWriter::ImplWriteSize( const Size& rSize)
 void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
     const Rectangle aRect( maVDev.LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
-     m_rStm << aRect.Left() << aRect.Top() << aRect.Right() << aRect.Bottom();
+    m_rStm
+        << static_cast<sal_Int32>(aRect.Left())
+        << static_cast<sal_Int32>(aRect.Top())
+        << static_cast<sal_Int32>(aRect.Right())
+        << static_cast<sal_Int32>(aRect.Bottom());
 }
 
 // -----------------------------------------------------------------------------
@@ -753,7 +757,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         const sal_uLong nOffPos = m_rStm.Tell();
         m_rStm.SeekRel( 16 );
 
-        m_rStm << (sal_uInt32) 0 << ( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
+        m_rStm << (sal_uInt32) 0 << sal_Int32( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
         rBmp.Write( aMemStm, sal_True, sal_False );

@@ -28,10 +28,11 @@
 $(eval $(call gb_Rdb_Rdb,ure/services))
 
 $(eval $(call gb_Rdb_add_components,ure/services,\
-    io/source/acceptor/acceptor \
+	$(if $(filter IOS,$(OS)),, \
+        io/source/acceptor/acceptor \
+        io/source/connector/connector) \
     binaryurp/source/binaryurp \
     stoc/util/bootstrap \
-    io/source/connector/connector \
     stoc/source/inspect/introspection \
     stoc/source/invocation_adapterfactory/invocadapt \
     stoc/source/invocation/invocation \
@@ -47,9 +48,9 @@ $(eval $(call gb_Rdb_add_components,ure/services,\
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Rdb_add_components,ure/services,\
+    javaunohelper/util/juh \
     stoc/source/javaloader/javaloader \
     stoc/source/javavm/javavm \
-    juh \
 ))
 endif
 

@@ -125,12 +125,10 @@ ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeExc
     setContrast( nContrast );
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaPictureFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPictureFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPictureFormat"));
 }
 
 uno::Sequence< rtl::OUString >

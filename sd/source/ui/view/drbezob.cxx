@@ -56,7 +56,6 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"
-#include "sdresid.hxx"
 #include "fusel.hxx"
 #include "fuconbez.hxx"
 
@@ -122,7 +121,7 @@ BezierObjectBar::~BezierObjectBar()
 
 void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
-    SfxItemSet aAttrSet( mpView->GetDoc()->GetPool() );
+    SfxItemSet aAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, sal_False); // <- sal_False, damit DontCare-Status uebernommen wird
 

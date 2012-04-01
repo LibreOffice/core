@@ -291,7 +291,7 @@ struct GetPPDAttribs
 
     ~GetPPDAttribs()
     {
-        if( m_aResult.getLength() )
+        if( !m_aResult.isEmpty() )
             unlink( m_aResult.getStr() );
     }
 
@@ -646,7 +646,7 @@ void CUPSManager::initialize()
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
             continue;
 
-        if( it->second.m_aInfo.m_aFeatures.getLength() > 0 )
+        if( !it->second.m_aInfo.m_aFeatures.isEmpty() )
             continue;
         aRemovePrinters.push_back( it->first );
     }
@@ -732,7 +732,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), aPPDFile.getStr() );
                 #endif
-                if( aPPDFile.getLength() )
+                if( !aPPDFile.isEmpty() )
                 {
                     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
                     OUString aFileName( OStringToOUString( aPPDFile, aEncoding ) );

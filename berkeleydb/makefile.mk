@@ -59,6 +59,14 @@ ADDITIONAL_FILES= \
 # not needed for win32. comment out when causing problems...
 .IF "$(GUI)$(COM)"=="WNTGCC"
 PATCH_FILES=db-4.7.25-mingw.patch
+PATCH_FILES += db-4.7.25.NC-mingw32hack.patch
+    # otherwise, db-4.7.25.NC/dist/configure decides for _FILE_OFFSET_BITS=64,
+    # which causes /usr/i686-w64-mingw32/sys-root/mingw/include/_mingw.h to not
+    # define _USE_32BIT_TIME_T, so that berkeleydb uses a 64 bit time_t while
+    # the rest of LibreOffice uses a 32 bit time_t, which causes problems as
+    # there is e.g. a member time_t timestamp of struct __db in db.h; see
+    # <http://sourceforge.net/support/tracker.php?aid=3513251> "_mingw.h: size
+    # of time_t depends on _FILE_OFFSET_BITS"
 .ELSE
 PATCH_FILES=\
     db-4.7.25.patch \
@@ -74,6 +82,10 @@ CXXFLAGS:=
 .IF "$(COM)"=="GCC"
 CFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
+.IF "$(ENABLE_SYMBOLS)"!=""
+CFLAGS+=-g
+CXXFLAGS+=-g
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -101,7 +113,9 @@ CONFIGURE_FLAGS+= --disable-shared
 CONFIGURE_FLAGS+= --enable-shared
 .ENDIF
 .IF "$(OS)"=="MACOSX"
-CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH) \
+    CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)

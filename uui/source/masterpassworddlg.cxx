@@ -36,7 +36,7 @@
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(MasterPasswordDialog, OKHdl_Impl)
 {
     EndDialog( RET_OK );
     return 1;

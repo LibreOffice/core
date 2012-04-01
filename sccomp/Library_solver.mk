@@ -30,11 +30,6 @@ $(eval $(call gb_Library_Library,solver))
 
 $(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/solver))
 
-$(eval $(call gb_Library_set_include,solver,\
-	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sccomp/source/solver) \
-))
-
 $(eval $(call gb_Library_add_api,solver,\
 	offapi \
 	udkapi \

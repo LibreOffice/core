@@ -538,7 +538,7 @@ namespace svxform
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
         SvLBoxEntry*        FindEntry( FmEntryData* pEntryData );
 
-        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
         virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
         virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

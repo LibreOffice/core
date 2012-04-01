@@ -237,8 +237,6 @@ BEGIN
 
     $strip = 1;
 
-    $globallogging = 0;
-    $globalloggingform21 = 1;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
     @errorlogfileinfo = ();
@@ -253,10 +251,7 @@ BEGIN
     $followme_from_directory = 0;
     $internal_cabinet_signing = 0;
 
-    $debug = 0;
-    $debugfilename = "debug.txt";
     $checksumfilename = "checksum.txt";
-    @functioncalls = ();
 
     $ismultilingual = 0;
     @multilanguagemodules = ();
@@ -279,7 +274,6 @@ BEGIN
     $infodirectory = "";
     @currentcontent = ();
     @installsetcontent = ();
-    %xpdpackageinfo = ();
     $signfiles_checked = 0;
     $dosign = 0;
     $pwfile = "";
@@ -296,14 +290,7 @@ BEGIN
     $lastsequence_before_merge = 0;
     $lastcabfilename = "";
 
-    $createdxpddefaultlang = 0;
-    $xpddir = "";
-    $productxpdfile = "setup.xpd";
-    $xpd_files_prepared = 0;
     $defaultlanguage = "";
-    @createdxpdfiles = ();
-    @allxpdfiles = ();
-    $isxpdplatform = 0;
     $javalanguagepath = "";
     $javasettozero = 0;
     $addlicensefile = 1;
@@ -430,8 +417,6 @@ BEGIN
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;
-
-    $starttime = "";
 
     @solarispatchscripts = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall", "postinstall", "preinstall", "i.none");
     @solarispatchscriptsforextensions = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall_extensions", "postinstall_extensions", "preinstall", "i.none");

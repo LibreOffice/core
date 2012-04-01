@@ -80,7 +80,7 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
 SwFlyFreeFrm::~SwFlyFreeFrm()
 {
-    //und Tschuess.
+    // and goodbye.
     // #i28701# - use new method <GetPageFrm()>
     if( GetPageFrm() )
     {
@@ -111,12 +111,10 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 |*
 |*  SwFlyFreeFrm::NotifyBackground()
 |*
-|*  Beschreibung        Benachrichtigt den Hintergrund (alle CntntFrms die
-|*      gerade ueberlappt werden. Ausserdem wird das Window in einigen
-|*      Faellen direkt invalidiert (vor allem dort, wo keine CntntFrms
-|*      ueberlappt werden.
-|*      Es werden auch die CntntFrms innerhalb von anderen Flys
-|*      beruecksichtigt.
+|*  Description      notifies the background (all CntntFrms that currently
+|*       are overlapping. Additionally, the window is also directly
+|*       invalidated (especially where there are no overlapping CntntFrms)
+|*       This also takes CntntFrms within other Flys into account.
 |*
 |*************************************************************************/
 
@@ -152,9 +150,9 @@ void SwFlyFreeFrm::MakeAll()
     if( !GetPageFrm() )
         return;
 
-    Lock(); //Der Vorhang faellt
+    Lock(); // The courtain drops
 
-    //uebernimmt im DTor die Benachrichtigung
+    // takes care of the notification in the dtor
     const SwFlyNotify aNotify( this );
 
     if ( IsClipped() )
@@ -182,13 +180,13 @@ void SwFlyFreeFrm::MakeAll()
     {
         SWRECTFN( this )
         const SwFmtFrmSize *pSz;
-        {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
+        {   // Additional scope, so aAccess will be destroyed before the check!
 
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             pSz = &rAttrs.GetAttrSet().GetFrmSize();
 
-            //Nur einstellen wenn das Flag gesetzt ist!!
+            // Only set when the flag is set!
             if ( !bValidSize )
             {
                 bValidPrtArea = sal_False;
@@ -292,12 +290,12 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 
 void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 {
-    //Jetzt ist es ggf. an der Zeit geignete Massnahmen zu ergreifen wenn
-    //der Fly nicht in seine Umgebung passt.
-    //Zuerst gibt der Fly seine Position auf. Danach wird er zunaechst
-    //formatiert. Erst wenn er auch durch die Aufgabe der Position nicht
-    //passt wird die Breite oder Hoehe aufgegeben - der Rahmen wird soweit
-    //wie notwendig zusammengequetscht.
+    // It's probably time now to take appropriate measures, if the Fly
+    // doesn't fit into its surrounding.
+    // First, the Fly gives up its position, then it's formatted.
+    // Only if it still doesn't fit after giving up its position, the
+    // width or height are given up as well. The frame will be squeezed
+    // as much as needed.
 
     const SwVirtFlyDrawObj *pObj = GetVirtDrawObj();
     SwRect aClip, aTmpStretch;
@@ -340,8 +338,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( Frm().Left() != nOld )
             {
                 const SwFmtHoriOrient &rH = GetFmt()->GetHoriOrient();
-                // Links ausgerichtete duerfen nicht nach links verschoben werden,
-                // wenn sie einem anderen ausweichen.
+                // Left-aligned ones may not be moved to the left when they
+                // are avoiding another one.
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                     Frm().Pos().X() = nOld;
                 else
@@ -353,22 +351,21 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             bValidSize = sal_False;
         else
         {
-            //Wenn wir hier ankommen ragt der Frm in unerlaubte Bereiche
-            //hinein, und eine Positionskorrektur ist nicht erlaubt bzw.
-            //moeglich oder noetig.
+            // If we reach this branch, the Frm protrudes into forbidden
+            // sections, and correcting the position is neither allowed
+            // nor possible nor required.
 
-            //Fuer Flys mit OLE-Objekten als Lower sorgen wir dafuer, dass
-            //immer proportional Resized wird.
+            // For Flys with OLE objects as lower, we make sure that
+            // we always resize proportionally
             Size aOldSize( Frm().SSize() );
 
-            //Zuerst wird das FrmRect eingestellt, und dann auf den Frm
-            //uebertragen.
+            // First, setup the FrmRect, then transfer it to the Frm.
             SwRect aFrmRect( Frm() );
 
             if ( bBot )
             {
                 long nDiff = nClipBot;
-                nDiff -= aFrmRect.Top(); //nDiff ist die verfuegbare Strecke.
+                nDiff -= aFrmRect.Top(); // nDiff represents the available distance
                 nDiff = aFrmRect.Height() - nDiff;
                 aFrmRect.Height( aFrmRect.Height() - nDiff );
                 bHeightClipped = sal_True;
@@ -376,7 +373,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( bRig )
             {
                 long nDiff = nClipRig;
-                nDiff -= aFrmRect.Left();//nDiff ist die verfuegbare Strecke.
+                nDiff -= aFrmRect.Left();// nDiff represents the available distance
                 nDiff = aFrmRect.Width() - nDiff;
                 aFrmRect.Width( aFrmRect.Width() - nDiff );
                 bWidthClipped = sal_True;
@@ -396,8 +393,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                  ( static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() ||
                    !HasEnvironmentAutoSize() ) )
             {
-                //Wenn Breite und Hoehe angepasst wurden, so ist die
-                //groessere Veraenderung massgeblich.
+                // If width and height got adjusted, then the bigger
+                // change is relevant.
                 if ( aFrmRect.Width() != aOldSize.Width() &&
                      aFrmRect.Height()!= aOldSize.Height() )
                 {
@@ -408,14 +405,14 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                         aFrmRect.Width( aOldSize.Width() );
                 }
 
-                //Breite angepasst? - Hoehe dann proportional verkleinern
+                // Adjusted the width? change height proportionally
                 if( aFrmRect.Width() != aOldSize.Width() )
                 {
                     aFrmRect.Height( aFrmRect.Width() * aOldSize.Height() /
                                      aOldSize.Width() );
                     bHeightClipped = sal_True;
                 }
-                //Hoehe angepasst? - Breite dann proportional verkleinern
+                // Adjusted the height? change width proportionally
                 else if( aFrmRect.Height() != aOldSize.Height() )
                 {
                     aFrmRect.Width( aFrmRect.Height() * aOldSize.Width() /
@@ -446,16 +443,15 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 }
             }
 
-            //Jetzt die Einstellungen am Frm vornehmen, bei Spalten werden
-            //die neuen Werte in die Attribute eingetragen, weil es sonst
-            //ziemlich fiese Oszillationen gibt.
+            // Now change the Frm; for columns, we put the new values into the attributes,
+            // otherwise we'll end up with unwanted side-effects
             const long nPrtHeightDiff = Frm().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
             Frm().Height( aFrmRect.Height() );
             Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
             {
-                ColLock();  //Grow/Shrink locken.
+                ColLock();  //lock grow/shrink
                 const Size aTmpOldSize( Prt().SSize() );
                 Prt().Height( Frm().Height() - nPrtHeightDiff );
                 Prt().Width ( Frm().Width()  - nPrtWidthDiff );
@@ -463,7 +459,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 SwFrm *pLow = Lower();
                 do
                 {   pLow->Calc();
-                    // auch den (Column)BodyFrm mitkalkulieren
+                    // also calculate the (Column)BodyFrm
                     ((SwLayoutFrm*)pLow)->Lower()->Calc();
                     pLow = pLow->GetNext();
                 } while ( pLow );
@@ -523,13 +519,13 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
             (const SfxPoolItem**)&pAnch ))
-        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
+        ; // GetItemState sets the anchor pointer!
 
     else if( RES_ANCHOR == nWhich )
     {
-        //Ankerwechsel, ich haenge mich selbst um.
-        //Es darf sich nicht um einen Wechsel des Ankertyps handeln,
-        //dies ist nur ueber die SwFEShell moeglich.
+        // Change of anchor. I'm attaching myself to the new place.
+        // It's not allowed to change the anchor type. This is only
+        // possible via SwFEShell.
         pAnch = (SwFmtAnchor*)pNew;
     }
 
@@ -537,10 +533,9 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     {
         OSL_ENSURE( pAnch->GetAnchorId() ==
                 GetFmt()->GetAnchor().GetAnchorId(),
-                "8-) Unzulaessiger Wechsel des Ankertyps." );
+                "8-) Invalid change of anchor type." );
 
-        //Abmelden, Seite besorgen, an den entsprechenden LayoutFrm
-        //haengen.
+        // Unregister, get hold of the page, attach to the corresponding LayoutFrm.
         SwRect aOld( GetObjRectWithSpaces() );
         // #i28701# - use new method <GetPageFrm()>
         SwPageFrm *pOldPage = GetPageFrm();
@@ -625,7 +620,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
             pObj->SetOrdNum( nNewNum );
     }
 
-    //Flys die im Cntnt sitzen beachten wir nicht weiter.
+    // Don't look further at Flys that sit inside the Cntnt.
     if ( pNew->IsFlyInCntFrm() )
         InvalidateFlyInCnt();
     else
@@ -709,7 +704,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
         ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
     }
 
-    //Flys die im Cntnt sitzen beachten wir nicht weiter.
+    // Don't look further at Flys that sit inside the Cntnt.
     if ( pToRemove->IsFlyInCntFrm() )
         return;
 
@@ -724,11 +719,10 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
                                   ->DisposeAccessibleFrm( pToRemove, sal_True );
     }
 
-    //Collections noch nicht loeschen. Das passiert am Ende
-    //der Action im RemoveSuperfluous der Seite - angestossen von gleich-
-    //namiger Methode der Root.
-    //Die FlyColl kann bereits weg sein, weil der DTor der Seite
-    //gerade 'laeuft'
+    // Don't delete collections just yet. This will happen at the end of the
+    // action in the RemoveSuperfluous of the page, kicked off by a method of
+    // the same name in the root.
+    // The FlyColl might be gone already, because the page's dtor is being executed.
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( *pToRemove );
@@ -748,7 +742,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 
 void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 {
-    //Invalidierungen
+    // Invalidations
     if ( GetUpper() )
     {
         ((SwRootFrm*)GetUpper())->SetIdleFlags();
@@ -778,8 +772,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
                                   ->DisposeAccessibleFrm( pToMove, sal_True );
     }
 
-    //Die FlyColl kann bereits weg sein, weil der DTor der Seite
-    //gerade 'laeuft'
+    // The FlyColl might be gone already, because the page's dtor is being executed.
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( *pToMove );
@@ -788,7 +781,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         }
     }
 
-    //Anmelden
+    // Register
     if ( !pDest->GetSortedObjs() )
         pDest->pSortedObjs = new SwSortedObjs();
 
@@ -948,12 +941,12 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
     }
     else
     {
-        //Wenn ein Fly uebergeben wurde, so benutzen wir diesen, ansonsten wird
-        //mit dem Format einer erzeugt.
+        // If we received a Fly, we use that one. Otherwise, create a new
+        // one using the Format.
         if ( pFly )
             AppendFly( pFly );
         else
-        {   OSL_ENSURE( pFmt, ":-( kein Format fuer Fly uebergeben." );
+        {   OSL_ENSURE( pFmt, ":-( No Format given for Fly." );
             pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this, this );
             AppendFly( pFly );
             ::RegistFlys( this, pFly );
@@ -968,15 +961,14 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 |*************************************************************************/
 // #i18732# - adjustments for following text flow or not
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
-// #i22305# - adjustment for following text flow
-// for to frame anchored objects
-// #i29778# - Because the calculation of the position of the
-// floating screen object (Writer fly frame or drawing object) doesn't perform
-// a calculation on its upper frames and its anchor frame, a calculation of
-// the upper frames in this method no longer sensible.
-// #i28701# - if document compatibility option 'Consider
-// wrapping style influence on object positioning' is ON, the clip area
-// corresponds to the one as the object doesn't follows the text flow.
+// #i22305# - adjustment for following text flow for to frame anchored objects
+// #i29778# - Because calculating the floating screen object's position
+// (Writer fly frame or drawing object) doesn't perform a calculation on its
+// upper frames and its anchor frame, a calculation of the upper frames in this
+// method is no longer sensible.
+// #i28701# - if document compatibility option 'Consider wrapping style influence
+// on object positioning' is ON, the clip area corresponds to the one as the
+// object doesn't follow the text flow.
 sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
 {
     sal_Bool bRet = sal_True;
@@ -1005,14 +997,14 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
             rRect = pClip->Frm();
             SWRECTFN( pClip )
 
-            //Vertikales clipping: Top und Bottom, ggf. an PrtArea
+            // vertical clipping: Top and Bottom, also to PrtArea if neccessary
             if( rV.GetVertOrient() != text::VertOrientation::NONE &&
                 rV.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
             {
                 (rRect.*fnRect->fnSetTop)( (pClip->*fnRect->fnGetPrtTop)() );
                 (rRect.*fnRect->fnSetBottom)( (pClip->*fnRect->fnGetPrtBottom)() );
             }
-            //Horizontales clipping: Left und Right, ggf. an PrtArea
+            // horizontal clipping: Top and Bottom, also to PrtArea if necessary
             const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
             if( rH.GetHoriOrient() != text::HoriOrientation::NONE &&
                 rH.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
@@ -1178,8 +1170,8 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
                 }
                 if ( pCell )
                 {
-                    //CellFrms koennen auch in 'unerlaubten' Bereichen stehen, dann
-                    //darf der Fly das auch.
+                    // CellFrms might also sit in unallowed sections. In this case,
+                    // the Fly is allowed to do so as well
                     SwRect aTmp( pCell->Prt() );
                     aTmp += pCell->Frm().Pos();
                     rRect.Union( aTmp );

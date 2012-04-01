@@ -69,7 +69,6 @@
 #define UNOMUTEXGUARD                   ::osl::MutexGuard
 #define UNOOIMPLEMENTATIONID            ::cppu::OImplementationId
 #define UNOOTYPECOLLECTION              ::cppu::OTypeCollection
-#define UNOOUSTRING                     ::rtl::OUString
 #define UNOPROPERTYVALUE                ::com::sun::star::beans::PropertyValue
 #define UNOREFERENCE                    ::com::sun::star::uno::Reference
 #define UNORUNTIMEEXCEPTION             ::com::sun::star::uno::RuntimeException
@@ -142,6 +141,33 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 #define SFX_DECL_XINTERFACE_XTYPEPROVIDER                                                                                            \
     SFX_DECL_XINTERFACE                                                                                                               \
     SFX_DECL_XTYPEPROVIDER
+
+//************************************************************************************************************************
+//  declaration of      XInterface::queryInterface()
+//                      XInterface::aquire()
+//                      XInterface::release()
+//                      XTypeProvider::getTypes()
+//                      XTypeProvider::getImplementationId()
+//                      XServiceInfo::getImplementationName()
+//                      XServiceInfo::supportsService()
+//                      XServiceInfo::getSupportedServiceNames()
+//                      static xxx::impl_getStaticSupportedServiceNames()
+//                      static xxx::impl_getStaticImplementationName()
+//                      static xxx::impl_createInstance()
+//************************************************************************************************************************
+#define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                   \
+    /* XServiceInfo */                                                                                                                              \
+    virtual rtl::OUString SAL_CALL getImplementationName() throw( UNORUNTIMEEXCEPTION );                                                            \
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION );                                    \
+    virtual UNOSEQUENCE< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION );                                          \
+                                                                                                                                                    \
+    /* Helper for XServiceInfo */                                                                                                                   \
+    static UNOSEQUENCE< rtl::OUString > impl_getStaticSupportedServiceNames();                                                                      \
+    static rtl::OUString impl_getStaticImplementationName();                                                                                        \
+                                                                                                                                                    \
+    /* Helper for registry */                                                                                                                       \
+    static UNOREFERENCE< UNOXINTERFACE > SAL_CALL impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION );
+
 //************************************************************************************************************************
 //  declaration of      XInterface::queryInterface()
 //                      XInterface::aquire()
@@ -157,17 +183,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 //                      static xxx::impl_createFactory()
 //************************************************************************************************************************
 #define SFX_DECL_XSERVICEINFO                                                                                             \
-    /* XServiceInfo */                                                                                                                              \
-    virtual UNOOUSTRING SAL_CALL getImplementationName() throw( UNORUNTIMEEXCEPTION );                                                              \
-    virtual sal_Bool SAL_CALL supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION );                                      \
-    virtual UNOSEQUENCE< UNOOUSTRING > SAL_CALL getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION );                                            \
-                                                                                                                                                    \
-    /* Helper for XServiceInfo */                                                                                                                   \
-    static UNOSEQUENCE< UNOOUSTRING > impl_getStaticSupportedServiceNames();                                                                        \
-    static UNOOUSTRING impl_getStaticImplementationName();                                                                                          \
-                                                                                                                                                    \
-    /* Helper for registry */                                                                                                                       \
-    static UNOREFERENCE< UNOXINTERFACE > SAL_CALL impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION );\
+    SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                       \
     static UNOREFERENCE< UNOXSINGLESERVICEFACTORY > impl_createFactory( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager );
 
 #define SFX_DECL_XINTERFACE_XTYPEPROVIDER_XSERVICEINFO                                                                                              \
@@ -510,16 +526,16 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 #define SFX_IMPL_XSERVICEINFO( IMPLCLASS, IMPLSERVICENAME, IMPLNAME )                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    UNOOUSTRING SAL_CALL IMPLCLASS::getImplementationName() throw( UNORUNTIMEEXCEPTION )                                                            \
+    rtl::OUString SAL_CALL IMPLCLASS::getImplementationName() throw( UNORUNTIMEEXCEPTION )                                                          \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    sal_Bool SAL_CALL IMPLCLASS::supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION )                                    \
+    sal_Bool SAL_CALL IMPLCLASS::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )                                  \
     {                                                                                                                                               \
-        UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();                                                                 \
-        const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();                                                            \
+        UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();                                                                  \
+        const rtl::OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
         for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )                                                              \
         {                                                                                                                                           \
             if ( pArray[nCounter] == sServiceName )                                                                                                 \
@@ -531,23 +547,23 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    UNOSEQUENCE< UNOOUSTRING > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )                                      \
+    UNOSEQUENCE< rtl::OUString > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )                                        \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    UNOSEQUENCE< UNOOUSTRING > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                                 \
+    UNOSEQUENCE< rtl::OUString > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                                   \
     {                                                                                                                                               \
-        UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );                                                                                            \
-        seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( IMPLSERVICENAME );                                                           \
+        UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );                                                                                          \
+        seqServiceNames.getArray() [0] = rtl::OUString::createFromAscii( IMPLSERVICENAME );                                                         \
         return seqServiceNames ;                                                                                                                    \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    UNOOUSTRING IMPLCLASS::impl_getStaticImplementationName()                                                                                       \
+    rtl::OUString IMPLCLASS::impl_getStaticImplementationName()                                                                                     \
     {                                                                                                                                               \
-        return UNOOUSTRING::createFromAscii( IMPLNAME );                                                                                            \
+        return rtl::OUString::createFromAscii( IMPLNAME );                                                                                          \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for registry */                                                                                                                       \
@@ -601,7 +617,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 //************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY(CLASS)                                                                           \
                                                                                                                         \
-    if ( CLASS::impl_getStaticImplementationName().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )  \
+    if ( CLASS::impl_getStaticImplementationName().equals( rtl::OUString::createFromAscii( pImplementationName ) ) )    \
     {                                                                                                                   \
         CREATEFACTORY ( CLASS )                                                                                     \
     }

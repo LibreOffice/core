@@ -165,19 +165,19 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         DECL_LINK( Command, CommandEvent * );
         PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
         //end
-        DECL_LINK( Click, ToolBox * );
-        DECL_LINK( DropdownClick, ToolBox * );
-        DECL_LINK( DoubleClick, ToolBox * );
-        DECL_LINK( Select, ToolBox * );
-        DECL_LINK( Activate, ToolBox * );
-        DECL_LINK( Deactivate, ToolBox * );
+        DECL_LINK(Click, void *);
+        DECL_LINK(DropdownClick, void *);
+        DECL_LINK(DoubleClick, void *);
+        DECL_LINK(Select, void *);
+        DECL_LINK(Activate, void *);
+        DECL_LINK(Deactivate, void *);
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );
 
         DECL_LINK( MenuButton, ToolBox * );
         DECL_LINK( MenuSelect, Menu * );
         DECL_LINK( MenuDeactivate, Menu * );
-        DECL_LINK( AsyncUpdateControllersHdl, Timer * );
+        DECL_LINK(AsyncUpdateControllersHdl, void *);
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo* );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;

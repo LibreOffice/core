@@ -29,7 +29,6 @@
 
 #include <set>
 #include <comphelper/string.hxx>
-#include <tools/table.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 #include <vcl/decoview.hxx>
@@ -272,7 +271,7 @@ sal_Bool ComboBox::IsAutocompleteEnabled() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
 {
     ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
@@ -294,7 +293,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -376,7 +375,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 {
     sal_Bool bPopup = IsInDropDown();
     sal_Bool bCallSelect = sal_False;
@@ -470,7 +469,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplCancelHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplCancelHdl)
 {
     if( IsInDropDown() )
         mpFloatWin->EndPopupMode();
@@ -493,7 +492,7 @@ IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplDoubleClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplDoubleClickHdl)
 {
     DoubleClick();
     return 0;
@@ -1078,6 +1077,29 @@ Size ComboBox::GetOptimalSize(WindowSizeType eType) const
 
 // -----------------------------------------------------------------------
 
+long ComboBox::getMaxWidthScrollBarAndDownButton() const
+{
+    long nButtonDownWidth = 0;
+
+    Window *pBorder = GetWindow( WINDOW_BORDER );
+    ImplControlValue aControlValue;
+    Point aPoint;
+    Rectangle aContent, aBound;
+
+    // use the full extent of the control
+    Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+
+    if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+    {
+        nButtonDownWidth = aContent.getWidth();
+    }
+
+    long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    return std::max(nScrollBarWidth, nButtonDownWidth);
+}
+
 Size ComboBox::CalcMinimumSize() const
 {
     Size aSz;
@@ -1090,7 +1112,7 @@ Size ComboBox::CalcMinimumSize() const
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Width() += getMaxWidthScrollBarAndDownButton();
     }
 
     aSz = CalcWindowSize( aSz );
@@ -1145,12 +1167,12 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     // Breite
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth( UniString( 'X' ) );
+        aSz.Width() = nColumns * GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('X')));
     else
         aSz.Width() = aMinSz.Width();
 
     if ( IsDropDownBox() )
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Width() += getMaxWidthScrollBarAndDownButton();
 
     if ( !IsDropDownBox() )
     {
@@ -1168,7 +1190,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth( UniString( 'x' ) );
+    long nCharWidth = GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('x')));
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();

@@ -593,7 +593,10 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
 SlideshowImpl::~SlideshowImpl()
 {
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdModule *pModule = SD_MOD();
+    //rhbz#806663 SlideshowImpl can outlive SdModule
+    SdOptions* pOptions = pModule ?
+        pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : NULL;
     if( pOptions )
     {
         pOptions->SetPresentationPenColor(mnUserPaintColor);
@@ -693,9 +696,11 @@ void SAL_CALL SlideshowImpl::disposing()
 
     if( maPresSettings.mbFullScreen )
     {
+#ifndef DISABLE_SCRIPTING
         // restore StarBASICErrorHdl
         StarBASIC::SetGlobalErrorHdl(maStarBASICGlobalErrorHdl);
         maStarBASICGlobalErrorHdl = Link();
+#endif
     }
     else
     {
@@ -1038,9 +1043,11 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if( maPresSettings.mbFullScreen )
             {
+#ifndef DISABLE_SCRIPTING
                 // disable basic ide error handling
                 maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
                 StarBASIC::SetGlobalErrorHdl( Link() );
+#endif
             }
 
             // call resize handler
@@ -1448,7 +1455,7 @@ void SlideshowImpl::endPresentation()
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
 {
     mnEndShowEvent = 0;
 
@@ -1834,7 +1841,7 @@ void SlideshowImpl::startUpdateTimer()
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
     transition preperation */
-IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
 {
     mbInputFreeze = false;
     return 0;
@@ -1846,7 +1853,7 @@ IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
     and not by using the timer, I will personaly punish this
     person seriously, even if this person is me.
 */
-IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
 {
     mnUpdateEvent = 0;
 
@@ -1856,7 +1863,7 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
 
 
-IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
 {
     // prevent me from deletion when recursing (App::Reschedule does)
     const rtl::Reference<SlideshowImpl> this_(this);
@@ -2162,7 +2169,7 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 {
     mnContextMenuEvent = 0;
 
@@ -2485,7 +2492,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
         // create animation slide controller
         AnimationSlideController::Mode eMode =
-            ( pCustomShow && pCustomShow->Count() ) ? AnimationSlideController::CUSTOM :
+            ( pCustomShow && pCustomShow->PagesVector().size() ) ? AnimationSlideController::CUSTOM :
                 (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
@@ -2546,11 +2553,11 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
                     mpSlideController->insertSlideNumber( (sal_uInt16) nSlide );
             }
 
-            void* pCustomSlide;
-            sal_Int32 nSlideIndex;
-            for( pCustomSlide = pCustomShow->First(),nSlideIndex=0; pCustomSlide; pCustomSlide = pCustomShow->Next(), nSlideIndex++ )
+            sal_Int32 nSlideIndex = 0;
+            for( SdCustomShow::PageVec::iterator it = pCustomShow->PagesVector().begin();
+                 it != pCustomShow->PagesVector().end(); ++it, nSlideIndex++ )
             {
-                const sal_uInt16 nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNum() - 1 ) / 2;
+                const sal_uInt16 nSdSlide = ( ( (SdPage*) (*it) )->GetPageNum() - 1 ) / 2;
 
                 if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );
@@ -2764,7 +2771,7 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, deactivateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 {
     if( mbActive && mxShow.is() )
     {

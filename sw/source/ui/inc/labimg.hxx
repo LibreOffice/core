@@ -68,6 +68,8 @@ public:
     sal_Int32       nRows;   // number of rows (user)
     sal_Int32       nCol;    // column for single print
     sal_Int32       nRow;    // row for single print
+    sal_Int32       lPHeight; // paper height
+    sal_Int32       lPWidth;  // paper width
     sal_Bool        bAddr;// address as label?
     sal_Bool        bCont;// continuous paper?
     sal_Bool        bPage;// whole page or single labels?

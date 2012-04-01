@@ -1212,7 +1212,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
 {
     ImplUpdateInfoBar();
     return 0L;
@@ -1232,7 +1232,7 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
 {
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 

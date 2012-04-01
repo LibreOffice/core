@@ -498,7 +498,7 @@ sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
     Description: localise subtypes of a field
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<String>& rToFill)
+sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& rToFill)
 {
     sal_Bool bRet = sal_False;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();

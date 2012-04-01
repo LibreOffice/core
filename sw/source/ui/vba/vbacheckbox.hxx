@@ -50,7 +50,7 @@ public:
     void SAL_CALL setValue( sal_Bool value ) throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_CHECKBOX_HXX */

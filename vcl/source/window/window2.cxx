@@ -302,42 +302,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
     }
 }
 
-// =======================================================================
-
-Bitmap Window::SnapShot( sal_Bool bBorder ) const
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    Bitmap aBmp;
-
-    if ( IsReallyVisible() )
-    {
-        if ( bBorder && mpWindowImpl->mpBorderWindow )
-            aBmp = mpWindowImpl->mpBorderWindow->SnapShot();
-        else
-        {
-            ((Window*)this)->Update();
-
-            if ( bBorder && mpWindowImpl->mbFrame )
-            {
-                SalBitmap* pSalBmp = mpWindowImpl->mpFrame->SnapShot();
-
-                if ( pSalBmp )
-                {
-                    ImpBitmap* pImpBmp = new ImpBitmap;
-                    pImpBmp->ImplSetSalBitmap( pSalBmp );
-                    aBmp.ImplSetImpBitmap( pImpBmp );
-                    return aBmp;
-                }
-            }
-
-            mpWindowImpl->mpFrameWindow->ImplGetFrameBitmap( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ), aBmp );
-        }
-    }
-
-    return aBmp;
-}
-
 // -----------------------------------------------------------------------
 
 void Window::ShowFocus( const Rectangle& rRect )

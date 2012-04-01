@@ -40,21 +40,21 @@
 #define BLINK_OFF_TIME      800L
 
 /*************************************************************************
- * pBlink zeigt auf die Instanz, bei der sich blinkende Portions anmelden
- * muessen, ggf. muss pBlink erst per new SwBlink angelegt werden.
- * Diese werden dann rhythmisch zum Repaint angeregt und koennen abfragen,
- * ob sie zur Zeit sichtbar oder unsichtbar sein sollen ( IsVisible() ).
+ * pBlink points to the instance where blinking portions need to register.
+ * If necessary, it needs to be created by SwBlink.
+ * They are then triggered rhythimcally for a repaint. They can query
+ * for being visible or invisible with IsVisible().
  *************************************************************************/
 SwBlink *pBlink = NULL;
 
 
-// Liste von blinkenden Portions
+// List of blinking portions
 SV_IMPL_OP_PTRARR_SORT( SwBlinkList, SwBlinkPortionPtr )
 
 SwBlink::SwBlink()
 {
     bVisible = sal_True;
-    // Den Timer vorbereiten
+    // Prepare the timer
     aTimer.SetTimeout( BLINK_ON_TIME );
     aTimer.SetTimeoutHdl( LINK(this, SwBlink, Blinker) );
 }
@@ -65,13 +65,12 @@ SwBlink::~SwBlink( )
 }
 
 /*************************************************************************
- * SwBlink::Blinker (Timerablauf):
- * Sichtbar/unsichtbar-Flag toggeln.
- * Repaint-Rechtecke der Blinkportions ermitteln und an ihren OleShells
- * invalidieren.
+ * SwBlink::Blinker (timer):
+ * Toggle visibility flag
+ * Determine the repaint rectangle and invalidate them in their OleShells.
  *************************************************************************/
 
-IMPL_LINK( SwBlink, Blinker, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwBlink, Blinker)
 {
     bVisible = !bVisible;
     if( bVisible )
@@ -123,11 +122,11 @@ IMPL_LINK( SwBlink, Blinker, Timer *, EMPTYARG )
                 ((SwRootFrm*)pTmp->GetRootFrm())
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
-            else // Portions ohne Shell koennen aus der Liste entfernt werden.
+            else // Portions without a shell can be removed from the list
                 aList.Remove( nPos );
         }
     }
-    else // Wenn die Liste leer ist, kann der Timer gestoppt werden.
+    else // If the list is empty, the timer can be stopped
         aTimer.Stop();
     return sal_True;
 }

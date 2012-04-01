@@ -31,8 +31,7 @@ $(eval $(call gb_Executable_add_package_headers,demoshow,sd_qa_unit))
 
 $(eval $(call gb_Executable_set_include,demoshow,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/slideshow/source/inc) \
-    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/slideshow/source/inc \
 ))
 
 ifeq ($(strip $(VERBOSE)),TRUE)

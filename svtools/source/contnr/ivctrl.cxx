@@ -75,26 +75,11 @@ SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtr
 
 SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
 
-     // WB_CLIPCHILDREN an, da ScrollBars auf dem Fenster liegen!
+     // WB_CLIPCHILDREN on, as ScrollBars lie on the window!
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
     _pCurKeyEvent   ( NULL ),
     _pImp           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
-    _bAutoFontColor ( sal_False )
-
-{
-    SetLineColor();
-    _pImp->SetGrid( Size( 100, 70 ) );
-    _pImp->InitSettings();
-    _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
-}
-
-SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, const ResId& rResId ) :
-
-    Control( pParent, rResId ),
-
-    _pCurKeyEvent   ( NULL ),
-    _pImp           ( new SvxIconChoiceCtrl_Impl( this, WB_BORDER ) ),
     _bAutoFontColor ( sal_False )
 
 {
@@ -119,7 +104,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
-sal_Bool SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString&, sal_Bool )
+sal_Bool SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const rtl::OUString&, sal_Bool )
 {
     return sal_True;
 }
@@ -354,7 +339,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
 }
 sal_Bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
 {
-    // unter OS/2 bekommen wir auch beim Editieren Key-Up/Down
+    // under OS/2, we get key up/down even while editing
     if( IsEntryEditing() )
         return sal_True;
     _pCurKeyEvent = (KeyEvent*)&rKEvt;
@@ -410,7 +395,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         else
         {
             Wallpaper aBackground( rPaper );
-            // HACK, da Hintergrund sonst transparent sein koennte
+            // HACK, as background might be transparent!
             if( !aBackground.IsBitmap() )
                 aBackground.SetStyle( WALLPAPER_TILE );
 
@@ -438,8 +423,8 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             Control::SetBackground( aBackground );
         }
 
-        // bei hart attributierter Textfarbe keine 'Automatik', die eine
-        // lesbare Textfarbe einstellt.
+        // If text colors are attributed "hard," don't use automatism to select
+        // a readable text color.
         Font aFont( GetFont() );
         aFont.SetColor( rStyleSettings.GetFieldTextColor() );
         SetFont( aFont );

@@ -702,7 +702,7 @@ void OPropertySetHelper::fire
                 pLC = aBoundLC.getContainer( pEvts[i].PropertyHandle );
             if( pLC )
             {
-                // Ueber alle Listener iterieren und Events senden
+                // Iterate over all listeners and send events
                 OInterfaceIteratorHelper aIt( *pLC);
                 while( aIt.hasMoreElements() )
                 {
@@ -759,7 +759,7 @@ void OPropertySetHelper::fire
             }
             if( pLC )
             {
-                // Ueber alle Listener iterieren und Events senden
+                // Iterate over all listeners and send events.
                 OInterfaceIteratorHelper aIt( *pLC);
                 while( aIt.hasMoreElements() )
                 {

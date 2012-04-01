@@ -688,7 +688,7 @@ SAL_CALL osl_createFileHandleFromOSHandle (
         pImpl->m_state |= FileHandle_Impl::STATE_SEEKABLE;
 
         /* init current size */
-        LARGE_INTEGER uSize = { 0, 0 };
+        LARGE_INTEGER uSize = { { 0, 0 } };
         (void) ::GetFileSizeEx(hFile, &uSize);
         pImpl->m_size = (sal::static_int_cast<sal_uInt64>(uSize.HighPart) << 32) + uSize.LowPart;
     }

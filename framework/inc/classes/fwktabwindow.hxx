@@ -114,8 +114,8 @@ private:
     TabEntry*       FindEntry( sal_Int32 nIndex ) const;
     bool            RemoveEntry( sal_Int32 nIndex );
 
-    DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
-    DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
+    DECL_DLLPRIVATE_LINK(ActivatePageHdl, void *);
+    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, void *);
 
 public:
     FwkTabWindow( Window* pParent );

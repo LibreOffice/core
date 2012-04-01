@@ -127,7 +127,6 @@ friend class SvxSearchDialogWrapper;
 friend class SvxJSearchOptionsDialog;
 
 public:
-    SvxSearchDialog( Window* pParent, SfxBindings& rBind );
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
@@ -135,9 +134,6 @@ public:
 
     // Window
     virtual void    Activate();
-
-    void            GetSearchItems( SfxItemSet& rSet );
-    void            GetReplaceItems( SfxItemSet& rSet );
 
     const SearchAttrItemList*   GetSearchItemList() const
                                     { return pSearchList; }
@@ -239,12 +235,12 @@ private:
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
     DECL_LINK( FlagHdl_Impl, Control* pCtrl );
     DECL_LINK( CommandHdl_Impl, Button* pBtn );
-    DECL_LINK( TemplateHdl_Impl, Button* );
+    DECL_LINK(TemplateHdl_Impl, void *);
     DECL_LINK( FocusHdl_Impl, Control* );
-    DECL_LINK( LoseFocusHdl_Impl, Control* );
-    DECL_LINK( FormatHdl_Impl, Button* );
-    DECL_LINK( NoFormatHdl_Impl, Button* );
-    DECL_LINK( AttributeHdl_Impl, Button* );
+    DECL_LINK(LoseFocusHdl_Impl, void *);
+    DECL_LINK(FormatHdl_Impl, void *);
+    DECL_LINK(NoFormatHdl_Impl, void *);
+    DECL_LINK(AttributeHdl_Impl, void *);
     DECL_LINK( TimeoutHdl_Impl, Timer* );
 
     void            Construct_Impl();

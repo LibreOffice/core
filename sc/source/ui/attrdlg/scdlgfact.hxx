@@ -389,6 +389,8 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
 
 public:
+    virtual ~ScAbstractDialogFactory_Impl() {}
+
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');
@@ -491,7 +493,7 @@ public:
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
-                                                                const ScDPLabelDataVector& rLabelVec,
+                                                                const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData );
 

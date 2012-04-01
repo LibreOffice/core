@@ -28,7 +28,6 @@
 package installer::windows::featurecomponent;
 
 use installer::converter;
-use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -78,7 +77,7 @@ sub create_featurecomponent_table_from_files_collector
 
             # control of uniqueness
 
-            if (! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
+            if (! grep {$_ eq $oneline} @{$featurecomponenttableref})
             {
                 push(@{$featurecomponenttableref}, $oneline);
             }
@@ -124,7 +123,7 @@ sub create_featurecomponent_table_from_registry_collector
 
         # control of uniqueness
 
-        if (! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
+        if (! grep {$_ eq $oneline} @{$featurecomponenttableref})
         {
             push(@{$featurecomponenttableref}, $oneline);
         }

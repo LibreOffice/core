@@ -239,9 +239,10 @@ void ScAcceptChgDlg::Init()
         pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg,ChgTrackModHdl));
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
-        ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(sal_uInt16  i=0;i<aUserColl.GetCount();i++)
-            pTPFilter->InsertAuthor(aUserColl[i]->GetString());
+        const std::set<rtl::OUString>& rUserColl = pChanges->GetUserCollection();
+        std::set<rtl::OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
+        for (; it != itEnd; ++it)
+            pTPFilter->InsertAuthor(*it);
     }
 
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
@@ -336,23 +337,23 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 
     ScChangeActionType eType=pScChangeAction->GetType();
     String aString;
-    String aDesc;
+    rtl::OUString aDesc;
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if(eType==SC_CAT_CONTENT)
     {
         if(!pScChangeAction->IsDialogParent())
-            pScChangeAction->GetDescription( aDesc, pDoc, true);
+            pScChangeAction->GetDescription(aDesc, pDoc, true);
     }
     else
-        pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
+        pScChangeAction->GetDescription(aDesc, pDoc, !pScChangeAction->IsMasterDelete());
 
-    if(aDesc.Len()>0)
+    if (!aDesc.isEmpty())
     {
         aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment+=aDesc;
-        aComment+=')';
+        aComment += String(aDesc);
+        aComment += ')';
     }
 
     if(pTheView->IsValidEntry(&aUser,&aDateTime,&aComment))
@@ -391,10 +392,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
     String aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    String aRefStr;
+    rtl::OUString aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
     rtl::OUStringBuffer aBuf;
-    String aDesc;
+    rtl::OUString aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
     pNewData->pData=(void *)pScChangeAction;
@@ -465,11 +466,11 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
-    if(aDesc.Len()>0)
+    if (!aDesc.isEmpty())
     {
         aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment+=aDesc;
-        aComment+=')';
+        aComment += String(aDesc);
+        aComment += ')';
     }
 
     aBuf.append(aComment);
@@ -568,11 +569,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
     if(bFlag)
     {
 
-        String aRefStr;
+        rtl::OUString aRefStr;
         ScChangeActionType eType=pScChangeAction->GetType();
         String aString;
-        String aDesc;
-
+        rtl::OUString aDesc;
 
         ScRedlinData* pNewData=new ScRedlinData;
         pNewData->pData=(void *)pScChangeAction;
@@ -637,11 +637,11 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
 
         String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
-        if(aDesc.Len()>0)
+        if (!aDesc.isEmpty())
         {
             aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-            aComment+=aDesc;
-            aComment+=')';
+            aComment += String(aDesc);
+            aComment += ')';
         }
         if(pTheView->IsValidComment(&aComment))
         {
@@ -688,14 +688,16 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
             bFlag=true;
     }
 
-    String aRefStr;
+    rtl::OUString aRefStr;
     String aString;
     String a2String;
     String aDesc;
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        pScChangeAction->GetOldString(a2String);
+        rtl::OUString aTmp;
+        pScChangeAction->GetOldString(aTmp);
+        a2String = aTmp;
         if(a2String.Len()==0) a2String=aStrEmpty;
 
         //aString+="\'";
@@ -707,7 +709,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
     }
     else
     {
-        pScChangeAction->GetNewString(a2String);
+        rtl::OUString aTmp;
+        pScChangeAction->GetNewString(aTmp);
+        a2String = aTmp;
         if(a2String.Len()==0)
         {
             a2String=aStrEmpty;
@@ -912,7 +916,7 @@ IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
@@ -1102,7 +1106,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
 {
     SetPointer(Pointer(POINTER_WAIT));
     bIgnoreMsg=true;
@@ -1131,7 +1135,7 @@ IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
 {
     SetPointer(Pointer(POINTER_WAIT));
 
@@ -1157,7 +1161,7 @@ IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, SelectHandle)
 {
     if(!bNoSelection)
         aSelectionTimer.Start();
@@ -1690,7 +1694,7 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 
     return 0;
 }
-IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, ReOpenTimerHdl)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     aAcceptChgCtr.ShowFilterPage();
@@ -1699,7 +1703,7 @@ IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1749,7 +1753,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 {
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
@@ -1925,7 +1929,7 @@ void ScAcceptChgDlg::InitFilter()
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, FilterModified)
 {
     return 0;
 }

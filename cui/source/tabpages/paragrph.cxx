@@ -176,7 +176,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 
 // class SvxStdParagraphTabPage ------------------------------------------
 
-IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -282,7 +282,8 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         }
     }
 
-    if ( aTopDist.IsValueModified() || aBottomDist.IsValueModified() )
+    if ( aTopDist.IsValueModified() || aBottomDist.IsValueModified()
+            || aContextualCB.GetSavedValue() != aContextualCB.IsChecked())
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -314,6 +315,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             aMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopDist, eUnit ) );
             aMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomDist, eUnit ) );
         }
+        aMargin.SetContextValue(aContextualCB.IsChecked());
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aMargin ) ||
@@ -534,10 +536,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
 
+        const SvxULSpaceItem& rOldItem =
+            (const SvxULSpaceItem&)rSet.Get( _nWhich );
         if ( bRelativeMode )
         {
-            const SvxULSpaceItem& rOldItem =
-                (const SvxULSpaceItem&)rSet.Get( _nWhich );
 
             if ( rOldItem.GetPropUpper() != 100 )
             {
@@ -571,11 +573,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            const SvxULSpaceItem& rTopMargin =
-                (const SvxULSpaceItem&)rSet.Get( _nWhich );
-            SetMetricValue( aTopDist, rTopMargin.GetUpper(), eUnit );
-            SetMetricValue( aBottomDist, rTopMargin.GetLower(), eUnit );
+            SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
+            SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
         }
+        aContextualCB.Check(rOldItem.GetContext());
     }
     else
     {
@@ -620,6 +621,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     ELRLoseFocusHdl( NULL );
     aAutoCB.SaveValue();
+    aContextualCB.SaveValue();
     aLineDist.SaveValue();
 }
 
@@ -669,6 +671,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     aTopDist                ( this, CUI_RES( ED_TOPDIST ) ),
     aBottomLabel            ( this, CUI_RES( FT_BOTTOMDIST ) ),
     aBottomDist             ( this, CUI_RES( ED_BOTTOMDIST ) ),
+    aContextualCB           ( this, CUI_RES( CB_CONTEXTUALSPACING ) ),
 
     aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
     aLineDist               ( this, CUI_RES( LB_LINEDIST ) ),
@@ -872,12 +875,12 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxStdParagraphTabPage, ModifyHdl_Impl, SvxRelativeField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxStdParagraphTabPage, ModifyHdl_Impl)
 {
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxStdParagraphTabPage, ModifyHdl_Impl, SvxRelativeField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxStdParagraphTabPage, ModifyHdl_Impl)
 
 // -----------------------------------------------------------------------
 
@@ -961,6 +964,11 @@ void SvxStdParagraphTabPage::EnableRegisterMode()
     aRegisterFL.Show();
 }
 
+void SvxStdParagraphTabPage::EnableContextualMode()
+{
+    aContextualCB.Show();
+}
+
 IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, CheckBox*, pBox )
 {
     sal_Bool bEnable = !pBox->IsChecked();
@@ -996,6 +1004,7 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
                         0x0002 --->EnableRegisterMode()
                         0x0004 --->EnableAutoFirstLine()
                         0x0008 --->EnableNegativeMode()
+                        0x0010 --->EnableContextualMode()
             */
     SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
@@ -1023,6 +1032,9 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
         if  (( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
                 EnableNegativeMode();
 
+    if (pFlagSetItem)
+        if  (( 0x0010 & pFlagSetItem->GetValue()) == 0x0010 )
+                EnableContextualMode();
 }
 
 
@@ -1316,7 +1328,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     UpdateExample_Impl(sal_True);
 }
 
-IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
 {
     sal_Bool bJustify = aJustify.IsChecked();
     aLastLineFT.Enable(bJustify);
@@ -1326,13 +1338,13 @@ IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxParaAlignTabPage, LastLineHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
 {
     UpdateExample_Impl(sal_False);
     return 0;
 }
 
-IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
 {
     SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
     switch ( eDir )
@@ -2018,7 +2030,7 @@ sal_uInt16* SvxExtParagraphTabPage::GetRanges()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
 {
     switch ( aPageBreakBox.GetState() )
     {
@@ -2062,7 +2074,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, KeepTogetherHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepTogetherHdl_Impl)
 {
     sal_Bool bEnable = aKeepTogetherBox.GetState() == STATE_NOCHECK;
     aWidowBox.Enable(bEnable);
@@ -2073,7 +2085,7 @@ IMPL_LINK( SvxExtParagraphTabPage, KeepTogetherHdl_Impl, TriStateBox *, EMPTYARG
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, WidowHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl)
 {
     switch ( aWidowBox.GetState() )
     {
@@ -2098,7 +2110,7 @@ IMPL_LINK( SvxExtParagraphTabPage, WidowHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, OrphanHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
 {
     switch( aOrphanBox.GetState() )
     {
@@ -2123,7 +2135,7 @@ IMPL_LINK( SvxExtParagraphTabPage, OrphanHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, HyphenClickHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
 {
 
     sal_Bool bEnable = aHyphenBox.GetState() == STATE_CHECK;
@@ -2140,7 +2152,7 @@ IMPL_LINK( SvxExtParagraphTabPage, HyphenClickHdl_Impl, TriStateBox *, EMPTYARG 
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl)
 {
     sal_Bool bEnable = sal_False;
     if ( aApplyCollBtn.GetState() == STATE_CHECK &&

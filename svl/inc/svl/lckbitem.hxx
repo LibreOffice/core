@@ -43,8 +43,6 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 public:
                             TYPEINFO();
                             SfxLockBytesItem();
-                            SfxLockBytesItem( sal_uInt16 nWhich,
-                                              SvLockBytes *pLockBytes );
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );
                             ~SfxLockBytesItem();

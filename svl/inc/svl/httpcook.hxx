@@ -106,10 +106,10 @@ struct CntHTTPCookie
 
     void read (SvStream& rStrm, bool bUnicode)
     {
-        SfxPoolItem::readUnicodeString(rStrm, m_aName, bUnicode);
-        SfxPoolItem::readUnicodeString(rStrm, m_aValue, bUnicode);
-        SfxPoolItem::readUnicodeString(rStrm, m_aDomain, bUnicode);
-        SfxPoolItem::readUnicodeString(rStrm, m_aPath, bUnicode);
+        m_aName = SfxPoolItem::readUnicodeString(rStrm, bUnicode);
+        m_aValue = SfxPoolItem::readUnicodeString(rStrm, bUnicode);
+        m_aDomain = SfxPoolItem::readUnicodeString(rStrm, bUnicode);
+        m_aPath = SfxPoolItem::readUnicodeString(rStrm, bUnicode);
 
         sal_uInt32 nValue = 0;
         rStrm >> nValue;

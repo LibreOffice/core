@@ -462,8 +462,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     if( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags &&
         GRAPHIC_NONE != eType )
     {
-        // actually transform the graphic only in this case. On the
-        // other hand, cropping will always happen
+        // Actually transform the graphic only in this case.
+        // Cropping always happens, though.
         aActAttr = aGrafInfo;
 
         if( bMirror )
@@ -1335,6 +1335,14 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
             ::comphelper::LifecycleProxy proxy;
             xStream.set(
                 pModel->GetDocumentStream(pGraphic->GetUserData(), proxy));
+            // fdo#46340: this may look completely insane, and it is,
+            // but it also prevents a crash: the LifecycleProxy will go out
+            // of scope, but the xStream must be returned; the UcbStreamHelper
+            // will actually copy the xStream to a temp file (because it is
+            // not seekable), which makes it not crash...
+            SvStream *const pStream =
+                utl::UcbStreamHelper::CreateStream(xStream);
+            xStream.set(new utl::OInputStreamWrapper(pStream, true));
         }
         else if( pGraphic && GetGraphic().IsLink() )
         {

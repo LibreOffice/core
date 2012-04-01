@@ -70,7 +70,7 @@ private:
     sal_uInt16      nLastTab;
     sal_Int32   nOldLinkMode;
 
-    DECL_LINK(MetricHdl, ListBox*);
+    DECL_LINK(MetricHdl, void *);
 
 public:
     SwLoadOptPage( Window* pParent, const SfxItemSet& rSet );
@@ -168,11 +168,11 @@ private:
     sal_uInt16          eType;
     sal_Bool            bHTMLMode;
 
-    DECL_LINK( SelectHdl, ListBox *pLB = 0 );
-    DECL_LINK( ModifyHdl, Edit *pEdt = 0 );
+    DECL_LINK(SelectHdl, void *);
+    DECL_LINK(ModifyHdl, void * = 0);
     DECL_LINK( OrderHdl, ListBox* );
-    DECL_LINK( ShowEntryHdl, SvxCheckListBox *pLB = 0 );
-    DECL_LINK( SaveEntryHdl, SvxCheckListBox *pLB = 0 );
+    DECL_LINK(ShowEntryHdl, void *);
+    DECL_LINK(SaveEntryHdl, void *);
 
     void                DelUserData();
     void                SetOptions( const sal_uInt16 nPos,

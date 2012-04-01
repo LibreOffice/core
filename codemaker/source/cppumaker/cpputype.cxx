@@ -1262,8 +1262,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
                 o << "sal_False";
             break;
         case RT_TYPE_BYTE:
-            o << "(sal_Int8)"
-              << sal::static_int_cast< sal_Int8 >(constValue.m_value.aByte);
+            o << "(sal_Int8)" << constValue.m_value.aByte;
             break;
         case RT_TYPE_INT16:
             o << "(sal_Int16)" << constValue.m_value.aShort;
@@ -1412,8 +1411,13 @@ void InterfaceType::dumpDeclaration(FileStream& o)
 
     o << "\n" << indent()
       << ("static inline ::com::sun::star::uno::Type const & SAL_CALL"
-          " static_type(void * = 0);\n");
-
+          " static_type(void * = 0);\n\n");
+    dec();
+    o << "protected:\n";
+    inc();
+    o << indent() << "~" << m_name
+      << ("() throw () {} // avoid warnings about virtual members and"
+          " non-virtual dtor\n");
     dec();
     o << "};\n\n";
 }

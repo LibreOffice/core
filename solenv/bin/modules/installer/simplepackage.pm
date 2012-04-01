@@ -33,7 +33,7 @@ use installer::download;
 use installer::exiter;
 use installer::globals;
 use installer::logger;
-use installer::strip;
+use installer::strip qw(strip_libraries);
 use installer::systemactions;
 use installer::worker;
 
@@ -408,11 +408,6 @@ sub create_package
         my $sla = 'sla.r';
         my $ref = "";
 
-        if ( ! $allvariables->{'HIDELICENSEDIALOG'} )
-        {
-            installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
-        }
-
         my $localtempdir = $tempdir;
 
         if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
@@ -535,7 +530,7 @@ sub create_package
             chdir $localfrom;
         }
 
-        $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
+        $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDBZ $installdir/tmp.dmg -o $archive && ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
@@ -677,7 +672,7 @@ sub create_simple_package
     }
 
     # stripping files ?!
-    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { installer::strip::strip_libraries($filesref, $languagestringref); }
+    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { strip_libraries($filesref, $languagestringref); }
 
     # copy Files
     installer::logger::print_message( "... copying files ...\n" );

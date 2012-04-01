@@ -43,9 +43,6 @@
 #include "sqlmessage.hxx"
 
 #include <osl/file.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
@@ -140,7 +137,7 @@ namespace dbaui
 
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
+    IMPL_LINK_NOARG(OGenericAdministrationPage, OnControlModified)
     {
         callModifiedHdl();
         return 0L;
@@ -165,7 +162,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
+            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
                 aSelector.Select(_sCurr);
             if ( RET_OK == aSelector.Execute() )

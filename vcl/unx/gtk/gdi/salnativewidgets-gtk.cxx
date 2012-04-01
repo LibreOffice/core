@@ -467,7 +467,6 @@ void GtkData::initNWF( void )
  *********************************************************/
 void GtkData::deInitNWF( void )
 {
-
     for( unsigned int i = 0; i < gWidgetData.size(); i++ )
     {
         // free up global widgets
@@ -904,27 +903,6 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
 }
 
 /*
- * DrawNativeControlText()
- *
- *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
- *     Used if text not drawn by DrawNativeControl().
- *
- *  rControlRegion:    The bounding region of the complete control in VCL frame coordinates.
- *  aValue:          An optional value (tristate/numerical/string)
- *  rCaption:      A caption or title string (like button text etc)
- */
-sal_Bool GtkSalGraphics::drawNativeControlText(    ControlType,
-                                ControlPart,
-                                const Rectangle&,
-                                ControlState,
-                                const ImplControlValue&,
-                                const OUString& )
-{
-    return( sal_False );
-}
-
-
-/*
  * GetNativeControlRegion()
  *
  *  If the return value is sal_True, rNativeBoundingRegion
@@ -1049,12 +1027,20 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             gint arrow_size;
             gint arrow_extent;
             guint horizontal_padding;
-            gfloat arrow_scaling;
+            gfloat arrow_scaling = 0.4; // Default for early GTK versions
 
             gtk_widget_style_get( widget,
                                   "horizontal-padding", &horizontal_padding,
-                                  "arrow-scaling", &arrow_scaling,
                                   NULL );
+
+            // Use arrow-scaling property if available (2.15+), avoid warning otherwise
+            if ( gtk_widget_class_find_style_property( GTK_WIDGET_GET_CLASS( widget ),
+                                                       "arrow-scaling" ) )
+            {
+                gtk_widget_style_get( widget,
+                                      "arrow-scaling", &arrow_scaling,
+                                      NULL );
+            }
 
             child = GTK_BIN( widget )->child;
 

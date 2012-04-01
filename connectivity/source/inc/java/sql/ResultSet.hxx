@@ -83,7 +83,7 @@ namespace connectivity
         void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     protected:
-        // statische Daten fuer die Klasse
+        // Static data for the class
         static jclass theClass;
 
         // OPropertyArrayUsageHelper
@@ -110,7 +110,7 @@ namespace connectivity
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const;
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection,
             java_sql_Statement_Base* pStmt = NULL );
 

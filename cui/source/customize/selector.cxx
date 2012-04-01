@@ -128,7 +128,7 @@ void SvxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-IMPL_LINK( SvxConfigFunctionListBox_Impl, TimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SvxConfigFunctionListBox_Impl, TimerHdl)
 {
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();

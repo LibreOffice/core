@@ -75,7 +75,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
@@ -90,7 +89,6 @@
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
-#include <editeng/eeitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
@@ -121,7 +119,6 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -205,7 +202,7 @@ OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
         {
             CellType eType = pCell->GetCellType();
             if ( eType == CELLTYPE_STRING )
-                static_cast<ScStringCell*>(pCell)->GetString(aVal);     // string cell: content
+                aVal = static_cast<ScStringCell*>(pCell)->GetString();     // string cell: content
             else if ( eType == CELLTYPE_EDIT )
             {
                 // edit cell: text with line breaks
@@ -910,17 +907,17 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
         ScDetOpList* pOpList(pDoc->GetDetOpList());
         if( pOpList )
         {
-            sal_uInt32 nCount(pOpList->Count());
-            for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
+            size_t nCount = pOpList->Count();
+            for (size_t nIndex = 0; nIndex < nCount; ++nIndex )
             {
-                ScDetOpData* pDetData(pOpList->GetObject( static_cast<sal_uInt16>(nIndex) ));
+                const ScDetOpData* pDetData = pOpList->GetObject( nIndex);
                 if( pDetData )
                 {
                     const ScAddress& rDetPos = pDetData->GetPos();
                     SCTAB nTab = rDetPos.Tab();
                     if ( nTab < pDoc->GetTableCount() )
                     {
-                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, nIndex );
+                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, static_cast<sal_uInt32>( nIndex) );
 
                         // cells with detective operations are written even if empty
                         pSharedData->SetLastColumn( nTab, rDetPos.Col() );
@@ -1486,14 +1483,14 @@ void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, table::CellRangeAdd
 
 void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups)
 {
-    sal_Int32 nDepth(pFields->GetDepth());
-    for(sal_Int32 i = 0; i < nDepth; ++i)
+    size_t nDepth = pFields->GetDepth();
+    for (size_t i = 0; i < nDepth; ++i)
     {
-        sal_Int32 nFields = pFields->GetCount(static_cast<sal_uInt16>(i));
-        for (sal_Int32 j = 0; j < nFields; ++j)
+        size_t nFields = pFields->GetCount(i);
+        for (size_t j = 0; j < nFields; ++j)
         {
             ScMyColumnRowGroup aGroup;
-            ScOutlineEntry* pEntry(pFields->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
+            const ScOutlineEntry* pEntry = pFields->GetEntry(i, j);
             aGroup.nField = pEntry->GetStart();
             aGroup.nLevel = static_cast<sal_Int16>(i);
             aGroup.bDisplay = !(pEntry->IsHidden());
@@ -2195,13 +2192,13 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteIter != aNoteEnd)
             {
                 ScAddress aPos = aNoteIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
                     //! separate method AddStyleFromNote needed?
 
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes( nTable )->findByAddress(aPos);
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2243,11 +2240,11 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteParaIter != aNoteParaEnd)
             {
                 ScAddress aPos = aNoteParaIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2278,11 +2275,11 @@ void ScXMLExport::_ExportAutoStyles()
             while (aNoteTextIter != aNoteTextEnd)
             {
                 ScAddress aPos = aNoteTextIter->maCellPos;
-                sal_Int32 nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                SCTAB nTable = aPos.Tab();
+                bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
+                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2449,16 +2446,10 @@ void ScXMLExport::_ExportAutoStyles()
                     {
                         sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
                         pSharedData->SetLastRow(nTable, nRows);
-                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable, nTable));
-                        if (aCellAddress.EndRow > nRows)
-                        {
-                            ++nRows;
-                            pRowStyles->AddNewTable(nTable, aCellAddress.EndRow);
-                        }
-                        else
-                            pRowStyles->AddNewTable(nTable, nRows);
+
+                        pRowStyles->AddNewTable(nTable, MAXROW);
                         sal_Int32 nRow = 0;
-                        while (nRow <= nRows && nRow <= MAXROW)
+                        while (nRow <= MAXROW)
                         {
                             sal_Int32 nIndex = 0;
                             Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
@@ -2471,11 +2462,6 @@ void ScXMLExport::_ExportAutoStyles()
                             nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow), false);
                             if (nRow > nOld + 1)
                                 pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
-                        }
-                        if (aCellAddress.EndRow > nRows)
-                        {
-                            sal_Int32 nIndex(pRowStyles->GetStyleNameIndex(nTable, nRows));
-                            pRowStyles->AddFieldStyleName(nTable, nRows + 1, nIndex, aCellAddress.EndRow);
                         }
                     }
                 }
@@ -3060,14 +3046,11 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     {
                         ::rtl::OUString aChartName;
                         xShapeProps->getPropertyValue( sPersistName ) >>= aChartName;
-                        ScRange aEmptyRange;
-                        ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                        sal_uInt16 nIndex = 0;
                         ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                        if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
+                        if (pCollection)
                         {
-                            ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
-                            if ( pListener )
+                            ScChartListener* pListener = pCollection->findByName(aChartName);
+                            if (pListener)
                             {
                                 const ScRangeListRef& rRangeList = pListener->GetRangeList();
                                 if ( rRangeList.Is() )

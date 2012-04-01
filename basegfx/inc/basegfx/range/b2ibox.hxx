@@ -263,29 +263,6 @@ namespace basegfx
         BasicBox        maRangeY;
     };
 
-    /** Compute the set difference of the two given boxes
-
-        This method calculates the symmetric difference (aka XOR)
-        between the two given boxes, and returning the resulting
-        boxes. Thus, the result will contain all areas where one, but
-        not both boxes lie.
-
-        @param o_rResult
-        Result vector. The up to four difference boxes are returned
-        within this vector
-
-        @param rFirst
-        The first box
-
-        @param rSecond
-        The second box
-
-        @return the input vector
-     */
-     BASEGFX_DLLPUBLIC ::std::vector< B2IBox >& computeSetDifference( ::std::vector< B2IBox >& o_rResult,
-                                                                      const B2IBox&            rFirst,
-                                                                      const B2IBox&            rSecond );
-
 } // end of namespace basegfx
 
 #endif /* _BGFX_RANGE_B2IBOX_HXX */

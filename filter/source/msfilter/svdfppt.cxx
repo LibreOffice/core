@@ -124,7 +124,6 @@
 #include <vcl/virdev.hxx>
 #include <algorithm>
 #include <set>
-#include <unotools/streamwrap.hxx>
 #include <rtl/strbuf.hxx>
 
 // PPT ColorScheme Slots
@@ -165,10 +164,9 @@ using namespace drawing             ;
 using namespace container           ;
 using namespace table               ;
 
-PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags, MSFilterTracer* pT ) :
+PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags ) :
     rDocStream      ( rDocStrm ),
-    nImportFlags    ( nFlags ),
-    pTracer         ( pT )
+    nImportFlags    ( nFlags )
 {
 }
 
@@ -520,7 +518,7 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 };
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
-    SvxMSDffManager         ( rParam.rDocStream, rBaseURL, rParam.pTracer ),
+    SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
@@ -548,7 +546,7 @@ const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
     return NULL;
 }
 
-sal_Bool SdrEscherImport::ReadString( String& rStr ) const
+sal_Bool SdrEscherImport::ReadString( rtl::OUString& rStr ) const
 {
     sal_Bool bRet = sal_False;
     DffRecordHeader aStrHd;
@@ -979,7 +977,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
 
                 sal_uInt32 nDestinationInstance = aTextObj.GetInstance();
-                if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
+                if ( rPersistEntry.ePageKind == PPT_MASTERPAGE )
                 {
                     if ( !rPersistEntry.pPresentationObjects )
                     {
@@ -2146,9 +2144,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetPitch( pFont->ePitch );
                 aFont.SetHeight( 100 );
 
-                if ( mbTracing && !pFont->bAvailable )
-                    mpTracer->Trace( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sd1000" )), pFont->aName );
-
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset
                 if ( pFont->aName.EqualsIgnoreCaseAscii( "Wingdings" ) ||
@@ -2394,14 +2389,9 @@ sal_Bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStre
                 sal_uInt32  i = rContentHd.nRecLen >> 1;
                 if ( i > n )
                 {
-                    String aPre, aSuf;
-                    sal_Unicode *pTmp = aPre.AllocBuffer( n );
-                    while ( n-- )
-                        rSt >> *pTmp++;
+                    String aPre = read_uInt16s_ToOUString(rSt, n);
                     n = (sal_uInt16)( i - 6 );
-                    pTmp = aSuf.AllocBuffer( n );
-                    while ( n-- )
-                        rSt >> *pTmp++;
+                    String aSuf = read_uInt16s_ToOUString(rSt, n);
                     sal_Int32 nV = aSuf.ToInt32();
                     if ( ( nV == nVersion ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
                     {
@@ -2740,12 +2730,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
     {
-        if ( mbTracing )
-            mpTracer->AddAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
-                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )),
-                                    rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
-
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
         ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
@@ -2935,10 +2919,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
-        if ( mbTracing )
-            mpTracer->RemoveAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                        ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
-                                        : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )) );
     }
     rStCtrl.Seek( nMerk );
 }
@@ -7319,7 +7299,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     }
 }
 
-void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 > vPositions, sal_Int32 nColumns )
+void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
 {
     try
     {

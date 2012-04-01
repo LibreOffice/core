@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
@@ -64,7 +63,6 @@
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -246,7 +244,10 @@ void NameContainer::removeByName( const OUString& aName )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        throw NoSuchElementException();
+        rtl::OUString sMessage = rtl::OUStringBuffer().append('"')
+            .append(aName).append("\" not found")
+            .makeStringAndClear();
+        throw NoSuchElementException(sMessage, uno::Reference< uno::XInterface >());
     }
 
     sal_Int32 iHashResult = (*aIt).second;
@@ -586,20 +587,18 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     rStr += OUString(RTL_CONSTASCII_USTRINGPARAM(".xlb/"));
 }
 
-sal_Bool SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
+void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
 {
     // this might be called from within the ctor, and the impl_init might (indirectly) create
     // an UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
     osl_incrementInterlockedCount( &m_refCount );
-    sal_Bool bSuccess = init_Impl( rInitialDocumentURL, rxInitialStorage );
+    init_Impl( rInitialDocumentURL, rxInitialStorage );
     osl_decrementInterlockedCount( &m_refCount );
-
-    return bSuccess;
 }
 
-sal_Bool SfxLibraryContainer::init_Impl(
-    const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
+void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
+                                     const uno::Reference< embed::XStorage >& rxInitialStorage )
 {
     uno::Reference< embed::XStorage > xStorage = rxInitialStorage;
 
@@ -632,8 +631,8 @@ sal_Bool SfxLibraryContainer::init_Impl(
             meInitMode = LIBRARY_INIT_FILE;
             uno::Reference< embed::XStorage > xDummyStor;
             ::xmlscript::LibDescriptor aLibDesc;
-            sal_Bool bReadIndexFile = implLoadLibraryIndexFile( NULL, aLibDesc, xDummyStor, aInitFileName );
-               return bReadIndexFile;
+            implLoadLibraryIndexFile( NULL, aLibDesc, xDummyStor, aInitFileName );
+            return;
         }
         else
         {
@@ -643,7 +642,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {
                 meInitMode = OLD_BASIC_STORAGE;
                 importFromOldStorage( aInitFileName );
-                return sal_True;
+                return;
             }
             else
             {
@@ -661,7 +660,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     }
     else
     {
-        // Default pathes
+        // Default paths
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 
@@ -670,7 +669,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     if( !xParser.is() )
     {
         SAL_WARN("basic", "couldn't create sax parser component");
-        return sal_False;
+        return;
     }
 
     uno::Reference< io::XInputStream > xInput;
@@ -770,13 +769,8 @@ sal_Bool SfxLibraryContainer::init_Impl(
             }
             catch(const Exception& )
             {
+                // Silently tolerate empty or missing files
                 xInput.clear();
-                if( nPass == 0 )
-                {
-                    SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-                    ErrorHandler::HandleError( nErrorCode );
-                }
             }
 
             // Old variant?
@@ -795,9 +789,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 catch(const Exception& )
                 {
                     xInput.clear();
-                    SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-                    ErrorHandler::HandleError( nErrorCode );
                 }
             }
 
@@ -821,12 +812,12 @@ sal_Bool SfxLibraryContainer::init_Impl(
             catch ( const xml::sax::SAXException& e )
             {
                 SAL_WARN("basic", e.Message);
-                return sal_False;
+                return;
             }
             catch ( const io::IOException& e )
             {
                 SAL_WARN("basic", e.Message);
-                return sal_False;
+                return;
             }
 
             sal_Int32 nLibCount = pLibArray->mnLibCount;
@@ -959,11 +950,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
 
             delete pLibArray;
         }
-        // Only in the first pass it's an error when no index file is found
-        else if( nPass == 0 )
-        {
-            return sal_False;
-        }
     }
 
     // #110009: END Scope to force the StorageRefs to be destructed
@@ -1001,13 +987,13 @@ sal_Bool SfxLibraryContainer::init_Impl(
         INetURLObject aUserBasicInetObj( String(maLibraryPath).GetToken(1) );
         OUString aStandardStr( RTL_CONSTASCII_USTRINGPARAM("Standard") );
 
-        static char strPrevFolderName_1[] = "__basic_80";
-        static char strPrevFolderName_2[] = "__basic_80_2";
+        static char const strPrevFolderName_1[] = "__basic_80";
+        static char const strPrevFolderName_2[] = "__basic_80_2";
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
         aPrevUserBasicInetObj_1.removeSegment();
         INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
-        aPrevUserBasicInetObj_1.Append( strPrevFolderName_1 );
-        aPrevUserBasicInetObj_2.Append( strPrevFolderName_2 );
+        aPrevUserBasicInetObj_1.Append( rtl::OString( strPrevFolderName_1 ));
+        aPrevUserBasicInetObj_2.Append( rtl::OString( strPrevFolderName_2 ));
 
         // #i93163
         bool bCleanUp = false;
@@ -1072,7 +1058,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 String aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
                 aUserBasicTmpInetObj.removeSegment();
-                aUserBasicTmpInetObj.Append( "__basic_tmp" );
+                aUserBasicTmpInetObj.Append( rtl::OString( "__basic_tmp" ));
                 String aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 mxSFI->move( aFolderUserBasic, aFolderTmp );
@@ -1185,20 +1171,19 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 mxSFI->kill( aPrevFolder );
             }
         }
-        catch(const Exception& )
+        catch(const Exception& e)
         {
             bCleanUp = true;
+            SAL_WARN("basic", "Upgrade of Basic installation failed somehow: " << e.Message);
         }
 
         // #i93163
         if( bCleanUp )
         {
-            SAL_WARN("basic", "Upgrade of Basic installation failed somehow");
-
-            static char strErrorSavFolderName[] = "__basic_80_err";
+            static const char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
-            aPrevUserBasicInetObj_Err.Append( strErrorSavFolderName );
+            aPrevUserBasicInetObj_Err.Append( rtl::OString( strErrorSavFolderName ));
             String aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
 
             bool bSaved = false;
@@ -1225,8 +1210,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {}
         }
     }
-
-    return sal_True;
 }
 
 void SfxLibraryContainer::implScanExtensions( void )
@@ -3369,70 +3352,6 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPack
         {
             rbPureDialogLib = true;
             xScriptPackage = xPackage;
-        }
-    }
-
-    return xScriptPackage;
-}
-
-Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageFromPackage
-    ( const Reference< deployment::XPackage > xPackage, bool& rbPureDialogLib )
-{
-    rbPureDialogLib = false;
-
-    Reference< deployment::XPackage > xScriptPackage;
-    if( !xPackage.is() )
-        return xScriptPackage;
-
-    // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
-        ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
-    bool bRegistered = false;
-    if( option.IsPresent )
-    {
-        beans::Ambiguous<sal_Bool> const & reg = option.Value;
-        if( !reg.IsAmbiguous && reg.Value )
-            bRegistered = true;
-    }
-    if( bRegistered )
-    {
-        if( xPackage->isBundle() )
-        {
-            Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
-                ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
-            sal_Int32 nPkgCount = aPkgSeq.getLength();
-            const Reference< deployment::XPackage >* pSeq = aPkgSeq.getConstArray();
-            for( sal_Int32 iPkg = 0 ; iPkg < nPkgCount ; ++iPkg )
-            {
-                const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
-                const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
-                rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-                if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
-                {
-                    xScriptPackage = xSubPkg;
-                    break;
-                }
-                else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
-                {
-                    rbPureDialogLib = true;
-                    xScriptPackage = xSubPkg;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
-            rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
-            {
-                xScriptPackage = xPackage;
-            }
-            else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
-            {
-                rbPureDialogLib = true;
-                xScriptPackage = xPackage;
-            }
         }
     }
 

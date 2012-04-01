@@ -138,7 +138,7 @@ namespace psp
         )
     {
         com::sun::star::lang::Locale aLoc( i_rLocale );
-        if( bInsertDefault && aLoc.Language.getLength() == 0 )
+        if( bInsertDefault && aLoc.Language.isEmpty() )
         {
             // empty locale requested, fill in application UI locale
             aLoc = Application::GetSettings().GetUILocale();
@@ -175,17 +175,17 @@ namespace psp
     {
         rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
         aKey.append( i_rKey );
-        if( i_rOption.getLength() || i_rValue.getLength() )
+        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rOption );
         }
-        if( i_rValue.getLength() )
+        if( !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
         }
-        if( aKey.getLength() && i_rTranslation.getLength() )
+        if( aKey.getLength() && !i_rTranslation.isEmpty() )
         {
             rtl::OUString aK( aKey.makeStringAndClear() );
             com::sun::star::lang::Locale aLoc;
@@ -207,12 +207,12 @@ namespace psp
 
         rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
         aKey.append( i_rKey );
-        if( i_rOption.getLength() || i_rValue.getLength() )
+        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rOption );
         }
-        if( i_rValue.getLength() )
+        if( !i_rValue.isEmpty() )
         {
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
@@ -567,15 +567,15 @@ String PPDParser::getPPDFile( const String& rFile )
     String aRet;
     if( aStream.IsOpen() )
     {
-        ByteString aLine = aStream.ReadLine();
-        if( aLine.Search( "*PPD-Adobe" ) == 0 )
+        rtl::OString aLine = aStream.ReadLine();
+        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*PPD-Adobe")) == 0)
             aRet = aStream.GetFileName();
         else
         {
             // our *Include hack does usually not begin
             // with *PPD-Adobe, so try some lines for *Include
             int nLines = 10;
-            while( aLine.Search( "*Include" ) != 0 && --nLines )
+            while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*Include")) != 0 && --nLines)
                 aLine = aStream.ReadLine();
             if( nLines )
                 aRet = aStream.GetFileName();
@@ -655,7 +655,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
         PrinterInfoManager& rMgr = PrinterInfoManager::get();
         if( rMgr.getType() == PrinterInfoManager::CUPS )
         {
-#ifndef ANDROID
+#if !defined(ANDROID) && !defined(LIBO_HEADLESS)
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
 #endif
         }
@@ -696,12 +696,12 @@ PPDParser::PPDParser( const String& rFile ) :
     {
         while( ! aStream.IsEof() )
         {
-            ByteString aCurLine = aStream.ReadLine();
-            if( aCurLine.GetChar( 0 ) == '*' )
+            rtl::OString aCurLine = aStream.ReadLine();
+            if( aCurLine[0] == '*' )
             {
-                if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )
+                if (aCurLine.matchIgnoreAsciiCase(rtl::OString("*include:")))
                 {
-                    aCurLine.Erase( 0, 9 );
+                    aCurLine = aCurLine.copy(9);
                     aCurLine = comphelper::string::stripStart(aCurLine, ' ');
                     aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
                     aCurLine = comphelper::string::stripStart(aCurLine, '\t');
@@ -711,27 +711,26 @@ PPDParser::PPDParser( const String& rFile ) :
                     aCurLine = comphelper::string::stripStart(aCurLine, '"');
                     aCurLine = comphelper::string::stripEnd(aCurLine, '"');
                     aStream.Close();
-                    aStream.Open( getPPDFile( String( aCurLine, m_aFileEncoding ) ) );
+                    aStream.Open(getPPDFile(rtl::OStringToOUString(aCurLine, m_aFileEncoding)));
                     continue;
                 }
                 else if( ! bLanguageEncoding &&
-                         aCurLine.CompareIgnoreCaseToAscii( "*languageencoding", 17 ) == COMPARE_EQUAL )
+                         aCurLine.matchIgnoreAsciiCase(rtl::OString("*languageencoding")) )
                 {
                     bLanguageEncoding = true; // generally only the first one counts
-                    ByteString aLower = aCurLine;
-                    aLower.ToLowerAscii();
-                    if( aLower.Search( "isolatin1", 17 ) != STRING_NOTFOUND ||
-                        aLower.Search( "windowsansi", 17 ) != STRING_NOTFOUND )
+                    rtl::OString aLower = aCurLine.toAsciiLowerCase();
+                    if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin1"), 17 ) != -1 ||
+                        aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("windowsansi"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_MS_1252;
-                    else if( aLower.Search( "isolatin2", 17 ) != STRING_NOTFOUND )
+                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin2"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_ISO_8859_2;
-                    else if( aLower.Search( "isolatin5", 17 ) != STRING_NOTFOUND )
+                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin5"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_ISO_8859_5;
-                    else if( aLower.Search( "jis83-rksj", 17 ) != STRING_NOTFOUND )
+                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("jis83-rksj"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_SHIFT_JIS;
-                    else if( aLower.Search( "macstandard", 17 ) != STRING_NOTFOUND )
+                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("macstandard"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-                    else if( aLower.Search( "utf-8", 17 ) != STRING_NOTFOUND )
+                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("utf-8"), 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_UTF8;
                 }
             }
@@ -971,49 +970,59 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
     PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
     {
-        ByteString aCurrentLine( *line );
+        rtl::OString aCurrentLine( *line );
         ++line;
-        if( aCurrentLine.GetChar(0) != '*' )
+        if( aCurrentLine[0] != '*' )
             continue;
-        if( aCurrentLine.GetChar(1) == '%' )
-            continue;
-
-        ByteString aKey = GetCommandLineToken( 0, comphelper::string::getToken(aCurrentLine, 0, ':') );
-        int nPos = aKey.Search( '/' );
-        if( nPos != STRING_NOTFOUND )
-            aKey.Erase( nPos );
-        aKey.Erase( 0, 1 ); // remove the '*'
-
-        if( aKey.Equals( "CloseUI" ) || aKey.Equals( "OpenGroup" ) || aKey.Equals( "CloseGroup" ) || aKey.Equals( "End" ) || aKey.Equals( "OpenSubGroup" ) || aKey.Equals( "CloseSubGroup" ) )
+        if( aCurrentLine[1] == '%' )
             continue;
 
-        if( aKey.Equals( "OpenUI" ) )
+        rtl::OString aKey = GetCommandLineToken( 0, comphelper::string::getToken(aCurrentLine, 0, ':') );
+        sal_Int32 nPos = aKey.indexOf('/');
+        if (nPos != -1)
+            aKey = aKey.copy(0, nPos);
+        aKey = aKey.copy(1); // remove the '*'
+
+        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseUI")) ||
+            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenGroup")) ||
+            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseGroup")) ||
+            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("End")) ||
+            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenSubGroup")) ||
+            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseSubGroup")))
+        {
+            continue;
+        }
+
+        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenUI")))
         {
             parseOpenUI( aCurrentLine );
             continue;
         }
-        else if( aKey.Equals( "OrderDependency" ) )
+        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OrderDependency")))
         {
             parseOrderDependency( aCurrentLine );
             continue;
         }
-        else if( aKey.Equals( "UIConstraints" ) || aKey.Equals( "NonUIConstraints" ) )
+        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIConstraints")) ||
+                 aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("NonUIConstraints")))
+        {
             continue; // parsed in pass 2
-        else if( aKey.Equals( "CustomPageSize" ) ) // currently not handled
+        }
+        else if( aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CustomPageSize")) ) // currently not handled
             continue;
 
         // default values are parsed in pass 2
-        if( aKey.CompareTo( "Default", 7 ) == COMPARE_EQUAL )
+        if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("Default")))
             continue;
 
         bool bQuery     = false;
-        if( aKey.GetChar( 0 ) == '?' )
+        if (aKey[0] == '?')
         {
-            aKey.Erase( 0, 1 );
+            aKey = aKey.copy(1);
             bQuery = true;
         }
 
-        String aUniKey( aKey, RTL_TEXTENCODING_MS_1252 );
+        String aUniKey(rtl::OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
         // handle CUPS extension for globalized PPDs
         bool bIsGlobalizedLine = false;
         com::sun::star::lang::Locale aTransLocale;
@@ -1035,10 +1044,10 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         }
 
         String aOption;
-        nPos = aCurrentLine.Search( ':' );
-        if( nPos != STRING_NOTFOUND )
+        nPos = aCurrentLine.indexOf(':');
+        if( nPos != -1 )
         {
-            aOption = String( aCurrentLine.Copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
+            aOption = rtl::OStringToOUString( aCurrentLine.copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
             aOption = GetCommandLineToken( 1, aOption );
             int nTransPos = aOption.Search( '/' );
             if( nTransPos != STRING_NOTFOUND )
@@ -1052,17 +1061,16 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         if( nPos != STRING_NOTFOUND )
         {
             // found a colon, there may be an option
-            ByteString aLine = aCurrentLine.Copy( 1, nPos-1 );
+            rtl::OString aLine = aCurrentLine.copy( 1, nPos-1 );
             aLine = WhitespaceToSpace( aLine );
-            int nTransPos = aLine.Search( '/' );
-            if( nTransPos != STRING_NOTFOUND )
-                aOptionTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
+            sal_Int32 nTransPos = aLine.indexOf('/');
+            if (nTransPos != -1)
+                aOptionTranslation = handleTranslation( aLine.copy(nTransPos+1), bIsGlobalizedLine );
 
             // read in more lines if necessary for multiline values
-            aLine = aCurrentLine.Copy( nPos+1 );
-            if( aLine.Len() )
+            aLine = aCurrentLine.copy( nPos+1 );
+            if (!aLine.isEmpty())
             {
-                //while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
                 rtl::OStringBuffer aBuffer(aLine);
                 while (line != rLines.end() && oddDoubleQuoteCount(aBuffer))
                 {
@@ -1076,7 +1084,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
             aLine = WhitespaceToSpace( aLine );
 
             // #i100644# handle a missing value (actually a broken PPD)
-            if( ! aLine.Len() )
+            if( aLine.isEmpty() )
             {
                 if( aOption.Len() &&
                     aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
@@ -1085,13 +1093,18 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                     eType = eQuoted;
             }
             // check for invocation or quoted value
-            else if( aLine.GetChar(0) == '"' )
+            else if(aLine[0] == '"')
             {
-                aLine.Erase( 0, 1 );
-                nTransPos = aLine.Search( '"' );
-                aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                aLine = aLine.copy(1);
+                nTransPos = aLine.indexOf('"');
+                if (nTransPos == -1)
+                    nTransPos = aLine.getLength();
+                aValue = String( aLine.copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
                 // after the second doublequote can follow a / and a translation
-                aValueTranslation = handleTranslation( aLine.Copy( nTransPos+2 ), bIsGlobalizedLine );
+                if (nTransPos < aLine.getLength() - 2)
+                {
+                    aValueTranslation = handleTranslation( aLine.copy( nTransPos+2 ), bIsGlobalizedLine );
+                }
                 // check for quoted value
                 if( aOption.Len() &&
                     aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
@@ -1100,9 +1113,9 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                     eType = eQuoted;
             }
             // check for symbol value
-            else if( aLine.GetChar(0) == '^' )
+            else if(aLine[0] == '^')
             {
-                aLine.Erase( 0, 1 );
+                aLine = aLine.copy(1);
                 aValue = String( aLine, RTL_TEXTENCODING_MS_1252 );
                 eType = eSymbol;
             }
@@ -1113,11 +1126,12 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                 // can contain any whitespace which is reduced
                 // to one space by now
                 // who cares ...
-                nTransPos = aLine.Search( '/' );
-                if( nTransPos == STRING_NOTFOUND )
-                    nTransPos = aLine.Len();
-                aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
-                aValueTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
+                nTransPos = aLine.indexOf('/');
+                if (nTransPos == -1)
+                    nTransPos = aLine.getLength();
+                aValue = String( aLine.copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                if (nTransPos+1 < aLine.getLength())
+                    aValueTranslation = handleTranslation( aLine.copy( nTransPos+1 ), bIsGlobalizedLine );
                 eType = eString;
             }
         }
@@ -1159,9 +1173,9 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         pValue->m_eType = eType;
         pValue->m_aValue = aValue;
 
-        if( aOptionTranslation.getLength() )
+        if( !aOptionTranslation.isEmpty() )
             m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
-        if( aValueTranslation.getLength() )
+        if( !aValueTranslation.isEmpty() )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
@@ -1176,16 +1190,16 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
     // second pass: fill in defaults
     for( line = rLines.begin(); line != rLines.end(); ++line )
     {
-        ByteString aLine( *line );
-        if( aLine.CompareTo( "*Default", 8 ) == COMPARE_EQUAL )
+        rtl::OString aLine(*line);
+        if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*Default")))
         {
-            String aKey( aLine.Copy( 8 ), RTL_TEXTENCODING_MS_1252 );
+            String aKey( aLine.copy( 8 ), RTL_TEXTENCODING_MS_1252 );
             sal_uInt16 nPos = aKey.Search( ':' );
             if( nPos != STRING_NOTFOUND )
             {
                 aKey.Erase( nPos );
                 rtl::OUString aOption(rtl::OStringToOUString(
-                    WhitespaceToSpace(aLine.Copy(nPos+9)),
+                    WhitespaceToSpace(aLine.copy(nPos+9)),
                     RTL_TEXTENCODING_MS_1252));
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )
@@ -1208,31 +1222,32 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                 }
             }
         }
-        else if( aLine.CompareTo( "*UIConstraints", 14 ) == COMPARE_EQUAL  ||
-                 aLine.CompareTo( "*NonUIConstraints", 17 ) == COMPARE_EQUAL )
+        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*UIConstraints")) ||
+                 aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*NonUIConstraints")))
+        {
             parseConstraint( aLine );
-
+        }
     }
 }
 
 void PPDParser::parseOpenUI(const rtl::OString& rLine)
 {
     String aTranslation;
-    ByteString aKey = rLine;
+    rtl::OString aKey = rLine;
 
-    int nPos = aKey.Search( ':' );
-    if( nPos != STRING_NOTFOUND )
-        aKey.Erase( nPos );
-    nPos = aKey.Search( '/' );
-    if( nPos != STRING_NOTFOUND )
+    sal_Int32 nPos = aKey.indexOf(':');
+    if( nPos != -1 )
+        aKey = aKey.copy(0, nPos);
+    nPos = aKey.indexOf('/');
+    if( nPos != -1 )
     {
-        aTranslation = handleTranslation( aKey.Copy( nPos + 1 ), false );
-        aKey.Erase( nPos );
+        aTranslation = handleTranslation( aKey.copy( nPos + 1 ), false );
+        aKey = aKey.copy(0, nPos);
     }
     aKey = GetCommandLineToken( 1, aKey );
-    aKey.Erase( 0, 1 );
+    aKey = aKey.copy(1);
 
-    String aUniKey( aKey, RTL_TEXTENCODING_MS_1252 );
+    String aUniKey(rtl::OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
     PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aUniKey );
     PPDKey* pKey;
     if( keyit == m_aKeys.end() )
@@ -1247,10 +1262,10 @@ void PPDParser::parseOpenUI(const rtl::OString& rLine)
     m_pTranslator->insertKey( pKey->getKey(), aTranslation );
 
     sal_Int32 nIndex = 0;
-    ByteString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
-    if( aValue.CompareIgnoreCaseToAscii( "boolean" ) == COMPARE_EQUAL )
+    rtl::OString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
+    if( aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("boolean")))
         pKey->m_eUIType = PPDKey::Boolean;
-    else if( aValue.CompareIgnoreCaseToAscii( "pickmany" ) == COMPARE_EQUAL )
+    else if (aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pickmany")))
         pKey->m_eUIType = PPDKey::PickMany;
     else
         pKey->m_eUIType = PPDKey::PickOne;
@@ -1264,7 +1279,7 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
         aLine = aLine.copy( nPos+1 );
 
     sal_Int32 nOrder = GetCommandLineToken( 0, aLine ).toInt32();
-    ByteString aSetup = GetCommandLineToken( 1, aLine );
+    rtl::OString aSetup = GetCommandLineToken( 1, aLine );
     String aKey(rtl::OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey.GetChar( 0 ) != '*' )
         return; // invalid order depency
@@ -1281,15 +1296,15 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
         pKey = keyit->second;
 
     pKey->m_nOrderDependency = nOrder;
-    if( aSetup.Equals( "ExitServer" ) )
+    if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("ExitServer")) )
         pKey->m_eSetupType = PPDKey::ExitServer;
-    else if( aSetup.Equals( "Prolog" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("Prolog")) )
         pKey->m_eSetupType = PPDKey::Prolog;
-    else if( aSetup.Equals( "DocumentSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("DocumentSetup")) )
         pKey->m_eSetupType = PPDKey::DocumentSetup;
-    else if( aSetup.Equals( "PageSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("PageSetup")) )
         pKey->m_eSetupType = PPDKey::PageSetup;
-    else if( aSetup.Equals( "JCLSetup" ) )
+    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("JCLSetup")) )
         pKey->m_eSetupType = PPDKey::JCLSetup;
     else
         pKey->m_eSetupType = PPDKey::AnySetup;
@@ -1511,7 +1526,7 @@ rtl::OUString PPDParser::translateKey( const rtl::OUString& i_rKey,
                                        const com::sun::star::lang::Locale& i_rLocale ) const
 {
     rtl::OUString aResult( m_pTranslator->translateKey( i_rKey, i_rLocale ) );
-    if( aResult.getLength() == 0 )
+    if( aResult.isEmpty() )
         aResult = i_rKey;
     return aResult;
 }
@@ -1521,7 +1536,7 @@ rtl::OUString PPDParser::translateOption( const rtl::OUString& i_rKey,
                                           const com::sun::star::lang::Locale& i_rLocale ) const
 {
     rtl::OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, i_rLocale ) );
-    if( aResult.getLength() == 0 )
+    if( aResult.isEmpty() )
         aResult = i_rOption;
     return aResult;
 }
@@ -1871,13 +1886,13 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
-        rBytes += aCopy.Len();
+        rtl::OString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        rBytes += aCopy.getLength();
         rBytes += 1; // for ':'
         if( it->second )
         {
             aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
-            rBytes += aCopy.Len();
+            rBytes += aCopy.getLength();
         }
         else
             rBytes += 4;
@@ -1889,17 +1904,17 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     char* pRun = pBuffer;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
-        int nBytes = aCopy.Len();
-        memcpy( pRun, aCopy.GetBuffer(), nBytes );
+        rtl::OString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        int nBytes = aCopy.getLength();
+        memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
         *pRun++ = ':';
         if( it->second )
             aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
         else
             aCopy = "*nil";
-        nBytes = aCopy.Len();
-        memcpy( pRun, aCopy.GetBuffer(), nBytes );
+        nBytes = aCopy.getLength();
+        memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
 
         *pRun++ = 0;
@@ -1919,15 +1934,15 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
     char* pRun = pBuffer;
     while( nBytes && *pRun )
     {
-        ByteString aLine( pRun );
-        int nPos = aLine.Search( ':' );
-        if( nPos != STRING_NOTFOUND )
+        rtl::OString aLine( pRun );
+        sal_Int32 nPos = aLine.indexOf(':');
+        if( nPos != -1 )
         {
-            const PPDKey* pKey = m_pParser->getKey( String( aLine.Copy( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
+            const PPDKey* pKey = m_pParser->getKey( rtl::OStringToOUString( aLine.copy( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
             if( pKey )
             {
                 const PPDValue* pValue = NULL;
-                String aOption( aLine.Copy( nPos+1 ), RTL_TEXTENCODING_MS_1252 );
+                String aOption( aLine.copy( nPos+1 ), RTL_TEXTENCODING_MS_1252 );
                 if( ! aOption.EqualsAscii( "*nil" ) )
                     pValue = pKey->getValue( aOption );
                 m_aCurrentValues[ pKey ] = pValue;
@@ -1936,8 +1951,8 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 #endif
             }
         }
-        nBytes -= aLine.Len()+1;
-        pRun += aLine.Len()+1;
+        nBytes -= aLine.getLength()+1;
+        pRun += aLine.getLength()+1;
     }
 }
 

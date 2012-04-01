@@ -37,10 +37,13 @@
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
+#include "svtools/javainteractionhandler.hxx"
+#include "uno/current_context.hxx"
 #include "unotools/pathoptions.hxx"
 
 #if !defined(ANDROID) && !defined(IOS)
 #include <l10ntools/compilehelp.hxx>
+#include <l10ntools/HelpIndexer.hxx>
 #endif
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -200,8 +203,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
 
             if (subType.EqualsIgnoreCaseAscii(
@@ -381,9 +383,6 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
     return beans::Optional<OUString>(true, OUString());
 }
 
-static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
-static rtl::OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
-
 void BackendImpl::implProcessHelp(
     PackageImpl * package, bool doRegisterPackage,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
@@ -416,23 +415,6 @@ void BackendImpl::implProcessHelp(
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                 }
 
-                Reference<XComponentContext> const & xContext = getComponentContext();
-                Reference< script::XInvocation > xInvocation;
-                if( xContext.is() )
-                {
-                    try
-                    {
-                        xInvocation = Reference< script::XInvocation >(
-                            xContext->getServiceManager()->createInstanceWithContext(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.help.HelpIndexer" )), xContext ) , UNO_QUERY );
-                    }
-                    catch (const Exception &)
-                    {
-                        // i98680: Survive missing lucene
-                    }
-                }
-
                 // Scan languages
                 Sequence< rtl::OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
                 sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
@@ -458,6 +440,9 @@ void BackendImpl::implProcessHelp(
                         ::dp_misc::create_folder(
                             &langFolderContent,
                             langFolderDest, xCmdEnv);
+
+                        const OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
+                        const OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                         rtl::OUString aJarFile(
                             makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
@@ -512,33 +497,19 @@ void BackendImpl::implProcessHelp(
                             nXhpFileCount, pXhpFiles,
                             langFolderDestExpanded, aErrorInfo );
 
-                        if( bSuccess && xInvocation.is() )
+                        if( bSuccess )
                         {
-                            Sequence<uno::Any> aParamsSeq( 6 );
-
-                            aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" ) ));
-
                             rtl::OUString aLang;
                             sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
                             if( nLastSlash != -1 )
                                 aLang = aLangURL.copy( nLastSlash + 1 );
                             else
                                 aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
-                            aParamsSeq[1] = uno::makeAny( aLang );
 
-                            aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-mod" ) ));
-                            aParamsSeq[3] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "help" ) ));
+                            rtl::OUString aMod(RTL_CONSTASCII_USTRINGPARAM("help"));
 
-                            aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-zipdir" ) ));
-                            rtl::OUString aSystemPath;
-                            osl::FileBase::getSystemPathFromFileURL(
-                                langFolderDestExpanded, aSystemPath );
-                            aParamsSeq[5] = uno::makeAny( aSystemPath );
-
-                            Sequence< sal_Int16 > aOutParamIndex;
-                            Sequence< uno::Any > aOutParam;
-                            uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "createIndex" )),
-                                                                 aParamsSeq, aOutParamIndex, aOutParam );
+                            HelpIndexer aIndexer(aLang, aMod, langFolderDestExpanded, langFolderDestExpanded);
+                            aIndexer.indexDocuments();
                         }
 
                         if( !bSuccess )

@@ -62,6 +62,9 @@ namespace basctl { namespace docs {
     {
     public:
         virtual bool    includeDocument( const DocumentDescriptor& _rDocument ) const = 0;
+
+    protected:
+        ~IDocumentDescriptorFilter() {}
     };
 
     //====================================================================

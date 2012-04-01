@@ -90,11 +90,11 @@ class LicenseDialog : public ModalDialog
 
     void                EnableControls();
 
-    DECL_LINK(          PageDownHdl, PushButton * );
-    DECL_LINK(          EndReachedHdl, LicenseView * );
-    DECL_LINK(          ScrolledHdl, LicenseView * );
-    DECL_LINK(          AcceptBtnHdl, PushButton * );
-    DECL_LINK(          DeclineBtnHdl, PushButton * );
+    DECL_LINK(PageDownHdl, void *);
+    DECL_LINK(EndReachedHdl, void *);
+    DECL_LINK(ScrolledHdl, void *);
+    DECL_LINK(AcceptBtnHdl, void *);
+    DECL_LINK(DeclineBtnHdl, void *);
 
     public:
         LicenseDialog(const rtl::OUString& aLicense, ResMgr *pResMgr);

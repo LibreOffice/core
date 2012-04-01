@@ -160,21 +160,21 @@ private:
     void            InitFilter();
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
-    DECL_LINK( RefHandle, SvxTPFilter* );
-    DECL_LINK( FilterModified, SvxTPFilter* );
+    DECL_LINK( RefHandle, void* );
+    DECL_LINK( FilterModified, void* );
     DECL_LINK( MinSizeHandle, SvxAcceptChgCtr*);
     DECL_LINK( RejectHandle, SvxTPView*);
     DECL_LINK( AcceptHandle, SvxTPView*);
-    DECL_LINK( RejectAllHandle, SvxTPView*);
-    DECL_LINK( AcceptAllHandle, SvxTPView*);
+    DECL_LINK( RejectAllHandle, void*);
+    DECL_LINK( AcceptAllHandle, void*);
     DECL_LINK( ExpandingHandle, SvxRedlinTable*);
-    DECL_LINK( SelectHandle, SvxRedlinTable*);
+    DECL_LINK( SelectHandle, void*);
     DECL_LINK( RefInfoHandle, String*);
 
-    DECL_LINK( UpdateSelectionHdl, Timer*);
+    DECL_LINK( UpdateSelectionHdl, void*);
     DECL_LINK( ChgTrackModHdl, ScChangeTrack*);
-    DECL_LINK( CommandHdl, Control*);
-    DECL_LINK( ReOpenTimerHdl, Timer*);
+    DECL_LINK( CommandHdl, void*);
+    DECL_LINK( ReOpenTimerHdl, void*);
     DECL_LINK( ColCompareHdl, SvSortData*);
 
 

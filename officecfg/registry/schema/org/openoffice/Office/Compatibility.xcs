@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,47 +41,47 @@
                     </enumeration>
                 </constraints>
             </prop>
-            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean">
+            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Use printer metrics for document formatting</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="AddSpacing" oor:type="xs:boolean">
+            <prop oor:name="AddSpacing" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Add spacing between paragraphs and tables</desc></info>
                 <value>true</value>
             </prop>
-            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean">
+            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Add paragraph and table spacing at tops of pages</desc></info>
                 <value>true</value>
             </prop>
-            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean">
+            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Use OpenOffice.org 1.1 tabstop formatting</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="NoExternalLeading" oor:type="xs:boolean">
+            <prop oor:name="NoExternalLeading" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Do not add leading (extra space) between lines of text</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="UseLineSpacing" oor:type="xs:boolean">
+            <prop oor:name="UseLineSpacing" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Use OpenOffice.org 1.1 line spacing</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="AddTableSpacing" oor:type="xs:boolean">
+            <prop oor:name="AddTableSpacing" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>???</desc></info>
                 <value>true</value>
             </prop>
-            <prop oor:name="UseObjectPositioning" oor:type="xs:boolean">
+            <prop oor:name="UseObjectPositioning" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Use OpenOffice.org 1.1 object positioning</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="UseOurTextWrapping" oor:type="xs:boolean">
+            <prop oor:name="UseOurTextWrapping" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean">
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Consider wrapping style when positioning objects</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ExpandWordSpace" oor:type="xs:boolean">
+            <prop oor:name="ExpandWordSpace" oor:type="xs:boolean" oor:nillable="false">
                 <info><desc>Expand word space on lines with manual line breaks in justified paragraphs</desc></info>
                 <value>true</value>
             </prop>
@@ -98,7 +98,7 @@
 				<desc>Used by the writer compatibility flag as the last OOo version.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
-			<prop oor:name="OOo11" oor:type="xs:string">
+			<prop oor:name="OOo11" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - OOo Writer - Compatibility -->
 				<!--The value should only be written by the setup.-->
 				<info>

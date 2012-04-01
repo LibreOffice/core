@@ -392,7 +392,7 @@ enum AxisTypeListBoxEntry
     TYPE_DATE=2
 };
 
-IMPL_LINK( ScaleTabPage, SelectAxisTypeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
 {
     sal_uInt16 nPos = m_aLB_AxisType.GetSelectEntryPos();
     if( nPos==TYPE_DATE )

@@ -29,6 +29,9 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/cellproperties.hxx>
+#include <test/util/xreplaceable.hxx>
+#include <test/util/xsearchable.hxx>
+#include <test/sheet/xcellrangedata.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -36,14 +39,18 @@
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 8
+#define NUMBER_OF_TESTS 14
 
-class ScCellRangeObj : public UnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties
+class ScCellRangeObj : public UnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties,
+                        apitest::XSearchable, apitest::XReplaceable, apitest::XCellRangeData
 {
 public:
+    ScCellRangeObj();
+
     virtual void setUp();
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
+    virtual uno::Reference< uno::XInterface > getXCellRangeData();
 
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
     CPPUNIT_TEST(testQueryColumnDifference);
@@ -55,6 +62,12 @@ public:
     CPPUNIT_TEST(testQueryVisibleCells);
     CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST(testRotateReference);
+    CPPUNIT_TEST(testFindAll);
+    CPPUNIT_TEST(testFindFirst);
+    CPPUNIT_TEST(testReplaceAll);
+    CPPUNIT_TEST(testCreateReplaceDescriptor);
+    CPPUNIT_TEST(testGetDataArray);
+    CPPUNIT_TEST(testSetDataArray);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -64,6 +77,13 @@ private:
 
 sal_Int32 ScCellRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
+
+ScCellRangeObj::ScCellRangeObj():
+        apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), 1),
+        apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("35")))
+{
+
+}
 
 uno::Reference< uno::XInterface > ScCellRangeObj::init()
 {
@@ -80,6 +100,26 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
     CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
 
     uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,3,4), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
+    return xReturn;
+}
+
+uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
+{
+    rtl::OUString aFileURL;
+    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
+    createFileURL(aFileBase, aFileURL);
+    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    if( !mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL);
+    uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
+
+    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,3,3), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
     return xReturn;

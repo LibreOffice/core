@@ -96,7 +96,6 @@
 #include "escher.hxx"
 #include <ndtxt.hxx>
 #include "WW8FFData.hxx"
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -2030,7 +2029,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             aPropOpt.Commit( *pStrm );
 
             AddAtom( 4, ESCHER_ClientData );
-            GetStream() << 1L;
+            GetStream() << static_cast<sal_Int32>(1);
 
             CloseContainer();   // ESCHER_SpContainer
         }
@@ -2493,10 +2492,10 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     aWinwordAnchoring.WriteData(*this);
 
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream() << 0L;
+    GetStream() << static_cast<sal_Int32>(0);
 
     AddAtom(4, ESCHER_ClientData);
-    GetStream() << 1L;
+    GetStream() << static_cast<sal_Int32>(1);
 }
 
 sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,

@@ -443,7 +443,6 @@ void SdrEditView::ReverseOrderOfMarked()
     sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
     if (nMarkAnz>0)
     {
-        //sal_Bool bNeedBundle=sal_False;
         sal_Bool bChg=sal_False;
 
         bool bUndo = IsUndoEnabled();
@@ -1616,7 +1615,6 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
 void SdrEditView::DismantleMarkedObjects(sal_Bool bMakeLines)
 {
-    //sal_uInt32 nCnt(0);
     // temporary MarkList
     SdrMarkList aRemoveMerker;
 

@@ -63,7 +63,7 @@ public:
     virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

@@ -97,11 +97,4 @@ uno::Sequence< ::rtl::OUString> SAL_CALL SvxAccessibleTextPropertySet::getSuppor
     return SvxUnoTextRangeBase::getSupportedServiceNames();
 }
 
-// XServiceName
-::rtl::OUString SAL_CALL SvxAccessibleTextPropertySet::getServiceName() throw (uno::RuntimeException)
-{
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.PropertyValue"));
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

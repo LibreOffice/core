@@ -149,7 +149,7 @@ class SwNewGlosNameDlg : public ModalDialog
 
 protected:
     DECL_LINK( Modify, Edit * );
-    DECL_LINK( Rename, Button * );
+    DECL_LINK(Rename, void *);
 
 public:
     SwNewGlosNameDlg( Window* pParent,
@@ -445,7 +445,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
         EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, EMPTYARG )
+IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
@@ -585,9 +585,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             pGlossaryHdl->GetMacros(aShortNameEdit.GetText(), aStart, aEnd );
 
             SvxMacroItem aItem(RES_FRMMACRO);
-            if( aStart.GetMacName().Len() )
+            if( aStart.HasMacro() )
                 aItem.SetMacro( SW_EVENT_START_INS_GLOSSARY, aStart );
-            if( aEnd.GetMacName().Len() )
+            if( aEnd.HasMacro() )
                 aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
 
             aSet.Put( aItem );
@@ -657,7 +657,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 /*--------------------------------------------------------------------
      Description:   dialog manage regions
  --------------------------------------------------------------------*/
-IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
 {
     SwGlossaries* pGloss = ::GetGlossaries();
     if( pGloss->IsGlosPathErr() )
@@ -829,7 +829,7 @@ void SwGlossaryDlg::Init()
     aInsertTipCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
-IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
 {
 // EndDialog must not be called in MenuHdl
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
@@ -842,7 +842,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 
 /*------------------------------------------------------------------------
  Description:   KeyInput for ShortName - Edits without Spaces
@@ -862,7 +862,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
 {
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
     String sNew = GetAppCharClass().uppercase(aNewShort.GetText());
@@ -1165,7 +1165,7 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
     return 0;
 };
 
-IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl,  void *, EMPTYARG )
+IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)
 {
     sal_Bool bShow = aShowExampleCB.IsChecked();
     aExampleWIN.Show( bShow );

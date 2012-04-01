@@ -274,7 +274,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
 void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     boost::scoped_ptr<SvxMacro> pMacro;
-    if ( rMacro.GetMacName().Len() )
+    if ( rMacro.HasMacro() )
         pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
     PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
 }

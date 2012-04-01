@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,xmlsecurity,xmlsecurity/util/xmlsecur
 
 $(eval $(call gb_Library_set_include,xmlsecurity,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
+	-I$(SRCDIR)/xmlsecurity/inc \
 ))
 
 $(eval $(call gb_Library_add_api,xmlsecurity,\

@@ -142,14 +142,6 @@ namespace basegfx
         */
         B2DVector& normalize();
 
-        /** Test if this 2D Vector is normalized
-
-            @return
-            true if lenth of vector is equal to 1.0
-            false else
-        */
-        bool isNormalized() const;
-
         /** Calculate the Scalar with another 2D Vector
 
             @param rVec

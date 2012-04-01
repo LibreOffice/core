@@ -328,8 +328,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     {
         sal_Int32 i(0);
         rtl::OUStringBuffer sTemp;
-        String sMessage(sOUMessage);
-        rtl::OUString sText (sMessage.ConvertLineEnd(LINEEND_LF));
+        rtl::OUString sText(convertLineEnd(sOUMessage, LINEEND_LF));
         bool bPrevCharWasSpace(true);
         while(i < sText.getLength())
         {
@@ -1291,6 +1290,9 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    if (!(static_cast<size_t>(nTable) < aTables.size()))
+        return -1;
+
     if (maCache.hasCache(nTable, nField))
         // Cache hit !
         return maCache.mnStyle;

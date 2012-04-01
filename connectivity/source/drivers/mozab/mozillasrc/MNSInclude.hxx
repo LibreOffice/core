@@ -65,7 +65,6 @@
 #include <nsIPref.h>
 #include <nsIAddrBookSession.h>
 #include <nsIMsgHeaderParser.h>
-#include <nsIAddrBookSession.h>
 #include <nsIAbDirectory.h>
 #include <nsAbDirectoryQuery.h>
 #include <nsIAbDirectoryQuery.h>

@@ -305,37 +305,6 @@ double SAL_CALL Player::getMediaTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setStopTime( double fTime )
-    throw (uno::RuntimeException)
-{
-    if( mpMP  )
-        mpMP->put_StopTime( fTime );
-}
-
-// ------------------------------------------------------------------------------
-
-double SAL_CALL Player::getStopTime(  )
-    throw (uno::RuntimeException)
-{
-    REFTIME aRefTime( 0.0 );
-
-    if( mpMP  )
-        mpMP->get_StopTime( &aRefTime );
-
-    return aRefTime;
-}
-
-// ------------------------------------------------------------------------------
-
-void SAL_CALL Player::setRate( double fRate )
-    throw (uno::RuntimeException)
-{
-    if( mpMP  )
-        mpMP->put_Rate( fRate );
-}
-
-// ------------------------------------------------------------------------------
-
 double SAL_CALL Player::getRate(  )
     throw (uno::RuntimeException)
 {

@@ -211,7 +211,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
     {
         for(sal_uInt16 i=1; i <= MAX_TOC_LEVEL; i++)
         {
-            if (m_aTOCSource[i].size() == 0)
+            if (m_aTOCSource[i].empty())
             {
                 // unnecessary to output this level
                 continue;

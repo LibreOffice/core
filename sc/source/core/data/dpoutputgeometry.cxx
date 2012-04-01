@@ -38,13 +38,12 @@
 
 using ::std::vector;
 
-ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType) :
+ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter) :
     maOutRange(rOutRange),
     mnRowFields(0),
     mnColumnFields(0),
     mnPageFields(0),
     mnDataFields(0),
-    meImportType(eImportType),
     mbShowFilter(bShowFilter)
 {
 }
@@ -82,8 +81,6 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
         return;
     }
 
-    bool bDataLayout = mnDataFields > 1;
-
     SCROW nCurRow = maOutRange.aStart.Row();
 
     if (mnPageFields)
@@ -97,7 +94,7 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
     SCROW nRow = nCurRow;
     SCTAB nTab = maOutRange.aStart.Tab();
-    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields + (bDataLayout ? 1 : 0));
+    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields);
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
@@ -165,12 +162,10 @@ SCROW ScDPOutputGeometry::getRowFieldHeaderRow() const
     return nCurRow;
 }
 
-ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
+std::pair<ScDPOutputGeometry::FieldType, size_t>
+ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
 {
     // We will ignore the table position for now.
-
-    bool bExtraTitleRow = (mnColumnFields == 0 && meImportType == ScDPOutputGeometry::XLS);
-    bool bDataLayout = mnDataFields > 1;
 
     SCROW nCurRow = maOutRange.aStart.Row();
 
@@ -180,7 +175,10 @@ ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAdd
         SCROW nRowStart = maOutRange.aStart.Row() + mbShowFilter;
         SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
         if (rPos.Col() == nCol && nRowStart <= rPos.Row() && rPos.Row() <= nRowEnd)
-            return Page;
+        {
+            size_t nPos = static_cast<size_t>(rPos.Row() - nRowStart);
+            return std::pair<FieldType, size_t>(Page, nPos);
+        }
 
         nCurRow = nRowEnd + 2;
     }
@@ -190,15 +188,17 @@ ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAdd
     if (mnColumnFields)
     {
         SCROW nRow = nCurRow;
-        SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields + (bDataLayout ? 1 : 0));
+        SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields);
         SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
         if (rPos.Row() == nRow && nColStart <= rPos.Col() && rPos.Col() <= nColEnd)
-            return Column;
+        {
+            size_t nPos = static_cast<size_t>(rPos.Col() - nColStart);
+            return std::pair<FieldType, size_t>(Column, nPos);
+        }
 
         nCurRow += static_cast<SCROW>(mnColumnFields);
     }
-
-    if (bExtraTitleRow)
+    else
         ++nCurRow;
 
     if (mnRowFields)
@@ -206,10 +206,13 @@ ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAdd
         SCCOL nColStart = maOutRange.aStart.Col();
         SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnRowFields-1);
         if (rPos.Row() == nCurRow && nColStart <= rPos.Col() && rPos.Col() <= nColEnd)
-            return Row;
+        {
+            size_t nPos = static_cast<size_t>(rPos.Col() - nColStart);
+            return std::pair<FieldType, size_t>(Row, nPos);
+        }
     }
 
-    return None;
+    return std::pair<FieldType, size_t>(None, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

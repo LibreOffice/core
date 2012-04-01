@@ -75,9 +75,9 @@ struct mnttab
 struct mymnttab
 {
     dev_t mountdevice;
-    ByteString mountspecial;
-    ByteString mountpoint;
-    ByteString mymnttab_filesystem;
+    rtl::OString mountspecial;
+    rtl::OString mountpoint;
+    rtl::OString mymnttab_filesystem;
     mymnttab() { mountdevice = (dev_t) -1; }
 };
 
@@ -241,27 +241,6 @@ String DirEntry::GetVolume() const
                     String());
 }
 
-DirEntry DirEntry::GetDevice() const
-{
-  DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry aPath( *this );
-    aPath.ToAbs();
-
-    struct stat buf;
-    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
-    {
-        if (aPath.Level() <= 1)
-            return String();
-        aPath = aPath [1];
-    }
-    mymnttab &rMnt = mymnt::get();
-    return ((buf.st_dev == rMnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &rMnt)) ?
-                    String( rMnt.mountpoint, osl_getThreadTextEncoding()) :
-                    String());
-}
-
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
@@ -348,22 +327,6 @@ sal_uInt16 DirReader_Impl::Read()
     else
         bReady = sal_True;
     return 0;
-}
-
-/*************************************************************************
-|*
-|*    FileStat::FileStat()
-|*
-*************************************************************************/
-
-FileStat::FileStat( const void * ):
-    aDateCreated(0),
-    aTimeCreated(0),
-    aDateModified(0),
-    aTimeModified(0),
-    aDateAccessed(0),
-    aTimeAccessed(0)
-{
 }
 
 /*************************************************************************

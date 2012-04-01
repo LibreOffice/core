@@ -123,6 +123,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_FIRST_LINE_INDENT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaFirstLineIndent")); break;
             case PROP_PARA_KEEP_TOGETHER:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaKeepTogether")); break;
             case PROP_PARA_TOP_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTopMargin")); break;
+            case PROP_PARA_CONTEXT_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")); break;
             case PROP_PARA_BOTTOM_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin")); break;
             case PROP_PARA_IS_HYPHENATION:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")); break;
             case PROP_PARA_LINE_NUMBER_COUNT:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLineNumberCount")); break;
@@ -196,6 +197,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CONTOUR_POLY_POLYGON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")); break;
             case PROP_PAGE_TOGGLE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageToggle")); break;
             case PROP_BACK_COLOR           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColor")); break;
+            case PROP_BACK_COLOR_TRANSPARENCY:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColorTransparency")); break;
             case PROP_ALTERNATIVE_TEXT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")); break;
             case PROP_HEADER_TEXT_LEFT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderTextLeft")); break;
             case PROP_HEADER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderText")); break;

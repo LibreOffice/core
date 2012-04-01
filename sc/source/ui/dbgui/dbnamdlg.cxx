@@ -245,7 +245,6 @@ void ScDbNameDlg::Init()
             pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, sal_True );
             if ( pDBData )
             {
-                ::rtl::OUString theDbName;
                 ScAddress&  rStart = theCurArea.aStart;
                 ScAddress&  rEnd   = theCurArea.aEnd;
                 SCCOL nCol1;
@@ -260,7 +259,9 @@ void ScDbNameDlg::Init()
                     && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
-                    aEdName.SetText(pDBData->GetName());
+                    rtl::OUString aDBName = pDBData->GetName();
+                    if (!aDBName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
+                        aEdName.SetText(aDBName);
 
                     aBtnHeader.Check( pDBData->HasHeader() );
                     aBtnDoSize.Check( pDBData->IsDoSize() );
@@ -432,7 +433,7 @@ sal_Bool ScDbNameDlg::IsRefInputMode() const
 // Handler:
 // ========
 
-IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
 {
     AddBtnHdl( 0 );
 
@@ -449,16 +450,16 @@ IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
     String  aNewName = aEdName.GetText();
     String  aNewArea = aEdAssign.GetText();
@@ -468,7 +469,7 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
 
     if ( aNewName.Len() > 0 && aNewArea.Len() > 0 )
     {
-        if ( ScRangeData::IsNameValid( aNewName, pDoc ) )
+        if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.EqualsAscii(STR_DB_LOCAL_NONAME) )
         {
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
@@ -557,7 +558,7 @@ public:
 
 }
 
-IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 {
     ::rtl::OUString aStrEntry = aEdName.GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
@@ -610,7 +611,7 @@ IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
     String  theName     = aEdName.GetText();
     sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
@@ -695,7 +696,7 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 {
     //  hier parsen fuer Save() etc.
 

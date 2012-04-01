@@ -28,14 +28,12 @@
 
 $(eval $(call gb_Library_Library,dict_ja))
 
-$(eval $(call gb_Library_add_package_headers,dict_ja,i18npool_generated))
-
 $(eval $(call gb_Library_add_linked_libs,dict_ja,\
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,dict_ja,\
-	CustomTarget/i18npool/source/breakiterator/data/dict_ja \
+	CustomTarget/i18npool/breakiterator/dict_ja \
 ))
 
 # vim: set noet sw=4 ts=4:

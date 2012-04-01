@@ -27,12 +27,14 @@
 
 # Complete list of all supported localizations (ISO codes)
 completelangiso=af \
+am \
 ar \
 as \
 ast \
 be \
 bg \
 bn \
+bn-IN \
 bo \
 br \
 brx \
@@ -76,7 +78,6 @@ ko \
 kok \
 ks \
 ku \
-ky-CN \
 lb \
 lo \
 lt \

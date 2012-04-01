@@ -108,7 +108,7 @@ SwMailMergeChildWin::~SwMailMergeChildWin()
 {
 }
 
-IMPL_LINK( SwMailMergeChildWin, BackHdl, ToolBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)
 {
     GetBindings().GetDispatcher()->Execute(FN_MAILMERGE_WIZARD, SFX_CALLMODE_ASYNCHRON);
     return 0;
@@ -426,7 +426,7 @@ void lcl_Move(Control& rCtrl, long nYOffset)
     rCtrl.SetPosPixel(aPos);
 }
 
-IMPL_LINK( SwSendMailDialog, DetailsHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwSendMailDialog, DetailsHdl_Impl)
 {
     long nMove = 0;
     if(m_aStatusLB.IsVisible())
@@ -472,7 +472,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
     return 0;
 }
 
-IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl)
 {
     ModelessDialog::Show( sal_False );
     return 0;

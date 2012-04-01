@@ -233,7 +233,7 @@ namespace canvas
         // in line with the problem of having sprite state available
         // for the frame before the last frame; plus, it avoids
         // frequent locks of the object mutices
-        SpriteComparator aSpriteComparator;
+        SpriteWeakOrder aSpriteComparator;
 
         // put all sprites that have changed content into update areas
         ListOfSprites::const_iterator       aCurrSprite( maSprites.begin() );
@@ -277,8 +277,7 @@ namespace canvas
 
         VectorOfSprites::iterator aEnd=
             ::std::unique( aUpdatableSprites.begin(),
-                           aUpdatableSprites.end(),
-                           aSpriteComparator );
+                           aUpdatableSprites.end() );
 
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the

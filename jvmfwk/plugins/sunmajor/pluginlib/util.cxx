@@ -31,13 +31,13 @@
 
 #include "osl/process.h"
 #include "osl/security.hxx"
-#include "osl/thread.hxx"
 #include "osl/file.hxx"
 #include "osl/module.hxx"
 #include "rtl/byteseq.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
-#include <salhelper/linkhelper.hxx>
+#include "salhelper/linkhelper.hxx"
+#include "salhelper/thread.hxx"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -294,7 +294,7 @@ FileHandleReader::readLine(rtl::OString * pLine)
     }
 }
 
-class AsynchReader: public Thread
+class AsynchReader: public salhelper::Thread
 {
     size_t  m_nDataSize;
     boost::scoped_array<sal_Char> m_arData;
@@ -303,7 +303,9 @@ class AsynchReader: public Thread
     bool m_bDone;
     FileHandleGuard m_aGuard;
 
-    void SAL_CALL run();
+    virtual ~AsynchReader() {}
+
+    void execute();
 public:
 
     AsynchReader(oslFileHandle & rHandle);
@@ -317,17 +319,17 @@ public:
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
-    m_nDataSize(0), m_bError(false), m_bDone(false), m_aGuard(rHandle)
+    Thread("jvmfwkAsyncReader"), m_nDataSize(0), m_bError(false),
+    m_bDone(false), m_aGuard(rHandle)
 {
 }
 
 OString AsynchReader::getData()
 {
-    OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
 
-void AsynchReader::run()
+void AsynchReader::execute()
 {
     const sal_uInt64 BUFFER_SIZE = 4096;
     sal_Char aBuffer[BUFFER_SIZE];
@@ -420,7 +422,7 @@ bool getJavaProps(const OUString & exePath,
     oslFileHandle fileErr= 0;
 
     FileHandleReader stdoutReader(fileOut);
-    AsynchReader stderrReader(fileErr);
+    rtl::Reference< AsynchReader > stderrReader(new AsynchReader(fileErr));
 
     JFW_TRACE2(OUSTR("\n[Java framework] Executing: ") + exePath + OUSTR(".\n"));
     oslProcessError procErr =
@@ -450,7 +452,7 @@ bool getJavaProps(const OUString & exePath,
     }
 
     //Start asynchronous reading (different thread) of error stream
-    stderrReader.create();
+    stderrReader->launch();
 
     //Use this thread to read output stream
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
@@ -489,9 +491,9 @@ bool getJavaProps(const OUString & exePath,
         ret = true;
 
     //process error stream data
-    stderrReader.join();
+    stderrReader->join();
     JFW_TRACE2("[Java framework]  Java wrote to stderr:\" "
-               << stderrReader.getData().getStr() << " \".\n");
+               << stderrReader->getData().getStr() << " \".\n");
 
     TimeValue waitMax= {5 ,0};
     procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
@@ -1186,7 +1188,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
             {
                 OUString usDir2(usDir1 + arCollectDirs[j]);
                 // prevent that we scan the whole /usr, /usr/lib, etc directories
-                if (arCollectDirs[j] != OUString())
+                if (!arCollectDirs[j].isEmpty())
                 {
                     //usr/java/xxx
                     //Examin every subdirectory

@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/unx/gtk/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
@@ -58,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \

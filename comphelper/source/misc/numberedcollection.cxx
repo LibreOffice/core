@@ -44,7 +44,7 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-static const ::rtl::OUString ERRMSG_INVALID_COMPONENT_PARAM(RTL_CONSTASCII_USTRINGPARAM("NULL as component reference not allowed."));
+static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 
 //-----------------------------------------------
 NumberedCollection::NumberedCollection()
@@ -91,7 +91,7 @@ void NumberedCollection::setUntitledPrefix(const ::rtl::OUString& sPrefix)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
-            throw css::lang::IllegalArgumentException (ERRMSG_INVALID_COMPONENT_PARAM, m_xOwner.get(), 1);
+            throw css::lang::IllegalArgumentException (rtl::OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
         long                              pComponent = (long) xComponent.get ();
         TNumberedItemHash::const_iterator pIt        = m_lComponents.find (pComponent);
@@ -167,7 +167,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
-            throw css::lang::IllegalArgumentException (ERRMSG_INVALID_COMPONENT_PARAM, m_xOwner.get(), 1);
+            throw css::lang::IllegalArgumentException (rtl::OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
         long                        pComponent = (long) xComponent.get ();
         TNumberedItemHash::iterator pIt        = m_lComponents.find (pComponent);

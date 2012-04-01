@@ -36,20 +36,6 @@ TYPEINIT1(SfxItemSetHint, SfxHint);
 
 //====================================================================
 
-SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
-
-/*  [Beschreibung]
-
-    Dieser Ctor "ubernimmt das als Parameter "ubergeben <SfxItemSet>,
-    das im Dtor gel"oscht wird.
-*/
-
-:   _pItemSet( pItemSet )
-{
-}
-
-//--------------------------------------------------------------------
-
 SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
 /*  [Beschreibung]

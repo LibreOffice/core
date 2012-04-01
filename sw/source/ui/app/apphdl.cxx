@@ -265,10 +265,10 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     AbstractMailMergeWizard* m_pWizard;     // always owner
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
-    DECL_LINK( DestroyDialogHdl, AbstractMailMergeWizard* );
+    DECL_LINK( DestroyDialogHdl, void* );
     DECL_LINK( DestroyWizardHdl, AbstractMailMergeWizard* );
-    DECL_LINK( CancelHdl, AbstractMailMergeWizard* );
-    DECL_LINK( CloseFrameHdl, AbstractMailMergeWizard* );
+    DECL_LINK( CancelHdl, void* );
+    DECL_LINK( CloseFrameHdl, void* );
 
     void ExecutionFinished( bool bDeleteConfigItem );
     void ExecuteWizard();
@@ -550,7 +550,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, DestroyDialogHdl, AbstractMailMergeWizard*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl)
 {
     delete m_pWizard;
     m_pWizard = 0;
@@ -565,7 +565,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, CancelHdl, AbstractMailMergeWizard*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl)
 {
     if(m_pMMConfig->GetTargetView())
     {
@@ -585,7 +585,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, CancelHdl, AbstractMailMergeWizard*, EMPTY
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, CloseFrameHdl, AbstractMailMergeWizard*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl)
 {
     if ( m_pView2Close )
     {

@@ -34,6 +34,7 @@ $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 
 $(call gb_UnoApiTarget_set_root,$(1),/)
 
+$(call gb_UnoApiMerge_get_target,$(1)) :| $(dir $(call gb_UnoApiMerge_get_target,$(1))).dir
 $(call gb_UnoApiMerge_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiMerge_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 

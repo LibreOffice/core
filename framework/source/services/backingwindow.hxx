@@ -90,10 +90,6 @@ namespace framework
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
         com::sun::star::uno::Reference<com::sun::star::document::XEventBroadcaster>      mxBroadcaster;
 
-        FixedText                       maWelcome;
-        Size                            maWelcomeSize;
-        FixedText                       maProduct;
-        Size                            maProductSize;
         ImageButton                     maWriterButton;
         ImageButton                     maCalcButton;
         ImageButton                     maImpressButton;
@@ -109,8 +105,6 @@ namespace framework
         BitmapEx                        maBackgroundMiddle;
         BitmapEx                        maBackgroundRight;
 
-        String                          maWelcomeString;
-        String                          maProductString;
         String                          maCreateString;
         String                          maOpenString;
         String                          maTemplateString;
@@ -121,12 +115,11 @@ namespace framework
         long                            mnColumnWidth[2];
         long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
-        Color                           maWelcomeTextColor;
 
         Size                            maButtonImageSize;
 
         bool                            mbInitControls;
-        sal_Int32                       mnLayoutStyle;
+        sal_Int32                       mnHideExternalLinks;
         svt::AcceleratorExecute*        mpAccExec;
         long                            mnBtnPos;
         long                            mnBtnTop;

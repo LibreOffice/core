@@ -93,7 +93,7 @@ protected:
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
                      const String&          rName,
-                     SwDocStyleSheetPool&   rPool,
+                     SwDocStyleSheetPool*   pPool,
                      SfxStyleFamily         eFam,
                      sal_uInt16                 nMask);
 

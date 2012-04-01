@@ -62,11 +62,11 @@ EXCEPTIONSFILES=\
     $(SLO)$/FTables.obj				\
     $(SLO)$/fanalyzer.obj			\
     $(SLO)$/fcode.obj				\
-    $(SLO)$/fcomp.obj
+    $(SLO)$/fcomp.obj				\
+    $(SLO)$/quotedstring.obj
 
 SLOFILES=\
-    $(EXCEPTIONSFILES)				\
-    $(SLO)$/quotedstring.obj
+    $(EXCEPTIONSFILES)
 
 
 # --- Library -----------------------------------

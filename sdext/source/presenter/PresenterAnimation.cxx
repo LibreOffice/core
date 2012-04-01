@@ -47,9 +47,7 @@ PresenterAnimation::PresenterAnimation (
     const sal_uInt64 nStepDuration)
     : mnStartTime(GetCurrentTime()+nStartDelay),
       mnTotalDuration(nTotalDuration),
-      mnStepDuration(nStepDuration),
-      mpStartCallbacks(),
-      mpEndCallbacks()
+      mnStepDuration(nStepDuration)
 {
 }
 
@@ -70,33 +68,6 @@ sal_uInt64 PresenterAnimation::GetEndTime (void)
 sal_uInt64 PresenterAnimation::GetStepDuration (void)
 {
     return mnStepDuration;
-}
-
-void PresenterAnimation::AddEndCallback (const Callback& rCallback)
-{
-    if (mpEndCallbacks.get() == NULL)
-        mpEndCallbacks.reset(new ::std::vector<Callback>());
-    mpEndCallbacks->push_back(rCallback);
-}
-
-void PresenterAnimation::RunStartCallbacks (void)
-{
-    if (mpStartCallbacks.get() != NULL)
-    {
-        ::std::vector<Callback>::const_iterator iCallback;
-        for (iCallback=mpStartCallbacks->begin(); iCallback!=mpStartCallbacks->end(); ++iCallback)
-            (*iCallback)();
-    }
-}
-
-void PresenterAnimation::RunEndCallbacks (void)
-{
-    if (mpEndCallbacks.get() != NULL)
-    {
-        ::std::vector<Callback>::const_iterator iCallback;
-        for (iCallback=mpEndCallbacks->begin(); iCallback!=mpEndCallbacks->end(); ++iCallback)
-            (*iCallback)();
-    }
 }
 
 } } // end of namespace ::sdext::presenter

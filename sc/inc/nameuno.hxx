@@ -173,11 +173,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
-
-                            // methods accessible via getImplementation()
-            void            SetContentWithGrammar( const ::rtl::OUString& aContent,
-                                    const formula::FormulaGrammar::Grammar eGrammar )
-                                throw(::com::sun::star::uno::RuntimeException);
 };
 
 

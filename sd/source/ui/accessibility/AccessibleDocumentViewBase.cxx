@@ -744,8 +744,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
     if (xInfo.is())
     {
         OUString sFirstService = xInfo->getSupportedServiceNames()[0];
-        if (sFirstService == OUString (
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        if (sFirstService.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
         {
             sDescription = OUString (RTL_CONSTASCII_USTRINGPARAM("Draw Document"));
         }

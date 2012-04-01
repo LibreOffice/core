@@ -74,7 +74,7 @@ static ResMgr* pSolverResMgr = NULL;
 OUString lcl_GetResourceString( sal_uInt32 nId )
 {
     if (!pSolverResMgr)
-        pSolverResMgr = CREATEVERSIONRESMGR( solver );
+        pSolverResMgr = ResMgr::CreateResMgr("solver");
 
     return String( ResId( nId, *pSolverResMgr ) );
 }

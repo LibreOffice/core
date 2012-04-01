@@ -152,7 +152,7 @@ static BOOL IsValidFilePathComponent(
             lpComponentEnd = lpCurrent;
         }
 
-        /* Test wether the component specifies a device name what is not allowed */
+        /* Test whether the component specifies a device name what is not allowed */
 
         // MT: PERFORMANCE:
         // This is very expensive. A lot of calls to _tcsicmp.
@@ -314,7 +314,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
                     /* If we now reached the end of the path, everything is O.K. */
 
 
-                    if ( fValid && (!lpComponent || lpComponent && !*++lpComponent ) )
+                    if ( fValid && (!lpComponent || !*++lpComponent ) )
                     {
                         lpComponent = NULL;
                         dwPathType |= PATHTYPE_IS_VOLUME;
@@ -446,7 +446,7 @@ static LPTSTR PathAddBackslash(LPTSTR lpPath, sal_Int32 nBufLen)
     {
             int     nLen = _tcslen(lpPath);
 
-            if ( !nLen || lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 )
+            if ( !nLen || ( lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 ) )
             {
                 lpEndPath = lpPath + nLen;
                 *lpEndPath++ = '\\';

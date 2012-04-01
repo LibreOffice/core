@@ -255,7 +255,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                         wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
                     break;
 
-            case OBJECTTYPE_DATA_ERRORS:
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
                 pItemConverter =  new wrapper::ErrorBarItemConverter(
                     xChartModel, xObjectProperties, rDrawModel.GetItemPool(),
                     rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
@@ -280,12 +282,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                         pRefSize );
                     break;
             }
-            case OBJECTTYPE_DATA_ERRORS_X:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Y:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Z:
-                    break;
             case OBJECTTYPE_DATA_STOCK_RANGE:
                     break;
             case OBJECTTYPE_DATA_STOCK_LOSS:
@@ -432,6 +428,15 @@ rtl::OUString lcl_getGridCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGridIndex ) );
     return aCID;
 }
+
+rtl::OUString lcl_getErrorCIDForCommand( const ObjectType eDispatchType, const ObjectType &eSelectedType, const ::rtl::OUString &rSelectedCID)
+{
+    if( eSelectedType == eDispatchType )
+        return rSelectedCID;
+
+    return ObjectIdentifier::createClassifiedIdentifierWithParent( eDispatchType, ::rtl::OUString(), rSelectedCID );
+}
+
 rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const rtl::OUString& rSelectedCID )
 {
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
@@ -591,13 +596,15 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
     }
     //-------------------------------------------------------------------------
     // y error bars
+    else if( rDispatchCommand.equals("FormatXErrorBars") )
+    {
+        return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_X, eSelectedType, rSelectedCID );
+    }
+    //-------------------------------------------------------------------------
+    // y error bars
     else if( rDispatchCommand.equals("FormatYErrorBars") )
     {
-        if( eSelectedType == OBJECTTYPE_DATA_ERRORS )
-            return rSelectedCID;
-        else
-            return ObjectIdentifier::createClassifiedIdentifierWithParent(
-                OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), rSelectedCID );
+        return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_Y, eSelectedType, rSelectedCID );
     }
     //-------------------------------------------------------------------------
     // axis
@@ -766,6 +773,10 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
             return bRet;
 
         SfxItemSet aItemSet = apItemConverter->CreateEmptyItemSet();
+
+        if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X || eObjectType == OBJECTTYPE_DATA_ERRORS_Y )
+            aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE, eObjectType == OBJECTTYPE_DATA_ERRORS_Y ));
+
         apItemConverter->FillItemSet( aItemSet );
 
         //-------------------------------------------------------------

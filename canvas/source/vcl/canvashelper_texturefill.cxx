@@ -555,8 +555,6 @@ namespace vclcanvas
                            const rendering::Texture&                       texture,
                            int                                             nTransparency )
         {
-            (void)nTransparency;
-
             // TODO(T2): It is maybe necessary to lock here, should
             // maGradientPoly someday cease to be const. But then, beware of
             // deadlocks, canvashelper calls this method with locked own
@@ -606,22 +604,17 @@ namespace vclcanvas
                                 false );
                 rOutDev.Pop();
 
-                if( p2ndOutDev )
+                if( p2ndOutDev && nTransparency < 253 )
                 {
-                    p2ndOutDev->Push( PUSH_CLIPREGION );
-                    p2ndOutDev->IntersectClipRegion( aPolygonDeviceRectOrig );
-                    doGradientFill( *p2ndOutDev,
-                                    rValues,
-                                    rColors,
-                                    aTotalTransform,
-                                    aPolygonDeviceRectOrig,
-                                    nStepCount,
-                                    false );
-                    p2ndOutDev->Pop();
+                    // HACK. Normally, CanvasHelper does not care about
+                    // actually what mp2ndOutDev is...  well, here we do &
+                    // assume a 1bpp target - everything beyond 97%
+                    // transparency is fully transparent
+                    p2ndOutDev->SetFillColor( COL_BLACK );
+                    p2ndOutDev->DrawRect( aPolygonDeviceRectOrig );
                 }
             }
             else
-#if defined(QUARTZ) // TODO: other ports should avoid the XOR-trick too (implementation vs. interface!)
             {
                 const Region aPolyClipRegion( rPoly );
 
@@ -637,71 +630,16 @@ namespace vclcanvas
                                 false );
                 rOutDev.Pop();
 
-                if( p2ndOutDev )
+                if( p2ndOutDev && nTransparency < 253 )
                 {
-                    p2ndOutDev->Push( PUSH_CLIPREGION );
-                    p2ndOutDev->SetClipRegion( aPolyClipRegion );
-                    doGradientFill( *p2ndOutDev,
-                                    rValues,
-                                    rColors,
-                                    aTotalTransform,
-                                    aPolygonDeviceRectOrig,
-                                    nStepCount,
-                                    false );
-                    p2ndOutDev->Pop();
-                }
-            }
-#else // TODO: remove once doing the XOR-trick in the canvas-layer becomes redundant
-            {
-                // output gradient the hard way: XORing out the polygon
-                rOutDev.Push( PUSH_RASTEROP );
-                rOutDev.SetRasterOp( ROP_XOR );
-                doGradientFill( rOutDev,
-                                rValues,
-                                rColors,
-                                aTotalTransform,
-                                aPolygonDeviceRectOrig,
-                                nStepCount,
-                                true );
-                rOutDev.SetFillColor( COL_BLACK );
-                rOutDev.SetRasterOp( ROP_0 );
-                rOutDev.DrawPolyPolygon( rPoly );
-                rOutDev.SetRasterOp( ROP_XOR );
-                doGradientFill( rOutDev,
-                                rValues,
-                                rColors,
-                                aTotalTransform,
-                                aPolygonDeviceRectOrig,
-                                nStepCount,
-                                true );
-                rOutDev.Pop();
-
-                if( p2ndOutDev )
-                {
-                    p2ndOutDev->Push( PUSH_RASTEROP );
-                    p2ndOutDev->SetRasterOp( ROP_XOR );
-                    doGradientFill( *p2ndOutDev,
-                                    rValues,
-                                    rColors,
-                                    aTotalTransform,
-                                    aPolygonDeviceRectOrig,
-                                    nStepCount,
-                                    true );
+                    // HACK. Normally, CanvasHelper does not care about
+                    // actually what mp2ndOutDev is...  well, here we do &
+                    // assume a 1bpp target - everything beyond 97%
+                    // transparency is fully transparent
                     p2ndOutDev->SetFillColor( COL_BLACK );
-                    p2ndOutDev->SetRasterOp( ROP_0 );
                     p2ndOutDev->DrawPolyPolygon( rPoly );
-                    p2ndOutDev->SetRasterOp( ROP_XOR );
-                    doGradientFill( *p2ndOutDev,
-                                    rValues,
-                                    rColors,
-                                    aTotalTransform,
-                                    aPolygonDeviceRectOrig,
-                                    nStepCount,
-                                    true );
-                    p2ndOutDev->Pop();
                 }
             }
-#endif // complex-clipping vs. XOR-trick
 
 #if OSL_DEBUG_LEVEL > 3
             // extra-verbosity

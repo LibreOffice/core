@@ -161,19 +161,19 @@ static sal_uInt8 aPal8[ 256 * 4 ] =
 
 
 
-inline long SwapLong( long n )
+inline sal_Int32 SwapDWord( sal_Int32 n )
 {
 #ifndef OSL_LITENDIAN
-    return SWAPLONG( n );
+    return OSL_SWAPDWORD( n );
 #else
     return n;
 #endif
 }
 
-inline short SwapShort( short n )
+inline sal_Int16 SwapWord( sal_Int16 n )
 {
 #ifndef OSL_LITENDIAN
-    return SWAPSHORT( n );
+    return OSL_SWAPWORD( n );
 #else
     return n;
 #endif
@@ -192,31 +192,31 @@ static void WriteBMPHeader( SvStream& rStream,
     if( !nWdtOut )
         nWdtOut = (sal_uInt16)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
 
-    long nOffset = 14 + 40;     // BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
+    sal_Int32 nOffset = 14 + 40;     // BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
     if( 256 >= nColors )
         nOffset += nColors * 4;
-    long nSize = nOffset + nWdtOut * n4Height;
+    sal_Int32 nSize = nOffset + nWdtOut * n4Height;
     rStream << "BM"                     // = "BM"
-            << SwapLong(nSize)          // Filesize in Bytes
-            << SwapShort(0)             // Reserved
-            << SwapShort(0)             // Reserved
-            << SwapLong(nOffset);       // Offset?
+            << SwapDWord(nSize)          // Filesize in Bytes
+            << SwapWord(0)             // Reserved
+            << SwapWord(0)             // Reserved
+            << SwapDWord(nOffset);       // Offset?
 
-    rStream << SwapLong(40)             // sizeof( BmpInfo )
-            << SwapLong(n4Width)
-            << SwapLong(n4Height)
+    rStream << SwapDWord(40)             // sizeof( BmpInfo )
+            << SwapDWord(n4Width)
+            << SwapDWord(n4Height)
             << (sal_uInt16)1
             << n4ColBits
-            << SwapLong(0)
-            << SwapLong(0)
-            << SwapLong( rPicType.nGoalWidth
+            << SwapDWord(0)
+            << SwapDWord(0)
+            << SwapDWord( rPicType.nGoalWidth
                         ? rPicType.nGoalWidth * 1000L / 254L
                         : 0 )         // DPI in Pixel per Meter
-            << SwapLong( rPicType.nGoalHeight
+            << SwapDWord( rPicType.nGoalHeight
                         ? rPicType.nGoalHeight * 1000L / 254L      // dito
                         : 0 )
-            << SwapLong(0)
-            << SwapLong(0);
+            << SwapDWord(0)
+            << SwapDWord(0);
 
 
     switch( rPicType.nBitsPerPixel )

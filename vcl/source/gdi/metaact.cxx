@@ -146,16 +146,6 @@ sal_Bool MetaAction::Compare( const MetaAction& ) const
 
 // ------------------------------------------------------------------------
 
-sal_Bool MetaAction::IsEqual( const MetaAction& rMetaAction ) const
-{
-    if ( mnType != rMetaAction.mnType )
-        return sal_False;
-    else
-        return Compare( rMetaAction );
-}
-
-// ------------------------------------------------------------------------
-
 void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 {
     rOStm << mnType;
@@ -3982,15 +3972,6 @@ MetaCommentAction::MetaCommentAction( const rtl::OString& rComment, sal_Int32 nV
     MetaAction  ( META_COMMENT_ACTION ),
     maComment   ( rComment ),
     mnValue     ( nValue )
-{
-    ImplInitDynamicData( pData, nDataSize );
-}
-
-// ------------------------------------------------------------------------
-
-MetaCommentAction::MetaCommentAction( const sal_uInt8* pData, sal_uInt32 nDataSize ) :
-    MetaAction  ( META_COMMENT_ACTION ),
-    mnValue     ( 0L )
 {
     ImplInitDynamicData( pData, nDataSize );
 }

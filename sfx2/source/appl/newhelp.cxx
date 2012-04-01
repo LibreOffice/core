@@ -72,7 +72,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -754,7 +753,7 @@ void IndexTabPage_Impl::ClearIndex()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
 {
     aIndexCB.GetDoubleClickHdl().Call( &aIndexCB );
     return 0;
@@ -1072,7 +1071,7 @@ void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
     String aSearchText = TRIM( aSearchED.GetText() );
     if ( aSearchText.Len() > 0 )
@@ -1117,7 +1116,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
 {
     aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
     return 0;
@@ -1125,7 +1124,7 @@ IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SearchTabPage_Impl, ModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 {
     String aSearchText = TRIM( aSearchED.GetText() );
     aSearchBtn.Enable( aSearchText.Len() > 0 );
@@ -1401,7 +1400,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( BookmarksTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
 {
     aBookmarksBox.GetDoubleClickHdl().Call( &aBookmarksBox );
     return 0;
@@ -1707,7 +1706,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
 {
     aTimer.Start();
 
@@ -1716,7 +1715,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 {
     bIsInitDone = true;
     Initialize();
@@ -1730,7 +1729,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
     String* pFactory = (String*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
     if ( pFactory )
@@ -1746,7 +1745,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl *, EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 {
     // keyword found on index?
     sal_Bool bIndex = pIPage->HasKeyword();
@@ -2348,7 +2347,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
 {
     try
     {
@@ -3049,7 +3048,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
+IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 {
     pIndexWin->SelectExecutableEntry();
     String aEntry = pIndexWin->GetSelectEntry();

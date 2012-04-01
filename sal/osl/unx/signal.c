@@ -87,6 +87,10 @@
 
 #define MAX_PATH_LEN    2048
 
+#if defined(HAVE_MEMCHECK_H)
+#include <memcheck.h>
+#endif
+
 typedef struct _oslSignalHandlerImpl
 {
     oslSignalHandlerFunction      Handler;
@@ -260,8 +264,13 @@ static sal_Bool InitSignal()
     sigfillset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (i = 0; i < NoSignals; i++)
+    for (i = 0; i < NoSignals; ++i)
     {
+#if defined(HAVE_MEMCHECK_H)
+        if (Signals[i].Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
+            Signals[i].Action = ACT_IGNORE;
+#endif
+
         /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
         if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
         && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
@@ -283,10 +292,12 @@ static sal_Bool InitSignal()
                         Signals[i].Handler = SIG_DFL;
                 }
                 else
+                {
                     if (sigaction(Signals[i].Signal, &act, &oact) == 0)
                         Signals[i].Handler = oact.sa_handler;
                     else
                         Signals[i].Handler = SIG_DFL;
+                }
             }
         }
     }
@@ -908,6 +919,25 @@ void CallSystemHandler(int Signal)
     }
 }
 
+#if defined(HAVE_MEMCHECK_H)
+static void DUMPCURRENTALLOCS()
+{
+    VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
+
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+
+    VALGRIND_DO_LEAK_CHECK;
+
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#   pragma GCC diagnostic pop
+#endif
+
+    VALGRIND_PRINTF( "=== end memcheck dump of active allocations ===\n" );
+}
+#endif
 
 /*****************************************************************************/
 /* SignalHandlerFunction    */
@@ -942,10 +972,18 @@ void SignalHandlerFunction(int Signal)
 
         case SIGINT:
         case SIGTERM:
-    case SIGQUIT:
-    case SIGHUP:
+        case SIGQUIT:
+        case SIGHUP:
             Info.Signal = osl_Signal_Terminate;
             break;
+
+#if defined(HAVE_MEMCHECK_H)
+        case SIGUSR2:
+            if (RUNNING_ON_VALGRIND)
+                DUMPCURRENTALLOCS();
+            Info.Signal = osl_Signal_System;
+            break;
+#endif
 
         default:
             Info.Signal = osl_Signal_System;

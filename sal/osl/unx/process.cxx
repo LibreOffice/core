@@ -215,216 +215,22 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
 
 
 /**********************************************
- sendFdPipe
- *********************************************/
-
-static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
-{
-    sal_Bool bRet = sal_False;
-
-    struct iovec    iov[1];
-    struct msghdr   msg;
-    char            buf[2]; /* send_fd()/recv_fd() 2-byte protocol */
-    int nSend;
-    int RetCode=0;
-
-#if defined(IOCHANNEL_TRANSFER_BSD)
-
-    OSL_TRACE("IOCHANNEL_TRANSFER_BSD send");
-/*      OSL_TRACE("sending fd %i\n",SocketFD); */
-
-    iov[0].iov_base = buf;
-    iov[0].iov_len  = sizeof(buf);
-    msg.msg_iov     = iov;
-    msg.msg_iovlen  = 1;
-    msg.msg_name    = NULL;
-    msg.msg_namelen = 0;
-
-    msg.msg_accrights    = (caddr_t) &SocketFD; /* addr of descriptor */
-    msg.msg_accrightslen = sizeof(int);     /* pass 1 descriptor */
-    buf[1] = 0;                             /* zero status means OK */
-    buf[0] = 0;                             /* null byte flag to recv_fd() */
-
-#else
-
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-
-    OSL_TRACE("!!!!!! IOCHANNEL_TRANSFER_BSD_RENO send");
-/*      OSL_TRACE("sending fd %i\n",SocketFD); */
-
-    iov[0].iov_base = buf;
-    iov[0].iov_len = sizeof(buf);
-    msg.msg_iov = iov;
-    msg.msg_iovlen = 1;
-    msg.msg_name = NULL;
-    msg.msg_namelen = 0;
-    msg.msg_control = (caddr_t) cmptr;
-    msg.msg_controllen = CONTROLLEN;
-
-    cmptr->cmsg_level = SOL_SOCKET;
-    cmptr->cmsg_type = SCM_RIGHTS;
-    cmptr->cmsg_len = CONTROLLEN;
-    memcpy(CMSG_DATA(cmptr), &SocketFD, sizeof(int));
-
-#endif
-
-    if ( ( nSend = sendmsg(PipeFD, &msg, 0) ) > 0 )
-    {
-        bRet = sal_True;
-        OSL_TRACE("sendFdPipe : send '%i' bytes",nSend);
-
-    }
-    else
-    {
-        OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
-    }
-
-    bRet = safeRead(PipeFD, &RetCode, sizeof(RetCode));
-
-    if ( bRet && RetCode == 1 )
-    {
-        OSL_TRACE("sendFdPipe : resource was received");
-    }
-    else
-    {
-        OSL_TRACE("sendFdPipe : resource wasn't received (error %s)", strerror(errno));
-    }
-
-#if defined(IOCHANNEL_TRANSFER_BSD_RENO)
-    free(cmptr);
-#endif
-
-    return bRet;
-}
-
-/**********************************************
- receiveFdPipe
- *********************************************/
-
-static oslSocket receiveFdPipe(int PipeFD)
-{
-    oslSocket pSocket = 0;
-    struct msghdr msghdr;
-    struct iovec iov[1];
-    char buffer[2];
-    sal_Int32 nRead;
-    int newfd=-1;
-    int nRetCode=0;
-/*      char *ptr; */
-
-#if defined(IOCHANNEL_TRANSFER_BSD)
-
-    OSL_TRACE("IOCHANNEL_TRANSFER_BSD receive");
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = sizeof(buffer);
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-    msghdr.msg_accrights = (caddr_t) &newfd; /* addr of descriptor   */
-    msghdr.msg_accrightslen = sizeof(int);   /* receive 1 descriptor */
-
-#else
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-
-    OSL_TRACE(" !!!! IOCHANNEL_TRANSFER_BSD_RENO receive");
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = sizeof(buffer);
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-
-    msghdr.msg_control = (caddr_t) cmptr;
-    msghdr.msg_controllen = CONTROLLEN;
-
-#endif
-
-
-#if defined(IOCHANNEL_TRANSFER_BSD)
-
-    if ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 )
-    {
-        OSL_TRACE("receiveFdPipe : received '%i' bytes",nRead);
-    }
-#else
-
-    if ( ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 ) &&
-         ( msghdr.msg_controllen == CONTROLLEN ) )
-    {
-        OSL_TRACE("receiveFdPipe : received '%i' bytes",nRead);
-        memcpy(&newfd, CMSG_DATA(cmptr), sizeof(int));
-    }
-#endif
-    else
-    {
-        OSL_TRACE("receiveFdPipe : receiving failed (%s)",strerror(errno));
-    }
-
-    if ( newfd >= 0 )
-    {
-        pSocket = __osl_createSocketImpl(newfd);
-        nRetCode=1;
-        OSL_TRACE("received fd %i",newfd);
-    }
-
-    OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
-    if ( !safeWrite(PipeFD, &nRetCode, sizeof(nRetCode)) )
-        OSL_TRACE("write failed (%s)", strerror(errno));
-
-    if ( nRead < 0 )
-    {
-        OSL_TRACE("write failed (%s)", strerror(errno));
-    }
-    else if ( nRead != sizeof(nRetCode) )
-    {
-        // TODO: Handle this case.
-        OSL_TRACE("partial write: wrote %d out of %d)", nRead, sizeof(nRetCode));
-    }
-
-#if defined(IOCHANNEL_TRANSFER_BSD_RENO)
-    free(cmptr);
-#endif
-
-    return pSocket;
-}
-
-/**********************************************
  osl_sendResourcePipe
  *********************************************/
 
-sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
+sal_Bool osl_sendResourcePipe(oslPipe /*pPipe*/, oslSocket /*pSocket*/)
 {
-    sal_Bool bRet = sal_False;
-
-    if ( pSocket == 0 || pPipe == 0 )
-    {
-        return sal_False;
-    }
-
-    bRet = sendFdPipe(pPipe->m_Socket,pSocket->m_Socket);
-
-    return bRet;
+    return osl_Process_E_InvalidError;
 }
 
 /**********************************************
  osl_receiveResourcePipe
  *********************************************/
 
-oslSocket osl_receiveResourcePipe(oslPipe pPipe)
+oslSocket osl_receiveResourcePipe(oslPipe /*pPipe*/)
 {
-    oslSocket pSocket=0;
-
-    if ( pPipe ==  0 )
-    {
-        return 0;
-    }
-
-    pSocket = receiveFdPipe(pPipe->m_Socket);
-
-    return (oslSocket) pSocket;
+    oslSocket pSocket = 0;
+    return pSocket;
 }
 
 

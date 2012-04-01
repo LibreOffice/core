@@ -29,8 +29,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/table.hxx>
-
 #include "chartpos.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
@@ -382,12 +380,8 @@ void ScChartPositioner::CreatePositionMap()
 
     GlueState();
 
-    sal_Bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
-    Table* pCols = new Table;
-    Table* pNewRowTable = new Table;
-    ScAddress* pNewAddress = new ScAddress;
-    Table* pCol;
-    ScAddress* pPos;
+    const sal_Bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
+    ColumnMap* pCols = new ColumnMap;
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
@@ -400,34 +394,24 @@ void ScChartPositioner::CreatePositionMap()
                     static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
-                if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
-                {   // meistens gleiche Cols
-                    if ( (pCol = (Table*) pCols->Get( nInsCol ))==NULL )
-                    {
-                        pCols->Insert( nInsCol, pNewRowTable );
-                        pCol = pNewRowTable;
-                        pNewRowTable = new Table;
-                    }
+                RowMap* pCol = NULL;
+                ColumnMap::const_iterator it = pCols->find( nInsCol );
+                if ( it == pCols->end() )
+                {
+                    pCol = new RowMap;
+                    pCols->insert( ColumnMap::value_type( nInsCol, pCol ) );
                 }
                 else
-                {   // meistens neue Cols
-                    if ( pCols->Insert( nInsCol, pNewRowTable ) )
-                    {
-                        pCol = pNewRowTable;
-                        pNewRowTable = new Table;
-                    }
-                    else
-                        pCol = (Table*) pCols->Get( nInsCol );
-                }
+                    pCol = it->second;
+
                 // bei anderer Tabelle wurde bereits neuer ColKey erzeugt,
                 // die Zeilen muessen fuer's Dummy fuellen gleich sein!
                 sal_uLong nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
                 for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
                 {
-                    if ( pCol->Insert( nInsRow, pNewAddress ) )
+                    if ( pCol->find( nInsRow ) == pCol->end() )
                     {
-                        pNewAddress->Set( nCol, nRow, nTab );
-                        pNewAddress = new ScAddress;
+                        pCol->insert( RowMap::value_type( nInsRow, new ScAddress( nCol, nRow, nTab ) ) );
                     }
                 }
             }
@@ -435,16 +419,15 @@ void ScChartPositioner::CreatePositionMap()
         // bei NoGlue werden zusammengehoerige Tabellen als ColGlue dargestellt
         nNoGlueRow += nRow2 - nRow1 + 1;
     }
-    delete pNewAddress;
-    delete pNewRowTable;
 
     // Anzahl der Daten
-    nColCount = static_cast< SCSIZE >( pCols->Count());
-    if ( (pCol = (Table*) pCols->First())!=NULL )
+    nColCount = static_cast< SCSIZE >( pCols->size());
+    if ( !pCols->empty() )
     {
+        RowMap* pCol = pCols->begin()->second;
         if ( bDummyUpperLeft )
-            pCol->Insert( 0, (void*)0 );        // Dummy fuer Beschriftung
-        nRowCount = static_cast< SCSIZE >( pCol->Count());
+            (*pCol)[ 0 ] = NULL;        // Dummy fuer Beschriftung
+        nRowCount = static_cast< SCSIZE >( pCol->size());
     }
     else
         nRowCount = 0;
@@ -455,25 +438,27 @@ void ScChartPositioner::CreatePositionMap()
 
     if ( nColCount==0 || nRowCount==0 )
     {   // einen Eintrag ohne Daten erzeugen
-        if ( pCols->Count() > 0 )
-            pCol = (Table*) pCols->First();
+        RowMap* pCol;
+        if ( !pCols->empty() )
+            pCol = pCols->begin()->second;
         else
         {
-            pCol = new Table;
-            pCols->Insert( 0, pCol );
+            pCol = new RowMap;
+            (*pCols)[ 0 ] = pCol;
         }
         nColCount = 1;
-        if ( pCol->Count() > 0 )
+        if ( !pCol->empty() )
         {   // kann ja eigentlich nicht sein, wenn nColCount==0 || nRowCount==0
-            pPos = (ScAddress*) pCol->First();
+            ScAddress* pPos = pCol->begin()->second;
             if ( pPos )
             {
+                sal_uLong nCurrentKey = pCol->begin()->first;
                 delete pPos;
-                pCol->Replace( pCol->GetCurKey(), (void*)0 );
+                (*pCol)[ nCurrentKey ] = NULL;
             }
         }
         else
-            pCol->Insert( 0, (void*)0 );
+            (*pCol)[ 0 ] = NULL;
         nRowCount = 1;
         nColAdd = 0;
         nRowAdd = 0;
@@ -482,15 +467,14 @@ void ScChartPositioner::CreatePositionMap()
     {
         if ( bNoGlue )
         {   // Luecken mit Dummies fuellen, erste Spalte ist Master
-            Table* pFirstCol = (Table*) pCols->First();
-            sal_uLong nCount = pFirstCol->Count();
-            pFirstCol->First();
-            for ( sal_uLong n = 0; n < nCount; n++, pFirstCol->Next() )
+            RowMap* pFirstCol = pCols->begin()->second;
+            sal_uLong nCount = pFirstCol->size();
+            RowMap::const_iterator it1 = pFirstCol->begin();
+            for ( sal_uLong n = 0; n < nCount; n++, ++it1 )
             {
-                sal_uLong nKey = pFirstCol->GetCurKey();
-                pCols->First();
-                while ( (pCol = (Table*) pCols->Next())!=NULL )
-                    pCol->Insert( nKey, (void*)0 );     // keine Daten
+                sal_uLong nKey = it1->first;
+                for (ColumnMap::const_iterator it2 = ++pCols->begin(); it2 != pCols->end(); ++it2 )
+                    it2->second->insert( RowMap::value_type( nKey, NULL )); // keine Daten
             }
         }
     }
@@ -499,16 +483,16 @@ void ScChartPositioner::CreatePositionMap()
         static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), *pCols );
 
     //  Aufraeumen
-    for ( pCol = (Table*) pCols->First(); pCol; pCol = (Table*) pCols->Next() )
+    for (ColumnMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it )
     {   //! nur Tables loeschen, nicht die ScAddress*
-        delete pCol;
+        delete it->second;
     }
     delete pCols;
 }
 
 
 ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
-            SCCOL nColAdd, SCROW nRowAdd, Table& rCols ) :
+            SCCOL nColAdd, SCROW nRowAdd, ColumnMap& rCols ) :
         ppData( new ScAddress* [ nChartCols * nChartRows ] ),
         ppColHeader( new ScAddress* [ nChartCols ] ),
         ppRowHeader( new ScAddress* [ nChartRows ] ),
@@ -518,64 +502,81 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
 {
     OSL_ENSURE( nColCount && nRowCount, "ScChartPositionMap without dimension" );
 
-    ScAddress* pPos;
-    SCCOL nCol;
-    SCROW nRow;
-
-    Table* pCol = (Table*) rCols.First();
+    ColumnMap::const_iterator pColIter = rCols.begin();
+    RowMap* pCol1 = pColIter->second;
+    RowMap::const_iterator pPos1Iter;
 
     // Zeilen-Header
-    pPos = (ScAddress*) pCol->First();
+    pPos1Iter = pCol1->begin();
     if ( nRowAdd )
-        pPos = (ScAddress*) pCol->Next();
+        ++pPos1Iter;
     if ( nColAdd )
     {   // eigenstaendig
-        for ( nRow = 0; nRow < nRowCount; nRow++ )
+        SCROW nRow = 0;
+        for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
-            ppRowHeader[ nRow ] = pPos;
-            pPos = (ScAddress*) pCol->Next();
+            ppRowHeader[ nRow ] = pPos1Iter->second;
+            ++pPos1Iter;
         }
+        for ( ; nRow < nRowCount; nRow++ )
+            ppRowHeader[ nRow ] = NULL;
     }
     else
     {   // Kopie
-        for ( nRow = 0; nRow < nRowCount; nRow++ )
+        SCROW nRow = 0;
+        for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
-            ppRowHeader[ nRow ] = ( pPos ? new ScAddress( *pPos ) : NULL );
-            pPos = (ScAddress*) pCol->Next();
+            ppRowHeader[ nRow ] = pPos1Iter->second ?
+                new ScAddress( *pPos1Iter->second ) : NULL;
+            ++pPos1Iter;
         }
+        for ( ; nRow < nRowCount; nRow++ )
+            ppRowHeader[ nRow ] = NULL;
     }
     if ( nColAdd )
-        pCol = (Table*) rCols.Next();
+    {
+        ++pColIter;
+    }
 
     // Daten spaltenweise und Spalten-Header
     sal_uLong nIndex = 0;
-    for ( nCol = 0; nCol < nColCount; nCol++ )
+    for ( SCCOL nCol = 0; nCol < nColCount; nCol++ )
     {
-        if ( pCol )
+        if ( pColIter != rCols.end() )
         {
-            pPos = (ScAddress*) pCol->First();
-            if ( nRowAdd )
+            RowMap* pCol2 = pColIter->second;
+            RowMap::const_iterator pPosIter = pCol2->begin();
+            if ( pPosIter != pCol2->end() )
             {
-                ppColHeader[ nCol ] = pPos;     // eigenstaendig
-                pPos = (ScAddress*) pCol->Next();
+                if ( nRowAdd )
+                {
+                    ppColHeader[ nCol ] = pPosIter->second;     // eigenstaendig
+                    ++pPosIter;
+                }
+                else
+                    ppColHeader[ nCol ] = pPosIter->second ?
+                        new ScAddress( *pPosIter->second ) : NULL;
             }
-            else
-                ppColHeader[ nCol ] = ( pPos ? new ScAddress( *pPos ) : NULL );
-            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+
+            SCROW nRow = 0;
+            for ( ; nRow < nRowCount && pPosIter != pCol2->end(); nRow++, nIndex++ )
             {
-                ppData[ nIndex ] = pPos;
-                pPos = (ScAddress*) pCol->Next();
+                ppData[ nIndex ] = pPosIter->second;
+                ++pPosIter;
             }
+            for ( ; nRow < nRowCount; nRow++, nIndex++ )
+                ppData[ nIndex ] = NULL;
+
+            ++pColIter;
         }
         else
         {
             ppColHeader[ nCol ] = NULL;
-            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
+            for ( SCROW nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
                 ppData[ nIndex ] = NULL;
             }
         }
-        pCol = (Table*) rCols.Next();
     }
 }
 

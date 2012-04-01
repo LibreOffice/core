@@ -41,6 +41,9 @@ public:
 
     void testVertJustify();
     void testRotateReference();
+
+protected:
+    ~CellProperties() {}
 };
 
 }

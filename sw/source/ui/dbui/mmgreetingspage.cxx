@@ -91,7 +91,7 @@ void lcl_StoreGreetingsBox(ComboBox& rBox,
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
 
-IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 {
     sal_Bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
     m_pFemaleFT->Enable(bIndividual);
@@ -160,7 +160,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl)
 {
     UpdatePreview();
     return 0;
@@ -553,7 +553,7 @@ IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailBodyDialog, OKHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetGreetingLine(

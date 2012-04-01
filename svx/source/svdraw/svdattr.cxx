@@ -369,7 +369,7 @@ SdrItemPool::~SdrItemPool()
         }
     }
 
-    // split pools before detroying
+    // split pools before destroying
     SetSecondaryPool(NULL);
 }
 
@@ -754,10 +754,11 @@ SfxPoolItem* SdrOnOffItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrOnOffItem(Which(),rIn);
 }
 
-XubString SdrOnOffItem::GetValueTextByVal(sal_Bool bVal) const
+rtl::OUString SdrOnOffItem::GetValueTextByVal(sal_Bool bVal) const
 {
-    if (bVal) return ImpGetResStr(STR_ItemValON);
-    else return ImpGetResStr(STR_ItemValOFF);
+    if (bVal)
+        return ImpGetResStr(STR_ItemValON);
+    return ImpGetResStr(STR_ItemValOFF);
 }
 
 SfxItemPresentation SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
@@ -786,10 +787,11 @@ SfxPoolItem* SdrYesNoItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrYesNoItem(Which(),rIn);
 }
 
-XubString SdrYesNoItem::GetValueTextByVal(sal_Bool bVal) const
+rtl::OUString SdrYesNoItem::GetValueTextByVal(sal_Bool bVal) const
 {
-    if (bVal) return ImpGetResStr(STR_ItemValYES);
-    else return ImpGetResStr(STR_ItemValNO);
+    if (bVal)
+        return ImpGetResStr(STR_ItemValYES);
+    return ImpGetResStr(STR_ItemValNO);
 }
 
 SfxItemPresentation SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,

@@ -77,7 +77,7 @@ private:
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
-    DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
+    DECL_DLLPRIVATE_LINK(OKHdl, void *);
 
     void            SetPasswdText();
 
@@ -93,7 +93,6 @@ public:
     void            SetGroup2Text( const String& i_rText ) { maPassword2Box.SetText( i_rText ); }
 
     void            SetMinLen( sal_uInt16 Len );
-    void            SetMaxLen( sal_uInt16 Len );
     void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
     void            ShowExtras( sal_uInt16 nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }

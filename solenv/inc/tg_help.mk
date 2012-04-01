@@ -41,7 +41,7 @@ HELP_OUT:=$(MISC)
 
 HLANGXHPFILES*:=$(foreach,i,$(XHPFILES) $(foreach,j,$(aux_alllangiso) $(XHPDEST)$/$j$/$(SHELL_PACKAGE)$/$(i:f)))
 
-ALLTAR : $(HELP_OUT)$/$(TARGET).done $(HELP_OUT)$/xhp_changed.flag optix
+ALLTAR : $(HELP_OUT)$/$(TARGET).done $(HELP_OUT)$/xhp_changed.flag
 
 $(HLANGXHPFILES) : $$(@:d)thisdir.created
 
@@ -53,15 +53,12 @@ $(XHPDEST)$/{$(aux_alllangiso)}$/$(SHELL_PACKAGE)$/%.xhp :| %.xhp
 
 $(HELP_OUT)$/$(TARGET).done : $(HLANGXHPFILES)
 .IF "$(WITH_LANG)"!=""
-    $(AUGMENT_LIBRARY_PATH) $(HELPEX) -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(XHPDEST) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
+    @echo Localizing help files...
+    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(HELPEX) -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(XHPDEST) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
 .ELSE			# "$(WITH_LANG)"!=""
-    cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(XHPDEST)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
+    @echo Copying help files...
+    $(COMMAND_ECHO)cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(XHPDEST)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
 .ENDIF			# "$(WITH_LANG)"!=""
-.IF "$(OS)"=="SOLARIS"
-    @$(ECHONL) " "
-.ELSE			# "$(OS)"=="SOLARIS"
-    @$(ECHONL)
-.ENDIF			# "$(OS)"=="SOLARIS"
 
 $(HELP_OUT)$/xhp_changed.flag : $(HLANGXHPFILES)
     @$(TOUCH) $@
@@ -79,9 +76,6 @@ $(HELP_OUT)$/$(TARGET).done : $(LOCALIZESDF)
 .ENDIF			# "$(WITH_LANG)"!=""
 .ENDIF          # "$(HELPTRANSPHONY)"!=""
 .ENDIF          # "$(HLANGXHPFILES)"!=""
-
-optix: $(HELP_OUT)$/$(TARGET).done
-    @echo done
 
 %.created :
     @@-$(MKDIRHIER) $(@:d)

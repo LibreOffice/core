@@ -249,7 +249,7 @@ public:
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
-    DECL_LINK(ImpComeBackHdl,Timer*);
+    DECL_LINK(ImpComeBackHdl,void*);
 
 protected:
     sal_uInt16 ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const;

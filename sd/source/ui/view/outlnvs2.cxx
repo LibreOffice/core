@@ -48,7 +48,6 @@
 #include <sfx2/viewfrm.hxx>
 #include "Outliner.hxx"
 #include "Window.hxx"
-#include "OutlineViewShell.hxx"
 #include "fubullet.hxx"
 #include "fuolbull.hxx"
 #include "FrameView.hxx"

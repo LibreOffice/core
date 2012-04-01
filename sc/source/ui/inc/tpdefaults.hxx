@@ -53,15 +53,25 @@ private:
     virtual ~ScTpDefaultsOptions();
 
     void CheckNumSheets();
+    void CheckPrefix(Edit* pEdit);
+    void OnFocusPrefixInput(Edit* pEdit);
 
-    DECL_LINK( NumModifiedHdl, NumericField* );
+    DECL_LINK(NumModifiedHdl, void *);
+    DECL_LINK( PrefixModifiedHdl, Edit* );
+    DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 
 private:
     FixedLine     aFLInitSpreadSheet;
     FixedText     aFtNSheets;
     NumericField  aEdNSheets;
+    FixedText     aFtSheetPrefix;
+    Edit          aEdSheetPrefix;
 
-    ::boost::shared_ptr<ScDocOptions> mpLocalOptions;
+    // Stores old Sheet Prefix
+    ::rtl::OUString maOldPrefixValue;
+
+    ::boost::shared_ptr<ScDocOptions> mpOldOptions;
+    ::boost::shared_ptr<ScDocOptions> mpNewOptions;
 };
 
 #endif

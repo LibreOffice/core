@@ -40,6 +40,8 @@ namespace sd { namespace slidesorter { namespace view {
 class ILayerInvalidator
 {
 public:
+    virtual ~ILayerInvalidator() {}
+
     virtual void Invalidate (const Rectangle& rInvalidationBox) = 0;
 };
 typedef ::boost::shared_ptr<ILayerInvalidator> SharedILayerInvalidator;
@@ -47,6 +49,8 @@ typedef ::boost::shared_ptr<ILayerInvalidator> SharedILayerInvalidator;
 class ILayerPainter
 {
 public:
+    virtual ~ILayerPainter() {}
+
     virtual void SetLayerInvalidator (
         const SharedILayerInvalidator& rpInvalidator) = 0;
     virtual void Paint (

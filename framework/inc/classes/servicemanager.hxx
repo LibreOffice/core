@@ -55,7 +55,6 @@ namespace framework{
 
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-#define OUSTRING                    ::rtl::OUString
 #define MUTEX                       ::osl::Mutex
 
 //_________________________________________________________________________________________________________________
@@ -169,7 +168,7 @@ class ServiceManager
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > getSharedUNOServiceManager( const OUSTRING& sUserRegistryFile );
+        REFERENCE< XMULTISERVICEFACTORY > getSharedUNOServiceManager( const ::rtl::OUString& sUserRegistryFile );
 
         /*-****************************************************************************************************//**
             @short      return a reference to a uno servicemanager instance which use your specified user registry file only
@@ -190,7 +189,7 @@ class ServiceManager
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > getPrivateUNOServiceManager( const OUSTRING& sUserRegistryFile );
+        REFERENCE< XMULTISERVICEFACTORY > getPrivateUNOServiceManager( const ::rtl::OUString& sUserRegistryFile );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -234,7 +233,7 @@ class ServiceManager
             @onerror    Return a NULL-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > impl_createManager( const OUSTRING& sRegistryFile );
+        REFERENCE< XMULTISERVICEFACTORY > impl_createManager( const ::rtl::OUString& sRegistryFile );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

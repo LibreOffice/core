@@ -49,12 +49,15 @@ extern "C" {
     enough to hold the string. */
 
 
+#if !defined(__MINGW32__) || defined (__NO_ISOCEXT)
 
 /* UNICODE version */
 _SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
 
 /* SBCS and MBCS version */
 _SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
+
+#endif
 
 /* Conflict with STL_port inline implementation */
 

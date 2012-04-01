@@ -131,14 +131,14 @@ class SvxRubyDialog : public SfxModelessDialog
     SfxBindings*    pBindings;
     SvxRubyData_Impl* pImpl;
 
-    DECL_LINK(ApplyHdl_Impl, PushButton*);
-    DECL_LINK(CloseHdl_Impl, PushButton*);
-    DECL_LINK(StylistHdl_Impl, PushButton*);
+    DECL_LINK(ApplyHdl_Impl, void *);
+    DECL_LINK(CloseHdl_Impl, void *);
+    DECL_LINK(StylistHdl_Impl, void *);
     DECL_LINK(AutomaticHdl_Impl, CheckBox*);
     DECL_LINK(ScrollHdl_Impl, ScrollBar*);
     DECL_LINK(PositionHdl_Impl, ListBox*);
     DECL_LINK(AdjustHdl_Impl, ListBox*);
-    DECL_LINK(CharStyleHdl_Impl, ListBox*);
+    DECL_LINK(CharStyleHdl_Impl, void *);
     DECL_LINK(EditModifyHdl_Impl, Edit*);
     DECL_LINK(EditScrollHdl_Impl, sal_Int32*);
     DECL_LINK(EditJumpHdl_Impl, sal_Int32*);

@@ -39,7 +39,6 @@
 #include <tools/config.hxx>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
-#include <comphelper/string.hxx>
 #include <boost/unordered_set.hpp>
 
 using namespace psp;
@@ -508,8 +507,6 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
     rtl::OString aDefCopies( aConfig.ReadKey( "Copies" ) );
     rtl::OString aDefDPI( aConfig.ReadKey( "DPI" ) );
 
-    using comphelper::string::getToken;
-
     aConfig.SetGroup( "devices" );
     int nDevices = aConfig.GetKeyCount();
     for( int nKey = 0; nKey < nDevices; nKey++ )
@@ -517,9 +514,9 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         aConfig.SetGroup( "devices" );
         rtl::OString aPrinter(aConfig.GetKeyName(nKey));
         rtl::OString aValue(aConfig.ReadKey(aPrinter));
-        rtl::OString aPort(getToken(aValue, 1, ','));
-        rtl::OString aDriver(getToken(aValue, 0, ' '));
-        rtl::OString aPS( getToken(getToken(aValue, 0, ','), 1, ' ') );
+        rtl::OString aPort(aValue.getToken(1, ','));
+        rtl::OString aDriver(aValue.getToken(0, ' '));
+        rtl::OString aPS( aValue.getToken(0, ',').getToken(1, ' ') );
         rtl::OString aNewDriver(aDriver);
         if( aDriver.equalsL(RTL_CONSTASCII_STRINGPARAM("GENERIC")))
             aNewDriver = rtl::OString(RTL_CONSTASCII_STRINGPARAM("SGENPRT"));
@@ -613,7 +610,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             // should never have been writte because they are defaults
             // PageRegion leads to problems in conjunction
             // with a not matching PageSize
-            if (comphelper::string::matchL(aPPDKey, RTL_CONSTASCII_STRINGPARAM("PPD_")) &&
+            if (aPPDKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) &&
                 !aPPDKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PPD_PageRegion")))
             {
                 aValue = aConfig.ReadKey( nPPDKey );

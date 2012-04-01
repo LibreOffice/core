@@ -152,7 +152,6 @@ namespace connectivity
             // close and free the handle and set it to SQL_NULLHANDLE
             void            freeStatementHandle(SQLHANDLE& _pHandle);
 
-            void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
             const TTypeInfoVector&  getTypeInfo() const { return m_aTypeInfo; }
         };
     }

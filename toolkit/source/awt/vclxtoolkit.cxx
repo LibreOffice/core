@@ -1094,7 +1094,13 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     // try to load the lib
     if ( !fnSvtCreateWindow && !hSvToolsLib )
     {
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", sal_True );
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName(
+#ifdef LIBO_MERGELIBS
+                                                                       "merged",
+#else
+                                                                       "svt",
+#endif
+                                                                       sal_True );
         hSvToolsLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )

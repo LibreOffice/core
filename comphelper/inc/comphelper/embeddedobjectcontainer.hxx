@@ -52,6 +52,9 @@ namespace comphelper
         virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const = 0;
         virtual bool isEnableSetModified() const = 0;
+
+    protected:
+        ~IEmbeddedHelper() {}
     };
 
 struct EmbedImpl;

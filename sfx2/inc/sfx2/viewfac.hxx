@@ -46,7 +46,6 @@ class SFX2_DLLPUBLIC SfxViewFactory
 public:
     SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
                     sal_uInt16 nOrdinal, const sal_Char* asciiViewName );
-    ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
     sal_uInt16        GetOrdinal() const { return nOrd; }

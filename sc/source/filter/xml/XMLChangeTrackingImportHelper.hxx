@@ -64,9 +64,6 @@ struct ScMyCellInfo
     ~ScMyCellInfo();
 
     ScBaseCell* CreateCell(ScDocument* pDoc);
-
-private:
-    ScMyCellInfo(); // disabled
 };
 
 struct ScMyDeleted
@@ -186,7 +183,7 @@ class ScChangeViewSettings;
 
 class ScXMLChangeTrackingImportHelper
 {
-    ScStrCollection     aUsers;
+    std::set<rtl::OUString> aUsers;
     ScMyActions         aActions;
     com::sun::star::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
