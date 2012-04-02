@@ -285,6 +285,7 @@ MarkPosition
 MaxFieldCount
 MaxTextLen
 MediaType
+MediaURL
 MinorTickmarks
 MirroredX
 MirroredY
@@ -345,6 +346,8 @@ PrintDownFirst
 PrintGrid
 PrintHeaders
 Printable
+PrivateStream
+PrivateTempFileURL
 ProgressValueMax
 ProgressValueMin
 Protected

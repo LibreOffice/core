@@ -440,9 +440,9 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     if( nContrast != 0 )
         rPropMap[ PROP_AdjustContrast ] <<= nContrast;
 
-    // TODO: Audio content, yet to be implemented
+    // Media content
     if( !maAudio.msEmbed.isEmpty() )
-        rPropMap[ PROP_Sound ] <<= maAudio.msEmbed;
+        rPropMap[ PROP_MediaURL ] <<= maAudio.msEmbed;
 }
 
 // ============================================================================

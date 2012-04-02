@@ -330,11 +330,22 @@ Reference< XShape > Shape::createAndInsert(
         sal_Bool bClearText,
         basegfx::B2DHomMatrix& aParentTransformation )
 {
+    bool bIsEmbMedia = false;
     OSL_TRACE("Shape::createAndInsert id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
 
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
-    OUString aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
+    OUString aServiceName;
+    if( rServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape") ) &&
+        mpGraphicPropertiesPtr && !mpGraphicPropertiesPtr->maAudio.msEmbed.isEmpty() )
+    {
+        aServiceName = finalizeServiceName( rFilterBase, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.MediaShape" ) ), aShapeRectHmm );
+        bIsEmbMedia = true;
+    }
+    else
+    {
+        aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
+    }
     sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) ) || aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) );
 
     basegfx::B2DHomMatrix aTransformation;
@@ -518,7 +529,7 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) )
+        if ( bIsEmbMedia || aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape")) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );

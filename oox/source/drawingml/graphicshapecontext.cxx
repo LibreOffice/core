@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/io/XTempFile.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include <osl/diagnose.h>
 
@@ -42,6 +43,9 @@
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
+#include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/binaryoutputstream.hxx"
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -77,7 +81,22 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
         xRet.set( new BlipFillContext( *this, xAttribs, mpShapePtr->getGraphicProperties().maBlipProps ) );
         break;
     case XML_wavAudioFile:
-        getEmbeddedWAVAudioFile( getRelations(), xAttribs, mpShapePtr->getGraphicProperties().maAudio );
+        {
+            getEmbeddedWAVAudioFile( getRelations(), xAttribs, mpShapePtr->getGraphicProperties().maAudio );
+            if( !mpShapePtr->getGraphicProperties().maAudio.msEmbed.isEmpty() )
+            {
+                Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                Reference< XInputStream > xInStrm( getFilter().openInputStream( mpShapePtr->getGraphicProperties().maAudio.msEmbed ), UNO_SET_THROW );
+                Reference< XTempFile > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
+                BinaryXOutputStream aOutStrm( xOutStrm, false );
+                BinaryXInputStream aInStrm( xInStrm, false );
+                aInStrm.copyToStream( aOutStrm );
+
+                xTempFile->setRemoveFile( false );
+                mpShapePtr->getGraphicProperties().maAudio.msEmbed = xTempFile->getUri();
+            }
+        }
         break;
     }
 
