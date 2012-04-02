@@ -129,12 +129,12 @@ namespace osl_Security
 
 
         SAL_CPPUNIT_TEST_SUITE( logonUser );
-        if  ( !aStringForward.equals( aNullUrl )  && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
+        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd are forwarded
         {
             CPPUNIT_TEST( logonUser_user_pwd );
         }
-        if  ( !aStringForward.equals( aNullUrl )  && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) !=  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
+        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) !=  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd and file server are forwarded
         {
             CPPUNIT_TEST( logonUser_user_pwd_server );
@@ -597,31 +597,31 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     t_print("#\n#Retrived system information is below:\n");
 
     t_print("Computer Name:              ");
-    if ( strComputerName == aNullUrl )
+    if ( strComputerName.isEmpty())
         t_print("Not retrived\n" );
     else
         printUString( strComputerName );
 
     t_print("Current User Name:          ");
-    if ( strUserName == aNullUrl )
+    if ( strUserName.isEmpty())
         t_print("Not retrived\n" );
     else
         printUString( strUserName );
 
     t_print("Current User Home Directory:");
-    if ( strHomeDirectory == aNullUrl )
+    if ( strHomeDirectory.isEmpty())
         t_print("Not retrived\n" );
     else
         printUString( strHomeDirectory );
 
     t_print("Current Config Directory:   ");
-    if ( strConfigDirectory == aNullUrl )
+    if ( strConfigDirectory.isEmpty())
         t_print("Not retrived\n" );
     else
         printUString( strConfigDirectory );
 
     t_print("Current UserID:             ");
-    if ( strUserID == aNullUrl )
+    if ( strUserID.isEmpty())
         t_print("Not retrived\n" );
     else
         printUString( strUserID );
@@ -634,7 +634,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     /// get and display forwarded text if available.
     aStringForward = ::rtl::OUString::createFromAscii( parameters.getCommandLine().c_str() );
-    if ( !aStringForward.equals( aNullUrl ) && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 )
+    if ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 )
     {
         sal_Int32 nFirstSpacePoint = aStringForward.indexOf( (sal_Unicode)' ' );;
         sal_Int32 nLastSpacePoint = aStringForward.lastIndexOf( (sal_Unicode)' ' );;

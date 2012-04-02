@@ -59,22 +59,9 @@
 #define BUFSIZE 1024
 const char pTestString[17] = "Sun Microsystems";
 
-
-#define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
-    ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )
-
-//------------------------------------------------------------------------
-// condition names
-//------------------------------------------------------------------------
-
-// Intentionally different from the aNullURL in osl_File_Const.h to avoid
-// duplicate symbols as all the unit tests here get linked together for iOS...
-
-OSLTEST_DECLARE_USTRING( NullUrl,  "" );
-
-::rtl::OUString aLogonUser( aNullUrl ), aLogonPasswd( aNullUrl ), aFileServer( aNullUrl ), aStringForward( aNullUrl );
-::rtl::OUString strUserName( aNullUrl ) , strComputerName( aNullUrl ) , strHomeDirectory( aNullUrl );
-::rtl::OUString strConfigDirectory( aNullUrl ), strUserID( aNullUrl );
+::rtl::OUString aLogonUser, aLogonPasswd, aFileServer, aStringForward;
+::rtl::OUString strUserName, strComputerName, strHomeDirectory;
+::rtl::OUString strConfigDirectory, strUserID;
 
 sal_Bool isAdmin = sal_False;
 
