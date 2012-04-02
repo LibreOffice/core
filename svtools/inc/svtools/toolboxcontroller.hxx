@@ -42,12 +42,10 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <boost/unordered_map.hpp>
 

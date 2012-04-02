@@ -53,7 +53,6 @@
 //_________________________________________________________________________________________________________________
 
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

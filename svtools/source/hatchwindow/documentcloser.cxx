@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 

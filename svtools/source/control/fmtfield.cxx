@@ -41,7 +41,6 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <unotools/syslocale.hxx>
 
 #ifndef REGEXP_SUPPORT

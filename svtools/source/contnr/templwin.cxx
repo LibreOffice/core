@@ -60,7 +60,6 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

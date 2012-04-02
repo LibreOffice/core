@@ -39,7 +39,6 @@
 #include "renderer.hxx"
 #include "unowizard.hxx"
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include "comphelper/servicedecl.hxx"
 
 #include "cppuhelper/implementationentry.hxx"

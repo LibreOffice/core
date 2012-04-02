@@ -37,13 +37,11 @@
 
 #include "svl/urihelper.hxx"
 #include <svtools/imap.hxx>
-#include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 
-#include <string.h>
 #include <math.h>
 
 #define NOTEOL(c) ((c)!='\0')

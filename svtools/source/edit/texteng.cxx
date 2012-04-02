@@ -59,7 +59,6 @@
 #include <vcl/unohelp.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/metric.hxx>
 
 #include <unicode/ubidi.h>

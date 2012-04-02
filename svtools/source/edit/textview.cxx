@@ -62,7 +62,6 @@
 
 
 #include <sot/exchange.hxx>
-#include <sot/formats.hxx>
 
 #include <osl/mutex.hxx>
 

@@ -32,7 +32,6 @@
 #include <svl/ctloptions.hxx>
 #include <i18npool/mslangid.hxx>
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
