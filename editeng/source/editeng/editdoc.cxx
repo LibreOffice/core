@@ -1687,25 +1687,14 @@ void ItemList::Insert( const SfxPoolItem* pItem )
 
 EditDoc::EditDoc( SfxItemPool* pPool ) :
     nLastCache(0),
+    pItemPool(pPool ? pPool : new EditEngineItemPool(false)),
+    nDefTab(DEFTAB),
     bIsVertical(false),
     bIsFixedCellHeight(false),
     bOwnerOfPool(pPool ? false : true),
     bModified(false)
 {
-    if ( pPool )
-    {
-        pItemPool = pPool;
-    }
-    else
-    {
-        pItemPool = new EditEngineItemPool( sal_False );
-    }
-
-    nDefTab = DEFTAB;
-
     // Don't create a empty node, Clear() will be called in EditEngine-CTOR
-
-    SetModified( sal_False );
 };
 
 EditDoc::~EditDoc()
