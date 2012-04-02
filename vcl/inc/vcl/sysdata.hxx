@@ -194,7 +194,6 @@ struct SystemGlyphData
 // --------------------
 // - SystemFontData -
 // --------------------
-
 struct SystemFontData
 {
     unsigned long   nSize;          // size in bytes of this structure
@@ -202,7 +201,7 @@ struct SystemFontData
     HFONT           hFont;          // native font object
 #elif defined( QUARTZ )
 #ifdef ENABLE_CORETEXT
-    CTFontRef       rCTFont;
+    void*           rCTFont;
 #else
     void*           aATSUFontID;    // native font object
 #endif
