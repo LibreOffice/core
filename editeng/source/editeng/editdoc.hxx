@@ -726,11 +726,11 @@ private:
 
     SvxFont         aDefFont;           //faster than ever from the pool!!
     sal_uInt16          nDefTab;
-    sal_Bool            bIsVertical;
-    sal_Bool            bIsFixedCellHeight;
+    bool            bIsVertical:1;
+    bool            bIsFixedCellHeight:1;
 
-    sal_Bool            bOwnerOfPool;
-    sal_Bool            bModified;
+    bool            bOwnerOfPool:1;
+    bool            bModified:1;
 
 protected:
     void            ImplDestroyContents();
@@ -739,8 +739,8 @@ public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
 
-    sal_Bool            IsModified() const      { return bModified; }
-    void            SetModified( sal_Bool b );
+    bool            IsModified() const      { return bModified; }
+    void            SetModified( bool b );
 
     void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
     Link            GetModifyHdl() const { return aModifyHdl; }
@@ -751,11 +751,11 @@ public:
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     sal_uInt16          GetDefTab() const           { return nDefTab; }
 
-    void            SetVertical( sal_Bool bVertical )   { bIsVertical = bVertical; }
-    sal_Bool            IsVertical() const              { return bIsVertical; }
+    void            SetVertical( bool bVertical )   { bIsVertical = bVertical; }
+    bool            IsVertical() const              { return bIsVertical; }
 
-    void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
-    sal_Bool            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
+    void            SetFixedCellHeight( bool bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
+    bool            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
 
     EditPaM         Clear();
     EditPaM         RemoveText();
