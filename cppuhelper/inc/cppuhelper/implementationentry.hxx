@@ -31,8 +31,10 @@
 #include <cppuhelper/factory.hxx>
 #include "cppuhelperdllapi.h"
 
-// MinGW wants it the one way around while MSVC wants it the other (and
-// everywhere else, SAL_CALL is empty, so doesn't matter):
+// MinGW wants it the one way around while MSVC wants it the other (cf.
+// <sourceforge.net/support/tracker.php?aid=3514133> "Syntactic __cdecl
+// incompatibility with MSVC"; and everywhere else, SAL_CALL is empty, so
+// doesn't matter):
 #if defined __GNUC__
 #define MY_FN_PTR(name) SAL_CALL (* name)
 #else
