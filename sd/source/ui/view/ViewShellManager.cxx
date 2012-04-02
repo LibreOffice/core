@@ -41,9 +41,6 @@
 #include <boost/unordered_map.hpp>
 #include <iterator>
 
-#undef VERBOSE
-//#define VERBOSE 2
-
 namespace sd {
 
 namespace {
@@ -228,7 +225,7 @@ private:
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >= 2
     void DumpShellStack (const ShellStack& rStack);
     void DumpSfxShellStack (void);
 #endif
@@ -930,10 +927,10 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
         aSfxShellStack.push_back(mrBase.GetSubShell(nIndex));
 
 
-#ifdef VERBOSE
-    OSL_TRACE("Current SFX Stack\r");
+#if OSL_DEBUG_LEVEL >= 2
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": Current SFX Stack");
     DumpShellStack(aSfxShellStack);
-    OSL_TRACE("Target Stack\r");
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": Target Stack");
     DumpShellStack(aTargetStack);
 #endif
 
@@ -956,9 +953,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
             i != iLast; ++i)
     {
         SfxShell* const pShell = *i;
-#ifdef VERBOSE
-        OSL_TRACE("removing shell %p from stack\r", pShell);
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": removing shell " << pShell << " from stack");
         mrBase.RemoveSubShell(pShell);
     }
     aSfxShellStack.erase(iSfxShell, aSfxShellStack.end());
@@ -968,9 +963,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     mbShellStackIsUpToDate = false;
     while (iTargetShell != aTargetStack.end())
     {
-#ifdef VERBOSE
-        OSL_TRACE("pushing shell %p on stack\r", *iTargetShell);
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": pushing shell " << *iTargetShell << " on stack");
         mrBase.AddSubShell(**iTargetShell);
         ++iTargetShell;
 
@@ -993,8 +986,8 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     // to) abort and return immediately.
     mbShellStackIsUpToDate = true;
 
-#ifdef VERBOSE
-    OSL_TRACE("New current stack\r");
+#if OSL_DEBUG_LEVEL >= 2
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": New current stack");
     DumpSfxShellStack();
 #endif
 }
@@ -1012,8 +1005,8 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         ? pTopMostShell->GetUndoManager()
         : NULL;
 
-#ifdef VERBOSE
-    OSL_TRACE("TakeShellsFromStack(%p)\r", pShell);
+#if OSL_DEBUG_LEVEL >= 2
+    SAL_INFO("sd.view", OSL_THIS_FUNC << "TakeShellsFromStack( " << pShell << ")");
     DumpSfxShellStack();
 #endif
 
@@ -1049,9 +1042,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         while (true)
         {
             SfxShell* pShellOnStack = mrBase.GetSubShell(0);
-#ifdef VERBOSE
-            OSL_TRACE("removing shell %p from stack\r", pShellOnStack);
-#endif
+            SAL_INFO("sd.view", OSL_THIS_FUNC << "removing shell " << pShellOnStack << " from stack");
             mrBase.RemoveSubShell(pShellOnStack);
             if (pShellOnStack == pShell)
                 break;
@@ -1068,8 +1059,9 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
             mpTopShell->SetUndoManager(pUndoManager);
     }
 
-#ifdef VERBOSE
-    OSL_TRACE("Sfx shell stack is:\r");
+
+#if OSL_DEBUG_LEVEL >= 2
+    SAL_INFO("sd.view", OSL_THIS_FUNC << "Sfx shell stack is:");
     DumpSfxShellStack();
 #endif
 }
@@ -1314,17 +1306,17 @@ void ViewShellManager::Implementation::Shutdown (void)
 
 
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >= 2
 void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
 {
     ShellStack::const_reverse_iterator iEntry;
     for (iEntry=rStack.rbegin(); iEntry!=rStack.rend(); ++iEntry)
         if (*iEntry != NULL)
-            OSL_TRACE ("    %p : %s\r",
-                *iEntry,
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    " <<
+                *iEntry << " : " <<
                 ::rtl::OUStringToOString((*iEntry)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
         else
-            OSL_TRACE("     null\r");
+            SAL_INFO("sd.view", OSL_THIS_FUNC << "     null");
 }
 
 

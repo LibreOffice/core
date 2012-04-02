@@ -39,11 +39,6 @@
 
 using namespace ::com::sun::star::uno;
 
-// Uncomment the definition of VERBOSE to get some more OSL_TRACE messages.
-#ifdef DEBUG
-//#define VERBOSE
-#endif
-
 namespace {
 
 /** This is a trivial implementation of the CacheCompactor interface class.
@@ -211,10 +206,7 @@ void CacheCompactionByCompression::Run (void)
 {
     if (mrCache.GetSize() > mnMaximalCacheSize)
     {
-#ifdef VERBOSE
-        OSL_TRACE ("bitmap cache uses to much space: %d > %d",
-            mrCache.GetSize(), mnMaximalCacheSize);
-#endif
+        SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses to much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
@@ -231,9 +223,7 @@ void CacheCompactionByCompression::Run (void)
                 break;
         }
         mrCache.ReCalculateTotalCacheSize();
-#ifdef VERBOSE
-        OSL_TRACE ("    there are now %d bytes occupied", mrCache.GetSize());
-#endif
+        SAL_INFO("sd.sls", OSL_THIS_FUNC << ":    there are now " << mrCache.GetSize() << " bytes occupied");
     }
 }
 

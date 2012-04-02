@@ -35,11 +35,6 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-// Uncomment the following define for some more OSL_TRACE messages.
-#ifdef DEBUG
-//#define VERBOSE
-#endif
-
 // Define the default value for the maximal cache size that is used for
 // previews that are currently not visible.  The visible previews are all
 // held in memory at all times.  This default is used only when the
@@ -421,9 +416,7 @@ void BitmapCache::ReCalculateTotalCacheSize (void)
     }
     mbIsFull = (mnNormalCacheSize  >= mnMaximalNormalCacheSize);
 
-#ifdef VERBOSE
-    OSL_TRACE("cache size is %d/%d", mnNormalCacheSize, mnPreciousCacheSize);
-#endif
+    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": cache size is " << mnNormalCacheSize << "/" << mnPreciousCacheSize);
 }
 
 
@@ -527,9 +520,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
             if ( ! rEntry.IsPrecious() && mnNormalCacheSize>mnMaximalNormalCacheSize)
             {
                 mbIsFull = true;
-#ifdef VERBOSE
-                OSL_TRACE("cache size is %d > %d", mnNormalCacheSize,mnMaximalNormalCacheSize);
-#endif
+                SAL_INFO("sd.sls", OSL_THIS_FUNC << ": cache size is " << mnNormalCacheSize << " > " << mnMaximalNormalCacheSize);
                 mpCacheCompactor->RequestCompaction();
             }
             break;
@@ -618,17 +609,13 @@ void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompress
         {
             mpReplacement = rpCompressor->Compress(maPreview);
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 2
             sal_uInt32 nOldSize (maPreview.GetSizeBytes());
             sal_uInt32 nNewSize (mpReplacement.get()!=NULL ? mpReplacement->GetMemorySize() : 0);
             if (nOldSize == 0)
                 nOldSize = 1;
             sal_Int32 nRatio (100L * nNewSize / nOldSize);
-            OSL_TRACE("compressing bitmap for %x from %d to %d bytes (%d%%)",
-                this,
-                nOldSize,
-                nNewSize,
-                nRatio);
+            SAL_INFO("sd.sls", OSL_THIS_FUNC << ": compressing bitmap for " << %x << " from " << nOldSize << " to " << nNewSize << " bytes (" << nRatio << "%)");
 #endif
 
             mpCompressor = rpCompressor;

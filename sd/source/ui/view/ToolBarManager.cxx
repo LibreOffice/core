@@ -58,8 +58,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#undef VERBOSE
-
 #undef OUSTRING // Remove definition made in the SFX
 #define OUSTRING(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
 
@@ -710,9 +708,7 @@ void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
 
 void ToolBarManager::Implementation::ResetAllToolBars (void)
 {
-#ifdef VERBOSE
-    OSL_TRACE("resetting all tool bars");
-#endif
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": resetting all tool bars");
     for (int i=TBG__FIRST; i<=TBG__LAST; ++i)
         ResetToolBars((ToolBarGroup)i);
 }
@@ -802,9 +798,7 @@ void ToolBarManager::Implementation::PreUpdate (void)
     {
         mbPreUpdatePending = false;
 
-#ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PreUpdate [");
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PreUpdate [");
 
         // Get the list of tool bars that are not used anymore and are to be
         // deactivated.
@@ -816,17 +810,13 @@ void ToolBarManager::Implementation::PreUpdate (void)
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
             ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
-#ifdef VERBOSE
-            OSL_TRACE("    turning off tool bar %s",
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " <<
                 ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
-#endif
             mxLayouter->destroyElement(sFullName);
             maToolBarList.MarkToolBarAsNotActive(*iToolBar);
         }
 
-#ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PreUpdate ]");
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PreUpdate ]");
     }
 }
 
@@ -847,26 +837,20 @@ void ToolBarManager::Implementation::PostUpdate (void)
         NameList aToolBars;
         maToolBarList.GetToolBarsToActivate(aToolBars);
 
-#ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PostUpdate [");
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate [");
 
         // Turn on the tool bars that are visible in the new context.
         NameList::const_iterator iToolBar;
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
             ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
-#ifdef VERBOSE
-            OSL_TRACE("    turning on tool bar %s",
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " <<
                 ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
-#endif
             mxLayouter->requestElement(sFullName);
             maToolBarList.MarkToolBarAsActive(*iToolBar);
         }
 
-#ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PostUpdate ]");
-#endif
+        SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate ]");
     }
 }
 
@@ -885,9 +869,7 @@ void ToolBarManager::Implementation::LockViewShellManager (void)
 
 void ToolBarManager::Implementation::LockUpdate (void)
 {
-#ifdef VERBOSE
-    OSL_TRACE("LockUpdate %d", mnLockCount);
-#endif
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": LockUpdate " << mnLockCount);
     ::osl::MutexGuard aGuard(maMutex);
 
     DBG_ASSERT(mnLockCount<100, "ToolBarManager lock count unusually high");
@@ -905,9 +887,7 @@ void ToolBarManager::Implementation::LockUpdate (void)
 
 void ToolBarManager::Implementation::UnlockUpdate (void)
 {
-#ifdef VERBOSE
-    OSL_TRACE("UnlockUpdate %d", mnLockCount);
-#endif
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": UnlockUpdate " << mnLockCount);
     ::osl::MutexGuard aGuard(maMutex);
 
     OSL_ASSERT(mnLockCount>0);
@@ -1122,9 +1102,7 @@ using namespace ::sd;
 LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
     : mxLayouter(rxLayouter)
 {
-#ifdef VERBOSE
-    OSL_TRACE("LayouterLock %d", mxLayouter.is() ? 1 :0);
-#endif
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": LayouterLock " << (mxLayouter.is() ? 1 :0));
     if (mxLayouter.is())
         mxLayouter->lock();
 }
@@ -1134,9 +1112,7 @@ LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
 
 LayouterLock::~LayouterLock (void)
 {
-#ifdef VERBOSE
-    OSL_TRACE("~LayouterLock %d", mxLayouter.is() ? 1 :0);
-#endif
+    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ~LayouterLock " << (mxLayouter.is() ? 1 :0));
     if (mxLayouter.is())
         mxLayouter->unlock();
 }
