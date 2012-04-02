@@ -48,8 +48,10 @@ copy-stuff:
 		   basebmplo \
 		   basegfxlo \
 		   bootstrap.uno \
+		   cdrimportlo \
 		   comphelpgcc3 \
 		   datelo \
+		   dbaxmllo \
 		   expwrap.uno \
 		   fastsax.uno \
 		   fileacc \
@@ -59,6 +61,7 @@ copy-stuff:
 		   freetype \
 		   frmlo \
 		   gcc3_uno \
+		   hwplo \
 		   i18nisolang1gcc3 \
 		   i18npaperlo \
 		   i18npool.uno \
@@ -76,18 +79,26 @@ copy-stuff:
 		   lo-bootstrap \
 		   localedata_en \
 		   localedata_others \
+		   lwpftlo \
 		   mergedlo \
 		   msfilterlo \
+		   msworkslo \
 		   ooxlo \
 		   reflection.uno \
 		   reg \
 		   saxlo \
 		   sclo \
+		   scdlo \
 		   scfiltlo \
+		   sddlo \
+		   smdlo \
 		   sotlo \
 		   stocservices.uno \
 		   store \
+		   svgfilterlo \
 		   svllo \
+		   swdlo \
+		   t602filterlo \
 		   textinstream.uno \
 		   tllo \
 		   ucbhelper4gcc3 \
@@ -100,7 +111,11 @@ copy-stuff:
 		   utllo \
 		   vbahelperlo \
 		   vcllo \
+		   visioimportlo \
+		   wpftlo \
+		   wpgimportlo \
 		   xml2 \
+		   xmlfdlo \
 		   xmlreader \
 		   xstor \
 		  ); do \
