@@ -105,8 +105,8 @@ void RscLangEnum::Init( RscNameTable& rNames )
                  pLangEntry->mnLang,
                  MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
 #endif
-        rtl::OString aLang = pLangEntry->maLangStr;
-        rtl::OString aCountry = pLangEntry->maCountry;
+        rtl::OString aLang(pLangEntry->maLangStr, strlen(pLangEntry->maLangStr));
+        rtl::OString aCountry(pLangEntry->maCountry, strlen(pLangEntry->maCountry));
         if ( aCountry.isEmpty() || aLang.equalsIgnoreAsciiCase(aCountry) )
         {
             SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
