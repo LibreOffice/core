@@ -628,7 +628,7 @@ void EditorWindow::CreateEditEngine()
 
 
     for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
-        aSyntaxLineTable.Insert( nLine, (void*)(sal_uInt16)1 );
+        aSyntaxLineTable.insert( nLine );
     ForceSyntaxTimeout();
 
     DELETEZ( pProgress );
@@ -793,7 +793,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         if ( aChanges.Len() )
         {
             for ( long n = aChanges.Min() + 1; n <= aChanges.Max(); n++ )
-                aSyntaxLineTable.Insert( n, (void*)(sal_uLong)1 );
+                aSyntaxLineTable.insert( n );
             aSyntaxIdleTimer.Start();
         }
 
@@ -868,7 +868,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     {
         if ( bDelayHighlight )
         {
-            aSyntaxLineTable.Insert( nPara, (void*)(sal_uLong)1 );
+            aSyntaxLineTable.insert( nPara );
             aSyntaxIdleTimer.Start();
         }
         else
@@ -884,13 +884,11 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
     // pEditEngine->SetUpdateMode( sal_False );
 
     bHighlightning = sal_True;
-    sal_uInt16 nLine;
-    void* p = aSyntaxLineTable.First();
-    while ( p )
+    for ( SyntaxLineSet::const_iterator it = aSyntaxLineTable.begin();
+          it != aSyntaxLineTable.end(); ++it )
     {
-        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
+        sal_uInt16 nLine = *it;
         DoSyntaxHighlight( nLine );
-        p = aSyntaxLineTable.Next();
     }
 
     // #i45572#
@@ -899,7 +897,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 
     pEditEngine->SetModified( bWasModified );
 
-    aSyntaxLineTable.Clear();
+    aSyntaxLineTable.clear();
     bHighlightning = sal_False;
 
     return 0;

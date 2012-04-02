@@ -51,11 +51,11 @@ class SvxSearchItem;
 #include <sfx2/progress.hxx>
 #include <svtools/syntaxhighlight.hxx>
 #include <unotools/options.hxx>
-#include <tools/table.hxx>
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 #include "objdlg.hxx"
+#include <set>
 
 #include <tools/table.hxx>
 
@@ -95,6 +95,8 @@ inline void ProgressInfo::StepProgress()
     SetState( ++nCurState );
 }
 
+typedef std::set<sal_uInt16> SyntaxLineSet;
+
 class EditorWindow : public Window, public SfxListener
 {
 private:
@@ -113,7 +115,7 @@ private:
 
     SyntaxHighlighter   aHighlighter;
     Timer           aSyntaxIdleTimer;
-    Table           aSyntaxLineTable;
+    SyntaxLineSet   aSyntaxLineTable;
     DECL_LINK(SyntaxTimerHdl, void *);
     ProgressInfo*   pProgress;
     ModulWindow*    pModulWindow;
