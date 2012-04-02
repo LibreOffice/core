@@ -918,7 +918,10 @@ void DataBrowserModel::updateFromModel()
 
                         // add ranges for error bars if present for a series
                         if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ true ))
-                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd );
+                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
+
+                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ false ))
+                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
 
                         m_aHeaders.push_back(
                             tDataHeader(
@@ -942,58 +945,30 @@ void DataBrowserModel::addErrorBarRanges(
     const Reference< chart2::XDataSeries > & xDataSeries,
     sal_Int32 nNumberFormatKey,
     sal_Int32 & rInOutSequenceIndex,
-    sal_Int32 & rInOutHeaderEnd )
+    sal_Int32 & rInOutHeaderEnd, bool bYError )
 {
     try
     {
         ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSequences;
 
-        // x error bars
-        // ------------
         Reference< chart2::data::XDataSource > xErrorSource(
-            StatisticsHelper::getErrorBars( xDataSeries, /* bYError = */ false ), uno::UNO_QUERY );
+            StatisticsHelper::getErrorBars( xDataSeries, bYError ), uno::UNO_QUERY );
 
-        // positive x error bars
         Reference< chart2::data::XLabeledDataSequence > xErrorLSequence(
             StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
                 xErrorSource,
                 /* bPositiveValue = */ true,
-                /* bYError = */ false ));
+                bYError ));
         if( xErrorLSequence.is())
             aSequences.push_back( xErrorLSequence );
 
-        // negative x error bars
         xErrorLSequence.set(
             StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
                 xErrorSource,
                 /* bPositiveValue = */ false,
-                /* bYError = */ false ));
+                bYError ));
         if( xErrorLSequence.is())
             aSequences.push_back( xErrorLSequence );
-
-        // y error bars
-        // ------------
-        xErrorSource.set(
-            StatisticsHelper::getErrorBars( xDataSeries, /* bYError = */ true ), uno::UNO_QUERY );
-
-        // positive y error bars
-        xErrorLSequence.set(
-            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
-                xErrorSource,
-                /* bPositiveValue = */ true,
-                /* bYError = */ true ));
-        if( xErrorLSequence.is())
-            aSequences.push_back( xErrorLSequence );
-
-        // negative y error bars
-        xErrorLSequence.set(
-            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
-                xErrorSource,
-                /* bPositiveValue = */ false,
-                /* bYError = */ true ));
-        if( xErrorLSequence.is())
-            aSequences.push_back( xErrorLSequence );
-
 
         for( ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aIt( aSequences.begin());
              aIt != aSequences.end(); ++aIt )

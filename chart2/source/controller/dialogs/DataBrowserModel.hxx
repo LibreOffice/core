@@ -159,7 +159,7 @@ private:
             ::com::sun::star::chart2::XDataSeries > & xDataSeries,
         sal_Int32 nNumberFormatKey,
         sal_Int32 & rInOutSequenceIndex,
-        sal_Int32 & rInOutHeaderEnd );
+        sal_Int32 & rInOutHeaderEnd, bool bYError );
 
     sal_Int32 getCategoryColumnCount();
 
