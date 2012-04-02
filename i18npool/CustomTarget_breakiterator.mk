@@ -95,10 +95,16 @@ $(IPBI)/%.brk : $(IPBI)/%.txt $(GENBRKTARGET)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		$(GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-# fdo#31271 ")" reclassified in more recent ICU/Unicode Standards
+# fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
+# Prepend set empty as of Unicode Version 6.1 / ICU 4.9, which bails out if used.
+# NOTE: strips every line with _word_ 'Prepend', including $Prepend
 $(IPBI)/%.txt : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(IPBI)/.dir
 ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
+ifeq ($(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),YES)
+	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#;/\<Prepend\>/d" $< > $@
+else
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
+endif
 else
 	cp $< $@
 endif

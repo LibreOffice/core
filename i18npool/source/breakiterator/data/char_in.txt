@@ -15,6 +15,7 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [\p{Grapheme_Cluster_Break = Control}];
+$Prepend     = [\p{Grapheme_Cluster_Break = Prepend}];
 $Extend      = [\p{Grapheme_Cluster_Break = Extend}];
 $SpacingMark = [\p{Grapheme_Cluster_Break = SpacingMark}];
 $BengaliLetter = [\u0985-\u09B9 \u09CE \u09DC-\u09E1 \u09F0-\u09F1];
@@ -71,6 +72,7 @@ $L ($L | $V | $LV | $LVT);
 [^$Control $CR $LF] $Extend;
 
 [^$Control $CR $LF] $SpacingMark;
+$Prepend [^$Control $CR $LF];
 
 
 ## -------------------------------------------------
@@ -92,6 +94,7 @@ $T ($LVT | $T);
 
 $Extend      [^$Control $CR $LF];
 $SpacingMark [^$Control $CR $LF];
+[^$Control $CR $LF] $Prepend;
 
 
 ## -------------------------------------------------

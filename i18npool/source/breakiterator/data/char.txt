@@ -16,6 +16,7 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [\p{Grapheme_Cluster_Break = Control}];
+$Prepend     = [\p{Grapheme_Cluster_Break = Prepend}];
 $Extend      = [\p{Grapheme_Cluster_Break = Extend}];
 $SpacingMark = [\p{Grapheme_Cluster_Break = SpacingMark}];
 # True Indic wants to move by syllables. Break up SpacingMark. This based on Unicode 6.0 data

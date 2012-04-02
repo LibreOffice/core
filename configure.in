@@ -7487,6 +7487,7 @@ ICU_MAJOR=
 ICU_MINOR=
 ICU_MICRO=
 ICU_RECLASSIFIED_CLOSE_PARENTHESIS=
+ICU_RECLASSIFIED_PREPEND_SET_EMPTY=
 AC_MSG_CHECKING([which icu to use])
 if test "$with_system_icu" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7549,6 +7550,9 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
             ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
         fi
+        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+        fi
     fi
 
     libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
@@ -7558,6 +7562,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
     ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+    # ICU_RECLASSIFIED_PREPEND_SET_EMPTY not applied for our internal ICU 4.4.2
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
 
@@ -7569,6 +7574,7 @@ AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_MICRO)
 AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
+AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 AC_SUBST([MINGW_ICUDATA_DLL])
 AC_SUBST([MINGW_ICUI18N_DLL])
 AC_SUBST([MINGW_ICUUC_DLL])
