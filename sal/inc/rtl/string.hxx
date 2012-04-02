@@ -196,7 +196,9 @@ public:
       New string from a string literal.
 
       If there are any embedded \0's in the string literal, the result is undefined.
-      Use the overload that explicitly accepts length.
+      Use the overload that explicitly accepts length or cast the literal
+      explicitly to const char*.
+
       @since LibreOffice 3.6
 
       @param    literal       a string literal

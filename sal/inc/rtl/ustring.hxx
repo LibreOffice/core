@@ -190,6 +190,9 @@ public:
       is not pure ASCII, it needs to be converted to OUString by explicitly
       providing the encoding to use for the conversion.
 
+      If there are any embedded \0's in the string literal, the result is undefined.
+      Use the overload that explicitly accepts length or fromAscii().
+
       @param    literal         the 8-bit ASCII string literal
 
       @since LibreOffice 3.6

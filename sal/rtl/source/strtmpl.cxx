@@ -1220,6 +1220,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis
             /* Check ASCII range */
             SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
                         "rtl_uString_newFromLiteral - Found char > 127" );
+            SAL_WARN_IF( ((unsigned char)*pCharStr) == '\0', "rtl.string",
+                        "rtl_uString_newFromLiteral - Found embedded \\0 character" );
 
             *pBuffer = *pCharStr;
             pBuffer++;
