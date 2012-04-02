@@ -103,6 +103,8 @@ private:
     void load(const OUString& rURL);
     /// Get the length of the whole document.
     int getLength();
+    /// Get page count.
+    int getPages();
     uno::Reference<lang::XComponent> mxComponent;
 };
 
@@ -128,6 +130,15 @@ int RtfModelTest::getLength()
         }
     }
     return aBuf.getLength();
+}
+
+int RtfModelTest::getPages()
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    return xCursor->getPage();
 }
 
 void RtfModelTest::setUp()
@@ -382,11 +393,7 @@ void RtfModelTest::testFdo43965()
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), aBorder.LineWidth);
 
     // Finally, make sure that we have two pages
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 void RtfModelTest::testN751020()
@@ -476,11 +483,7 @@ void RtfModelTest::testFdo45394()
 void RtfModelTest::testFdo48104()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo48104.rtf")));
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
