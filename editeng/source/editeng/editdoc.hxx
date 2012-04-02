@@ -732,7 +732,7 @@ private:
     bool            bOwnerOfPool:1;
     bool            bModified:1;
 
-protected:
+private:
     void            ImplDestroyContents();
 
 public:
