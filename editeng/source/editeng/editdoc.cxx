@@ -171,6 +171,7 @@ DBG_NAME( EE_TextPortion );
 DBG_NAME( EE_EditLine );
 DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
+DBG_NAME( EE_ParaPortion )
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
@@ -396,11 +397,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return pNew;
 }
 
-
-DBG_NAME( EE_ParaPortion )
-
 SV_IMPL_VARARR( CharPosArray, sal_Int32 );
-
 
 TextPortionList::TextPortionList()
 {
@@ -709,11 +706,6 @@ void ParaPortionList::Append(ParaPortion* p)
 size_t ParaPortionList::Count() const
 {
     return maPortions.size();
-}
-
-size_t EditDoc::GetPos(const ContentNode* p) const
-{
-    return FastGetPos(maContents, p, nLastCache);
 }
 
 void ParaPortionList::Reset()
@@ -1840,6 +1832,11 @@ const ContentNode* EditDoc::SafeGetObject(size_t nPos) const
 ContentNode* EditDoc::SafeGetObject(size_t nPos)
 {
     return ( nPos < Count() ) ? GetObject( nPos ) : 0;
+}
+
+size_t EditDoc::GetPos(const ContentNode* p) const
+{
+    return FastGetPos(maContents, p, nLastCache);
 }
 
 const ContentNode* EditDoc::GetObject(size_t nPos) const
