@@ -515,15 +515,15 @@ sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     }
     if( rInfo.nFtnOffset > 0 )
     {
-        pParts[1] = String::CreateFromInt32( (sal_Int32)rInfo.nFtnOffset );
+        pParts[1] = rtl::OUString::valueOf(static_cast<sal_Int32>(rInfo.nFtnOffset));
         nParts = 2;
     }
-    if( rInfo.GetPrefix().Len() > 0 )
+    if( !rInfo.GetPrefix().isEmpty() )
     {
         pParts[2] = rInfo.GetPrefix();
         nParts = 3;
     }
-    if( rInfo.GetSuffix().Len() > 0 )
+    if( !rInfo.GetSuffix().isEmpty() )
     {
         pParts[3] = rInfo.GetSuffix();
         nParts = 4;

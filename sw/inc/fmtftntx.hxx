@@ -46,8 +46,8 @@ enum SwFtnEndPosEnum
 
 class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
 {
-    String      sPrefix;
-    String      sSuffix;
+    rtl::OUString sPrefix;
+    rtl::OUString sSuffix;
     SvxNumberType aFmt;
     sal_uInt16      nOffset;
 
@@ -87,11 +87,11 @@ public:
     sal_uInt16 GetOffset() const                { return nOffset; }
     void SetOffset( sal_uInt16 nOff )           { nOffset = nOff; }
 
-    const String& GetPrefix() const         { return sPrefix; }
-    void SetPrefix(const String& rSet)      { sPrefix = rSet; }
+    const rtl::OUString& GetPrefix() const      { return sPrefix; }
+    void SetPrefix(const rtl::OUString& rSet)   { sPrefix = rSet; }
 
-    const String& GetSuffix() const         { return sSuffix; }
-    void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    const rtl::OUString& GetSuffix() const      { return sSuffix; }
+    void SetSuffix(const rtl::OUString& rSet)   { sSuffix = rSet; }
 };
 
 class SW_DLLPUBLIC SwFmtFtnAtTxtEnd : public SwFmtFtnEndAtTxtEnd
