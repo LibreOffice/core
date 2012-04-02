@@ -80,7 +80,6 @@ $(eval $(call gb_CppunitTest_add_components,sdext_pdfimport,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sdext_pdfimport,\
-    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))

@@ -63,7 +63,6 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sot_test_sot,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sot_test_sot,\
-    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

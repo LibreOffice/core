@@ -100,7 +100,6 @@ $(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
-    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))

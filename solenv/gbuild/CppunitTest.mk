@@ -63,6 +63,7 @@ gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip
 gb_CppunitTest__get_uno_type_target = $(OUTDIR)/bin/$(1).rdb
 define gb_CppunitTest__make_args
 $(ARGS) \
+--headless \
 $(if $(strip $(UNO_TYPES)),\
 	"-env:UNO_TYPES=$(foreach rdb,udkapi $(UNO_TYPES),\
 		$(call gb_CppunitTarget__make_url,$(call gb_CppunitTest__get_uno_type_target,$(rdb))))") \

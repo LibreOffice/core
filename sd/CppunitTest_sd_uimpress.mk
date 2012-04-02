@@ -90,7 +90,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_uimpress,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
-    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
