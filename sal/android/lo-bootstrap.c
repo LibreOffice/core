@@ -71,15 +71,21 @@ struct engine {
     int dummy;
 };
 
+/* These vars are valid / used only when this library is used from
+ *  NativeActivity-based apps.
+ */
 static struct android_app *app;
-static const char *data_dir;
-static const char **library_locations;
-static void *apk_file;
-static int apk_file_size;
 static int (*lo_main)(int, const char **);
 static int lo_main_argc;
 static const char **lo_main_argv;
 static int sleep_time = 0;
+
+/* These are valid / used in all apps. */
+static const char *data_dir;
+static const char **library_locations;
+static void *apk_file;
+static int apk_file_size;
+static JavaVM *the_java_vm;
 
 /* Zip data structures */
 
@@ -321,6 +327,20 @@ free_ptrarray(void **pa)
         free(*rover++);
 
     free(pa);
+}
+
+/* The lo-bootstrap shared library is always loaded from Java, so
+ * this is always called by JNI first.
+ */
+__attribute__ ((visibility("default")))
+jint
+JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+    (void) reserved;
+
+    the_java_vm = vm;
+
+    return JNI_VERSION_1_2;
 }
 
 __attribute__ ((visibility("default")))
@@ -1602,7 +1622,7 @@ __attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {
-    return app->activity->vm;
+    return the_java_vm;
 }
 
 __attribute__ ((visibility("default")))
