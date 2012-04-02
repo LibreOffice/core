@@ -366,7 +366,7 @@ class SmSymbolDialog : public ModalDialog
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
 
-    String              aSymbolSetName;
+    rtl::OUString       aSymbolSetName;
     SymbolPtrVec_t      aSymbolSet;
 
     OutputDevice       *pFontListDev;

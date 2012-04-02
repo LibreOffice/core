@@ -1677,7 +1677,7 @@ bool SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
 void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 {
     const SmSym *pSym = NULL;
-    if (aSymbolSetName.Len() > 0  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size()))
+    if (!aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size()))
         pSym = aSymbolSet[ nSymbolNo ];
 
     aSymbolSetDisplay.SelectSymbol(nSymbolNo);
@@ -1689,7 +1689,7 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 const SmSym * SmSymbolDialog::GetSymbol() const
 {
     sal_uInt16 nSymbolNo = aSymbolSetDisplay.GetSelectSymbol();
-    bool bValid = aSymbolSetName.Len() > 0  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size());
+    bool bValid = !aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size());
     return bValid ? aSymbolSet[ nSymbolNo ] : NULL;
 }
 
