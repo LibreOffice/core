@@ -42,7 +42,7 @@
 
 
 # English dictionary
-[ language=en.* || language=de ]
+[ language=en.* || language=de || language=it ]
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt
     
 # English (Canada, en_CA) dictionary
