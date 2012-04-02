@@ -473,8 +473,6 @@ namespace writerfilter {
                 bool m_bWasInFrame;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;
-                /// If we should reset the page break property when we start the next paragraph.
-                bool m_bHasPage;
                 // Unicode characters are collected here so we don't have to send them one by one.
                 rtl::OUStringBuffer m_aUnicodeBuffer;
                 /// Same for hex characters.

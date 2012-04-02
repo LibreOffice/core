@@ -75,6 +75,7 @@ public:
     void testFdo47036();
     void testFdo46955();
     void testFdo45394();
+    void testFdo48104();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testFdo47036);
     CPPUNIT_TEST(testFdo46955);
     CPPUNIT_TEST(testFdo45394);
+    CPPUNIT_TEST(testFdo48104);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -469,6 +471,16 @@ void RtfModelTest::testFdo45394()
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+void RtfModelTest::testFdo48104()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo48104.rtf")));
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
