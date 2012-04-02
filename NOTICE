@@ -3,181 +3,154 @@ Copyright 2011, 2012 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
+
 ____
 
-Category A Software: Authorized Licenses.
+[placeholder for Andrew Rist (arist) to include copyright notice from Oracle]
 
-As part of the base system this product also includes code
-from Apache Tomcat, Apache Commons and Apache Lucene, the
-Apache Portable Runtime TLPs from the Apache Software
-Foundation.
-
-The MathMLDTD module uses the DTD for MathML from the World
-Wide Web Consortium under the W3C license. The official
-distribution is available here:
-    http://www.w3.org/Math/DTD/
-
-The Font Manager support in the vcl module and the
-"psprint_config" module contain code copyrighted by
-Adobe Systems Incorporated.
-
-The apple_remote module includes code derived from the Apple
-Remote Control wrapper copyrighted by Martin Kahr and modified
-for OpenOffice.org by Eric Bachard under the same license. The
-original package is available here
-    https://github.com/martinkahr/apple_remote_control
-
-We include the Boost C++ libraries written by various authors
-under similar licenses that have been grouping under the
-Boost Software License. More information about Boost is
-available at:
-    http://www.boost.org/
-
-The connectivity module uses code developed by the HSQL
-Development Group under a BSD-style license. More
-information about HSQL is available here:
-    http://hsqldb.org/
-
-The ICC module includes code developed by the International
-Color Consortium. More information about the ICC is available
-here:
-    http://www.color.org/
-
-We use James Clark's Expat XML parser toolkit library which
-is copyrighted by the Thai Open Source Software Center Ltd
-and Clark Cooper. More information is available here:
-    http://www.libexpat.org/   
-
-The libtextcat module contains fingerprints for the libtextcat
-Library copyrighted by WiseGuys Internet B.V under a BSD-style
-license. More information is available here:
-    http://software.wise-guys.nl/libtextcat/
-
-Optional LDAP support is available through the community
-developed OpenLDAP project:
-    http://www.openldap.org/
-
-OpenSSL is copyrighted (c) 1998-2011 The OpenSSL Project and
-1995-1998 Eric Young.It is also considered strong cryptography
-software so it falls under certain export/import and/or use
-restrictions in some parts of the world. More information
-is available at:
-    http://www.openssl.org/
-
-The scanner support software uses a code header derived from
-the Scanner Access Now Easy project under Public Domain by
-David Mosberger-Tang and Andreas Beck. More information about
-the SANE Project is available here:
-    http://www.sane-project.org/
-
-Likewise, the "twain" module includes a standard header from
-the TWAIN Working Group. More information about TWAIN is
-available here:
-    http://www.twain.org/
-
-The Redland RDF library librdf was written by Dave Beckett
-and is available under the Apache License version 2.
-    http://librdf.org/
-
-STLport is an implementation of the Standard Template
-Library, originally by SGI and further refined by
-Boris Fomitchev. More information at:
-    http://www.stlport.org/
-
-The ucpp preprocessor was written by Thomas Pornin and
-maintained by Louis P. Santillan and is available under
-the "New" BSD license.
-    http://code.google.com/p/ucpp/
-
-The UnixODBC directory contains code by Ke Jin and OpenLink
-Software from the iODBC driver manager available at:
-    http://www.iodbc.org/
-
-The VIGRA "Vision with Generic Algorithms" computer vision
-library was written by Ullrich Köthe and is available under
-the MIT License. More in formation in the Homepage:
-    http://hci.iwr.uni-heidelberg.de/vigra/
-
-Libxml2 is a C parser and toolkit Copyright (C) 2001-2002
-Daniel Veillard, developed for the Gnome project under an
-MIT License.
-    http://xmlsoft.org/
-
-This software contains code derived from the XFree86 Project
-Inc. including code written by Keith Packard from SuSE, Inc,
-and Jim Gettys from Hewlett Packard as headers for the
-x11_extensions module and an iconv header contributed  
-by the Free Software Foundation, Inc. in the hwpfilter
-module. The original software under an MIT-style license
-is available from:
-    http://cvsweb.xfree86.org/cvsweb/xc/include/extensions/
-    http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
-
-The install-sh and mkdepend tools are copyrighted MIT and
-the X Consortium respectively and are available in the
-XFree86 distribution among other places.
-
-For general convenience we also include the DejaVu fonts,
-a font family based on the Vera Fonts. More information
-is available here:
-    http://dejavu-fonts.org/
-
-Older versions of Java may require the StAX API, which
-was included in OpenJDK 6. Information about the latest
-version under an Apache License 2.0 is available here:
-    http://stax.codehaus.org/
 ____
 
-Category B: Reciprocal Licenses.
+As part of the base system this product also includes code from the following
+Apache projects:
+- Apache Lucene
+- Apache Portable Runtime 
+- Apache Portable Runtime Utility Library
+- Apache Commons - used by MediaWiki Publisher extension
+- Apache Jakarta HttpClient - used by MediaWiki Publisher extension
+- Apache Tomcat - used by MediaWiki Piblisher extension
 
-As part of its Third-Party Licensing Policy, Apache products
-normally don't ship copyleft code as part of their releases.
-Still Apache releases can contain optional support for
-binaries from some accepted weak copyleft code bases.
+The notices from these projects are following:
 
-We include the Beanshell written by Pat Niemeyer and
-available under Sun Industrial License. More information
-is available here:
-    http://www.beanshell.org/
+Apache Lucene
+Copyright 2006 The Apache Software Foundation
 
-We can also make use the Cairo 2D Graphics library in some
-platforms for the canvas code. More information is available
-here:
-    http://cairographics.org/
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
 
-The Open Source SAXON XSLT processor was developed by Michael
-Kay of Saxonica Limited and is available under the MPL at:
-    https://sourceforge.net/projects/saxon/files/Saxon-B/
+The snowball stemmers in
+  contrib/snowball/src/java/net/sf/snowball
+were developed by Martin Porter and Richard Boulton.
+The full snowball package is available from
+  http://snowball.tartarus.org/
 
-The LP solver in Calc uses the algorithms developed by the
-Computational Infrastructure for Operations Research COIN_OR
-project (specifically CLP and CBC) in the CoinMP library.
-The source code is available under EPL is here:
-    http://www.coin-or.org/download/source/CoinMP/
 
-The graphite module is distributed under CPL (Common Public
-License). Silgraphite as used by the program is available
-at:
-    http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/
+Apache Portable Runtime
+Copyright (c) 2011 The Apache Software Foundation.
 
-Some functionality, in particular the support for
-addressbooks, is available through by Mozilla's Seamonkey
-Project available under the MPL here:
-    http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/
-    
-Document signing can be provided by Mozilla's Network Security
-Services (NSS). The NSS sources are available here:
-    ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_6_RTM/src/
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
 
-We use the XML Security Library by Alexey Sanin. The code library is
-under an MIT license and the xmlsec-nss under the MPL.
-    http://www.aleksey.com/xmlsec/download/
+Portions of this software were developed at the National Center
+for Supercomputing Applications (NCSA) at the University of
+Illinois at Urbana-Champaign.
 
-For convenience we optionally include the Gentium Basic fonts,
-available under the SIL OpenFont License (OFL). The source
-code can be downloaded here:
-    http://scripts.sil.org/cms/scripts/page.php?item_id=Gentium_basic
+This software contains code derived from the RSA Data Security
+Inc. MD5 Message-Digest Algorithm.
 
-Also for convenience we have available a set of fonts developed by
-Google Inc. for ChromeOS available under the OFL in this site:
-    http://gsdview.appspot.com/chromeos-localmirror/distfiles/
+This software contains code derived from UNIX V7, Copyright(C)
+Caldera International Inc.
+
+
+Apache Portable Runtime Utility Library
+Copyright (c) 2011 The Apache Software Foundation.
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+Portions of this software were developed at the National Center
+for Supercomputing Applications (NCSA) at the University of
+Illinois at Urbana-Champaign.
+
+This software contains code derived from the RSA Data Security
+Inc. MD5 Message-Digest Algorithm, including various
+modifications by Spyglass Inc., Carnegie Mellon University, and
+Bell Communications Research, Inc (Bellcore).
+
+
+Apache Commons Codec
+Copyright 2002-2012 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+src/test/org/apache/commons/codec/language/DoubleMetaphoneTest.java contains
+test data from http://aspell.sourceforge.net/test/batch0.tab.
+
+Copyright (C) 2002 Kevin Atkinson (kevina@gnu.org). Verbatim copying
+and distribution of this entire article is permitted in any medium,
+provided this notice is preserved.
+
+Apache Jakarta HttpClient
+Copyright 1999-2007 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+Apache Commons Lang
+Copyright 2001-2012 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes software from the Spring Framework,
+under the Apache License 2.0 (see: StringUtils.containsWhitespace())
+
+
+Apache Commons Logging
+Copyright 2003-2007 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+
+Apache Tomcat
+Copyright 1999-2012 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+Java Management Extensions (JMX) support is provided by
+the MX4J package, which is open source software.  The
+original software and related information is available
+at http://mx4j.sourceforge.net/.
+
+The Windows Installer is built with the Nullsoft
+Scriptable Install System (NSIS), which is
+open source software.  The original software and
+related information is available at
+http://nsis.sourceforge.net/.
+
+Java compilation software for JSP pages is provided by Eclipse, 
+which is open source software.  The original software and 
+related information is available at
+http://www.eclipse.org/.
+
+____
+
+As part of the base system this product also includes code from the following
+projects which are licensed under the Apache license:
+- serf
+- redland
+- StAX
+
+The notices from these projects are following:
+
+serf
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+
+redland
+This product includes Redland software (http://librdf.org/)
+developed at the Institute for Learning and Research Technology,
+University of Bristol, UK (http://www.bristol.ac.uk/).
+
+
+StAX
+[no notices]
+
+____
+
+This product includes software developed by the OpenSSL Project
+for use in the OpenSSL Toolkit. (http://www.openssl.org/)
+
