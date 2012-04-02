@@ -193,6 +193,47 @@ namespace css = ::com::sun::star;
 
 ResMgr*                 desktop::Desktop::pResMgr = 0;
 
+namespace {
+
+/** Write a marker file that is basically empty (just a single
+    character to prevent it from being deleted.)  Its time of last
+    modification is its only important feature.
+
+    This is a simplified version of the function in
+    dp_extensionmanager.cxx.  It uses direct file access instead of
+    the UCB.  May prove to be too simple, but then again, it may not.
+*/
+bool writeLastModified (::rtl::OUString& rsURL)
+{
+    try
+    {
+        // Remove the file if it already exists.
+        ::osl::File::remove(rsURL);
+
+        ::osl::File aFile (rsURL);
+        if (aFile.open(OpenFlag_Create | OpenFlag_Write) != ::osl::File::E_None)
+            return false;
+
+        const char aBuffer[] = "1";
+        sal_uInt64 nBytesWritten (0);
+        if (aFile.write(aBuffer, strlen(aBuffer), nBytesWritten) != ::osl::File::E_None)
+            return false;
+
+        if (aFile.close() != ::osl::File::E_None)
+            return false;
+
+        return true;
+    }
+    catch(...)
+    {
+    }
+    return false;
+}
+
+} // end of anonymous namespace
+
+
+
 namespace desktop
 {
 
@@ -755,9 +796,77 @@ void MinimalCommandEnv::handle(
     }
 }
 
+
+/** Check if installBundledExtensionBlobs() has to be run.
+    It uses the time stamps of a marker file (rsMarkerURL) on the one
+    hand and of the files in the given directory on the other.
+    Returns </TRUE> when either the marker does not yet exist or any
+    file in the given directory is newer than the marker.
+*/
+static bool needsInstallBundledExtensionBlobs (
+    const ::rtl::OUString& rsMarkerURL,
+    ::osl::Directory& rDirectory)
+{
+    ::osl::DirectoryItem aMarkerItem;
+    if (::osl::DirectoryItem::get(rsMarkerURL, aMarkerItem) == ::osl::File::E_NOENT)
+    {
+        // Marker does not exist.  Extensions where never installed.
+        return true;
+    }
+
+    ::osl::FileStatus aMarkerStat (FileStatusMask_ModifyTime);
+    if (aMarkerItem.getFileStatus(aMarkerStat) != ::osl::File::E_None)
+    {
+        // Can not get marker state.  Reason?
+        return true;
+    }
+
+    const TimeValue aMarkerModifyTime (aMarkerStat.getModifyTime());
+
+    if (rDirectory.open() != osl::File::E_None)
+    {
+        // No extension directory.  Nothing to be done.
+        return false;
+    }
+
+    ::osl::DirectoryItem aDirectoryItem;
+    while (rDirectory.getNextItem(aDirectoryItem) == osl::File::E_None)
+    {
+        ::osl::FileStatus aFileStat (FileStatusMask_ModifyTime);
+        if (aDirectoryItem.getFileStatus(aFileStat) != ::osl::File::E_None)
+            continue;
+        if (aFileStat.getFileType() != ::osl::FileStatus::Regular)
+            continue;
+        const sal_uInt32 nT1 (aFileStat.getModifyTime().Seconds);
+        const sal_uInt32 nT2 (aMarkerModifyTime.Seconds);
+        if (aFileStat.getModifyTime().Seconds > aMarkerModifyTime.Seconds)
+        {
+            rDirectory.close();
+            return true;
+        }
+    }
+    rDirectory.close();
+
+    // No file in the directory is newer than the marker.
+    return false;
+}
+
+
 // install bundled but non-pre-registered extension blobs
 static void installBundledExtensionBlobs()
 {
+    rtl::OUString aDirUrl( OUSTR("$BRAND_BASE_DIR/share/extensions/install"));
+    ::rtl::Bootstrap::expandMacros( aDirUrl);
+    ::osl::Directory aDir( aDirUrl);
+
+    // Find out if we can exit early: only when there is an extension file newer
+    // than the marker we have to install any extension.
+    ::rtl::OUString sMarkerURL (RTL_CONSTASCII_USTRINGPARAM("$BUNDLED_EXTENSIONS_USER/lastsynchronized.bundled"));
+    ::rtl::Bootstrap::expandMacros(sMarkerURL);
+    if ( ! needsInstallBundledExtensionBlobs(sMarkerURL, aDir))
+        return;
+    writeLastModified(sMarkerURL);
+
     // get the ExtensionManager
     ::css::uno::Reference< ::css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     ::css::uno::Reference< ::css::deployment::XExtensionManager> xEM = ::css::deployment::ExtensionManager::get( xContext);
@@ -785,9 +894,6 @@ static void installBundledExtensionBlobs()
     }
 
     // iterate over the bundled extension blobs
-    rtl::OUString aDirUrl( OUSTR("$BRAND_BASE_DIR/share/extensions/install"));
-    ::rtl::Bootstrap::expandMacros( aDirUrl);
-    ::osl::Directory aDir( aDirUrl);
     ::osl::File::RC rc = aDir.open();
     while( rc == osl::File::E_None) {
         ::osl::DirectoryItem aDI;
@@ -1865,24 +1971,6 @@ void Desktop::Main()
                     DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
                 if (xFirstStartJob.is())
                 {
-#if 0 // license acceptance is not needed for ASL
-                    sal_Bool bDone = sal_False;
-                    Sequence< NamedValue > lArgs(2);
-                    lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
-                    lArgs[0].Value <<= LicenseNeedsAcceptance();
-                    lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
-                    lArgs[1].Value <<= GetLicensePath();
-
-                    xFirstStartJob->execute(lArgs) >>= bDone;
-                    if ( !bDone )
-                    {
-                        return;
-                    }
-#endif // license acceptance is not needed for ASL
-
-                   // process non-pre-registered extensions
-                   installBundledExtensionBlobs();
-
                    // mark first start as done
                    FinishFirstStart();
                 }
@@ -1890,6 +1978,9 @@ void Desktop::Main()
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
         }
+
+        // process non-pre-registered extensions
+        installBundledExtensionBlobs();
 
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
