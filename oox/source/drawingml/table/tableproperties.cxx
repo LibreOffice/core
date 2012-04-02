@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <rtl/instance.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 
@@ -103,7 +104,10 @@ void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, sal_Int
    }
 }
 
-static TableStyle* pDefaultTableStyle = new TableStyle();
+namespace
+{
+    struct theDefaultTableStyle : public ::rtl::Static< TableStyle, theDefaultTableStyle > {};
+}
 
 const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase )
 {
@@ -127,8 +131,9 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
             ++aIter;
         }
     }
+
     if ( !pTableStyle )
-        pTableStyle = pDefaultTableStyle;
+        return theDefaultTableStyle::get();
 
     return *pTableStyle;
 }
