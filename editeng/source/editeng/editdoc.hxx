@@ -301,27 +301,6 @@ public:
     sal_Bool            IsFeature( sal_uInt16 nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
 };
 
-class ContentList
-{
-    mutable size_t nLastCache;
-    boost::ptr_vector<ContentNode> maContents;
-public:
-    ContentList();
-    size_t GetPos(const ContentNode* p) const;
-    const ContentNode* GetObject(size_t nPos) const;
-    ContentNode* GetObject(size_t nPos);
-    const ContentNode* operator[](size_t nPos) const;
-    ContentNode* operator[](size_t nPos);
-
-    void Insert(size_t nPos, ContentNode* p);
-    /// deletes
-    void Remove(size_t nPos);
-    /// does not delete
-    void Release(size_t nPos);
-    size_t Count() const;
-    void Clear();
-};
-
 // -------------------------------------------------------------------------
 // class EditPaM
 // -------------------------------------------------------------------------
@@ -703,7 +682,7 @@ public:
     sal_Bool            IsInvalid() const;
     sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 
-    sal_Bool            Adjust( const ContentList& rNodes );
+    sal_Bool            Adjust( const EditDoc& rNodes );
 
     EditSelection&  operator = ( const EditPaM& r );
     sal_Bool            operator == ( const EditSelection& r ) const
@@ -736,9 +715,12 @@ SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0 )
 // -------------------------------------------------------------------------
 // class EditDoc
 // -------------------------------------------------------------------------
-class EditDoc : public ContentList
+class EditDoc
 {
 private:
+    mutable size_t nLastCache;
+    boost::ptr_vector<ContentNode> maContents;
+
     SfxItemPool*    pItemPool;
     Link            aModifyHdl;
 
@@ -804,9 +786,20 @@ public:
     sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
     void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
-    sal_uInt16 GetPos( const ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
     const ContentNode* SafeGetObject(size_t nPos) const;
     ContentNode* SafeGetObject(size_t nPos);
+
+    size_t GetPos(const ContentNode* pNode) const;
+    const ContentNode* GetObject(size_t nPos) const;
+    ContentNode* GetObject(size_t nPos);
+    size_t Count() const;
+    const ContentNode* operator[](size_t nPos) const;
+    ContentNode* operator[](size_t nPos);
+    void Insert(size_t nPos, ContentNode* p);
+    /// deletes
+    void Remove(size_t nPos);
+    /// does not delete
+    void Release(size_t nPos);
 
     static XubString    GetSepStr( LineEnd eEnd );
 };

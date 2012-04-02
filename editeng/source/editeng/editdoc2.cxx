@@ -379,39 +379,37 @@ size_t ParaPortionList::Count() const
     return maPortions.size();
 }
 
-ContentList::ContentList() : nLastCache(0) {}
-
-size_t ContentList::GetPos(const ContentNode* p) const
+size_t EditDoc::GetPos(const ContentNode* p) const
 {
     return FastGetPos(maContents, p, nLastCache);
 }
 
-const ContentNode* ContentList::GetObject(size_t nPos) const
+const ContentNode* EditDoc::GetObject(size_t nPos) const
 {
     return nPos < maContents.size() ? &maContents[nPos] : NULL;
 }
 
-ContentNode* ContentList::GetObject(size_t nPos)
+ContentNode* EditDoc::GetObject(size_t nPos)
 {
     return nPos < maContents.size() ? &maContents[nPos] : NULL;
 }
 
-const ContentNode* ContentList::operator[](size_t nPos) const
+const ContentNode* EditDoc::operator[](size_t nPos) const
 {
     return GetObject(nPos);
 }
 
-ContentNode* ContentList::operator[](size_t nPos)
+ContentNode* EditDoc::operator[](size_t nPos)
 {
     return GetObject(nPos);
 }
 
-void ContentList::Insert(size_t nPos, ContentNode* p)
+void EditDoc::Insert(size_t nPos, ContentNode* p)
 {
     maContents.insert(maContents.begin()+nPos, p);
 }
 
-void ContentList::Remove(size_t nPos)
+void EditDoc::Remove(size_t nPos)
 {
     if (nPos >= maContents.size())
         return;
@@ -419,7 +417,7 @@ void ContentList::Remove(size_t nPos)
     maContents.erase(maContents.begin() + nPos);
 }
 
-void ContentList::Release(size_t nPos)
+void EditDoc::Release(size_t nPos)
 {
     if (nPos >= maContents.size())
         return;
@@ -427,14 +425,9 @@ void ContentList::Release(size_t nPos)
     maContents.release(maContents.begin() + nPos).release();
 }
 
-size_t ContentList::Count() const
+size_t EditDoc::Count() const
 {
     return maContents.size();
-}
-
-void ContentList::Clear()
-{
-    maContents.clear();
 }
 
 void ParaPortionList::Reset()

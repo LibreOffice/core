@@ -644,7 +644,7 @@ sal_Bool EditSelection::IsInvalid() const
     return sal_False;
 }
 
-sal_Bool EditSelection::Adjust( const ContentList& rNodes )
+sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
 {
     DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );
     DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index out of range in Adjust(2)" );
@@ -1201,7 +1201,7 @@ void ItemList::Insert( const SfxPoolItem* pItem )
 }
 
 
-EditDoc::EditDoc( SfxItemPool* pPool )
+EditDoc::EditDoc( SfxItemPool* pPool ) : nLastCache(0)
 {
     if ( pPool )
     {
@@ -1235,7 +1235,7 @@ void EditDoc::ImplDestroyContents()
     for ( sal_uInt16 nNode = Count(); nNode; )
         RemoveItemsFromPool( GetObject( --nNode ) );
 
-    ContentList::Clear();
+    maContents.clear();
 }
 
 void EditDoc::RemoveItemsFromPool( ContentNode* pNode )

@@ -720,7 +720,7 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 
     bAllowUndoAction = sal_False;   // Not anymore ...
 
-    ContentList& rNodes = pImpEE->GetEditDoc();
+    EditDoc& rNodes = pImpEE->GetEditDoc();
     sal_uInt16 nPos = rNodes.GetPos( pCurNode );
 
     // Special case: Bullet => Paragraph start => simply return NULL...
