@@ -38,6 +38,7 @@
 #endif
 #include <osl_Security_Const.h>
 #include <osl/thread.h>
+#include <rtl/process.h>
 #include <rtl/strbuf.hxx>
 
 using namespace osl;
@@ -353,7 +354,7 @@ class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
 
 
 void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
-                   const CPPUNIT_NS::PlugInParameters & parameters)
+                   const CPPUNIT_NS::PlugInParameters & )
 {
     /// start message
     t_print("#Initializing ...\n" );
@@ -633,44 +634,53 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         t_print("Administrator.\n" );
 
     /// get and display forwarded text if available.
-    aStringForward = ::rtl::OUString::createFromAscii( parameters.getCommandLine().c_str() );
-    if ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 )
+    rtl::OUString args[ 3 ];
+    int argsCount = 0;
+    sal_uInt32 n = rtl_getAppCommandArgCount();
+    // skip first, that's the module name
+    for (sal_uInt32 i = 1; i < n; ++i)
     {
-        sal_Int32 nFirstSpacePoint = aStringForward.indexOf( (sal_Unicode)' ' );;
-        sal_Int32 nLastSpacePoint = aStringForward.lastIndexOf( (sal_Unicode)' ' );;
-        if ( nFirstSpacePoint == nLastSpacePoint )
-        /// only forwarded two parameters, username and password.
+        rtl::OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        if( !arg.isEmpty() && arg[ 0 ] == '-' )
+            continue;
+        if( argsCount >= 3 )
         {
-            aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            t_print("\n#Forwarded username: ");
-            printUString( aLogonUser);
-
-            aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, aStringForward.getLength( ) - 1 );
-            t_print("#Forwarded password: ");
-            for (int i = nFirstSpacePoint+1; i <= aStringForward.getLength()-1; ++i)
-                t_print("*");
-            t_print("\n" );
+            SAL_WARN( "sal", "Too many test arguments" );
+            continue;
         }
-        else
-        /// forwarded three parameters, username, password and fileserver.
-        {
-            aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            t_print("#Forwarded username: ");
-            printUString( aLogonUser);
-
-            aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, nLastSpacePoint );
-            t_print("#Forwarded password: ");
-            for (int i = nFirstSpacePoint+1; i <= nLastSpacePoint; ++i)
-                t_print("*");
-            t_print("\n" );
-
-            aFileServer = aStringForward.copy( nLastSpacePoint +1, aStringForward.getLength( ) - 1 );
-            t_print("#Forwarded FileServer: ");
-            printUString( aFileServer );
-
-        }
+        args[ argsCount++ ] = arg;
     }
+    /// only forwarded two parameters, username and password.
+    if( argsCount == 2 )
+    {
+        aLogonUser = args[ 0 ];
+        t_print("\n#Forwarded username: ");
+        printUString( aLogonUser);
 
+        aLogonPasswd = args[ 1 ];
+        t_print("#Forwarded password: ");
+        for (int i = 0; i < aLogonPasswd.getLength(); ++i)
+            t_print("*");
+        t_print("\n" );
+    }
+    else if( argsCount == 3 )
+    /// forwarded three parameters, username, password and fileserver.
+    {
+        aLogonUser = args[ 0 ];
+        t_print("#Forwarded username: ");
+        printUString( aLogonUser);
+
+        aLogonPasswd = args[ 1 ];
+        t_print("#Forwarded password: ");
+        for (int i = 0; i < aLogonPasswd.getLength(); ++i)
+            t_print("*");
+        t_print("\n" );
+
+        aFileServer = args[ 2 ];
+        t_print("#Forwarded FileServer: ");
+        printUString( aFileServer );
+    }
     t_print("#\n#Initialization Done.\n" );
 
 }
