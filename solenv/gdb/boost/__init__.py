@@ -24,9 +24,9 @@ import boost.smart_ptr
 import boost.unordered
 
 def register_pretty_printers(obj):
-    boost.optional.register_pretty_printer(obj)
-    boost.ptr_container.register_pretty_printer(obj)
-    boost.smart_ptr.register_pretty_printer(obj)
-    boost.unordered.register_pretty_printer(obj)
+    boost.optional.register_pretty_printers(obj)
+    boost.ptr_container.register_pretty_printers(obj)
+    boost.smart_ptr.register_pretty_printers(obj)
+    boost.unordered.register_pretty_printers(obj)
 
 # vim:set filetype=python shiftwidth=4 softtabstop=4 expandtab:
