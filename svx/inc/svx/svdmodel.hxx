@@ -50,7 +50,6 @@
 
 class OutputDevice;
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
-#include <vcl/field.hxx>
 #include "svx/svxdllapi.h"
 
 #include <rtl/ref.hxx>

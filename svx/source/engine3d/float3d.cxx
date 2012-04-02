@@ -49,7 +49,6 @@
 #include <svl/style.hxx>
 #include <svx/dlgutil.hxx>
 
-#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/viewpt3d.hxx> // Projection Type
 

@@ -52,7 +52,6 @@
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/ObjectInspectorModel.hpp>
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>

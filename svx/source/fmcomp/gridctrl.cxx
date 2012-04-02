@@ -36,7 +36,6 @@
 #include <svtools/stringtransfer.hxx>
 
 #include "fmprop.hrc"
-#include <svtools/stringtransfer.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>

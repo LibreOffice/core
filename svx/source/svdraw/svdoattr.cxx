@@ -63,7 +63,6 @@
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svl/style.hxx>
-#include <svl/style.hxx>
 #include <svl/whiter.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>

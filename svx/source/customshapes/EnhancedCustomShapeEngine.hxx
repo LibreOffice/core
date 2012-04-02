@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase3.hxx>
 #ifndef __com_sun_star_awt_Rectangle_hpp_
 #include <com/sun/star/awt/Rectangle.hpp>

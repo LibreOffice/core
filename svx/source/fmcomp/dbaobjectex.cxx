@@ -30,13 +30,11 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include "fmprop.hrc"
 #include <comphelper/extract.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include "fmprop.hrc"
 
 //........................................................................
 namespace svx

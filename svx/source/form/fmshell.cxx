@@ -95,7 +95,6 @@
 #define FmFormShell
 #include "svxslots.hxx"
 
-#include <svx/svxids.hrc>
 #include "tbxform.hxx"
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

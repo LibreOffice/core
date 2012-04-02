@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 /** === end UNO includes === **/
 #include <comphelper/stl_types.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include <set>
 

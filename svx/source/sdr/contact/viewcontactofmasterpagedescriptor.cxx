@@ -41,7 +41,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <svx/svdpage.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>

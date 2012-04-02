@@ -77,7 +77,6 @@
 #include <svl/whiter.hxx>
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
-#include <svx/xlnclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>

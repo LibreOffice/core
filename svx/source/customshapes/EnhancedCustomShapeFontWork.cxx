@@ -38,7 +38,6 @@
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svditer.hxx>
-#include <vcl/metric.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fontitem.hxx>

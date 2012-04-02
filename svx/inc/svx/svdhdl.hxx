@@ -41,9 +41,6 @@
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include "svx/svxdllapi.h"
 
-#include <svx/xpoly.hxx>
-#include <svx/svdoedge.hxx>
-
 class VirtualDevice;
 class OutputDevice;
 class Region;

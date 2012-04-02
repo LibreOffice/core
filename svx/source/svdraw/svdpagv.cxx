@@ -37,15 +37,9 @@
 #include <svx/svdview.hxx>
 
 #include <svx/svdedxv.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svdpagv.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdview.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
@@ -54,7 +48,6 @@
 #include <svx/svdoole2.hxx>
 
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/fmview.hxx>
 

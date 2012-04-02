@@ -51,7 +51,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -97,8 +96,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
 
 // #i102251#
 #include <editeng/editstat.hxx>

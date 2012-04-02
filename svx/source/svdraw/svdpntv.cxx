@@ -40,12 +40,8 @@
 #include <svx/svdpagv.hxx>
 #include <svl/smplhint.hxx>
 
-#include <svx/svdpntv.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdglue.hxx>
@@ -58,18 +54,13 @@
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/svdglue.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svx/svdouno.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 

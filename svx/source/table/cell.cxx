@@ -50,9 +50,6 @@
 
 #include "tableundo.hxx"
 #include "cell.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/svdoutl.hxx"
-#include "svx/unoshtxt.hxx"
 #include "svx/unoshprp.hxx"
 #include "svx/unoshape.hxx"
 #include "editeng/editobj.hxx"

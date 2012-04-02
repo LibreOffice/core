@@ -50,7 +50,6 @@
 #include "xmloff/HatchStyle.hxx"
 #include "xmloff/ImageStyle.hxx"
 #include "xmloff/MarkerStyle.hxx"
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>

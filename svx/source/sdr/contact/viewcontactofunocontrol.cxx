@@ -45,7 +45,6 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //........................................................................

@@ -39,7 +39,6 @@
 
 #include <stdio.h>
 #include <float.h>
-#include <rtl/math.hxx>
 
 #include "svx/chrtitem.hxx"
 

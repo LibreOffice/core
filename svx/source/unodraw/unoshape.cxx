@@ -40,7 +40,6 @@
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <osl/mutex.hxx>
 #include "svx/shapepropertynotifier.hxx"
 #include <comphelper/extract.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -86,8 +85,6 @@
 #include "svx/xbtmpit.hxx"
 #include "svx/xflgrit.hxx"
 #include "svx/xflhtit.hxx"
-#include "svx/xlnedit.hxx"
-#include "svx/xlnstit.hxx"
 #include "svx/xlndsit.hxx"
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"

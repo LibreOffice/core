@@ -49,7 +49,6 @@
 #include "editeng/flditem.hxx"  // for URLField
 #include "svx/obj3d.hxx"
 #include "svx/svddrgmt.hxx"
-#include "svx/svdoutl.hxx"
 #include "svx/svdotable.hxx"
 #include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>

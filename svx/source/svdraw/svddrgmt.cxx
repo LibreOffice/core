@@ -47,7 +47,6 @@
 #include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/svddrgv.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>

@@ -716,7 +716,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
-#include <editeng/unonrule.hxx>
+
 com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
     SvxNumRule* pDefaultRule = NULL;

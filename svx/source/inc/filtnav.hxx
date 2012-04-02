@@ -49,7 +49,6 @@
 #include "svx/fmtools.hxx"
 #include "fmexch.hxx"
 #include <connectivity/sqlparse.hxx>
-#include "fmexch.hxx"
 #include "sqlparserclient.hxx"
 
 class FmFormShell;

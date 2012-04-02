@@ -74,7 +74,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
 #include "svx/svdglob.hxx"  // Stringcache
 #include "svx/svdstr.hrc"   // the object's name

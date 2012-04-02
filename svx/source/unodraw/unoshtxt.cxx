@@ -53,7 +53,6 @@
 #include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
 using namespace ::osl;

@@ -55,7 +55,6 @@
 
 #include <svx/xdef.hxx>
 #include "svx/unoapi.hxx"
-#include "accessibility.hrc"
 #include "lookupcolorname.hxx"
 
 using namespace ::rtl;

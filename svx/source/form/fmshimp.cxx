@@ -109,7 +109,6 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>

@@ -34,7 +34,6 @@
 #include <svx/sdr/event/eventhandler.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
-#include <svx/sdr/event/eventhandler.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

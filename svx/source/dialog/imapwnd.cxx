@@ -56,7 +56,6 @@
 #include <sot/formats.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 

@@ -49,7 +49,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

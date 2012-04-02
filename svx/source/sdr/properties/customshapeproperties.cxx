@@ -33,7 +33,6 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svl/whiter.hxx>
-#include <svl/itemset.hxx>
 #include <svl/smplhint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

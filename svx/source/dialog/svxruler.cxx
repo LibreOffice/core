@@ -138,7 +138,6 @@ void DebugParaMargin_Impl(const SvxLRSpaceItem& rLRSpace)
 
 #endif // DEBUGLIN
 #ifdef DEBUG_RULER
-#include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 class RulerDebugWindow : public Window
 {

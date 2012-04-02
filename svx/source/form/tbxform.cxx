@@ -45,7 +45,6 @@
 #include "svx/tbxdraw.hxx"
 #include "tbxform.hxx"
 #include "svx/fmresids.hrc"
-#include "fmitems.hxx"
 #include "fmhelp.hrc"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

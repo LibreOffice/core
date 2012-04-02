@@ -47,17 +47,14 @@
 #include <svl/whiter.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <editeng/charscaleitem.hxx>
-#include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/postitem.hxx>
 
 

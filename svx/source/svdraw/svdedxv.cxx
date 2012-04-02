@@ -62,7 +62,6 @@
 #include <svdibrow.hxx>
 #endif
 
-#include <svx/svdoutl.hxx>
 #include <svx/svddrgv.hxx>  // for SetSolidDragging()
 #include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache

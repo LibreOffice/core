@@ -35,7 +35,6 @@
 #include <tlfsys.hxx>
 #include <tlbigint.hxx>
 
-#include <sysdep.hxx>
 #include <sv.hxx>
 #include <svtool.hxx>
 #define _ANIMATION

@@ -34,7 +34,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/uno3.hxx>
-#include <com/sun/star/container/XChild.hpp>
 
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>

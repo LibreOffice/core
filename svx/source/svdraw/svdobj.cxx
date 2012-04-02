@@ -76,7 +76,6 @@
 #include <svx/svditer.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include "svx/xlinjoit.hxx"
 #include <svx/unopage.hxx>

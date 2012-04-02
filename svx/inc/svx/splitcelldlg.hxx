@@ -31,7 +31,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
-#include <vcl/button.hxx>
 
 #include <svx/stddlg.hxx>
 

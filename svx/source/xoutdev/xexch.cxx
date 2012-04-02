@@ -35,7 +35,6 @@
 #include <svx/xfillit0.hxx>
 #include <svl/itempool.hxx>
 #include <svl/whiter.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "svx/xexch.hxx"

@@ -87,8 +87,6 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>

@@ -30,7 +30,6 @@
 #include "chinese_translation_unodialog.hxx"
 #include "chinese_translationdialog.hxx"
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

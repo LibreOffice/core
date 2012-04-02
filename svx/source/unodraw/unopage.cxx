@@ -31,7 +31,6 @@
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/clsids.hxx>
 #include <comphelper/serviceinfohelper.hxx>

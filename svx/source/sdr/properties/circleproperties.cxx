@@ -34,7 +34,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/sxcikitm.hxx>
 #include <svx/sxciaitm.hxx>
-#include <svx/sxciaitm.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

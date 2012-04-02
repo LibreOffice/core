@@ -39,7 +39,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/svdoashp.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
 #include <editeng/eeitem.hxx>

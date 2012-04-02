@@ -62,7 +62,6 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>

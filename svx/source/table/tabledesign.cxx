@@ -39,7 +39,6 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/basemutex.hxx>

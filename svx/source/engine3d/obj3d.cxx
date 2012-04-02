@@ -49,7 +49,6 @@
 #include <vcl/settings.hxx>
 #include <svx/xlnclit.hxx>
 #include <svl/metitem.hxx>
-#include <svx/xtable.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
@@ -84,7 +83,6 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()

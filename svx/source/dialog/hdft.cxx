@@ -59,7 +59,6 @@
 #include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 // static ----------------------------------------------------------------
 
 // Word 97 incompatibility (#i19922#)

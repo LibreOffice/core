@@ -65,7 +65,6 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>

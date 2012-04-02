@@ -32,7 +32,6 @@
 // HACK
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
-#include <sot/storage.hxx>
 #include <svx/svdview.hxx>
 #include <string.h>
 #ifndef _STRING_H
