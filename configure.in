@@ -2325,7 +2325,7 @@ if test "$_os" = "Darwin"; then
           MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.5.sdk"
         fi
         if test ! -d "$MACOSX_SDK_PATH"; then
-          MACOSX_SDK_PATH="/Xcode3/SDKs/MacOSX10.4u.sdk"
+          MACOSX_SDK_PATH="/Xcode3/SDKs/MacOSX10.5.sdk"
         fi
         macosx_sdk_value="1050"
         AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
