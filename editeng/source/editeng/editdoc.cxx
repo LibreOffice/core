@@ -1350,6 +1350,52 @@ ContentNode* EditDoc::SafeGetObject(size_t nPos)
     return ( nPos < Count() ) ? GetObject( nPos ) : 0;
 }
 
+const ContentNode* EditDoc::GetObject(size_t nPos) const
+{
+    return nPos < maContents.size() ? &maContents[nPos] : NULL;
+}
+
+ContentNode* EditDoc::GetObject(size_t nPos)
+{
+    return nPos < maContents.size() ? &maContents[nPos] : NULL;
+}
+
+const ContentNode* EditDoc::operator[](size_t nPos) const
+{
+    return GetObject(nPos);
+}
+
+ContentNode* EditDoc::operator[](size_t nPos)
+{
+    return GetObject(nPos);
+}
+
+void EditDoc::Insert(size_t nPos, ContentNode* p)
+{
+    maContents.insert(maContents.begin()+nPos, p);
+}
+
+void EditDoc::Remove(size_t nPos)
+{
+    if (nPos >= maContents.size())
+        return;
+
+    maContents.erase(maContents.begin() + nPos);
+}
+
+void EditDoc::Release(size_t nPos)
+{
+    if (nPos >= maContents.size())
+        return;
+
+    maContents.release(maContents.begin() + nPos).release();
+}
+
+size_t EditDoc::Count() const
+{
+    return maContents.size();
+}
+
 XubString EditDoc::GetSepStr( LineEnd eEnd )
 {
     XubString aSep;
