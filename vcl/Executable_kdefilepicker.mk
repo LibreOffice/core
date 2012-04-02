@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Executable_Executable,kdefilepicker))
 
-$(eval $(call gb_Executable_add_package_headers,kdefilepicker,\
-	vcl_kde_moc \
-))
-
 $(eval $(call gb_Executable_add_defs,kdefilepicker,\
 	$(KDE_CFLAGS) \
 ))

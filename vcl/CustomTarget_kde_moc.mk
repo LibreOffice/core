@@ -25,12 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,vcl_kde_moc,$(WORKDIR)/CustomTarget/vcl/unx/kde/fpicker))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde/fpicker,new_style))
 
-$(eval $(call gb_Package_add_customtarget,vcl_kde_moc,vcl/unx/kde/fpicker))
+VCKF := $(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)
 
-$(eval $(call gb_CustomTarget_add_dependencies,vcl/unx/kde/fpicker,\
-    vcl/unx/kde/fpicker/kdefilepicker.hxx \
-))
+$(call gb_CustomTarget_get_target,vcl/unx/kde/fpicker) : \
+	$(VCKF)/kdefilepicker.moc.cxx
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(VCKF)/kdefilepicker.moc.cxx : \
+		$(SRCDIR)/vcl/unx/kde/fpicker/kdefilepicker.hxx | $(VCKF)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
+	$(MOC) -o $@ $<
+
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:

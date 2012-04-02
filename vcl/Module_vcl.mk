@@ -57,6 +57,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 ifneq ($(ENABLE_KDE),)
 $(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_kde_moc \
+    Executable_kdefilepicker \
     Library_vclplug_kde \
 ))
 endif
