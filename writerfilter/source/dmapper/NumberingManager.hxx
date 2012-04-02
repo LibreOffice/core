@@ -30,7 +30,7 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
     sal_Int32                                     m_nFWord6;         //LN_FWORD6
     ::rtl::OUString                               m_sRGBXchNums;     //LN_RGBXCHNUMS
-    sal_Int32                                     m_nXChFollow;      //LN_IXCHFOLLOW
+    sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     ::rtl::OUString                               m_sBulletChar;
     sal_Int32                                     m_nTabstop;
     boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;

@@ -1319,7 +1319,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_uInt16 nNumberingType,
         SvxAdjust eAdjust,
         const sal_uInt8 * pNumLvlPos,
-        sal_uInt8 /*nFollow*/,
+        sal_uInt8 nFollow,
         const wwFont * pFont,
         const SfxItemSet * pOutSet,
         sal_Int16 nIndentAt,
@@ -1364,7 +1364,8 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT;
     m_rExport.OutULong( nStart );
 
-    m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW << "0";
+    m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW;
+    m_rExport.OutULong( nFollow );
 
     // leveltext group
     m_rExport.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LEVELTEXT << ' ';

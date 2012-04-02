@@ -2389,8 +2389,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_LEVELFOLLOW:
+            m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_IXCHFOLLOW, pIntValue));
+            break;
         case RTF_LISTOVERRIDECOUNT:
-            // Ignore these for now, the exporter always emits them with a zero parameter.
+            // Ignore this for now, the exporter always emits it with a zero parameter.
             break;
         case RTF_PICSCALEX:
             m_aStates.top().aPicture.nScaleX = nParam;

@@ -244,6 +244,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_DISTANCE               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Distance")); break;
             case PROP_NUMBER_POSITION        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberPosition")); break;
             case PROP_LEVEL                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Level")); break;
+            case PROP_LEVEL_FOLLOW           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LabelFollowedBy")); break;
             case PROP_LEVEL_PARAGRAPH_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles")); break;
             case PROP_LEVEL_FORMAT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")); break;
             case PROP_TOKEN_TYPE             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenType")); break;

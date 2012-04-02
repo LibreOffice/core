@@ -282,7 +282,9 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 
 //    TODO: sRGBXchNums;     array of inherited numbers
 
-//    TODO: nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
+//  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
+    aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LEVEL_FOLLOW, m_nXChFollow ));
+
 
     _PropertyMap::const_iterator aMapIter = begin();
     _PropertyMap::const_iterator aEndIter = end();
@@ -816,7 +818,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if(pProperties.get())
                     pProperties->resolve(*this);
-                }
+            }
             break;
             case NS_rtf::LN_RGBXCHNUMS: break;
             case NS_rtf::LN_ISTARTAT:
