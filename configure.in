@@ -975,6 +975,11 @@ AC_ARG_ENABLE(postgresql-sdbc,
         [Disable the build of the PostgreSQL-SDBC driver.])
 )
 
+AC_ARG_ENABLE(coretext,
+    AS_HELP_STRING([--enable-coretext],
+        [Use CoreText framework on Mac (instead of ATSU).]),
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -10092,6 +10097,21 @@ else
     AC_MSG_RESULT([integration])
 fi
 AC_SUBST(WITH_HELPPACK_INTEGRATION)
+
+dnl ===================================================================
+dnl Test whether to use CoreText framework
+dnl ===================================================================
+ENABLE_CORETEXT=NO
+if test "$_os" = "Darwin"; then
+    AC_MSG_CHECKING([whether to use CoreText framework])
+    if test "$enable_coretext" = "yes"; then
+        AC_MSG_RESULT([yes])
+        ENABLE_CORETEXT=YES
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(ENABLE_CORETEXT)
 
 ###############################################################################
 # Extensions checking
