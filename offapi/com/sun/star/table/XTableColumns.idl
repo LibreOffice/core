@@ -48,9 +48,6 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
 
     /** inserts new columns.
 
-        <p>When the index or combination of index and count is out
-        of bounds an exception will be thrown.</p>
-
         @param nIndex
             is the index the first inserted column will have.
 
@@ -62,9 +59,6 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
     //-------------------------------------------------------------------------
 
     /** deletes columns.
-
-        <p>When the index or combination of index and count is out
-        of bounds an exception will be thrown.</p>
 
         @param nIndex
             is the index of the first column to delete.
