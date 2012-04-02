@@ -71,8 +71,6 @@
 #include "markdata.hxx"
 #include "reffact.hxx"
 
-#include <iostream>
-
 //------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )

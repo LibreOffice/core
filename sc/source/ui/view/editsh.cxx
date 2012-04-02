@@ -92,9 +92,6 @@
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
 
-#include <iostream>
-
-
 using namespace ::com::sun::star;
 
 

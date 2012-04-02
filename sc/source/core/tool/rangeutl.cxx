@@ -42,8 +42,6 @@
 #include "externalrefmgr.hxx"
 #include "compiler.hxx"
 
-#include <iostream>
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::formula::FormulaGrammar;

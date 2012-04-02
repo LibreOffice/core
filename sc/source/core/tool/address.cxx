@@ -59,8 +59,6 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 
 ////////////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-
 /**
  * Parse from the opening single quote to the closing single quote.  Inside
  * the quotes, a single quote character is encoded by double single-quote
