@@ -32,13 +32,14 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
 #include <svl/solar.hrc>
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define ENTER_MOD_METHOD()  \
-    ::osl::MutexGuard aGuard(s_aMutex); \
+    ::osl::MutexGuard aGuard(theOModuleMutex::get()); \
     ensureImpl()
 
 //.........................................................................
@@ -98,7 +99,11 @@ ResMgr* OModuleImpl::getResManager()
 //=========================================================================
 //= OModule
 //=========================================================================
-::osl::Mutex    OModule::s_aMutex;
+namespace
+{
+    // access safety
+    struct theOModuleMutex : public rtl::Static< osl::Mutex, theOModuleMutex > {};
+}
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = NULL;
 //-------------------------------------------------------------------------
@@ -111,14 +116,14 @@ ResMgr* OModule::getResManager()
 //-------------------------------------------------------------------------
 void OModule::registerClient()
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(theOModuleMutex::get());
     ++s_nClients;
 }
 
 //-------------------------------------------------------------------------
 void OModule::revokeClient()
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(theOModuleMutex::get());
     if (!--s_nClients && s_pImpl)
     {
         delete s_pImpl;

@@ -52,20 +52,20 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-const ::rtl::OUString TITLE(RTL_CONSTASCII_USTRINGPARAM ("Title"));
-const ::rtl::OUString TARGET_DIR_URL(RTL_CONSTASCII_USTRINGPARAM ("TargetDirURL"));
-const ::rtl::OUString DESCRIPTION(RTL_CONSTASCII_USTRINGPARAM ("TypeDescription"));
-const ::rtl::OUString TARGET_URL(RTL_CONSTASCII_USTRINGPARAM ("TargetURL"));
+const char TITLE[] = "Title";
+const char TARGET_DIR_URL[] = "TargetDirURL";
+const char DESCRIPTION[] = "TypeDescription";
+const char TARGET_URL[] = "TargetURL";
 
-const ::rtl::OUString DOCTEMPLATES(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.DocumentTemplates"));
+const char DOCTEMPLATES[] = "com.sun.star.frame.DocumentTemplates";
 
 //  These strings are used to find impress templates in the tree of
 //  template files.  Should probably be determined dynamically.
-const ::rtl::OUString IMPRESS_BIN_TEMPLATE(RTL_CONSTASCII_USTRINGPARAM ("application/vnd.stardivision.impress"));
-const ::rtl::OUString IMPRESS_XML_TEMPLATE = MIMETYPE_VND_SUN_XML_IMPRESS;
+const char IMPRESS_BIN_TEMPLATE[] = "application/vnd.stardivision.impress";
+const char IMPRESS_XML_TEMPLATE[] = MIMETYPE_VND_SUN_XML_IMPRESS_ASCII;
 // The following id comes from the bugdoc in #i2764#.
-const ::rtl::OUString IMPRESS_XML_TEMPLATE_B(RTL_CONSTASCII_USTRINGPARAM ("Impress 2.0"));
-const ::rtl::OUString IMPRESS_XML_TEMPLATE_OASIS = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION;
+const char IMPRESS_XML_TEMPLATE_B[] = "Impress 2.0";
+const char IMPRESS_XML_TEMPLATE_OASIS[] = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII;
 
 
 class FolderDescriptor
@@ -225,7 +225,7 @@ TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
     if (xFactory.is())
     {
         Reference<frame::XDocumentTemplates> xTemplates (
-            xFactory->createInstance (DOCTEMPLATES), UNO_QUERY);
+            xFactory->createInstance (rtl::OUString(DOCTEMPLATES)), UNO_QUERY);
         DBG_ASSERT (xTemplates.is(), "TemplateScanner::GetTemplateRoot: xTemplates is NULL");
 
         if (xTemplates.is())
@@ -253,9 +253,9 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
         Sequence<rtl::OUString> aProps (3);
-        aProps[0] = TITLE;
-        aProps[1] = TARGET_URL;
-        aProps[2] = DESCRIPTION;
+        aProps[0] = rtl::OUString(TITLE);
+        aProps[1] = rtl::OUString(TARGET_URL);
+        aProps[2] = rtl::OUString(DESCRIPTION);
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
@@ -294,10 +294,10 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 //  add a new entry to the resulting list (which is created
                 //  first if necessary).
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
-                    ||  (sContentType == IMPRESS_BIN_TEMPLATE)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
+                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE_OASIS)))
+                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_BIN_TEMPLATE)))
+                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE)))
+                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE_B))))
                 {
                     ::rtl::OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
@@ -347,8 +347,8 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
 
         //  Define the list of properties we are interested in.
         Sequence<rtl::OUString> aProps (2);
-        aProps[0] = TITLE;
-        aProps[1] = TARGET_DIR_URL;
+        aProps[0] = rtl::OUString(TITLE);
+        aProps[1] = rtl::OUString(TARGET_DIR_URL);
 
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;

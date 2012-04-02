@@ -50,7 +50,6 @@ namespace rptui
             // not implemented. OModule is a static class
 
     protected:
-        static ::osl::Mutex s_aMutex;       /// access safety
         static sal_Int32    s_nClients;     /// number of registered clients
         static OModuleImpl* s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
 

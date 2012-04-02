@@ -153,9 +153,6 @@ private:
         ::com::sun::star::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
 
-    static const ::rtl::OUString msCurrentPagePropertyName;
-    static const ::rtl::OUString msEditModePropertyName;
-
     void ReleaseListeners (void);
 
     void ConnectToController (void);
@@ -175,10 +172,8 @@ private:
 };
 
 
-const ::rtl::OUString EventMultiplexer::Implementation::msCurrentPagePropertyName (
-    RTL_CONSTASCII_USTRINGPARAM("CurrentPage"));
-const ::rtl::OUString EventMultiplexer::Implementation::msEditModePropertyName (
-    RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
+const char aCurrentPagePropertyName[] = "CurrentPage";
+const char aEditModePropertyName[] = "IsMasterPageMode";
 
 
 //===== EventMultiplexer ======================================================
@@ -441,7 +436,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
         {
                 try
                 {
-                    xSet->addPropertyChangeListener(msCurrentPagePropertyName, this);
+                    xSet->addPropertyChangeListener(rtl::OUString(aCurrentPagePropertyName), this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -450,7 +445,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
 
                 try
                 {
-                    xSet->addPropertyChangeListener(msEditModePropertyName, this);
+                    xSet->addPropertyChangeListener(rtl::OUString(aEditModePropertyName), this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -488,7 +483,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         {
             try
             {
-                xSet->removePropertyChangeListener(msCurrentPagePropertyName, this);
+                xSet->removePropertyChangeListener(rtl::OUString(aCurrentPagePropertyName), this);
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -497,7 +492,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
 
             try
             {
-                xSet->removePropertyChangeListener(msEditModePropertyName, this);
+                xSet->removePropertyChangeListener(rtl::OUString(aEditModePropertyName), this);
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -560,11 +555,11 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 {
     ThrowIfDisposed();
 
-    if (rEvent.PropertyName.equals(msCurrentPagePropertyName))
+    if (rEvent.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCurrentPagePropertyName)))
     {
         CallListeners(EventMultiplexerEvent::EID_CURRENT_PAGE);
     }
-    else if (rEvent.PropertyName.equals(msEditModePropertyName))
+    else if (rEvent.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aEditModePropertyName)))
     {
         bool bIsMasterPageMode (false);
         rEvent.NewValue >>= bIsMasterPageMode;

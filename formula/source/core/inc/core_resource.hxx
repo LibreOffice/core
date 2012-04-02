@@ -43,7 +43,6 @@ namespace formula
     class ResourceManager
     {
         friend class OModuleClient;
-        static ::osl::Mutex s_aMutex;       /// access safety
         static sal_Int32    s_nClients;     /// number of registered clients
         static ResMgr*  m_pImpl;
 

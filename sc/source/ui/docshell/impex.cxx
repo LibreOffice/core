@@ -89,9 +89,9 @@ class StarBASIC;
 
 namespace
 {
-    const String SYLK_LF = String::CreateFromAscii("\x1b :");
-    const String DOUBLE_SEMICOLON = String::CreateFromAscii(";;");
-    const String DOUBLE_DOUBLEQUOTE = String::CreateFromAscii("\"\"");
+    const char SYLK_LF[]  = "\x1b :";
+    const char DOUBLE_SEMICOLON[] = ";;";
+    const char DOUBLE_DOUBLEQUOTE[] = "\"\"";
 }
 
 enum SylkVersion
@@ -624,11 +624,11 @@ void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString.SearchAndReplaceAll( DOUBLE_SEMICOLON, ';' );
+        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_SEMICOLON), ';' );
     else
-        rString.SearchAndReplaceAll( DOUBLE_DOUBLEQUOTE, '"' );
+        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_DOUBLEQUOTE), '"' );
 
-    rString.SearchAndReplaceAll( SYLK_LF, _LF );
+    rString.SearchAndReplaceAll( rtl::OUString(SYLK_LF), _LF );
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
@@ -1857,7 +1857,7 @@ sal_Bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCellStr );
-                    aCellStr.SearchAndReplaceAll( _LF, SYLK_LF );
+                    aCellStr.SearchAndReplaceAll( _LF, rtl::OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += String::CreateFromInt32( c );

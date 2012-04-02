@@ -34,7 +34,7 @@
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
 //---------------------------------------------------
-
+#include <rtl/instance.hxx>
 #include <svl/solar.hrc>
 
 //.........................................................................
@@ -44,7 +44,12 @@ namespace dbaccess
     //==================================================================
     //= ResourceManager
     //==================================================================
-    ::osl::Mutex    ResourceManager::s_aMutex;
+    namespace
+    {
+        // access safety
+        struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
+    }
+
     sal_Int32       ResourceManager::s_nClients = 0;
     ResMgr*         ResourceManager::m_pImpl = NULL;
 
@@ -92,14 +97,14 @@ namespace dbaccess
     //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
         ++s_nClients;
     }
 
     //-------------------------------------------------------------------------
     void ResourceManager::revokeClient()
     {
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
         if (!--s_nClients && m_pImpl)
         {
             delete m_pImpl;
