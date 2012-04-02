@@ -234,6 +234,14 @@ bool AquaSalGraphics::CheckContext()
     return (mrContext != NULL);
 }
 
+CGContextRef AquaSalGraphics::GetContext()
+{
+    if(!mrContext)
+    {
+        CheckContext();
+    }
+    return mrContext;
+}
 
 void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
 {

@@ -161,6 +161,7 @@ public:
     void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool                CheckContext();
+    CGContextRef        GetContext();
     void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
     void                RefreshRect( const CGRect& );
     void                RefreshRect( const NSRect& );
@@ -347,7 +348,7 @@ private:
     void Pattern50Fill();
     UInt32 getState( ControlState nState );
     UInt32 getTrackState( ControlState nState );
-    bool GetRawFontData( const ImplFontData* pFontData,
+    bool GetRawFontData( const PhysicalFontFace* pFontData,
                          std::vector<unsigned char>& rBuffer,
                          bool* pJustCFF );
 };

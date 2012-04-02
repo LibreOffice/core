@@ -335,6 +335,17 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_CORETEXT \
 ))
 
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/aqua/source/gdi/coretext/salcoretextfontutils \
+    vcl/aqua/source/gdi/coretext/salcoretextlayout \
+    vcl/aqua/source/gdi/coretext/salcoretextstyle \
+    vcl/aqua/source/gdi/coretext/salgdi \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+	coretext \
+))
+
 else # ATSUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -399,6 +410,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/service_entry \
     vcl/aqua/source/gdi/salbmp \
     vcl/aqua/source/gdi/salcolorutils \
+    vcl/aqua/source/gdi/salgdicommon \
     vcl/aqua/source/gdi/salgdiutils \
     vcl/aqua/source/gdi/salmathutils \
     vcl/aqua/source/gdi/salnativewidgets \
