@@ -412,7 +412,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         xub_StrLen nFnd = sNumStr.Search( sSrch );
                         if( STRING_NOTFOUND != nFnd )
                         {
-                            *pLvlPos = (sal_uInt8)(nFnd + rFmt.GetPrefix().Len() + 1 );
+                            *pLvlPos = (sal_uInt8)(nFnd + rFmt.GetPrefix().getLength() + 1 );
                             ++pLvlPos;
                             sNumStr.SetChar( nFnd, (char)i );
                         }
@@ -429,7 +429,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     }
                 }
 
-                if( rFmt.GetPrefix().Len() )
+                if( !rFmt.GetPrefix().isEmpty() )
                     sNumStr.Insert( rFmt.GetPrefix(), 0 );
                 sNumStr += rFmt.GetSuffix();
             }

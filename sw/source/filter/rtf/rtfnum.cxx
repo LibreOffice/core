@@ -1015,21 +1015,21 @@ NUMATTR_SETUNDERLINE:
     // Punkt ist, dann will RTF den Punkt als Trenner zwischen den Ebenen
     // haben - das haben wir aber schon als default
     if( 1 < pCurNumFmt->GetIncludeUpperLevels() &&
-        1 == pCurNumFmt->GetPrefix().Len() &&
-        '.' == pCurNumFmt->GetPrefix().GetChar( 0 ) &&
+        1 == pCurNumFmt->GetPrefix().getLength() &&
+        '.' == pCurNumFmt->GetPrefix()[0] &&
         SVX_NUM_CHAR_SPECIAL != pCurNumFmt->GetNumberingType() )
         pCurNumFmt->SetPrefix( aEmptyStr );
 
     // falls das ein nicht numerierter Absatz mit ein Prefix-Text mit
     // einem Zeichen ist, dann setze den als Bulletzeichen
     if( pCurNumFmt->GetCharFmt() && SVX_NUM_NUMBER_NONE == pCurNumFmt->GetNumberingType() &&
-        3 == nListNo && 1 == pCurNumFmt->GetPrefix().Len() )
+        3 == nListNo && 1 == pCurNumFmt->GetPrefix().getLength() )
     {
         SwCharFmt* pChFmt = pCurNumFmt->GetCharFmt();
         pCurNumFmt->SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         pCurNumFmt->SetBulletFont( FindFontOfItem( pChFmt->GetFont() ) );
 
-        pCurNumFmt->SetBulletChar( pCurNumFmt->GetPrefix().GetChar( 0 ) );
+        pCurNumFmt->SetBulletChar( pCurNumFmt->GetPrefix()[0] );
         pCurNumFmt->SetPrefix( aEmptyStr );
 
         // den Font oder sogar das gesamte CharFormat loeschen?
