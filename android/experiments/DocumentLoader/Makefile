@@ -196,6 +196,9 @@ copy-stuff:
 	echo 'ProductMinor=1' >> assets/program/versionrc
 	echo 'ProductSource=OOO350' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
+# Assets that are unpacked at run-time into the app's data directory.
+	mkdir -p assets/unpack/etc/fonts
+	cp fonts.conf assets/unpack/etc/fonts
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
