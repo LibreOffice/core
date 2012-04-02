@@ -1704,19 +1704,32 @@ EditDoc::~EditDoc()
         SfxItemPool::Free(pItemPool);
 }
 
+namespace {
+
+class RemoveEachItemFromPool : std::unary_function<ContentNode, void>
+{
+    EditDoc& mrDoc;
+public:
+    RemoveEachItemFromPool(EditDoc& rDoc) : mrDoc(rDoc) {}
+    void operator() (const ContentNode& rNode)
+    {
+        mrDoc.RemoveItemsFromPool(rNode);
+    }
+};
+
+}
+
 void EditDoc::ImplDestroyContents()
 {
-    for ( sal_uInt16 nNode = Count(); nNode; )
-        RemoveItemsFromPool( GetObject( --nNode ) );
-
+    std::for_each(maContents.begin(), maContents.end(), RemoveEachItemFromPool(*this));
     maContents.clear();
 }
 
-void EditDoc::RemoveItemsFromPool( ContentNode* pNode )
+void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
 {
-    for ( sal_uInt16 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
+    for (size_t nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); ++nAttr)
     {
-        const EditCharAttrib& rAttr = pNode->GetCharAttribs().GetAttribs()[nAttr];
+        const EditCharAttrib& rAttr = rNode.GetCharAttribs().GetAttribs()[nAttr];
         GetItemPool().Remove(*rAttr.GetItem());
     }
 }
@@ -2143,7 +2156,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     *pLeft += *pRight;
 
     // the one to the right disappears.
-    RemoveItemsFromPool( pRight );
+    RemoveItemsFromPool(*pRight);
     sal_uInt16 nRight = GetPos( pRight );
     Remove( nRight );
 

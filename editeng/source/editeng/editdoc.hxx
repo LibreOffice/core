@@ -777,7 +777,7 @@ public:
     SfxItemPool&        GetItemPool()                   { return *pItemPool; }
     const SfxItemPool&  GetItemPool() const             { return *pItemPool; }
 
-    void            RemoveItemsFromPool( ContentNode* pNode );
+    void RemoveItemsFromPool(const ContentNode& rNode);
 
     void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem );

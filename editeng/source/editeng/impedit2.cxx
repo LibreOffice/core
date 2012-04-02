@@ -2503,7 +2503,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
         InsertUndo( new EditUndoDelContent( this, pNode, nPara ) );
     else
     {
-        aEditDoc.RemoveItemsFromPool( pNode );
+        aEditDoc.RemoveItemsFromPool(*pNode);
         if ( pNode->GetStyleSheet() )
             EndListening( *pNode->GetStyleSheet(), sal_False );
         delete pNode;
