@@ -52,7 +52,7 @@ public:
     /** Insert a request with highest or lowest priority in its priority
         class.  When the request is already present then it is first
         removed.  This effect is then a re-prioritization.
-        @param rRequestData
+        @param aKey
             The request.
         @param eRequestClass
             The priority class in which to insert the request with highest
@@ -68,7 +68,7 @@ public:
         bool bInsertWithHighestPriority = false);
 
     /** Remove the specified request from the queue.
-        @param rRequestData
+        @param aKey
             It is OK when the specified request is not a member of the
             queue.
         @return

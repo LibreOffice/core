@@ -31,10 +31,6 @@
 
 #include <set>
 
-
-#undef VERBOSE
-//#define VERBOSE
-
 namespace sd { namespace slidesorter { namespace cache {
 
 /** This class extends the actual request data with additional information
@@ -118,7 +114,7 @@ void RequestQueue::AddRequest (
 
     // If the request is already a member of the queue then remove it so
     // that the following insertion will use the new prioritization.
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >=2
     bool bRemoved =
 #endif
         RemoveRequest(aKey);
@@ -130,13 +126,12 @@ void RequestQueue::AddRequest (
     Request aRequest (aKey, nPriority, eRequestClass);
     mpRequestQueue->insert(aRequest);
 
-    SSCD_SET_REQUEST_CLASS(rRequestData.GetPage(),eRequestClass);
+    SSCD_SET_REQUEST_CLASS(aKey,eRequestClass);
 
-#ifdef VERBOSE
-    OSL_TRACE("%s request for page %d with priority class %d",
-        bRemoved?"replaced":"added",
-        (rRequestData.GetPage()->GetPageNum()-1)/2,
-        eRequestClass);
+#if OSL_DEBUG_LEVEL >=2
+    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": " << (bRemoved?"replaced":"added")
+        << " request for page " << ((aKey->GetPageNum()-1)/2)
+        << " with priority class " << static_cast<int>(eRequestClass));
 #endif
 }
 
@@ -166,7 +161,7 @@ bool RequestQueue::RemoveRequest (
 
             if (bRequestWasRemoved)
             {
-                SSCD_SET_STATUS(rRequest.GetPage(),NONE);
+                SSCD_SET_STATUS(aKey,NONE);
             }
         }
         else
@@ -195,7 +190,7 @@ void RequestQueue::ChangeClass (
     if (iRequest!=mpRequestQueue->end() && iRequest->meClass!=eNewRequestClass)
     {
         AddRequest(aKey, eNewRequestClass, true);
-        SSCD_SET_REQUEST_CLASS(rRequestData.GetPage(),eNewRequestClass);
+        SSCD_SET_REQUEST_CLASS(aKey,eNewRequestClass);
     }
 }
 
