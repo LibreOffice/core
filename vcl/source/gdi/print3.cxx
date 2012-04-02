@@ -451,7 +451,6 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             PrintDialog aDlg( NULL, i_pController );
             if( ! aDlg.Execute() )
             {
-                GDIMetaFile aPageFile;
                 i_pController->abortJob();
                 return;
             }
