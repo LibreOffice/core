@@ -28,7 +28,7 @@
 $(eval $(call gb_Executable_Executable,kdefilepicker))
 
 $(eval $(call gb_Executable_add_package_headers,kdefilepicker,\
-	fpicker_kde_moc \
+	vcl_kde_moc \
 ))
 
 $(eval $(call gb_Executable_add_defs,kdefilepicker,\
@@ -46,14 +46,14 @@ $(eval $(call gb_Executable_add_libs,kdefilepicker,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,kdefilepicker,\
-	fpicker/source/unx/kde/kdecommandthread \
-	fpicker/source/unx/kde/kdefilepicker \
-	fpicker/source/unx/kde/kdefpmain \
-	fpicker/source/unx/kde/kdemodalityfilter \
+	vcl/unx/kde/fpicker/kdecommandthread \
+	vcl/unx/kde/fpicker/kdefilepicker \
+	vcl/unx/kde/fpicker/kdefpmain \
+	vcl/unx/kde/fpicker/kdemodalityfilter \
 ))
 
 $(eval $(call gb_Executable_add_generated_cxxobjects,kdefilepicker,\
-	CustomTarget/fpicker/source/unx/kde/kdefilepicker.moc \
+	CustomTarget/vcl/unx/kde/fpicker/kdefilepicker.moc \
 ))
 
 $(eval $(call gb_Executable_set_warnings_not_errors,kdefilepicker))

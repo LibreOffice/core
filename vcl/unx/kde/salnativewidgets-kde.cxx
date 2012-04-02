@@ -29,6 +29,7 @@
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
 #include <unx/kde/kde_headers.h>
+#include "UnxFilePicker.hxx"
 
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>
@@ -41,7 +42,7 @@
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
+using namespace ::com::sun::star;
 using namespace ::rtl;
 
 /** Cached native widgets.
@@ -2053,6 +2054,13 @@ SalFrame *
 KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
 {
     return new KDESalFrame( pParent, nStyle );
+}
+
+uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
+        const uno::Reference< uno::XComponentContext >& xMSF )
+{
+    return uno::Reference< ui::dialogs::XFilePicker2 >(
+                new UnxFilePicker( xMSF ) );
 }
 
 // -----------------------------------------------------------------------

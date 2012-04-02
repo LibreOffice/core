@@ -90,18 +90,18 @@ namespace
 // UnxFilePicker
 //////////////////////////////////////////////////////////////////////////
 
-UnxFilePicker::UnxFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr )
-    : cppu::WeakComponentImplHelper8<
+UnxFilePicker::UnxFilePicker( const uno::Reference<uno::XComponentContext>& )
+    : cppu::WeakComponentImplHelper9<
           XFilterManager,
           XFilterGroupManager,
           XFilePickerControlAccess,
           XFilePickerNotifier,
 // TODO   XFilePreview,
+          XFilePicker2,
           lang::XInitialization,
           util::XCancellable,
           lang::XEventListener,
           lang::XServiceInfo>( m_rbHelperMtx ),
-          m_xServiceMgr( xServiceMgr ),
           m_nFilePickerPid( -1 ),
           m_nFilePickerWrite( -1 ),
           m_nFilePickerRead( -1 ),
@@ -546,14 +546,14 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
     if ( 0 == rArguments.getLength( ) )
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
-                static_cast< XFilePicker* >( this ), 1 );
+                static_cast< XFilePicker2* >( this ), 1 );
 
     aAny = rArguments[0];
 
     if ( ( aAny.getValueType() != ::getCppuType( (sal_Int16*)0 ) ) && ( aAny.getValueType() != ::getCppuType( (sal_Int8*)0 ) ) )
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
-                static_cast< XFilePicker* >( this ), 1 );
+                static_cast< XFilePicker2* >( this ), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
@@ -637,7 +637,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
         default:
             throw lang::IllegalArgumentException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
-                    static_cast< XFilePicker* >( this ),
+                    static_cast< XFilePicker2* >( this ),
                     1 );
     }
 }
@@ -932,6 +932,12 @@ void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )
 
         sendCommand( aBuffer.makeStringAndClear() );
     }
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL UnxFilePicker::getSelectedFiles()
+    throw( uno::RuntimeException )
+{
+    return getFiles();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

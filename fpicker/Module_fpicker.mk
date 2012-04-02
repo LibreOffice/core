@@ -50,17 +50,6 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 endif
 
-ifeq ($(GUIBASE),unx)
-ifeq ($(ENABLE_KDE),TRUE)
-$(eval $(call gb_Module_add_targets,fpicker,\
-	Executable_kdefilepicker \
-	Library_fps_kde \
-	Package_kde_moc \
-))
-endif
-
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:

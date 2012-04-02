@@ -82,6 +82,9 @@ $(eval $(call gb_Library_use_externals,vclplug_kde,\
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
     vcl/unx/kde/kdedata \
     vcl/unx/kde/salnativewidgets-kde \
+	vcl/unx/kde/UnxCommandThread \
+	vcl/unx/kde/UnxFilePicker \
+	vcl/unx/kde/UnxNotifyThread \
 ))
 
 # KDE/Qt consider -Wshadow more trouble than benefit

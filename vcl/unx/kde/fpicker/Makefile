@@ -25,8 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-kdefilepicker.moc.cxx :
-	$(MOC) -o $@ $(SRCDIR)/fpicker/source/unx/kde/kdefilepicker.hxx
+kdefilepicker.moc.cxx : $(SRCDIR)/fpicker/source/unx/kde/kdefilepicker.hxx
+	$(MOC) -o $@ $<
 
 .DEFAULT_GOAL := all
 .PHONY : all

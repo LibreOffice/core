@@ -85,6 +85,12 @@ public:
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
     virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+
+    virtual bool hasNativeFileSelection() const { return true; }
+
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+        createFilePicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& );
 };
 
 class KDEXLib : public SalXLib
