@@ -41,11 +41,34 @@ SOURCELICENCES=$(foreach,i,$(SYSLICBASE) $(SYSLICDEST)$/$(i:b)_en-US$(i:e))
 
 fallbacklicenses=$(foreach,i,{$(subst,$(defaultlangiso), $(alllangiso))} $(foreach,j,$(SYSLICBASE) $(SYSLICDEST)$/$(j:b)_$i$(j:e)))
 
+ALL_LICENSE=..$/LICENSE
+ALL_NOTICE=..$/NOTICE
+.IF "${ENABLE_CATEGORY_B}"=="YES"
+    # extend the install set's LICENSE and NOTICE files
+    # for content distributed under category-B licenses
+    ALL_LICENSE+=..$/LICENSE_category_b
+    ALL_NOTICE+=..$/NOTICE_category_b
+.ENDIF
+.IF "${BUNDLED_EXTENSION_BLOBS}"!=""
+    # extend the install set's LICENSE and NOTICE files
+    # for content distributed as mere aggregations
+    ALL_LICENSE+=..$/LICENSE_aggregated
+    ALL_NOTICE+=..$/NOTICE_aggregated
+.ENDIF
+SUM_LICENSE=$(MISC)$/SUM_LICENSE
+SUM_NOTICE=$(MISC)$/SUM_NOTICE
+
 # ------------------------------------------------------------------
 .INCLUDE: target.mk
 # ------------------------------------------------------------------
 
-ALLTAR: $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics
+ALLTAR: ${SUM_LICENSE} ${SUM_NOTICE} $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics
+
+${SUM_LICENSE} : ${ALL_LICENSE}
+    cat $< > $@
+
+${SUM_NOTICE} : ${ALL_NOTICE}
+    cat $< > $@
 
 .IF "$(fallbacklicenses)"!=""
 $(fallbacklicenses) : $(SOURCELICENCES)
@@ -56,7 +79,7 @@ $(fallbacklicenses) : $(SOURCELICENCES)
 just_for_nice_optics: $(fallbacklicenses)
     @$(ECHONL)
 
-# for windows, convert linends to DOS
+# for windows, convert line ends to CR/LF
 $(SYSLICDEST)$/license_en-US.% : source$/license$/license_en-US.%
     @-$(MKDIRHIER) $(SYSLICDEST)
     $(PERL) -p -e 's/\r?\n$$/\r\n/' < $< > $@

@@ -1325,6 +1325,8 @@ dnl ===================================================================
 # Note that further below they may be enabled or disabled again by
 # more specific options.
 
+ENABLE_CATEGORY_B=
+
 AC_MSG_CHECKING([whether to enable category B components])
 # Category B modules (libraries):
 #   moz (seamonkey)
@@ -1336,8 +1338,7 @@ AC_MSG_CHECKING([whether to enable category B components])
 #   beanshell (beanshell)
 #   graphite (silgraphite)
 if test "$enable_category_b" = "yes"; then
-#   enable_mozilla="yes"
-#   enable_nss_module="yes"
+   ENABLE_CATEGORY_B=YES
    enable_hunspell="yes"
    enable_hyphen="yes"
    enable_saxon="yes"
@@ -1361,6 +1362,7 @@ else
 
    AC_MSG_RESULT([no: disabled modules moz, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
 fi
+AC_SUBST(ENABLE_CATEGORY_B)
 
 # gstreamer is used only via pre-installed libraries: not a problem
 

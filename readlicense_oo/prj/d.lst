@@ -44,6 +44,6 @@ dos: echo =====================================================================
 dos: echo Delivering NOTICE file
 dos: echo =====================================================================
 
-# deliver the NOTICE and LICENSE file in the main root from here for later use in the packaging process
-..\..\NOTICE %_DEST%\bin%_EXT%\osl
-..\..\LICENSE %_DEST%\bin%_EXT%\osl
+# deliver the NOTICE and LICENSE file for later use in the packaging process
+..\%__SRC%\misc\SUM_NOTICE %_DEST%\bin%_EXT%\osl\NOTICE
+..\%__SRC%\misc\SUM_LICENSE %_DEST%\bin%_EXT%\osl\LICENSE
