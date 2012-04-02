@@ -4177,7 +4177,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
-    short nPara = ((nId == 0x246D) ? SVBT16ToShort( pData ) : (0 != *pData));
+    short nPara = SVBT16ToShort( pData );
     if( nPara < 0 )
         nPara = -nPara;
 
@@ -4195,13 +4195,22 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case 0xA414:
             aUL.SetLower( nPara );
             break;
-        case 0x246D:
-            aUL.SetContextValue( nPara );
-            break;
         default:
             return;
     };
 
+    NewAttr( aUL );
+}
+
+void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* pData, short nLen )
+{
+    if( nLen < 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
+        return;
+    }
+    SvxULSpaceItem aUL( *(const SvxULSpaceItem*)GetFmtAttr( RES_UL_SPACE ));
+    aUL.SetContextValue(*pData);
     NewAttr( aUL );
 }
 
@@ -6076,7 +6085,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x303C, 0},                                 //undocumented
         {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
         {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para
-        {0x246D, &SwWW8ImplReader::Read_UL}          //"sprmPFContextualSpacing"
+        {0x246D, &SwWW8ImplReader::Read_ParaContextualSpacing} //"sprmPFContextualSpacing"
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
