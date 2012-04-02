@@ -38,6 +38,7 @@ import android.util.Log;
 import fi.iki.tml.CommandLine;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -73,7 +74,10 @@ public class Bootstrap extends NativeActivity
 
     // To be called after you are sure libgnustl_shared.so
     // has been loaded
-    public static native void patch_libgnustl_shared();
+    static native void patch_libgnustl_shared();
+
+    // Extracts files in the .apk that need to be extraced into the app's tree
+    static native void extract_files();
 
     // Wrapper for getpid()
     public static native int getpid();
@@ -97,6 +101,8 @@ public class Bootstrap extends NativeActivity
     // (contentbroker.cxx), also this called indirectly through the lo-bootstrap library
     public static native void initUCBHelper();
 
+    // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
+    // and 2) should be called from other kinds of LO code using apps.
     public static void setup(Activity activity)
     {
         String dataDir = null;
@@ -114,6 +120,13 @@ public class Bootstrap extends NativeActivity
         if (!setup(dataDir, activity.getApplication().getPackageResourcePath(), llpa))
             return;
 
+        // We build LO code against the shared GNU C++ library
+        dlopen("libgnustl_shared.so");
+        // and need to patch it.
+        patch_libgnustl_shared();
+
+        // Extract files from the .apk that can't be used mmapped directly from it
+        extract_files();
     }
 
     @Override

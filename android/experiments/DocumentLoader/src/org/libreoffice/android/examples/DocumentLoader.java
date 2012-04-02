@@ -52,9 +52,6 @@ public class DocumentLoader
 
             Bootstrap.putenv("SAL_LOG=yes");
 
-            Bootstrap.dlopen("libgnustl_shared.so");
-            Bootstrap.patch_libgnustl_shared();
-
             // Load a lot of shlibs here explicitly in advance because that
             // makes debugging work better, sigh
             Bootstrap.dlopen("libvcllo.so");

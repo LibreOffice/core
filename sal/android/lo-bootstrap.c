@@ -1518,7 +1518,7 @@ extract_files(const char *prefix)
     lo_apk_closedir(tree);
 }
 
-// public static native void patch_libgnustl_shared();
+// static native void patch_libgnustl_shared();
 
 __attribute__ ((visibility("default")))
 void
@@ -1529,6 +1529,19 @@ Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
     (void) clazz;
 
     patch_libgnustl_shared();
+}
+
+// static native void extract_files();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env,
+                                                      jobject clazz)
+{
+    (void) env;
+    (void) clazz;
+
+    extract_files(UNPACK_TREE);
 }
 
 /* Android's JNI works only to libraries loaded through Java's
@@ -1665,10 +1678,6 @@ android_main(struct android_app* state)
     if (lo_dladdr(lo_main, &lo_main_info) != 0) {
         lo_main_argv[0] = lo_main_info.dli_fname;
     }
-
-    patch_libgnustl_shared();
-
-    extract_files(UNPACK_TREE);
 
     lo_main(lo_main_argc, lo_main_argv);
     fprintf (stderr, "exit android_main\n");
