@@ -90,6 +90,9 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
     Bitmap pInSalBitmap = aIcon.GetBitmap();
     AlphaMask pInSalAlpha = aIcon.GetAlpha();
 
+    if( pInSalBitmap.GetBitCount() != 24 )
+        pInSalBitmap.Convert( BMP_CONVERSION_24BIT );
+
     Bitmap::ScopedReadAccess pSalBitmap(pInSalBitmap);
     AlphaMask::ScopedReadAccess pSalAlpha(pInSalAlpha);
 
