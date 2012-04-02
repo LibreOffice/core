@@ -376,7 +376,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aSortParam.bNaturalSort     = false;
                     aSortParam.bIncludePattern  = true;
                     aSortParam.bInplace         = true;
-                    aSortParam.maKeyState[0]    = { true, nCol, nSlotId == SID_SORT_ASCENDING };
+                    aSortParam.maKeyState[0].bDoSort = true;
+                    aSortParam.maKeyState[0].nField = nCol;
+                    aSortParam.maKeyState[0].bAscending = ( nSlotId == SID_SORT_ASCENDING );
 
                     for ( sal_uInt16 i=1; i<aSortParam.GetSortKeyCount(); i++ )
                         aSortParam.maKeyState[i].bDoSort = false;

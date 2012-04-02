@@ -165,10 +165,21 @@ void ScTabPageSortFields::Init()
     aLbSort2.Clear();
     aLbSort3.Clear();
 
-    aLbSortArr = { &aLbSort1,  &aLbSort2,  &aLbSort3 };
-    aBtnUp     = { &aBtnUp1,   &aBtnUp2,   &aBtnUp3 };
-    aBtnDown   = { &aBtnDown1, &aBtnDown2, &aBtnDown3 };
-    aFlArr     = { &aFlSort1,  &aFlSort2,  &aFlSort3 };
+    aLbSortArr.push_back( &aLbSort1 );
+    aLbSortArr.push_back( &aLbSort2 );
+    aLbSortArr.push_back( &aLbSort3 );
+
+    aBtnUp.push_back( &aBtnUp1 );
+    aBtnUp.push_back( &aBtnUp2 );
+    aBtnUp.push_back( &aBtnUp3 );
+
+    aBtnDown.push_back( &aBtnDown1 );
+    aBtnDown.push_back( &aBtnDown2 );
+    aBtnDown.push_back( &aBtnDown3 );
+
+    aFlArr.push_back( &aFlSort1 );
+    aFlArr.push_back( &aFlSort2 );
+    aFlArr.push_back( &aFlSort3 );
 }
 
 // -----------------------------------------------------------------------

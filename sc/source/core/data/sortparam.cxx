@@ -61,6 +61,8 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 
 void ScSortParam::Clear()
 {
+    ScSortKeyState aKeyState;
+
     nCol1=nCol2=nDestCol = 0;
     nRow1=nRow2=nDestRow = 0;
     nCompatHeader = 2;
@@ -71,8 +73,12 @@ void ScSortParam::Clear()
     aCollatorLocale = ::com::sun::star::lang::Locale();
     aCollatorAlgorithm = ::rtl::OUString();
 
+    aKeyState.bDoSort = false;
+    aKeyState.nField = 0;
+    aKeyState.bAscending = true;
+
     // Initialize to default size
-    maKeyState.assign( DEFSORT, { false, 0, true } );
+    maKeyState.assign( DEFSORT, aKeyState );
 }
 
 //------------------------------------------------------------------------
@@ -180,7 +186,9 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             {
                 if (nNewCount < nSortSize)
                 {
-                    maKeyState[nNewCount] = { true, rSub.nField[i], rSub.bAscending };
+                    maKeyState[nNewCount].bDoSort = true;
+                    maKeyState[nNewCount].nField = rSub.nField[i];
+                    maKeyState[nNewCount].bAscending = rSub.bAscending;
                     ++nNewCount;
                 }
             }
@@ -198,14 +206,20 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             {
                 if (nNewCount < nSortSize)
                 {
-                    maKeyState[nNewCount] = { true, nThisField, rOld.maKeyState[i].bAscending };
+                    maKeyState[nNewCount].bDoSort = true;
+                    maKeyState[nNewCount].nField = nThisField;
+                    maKeyState[nNewCount].bAscending = rOld.maKeyState[i].bAscending;
                     ++nNewCount;
                 }
             }
         }
 
     for (i=nNewCount; i<nSortSize; i++)       // Rest loeschen
-        maKeyState.push_back( ScSortKeyState({ false, 0, true }) );
+    {
+        maKeyState[nNewCount].bDoSort = false;
+        maKeyState[nNewCount].nField = 0;
+        maKeyState[nNewCount].bAscending = true;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -219,10 +233,19 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
-    maKeyState.push_back( ScSortKeyState( { true, nCol, true } ) );
+    ScSortKeyState aKeyState;
+    aKeyState.bDoSort = true;
+    aKeyState.nField = nCol;
+    aKeyState.bAscending = true;
+
+    maKeyState.push_back( aKeyState );
+
+    // Set the rest
+    aKeyState.bDoSort = false;
+    aKeyState.nField = 0;
 
     for (sal_uInt16 i=1; i<GetSortKeyCount(); i++)
-        maKeyState.push_back( ScSortKeyState( { false, 0, true } ) );
+        maKeyState.push_back( aKeyState );
 }
 
 //------------------------------------------------------------------------
