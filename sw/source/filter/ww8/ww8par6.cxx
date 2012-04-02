@@ -4177,7 +4177,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
-    short nPara = nId == 0x246D ? SVBT16ToShort( pData ) : 0 != *pData;
+    short nPara = ((nId == 0x246D) ? SVBT16ToShort( pData ) : (0 != *pData));
     if( nPara < 0 )
         nPara = -nPara;
 
