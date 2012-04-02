@@ -1,4 +1,4 @@
-AC_INIT([LibreOffice],[3.5],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[3.6],[],[],[http://documentfoundation.org/])
 AC_PREREQ([2.59])
 
 echo "********************************************************************"
