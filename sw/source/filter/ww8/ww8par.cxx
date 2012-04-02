@@ -2716,6 +2716,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         pStr->length = nEndUsed;
 
         emulateMSWordAddTextToParagraph(rtl::OUString(pStr, SAL_NO_ACQUIRE));
+        pStr = NULL;
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
             bWasParaEnd = false;            //kein CR
@@ -2723,6 +2724,8 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
+    if (pStr)
+        rtl_uString_release(pStr);
     delete [] p8Bits;
     return nL2 >= nStrLen;
 }
