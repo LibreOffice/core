@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 
 
 /*
- * 1170-SurvivalKit: For how long do we get past the last char of the line.
+ * - SurvivalKit: For how long do we get past the last char of the line.
  * - RightMargin abstains from adjusting position with -1
  * - GetCharRect returns a GetEndCharRect for MV_RIGHTMARGIN
  * - GetEndCharRect sets bRightMargin to sal_True
@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
                           const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
 {
-    // 8810: vgl. 1170, RightMargin in the last master line
+    // RightMargin in the last master line
     const xub_StrLen nOffset = rPos.nContent.GetIndex();
     SwTxtFrm *pFrmAtPos = pFrm;
     if( !bNoScroll || pFrm->GetFollow() )
@@ -153,7 +153,6 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
  *                      GetFrmAtOfst(), GetFrmAtPos()
  *************************************************************************/
 
-// OD 07.10.2003 #110978#
 SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const xub_StrLen nWhere )
 {
     SwTxtFrm* pRet = this;
@@ -292,7 +291,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 SwTxtCursor  aLine( pFrm, &aInf );
                 nNextOfst = aLine.GetEnd();
                 // See comment in AdjustFrm
-                // 1170: Include the line's last char?
+                // Include the line's last char?
                 bRet = bRightMargin ? aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY )
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
             }
@@ -458,8 +457,6 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 
 /** determine top of line for given position in the text frame
 
-    OD 11.11.2003 #i22341#
-    OD 2004-03-18 #114789# - corrections:
     - Top of first paragraph line is the top of the printing area of the text frame
     - If a proportional line spacing is applied use top of anchor character as
       top of the line.
@@ -483,7 +480,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
         SWRECTFN( this )
         if ( IsEmpty() || !(Prt().*fnRect->fnGetHeight)() )
         {
-            // OD 2004-03-18 #i11860# - consider upper space amount considered
+            // consider upper space amount considered
             // for previous frame and the page grid.
             _onTopOfLine = (this->*fnRect->fnGetPrtTop)();
         }
@@ -493,7 +490,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
             SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
             pFrm->GetFormatted();
             SWREFRESHFN( pFrm )
-            // OD 2004-03-18 #114789# - If proportional line spacing is applied
+            // If proportional line spacing is applied
             // to the text frame, the top of the anchor character is also the
             // top of the line.
             // Otherwise the line layout determines the top of the line
@@ -569,7 +566,7 @@ struct SwFillData
 sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
                     const sal_Bool bChgFrm, SwCrsrMoveState* pCMS ) const
 {
-    // 8804: _GetCrsrOfst is called by GetCrsrOfst and GetKeyCrsrOfst.
+    // _GetCrsrOfst is called by GetCrsrOfst and GetKeyCrsrOfst.
     // Never just a return sal_False.
 
     if( IsLocked() || IsHiddenNow() )
@@ -627,7 +624,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
             ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
 
-    // 6776: pPos is a pure IN parameter and must not be evaluated.
+    // pPos is a pure IN parameter and must not be evaluated.
     // pIter->GetCrsrOfst returns from a nesting with STRING_LEN.
     // If SwTxtIter::GetCrsrOfst calls GetCrsrOfst further by itself
     // nNode changes the position.
@@ -804,7 +801,7 @@ public:
 sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                             sal_Bool bSetInReadOnly ) const
 {
-    // 8626: Set the RightMargin if needed
+    // Set the RightMargin if needed
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
@@ -831,7 +828,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             SwTxtSizeInfo aInf( (SwTxtFrm*)this );
             SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
 
-            // 8116: Optimize away flys with no flow and IsDummy()
+            // Optimize away flys with no flow and IsDummy()
             if( nPos )
                 aLine.CharCrsrToLine( nPos );
             else
@@ -885,7 +882,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                         "SwTxtFrm::UnitUp: illegal node change" );
 #endif
 
-                // 7684: We make sure that we move up.
+                // We make sure that we move up.
                 if( nTmpOfst >= nStart && nStart && !bSecondOfDouble )
                 {
                     nTmpOfst = nStart;
@@ -1255,7 +1252,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                     "SwTxtFrm::UnitDown: illegal node change" );
 #endif
 
-                // 7684: We make sure that we move down.
+                // We make sure that we move down.
                 if( nTmpOfst <= nStart && ! bFirstOfDouble )
                     nTmpOfst = nStart + 1;
                 pPam->GetPoint()->nContent =
@@ -1340,7 +1337,7 @@ sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
                                            SwTxtCursor::IsRightMargin() );
     const sal_Bool bRet = pFrm->_UnitUp( pPam, nOffset, bSetInReadOnly );
 
-    // 8626: No SwTxtCursor::SetRightMargin( sal_False );
+    // No SwTxtCursor::SetRightMargin( sal_False );
     // Instead we have a SwSetToRightMargin in _UnitUp
     return bRet;
 }
