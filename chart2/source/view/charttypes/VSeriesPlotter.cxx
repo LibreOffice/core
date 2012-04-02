@@ -823,7 +823,12 @@ void VSeriesPlotter::createErrorBar(
 
         drawing::Position3D aUnscaledLogicPosition(rUnscaledLogicPosition);
         if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION)
-            aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
+        {
+            if (bYError)
+                aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
+            else
+                aUnscaledLogicPosition.PositionX = rVDataSeries.getXMeanValue();
+        }
 
         bool bCreateNegativeBorder = false;//make a vertical line at the negative end of the error bar
         bool bCreatePositiveBorder = false;//make a vertical line at the positive end of the error bar

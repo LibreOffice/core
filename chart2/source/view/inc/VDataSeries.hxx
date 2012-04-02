@@ -102,6 +102,7 @@ public:
     ::com::sun::star::uno::Sequence< double > getAllX() const;
     ::com::sun::star::uno::Sequence< double > getAllY() const;
 
+    double getXMeanValue() const;
     double getYMeanValue() const;
 
     bool        hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
@@ -216,6 +217,7 @@ private: //member
 
     VDataSequence*  m_pValueSequenceForDataLabelNumberFormatDetection;
 
+    mutable double m_fXMeanValue;
     mutable double m_fYMeanValue;
 
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aAttributedDataPointIndexList;

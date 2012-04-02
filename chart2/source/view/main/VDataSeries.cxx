@@ -176,6 +176,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_aValues_Bubble_Size()
     , m_pValueSequenceForDataLabelNumberFormatDetection(&m_aValues_Y)
 
+    , m_fXMeanValue(1.0)
     , m_fYMeanValue(1.0)
 
     , m_aAttributedDataPointIndexList()
@@ -207,6 +208,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
     , m_bAllowPercentValueInDataLabel(false)
 {
+    ::rtl::math::setNan( & m_fXMeanValue );
     ::rtl::math::setNan( & m_fYMeanValue );
 
     uno::Reference<data::XDataSource> xDataSource =
@@ -727,6 +729,19 @@ uno::Sequence< double > VDataSeries::getAllY() const
             m_aValues_Y.Doubles[nN] = nN+1;
     }
     return m_aValues_Y.Doubles;
+}
+
+double VDataSeries::getXMeanValue() const
+{
+    if( ::rtl::math::isNan( m_fXMeanValue ) )
+    {
+        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( "com.sun.star.chart2.MeanValueRegressionCurve" ) );
+        uno::Sequence< double > aXValuesDummy;
+        xCalculator->recalculateRegression( aXValuesDummy, getAllX() );
+        double fXDummy = 1.0;
+        m_fXMeanValue = xCalculator->getCurveValue( fXDummy );
+    }
+    return m_fXMeanValue;
 }
 
 double VDataSeries::getYMeanValue() const
