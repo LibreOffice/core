@@ -822,7 +822,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           Window*                    pParentWindow,
                                           const ::Color              rLastColor ) :
 
-    SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP ) ),
+    SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
 
     theSlotId( nSlotId ),
     aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
@@ -1049,7 +1049,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
-    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP ) ),
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     bParagraphMode(sal_False)
 
@@ -1326,7 +1326,7 @@ Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 
 SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
-    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_AUTOSIZE ) ),
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
     m_aLineStyleLb( this )
 {
     try
