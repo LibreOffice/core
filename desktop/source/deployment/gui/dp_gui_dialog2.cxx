@@ -1247,19 +1247,16 @@ void ExtMgrDialog::Resize()
     long nWidth = m_aBundledCbx.GetCtrlTextWidth( m_aBundledCbx.GetText() );
     Size aBCBSize(m_aBundledCbx.GetSizePixel());
     aBCBSize.Width() = nWidth + 30;
-    aBCBSize.Height() += 3;
     m_aBundledCbx.SetSizePixel( aBCBSize );
 
     nWidth = m_aSharedCbx.GetCtrlTextWidth( m_aSharedCbx.GetText() );
     Size aSCBSize(m_aSharedCbx.GetSizePixel());
     aSCBSize.Width() = nWidth + 30;
-    aSCBSize.Height() += 3;
     m_aSharedCbx.SetSizePixel( aSCBSize );
 
     nWidth = m_aUserCbx.GetCtrlTextWidth( m_aUserCbx.GetText() );
     Size aUCBSize(m_aUserCbx.GetSizePixel());
     aUCBSize.Width() = nWidth + 30;
-    aUCBSize.Height() += 3;
     m_aUserCbx.SetSizePixel( aUCBSize );
 
     offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*RSC_SP_CTRL_GROUP_X - aBCBSize.Width() - aSCBSize.Width() - aUCBSize.Width() );
