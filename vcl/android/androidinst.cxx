@@ -378,14 +378,13 @@ static const char *app_cmd_name(int cmd)
 
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
-    ANativeWindow *pWindow = mpApp->window;
-    if (!pWindow)
+    if (!mpApp || !mpApp->window)
         rRect = Rectangle( Point( 0, 0 ),
                            Size( 800, 600 ) );
     else
         rRect = Rectangle( Point( 0, 0 ),
-                           Size( ANativeWindow_getWidth( pWindow ),
-                                 ANativeWindow_getHeight( pWindow ) ) );
+                           Size( ANativeWindow_getWidth( mpApp->window ),
+                                 ANativeWindow_getHeight( mpApp->window ) ) );
 }
 
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
@@ -632,7 +631,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
             pSource->process(mpApp, pSource);
     }
 
-    if (mbQueueReDraw && mpApp->window)
+    if (mbQueueReDraw && mpApp && mpApp->window)
         AndroidSalInstance::getInstance()->RedrawWindows (mpApp->window);
 }
 
