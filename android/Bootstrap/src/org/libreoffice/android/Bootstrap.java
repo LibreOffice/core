@@ -127,6 +127,18 @@ public class Bootstrap extends NativeActivity
 
         // Extract files from the .apk that can't be used mmapped directly from it
         extract_files();
+
+        // If we notice that a fonts.conf file was extracted, automatically
+        // set the FONTCONFIG_FILE env var.
+        InputStream i;
+        try {
+            i = activity.getAssets().open("unpack/etc/fonts/fonts.conf");
+        }
+        catch (java.io.IOException e) {
+            i = null;
+        }
+        if (i != null)
+            putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
     }
 
     @Override
