@@ -1973,6 +1973,18 @@ XubString EditDoc::GetParaAsString(
     return aStr;
 }
 
+EditPaM EditDoc::GetStartPaM() const
+{
+    ContentNode* p = const_cast<ContentNode*>(GetObject(0));
+    return EditPaM(p, 0);
+}
+
+EditPaM EditDoc::GetEndPaM() const
+{
+    ContentNode* pLastNode = const_cast<ContentNode*>(GetObject(Count()-1));
+    return EditPaM( pLastNode, pLastNode->Len() );
+}
+
 sal_uLong EditDoc::GetTextLen() const
 {
     sal_uLong nLen = 0;

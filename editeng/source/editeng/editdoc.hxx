@@ -771,8 +771,8 @@ public:
     XubString       GetParaAsString( sal_uInt16 nNode ) const;
     XubString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
 
-    inline EditPaM  GetStartPaM() const;
-    inline EditPaM  GetEndPaM() const;
+    EditPaM GetStartPaM() const;
+    EditPaM GetEndPaM() const;
 
     SfxItemPool&        GetItemPool()                   { return *pItemPool; }
     const SfxItemPool&  GetItemPool() const             { return *pItemPool; }
@@ -803,18 +803,6 @@ public:
 
     static XubString    GetSepStr( LineEnd eEnd );
 };
-
-inline EditPaM EditDoc::GetStartPaM() const
-{
-    ContentNode* p = const_cast<ContentNode*>(GetObject(0));
-    return EditPaM(p, 0);
-}
-
-inline EditPaM EditDoc::GetEndPaM() const
-{
-    ContentNode* pLastNode = const_cast<ContentNode*>(GetObject(Count()-1));
-    return EditPaM( pLastNode, pLastNode->Len() );
-}
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, size_t nAttr)
 {
