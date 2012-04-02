@@ -139,7 +139,6 @@ public:
 //  ----------------------------------------------------------------------
 //  class SvxColorList
 //  ----------------------------------------------------------------------
-typedef ContentNode* ContentNodePtr;
 typedef ::std::vector< SvxColorItem* > DummyColorList;
 
 class SvxColorList
@@ -160,8 +159,7 @@ public:
 //  ----------------------------------------------------------------------
 //  class ItemList
 //  ----------------------------------------------------------------------
-typedef const SfxPoolItem* ConstPoolItemPtr;
-typedef ::std::vector< ConstPoolItemPtr > DummyItemList;
+typedef ::std::vector<const SfxPoolItem*> DummyItemList;
 
 class ItemList
 {
