@@ -649,7 +649,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_RTL:
             {
                 ScDocShell* pDocSh = pViewData->GetDocShell();
-                ScDocFunc aFunc(*pDocSh);
+                ScDocFunc &rFunc = pDocSh->GetDocFunc();
                 sal_Bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
 
                 const ScMarkData& rMark = pViewData->GetMarkData();
@@ -663,12 +663,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
                     for (; itr != itrEnd; ++itr)
-                        aFunc.SetLayoutRTL( *itr, bSet, false );
+                        rFunc.SetLayoutRTL( *itr, bSet, false );
 
                     pUndoManager->LeaveListAction();
                 }
                 else
-                    aFunc.SetLayoutRTL( nCurrentTab, bSet, false );
+                    rFunc.SetLayoutRTL( nCurrentTab, bSet, false );
             }
             break;
 

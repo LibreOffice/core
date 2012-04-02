@@ -3979,13 +3979,12 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
 
-        ScDocFunc aFunc(*pDocShell);
         SCCOLROW nColArr[2];
         nColArr[0] = thisAddress.StartColumn;
         nColArr[1] = thisAddress.EndColumn;
         // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
-        aFunc.SetWidthOrHeight( true, 1, nColArr, thisAddress.Sheet,
-                                SC_SIZE_DIRECT, nTwips, true, true );
+        pDocShell->GetDocFunc().SetWidthOrHeight( true, 1, nColArr, thisAddress.Sheet,
+                                                  SC_SIZE_DIRECT, nTwips, true, true );
 
     }
 }
@@ -4143,11 +4142,10 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeExcepti
     sal_uInt16 nTwips = lcl_pointsToTwips( nHeight );
 
     ScDocShell* pDocShell = excel::GetDocShellFromRange( mxRange );
-    ScDocFunc aFunc(*pDocShell);
     SCCOLROW nRowArr[2];
     nRowArr[0] = thisAddress.StartRow;
     nRowArr[1] = thisAddress.EndRow;
-    aFunc.SetWidthOrHeight( false, 1, nRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
+    pDocShell->GetDocFunc().SetWidthOrHeight( false, 1, nRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
                                                                         nTwips, true, true );
 }
 
@@ -4842,7 +4840,6 @@ ScVbaRange::Autofit() throw (uno::RuntimeException)
             RangeHelper thisRange( mxRange );
             table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
 
-            ScDocFunc aFunc(*pDocShell);
             SCCOLROW nColArr[2];
             nColArr[0] = thisAddress.StartColumn;
             nColArr[1] = thisAddress.EndColumn;
@@ -4853,9 +4850,8 @@ ScVbaRange::Autofit() throw (uno::RuntimeException)
                 nColArr[0] = thisAddress.StartRow;
                 nColArr[1] = thisAddress.EndRow;
             }
-            aFunc.SetWidthOrHeight( bDirection, 1, nColArr, thisAddress.Sheet, SC_SIZE_OPTIMAL,
-                                                                                0, true, true );
-
+            pDocShell->GetDocFunc().SetWidthOrHeight( bDirection, 1, nColArr, thisAddress.Sheet,
+                                                      SC_SIZE_OPTIMAL, 0, true, true );
     }
 }
 
@@ -5587,9 +5583,9 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                 break;
         }
     }
-    ScDocFunc aFunc(*pDocSh);
 #ifdef VBA_OOBUILD_HACK
-    aFunc.FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd, nCount, fStep, fEndValue, sal_True, sal_True );
+    pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd,
+                                   nCount, fStep, fEndValue, sal_True, sal_True );
 #endif
 }
 sal_Bool SAL_CALL

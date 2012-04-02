@@ -212,8 +212,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
     pNewRanges->erase(*pOld);
     if (pNewRanges->insert(pNew))
     {
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNewRangeNames(pNewRanges, mxParent->IsModifyAndBroadcast(), nTab);
+        pDocShell->GetDocFunc().SetNewRangeNames(pNewRanges, mxParent->IsModifyAndBroadcast(), nTab);
 
         aName = aInsName;   //! broadcast?
     }
@@ -554,8 +553,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
             if ( pNewRanges->insert(pNew) )
             {
-                ScDocFunc aFunc(*pDocShell);
-                aFunc.SetNewRangeNames(pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
+                pDocShell->GetDocFunc().SetNewRangeNames(pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
                 bDone = true;
             }
             else
@@ -591,10 +589,7 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
     if (bRight)  nFlags |= NAME_RIGHT;
 
     if (nFlags)
-    {
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.CreateNames( aRange, nFlags, sal_True, GetTab_Impl() );
-    }
+        pDocShell->GetDocFunc().CreateNames( aRange, nFlags, sal_True, GetTab_Impl() );
 }
 
 void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
@@ -612,8 +607,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
             {
                 ScRangeName* pNewRanges = new ScRangeName(*pNames);
                 pNewRanges->erase(*pData);
-                ScDocFunc aFunc(*pDocShell);
-                aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
+                pDocShell->GetDocFunc().SetNewRangeNames( pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
                 bDone = true;
             }
         }
@@ -629,10 +623,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aOutputPosition.Column, (SCROW)aOutputPosition.Row, aOutputPosition.Sheet );
     if (pDocShell)
-    {
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.InsertNameList( aPos, sal_True );
-    }
+        pDocShell->GetDocFunc().InsertNameList( aPos, sal_True );
 }
 
 // container::XEnumerationAccess

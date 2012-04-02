@@ -212,10 +212,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 sal_Bool ScNameDlg::Close()
 {
     if (mbDataChanged && !mbCloseWithoutUndo)
-    {
-        ScDocFunc aFunc(*mpViewData->GetDocShell());
-        aFunc.ModifyAllRangeNames(maRangeMap);
-    }
+        mpViewData->GetDocFunc().ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 

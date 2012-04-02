@@ -1233,7 +1233,6 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             if( bMoveRulerAction )
             {
                 long  nNewColWidth = 0;
-                ScDocFunc aFunc(*pDocShell);
                 SCCOLROW nCols[2] = { nColNumberButttonDown, nColNumberButttonDown };
 
                 if( !bLayoutRTL )
@@ -1250,7 +1249,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                 if( nNewColWidth >= 0 )
                 {
-                    aFunc.SetWidthOrHeight( true, 1,nCols, nTab, SC_SIZE_DIRECT, (sal_uInt16)nNewColWidth, true, true);
+                    pDocShell->GetDocFunc().SetWidthOrHeight(
+                                                true, 1,nCols, nTab, SC_SIZE_DIRECT,
+                                                (sal_uInt16)nNewColWidth, true, true);
                     pDocShell->SetModified(true);
                 }
                 if ( ValidTab( nTab ) )

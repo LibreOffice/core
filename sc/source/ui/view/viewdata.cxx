@@ -2067,6 +2067,11 @@ SfxObjectShell* ScViewData::GetSfxDocShell() const
     return pDocShell;
 }
 
+ScDocFunc& ScViewData::GetDocFunc() const
+{
+    return pDocShell->GetDocFunc();
+}
+
 SfxBindings& ScViewData::GetBindings()
 {
     OSL_ENSURE( pViewShell, "GetBindings() without ViewShell" );

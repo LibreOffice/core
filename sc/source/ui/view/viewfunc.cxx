@@ -2563,7 +2563,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScDocFunc aFunc(*pDocSh);
+    ScDocFunc &rFunc = pDocSh->GetDocFunc();
     bool bUndo(pDoc->IsUndoEnabled());
 
     //  modifying several tabs is handled here
@@ -2576,7 +2576,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 
     ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd; ++itr)
-        aFunc.ProtectSheet(*itr, rProtect);
+        rFunc.ProtectSheet(*itr, rProtect);
 
     if (bUndo)
         pDocSh->GetUndoManager()->LeaveListAction();
@@ -2589,11 +2589,11 @@ void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScDocFunc aFunc(*pDocSh);
+    ScDocFunc &rFunc = pDocSh->GetDocFunc();
     sal_Bool bUndo(pDoc->IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
-        aFunc.Protect( nTab, rPassword, false );
+        rFunc.Protect( nTab, rPassword, false );
     else
     {
         //  modifying several tabs is handled here
@@ -2606,7 +2606,7 @@ void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd; ++itr)
-            aFunc.Protect( *itr, rPassword, false );
+            rFunc.Protect( *itr, rPassword, false );
 
         if (bUndo)
             pDocSh->GetUndoManager()->LeaveListAction();
@@ -2620,12 +2620,12 @@ sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScDocFunc aFunc(*pDocSh);
+    ScDocFunc &rFunc = pDocSh->GetDocFunc();
     sal_Bool bChanged = false;
     sal_Bool bUndo (pDoc->IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
-        bChanged = aFunc.Unprotect( nTab, rPassword, false );
+        bChanged = rFunc.Unprotect( nTab, rPassword, false );
     else
     {
         //  modifying several tabs is handled here
@@ -2638,7 +2638,7 @@ sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd; ++itr)
-            if ( aFunc.Unprotect( *itr, rPassword, false ) )
+            if ( rFunc.Unprotect( *itr, rPassword, false ) )
                     bChanged = sal_True;
 
         if (bUndo)

@@ -1026,12 +1026,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         if ( aSolution.getLength() == nVarCount )
         {
             mpDocShell->LockPaint();
-            ScDocFunc aFunc(*mpDocShell);
+            ScDocFunc &rFunc = mpDocShell->GetDocFunc();
             for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
             {
                 ScAddress aCellPos;
                 ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-                aFunc.PutCell( aCellPos, new ScValueCell( aSolution[nVarPos] ), sal_True );
+                rFunc.PutCell( aCellPos, new ScValueCell( aSolution[nVarPos] ), sal_True );
             }
             mpDocShell->UnlockPaint();
         }
@@ -1061,12 +1061,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     if ( bRestore )         // restore old values
     {
         mpDocShell->LockPaint();
-        ScDocFunc aFunc(*mpDocShell);
+        ScDocFunc &rFunc = mpDocShell->GetDocFunc();
         for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            aFunc.PutCell( aCellPos, new ScValueCell( aOldValues[nVarPos] ), sal_True );
+            rFunc.PutCell( aCellPos, new ScValueCell( aOldValues[nVarPos] ), sal_True );
         }
         mpDocShell->UnlockPaint();
     }

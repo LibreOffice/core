@@ -1983,8 +1983,7 @@ void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         ScViewData* pViewData = ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData();
-        ScDocFunc aFunc(*pViewData->GetDocShell());
-        aFunc.ClearItems( pViewData->GetMarkData(), pWhich, false );
+        pViewData->GetDocFunc().ClearItems( pViewData->GetMarkData(), pWhich, false );
     }
 }
 

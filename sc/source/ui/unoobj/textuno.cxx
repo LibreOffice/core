@@ -1059,11 +1059,8 @@ void ScCellTextData::UpdateData()
             //  during the own UpdateData call, bDataValid must not be reset,
             //  or things like attributes after the text would be lost
             //  (are not stored in the cell)
-
             bInUpdate = sal_True;   // prevents bDataValid from being reset
-
-            ScDocFunc aFunc(*pDocShell);
-            aFunc.PutData( aCellPos, *pEditEngine, false, sal_True );   // always as text
+            pDocShell->GetDocFunc().PutData( aCellPos, *pEditEngine, false, sal_True ); // always as text
 
             bInUpdate = false;
             bDirty = false;

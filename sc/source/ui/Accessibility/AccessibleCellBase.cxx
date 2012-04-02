@@ -34,6 +34,7 @@
 #include "miscuno.hxx"
 #include "document.hxx"
 #include "docfunc.hxx"
+#include "docsh.hxx"
 #include "cell.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -269,8 +270,7 @@ sal_Bool SAL_CALL
         if (IsEditable(xParentStates))
         {
             ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
-            ScDocFunc aFunc(*pDocShell);
-            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
+            bResult = pDocShell->GetDocFunc().PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
         }
     }
     return bResult;

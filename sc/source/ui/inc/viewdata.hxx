@@ -94,6 +94,7 @@ enum ScPasteFlags
     SC_PASTE_BORDER = 2,    // Show a border around the source cells
 };
 
+class ScDocFunc;
 class ScDocShell;
 class ScDocument;
 class ScDBFunc;
@@ -246,6 +247,7 @@ public:
     void            InitData( ScDocument* pDocument );
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
+    ScDocFunc&      GetDocFunc() const;
     ScDBFunc*       GetView() const         { return pView; }
     ScTabViewShell* GetViewShell() const    { return pViewShell; }
 

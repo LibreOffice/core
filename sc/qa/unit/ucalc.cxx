@@ -3899,13 +3899,12 @@ void Test::testMergedCells()
     SCROW nEndRow = 1;
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
-    ScDocFunc aDocFunc(*m_xDocShRef);
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     m_pDoc->SetInTest();
-    aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
-    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
+    m_xDocShRef->GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
+    m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);

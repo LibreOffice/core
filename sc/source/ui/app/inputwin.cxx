@@ -2397,8 +2397,7 @@ void ScPosWnd::DoEnter()
                         ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
                         {
-                            ScDocFunc aFunc(*pDocShell);
-                            aFunc.ModifyRangeNames( aNewRanges );
+                            pDocShell->GetDocFunc().ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(true);
                         }
                     }

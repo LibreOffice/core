@@ -2156,9 +2156,8 @@ void ScCellShell::ExecuteExternalSource(
         else
             aLinkRange = ScRange( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
 
-        ScDocFunc aFunc(*pData->GetDocShell());
-        aFunc.InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
-                                aLinkRange, _nRefresh, bMove, false );
+        pData->GetDocFunc().InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
+                                            aLinkRange, _nRefresh, bMove, false );
         _rRequest.Done();
     }
     else
