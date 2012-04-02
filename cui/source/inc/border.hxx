@@ -125,8 +125,7 @@ private:
     bool                mbTLBREnabled;      /// true = Top-left to bottom-right border enabled.
     bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
-
-    static sal_Bool         bSync;
+    bool                mbSync;
 
 #ifdef _SVX_BORDER_CXX
     // Handler

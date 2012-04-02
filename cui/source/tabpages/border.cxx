@@ -86,8 +86,6 @@ static sal_uInt16 pRanges[] =
     0
 };
 
-sal_Bool SvxBorderTabPage::bSync = sal_True;
-
 // -----------------------------------------------------------------------
 void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {
@@ -147,7 +145,8 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         mbVerEnabled( false ),
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
-        mbUseMarginItem( false )
+        mbUseMarginItem( false ),
+        mbSync(true)
 
 {
     // diese Page braucht ExchangeSupport
@@ -217,7 +216,6 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             SetFieldUnit(aRightMF, eFUnit);
             SetFieldUnit(aTopMF, eFUnit);
             SetFieldUnit(aBottomMF, eFUnit);
-            aSynchronizeCB.Check(bSync);
             aSynchronizeCB.SetClickHdl(LINK(this, SvxBorderTabPage, SyncHdl_Impl));
             aLeftMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
             aRightMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
@@ -571,6 +569,11 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     }
 
     LinesChanged_Impl( 0 );
+    if(aLeftMF.GetValue() == aRightMF.GetValue() && aTopMF.GetValue() == aBottomMF.GetValue() && aTopMF.GetValue() == aLeftMF.GetValue())
+        mbSync = true;
+    else
+        mbSync = false;
+    aSynchronizeCB.Check(mbSync);
 }
 
 // -----------------------------------------------------------------------
@@ -1153,7 +1156,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
 
 IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
 {
-    if ( bSync )
+    if ( mbSync )
     {
         sal_Int64 nVal = pField->GetValue();
         if(pField != &aLeftMF)
@@ -1170,7 +1173,7 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
 
 IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
 {
-    bSync = pBox->IsChecked();
+    mbSync = pBox->IsChecked();
     return 0;
 }
 
