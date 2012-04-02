@@ -139,11 +139,11 @@ public:
 //  ----------------------------------------------------------------------
 //  class SvxColorList
 //  ----------------------------------------------------------------------
-typedef ::std::vector< SvxColorItem* > DummyColorList;
 
 class SvxColorList
 {
 private:
+    typedef std::vector<SvxColorItem*> DummyColorList;
     DummyColorList aColorList;
 
 public:
@@ -159,11 +159,11 @@ public:
 //  ----------------------------------------------------------------------
 //  class ItemList
 //  ----------------------------------------------------------------------
-typedef ::std::vector<const SfxPoolItem*> DummyItemList;
 
 class ItemList
 {
 private:
+    typedef std::vector<const SfxPoolItem*> DummyItemList;
     DummyItemList aItemPool;
     size_t  CurrentItem;
 
