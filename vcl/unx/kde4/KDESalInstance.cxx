@@ -26,13 +26,23 @@
  *
  ************************************************************************/
 
+#include "KDE4FilePicker.hxx"
 #include "KDESalInstance.hxx"
 
 #include "KDESalFrame.hxx"
 
+using namespace com::sun::star;
+
 SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
 {
     return new KDESalFrame( pParent, nState );
+}
+
+uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
+        const uno::Reference< uno::XComponentContext >& xMSF )
+{
+    return uno::Reference< ui::dialogs::XFilePicker2 >(
+                new KDE4FilePicker( xMSF ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

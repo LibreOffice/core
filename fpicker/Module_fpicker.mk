@@ -59,11 +59,6 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 endif
 
-ifeq ($(ENABLE_KDE4),TRUE)
-$(eval $(call gb_Module_add_targets,fpicker,\
-	Library_fps_kde4 \
-))
-endif
 endif
 
 endif

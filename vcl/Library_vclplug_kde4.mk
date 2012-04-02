@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_api,vclplug_kde4,\
 
 $(eval $(call gb_Library_add_libs,vclplug_kde4,\
     $$(KDE4_LIBS) \
+    -lkio -lkfile \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
@@ -82,6 +83,7 @@ $(eval $(call gb_Library_use_externals,vclplug_kde4,\
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEData \
+	vcl/unx/kde4/KDE4FilePicker \
     vcl/unx/kde4/KDESalDisplay \
     vcl/unx/kde4/KDESalFrame \
     vcl/unx/kde4/KDESalGraphics \

@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase9.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,6 +36,8 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <osl/conditn.hxx>
@@ -53,19 +55,19 @@ class QLayout;
 class ResMgr;
 
 class KDE4FilePicker :
-    public cppu::WeakComponentImplHelper8<
+    public cppu::WeakComponentImplHelper9<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilterGroupManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
 // TODO ::com::sun::star::ui::dialogs::XFilePreview,
+        ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
         ::com::sun::star::lang::XEventListener,
         ::com::sun::star::lang::XServiceInfo >
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
 
@@ -89,7 +91,7 @@ protected:
     QLayout* _layout;
 
 public:
-    KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+    KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~KDE4FilePicker();
 
     // XFilePickerNotifier
@@ -138,6 +140,11 @@ public:
     virtual sal_Bool SAL_CALL   setShowState( sal_Bool bShowState ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL   getShowState(  ) throw (::com::sun::star::uno::RuntimeException);
     */
+
+    // XFilePicker2 functions
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles()
+            throw (::com::sun::star::uno::RuntimeException);
 
     // XInitialization
 

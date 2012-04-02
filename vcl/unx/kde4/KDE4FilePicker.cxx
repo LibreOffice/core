@@ -118,18 +118,18 @@ QString toQString(const rtl::OUString& s)
 // KDE4FilePicker
 //////////////////////////////////////////////////////////////////////////
 
-KDE4FilePicker::KDE4FilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr )
-    : cppu::WeakComponentImplHelper8<
+KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
+    : cppu::WeakComponentImplHelper9<
           XFilterManager,
           XFilterGroupManager,
           XFilePickerControlAccess,
           XFilePickerNotifier,
 // TODO   XFilePreview,
+          XFilePicker2,
           lang::XInitialization,
           util::XCancellable,
           lang::XEventListener,
           lang::XServiceInfo>( _helperMutex ),
-          m_xServiceMgr( xServiceMgr ),
           _resMgr( ResMgr::CreateResMgr("fps_office") )
 {
     _extraControls = new QWidget();
@@ -285,6 +285,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     }
 
     return seq;
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
+    throw( uno::RuntimeException )
+{
+    return getFiles();
 }
 
 void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const ::rtl::OUString &filter )
@@ -610,7 +616,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     {
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
-                static_cast< XFilePicker* >( this ), 1 );
+                static_cast< XFilePicker2* >( this ), 1 );
     }
 
     arg = args[0];
@@ -620,7 +626,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     {
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
-                static_cast< XFilePicker* >( this ), 1 );
+                static_cast< XFilePicker2* >( this ), 1 );
     }
 
     sal_Int16 templateId = -1;
@@ -692,7 +698,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         default:
             throw lang::IllegalArgumentException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
-                    static_cast< XFilePicker* >( this ),
+                    static_cast< XFilePicker2* >( this ),
                     1 );
     }
 
