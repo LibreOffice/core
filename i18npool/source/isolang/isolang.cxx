@@ -659,9 +659,9 @@ void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
     do
     {
         if ( pEntry->mnLang == nLang )
-        {
-            rLangStr = rtl::OString( pEntry->maLangStr );
-            rCountry = rtl::OString( pEntry->maCountry );
+        {                          // avoid embedded \0 warning
+            rLangStr = rtl::OString( static_cast< const char* >( pEntry->maLangStr ));
+            rCountry = rtl::OString( static_cast< const char* >( pEntry->maCountry ));
             return;
         }
         ++pEntry;
@@ -675,9 +675,9 @@ void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
     do
     {
         if ( pNoneStdEntry->mnLang == nLang )
-        {
-            rLangStr = rtl::OString( pNoneStdEntry->maLangStr );
-            rCountry = rtl::OString( pNoneStdEntry->maCountry );
+        {                          // avoid embedded \0 warning
+            rLangStr = rtl::OString( static_cast< const char* >( pNoneStdEntry->maLangStr ));
+            rCountry = rtl::OString( static_cast< const char* >( pNoneStdEntry->maCountry ));
             return;
         }
         ++pNoneStdEntry;
@@ -1082,12 +1082,12 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         rtl::OString aUpperCountry = aCountry.toAsciiUpperCase();
         const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
         do
-        {
-            if (( aLowerLang.equals( pGLIBCModifiersEntry->maLangStr ) ) &&
-               ( aAtString.equals( pGLIBCModifiersEntry->maAtString ) ))
+        {                         // avoid embedded \0 warning
+            if (( aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLangStr ))) &&
+               ( aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString ))))
             {
                 if ( aUpperCountry.isEmpty() ||
-                     aUpperCountry.equals( pGLIBCModifiersEntry->maCountry ) )
+                     aUpperCountry.equals( static_cast< const char* >( pGLIBCModifiersEntry->maCountry )))
                {
                     return pGLIBCModifiersEntry->mnLang;
                }
