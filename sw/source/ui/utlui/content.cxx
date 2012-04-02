@@ -2769,13 +2769,13 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
                 pActiveShell->StartAction();
                 String sTable = SW_RES(STR_TABLE_NAME);
                 SwRewriter aRewriterTableName;
-                aRewriterTableName.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
-                aRewriterTableName.AddRule(UNDO_ARG2, pCnt->GetName());
-                aRewriterTableName.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+                aRewriterTableName.AddRule(UndoArg1, SW_RES(STR_START_QUOTE));
+                aRewriterTableName.AddRule(UndoArg2, pCnt->GetName());
+                aRewriterTableName.AddRule(UndoArg3, SW_RES(STR_END_QUOTE));
                 sTable = aRewriterTableName.Apply(sTable);
 
                 SwRewriter aRewriter;
-                aRewriter.AddRule(UNDO_ARG1, sTable);
+                aRewriter.AddRule(UndoArg1, sTable);
                 pActiveShell->StartUndo(UNDO_DELETE, &aRewriter);
                 pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 pActiveShell->DeleteRow();

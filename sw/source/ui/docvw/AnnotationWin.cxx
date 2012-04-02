@@ -204,7 +204,7 @@ MenuButton* SwAnnotationWin::CreateMenuButton()
     mpButtonPopup = new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON));
     XubString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1,GetAuthor());
+    aRewriter.AddRule(UndoArg1,GetAuthor());
     aText = aRewriter.Apply(aText);
     mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
     MenuButton* pMenuButton = new AnnotationMenuButton( *this );
@@ -221,7 +221,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     String aText = String(SW_RES(STR_REPLY));
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, pWin->GetAuthor());
+        aRewriter.AddRule(UndoArg1, pWin->GetAuthor());
         aText = aRewriter.Apply(aText);
         aText.Append(String(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
         String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ")) +

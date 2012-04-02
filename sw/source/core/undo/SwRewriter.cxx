@@ -50,9 +50,9 @@ SwRewriter::~SwRewriter()
 {
 }
 
-void SwRewriter::AddRule(const String & rWhat, const String & rWith)
+void SwRewriter::AddRule(SwUndoArg eWhat, const String & rWith)
 {
-    SwRewriteRule aRule(rWhat, rWith);
+    SwRewriteRule aRule(eWhat, rWith);
 
     vector<SwRewriteRule>::iterator aIt;
 
@@ -62,17 +62,6 @@ void SwRewriter::AddRule(const String & rWhat, const String & rWith)
         *aIt = aRule;
     else
         mRules.push_back(aRule);
-}
-
-String SwRewriter::Apply(const String & rStr) const
-{
-    String aResult = rStr;
-    vector<SwRewriteRule>::const_iterator aIt;
-
-    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
-        aResult.SearchAndReplaceAll(aIt->first, aIt->second);
-
-    return aResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

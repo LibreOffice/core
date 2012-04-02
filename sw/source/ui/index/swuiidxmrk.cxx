@@ -455,12 +455,12 @@ void SwIndexMarkDlg::InsertUpdate()
         InsertMark();
 
         if ( pTOXMgr->GetCurTOXMark())
-            aRewriter.AddRule(UNDO_ARG1, pTOXMgr->GetCurTOXMark()->GetText());
+            aRewriter.AddRule(UndoArg1, pTOXMgr->GetCurTOXMark()->GetText());
     }
     else if( !pSh->HasReadonlySel() )
     {
         if ( pTOXMgr->GetCurTOXMark())
-            aRewriter.AddRule(UNDO_ARG1,
+            aRewriter.AddRule(UndoArg1,
                               pTOXMgr->GetCurTOXMark()->GetText());
 
         if( bDel )

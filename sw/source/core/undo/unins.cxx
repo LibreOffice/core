@@ -461,14 +461,14 @@ SwRewriter SwUndoInsert::GetRewriter() const
                                        nUndoStringLength,
                                        String(SW_RES(STR_LDOTS)));
 
-        aResult.AddRule(UNDO_ARG1, aString);
+        aResult.AddRule(UndoArg1, aString);
 
         bDone = true;
     }
 
     if ( ! bDone )
     {
-        aResult.AddRule(UNDO_ARG1, String("??", RTL_TEXTENCODING_ASCII_US));
+        aResult.AddRule(UndoArg1, String("??", RTL_TEXTENCODING_ASCII_US));
     }
 
     return aResult;
@@ -536,15 +536,15 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
 
     if (1 < occurrences)
     {
-        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(occurrences));
-        aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_OCCURRENCES_OF)));
+        aResult.AddRule(UndoArg1, String::CreateFromInt32(occurrences));
+        aResult.AddRule(UndoArg2, String(SW_RES(STR_OCCURRENCES_OF)));
 
         String aTmpStr;
         aTmpStr += String(SW_RES(STR_START_QUOTE));
         aTmpStr += ShortenString(sOld, nUndoStringLength,
                                  SW_RES(STR_LDOTS));
         aTmpStr += String(SW_RES(STR_END_QUOTE));
-        aResult.AddRule(UNDO_ARG3, aTmpStr);
+        aResult.AddRule(UndoArg3, aTmpStr);
     }
     else if (1 == occurrences)
     {
@@ -556,10 +556,10 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
             aTmpStr += ShortenString(sOld, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
-            aResult.AddRule(UNDO_ARG1, aTmpStr);
+            aResult.AddRule(UndoArg1, aTmpStr);
         }
 
-        aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+        aResult.AddRule(UndoArg2, String(SW_RES(STR_YIELDS)));
 
         {
             String aTmpStr;
@@ -569,7 +569,7 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
             aTmpStr += ShortenString(sNew, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
-            aResult.AddRule(UNDO_ARG3, aTmpStr);
+            aResult.AddRule(UndoArg3, aTmpStr);
         }
     }
 
@@ -1037,7 +1037,7 @@ SwRewriter SwUndoInsertLabel::GetRewriter() const
                              String(SW_RES(STR_LDOTS)));
     aTmpStr += String(SW_RES(STR_END_QUOTE));
 
-    aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+    aRewriter.AddRule(UndoArg1, aTmpStr);
 
     return aRewriter;
 }

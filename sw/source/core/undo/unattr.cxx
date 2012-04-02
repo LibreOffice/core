@@ -406,7 +406,7 @@ SwRewriter SwUndoFmtAttr::GetRewriter() const
 
     if (m_pFmt)
     {
-        aRewriter.AddRule(UNDO_ARG1, m_pFmt->GetName());
+        aRewriter.AddRule(UndoArg1, m_pFmt->GetName());
     }
 
     return aRewriter;

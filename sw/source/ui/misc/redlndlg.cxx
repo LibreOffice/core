@@ -830,13 +830,13 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
         String aTmpStr;
         {
             SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1,
+            aRewriter.AddRule(UndoArg1,
                               String::CreateFromInt32(aRedlines.size()));
             aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+        aRewriter.AddRule(UndoArg1, aTmpStr);
 
         pSh->StartUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE,
                        &aRewriter);

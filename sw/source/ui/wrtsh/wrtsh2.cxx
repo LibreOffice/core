@@ -80,7 +80,7 @@ void SwWrtShell::Insert(SwField &rFld)
     StartAllAction();
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, rFld.GetDescription());
+    aRewriter.AddRule(UndoArg1, rFld.GetDescription());
 
     StartUndo(UNDO_INSERT, &aRewriter);
 

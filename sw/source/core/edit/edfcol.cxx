@@ -73,7 +73,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     StartAllAction();
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, pLocal->GetName());
+    aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)

@@ -378,9 +378,9 @@ throw (uno::RuntimeException)
     }
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, lcl_QuoteName(getName()));
-    aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-    aRewriter.AddRule(UNDO_ARG3, lcl_QuoteName(rName));
+    aRewriter.AddRule(UndoArg1, lcl_QuoteName(getName()));
+    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, lcl_QuoteName(rName));
 
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(
             UNDO_BOOKMARK_RENAME, &aRewriter);

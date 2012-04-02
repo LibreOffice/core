@@ -342,7 +342,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
             {
                 XubString aText = ((PopupMenu*)pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
                 SwRewriter aRewriter;
-                aRewriter.AddRule(UNDO_ARG1, mrSidebarWin.GetAuthor());
+                aRewriter.AddRule(UndoArg1, mrSidebarWin.GetAuthor());
                 aText = aRewriter.Apply(aText);
                 ((PopupMenu*)pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
             }

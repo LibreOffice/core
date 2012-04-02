@@ -2076,7 +2076,7 @@ bool SwDoc::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
         {
             SwRewriter aRewriter;
 
-            aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
+            aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
             GetIDocumentUndoRedo().StartUndo(UNDO_ACCEPT_REDLINE, &aRewriter);
         }
 
@@ -2158,12 +2158,12 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
 
         {
             SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1, String::CreateFromInt32(nRet));
+            aRewriter.AddRule(UndoArg1, String::CreateFromInt32(nRet));
             aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+        aRewriter.AddRule(UndoArg1, aTmpStr);
 
         GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
     }
@@ -2186,7 +2186,7 @@ bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
         {
             SwRewriter aRewriter;
 
-            aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
+            aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
             GetIDocumentUndoRedo().StartUndo(UNDO_REJECT_REDLINE, &aRewriter);
         }
 
@@ -2268,12 +2268,12 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
 
         {
             SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1, String::CreateFromInt32(nRet));
+            aRewriter.AddRule(UndoArg1, String::CreateFromInt32(nRet));
             aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+        aRewriter.AddRule(UndoArg1, aTmpStr);
 
         GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
     }
@@ -3809,7 +3809,7 @@ String SwRedline::GetDescr(sal_uInt16 nPos)
     aTmpStr += String(SW_RES(STR_END_QUOTE));
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+    aRewriter.AddRule(UndoArg1, aTmpStr);
 
     aResult = aRewriter.Apply(aResult);
 

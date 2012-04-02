@@ -337,7 +337,7 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
                              String(SW_RES(STR_LDOTS)));
     aString += String(SW_RES(STR_END_QUOTE));
 
-    aResult.AddRule(UNDO_ARG1, aString);
+    aResult.AddRule(UndoArg1, aString);
 
     return aResult;
 }

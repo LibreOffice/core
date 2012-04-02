@@ -631,7 +631,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     SwRewriter aRewriter;
 
-                    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
+                    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_FRAME));
 
                     rShell.EndUndo(UNDO_INSERT, &aRewriter);
                 }
@@ -1096,7 +1096,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         // Selektierten Inhalt loeschen
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_SPECIALCHAR));
+        aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_SPECIALCHAR));
 
         rSh.StartUndo( UNDO_INSERT, &aRewriter );
         if ( rSh.HasSelection() )

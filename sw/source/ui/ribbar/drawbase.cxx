@@ -322,7 +322,7 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SwRewriter aRewriter;
 
-                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
+                aRewriter.AddRule(UndoArg1, SW_RES(STR_FRAME));
                 m_pSh->StartUndo(UNDO_INSERT, &aRewriter);
             }
 

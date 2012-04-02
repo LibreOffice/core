@@ -2669,9 +2669,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
             if (rSh.GetTableFmt())
             {
-                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
-                aRewriter.AddRule(UNDO_ARG2, rSh.GetTableFmt()->GetName());
-                aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+                aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_START_QUOTE));
+                aRewriter.AddRule(UndoArg2, rSh.GetTableFmt()->GetName());
+                aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
             }
             rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // wegen moegl. Shellwechsel

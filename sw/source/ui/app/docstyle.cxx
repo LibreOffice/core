@@ -1112,7 +1112,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         SwRewriter aRewriter;
-        aRewriter.AddRule( UNDO_ARG1, GetName() );
+        aRewriter.AddRule( UndoArg1, GetName() );
         rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_INSFMTATTR, &aRewriter );
     }
 

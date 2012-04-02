@@ -77,7 +77,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, m_pHistoryBookmark->GetName());
+    aResult.AddRule(UndoArg1, m_pHistoryBookmark->GetName());
 
     return aResult;
 }

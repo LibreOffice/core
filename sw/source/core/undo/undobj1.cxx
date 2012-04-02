@@ -438,7 +438,7 @@ SwRewriter SwUndoDelLayFmt::GetRewriter() const
             {
                 SwOLENode * pOLENd = pNd->GetOLENode();
 
-                aRewriter.AddRule(UNDO_ARG1, pOLENd->GetDescription());
+                aRewriter.AddRule(UndoArg1, pOLENd->GetDescription());
             }
         }
     }
@@ -491,7 +491,7 @@ SwRewriter SwUndoSetFlyFmt::GetRewriter() const
     SwRewriter aRewriter;
 
     if (pNewFmt)
-        aRewriter.AddRule(UNDO_ARG1, pNewFmt->GetName());
+        aRewriter.AddRule(UndoArg1, pNewFmt->GetName());
 
     return aRewriter;
 }

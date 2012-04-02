@@ -52,6 +52,7 @@
 #include <fmtfld.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
+#include <vector>
 
 
 // DELETE
@@ -532,7 +533,7 @@ static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
 
         if (aDescr.Len() > 0)
         {
-            aRewriter.AddRule(UNDO_ARG2, aDescr);
+            aRewriter.AddRule(UndoArg2, aDescr);
 
             bDone = true;
             break;
@@ -541,10 +542,118 @@ static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
 
     if (! bDone)
     {
-        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_FIELD));
+        aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_FIELD));
     }
 
     return aRewriter;
+}
+
+static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
+{
+    switch (nChar)
+    {
+    case CH_TXTATR_BREAKWORD:
+    case CH_TXTATR_INWORD:
+    case CH_TXTATR_TAB:
+    case CH_TXTATR_NEWLINE:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+const char UNDO_ARG1[] = "$1";
+const char UNDO_ARG2[] = "$2";
+const char UNDO_ARG3[] = "$3";
+
+static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
+                                 xub_StrLen nEnd)
+{
+    String aResult;
+
+    if (nEnd - nStart > 0)
+    {
+        sal_Unicode cLast = rStr.GetChar(nEnd - 1);
+        if (lcl_IsSpecialCharacter(cLast))
+        {
+            switch(cLast)
+            {
+            case CH_TXTATR_TAB:
+                aResult = SW_RESSTR(STR_UNDO_TABS);
+
+                break;
+            case CH_TXTATR_NEWLINE:
+                aResult = SW_RESSTR(STR_UNDO_NLS);
+
+                break;
+
+            case CH_TXTATR_INWORD:
+            case CH_TXTATR_BREAKWORD:
+                aResult = rtl::OUString(UNDO_ARG2);
+
+                break;
+
+            }
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1,
+                              String::CreateFromInt32(nEnd - nStart));
+            aResult = aRewriter.Apply(aResult);
+        }
+        else
+        {
+            aResult = SW_RESSTR(STR_START_QUOTE);
+            aResult += rStr.Copy(nStart, nEnd - nStart);
+            aResult += SW_RESSTR(STR_END_QUOTE);
+        }
+    }
+
+    return aResult;
+}
+
+String DenoteSpecialCharacters(const String & rStr)
+{
+    String aResult;
+
+    if (rStr.Len() > 0)
+    {
+        bool bStart = false;
+        xub_StrLen nStart = 0;
+        sal_Unicode cLast = 0;
+
+        for (xub_StrLen i = 0; i < rStr.Len(); i++)
+        {
+            if (lcl_IsSpecialCharacter(rStr.GetChar(i)))
+            {
+                if (cLast != rStr.GetChar(i))
+                    bStart = true;
+
+            }
+            else
+            {
+                if (lcl_IsSpecialCharacter(cLast))
+                    bStart = true;
+            }
+
+            if (bStart)
+            {
+                aResult += lcl_DenotedPortion(rStr, nStart, i);
+
+                nStart = i;
+                bStart = false;
+            }
+
+            cLast = rStr.GetChar(i);
+        }
+
+        aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
+    }
+    else
+        aResult = rtl::OUString(UNDO_ARG2);
+
+    return aResult;
 }
 
 SwRewriter SwUndoDelete::GetRewriter() const
@@ -558,15 +667,15 @@ SwRewriter SwUndoDelete::GetRewriter() const
         {
 
             SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
-            aRewriter.AddRule(UNDO_ARG2, sTableName);
-            aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+            aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_START_QUOTE));
+            aRewriter.AddRule(UndoArg2, sTableName);
+            aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
             String sTmp = aRewriter.Apply(SW_RES(STR_TABLE_NAME));
-            aResult.AddRule(UNDO_ARG1, sTmp);
+            aResult.AddRule(UndoArg1, sTmp);
         }
         else
-            aResult.AddRule(UNDO_ARG1, String(SW_RES(STR_PARAGRAPHS)));
+            aResult.AddRule(UndoArg1, SW_RESSTR(STR_PARAGRAPHS));
     }
     else
     {
@@ -590,7 +699,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
             else
             {
-                aStr = UNDO_ARG2;
+                aStr = rtl::OUString(UNDO_ARG2);
             }
         }
 
@@ -601,7 +710,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             aStr = aRewriter.Apply(aStr);
         }
 
-        aResult.AddRule(UNDO_ARG1, aStr);
+        aResult.AddRule(UndoArg1, aStr);
     }
 
     return aResult;
@@ -984,6 +1093,31 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoDelete::SetTableName(const String & rName)
 {
     sTableName = rName;
+}
+
+String SwRewriter::Apply(const String & rStr) const
+{
+    rtl::OUString aResult = rStr;
+    std::vector<SwRewriteRule>::const_iterator aIt;
+
+    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
+    {
+        switch (aIt->first)
+        {
+            case UndoArg1:
+            default:
+                aResult = aResult.replaceAll(UNDO_ARG1, aIt->second);
+                break;
+            case UndoArg2:
+                aResult = aResult.replaceAll(UNDO_ARG2, aIt->second);
+                break;
+            case UndoArg3:
+                aResult = aResult.replaceAll(UNDO_ARG3, aIt->second);
+                break;
+        }
+    }
+
+    return aResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

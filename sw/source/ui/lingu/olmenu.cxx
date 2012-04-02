@@ -744,13 +744,13 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             // #111827#
             SwRewriter aRewriter;
 
-            aRewriter.AddRule(UNDO_ARG1, pSh->GetCrsrDescr());
-            aRewriter.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+            aRewriter.AddRule(UndoArg1, pSh->GetCrsrDescr());
+            aRewriter.AddRule(UndoArg2, String(SW_RES(STR_YIELDS)));
 
             String aTmpStr( SW_RES(STR_START_QUOTE) );
             aTmpStr += aTmp;
             aTmpStr += String(SW_RES(STR_END_QUOTE));
-            aRewriter.AddRule(UNDO_ARG3, aTmpStr);
+            aRewriter.AddRule(UndoArg3, aTmpStr);
 
             pSh->StartUndo(UNDO_UI_REPLACE, &aRewriter);
             pSh->StartAction();

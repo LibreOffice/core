@@ -370,9 +370,9 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
-    aRewriter.AddRule(UNDO_ARG2, sTblNm);
-    aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+    aRewriter.AddRule(UndoArg1, SW_RES(STR_START_QUOTE));
+    aRewriter.AddRule(UndoArg2, sTblNm);
+    aRewriter.AddRule(UndoArg3, SW_RES(STR_END_QUOTE));
 
     return aRewriter;
 }

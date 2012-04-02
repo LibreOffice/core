@@ -1146,7 +1146,7 @@ void SwPostItMgr::Delete(String aAuthor)
     SwRewriter aRewriter;
     String aUndoString = SW_RES(STR_DELETE_AUTHOR_NOTES);
     aUndoString += aAuthor;
-    aRewriter.AddRule(UNDO_ARG1, aUndoString);
+    aRewriter.AddRule(UndoArg1, aUndoString);
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
 
     std::vector<SwFmtFld*> aTmp;
@@ -1174,7 +1174,7 @@ void SwPostItMgr::Delete()
     mpWrtShell->StartAllAction();
     SetActiveSidebarWin(0);
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_DELETE_ALL_NOTES) );
+    aRewriter.AddRule(UndoArg1, SW_RES(STR_DELETE_ALL_NOTES) );
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
 
     std::vector<SwFmtFld*> aTmp;

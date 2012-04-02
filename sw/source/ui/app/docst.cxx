@@ -981,7 +981,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
                 GetWrtShell()->StartAllAction();
 
                 SwRewriter aRewriter;
-                aRewriter.AddRule(UNDO_ARG1, pColl->GetName());
+                aRewriter.AddRule(UndoArg1, pColl->GetName());
 
                 GetWrtShell()->StartUndo(UNDO_INSFMTATTR, &aRewriter);
                 GetWrtShell()->FillByEx(pColl);

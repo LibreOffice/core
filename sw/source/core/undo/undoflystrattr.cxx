@@ -92,7 +92,7 @@ SwRewriter SwUndoFlyStrAttr::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule( UNDO_ARG1, mrFlyFrmFmt.GetName() );
+    aResult.AddRule( UndoArg1, mrFlyFrmFmt.GetName() );
 
     return aResult;
 }

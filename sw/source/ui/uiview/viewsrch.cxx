@@ -586,9 +586,9 @@ void SwView::Replace()
     if( pSrchItem->GetPattern() ) // Vorlagen?
     {
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, pSrchItem->GetSearchString());
-        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-        aRewriter.AddRule(UNDO_ARG3, pSrchItem->GetReplaceString());
+        aRewriter.AddRule(UndoArg1, pSrchItem->GetSearchString());
+        aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+        aRewriter.AddRule(UndoArg3, pSrchItem->GetReplaceString());
 
         pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
 

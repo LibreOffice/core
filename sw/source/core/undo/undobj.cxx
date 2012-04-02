@@ -1212,110 +1212,6 @@ String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFi
     return aResult;
 }
 
-static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
-{
-    switch (nChar)
-    {
-    case CH_TXTATR_BREAKWORD:
-    case CH_TXTATR_INWORD:
-    case CH_TXTATR_TAB:
-    case CH_TXTATR_NEWLINE:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
-                                 xub_StrLen nEnd)
-{
-    String aResult;
-
-    if (nEnd - nStart > 0)
-    {
-        sal_Unicode cLast = rStr.GetChar(nEnd - 1);
-        if (lcl_IsSpecialCharacter(cLast))
-        {
-            switch(cLast)
-            {
-            case CH_TXTATR_TAB:
-                aResult += String(SW_RES(STR_UNDO_TABS));
-
-                break;
-            case CH_TXTATR_NEWLINE:
-                aResult += String(SW_RES(STR_UNDO_NLS));
-
-                break;
-
-            case CH_TXTATR_INWORD:
-            case CH_TXTATR_BREAKWORD:
-                aResult += UNDO_ARG2;
-
-                break;
-
-            }
-            SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1,
-                              String::CreateFromInt32(nEnd - nStart));
-            aResult = aRewriter.Apply(aResult);
-        }
-        else
-        {
-            aResult = String(SW_RES(STR_START_QUOTE));
-            aResult += rStr.Copy(nStart, nEnd - nStart);
-            aResult += String(SW_RES(STR_END_QUOTE));
-        }
-    }
-
-    return aResult;
-}
-
-String DenoteSpecialCharacters(const String & rStr)
-{
-    String aResult;
-
-    if (rStr.Len() > 0)
-    {
-        bool bStart = false;
-        xub_StrLen nStart = 0;
-        sal_Unicode cLast = 0;
-
-        for (xub_StrLen i = 0; i < rStr.Len(); i++)
-        {
-            if (lcl_IsSpecialCharacter(rStr.GetChar(i)))
-            {
-                if (cLast != rStr.GetChar(i))
-                    bStart = true;
-
-            }
-            else
-            {
-                if (lcl_IsSpecialCharacter(cLast))
-                    bStart = true;
-            }
-
-            if (bStart)
-            {
-                aResult += lcl_DenotedPortion(rStr, nStart, i);
-
-                nStart = i;
-                bStart = false;
-            }
-
-            cLast = rStr.GetChar(i);
-        }
-
-        aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
-    }
-    else
-        aResult = UNDO_ARG2;
-
-    return aResult;
-}
-
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelCntntType const nDelCntntType)
@@ -1331,9 +1227,5 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
             ||  !rStart.nContent.GetIndex()
             );
 }
-
-const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

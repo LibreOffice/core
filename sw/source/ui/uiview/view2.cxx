@@ -410,7 +410,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         rSh.StartAction();
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_GRAPHIC_DEFNAME)));
+        aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_GRAPHIC_DEFNAME));
 
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 

@@ -83,7 +83,7 @@ SwRewriter SwUndoInsNum::GetRewriter() const
 {
     SwRewriter aResult;
     if( UNDO_INSFMTATTR == GetId() )
-        aResult.AddRule(UNDO_ARG1, aNumRule.GetName());
+        aResult.AddRule(UndoArg1, aNumRule.GetName());
     return aResult;
 }
 

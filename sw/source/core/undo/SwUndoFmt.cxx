@@ -102,7 +102,7 @@ SwRewriter SwUndoFmtCreate::GetRewriter() const
 
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, sNewName);
+    aRewriter.AddRule(UndoArg1, sNewName);
 
     return aRewriter;
 }
@@ -152,7 +152,7 @@ SwRewriter SwUndoFmtDelete::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, sOldName);
+    aRewriter.AddRule(UndoArg1, sOldName);
 
     return aRewriter;
 }
@@ -195,9 +195,9 @@ SwRewriter SwUndoRenameFmt::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, sOldName);
-    aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-    aRewriter.AddRule(UNDO_ARG3, sNewName);
+    aRewriter.AddRule(UndoArg1, sOldName);
+    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, sNewName);
 
     return aRewriter;
 }
@@ -398,7 +398,7 @@ SwRewriter SwUndoNumruleCreate::GetRewriter() const
         bInitialized = true;
     }
 
-    aResult.AddRule(UNDO_ARG1, aNew.GetName());
+    aResult.AddRule(UndoArg1, aNew.GetName());
 
     return aResult;
 }
@@ -423,7 +423,7 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, aOld.GetName());
+    aResult.AddRule(UndoArg1, aOld.GetName());
 
     return aResult;
 }
@@ -450,9 +450,9 @@ SwRewriter SwUndoNumruleRename::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, aOldName);
-    aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-    aRewriter.AddRule(UNDO_ARG3, aNewName);
+    aRewriter.AddRule(UndoArg1, aOldName);
+    aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, aNewName);
 
     return aRewriter;
 }

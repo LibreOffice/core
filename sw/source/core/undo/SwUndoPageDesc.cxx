@@ -312,9 +312,9 @@ SwRewriter SwUndoPageDesc::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, aOld.GetName());
-    aResult.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-    aResult.AddRule(UNDO_ARG3, aNew.GetName());
+    aResult.AddRule(UndoArg1, aOld.GetName());
+    aResult.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+    aResult.AddRule(UndoArg3, aNew.GetName());
 
     return aResult;
 }
@@ -367,9 +367,9 @@ SwRewriter SwUndoPageDescCreate::GetRewriter() const
     SwRewriter aResult;
 
     if (pDesc)
-        aResult.AddRule(UNDO_ARG1, pDesc->GetName());
+        aResult.AddRule(UndoArg1, pDesc->GetName());
     else
-        aResult.AddRule(UNDO_ARG1, aNew.GetName());
+        aResult.AddRule(UndoArg1, aNew.GetName());
 
 
     return aResult;
@@ -412,7 +412,7 @@ SwRewriter SwUndoPageDescDelete::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, aOld.GetName());
+    aResult.AddRule(UndoArg1, aOld.GetName());
 
     return aResult;
 }

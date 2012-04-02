@@ -229,15 +229,15 @@ void SwWrtShell::Insert( const String &rStr )
         // #111827#
         SwRewriter aRewriter;
 
-        aRewriter.AddRule(UNDO_ARG1, GetCrsrDescr());
-        aRewriter.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+        aRewriter.AddRule(UndoArg1, GetCrsrDescr());
+        aRewriter.AddRule(UndoArg2, String(SW_RES(STR_YIELDS)));
         {
             String aTmpStr;
             aTmpStr += String(SW_RES(STR_START_QUOTE));
             aTmpStr += rStr;
             aTmpStr += String(SW_RES(STR_END_QUOTE));
 
-            aRewriter.AddRule(UNDO_ARG3, rStr);
+            aRewriter.AddRule(UndoArg3, rStr);
         }
 
         StartUndo(UNDO_REPLACE, &aRewriter);
@@ -272,7 +272,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     StartAllAction();
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_GRAPHIC));
+    aRewriter.AddRule(UndoArg1, SW_RES(STR_GRAPHIC));
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
@@ -586,11 +586,11 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     SwRewriter aRewriter;
 
     if ( bStarMath )
-        aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_MATH_FORMULA));
+        aRewriter.AddRule(UndoArg1, SW_RES(STR_MATH_FORMULA));
     else if ( SotExchange::IsChart( aCLSID ) )
-        aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_CHART));
+        aRewriter.AddRule(UndoArg1, SW_RES(STR_CHART));
     else
-        aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_OLE));
+        aRewriter.AddRule(UndoArg1, SW_RES(STR_OLE));
 
     EndUndo(UNDO_INSERT, &aRewriter);
 

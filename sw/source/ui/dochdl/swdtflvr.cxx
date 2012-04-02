@@ -3217,7 +3217,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, rSrcSh.GetSelDescr());
+    aRewriter.AddRule(UndoArg1, rSrcSh.GetSelDescr());
 
     if(rSrcSh.GetDoc() != rSh.GetDoc())
         rSrcSh.StartUndo( eUndoId, &aRewriter );

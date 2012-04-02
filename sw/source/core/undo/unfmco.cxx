@@ -110,7 +110,7 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
     // #i31191# Use stored format name instead of
     // pFmtColl->GetName(), because pFmtColl does not have to be available
     // anymore.
-    aResult.AddRule(UNDO_ARG1, aFmtName );
+    aResult.AddRule(UndoArg1, aFmtName );
 
     return aResult;
 }

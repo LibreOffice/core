@@ -33,11 +33,14 @@
 #include <tools/string.hxx>
 #include <swdllapi.h>
 
-extern SW_DLLPUBLIC String const UNDO_ARG1;
-extern SW_DLLPUBLIC String const UNDO_ARG2;
-extern SW_DLLPUBLIC String const UNDO_ARG3;
+enum SwUndoArg
+{
+    UndoArg1,
+    UndoArg2,
+    UndoArg3
+};
 
-typedef std::pair<String, String> SwRewriteRule;
+typedef std::pair<SwUndoArg, String> SwRewriteRule;
 
 class SW_DLLPUBLIC SwRewriter
 {
@@ -48,7 +51,7 @@ public:
     SwRewriter(const SwRewriter & rSrc);
     ~SwRewriter();
 
-    void AddRule(const String & rWhat, const String & rWith);
+    void AddRule(SwUndoArg eWhat, const String & rWith);
 
     String Apply(const String & rStr) const;
 };
