@@ -84,27 +84,6 @@ protected:
 };
 
 // ============================================================================
-
-class StdHlinkObject : public OleInputObjectBase
-{
-public:
-    explicit            StdHlinkObject( const InputObjectBase& rParent );
-
-protected:
-    virtual void        implDump();
-
-private:
-    ::rtl::OUString     dumpHyperlinkString( const String& rName, bool bUnicode );
-
-    bool                dumpGuidAndMoniker();
-    void                dumpUrlMoniker();
-    void                dumpFileMoniker();
-    void                dumpItemMoniker();
-    void                dumpAntiMoniker();
-    void                dumpCompositeMoniker();
-};
-
-// ============================================================================
 // ============================================================================
 
 class OleStreamObject : public OleInputObjectBase

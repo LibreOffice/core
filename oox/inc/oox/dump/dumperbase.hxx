@@ -395,7 +395,6 @@ public:
     // token list -------------------------------------------------------------
 
     static void         appendToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    static void         appendToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rIdx );
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, sal_Int64 nIdx );
@@ -1074,9 +1073,6 @@ public:
     void                writeColRowRange( sal_Int32 nColRow1, sal_Int32 nColRow2 );
     void                writeColRange( sal_Int32 nCol1, sal_Int32 nCol2 );
     void                writeRowRange( sal_Int32 nRow1, sal_Int32 nRow2 );
-    void                writeAddress( const Address& rPos );
-    void                writeRange( const Range& rRange );
-    void                writeRangeList( const RangeList& rRanges );
 
     template< typename Type >
     inline void         writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )
@@ -1349,17 +1345,6 @@ protected:
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const ::rtl::OUString& rGuid );
-    void                writeColIndexItem( const String& rName, sal_Int32 nCol );
-    void                writeRowIndexItem( const String& rName, sal_Int32 nRow );
-    void                writeColRangeItem( const String& rName, sal_Int32 nCol1, sal_Int32 nCol2 );
-    void                writeRowRangeItem( const String& rName, sal_Int32 nRow1, sal_Int32 nRow2 );
-    void                writeAddressItem( const String& rName, const Address& rPos );
-    void                writeRangeItem( const String& rName, const Range& rRange );
-    void                writeRangeListItem( const String& rName, const RangeList& rRanges );
-    void                writeTokenAddressItem( const String& rName, const TokenAddress& rPos, bool bNameMode );
-    void                writeTokenAddress3dItem( const String& rName, const ::rtl::OUString& rRef, const TokenAddress& rPos, bool bNameMode );
-    void                writeTokenRangeItem( const String& rName, const TokenRange& rRange, bool bNameMode );
-    void                writeTokenRange3dItem( const String& rName, const ::rtl::OUString& rRef, const TokenRange& rRange, bool bNameMode );
 
     template< typename Type >
     void                addNameToItem( Type nData, const NameListWrapper& rListWrp );
@@ -1752,9 +1737,6 @@ protected:
     void                construct(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            rtl_TextEncoding eTextEnc );
-    void                construct(
-                            const InputObjectBase& rParent,
                             rtl_TextEncoding eTextEnc );
 
     virtual bool        implIsValid() const;

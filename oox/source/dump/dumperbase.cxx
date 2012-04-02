@@ -616,13 +616,6 @@ void StringHelper::appendToken( OUStringBuffer& rStr, const OUString& rToken, sa
     rStr.append( rToken );
 }
 
-void StringHelper::appendToken( OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep )
-{
-    OUStringBuffer aToken;
-    appendDec( aToken, nToken );
-    appendToken( rStr, aToken.makeStringAndClear(), cSep );
-}
-
 void StringHelper::appendIndex( OUStringBuffer& rStr, const OUString& rIdx )
 {
     rStr.append( sal_Unicode( '[' ) ).append( rIdx ).append( sal_Unicode( ']' ) );
@@ -1878,21 +1871,6 @@ void Output::writeRowRange( sal_Int32 nRow1, sal_Int32 nRow2 )
     writeRowIndex( nRow2 );
 }
 
-void Output::writeAddress( const Address& rPos )
-{
-    StringHelper::appendAddress( maLine, rPos );
-}
-
-void Output::writeRange( const Range& rRange )
-{
-    StringHelper::appendRange( maLine, rRange );
-}
-
-void Output::writeRangeList( const RangeList& rRanges )
-{
-    StringHelper::appendRangeList( maLine, rRanges );
-}
-
 // ----------------------------------------------------------------------------
 
 bool Output::implIsValid() const
@@ -2220,85 +2198,6 @@ void OutputObjectBase::writeGuidItem( const String& rName, const OUString& rGuid
     mxOut->writeString( rGuid );
     aItem.cont();
     mxOut->writeString( cfg().getStringOption( rGuid, OUString() ) );
-}
-
-void OutputObjectBase::writeColIndexItem( const String& rName, sal_Int32 nCol )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeDec( nCol );
-    aItem.cont();
-    mxOut->writeColIndex( nCol );
-}
-
-void OutputObjectBase::writeRowIndexItem( const String& rName, sal_Int32 nRow )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeDec( nRow );
-    aItem.cont();
-    mxOut->writeRowIndex( nRow );
-}
-
-void OutputObjectBase::writeColRangeItem( const String& rName, sal_Int32 nCol1, sal_Int32 nCol2 )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeColRowRange( nCol1, nCol2 );
-    aItem.cont();
-    mxOut->writeColRange( nCol1, nCol2 );
-}
-
-void OutputObjectBase::writeRowRangeItem( const String& rName, sal_Int32 nRow1, sal_Int32 nRow2 )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeColRowRange( nRow1, nRow2 );
-    aItem.cont();
-    mxOut->writeRowRange( nRow1, nRow2 );
-}
-
-void OutputObjectBase::writeAddressItem( const String& rName, const Address& rPos )
-{
-    ItemGuard aItem( mxOut, rName );
-    StringHelper::appendAddress( mxOut->getLine(), rPos );
-}
-
-void OutputObjectBase::writeRangeItem( const String& rName, const Range& rRange )
-{
-    ItemGuard aItem( mxOut, rName );
-    StringHelper::appendRange( mxOut->getLine(), rRange );
-}
-
-void OutputObjectBase::writeRangeListItem( const String& rName, const RangeList& rRanges )
-{
-    MultiItemsGuard aMultiGuard( mxOut );
-    writeEmptyItem( rName );
-    writeDecItem( "count", static_cast< sal_uInt16 >( rRanges.size() ) );
-    ItemGuard aItem( mxOut, "ranges" );
-    StringHelper::appendRangeList( mxOut->getLine(), rRanges );
-}
-
-void OutputObjectBase::writeTokenAddressItem( const String& rName, const TokenAddress& rPos, bool bNameMode )
-{
-    ItemGuard aItem( mxOut, rName );
-    StringHelper::appendAddress( mxOut->getLine(), rPos, bNameMode );
-}
-
-void OutputObjectBase::writeTokenAddress3dItem( const String& rName, const OUString& rRef, const TokenAddress& rPos, bool bNameMode )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeString( rRef );
-    StringHelper::appendAddress( mxOut->getLine(), rPos, bNameMode );
-}
-
-void OutputObjectBase::writeTokenRangeItem( const String& rName, const TokenRange& rRange, bool bNameMode )
-{
-    ItemGuard aItem( mxOut, rName );
-    StringHelper::appendRange( mxOut->getLine(), rRange, bNameMode );
-}
-
-void OutputObjectBase::writeTokenRange3dItem( const String& rName, const OUString& rRef, const TokenRange& rRange, bool bNameMode )
-{
-    ItemGuard aItem( mxOut, rName );
-    mxOut->writeString( rRef );
-    StringHelper::appendRange( mxOut->getLine(), rRange, bNameMode );
 }
 
 // ============================================================================
@@ -2642,12 +2541,6 @@ void TextStreamObjectBase::construct( const OutputObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc )
 {
     InputObjectBase::construct( rParent, rxStrm );
-    constructTextStrmObj( eTextEnc );
-}
-
-void TextStreamObjectBase::construct( const InputObjectBase& rParent, rtl_TextEncoding eTextEnc )
-{
-    InputObjectBase::construct( rParent );
     constructTextStrmObj( eTextEnc );
 }
 
