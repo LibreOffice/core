@@ -235,6 +235,7 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+ifeq ($(strip $(NOCPPUNIT)),)
 define gb_Module_add_check_target
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
@@ -242,6 +243,7 @@ $(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+endif # NOCPPUNIT
 
 define gb_Module_add_slowcheck_target
 $(call gb_Module__read_targetfile,$(1),$(2),slowcheck target)
