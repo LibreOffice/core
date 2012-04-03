@@ -375,10 +375,6 @@ my_components += mozbootstrap
 .END
 .ENDIF
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""
-my_components += component/fpicker/source/unx/kde4/fps_kde4
-.END
-
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
 my_components += cmdmail
 .END

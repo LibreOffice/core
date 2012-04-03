@@ -489,12 +489,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     $(if $(filter $(OS),WNT), \
         fps_odma \
     ) \
-    $(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
-        fps_kde \
-    ) \
-    $(if $(filter $(GUIBASE)$(ENABLE_KDE4),unxTRUE), \
-        fps_kde4 \
-    ) \
 ))
 
 ifeq ($(OS),WNT)
