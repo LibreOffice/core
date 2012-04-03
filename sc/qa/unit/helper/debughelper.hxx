@@ -59,6 +59,9 @@ using ::std::vector;
 
 namespace {
 
+#ifdef __GNUC__
+__attribute__((used))
+#endif
 ::std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
 {
     return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
