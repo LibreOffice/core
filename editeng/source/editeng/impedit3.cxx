@@ -370,7 +370,7 @@ void ImpEditEngine::FormatDoc()
 
     EnterBlockNotifications();
 
-    bIsFormatting = sal_True;
+    bIsFormatting = true;
 
     // Then I can also start the spell-timer ...
     if ( GetStatus().DoOnlineSpelling() )
@@ -487,8 +487,8 @@ void ImpEditEngine::FormatDoc()
 
     if ( aStatus.DoRestoreFont() )
         GetRefDevice()->SetFont( aOldFont );
-    bIsFormatting = sal_False;
-    bFormatted = sal_True;
+    bIsFormatting = false;
+    bFormatted = true;
 
     if ( bMapChanged )
         GetRefDevice()->Pop();

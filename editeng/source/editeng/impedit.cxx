@@ -1372,13 +1372,13 @@ sal_Bool ImpEditView::IsInSelection( const EditPaM& rPaM )
 
 void ImpEditView::CreateAnchor()
 {
-    pEditEngine->pImpEditEngine->bInSelection = sal_True;
+    pEditEngine->pImpEditEngine->bInSelection = true;
     GetEditSelection().Min() = GetEditSelection().Max();
 }
 
 void ImpEditView::DeselectAll()
 {
-    pEditEngine->pImpEditEngine->bInSelection = sal_False;
+    pEditEngine->pImpEditEngine->bInSelection = false;
     DrawSelection();
     GetEditSelection().Min() = GetEditSelection().Max();
 }

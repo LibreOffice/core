@@ -450,8 +450,6 @@ private:
     sal_uInt16          nStretchY;
 
     sal_uInt16              nAsianCompressionMode;
-    sal_Bool                bKernAsianPunctuation;
-    sal_Bool                bAddExtLeading;
 
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
@@ -475,20 +473,22 @@ private:
     OnDemandLocaleDataWrapper       xLocaleDataWrapper;
     OnDemandTransliterationWrapper  xTransliterationWrapper;
 
-    sal_Bool            bIsFormatting;
-    sal_Bool            bFormatted;
-    sal_Bool            bInSelection;
-    sal_Bool            bIsInUndo;
-    sal_Bool            bUpdate;
-    sal_Bool            bUndoEnabled;
-    sal_Bool            bOwnerOfRefDev;
-    sal_Bool            bDowning;
-    sal_Bool            bUseAutoColor;
-    sal_Bool            bForceAutoColor;
-    sal_Bool            bCallParaInsertedOrDeleted;
-    sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
-    sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
-    sal_Bool            mbLastTryMerge;
+    bool            bKernAsianPunctuation:1;
+    bool            bAddExtLeading:1;
+    bool            bIsFormatting:1;
+    bool            bFormatted:1;
+    bool            bInSelection:1;
+    bool            bIsInUndo:1;
+    bool            bUpdate:1;
+    bool            bUndoEnabled:1;
+    bool            bOwnerOfRefDev:1;
+    bool            bDowning:1;
+    bool            bUseAutoColor:1;
+    bool            bForceAutoColor:1;
+    bool            bCallParaInsertedOrDeleted:1;
+    bool            bImpConvertFirstCall:1;   // specifies if ImpConvert is called the very first time after Convert was called
+    bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
+    bool            mbLastTryMerge:1;
 
     // For Formatting / Update ....
     boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
@@ -527,8 +527,7 @@ private:
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
-    // may prefer in-line, but so few ...
-    void                InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge = sal_False );
+    void                InsertUndo( EditUndo* pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
     sal_Bool            HasUndoManager() const  { return pUndoManager ? sal_True : sal_False; }
 
@@ -664,10 +663,10 @@ private:
     long                CalcVertLineSpacing(Point& rStartPos) const;
 
     Color               GetAutoColor() const;
-    void                EnableAutoColor( sal_Bool b ) { bUseAutoColor = b; }
-    sal_Bool                IsAutoColorEnabled() const { return bUseAutoColor; }
-    void                ForceAutoColor( sal_Bool b ) { bForceAutoColor = b; }
-    sal_Bool                IsForceAutoColor() const { return bForceAutoColor; }
+    void                EnableAutoColor( bool b ) { bUseAutoColor = b; }
+    bool                IsAutoColorEnabled() const { return bUseAutoColor; }
+    void                ForceAutoColor( bool b ) { bForceAutoColor = b; }
+    bool                IsForceAutoColor() const { return bForceAutoColor; }
 
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode );
     inline void             EraseVirtualDevice();
@@ -705,7 +704,7 @@ public:
     inline EditUndoManager& GetUndoManager();
 
     void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
-    sal_Bool                GetUpdateMode() const   { return bUpdate; }
+    bool                GetUpdateMode() const   { return bUpdate; }
 
     const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
@@ -756,16 +755,16 @@ public:
 
     void                    UpdateSelections();
 
-    void                    EnableUndo( sal_Bool bEnable );
-    sal_Bool                IsUndoEnabled()         { return bUndoEnabled; }
-    void                    SetUndoMode( sal_Bool b )   { bIsInUndo = b; }
-    sal_Bool                IsInUndo()              { return bIsInUndo; }
+    void                EnableUndo( bool bEnable );
+    bool                IsUndoEnabled()         { return bUndoEnabled; }
+    void                SetUndoMode( bool b )   { bIsInUndo = b; }
+    bool                IsInUndo()              { return bIsInUndo; }
 
-    void                    SetCallParaInsertedOrDeleted( sal_Bool b ) { bCallParaInsertedOrDeleted = b; }
-    sal_Bool                IsCallParaInsertedOrDeleted() const { return bCallParaInsertedOrDeleted; }
+    void                SetCallParaInsertedOrDeleted( bool b ) { bCallParaInsertedOrDeleted = b; }
+    bool                IsCallParaInsertedOrDeleted() const { return bCallParaInsertedOrDeleted; }
 
-    sal_Bool                IsFormatted() const { return bFormatted; }
-    sal_Bool                IsFormatting() const { return bIsFormatting; }
+    bool                IsFormatted() const { return bFormatted; }
+    bool                IsFormatting() const { return bIsFormatting; }
 
     void            SetText( const String& rText );
     EditPaM         DeleteSelected( EditSelection aEditSelection);
@@ -825,7 +824,7 @@ public:
     Link            GetModifyHdl() const { return aModifyHdl; }
 
 
-    sal_Bool        IsInSelectionMode() { return bInSelection; }
+    bool        IsInSelectionMode() { return bInSelection; }
 
     void            IndentBlock( EditView* pView, sal_Bool bRight );
 
@@ -995,11 +994,11 @@ public:
     void                SetAsianCompressionMode( sal_uInt16 n );
     sal_uInt16              GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
-    void                SetKernAsianPunctuation( sal_Bool b );
-    sal_Bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
+    void                SetKernAsianPunctuation( bool b );
+    bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
 
-    void                SetAddExtLeading( sal_Bool b );
-    sal_Bool                IsAddExtLeading() const { return bAddExtLeading; }
+    void                SetAddExtLeading( bool b );
+    bool                IsAddExtLeading() const { return bAddExtLeading; }
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable( sal_Bool bGetInternal = sal_True ) const;
     void                SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
@@ -1013,8 +1012,8 @@ public:
     Link            GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
-    void            SetFirstWordCapitalization( sal_Bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
-    sal_Bool            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
+    void            SetFirstWordCapitalization( bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
+    bool            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

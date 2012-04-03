@@ -263,7 +263,7 @@ public:
     /** returns the value last used for bTryMerge while calling ImpEditEngine::InsertUndo
         This is currently used in a bad but needed hack to get undo actions merged in the
         OutlineView in impress. Do not use it unless you want to sell your soul too! */
-    sal_Bool            HasTriedMergeOnLastAddUndo() const;
+    bool            HasTriedMergeOnLastAddUndo() const;
 
     void            ClearModifyFlag();
     void            SetModified();

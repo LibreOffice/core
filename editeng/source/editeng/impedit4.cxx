@@ -1572,7 +1572,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
         bIsStart = sal_True;
 
-    bImpConvertFirstCall = sal_True;    // next ImpConvert call is the very first in this conversion turn
+    bImpConvertFirstCall = true;    // next ImpConvert call is the very first in this conversion turn
 
     Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     TextConvWrapper aWrp( Application::GetDefDialogParent(), xMSF,
@@ -3061,7 +3061,7 @@ void ImpEditEngine::SetAsianCompressionMode( sal_uInt16 n )
     }
 }
 
-void ImpEditEngine::SetKernAsianPunctuation( sal_Bool b )
+void ImpEditEngine::SetKernAsianPunctuation( bool b )
 {
     if ( b != bKernAsianPunctuation )
     {
@@ -3074,7 +3074,7 @@ void ImpEditEngine::SetKernAsianPunctuation( sal_Bool b )
     }
 }
 
-void ImpEditEngine::SetAddExtLeading( sal_Bool bExtLeading )
+void ImpEditEngine::SetAddExtLeading( bool bExtLeading )
 {
     if ( IsAddExtLeading() != bExtLeading )
     {

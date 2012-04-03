@@ -120,26 +120,26 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     nStretchX           = 100;
     nStretchY           = 100;
 
-    bInSelection        = sal_False;
-    bOwnerOfRefDev      = sal_False;
-    bDowning            = sal_False;
-    bIsInUndo           = sal_False;
-    bIsFormatting       = sal_False;
-    bFormatted          = sal_False;
-    bUpdate             = sal_True;
-    bUseAutoColor       = sal_True;
-    bForceAutoColor     = sal_False;
-    bAddExtLeading      = sal_False;
-    bUndoEnabled        = sal_True;
-    bCallParaInsertedOrDeleted = sal_False;
-    bImpConvertFirstCall= sal_False;
-    bFirstWordCapitalization    = sal_True;
+    bInSelection        = false;
+    bOwnerOfRefDev      = false;
+    bDowning            = false;
+    bIsInUndo           = false;
+    bIsFormatting       = false;
+    bFormatted          = false;
+    bUpdate             = true;
+    bUseAutoColor       = true;
+    bForceAutoColor     = false;
+    bAddExtLeading      = false;
+    bUndoEnabled        = true;
+    bCallParaInsertedOrDeleted = false;
+    bImpConvertFirstCall= false;
+    bFirstWordCapitalization    = true;
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
 
     nAsianCompressionMode = text::CharacterCompressionType::NONE;
-    bKernAsianPunctuation = sal_False;
+    bKernAsianPunctuation = false;
 
     eDefaultHorizontalTextDirection = EE_HTEXTDIR_DEFAULT;
 
@@ -166,11 +166,11 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     SetRefDevice( pRefDev );
     InitDoc( sal_False );
 
-    bCallParaInsertedOrDeleted = sal_True;
+    bCallParaInsertedOrDeleted = true;
 
     aEditDoc.SetModifyHdl( LINK( this, ImpEditEngine, DocModified ) );
 
-    mbLastTryMerge = sal_False;
+    mbLastTryMerge = false;
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -182,7 +182,7 @@ ImpEditEngine::~ImpEditEngine()
     // Destroying templates may otherwise cause unnecessary formatting,
     // when a parent template is destroyed.
     // And this after the destruction of the data!
-    bDowning = sal_True;
+    bDowning = true;
     SetUpdateMode( sal_False );
 
     delete pVirtDev;
@@ -203,7 +203,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
         delete pRefDev;
 
     pRefDev = pRef;
-    bOwnerOfRefDev = sal_False;
+    bOwnerOfRefDev = false;
 
     if ( !pRef )
         pRefDev = EE_DLL().GetGlobalData()->GetStdRefDevice();
@@ -228,7 +228,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
         pRefDev = new VirtualDevice;
         pRefDev->SetMapMode( MAP_TWIP );
         SetRefDevice( pRefDev );
-        bOwnerOfRefDev = sal_True;
+        bOwnerOfRefDev = true;
     }
     pRefDev->SetMapMode( rMapMode );
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
@@ -258,7 +258,7 @@ void ImpEditEngine::InitDoc( sal_Bool bKeepParaAttribs )
     ParaPortion* pIniPortion = new ParaPortion( aEditDoc[0] );
     GetParaPortions().Insert(0, pIniPortion);
 
-    bFormatted = sal_False;
+    bFormatted = false;
 
     if ( IsCallParaInsertedOrDeleted() )
     {
@@ -660,7 +660,7 @@ sal_Bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView 
 {
     GetSelEngine().SetCurView( pView );
     GetSelEngine().SelMouseButtonUp( rMEvt );
-    bInSelection = sal_False;
+    bInSelection = false;
     // Special treatments
     EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
@@ -794,7 +794,7 @@ void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
 
 void ImpEditEngine::TextModified()
 {
-    bFormatted = sal_False;
+    bFormatted = false;
 
     if ( GetNotifyHdl().IsSet() )
     {
@@ -810,7 +810,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
     OSL_ENSURE( pNode, "ParaAttribsChanged: Which one?" );
 
     aEditDoc.SetModified( sal_True );
-    bFormatted = sal_False;
+    bFormatted = false;
 
     ParaPortion* pPortion = FindParaPortion( pNode );
     OSL_ENSURE( pPortion, "ParaAttribsChanged: Portion?" );

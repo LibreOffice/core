@@ -161,7 +161,7 @@ void EditEngine::UndoActionEnd( sal_uInt16 nId )
         pImpEditEngine->UndoActionEnd( nId );
 }
 
-sal_Bool EditEngine::HasTriedMergeOnLastAddUndo() const
+bool EditEngine::HasTriedMergeOnLastAddUndo() const
 {
     return pImpEditEngine->mbLastTryMerge;
 }

@@ -263,13 +263,13 @@ void ImpEditEngine::UndoActionEnd( sal_uInt16 )
     }
 }
 
-void ImpEditEngine::InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge )
+void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
 {
     DBG_ASSERT( !IsInUndo(), "InsertUndo in Undomodus!" );
     if ( pUndoMarkSelection )
     {
         EditUndoMarkSelection* pU = new EditUndoMarkSelection( this, *pUndoMarkSelection );
-        GetUndoManager().AddUndoAction( pU, sal_False );
+        GetUndoManager().AddUndoAction( pU, false );
         delete pUndoMarkSelection;
         pUndoMarkSelection = NULL;
     }
@@ -284,7 +284,7 @@ void ImpEditEngine::ResetUndoManager()
         GetUndoManager().Clear();
 }
 
-void ImpEditEngine::EnableUndo( sal_Bool bEnable )
+void ImpEditEngine::EnableUndo( bool bEnable )
 {
     // When switching the mode Delete list:
     if ( bEnable != IsUndoEnabled() )
@@ -586,7 +586,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
         }
         else if ( bCharAttribFound )
         {
-            bFormatted = sal_False;
+            bFormatted = false;
             if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
             {
                 pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
@@ -657,7 +657,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaA
 
         if ( bChanged && !bRemoveParaAttribs )
         {
-            bFormatted = sal_False;
+            bFormatted = false;
             pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
         }
     }
@@ -794,7 +794,7 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
                 aEditDoc.InsertAttrib( pNode, nLastEnd, nEndPos, rItem );
         }
     }
-    bFormatted = sal_False;
+    bFormatted = false;
     // Portion does not need to be invalidated here, happens elsewhere.
 }
 
