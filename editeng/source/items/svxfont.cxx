@@ -217,9 +217,6 @@ void SvxDoCapitals::DoSpace( const sal_Bool /*bDraw*/ ) { }
 
 void SvxDoCapitals::SetSpace() { }
 
-void SvxDoCapitals::Do( const XubString &/*_rTxt*/, const xub_StrLen /*_nIdx*/,
-    const xub_StrLen /*_nLen*/, const sal_Bool /*bUpper*/ ) { }
-
 /*************************************************************************
  *                  SvxFont::DoOnCapitals() const
  * Decomposes the String into uppercase and lowercase letters and then
