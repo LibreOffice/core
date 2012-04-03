@@ -30,6 +30,13 @@ TARGET=ttf_dejavu
 
 .INCLUDE :	settings.mk
 
+.IF "$(WITH_CATA_FONTS)" != "YES"
+
+@all:
+    @echo "category A licensed DejaVu font is disabled."
+
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=dejavu-fonts-ttf-2.33
@@ -55,3 +62,4 @@ BUILD_FLAGS=
 .INCLUDE : tg_ext.mk
 .ENDIF
 
+.ENDIF

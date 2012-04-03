@@ -28,6 +28,13 @@ TARGET=ttf_croscore
 
 .INCLUDE :	settings.mk
 
+.IF "$(WITH_CATB_FONTS)" != "YES"
+
+@all:
+    @echo "category B licensed CrossCore font is disabled."
+
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=croscorefonts-1.21.0
@@ -52,3 +59,4 @@ BUILD_FLAGS=
 .INCLUDE : tg_ext.mk
 .ENDIF
 
+.ENDIF

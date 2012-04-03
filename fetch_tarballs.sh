@@ -207,6 +207,19 @@ while read line ; do
             download $line
             ;;
 
+        # If the line starts with the name of an environment variable than the file is
+        # downloaded only when the variable evaluates to YES.
+        [A-Z0-9_]*:*)
+            prefix=`echo $line | sed 's/:.*$//'`
+            if [ -n "$prefix" ]; then
+                eval value=\$$prefix
+                if [ "x$value" = "xYES" ]; then
+                    line=`echo $line | sed 's/^.*://'`
+                    download_and_check $UrlHead$line
+                fi
+            fi
+            ;;
+
         # Any other line is interpreted as the second part of a partial URL.
         # It is appended to UrlHead and then downloaded.
         *)

@@ -889,7 +889,8 @@ AC_ARG_ENABLE(category-b,
 [  --enable-category-b     Activate components under a category B license 
                           (see http://www.apache.org/legal/3party.html#category-b):
                           MPL (seamonkey, hunspell, hyphen, nss, saxon, rhino),
-                          CPL (silgraphite), CPL/EPL (CoinMP), SPL (beanshell).
+                          CPL (silgraphite), CPL/EPL (CoinMP), SPL (beanshell),
+                          OFL (fonts).
                           Flags for individual libraries override this one.
 ],,)
 AC_ARG_WITH(arm-target,
@@ -1350,6 +1351,7 @@ if test "$enable_category_b" = "yes"; then
    enable_beanshell="yes"
    enable_graphite="yes"
    enable_coinmp="yes"
+   enable_category_b_fonts="yes"
 
    AC_MSG_RESULT([yes: allow modules moz, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp to be built])
 else
@@ -1363,6 +1365,7 @@ else
    enable_beanshell="no"
    enable_graphite="no"
    enable_coinmp="no"
+   enable_category_b_fonts="no"
 
    AC_MSG_RESULT([no: disabled modules moz, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
 fi
@@ -6776,18 +6779,47 @@ else
 fi
 
 dnl ===================================================================
-dnl Test whether to include fonts
+dnl Test whether to include category-B fonts
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include third-party fonts])
-if test "$with_fonts" != "no" ; then
+WITH_CATB_FONTS=
+AC_MSG_CHECKING([whether to include category B fonts])
+if test "x$enable_category_b_fonts" = "xyes"; then
+   AC_MSG_RESULT([yes])
+   BUILD_TYPE="$BUILD_TYPE CATB_FONTS"
+   WITH_CATB_FONTS=YES
+   SCPDEFS="$SCPDEFS -DWITH_CATB_FONTS"
+else
+   AC_MSG_RESULT([no])
+   WITH_CATB_FONTS=NO
+fi
+
+dnl ===================================================================
+dnl Test whether to include category-A fonts
+dnl ===================================================================
+WITH_CATA_FONTS=
+AC_MSG_CHECKING([whether to include category A fonts])
+if test "x$with_fonts" != "xno" ; then
   AC_MSG_RESULT([yes])
-  WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
+  WITH_CATA_FONTS=YES
+  SCPDEFS="$SCPDEFS -DWITH_CATA_FONTS"
 else
   AC_MSG_RESULT([no])
-  WITH_FONTS=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
+  WITH_CATA_FONTS=NO
+  WITH_CATB_FONTS=NO
 fi
+
+WITH_FONTS=NO
+AC_MSG_CHECKING([whether any fonts are included])
+if test "x$WITH_CATA_FONTS" = "xYES" -o "x$WITH_CATB_FONTS" = "xYES"; then
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
+  WITH_FONTS=YES
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(WITH_CATA_FONTS)
+AC_SUBST(WITH_CATB_FONTS)
 AC_SUBST(WITH_FONTS)
 
 dnl ===================================================================

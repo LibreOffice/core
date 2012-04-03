@@ -30,6 +30,13 @@ TARGET=ttf_gentium
 
 .INCLUDE :	settings.mk
 
+.IF "$(WITH_CATB_FONTS)" != "YES"
+
+@all:
+    @echo "category B licensed Gentium font is disabled."
+
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=gentiumbasic-fonts-1.10
@@ -55,3 +62,4 @@ BUILD_FLAGS=
 .INCLUDE : tg_ext.mk
 .ENDIF
 
+.ENDIF

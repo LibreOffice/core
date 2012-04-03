@@ -1905,6 +1905,8 @@ ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
 ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
 ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
+ToFile( "WITH_CATA_FONTS",   "@WITH_CATA_FONTS@",  "e" );
+ToFile( "WITH_CATB_FONTS",   "@WITH_CATB_FONTS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
