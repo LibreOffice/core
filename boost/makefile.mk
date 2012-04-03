@@ -69,6 +69,7 @@ PATCH_FILES+=boost.windows.patch
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 .IF "$(COM)" == "GCC"
 PATCH_FILES += boost_1_44_0-unused-parameters.patch
+PATCH_FILES += boost_1_44_0-logical-op-parentheses.patch
 .END
 
 # Backporting fixes for the GCC 4.7 -std=c++11 mode from Boost 1.48.0:
