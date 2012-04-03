@@ -893,6 +893,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_ANNOTATIONAUTHOR:
         case DESTINATION_FALT:
         case DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER:
+        case DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1320,6 +1321,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_PNTXTA:
             m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER;
+            break;
+        case RTF_PNTXTB:
+            m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -2083,6 +2087,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aTableSprms->push_back(make_pair(NS_rtf::LN_NFC, pValue));
                 }
                 break;
+        case RTF_PNLVLBLT:
+                {
+                    m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_LSID, RTFValue::Pointer_t(new RTFValue(1))));
+                    m_aStates.top().aTableSprms->push_back(make_pair(NS_rtf::LN_NFC, RTFValue::Pointer_t(new RTFValue(23)))); // bullets, same as \levelnfc23
+                }
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -2735,6 +2745,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_PNSTART:
             m_aStates.top().aTableSprms->push_back(make_pair(NS_rtf::LN_ISTARTAT, pIntValue));
             break;
+        case RTF_PNF:
+            {
+                int nFontIndex = getFontIndex(nParam);
+                RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
+                lcl_putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_Lvl_rPr, NS_sprm::LN_CRgFtc0, pValue);
+            }
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3314,8 +3331,12 @@ int RTFDocumentImpl::popState()
         {
             // Abstract numbering
             RTFSprms aLeveltextAttributes;
-            OUString aTextValue("%1");
-            RTFValue::Pointer_t pTextAfter = aState.aTableAttributes.find(NS_ooxml::LN_CT_LevelText_val);
+            OUString aTextValue;
+            RTFValue::Pointer_t pTextBefore = aState.aTableAttributes.find(NS_ooxml::LN_CT_LevelText_val);
+            if (pTextBefore.get())
+                aTextValue += pTextBefore->getString();
+            aTextValue += "%1";
+            RTFValue::Pointer_t pTextAfter = aState.aTableAttributes.find(NS_ooxml::LN_CT_LevelSuffix_val);
             if (pTextAfter.get())
                 aTextValue += pTextAfter->getString();
             RTFValue::Pointer_t pTextValue(new RTFValue(aTextValue));
@@ -3336,6 +3357,9 @@ int RTFDocumentImpl::popState()
 
             RTFValue::Pointer_t pLeveltextValue(new RTFValue(aLeveltextAttributes));
             aLevelSprms->push_back(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pLeveltextValue));
+            RTFValue::Pointer_t pRunProps = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_rPr);
+            if (pRunProps.get())
+                aLevelSprms->push_back(make_pair(NS_ooxml::LN_CT_Lvl_rPr, pRunProps));
 
             RTFSprms aAbstractAttributes;
             RTFSprms aAbstractSprms;
@@ -3370,6 +3394,11 @@ int RTFDocumentImpl::popState()
         }
     }
     else if (aState.nDestinationState == DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
+        m_aStates.top().aTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_LevelSuffix_val, pValue));
+    }
+    else if (aState.nDestinationState == DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE)
     {
         RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
         m_aStates.top().aTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
