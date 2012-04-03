@@ -433,6 +433,23 @@
              ) const
          {
              this->act(ref,value_ref); // defined in ActionT
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/composite/no_actions.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/composite/no_actions.hpp
+@@ -38,10 +38,10 @@
+     template<typename ActorT, typename AttrT, typename IteratorT>
+     void
+     do_action(
+-        ActorT const&       actor,
+-        AttrT&              val,
+-        IteratorT const&    first,
+-        IteratorT const&    last) const
++        __attribute__ ((unused)) ActorT const&       actor,
++        __attribute__ ((unused)) AttrT&              val,
++        __attribute__ ((unused)) IteratorT const&    first,
++        __attribute__ ((unused)) IteratorT const&    last) const
+     {}
+ };
+ 
 --- misc/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2012-01-20 12:44:07.124316347 +0100
 @@ -41,7 +41,7 @@
@@ -471,6 +488,17 @@
          {
              typedef scanner_policies<
                  inhibit_case_iteration_policy<
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/grammar.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/grammar.hpp
+@@ -83,7 +83,7 @@
+         {   // Does _not_ copy the helpers member !
+         }
+ 
+-        grammar_helper_list& operator=(grammar_helper_list const& x)
++        grammar_helper_list& operator=(__attribute__ ((unused)) grammar_helper_list const& x)
+         {   // Does _not_ copy the helpers member !
+             return *this;
+         }
 --- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2012-01-20 12:44:07.124316347 +0100
 @@ -51,15 +51,15 @@
@@ -603,6 +631,44 @@
              NestedT const& nested_d)
          {
              typedef typename BinaryT::parser_generator_t binary_gen_t;
+@@ -324,7 +324,7 @@
+         >
+         static typename parser_result<ParserT, ScannerT>::type
+         parse(ParserT const &, ScannerT const& scan, ActionT const &action,
+-            NestedT const& nested_d)
++            __attribute__ ((unused)) NestedT const& nested_d)
+         {
+             return action.parse(scan);
+         }
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset.ipp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset.ipp
+@@ -129,7 +129,7 @@
+ }
+ 
+ template <typename CharT>
+-inline chset<CharT>::chset(nothing_parser arg_)
++inline chset<CharT>::chset(__attribute__ ((unused)) nothing_parser arg_)
+ : ptr(new basic_chset<CharT>()) {}
+ 
+ template <typename CharT>
+@@ -182,7 +182,7 @@
+ 
+ template <typename CharT>
+ inline chset<CharT>&
+-chset<CharT>::operator=(anychar_parser rhs)
++chset<CharT>::operator=(__attribute__ ((unused)) anychar_parser rhs)
+ {
+     utility::impl::detach_clear(ptr);
+     ptr->set(
+@@ -194,7 +194,7 @@
+ 
+ template <typename CharT>
+ inline chset<CharT>&
+-chset<CharT>::operator=(nothing_parser rhs)
++chset<CharT>::operator=(__attribute__ ((unused)) nothing_parser rhs)
+ {
+     utility::impl::detach_clear(ptr);
+     return *this;
 --- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2012-01-20 12:44:07.127316333 +0100
 @@ -576,7 +576,7 @@
@@ -638,6 +704,17 @@
          {
              return (
                      (item - delim)
+--- misc/boost_1_44_0/boost/spirit/home/classic/phoenix/tuples.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/phoenix/tuples.hpp
+@@ -211,7 +211,7 @@
+     typedef nil_t& rtype;
+     typedef nil_t const& crtype;
+ 
+-    static nil_t    get(TupleT const& t)    { return nil_t(); }
++    static nil_t    get(__attribute__ ((unused)) TupleT const& t)    { return nil_t(); }
+ };
+ 
+ //////////////////////////////////
 --- misc/boost_1_44_0/boost/throw_exception.hpp	2010-07-03 23:32:02.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/throw_exception.hpp	2012-01-20 12:44:07.127316333 +0100
 @@ -49,7 +49,7 @@
