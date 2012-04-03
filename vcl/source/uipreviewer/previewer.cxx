@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <osl/file.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/builder.hxx>
@@ -49,7 +50,11 @@ int UIPreviewApp::Main()
 {
     std::vector<rtl::OUString> uifiles;
     for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
-        uifiles.push_back(GetCommandLineParam(i));
+    {
+        rtl::OUString aFileUrl;
+        osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
+        uifiles.push_back(aFileUrl);
+    }
 
     if (uifiles.empty())
     {
@@ -71,17 +76,26 @@ int UIPreviewApp::Main()
     aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
     ::ucbhelper::ContentBroker::initialize(xSFactory, aArgs);
 
-    VclBuilder aBuilder(NULL, uifiles[0]);
-    Window *pWindow = aBuilder.get_widget_root();
-    Dialog *pDialog = dynamic_cast<Dialog*>(pWindow);
-    if (pDialog)
+    try
     {
-        pDialog->Execute();
+        VclBuilder aBuilder(NULL, uifiles[0]);
+        Window *pWindow = aBuilder.get_widget_root();
+        Dialog *pDialog = dynamic_cast<Dialog*>(pWindow);
+        if (pDialog)
+        {
+            pDialog->Execute();
+        }
+        else
+        {
+            fprintf(stderr, "to-do: no toplevel dialog, make one\n");
+        }
     }
-    else
+    catch (const uno::Exception &e)
     {
-        fprintf(stderr, "to-do: no toplevel dialog, make one\n");
+        fprintf(stderr, "fatal error: \n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
+    return false;
+
 
     ::ucbhelper::ContentBroker::deinitialize();
 

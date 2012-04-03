@@ -4913,6 +4913,7 @@ void Window::UserEvent( sal_uLong, void* )
 
 void Window::StateChanged( StateChangedType )
 {
+    queueResize();
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 

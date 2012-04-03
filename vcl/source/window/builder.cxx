@@ -142,6 +142,11 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
             const rtl::OString &rValue = aI->second;
             if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
                 pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
+            {
+                bool bIsVisible = (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
+                pCurrentChild->Show(bIsVisible);
+            }
             else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
             {
                 WinBits nBits = pCurrentChild->GetStyle();
