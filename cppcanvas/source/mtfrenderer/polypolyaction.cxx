@@ -61,6 +61,8 @@ namespace cppcanvas
             class PolyPolyAction : public CachedPrimitiveBase
             {
             public:
+                using CachedPrimitiveBase::render;
+
                 PolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                 const CanvasSharedPtr&,
                                 const OutDevState&,
@@ -245,6 +247,8 @@ namespace cppcanvas
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
+                using CachedPrimitiveBase::render;
+
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const CanvasSharedPtr&           rCanvas,
                                         const OutDevState&               rState,
@@ -359,6 +363,8 @@ namespace cppcanvas
             class StrokedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
+                using CachedPrimitiveBase::render;
+
                 StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&     rPoly,
                                        const CanvasSharedPtr&               rCanvas,
                                        const OutDevState&                   rState,

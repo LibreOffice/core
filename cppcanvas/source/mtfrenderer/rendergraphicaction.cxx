@@ -60,6 +60,8 @@ namespace cppcanvas
             class RenderGraphicAction : public CachedPrimitiveBase
             {
             public:
+                using CachedPrimitiveBase::render;
+
                 RenderGraphicAction( const ::vcl::RenderGraphic& rRenderGraphic,
                               const ::basegfx::B2DPoint& rDstPoint,
                               const ::basegfx::B2DVector& rDstSize,

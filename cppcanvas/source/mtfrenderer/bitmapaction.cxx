@@ -60,6 +60,8 @@ namespace cppcanvas
             class BitmapAction : public CachedPrimitiveBase
             {
             public:
+                using CachedPrimitiveBase::render;
+
                 BitmapAction( const ::BitmapEx&,
                               const ::basegfx::B2DPoint& rDstPoint,
                               const CanvasSharedPtr&,
