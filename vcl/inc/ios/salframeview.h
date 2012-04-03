@@ -37,12 +37,10 @@
 -(id)initWithSalFrame: (IosSalFrame*)pFrame;
 -(BOOL)canBecomeKeyWindow;
 -(void)displayIfNeeded;
--(void)becomeKeyWindow;
--(void)resignKeyWindow;
 -(IosSalFrame*)getSalFrame;
 @end
 
-@interface SalFrameView : UIView <UITextInput>
+@interface SalFrameView : UIView
 {
     IosSalFrame*       mpFrame;
 
@@ -64,7 +62,6 @@
 -(BOOL)acceptsFirstResponder;
 -(BOOL)isOpaque;
 -(void)drawRect: (CGRect)aRect;
--(void)flagsChanged: (UIEvent*)pEvent;
 @end
 
 #endif

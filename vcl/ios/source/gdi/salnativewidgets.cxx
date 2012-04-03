@@ -186,16 +186,23 @@ sal_Bool IosSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
 sal_Bool IosSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, sal_Bool& rIsInside )
 {
+    (void) nType;
+    (void) nPart;
+    (void) rControlRegion;
+    (void) rPos;
+    (void) rIsInside;
     return sal_False;
 }
 
 UInt32 IosSalGraphics::getState( ControlState nState )
 {
+    (void) nState;
     return 0;
 }
 
 UInt32 IosSalGraphics::getTrackState( ControlState nState )
 {
+    (void) nState;
     return 0;
 }
 
@@ -215,6 +222,11 @@ sal_Bool IosSalGraphics::drawNativeControl(ControlType nType,
                     const ImplControlValue& aValue,
                     const rtl::OUString& )
 {
+    (void) nType;
+    (void) nPart;
+    (void) rControlRegion;
+    (void) nState;
+    (void) aValue;
     return sal_False;
 }
 
@@ -236,6 +248,12 @@ sal_Bool IosSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {
+    (void) nType;
+    (void) nPart;
+    (void) rControlRegion;
+    (void) aValue;
+    (void) rNativeBoundingRegion;
+    (void) rNativeContentRegion;
     return sal_False;
 }
 

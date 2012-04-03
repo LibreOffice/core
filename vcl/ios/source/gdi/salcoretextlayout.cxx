@@ -130,7 +130,9 @@ CoreTextLayout::CoreTextLayout( CTFontSymbolicTraits& rCoreTextStyle, float fFon
     mpDeltaY( NULL ),
     mpFallbackInfo( NULL ),
     mnBaseAdv( 0 )
-{}
+{
+    (void) rCoreTextStyle;
+}
 
 // -----------------------------------------------------------------------
 
@@ -150,23 +152,33 @@ CoreTextLayout::~CoreTextLayout()
 
 bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    (void) rArgs;
     // Implement...
     return true;
 }
 
 void CoreTextLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
+    (void) rArgs;
     // Implement...
 }
 
 void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 {
+    (void) rGraphics;
     // Implement...
 }
 
 int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
     sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
+    (void) nLen;
+    (void) pGlyphIDs;
+    (void) rPos;
+    (void) nStart;
+    (void) pGlyphAdvances;
+    (void) pCharIndexes;
+
     if( nStart < 0 )                // first glyph requested?
         nStart = 0;
 
@@ -195,20 +207,30 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
 
 int CoreTextLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
+    (void) nMaxWidth;
+    (void) nCharExtra;
+    (void) nFactor;
+    // Implement...
     return 0;
 }
 
 void CoreTextLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
+    (void) nMaxIndex;
+    (void) pCaretXArray;
+    // Implement...
 }
 
 bool CoreTextLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
 {
+    (void) rVCLRect;
+    // Implement;
     return true;
 }
 
 bool CoreTextLayout::InitGIA( ImplLayoutArgs* pArgs ) const
 {
+    (void) pArgs;
     // no need to run InitGIA more than once on the same CoreTextLayout object
     if( mnGlyphCount >= 0 )
         return true;
@@ -280,6 +302,8 @@ const ImplFontData* CoreTextLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) 
 
 int FallbackInfo::AddFallback( CTFontRef  nFontId )
 {
+    (void) nFontId;
+    // Implement...
     return 0;
 }
 

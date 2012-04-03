@@ -44,9 +44,9 @@
 -(id)initWithSalFrame: (IosSalFrame*)pFrame
 {
     mpFrame = pFrame;
+#if 0
     CGRect aRect = { { pFrame->maGeometry.nX, pFrame->maGeometry.nY },
                      { pFrame->maGeometry.nWidth, pFrame->maGeometry.nHeight } };
-#if 0
     NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
     return pNSWindow;
@@ -67,7 +67,7 @@
         if( pMutex )
         {
             pMutex->acquire();
-            [super displayIfNeeded];
+            // ??? [super displayIfNeeded];
             pMutex->release();
         }
     }
@@ -85,7 +85,8 @@
         return YES;
     if( (mpFrame->mnStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         return YES;
-    return [super canBecomeKeyWindow];
+    // ??? return [super canBecomeKeyWindow];
+    return NO;
 }
 
 -(void)windowDidBecomeKey: (NSNotification*)pNotification
@@ -95,10 +96,11 @@
 
     if( mpFrame && IosSalFrame::isAlive( mpFrame ) )
     {
+#if 0
         static const sal_uLong nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
                                             SAL_FRAME_STYLE_SIZEABLE|
                                             SAL_FRAME_STYLE_CLOSEABLE;
-        
+#endif
         mpFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
         mpFrame->SendPaintEvent(); // repaint controls as active
     }
@@ -204,6 +206,7 @@
 {
     // ???
 
+    (void) pFrame;
     mfLastMagnifyTime = 0.0;
     return self;
 }
@@ -257,8 +260,9 @@ private:
         if( mpFrame->mpGraphics )
         {
             mpFrame->mpGraphics->UpdateWindow( aRect );
-            if( mpFrame->getClipPath() )
-                [mpFrame->getWindow() invalidateShadow];
+            if( mpFrame->getClipPath() ) {
+                // ??? [mpFrame->getWindow() invalidateShadow];
+            }
         }
     }
 }
