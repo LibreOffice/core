@@ -351,22 +351,12 @@ typedef struct _sal_Sequence
 #endif
 
 
-/** Wrap C++ const_cast, reinterpret_cast and static_cast expressions in
-    macros to keep code portable to old compilers (since most compilers still
-    lack RTTI support, dynamic_cast is not included here).
+/* Historical macros, no need to use, old use cases should be replaced
+ * by their expansions.
  */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || \
-    defined FREEBSD || defined NETBSD || defined AIX || \
-    defined OPENBSD || defined DRAGONFLY
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
-#define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
-#else /* SAL_W32, SOLARIS, LINUX */
-#define SAL_CONST_CAST(type, expr) ((type) (expr))
-#define SAL_REINTERPRET_CAST(type, expr) ((type) (expr))
-#define SAL_STATIC_CAST(type, expr) ((type) (expr))
-#endif /* SAL_W32, SOLARIS, LINUX */
 #endif /* __cplusplus */
 
 /** Definition of function throw clause macros.  These have been introduced
