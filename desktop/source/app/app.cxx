@@ -102,8 +102,6 @@
 #include <sys/wait.h>
 #endif
 
-#define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
@@ -1566,7 +1564,7 @@ int Desktop::Main()
 #ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
-        aTitle += DEFINE_CONST_UNICODE(" [");
+        aTitle += rtl::OUString(" [");
         String aVerId( utl::Bootstrap::getProductSource(aDefault));
         aTitle += aVerId;
         aTitle += ']';
@@ -1597,7 +1595,7 @@ int Desktop::Main()
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( xSMgr->createInstance(
-            DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+            rtl::OUString( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
@@ -2002,7 +2000,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
-                                                DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
+                                                rtl::OUString( "com.sun.star.office.Quickstart" ), aSeq ),
                                                 UNO_QUERY );
         }
         return sal_True;
@@ -2114,8 +2112,8 @@ void Desktop::EnableOleAutomation()
       RTL_LOGFILE_CONTEXT( aLog, "desktop (jl97489) ::Desktop::EnableOleAutomation" );
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-    xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
-    xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.comp.ole.EmbedServer"));
+    xSMgr->createInstance(rtl::OUString("com.sun.star.bridge.OleApplicationRegistration"));
+    xSMgr->createInstance(rtl::OUString("com.sun.star.comp.ole.EmbedServer"));
 #endif
 }
 
@@ -2136,7 +2134,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/swriter"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/swriter"),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2148,7 +2146,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/scalc"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/scalc"),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2160,7 +2158,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/sdraw"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/sdraw"),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2172,7 +2170,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/simpress"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/simpress"),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2186,7 +2184,7 @@ void Desktop::PreloadConfigurationData()
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
     Reference< XNameAccess > xNameAccess( rFactory->createInstance(
-        DEFINE_CONST_UNICODE( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
+        rtl::OUString( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
 
     rtl::OUString aWriterDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
     rtl::OUString aCalcDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
@@ -2205,8 +2203,8 @@ void Desktop::PreloadConfigurationData()
             a >>= xCmdAccess;
             if ( xCmdAccess.is() )
             {
-                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:BasicShapes" ));
-                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:EditGlossary" ));
+                xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
+                xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
             }
         }
         catch ( const ::com::sun::star::uno::Exception& )
@@ -2218,7 +2216,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aCalcDoc );
             a >>= xCmdAccess;
             if ( xCmdAccess.is() )
-                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:InsertObjectStarMath" ));
+                xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2230,7 +2228,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aDrawDoc );
             a >>= xCmdAccess;
             if ( xCmdAccess.is() )
-                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:Polygon" ));
+                xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2239,7 +2237,7 @@ void Desktop::PreloadConfigurationData()
 
     // preload window state configuration
     xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    DEFINE_CONST_UNICODE( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
+                    rtl::OUString( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
     if ( xNameAccess.is() )
     {
         Any a;
@@ -2249,7 +2247,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aWriterDoc );
             a >>= xWindowAccess;
             if ( xWindowAccess.is() )
-                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2259,7 +2257,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aCalcDoc );
             a >>= xWindowAccess;
             if ( xWindowAccess.is() )
-                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2269,7 +2267,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aDrawDoc );
             a >>= xWindowAccess;
             if ( xWindowAccess.is() )
-                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2279,7 +2277,7 @@ void Desktop::PreloadConfigurationData()
             a = xNameAccess->getByName( aImpressDoc );
             a >>= xWindowAccess;
             if ( xWindowAccess.is() )
-                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2290,7 +2288,7 @@ void Desktop::PreloadConfigurationData()
     Sequence< Sequence< css::beans::PropertyValue > > aSeqSeqPropValue;
     Reference< ::com::sun::star::ui::XUIElementFactoryRegistration > xUIElementFactory(
         rFactory->createInstance(
-            DEFINE_CONST_UNICODE( "com.sun.star.ui.UIElementFactoryManager" )),
+            rtl::OUString( "com.sun.star.ui.UIElementFactoryManager" )),
             UNO_QUERY );
     if ( xUIElementFactory.is() )
     {
@@ -2307,14 +2305,14 @@ void Desktop::PreloadConfigurationData()
     // configuration file they also get preloaded!
     Reference< ::com::sun::star::frame::XUIControllerRegistration > xPopupMenuControllerFactory(
         rFactory->createInstance(
-            DEFINE_CONST_UNICODE( "com.sun.star.frame.PopupMenuControllerFactory" )),
+            rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
             UNO_QUERY );
     if ( xPopupMenuControllerFactory.is() )
     {
         try
         {
             xPopupMenuControllerFactory->hasController(
-                        DEFINE_CONST_UNICODE( ".uno:CharFontName" ),
+                        rtl::OUString( ".uno:CharFontName" ),
                         OUString() );
         }
         catch ( const ::com::sun::star::uno::Exception& )
@@ -2325,7 +2323,7 @@ void Desktop::PreloadConfigurationData()
     // preload filter configuration
     Sequence< OUString > aSeq;
     xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" )), UNO_QUERY );
+                    rtl::OUString( "com.sun.star.document.FilterFactory" )), UNO_QUERY );
     if ( xNameAccess.is() )
     {
         try
@@ -2339,7 +2337,7 @@ void Desktop::PreloadConfigurationData()
 
     // preload type detection configuration
     xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" )), UNO_QUERY );
+                    rtl::OUString( "com.sun.star.document.TypeDetection" )), UNO_QUERY );
     if ( xNameAccess.is() )
     {
         try
@@ -2882,7 +2880,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             aSeq[0] <<= bQuickstart;
 
             Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                           DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
+                                                           rtl::OUString( "com.sun.star.office.Quickstart" )),
                                                        UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
