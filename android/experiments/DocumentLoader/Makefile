@@ -196,6 +196,13 @@ copy-stuff:
 	echo 'ProductMinor=1' >> assets/program/versionrc
 	echo 'ProductSource=OOO350' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
+# .res files
+	mkdir -p assets/program/resource
+	cp $(OUTDIR)/bin/*en-US.res assets/program/resource
+# Image Zip archives
+	for I in default tango; do \
+		cp $(OUTDIR)/bin/images_$$I.zip assets/share/config; \
+	done
 # Assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
