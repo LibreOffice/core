@@ -1414,18 +1414,18 @@ rtl::OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 
 // -----------------------------------------------------------------------
 
-SvStream& SvStream::WriteUniOrByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet )
+SvStream& SvStream::WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
     {
-        sal_uInt32 nLen = rStr.Len();
+        sal_Int32 nLen = rStr.getLength();
         operator<< (nLen);
         if (nLen)
         {
             if (bSwap)
             {
-                const sal_Unicode *pStr = rStr.GetBuffer();
+                const sal_Unicode *pStr = rStr.getStr();
                 const sal_Unicode *pEnd = pStr + nLen;
 
                 for (; pStr < pEnd; pStr++)
@@ -1436,7 +1436,7 @@ SvStream& SvStream::WriteUniOrByteString( const UniString& rStr, rtl_TextEncodin
                 }
             }
             else
-                Write( rStr.GetBuffer(), nLen << 1 );
+                Write( rStr.getStr(), nLen << 1 );
         }
 
         return *this;
