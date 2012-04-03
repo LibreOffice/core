@@ -1299,41 +1299,22 @@ void ValueSet::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-namespace
-{
-
-size_t
-lcl_gotoLastLine(size_t const nLastPos, size_t const nCols, size_t const nCurPos)
-{
-    size_t nItemPos = ((((nLastPos+1)/nCols)-1)*nCols)+(nCurPos%nCols);
-    if ( nItemPos+nCols <= nLastPos )
-        nItemPos = nItemPos + nCols;
-    return nItemPos;
-}
-
-}
-
 void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
     size_t nLastItem = mItemList.size();
-    size_t nItemPos = VALUESET_ITEM_NOTFOUND;
-    size_t nCurPos = VALUESET_ITEM_NONEITEM;
-    size_t nCalcPos;
 
     if ( !nLastItem || !ImplGetFirstItem() )
     {
         Control::KeyInput( rKEvt );
         return;
     }
-    else
-        nLastItem--;
 
-    if ( mnSelItemId )
-        nCurPos = GetItemPos( mnSelItemId );
-    nCalcPos = nCurPos;
+    --nLastItem;
+    const size_t nCurPos = mnSelItemId ? GetItemPos( mnSelItemId )
+                                       : mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
+    size_t nItemPos = VALUESET_ITEM_NOTFOUND;
+    size_t nVStep = mnCols;
 
-    //switch off selection mode if key travelling is used
-    bool bDefault = false;
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_HOME:
@@ -1345,147 +1326,129 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_LEFT:
-        case KEY_RIGHT:
-            if ( rKEvt.GetKeyCode().GetCode()==KEY_LEFT )
+            if (nCurPos != VALUESET_ITEM_NONEITEM)
             {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = nLastItem;
-                else if ( !nCalcPos )
+                if (nCurPos)
                 {
-                    if ( mpNoneItem )
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    else
-                        nItemPos = nLastItem;
+                    nItemPos = nCurPos-1;
                 }
-                else
-                    nItemPos = nCalcPos-1;
-            }
-            else
-            {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = 0;
-                else if ( nCalcPos == nLastItem )
+                else if (mpNoneItem)
                 {
-                    if ( mpNoneItem )
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    else
-                        nItemPos = 0;
+                    nItemPos = VALUESET_ITEM_NONEITEM;
                 }
-                else
-                    nItemPos = nCalcPos+1;
             }
-            nCalcPos = nItemPos;
             break;
 
-        case KEY_UP:
+        case KEY_RIGHT:
+            if (nCurPos < nLastItem)
+            {
+                if (nCurPos == VALUESET_ITEM_NONEITEM)
+                {
+                    nItemPos = 0;
+                }
+                else
+                {
+                    nItemPos = nCurPos+1;
+                }
+            }
+            break;
+
         case KEY_PAGEUP:
-        {
-            if( rKEvt.GetKeyCode().GetCode() != KEY_PAGEUP ||
-                ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
+            if (rKEvt.GetKeyCode().IsShift() || rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
-                const size_t nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                {
-                    if ( nLastItem+1 <= mnCols )
-                        nItemPos = mnCurCol;
-                    else
-                        nItemPos = lcl_gotoLastLine(nLastItem, mnCols, mnCurCol);
-                }
-                else if ( nCalcPos >= mnCols ) // we can go up
-                {
-                    if ( nCalcPos >= ( nLineCount * mnCols ) )
-                        nItemPos = nCalcPos - ( nLineCount * mnCols );
-                    else
-                        // Go to the first line. This can only happen for KEY_PAGEUP
-                        nItemPos = nCalcPos % mnCols;
-                }
-                else // wrap around
-                {
-                    if ( mpNoneItem )
-                    {
-                        mnCurCol  = nCalcPos%mnCols;
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    }
-                    else
-                    {
-                        if ( nLastItem+1 <= mnCols )
-                            nItemPos = nCalcPos;
-                        else
-                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
-                    }
-                }
-                nCalcPos = nItemPos;
-            }
-            else
                 Control::KeyInput( rKEvt );
-        }
-        break;
+                return;
+            }
+            nVStep *= mnVisLines;
+            // intentional fall-through
+        case KEY_UP:
+            if (nCurPos != VALUESET_ITEM_NONEITEM)
+            {
+                if (nCurPos == nLastItem)
+                {
+                    const size_t nCol = nLastItem % mnCols;
+                    if (nCol < mnCurCol)
+                    {
+                        // Move to previous row/page, keeping the old column
+                        nVStep -= mnCurCol - nCol;
+                    }
+                }
+                if (nCurPos >= nVStep)
+                {
+                    // Go up of a whole page
+                    nItemPos = nCurPos-nVStep;
+                }
+                else if (mpNoneItem)
+                {
+                    nItemPos = VALUESET_ITEM_NONEITEM;
+                }
+                else if (nCurPos > mnCols)
+                {
+                    // Go to same column in first row
+                    nItemPos = nCurPos % mnCols;
+                }
+            }
+            break;
 
-        case KEY_DOWN:
         case KEY_PAGEDOWN:
-        {
-            if( rKEvt.GetKeyCode().GetCode() != KEY_PAGEDOWN ||
-                ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
+            if (rKEvt.GetKeyCode().IsShift() || rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
-                const long nLineCount = ( ( KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = mnCurCol;
-                else if ( nCalcPos + mnCols <= nLastItem ) // we can go down
-                {
-                    if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                        nItemPos = nCalcPos + ( nLineCount * mnCols );
-                    else
-                        // Go to the last line. This can only happen for KEY_PAGEDOWN
-                        nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
-                }
-                else // wrap around
-                {
-                    {
-                        if ( mpNoneItem )
-                        {
-                            mnCurCol  = nCalcPos%mnCols;
-                            nItemPos = VALUESET_ITEM_NONEITEM;
-                        }
-                        else
-                            nItemPos = nCalcPos%mnCols;
-                    }
-                }
-                nCalcPos = nItemPos;
-            }
-            else
                 Control::KeyInput( rKEvt );
+                return;
+            }
+            nVStep *= mnVisLines;
+            // intentional fall-through
+        case KEY_DOWN:
+            if (nCurPos != nLastItem)
+            {
+                if (nCurPos == VALUESET_ITEM_NONEITEM)
+                {
+                    nItemPos = nVStep-mnCols+mnCurCol;
+                }
+                else
+                {
+                    nItemPos = nCurPos+nVStep;
+                }
+                if (nItemPos > nLastItem)
+                {
+                    nItemPos = nLastItem;
+                }
+            }
+            break;
 
-        }
-        break;
         case KEY_RETURN:
-            //enable default handling of KEY_RETURN in dialogs
-            if(0 != (GetStyle()&WB_NO_DIRECTSELECT))
+            if (GetStyle() & WB_NO_DIRECTSELECT)
             {
                 Select();
                 break;
             }
-            //no break;
+            // intentional fall-through
         default:
             Control::KeyInput( rKEvt );
-            bDefault = true;
-            break;
+            return;
     }
-    if(!bDefault)
-        EndSelection();
+
+    // This point is reached only if key travelling was used,
+    // in which case selection mode should be switched off
+    EndSelection();
+
     if ( nItemPos != VALUESET_ITEM_NOTFOUND )
     {
-        sal_uInt16 nItemId;
-        if ( nItemPos != VALUESET_ITEM_NONEITEM )
-            nItemId = GetItemId( nItemPos );
-        else
-            nItemId = 0;
-
+        if ( nItemPos!=VALUESET_ITEM_NONEITEM && nItemPos<nLastItem )
+        {
+            // update current column only in case of a new position
+            // which is also not a "specially" handled one.
+            mnCurCol = nItemPos % mnCols;
+        }
+        const sal_uInt16 nItemId = (nItemPos != VALUESET_ITEM_NONEITEM) ? GetItemId( nItemPos ) : 0;
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
-            //select only if WB_NO_DIRECTSELECT is not set
-            if(0 == (GetStyle()&WB_NO_DIRECTSELECT))
+            if (!(GetStyle() & WB_NO_DIRECTSELECT))
+            {
+                // select only if WB_NO_DIRECTSELECT is not set
                 Select();
+            }
         }
     }
 }
