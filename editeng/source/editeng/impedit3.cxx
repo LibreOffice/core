@@ -619,7 +619,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
     if ( pParaPortion->GetLines().Count() == 0 )
     {
         EditLine* pL = new EditLine;
-        pParaPortion->GetLines().Insert( pL, 0 );
+        pParaPortion->GetLines().Append(pL);
     }
 
     // ---------------------------------------------------------------
@@ -706,7 +706,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
     sal_uInt16 nLine = pParaPortion->GetLines().Count()-1;
     for ( sal_uInt16 nL = 0; nL <= nLine; nL++ )
     {
-        EditLine* pLine = pParaPortion->GetLines().GetObject( nL );
+        EditLine* pLine = pParaPortion->GetLines()[nL];
         if ( pLine->GetEnd() > nRealInvalidStart )  // not nInvalidStart!
         {
             nLine = nL;
@@ -719,7 +719,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
     if ( nLine && ( !pParaPortion->IsSimpleInvalid() || ( nInvalidEnd < pNode->Len() ) || ( nInvalidDiff <= 0 ) ) )
         nLine--;
 
-    EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+    EditLine* pLine = pParaPortion->GetLines()[nLine];
 
     static Rectangle aZeroArea = Rectangle( Point(), Point() );
     Rectangle aBulletArea( aZeroArea );
@@ -1508,7 +1508,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             // Next line or maybe a new line....
             pLine = 0;
             if ( nLine < pParaPortion->GetLines().Count()-1 )
-                pLine = pParaPortion->GetLines().GetObject( ++nLine );
+                pLine = pParaPortion->GetLines()[++nLine];
             if ( pLine && ( nIndex >= pNode->Len() ) )
             {
                 nDelFromLine = nLine;
@@ -1519,7 +1519,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                 if ( nIndex < pNode->Len() )
                 {
                     pLine = new EditLine;
-                    pParaPortion->GetLines().Insert( pLine, ++nLine );
+                    pParaPortion->GetLines().Insert(++nLine, pLine);
                 }
                 else if ( nIndex && bLineBreak && GetTextRanger() )
                 {
@@ -1528,7 +1528,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                     TextPortion* pDummyPortion = new TextPortion( 0 );
                     pParaPortion->GetTextPortions().Insert( pDummyPortion, pParaPortion->GetTextPortions().Count() );
                     pLine = new EditLine;
-                    pParaPortion->GetLines().Insert( pLine, ++nLine );
+                    pParaPortion->GetLines().Insert(++nLine, pLine);
                     bForceOneRun = sal_True;
                     bProcessingEmptyLine = sal_True;
                 }
@@ -1571,7 +1571,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     EditLine* pTmpLine = new EditLine;
     pTmpLine->SetStart( pParaPortion->GetNode()->Len() );
     pTmpLine->SetEnd( pParaPortion->GetNode()->Len() );
-    pParaPortion->GetLines().Insert( pTmpLine, pParaPortion->GetLines().Count() );
+    pParaPortion->GetLines().Append(pTmpLine);
 
     sal_Bool bLineBreak = pParaPortion->GetNode()->Len() ? sal_True : sal_False;
     sal_Int32 nSpaceBefore = 0;
@@ -2818,7 +2818,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
     long nFirstVisXPos = - pOutDev->GetMapMode().GetOrigin().X();
     long nFirstVisYPos = - pOutDev->GetMapMode().GetOrigin().Y();
 
-    EditLine* pLine;
+    const EditLine* pLine = NULL;
     Point aTmpPos;
     Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
@@ -2885,7 +2885,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
-                pLine = pPortion->GetLines().GetObject(nLine);
+                pLine = pPortion->GetLines()[nLine];
                 DBG_ASSERT( pLine, "NULL-Pointer in the line iterator in UpdateViews" );
                 aTmpPos = aStartPos;
                 if ( !IsVertical() )
@@ -3974,7 +3974,7 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
         nTotalLineCount += nLineCount;
         for (sal_uInt16 j = 0; j < nLineCount; ++j)
         {
-            EditLine* pLine = rLines.GetObject(j);
+            const EditLine* pLine = rLines[j];
             nTotalOccupiedHeight += pLine->GetHeight();
             if (j < nLineCount-1)
                 nTotalOccupiedHeight += nSBL;

@@ -1024,33 +1024,57 @@ EditLineList::~EditLineList()
 
 void EditLineList::Reset()
 {
-    for ( sal_uInt16 nLine = 0; nLine < Count(); nLine++ )
-        delete GetObject(nLine);
-    Remove( 0, Count() );
+    maLines.clear();
 }
 
-void EditLineList::DeleteFromLine( sal_uInt16 nDelFrom )
+void EditLineList::DeleteFromLine(size_t nDelFrom)
 {
-    DBG_ASSERT( nDelFrom <= (Count() - 1), "DeleteFromLine: Out of range" );
-    for ( sal_uInt16 nL = nDelFrom; nL < Count(); nL++ )
-        delete GetObject(nL);
-    Remove( nDelFrom, Count()-nDelFrom );
+    DBG_ASSERT( nDelFrom <= (maLines.size() - 1), "DeleteFromLine: Out of range" );
+    LinesType::iterator it = maLines.begin();
+    std::advance(it, nDelFrom);
+    maLines.erase(it, maLines.end());
 }
 
-sal_uInt16 EditLineList::FindLine( sal_uInt16 nChar, sal_Bool bInclEnd )
+size_t EditLineList::FindLine(sal_uInt16 nChar, bool bInclEnd)
 {
-    for ( sal_uInt16 nLine = 0; nLine < Count(); nLine++ )
+    size_t n = maLines.size();
+    for (size_t i = 0; i < n; ++i)
     {
-        EditLine* pLine = GetObject( nLine );
-        if ( ( bInclEnd && ( pLine->GetEnd() >= nChar ) ) ||
-             ( pLine->GetEnd() > nChar ) )
+        const EditLine& rLine = maLines[i];
+        if ( (bInclEnd && (rLine.GetEnd() >= nChar)) ||
+             (rLine.GetEnd() > nChar) )
         {
-            return nLine;
+            return i;
         }
     }
 
     DBG_ASSERT( !bInclEnd, "Line not found: FindLine" );
-    return ( Count() - 1 );
+    return n - 1;
+}
+
+size_t EditLineList::Count() const
+{
+    return maLines.size();
+}
+
+const EditLine* EditLineList::operator[](size_t nPos) const
+{
+    return &maLines[nPos];
+}
+
+EditLine* EditLineList::operator[](size_t nPos)
+{
+    return &maLines[nPos];
+}
+
+void EditLineList::Append(EditLine* p)
+{
+    maLines.push_back(p);
+}
+
+void EditLineList::Insert(size_t nPos, EditLine* p)
+{
+    maLines.insert(maLines.begin()+nPos, p);
 }
 
 EditPaM::EditPaM() : pNode(NULL), nIndex(0) {}

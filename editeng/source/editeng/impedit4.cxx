@@ -1159,9 +1159,9 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             nCount = pParaPortion->GetLines().Count();
             for ( n = 0; n < nCount; n++ )
             {
-                EditLine* pLine = pParaPortion->GetLines()[n];
+                const EditLine* pLine = pParaPortion->GetLines()[n];
                 EditLine* pNew = pLine->Clone();
-                pX->aLines.Insert( pNew, pX->aLines.Count() );
+                pX->aLines.Append(pNew);
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
@@ -1357,7 +1357,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                     EditLine* pLine = pXP->aLines[m];
                     EditLine* pNew = pLine->Clone();
                     pNew->SetInvalid(); // Paint again!
-                    pParaPortion->GetLines().Insert( pNew, m );
+                    pParaPortion->GetLines().Insert(m, pNew);
                 }
 #ifdef DBG_UTIL
                 sal_uInt16 nTest;

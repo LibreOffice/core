@@ -540,18 +540,24 @@ public:
 // -------------------------------------------------------------------------
 // class LineList
 // -------------------------------------------------------------------------
-typedef EditLine* EditLinePtr;
-SV_DECL_PTRARR( LineArray, EditLinePtr, 0 )
-
-class EditLineList : public LineArray
+class EditLineList
 {
+    typedef boost::ptr_vector<EditLine> LinesType;
+    LinesType maLines;
+
 public:
             EditLineList();
             ~EditLineList();
 
-    void    Reset();
-    void    DeleteFromLine( sal_uInt16 nDelFrom );
-    sal_uInt16  FindLine( sal_uInt16 nChar, sal_Bool bInclEnd );
+    void Reset();
+    void DeleteFromLine(size_t nDelFrom);
+    size_t FindLine(sal_uInt16 nChar, bool bInclEnd);
+    size_t Count() const;
+    const EditLine* operator[](size_t nPos) const;
+    EditLine* operator[](size_t nPos);
+
+    void Append(EditLine* p);
+    void Insert(size_t nPos, EditLine* p);
 };
 
 // -------------------------------------------------------------------------

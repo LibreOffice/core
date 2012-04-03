@@ -533,11 +533,11 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
-    long GetXPos(const ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false) const;
+    long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false) const;
     long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nTextPortion) const;
-    sal_uInt16 GetChar(const ParaPortion* pParaPortion, EditLine* pLine, long nX, bool bSmart = true);
+    sal_uInt16 GetChar(const ParaPortion* pParaPortion, const EditLine* pLine, long nX, bool bSmart = true);
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
-    Range               GetLineXPosStartEnd( const ParaPortion* pParaPortion, EditLine* pLine ) const;
+    Range GetLineXPosStartEnd( const ParaPortion* pParaPortion, const EditLine* pLine ) const;
 
     void                SetParaAttrib( sal_uInt8 nFunc, EditSelection aSel, sal_uInt16 nValue );
     sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );

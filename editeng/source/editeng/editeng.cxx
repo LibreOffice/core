@@ -1708,7 +1708,7 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
         if ( pPPortion->GetLines().Count() )
         {
             // Correct it if large Bullet.
-            EditLine* pFirstLine = pPPortion->GetLines()[0];
+            const EditLine* pFirstLine = pPPortion->GetLines()[0];
             aPoint.X() = pFirstLine->GetStartPosX();
         }
         else
@@ -1762,7 +1762,7 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
 
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
-            EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+            const EditLine* pLine = pParaPortion->GetLines()[nLine];
             Range aLineXPosStartEnd = pImpEditEngine->GetLineXPosStartEnd( pParaPortion, pLine );
             if ( ( aDocPos.X() >= aLineXPosStartEnd.Min() - nBorder ) &&
                  ( aDocPos.X() <= aLineXPosStartEnd.Max() + nBorder ) )
@@ -2201,9 +2201,9 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
     aInfos.bValid = pImpEditEngine->IsFormatted();
     if ( pImpEditEngine->IsFormatted() )
     {
-        ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
-        EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
-                pParaPortion->GetLines().GetObject( 0 ) : NULL;
+        const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
+        const EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
+                pParaPortion->GetLines()[0] : NULL;
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {

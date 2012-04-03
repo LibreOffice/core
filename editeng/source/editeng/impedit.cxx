@@ -205,7 +205,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 
         for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
         {
-            EditLine* pLine = pTmpPortion->GetLines().GetObject( nLine );
+            const EditLine* pLine = pTmpPortion->GetLines()[nLine];
             DBG_ASSERT( pLine, "Line not found: DrawSelection()" );
 
             sal_Bool bPartOfLine = sal_False;
@@ -261,7 +261,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 
                     DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelection, Start >= End?" );
 
-                    long nX1 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpStartIndex, sal_True );
+                    long nX1 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpStartIndex, true );
                     long nX2 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpEndIndex );
 
                     Point aPt1( Min( nX1, nX2 ), aTopLeft.Y() );
