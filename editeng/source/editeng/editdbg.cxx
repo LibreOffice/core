@@ -384,7 +384,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         sal_uLong n = 0;
         for ( z = 0; z < nTextPortions; z++ )
         {
-            TextPortion* pPortion = pPPortion->GetTextPortions().GetObject( z );
+            TextPortion* pPortion = pPPortion->GetTextPortions()[z];
             aPortionStr.append(' ');
             aPortionStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
             aPortionStr.append('(');
@@ -409,7 +409,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         sal_uInt16 nLine;
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
-            EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
+            EditLine* pLine = pPPortion->GetLines()[nLine];
 
             rtl::OString aLine(rtl::OUStringToOString(pPPortion->GetNode()->Copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart()), RTL_TEXTENCODING_ASCII_US));
             fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.getStr() );
@@ -417,7 +417,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         // then the internal data ...
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
-            EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
+            EditLine* pLine = pPPortion->GetLines()[nLine];
             fprintf( fp, "\nZeile %i:\tStart: %i,\tEnd: %i", nLine, pLine->GetStart(), pLine->GetEnd() );
             fprintf( fp, "\t\tPortions: %i - %i.\tHight: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
         }
