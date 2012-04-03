@@ -64,6 +64,9 @@ sub check_whitespaces($)
 	    if (/^(?:[<>=]){7}$/) {
 		bad_line("unresolved merge conflict", $src_full);
 	    }
+	    if (/SAL_DEBUG/) {
+		bad_line("temporary debug in commit", $_, $src_limited);
+	    }
 	}
     }
     if ( $found_bad)
