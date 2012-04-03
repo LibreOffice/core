@@ -247,6 +247,10 @@ public:
         const ::com::sun::star::awt::Size & rPageSize,
         sal_Bool bExportContent );
 
+    void exportErrorBar (
+        const ::com::sun::star::uno::Reference<beans::XPropertySet> &xSeriesProp,
+            sal_Bool bExportContent );
+
     /// add svg position as attribute for current element
     void addPosition( const ::com::sun::star::awt::Point & rPosition );
     void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
@@ -2748,8 +2752,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     sal_Bool bHasMeanValueLine = false;
                     chart::ChartRegressionCurveType eRegressionType( chart::ChartRegressionCurveType_NONE );
-                    chart::ChartErrorIndicatorType eErrorType( chart::ChartErrorIndicatorType_NONE );
-                    sal_Int32 nErrorBarStyle( chart::ErrorBarStyle::NONE );
                     Reference< beans::XPropertySet > xPropSet;
                     tLabelValuesDataPair aSeriesLabelValuesPair;
 
@@ -2817,14 +2819,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     aAny = xPropSet->getPropertyValue(
                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "RegressionCurves" )));
                                     aAny >>= eRegressionType;
-
-                                    aAny = xPropSet->getPropertyValue(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorIndicator" )));
-                                    aAny >>= eErrorType;
-
-                                    aAny = xPropSet->getPropertyValue(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorBarStyle" )));
-                                    aAny >>= nErrorBarStyle;
                                 }
                                 catch( const beans::UnknownPropertyException & rEx )
                                 {
@@ -2998,62 +2992,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
                     }
 
-                    if( nErrorBarStyle != chart::ErrorBarStyle::NONE &&
-                        eErrorType != chart::ChartErrorIndicatorType_NONE &&
-                        xPropSet.is() &&
-                        mxExpPropMapper.is() )
-                    {
-                        Reference< beans::XPropertySet > xStatProp;
-                        try
-                        {
-                            Any aPropAny( xPropSet->getPropertyValue(
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "DataErrorProperties" ))));
-                            aPropAny >>= xStatProp;
-                        }
-                        catch( const uno::Exception & rEx )
-                        {
-                            (void)rEx; // avoid warning for pro build
-                            OSL_TRACE( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
-                                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                        }
-
-                        if( xStatProp.is() )
-                        {
-                            if( bExportContent &&
-                                nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
-                            {
-                                // register data ranges for error bars for export in local table
-                                ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
-                                    lcl_getErrorBarSequences( xStatProp ));
-                                for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
-                                         aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
-                                {
-                                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
-                                }
-                            }
-
-                            aPropertyStates = mxExpPropMapper->Filter( xStatProp );
-
-                            if( !aPropertyStates.empty() )
-                            {
-                                // write element
-                                if( bExportContent )
-                                {
-                                    // add style name attribute
-                                    AddAutoStyleAttribute( aPropertyStates );
-
-                                    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                                    if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
-                                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );//#i114149#
-                                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
-                                }
-                                else    // autostyles
-                                {
-                                    CollectAutoStyle( aPropertyStates );
-                                }
-                            }
-                        }
-                    }
+                    exportErrorBar( xPropSet,bExportContent );
 
                     exportDataPoints(
                         uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
@@ -3171,6 +3110,91 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                     CollectAutoStyle( aPropertyStates );
                 if( bExportEquation && !aEquationPropertyStates.empty())
                     CollectAutoStyle( aEquationPropertyStates );
+            }
+        }
+    }
+}
+
+void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySet> &xSeriesProp,
+                                              sal_Bool bExportContent )
+{
+    assert(mxExpPropMapper.is());
+
+    if (xSeriesProp.is())
+    {
+        Any aAny;
+        std::vector< XMLPropertyState > aPropertyStates;
+        sal_Int32 nErrorBarStyle = chart::ErrorBarStyle::NONE;
+        chart::ChartErrorIndicatorType eErrorType = chart::ChartErrorIndicatorType_NONE;
+
+        try
+        {
+            aAny = xSeriesProp->getPropertyValue("ErrorIndicator" );
+            aAny >>= eErrorType;
+
+            aAny = xSeriesProp->getPropertyValue("ErrorBarStyle" );
+            aAny >>= nErrorBarStyle;
+        }
+        catch( const beans::UnknownPropertyException & rEx )
+        {
+            (void)rEx; // avoid warning for pro build
+            OSL_TRACE(
+                OUStringToOString(OUString("Required property not found in DataRowProperties: " ) +
+                    rEx.Message,
+                    RTL_TEXTENCODING_ASCII_US ).getStr());
+        }
+
+        if( nErrorBarStyle != chart::ErrorBarStyle::NONE &&
+            eErrorType != chart::ChartErrorIndicatorType_NONE)
+        {
+            Reference< beans::XPropertySet > xErrorBarProp;
+            try
+            {
+                aAny = xSeriesProp->getPropertyValue("DataErrorProperties" );
+                aAny >>= xErrorBarProp;
+            }
+            catch( const uno::Exception & rEx )
+            {
+                (void)rEx; // avoid warning for pro build
+                OSL_TRACE( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
+                            OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            }
+
+            if( xErrorBarProp.is() )
+            {
+                if( bExportContent &&
+                    nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
+                {
+                    // register data ranges for error bars for export in local table
+                    ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
+                        lcl_getErrorBarSequences( xErrorBarProp ));
+                    for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
+                             aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
+                    {
+                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
+                    }
+                }
+
+                aPropertyStates = mxExpPropMapper->Filter( xErrorBarProp );
+
+                if( !aPropertyStates.empty() )
+                {
+                    // write element
+                    if( bExportContent )
+                    {
+                        // add style name attribute
+                        AddAutoStyleAttribute( aPropertyStates );
+
+                        const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                        if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );//#i114149#
+                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
+                    }
+                    else    // autostyles
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
             }
         }
     }
