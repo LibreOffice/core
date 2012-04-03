@@ -103,7 +103,6 @@
 #endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-#define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
