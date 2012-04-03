@@ -637,8 +637,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     rtl::OUString args[ 3 ];
     int argsCount = 0;
     sal_uInt32 n = rtl_getAppCommandArgCount();
-    // skip first, that's the module name
-    for (sal_uInt32 i = 1; i < n; ++i)
+    for (sal_uInt32 i = 0; i < n; ++i)
     {
         rtl::OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
