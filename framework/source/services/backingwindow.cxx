@@ -239,6 +239,9 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maButtonImageSize.Width() += 12;
     maButtonImageSize.Height() += 12;
 
+    // set a slighly larger font than normal labels on the texts
+    maTextFont.SetSize( Size( 0, 11 ) );
+    maTextFont.SetWeight( WEIGHT_NORMAL );
 }
 
 
