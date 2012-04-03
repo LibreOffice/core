@@ -4021,7 +4021,9 @@ long ImpEditEngine::GetXPos(
                         if ( nType == CHAR_PUNCTUATIONRIGHT )
                         {
                             sal_uInt16 n = nIndex - nTextPortionStart;
-                            const sal_Int32* pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
+                            const sal_Int32* pDXArray = NULL;
+                            if (!pLine->GetCharPosArray().empty())
+                                pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
                             sal_Int32 nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < pPortion->GetLen() )
