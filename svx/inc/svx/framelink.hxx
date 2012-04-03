@@ -118,12 +118,12 @@ public:
     /** Constructs an invisible frame style. */
     inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnType( editeng::SOLID ) { Clear(); }
     /** Constructs a frame style with passed line widths. */
-    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
+    inline explicit     Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )
                             { Clear(); Set( nP, nD, nS ); }
     /** Constructs a frame style with passed color and line widths. */
     inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
+                            double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )
                             { Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. */
@@ -138,21 +138,21 @@ public:
     inline const Color& GetColorSecn() const { return maColorSecn; }
     inline const Color& GetColorGap() const { return maColorGap; }
     inline bool         UseGapColor() const { return mbUseGapColor; }
-    inline sal_uInt16   Prim() const { return mnPrim; }
-    inline sal_uInt16   Dist() const { return mnDist; }
-    inline sal_uInt16   Secn() const { return mnSecn; }
+    inline double       Prim() const { return mnPrim; }
+    inline double       Dist() const { return mnDist; }
+    inline double       Secn() const { return mnSecn; }
     inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
-    inline sal_uInt16   GetWidth() const { return mnPrim + mnDist + mnSecn; }
+    inline double       GetWidth() const { return mnPrim + mnDist + mnSecn; }
 
     /** Sets the frame style to invisible state. */
     void                Clear();
     /** Sets the frame style to the passed line widths. */
-    void                Set( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
+    void                Set( double nP, double nD, double nS );
     /** Sets the frame style to the passed line widths. */
     void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
+                            double nP, double nD, double nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
     void                Set( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
@@ -178,9 +178,9 @@ private:
     Color               maColorGap;
     bool                mbUseGapColor;
     RefMode             meRefMode;  /// Reference point handling for this frame border.
-    sal_uInt16          mnPrim;     /// Width of primary (single, left, or top) line.
-    sal_uInt16          mnDist;     /// Distance between primary and secondary line.
-    sal_uInt16          mnSecn;     /// Width of secondary (right or bottom) line.
+    double              mnPrim;     /// Width of primary (single, left, or top) line.
+    double              mnDist;     /// Distance between primary and secondary line.
+    double              mnSecn;     /// Width of secondary (right or bottom) line.
     editeng::SvxBorderStyle      mnType;
 };
 
