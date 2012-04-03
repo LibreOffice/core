@@ -236,7 +236,8 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)
-	$(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*))
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
 
 endif
 
