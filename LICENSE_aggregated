@@ -1,4 +1,11 @@
-The binary release of Apache OpenOffice may include parts that are
-merely aggregated for the convenience of end users. Here are their
-license terms:
+____
 
+The binary package of Apache OpenOffice (incubating) may include
+dictionary extensions that are merely aggregated for the convenience
+of end users.
+Basis for this aggregation is Apache JIRA issue LEGAL-117
+- https://issues.apache.org/jira/browse/LEGAL-117
+As these dictionary extensions are only aggregated
+
+The licenses of the aggregated dictionary extensions are typically
+GNU General Public License and/or GNU Lesser General Public License.
