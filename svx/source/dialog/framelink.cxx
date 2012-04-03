@@ -215,12 +215,9 @@ inline long lclD2L( double fValue )
 }
 
 /** Converts a width in twips to a width in another map unit (specified by fScale). */
-sal_uInt16 lclScaleValue( long nValue, double fScale, sal_uInt16 nMaxWidth )
+double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
 {
-    // convert any width except 0 to at least 1 unit
-    // #i61324# 1 twip must scale to 1/100mm
-    return nValue ? static_cast< sal_uInt16 >( std::min< long >( std::max(
-        static_cast< long >( nValue * fScale ), 1L ), nMaxWidth ) ) : 0;
+    return std::min<double>(nValue * fScale, nMaxWidth);
 }
 
 // ----------------------------------------------------------------------------
@@ -1154,7 +1151,7 @@ void Style::Clear()
     Set( Color(), Color(), Color(), false, 0, 0, 0 );
 }
 
-void Style::Set( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS )
+void Style::Set( double nP, double nD, double nS )
 {
     /*  nP  nD  nS  ->  mnPrim  mnDist  mnSecn
         --------------------------------------
@@ -1163,12 +1160,12 @@ void Style::Set( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS )
         >0  0   >0      nP      0       0
         >0  >0  >0      nP      nD      nS
      */
-    mnPrim = nP ? nP : nS;
-    mnDist = (nP && nS) ? nD : 0;
-    mnSecn = (nP && nD) ? nS : 0;
+    mnPrim = rtl::math::round(nP ? nP : nS, 2);
+    mnDist = rtl::math::round((nP && nS) ? nD : 0, 2);
+    mnSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
 }
 
-void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS )
+void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS )
 {
     maColorPrim = rColorPrim;
     maColorSecn = rColorSecn;
@@ -1197,7 +1194,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
     {
         Set( SCALEVALUE( nPrim ), SCALEVALUE( nDist ), SCALEVALUE( nSecn ) );
         // Enlarge the style if distance is too small due to rounding losses.
-        sal_uInt16 nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
+        double nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
         if( nPixWidth > GetWidth() )
             mnDist = nPixWidth - mnPrim - mnSecn;
         // Shrink the style if it is too thick for the control.
@@ -1209,7 +1206,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
             // Still too thick? Decrease the line widths.
             if( GetWidth() > nMaxWidth )
             {
-                if( mnPrim && (mnPrim == mnSecn) )
+                if( rtl::math::approxEqual(mnPrim, 0.0) && rtl::math::approxEqual(mnPrim, mnSecn) )
                 {
                     // Both lines equal - decrease both to keep symmetry.
                     --mnPrim;
@@ -1220,7 +1217,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
                     // Decrease each line for itself
                     if( mnPrim )
                         --mnPrim;
-                    if( (GetWidth() > nMaxWidth) && mnSecn )
+                    if( (GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mnSecn, 0.0) )
                         --mnSecn;
                 }
             }
@@ -1264,8 +1261,8 @@ bool operator==( const Style& rL, const Style& rR )
 bool operator<( const Style& rL, const Style& rR )
 {
     // different total widths -> rL<rR, if rL is thinner
-    sal_uInt16 nLW = rL.GetWidth();
-    sal_uInt16 nRW = rR.GetWidth();
+    double nLW = rL.GetWidth();
+    double nRW = rR.GetWidth();
     if( nLW != nRW ) return nLW < nRW;
 
     // one line double, the other single -> rL<rR, if rL is single

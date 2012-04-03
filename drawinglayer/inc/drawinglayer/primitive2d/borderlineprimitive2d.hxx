@@ -85,17 +85,17 @@ namespace drawinglayer
             /// local helpers
             double getCorrectedLeftWidth() const
             {
-                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth;
+                return mfLeftWidth <= 0.1 ? 0.0 : mfLeftWidth;
             }
 
             double getCorrectedDistance() const
             {
-                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance;
+                return mfDistance <= 0.1 ? 0.0 : mfDistance;
             }
 
             double getCorrectedRightWidth() const
             {
-                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth;
+                return mfRightWidth <= 0.1 ? 0.0 : mfRightWidth;
             }
 
             double getWidth() const
@@ -105,12 +105,12 @@ namespace drawinglayer
 
             bool leftIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfLeftWidth);
+                return 0 < mfLeftWidth && mfLeftWidth <= 0.1;
             }
 
             bool rightIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfRightWidth);
+                return 0 < mfRightWidth && mfRightWidth <= 0.1;
             }
 
             bool isSolidLine() const
