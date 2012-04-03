@@ -427,19 +427,28 @@ public:
 // -------------------------------------------------------------------------
 // class TextPortionList
 // -------------------------------------------------------------------------
-typedef TextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0 )
-
-class TextPortionList : public TextPortionArray
+class TextPortionList
 {
+    typedef boost::ptr_vector<TextPortion> PortionsType;
+    PortionsType maPortions;
+
 public:
             TextPortionList();
             ~TextPortionList();
 
     void    Reset();
-    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False ) const;
-    sal_uInt16  GetStartPos( sal_uInt16 nPortion );
-    void    DeleteFromPortion( sal_uInt16 nDelFrom );
+    size_t FindPortion(
+        sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false) const;
+    sal_uInt16 GetStartPos(size_t nPortion);
+    void DeleteFromPortion(size_t nDelFrom);
+    size_t Count() const;
+    const TextPortion* operator[](size_t nPos) const;
+    TextPortion* operator[](size_t nPos);
+
+    void Append(TextPortion* p);
+    void Insert(size_t nPos, TextPortion* p);
+    void Remove(size_t nPos);
+    size_t GetPos(const TextPortion* p) const;
 };
 
 class ParaPortion;

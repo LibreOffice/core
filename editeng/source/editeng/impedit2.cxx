@@ -1032,7 +1032,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
 
         sal_uInt16 nTmp;
         sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, sal_True );
-        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+        const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
         sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
         sal_Bool bPortionRTL = (nRTLLevel%2) ? sal_True : sal_False;
 
@@ -1096,7 +1096,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         // Check if we are within a portion and don't have overwrite mode, then it's easy...
         sal_uInt16 nPortionStart;
         sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, sal_False );
-        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+        const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
         sal_Bool bPortionBoundary = ( aPaM.GetIndex() == nPortionStart ) || ( aPaM.GetIndex() == (nPortionStart+pTextPortion->GetLen()) );
         sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
@@ -1107,7 +1107,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         {
             sal_uInt16 nTmp;
             sal_uInt16 nNextTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex()+1, nTmp, bLogicalBackward ? sal_False : sal_True );
-            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nNextTextPortion );
+            const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nNextTextPortion];
             nRTLLevelNextPortion = pNextTextPortion->GetRightToLeft();
         }
 
@@ -1176,7 +1176,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
 
             sal_uInt16 nPortionStart;
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, bBeforePortion );
-            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             sal_Bool bRTLPortion = (pTextPortion->GetRightToLeft() % 2) != 0;
 
             // -1: We are 'behind' the character
@@ -1205,7 +1205,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
                 sal_uInt16 _nPortionStart;
                 // sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
                 sal_uInt16 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, sal_True );
-                TextPortion* _pTextPortion = pParaPortion->GetTextPortions().GetObject( _nTextPortion );
+                const TextPortion* _pTextPortion = pParaPortion->GetTextPortions()[_nTextPortion];
                 if ( bVisualToLeft && !bRTLPortion && ( _pTextPortion->GetRightToLeft() % 2 ) )
                     aPaM.GetIndex()++;
                 else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_pTextPortion->GetRightToLeft() % 2 )) )
@@ -2018,7 +2018,7 @@ sal_Bool ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
     sal_uInt16 nRTLLevel = IsRightToLeft( nPara ) ? 1 : 0;
     for ( sal_uInt16 n = 0; n < pParaPortion->GetTextPortions().Count(); n++ )
     {
-        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( n );
+        const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
         if ( pTextPortion->GetRightToLeft() != nRTLLevel )
         {
             bHasDifferentRTLLevels = sal_True;
@@ -3165,7 +3165,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
     sal_uInt16 nPos = pLine->GetStart();
     for ( sal_uInt16 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
     {
-        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
+        const TextPortion* pTextPortion = pPortion->GetTextPortions()[nTP];
         switch ( pTextPortion->GetKind() )
         {
             case PORTIONKIND_FIELD:
@@ -3720,7 +3720,7 @@ sal_uInt16 ImpEditEngine::GetChar(
     // Search best matching portion with GetPortionXOffset()
     for ( sal_uInt16 i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
     {
-        TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( i );
+        const TextPortion* pPortion = pParaPortion->GetTextPortions()[i];
         long nXLeft = GetPortionXOffset( pParaPortion, pLine, i );
         long nXRight = nXLeft + pPortion->GetSize().Width();
         if ( ( nXLeft <= nXPos ) && ( nXRight >= nXPos ) )
@@ -3846,7 +3846,7 @@ long ImpEditEngine::GetPortionXOffset(
 
     for ( sal_uInt16 i = pLine->GetStartPortion(); i < nTextPortion; i++ )
     {
-        TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( i );
+        const TextPortion* pPortion = pParaPortion->GetTextPortions()[i];
         switch ( pPortion->GetKind() )
         {
             case PORTIONKIND_FIELD:
@@ -3863,7 +3863,7 @@ long ImpEditEngine::GetPortionXOffset(
     sal_uInt16 nPara = GetEditDoc().GetPos( pParaPortion->GetNode() );
     sal_Bool bR2LPara = IsRightToLeft( nPara );
 
-    TextPortion* pDestPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+    const TextPortion* pDestPortion = pParaPortion->GetTextPortions()[nTextPortion];
     if ( pDestPortion->GetKind() != PORTIONKIND_TAB )
     {
         if ( !bR2LPara && pDestPortion->GetRightToLeft() )
@@ -3872,7 +3872,7 @@ long ImpEditEngine::GetPortionXOffset(
             sal_uInt16 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
-                TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
                 if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX += pNextTextPortion->GetSize().Width();
                 else
@@ -3884,7 +3884,7 @@ long ImpEditEngine::GetPortionXOffset(
             while ( nTmpPortion > pLine->GetStartPortion() )
             {
                 --nTmpPortion;
-                TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                const TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
                 if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX -= pPrevTextPortion->GetSize().Width();
                 else
@@ -3897,7 +3897,7 @@ long ImpEditEngine::GetPortionXOffset(
             sal_uInt16 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
-                TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
                 if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX += pNextTextPortion->GetSize().Width();
                 else
@@ -3909,7 +3909,7 @@ long ImpEditEngine::GetPortionXOffset(
             while ( nTmpPortion > pLine->GetStartPortion() )
             {
                 --nTmpPortion;
-                TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                const TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
                 if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX -= pPrevTextPortion->GetSize().Width();
                 else
@@ -3947,7 +3947,7 @@ long ImpEditEngine::GetXPos(
 
     OSL_ENSURE( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
 
-    TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+    const TextPortion* pPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
     long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
 
@@ -3967,7 +3967,7 @@ long ImpEditEngine::GetXPos(
             {
                 if ( (nTextPortion+1) < pParaPortion->GetTextPortions().Count() )
                 {
-                    TextPortion* pNextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion+1 );
+                    const TextPortion* pNextPortion = pParaPortion->GetTextPortions()[nTextPortion+1];
                     if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
                     {
                         if ( !bPreferPortionStart )

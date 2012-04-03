@@ -631,7 +631,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         // start at 0, so the index is right ...
         for ( sal_uInt16 n = 0; n <= nEndPortion; n++ )
         {
-            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject(n);
+            const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
             if ( n < nStartPortion )
             {
                 nIndex = nIndex + pTextPortion->GetLen();
@@ -1150,9 +1150,9 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             sal_uInt16 n;
             for ( n = 0; n < nCount; n++ )
             {
-                TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
+                const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
                 TextPortion* pNew = new TextPortion( *pTextPortion );
-                pX->aTextPortions.Insert( pNew, pX->aTextPortions.Count() );
+                pX->aTextPortions.Append(pNew);
             }
 
             // The lines
@@ -1346,7 +1346,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                 {
                     TextPortion* pTextPortion = pXP->aTextPortions[_n];
                     TextPortion* pNew = new TextPortion( *pTextPortion );
-                    pParaPortion->GetTextPortions().Insert( pNew, _n );
+                    pParaPortion->GetTextPortions().Insert(_n, pNew);
                 }
 
                 // The lines

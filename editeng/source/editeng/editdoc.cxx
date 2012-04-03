@@ -68,6 +68,8 @@
 #include <tools/shl.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
+#include <limits>
+
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
@@ -408,48 +410,104 @@ TextPortionList::~TextPortionList()
 
 void TextPortionList::Reset()
 {
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
-        delete GetObject( nPortion );
-    Remove( 0, Count() );
+    maPortions.clear();
 }
 
-void TextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
+void TextPortionList::DeleteFromPortion(size_t nDelFrom)
 {
-    DBG_ASSERT( ( nDelFrom < Count() ) || ( (nDelFrom == 0) && (Count() == 0) ), "DeleteFromPortion: Out of range" );
-    for ( sal_uInt16 nP = nDelFrom; nP < Count(); nP++ )
-        delete GetObject( nP );
-    Remove( nDelFrom, Count()-nDelFrom );
+    DBG_ASSERT( ( nDelFrom < maPortions.size() ) || ( (nDelFrom == 0) && maPortions.empty() ), "DeleteFromPortion: Out of range" );
+    PortionsType::iterator it = maPortions.begin();
+    std::advance(it, nDelFrom);
+    maPortions.erase(it, maPortions.end());
 }
 
-sal_uInt16 TextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion ) const
+size_t TextPortionList::Count() const
+{
+    return maPortions.size();
+}
+
+const TextPortion* TextPortionList::operator[](size_t nPos) const
+{
+    return &maPortions[nPos];
+}
+
+TextPortion* TextPortionList::operator[](size_t nPos)
+{
+    return &maPortions[nPos];
+}
+
+void TextPortionList::Append(TextPortion* p)
+{
+    maPortions.push_back(p);
+}
+
+void TextPortionList::Insert(size_t nPos, TextPortion* p)
+{
+    maPortions.insert(maPortions.begin()+nPos, p);
+}
+
+void TextPortionList::Remove(size_t nPos)
+{
+    maPortions.erase(maPortions.begin()+nPos);
+}
+
+namespace {
+
+class FindTextPortionByAddress : std::unary_function<TextPortion, bool>
+{
+    const TextPortion* mp;
+public:
+    FindTextPortionByAddress(const TextPortion* p) : mp(p) {}
+    bool operator() (const TextPortion& v) const
+    {
+        return &v == mp;
+    }
+};
+
+}
+
+size_t TextPortionList::GetPos(const TextPortion* p) const
+{
+    PortionsType::const_iterator it =
+        std::find_if(maPortions.begin(), maPortions.end(), FindTextPortionByAddress(p));
+
+    if (it == maPortions.end())
+        return std::numeric_limits<size_t>::max(); // not found.
+
+    return std::distance(maPortions.begin(), it);
+}
+
+size_t TextPortionList::FindPortion(
+    sal_uInt16 nCharPos, sal_uInt16& nPortionStart, bool bPreferStartingPortion) const
 {
     // When nCharPos at portion limit, the left portion is found
     sal_uInt16 nTmpPos = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    size_t n = maPortions.size();
+    for (size_t i = 0; i < n; ++i)
     {
-        TextPortion* pPortion = GetObject( nPortion );
-        nTmpPos = nTmpPos + pPortion->GetLen();
+        const TextPortion& rPortion = maPortions[i];
+        nTmpPos = nTmpPos + rPortion.GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one
-            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == Count() - 1 ) )
+            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( i == n-1 ) )
             {
-                nPortionStart = nTmpPos - pPortion->GetLen();
-                return nPortion;
+                nPortionStart = nTmpPos - rPortion.GetLen();
+                return i;
             }
         }
     }
     OSL_FAIL( "FindPortion: Not found!" );
-    return ( Count() - 1 );
+    return n - 1;
 }
 
-sal_uInt16 TextPortionList::GetStartPos( sal_uInt16 nPortion )
+sal_uInt16 TextPortionList::GetStartPos(size_t nPortion)
 {
     sal_uInt16 nPos = 0;
-    for ( sal_uInt16 n = 0; n < nPortion; n++ )
+    for (size_t i = 0; i < nPortion; ++i)
     {
-        TextPortion* pPortion = GetObject( n );
-        nPos = nPos + pPortion->GetLen();
+        const TextPortion& rPortion = maPortions[i];
+        nPos = nPos + rPortion.GetLen();
     }
     return nPos;
 }
@@ -987,7 +1045,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
 
     for ( sal_uInt16 n = nStartPortion; n <= nEndPortion; n++ )
     {
-        pPortion = rParaPortion.GetTextPortions().GetObject(n);
+        pPortion = rParaPortion.GetTextPortions()[n];
         switch ( pPortion->GetKind() )
         {
             case PORTIONKIND_TEXT:

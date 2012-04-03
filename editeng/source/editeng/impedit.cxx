@@ -675,7 +675,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
-            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
                 aEditCursor.Right() += pTextPortion->GetSize().Width();
@@ -844,7 +844,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? sal_True : sal_False );
-            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
             if ( nRTLLevel%2 )
                 nCursorDir = CURSOR_DIRECTION_RTL;
