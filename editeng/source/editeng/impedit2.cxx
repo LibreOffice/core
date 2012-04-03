@@ -3965,7 +3965,7 @@ long ImpEditEngine::GetXPos(
             // End of Portion
             if ( pPortion->GetKind() == PORTIONKIND_TAB )
             {
-                if ( (nTextPortion+1) < pParaPortion->GetTextPortions().Count() )
+                if ( static_cast<size_t>(nTextPortion+1) < pParaPortion->GetTextPortions().Count() )
                 {
                     const TextPortion* pNextPortion = pParaPortion->GetTextPortions()[nTextPortion+1];
                     if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
