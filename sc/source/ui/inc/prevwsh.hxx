@@ -50,6 +50,7 @@ class CommandEvent;
 
 class ScPreviewShell: public SfxViewShell
 {
+friend class ScPreview; // allow access to AdjustPosSizePixel
     ScDocShell*     pDocShell;
 
     ScPreview*      pPreview;               // Ausgabe-Fenster
@@ -63,7 +64,8 @@ class ScPreviewShell: public SfxViewShell
     long            nMaxVertPos;
 
     SfxBroadcaster* pAccessibilityBroadcaster;
-
+    bool            GetPageSize( Size& aPageSize );
+    void            UpdateNeededScrollBars();
 private:
     void            Construct( Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
@@ -72,7 +74,6 @@ private:
 protected:
     virtual void    Activate(sal_Bool bMDI);
     virtual void    Deactivate(sal_Bool bMDI);
-
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );
 
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );

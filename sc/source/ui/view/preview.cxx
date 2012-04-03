@@ -705,7 +705,10 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         SetMapMode( aMMMode );
 
         bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
-        pViewShell->UpdateScrollBars();
+        if ( Window* pWin = pViewShell->GetWindow() )
+            pViewShell->AdjustPosSizePixel( pWin->GetPosPixel(), pWin->GetSizePixel() );
+        else
+            pViewShell->UpdateScrollBars();
         bInSetZoom = false;
 
         bStateValid = false;

@@ -134,8 +134,8 @@ void ScPreviewShell::Construct( Window* pParent )
     if (pDrawBC)
         StartListening(*pDrawBC);
 
-    pHorScroll->Show();
-    pVerScroll->Show();
+    pHorScroll->Show( false );
+    pVerScroll->Show( false );
     pCorner->Show();
     SetHelpId( HID_SCSHELL_PREVWSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Preview")));
@@ -244,24 +244,15 @@ Size ScPreviewShell::GetOptimalSizePixel() const
 
 void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
-    long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
-    long nBarH = nBarW;
-
-    Size aOutSize( rSize.Width()-nBarW, rSize.Height()-nBarH );
+    Size aOutSize( rSize );
     pPreview->SetPosSizePixel( rPos, aOutSize );
-    pHorScroll->SetPosSizePixel( Point( rPos.X(), rPos.Y() + aOutSize.Height() ),
-                                 Size( aOutSize.Width(), nBarH ) );
-    pVerScroll->SetPosSizePixel( Point( rPos.X() + aOutSize.Width(), rPos.Y() ),
-                                 Size( nBarW, aOutSize.Height() ) );
-    pCorner->SetPosSizePixel( Point( rPos.X() + aOutSize.Width(), rPos.Y() + aOutSize.Height() ),
-                              Size( nBarW, nBarH ) );
 
     if ( SVX_ZOOM_WHOLEPAGE == eZoom )
         pPreview->SetZoom( pPreview->GetOptimalZoom(false) );
     else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom(sal_True) );
+        pPreview->SetZoom( pPreview->GetOptimalZoom(true) );
 
-    UpdateScrollBars();
+    UpdateNeededScrollBars();
 }
 
 void ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
@@ -274,7 +265,7 @@ void ScPreviewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
     AdjustPosSizePixel( rOfs,rSize );
 }
 
-void ScPreviewShell::UpdateScrollBars()
+bool ScPreviewShell::GetPageSize( Size& aPageSize )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab = pPreview->GetTab();
@@ -282,13 +273,87 @@ void ScPreviewShell::UpdateScrollBars()
     ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ),
                                                         SFX_STYLE_FAMILY_PAGE );
-    OSL_ENSURE(pStyleSheet,"StyleSheet nicht gefunden");
-    if (!pStyleSheet) return;
+    OSL_ENSURE(pStyleSheet,"No style sheet");
+    if (!pStyleSheet) return false;
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
-    Size aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
+    aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
     aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
+    return true;
+}
+
+void ScPreviewShell::UpdateNeededScrollBars()
+{
+    bool bVert = pVerScroll ? pVerScroll->IsVisible() : false;
+    bool bHori = pHorScroll ? pHorScroll->IsVisible() : false;
+
+    Size aPageSize;
+    if ( !GetPageSize( aPageSize ) )
+        return;
+
+    Size aWindowSize = pPreview->GetOutputSize();
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+
+    long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    long nBarH = nBarW;
+
+    long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
+    long aWidthOffSet = aHeightOffSet;
+
+    Point aOfs = pPreview->GetOffset();
+
+    if( pHorScroll )
+    {
+        long nMaxPos = aPageSize.Width() - aWindowSize.Width() + aWidthOffSet;
+        if ( nMaxPos<0 )
+            bHori = false;
+        else
+            bHori = true;
+        pHorScroll->Show( bHori );
+    }
+
+    if( pVerScroll )
+    {
+        nMaxVertPos = aPageSize.Height() - aWindowSize.Height() + aHeightOffSet;
+
+        if ( nMaxVertPos < 0 )
+            bVert = false;
+        else
+            bVert = true;
+        pVerScroll->Show( bVert );
+    }
+
+    Size aOutSize = pPreview->GetSizePixel();
+    Size aNewSize = aOutSize;
+    Point aPos = pPreview->GetPosPixel();
+
+    if ( bHori )
+        aNewSize.Height() -= nBarH;
+    if ( bVert )
+        aNewSize.Width() -= nBarW;
+
+    pPreview->SetPosSizePixel( aPos, aNewSize );
+
+    pHorScroll->SetPosSizePixel( Point( aPos.X(), aPos.Y() + aNewSize.Height() ),
+                                 Size( aNewSize.Width(), nBarH ) );
+    pVerScroll->SetPosSizePixel( Point( aPos.X() + aNewSize.Width(), aPos.Y() ),
+                                 Size( nBarW, aNewSize.Height() ) );
+    pCorner->SetPosSizePixel( Point( aPos.X() + aNewSize.Width(), aPos.Y() + aNewSize.Height() ),
+                              Size( nBarW, nBarH ) );
+
+    if ( SVX_ZOOM_WHOLEPAGE == eZoom )
+        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_False ) );
+    else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
+        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_True ) );
+    UpdateScrollBars();
+}
+
+void ScPreviewShell::UpdateScrollBars()
+{
+    Size aPageSize;
+    if ( !GetPageSize( aPageSize ) )
+        return;
 
     //  for centering, page size without the shadow is used
 
