@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,evoab2,\
 	connectivity/source/drivers/evoab2/NResultSet \
 	connectivity/source/drivers/evoab2/NResultSetMetaData \
 	connectivity/source/drivers/evoab2/EApi \
-	connectivity/source/drivers/evoab2/NDebug \
 ))
 
 # vim: set noet sw=4 ts=4:
