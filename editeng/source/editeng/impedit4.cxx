@@ -2712,8 +2712,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
+        const XubString& aNodeStr = pNode->GetString();
         xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pNode->Len();
+        xub_StrLen nEndPos = aNodeStr.Len();
         if ( nNode == nStartNode )
             nStartPos = aSel.Min().GetIndex();
         if ( nNode == nEndNode ) // can also be == nStart!
@@ -2746,19 +2747,19 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             i18n::Boundary aSttBndry;
             i18n::Boundary aEndBndry;
             aSttBndry = _xBI->getWordBoundary(
-                        *pNode, nStartPos,
+                        aNodeStr, nStartPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ),
-                        nWordType, sal_True /*prefer forward direction*/);
+                        nWordType, true /*prefer forward direction*/);
             aEndBndry = _xBI->getWordBoundary(
-                        *pNode, nEndPos,
+                        aNodeStr, nEndPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ),
-                        nWordType, sal_False /*prefer backward direction*/);
+                        nWordType, false /*prefer backward direction*/);
 
             // prevent backtracking to the previous word if selection is at word boundary
             if (aSttBndry.endPos <= nStartPos)
             {
                 aSttBndry = _xBI->nextWord(
-                        *pNode, aSttBndry.endPos,
+                        aNodeStr, aSttBndry.endPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, aSttBndry.endPos + 1 ) ) ),
                         nWordType);
             }
@@ -2766,7 +2767,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             if (aEndBndry.startPos >= nEndPos)
             {
                 aEndBndry = _xBI->previousWord(
-                        *pNode, aEndBndry.startPos,
+                        aNodeStr, aEndBndry.startPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, aEndBndry.startPos + 1 ) ) ),
                         nWordType);
             }
@@ -2779,15 +2780,15 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
-                String aText( pNode->Copy( nCurrentStart, nLen ) );
+                String aText(aNodeStr.Copy(nCurrentStart, nLen) );
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate( *pNode,
+                String aNewText( aTranslitarationWrapper.transliterate(aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
-                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
+                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
@@ -2801,7 +2802,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 (void) aSelTxt;
 #endif
 
-                aCurWordBndry = _xBI->nextWord( *pNode, nCurrentEnd,
+                aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentEnd,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
                         nWordType);
             }
@@ -2812,18 +2813,18 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             // for 'sentence case' we need to iterate sentence by sentence
 
             sal_Int32 nLastStart = _xBI->beginOfSentence(
-                    *pNode, nEndPos,
+                    aNodeStr, nEndPos,
                     SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ) );
             sal_Int32 nLastEnd = _xBI->endOfSentence(
-                    *pNode, nLastStart,
+                    aNodeStr, nLastStart,
                     SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ) );
 
             // extend nCurrentStart, nCurrentEnd to the current sentence boundaries
             nCurrentStart = _xBI->beginOfSentence(
-                    *pNode, nStartPos,
+                    aNodeStr, nStartPos,
                     SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ) );
             nCurrentEnd = _xBI->endOfSentence(
-                    *pNode, nCurrentStart,
+                    aNodeStr, nCurrentStart,
                     SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
 
             // prevent backtracking to the previous sentence if selection starts at end of a sentence
@@ -2833,16 +2834,16 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // are in Asian text with no spaces...)
                 // Thus to get the real sentence start we should locate the next real word,
                 // that is one found by DICTIONARY_WORD
-                i18n::Boundary aBndry = _xBI->nextWord( *pNode, nCurrentEnd,
+                i18n::Boundary aBndry = _xBI->nextWord( aNodeStr, nCurrentEnd,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
                         i18n::WordType::DICTIONARY_WORD);
 
                 // now get new current sentence boundaries
                 nCurrentStart = _xBI->beginOfSentence(
-                        *pNode, aBndry.startPos,
+                        aNodeStr, aBndry.startPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
                 nCurrentEnd = _xBI->endOfSentence(
-                        *pNode, nCurrentStart,
+                        aNodeStr, nCurrentStart,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
             }
             // prevent advancing to the next sentence if selection ends at start of a sentence
@@ -2852,11 +2853,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // are in Asian text with no spaces...)
                 // Thus to get the real sentence start we should locate the previous real word,
                 // that is one found by DICTIONARY_WORD
-                i18n::Boundary aBndry = _xBI->previousWord( *pNode, nLastStart,
+                i18n::Boundary aBndry = _xBI->previousWord( aNodeStr, nLastStart,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ),
                         i18n::WordType::DICTIONARY_WORD);
                 nLastEnd = _xBI->endOfSentence(
-                        *pNode, aBndry.startPos,
+                        aNodeStr, aBndry.startPos,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
                 if (nCurrentEnd > nLastEnd)
                     nCurrentEnd = nLastEnd;
@@ -2867,15 +2868,15 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
-                String aText( pNode->Copy( nCurrentStart, nLen ) );
+                String aText( aNodeStr.Copy( nCurrentStart, nLen ) );
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate( *pNode,
+                String aNewText( aTranslitarationWrapper.transliterate( aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
-                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
+                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
@@ -2887,12 +2888,12 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 i18n::Boundary aFirstWordBndry;
                 aFirstWordBndry = _xBI->nextWord(
-                        *pNode, nCurrentEnd,
+                        aNodeStr, nCurrentEnd,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
                         nWordType);
                 nCurrentStart = aFirstWordBndry.startPos;
                 nCurrentEnd = _xBI->endOfSentence(
-                        *pNode, nCurrentStart,
+                        aNodeStr, nCurrentStart,
                         SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
             }
             DBG_ASSERT( nCurrentEnd >= nLastEnd, "failed to reach end of transliteration" );
@@ -2911,9 +2912,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 xub_StrLen nLen = nCurrentEnd - nCurrentStart;
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
+                String aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
-                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
+                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;

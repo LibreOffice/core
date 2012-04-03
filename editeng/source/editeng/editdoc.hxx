@@ -42,6 +42,7 @@
 #include <deque>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 
 class ImpEditEngine;
 class SvxTabStop;
@@ -262,9 +263,10 @@ public:
 // -------------------------------------------------------------------------
 // class ContentNode
 // -------------------------------------------------------------------------
-class ContentNode : public XubString
+class ContentNode : boost::noncopyable
 {
 private:
+    XubString maString;
     ContentAttribs  aContentAttribs;
     CharAttribList  aCharAttribList;
     WrongList*      pWrongList;
@@ -298,7 +300,19 @@ public:
     void            CreateWrongList();
     void            DestroyWrongList();
 
-    sal_Bool            IsFeature( sal_uInt16 nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
+    bool IsFeature( sal_uInt16 nPos ) const;
+
+    sal_uInt16 Len() const;
+    const XubString& GetString() const;
+
+    void SetChar(sal_uInt16 nPos, sal_Unicode c);
+    void Insert(const XubString& rStr, sal_uInt16 nPos);
+    void Append(const XubString& rStr);
+    void Erase(sal_uInt16 nPos);
+    void Erase(sal_uInt16 nPos, sal_uInt16 nCount);
+    XubString Copy(sal_uInt16 nPos) const;
+    XubString Copy(sal_uInt16 nPos, sal_uInt16 nCount) const;
+    sal_Unicode GetChar(sal_uInt16 nPos) const;
 };
 
 // -------------------------------------------------------------------------
@@ -323,8 +337,8 @@ public:
     sal_uInt16&         GetIndex()                      { return nIndex; }
     void            SetIndex( sal_uInt16 n )            { nIndex = n; }
 
-    sal_Bool            IsParaStart() const             { return nIndex == 0; }
-    sal_Bool            IsParaEnd() const               { return nIndex == pNode->Len(); }
+    bool IsParaStart() const;
+    bool IsParaEnd() const;
 
     sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 

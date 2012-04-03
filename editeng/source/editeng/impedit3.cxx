@@ -646,7 +646,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
     if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
     {
         if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
-             ( pNode->Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
+             ( pNode->GetString().Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
         {
             bQuickFormat = sal_True;
         }
@@ -1043,7 +1043,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
 
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
-                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, pPortion->GetLen(), pBuf );
+                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, pPortion->GetLen(), pBuf );
 
                     // #i9050# Do Kerning also behind portions...
                     if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + pPortion->GetLen() ) < pNode->Len() ) )
@@ -1118,7 +1118,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                     if ( nDecPos != STRING_NOTFOUND )
                     {
                         nW -= pParaPortion->GetTextPortions()[nTmpPortion]->GetSize().Width();
-                        nW += aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, nDecPos, NULL ).Width();
+                        nW += aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, nDecPos, NULL ).Width();
                         aCurrentTab.bValid = sal_False;
                     }
                 }
@@ -1762,7 +1762,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
 
         Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-        OUString aText( *pNode );
+        OUString aText = pNode->GetString();
         Reference< XHyphenator > xHyph;
         if ( bCanHyphenate )
             xHyph = GetHyphenator();
@@ -1776,7 +1776,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
         aUserOptions.allowHyphenateEnglish = sal_False;
 
-        i18n::LineBreakResults aLBR = _xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+        i18n::LineBreakResults aLBR = _xBI->getLineBreak(
+            pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
         nBreakPos = (sal_uInt16)aLBR.breakIndex;
 
         // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
@@ -1813,7 +1814,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // into more than two lines ...
         if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
         {
-            i18n::Boundary aBoundary = _xBI->getWordBoundary( *pNode, nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+            i18n::Boundary aBoundary = _xBI->getWordBoundary(
+                pNode->GetString(), nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), ::com::sun::star::i18n::WordType::DICTIONARY_WORD, true);
             sal_uInt16 nWordStart = nBreakPos;
             sal_uInt16 nWordEnd = (sal_uInt16) aBoundary.endPos;
             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -1822,7 +1824,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
                 // May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
-                String aWord( *pNode, nWordStart, nWordLen );
+                String aWord(pNode->GetString(), nWordStart, nWordLen);
                 sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1; //+1: Before the dickey letter
                 Reference< XHyphenatedWord > xHyphWord;
                 if (xHyphenator.is())
@@ -2253,7 +2255,7 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
             aTmpFont.SetPhysFont( GetRefDevice() );
             GetRefDevice()->Push( PUSH_TEXTLANGUAGE );
             ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
-            Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), *pPortion->GetNode(), nTxtPortionStart, pTextPortion->GetLen(), NULL );
+            Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen(), NULL );
             GetRefDevice()->Pop();
             pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
         }
@@ -2996,7 +2998,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
                                 {
-                                    aText = *pPortion->GetNode();
+                                    aText = pPortion->GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = pTextPortion->GetLen();
                                     if (!pLine->GetCharPosArray().empty())

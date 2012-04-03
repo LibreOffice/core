@@ -1154,6 +1154,16 @@ void EditPaM::SetNode(ContentNode* p)
     pNode = p;
 }
 
+bool EditPaM::IsParaStart() const
+{
+    return nIndex == 0;
+}
+
+bool EditPaM::IsParaEnd() const
+{
+    return nIndex == pNode->Len();
+}
+
 sal_Bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
     if ( !pNode )
@@ -1275,7 +1285,7 @@ ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 }
 
 ContentNode::ContentNode( const XubString& rStr, const ContentAttribs& rContentAttribs ) :
-    XubString( rStr ), aContentAttribs( rContentAttribs )
+    maString(rStr), aContentAttribs(rContentAttribs)
 {
     DBG_CTOR( EE_ContentNode, 0 );
     pWrongList = NULL;
@@ -1414,7 +1424,7 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
 
     if ( pWrongList )
     {
-        sal_Bool bSep = ( GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
+        bool bSep = ( maString.GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
         pWrongList->TextInserted( nIndex, nNew, bSep );
     }
 
@@ -1515,7 +1525,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 {
     DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
 
-    xub_StrLen nCut = pPrevNode->Len();
+    sal_uInt16 nCut = pPrevNode->Len();
 
     size_t nAttr = 0;
     CharAttribList::AttribsType& rPrevAttribs = pPrevNode->GetCharAttribs().GetAttribs();
@@ -1567,7 +1577,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 {
     DBG_ASSERT( pNextNode, "Copy of attributes to a null pointer?" );
 
-    sal_uInt16 nNewStart = Len();
+    sal_uInt16 nNewStart = maString.Len();
 
 #if OSL_DEBUG_LEVEL > 2
     OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
@@ -1656,6 +1666,61 @@ void ContentNode::DestroyWrongList()
 {
     delete pWrongList;
     pWrongList = NULL;
+}
+
+bool ContentNode::IsFeature( sal_uInt16 nPos ) const
+{
+    return maString.GetChar(nPos) == CH_FEATURE;
+}
+
+sal_uInt16 ContentNode::Len() const
+{
+    return maString.Len();
+}
+
+const XubString& ContentNode::GetString() const
+{
+    return maString;
+}
+
+void ContentNode::SetChar(sal_uInt16 nPos, sal_Unicode c)
+{
+    maString.SetChar(nPos, c);
+}
+
+void ContentNode::Insert(const XubString& rStr, sal_uInt16 nPos)
+{
+    maString.Insert(rStr, nPos);
+}
+
+void ContentNode::Append(const XubString& rStr)
+{
+    maString.Append(rStr);
+}
+
+void ContentNode::Erase(sal_uInt16 nPos)
+{
+    maString.Erase(nPos);
+}
+
+void ContentNode::Erase(sal_uInt16 nPos, sal_uInt16 nCount)
+{
+    maString.Erase(nPos, nCount);
+}
+
+XubString ContentNode::Copy(sal_uInt16 nPos) const
+{
+    return maString.Copy(nPos);
+}
+
+XubString ContentNode::Copy(sal_uInt16 nPos, sal_uInt16 nCount) const
+{
+    return maString.Copy(nPos, nCount);
+}
+
+sal_Unicode ContentNode::GetChar(sal_uInt16 nPos) const
+{
+    return maString.GetChar(nPos);
 }
 
 void ContentNode::CreateWrongList()
@@ -2050,7 +2115,7 @@ XubString EditDoc::GetParaAsString(
         //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
         //!! thus would result in adding the whole sub string up to the end of the node !!
         if (nEnd > nIndex)
-            aStr += XubString( *pNode, nIndex, nEnd - nIndex );
+            aStr += XubString(pNode->GetString(), nIndex, nEnd - nIndex);
 
         if ( pNextFeature )
         {
@@ -2240,7 +2305,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     // First the attributes, otherwise nLen will not be correct!
     pLeft->AppendAttribs( pRight );
     // then the Text...
-    *pLeft += *pRight;
+    pLeft->Append(pRight->GetString());
 
     // the one to the right disappears.
     RemoveItemsFromPool(*pRight);

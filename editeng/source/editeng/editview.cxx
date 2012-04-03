@@ -941,7 +941,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             ContentNode *pNode = aPaM.GetNode();
             if (pNode)
             {
-                aParaText = *pNode;
+                aParaText = pNode->GetString();
             }
             else
             {

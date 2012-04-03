@@ -743,7 +743,7 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
         n--;
         ContentNode* pNode = rNodes[n];
         if ( pNode->Len() )
-            return pNode;
+            return &pNode->GetString();
     }
     return NULL;
 
@@ -764,7 +764,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
         return bRet;
 
     LanguageType eLang = pImpEE->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );
-    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList( *pCurNode, rSttPos, nEndPos, *this, eLang );
+    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(pCurNode->GetString(), rSttPos, nEndPos, *this, eLang);
     if( pFnd && pFnd->IsTextOnly() )
     {
         // then replace
@@ -777,7 +777,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
         pImpEE->ImpInsertText( aSel, pFnd->GetLong() );
         nCursor = nCursor + pFnd->GetLong().Len();
         if( ppPara )
-            *ppPara = pCurNode;
+            *ppPara = &pCurNode->GetString();
         bRet = sal_True;
     }
 
