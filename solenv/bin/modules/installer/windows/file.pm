@@ -876,7 +876,7 @@ sub create_files_table
     my %allfilecomponents = ();
     my $counter = 0;
 
-    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_paths($filesref); }
 
     # The filenames must be collected because of uniqueness
     # 01-44-~1.DAT, 01-44-~2.DAT, ...

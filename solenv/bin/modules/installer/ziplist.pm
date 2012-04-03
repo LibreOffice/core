@@ -454,7 +454,7 @@ sub getinfofromziplist
 # Replacing variables in include path
 ####################################################
 
-sub replace_all_variables_in_pathes
+sub replace_all_variables_in_paths
 {
     my ( $patharrayref, $variableshashref ) = @_;
 
@@ -481,7 +481,7 @@ sub replace_all_variables_in_pathes
 # Replacing minor in include path
 ####################################################
 
-sub replace_minor_in_pathes
+sub replace_minor_in_paths
 {
     my ( $patharrayref ) = @_;
 
@@ -500,7 +500,7 @@ sub replace_minor_in_pathes
 # Replacing packagetype in include path
 ####################################################
 
-sub replace_packagetype_in_pathes
+sub replace_packagetype_in_paths
 {
     my ( $patharrayref ) = @_;
 
@@ -542,7 +542,7 @@ sub remove_ending_separator
 # Replacing languages in include path
 ####################################################
 
-sub replace_languages_in_pathes
+sub replace_languages_in_paths
 {
     my ( $patharrayref, $languagesref ) = @_;
 
@@ -576,7 +576,7 @@ sub replace_languages_in_pathes
                     # Checking if $newdir is empty
                     if ( ! installer::systemactions::is_empty_dir($newdir) )
                     {
-                        $installer::globals::refresh_includepathes = 1;
+                        $installer::globals::refresh_includepaths = 1;
                         $infoline = "Directory $newdir exists and is not empty. Refreshing global file array is required.\n";
                         push( @installer::globals::logfileinfo, $infoline);
                     }
@@ -610,7 +610,7 @@ sub list_all_files_from_include_path
 {
     my ( $patharrayref) = @_;
 
-    installer::logger::include_header_into_logfile("Include pathes:");
+    installer::logger::include_header_into_logfile("Include paths:");
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
     {
@@ -673,7 +673,7 @@ sub set_default_productversion_if_required
 }
 
 ####################################################
-# Removing .. in pathes
+# Removing .. in paths
 ####################################################
 
 sub simplify_path
@@ -696,10 +696,10 @@ sub simplify_path
 }
 
 ####################################################
-# Removing ending separators in pathes
+# Removing ending separators in paths
 ####################################################
 
-sub resolve_relative_pathes
+sub resolve_relative_paths
 {
     my ( $patharrayref ) = @_;
 

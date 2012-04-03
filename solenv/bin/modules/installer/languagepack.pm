@@ -474,7 +474,7 @@ sub build_installer_for_languagepack
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
     my $licensefilename = "LICENSE"; # _" . $licenselanguage;
-    my $licenseincludepatharrayref = installer::worker::get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
+    my $licenseincludepatharrayref = installer::worker::get_language_specific_include_paths($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);
     if ($$licenseref eq "") { installer::exiter::exit_program("ERROR: Could not find License file $licensefilename!", "build_installer_for_languagepack"); }

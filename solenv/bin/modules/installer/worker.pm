@@ -312,7 +312,7 @@ sub clean_output_tree
 # array of include paths with $(LANG)
 ###########################################################
 
-sub get_language_specific_include_pathes
+sub get_language_specific_include_paths
 {
     my ( $patharrayref, $onelanguage ) = @_;
 
@@ -1818,7 +1818,7 @@ sub add_variables_from_inc_to_hashref
 # Collecting all files from include paths
 ##############################################
 
-sub collect_all_files_from_includepathes
+sub collect_all_files_from_includepaths
 {
     my ($patharrayref) = @_;
 
@@ -1826,7 +1826,7 @@ sub collect_all_files_from_includepathes
     installer::logger::print_message( "... reading include paths ...\n" );
     # empty the global
 
-    @installer::globals::allincludepathes =();
+    @installer::globals::allincludepaths =();
     my $infoline;
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
@@ -1864,11 +1864,11 @@ sub collect_all_files_from_includepathes
                 $allfileshash{$sourcefiles[$j]} = 1;
             }
 
-            push(@installer::globals::allincludepathes, \%allfileshash);
+            push(@installer::globals::allincludepaths, \%allfileshash);
         }
     }
 
-    $installer::globals::include_pathes_read = 1;
+    $installer::globals::include_paths_read = 1;
 
     installer::logger::globallog("Reading all directories: End");
     push( @installer::globals::globallogfileinfo, "\n");
@@ -2123,12 +2123,12 @@ sub set_time_stamp
 }
 
 ############################################################
-# Generating pathes for cygwin (first version)
+# Generating paths for cygwin (first version)
 # This function has problems with cygwin, if $tmpfilename
 # contains many thousand files (OpenOffice SDK).
 ############################################################
 
-sub generate_cygwin_pathes_old
+sub generate_cygwin_paths_old
 {
     my ($filesref) = @_;
 
@@ -2150,20 +2150,20 @@ sub generate_cygwin_pathes_old
 }
 
 #################################################
-# Generating pathes for cygwin (second version)
+# Generating paths for cygwin (second version)
 # This function generates smaller files for
 #################################################
 
-sub generate_cygwin_pathes
+sub generate_cygwin_paths
 {
     my ($filesref) = @_;
 
-    installer::logger::include_timestamp_into_logfile("Starting generating cygwin pathes");
+    installer::logger::include_timestamp_into_logfile("Starting generating cygwin paths");
 
-    my $infoline = "Generating cygwin pathes (generate_cygwin_pathes)\n";
+    my $infoline = "Generating cygwin paths (generate_cygwin_paths)\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    my $max = 5000;  # number of pathes in one file
+    my $max = 5000;  # number of paths in one file
 
     my @pathcollector = ();
     my $startnumber = 0;
@@ -2181,7 +2181,7 @@ sub generate_cygwin_pathes
             my $temppath = $installer::globals::temppath;
             $temppath =~ s/\Q$installer::globals::separator\E\s*$//;
             $tmpfilename = $temppath . $installer::globals::separator . $tmpfilename;
-            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter pathes)\n";
+            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter paths)\n";
             push( @installer::globals::logfileinfo, $infoline);
             if ( -f $tmpfilename ) { unlink $tmpfilename; }
 
@@ -2192,19 +2192,19 @@ sub generate_cygwin_pathes
             chomp @cyg_sourcepathlist;
 
             # Validating the array, it has to contain the correct number of values
-            my $new_pathes = $#cyg_sourcepathlist + 1;
-            if ( $new_pathes == $counter ) { $success = 1; }
+            my $new_paths = $#cyg_sourcepathlist + 1;
+            if ( $new_paths == $counter ) { $success = 1; }
 
             if ($success)
             {
-                $infoline = "Success: Successfully converted to cygwin pathes!\n";
+                $infoline = "Success: Successfully converted to cygwin paths!\n";
                 push( @installer::globals::logfileinfo, $infoline);
             }
             else
             {
-                $infoline = "ERROR: Failed to convert to cygwin pathes!\n";
+                $infoline = "ERROR: Failed to convert to cygwin paths!\n";
                 push( @installer::globals::logfileinfo, $infoline);
-                installer::exiter::exit_program("ERROR: Failed to convert to cygwin pathes!", "generate_cygwin_pathes");
+                installer::exiter::exit_program("ERROR: Failed to convert to cygwin paths!", "generate_cygwin_paths");
             }
 
             for ( my $j = 0; $j <= $#cyg_sourcepathlist; $j++ )
@@ -2228,11 +2228,11 @@ sub generate_cygwin_pathes
         {
             $infoline = "ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}\n";
             push( @installer::globals::logfileinfo, $infoline);
-            installer::exiter::exit_program("ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}!", "generate_cygwin_pathes");
+            installer::exiter::exit_program("ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}!", "generate_cygwin_paths");
         }
     }
 
-    installer::logger::include_timestamp_into_logfile("Ending generating cygwin pathes");
+    installer::logger::include_timestamp_into_logfile("Ending generating cygwin paths");
 }
 
 ##############################################
@@ -2468,7 +2468,7 @@ sub put_license_into_setup
     my $licenselanguage = "en-US";                  # always english !
     # my $licensefilename = "LICENSE"; # _" . $licenselanguage;
     my $licensefilename = "license"; # . $licenselanguage . ".txt";
-    my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
+    my $licenseincludepatharrayref = get_language_specific_include_paths($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);
     if ($$licenseref eq "") { installer::exiter::exit_program("ERROR: Could not find License file $licensefilename!", "put_license_into_setup"); }

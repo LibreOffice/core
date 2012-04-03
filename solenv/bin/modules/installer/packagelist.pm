@@ -759,7 +759,7 @@ sub create_module_destination_hash
 # fileinfo log file.
 #####################################################################
 
-sub add_defaultpathes_into_filescollector
+sub add_defaultpaths_into_filescollector
 {
     my ($allfiles) = @_;
 
@@ -767,15 +767,15 @@ sub add_defaultpathes_into_filescollector
     {
         my $onefile = ${$allfiles}[$i];
 
-        if ( ! $onefile->{'destination'} ) { installer::exiter::exit_program("ERROR: No destination found at file $onefile->{'gid'}!", "add_defaultpathes_into_filescollector"); }
+        if ( ! $onefile->{'destination'} ) { installer::exiter::exit_program("ERROR: No destination found at file $onefile->{'gid'}!", "add_defaultpaths_into_filescollector"); }
         my $destination = $onefile->{'destination'};
 
-        if ( ! $onefile->{'modules'} ) { installer::exiter::exit_program("ERROR: No modules found at file $onefile->{'gid'}!", "add_defaultpathes_into_filescollector"); }
+        if ( ! $onefile->{'modules'} ) { installer::exiter::exit_program("ERROR: No modules found at file $onefile->{'gid'}!", "add_defaultpaths_into_filescollector"); }
         my $module = $onefile->{'modules'};
         # If modules contains a list of modules, only taking the first one.
         if ( $module =~ /^\s*(.*?)\,/ ) { $module = $1; }
 
-        if ( ! exists($installer::globals::moduledestination{$module}) ) { installer::exiter::exit_program("ERROR: No default destination path found for module $module!", "add_defaultpathes_into_filescollector"); }
+        if ( ! exists($installer::globals::moduledestination{$module}) ) { installer::exiter::exit_program("ERROR: No default destination path found for module $module!", "add_defaultpaths_into_filescollector"); }
         my $defaultpath = $installer::globals::moduledestination{$module};
         $defaultpath =~ s/\/\s*$//; # removing ending slashes
         my $fulldestpath = $defaultpath . $installer::globals::separator . $destination;

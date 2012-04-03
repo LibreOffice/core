@@ -116,7 +116,7 @@ sub strip_binaries
         ${$filelist}[$i]->{'is_executable'} = ( $filetypelist[$i] =~ /:.*PE executable/ );
     }
 
-    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filelist); }
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_paths($filelist); }
 
     for ( my $i = 0; $i <= $#{$filelist}; $i++ )
     {

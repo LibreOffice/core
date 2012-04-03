@@ -171,7 +171,7 @@ sub generate_cab_file_list
 
     installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation start");
 
-    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_paths($filesref); }
 
     if ( $installer::globals::use_packages_for_cabs )
     {

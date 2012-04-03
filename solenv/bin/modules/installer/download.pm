@@ -204,7 +204,7 @@ sub get_path_for_library
 
     my $getuidlibraryref = "";
 
-    if ( $installer::globals::include_pathes_read )
+    if ( $installer::globals::include_paths_read )
     {
         $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
     }
@@ -954,7 +954,7 @@ sub create_download_sets
 
             my $scriptref = "";
 
-            if ( $installer::globals::include_pathes_read )
+            if ( $installer::globals::include_paths_read )
             {
                 $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
             }

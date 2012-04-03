@@ -47,7 +47,7 @@ par2script::parameter::outputparameter();
 my $includes = par2script::work::setincludes($par2script::globals::includepathlist);
 my $parfiles = par2script::work::setparfiles($par2script::globals::parfilelist);
 
-par2script::work::make_complete_pathes_for_parfiles($parfiles, $includes);
+par2script::work::make_complete_paths_for_parfiles($parfiles, $includes);
 
 print "Reading par files\n";
 my $parfilecontent = par2script::work::read_all_parfiles($parfiles);

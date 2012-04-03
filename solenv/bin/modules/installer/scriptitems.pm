@@ -1090,9 +1090,9 @@ sub get_sourcepath_from_filename_and_includepath
     my $foundsourcefile = 0;
     my $foundnewname = 0;
 
-    for ( my $j = 0; $j <= $#installer::globals::allincludepathes; $j++ )
+    for ( my $j = 0; $j <= $#installer::globals::allincludepaths; $j++ )
     {
-        my $allfiles = $installer::globals::allincludepathes[$j];
+        my $allfiles = $installer::globals::allincludepaths[$j];
 
         if ( exists( $allfiles->{$$searchfilenameref} ))
         {
@@ -1106,9 +1106,9 @@ sub get_sourcepath_from_filename_and_includepath
     {
         # Attention: README01.html is copied for Windows to readme01.html, not case sensitive
 
-        for ( my $j = 0; $j <= $#installer::globals::allincludepathes; $j++ )
+        for ( my $j = 0; $j <= $#installer::globals::allincludepaths; $j++ )
         {
-            my $allfiles = $installer::globals::allincludepathes[$j];
+            my $allfiles = $installer::globals::allincludepaths[$j];
 
             my $newfilename = $$searchfilenameref;
             $newfilename =~ s/readme/README/;       # special handling for readme files

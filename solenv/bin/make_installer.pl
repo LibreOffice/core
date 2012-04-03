@@ -276,13 +276,13 @@ if ( $$includepathref eq "" )
 
 my $includepatharrayref = installer::converter::convert_stringlist_into_array($includepathref, ",");
 
-installer::ziplist::replace_all_variables_in_pathes($includepatharrayref, $pathvariableshashref);
+installer::ziplist::replace_all_variables_in_paths($includepatharrayref, $pathvariableshashref);
 
-installer::ziplist::replace_minor_in_pathes($includepatharrayref);
+installer::ziplist::replace_minor_in_paths($includepatharrayref);
 
-installer::ziplist::replace_packagetype_in_pathes($includepatharrayref);
+installer::ziplist::replace_packagetype_in_paths($includepatharrayref);
 
-installer::ziplist::resolve_relative_pathes($includepatharrayref);
+installer::ziplist::resolve_relative_paths($includepatharrayref);
 
 installer::ziplist::remove_ending_separator($includepatharrayref);
 
@@ -291,7 +291,7 @@ installer::ziplist::remove_ending_separator($includepatharrayref);
 # paths in global hashes.
 ##############################################
 
-installer::worker::collect_all_files_from_includepathes($includepatharrayref);
+installer::worker::collect_all_files_from_includepaths($includepatharrayref);
 
 ##############################################
 # Analyzing languages in zip.lst if required
@@ -636,9 +636,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # Resolving include paths (language dependent)
     ################################################
 
-    $includepatharrayref_lang = installer::ziplist::replace_languages_in_pathes($includepatharrayref, $languagesarrayref);
+    $includepatharrayref_lang = installer::ziplist::replace_languages_in_paths($includepatharrayref, $languagesarrayref);
 
-    if ( $installer::globals::refresh_includepathes ) { installer::worker::collect_all_files_from_includepathes($includepatharrayref_lang); }
+    if ( $installer::globals::refresh_includepaths ) { installer::worker::collect_all_files_from_includepaths($includepatharrayref_lang); }
 
     installer::ziplist::list_all_files_from_include_path($includepatharrayref_lang);
 

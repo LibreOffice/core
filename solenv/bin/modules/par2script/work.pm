@@ -105,7 +105,7 @@ sub setparfiles
 # for the par files
 ############################################
 
-sub make_complete_pathes_for_parfiles
+sub make_complete_paths_for_parfiles
 {
     my ($parfiles, $includes) = @_;
 

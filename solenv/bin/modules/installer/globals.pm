@@ -323,8 +323,8 @@ BEGIN
     $tab = 0;
     $patch = 0;
     $patchincludepath = "";
-    $refresh_includepathes = 0;
-    $include_pathes_read = 0;
+    $refresh_includepaths = 0;
+    $include_paths_read = 0;
     $patchfilelistname = "patchfilelist.txt";
     @patchfilecollector = ();
     $nopatchfilecollector = "";
