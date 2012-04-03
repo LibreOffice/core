@@ -6162,6 +6162,7 @@ ICU_MAJOR=
 ICU_MINOR=
 ICU_MICRO=
 ICU_RECLASSIFIED_CLOSE_PARENTHESIS=
+ICU_RECLASSIFIED_PREPEND_SET_EMPTY=
 AC_MSG_CHECKING([which icu to use])
 if test "$with_system_icu" = "yes"; then
     AC_MSG_RESULT([external])
@@ -6207,6 +6208,9 @@ if test "$with_system_icu" = "yes"; then
         if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
             ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
         fi
+        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+        fi
     fi
 
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS icui18n$ICU_MAJOR$ICU_MINOR.dll icuuc$ICU_MAJOR$ICU_MINOR.dll icudata$ICU_MAJOR$ICU_MINOR.dll"
@@ -6214,6 +6218,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
     ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+    # ICU_RECLASSIFIED_PREPEND_SET_EMPTY not applied for our internal ICU 4.4.2
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
 AC_SUBST(SYSTEM_ICU)
@@ -6224,6 +6229,7 @@ AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_MICRO)
 AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
+AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 
 dnl ===================================================================
 dnl Graphite
