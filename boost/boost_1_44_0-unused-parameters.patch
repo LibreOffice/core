@@ -488,8 +488,8 @@
          {
              typedef scanner_policies<
                  inhibit_case_iteration_policy<
---- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/grammar.hpp
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/grammar.hpp
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
 @@ -83,7 +83,7 @@
          {   // Does _not_ copy the helpers member !
          }
