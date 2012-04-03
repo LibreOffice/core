@@ -34,9 +34,6 @@ Module gid_Module_Root_Brand
     PackageInfo = "packinfo_brand.txt";
     Dirs = (gid_Brand_Dir_Program,
             gid_Brand_Dir_Share,
-            gid_Brand_Dir_Share_C05,
-            gid_Brand_Dir_Share_C05_Rgt,
-            gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extension,
             gid_Brand_Dir_Share_Extensions,
@@ -62,14 +59,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Msvcr71,
              gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAbout,
-             gid_Brand_File_C05_Zip_Faq,
-             gid_Brand_File_C05_Zip_Register,
-             gid_Brand_File_C05_Htm_Faq,
-             gid_Brand_File_C05_Htm_Rgt,
-             gid_Brand_File_C05_Pdf_Gettingstartedguide,
-             gid_Brand_File_C05_Exe_Suptool,
              gid_Brand_File_Desktophelper_Txt,
-             gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
@@ -82,7 +72,6 @@ Module gid_Module_Root_Brand
 			 gid_Brand_File_Lib_Oirm2,
              gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
-             gid_Brand_File_Lib_Subscrib_C05,
              gid_Brand_File_ServicesRdb,
              gid_Brand_File_Share_Registry_Brand_Xcd,
              gid_Brand_File_Share_Registry_O5oo_Xcd,
@@ -123,22 +112,10 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_About,
              gid_Brand_File_Res_Oirm,
-             gid_Brand_File_Help_C05_Sdatabase_Zip,
-             gid_Brand_File_Help_C05_Scalc_Zip,
-             gid_Brand_File_Help_C05_Sdraw_Zip,
-             gid_Brand_File_Help_C05_Swriter_Zip,
-             gid_Brand_File_License_License,
-             gid_Brand_File_License_License_Small,
-             gid_Brand_File_License_License_Html,
-             gid_Brand_File_License_License_Html_Small,
              gid_Brand_File_Readme_Readme,
              gid_Brand_File_Readme_Readme_Html,
              gid_Brand_File_Share_Registry_Cjk_Xcd,
              gid_Brand_File_Share_Registry_Korea_Xcd,
-             gid_Brand_File_Txt_License,
-             gid_Brand_File_Txt_License_Small,
-             gid_Brand_File_Txt_License_Html,
-             gid_Brand_File_Txt_License_Html_Small,
              gid_Brand_File_Txt_Readme,
              gid_Brand_File_Txt_Readme_Html);
 End
@@ -313,17 +290,6 @@ End
 #endif
 
 // Files
-
-File gid_Brand_File_Html_Thirdpartylicensereadme
-    Name = "THIRDPARTYLICENSEREADME.html";
-#ifdef MACOSX
-    Dir = gid_Brand_Dir_BasisLink;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-    Styles = (WORKSTATION);
-    TXT_FILE_BODY;
-End
 
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;

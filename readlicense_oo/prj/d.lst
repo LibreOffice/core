@@ -2,34 +2,6 @@ mkdir: %_DEST%\bin%_EXT%\osl
 mkdir: %_DEST%\pck%_EXT%
 
 dos: echo =====================================================================
-dos: echo Delivering LICENSE files
-dos: echo =====================================================================
-
-# Can we finally unify Windows and unx file names to upper case
-# LICENSE/LICENSE.html?
-# FIXME: is - can you solve this?
-..\%__SRC%\misc\license\unx\LICENSE* %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\unx\LICENSE*.html %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.txt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.html %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.rtf %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\os2\license*.txt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\os2\license*.html %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\os2\license*.rtf %_DEST%\bin%_EXT%\osl
-
-# URE:
-mkdir: %_DEST%\bin%_EXT%\ure
-..\%__SRC%\misc\license\unx\LICENSE_en-US %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\wnt\license_en-US.txt %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\wnt\license_en-US.rtf %_DEST%\bin%_EXT%\ure\license_en-US.rtf
-..\%__SRC%\misc\license\os2\license_en-US.txt %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\os2\license_en-US.rtf %_DEST%\bin%_EXT%\ure\license_en-US.rtf
-
-# RTF only for Windows?
-# Why? It comes from cws_src680_langsupporter.
-..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
-
-dos: echo =====================================================================
 dos: echo Delivering README files
 dos: echo =====================================================================
 
@@ -41,7 +13,7 @@ dos: echo =====================================================================
 ..\%__SRC%\misc\UNX\README_*.html %_DEST%\bin%_EXT%\osl
 
 dos: echo =====================================================================
-dos: echo Delivering NOTICE file
+dos: echo Delivering the LICENSE and NOTICE files
 dos: echo =====================================================================
 
 # deliver the NOTICE and LICENSE file for later use in the packaging process

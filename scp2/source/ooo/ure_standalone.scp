@@ -55,17 +55,17 @@ Directory gid_Dir_Common_Ure
     Styles = (UREDIRECTORY);
 End
 
-File gid_File_License_Ure
+File gid_File_LICENSE_Ure
     TXT_FILE_BODY;
     Dir = gid_Dir_Common_Ure;
     Name = "LICENSE";
     Styles = (PACKED);
 End
 
-File gid_File_ThirdpartylicensereadmeHtml_Ure
+File gid_File_NOTICE_Ure
     TXT_FILE_BODY;
     Dir = gid_Dir_Common_Ure;
-    Name = "THIRDPARTYLICENSEREADME.html";
+    Name = "NOTICE";
     Styles = (PACKED);
 End
 

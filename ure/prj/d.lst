@@ -3,7 +3,6 @@ mkdir: %_DEST%\xml%_EXT%\ure
 ..\%__SRC%\bin\uretest.zip %COMMON_DEST%\bin%_EXT%\uretest.zip
 ..\%__SRC%\misc\services.rdb %_DEST%\xml%_EXT%\ure\services.rdb
 ..\source\README %_DEST%\bin%_EXT%\ure\README
-..\source\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\ure\THIRDPARTYLICENSEREADME.html
 ..\source\jvmfwk3.ini %_DEST%\bin%_EXT%\ure\jvmfwk3.ini
 ..\source\jvmfwk3rc %_DEST%\bin%_EXT%\ure\jvmfwk3rc
 ..\source\startup.sh %_DEST%\bin%_EXT%\ure\startup.sh

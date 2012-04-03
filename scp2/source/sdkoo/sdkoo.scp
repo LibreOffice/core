@@ -92,16 +92,15 @@ End
 
 
 #if defined MACOSX
-ScpAction scp_Copy_License_Html_Sdk
-    README_TXT_ALL_LANG(Copy, LICENSE, html);
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-    Styles = (SCPZIP_REPLACE);
-    Subdir = "LICENSEs";
-End
-
 ScpAction scp_Copy_License_Txt_Sdk
     README_ALL_LANG(Copy, LICENSE);
     README_ALL_LANG(Name, LICENSE);
+    Styles = (SCPZIP_REPLACE);
+    Subdir = "LICENSEs";
+End
+ScpAction scp_Copy_Notice_Txt_Sdk
+    README_ALL_LANG(Copy, NOTICE);
+    README_ALL_LANG(Name, NOTICE);
     Styles = (SCPZIP_REPLACE);
     Subdir = "LICENSEs";
 End
@@ -136,31 +135,6 @@ File gid_File_Txt_License_Root
     TXT_FILE_BODY;
     Dir = gid_Dir_Basis_Sdk;
     Name = "LICENSE";
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-
-File gid_File_Txt_License
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "LICENSE_en-US";
-  #endif
-  #ifdef WNT
-    Name = "license_en-US.txt";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Txt_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "LICENSE_en-US.html";
-  #endif
-  #ifdef WNT
-    Name = "license_en-US.html";
-  #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 

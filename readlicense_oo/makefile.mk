@@ -26,21 +26,6 @@ TARGET=source
 .INCLUDE: settings.mk
 # ------------------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
-SYSLICBASE=license.txt license.html license.rtf
-SYSLICDEST=$(MISC)$/license$/wnt
-.ELIF "$(GUI)"=="OS2"
-SYSLICBASE=license.txt license.html license.rtf
-SYSLICDEST=$(MISC)$/license$/os2
-.ELSE          # "$(GUI)"=="WNT"
-SYSLICBASE=LICENSE LICENSE.html
-SYSLICDEST=$(MISC)$/license$/unx
-.ENDIF          # "$(GUI)"=="WNT"
-
-SOURCELICENCES=$(foreach,i,$(SYSLICBASE) $(SYSLICDEST)$/$(i:b)_en-US$(i:e))
-
-fallbacklicenses=$(foreach,i,{$(subst,$(defaultlangiso), $(alllangiso))} $(foreach,j,$(SYSLICBASE) $(SYSLICDEST)$/$(j:b)_$i$(j:e)))
-
 ALL_LICENSE=..$/LICENSE
 ALL_NOTICE=..$/NOTICE
 .IF "${ENABLE_CATEGORY_B}"=="YES"
@@ -62,7 +47,7 @@ SUM_NOTICE=$(MISC)$/SUM_NOTICE
 .INCLUDE: target.mk
 # ------------------------------------------------------------------
 
-ALLTAR: ${SUM_LICENSE} ${SUM_NOTICE} $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics
+ALLTAR: ${SUM_LICENSE} ${SUM_NOTICE}
 
 ${SUM_LICENSE} : ${ALL_LICENSE}
     cat $< > $@
@@ -70,25 +55,3 @@ ${SUM_LICENSE} : ${ALL_LICENSE}
 ${SUM_NOTICE} : ${ALL_NOTICE}
     cat $< > $@
 
-.IF "$(fallbacklicenses)"!=""
-$(fallbacklicenses) : $(SOURCELICENCES)
-    @$(ECHON) .
-    @$(COPY) $(@:d)$(@:b:s/_/./:b)_$(defaultlangiso)$(@:e) $@
-.ENDIF          # "$(fallbacklicenses)"!=""
-
-just_for_nice_optics: $(fallbacklicenses)
-    @$(ECHONL)
-
-# for windows, convert line ends to CR/LF
-$(SYSLICDEST)$/license_en-US.% : source$/license$/license_en-US.%
-    @-$(MKDIRHIER) $(SYSLICDEST)
-    $(PERL) -p -e 's/\r?\n$$/\r\n/' < $< > $@
-
-# for others just copy
-$(SYSLICDEST)$/LICENSE_en-US : source$/license$/license_en-US.txt
-    @-$(MKDIRHIER) $(SYSLICDEST)
-    $(COPY) $< $@
-
-$(SYSLICDEST)$/LICENSE_en-US.html : source$/license$/license_en-US.html
-    @-$(MKDIRHIER) $(SYSLICDEST)
-    $(COPY) $< $@

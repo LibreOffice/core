@@ -29,46 +29,22 @@ File gid_Brand_File_Txt_License
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Readme;
   #ifdef UNX
-    README_ALL_LANG(Name, LICENSE);
+    Name=LICENSE;
   #endif
   #if defined(WNT) || defined(OS2)
-    README_TXT_ALL_LANG(Name, license, txt);
+    Name=LICENSE.txt;
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
-File gid_Brand_File_Txt_License_Html
+File gid_Brand_File_Txt_Notice
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Readme;
   #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
+    Name=NOTICE;
   #endif
   #if defined(WNT) || defined(OS2)
-    README_TXT_ALL_LANG(Name, license, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_Brand_File_License_License
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_License;
-  #ifdef UNX
-    README_ALL_LANG(Name, LICENSE);
-  #endif
-  #if defined(WNT) || defined(OS2)
-    README_TXT_ALL_LANG(Name, license, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_Brand_File_License_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_License;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #endif
-  #if defined(WNT) || defined(OS2)
-    README_TXT_ALL_LANG(Name, license, html);
+    Name=NOTICE.txt;
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
