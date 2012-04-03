@@ -1336,13 +1336,13 @@ void Region::Scale( double fScaleX, double fScaleY )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Region::Union( const Rectangle& rRect )
+void Region::Union( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     // is rectangle empty? -> nothing to do
     if ( rRect.IsEmpty() )
-        return sal_True;
+        return;
 
     if( HasPolyPolygon() )
     {
@@ -1353,7 +1353,7 @@ sal_Bool Region::Union( const Rectangle& rRect )
         if( aThisPolyPoly.count() == 0 )
         {
             *this = rRect;
-            return true;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -1363,7 +1363,7 @@ sal_Bool Region::Union( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationOr( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1394,13 +1394,11 @@ sal_Bool Region::Union( const Rectangle& rRect )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Region::Intersect( const Rectangle& rRect )
+void Region::Intersect( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
@@ -1416,7 +1414,7 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
                 delete mpImplRegion;
         }
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
-        return sal_True;
+        return;
     }
 
     // #103137# Avoid banding for special cases
@@ -1434,7 +1432,7 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
         // unnecessary banding
         mpImplRegion->mpPolyPoly->Clip( rRect );
 
-        return sal_True;
+        return;
     }
     else if( mpImplRegion->mpB2DPolyPoly )
     {
@@ -1450,14 +1448,14 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
                                                 basegfx::B2DRange( rRect.Left(), rRect.Top(),
                                                                    rRect.Right(), rRect.Bottom() ),
                                                 true, false );
-        return sal_True;
+        return;
     }
     else
         ImplPolyPolyRegionToBandRegion();
 
     // is region empty? -> nothing to do!
     if ( mpImplRegion == &aImplEmptyRegion )
-        return sal_True;
+        return;
 
     // get justified rectangle
     long nLeft      = Min( rRect.Left(), rRect.Right() );
@@ -1478,7 +1476,7 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
         mpImplRegion->mpFirstBand->Union( nLeft, nRight );
         mpImplRegion->mnRectCount = 1;
 
-        return sal_True;
+        return;
     }
 
     // no own instance data? -> make own copy!
@@ -1521,19 +1519,17 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Region::Exclude( const Rectangle& rRect )
+void Region::Exclude( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     // is rectangle empty? -> nothing to do
     if ( rRect.IsEmpty() )
-        return sal_True;
+        return;
 
     if( HasPolyPolygon() )
     {
@@ -1542,7 +1538,7 @@ sal_Bool Region::Exclude( const Rectangle& rRect )
         aThisPolyPoly = basegfx::tools::prepareForPolygonOperation( aThisPolyPoly );
 
         if( aThisPolyPoly.count() == 0 )
-            return sal_True;
+            return;
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolygon aRectPoly( basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
@@ -1551,14 +1547,14 @@ sal_Bool Region::Exclude( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
 
     // no instance data? -> create!
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
-        return sal_True;
+        return;
 
     // no own instance data? -> make own copy!
     if ( mpImplRegion->mnRefCount > 1 )
@@ -1582,19 +1578,17 @@ sal_Bool Region::Exclude( const Rectangle& rRect )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Region::XOr( const Rectangle& rRect )
+void Region::XOr( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     // is rectangle empty? -> nothing to do
     if ( rRect.IsEmpty() )
-        return sal_True;
+        return;
 
     if( HasPolyPolygon() )
     {
@@ -1605,7 +1599,7 @@ sal_Bool Region::XOr( const Rectangle& rRect )
         if( aThisPolyPoly.count() == 0 )
         {
             *this = rRect;
-            return sal_True;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -1615,7 +1609,7 @@ sal_Bool Region::XOr( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1646,8 +1640,6 @@ sal_Bool Region::XOr( const Rectangle& rRect )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1673,14 +1665,14 @@ void Region::ImplUnionPolyPolygon( const Region& i_rRegion )
     *this = Region( aClip );
 }
 
-sal_Bool Region::Union( const Region& rRegion )
+void Region::Union( const Region& rRegion )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplUnionPolyPolygon( rRegion );
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1688,7 +1680,7 @@ sal_Bool Region::Union( const Region& rRegion )
 
     // is region empty or null? -> nothing to do
     if ( (rRegion.mpImplRegion == &aImplEmptyRegion) || (rRegion.mpImplRegion == &aImplNullRegion) )
-        return sal_True;
+        return;
 
     // no instance data? -> create!
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
@@ -1723,8 +1715,6 @@ sal_Bool Region::Union( const Region& rRegion )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1745,29 +1735,29 @@ void Region::ImplIntersectWithPolyPolygon( const Region& i_rRegion )
     *this = Region( aClip );
 }
 
-sal_Bool Region::Intersect( const Region& rRegion )
+void Region::Intersect( const Region& rRegion )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     // same instance data? -> nothing to do!
     if ( mpImplRegion == rRegion.mpImplRegion )
-        return sal_True;
+        return;
 
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplIntersectWithPolyPolygon( rRegion );
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
     ((Region*)&rRegion)->ImplPolyPolyRegionToBandRegion();
 
     if ( mpImplRegion == &aImplEmptyRegion )
-        return sal_True;
+        return;
 
     // is region null? -> nothing to do
     if ( rRegion.mpImplRegion == &aImplNullRegion )
-        return sal_True;
+        return;
 
     // is rectangle empty? -> nothing to do
     if ( rRegion.mpImplRegion == &aImplEmptyRegion )
@@ -1781,7 +1771,7 @@ sal_Bool Region::Intersect( const Region& rRegion )
                 delete mpImplRegion;
         }
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
-        return sal_True;
+        return;
     }
 
     // is own region NULL-region? -> copy data!
@@ -1789,7 +1779,7 @@ sal_Bool Region::Intersect( const Region& rRegion )
     {
         mpImplRegion = rRegion.mpImplRegion;
         rRegion.mpImplRegion->mnRefCount++;
-        return sal_True;
+        return;
     }
 
     // Wenn wir weniger Rechtecke haben, drehen wir den Intersect-Aufruf um
@@ -1884,8 +1874,6 @@ sal_Bool Region::Intersect( const Region& rRegion )
             mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
         }
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1905,14 +1893,14 @@ void Region::ImplExcludePolyPolygon( const Region& i_rRegion )
     *this = Region( aClip );
 }
 
-sal_Bool Region::Exclude( const Region& rRegion )
+void Region::Exclude( const Region& rRegion )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplExcludePolyPolygon( rRegion );
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1920,11 +1908,11 @@ sal_Bool Region::Exclude( const Region& rRegion )
 
     // is region empty or null? -> nothing to do
     if ( (rRegion.mpImplRegion == &aImplEmptyRegion) || (rRegion.mpImplRegion == &aImplNullRegion) )
-        return sal_True;
+        return;
 
     // no instance data? -> nothing to do
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
-        return sal_True;
+        return;
 
     // no own instance data? -> make own copy!
     if ( mpImplRegion->mnRefCount > 1 )
@@ -1958,8 +1946,6 @@ sal_Bool Region::Exclude( const Region& rRegion )
 
         pBand = pBand->mpNextBand;
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1982,14 +1968,14 @@ void Region::ImplXOrPolyPolygon( const Region& i_rRegion )
     *this = Region( aClip );
 }
 
-sal_Bool Region::XOr( const Region& rRegion )
+void Region::XOr( const Region& rRegion )
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplXOrPolyPolygon( rRegion );
-        return sal_True;
+        return;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1997,13 +1983,13 @@ sal_Bool Region::XOr( const Region& rRegion )
 
     // is region empty or null? -> nothing to do
     if ( (rRegion.mpImplRegion == &aImplEmptyRegion) || (rRegion.mpImplRegion == &aImplNullRegion) )
-        return sal_True;
+        return;
 
     // no own instance data? -> XOr = copy
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
     {
         *this = rRegion;
-        return sal_True;
+        return;
     }
 
     // no own instance data? -> make own copy!
@@ -2035,8 +2021,6 @@ sal_Bool Region::XOr( const Region& rRegion )
         delete mpImplRegion;
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
     }
-
-    return sal_True;
 }
 
 // -----------------------------------------------------------------------

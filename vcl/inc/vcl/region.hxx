@@ -99,14 +99,14 @@ public:
 
     void            Move( long nHorzMove, long nVertMove );
     void            Scale( double fScaleX, double fScaleY );
-    sal_Bool            Union( const Rectangle& rRegion );
-    sal_Bool            Intersect( const Rectangle& rRegion );
-    sal_Bool            Exclude( const Rectangle& rRegion );
-    sal_Bool            XOr( const Rectangle& rRegion );
-    sal_Bool            Union( const Region& rRegion );
-    sal_Bool            Intersect( const Region& rRegion );
-    sal_Bool            Exclude( const Region& rRegion );
-    sal_Bool            XOr( const Region& rRegion );
+    void            Union( const Rectangle& rRegion );
+    void            Intersect( const Rectangle& rRegion );
+    void            Exclude( const Rectangle& rRegion );
+    void            XOr( const Rectangle& rRegion );
+    void            Union( const Region& rRegion );
+    void            Intersect( const Region& rRegion );
+    void            Exclude( const Region& rRegion );
+    void            XOr( const Region& rRegion );
 
     RegionType      GetType() const;
     sal_Bool            IsEmpty() const { return GetType() == REGION_EMPTY; };
