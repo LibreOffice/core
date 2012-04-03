@@ -541,6 +541,14 @@ int RTFDocumentImpl::getFontIndex(int nIndex)
         return m_pSuperstream->getFontIndex(nIndex);
 }
 
+RTFParserState& RTFDocumentImpl::getDefaultState()
+{
+    if (!m_pSuperstream)
+        return m_aDefaultState;
+    else
+        return m_pSuperstream->getDefaultState();
+}
+
 void RTFDocumentImpl::resolve(Stream & rMapper)
 {
     m_pMapperStream = &rMapper;
@@ -1762,8 +1770,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
             break;
         case RTF_PLAIN:
-            m_aStates.top().aCharacterSprms = m_aDefaultState.aCharacterSprms;
-            m_aStates.top().aCharacterAttributes = m_aDefaultState.aCharacterAttributes;
+            {
+                m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
+                RTFValue::Pointer_t pValue = m_aStates.top().aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
+                if (pValue.get())
+                    m_aStates.top().nCurrentEncoding = getEncoding(pValue->getInt());
+                m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
+            }
             break;
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;

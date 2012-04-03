@@ -35,6 +35,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
@@ -77,6 +78,7 @@ public:
     void testFdo45394();
     void testFdo48104();
     void testFdo47107();
+    void testFdo45182();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -97,6 +99,7 @@ public:
     CPPUNIT_TEST(testFdo45394);
     CPPUNIT_TEST(testFdo48104);
     CPPUNIT_TEST(testFdo47107);
+    CPPUNIT_TEST(testFdo45182);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -498,6 +501,18 @@ void RtfModelTest::testFdo47107()
     // Make sure numbered and bullet legacy syntax is recognized, this used to throw a NoSuchElementException
     xNumberingStyles->getByName("WWNum1");
     xNumberingStyles->getByName("WWNum2");
+}
+
+void RtfModelTest::testFdo45182()
+{
+    load("fdo45182.rtf");
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // Encoding in the footnote was wrong.
+    OUString aExpected("živností", 10, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

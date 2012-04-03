@@ -372,6 +372,8 @@ namespace writerfilter {
                 int getFontIndex(int nIndex);
                 /// Return the encoding associated with a dmapper font index.
                 rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
+                /// Get the default parser state.
+                RTFParserState& getDefaultState();
 
             private:
                 SvStream& Strm();
