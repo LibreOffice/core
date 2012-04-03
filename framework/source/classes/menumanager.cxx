@@ -146,8 +146,14 @@ MenuManager::MenuManager(
     m_xFrame            = rFrame;
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_False;
+#ifdef LIBO_WERROR
+    // Wtf? Clang says: call to pure virtual member function
+    // 'acquire'; overrides of 'acquire' in subclasses are not
+    // available in the constructor of 'XInterface'
+    assert(!"Call to pure virtual member function");
+#else
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
-
+#endif
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
