@@ -376,40 +376,6 @@ void StdTabController::activateLast(  ) throw(RuntimeException)
 Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XControl > >& rCtrls,
  const Reference< XControlModel > & rxCtrlModel )
 {
-
-/*
-     // MT: Funktioniert nicht mehr, weil ich nicht mehr bei mir angemeldet bin,
-    // weil DG das abfaengt.
-
-    // #54677# Beim Laden eines HTML-Dokuments wird nach jedem Control ein
-    // activateTabOrder gerufen und jede Menge Zeit in dieser Methode verbraten.
-    // Die Anzahl dieser Schleifendurchlaufe steigt quadratisch, also versuchen
-    // das Control direkt vom Model zu erhalten.
-    // => Wenn genau ein Control als PropertyChangeListener angemeldet ist,
-    // dann muss das auch das richtige sein.
-
-    UnoControlModel* pUnoCtrlModel = UnoControlModel::GetImplementation( rxCtrlModel );
-
-
-    if ( pUnoCtrlModel )
-    {
-        ListenerIterator aIt( pUnoCtrlModel->maPropertiesListeners );
-        while( aIt.hasMoreElements() )
-        {
-            XEventListener* pL = aIt.next();
-            Reference< XControl >  xC( pL, UNO_QUERY );
-            if ( xC.is() )
-            {
-                if( xC->getContext() == mxControlContainer )
-                {
-                    xCtrl = xC;
-                    break;
-                }
-            }
-        }
-    }
-    if ( !xCtrl.is() && rxCtrlModel.is())
-*/
     DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
 
     const Reference< XControl > * pCtrls = rCtrls.getConstArray();
