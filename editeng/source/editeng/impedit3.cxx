@@ -1697,7 +1697,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     {
         // -2: The new one is already inserted.
 #ifdef DBG_UTIL
-        EditLine* pLastLine = pParaPortion->GetLines().GetObject( pParaPortion->GetLines().Count()-2 );
+        EditLine* pLastLine = pParaPortion->GetLines()[pParaPortion->GetLines().Count()-2];
         DBG_ASSERT( pLastLine, "soft wrap no line?!" );
         DBG_ASSERT( pLastLine->GetEnd() == pParaPortion->GetNode()->Len(), "different anyway?" );
 #endif

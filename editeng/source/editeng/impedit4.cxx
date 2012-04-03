@@ -1167,9 +1167,9 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             sal_uInt16 nTest;
             int nTPLen = 0, nTxtLen = 0;
             for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
-                nTPLen += pParaPortion->GetTextPortions().GetObject( --nTest )->GetLen();
+                nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
             for ( nTest = pParaPortion->GetLines().Count(); nTest; )
-                nTxtLen += pParaPortion->GetLines().GetObject( --nTest )->GetLen();
+                nTxtLen += pParaPortion->GetLines()[--nTest]->GetLen();
             DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
 #endif
         }
@@ -1363,9 +1363,9 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                 sal_uInt16 nTest;
                 int nTPLen = 0, nTxtLen = 0;
                 for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
-                    nTPLen += pParaPortion->GetTextPortions().GetObject( --nTest )->GetLen();
+                    nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
                 for ( nTest = pParaPortion->GetLines().Count(); nTest; )
-                    nTxtLen += pParaPortion->GetLines().GetObject( --nTest )->GetLen();
+                    nTxtLen += pParaPortion->GetLines()[--nTest]->GetLen();
                 DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "InsertBinTextObject: ParaPortion not completely formatted!" );
 #endif
             }
