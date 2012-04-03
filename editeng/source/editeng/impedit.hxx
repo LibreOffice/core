@@ -488,6 +488,7 @@ private:
     sal_Bool            bCallParaInsertedOrDeleted;
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
+    sal_Bool            mbLastTryMerge;
 
     // For Formatting / Update ....
     boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
@@ -1002,8 +1003,6 @@ public:
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable( sal_Bool bGetInternal = sal_True ) const;
     void                SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-
-    sal_Bool                mbLastTryMerge;
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
