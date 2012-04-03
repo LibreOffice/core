@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
-#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
-
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
 #include <tools/diagnose_ex.h>

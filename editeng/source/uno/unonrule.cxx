@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define PROPERTY_NONE 0
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 

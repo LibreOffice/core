@@ -54,15 +54,6 @@
 #include <svl/itemset.hxx>
 #include <editeng/editstat.hxx>
 
-
-// Width of the border zones within which is scrolled during Drag and Drop
-#define OL_SCROLL_LRBORDERWIDTHPIX  10
-#define OL_SCROLL_TBBORDERWIDTHPIX  10
-
-// Value to the window content when scrolling during Drag and Drop
-#define OL_SCROLL_HOROFFSET         20  /* in % of VisibleSize.Width */
-#define OL_SCROLL_VEROFFSET         20  /* in % of VisibleSize.Height */
-
 using namespace ::com::sun::star;
 
 DBG_NAME(OutlinerView)

@@ -31,13 +31,6 @@
 
 #include <svx/svxids.hrc>
 
-#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
-#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
-#define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
-
-
 #include <svx/numinf.hxx>
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

@@ -89,8 +89,6 @@
 
 #include "../appl/app.hrc"
 
-#define DOCPROPSNUM 17
-
 // flags that specify requested operation
 #define EXPORT_REQUESTED            1
 #define PDFEXPORT_REQUESTED         2
