@@ -37,8 +37,8 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <breakit.hxx>
-#include <viewsh.hxx>       // Bildschirmabgleich
-#include <viewopt.hxx>      // Bildschirmabgleich abschalten, ViewOption
+#include <viewsh.hxx>
+#include <viewopt.hxx>
 #include <fntcache.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>       // CH_BLANK + CH_BULLET
@@ -61,12 +61,12 @@
 
 using namespace ::com::sun::star;
 
-// globale Variablen, werden in FntCache.Hxx bekanntgegeben
-// Der FontCache wird in TxtInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
+// global variables declared in fntcache.hxx
+// FontCache is created in txtinit.cxx _TextInit and deleted in _TextFinit
 SwFntCache *pFntCache = NULL;
-// Letzter Font, der durch ChgFntCache eingestellt wurde.
+// last Font set by ChgFntCache
 SwFntObj *pLastFont = NULL;
-// Die "MagicNumber", die den Fonts zur Identifizierung verpasst wird
+// "MagicNumber" used to identify Fonts
 sal_uInt8* pMagicNo = NULL;
 
 Color *pWaveCol = 0;
@@ -285,9 +285,8 @@ void lcl_calcLinePos( const CalcLinePosData &rData,
  *
  *  sal_uInt16 SwFntObj::GetFontAscent( const OutputDevice& rOut )
  *
- *  Beschreibung: liefern den Ascent des Fonts auf dem
- *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
- *  erzeugt werden.
+ * Returns the Ascent of the Font on the given output device;
+ * it may be necessary to create the screen font first.
  *************************************************************************/
 
 sal_uInt16 SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
@@ -303,7 +302,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rO
     }
     else
     {
-        if ( nPrtAscent == USHRT_MAX ) // DruckerAscent noch nicht bekannt?
+        if (nPrtAscent == USHRT_MAX) // printer ascent unknown?
         {
             CreatePrtFont( rOut );
             const Font aOldFnt( rRefDev.GetFont() );
@@ -329,9 +328,8 @@ sal_uInt16 SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rO
  *
  *  sal_uInt16 SwFntObj::GetFontHeight( const OutputDevice* pOut )
  *
- *  Beschreibung: liefern die H?he des Fonts auf dem
- *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
- *  erzeugt werden.
+ * Returns the height of the Font on the given output device;
+ * it may be necessary to create the screen font first.
  *************************************************************************/
 
 sal_uInt16 SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
@@ -347,7 +345,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rO
     }
     else
     {
-        if ( nPrtHeight == USHRT_MAX ) // PrinterHeight noch nicht bekannt?
+        if (nPrtHeight == USHRT_MAX) // printer height unknown?
         {
             CreatePrtFont( rOut );
             const Font aOldFnt( rRefDev.GetFont() );
@@ -483,12 +481,11 @@ void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
         pScrFont = pPrtFont;
     }
 
-    // Zoomfaktor ueberpruefen, z.B. wg. PrtOle2 beim Speichern
+    // check zoom factor, e.g. because of PrtOle2 during export
     {
-        // Sollte der Zoomfaktor des OutputDevices nicht mit dem der View-
-        // Options uebereinstimmen, so darf dieser Font nicht gecacht
-        // werden, deshalb wird der Zoomfaktor auf einen "ungueltigen" Wert
-        // gesetzt.
+        // In case the zoom factor of the output device differs from the
+        // one in the ViewOptions, this Font must not be cached,
+        // hence set zoom factor to an invalid value
         long nTmp;
         if( pOut->GetMapMode().GetScaleX().IsValid() &&
             pOut->GetMapMode().GetScaleY().IsValid() &&
@@ -541,10 +538,9 @@ void SwFntObj::GuessLeading( const ViewShell&
         const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
         if( pPrtFont->GetName().Search( aWinMet.GetName() ) < USHRT_MAX )
         {
-            // Wenn das Leading auf dem Window auch 0 ist, dann
-            // muss es auch so bleiben (vgl. StarMath!).
+            // If the Leading on the Window is also 0, then it has to stay
+            // that way (see also StarMath).
             long nTmpLeading = (long)aWinMet.GetIntLeading();
-             // einen Versuch haben wir noch wg. 31003:
             if( nTmpLeading <= 0 )
             {
                 pWin->SetFont( rMet );
@@ -561,6 +557,10 @@ void SwFntObj::GuessLeading( const ViewShell&
                 // Wer beim Leading luegt, luegt moeglicherweise auch beim
                 // Ascent/Descent, deshalb wird hier ggf. der Font ein wenig
                 // tiefergelegt, ohne dabei seine Hoehe zu aendern.
+                // (above original comment preserved for cultural reasons)
+                // Those who lie about their Leading, may lie about their
+                // Ascent/Descent as well, hence the Font will be lowered a
+                // litte without changing its height.
                 long nDiff = Min( rMet.GetDescent() - aWinMet.GetDescent(),
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
@@ -573,8 +573,8 @@ void SwFntObj::GuessLeading( const ViewShell&
         }
         else
         {
-            // Wenn alle Stricke reissen, nehmen wir 15% der
-            // Hoehe, ein von CL empirisch ermittelter Wert.
+            // If all else fails, take 15% of the height, as emprically
+            // determined by CL
             nGuessedLeading = (nWinHeight * 15) / 100;
         }
         pWin->SetFont( aOldFnt );
@@ -589,8 +589,8 @@ void SwFntObj::GuessLeading( const ViewShell&
  *
  *  void SwFntObj::SetDeviceFont( const OutputDevice *pOut ),
  *
- *  Beschreibung: stellt den Font am gewuenschten OutputDevice ein,
- *  am Bildschirm muss eventuell erst den Abgleich durchgefuehrt werden.
+ * Set the font at the given output device; for screens it may be
+ * necessary to do some adjustment first.
  *
  *************************************************************************/
 
@@ -626,10 +626,10 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
  *
  * void SwFntObj::DrawText( ... )
  *
- *  Beschreibung: Textausgabe
- *                  auf dem Bildschirm          => DrawTextArray
- *                  auf dem Drucker, !Kerning   => DrawText
- *                  auf dem Drucker + Kerning   => DrawStretchText
+ * Output text:
+ *      on screen              => DrawTextArray
+ *      on printer, !Kerning   => DrawText
+ *      on printer + Kerning   => DrawStretchText
  *
  *************************************************************************/
 
@@ -912,9 +912,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( ! pTmpFont )
         pTmpFont = pPrtFont;
 
-    // HACK: UNDERLINE_WAVE darf nicht mehr missbraucht werden, daher
-    // wird die graue Wellenlinie des ExtendedAttributSets zunaechst
-    // in der Fontfarbe erscheinen.
+    // HACK: UNDERLINE_WAVE must not be abused any more, hence the grey wave
+    // line of the ExtendedAttributeSets will appear in the font color first
 
     const sal_Bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
     const sal_Bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
@@ -1334,13 +1333,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pKernArray[i] += nKernSum;
                 }
 
-                // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
-                // einer Textausgabe besondere Massnahmen:
+                // In case of underlined/strike-through justified text
+                // a blank at the end requires special handling:
                 if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
                     rInf.GetText().GetChar( rInf.GetIdx()+rInf.GetLen()-1 ) ) )
                 {
-                    // Wenn es sich um ein singulaeres, unterstrichenes Space
-                    // handelt, muessen wir zwei ausgeben:
+                    // If it is a single underlined space, output 2 spaces:
                     if( 1 == rInf.GetLen() )
                     {
                            pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
@@ -1563,8 +1561,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         long nKernSum = rInf.GetKern();
         xub_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
 
-        // Wenn es sich um ein singulaeres, unterstrichenes Space
-        // im Blocksatz handelt, muessen wir zwei ausgeben:
+        // In case of a single underlined space in justified text,
+        // have to output 2 spaces:
         if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
         {
             pKernArray[0] = rInf.GetWidth() +
@@ -1587,7 +1585,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             xub_Unicode nCh;
 
-            // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
+            // In case of Pair Kerning the printer influence on the positioning
+            // grows
             sal_uInt16 nMul = 3;
 
             if ( pPrtFont->GetKerning() )
@@ -1595,15 +1594,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             const sal_uInt16 nDiv = nMul+1;
 
-            // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
-            // Zwischenraum aufsummiert.
-            // Die Spaces selbst werden im Normalfall in der Mitte des
-            // Zwischenraums positioniert, deshalb die nSpace/2-Mimik.
-            // Bei wortweiser Unterstreichung muessen sie am Anfang des
-            // Zwischenraums stehen, damit dieser nicht unterstrichen wird.
-            // Ein Space am Anfang oder am Ende des Textes muss allerdings
-            // vor bzw. hinter den kompletten Zwischenraum gesetzt werden,
-            // sonst wuerde das Durch-/Unterstreichen Luecken aufweisen.
+            // nSpaceSum contains the sum of the intermediate space distributed
+            // among Spaces by the Justification.
+            // The Spaces themselves will be positioned in the middle of the
+            // intermediate space, hence the nSpace/2.
+            // In case of word-by-word underlining they have to be positioned
+            // at the beginning of the intermediate space, so that the space
+            // is not underlined.
+            // A Space at the beginning or end of the text must be positioned
+            // before (resp. after) the whole intermediate space, otherwise
+            // the underline/strike-through would have gaps.
             long nSpaceSum = 0;
             // in word line mode and for Arabic, we disable the half space trick:
             const long nHalfSpace = pPrtFont->IsWordLineMode() || bNoHalfSpace ? 0 : nSpaceAdd / 2;
@@ -1618,10 +1618,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 long nScr;
                 nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
 
-                // Wenn vor uns ein (Ex-)SPACE ist, positionieren wir uns optimal,
-                // d.h. unseren rechten Rand auf die 100% Druckerposition,
-                // sind wir sogar selbst ein Ex-SPACE, so positionieren wir uns
-                // linksbuendig zur Druckerposition.
+                // If there is an (ex-)Space before us, position optimally,
+                // i.e., our right margin to the 100% printer position;
+                // if we _are_ an ex-Space, position us left-aligned to the
+                // printer position.
                 if ( nCh == CH_BLANK )
                 {
                     nScrPos = pKernArray[i-1] + nScr;
@@ -1638,8 +1638,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( cChPrev == CH_BLANK )
                     {
                         nScrPos = pKernArray[i-1] + nScr;
-
-                        // kein Pixel geht verloren:
+                        // no Pixel is lost:
                         nSpaceSum += nOtherHalf;
                     }
                     else if ( cChPrev == '-' )
@@ -1786,7 +1785,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 }
 
 
-// Optimierung war fuer DrawText() ausgeschaltet
+// optimization disabled for DrawText()
 #ifdef _MSC_VER
 #pragma optimize("",on)
 #endif
@@ -1797,7 +1796,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
  *  Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
  *           const sal_uInt16 nIdx, const sal_uInt16 nLen, const short nKern = 0 );
  *
- *  Beschreibung: ermittelt die TextSize (des Druckers)
+ *  determine the TextSize (of the printer)
  *
  *************************************************************************/
 
@@ -1942,7 +1941,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             xub_Unicode nCh;
 
-            // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
+            // In case of Pair Kerning the printer influence on the positioning
+            // grows
             sal_uInt16 nMul = 3;
             if ( pPrtFont->GetKerning() )
                 nMul = 1;
@@ -2229,20 +2229,19 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )
 {
-    // Der benutzte CTor von SwCacheAccess sucht anhand rMagic+rIndex im Cache
+    // the used ctor of SwCacheAccess searches for rMagic+rIndex in the cache
     if ( IsAvail() )
     {
-        // Der schnellste Fall: ein bekannter Font ( rMagic ),
-        // bei dem Drucker und Zoom nicht ueberprueft werden brauchen.
+        // fast case: known Font (rMagic), no need to check printer and zoom
         if ( !bCheck )
             return;
 
-        // Hier ist zwar der Font bekannt, muss aber noch ueberprueft werden.
-
+        // Font is known, but has to be checked
     }
     else
-        // Hier ist der Font nicht bekannt, muss also gesucht werden.
+    {   // Font not known, must be searched
         bCheck = sal_False;
+    }
 
 
     {
@@ -2264,9 +2263,11 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                  ( pFntObj->pPrinter == pOut ) &&
                    pFntObj->GetPropWidth() ==
                         ((SwSubFont*)pOwn)->GetPropWidth() )
-                return; // Die Ueberpruefung ergab: Drucker+Zoom okay.
-            pFntObj->Unlock( ); // Vergiss dies Objekt, es wurde leider
-            pObj = NULL;        // eine Drucker/Zoomaenderung festgestellt.
+            {
+                return; // result of Check: Drucker+Zoom okay.
+            }
+            pFntObj->Unlock(); // forget this object, printer/zoom differs
+            pObj = NULL;
         }
 
         // Search by font comparison, quite expensive!
@@ -2281,8 +2282,8 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 
         if( pFntObj && pFntObj->pPrinter != pOut )
         {
-            // Wir haben zwar einen ohne Drucker gefunden, mal sehen, ob es
-            // auch noch einen mit identischem Drucker gibt.
+            // found one without printer, let's see if there is one with
+            // the same printer as well
             SwFntObj *pTmpObj = pFntObj;
             while( pTmpObj && !( pTmpObj->aFont == *(Font *)pOwn &&
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
@@ -2295,16 +2296,16 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 
         if ( !pFntObj ) // Font has not been found, create one
         {
-            // Das Objekt muss neu angelegt werden, deshalb muss der Owner ein
-            // SwFont sein, spaeter wird als Owner die "MagicNumber" gehalten.
+            // Have to create new Object, hence Owner must be a SwFont, later
+            // the Owner will be the "MagicNumber"
             SwCacheAccess::pOwner = pOwn;
-            pFntObj = Get(); // hier wird via NewObj() angelegt und gelockt.
+            pFntObj = Get(); // will create via NewObj() and lock
             OSL_ENSURE(pFntObj, "No Font, no Fun.");
         }
         else  // Font has been found, so we lock it.
         {
             pFntObj->Lock();
-            if( pFntObj->pPrinter != pOut ) // Falls bis dato kein Drucker bekannt
+            if (pFntObj->pPrinter != pOut) // if no printer is known by now
             {
                 OSL_ENSURE( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
                 pFntObj->CreatePrtFont( *pOut );
@@ -2318,9 +2319,9 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             pObj = pFntObj;
         }
 
-        // egal, ob neu oder gefunden, ab jetzt ist der Owner vom Objekt eine
-        // MagicNumber und wird auch dem aufrufenden SwFont bekanntgegeben,
-        // ebenso der Index fuer spaetere direkte Zugriffe
+        // no matter if new or found, now the Owner of the Object is a
+        // MagicNumber, and will be given to the SwFont, as well as the Index
+        // for later direct access
         rMagic = pFntObj->GetOwner();
         SwCacheAccess::pOwner = rMagic;
         rIndex = pFntObj->GetCachePos();
@@ -2329,7 +2330,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 
 SwCacheObj *SwFntAccess::NewObj( )
 {
-    // Ein neuer Font, eine neue "MagicNumber".
+    // a new Font, a new "MagicNumber".
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
 }
 
