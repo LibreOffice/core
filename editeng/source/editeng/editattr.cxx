@@ -58,28 +58,21 @@
 DBG_NAME( EE_EditAttrib )
 
 // -------------------------------------------------------------------------
-// class EditAttrib
-// -------------------------------------------------------------------------
-EditAttrib::EditAttrib( const SfxPoolItem& rAttr )
-{
-    DBG_CTOR( EE_EditAttrib, 0 );
-    pItem = &rAttr;
-}
-
-EditAttrib::~EditAttrib()
-{
-    DBG_DTOR( EE_EditAttrib, 0 );
-}
-
-// -------------------------------------------------------------------------
 // class EditCharAttrib
 // -------------------------------------------------------------------------
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE ) :
-    EditAttrib(rAttr),
     nStart(nS), nEnd(nE), bFeature(false), bEdge(false)
 {
+    DBG_CTOR( EE_EditAttrib, 0 );
+    pItem = &rAttr;
+
     DBG_ASSERT( ( rAttr.Which() >= EE_ITEMS_START ) && ( rAttr.Which() <= EE_ITEMS_END ), "EditCharAttrib CTOR: Invalid id!" );
     DBG_ASSERT( ( rAttr.Which() < EE_FEATURE_START ) || ( rAttr.Which() > EE_FEATURE_END ) || ( nE == (nS+1) ), "EditCharAttrib CTOR: Invalid feature!" );
+}
+
+EditCharAttrib::~EditCharAttrib()
+{
+    DBG_DTOR( EE_EditAttrib, 0 );
 }
 
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )

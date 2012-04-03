@@ -66,35 +66,14 @@ class SfxVoidItem;
 #define DEF_METRIC  0
 
 // -------------------------------------------------------------------------
-// class EditAttrib
-// -------------------------------------------------------------------------
-class EditAttrib : private boost::noncopyable
-{
-private:
-    EditAttrib();
-
-protected:
-    const SfxPoolItem*  pItem;
-
-    EditAttrib( const SfxPoolItem& rAttr );
-    virtual ~EditAttrib();
-
-public:
-    // RemoveFromPool must always be called before the destructor!!
-    void                RemoveFromPool( SfxItemPool& rPool );
-
-    sal_uInt16              Which() const   { return pItem->Which(); }
-    const SfxPoolItem*  GetItem() const { return pItem; }
-};
-
-// -------------------------------------------------------------------------
 // class EditCharAttrib
 // -------------------------------------------------------------------------
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
-class EditCharAttrib : public EditAttrib
+class EditCharAttrib : private boost::noncopyable
 {
 protected:
+    const SfxPoolItem*  pItem;
 
     sal_uInt16              nStart;
     sal_uInt16              nEnd;
@@ -103,6 +82,10 @@ protected:
 
 public:
     EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    virtual ~EditCharAttrib();
+
+    sal_uInt16          Which() const   { return pItem->Which(); }
+    const SfxPoolItem*  GetItem() const { return pItem; }
 
     sal_uInt16&         GetStart()                  { return nStart; }
     sal_uInt16&         GetEnd()                    { return nEnd; }
