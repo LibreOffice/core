@@ -1,16 +1,23 @@
-dnl /******************************************************************
-dnl *     vi:set sw=3 ts=3 et:
-dnl *
-dnl * Name: configure.in
-dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl *
-dnl * Desc: This file serves as input for the GNU autoconf package
-dnl *       in order to create a configure script.
-dnl *       In this stage configure just checks the pre-requisites
-dnl *       necessary to build Apache OpenOffice
-dnl *
-dnl *
-dnl ******************************************************************/
+dnl * *************************************************************
+dnl *  
+dnl *  Licensed to the Apache Software Foundation (ASF) under one
+dnl *  or more contributor license agreements.  See the NOTICE file
+dnl *  distributed with this work for additional information
+dnl *  regarding copyright ownership.  The ASF licenses this file
+dnl *  to you under the Apache License, Version 2.0 (the
+dnl *  "License"); you may not use this file except in compliance
+dnl *  with the License.  You may obtain a copy of the License at
+dnl *  
+dnl *    http://www.apache.org/licenses/LICENSE-2.0
+dnl *  
+dnl *  Unless required by applicable law or agreed to in writing,
+dnl *  software distributed under the License is distributed on an
+dnl *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+dnl *  KIND, either express or implied.  See the License for the
+dnl *  specific language governing permissions and limitations
+dnl *  under the License.
+dnl *  
+dnl * *************************************************************
 AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
 AC_INIT()
