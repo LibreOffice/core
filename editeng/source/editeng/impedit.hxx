@@ -35,6 +35,8 @@
 #include <editstt2.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/svxacorr.hxx>
+#include <editeng/SpellPortions.hxx>
+#include <editeng/eedata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
@@ -56,6 +58,8 @@
 
 #include <i18npool/lang.h>
 #include <rtl/ref.hxx>
+
+#include <boost/noncopyable.hpp>
 
 DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
@@ -89,11 +93,6 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
 class Window;
-
-#include <editeng/SpellPortions.hxx>
-
-#include <editeng/eedata.hxx>
-
 class SvxNumberFormat;
 
 
@@ -381,7 +380,7 @@ public:
 typedef EditView* EditViewPtr;
 SV_DECL_PTRARR( EditViews, EditViewPtr, 0 )
 
-class ImpEditEngine : public SfxListener
+class ImpEditEngine : public SfxListener, boost::noncopyable
 {
     // The Undos have to manipulate directly ( private-Methods ),
     // do that no new Undo is inserted!
@@ -688,6 +687,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
     SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
+
+    ImpEditEngine(); // disabled
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
