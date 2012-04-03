@@ -671,7 +671,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                     }
                     i = nIndex;
 		    aClip.Intersect(aRegion);
-                    if( nAttr )
+                    if( !aClip.IsEmpty() && nAttr )
                     {
                         Font aFont = GetFont();
                         if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
