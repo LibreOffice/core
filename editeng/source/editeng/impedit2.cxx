@@ -94,7 +94,22 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aEditDoc( pItemPool ),
     aWordDelimiters( RTL_CONSTASCII_USTRINGPARAM( "  .,;:-'`'?!_=\"{}()[]\0xFF" ) ),
-    aGroupChars( RTL_CONSTASCII_USTRINGPARAM( "{}()[]" ) )
+    aGroupChars( RTL_CONSTASCII_USTRINGPARAM( "{}()[]" ) ),
+    bKernAsianPunctuation(false),
+    bAddExtLeading(false),
+    bIsFormatting(false),
+    bFormatted(false),
+    bIsInUndo(false),
+    bUpdate(true),
+    bUndoEnabled(true),
+    bOwnerOfRefDev(false),
+    bDowning(false),
+    bUseAutoColor(true),
+    bForceAutoColor(false),
+    bCallParaInsertedOrDeleted(false),
+    bImpConvertFirstCall(false),
+    bFirstWordCapitalization(true),
+    mbLastTryMerge(false)
 {
     pEditEngine         = pEE;
     pRefDev             = NULL;
@@ -120,26 +135,10 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     nStretchX           = 100;
     nStretchY           = 100;
 
-    bInSelection        = false;
-    bOwnerOfRefDev      = false;
-    bDowning            = false;
-    bIsInUndo           = false;
-    bIsFormatting       = false;
-    bFormatted          = false;
-    bUpdate             = true;
-    bUseAutoColor       = true;
-    bForceAutoColor     = false;
-    bAddExtLeading      = false;
-    bUndoEnabled        = true;
-    bCallParaInsertedOrDeleted = false;
-    bImpConvertFirstCall= false;
-    bFirstWordCapitalization    = true;
-
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
 
     nAsianCompressionMode = text::CharacterCompressionType::NONE;
-    bKernAsianPunctuation = false;
 
     eDefaultHorizontalTextDirection = EE_HTEXTDIR_DEFAULT;
 
@@ -169,8 +168,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted = true;
 
     aEditDoc.SetModifyHdl( LINK( this, ImpEditEngine, DocModified ) );
-
-    mbLastTryMerge = false;
 }
 
 ImpEditEngine::~ImpEditEngine()

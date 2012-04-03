@@ -473,23 +473,6 @@ private:
     OnDemandLocaleDataWrapper       xLocaleDataWrapper;
     OnDemandTransliterationWrapper  xTransliterationWrapper;
 
-    bool            bKernAsianPunctuation:1;
-    bool            bAddExtLeading:1;
-    bool            bIsFormatting:1;
-    bool            bFormatted:1;
-    bool            bInSelection:1;
-    bool            bIsInUndo:1;
-    bool            bUpdate:1;
-    bool            bUndoEnabled:1;
-    bool            bOwnerOfRefDev:1;
-    bool            bDowning:1;
-    bool            bUseAutoColor:1;
-    bool            bForceAutoColor:1;
-    bool            bCallParaInsertedOrDeleted:1;
-    bool            bImpConvertFirstCall:1;   // specifies if ImpConvert is called the very first time after Convert was called
-    bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
-    bool            mbLastTryMerge:1;
-
     // For Formatting / Update ....
     boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
     Rectangle           aInvalidRec;
@@ -517,6 +500,22 @@ private:
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
+    bool            bKernAsianPunctuation:1;
+    bool            bAddExtLeading:1;
+    bool            bIsFormatting:1;
+    bool            bFormatted:1;
+    bool            bInSelection:1;
+    bool            bIsInUndo:1;
+    bool            bUpdate:1;
+    bool            bUndoEnabled:1;
+    bool            bOwnerOfRefDev:1;
+    bool            bDowning:1;
+    bool            bUseAutoColor:1;
+    bool            bForceAutoColor:1;
+    bool            bCallParaInsertedOrDeleted:1;
+    bool            bImpConvertFirstCall:1;   // specifies if ImpConvert is called the very first time after Convert was called
+    bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
+    bool            mbLastTryMerge:1;
 
     // ================================================================
     // Methods...
