@@ -397,8 +397,6 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return pNew;
 }
 
-SV_IMPL_VARARR( CharPosArray, sal_Int32 );
-
 TextPortionList::TextPortionList()
 {
 }
@@ -917,13 +915,20 @@ EditLine::~EditLine()
     DBG_DTOR( EE_EditLine, 0 );
 }
 
+EditLine::CharPosArrayType& EditLine::GetCharPosArray()
+{
+    return aPositions;
+}
+
+const EditLine::CharPosArrayType& EditLine::GetCharPosArray() const
+{
+    return aPositions;
+}
+
 EditLine* EditLine::Clone() const
 {
     EditLine* pL = new EditLine;
-    if ( aPositions.Count() )
-    {
-        pL->aPositions.Insert (aPositions.GetData(), aPositions.Count(), 0);
-    }
+    pL->aPositions = aPositions;
     pL->nStartPosX      = nStartPosX;
     pL->nStart          = nStart;
     pL->nEnd            = nEnd;

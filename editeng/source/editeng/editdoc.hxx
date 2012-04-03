@@ -444,15 +444,16 @@ public:
 
 class ParaPortion;
 
-SV_DECL_VARARR( CharPosArray, sal_Int32, 0 )
-
 // ------------------------------------------------------------------------
 // class EditLine
 // -------------------------------------------------------------------------
 class EditLine
 {
+public:
+    typedef std::vector<sal_Int32> CharPosArrayType;
+
 private:
-    CharPosArray    aPositions;
+    CharPosArrayType aPositions;
     long            nTxtWidth;
     sal_uInt16          nStartPosX;
     sal_uInt16          nStart;     // could be replaced by nStartPortion
@@ -525,7 +526,8 @@ public:
 
     sal_Bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
 
-    CharPosArray&   GetCharPosArray()               { return aPositions; }
+    CharPosArrayType& GetCharPosArray();
+    const CharPosArrayType& GetCharPosArray() const;
 
     EditLine*       Clone() const;
 

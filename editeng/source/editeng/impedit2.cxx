@@ -3765,11 +3765,11 @@ sal_uInt16 ImpEditEngine::GetChar(
                 // Search in Array...
                 for ( sal_uInt16 x = 0; x < nMax; x++ )
                 {
-                    long nTmpPosMax = pLine->GetCharPosArray().GetObject( nTmpCurIndex+x );
+                    long nTmpPosMax = pLine->GetCharPosArray()[nTmpCurIndex+x];
                     if ( nTmpPosMax > nXInPortion )
                     {
                         // Check whether this or the previous...
-                        long nTmpPosMin = x ? pLine->GetCharPosArray().GetObject( nTmpCurIndex+x-1 ) : 0;
+                        long nTmpPosMin = x ? pLine->GetCharPosArray()[nTmpCurIndex+x-1] : 0;
                         long nDiffLeft = nXInPortion - nTmpPosMin;
                         long nDiffRight = nTmpPosMax - nXInPortion;
                         OSL_ENSURE( nDiffLeft >= 0, "DiffLeft negative" );
@@ -3780,8 +3780,8 @@ sal_uInt16 ImpEditEngine::GetChar(
                         // Skip all 0-positions, cheaper than using XBreakIterator:
                         if ( nOffset < nMax )
                         {
-                            const long nX = pLine->GetCharPosArray().GetObject(nOffset);
-                            while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray().GetObject(nOffset+1) == nX ) )
+                            const long nX = pLine->GetCharPosArray()[nOffset];
+                            while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray()[nOffset+1] == nX ) )
                                 nOffset++;
                         }
                         break;
@@ -3966,7 +3966,7 @@ long ImpEditEngine::GetXPos(
     // But the array migh not be init yet, if using text ranger this method is called within CreateLines()...
     long nPortionTextWidth = pPortion->GetSize().Width();
     if ( ( pPortion->GetKind() == PORTIONKIND_TEXT ) && pPortion->GetLen() && !GetTextRanger() )
-        nPortionTextWidth = pLine->GetCharPosArray().GetObject( nTextPortionStart + pPortion->GetLen() - 1 - pLine->GetStart() );
+        nPortionTextWidth = pLine->GetCharPosArray()[nTextPortionStart + pPortion->GetLen() - 1 - pLine->GetStart()];
 
     if ( nTextPortionStart != nIndex )
     {
@@ -4000,19 +4000,19 @@ long ImpEditEngine::GetXPos(
         else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
         {
             OSL_ENSURE( nIndex != pLine->GetStart(), "Strange behavior in new GetXPos()" );
-            OSL_ENSURE( pLine && pLine->GetCharPosArray().Count(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
+            OSL_ENSURE( pLine && pLine->GetCharPosArray().size(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
 
-            if( pLine->GetCharPosArray().Count() )
+            if( pLine->GetCharPosArray().size() )
             {
                 sal_uInt16 nPos = nIndex - 1 - pLine->GetStart();
-                if( nPos >= pLine->GetCharPosArray().Count() )
+                if( nPos >= pLine->GetCharPosArray().size() )
                 {
-                    nPos = pLine->GetCharPosArray().Count()-1;
+                    nPos = pLine->GetCharPosArray().size()-1;
                     OSL_FAIL("svx::ImpEditEngine::GetXPos(), index out of range!");
                 }
 
                 // old code restored see #i112788 (which leaves #i74188 unfixed again)
-                long nPosInPortion = pLine->GetCharPosArray().GetObject( nPos );
+                long nPosInPortion = pLine->GetCharPosArray()[nPos];
 
                 if ( !pPortion->IsRightToLeft() )
                 {
@@ -4032,7 +4032,7 @@ long ImpEditEngine::GetXPos(
                         if ( nType == CHAR_PUNCTUATIONRIGHT )
                         {
                             sal_uInt16 n = nIndex - nTextPortionStart;
-                            const sal_Int32* pDXArray = pLine->GetCharPosArray().GetData()+( nTextPortionStart-pLine->GetStart() );
+                            const sal_Int32* pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
                             sal_Int32 nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < pPortion->GetLen() )
