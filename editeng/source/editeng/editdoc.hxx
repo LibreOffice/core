@@ -464,8 +464,8 @@ private:
     sal_uInt16          nTxtHeight; // Pure Text height
     sal_uInt16          nCrsrHeight;    // For contour flow high lines => cursor is large.
     sal_uInt16          nMaxAscent;
-    sal_Bool            bHangingPunctuation;
-    sal_Bool            bInvalid;   // for skillful formatting
+    bool            bHangingPunctuation:1;
+    bool            bInvalid:1;   // for skillful formatting
 
 public:
                     EditLine();
@@ -509,8 +509,8 @@ public:
     void            SetMaxAscent( sal_uInt16 n )        { nMaxAscent = n; }
     sal_uInt16          GetMaxAscent() const            { return nMaxAscent; }
 
-    void            SetHangingPunctuation( sal_Bool b )     { bHangingPunctuation = b; }
-    sal_Bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
+    void            SetHangingPunctuation( bool b )     { bHangingPunctuation = b; }
+    bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
     sal_uInt16          GetLen() const                  { return nEnd - nStart; }
 
@@ -519,10 +519,10 @@ public:
 
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
-    sal_Bool            IsInvalid() const               { return bInvalid; }
-    sal_Bool            IsValid() const                 { return !bInvalid; }
-    void            SetInvalid()                    { bInvalid = sal_True; }
-    void            SetValid()                      { bInvalid = sal_False; }
+    bool            IsInvalid() const               { return bInvalid; }
+    bool            IsValid() const                 { return !bInvalid; }
+    void            SetInvalid()                    { bInvalid = true; }
+    void            SetValid()                      { bInvalid = false; }
 
     sal_Bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
 

@@ -873,7 +873,9 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
     }
 }
 
-EditLine::EditLine()
+EditLine::EditLine() :
+    bHangingPunctuation(false),
+    bInvalid(true)
 {
     DBG_CTOR( EE_EditLine, 0 );
 
@@ -887,11 +889,11 @@ EditLine::EditLine()
     nTxtWidth = 0;
     nCrsrHeight = 0;
     nMaxAscent = 0;
-    bHangingPunctuation = sal_False;
-    bInvalid = sal_True;
 }
 
-EditLine::EditLine( const EditLine& r )
+EditLine::EditLine( const EditLine& r ) :
+    bHangingPunctuation(r.bHangingPunctuation),
+    bInvalid(true)
 {
     DBG_CTOR( EE_EditLine, 0 );
 
@@ -899,7 +901,6 @@ EditLine::EditLine( const EditLine& r )
     nStart = r.nStart;
     nStartPortion = r.nStartPortion;
     nEndPortion = r.nEndPortion;
-    bHangingPunctuation = r.bHangingPunctuation;
 
     nHeight = 0;
     nStartPosX = 0;
@@ -907,7 +908,6 @@ EditLine::EditLine( const EditLine& r )
     nTxtWidth = 0;
     nCrsrHeight = 0;
     nMaxAscent = 0;
-    bInvalid = sal_True;
 }
 
 EditLine::~EditLine()
