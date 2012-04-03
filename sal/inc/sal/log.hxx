@@ -197,13 +197,9 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
       SAL_INFO("foo", "string " << s << " of length " << n)
 
-    would be an example of such a call; if the given s is of type rtl::OUString,
+    would be an example of such a call.
 
-      \#include "rtl/oustringostreaminserter.hxx"
-
-    would make sure that an appropriate operator << is available.
-
-    In either case, the composed message should be in UTF-8 and it should
+    In the composed message should be in UTF-8 and it should
     contain no vertical formatting characters and no null characters
 
     For the _IF variants, log output is only generated if the given condition is

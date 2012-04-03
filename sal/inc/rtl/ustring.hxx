@@ -2085,4 +2085,9 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 #endif /* _RTL_USTRING_HXX */
 
+// Include the ostream << operator directly here, so that it's always available
+// for SAL_INFO etc. Make sure it's outside of #ifdef _RTL_USTRING_HXX, because
+// includes ustring.hxx back.
+#include <rtl/oustringostreaminserter.hxx>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

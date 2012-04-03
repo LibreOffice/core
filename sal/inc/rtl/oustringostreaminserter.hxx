@@ -34,14 +34,6 @@
 #include "rtl/textenc.h"
 #include "rtl/ustring.hxx"
 
-/** Include this header to support rtl::OUString in std::ostream (and thus in
-    CPPUNIT_ASSERT macros, for example).
-
-    The rtl::OUString is converted to UTF-8.
-
-    @since LibreOffice 3.5.
-*/
-
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
 // sure the compiler generates a different (if generating also non-inline)
@@ -57,6 +49,14 @@ namespace rtl {
 #undef rtl
 #endif
 
+/**
+    Support for rtl::OUString in std::ostream (and thus in
+    CPPUNIT_ASSERT or SAL_INFO macros, for example).
+
+    The rtl::OUString is converted to UTF-8.
+
+    @since LibreOffice 3.5.
+*/
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
