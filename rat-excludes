@@ -5,6 +5,7 @@
 
 ext_sources/
 
+
 ##############################################################################
 #
 # external libraries that are not part of the source release, but may be built
@@ -16,47 +17,16 @@ ext_sources/
 
 extras/
 
+
 ##############################################################################
 #
 # files in the SGA but with no license yet (in progress)
 #
 
-main/desktop/test/deployment/update/publisher/release-notes_de-DE.html
-main/framework/test/test_documentproperties.bas
-main/i18npool/source/breakiterator/data/edit_word_he.txt
-main/icu/createmak.cfg
-main/moz/patches/index.txt
-main/officecfg/registry/schema/oo-common.conf
-main/qadevOOo/tests/java/mod/_javavm.uno/package.html
-main/sal/qa/helper/gcov/gcov_filter.pl
-main/sd/res/webview/edit.pl
-main/sd/res/webview/index.pl
-main/setup_native/source/packinfo/package_names.txt
-main/setup_native/source/packinfo/package_names_ext.txt
-main/solenv/doc/gbuild/doxygen.cfg
 main/swext/mediawiki/src/filter/odt2mediawiki.xsl
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_BasicOrganizer.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_BeanShell.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_JavaScript.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_Python.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_RunMacro.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_osx_BasicOrganizer.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_osx_BeanShell.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_osx_JavaScript.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_osx_Python.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_osx_RunMacro.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_win_BasicOrganizer.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_win_BeanShell.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_win_JavaScript.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_win_Python.txt
-main/testautomation/framework/required/input/scripts/Oracle-Open-Office_en-US_win_RunMacro.txt
-main/testautomation/graphics/required/input/einfg.ini
 main/testautomation/writer/optional/input/clipboard/dummy.txt
-main/toolkit/doc/layout/ChangeLog.0
-main/toolkit/doc/layout/metricfield.txt
-main/toolkit/src2xml/source/macroparser_test.py
 main/ure/source/THIRDPARTYLICENSEREADME.html
-main/writerfilter/documentation/doxygen/Doxyfile
+
 main/writerperfect/source/filter/DocumentCollector.cxx
 main/writerperfect/source/filter/DocumentCollector.hxx
 main/writerperfect/source/filter/DocumentElement.cxx
@@ -89,6 +59,12 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 #
 # small files with no creative content
 #
+
+main/automation/source/miniapp/test.sid
+main/testautomation/graphics/required/input/einfg.ini
+main/sd/res/webview/edit.pl
+main/sd/res/webview/index.pl
+main/qadevOOo/tests/java/mod/_javavm.uno/package.html
 main/sal/qa/rtl/random/makefile.add
 main/testautomation/writer/optional/input/export/filter/act_1.all
 main/icc/source/create_sRGB_profile/Makefile.am
@@ -103,24 +79,58 @@ main/chart2/qa/data.chd
 main/extras/unx/source/fonts/fonts.dir
 main/extras/unx/source/kde/applnk/.directory
 main/sfx2/qa/complex/sfx2/testdocuments/empty.rdf
+main/crashrep/source/win32/ctrylnglist.txt
+main/crashrep/source/win32/rcfooter.txt
+main/dbaccess/uiconfig/dbbrowser/menubar/preserve.txt
+main/desktop/win32/source/rebase/rcfooter.txt
+main/desktop/win32/source/rebase/rctmpl.txt
+main/desktop/win32/source/setup/rcfooter.txt
+main/helpcontent2/helpers/unocmds.txt
+main/officecfg/util/delcomment.sed
+main/sd/util/sdfilt.map
+main/sdext/source/minimizer/help/component.txt
+main/sdext/source/pdfimport/help/component.txt
+main/sdext/source/presenter/help/component.txt
+main/setup_native/source/packinfo/package.txt
+main/setup_native/source/packinfo/shellscripts.txt
+main/setup_native/source/packinfo/shellscripts_root.txt
+main/shell/source/unix/exec/urltest.txt
+main/shell/source/win32/shlxthandler/res/ctrylnglist.txt
+main/shell/source/win32/shlxthandler/res/rcfooter.txt
+main/shell/source/win32/shlxthandler/res/rcheader.txt
+main/solenv/bin/chrel.sed
+main/sysui/desktop/share/add_specfile_triggers.sed
+main/testautomation/dbaccess/optional/input/text_datasource/TT_Query1.txt
+main/testautomation/dbaccess/optional/input/text_datasource/text_database.txt
+main/testautomation/extensions/optional/input/files.txt
+main/testautomation/framework/optional/input/extras_formats/Tables_calc_en-US.txt
+main/testautomation/framework/optional/input/extras_formats/Tables_writer_en-US.txt
+main/testautomation/framework/optional/input/options/paths_1.txt
+main/testautomation/global/input/filters/graphic_filters.txt
+main/desktop/test/deployment/update/publisher/release-notes_de-DE.html
+
 
 ##############################################################################
 #
 # Single files to exclude
 #
 
-# license files themselves
+# own license files
 main/LICENSE_category_b
 main/NOTICE_category_b
 main/LICENSE_aggregated
 main/NOTICE_aggregated
+
+# part of SGA
+# Contains a list of labels used for printing; no header possible
+main/testautomation/framework/optional/input/extras_formats/Labels_en-US.txt
 
 # Used in writerfilter/source/doctok/xmigen.el (1), part of the SGA
 # XEmacs List (config file), comments possible (using ';' at each line start), ALv2 could be added
 main/writerfilter/source/doctok/xmigen.el
 
 # Used in main/extras/source/misc_config/autotbl.fmt (1), part of SGA
-# Excel format file
+# Excel format file, binary
 main/extras/source/misc_config/autotbl.fmt
 
 # Used in main/migrationanalysis/src/wizard/Wizard.FRX (1), part of SGA
@@ -182,7 +192,6 @@ main/ure/source/uretest/Makefile.pln
 # used in main/testautomation/writer/optional/input/import/pocketword.psw (1), part of SGA
 # PocketWord document, used for testing
 main/testautomation/writer/optional/input/import/pocketword.psw
-
 
 # used in main/testautomation/writer/optional/input/import/amipro3.sam (1), part of SGA
 # sinlge Ami Pro 3.0 test file for automated testing
@@ -297,23 +306,90 @@ main/odk/examples/OLE/delphi/InsertTables/Project1.dpr
 # symbnol export filter files (20), no creative content
 **/*.flt
 
+#  (>50), part of SGA
+# Install Definition Tables, ascii, not sure about comment support
+#**/*.idt
+main/instsetoo_native/inc_ooolangpack/windows/msi_templates/*.idt
+main/instsetoo_native/inc_openoffice/windows/msi_templates/*.idt
+main/instsetoo_native/inc_sdkoo/windows/msi_templates/*.idt
+main/instsetoo_native/inc_ure/windows/msi_templates/*.idt
+
+# mostly build.lst and d.lst (two hid.lst, one extensions.lst, one api.lst, one help_hid.lst, one uno_hid.lst, one openoffice.lst,
+# one pack.lst, one ooo.lst, one image-sort.lst, entries in main/splitbuild (can be removed?), entries in main/toolkit/src2xml)
+# All build specific stuff, no creative content
+**/*.lst
+
+# used as MANIFEST.MF (28), part of SGA
+# used with other names (6), but also as definition file
+# no creative content
+**/*.mf
+
+# (3) used as *.patch.mingw, a diff for preparing external stuff for build, all  in SGA
+# no creative content
+**/*.mingw
+
+# all in SGA
+# aqua-specific definitions, no creative content
+main/vcl/aqua/source/res/MainMenu.nib/classes.nib
+main/vcl/aqua/source/res/MainMenu.nib/info.nib
+
+# (12), part of the SGA
+# Windows specific ascii registry files, unknown if header possible, no creative content
+**/*.rgs
+
+# VisualStudio solution (6), part of SGA
+# binary file, no creative content
+**/*.sln
+
+# all in SGA
+# binary data (msdev settings file?), no creative content
+main/scripting/java/org/openoffice/netbeans/modules/office/resources/*.settings
+
+# part of SGA
+# jar manifest templates, no creative content
+main/ure/source/uretest/javaclient.mf.template
+main/ure/source/uretest/javamain.mf.template
+main/ure/source/uretest/javanative.mf.template
+main/ure/source/uretest/javatest.mf.template
+main/ure/source/uretest/runner.mf.template
+main/ure/source/uretest/tester.mf.template
+main/ure/source/uretest/types.mf.template
+
+# part of SGA
+# filetype ascii tables, no copyright, no license, no creative content
+main/testautomation/writer/optional/input/export/filter/*.unx
+
+# (9), part of SGA
+# Menu definitions for automated testing, no creative content
+main/testautomation/framework/optional/input/menu/en-us_basic.txt
+main/testautomation/framework/optional/input/menu/en-us_calc.txt
+main/testautomation/framework/optional/input/menu/en-us_draw.txt
+main/testautomation/framework/optional/input/menu/en-us_htmldokument.txt
+main/testautomation/framework/optional/input/menu/en-us_impress.txt
+main/testautomation/framework/optional/input/menu/en-us_insight.txt
+main/testautomation/framework/optional/input/menu/en-us_masterdoc.txt
+main/testautomation/framework/optional/input/menu/en-us_math.txt
+main/testautomation/framework/optional/input/menu/en-us_writer.txt
+
 ##############################################################################
 #
 # Patterns to exclude
 #
 
+
 # used in main/automation/source/miniapp/test.win (1), part of SGA, ascii config file
-# used in main/testautomation/global/win/* (30), part of SGA, automatoc test config, scripting files
+# used in main/testautomation/global/win/* (30), part of SGA, automatic test config, scripting files
 main/automation/source/miniapp/test.win
 main/testautomation/global/win/*.win
 
-# part of SGA 
+# (7), part of SGA 
 # ascii, ALv2 may be added here
-main/automation/source/miniapp/test.sid
-main/testautomation/global/sid/*.sid
+# Added ALv2 in these files 
+# main/testautomation/global/sid/*.sid
 
 # (158), part of SGA
 # AOO internal uno api definition files, XML, should all contain ALv2
+# All checked, all contain ALv2 header, disabling pattern
 #**/*.component
 
 # (2), part of SGA
@@ -322,7 +398,8 @@ main/testautomation/global/sid/*.sid
 
 # Used in main/scripting/java/build.env, main/xmerge/source/palmtests/qa-wrapper/env/master.env (2), part of the SGA
 # shell script files, comments possible (using '#'), ALv2 could be added
-**/*.env
+# Added ALv2 to both
+# **/*.env
 
 # used in main/migrationanalysis/src/wizard/* (4), part of SGA
 # WordPerfect file (?)
@@ -331,31 +408,15 @@ main/migrationanalysis/src/wizard/SearchDocs.frm
 main/migrationanalysis/src/wizard/Terminate.frm
 main/migrationanalysis/src/wizard/Wizard.frm
 
-#  (>50), part of SGA
-# InterFaceDefinitionTables (?), ascii, not sure about comment support
-**/*.idt
-
-# used in main/sysui/desktop/mimetypes (40), part of SGA
+# used in main/sysui/desktop/mimetypes/* (40), part of SGA
 # ascii, support of comments not clear
-**/*.keys
+#**/*.keys
+main/sysui/desktop/mimetypes/*.keys
 
 # part of SGA
 # ascii, no info about comment support
 main/sal/util/salalloc.list
 main/xmerge/source/palmtests/qa-wrapper/lists/master.list
-
-# used in main/libtextcat/data/new_fingerprints/lm (74), not in SGA
-# some language mapping files, created using libtextcat
-**/*.lm
-
-# uswed in main/sc/source/ui/vba/testvba/TestDocuments/* (112), part of SGA
-# result of test runs, could be removed (?)
-**/*.log
-
-# mostly build.lst and d.lst (two hid.lst, one extensions.lst, one api.lst, one help_hid.lst, one uno_hid.lst, one openoffice.lst,
-# one pack.lst, one ooo.lst, one image-sort.lst, entries in main/splitbuild (can be removed?), entries in main/toolkit/src2xml)
-# All build specific stuff, no creative content
-**/*.lst
 
 # One usage in main/apple_remote (1), files under MIT
 main/apple_remote/AppleRemote.m
@@ -373,21 +434,6 @@ main/connectivity/source/drivers/dbase/dbase.mxp.map
 main/connectivity/source/drivers/flat/flat.mxp.map
 main/connectivity/source/drivers/jdbc/jdbc.mxp.map
 main/connectivity/source/manager/sdbc.mxp.map
-
-# used as MANIFEST.MF (28), part of SGA
-# used with other names (6), but also as definition file
-# no creative content
-**/*.mf
-
-# (3) used as *.patch.mingw, a diff for preparing external stuff for build, all  in SGA
-# no creative content
-**/*.mingw
-
-# all in SGA
-# aqua-specific definitions, no creative content
-main/vcl/aqua/source/res/MainMenu.nib/classes.nib
-main/vcl/aqua/source/res/MainMenu.nib/info.nib
-
 
 # binary presentation template files, part of SGA
 main/extras/source/templates/layout/lang/*.otp
@@ -410,7 +456,7 @@ main/desktop/test/deployment/update/defect/update/fail4.oxt
 main/testautomation/framework/optional/input/security/autotest.p12
 main/xmlsecurity/test_docs/certs/p12/*.p12
 
-# (133) Diverse patches used to allow building extarnal libraries with the contained
+# (133) Diverse patches used to allow building external libraries with the contained
 # needed changes
 **/*.patch
 
@@ -451,12 +497,9 @@ main/testautomation/framework/optional/input/options/*.ref
 # Windows specific registry files, unknown if header possible, no creative content
 main/embedserv/regentries/*.reg
 
-# (12), part of the SGA
-# Windows specific ascii registry files, unknown if header possible, no creative content
-**/*.rgs
-
 # (3), part of the SGA
 # xml schema files, one of three with ALv2 header
+# Now all three with ALv2 header, disabling pattern
 #**/*.rng
 
 # (4), part of SGA
@@ -464,14 +507,6 @@ main/embedserv/regentries/*.reg
 main/testautomation/spreadsheet/optional/input/loadsave/preselected_filter/rtf.rtf
 main/testautomation/spreadsheet/optional/input/loadsave/tableimport/HTML_Doc_Numberformats_in_table.rtf
 main/testautomation/writer/optional/input/import/rtf.rtf
-
-# all in SGA
-# binary data (msdev settings file?)
-main/scripting/java/org/openoffice/netbeans/modules/office/resources/*.settings
-
-# VisualStudio solution (6), part of SGA
-# binary file
-**/*.sln
 
 # (31), part of SGA
 # AOO color palette (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
@@ -495,21 +530,8 @@ main/scripting/java/org/openoffice/netbeans/modules/office/resources/*.settings
 
 # part of SGA
 # used as c++ code snippets, ALv2 could be added (see .head)
-main/oox/source/token/*.tail
-
-# part of SGA
-# jar manifest templates
-main/ure/source/uretest/javaclient.mf.template
-main/ure/source/uretest/javamain.mf.template
-main/ure/source/uretest/javanative.mf.template
-main/ure/source/uretest/javatest.mf.template
-main/ure/source/uretest/runner.mf.template
-main/ure/source/uretest/tester.mf.template
-main/ure/source/uretest/types.mf.template
-
-# part of SGA
-# filetype ascii tables, no copyright, no license
-main/testautomation/writer/optional/input/export/filter/*.unx
+# Added ALv2 to these three, deactivating pattern
+# main/oox/source/token/*.tail
 
 # (5), part of SGA
 # VisualBasic Workspace (?)
@@ -530,10 +552,9 @@ main/redland/redland/redland-1.0.8.patch.win32
 **/*.xlb
 
 # part of SGA
-# UML defnitions for svx, "Poseidon for UML" needed to read these
+# UML defnitions for svx, binary, "Poseidon for UML" needed to read them
 main/svx/doc/UML/edit_engine_UNO_implementation.zuml
 main/svx/doc/UML/grid_control_implementation.zuml
-
 
 
 ##############################################################################
@@ -582,6 +603,7 @@ main/svx/doc/UML/grid_control_implementation.zuml
 
 # AutoCad Drawing (4), used in automated tests, part of SGA
 **/*.dxf
+
 
 ##############################################################################
 #
@@ -687,6 +709,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 # AOO dictionary FileFormat
 **/*.dic
 
+
 ##############################################################################
 #
 # binary packages
@@ -696,6 +719,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 **/*.dbt
 **/*.jar
 **/*.zip
+
 
 ##############################################################################
 #
@@ -709,6 +733,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 **/*.hgtags
 **/*.manifest
 
+
 ##############################################################################
 #
 # binary libraries and executables
@@ -719,6 +744,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 **/*.exe
 **/*.mdb
 
+
 ##############################################################################
 #
 # csv files do not allow for comments, thus do not allow for ALv2 header
@@ -726,6 +752,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 #
 
 **/*.csv
+
 
 ##############################################################################
 #
@@ -1020,11 +1047,28 @@ main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/crlnumber
 main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/serial
 main/xmlsecurity/tools/demo/manifest
 
+# used in main/libtextcat/data/new_fingerprints/lm (74), not in SGA
+# some language mapping files, created using libtextcat
+#**/*.lm
+main/libtextcat/data/new_fingerprints/lm/*.lm
+
+# used in main/sc/source/ui/vba/testvba/TestDocuments/* (112), part of SGA
+# result of test runs, could be removed (?)
+#**/*.log
+main/sc/source/ui/vba/testvba/TestDocuments/logs/excel/*.log
+main/sc/source/ui/vba/testvba/TestDocuments/logs/unix/*.log
+main/sc/source/ui/vba/testvba/TestDocuments/logs/win/*.log
+
+
 ##############################################################################
 #
 # no comments allowed in file format
 #
 
+main/setup_native/source/packinfo/package_names_ext.txt
+main/setup_native/source/packinfo/package_names.txt
+main/officecfg/registry/schema/oo-common.conf
+main/icu/createmak.cfg
 main/redland/raptor/raptor-1.4.18.patch.ooo_build
 main/redland/rasqal/rasqal-0.9.16.patch.ooo_build
 main/redland/redland/redland-1.0.8.patch.ooo_build
@@ -1153,6 +1197,7 @@ main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/index.txt
 main/xmlsecurity/tools/examples/eval_export.txt
 main/xmlsecurity/tools/examples/eval_import.txt
 
+
 ##############################################################################
 #
 # empty files
@@ -1203,6 +1248,7 @@ main/apple_remote/inc/RemoteControl.h
 main/apple_remote/inc/RemoteControlContainer.h
 main/apple_remote/inc/RemoteMainController.h
 
+
 ##############################################################################
 #
 # files with W3C Software License
@@ -1211,12 +1257,14 @@ main/apple_remote/inc/RemoteMainController.h
 main/MathMLDTD/w3c_ipr_software_notice.html
 main/MathMLDTD/math.dtd
 
+
 ##############################################################################
 #
 # files with Python Software Foundation License
 #
 
 main/filter/source/config/tools/merge/pyAltFCFGMerge
+
 
 ##############################################################################
 #
@@ -1234,9 +1282,11 @@ main/i18npool/source/breakiterator/data/dict_word_hu.txt
 main/i18npool/source/breakiterator/data/dict_word_nodash.txt
 main/i18npool/source/breakiterator/data/dict_word_prepostdash.txt
 main/i18npool/source/breakiterator/data/edit_word.txt
+main/i18npool/source/breakiterator/data/edit_word_he.txt
 main/i18npool/source/breakiterator/data/edit_word_hu.txt
 main/i18npool/source/breakiterator/data/line.txt
 main/i18npool/source/breakiterator/data/sent.txt
+
 
 ##############################################################################
 #
@@ -1244,6 +1294,7 @@ main/i18npool/source/breakiterator/data/sent.txt
 #
 
 main/sane/inc/sane.h
+
 
 ##############################################################################
 #
@@ -1256,6 +1307,7 @@ main/unixODBC/inc/sqlext.h
 main/unixODBC/inc/sqltypes.h
 main/unixODBC/inc/sqlucode.h
 
+
 ##############################################################################
 #
 # files with "The TWAIN License", see http://www.twain.org/license.shtm. Covered
@@ -1263,6 +1315,7 @@ main/unixODBC/inc/sqlucode.h
 #
 
 main/twain/inc/twain.h
+
 
 ##############################################################################
 #
@@ -1278,6 +1331,7 @@ main/twain/inc/twain.h
 main/config.guess
 main/config.sub
 
+
 ##############################################################################
 #
 # Header contains license identical to BSD without advertising
@@ -1286,6 +1340,7 @@ main/config.sub
 
 main/connectivity/qa/complex/connectivity/hsqldb/TestCacheSize.java
 
+
 ##############################################################################
 #
 # FSF, contains MIT equal license
@@ -1293,6 +1348,7 @@ main/connectivity/qa/complex/connectivity/hsqldb/TestCacheSize.java
 #
 
 main/hwpfilter/source/ksc5601.h
+
 
 ##############################################################################
 #
@@ -1314,6 +1370,7 @@ main/soltools/mkdepend/mkdepend.man
 main/soltools/mkdepend/parse.c
 main/soltools/mkdepend/pr.c
 
+
 ##############################################################################
 #
 # Open Document Managment API, uses "OPEN DOCUMENT MANAGEMENT API LICENSE 1.0"
@@ -1322,6 +1379,7 @@ main/soltools/mkdepend/pr.c
 #
 
 main/ucb/source/ucp/odma/odma.h
+
 
 ##############################################################################
 #
@@ -1336,6 +1394,7 @@ main/x11_extensions/inc/randrproto.h
 main/x11_extensions/inc/render.h
 main/x11_extensions/inc/renderproto.h
 
+
 ##############################################################################
 #
 # findings from af: The libtextcat version 2.2 library is under BSD license
@@ -1347,6 +1406,7 @@ main/x11_extensions/inc/renderproto.h
 
 main/libtextcat/data/new_fingerprints/fpdb.conf
 
+
 ##############################################################################
 #
 # (C) 1988, 1989, 1990 by Adobe Systems Incorporated
@@ -1356,4 +1416,12 @@ main/libtextcat/data/new_fingerprints/fpdb.conf
 
 main/vcl/unx/generic/fontmanager/parseAFM.cxx
 main/vcl/unx/generic/fontmanager/parseAFM.hxx
+
+
+##############################################################################
+#
+# Copyright Free Software Foundation, Inc., it's free software
+#
+
+main/icc/source/create_sRGB_profile/Makefile.in
 
