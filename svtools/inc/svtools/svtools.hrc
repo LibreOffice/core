@@ -333,6 +333,8 @@
 #define WARNINGBOX_JAVANOTFOUND             (RID_SVTOOLS_START+22)
 #define WARNINGBOX_INVALIDJAVASETTINGS      (RID_SVTOOLS_START+23)
 #define ERRORBOX_RESTARTREQUIRED            (RID_SVTOOLS_START+24)
+#define WARNINGBOX_INVALIDJAVASETTINGS_MAC  (RID_SVTOOLS_START+25)
+#define ERRORBOX_JVMCREATIONFAILED_MAC      (RID_SVTOOLS_START+26)
 
 //.............................................................................
 // images

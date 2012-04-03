@@ -151,7 +151,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // javavendors.xml was updated and Java has not been configured yet
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
+#ifdef MACOSX
+            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS_MAC ) );
+#else
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
+#endif
             String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
@@ -192,7 +196,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             // Java not correctly installed, or damaged
             SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
+#ifdef MACOSX
+            ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED_MAC ) );
+#else
             ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
+#endif
             String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();

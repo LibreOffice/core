@@ -126,7 +126,11 @@ namespace sfx2
         //................................................................
         void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
         {
+#ifdef MACOSX
+            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC, rbAlreadyShown );
+#else
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED, rbAlreadyShown );
+#endif
         }
 
         //................................................................

@@ -467,6 +467,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
     };
+    String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC
+    {
+        Text [ en-US ] = "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in %PRODUCTNAME - Preferences - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ;
+    };
     String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED
     {
         Text [ en-US ] = "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in Tools - Options - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ;
