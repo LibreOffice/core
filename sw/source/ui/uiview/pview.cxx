@@ -1365,9 +1365,9 @@ void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*
 {
     const StyleSettings &rSet = aViewWin.GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
-    if ( pVScrollbar->IsVisible( sal_False ))
+    if ( pVScrollbar->IsVisible( true ) )
         rToFill.Right()  = nTmp;
-    if ( pHScrollbar->IsVisible( sal_False ) )
+    if ( pHScrollbar->IsVisible( false ) )
         rToFill.Bottom() = nTmp;
     SetBorderPixel( rToFill );
 }
@@ -1388,7 +1388,7 @@ void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     //VisArea niemals einstellen!
 }
 
-void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
+void SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, sal_False );
@@ -1404,11 +1404,13 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
-    if ( pVScrollbar &&
-             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
-        {
-            ScrollDocSzChg();
-        }
+    if ( pVScrollbar && aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+    {
+        ScrollDocSzChg();
+    }
+
+    SvBorder aBorderNew;
+    CalcAndSetBorderPixel( aBorderNew, sal_False );
 }
 
 void SwPagePreView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
@@ -1620,30 +1622,48 @@ void SwPagePreView::ScrollViewSzChg()
             //vertical scrolling by row
             // adjust to new preview functionality
             sal_uInt16 nVisPages = aViewWin.GetRow() * aViewWin.GetCol();
-            pVScrollbar->SetVisibleSize( nVisPages );
-            // set selected page as scroll bar position,
-            // if it is visible.
-            SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
-            if ( pPagePrevwLay->IsPageVisible( aViewWin.SelectedPage() ) )
+
+            if( nVisPages < mnPageCount )
             {
-                pVScrollbar->SetThumbPos( aViewWin.SelectedPage() );
+                ShowVScrollbar( sal_True );
+                pPageUpBtn->Show( sal_True );
+                pPageDownBtn->Show( sal_True );
+
+                pVScrollbar->SetVisibleSize( nVisPages );
+                // set selected page as scroll bar position,
+                // if it is visible.
+                SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
+                if ( pPagePrevwLay->IsPageVisible( aViewWin.SelectedPage() ) )
+                {
+                    pVScrollbar->SetThumbPos( aViewWin.SelectedPage() );
+                }
+                else
+                {
+                    pVScrollbar->SetThumbPos( aViewWin.GetSttPage() );
+                }
+                pVScrollbar->SetLineSize( aViewWin.GetCol() );
+                pVScrollbar->SetPageSize( nVisPages );
+                // calculate and set scrollbar range
+                Range aScrollbarRange( 1, mnPageCount );
+                // increase range by one, because left-top-corner is left blank.
+                ++aScrollbarRange.Max();
+                // increase range in order to access all pages
+                aScrollbarRange.Max() += ( nVisPages - 1 );
+                pVScrollbar->SetRange( aScrollbarRange );
             }
             else
             {
-                pVScrollbar->SetThumbPos( aViewWin.GetSttPage() );
+                ShowVScrollbar( sal_False );
+                pPageUpBtn->Show( sal_False );
+                pPageDownBtn->Show( sal_False );
             }
-            pVScrollbar->SetLineSize( aViewWin.GetCol() );
-            pVScrollbar->SetPageSize( nVisPages );
-            // calculate and set scrollbar range
-            Range aScrollbarRange( 1, mnPageCount );
-            // increase range by one, because left-top-corner is left blank.
-            ++aScrollbarRange.Max();
-            // increase range in order to access all pages
-            aScrollbarRange.Max() += ( nVisPages - 1 );
-            pVScrollbar->SetRange( aScrollbarRange );
         }
         else //vertical scrolling by pixel
         {
+            ShowVScrollbar( sal_True );
+            pPageUpBtn->Show( sal_True );
+            pPageDownBtn->Show( sal_True );
+
             const Rectangle& rDocRect = aViewWin.GetPaintedPreviewDocRect();
             const Size& rPreviewSize =
                     GetViewShell()->PagePreviewLayout()->GetPrevwDocSize();
@@ -1666,18 +1686,20 @@ void SwPagePreView::ScrollViewSzChg()
 
         if(rDocRect.GetWidth() < rPreviewSize.Width())
         {
-            pHScrollbar->Show( sal_True );
+            ShowHScrollbar( sal_True );
+
             nVisWidth = rDocRect.GetWidth();
             nThumb = rDocRect.Left();
             aRange = Range(0, rPreviewSize.Width());
+
+            pHScrollbar->SetRange( aRange );
+            pHScrollbar->SetVisibleSize( nVisWidth );
+            pHScrollbar->SetThumbPos( nThumb );
+            pHScrollbar->SetLineSize( nVisWidth / 10 );
+            pHScrollbar->SetPageSize( nVisWidth / 2 );
         }
         else
-            pHScrollbar->Show( sal_False );
-        pHScrollbar->SetRange( aRange );
-        pHScrollbar->SetVisibleSize( nVisWidth );
-        pHScrollbar->SetThumbPos( nThumb );
-        pHScrollbar->SetLineSize( nVisWidth / 10 );
-        pHScrollbar->SetPageSize( nVisWidth / 2 );
+            ShowHScrollbar( sal_False );
     }
 }
 

@@ -308,21 +308,18 @@ void ScPreviewShell::UpdateScrollBars()
             //  page smaller than window -> center (but put scrollbar to 0)
             aOfs.X() = 0;
             pPreview->SetXOffset( nMaxPos / 2 );
-            pHorScroll->Show( sal_False );
         }
         else if (aOfs.X() < 0)
         {
             //  page larger than window -> never use negative offset
             aOfs.X() = 0;
             pPreview->SetXOffset( 0 );
-            pHorScroll->Show( sal_True );
         }
         else if (aOfs.X() > nMaxPos)
         {
             //  limit offset to align with right edge of window
             aOfs.X() = nMaxPos;
             pPreview->SetXOffset(nMaxPos);
-            pHorScroll->Show( sal_True );
         }
         pHorScroll->SetThumbPos( aOfs.X() );
     }
