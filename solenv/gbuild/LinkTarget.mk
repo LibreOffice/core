@@ -232,7 +232,7 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 #  gb_ObjCObject__command
 
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command,$@,$*,$<)
+	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)

@@ -132,15 +132,15 @@ endef
 define gb_ObjCObject__command
 $(call gb_Output_announce,$(2),$(true),OCC,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
-		$(DEFS) $(T_OBJCFLAGS) \
+		$(DEFS) \
+		$(T_OBJCFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
-		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
