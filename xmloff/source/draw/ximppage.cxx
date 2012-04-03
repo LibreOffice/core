@@ -34,7 +34,6 @@
 #include "XMLNumberStylesImport.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlstyle.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include "ximppage.hxx"
 #include "ximpshap.hxx"

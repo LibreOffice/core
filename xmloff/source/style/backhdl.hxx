@@ -31,7 +31,6 @@
 
 #include <xmloff/xmlprhdl.hxx>
 #include <com/sun/star/style/GraphicLocation.hpp>
-#include <com/sun/star/style/GraphicLocation.hpp>
 
 /**
     PropertyHandler for the XML-data-type:

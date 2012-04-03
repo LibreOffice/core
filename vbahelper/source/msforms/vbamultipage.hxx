@@ -33,7 +33,6 @@
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XMultiPage > MultiPageImpl_BASE;
 

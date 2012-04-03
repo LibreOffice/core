@@ -80,7 +80,6 @@
 #endif
 
 #include <vbahelper/vbahelper.hxx>
-#include <sfx2/app.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

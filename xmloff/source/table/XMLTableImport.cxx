@@ -45,7 +45,6 @@
 #include "xmloff/nmspmap.hxx"
 #include "xmloff/xmlstyle.hxx"
 #include "xmloff/prstylei.hxx"
-#include "xmloff/xmlimp.hxx"
 
 #include "xmloff/xmlnmspe.hxx"
 #include "table.hxx"

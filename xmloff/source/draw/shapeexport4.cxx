@@ -55,7 +55,6 @@
 #include <xmloff/xmltoken.hxx>
 #include "EnhancedCustomShapeToken.hxx"
 #include <com/sun/star/container/XIdentifierContainer.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>

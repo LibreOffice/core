@@ -40,9 +40,6 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 
-#include <tools/debug.hxx>
-
-#include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 

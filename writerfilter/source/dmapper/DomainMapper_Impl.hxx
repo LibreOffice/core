@@ -50,7 +50,6 @@
 #include <StyleSheetTable.hxx>
 #include <SettingsTable.hxx>
 #include <ThemeTable.hxx>
-#include <SettingsTable.hxx>
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
 #include <FFDataHandler.hxx>

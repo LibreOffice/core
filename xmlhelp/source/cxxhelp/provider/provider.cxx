@@ -51,7 +51,6 @@
 #include "databases.hxx"
 #include "provider.hxx"
 #include "content.hxx"
-#include "databases.hxx"
 
 using namespace com::sun::star;
 using namespace chelp;

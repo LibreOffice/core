@@ -53,7 +53,6 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/util/Duration.hpp>

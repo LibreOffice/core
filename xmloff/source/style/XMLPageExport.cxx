@@ -41,7 +41,6 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "PageMasterPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
-#include "PageMasterExportPropMapper.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

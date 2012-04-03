@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/container/XChild.hpp>

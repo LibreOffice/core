@@ -68,7 +68,6 @@ typedef XMLHint_Impl *XMLHint_ImplPtr;
 SV_DECL_PTRARR_DEL( XMLHints_Impl, XMLHint_ImplPtr, 5 )
 SV_IMPL_PTRARR( XMLHints_Impl, XMLHint_ImplPtr )
 // OD 2004-04-21 #i26791#
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

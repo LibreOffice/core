@@ -33,7 +33,6 @@
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"
-#include "formcellbinding.hxx"
 #include "xmloff/xformsexport.hxx"
 #include "property_meta_data.hxx"
 

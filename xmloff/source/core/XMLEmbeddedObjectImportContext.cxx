@@ -32,8 +32,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
-#include <tools/globname.hxx>
-#include <sot/clsids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"

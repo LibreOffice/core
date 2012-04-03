@@ -31,7 +31,6 @@
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <SettingsTable.hxx>
-#include <resourcemodel/ResourceModelHelper.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ConversionHelper.hxx>

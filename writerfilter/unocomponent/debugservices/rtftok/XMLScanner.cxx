@@ -50,7 +50,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>

@@ -63,7 +63,6 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 

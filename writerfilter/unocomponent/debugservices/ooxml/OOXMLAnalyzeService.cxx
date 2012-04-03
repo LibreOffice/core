@@ -48,16 +48,12 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 

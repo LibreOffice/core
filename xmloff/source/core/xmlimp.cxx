@@ -46,7 +46,6 @@
 #include "XMLScriptContextFactory.hxx"
 #include "StyleMap.hxx"
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlerror.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>

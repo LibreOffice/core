@@ -49,7 +49,6 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfi.hxx>      // SvXMLNumFmtDefaults
 
-#include <svl/svstdarr.hxx>
 #include <svl/nfsymbol.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>

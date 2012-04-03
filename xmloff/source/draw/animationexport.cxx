@@ -43,7 +43,6 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationEndSync.hpp>
-#include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>

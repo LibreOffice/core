@@ -56,7 +56,6 @@
 #include "XMLStarBasicExportHandler.hxx"
 #include "XMLScriptExportHandler.hxx"
 #include <xmloff/SettingsExportHelper.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
@@ -75,7 +74,6 @@
 #include "xmloff/XMLFilterServiceNames.h"
 #include "xmloff/XMLEmbeddedObjectExportFilter.hxx"
 #include "XMLBasicExportFilter.hxx"
-#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>

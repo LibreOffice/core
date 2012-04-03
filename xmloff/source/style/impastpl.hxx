@@ -38,7 +38,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <vector>
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
