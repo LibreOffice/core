@@ -491,7 +491,6 @@ void ImpEditView::ResetOutputArea( const Rectangle& rRec )
 
 void ImpEditView::RecalcOutputArea()
 {
-    Rectangle aOldArea( aOutArea );
     Point aNewTopLeft( aOutArea.TopLeft() );
     Size aNewSz( aOutArea.GetSize() );
 
@@ -886,7 +885,6 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 #endif
 
     Rectangle aNewVisArea( GetVisDocArea() );
-    Size aPaperSz( pEditEngine->pImpEditEngine->GetPaperSize() );
 
     // Vertical:
     if ( !IsVertical() )
