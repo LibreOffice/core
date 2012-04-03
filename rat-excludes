@@ -16,7 +16,6 @@ ext_sources/
 
 extras/
 
-
 ##############################################################################
 #
 # files in the SGA but with no license yet (in progress)
@@ -110,6 +109,11 @@ main/sfx2/qa/complex/sfx2/testdocuments/empty.rdf
 # Single files to exclude
 #
 
+# license files themselves
+main/LICENSE_category_b
+main/NOTICE_category_b
+main/LICENSE_aggregated
+main/NOTICE_aggregated
 
 # Used in writerfilter/source/doctok/xmigen.el (1), part of the SGA
 # XEmacs List (config file), comments possible (using ';' at each line start), ALv2 could be added
