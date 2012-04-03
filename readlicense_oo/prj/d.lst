@@ -19,3 +19,7 @@ dos: echo =====================================================================
 # deliver the NOTICE and LICENSE file for later use in the packaging process
 ..\%__SRC%\misc\SUM_NOTICE %_DEST%\bin%_EXT%\osl\NOTICE
 ..\%__SRC%\misc\SUM_LICENSE %_DEST%\bin%_EXT%\osl\LICENSE
+# also copy them to their *.txt counterparts
+# TODO: convince scp2 on WNT to use the txt-less files as input instead
+..\%__SRC%\misc\SUM_NOTICE %_DEST%\bin%_EXT%\osl\NOTICE.txt
+..\%__SRC%\misc\SUM_LICENSE %_DEST%\bin%_EXT%\osl\LICENSE.txt
