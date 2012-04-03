@@ -76,6 +76,7 @@ public:
     void testFdo46955();
     void testFdo45394();
     void testFdo48104();
+    void testFdo47107();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testFdo46955);
     CPPUNIT_TEST(testFdo45394);
     CPPUNIT_TEST(testFdo48104);
+    CPPUNIT_TEST(testFdo47107);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -484,6 +486,18 @@ void RtfModelTest::testFdo48104()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo48104.rtf")));
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+void RtfModelTest::testFdo47107()
+{
+    load("fdo47107.rtf");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"))), uno::UNO_QUERY);
+    // Make sure numbered and bullet legacy syntax is recognized, this used to throw a NoSuchElementException
+    xNumberingStyles->getByName("WWNum1");
+    xNumberingStyles->getByName("WWNum2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
