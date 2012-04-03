@@ -187,8 +187,9 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     SAL_INFO(char const * area, expr),
     SAL_INFO_IF(bool condition, char const * area, expr),
-    SAL_WARN(char const * area, expr), and
-    SAL_WARN_IF(bool condition, char const * area, expr) produce an info resp.
+    SAL_WARN(char const * area, expr),
+    SAL_WARN_IF(bool condition, char const * area, expr), and
+    SAL_DEBUG(expr) produce an info resp.
     warning log entry with a message produced by piping items into a C++
     std::ostringstream.  The given expr must be so that the full expression
     "stream << expr" is valid, where stream is a variable of type
@@ -208,7 +209,11 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     For the _IF variants, log output is only generated if the given condition is
     true (in addition to the other conditions that have to be met).
 
-    For all these macros, the given area argument must be non-null and must
+    The SAL_DEBUG macro is for temporary debug statements that are used while
+    working on code. It is never meant to remain in the code. It will always
+    simply output the given expression in debug builds.
+
+    For all the other macros, the given area argument must be non-null and must
     match the regular expression
 
       <area> ::= <segment>("."<segment>)*
@@ -311,6 +316,16 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), \
         ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
+
+/**
+  Produce temporary debugging output from stream. This macro is meant
+  to be used only while working on code and should never exist in production code.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_DEBUG(stream) \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, SAL_WHERE, stream)
 
 #endif
 

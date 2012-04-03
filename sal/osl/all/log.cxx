@@ -77,10 +77,14 @@ char const * toString(sal_detail_LogLevel level) {
         return "info";
     case SAL_DETAIL_LOG_LEVEL_WARN:
         return "warn";
+    case SAL_DETAIL_LOG_LEVEL_DEBUG:
+        return "debug";
     }
 }
 
 bool report(sal_detail_LogLevel level, char const * area) {
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
+        return true;
     assert(area != 0);
     char const * env = std::getenv("SAL_LOG");
     if (env == 0) {
@@ -152,9 +156,12 @@ void log(
     char const * message)
 {
     std::ostringstream s;
-    s << toString(level) << ':' << area << ':' << OSL_DETAIL_GETPID << ':'
-        << osl::Thread::getCurrentIdentifier() << ':' << where << message
-        << '\n';
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
+        s << toString(level) << ':' << /*no where*/' ' << message << '\n';
+    else
+        s << toString(level) << ':' << area << ':' << OSL_DETAIL_GETPID << ':'
+            << osl::Thread::getCurrentIdentifier() << ':' << where << message
+            << '\n';
     std::fputs(s.str().c_str(), stderr);
 }
 
