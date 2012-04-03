@@ -3785,7 +3785,7 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
             // Mark as deleted, so that no selection will end or begin at
             // this paragraph...
             DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( (sal_uIntPtr)pPPortion->GetNode(), nParagraph );
-            aDeletedNodes.Insert( pDelInfo, aDeletedNodes.Count() );
+            aDeletedNodes.push_back(pDelInfo);
             UpdateSelections();
             // The region below will not be invalidated if UpdateMode = sal_False!
             // If anyway, then save as sal_False before SetVisible !

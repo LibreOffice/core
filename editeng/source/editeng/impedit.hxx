@@ -490,7 +490,7 @@ private:
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
     // For Formatting / Update ....
-    DeletedNodesList    aDeletedNodes;
+    boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
     Rectangle           aInvalidRec;
     sal_uInt32          nCurTextHeight;
     sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs

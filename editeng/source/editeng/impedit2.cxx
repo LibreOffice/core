@@ -2255,7 +2255,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     sal_uInt16 nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pRight, nParagraphTobeDeleted );
-    aDeletedNodes.Insert( pInf, aDeletedNodes.Count() );
+    aDeletedNodes.push_back(pInf);
 
     GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
 
@@ -2482,7 +2482,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
 
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pNode, nPara );
-    aDeletedNodes.Insert( pInf, aDeletedNodes.Count() );
+    aDeletedNodes.push_back(pInf);
 
     // The node is managed by the undo and possibly destroyed!
     aEditDoc.Release( nPara );
@@ -3332,8 +3332,6 @@ sal_uInt32 ImpEditEngine::GetParaHeight( sal_uInt16 nParagraph )
 
 void ImpEditEngine::UpdateSelections()
 {
-    sal_uInt16 nInvNodes = aDeletedNodes.Count();
-
     // Check whether one of the selections is at a deleted node...
     // If the node is valid, the index has yet to be examined!
     for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
@@ -3341,16 +3339,16 @@ void ImpEditEngine::UpdateSelections()
         EditView* pView = aEditViews.GetObject(nView);
         DBG_CHKOBJ( pView, EditView, 0 );
         EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
-        sal_Bool bChanged = sal_False;
-        for ( sal_uInt16 n = 0; n < nInvNodes; n++ )
+        bool bChanged = false;
+        for (size_t i = 0, n = aDeletedNodes.size(); i < n; ++i)
         {
-            DeletedNodeInfo* pInf = aDeletedNodes.GetObject( n );
-            if ( ( ( sal_uLong )(aCurSel.Min().GetNode()) == pInf->GetInvalidAdress() ) ||
-                 ( ( sal_uLong )(aCurSel.Max().GetNode()) == pInf->GetInvalidAdress() ) )
+            const DeletedNodeInfo& rInf = aDeletedNodes[i];
+            if ( ( ( sal_uLong )(aCurSel.Min().GetNode()) == rInf.GetInvalidAdress() ) ||
+                 ( ( sal_uLong )(aCurSel.Max().GetNode()) == rInf.GetInvalidAdress() ) )
             {
                 // Use ParaPortions, as now also hidden paragraphs have to be
                 // taken into account!
-                sal_uInt16 nPara = pInf->GetPosition();
+                sal_uInt16 nPara = rInf.GetPosition();
                 ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nPara );
                 if ( !pPPortion ) // Last paragraph
                 {
@@ -3394,13 +3392,7 @@ void ImpEditEngine::UpdateSelections()
         }
     }
 
-    // Delete ...
-    for ( sal_uInt16 n = 0; n < nInvNodes; n++ )
-    {
-        DeletedNodeInfo* pInf = aDeletedNodes.GetObject( n );
-        delete pInf;
-    }
-    aDeletedNodes.Remove( 0, aDeletedNodes.Count() );
+    aDeletedNodes.clear();
 }
 
 EditSelection ImpEditEngine::ConvertSelection(

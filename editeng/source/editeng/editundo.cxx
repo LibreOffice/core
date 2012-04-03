@@ -216,7 +216,7 @@ void EditUndoDelContent::Redo()
         _pImpEE->GetEditEnginePtr()->ParagraphDeleted( nNode );
 
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pContentNode, nNode );
-    _pImpEE->aDeletedNodes.Insert( pInf, _pImpEE->aDeletedNodes.Count() );
+    _pImpEE->aDeletedNodes.push_back(pInf);
     _pImpEE->UpdateSelections();
 
     ContentNode* pN = ( nNode < _pImpEE->GetEditDoc().Count() )

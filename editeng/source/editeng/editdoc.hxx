@@ -707,12 +707,9 @@ public:
                                             {   nInvalidAdressPtr = nInvAdr;
                                                 nInvalidParagraph = nPos; }
 
-    sal_uIntPtr GetInvalidAdress()              {   return nInvalidAdressPtr; }
-    sal_uInt16  GetPosition()                   {   return nInvalidParagraph; }
+    sal_uIntPtr GetInvalidAdress() const { return nInvalidAdressPtr; }
+    sal_uInt16  GetPosition() const { return nInvalidParagraph; }
 };
-
-typedef DeletedNodeInfo* DeletedNodeInfoPtr;
-SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0 )
 
 // -------------------------------------------------------------------------
 // class EditDoc
