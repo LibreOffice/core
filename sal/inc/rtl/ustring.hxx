@@ -191,7 +191,7 @@ public:
       providing the encoding to use for the conversion.
 
       If there are any embedded \0's in the string literal, the result is undefined.
-      Use the overload that explicitly accepts length or fromAscii().
+      Use the overload that explicitly accepts length.
 
       @param    literal         the 8-bit ASCII string literal
 
