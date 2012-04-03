@@ -605,6 +605,19 @@ void AndroidSalInstance::Wakeup()
 
 void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
+    // Presumably this should never be called at all except in
+    // NativeActivity-based apps with a GUI, like android/qa/desktop, where
+    // the message pump is run here in vcl?
+    if (!mpApp) {
+        static bool beenhere = false;
+        if (!beenhere)
+        {
+            fprintf (stderr, "**** Huh, %s called in non-NativeActivity app\n", __FUNCTION__);
+            beenhere = true;
+        }
+        return;
+    }
+
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
