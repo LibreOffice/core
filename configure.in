@@ -331,6 +331,8 @@ AC_ARG_WITH(bundled-extension-blobs,
                           that are to be bundled as-is for installation as extensions
                           at the first program start. Make sure to only bundle extensions
                           which can be installed without requiring a license dialog
+                          and comply with their distribution requirements by updating the
+                          files LICENSE_aggregated and NOTICE_aggregated accordingly
 ],,)
 #AC_ARG_WITH(bundled-prereg-extensions,
 #[  --with-bundled-prereg-extensions Whitespace seperated list of files in the tarball directory that
@@ -339,7 +341,9 @@ AC_ARG_WITH(bundled-extension-blobs,
 #],,)
 AC_ARG_ENABLE(bundled-dictionaries,
 [  --enable-bundled-dictionaries  Download dictionaries (spelling, hyphenation, thesaurus)
-                           according to main/extensions.lst and bundle them.
+                           according to main/extensions.lst and bundle them. Make sure to
+                           comply with their distribution requirements and update the
+                           files LICENSE_aggregated and NOTICE_aggregated accordingly
 ],,enable_bundled_dictionaries=no)
 
 # Remove the following switches when not in release mode.

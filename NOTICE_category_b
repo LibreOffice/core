@@ -1,0 +1,7 @@
+___
+
+Apache OpenOffice has some optional parts that only get included
+when the configure option --enable-category-b has been requested.
+When you used this option make sure to comply with the
+distribution requirements of these parts by extending
+this file with the notices recommended by them:

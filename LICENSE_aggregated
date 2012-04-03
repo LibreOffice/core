@@ -5,7 +5,10 @@ dictionary extensions that are merely aggregated for the convenience
 of end users.
 Basis for this aggregation is Apache JIRA issue LEGAL-117
 - https://issues.apache.org/jira/browse/LEGAL-117
-As these dictionary extensions are only aggregated
+These parts are only included in binary form.
 
-The licenses of the aggregated dictionary extensions are typically
-GNU General Public License and/or GNU Lesser General Public License.
+In the case of Apache OpenOffice these parts only get aggregated
+when the configure option --with-bundled-extension-blobs or
+--enable-bundled-dictionaries have been requested.
+When you use these options make sure to add the license here:
+

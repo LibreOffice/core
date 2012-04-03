@@ -1,0 +1,9 @@
+___
+
+In the case of Apache OpenOffice some parts only get aggregated
+when the configure option --with-bundled-extension-blobs or
+--enable-bundled-dictionaries have been requested.
+When you use these options make sure to comply with the
+distribution requirements of these packages by extending
+this file with the notices recommended by them:
+
