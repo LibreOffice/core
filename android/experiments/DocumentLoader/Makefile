@@ -98,6 +98,7 @@ copy-stuff:
 		   svgfilterlo \
 		   svllo \
 		   swdlo \
+		   swlo \
 		   t602filterlo \
 		   textinstream.uno \
 		   tllo \
