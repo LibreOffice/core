@@ -300,7 +300,6 @@ public:
     void            SetNoSelection();
     sal_Bool            IsDateSelected( const Date& rDate ) const;
     Date            GetFirstSelectedDate() const;
-    Date            GetLastSelectedDate() const;
     void            EnableCallEverySelect( sal_Bool bEvery = sal_True ) { mbAllSel = bEvery; }
     sal_Bool            IsCallEverySelectEnabled() const { return mbAllSel; }
 

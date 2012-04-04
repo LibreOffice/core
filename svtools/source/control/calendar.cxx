@@ -1911,19 +1911,6 @@ Date Calendar::GetFirstSelectedDate() const
 
 // -----------------------------------------------------------------------
 
-Date Calendar::GetLastSelectedDate() const
-{
-    if ( !mpSelectTable->empty() )
-        return Date( *mpSelectTable->rbegin() );
-    else
-    {
-        Date aDate( 0, 0, 0 );
-        return aDate;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Calendar::SetCurDate( const Date& rNewDate )
 {
     if ( !rNewDate.IsValidAndGregorian() )

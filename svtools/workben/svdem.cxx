@@ -218,7 +218,6 @@ public:
 
                     DECL_LINK( Test, PushButton* );
                     DECL_LINK( SelectHdl, Window* );
-                    DECL_LINK( CalSelectHdl, CalendarField* );
     void            ContextMenu( const Point& rPos );
 
     void            Command( const CommandEvent& rCEvt );
@@ -819,8 +818,6 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     {
     aCalendarField.EnableEmptyFieldValue( sal_True );
     aCalendarField.SetCalendarStyle( aCalendarField.GetCalendarStyle() | WB_RANGESELECT );
-    aCalendarField.SetSelectHdl( LINK( this, MyWin, CalSelectHdl ) );
-//    aCalendarField.SetDate( Date() );
     aCalendarField.SetEmptyDate();
     aCalendarField.EnableToday();
     aCalendarField.EnableNone();
@@ -994,19 +991,6 @@ IMPL_LINK( MyWin, SelectHdl, Window*, pCtrl )
                 nBits &= ~(HIB_DOWNARROW | HIB_UPARROW);
             aHeadBar.SetItemBits( nItemId, nBits );
         }
-    }
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( MyWin, CalSelectHdl, CalendarField*, pCtrl )
-{
-    if ( pCtrl == &aCalendarField )
-    {
-        Calendar* l_pCalendar = pCtrl->GetCalendar();
-        aCalendarField2.SetDate( l_pCalendar->GetLastSelectDate() );
     }
 
     return 0;
