@@ -248,7 +248,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
-        aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
