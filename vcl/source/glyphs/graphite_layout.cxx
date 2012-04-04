@@ -40,6 +40,8 @@
 #undef NDEBUG
 #endif
 
+// #define GRLAYOUT_DEBUG 1
+
 // Header files
 //
 // Standard Library
@@ -274,7 +276,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                     }
                     mvChar2BaseGlyph[mnSegCharOffset + nFirstCharInCluster - mnMinCharPos] = nBaseGlyphIndex;
                 }
-                append(pSegment, rArgs, baseSlot, rightBoundary, fScaling,
+                append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling,
                        nDxOffset, bCluster, mnSegCharOffset + firstChar);
             }
             if (mnSegCharOffset + nLastCharInCluster < mnMinCharPos)
@@ -353,7 +355,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                     // only set mvChar2BaseGlyph for first character of cluster
                     mvChar2BaseGlyph[mnSegCharOffset + bFirstChar - mnMinCharPos] = nBaseGlyphIndex;
                 }
-                append(pSegment, rArgs, baseSlot, rightBoundary, fScaling,
+                append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling,
                        nDxOffset, true, mnSegCharOffset + firstChar);
             }
             if (mnSegCharOffset + bFirstChar >= mnEndCharPos)
@@ -409,13 +411,13 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
 
 // append walks an attachment tree, flattening it, and converting it into a
 // sequence of GlyphItem objects which we can later manipulate.
-void
+float
 GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
-    const gr_slot * gi, float nextGlyphOrigin, float scaling, long & rDXOffset,
+    const gr_slot * gi, float gOrigin, float nextGlyphOrigin, float scaling, long & rDXOffset,
     bool bIsBase, int baseChar)
 {
     bool bRtl = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL);
-    float nextOrigin = nextGlyphOrigin;
+    float nextOrigin;
     assert(gi);
     assert(gr_slot_before(gi) <= gr_slot_after(gi));
     int firstChar = gr_slot_before(gi) + mnSegCharOffset;
@@ -424,16 +426,22 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     // is the next glyph attached or in the next cluster?
     //glyph_set_range_t iAttached = gi.attachedClusterGlyphs();
     const gr_slot * pFirstAttached = gr_slot_first_attachment(gi);
+    const gr_slot * pNextSibling = gr_slot_next_sibling_attachment(gi);
     if (pFirstAttached)
-    {
         nextOrigin = gr_slot_origin_X(pFirstAttached);
-    }
+    else if (!bIsBase && pNextSibling)
+        nextOrigin = gr_slot_origin_X(pNextSibling);
+    else
+        nextOrigin = nextGlyphOrigin;
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
     int scaledGlyphPos = round(gr_slot_origin_X(gi) * scaling);
-    int glyphWidth = round(nextOrigin * scaling) - scaledGlyphPos;
-    if (glyphWidth < 0)
-        glyphWidth = 0;
+    int glyphWidth = round((nextOrigin - gOrigin) * scaling);
+//    if (glyphWidth < 0)
+//    {
+//        nextOrigin = gOrigin;
+//        glyphWidth = 0;
+//    }
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"c%d g%ld,X%d W%d nX%f ", firstChar, glyphId,
         (int)(gr_slot_origin_X(gi) * scaling), glyphWidth, nextOrigin * scaling);
@@ -481,16 +489,11 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     rDXOffset += deltaOffset;
 
     // Recursively append all the attached glyphs.
-    for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL;
-         agi = gr_slot_next_sibling_attachment(agi))
-    {
-        if (gr_slot_next_sibling_attachment(agi) == NULL)
-            append(pSeg, rArgs, agi, nextGlyphOrigin, scaling, rDXOffset,
-                   false, baseChar);
-        else
-            append(pSeg, rArgs, agi, gr_slot_origin_X(gr_slot_next_sibling_attachment(agi)),
-                   scaling, rDXOffset, false, baseChar);
-    }
+    float cOrigin = nextOrigin;
+    for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
+        cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar);
+
+    return cOrigin;
 }
 
 //
@@ -600,7 +603,8 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
                     nSegCharLimit - rArgs.mnEndCharPos, bRtl);
             }
         }
-        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset, rArgs.mpStr + limit, NULL);
+        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
+                rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
                                         rArgs.mpStr + mnSegCharOffset, numchars, bRtl);

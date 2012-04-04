@@ -163,9 +163,9 @@ private:
     void expandOrCondense(ImplLayoutArgs &rArgs);
     void    fillFrom(gr_segment * rSeg, ImplLayoutArgs & rArgs, float fScaling);
 
-    void append(gr_segment * pSeg,
+    float append(gr_segment * pSeg,
                 ImplLayoutArgs & rArgs,
-                const gr_slot * pSlot,
+                const gr_slot * pSlot, float gOrigin,
                 float nextGlyphOrigin, float fScaling,
                 long & rDXOffset, bool bIsBase, int baseChar);
 };
