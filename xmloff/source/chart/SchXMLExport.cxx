@@ -248,8 +248,8 @@ public:
         sal_Bool bExportContent );
 
     void exportErrorBar (
-        const ::com::sun::star::uno::Reference<beans::XPropertySet> &xSeriesProp,
-            sal_Bool bExportContent );
+        const ::com::sun::star::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
+            bool bExportContent );
 
     /// add svg position as attribute for current element
     void addPosition( const ::com::sun::star::awt::Point & rPosition );
@@ -2992,7 +2992,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                         exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
                     }
 
-                    exportErrorBar( xPropSet,bExportContent );
+                    exportErrorBar( xPropSet,false, bExportContent );   // X ErrorBar
+                    exportErrorBar( xPropSet,true, bExportContent );    // Y ErrorBar
 
                     exportDataPoints(
                         uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
@@ -3116,24 +3117,40 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 }
 
 void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySet> &xSeriesProp,
-                                              sal_Bool bExportContent )
+                                              bool bYError, bool bExportContent )
 {
     assert(mxExpPropMapper.is());
 
+    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+
+    /// Dont export X ErrorBars for older ODF versions.
+    if ( !bYError && nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+        return;
+
     if (xSeriesProp.is())
     {
-        Any aAny;
-        std::vector< XMLPropertyState > aPropertyStates;
+        bool bNegative = false, bPositive = false;
         sal_Int32 nErrorBarStyle = chart::ErrorBarStyle::NONE;
-        chart::ChartErrorIndicatorType eErrorType = chart::ChartErrorIndicatorType_NONE;
+        Reference< beans::XPropertySet > xErrorBarProp;
 
         try
         {
-            aAny = xSeriesProp->getPropertyValue("ErrorIndicator" );
-            aAny >>= eErrorType;
+            Any aAny;
 
-            aAny = xSeriesProp->getPropertyValue("ErrorBarStyle" );
-            aAny >>= nErrorBarStyle;
+            aAny = xSeriesProp->getPropertyValue( bYError ? "ErrorBarY" : "ErrorBarX" );
+            aAny >>= xErrorBarProp;
+
+            if ( xErrorBarProp.is() )
+            {
+                aAny = xErrorBarProp->getPropertyValue("ShowNegativeError" );
+                aAny >>= bNegative;
+
+                aAny = xErrorBarProp->getPropertyValue("ShowPositiveError" );
+                aAny >>= bPositive;
+
+                aAny = xErrorBarProp->getPropertyValue("ErrorBarStyle" );
+                aAny >>= nErrorBarStyle;
+            }
         }
         catch( const beans::UnknownPropertyException & rEx )
         {
@@ -3144,56 +3161,37 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                     RTL_TEXTENCODING_ASCII_US ).getStr());
         }
 
-        if( nErrorBarStyle != chart::ErrorBarStyle::NONE &&
-            eErrorType != chart::ChartErrorIndicatorType_NONE)
+        if( nErrorBarStyle != chart::ErrorBarStyle::NONE && (bNegative || bPositive))
         {
-            Reference< beans::XPropertySet > xErrorBarProp;
-            try
+            if( bExportContent && nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
             {
-                aAny = xSeriesProp->getPropertyValue("DataErrorProperties" );
-                aAny >>= xErrorBarProp;
-            }
-            catch( const uno::Exception & rEx )
-            {
-                (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
-                            OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            }
-
-            if( xErrorBarProp.is() )
-            {
-                if( bExportContent &&
-                    nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
+                // register data ranges for error bars for export in local table
+                ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
+                    lcl_getErrorBarSequences( xErrorBarProp ));
+                for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
+                         aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
-                    // register data ranges for error bars for export in local table
-                    ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
-                        lcl_getErrorBarSequences( xErrorBarProp ));
-                    for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
-                             aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
-                    {
-                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
-                    }
+                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
                 }
+            }
 
-                aPropertyStates = mxExpPropMapper->Filter( xErrorBarProp );
+            std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xErrorBarProp );
 
-                if( !aPropertyStates.empty() )
+            if( !aPropertyStates.empty() )
+            {
+                // write element
+                if( bExportContent )
                 {
-                    // write element
-                    if( bExportContent )
-                    {
-                        // add style name attribute
-                        AddAutoStyleAttribute( aPropertyStates );
+                    // add style name attribute
+                    AddAutoStyleAttribute( aPropertyStates );
 
-                        const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                        if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
-                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );//#i114149#
-                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
-                    }
-                    else    // autostyles
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
+                    if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, bYError ? XML_Y : XML_X );//#i114149#
+                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
+                }
+                else    // autostyles
+                {
+                    CollectAutoStyle( aPropertyStates );
                 }
             }
         }
