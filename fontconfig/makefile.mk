@@ -43,6 +43,10 @@ PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_ACTION=./configure
 
+.IF "$(debug)" != ""
+CONFIGURE_ACTION!:=CFLAGS=-g $(CONFIGURE_ACTION)
+.ENDIF
+
 CONFIGURE_FLAGS=\
     --disable-static \
     --with-arch=arm \
