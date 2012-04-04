@@ -1098,7 +1098,7 @@
                         <desc>List of Separators - as a String</desc>
                         <label>Separators</label>
                     </info>
-                    <value>;    </value>
+                    <value>,;&#9;</value>
                 </prop>
                 <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
                     <info>
