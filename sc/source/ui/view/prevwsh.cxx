@@ -301,6 +301,8 @@ void ScPreviewShell::UpdateNeededScrollBars()
     long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
     long aWidthOffSet = aHeightOffSet;
 
+    Point aOfs = pPreview->GetOffset();
+
     if( pHorScroll )
     {
         long nMaxPos = aPageSize.Width() - aWindowSize.Width() + aWidthOffSet;

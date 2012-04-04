@@ -310,7 +310,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
     ScStyleSheet* pStyle = (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if (!pStyle)
     {
-        //  create new style (was in ScPivot::SetStyle)
+        //  create new style
 
         pStyle = (ScStyleSheet*) &pStlPool->Make( aStyleName, SFX_STYLE_FAMILY_PARA,
                                                     SFXSTYLEBIT_USERDEF );

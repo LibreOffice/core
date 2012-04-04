@@ -317,9 +317,9 @@ private:
 
         // Count sort items first.
         size_t nSortCount = 0;
-        for (; nSortCount < aParam.GetSortKeyCount(); ++nSortCount)
+        for (; nSortCount < MAXSORT; ++nSortCount)
         {
-            if (!aParam.maKeyState[nSortCount].bDoSort)
+            if (!aParam.bDoSort[nSortCount])
                 break;
         }
 
@@ -359,10 +359,10 @@ private:
         for (size_t i = 0; i < nSortCount; ++i)
         {
             // Convert field value from absolute to relative.
-            SCCOLROW nField = aParam.maKeyState[i].nField - nFieldStart;
+            SCCOLROW nField = aParam.nField[i] - nFieldStart;
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nField));
 
-            if (!aParam.maKeyState[i].bAscending)
+            if (!aParam.bAscending[i])
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
 
             if (aParam.bUserDef)

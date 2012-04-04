@@ -376,12 +376,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aSortParam.bNaturalSort     = false;
                     aSortParam.bIncludePattern  = true;
                     aSortParam.bInplace         = true;
-                    aSortParam.maKeyState[0].bDoSort = true;
-                    aSortParam.maKeyState[0].nField = nCol;
-                    aSortParam.maKeyState[0].bAscending = ( nSlotId == SID_SORT_ASCENDING );
+                    aSortParam.bDoSort[0]       = true;
+                    aSortParam.nField[0]        = nCol;
+                    aSortParam.bAscending[0]    = (nSlotId == SID_SORT_ASCENDING);
 
-                    for ( sal_uInt16 i=1; i<aSortParam.GetSortKeyCount(); i++ )
-                        aSortParam.maKeyState[i].bDoSort = false;
+                    for ( sal_uInt16 i=1; i<MAXSORT; i++ )
+                        aSortParam.bDoSort[i] = false;
 
                     aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
@@ -420,18 +420,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         const SfxPoolItem* pItem;
                         if ( pArgs->GetItemState( SID_SORT_BYROW, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.bByRow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bByRow = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_HASHEADER, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.bHasHeader = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bHasHeader = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_CASESENS, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.bCaseSens = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bCaseSens = ((const SfxBoolItem*)pItem)->GetValue();
                     if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                        aSortParam.bNaturalSort = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.bIncludePattern = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bIncludePattern = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_USERDEF, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
-                            sal_uInt16 nUserIndex = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sal_uInt16 nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
                             aSortParam.bUserDef = ( nUserIndex != 0 );
                             if ( nUserIndex )
                                 aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-based
@@ -439,25 +439,25 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         SCCOLROW nField0 = 0;
                         if ( pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
-                            nField0 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-                        aSortParam.maKeyState[0].bDoSort = ( nField0 != 0 );
-                        aSortParam.maKeyState[0].nField = nField0 > 0 ? (nField0-1) : 0;
+                            nField0 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[0] = ( nField0 != 0 );
+                        aSortParam.nField[0] = nField0 > 0 ? (nField0-1) : 0;
                         if ( pArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.maKeyState[0].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bAscending[0] = ((const SfxBoolItem*)pItem)->GetValue();
                         SCCOLROW nField1 = 0;
                         if ( pArgs->GetItemState( FN_PARAM_3, sal_True, &pItem ) == SFX_ITEM_SET )
-                            nField1 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-                        aSortParam.maKeyState[1].bDoSort = ( nField1 != 0 );
-                        aSortParam.maKeyState[1].nField = nField1 > 0 ? (nField1-1) : 0;
+                            nField1 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[1] = ( nField1 != 0 );
+                        aSortParam.nField[1] = nField1 > 0 ? (nField1-1) : 0;
                         if ( pArgs->GetItemState( FN_PARAM_4, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.maKeyState[1].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bAscending[1] = ((const SfxBoolItem*)pItem)->GetValue();
                         SCCOLROW nField2 = 0;
                         if ( pArgs->GetItemState( FN_PARAM_5, sal_True, &pItem ) == SFX_ITEM_SET )
-                            nField2 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-                        aSortParam.maKeyState[2].bDoSort = ( nField2 != 0 );
-                        aSortParam.maKeyState[2].nField = nField2 > 0 ? (nField2-1) : 0;
+                            nField2 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[2] = ( nField2 != 0 );
+                        aSortParam.nField[2] = nField2 > 0 ? (nField2-1) : 0;
                         if ( pArgs->GetItemState( FN_PARAM_6, sal_True, &pItem ) == SFX_ITEM_SET )
-                            aSortParam.maKeyState[2].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
 
                         // subtotal when needed new
                         pTabViewShell->UISort( aSortParam );
@@ -516,26 +516,26 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     rOutParam.bIncludePattern ) );
                                 sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
                                 rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
-                                if ( rOutParam.maKeyState[0].bDoSort )
+                                if ( rOutParam.bDoSort[0] )
                                 {
                                     rReq.AppendItem( SfxInt32Item( FN_PARAM_1,
-                                        rOutParam.maKeyState[0].nField + 1 ) );
+                                        rOutParam.nField[0] + 1 ) );
                                     rReq.AppendItem( SfxBoolItem( FN_PARAM_2,
-                                        rOutParam.maKeyState[0].bAscending ) );
+                                        rOutParam.bAscending[0] ) );
                                 }
-                                if ( rOutParam.maKeyState[1].bDoSort )
+                                if ( rOutParam.bDoSort[1] )
                                 {
                                     rReq.AppendItem( SfxInt32Item( FN_PARAM_3,
-                                        rOutParam.maKeyState[1].nField + 1 ) );
+                                        rOutParam.nField[1] + 1 ) );
                                     rReq.AppendItem( SfxBoolItem( FN_PARAM_4,
-                                        rOutParam.maKeyState[1].bAscending ) );
+                                        rOutParam.bAscending[1] ) );
                                 }
-                                if ( rOutParam.maKeyState[2].bDoSort )
+                                if ( rOutParam.bDoSort[2] )
                                 {
                                     rReq.AppendItem( SfxInt32Item( FN_PARAM_5,
-                                        rOutParam.maKeyState[2].nField + 1 ) );
+                                        rOutParam.nField[2] + 1 ) );
                                     rReq.AppendItem( SfxBoolItem( FN_PARAM_6,
-                                        rOutParam.maKeyState[2].bAscending ) );
+                                        rOutParam.bAscending[2] ) );
                                 }
                             }
 

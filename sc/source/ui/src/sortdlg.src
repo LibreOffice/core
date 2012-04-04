@@ -61,7 +61,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Sort ~key 1" ;
+        Text [ en-US ] = "Sort ~by" ;
     };
     ListBox LB_SORT2
     {
@@ -92,7 +92,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Sort ~key 2" ;
+        Text [ en-US ] = "Then b~y" ;
     };
     ListBox LB_SORT3
     {
@@ -123,7 +123,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Sort ~key 3" ;
+        Text [ en-US ] = "T~hen by" ;
     };
 };
 

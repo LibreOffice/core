@@ -3539,9 +3539,9 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     // set up defaults
 
-    sal_Int16 nOrder1 = aSortParam.maKeyState[1].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
-    sal_Int16 nOrder2 = aSortParam.maKeyState[2].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
-    sal_Int16 nOrder3 = aSortParam.maKeyState[3].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder1 = aSortParam.bAscending[0] ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder2 = aSortParam.bAscending[1] ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder3 = aSortParam.bAscending[2] ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
 
     sal_Int16 nCustom = aSortParam.nUserIndex;
     sal_Int16 nSortMethod = excel::XlSortMethod::xlPinYin;
@@ -3620,26 +3620,26 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     {
         nOrder1 = ::comphelper::getINT16(Order1);
         if (  nOrder1 == excel::XlSortOrder::xlAscending )
-            aSortParam.maKeyState[0].bAscending  = true;
+            aSortParam.bAscending[0]  = true;
         else
-            aSortParam.maKeyState[0].bAscending  = false;
+            aSortParam.bAscending[0]  = false;
 
     }
     if ( Order2.hasValue() )
     {
         nOrder2 = ::comphelper::getINT16(Order2);
         if ( nOrder2 == excel::XlSortOrder::xlAscending )
-            aSortParam.maKeyState[1].bAscending  = true;
+            aSortParam.bAscending[1]  = true;
         else
-            aSortParam.maKeyState[1].bAscending  = false;
+            aSortParam.bAscending[1]  = false;
     }
     if ( Order3.hasValue() )
     {
         nOrder3 = ::comphelper::getINT16(Order3);
         if ( nOrder3 == excel::XlSortOrder::xlAscending )
-            aSortParam.maKeyState[2].bAscending  = true;
+            aSortParam.bAscending[2]  = true;
         else
-            aSortParam.maKeyState[2].bAscending  = false;
+            aSortParam.bAscending[2]  = false;
     }
 
     uno::Reference< table::XCellRange > xKey1;

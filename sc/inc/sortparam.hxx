@@ -29,26 +29,15 @@
 #ifndef SC_SORTPARAM_HXX
 #define SC_SORTPARAM_HXX
 
-#define DEFSORT 3
-
-#include <vector>
-
 #include "address.hxx"
 #include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 
+#define MAXSORT 3
+
 struct ScSubTotalParam;
 struct ScQueryParam;
-
-struct ScSortKeyState
-{
-    bool     bDoSort;
-    SCCOLROW nField;
-    bool     bAscending;
-};
-
-typedef ::std::vector<ScSortKeyState> ScSortKeyStateVec;
 
 struct SC_DLLPUBLIC ScSortParam
 {
@@ -67,11 +56,12 @@ struct SC_DLLPUBLIC ScSortParam
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    ScSortKeyStateVec maKeyState;
+    bool        bDoSort[MAXSORT];
+    SCCOLROW    nField[MAXSORT];
+    bool        bAscending[MAXSORT];
     ::com::sun::star::lang::Locale aCollatorLocale;
     ::rtl::OUString aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;
-
 
     ScSortParam();
     ScSortParam( const ScSortParam& r );
@@ -83,9 +73,8 @@ struct SC_DLLPUBLIC ScSortParam
     ScSortParam&    operator=  ( const ScSortParam& r );
     bool            operator== ( const ScSortParam& rOther ) const;
     void            Clear       ();
-    void            MoveToDest();
 
-    inline sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
+    void            MoveToDest();
 };
 
 

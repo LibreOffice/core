@@ -206,7 +206,6 @@ public:
     void testJumpToPrecedentsDependents();
 
     void testSetBackgroundColor();
-    void testRenameTable();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -245,7 +244,6 @@ public:
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
-    CPPUNIT_TEST(testRenameTable);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3911,53 +3909,6 @@ void Test::testMergedCells()
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
-
-
-void Test::testRenameTable()
-{
-    //test set rename table
-    //TODO: set name1 and name2 and do an undo to check if name 1 is set now
-    //TODO: also check if new name for table is same as another table
-
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
-
-    //test case 1 , rename table2 to sheet 1, it should return error
-    rtl::OUString nameToSet = "Sheet1";
-    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
-    CPPUNIT_ASSERT_MESSAGE("name same as another table is being set", !rDocFunc.RenameTable(1,nameToSet,false,true) );
-
-    //test case 2 , simple rename to check name
-    nameToSet = "test1";
-    m_xDocShRef->GetDocFunc().RenameTable(0,nameToSet,false,true);
-    rtl::OUString nameJustSet;
-    m_pDoc->GetName(0,nameJustSet);
-    CPPUNIT_ASSERT_MESSAGE("table not renamed", nameToSet != nameJustSet);
-
-    //test case 3 , rename again
-    rtl::OUString anOldName;
-    m_pDoc->GetName(0,anOldName);
-
-    nameToSet = "test2";
-    rDocFunc.RenameTable(0,nameToSet,false,true);
-    m_pDoc->GetName(0,nameJustSet);
-    CPPUNIT_ASSERT_MESSAGE("table not renamed", nameToSet != nameJustSet);
-
-    //test case 4 , check if  undo works
-    SfxUndoAction* pUndo = new ScUndoRenameTab(m_xDocShRef,0,anOldName,nameToSet);
-    pUndo->Undo();
-    m_pDoc->GetName(0,nameJustSet);
-    CPPUNIT_ASSERT_MESSAGE("the correct name is not set after undo", nameJustSet == anOldName);
-
-    pUndo->Redo();
-    m_pDoc->GetName(0,nameJustSet);
-    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after redo", nameJustSet == nameToSet);
-
-    m_pDoc->DeleteTab(0);
-    m_pDoc->DeleteTab(1);
-}
-
-
 
 void Test::testSetBackgroundColor()
 {

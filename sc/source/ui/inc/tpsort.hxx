@@ -29,7 +29,6 @@
 #ifndef SC_TPSORT_HXX
 #define SC_TPSORT_HXX
 
-#include <vector>
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/edit.hxx>
@@ -41,7 +40,6 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include "sortparam.hxx"
 
 //------------------------------------------------------------------------
 
@@ -99,28 +97,23 @@ private:
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
     const ScSortParam&  rSortData;
-    ScSortParam         aNewSortData;
-    std::vector<SCCOLROW>  nFieldArr;
+    SCCOLROW            nFieldArr[SC_MAXFIELDS];
     sal_uInt16          nFieldCount;
-    sal_uInt16          nSortKeyCount;
-    sal_uInt16          nCurrentOffset;
-
     SCCOL               nFirstCol;
     SCROW               nFirstRow;
     sal_Bool            bHasHeader;
     sal_Bool            bSortByRows;
 
-    std::vector<ListBox*>      aLbSortArr;
-    std::vector<RadioButton*>  aBtnUp;
-    std::vector<RadioButton*>  aBtnDown;
-    std::vector<FixedLine*>    aFlArr;
+    ListBox*            aSortLbArr[3];
+    RadioButton*        aDirBtnArr[3][2];
+    FixedLine*          aFlArr[3];
 
 #ifdef _TPSORT_CXX
 private:
     void    Init            ();
     void    DisableField    ( sal_uInt16 nField );
     void    EnableField     ( sal_uInt16 nField );
-    void    FillFieldLists  ( sal_uInt16 nStartField );
+    void    FillFieldLists  ();
     sal_uInt16  GetFieldSelPos  ( SCCOLROW nField );
 
     // Handler ------------------------
@@ -188,7 +181,6 @@ private:
 
     const sal_uInt16    nWhichSort;
     const ScSortParam&  rSortData;
-    ScSortParam         aNewSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     ScSortDlg*          pDlg;

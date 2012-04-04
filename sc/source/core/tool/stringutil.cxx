@@ -48,15 +48,9 @@ ScSetStringParam::ScSetStringParam() :
 bool ScStringUtil::parseSimpleNumber(
     const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)
 {
-    // Actually almost the entire pre-check is unnecessary and we could call
-    // rtl::math::stringToDouble() just after having exchanged ascii space with
-    // non-breaking space, if it wasn't for check of grouped digits. The NaN
-    // and Inf cases that are accepted by stringToDouble() could be detected
-    // using rtl::math::isFinite() on the result.
-
-    /* TODO: The grouped digits check isn't even valid for locales that do not
-     * group in thousands ... e.g. Indian locales. But that's something also
-     * the number scanner doesn't implement yet, only the formatter. */
+    if (gsep == 0x00A0)
+        // unicode space to ascii space
+        gsep = 0x0020;
 
     OUStringBuffer aBuf;
 
@@ -66,7 +60,6 @@ bool ScStringUtil::parseSimpleNumber(
     const sal_Unicode* pLast = p + (n-1);
     sal_Int32 nPosDSep = -1, nPosGSep = -1;
     sal_uInt32 nDigitCount = 0;
-    sal_Int32 nPosExponent = -1;
 
     // Skip preceding spaces.
     for (i = 0; i < n; ++i, ++p)
@@ -95,9 +88,9 @@ bool ScStringUtil::parseSimpleNumber(
     for (i = 0; i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
-        if (c == 0x0020 && gsep == 0x00A0)
-            // ascii space to unicode space if that is group separator
-            c = 0x00A0;
+        if (c == 0x00A0)
+            // unicode space to ascii space
+            c = 0x0020;
 
         if (sal_Unicode('0') <= c && c <= sal_Unicode('9'))
         {
@@ -139,39 +132,16 @@ bool ScStringUtil::parseSimpleNumber(
                 // must be exactly 3 digits since the last group separator.
                 return false;
 
-            if (nPosExponent >= 0)
-                // not allowed in exponent.
-                return false;
-
             nPosGSep = i;
             nDigitCount = 0;
         }
         else if (c == sal_Unicode('-') || c == sal_Unicode('+'))
         {
-            // A sign must be the first character if it's given, or immediately
-            // follow the exponent character if present.
-            if (i == 0 || (nPosExponent >= 0 && i == nPosExponent + 1))
+            // A sign must be the first character if it's given.
+            if (i == 0)
                 aBuf.append(c);
             else
                 return false;
-        }
-        else if (c == sal_Unicode('E') || c == sal_Unicode('e'))
-        {
-            // this is an exponent designator.
-
-            if (nPosExponent >= 0)
-                // Only one exponent allowed.
-                return false;
-
-            if (nPosGSep >= 0 && nDigitCount != 3)
-                // must be exactly 3 digits since the last group separator.
-                return false;
-
-            aBuf.append(c);
-            nPosExponent = i;
-            nPosDSep = -1;
-            nPosGSep = -1;
-            nDigitCount = 0;
         }
         else
             return false;
@@ -185,10 +155,8 @@ bool ScStringUtil::parseSimpleNumber(
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    OUString aString( aBuf.makeStringAndClear());
-    rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
-    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
-        // Not a valid number or not entire string consumed.
+    rVal = ::rtl::math::stringToDouble(aBuf.makeStringAndClear(), dsep, gsep, &eStatus, &nParseEnd);
+    if (eStatus != rtl_math_ConversionStatus_Ok)
         return false;
 
     return true;

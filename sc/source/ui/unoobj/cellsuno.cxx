@@ -5593,9 +5593,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescripto
             SCCOLROW nFieldStart = aParam.bByRow ?
                 static_cast<SCCOLROW>(aDBRange.aStart.Col()) :
                 static_cast<SCCOLROW>(aDBRange.aStart.Row());
-            for (sal_uInt16 i=0; i<aParam.GetSortKeyCount(); i++)
-                if ( aParam.maKeyState[i].bDoSort && aParam.maKeyState[i].nField >= nFieldStart )
-                    aParam.maKeyState[i].nField -= nFieldStart;
+            for (sal_uInt16 i=0; i<MAXSORT; i++)
+                if ( aParam.bDoSort[i] && aParam.nField[i] >= nFieldStart )
+                    aParam.nField[i] -= nFieldStart;
         }
     }
 
@@ -5621,9 +5621,9 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
             SCCOLROW nOldStart = aParam.bByRow ?
                 static_cast<SCCOLROW>(aRange.aStart.Col()) :
                 static_cast<SCCOLROW>(aRange.aStart.Row());
-            for (i=0; i<aParam.GetSortKeyCount(); i++)
-                if ( aParam.maKeyState[i].bDoSort && aParam.maKeyState[i].nField >= nOldStart )
-                    aParam.maKeyState[i].nField -= nOldStart;
+            for (i=0; i<MAXSORT; i++)
+                if ( aParam.bDoSort[i] && aParam.nField[i] >= nOldStart )
+                    aParam.nField[i] -= nOldStart;
         }
 
         ScSortDescriptor::FillSortParam( aParam, aDescriptor );
@@ -5633,8 +5633,8 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         SCCOLROW nFieldStart = aParam.bByRow ?
             static_cast<SCCOLROW>(aRange.aStart.Col()) :
             static_cast<SCCOLROW>(aRange.aStart.Row());
-        for (i=0; i<aParam.GetSortKeyCount(); i++)
-            aParam.maKeyState[i].nField += nFieldStart;
+        for (i=0; i<MAXSORT; i++)
+            aParam.nField[i] += nFieldStart;
 
         SCTAB nTab = aRange.aStart.Tab();
         aParam.nCol1 = aRange.aStart.Col();

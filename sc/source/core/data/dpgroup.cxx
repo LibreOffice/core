@@ -68,6 +68,15 @@ using ::boost::shared_ptr;
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
+namespace {
+
+inline bool IsInteger( double fValue )
+{
+    return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
+}
+
+}
+
 class ScDPGroupNumFilter : public ScDPCacheTable::FilterBase
 {
 public:
