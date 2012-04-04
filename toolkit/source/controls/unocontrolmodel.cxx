@@ -1054,13 +1054,6 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
     return Sequence< ::rtl::OUString >( &sName, 1 );
 }
 
-// ::cppu::OPropertySetHelper
-::cppu::IPropertyArrayHelper& UnoControlModel::getInfoHelper()
-{
-    OSL_FAIL( "UnoControlModel::getInfoHelper() not possible!" );
-    return *(::cppu::IPropertyArrayHelper*) NULL;
-}
-
 // ------------------------------------------------------------------
 template <class TYPE>
 sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)

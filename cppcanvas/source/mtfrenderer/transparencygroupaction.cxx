@@ -82,34 +82,6 @@ namespace cppcanvas
 
                     @param rGroupMtf
                     Metafile that groups all actions to be rendered
-                    transparent
-
-                    @param rParms
-                    Render parameters
-
-                    @param rDstPoint
-                    Left, top edge of destination, in current state
-                    coordinate system
-
-                    @param rDstSize
-                    Size of the transparency group object, in current
-                    state coordinate system.
-
-                    @param nAlpha
-                    Alpha value, must be in the range [0,1]
-                */
-                TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
-                                         const Renderer::Parameters&    rParms,
-                                         const ::basegfx::B2DPoint&     rDstPoint,
-                                         const ::basegfx::B2DVector&    rDstSize,
-                                         double                         nAlpha,
-                                         const CanvasSharedPtr&         rCanvas,
-                                         const OutDevState&             rState );
-
-                /** Create new transparency group action.
-
-                    @param rGroupMtf
-                    Metafile that groups all actions to be rendered
                     transparent.
 
                     @param rAlphaGradient
@@ -179,40 +151,6 @@ namespace cppcanvas
                 ::canvas::tools::appendToRenderState( rRenderState,
                                                       aLocalTransformation );
             }
-
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
-                                                              const Renderer::Parameters&   rParms,
-                                                              const ::basegfx::B2DPoint&    rDstPoint,
-                                                              const ::basegfx::B2DVector&   rDstSize,
-                                                              double                        nAlpha,
-                                                              const CanvasSharedPtr&        rCanvas,
-                                                              const OutDevState&            rState ) :
-                mpGroupMtf( rGroupMtf ),
-                mpAlphaGradient(),
-                maParms( rParms ),
-                maDstSize( rDstSize ),
-                mxBufferBitmap(),
-                maLastTransformation(),
-                mpCanvas( rCanvas ),
-                maState(),
-                mnAlpha( nAlpha )
-            {
-                tools::initRenderState(maState,rState);
-                implSetupTransform( maState, rDstPoint );
-
-                // correct clip (which is relative to original transform)
-                tools::modifyClip( maState,
-                                   rState,
-                                   rCanvas,
-                                   rDstPoint,
-                                   NULL,
-                                   NULL );
-
-                maLastSubset.mnSubsetBegin = 0;
-                maLastSubset.mnSubsetEnd = -1;
-            }
-            SAL_WNODEPRECATED_DECLARATIONS_POP
 
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,

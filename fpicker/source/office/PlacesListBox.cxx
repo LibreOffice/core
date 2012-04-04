@@ -97,10 +97,6 @@ void PlacesListBox::AppendPlace( PlacePtr pPlace )
     }
 }
 
-sal_Int32 PlacesListBox::GetNbPlaces() {
-    return maPlaces.size();
-}
-
 sal_Int32 PlacesListBox::GetNbEditablePlaces() {
     return mnNbEditables;
 }

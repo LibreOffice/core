@@ -110,9 +110,6 @@ private:
     AnimatorAccess& mrAnimatorAccess;
     ::boost::function<double(double)> maAccelerationFunction;
 
-    Rectangle GetInnerBoundingBox (
-        const view::Layouter& rLayouter,
-        const sal_Int32 nIndex) const;
     void RestartAnimation (void);
 };
 typedef ::boost::shared_ptr<PageObjectRun> SharedPageObjectRun;
@@ -381,33 +378,6 @@ PageObjectRun::PageObjectRun (
 PageObjectRun::~PageObjectRun (void)
 {
 }
-
-
-
-
-Rectangle PageObjectRun::GetInnerBoundingBox (
-    const view::Layouter& rLayouter,
-    const sal_Int32 nIndex) const
-{
-    model::SharedPageDescriptor pDescriptor (
-        mrAnimatorAccess.GetModel().GetPageDescriptor(nIndex));
-    if (pDescriptor)
-        if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
-            return rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                pDescriptor,
-                PageObjectLayouter::PageObject,
-                PageObjectLayouter::ModelCoordinateSystem);
-        else
-            return rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                pDescriptor,
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::ModelCoordinateSystem);
-    else
-        return Rectangle();
-}
-
-
-
 
 void PageObjectRun::UpdateOffsets(
     const InsertPosition& rInsertPosition,

@@ -325,41 +325,6 @@ namespace
     }
 
     //---------------------------------------------------------------------
-    void    convertStringListToUrls( const rtl::OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens )
-    {
-        const sal_Unicode cSeparator =
-#if defined(WNT)
-            ';'
-#else
-            ':'
-#endif
-            ;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            // the current token in the list
-            rtl::OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
-            if ( !sCurrentToken.isEmpty() )
-            {
-                INetURLObject aCurrentURL;
-
-                rtl::OUString sURL;
-                if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
-                    aCurrentURL = INetURLObject( sURL );
-                else
-                {
-                    // smart URL parsing, assuming FILE protocol
-                    aCurrentURL = INetURLObject( sCurrentToken, INET_PROT_FILE );
-                }
-
-                aCurrentURL.removeFinalSlash( );
-                _rTokens.push_back( aCurrentURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            }
-        }
-        while ( nIndex >= 0 );
-    }
-
-    //---------------------------------------------------------------------
     struct RemoveFinalSlash : public ::std::unary_function< String, void >
     {
         void operator()( String& _rURL )

@@ -126,23 +126,6 @@ protected:
     virtual void        Click();
 };
 
-class SvtTravelButton_Impl : public SvtFileDialogURLSelector
-{
-private:
-    ::std::vector< String > m_aFavourites;
-
-public:
-    SvtTravelButton_Impl( SvtFileDialog* pParent, const ResId& rResId );
-    ~SvtTravelButton_Impl();
-
-            void            SetFavouriteLocations( const ::std::vector< String >& _rLocations );
-
-protected:
-    virtual void        FillURLMenu( PopupMenu* _pMenu );
-    virtual void        Select();
-    virtual void        Click();
-};
-
 typedef sal_uInt8 SvtFileDlgState;
 
 #define FILEDLG_STATE_NONE        ((SvtFileDlgState)0x00)

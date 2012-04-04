@@ -96,7 +96,6 @@ class PlacesListBox : public Control
         void AppendPlace( PlacePtr pPlace );
         void RemovePlace( sal_uInt16 nPos );
         void RemoveSelectedPlace();
-        sal_Int32 GetNbPlaces();
         sal_Int32 GetNbEditablePlaces();
         bool IsUpdated();
         const std::vector<PlacePtr>& GetPlaces();

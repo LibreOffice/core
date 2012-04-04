@@ -579,16 +579,6 @@ SfxStyleSheet* Cell::GetStyleSheet() const
 
 // -----------------------------------------------------------------------------
 
-SfxStyleSheetPool* Cell::GetStyleSheetPool() const
-{
-    if( mpProperties && mpProperties->GetStyleSheet() )
-        return dynamic_cast< SfxStyleSheetPool* >( &mpProperties->GetStyleSheet()->GetPool() );
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------------
-
 const Rectangle& Cell::GetCurrentBoundRect() const
 {
     return maCellRect;
