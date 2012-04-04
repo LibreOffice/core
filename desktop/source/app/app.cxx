@@ -702,8 +702,7 @@ void Desktop::ensureProcessServiceFactory()
         }
         catch (const css::uno::Exception& e)
         {
-            (void)e;
-            OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+            SAL_WARN("desktop", "UNO Exception: " << e.Message);
             // let exceptions escape and tear down the process, it is
             // completely broken anyway
             throw;
