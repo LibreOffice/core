@@ -76,7 +76,7 @@ namespace pcr
         sal_Int32 nPostfixNumber = 1;
         do
         {
-            ( sInitialName = sNameBase ) += String::CreateFromInt32( nPostfixNumber++ );
+            ( sInitialName = sNameBase ) += rtl::OUString::valueOf(nPostfixNumber++);
         }
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 

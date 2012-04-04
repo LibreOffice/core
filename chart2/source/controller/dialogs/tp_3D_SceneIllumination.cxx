@@ -160,15 +160,15 @@ namespace
 {
     rtl::OUString lcl_makeColorName( Color rColor )
     {
-        String aStr(SVX_RES(RID_SVXFLOAT3D_FIX_R));
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetRed());
-        aStr += sal_Unicode(' ');
-        aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_G));
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetGreen());
-        aStr += sal_Unicode(' ');
-        aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_B));
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetBlue());
-        return aStr;
+        rtl::OUStringBuffer aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
+        aStr.append((sal_Int32)rColor.GetRed());
+        aStr.append(' ');
+        aStr.append(SVX_RESSTR(RID_SVXFLOAT3D_FIX_G));
+        aStr.append((sal_Int32)rColor.GetGreen());
+        aStr.append(' ');
+        aStr.append(SVX_RESSTR(RID_SVXFLOAT3D_FIX_B));
+        aStr.append((sal_Int32)rColor.GetBlue());
+        return aStr.makeStringAndClear();
     }
     void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
     {

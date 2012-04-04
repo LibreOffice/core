@@ -692,9 +692,9 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     {
         aName = GetWindow()->GetAccessibleName();
 #if OSL_DEBUG_LEVEL > 1
-        aName += String( RTL_CONSTASCII_USTRINGPARAM( " (Type = " ) );
-        aName += String::CreateFromInt32( GetWindow()->GetType() );
-        aName += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+        aName += rtl::OUString(" (Type = ");
+        aName += rtl::OUString::valueOf(static_cast<sal_Int32>(GetWindow()->GetType()));
+        aName += rtl::OUString( ")");
 #endif
     }
     return aName;

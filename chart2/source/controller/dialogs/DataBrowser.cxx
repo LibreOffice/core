@@ -658,7 +658,7 @@ String DataBrowser::GetColString( sal_Int32 nColumnId ) const
 
 String DataBrowser::GetRowString( sal_Int32 nRow ) const
 {
-    return String::CreateFromInt32( nRow + 1 );
+    return rtl::OUString::valueOf(nRow + 1);
 }
 
 String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const

@@ -83,8 +83,8 @@ DragMethod_PieSegment::~DragMethod_PieSegment()
 }
 void DragMethod_PieSegment::TakeSdrDragComment(String& rStr) const
 {
-    rStr = String( SchResId( STR_STATUS_PIE_SEGMENT_EXPLODED ) );
-    rStr.SearchAndReplaceAscii( "%PERCENTVALUE", String::CreateFromInt32( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
+    rStr = ResId::toString(SchResId(STR_STATUS_PIE_SEGMENT_EXPLODED));
+    rStr.SearchAndReplaceAscii( "%PERCENTVALUE", rtl::OUString::valueOf( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
 }
 bool DragMethod_PieSegment::BeginSdrDrag()
 {

@@ -395,27 +395,21 @@ const String SmFontFormatList::GetFontFormatId( size_t nPos ) const
 }
 
 
-const String SmFontFormatList::GetNewFontFormatId() const
+const rtl::OUString SmFontFormatList::GetNewFontFormatId() const
 {
     // returns first unused FormatId
 
-    String aRes;
-
-    String aPrefix( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
+    rtl::OUString aPrefix("Id");
     sal_Int32 nCnt = GetCount();
     for (sal_Int32 i = 1;  i <= nCnt + 1;  ++i)
     {
-        String aTmpId( aPrefix );
-        aTmpId += String::CreateFromInt32( i );
-        if (!GetFontFormat( aTmpId ))
-        {
-            aRes = aTmpId;
-            break;
-        }
+        rtl::OUString aTmpId =  aPrefix + rtl::OUString::valueOf(i);
+        if (!GetFontFormat(aTmpId))
+            return aTmpId;
     }
-    OSL_ENSURE( 0 != aRes.Len(), "failed to create new FontFormatId" );
+    OSL_ENSURE( !this, "failed to create new FontFormatId" );
 
-    return aRes;
+    return rtl::OUString();
 }
 
 /////////////////////////////////////////////////////////////////

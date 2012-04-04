@@ -491,7 +491,7 @@ void DataSourceTabPage::fillSeriesListBox()
                 if( nIndex != -1 )
                     aLabel = String( aResString.replaceAt(
                                          nIndex, aReplacementStr.getLength(),
-                                         String::CreateFromInt32( nUnnamedSeriesIndex )));
+                                         rtl::OUString::valueOf(nUnnamedSeriesIndex)));
             }
             if( aLabel.Len() == 0 )
                 aLabel = String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES ));

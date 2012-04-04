@@ -104,7 +104,7 @@ public:
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
     const String            GetFontFormatId( size_t nPos ) const;
-    const String            GetNewFontFormatId() const;
+    const rtl::OUString     GetNewFontFormatId() const;
     size_t                  GetCount() const    { return aEntries.size(); }
 
     bool    IsModified() const          { return bModified; }

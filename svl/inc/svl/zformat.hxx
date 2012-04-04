@@ -649,12 +649,12 @@ private:
             sal_uInt16 nMinDigits = 0  ) const;
 
     String ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
-        {
-            const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
-            if ( nMinDigits || rNum.IsComplete() )
-                return ImpGetNatNumString( rNum, nVal, nMinDigits );
-            return String::CreateFromInt32( nVal );
-        }
+    {
+        const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
+        if ( nMinDigits || rNum.IsComplete() )
+            return ImpGetNatNumString( rNum, nVal, nMinDigits );
+        return rtl::OUString::valueOf(nVal);
+    }
 
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE void ImpTransliterateImpl( String& rStr, const SvNumberNatNum& rNum ) const;

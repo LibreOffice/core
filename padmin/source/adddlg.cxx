@@ -1074,7 +1074,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
 
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
 
-    int nVersion = 1;
+    sal_Int32 nVersion = 1;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
     boost::unordered_set< OUString, OUStringHash > aPrinters;
@@ -1084,7 +1084,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     {
         aResult = rBase;
         aResult.AppendAscii( "_" );
-        aResult += String::CreateFromInt32( nVersion++ );
+        aResult += rtl::OUString::valueOf(nVersion++);
     }
 
     return aResult;

@@ -1380,7 +1380,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             {
                 aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "][$-" ) );
                 // language code in upper hex:
-                aFormatCode.append( String::CreateFromInt32( sal_Int32( eLang ), 16 ).ToUpperAscii() );
+                aFormatCode.append(rtl::OUString::valueOf(sal_Int32(eLang), 16).toAsciiUpperCase());
             }
             aFormatCode.append( sal_Unicode(']') );
         }
@@ -1905,7 +1905,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
         {
             //  '-' sign and language code in hex:
             aFormatCode.append( (sal_Unicode) '-' );
-            aFormatCode.append( String::CreateFromInt32( sal_Int32( nLang ), 16 ).ToUpperAscii() );
+            aFormatCode.append(rtl::OUString::valueOf(sal_Int32(nLang), 16).toAsciiUpperCase());
         }
 
         aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbol

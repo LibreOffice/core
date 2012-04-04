@@ -133,17 +133,17 @@ namespace accessibility
         SolarMethodGuard aGuard( *this );
 
         // TODO: localize this!
-        String sName = mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) );
-        if ( 0 == sName.Len() )
+        rtl::OUStringBuffer sName(mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) ));
+        if ( 0 == sName.getLength() )
         {
-            sName = String::CreateFromAscii( "Column " );
-            sName += String::CreateFromInt32( getColumnPos( ) );
+            sName.appendAscii(RTL_CONSTASCII_STRINGPARAM("Column "));
+            sName.append(getColumnPos());
         }
 
-        sName += String::CreateFromAscii( ", Row " );
-        sName += String::CreateFromInt32( getRowPos( ) );
+        sName.appendAscii(RTL_CONSTASCII_STRINGPARAM(", Row "));
+        sName.append(getRowPos());
 
-        return ::rtl::OUString( sName );
+        return sName.makeStringAndClear();
     }
 
     // -----------------------------------------------------------------------------

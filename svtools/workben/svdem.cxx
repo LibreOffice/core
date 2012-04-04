@@ -308,7 +308,7 @@ void ShowFont::Paint( const Rectangle& )
 
     if ( rFont.GetOrientation() )
     {
-        aText.Append( String::CreateFromInt32( rFont.GetOrientation()/10 ) );
+        aText.Append( rtl::OUString::valueOf(static_cast<sal_Int32>(rFont.GetOrientation()/10)) );
         aText.AppendAscii( " degree." );
 
         x = aWindowSize.Width()/2;

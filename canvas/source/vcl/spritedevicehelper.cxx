@@ -135,13 +135,13 @@ namespace vclcanvas
     {
         DeviceHelper::dumpScreenContent();
 
-        static sal_uInt32 nFilePostfixCount(0);
+        static sal_Int32 nFilePostfixCount(0);
 
         if( mpBackBuffer )
         {
-            String aFilename( String::CreateFromAscii("dbg_backbuffer") );
-            aFilename += String::CreateFromInt32(nFilePostfixCount);
-            aFilename += String::CreateFromAscii(".bmp");
+            rtl::OUString aFilename("dbg_backbuffer");
+            aFilename += rtl::OUString::valueOf(nFilePostfixCount);
+            aFilename += rtl::OUString(".bmp");
 
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 

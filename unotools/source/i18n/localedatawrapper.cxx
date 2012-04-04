@@ -342,19 +342,20 @@ void LocaleDataWrapper::invalidateData()
 //                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
                     )
                 {
-                    String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                    rtl::OUStringBuffer aMsg;
+                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(
                                 "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n"));
-                    aMsg += aDebugLocale;
-                    aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
-                    aMsg += String::CreateFromInt32( eLang, 16 );
-                    aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
-                    aMsg += String( aLanguage);
+                    aMsg.append(aDebugLocale);
+                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  0x"));
+                    aMsg.append(static_cast<sal_Int32>(eLang), 16);
+                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  "));
+                    aMsg.append(aLanguage);
                     if ( !aCountry.isEmpty() )
                     {
-                        aMsg += '_';
-                        aMsg += String( aCountry);
+                        aMsg.append('_');
+                        aMsg.append(aCountry);
                     }
-                    outputCheckMessage( aMsg );
+                    outputCheckMessage( aMsg.makeStringAndClear() );
                 }
                 eLang = LANGUAGE_DONTKNOW;
             }

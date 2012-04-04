@@ -510,8 +510,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     uno::Sequence<rtl::OUString> aListSource(TYPE_COUNT);
                     rtl::OUString* pListSourceArr = aListSource.getArray();
                     //pListSourceArr[0] = C2U("select TypeName, TypeIndex from TypeNms");
-                    for(sal_uInt16 i = 0; i < TYPE_COUNT; i++)
-                        pListSourceArr[i] = String::CreateFromInt32(i);
+                    for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
+                        pListSourceArr[i] = rtl::OUString::valueOf(i);
                     aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<rtl::OUString>*)0));
 
                     xPropSet->setPropertyValue(C2U("ListSource"), aAny);

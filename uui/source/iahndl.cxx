@@ -632,7 +632,7 @@ UUIInteractionHelper::handleRequest_impl(
             sal_Int32 nMedium = 0;
             aWrongMediumException.Medium >>= nMedium;
             std::vector< rtl::OUString > aArguments;
-            aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
+            aArguments.push_back(rtl::OUString::valueOf(nMedium + 1));
             handleErrorHandlerRequest(aWrongMediumException.Classification,
                                       ERRCODE_UUI_WRONGMEDIUM,
                                       aArguments,

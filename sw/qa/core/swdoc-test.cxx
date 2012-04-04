@@ -367,8 +367,7 @@ getRand(int modulus)
 static rtl::OUString
 getRandString()
 {
-    static rtl::OUString aText(RTL_CONSTASCII_USTRINGPARAM(
-        "AAAAA BBBB CCC DD E \n"));
+    rtl::OUString aText("AAAAA BBBB CCC DD E \n");
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
     rtl::OUString aRet(aText.copy(s, j));
