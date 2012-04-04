@@ -869,7 +869,7 @@ bool paintUsingPrimitivesHelper(
             if(bMirrorX || bMirrorY)
             {
                 aMappingTransform.translate(-aTargetRange.getCenterX(), -aTargetRange.getCenterY());
-                aMappingTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorX ? -1.0 : 1.0);
+                aMappingTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0); // #119176# small typo with X/Y
                 aMappingTransform.translate(aTargetRange.getCenterX(), aTargetRange.getCenterY());
             }
 

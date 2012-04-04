@@ -407,6 +407,9 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
         delete mpBmpEx, mpBmpEx = NULL;
         delete mpMtf, mpMtf = NULL;
         delete mpAnimation, mpAnimation = NULL;
+
+        // #119176# also reset SvgData
+        maSvgData.reset();
     }
 }
 

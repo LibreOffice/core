@@ -723,6 +723,44 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                 return sal_True;
             }
         }
+        else
+        {
+            // #119176# Svg files which have no xml header at all have shown up,
+            // detect those, too
+            bool bIsSvg(false);
+
+            // check for svg element in 1st 256 bytes
+            if(ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
+            {
+                bIsSvg = true;
+            }
+
+            if(!bIsSvg)
+            {
+                // look for '<svg' in full file. Should not happen too
+                // often since the tests above will handle most cases, but can happen
+                // with Svg files containing big comment headers or Svg as the host
+                // language
+                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
+                sal_uInt8* pBuf = new sal_uInt8[nSize];
+
+                rStream.Seek(nStreamPos);
+                rStream.Read(pBuf, nSize);
+
+                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
+                {
+                    bIsSvg = true;
+                }
+
+                delete[] pBuf;
+            }
+
+            if(bIsSvg)
+            {
+                rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+                return sal_True;
+            }
+        }
     }
     else if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
     {
