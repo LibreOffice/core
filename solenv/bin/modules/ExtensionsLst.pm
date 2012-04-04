@@ -591,6 +591,8 @@ sub GetExtensionList ($@)
     {
         # Bundling of dictionaires is disabled.
     }
+
+    return ();
 }
 
 

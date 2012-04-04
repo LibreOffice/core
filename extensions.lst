@@ -34,10 +34,10 @@
 # Some extensions that are installed indepently of the language.
 
 #[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
-#    file://presenter/presenter-screen.oxt
+    file://presenter/presenter-screen.oxt
 
 #[ language=all && ENABLE_MINIMIZER=YES ]
-#    file://minimizer/presentation-minimizer.oxt
+    file://minimizer/presentation-minimizer.oxt
 
 
 

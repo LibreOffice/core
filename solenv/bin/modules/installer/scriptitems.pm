@@ -491,7 +491,8 @@ sub remove_not_required_spellcheckerlanguage_files
     return \@filesarray;
 }
 
-=head3 add_bundled_extension_blobs
+=head3 add_bundled_extension_blobs(@filelist)
+
     Add entries for extension blobs to the global file list.
     Extension blobs, unlike preregistered extensions, are not
     extracted before included into a pack set.
@@ -503,6 +504,7 @@ sub remove_not_required_spellcheckerlanguage_files
     the default set.
 
     Extension blobs are placed in gid_Brand_Dir_Share_Extensions_Install.
+
 =cut
 sub add_bundled_extension_blobs
 {
@@ -510,7 +512,11 @@ sub add_bundled_extension_blobs
 
     my @bundle_files = ();
     my $bundleenv = $ENV{'BUNDLED_EXTENSION_BLOBS'};
-    my $bundlesrc = $ENV{'TARFILE_LOCATION'};
+    my $bundlehttpsrc = $ENV{'TARFILE_LOCATION'} . $installer::globals::separator;
+    my $bundlefilesrc = $ENV{SOLARVERSION}
+        . $installer::globals::separator . $ENV{INPATH}
+        . $installer::globals::separator . "bin"
+        . $installer::globals::separator;
 
     if ($installer::globals::product =~ /(SDK|URE)/i )
     {
@@ -519,16 +525,28 @@ sub add_bundled_extension_blobs
     elsif (defined $bundleenv)
     {
         # Use the list of extensions that was explicitly given to configure.
-        @bundle_files = split(/\s+/, $bundleenv, -1);
+        for my $name (split(/\s+/, $bundleenv, -1))
+        {
+            push @bundle_files, $bundlehttpsrc . $name;
+        }
     }
     else
     {
-        # Add the default rextensions for the current language set.
-        @bundle_files = ExtensionsLst::GetExtensionList("http|https", @installer::globals::languageproducts);
+        # Add the default extensions for the current language set.
+        # http:// extensions are taken from ext_sources/.
+        for my $name (ExtensionsLst::GetExtensionList("http|https", @installer::globals::languageproducts))
+        {
+            push @bundle_files, $bundlehttpsrc . $name;
+        }
+        # file:// extensions are taken from the solver bin/ directory.
+        for my $name (ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts))
+        {
+            push @bundle_files, $bundlefilesrc . $name;
+        }
     }
 
     installer::logger::print_message(
-        sprintf("preparing %d extension blob%s for language%s %s:\n    %s\n",
+        sprintf("preparing %d extension blob%s for language%s %s:\n",
            $#bundle_files + 1,
            $#bundle_files!=0 ? "s" : "",
            $#installer::globals::languageproducts!=0 ? "s" : "",
@@ -543,18 +561,21 @@ sub add_bundled_extension_blobs
             'Name' => $basename,
             'Styles' => '(PACKED)',
             'UnixRights' => '444',
-            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename,
+            'sourcepath' => $filename,
             'modules' => "gid_Module_Dictionaries",
             'gid' => "gid_File_Extension_".$basename
         };
         push( @filelist, $onefile);
         push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
+
+        installer::logger::print_message("    " . $basename . "\n");
     }
 
     return \@filelist;
 }
 
-=head3 add_bundled_prereg_extensions
+=head3 add_bundled_prereg_extensions(@filelist)
+
     Add entries for preregistered extensions to the global file list.
 
     The set of extensions to include is taken from the BUNDLED_PREREG_EXTENSIONS
@@ -564,6 +585,7 @@ sub add_bundled_extension_blobs
     the default set.
 
     Preregistered extensions are placed in subdirectories of gid_Brand_Dir_Share_Prereg_Bundled.
+
 =cut
 sub add_bundled_prereg_extensions
 {
@@ -585,7 +607,10 @@ sub add_bundled_prereg_extensions
     else
     {
         # Add the default rextensions for the current language set.
-        @bundle_files = ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts);
+
+        # file:// URLs are currently handled by add_bundled_extension_blobs(@), therefore
+        # we may not their handling here anmore.
+        # @bundle_files = ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts);
     }
 
     installer::logger::print_message(
