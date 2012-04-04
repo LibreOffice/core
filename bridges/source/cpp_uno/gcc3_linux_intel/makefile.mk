@@ -58,6 +58,7 @@ CFLAGSNOOPT=-O0
 
 SLOFILES= \
     $(SLO)$/except.obj		\
+    $(SLO)$/callvirtualmethod.obj \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj \
     $(SLO)$/call.obj
