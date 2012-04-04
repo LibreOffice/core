@@ -79,7 +79,7 @@
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
-    c71fa1e7a047cf4efdb27027e3f75a16 http://sourceforge.net/projects/aoo-extensions/files/1204/10/dict-it.oxt/download "dict-it.oxt"
+    e7ad2666a727b594948cb672a31ba22d http://sourceforge.net/projects/aoo-extensions/files/1204/11/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
 [ language=es ]
