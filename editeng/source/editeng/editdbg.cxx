@@ -334,13 +334,14 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     fprintf( fp, "\n================================================================================" );
     for ( sal_uInt16 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
     {
-
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
-        fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), rtl::OUStringToOString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).getStr() );
+        fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'",
+                 nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(),
+                 rtl::OUStringToOString(pPPortion->GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nVorlage:" );
         SfxStyleSheet* pStyle = pPPortion->GetNode()->GetStyleSheet();
         if ( pStyle )
-            fprintf( fp, " %s", rtl::OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).getStr() );
+            fprintf( fp, " %s", rtl::OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nParagraph attribute:" );
         DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), sal_False, sal_False );
 
