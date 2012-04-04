@@ -104,20 +104,6 @@ Slider::Slider( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-Slider::Slider( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_SLIDER )
-{
-    rResId.SetRT( RSC_SCROLLBAR );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 void Slider::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
@@ -999,20 +985,6 @@ void Slider::Slide()
 void Slider::EndSlide()
 {
     maEndSlideHdl.Call( this );
-}
-
-// -----------------------------------------------------------------------
-
-void Slider::SetRangeMin( long nNewRange )
-{
-    SetRange( Range( nNewRange, GetRangeMax() ) );
-}
-
-// -----------------------------------------------------------------------
-
-void Slider::SetRangeMax( long nNewRange )
-{
-    SetRange( Range( GetRangeMin(), nNewRange ) );
 }
 
 // -----------------------------------------------------------------------

@@ -88,7 +88,6 @@ private:
 
 public:
                     Slider( Window* pParent, WinBits nStyle = WB_HORZ );
-                    Slider( Window* pParent, const ResId& rResId );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
@@ -107,9 +106,7 @@ public:
                         { mbFullDrag = bEnable; }
     sal_Bool            IsDragEnabled() const { return mbFullDrag; }
 
-    void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( long nNewRange );
     long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
     Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
