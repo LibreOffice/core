@@ -313,28 +313,26 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
     // it's reasonable to relocate and test-format (2).
     //
     // Bit 1 in this case means that there are objects anchored to myself,
-    // bit 2 means that I have to avoid other objects.
+    // bit 2 means that I have to evade other objects.
 
-    // If a SurroundObj that desires to be wrapped around overlaps with the Rect,
-    // it's required to float (because we can't guess the relationships).
+    // If a SurroundObj that desires to be wrapped around overlaps with the
+    // Rect, it's required to flow (because we can't guess the relationships).
     // However it's possible for a test formatting to happen.
-    //
-    // If the SurroundObj is a Fly and I'm a Lower, or the Fly is a lower of
+    // If the SurroundObj is a Fly and I'm a Lower, or the Fly is a Lower of
     // mine, then it doesn't matter.
-    //
     // If the SurroundObj is anchored in a character bound Fly, and I'm not
     // a Lower of that character bound Fly myself, then the Fly doesn't matter.
 
-    //#32639# If the object is anchored with me, i can neglect it, because
-    //it's likely that it will follow the flow. A test formatting is not
-    //allowed in that case, however!
+    // #32639# If the object is anchored with me, i can ignore it, because
+    // it's likely that it will follow me with the flow. A test formatting is
+    // not allowed in that case, however!
     sal_uInt8 nRet = 0;
     SwFlowFrm *pTmp = this;
     do
     {   // If there are objects hanging either on me or on a follow, we can't
         // do a test formatting, because paragraph bound objects wouldn't
         // be properly considered, and character bound objects shouldn't
-        // be test formatted either.
+        // be test formatted at all.
         if( pTmp->GetFrm()->GetDrawObjs() )
             nRet = 1;
         pTmp = pTmp->GetFollow();
@@ -372,7 +370,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
                 }
 
                 // Don't do this if the object is anchored behind me in the text
-                // flow, because then I wouldn't avoid it.
+                // flow, because then I wouldn't evade it.
                 if ( ::IsFrmInSameKontext( pAnchor, &rThis ) )
                 {
                     if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_PARA )
@@ -381,7 +379,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
                         sal_uLong nTmpIndex = rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex();
                         // Now we're going to check whether the current paragraph before
                         // the anchor of the displacing object sits in the text. If this
-                        // is the case, we don't try to avoid it.
+                        // is the case, we don't try to evade it.
                         // The index is being determined via SwFmtAnchor, because it's
                         // getting quite expensive otherwise.
                         if( ULONG_MAX == nIndex )
@@ -473,7 +471,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
             while ( pCnt && pLay->IsAnLower( pCnt ) )
             {
                 // It's possible for the CntFrm to be locked, and we don't want
-                // to end up in an endless sideways movement, so we're not even
+                // to end up in an endless page migration, so we're not even
                 // going to call Calc!
                 OSL_ENSURE( pCnt->IsTxtFrm(), "The Graphic has landed." );
                 if ( ((SwTxtFrm*)pCnt)->IsLocked() ||
@@ -498,7 +496,7 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
     //returns sal_True if there's a LayoutFrm in the chain.
     sal_Bool bRet = sal_False;
 
-    // The chain beginning with pStart is being hanged before the sibling
+    // The chain beginning with pStart is inserted before pSibling
     // under the parent. We take care to invalidate as required.
 
     // I'm receiving a finished chain. We need to update the pointers for
@@ -790,8 +788,8 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
 |*
 |*  SwFrm::GetLeaf()
 |*
-|*  Description        Returns the next/previous Layout leave that's NOT
-|*      below this (or even is this itself). Also, that leave must be in the same
+|*  Description        Returns the next/previous Layout leaf that's NOT below
+|*      this (or even is this itself). Also, that leaf must be in the same
 |*      text flow as the pAnch origin frm (Body, Ftn)
 |*
 |*************************************************************************/
@@ -895,7 +893,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     // because then it's likely for the next page to have been
     // wrong and having been swapped because of that.
     // This in turn means that I have a new (and correct) page,
-    // but the conditions to swap are still not given.
+    // but the conditions to swap still apply.
     // Way out of the situation: Try to preliminarily insert a
     // new page once (empty pages are already inserted by InsertPage()
     // if required)
@@ -1149,8 +1147,9 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
         if( SwFlowFrm::CastFlowFrm( pPre )->IsAnFollow( this ) )
             return sal_False;
         SwLayoutFrm* pPreUp = pPre->GetUpper();
-        // If the upper is a SectionFrm, or a column of a SectionFrm, we're allowed
-        // to protrude it. However, we need to respect the Upper of the SectionFrm.
+        // If the upper is a SectionFrm, or a column of a SectionFrm, we're
+        // allowed to protrude out of it.  However, we need to respect the
+        // Upper of the SectionFrm.
         if( pPreUp->IsInSct() )
         {
             if( pPreUp->IsSctFrm() )
@@ -1201,7 +1200,7 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
 |*      predecessor (AFTER). If there's no predecessor on the page, we don't
 |*      need to think further.
 |*      Also, a page break (or the need for one) is also present if
-|*      the FrmFmt tells us so.
+|*      the FrmFmt contains a PageDesc.
 |*      The implementation works only on CntntFrms! - the definition
 |*      of the predecessor is not clear for LayoutFrms.
 |*
@@ -1256,11 +1255,11 @@ sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
 |*
 |*  sal_Bool SwFlowFrm::IsColBreak()
 |*
-|*  Description        If there's a hard column break before the Frm AND there is
+|*      If there's a hard column break before the Frm AND there is
 |*      a predecessor in the same column, we return sal_True (we need to create
-|*      a PageBreak. Otherwise, we return sal_False.
+|*      a ColBreak). Otherwise, we return sal_False.
 |*      If bAct is set to sal_True, we return sal_True if there's a ColBreak.
-|*      Of course, we don't evaluate the hard page break for follows.
+|*      Of course, we don't evaluate the hard column break for follows.
 |*
 |*      The column break is in it's own FrmFmt (BEFORE) or in the FrmFmt of the
 |*      predecessor (AFTER). If there's no predecessor in the column, we don't
@@ -1965,7 +1964,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
 
         if( bNoFwd )
         {
-            // It's allowed to mve PageBreaks if the Frm isn't the first
+            // It's allowed to move PageBreaks if the Frm isn't the first
             // one on the page.
             if ( !bPageBreak )
                 return sal_False;
@@ -2376,7 +2375,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 SwFlowFrm::SetMoveBwdJump( sal_True );
         }
     }
-    else // No breaks - we can float back.
+    else // No breaks - we can flow back.
         pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, sal_False );
 
     // #i27801# - no move backward of 'master' text frame,
