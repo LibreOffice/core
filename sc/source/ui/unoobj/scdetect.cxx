@@ -450,8 +450,17 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                 pFilter = 0;
                 if ( pStream )
                 {
-                    SotStorageRef aStorage = new SotStorage ( pStream, false );
-                    if ( !aStorage->GetError() )
+                    pStream->Seek( STREAM_SEEK_TO_END);
+                    sal_Size nSize = pStream->Tell();
+                    pStream->Seek( 0);
+                    // Do not attempt to create an SotStorage on a
+                    // 0-length stream as that would create the compound
+                    // document header on the stream and effectively write to
+                    // disk!
+                    SotStorageRef aStorage;
+                    if (nSize > 0)
+                        aStorage = new SotStorage ( pStream, false );
+                    if ( aStorage.Is() && !aStorage->GetError() )
                     {
                         // Excel-5: detect through contained streams
                         // there are some "excel" formats from 3rd party vendors that need to be distinguished
@@ -522,7 +531,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             }
                         }
                     }
-                    else
+                    else if (nSize > 0)
                     {
                         SvStream &rStr = *pStream;
 
@@ -766,6 +775,13 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
                                 pFilter = pPreselectedFilter;
                         }
+                    }
+                    else
+                    {
+                        // 0-length stream, preselected Text/CSV is ok, user
+                        // may want to write to that file later.
+                        if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) )
+                            pFilter = pPreselectedFilter;
                     }
                 }
             }
