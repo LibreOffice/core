@@ -109,7 +109,7 @@ public:
         LABEL_WIDTH_AND_POSITION,
         LABEL_ALIGNMENT
     };
-    enum SvxNumLabelFollowedBy
+    enum LabelFollowedBy
     {
         LISTTAB,
         SPACE,
@@ -147,7 +147,7 @@ private:
 
     // specifies what follows the list label before the text of the first line
     // of the list item starts
-    SvxNumLabelFollowedBy       meLabelFollowedBy;
+    LabelFollowedBy       meLabelFollowedBy;
     // specifies an additional list tab stop position for meLabelFollowedBy = LISTTAB
     long                        mnListtabPos;
     // specifies the first line indent
@@ -224,8 +224,8 @@ public:
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
     short           GetCharTextDistance() const;
 
-    void SetLabelFollowedBy( const SvxNumLabelFollowedBy eLabelFollowedBy );
-    SvxNumLabelFollowedBy GetLabelFollowedBy() const;
+    void SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy );
+    LabelFollowedBy GetLabelFollowedBy() const;
     void SetListtabPos( const long nListtabPos );
     long GetListtabPos() const;
     void SetFirstLineIndent( const long nFirstLineIndent );

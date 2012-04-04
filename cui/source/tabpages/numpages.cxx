@@ -3364,8 +3364,7 @@ IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
 IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
 {
     // determine value to be set at the chosen list levels
-    SvxNumberFormat::SvxNumLabelFollowedBy eLabelFollowedBy =
-                                                    SvxNumberFormat::LISTTAB;
+    SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
         const sal_uInt16 nPos = aLabelFollowedByLB.GetSelectEntryPos();
         if ( nPos == 1 )

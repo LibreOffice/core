@@ -438,11 +438,11 @@ short SvxNumberFormat::GetCharTextDistance() const
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nCharTextDistance : 0;
 }
 
-void SvxNumberFormat::SetLabelFollowedBy( const SvxNumLabelFollowedBy eLabelFollowedBy )
+void SvxNumberFormat::SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy )
 {
     meLabelFollowedBy = eLabelFollowedBy;
 }
-SvxNumberFormat::SvxNumLabelFollowedBy SvxNumberFormat::GetLabelFollowedBy() const
+SvxNumberFormat::LabelFollowedBy SvxNumberFormat::GetLabelFollowedBy() const
 {
     return meLabelFollowedBy;
 }

@@ -67,7 +67,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, sal_uInt8 nNumLvl )
     int nLvlTxtLevel = 0, nLvlNumberLevel = 0;
     String sLvlText, sLvlNumber;
     SwNumFmt* pCurNumFmt;
-    SvxNumberFormat::SvxNumLabelFollowedBy eFollowedBy = SvxNumberFormat::NOTHING;
+    SvxNumberFormat::LabelFollowedBy eFollowedBy = SvxNumberFormat::NOTHING;
 
     if( MAXLEVEL >= nNumLvl )
     {

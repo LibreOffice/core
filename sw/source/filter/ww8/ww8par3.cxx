@@ -904,7 +904,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             rNumFmt.SetListtabPos( nTabPos );
         else
             rNumFmt.SetListtabPos( aLVL.nV6Indent );
-        SvxNumberFormat::SvxNumLabelFollowedBy eNumLabelFollowedBy = SvxNumberFormat::LISTTAB;
+        SvxNumberFormat::LabelFollowedBy eNumLabelFollowedBy = SvxNumberFormat::LISTTAB;
         switch ( ixchFollow )
         {
             case 0:
