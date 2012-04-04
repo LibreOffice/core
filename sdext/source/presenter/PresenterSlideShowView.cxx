@@ -165,17 +165,7 @@ void PresenterSlideShowView::LateInit (void)
     // Add the new slide show view to the slide show.
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
-        Reference<presentation::XSlideShowView> xView (this);
-        mxSlideShow->addView(xView);
-        // Prevent embeded sounds being played twice at the same time by
-        // disabling sound for the new slide show view.
-        beans::PropertyValue aProperty;
-        aProperty.Name = A2S("IsSoundEnabled");
-        Sequence<Any> aValues (2);
-        aValues[0] <<= xView;
-        aValues[1] <<= sal_False;
-        aProperty.Value <<= aValues;
-        mxSlideShow->setProperty(aProperty);
+        impl_addAndConfigureView();
         mbIsViewAdded = true;
     }
 
@@ -690,7 +680,7 @@ void PresenterSlideShowView::ActivatePresenterView (void)
 {
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
-        mxSlideShow->addView(this);
+        impl_addAndConfigureView();
         mbIsViewAdded = true;
     }
 }
@@ -958,7 +948,7 @@ void PresenterSlideShowView::ForceRepaint (void)
     if (mxSlideShow.is() && mbIsViewAdded)
     {
         mxSlideShow->removeView(this);
-        mxSlideShow->addView(this);
+        impl_addAndConfigureView();
     }
 }
 
@@ -1018,6 +1008,21 @@ void PresenterSlideShowView::ThrowIfDisposed (void)
             OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSlideShowView object has already been disposed")),
             static_cast<uno::XWeak*>(this));
     }
+}
+
+void PresenterSlideShowView::impl_addAndConfigureView()
+{
+    Reference<presentation::XSlideShowView> xView (this);
+    mxSlideShow->addView(xView);
+    // Prevent embeded sounds being played twice at the same time by
+    // disabling sound for the new slide show view.
+    beans::PropertyValue aProperty;
+    aProperty.Name = A2S("IsSoundEnabled");
+    Sequence<Any> aValues (2);
+    aValues[0] <<= xView;
+    aValues[1] <<= sal_False;
+    aProperty.Value <<= aValues;
+    mxSlideShow->setProperty(aProperty);
 }
 
 } } // end of namespace ::sd::presenter
