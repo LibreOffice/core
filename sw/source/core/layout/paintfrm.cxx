@@ -3031,8 +3031,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                // have to paint frame borders added in heaven layer here...
-                ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
                 DELETEZ(g_pBorderLines);
                 pVout->Leave();
 
@@ -3751,12 +3749,28 @@ void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                                const SwRect &rRect, const SwPageFrm *pPage );
 
+struct BorderLinesGuard
+{
+    explicit BorderLinesGuard() : m_pBorderLines(g_pBorderLines)
+    {
+        g_pBorderLines = new BorderLines;
+    }
+    ~BorderLinesGuard()
+    {
+        delete g_pBorderLines;
+        g_pBorderLines = m_pBorderLines;
+    }
+private:
+    BorderLines *const m_pBorderLines;
+};
+
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
     //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
     //z.B. #33066#
     pLines->LockLines(sal_True);
+    BorderLinesGuard blg; // this should not paint borders added from PaintBaBo
 
     SwRect aRect( rRect );
     aRect._Intersection( Frm() );
@@ -3966,6 +3980,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     // and then unlock other lines.
     pLines->PaintLines( pOut );
     pLines->LockLines( sal_False );
+    // have to paint frame borders added in heaven layer here...
+    ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
 
     pOut->Pop();
 
