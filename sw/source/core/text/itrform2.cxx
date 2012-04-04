@@ -49,15 +49,15 @@
 #include <porfly.hxx>       // CalcFlyWidth
 #include <portox.hxx>       // WhichTxtPortion
 #include <porref.hxx>       // WhichTxtPortion
-#include <porfld.hxx>       // SwNumberPortion fuer CalcAscent()
+#include <porfld.hxx>       // SwNumberPortion for CalcAscent()
 #include <porftn.hxx>       // SwFtnPortion
 #include <porhyph.hxx>
 #include <guess.hxx>
 #include <blink.hxx>        // pBlink
-#include <ftnfrm.hxx>       // WhichFirstPortion() -> mal Verlagern.
+#include <ftnfrm.hxx>       // WhichFirstPortion() -> move it
 #include <redlnitr.hxx>     // SwRedlineItr
 #include <pagefrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>     // SwPageDesc
 #include <tgrditem.hxx>
 #include <doc.hxx>          // SwDoc
 #include <pormulti.hxx>     // SwMultiPortion
@@ -66,7 +66,7 @@
 #include <vector>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
+#include <ndtxt.hxx>        // pSwpHints, output operator
 #endif
 
 using namespace ::com::sun::star;
@@ -126,8 +126,8 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
 SwTxtFormatter::~SwTxtFormatter()
 {
-    // Auesserst unwahrscheinlich aber denkbar.
-    // z.B.: Feld spaltet sich auf, Widows schlagen zu
+    // Extremly unlikely, but still possible
+    // e.g.: field splits up, widows start to matter
     if( GetInfo().GetRest() )
     {
         delete GetInfo().GetRest();
@@ -141,7 +141,7 @@ SwTxtFormatter::~SwTxtFormatter()
 
 void SwTxtFormatter::Insert( SwLineLayout *pLay )
 {
-    // Einfuegen heute mal ausnahmsweise hinter dem aktuellen Element.
+    // Insert BEHIND the current element
     if ( pCurr )
     {
         pLay->SetNext( pCurr->GetNext() );
@@ -157,11 +157,11 @@ void SwTxtFormatter::Insert( SwLineLayout *pLay )
 
 KSHORT SwTxtFormatter::GetFrmRstHeight() const
 {
-    // 8725: Uns interessiert die Resthoehe bezogen auf die Seite.
-    // Wenn wir in einer Tabelle stehen, dann ist pFrm->GetUpper() nicht
-    // die Seite. GetFrmRstHeight() wird im Zusammenhang mit den Ftn
-    // gerufen.
-    // Falsch: const SwFrm *pUpper = pFrm->GetUpper();
+    // We want the rest height relative to the page.
+    // If we're in a table, then pFrm->GetUpper() is not the page.
+    //
+    // GetFrmRstHeight() is being called with Ftn.
+    // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
     const SwFrm *pPage = (const SwFrm*)pFrm->FindPageFrm();
     const SwTwips nHeight = pPage->Frm().Top()
                           + pPage->Prt().Top()
@@ -178,40 +178,40 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 
 SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 {
-    // Werte sichern und rInf initialisieren.
+    // Save values and initialize rInf
     SwLinePortion *pUnderFlow = rInf.GetUnderFlow();
     if( !pUnderFlow )
         return 0;
 
-    // Wir formatieren rueckwaerts, d.h. dass Attributwechsel in der
-    // naechsten Zeile durchaus noch einmal drankommen koennen.
-    // Zu beobachten in 8081.sdw, wenn man in der ersten Zeile Text eingibt.
+    // We format backwards, i.e. attribute changes can happen the next
+    // line again.
+    // Can be seen in 8081.sdw, if you enter text in the first line
 
     const xub_StrLen nSoftHyphPos = rInf.GetSoftHyphPos();
     const xub_StrLen nUnderScorePos = rInf.GetUnderScorePos();
 
-    // 8358, 8359: Flys sichern und auf 0 setzen, sonst GPF
-    // 3983: Nicht ClearFly(rInf) !
+    // Save flys and set to 0, or else segmentation fault
+    // Not ClearFly(rInf) !
     SwFlyPortion *pFly = rInf.GetFly();
     rInf.SetFly( 0 );
 
     FeedInf( rInf );
     rInf.SetLast( pCurr );
-    // pUnderFlow braucht nicht deletet werden, weil es im folgenden
-    // Truncate() untergehen wird.
+    // pUnderFlow does not need to be deleted, because it will drown in the following
+    // Truncate()
     rInf.SetUnderFlow(0);
     rInf.SetSoftHyphPos( nSoftHyphPos );
     rInf.SetUnderScorePos( nUnderScorePos );
     rInf.SetPaintOfst( GetLeftMargin() );
 
-    // Wir suchen die Portion mit der Unterlaufposition
+    // We look for the portion with the under-flow position
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     if( pPor != pUnderFlow )
     {
-        // pPrev wird die letzte Portion vor pUnderFlow,
-        // die noch eine echte Breite hat.
-        // Ausnahme: SoftHyphPortions duerfen dabei natuerlich
-        // nicht vergessen werden, obwohl sie keine Breite haben.
+        // pPrev will be the last portion before pUnderFlow,
+        // which still has a real width.
+        // Exception: SoftHyphPortions must not be forgotten, of course!
+        // Although they don't have a width.
         SwLinePortion *pTmpPrev = pPor;
         while( pPor && pPor != pUnderFlow )
         {
@@ -240,7 +240,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         }
     }
 
-    // Was? Die Unterlaufsituation ist nicht in der Portion-Kette ?
+    // What? The under-flow portion is not in the portion chain?
     OSL_ENSURE( pPor, "SwTxtFormatter::UnderFlow: overflow but underflow" );
 
     // OD 2004-05-26 #i29529# - correction: no delete of footnotes
@@ -256,32 +256,30 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 //    }
 
     /*--------------------------------------------------
-     * 9849: Schnellschuss
+     * Snapshot
      * --------------------------------------------------*/
     if ( pPor==rInf.GetLast() )
     {
-        // Hier landen wir, wenn die UnderFlow-ausloesende Portion sich
-        // ueber die ganze Zeile erstreckt, z. B. wenn ein Wort ueber
-        // mehrere Zeilen geht und in der zweiten Zeile in einen Fly
-        // hineinlaeuft!
-        rInf.SetFly( pFly ); // wg. 28300
+        // We end up here, if the portion triggering the under-flow
+        // spans over the whole line. E.g. if a word spans across
+        // multiple lines and flows into a fly in the second line.
+        rInf.SetFly( pFly );
         pPor->Truncate();
-        return pPor; // Reicht das?
+        return pPor; // Is that enough?
     }
     /*---------------------------------------------------
-     * Ende des Schnellschusses wg. 9849
+     * End the snapshot
      * --------------------------------------------------*/
 
-    // 4656: X + Width == 0 bei SoftHyph > Zeile ?!
+    // X + Width == 0 with SoftHyph > Line?!
     if( !pPor || !(rInf.X() + pPor->Width()) )
     {
         delete pFly;
         return 0;
     }
 
-    // Vorbereitungen auf's Format()
-    // Wir muessen die Kette hinter pLast abknipsen, weil
-    // nach dem Format() ein Insert erfolgt.
+    // Preparing for Format()
+    // We need to chip off the chain behind pLast, because we Insert after the Format()
     SeekAndChg( rInf );
 
     // line width is adjusted, so that pPor does not fit to current
@@ -291,17 +289,18 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     rInf.SetFull( sal_False );
     if( pFly )
     {
-        // Aus folgendem Grund muss die FlyPortion neu berechnet werden:
-        // Wenn durch einen grossen Font in der Mitte der Zeile die Grundlinie
-        // abgesenkt wird und dadurch eine Ueberlappung mit eine Fly entsteht,
-        // so hat die FlyPortion eine falsche Groesse/Fixsize.
+        // We need to recalculate the FlyPortion due to the following reason:
+        // If the base line is lowered by a big font in the middle of the line,
+        // causing overlapping with a fly, the FlyPortion has a wrong size/fixed
+        // size.
         rInf.SetFly( pFly );
         CalcFlyWidth( rInf );
     }
     rInf.GetLast()->SetPortion(0);
 
-    // Eine Ausnahme bildet das SwLineLayout, dass sich beim
-    // ersten Portionwechsel aufspaltet. Hier nun der umgekehrte Weg:
+    // The SwLineLayout is an exception to this, which splits at the first
+    // portion change.
+    // Here inly the other way around:
     if( rInf.GetLast() == pCurr )
     {
         if( pPor->InTxtGrp() && !pPor->InExpGrp() )
@@ -335,8 +334,8 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
                                     SwLinePortion *pPor ) const
 {
-    // Die neue Portion wird eingefuegt,
-    // bei dem LineLayout ist allerdings alles anders...
+    // The new portion is inserted, but everything's different for
+    // LineLayout ...
     if( pPor == pCurr )
     {
         if ( pCurr->GetPortion() )
@@ -360,14 +359,14 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 
         rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
 
-        // Maxima anpassen:
+        // Adjust maxima
         if( pCurr->Height() < pPor->Height() )
             pCurr->Height( pPor->Height() );
         if( pCurr->GetAscent() < pPor->GetAscent() )
             pCurr->SetAscent( pPor->GetAscent() );
     }
 
-    // manchmal werden ganze Ketten erzeugt (z.B. durch Hyphenate)
+    // Sometimes chains are constructed (e.g. by hyphenate)
     rInf.SetLast( pPor );
     while( pPor )
     {
@@ -388,9 +387,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
 
-    // Erst NewTxtPortion() entscheidet, ob pCurr in pPor landet.
-    // Wir muessen in jedem Fall dafuer sorgen, dass der Font eingestellt
-    // wird. In CalcAscent geschieht dies automatisch.
+    // First NewTxtPortion() decides whether pCurr ends up in pPor.
+    // We need to make sure that the font is being set in any case.
+    // This is done automatically in CalcAscent.
     rInf.SetLast( pCurr );
     rInf.ForcedLeftMargin( 0 );
 
@@ -401,7 +400,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     SeekAndChg( rInf );
 
-    // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
+    // Width() is shortened in CalcFlyWidth if we have a FlyPortion
     OSL_ENSURE( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
     CalcFlyWidth( rInf );
     SwFlyPortion *pFly = rInf.GetFly();
@@ -618,8 +617,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
-        // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
-        //       naechsten Softhyphen wieder umgebrochen!
+        // bUnderFlow needs to be reset or we wrap again at the next softhyphen
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
@@ -710,8 +708,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         rInf.SetFull( bFull );
 
-        // Restportions von mehrzeiligen Feldern haben bisher noch
-        // nicht den richtigen Ascent.
+        // Restportions from fields with multiple lines don't yet have the right ascent
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
             && !pPor->IsGrfNumPortion() && ! pPor->InNumberGrp()
             && !pPor->IsMultiPortion() )
@@ -723,7 +720,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     if( !rInf.IsStop() )
     {
-        // der letzte rechte, zentrierte, dezimale Tab
+        // The last right centered, decimal tab
         SwTabPortion *pLastTab = rInf.GetLastTab();
         if( pLastTab )
             pLastTab->FormatEOL( rInf );
@@ -734,7 +731,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         && ((SwNumberPortion*)pCurr->GetPortion())->IsHide() )
         rInf.SetNumDone( sal_False );
 
-    // 3260, 3860: Fly auf jeden Fall loeschen!
+    // Delete fly in any case
     ClearFly( rInf );
 
     // Reinit the tab overflow flag after the line
@@ -753,8 +750,8 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
         if( IsFlyInCntBase() )
         {
             CalcAdjLine( pCurrent );
-            // 23348: z.B. bei zentrierten Flys muessen wir den RefPoint
-            // auf jeden Fall umsetzen, deshalb bAllWays = sal_True
+            // For e.g. centered fly we need to switch the RefPoint
+            // That's why bAllWays = sal_True
             UpdatePos( pCurrent, GetTopLeft(), GetStart(), sal_True );
         }
     }
@@ -768,8 +765,8 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 {
     if ( pPor->InFldGrp() && ((SwFldPortion*)pPor)->GetFont() )
     {
-        // Numerierungen + InterNetFlds koennen einen eigenen Font beinhalten,
-        // dann ist ihre Groesse unabhaengig von harten Attributierungen.
+        // Numbering + InterNetFlds can keep an own font, then their size is
+        // independent from hard attribute values
         SwFont* pFldFnt = ((SwFldPortion*)pPor)->pFnt;
         SwFontSave aSave( rInf, pFldFnt );
         ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
@@ -791,8 +788,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         const SwLinePortion *pLast = rInf.GetLast();
         sal_Bool bChg;
 
-        // Fallunterscheidung: in leeren Zeilen werden die Attribute
-        // per SeekStart angeschaltet.
+        // In empty lines the attributes are switched on via SeekStart
         const sal_Bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
         if ( pPor->IsQuoVadisPortion() )
             bChg = SeekStartAndChg( rInf, sal_True );
@@ -804,7 +800,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
                 {
                     if ( pPor->GetLen() || !rInf.GetIdx()
                          || ( pCurr != pLast && !pLast->IsFlyPortion() )
-                         || !pCurr->IsRest() ) // statt !rInf.GetRest()
+                         || !pCurr->IsRest() ) // instead of !rInf.GetRest()
                         bChg = SeekAndChg( rInf );
                     else
                         bChg = SeekAndChgBefore( rInf );
@@ -883,9 +879,9 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
         }
         else
         {
-            // Erst zum Schluss !
-            // Wenn pCurr keine Breite hat, kann sie trotzdem schon Inhalt haben,
-             // z.B. bei nicht darstellbaren Zeichen.
+            // Only at the End!
+            // If pCurr does not have a width, it can however aready have content.
+            // E.g. for non-displayable characters
             if( rInf.GetLen() > 0 )
             {
                 if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FIELDSTART )
@@ -914,17 +910,16 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 /*************************************************************************
  *                      SwTxtFormatter::NewTxtPortion()
  *************************************************************************/
-// Die Laenge wird ermittelt, folgende Portion-Grenzen sind definiert:
+// We calculate the length, the following portion limits are defined:
 // 1) Tabs
 // 2) Linebreaks
 // 3) CH_TXTATR_BREAKWORD / CH_TXTATR_INWORD
-// 4) naechster Attributwechsel
+// 4) next attribute change
 
 SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 {
-    // Wenn wir am Zeilenbeginn stehen, nehmen wir pCurr
-    // Wenn pCurr nicht von SwTxtPortion abgeleitet ist,
-    // muessen wir duplizieren ...
+    // If we're at the line's beginning, we take pCurr
+    // If pCurr is not derived from SwTxtPortion, we need to duplicate
     Seek( rInf.GetIdx() );
     SwTxtPortion *pPor = WhichTxtPor( rInf );
 
@@ -940,17 +935,18 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     const xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
     nNextChg = Min( nNextChg, nNextDir );
 
-    // 7515, 7516, 3470, 6441 : Turbo-Boost
-    // Es wird unterstellt, dass die Buchstaben eines Fonts nicht
-    // groesser als doppelt so breit wie hoch sind.
-    // 7659: Ganz verrueckt: man muss sich auf den Ascent beziehen.
-    // Falle: GetSize() enthaelt die Wunschhoehe, die reale Hoehe
-    // ergibt sich erst im CalcAscent!
-    // 7697: Das Verhaeltnis ist noch krasser: ein Blank im Times
-    // New Roman besitzt einen Ascent von 182, eine Hoehe von 200
-    // und eine Breite von 53! Daraus folgt, dass eine Zeile mit
-    // vielen Blanks falsch eingeschaetzt wird. Wir erhoehen von
-    // Faktor 2 auf 8 (wg. negativen Kernings).
+    // Turbo boost:
+    // We assume that a font's characters are not larger than twice
+    // as wide as heigh.
+    // Very crazy: We need to take the ascent into account.
+    //
+    // Mind the trap! GetSize() contains the wished-for height, the real height
+    // is only known in CalcAscent!
+    //
+    // The ratio is even crazier: a blank in Times New Roman has an ascent of
+    // 182, a height of 200 and a width of 53!
+    // It follows that a line with a lot of blanks is processed incorrectly.
+    // Therefore we increase from factor 2 to 8 (due to negative kerning).
 
     pPor->SetLen(1);
     CalcAscent( rInf, pPor );
@@ -996,7 +992,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 
     if( rInf.GetRest() )
     {
-        // 5010: Tabs und Felder
+        // Tabs and fields
         if( '\0' != rInf.GetHookChar() )
             return 0;
 
@@ -1015,14 +1011,13 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         return pPor;
     }
 
-    // ???? und ????: im Follow duerfen wir schon stehen,
-    // entscheidend ist, ob pFrm->GetOfst() == 0 ist!
+    // We can stand in the follow, it's crucial that
+    // pFrm->GetOfst() == 0!
     if( rInf.GetIdx() )
     {
-        // Nun koennen auch FtnPortions und ErgoSumPortions
-        // verlaengert werden.
+        // We now too can elongate FtnPortions and ErgoSumPortions
 
-        // 1) Die ErgoSumTexte
+        // 1. The ErgoSumTexts
         if( !rInf.IsErgoDone() )
         {
             if( pFrm->IsInFtn() && !pFrm->GetIndPrev() )
@@ -1030,7 +1025,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetErgoDone( sal_True );
         }
 
-        // 2) Arrow portions
+        // 2. Arrow portions
         if( !pPor && !rInf.IsArrowDone() )
         {
             if( pFrm->GetOfst() && !pFrm->IsFollow() &&
@@ -1039,7 +1034,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetArrowDone( sal_True );
         }
 
-        // 3) Kerning portions at beginning of line in grid mode
+        // 3. Kerning portions at beginning of line in grid mode
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
@@ -1047,11 +1042,11 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
                 pPor = new SwKernPortion( *pCurr );
         }
 
-        // 4) Die Zeilenreste (mehrzeilige Felder)
+        // 4. The line rests (multiline fields)
         if( !pPor )
         {
             pPor = rInf.GetRest();
-            // 6922: Nur bei pPor natuerlich.
+            // Only for pPor of course
             if( pPor )
             {
                 pCurr->SetRest( sal_True );
@@ -1061,7 +1056,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
     }
     else
     {
-        // 5) Die Fussnotenzahlen
+        // 5. The foot note count
         if( !rInf.IsFtnDone() )
         {
             OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
@@ -1074,8 +1069,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetFtnDone( sal_True );
         }
 
-        // 6) Die ErgoSumTexte gibt es natuerlich auch im TextMaster,
-        // entscheidend ist, ob der SwFtnFrm ein Follow ist.
+        // 6. The ErgoSumTexts of course also exist in the TextMaster,
+        // it's crucial whether the SwFtnFrm is aFollow
         if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
             if( pFrm->IsInFtn() && !pFrm->GetIndPrev() )
@@ -1083,22 +1078,22 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetErgoDone( sal_True );
         }
 
-        // 7) Die Numerierungen
+        // 7. The numbering
         if( !rInf.IsNumDone() && !pPor )
         {
             OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
                      "Rotated number portion trouble" );
 
-            // Wenn wir im Follow stehen, dann natuerlich nicht.
+            // If we're in the follow, then of course not
             if( GetTxtFrm()->GetTxtNode()->GetNumRule() )
                 pPor = (SwLinePortion*)NewNumberPortion( rInf );
             rInf.SetNumDone( sal_True );
         }
-        // 8) Die DropCaps
+        // 8. The DropCaps
         if( !pPor && GetDropFmt() && ! rInf.IsMulti() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
-        // 9) Kerning portions at beginning of line in grid mode
+        // 9. Kerning portions at beginning of line in grid mode
         if ( !pPor && !pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
@@ -1107,7 +1102,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         }
     }
 
-        // 10) Decimal tab portion at the beginning of each line in table cells
+        // 10. Decimal tab portion at the beginning of each line in table cells
         if ( !pPor && !pCurr->GetPortion() &&
              GetTxtFrm()->IsInTab() &&
              GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) )
@@ -1115,7 +1110,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             pPor = NewTabPortion( rInf, true );
         }
 
-        // 11) suffix of meta-field
+        // 11. suffix of meta-field
         if (!pPor)
         {
             pPor = TryNewNoLengthPortion(rInf);
@@ -1145,21 +1140,20 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
  *                      SwTxtFormatter::NewPortion()
  *************************************************************************/
 
-/* NewPortion stellt rInf.nLen ein.
- * Eine SwTxtPortion wird begrenzt durch ein tab, break, txtatr,
- * attrwechsel.
- * Drei Faelle koennen eintreten:
- * 1) Die Zeile ist voll und der Umbruch wurde nicht emuliert
+/* NewPortion sets rInf.nLen
+ * A SwTxtPortion is limited by a tab, break, txtatr or attr change
+ * We can have three cases:
+ * 1) The line is full and the wrap was not emulated
  *    -> return 0;
- * 2) Die Zeile ist voll und es wurde ein Umbruch emuliert
- *    -> Breite neu einstellen und return new FlyPortion
- * 3) Es muss eine neue Portion gebaut werden.
- *    -> CalcFlyWidth emuliert ggf. die Breite und return Portion
+ * 2) The line is full and a wrap was emulated
+ *    -> Reset width and return new FlyPortion
+ * 3) We need to construct a new portion
+ *    -> CalcFlyWidth emulates the width and return portion, if needed
  */
 
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 {
-    // Underflow hat Vorrang
+    // Underflow takes precedence
     rInf.SetStopUnderFlow( sal_False );
     if( rInf.GetUnderFlow() )
     {
@@ -1167,12 +1161,11 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         return UnderFlow( rInf );
     }
 
-    // Wenn die Zeile voll ist, koennten noch Flys oder
-    // UnderFlow-LinePortions warten ...
+    // If the line is full, flys and UnderFlow portions could be waiting ...
     if( rInf.IsFull() )
     {
-        // ????: LineBreaks und Flys (bug05.sdw)
-        // 8450: IsDummy()
+        // LineBreaks and Flys (bug05.sdw)
+        // IsDummy()
         if( rInf.IsNewLine() && (!rInf.GetFly() || !pCurr->IsDummy()) )
             return 0;
 

@@ -33,7 +33,7 @@
 class SwFont;
 
 // DropCap cache, global variable initialized/destroyed in txtinit.cxx
-// und in txtdrop.cxx benutzt bei der Initialenberechnung
+// and used in txtdrop.cxx for initial calculation
 
 class SwDropCapCache;
 extern SwDropCapCache *pDropCapCache;

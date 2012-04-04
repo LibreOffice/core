@@ -55,7 +55,7 @@ class SwBreakPortion : public SwLinePortion
 {
 public:
             SwBreakPortion( const SwLinePortion &rPortion );
-    // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
+    // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

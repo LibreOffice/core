@@ -182,7 +182,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
 {
     if ( GetCacheIdx() != MSHRT_MAX )
     {
-        //Nur die Information Auswechseln, das CacheObj bleibt stehen.
+        // Only change the information, the CacheObj stays there
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
                                         Get( this, GetCacheIdx(), sal_False );
         if ( pTxtLine )
@@ -198,7 +198,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
         }
     }
     else if ( pNew )
-    {   //Einen neuen einfuegen.
+    {   // Insert a new one
         SwTxtLine *pTxtLine = new SwTxtLine( this, pNew );
         if ( SwTxtFrm::GetTxtCache()->Insert( pTxtLine ) )
             nCacheIdx = pTxtLine->GetCachePos();

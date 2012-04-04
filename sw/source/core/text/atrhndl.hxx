@@ -142,7 +142,7 @@ public:
     void Pop( const SwTxtAttr& rAttr );
 
     // apply script dependent attributes
-//    void ChangeScript( SwFont& rFnt, const sal_uInt8 nScr );
+    // void ChangeScript( SwFont& rFnt, const sal_uInt8 nScr );
 
     // returns the default value for stack nStack
     inline const SfxPoolItem& GetDefault( const sal_uInt16 nAttribID ) const;

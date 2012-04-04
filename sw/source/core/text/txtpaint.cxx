@@ -37,7 +37,7 @@
 
 void SwSaveClip::Reset()
 {
-    // Der alte Zustand wird wieder hergestellt.
+    // We recover the old state
     if( pOut && bChg )
     {
         if ( pOut->GetConnectMetaFile() )
@@ -95,8 +95,8 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
         if ( bEnlargeRect && ! bVertical )
             aRect.Bottom() += 40;
 
-        // Wenn das ClipRect identisch ist, passiert nix.
-        if( pOut->IsClipRegion() ) // kein && wg Mac
+        // If the ClipRect is identical, nothing will happen
+        if( pOut->IsClipRegion() ) // no && because of Mac
         {
             if ( aRect == pOut->GetClipRegion().GetBoundRect() )
             {
