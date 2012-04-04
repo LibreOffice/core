@@ -33,7 +33,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/spin.hxx>
+#include <vcl/field.hxx>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
 {
@@ -97,7 +97,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
     {
-        pWindow = new SpinButton(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
     {
