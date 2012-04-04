@@ -28,7 +28,8 @@
     <identifier value="UPDATED_IDENTIFIER"/>
 
     <dependencies>
-        <OpenOffice.org-minimal-version value="2.3" dep:name="Apache OpenOffice"/>
+        <OpenOffice.org-minimal-version value="3.4" dep:name="Apache OpenOffice"/>
+        <OpenOffice.org-maximal-version value="3.9" dep:name="Apache OpenOffice"/>
     </dependencies>
 
     <registration>
@@ -37,7 +38,7 @@
         </simple-license>
     </registration>
 
-    <version value="1.0.3"/>
+    <version value="1.1.0"/>
 
     <platform value="UPDATED_SUPPORTED_PLATFORM"/>
 

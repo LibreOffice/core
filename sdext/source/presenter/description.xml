@@ -28,7 +28,8 @@
   <identifier value="com.sun.PresenterScreen-UPDATED_PLATFORM" />
 
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.3" dep:name="Apache OpenOffice"/>
+    <OpenOffice.org-minimal-version value="3.4" dep:name="Apache OpenOffice"/>
+    <OpenOffice.org-minimal-version value="3.9" dep:name="Apache OpenOffice"/>
   </dependencies>
 
   <registration>
@@ -37,7 +38,7 @@
     </simple-license>
   </registration>
 
-  <version value="1.1.1" />
+  <version value="1.2.0"/>
 
   <platform value="UPDATED_PLATFORM" />
 
