@@ -33,7 +33,7 @@
 
     <registration>
         <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-            <license-text xlink:href="license/LICENSE" lang="isocode" license-id="lic-isocode"/>
+            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
         </simple-license>
     </registration>
 

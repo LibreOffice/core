@@ -155,8 +155,7 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
 
-# default license text for Apache OpenOffice extensions is the Apache Licence 2
-# may not fit...
+# default license text for Apache OpenOffice extensions is ALv2
 .IF "$(CUSTOM_LICENSE)"==""
 PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE_ALv2
 .ELSE			# "$(CUSTOM_LICENSE)" == ""
