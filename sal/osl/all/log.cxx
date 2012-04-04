@@ -156,12 +156,13 @@ void log(
     char const * message)
 {
     std::ostringstream s;
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         s << toString(level) << ':' << /*no where*/' ' << message << '\n';
-    else
+    } else {
         s << toString(level) << ':' << area << ':' << OSL_DETAIL_GETPID << ':'
             << osl::Thread::getCurrentIdentifier() << ':' << where << message
             << '\n';
+    }
     std::fputs(s.str().c_str(), stderr);
 }
 
