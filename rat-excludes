@@ -1058,6 +1058,10 @@ main/libtextcat/data/new_fingerprints/lm/*.lm
 main/sc/source/ui/vba/testvba/TestDocuments/logs/excel/*.log
 main/sc/source/ui/vba/testvba/TestDocuments/logs/unix/*.log
 main/sc/source/ui/vba/testvba/TestDocuments/logs/win/*.log
+main/sc/source/ui/vba/testvba/TestDocuments-ooo-build/logs/excel/*.log
+main/sc/source/ui/vba/testvba/TestDocuments-ooo-build/logs/format.log
+main/sc/source/ui/vba/testvba/TestDocuments-ooo-build/logs/unix/*.log
+main/sc/source/ui/vba/testvba/TestDocuments-ooo-build/logs/win/*.log
 
 
 ##############################################################################
