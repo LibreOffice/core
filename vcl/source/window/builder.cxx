@@ -28,12 +28,12 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
 {
@@ -85,31 +85,31 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
     {
-        pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
     {
-        pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
     {
-        pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
     {
-        pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER);
+        pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
     {
-        pWindow = new ComboBox(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new ListBox(pParent, WB_DROPDOWN|WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
     {
-        pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
     {
-        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER );
+        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK );
     }
     else
     {
