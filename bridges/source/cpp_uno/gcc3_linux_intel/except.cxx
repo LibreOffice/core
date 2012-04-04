@@ -46,7 +46,6 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
-#include <uno/any2.h>
 
 #include "share.hxx"
 
@@ -59,6 +58,10 @@ using namespace ::__cxxabiv1;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+void dummy_can_throw_anything( char const * )
+{
+}
 
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
