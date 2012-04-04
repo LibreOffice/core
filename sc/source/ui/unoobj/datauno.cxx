@@ -425,8 +425,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 sal_Int32 i;
                 if ( nCount > static_cast<sal_Int32>( rParam.GetSortKeyCount() ) )
                 {
-                    OSL_FAIL("Zu viele Sortierfelder");
                     nCount = nSortSize;
+                    rParam.maKeyState.resize(nCount);
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
                 for (i=0; i<nCount; i++)
@@ -435,7 +435,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.maKeyState[i].bAscending = pFieldArray[i].SortAscending;
 
                     // FieldType wird ignoriert
-                    rParam.maKeyState[i].bDoSort = sal_True;
+                    rParam.maKeyState[i].bDoSort = true;
                 }
                 for (i=nCount; i<nSortSize; i++)
                     rParam.maKeyState[i].bDoSort = false;
@@ -446,8 +446,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 sal_Int32 i;
                 if ( nCount > nSortSize )
                 {
-                    OSL_FAIL("Zu viele Sortierfelder");
                     nCount = nSortSize;
+                    rParam.maKeyState.resize(nCount);
                 }
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
                 for (i=0; i<nCount; i++)
@@ -461,7 +461,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.aCollatorAlgorithm = pFieldArray[i].CollatorAlgorithm;
 
                     // FieldType wird ignoriert
-                    rParam.maKeyState[i].bDoSort = sal_True;
+                    rParam.maKeyState[i].bDoSort = true;
                 }
                 for (i=nCount; i<nSortSize; i++)
                     rParam.maKeyState[i].bDoSort = false;
