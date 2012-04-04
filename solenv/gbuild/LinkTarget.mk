@@ -273,8 +273,6 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 $(call gb_LinkTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),LNK,4)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-		$(WORKDIR)/GenCObject/$(notdir $*) \
-		$(WORKDIR)/GenCxxObject/$(nodir $*) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -285,7 +283,9 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$*) \
 		$(call gb_LinkTarget_get_dep_target,$*) \
