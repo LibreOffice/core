@@ -43,6 +43,12 @@ ALL_NOTICE=..$/NOTICE
 SUM_LICENSE=$(MISC)$/SUM_LICENSE
 SUM_NOTICE=$(MISC)$/SUM_NOTICE
 
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+    LINEEND_CAT=$(PERL) -p -e 's/\r?\n$$/\r\n/'
+.ELSE
+    LINEEND_CAT=cat
+.ENDIF
+
 # ------------------------------------------------------------------
 .INCLUDE: target.mk
 # ------------------------------------------------------------------
@@ -50,8 +56,8 @@ SUM_NOTICE=$(MISC)$/SUM_NOTICE
 ALLTAR: ${SUM_LICENSE} ${SUM_NOTICE}
 
 ${SUM_LICENSE} : ${ALL_LICENSE}
-    cat $< > $@
+    ${LINEEND_CAT} > $@ $<
 
 ${SUM_NOTICE} : ${ALL_NOTICE}
-    cat $< > $@
+    ${LINEEND_CAT} > $@ $<
 
