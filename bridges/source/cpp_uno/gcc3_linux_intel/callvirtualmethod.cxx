@@ -36,6 +36,7 @@
 #include "typelib/typedescription.h"
 
 #include "callvirtualmethod.hxx"
+#include "share.hxx"
 
 // The call instruction within the asm block of callVirtualMethod may throw
 // exceptions.  At least GCC 4.7.0 with -O0 would create (unnecessary)
@@ -65,6 +66,8 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     assert(sizeof (void *) == 4 && sizeof (sal_Int32) == 4);
         // unexpected size of int
     assert(nStackLongs && pStackLongs); // no stack
+
+    if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
     volatile long edx = 0, eax = 0; // for register returns
     void * stackptr;
