@@ -3415,7 +3415,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
                 {
                     //move the right neighbor  to the right edge right aligned
                     ctrl_reverse_iterator itRight = it;
-                    --it;
+                    --itRight;
                     Control *pRight = *itRight;
                     nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
                 }
