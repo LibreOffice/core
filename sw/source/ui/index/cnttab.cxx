@@ -3430,17 +3430,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     if(nMove)
     {
         // move the complete list
+        MoveControls(nMove);
 
         Control *pCtrl = 0;
-
-        for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
-        {
-            pCtrl = *it;
-
-            Point aPos = pCtrl->GetPosPixel();
-            aPos.X() += nMove;
-            pCtrl->SetPosPixel(aPos);
-        }
 
         pCtrl = *(aControlList.begin());
         aLeftScrollWin.Enable(pCtrl->GetPosPixel().X() < 0);
