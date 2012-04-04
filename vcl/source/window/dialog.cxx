@@ -46,7 +46,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 
-
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
 
 // =======================================================================
 
@@ -592,6 +594,14 @@ sal_Bool Dialog::Close()
 
 sal_Bool Dialog::ImplStartExecuteModal()
 {
+#ifdef ANDROID
+    // If a non-NativeActivity app, we shouldn't be showing any dialogs
+    if (lo_get_app() == NULL) {
+        fprintf(stderr, "%s: Should not do anything, returning false\n", __FUNCTION__);
+        return sal_False;
+    }
+#endif
+
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
