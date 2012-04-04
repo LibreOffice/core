@@ -41,10 +41,10 @@ $(EXAI)/so_activex.tlb : \
 	$(call gb_Helper_abbreviate_dirs_native, \
 	midl.exe \
 		-tlb $@ \
-		-h so_activex.h \
-		-iid so_activex_i.c \
-		-dlldata so_activex_dll.c \
-		-proxy so_activex_p.c \
+		-h $(EXAI)/so_activex.h \
+		-iid $(EXAI)/so_activex_i.c \
+		-dlldata $(EXAI)/so_activex_dll.c \
+		-proxy $(EXAI)/so_activex_p.c \
 		-Oicf \
 		$(INCLUDE) \
 		$<)

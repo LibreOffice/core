@@ -44,8 +44,6 @@ $(eval $(call gb_WinResTarget_set_defs,activex_res,\
 	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(call gb_Helper_convert_native,$(SRCDIR)),../../..,$(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/extensions/source/activex/idl))) \
 ))
 
-# I suppose this dep is not really necessary, because it should always
-# be fulfilled anyway. But it cannot hurt to have it...
-$(call gb_WinResTarget_get_target,activex_res) : $(WORKDIR)/CustomTarget/extensions/source/activex/idl
+$(call gb_WinResTarget_get_target,activex_res) : $(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
