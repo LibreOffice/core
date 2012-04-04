@@ -36,7 +36,7 @@
 #include <osl/process.h>
 #include <rtl/ustring.h>
 
-// eindeutiger Name fÅr die Pipe
+// clear Name for the Pipe
 const char pszPipeName[] = "TestPipe";
 const char szTestString[] = "This is a test";
 char       szBuffer[256];
@@ -64,12 +64,12 @@ void fail( const char * pszText, int retval )
 
 
 /*
- * Teste die Pipe-Implementation in osl
+ * Test the Pipe-Implementation in osl
  */
 
 int main (int argc, const char *argv[])
 {
-    // erzeuge die Pipe
+    // create the Pipe
     rtl_uString* ustrPipeName=0;
     rtl_uString* ustrExeName=0;
 
@@ -83,7 +83,7 @@ int main (int argc, const char *argv[])
         fail( "unable to create Pipe.\n",
               osl_getLastPipeError(NULL));
 
-    // starte client process
+    // start client process
     ProcessError = osl_executeProcess( ustrExeName,
                                        NULL,
                                        0,
@@ -116,14 +116,14 @@ int main (int argc, const char *argv[])
         n  = sizeof(szTestString);
     }
 
-    // sende TestString zum Client
+    // send TestString to Client
     nChars = osl_sendPipe( C1Pipe, cp, n );
 
     if( nChars < 0 )
         fail( "unable to write on pipe.\n",
               osl_getLastPipeError( Pipe ) );
 
-    // empfange Daten vom Server
+    // receive data from the server
     nChars = osl_receivePipe( C1Pipe, szBuffer, 256 );
 
     if( nChars < 0 )
@@ -132,14 +132,14 @@ int main (int argc, const char *argv[])
 
     printf( "TestPipe Server: received data: %s.\n", szBuffer );
 
-    // warte bis das Client-Programm sich beendet
+    // wait until the client-program terminates
     ProcessError = osl_joinProcess( Process );
 
     if( ProcessError != osl_Process_E_None )
         fail( "unable to wait for client.\n",
               ProcessError );
 
-    // ermittle den RÅckgabewert des Client-Programms
+    // investigate the return-value of the client-program
     ProcessInfo.Size = sizeof( ProcessInfo );
 
     ProcessError = osl_getProcessInfo( Process, osl_Process_EXITCODE, &ProcessInfo );
@@ -151,10 +151,10 @@ int main (int argc, const char *argv[])
     if( ProcessInfo.Code != 0 )
         fail( "client aborted.\n", ProcessInfo.Code );
 
-    // gib das Handle fuer den Client-Prozess frei
+    // give the handle for the free client-process
     osl_freeProcessHandle( Process );
 
-    // schliesse die Pipes
+    // close the pipes
     osl_releasePipe( C1Pipe );
     osl_releasePipe( Pipe );
 

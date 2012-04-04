@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-// TestWin32.cpp : Definiert den Einsprungpunkt für die Anwendung.
+// TestWin32.cpp : Defines the entry point for the application
 //
 
 #define _WIN32_DCOM
@@ -49,10 +49,10 @@
 
 #define MAX_LOADSTRING 100
 
-// Globale Variablen:
-HINSTANCE           hInst;                      // aktuelle Instanz
-WCHAR               szTitle[MAX_LOADSTRING];            // Text der Titelzeile
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text der Titelzeile
+// Global variables:
+HINSTANCE           hInst;                      // current instance
+WCHAR               szTitle[MAX_LOADSTRING];            // Text for title
+WCHAR               szWindowClass[MAX_LOADSTRING];  // Text for title
 ATOM                MyRegisterClass( HINSTANCE hInstance );
 BOOL                InitInstance( HINSTANCE, int );
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
@@ -137,7 +137,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow )
 {
-     // ZU ERLEDIGEN: Fügen Sie hier den Code ein.
+    // TODO: Add code here.
     MSG     msg;
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
@@ -148,12 +148,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     //hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
 
-    // Globale Zeichenfolgen initialisieren
+    // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Initialisierung der Anwendung durchführen:
+    // Initialization of the application to perform:
     if( !InitInstance( hInstance, nCmdShow ) )
     {
         return FALSE;
@@ -161,7 +161,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
-    // Hauptnachrichtenschleife:
+    // Main message loop:
     while( GetMessage(&msg, NULL, 0, 0) )
     {
         if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
@@ -181,18 +181,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 //
-//  FUNKTION: MyRegisterClass()
+//  FUNCTION: MyRegisterClass()
 //
-//  AUFGABE: Registriert die Fensterklasse.
+//  PURPOSE: Registers the window class
 //
-//  KOMMENTARE:
-//
-//    Diese Funktion und ihre Verwendung sind nur notwendig, wenn dieser Code
-//    mit Win32-Systemen vor der 'RegisterClassEx'-Funktion kompatibel sein soll,
-//    die zu Windows 95 hinzugefügt wurde. Es ist wichtig diese Funktion aufzurufen,
-//    damit der Anwendung kleine Symbole mit den richtigen Proportionen zugewiesen
-//    werden.
-//
+//  COMMENTS:
+//    This function and its usage are only necessary if this code
+//    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
+//    function, which was added to Windows 95. If it important to call
+//    this function to allow the use of small icons in the correct proportions.
+
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
     WNDCLASSEXW wcex;
@@ -215,20 +213,19 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 }
 
 //
-//   FUNKTION: InitInstance(HANDLE, int)
+//   FUNCTION: InitInstance(HANDLE, int)
 //
-//   AUFGABE: Speichert die Instanzzugriffsnummer und erstellt das Hauptfenster
+//   PURPOSE: Saves instance handle and creates main window
 //
-//   KOMMENTARE:
-//
-//        In dieser Funktion wird die Instanzzugriffsnummer in einer globalen Variable
-//        gespeichert und das Hauptprogrammfenster erstellt und angezeigt.
+//   COMMENTS:
+//        In this function, the instance access number is stored in a global variable
+//        and the main program window is displayed.
 //
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
    HWND hWnd;
 
-   hInst = hInstance; // Instanzzugriffsnummer in unserer globalen Variable speichern
+   hInst = hInstance; // Store instance access number in our global variable
 
    hWnd = CreateWindowExW(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -245,15 +242,15 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 }
 
 //
-//  FUNKTION: WndProc(HWND, unsigned, WORD, LONG)
+//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
 //
-//  AUFGABE:  Verarbeitet Nachrichten für das Hauptfenster.
+//  PURPOSE: Processes messages for the main window.
 //
-//  WM_COMMAND  - Anwendungsmenü verarbeiten
-//  WM_PAINT    - Hauptfenster darstellen
-//  WM_DESTROY  - Beendigungsnachricht ausgeben und zurückkehren
+//  WM_COMMAND  - Handle application menu
+//  WM_PAINT    - Display main windows
+//  WM_DESTROY  - Output completion message and return
 //
-//
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int         wmId;
@@ -268,7 +265,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            // Menüauswahlen analysieren:
+            // Analyze menu selections
             switch( wmId )
             {
                 case IDD_PASTE:
@@ -287,7 +284,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             hdc = BeginPaint (hWnd, &ps);
-            // ZU ERLEDIGEN: Hier beliebigen Code zum Zeichnen hinzufügen...
+            // TODO: Add any code for drawing
             RECT rt;
             GetClientRect( hWnd, &rt );
 

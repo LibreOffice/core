@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-// TestWin32.cpp : Definiert den Einsprungpunkt für die Anwendung.
+// TestWin32.cpp : Defines the entry point for the application.
 //
 
 #define _WIN32_DCOM
@@ -50,11 +50,11 @@
 
 #define MAX_LOADSTRING 100
 
-// Globale Variablen:
-HINSTANCE           g_hInst;                        // aktuelle Instanz
+// Global variables:
+HINSTANCE           g_hInst;                        // current instance
 HWND                g_hwndMain;
-WCHAR               szTitle[MAX_LOADSTRING];            // Text der Titelzeile
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text der Titelzeile
+WCHAR               szTitle[MAX_LOADSTRING];            // Text for title
+WCHAR               szWindowClass[MAX_LOADSTRING];  // Text for title
 LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
@@ -83,7 +83,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow )
 {
-     // ZU ERLEDIGEN: Fügen Sie hier den Code ein.
+    // TODO: Add code here.
     MSG     msg;
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
@@ -95,12 +95,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     g_hInst = hInstance;
 
-    // Globale Zeichenfolgen initialisieren
+    // Initialize global strings
     LoadStringW(g_hInst, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(g_hInst, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(g_hInst);
 
-    // Initialisierung der Anwendung durchführen:
+    // Initialization of the applications to carry out
     if( !InitInstance( g_hInst, nCmdShow ) )
     {
         return FALSE;
@@ -108,7 +108,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
-    // Hauptnachrichtenschleife:
+    // Main message loop:
     while( GetMessage(&msg, NULL, 0, 0) )
     {
         if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
@@ -128,17 +128,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 //
-//  FUNKTION: MyRegisterClass()
+//  FUNCTION: MyRegisterClass()
 //
-//  AUFGABE: Registriert die Fensterklasse.
+//  PURPOSE: Registers the window class.
 //
-//  KOMMENTARE:
-//
-//    Diese Funktion und ihre Verwendung sind nur notwendig, wenn dieser Code
-//    mit Win32-Systemen vor der 'RegisterClassEx'-Funktion kompatibel sein soll,
-//    die zu Windows 95 hinzugefügt wurde. Es ist wichtig diese Funktion aufzurufen,
-//    damit der Anwendung kleine Symbole mit den richtigen Proportionen zugewiesen
-//    werden.
+//  COMMENTS:
+//    This function and its usage are only necessary if this code
+//    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
+//    function, which was added to Windows 95. If it important to call
+//    this function to allow the use of small icons in the correct proportions.
 //
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
@@ -164,13 +162,13 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 //
 //   FUNKTION: InitInstance(HANDLE, int)
 //
-//   AUFGABE: Speichert die Instanzzugriffsnummer und erstellt das Hauptfenster
+//   PURPOSE: Saves instance access number and creates main window
 //
-//   KOMMENTARE:
+//   Comments:
+//        In this function, the instance access number is stored in a global variable
+//        and the main program window is displayed.
 //
-//        In dieser Funktion wird die Instanzzugriffsnummer in einer globalen Variable
-//        gespeichert und das Hauptprogrammfenster erstellt und angezeigt.
-//
+
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
    g_hwndMain = CreateWindowExW(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
@@ -190,12 +188,13 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 //
 //  FUNKTION: WndProc(HWND, unsigned, WORD, LONG)
 //
-//  AUFGABE:  Verarbeitet Nachrichten für das Hauptfenster.
+//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
 //
-//  WM_COMMAND  - Anwendungsmenü verarbeiten
-//  WM_PAINT    - Hauptfenster darstellen
-//  WM_DESTROY  - Beendigungsnachricht ausgeben und zurückkehren
+//  PURPOSE: Processes messages for the main window.
 //
+//  WM_COMMAND  - Handle application menu
+//  WM_PAINT    - Display main windows
+//  WM_DESTROY  - Output completion message and return
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -215,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            // Menüauswahlen analysieren:
+            // Analyze menu selections:
             switch( wmId )
             {
                 case IDD_CBVIEWER:
@@ -234,7 +233,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             hdc = BeginPaint (hWnd, &ps);
-            // ZU ERLEDIGEN: Hier beliebigen Code zum Zeichnen hinzufügen...
+            // TODO: Add any code for drawing
             RECT rt;
             GetClientRect( hWnd, &rt );
 

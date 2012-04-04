@@ -160,13 +160,12 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
 
                 if ( !cConv )
                 {
-                    /* Wir vergleichen den kompletten Trailbereich den wir */
-                    /* definieren, der normalerweise groesser sein kann als */
-                    /* der definierte. Dies machen wir, damit Erweiterungen von */
-                    /* uns nicht beruecksichtigten Encodings so weit wie */
-                    /* moeglich auch richtig zu behandeln, das double byte */
-                    /* characters auch als ein einzelner Character behandelt */
-                    /* wird. */
+                    /* We compare the full range of the trail we defined, */
+                    /* which can often be greater than the limit. We do this */
+                    /* so that extensions that don't consider encodings */
+                    /* correctly treat double-byte characters as a single */
+                    /* character as much as possible. */
+
                     if (cLead < pConvertData->mnLeadStart
                         || cLead > pConvertData->mnLeadEnd
                         || cTrail < pConvertData->mnTrailStart
@@ -489,13 +488,12 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
 
             if ( !cConv )
             {
-                /* Wir vergleichen den kompletten Trailbereich den wir */
-                /* definieren, der normalerweise groesser sein kann als */
-                /* der definierte. Dies machen wir, damit Erweiterungen von */
-                /* uns nicht beruecksichtigten Encodings so weit wie */
-                /* moeglich auch richtig zu behandeln, das double byte */
-                /* characters auch als ein einzelner Character behandelt */
-                /* wird. */
+                /* We compare the full range of the trail we defined, */
+                /* which can often be greater than the limit. We do this */
+                /* so that extensions that don't consider encodings */
+                /* correctly treat double-byte characters as a single */
+                /* character as much as possible. */
+
                 if ( (cLead < JIS_EUC_LEAD_OFF) || (cTrail < JIS_EUC_TRAIL_OFF) )
                 {
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;

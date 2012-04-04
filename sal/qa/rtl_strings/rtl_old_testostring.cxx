@@ -80,7 +80,6 @@ void oldtests::test_OString()
     TEST_ENSURE( s2.lastIndexOf('M') == 0, "test_OString error 10");
     TEST_ENSURE( s2.lastIndexOf('t', s2.getLength() - 8) == 8, "test_OString error 9");
 
-
     //          "Mein erster RTL OString ist ein String aus der RTL Library\n"
     //           |    |    |    |    |    |    |    |    |    |    |    |
     //  Index    0    5    10   15   20   25   30   35   40   45   50   55

@@ -70,23 +70,23 @@ using namespace osl;
 using ::rtl::OString;
 
 // -----------------------------------------------------------------------------
-// Kleine Stopuhr
+// Small stopwatch
 class StopWatch {
-    TimeValue t1,t2;                                // Start und Stopzeit
+    TimeValue t1,t2;                                // Start and stoptime
 
 protected:
     sal_Int32 m_nNanoSec;
     sal_Int32 m_nSeconds;
 
-    bool m_bIsValid;                                   // TRUE, wenn gestartet und gestoppt
-    bool m_bIsRunning;                                 // TRUE, wenn gestartet.
+    bool m_bIsValid;                                   // TRUE, when started and stopped
+    bool m_bIsRunning;                                 // TRUE, when started
 
 public:
     StopWatch();
     ~StopWatch() {}
 
-    void start();                                 // Startet Timer
-    void stop();                                  // Stoppt Timer
+    void start();                                 // Starts time
+    void stop();                                  // Stops time
 
     double getSeconds() const;
     double getTenthSec() const;
@@ -94,7 +94,7 @@ public:
 
 // ================================= Stop Watch =================================
 
-// Eine kleine Stop-Uhr fuer den internen Gebrauch.
+// A small stopwatch for internal use
 // (c) Lars Langhans 29.12.1996 22:10
 
 StopWatch::StopWatch():m_bIsValid(false),m_bIsRunning(false) {}
@@ -116,12 +116,12 @@ void StopWatch::stop()
 // pre: Timer should be started
 // post: Timer will stopped
 
-    // gettimeofday(&t2, 0);                         // Timer ausfragen
+    // gettimeofday(&t2, 0);                         // Ask timer
     osl_getSystemTime( &t2 );
     t_print("# %u %u nsecs\n", (unsigned) t2.Seconds, (unsigned) t2.Nanosec);
 
     if (m_bIsRunning)
-    {                                // check ob gestartet.
+    {                                // check if started.
         m_nSeconds = static_cast<sal_Int32>(t2.Seconds) - static_cast<sal_Int32>(t1.Seconds);
         if ( t2.Nanosec > t1.Nanosec )
                m_nNanoSec = static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
@@ -143,8 +143,8 @@ void StopWatch::stop()
 
 double StopWatch::getSeconds() const
 {
-// pre: gueltig = TRUE
-// BACK: Zeit in Sekunden.
+// pre: valid = TRUE
+// BACK: time in seconds
 
     double nValue = 0.0;
     if (m_bIsValid)
