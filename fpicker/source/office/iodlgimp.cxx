@@ -165,14 +165,6 @@ SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
 }
 
 //-----------------------------------------------------------------------------
-void SvtFileDialogURLSelector::OpenURL( const String& rURL )
-{
-    INetURLObject aObj( rURL );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "SvtFileDialogURLSelector::OpenURL: Invalid URL!" );
-    m_pParent->OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-}
-
-//-----------------------------------------------------------------------------
 void SvtFileDialogURLSelector::Activate()
 {
     m_pMenu->Clear();

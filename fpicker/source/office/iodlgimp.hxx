@@ -100,7 +100,6 @@ protected:
     inline        SvtFileDialog*  GetDialogParent()       { return m_pParent; }
 
 protected:
-            void    OpenURL( const String& rURL );
 
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
