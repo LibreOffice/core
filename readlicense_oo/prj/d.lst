@@ -23,3 +23,6 @@ dos: echo =====================================================================
 # TODO: convince scp2 on WNT to use the txt-less files as input instead
 ..\%__SRC%\misc\SUM_NOTICE %_DEST%\bin%_EXT%\osl\NOTICE.txt
 ..\%__SRC%\misc\SUM_LICENSE %_DEST%\bin%_EXT%\osl\LICENSE.txt
+
+# alse delivering a pure ALv2 license file
+..\..\LICENSE_ALv2 %_DEST%\bin%_EXT%\osl
