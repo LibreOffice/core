@@ -234,9 +234,8 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
-            // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
-            // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
-            // ClrObject() auf.
+            // GetContour() causes the graphic to be loaded, which may cause
+            // the graphic to change its size, call ClrObject()
             PolyPolygon aPoly;
             if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
                 aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
@@ -258,8 +257,8 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
         memmove( pTextRanger + 1, pTextRanger, nObjCnt * sizeof( TextRanger* ) );
         memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
-        pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
-                             // GetContour() eingetragen werden.
+        pSdrObj[ 0 ] = pObj; // due to #37347 the Object must be entered only
+                             // after GetContour()
         pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
             (sal_uInt16)rLRSpace.GetLeft(), (sal_uInt16)rLRSpace.GetRight(),
             pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
@@ -317,13 +316,13 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
         sal_Bool bSet = sal_True;
         if( bOdd )
-            --nIdx; // innerhalb eines Intervalls
+            --nIdx; // within interval
         else if( ! bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
         {
             if( nIdx )
-                nIdx -= 2; // ein Intervall nach links gehen
+                nIdx -= 2; // an interval to the left
             else
-                bSet = sal_False; // vor dem erstem Intervall
+                bSet = sal_False; // before the first interval
         }
 
         if( bSet && nIdx < nCount )
@@ -801,11 +800,11 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             if (FLY_AT_PAGE == rNewA.GetAnchorId())
                 return sal_True;  // We always avoid page anchored ones
 
-            // Wenn absatzgebundene Flys in einem FlyCnt gefangen sind, so
-            // endet deren Einflussbereich an den Grenzen des FlyCnt!
-            // Wenn wir aber gerade den Text des FlyCnt formatieren, dann
-            // muss er natuerlich dem absatzgebundenen Frm ausweichen!
-            // pCurrFrm ist der Anker von pNew?
+            // If Flys anchored at paragraph are caught in a FlyCnt, then
+            // their influence ends at the borders of the FlyCnt!
+            // If we are currently formatting the text of the FlyCnt, then
+            // it has to get out of the way of the Frm anchored at paragraph!
+            // pCurrFrm ist the anchor of pNew?
             // #i26945#
             const SwFrm* pTmp = _pAnchoredObj->GetAnchorFrm();
             if( pTmp == pCurrFrm )
@@ -857,13 +856,13 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                     return sal_True;
 
                 // Compare indices:
-                // Den Index des anderen erhalten wir immer ueber das Ankerattr.
+                // The Index of the other is retrieved from the anchor attr.
                 sal_uLong nTmpIndex = rNewA.GetCntntAnchor()->nNode.GetIndex();
-                // Jetzt wird noch ueberprueft, ob der aktuelle Absatz vor dem
-                // Anker des verdraengenden Objekts im Text steht, dann wird
-                // nicht ausgewichen.
-                // Der Index wird moeglichst ueber einen SwFmtAnchor ermittelt,
-                // da sonst recht teuer.
+                // Now check whether the current paragraph is before the anchor
+                // of the displaced object in the text, then we don't have to
+                // get out of its way.
+                // If possible determine Index via SwFmtAnchor because
+                // otherwise it's quite expensive.
                 if( ULONG_MAX == nIndex )
                     nIndex = pCurrFrm->GetNode()->GetIndex();
 
@@ -913,8 +912,8 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
         {
             aRect = pCurrFrm->Frm();
         }
-        // Wir machen uns etwas kleiner als wir sind,
-        // damit Ein-Twip-Ueberlappungen ignoriert werden. (#49532)
+        // Make ourselves a little smaller than we are,
+        // so that 1-Twip-overlappings are ignored (#49532)
         SWRECTFN( pCurrFrm )
         const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
@@ -1071,9 +1070,9 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                 const SwFmtSurround &rSur = pFmt->GetSurround();
                 if( bAvoid )
                 {
-                    // Wenn der Text drunter durchlaeuft, bleibt die
-                    // Formatierung unbeeinflusst. Im LineIter::DrawText()
-                    // muessen "nur" geschickt die ClippingRegions gesetzt werden ...
+                    // If the text flows below, it has no influence on
+                    // formatting. In LineIter::DrawText() it is "just"
+                    // necessary to clevely set the ClippingRegions
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                     if( ( SURROUND_THROUGHT == rSur.GetSurround() &&
                           ( !rSur.IsAnchorOnly() ||
@@ -1144,7 +1143,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
                                 SwAnchoredObjList::size_type nFlyPos,
                                 const SwRect &rLine ) const
 {
-    // Normalerweise ist der rechte Rand der rechte Rand der Printarea.
+    // Usually the right margin is the right margin of the Printarea
     OSL_ENSURE( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
             "SwTxtFly::CalcRightMargin with swapped frame" );
     SWRECTFN( pCurrFrm )
@@ -1155,12 +1154,11 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     (aLine.*fnRect->fnSetRight)( nRight );
     (aLine.*fnRect->fnSetLeft)( (rFly.*fnRect->fnGetLeft)() );
 
-    // Es koennte aber sein, dass in die gleiche Zeile noch ein anderes
-    // Object hineinragt, welches _ueber_ uns liegt.
-    // Wunder der Technik: Flys mit Durchlauf sind fuer die darunterliegenden
-    // unsichtbar, das heisst, dass sie bei der Berechnung der Raender
-    // anderer Flys ebenfalls nicht auffallen.
-    // 3301: pNext->Frm().IsOver( rLine ) ist noetig
+    // It is possible that there is another object that is _above_ us
+    // and protrudes into the same line.
+    // Flys with run-through are invisible for those below, i.e., they
+    // are ignored for computing the margins of other Flys.
+    // 3301: pNext->Frm().IsOver( rLine ) is necessary
     // #i68520#
     SwSurround eSurroundForTextWrap;
 
@@ -1188,27 +1186,26 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
                 ( pNext, aLine, pCurrFrm, nFlyRight, sal_True ) );
         SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
 
-        // Optimierung:
-        // In nNextTop wird notiert, an welcher Y-Positon mit Aenderung der
-        // Rahmenverhaeltnisse gerechnet werden muss. Dies dient dazu, dass,
-        // obwohl nur die Rahmen in der aktuellen Zeilenhoehe betrachtet werden,
-        // bei Rahmen ohne Umlauf die Zeilenhoehe so erhoeht wird, dass mit einer
-        // einzigen Zeile die Unterkante das Rahmens oder ggf. die Oberkante des
-        // naechsten Rahmen erreicht wird.
-        // Insbesondere bei HTML-Dokumenten kommen oft (Dummy-)Absaetze in einer
-        // 2-Pt.-Schrift vor, bis diese einem groesseren Rahmen ausgewichen sind,
-        // erforderte es frueher Unmengen von Leerzeilen.
+        // optimization:
+        // Record in nNextTop at which Y-position frame related changes are
+        // likely.  This is so that, despite only looking at frames in the
+        // current line height, for frames without wrap the line height is
+        // incremented so that with a single line the lower border of the frame
+        // (or possibly the upper border of another frame) is reached.
+        // Especially in HTML documents there are often (dummy) paragraphs in
+        // 2 pt font, and they used to only evade big frames after huge numbers
+        // of empty lines.
         const long nTmpTop = (aTmp.*fnRect->fnGetTop)();
         if( (*fnRect->fnYDiff)( nTmpTop, (aLine.*fnRect->fnGetTop)() ) > 0 )
         {
             if( (*fnRect->fnYDiff)( nNextTop, nTmpTop ) > 0 )
-                SetNextTop( nTmpTop ); // Die Oberkante des "naechsten" Rahmens
+                SetNextTop( nTmpTop ); // upper border of next frame
         }
-        else if( ! (aTmp.*fnRect->fnGetWidth)() ) // Typisch fuer Objekte mit Konturumlauf
-        {   // Bei Objekten mit Konturumlauf, die vor der aktuellen Zeile beginnen
-            // und hinter ihr enden, trotzdem aber nicht mit ihr ueberlappen,
-            // muss die Optimierung ausgeschaltet werden, denn bereits in der
-            // naechsten Zeile kann sich dies aendern.
+        else if (!(aTmp.*fnRect->fnGetWidth)()) // typical for Objects with contour wrap
+        {   // For Objects with contour wrap that start before the current
+            // line, and end below it, but do not actually overlap it, the
+            // optimization has to be disabled, because the circumstances
+            // can change in the next line.
             if( ! (aTmp.*fnRect->fnGetHeight)() ||
                 (*fnRect->fnYDiff)( (aTmp.*fnRect->fnGetBottom)(),
                                     (aLine.*fnRect->fnGetTop)() ) > 0 )
@@ -1220,7 +1217,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
             if( SURROUND_RIGHT == eSurroundForTextWrap ||
                 SURROUND_PARALLEL == eSurroundForTextWrap )
             {
-                // der FlyFrm wird ueberstimmt.
+                // overrule the FlyFrm
                 if( nRight > nFlyRight )
                     nRight = nFlyRight;
                 bStop = sal_True;
@@ -1248,12 +1245,11 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
     SwRect aLine( rLine );
     (aLine.*fnRect->fnSetLeft)( nLeft );
 
-    // Es koennte aber sein, dass in die gleiche Zeile noch ein anderes
-    // Object hineinragt, welches _ueber_ uns liegt.
-    // Wunder der Technik: Flys mit Durchlauf sind fuer die darunterliegenden
-    // unsichtbar, das heisst, dass sie bei der Berechnung der Raender
-    // anderer Flys ebenfalls nicht auffallen.
-    // 3301: pNext->Frm().IsOver( rLine ) ist noetig
+    // It is possible that there is another object that is _above_ us
+    // and protrudes into the same line.
+    // Flys with run-through are invisible for those below, i.e., they
+    // are ignored for computing the margins of other Flys.
+    // 3301: pNext->Frm().IsOver( rLine ) is necessary
 
     // #i68520#
     SwAnchoredObjList::size_type nMyPos = nFlyPos;
@@ -1313,16 +1309,16 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
     if( !aFly.Width() )
         return aFly;
 
-    SetNextTop( (aFly.*fnRect->fnGetBottom)() ); // Damit die Zeile ggf. bis zur Unterkante
-                                 // des Rahmens waechst.
+    // so the line may grow up to the lower edge of the frame
+    SetNextTop( (aFly.*fnRect->fnGetBottom)() );
     SwAnchoredObjList::size_type nFlyPos = GetPos( pAnchoredObj );
 
     // LEFT and RIGHT, we grow the rectangle.
     // We have some problems, when several frames are to be seen.
     // At the moment, only the easier case is assumed:
-    //  + LEFT means that the text muss flaw on the left of the frame,
-    //    that is that the trame expands to the right edge of the
-    //    print area or to the the next frame.
+    //  + LEFT means that the text must flow on the left of the frame,
+    //    that is the frame expands to the right edge of the print area
+    //    or to the next frame.
     //  + RIGHT is the opposite.
     // Otherwise the set distance between text and frame is always
     // added up.
@@ -1374,7 +1370,7 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
         }
     }
 
-    // Beim Durchlauf und Nowrap wird smart ignoriert.
+    // in cause of run-through and nowrap ignore smartly
     if( SURROUND_THROUGHT == eSurroundForTextWrap ||
         SURROUND_NONE == eSurroundForTextWrap )
         return eSurroundForTextWrap;
@@ -1388,7 +1384,7 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
             eSurroundForTextWrap = SURROUND_LEFT;
     }
 
-    // "idealer Seitenumlauf":
+    // "ideal page wrap":
     if ( SURROUND_IDEAL == eSurroundForTextWrap )
     {
         SWRECTFN( pCurrFrm )
