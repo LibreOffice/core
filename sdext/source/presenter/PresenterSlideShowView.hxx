@@ -291,6 +291,8 @@ private:
     */
     void ThrowIfDisposed (void)
         throw (css::lang::DisposedException);
+
+    void impl_addAndConfigureView();
 };
 
 } } // end of namespace ::sd::presenter
