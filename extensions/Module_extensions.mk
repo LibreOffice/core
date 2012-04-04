@@ -69,9 +69,9 @@ ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 ifneq ($(DISABLE_ACTIVEX),TRUE)
 $(eval $(call gb_Module_add_targets,extensions,\
-	CustomTarget_so_activex_idl \
 	WinResTarget_activex \
 	Library_so_activex \
+	CustomTarget_so_activex_idl \
 ))
 
 ifeq ($(BUILD_X64),TRUE)
