@@ -360,7 +360,7 @@ void SAL_CALL PresenterSlideShowView::clear (void)
         rendering::ViewState aViewState (
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             NULL);
-        double aColor[3] = {0,0,0};
+        double aColor[4] = {0,0,0,0};
         rendering::RenderState aRenderState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             NULL,
