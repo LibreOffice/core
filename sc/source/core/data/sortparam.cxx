@@ -175,8 +175,6 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
         nCompatHeader( rOld.nCompatHeader )
 {
-    sal_uInt16 nNewCount = 0;
-    sal_uInt16 nSortSize = GetSortKeyCount();
     sal_uInt16 i;
 
     //  zuerst die Gruppen aus den Teilergebnissen
@@ -184,42 +182,34 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
             {
-                if (nNewCount < nSortSize)
-                {
-                    maKeyState[nNewCount].bDoSort = true;
-                    maKeyState[nNewCount].nField = rSub.nField[i];
-                    maKeyState[nNewCount].bAscending = rSub.bAscending;
-                    ++nNewCount;
-                }
+#if 0
+// FIXME this crashes in sc_unoapi currently; table3.cxx has nMaxSorts = 3...
+                ScSortKeyState key;
+                key.bDoSort = true;
+                key.nField = rSub.nField[i];
+                key.bAscending = rSub.bAscending;
+                maKeyState.push_back(key);
+#endif
             }
 
     //  dann dahinter die alten Einstellungen
-    for (i=0; i<nSortSize; i++)
+    for (i=0; i < rOld.GetSortKeyCount(); i++)
         if (rOld.maKeyState[i].bDoSort)
         {
             SCCOLROW nThisField = rOld.maKeyState[i].nField;
             bool bDouble = false;
-            for (sal_uInt16 j=0; j<nNewCount; j++)
+            for (sal_uInt16 j = 0; j < GetSortKeyCount(); j++)
                 if ( maKeyState[j].nField == nThisField )
                     bDouble = true;
             if (!bDouble)               // ein Feld nicht zweimal eintragen
             {
-                if (nNewCount < nSortSize)
-                {
-                    maKeyState[nNewCount].bDoSort = true;
-                    maKeyState[nNewCount].nField = nThisField;
-                    maKeyState[nNewCount].bAscending = rOld.maKeyState[i].bAscending;
-                    ++nNewCount;
-                }
+                ScSortKeyState key;
+                key.bDoSort = true;
+                key.nField = nThisField;
+                key.bAscending = rOld.maKeyState[i].bAscending;
+                maKeyState.push_back(key);
             }
         }
-
-    for (i=nNewCount; i<nSortSize; i++)       // Rest loeschen
-    {
-        maKeyState[nNewCount].bDoSort = false;
-        maKeyState[nNewCount].nField = 0;
-        maKeyState[nNewCount].bAscending = true;
-    }
 }
 
 //------------------------------------------------------------------------

@@ -585,7 +585,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     }
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
-    if ( aLocalParam.maKeyState[0].bDoSort )
+    if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
         pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
 
     sal_Bool bSave = sal_True;
@@ -593,7 +593,8 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     {
         ScSortParam aOldSortParam;
         pDBData->GetSortParam( aOldSortParam );
-        if ( aOldSortParam.maKeyState[0].bDoSort && aOldSortParam.bInplace )   // Inplace-Sortierung gemerkt?
+        if (aOldSortParam.GetSortKeyCount() &&
+            aOldSortParam.maKeyState[0].bDoSort && aOldSortParam.bInplace)
         {
             bSave = false;
             aOldSortParam.nDestCol = rSortParam.nDestCol;
