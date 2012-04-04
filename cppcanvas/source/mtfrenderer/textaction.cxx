@@ -644,8 +644,8 @@ namespace cppcanvas
                             const ::basegfx::B2DHomMatrix&  rTextTransform );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -723,10 +723,10 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  /*rSubset*/ ) const
+            bool TextAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  /*rSubset*/ ) const
             {
-                OSL_FAIL( "TextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::renderSubset(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -810,8 +810,8 @@ namespace cppcanvas
                                   const ::basegfx::B2DHomMatrix&    rTextTransform );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -959,10 +959,10 @@ namespace cppcanvas
                                          maReliefOffset );
             }
 
-            bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                           const Subset&                    /*rSubset*/ ) const
+            bool EffectTextAction::renderSubset( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                 const Subset&                    /*rSubset*/ ) const
             {
-                OSL_FAIL( "EffectTextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::renderSubset(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1040,8 +1040,8 @@ namespace cppcanvas
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -1123,10 +1123,10 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TextArrayAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                          const Subset&                     rSubset ) const
+            bool TextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                                const Subset&                     rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::renderSubset()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
 
                 rendering::RenderState                      aLocalState( maState );
@@ -1230,8 +1230,8 @@ namespace cppcanvas
                                        const ::basegfx::B2DHomMatrix&   rTextTransform );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -1413,10 +1413,10 @@ namespace cppcanvas
                 const rendering::ViewState&                         mrViewState;
             };
 
-            bool EffectTextArrayAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
-                                                const Subset&                   rSubset ) const
+            bool EffectTextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                      const Subset&                   rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::renderSubset()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
 
                 rendering::RenderState                   aLocalState( maState );
@@ -1568,8 +1568,8 @@ namespace cppcanvas
                                const ::basegfx::B2DHomMatrix&                       rTextTransform );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -1843,10 +1843,10 @@ namespace cppcanvas
                 const rendering::ViewState&                         mrViewState;
             };
 
-            bool OutlineAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
-                                        const Subset&                   rSubset ) const
+            bool OutlineAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                              const Subset&                   rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::OutlineAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::OutlineAction::renderSubset()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::OutlineAction: 0x%X", this );
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )

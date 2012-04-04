@@ -61,8 +61,6 @@ namespace cppcanvas
             class PolyPolyAction : public CachedPrimitiveBase
             {
             public:
-                using CachedPrimitiveBase::render;
-
                 PolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                 const CanvasSharedPtr&,
                                 const OutDevState&,
@@ -75,8 +73,8 @@ namespace cppcanvas
                                 bool bStroke,
                                 int nTransparency );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -86,8 +84,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::basegfx::B2DRange                           maBounds;
@@ -160,10 +158,10 @@ namespace cppcanvas
                 }
             }
 
-            bool PolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                         const ::basegfx::B2DHomMatrix&                 rTransformation ) const
+            bool PolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                  const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
 
                 rendering::RenderState aLocalState( maState );
@@ -193,8 +191,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                         const Subset&                  rSubset ) const
+            bool PolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                               const Subset&                  rSubset ) const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
                 // line segments, when subsets are requested.
@@ -247,15 +245,13 @@ namespace cppcanvas
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
-                using CachedPrimitiveBase::render;
-
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const CanvasSharedPtr&           rCanvas,
                                         const OutDevState&               rState,
                                         const rendering::Texture&        rTexture );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -265,8 +261,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::basegfx::B2DRectangle                       maBounds;
@@ -291,10 +287,10 @@ namespace cppcanvas
                 tools::initRenderState(maState,rState);
             }
 
-            bool TexturedPolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
+            bool TexturedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
 
                 rendering::RenderState aLocalState( maState );
@@ -310,8 +306,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TexturedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                                 const Subset&                  rSubset ) const
+            bool TexturedPolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                                       const Subset&                  rSubset ) const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
                 // line segments, when subsets are requested.
@@ -363,15 +359,13 @@ namespace cppcanvas
             class StrokedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
-                using CachedPrimitiveBase::render;
-
                 StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&     rPoly,
                                        const CanvasSharedPtr&               rCanvas,
                                        const OutDevState&                   rState,
                                        const rendering::StrokeAttributes&   rStrokeAttributes );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -381,8 +375,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::basegfx::B2DRectangle                       maBounds;
@@ -406,10 +400,10 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool StrokedPolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                                const ::basegfx::B2DHomMatrix&                 rTransformation ) const
+            bool StrokedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                         const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
 
                 rendering::RenderState aLocalState( maState );
@@ -422,8 +416,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool StrokedPolyPolyAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
-                                                const Subset&                   rSubset ) const
+            bool StrokedPolyPolyAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                      const Subset&                   rSubset ) const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
                 // line segments, when subsets are requested.

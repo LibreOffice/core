@@ -2755,8 +2755,8 @@ namespace cppcanvas
                 {
                     // ANDing the result. We want to fail if at least
                     // one action failed.
-                    mbRet &= rAction.mpAction->render( maTransformation,
-                                                       rSubset );
+                    mbRet &= rAction.mpAction->renderSubset( maTransformation,
+                                                             rSubset );
                 }
 
             private:

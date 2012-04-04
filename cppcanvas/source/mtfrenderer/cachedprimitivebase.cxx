@@ -85,8 +85,8 @@ namespace cppcanvas
             maLastTransformation = aTotalTransform;
 
             // delegate rendering to derived classes
-            return render( mxCachedPrimitive,
-                           rTransformation );
+            return renderPrimitive( mxCachedPrimitive,
+                                    rTransformation );
         }
     }
 }

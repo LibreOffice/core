@@ -65,8 +65,8 @@ namespace cppcanvas
                             const OutDevState& );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -110,8 +110,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const
+            bool LineAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const
             {
                 // line only contains a single action, fail if subset
                 // requests different range

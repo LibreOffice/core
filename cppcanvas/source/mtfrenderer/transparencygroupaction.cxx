@@ -136,8 +136,8 @@ namespace cppcanvas
                                          const OutDevState&             rState );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -255,10 +255,10 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                                  const Subset&                     rSubset ) const
+            bool TransparencyGroupAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                                        const Subset&                     rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TransparencyGroupAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TransparencyGroupAction::renderSubset()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TransparencyGroupAction: 0x%X", this );
 
                 // determine overall transformation matrix (render, view,
@@ -288,7 +288,7 @@ namespace cppcanvas
                                                 nRotate,
                                                 nShearX ) )
                 {
-                    OSL_FAIL( "TransparencyGroupAction::render(): non-decomposable transformation" );
+                    OSL_FAIL( "TransparencyGroupAction::renderSubset(): non-decomposable transformation" );
                     return false;
                 }
 
@@ -509,7 +509,7 @@ namespace cppcanvas
                 aSubset.mnSubsetBegin = 0;
                 aSubset.mnSubsetEnd   = -1;
 
-                return render( rTransformation, aSubset );
+                return renderSubset( rTransformation, aSubset );
             }
 
             ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation ) const

@@ -60,8 +60,6 @@ namespace cppcanvas
             class BitmapAction : public CachedPrimitiveBase
             {
             public:
-                using CachedPrimitiveBase::render;
-
                 BitmapAction( const ::BitmapEx&,
                               const ::basegfx::B2DPoint& rDstPoint,
                               const CanvasSharedPtr&,
@@ -72,8 +70,8 @@ namespace cppcanvas
                               const CanvasSharedPtr&,
                               const OutDevState& );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -83,8 +81,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                              const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 uno::Reference< rendering::XBitmap >                    mxBitmap;
                 CanvasSharedPtr                                         mpCanvas;
@@ -152,10 +150,10 @@ namespace cppcanvas
                                    NULL );
             }
 
-            bool BitmapAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                       const ::basegfx::B2DHomMatrix&                 rTransformation ) const
+            bool BitmapAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::renderPrimitive()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
 
                 rendering::RenderState aLocalState( maState );
@@ -168,8 +166,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool BitmapAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                       const Subset&                    rSubset ) const
+            bool BitmapAction::renderSubset( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                             const Subset&                    rSubset ) const
             {
                 // bitmap only contains a single action, fail if subset
                 // requests different range

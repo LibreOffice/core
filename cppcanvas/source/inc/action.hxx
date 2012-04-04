@@ -114,8 +114,8 @@ namespace cppcanvas
                 specified subset is invalid for this action, or if
                 rendering failed for other reasons, false is returned.
              */
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                 const Subset&                  rSubset ) const = 0;
+            virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                       const Subset&                  rSubset ) const = 0;
 
             /** Query bounds of this action on the associated canvas
 

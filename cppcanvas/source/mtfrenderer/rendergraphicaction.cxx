@@ -60,16 +60,14 @@ namespace cppcanvas
             class RenderGraphicAction : public CachedPrimitiveBase
             {
             public:
-                using CachedPrimitiveBase::render;
-
                 RenderGraphicAction( const ::vcl::RenderGraphic& rRenderGraphic,
                               const ::basegfx::B2DPoint& rDstPoint,
                               const ::basegfx::B2DVector& rDstSize,
                               const CanvasSharedPtr&,
                               const OutDevState& );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset& rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset& rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -79,8 +77,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                     const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                              const ::basegfx::B2DHomMatrix& rTransformation ) const;
 
                 ::vcl::RenderGraphic                    maRenderGraphic;
                 uno::Reference< rendering::XBitmap >    mxBitmap;
@@ -119,10 +117,10 @@ namespace cppcanvas
                 }
             }
 
-            bool RenderGraphicAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
-                                       const ::basegfx::B2DHomMatrix&                 rTransformation ) const
+            bool RenderGraphicAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                       const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::RenderGraphicAction::render()" );
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::RenderGraphicAction::renderPrimitive()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::RenderGraphicAction: 0x%X", this );
 
                 if( mxBitmap.is() )
@@ -138,8 +136,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool RenderGraphicAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                       const Subset&                    rSubset ) const
+            bool RenderGraphicAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                                    const Subset&                    rSubset ) const
             {
                 // rendergraphic only contains a single action, fail if subset
                 // requests different range

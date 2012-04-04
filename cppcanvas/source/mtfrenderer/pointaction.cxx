@@ -66,8 +66,8 @@ namespace cppcanvas
                              const ::Color&     );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const;
+                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                                           const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
@@ -125,8 +125,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PointAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                      const Subset&                     rSubset ) const
+            bool PointAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                            const Subset&                     rSubset ) const
             {
                 // point only contains a single action, fail if subset
                 // requests different range

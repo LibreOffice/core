@@ -79,11 +79,11 @@ namespace cppcanvas
         protected:
             using Action::render;
 
-            virtual bool render( ::com::sun::star::uno::Reference<
+        private:
+            virtual bool renderPrimitive( ::com::sun::star::uno::Reference<
                                      ::com::sun::star::rendering::XCachedPrimitive >& rCachedPrimitive,
                                  const ::basegfx::B2DHomMatrix&                       rTransformation ) const = 0;
 
-        private:
             CanvasSharedPtr                                             mpCanvas;
             mutable ::com::sun::star::uno::Reference<
                     ::com::sun::star::rendering::XCachedPrimitive >     mxCachedPrimitive;
