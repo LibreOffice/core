@@ -176,17 +176,19 @@ copy-stuff:
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
+#
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
 	echo 'UNO_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/xml/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
+#
 # Set up bootstraprc
 	echo '[Bootstrap]' > assets/program/bootstraprc
 	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
 	echo 'ProductKey=LibreOffice 3.6' >> assets/program/bootstraprc
-	echo "UserInstallation=file://$(APP_DATA_PATH)/cache/.libreoffice" >> assets/program/bootstraprc
-
+	echo "UserInstallation=file://$(APP_DATA_PATH)" >> assets/program/bootstraprc
+#
 # Set up versionrc
 	echo '[Version]' > assets/program/versionrc
 	echo 'AllLanguages=en-US' >> assets/program/versionrc
@@ -197,12 +199,23 @@ copy-stuff:
 	echo 'ProductMinor=1' >> assets/program/versionrc
 	echo 'ProductSource=OOO350' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
+#
 # .res files
 	mkdir -p assets/program/resource
 	cp $(OUTDIR)/bin/*en-US.res assets/program/resource
-# Assets that are unpacked at run-time into the app's data directory.
+#
+# Assets that are unpacked at run-time into the app's data directory. These
+# are files read by non-LO code, fontconfig and freetype for now, that doesn't
+# understand "/assets" paths.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
+	mkdir -p assets/unpack/user/fonts
+# $UserInstallation/user/fonts is added to the fontconfig path in
+# vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
+# set to the app's data dir above.
+	cp $(OUTDIR)/pck/Liberation*.ttf assets/unpack/user/fonts
+	cp $(OUTDIR)/pck/Gen*.ttf assets/unpack/user/fonts
+	cp $(OUTDIR)/pck/opens___.ttf assets/unpack/user/fonts
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
