@@ -147,5 +147,6 @@ $(COMPONENT_HELP) : help$/$$(@:f)
 $(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
 .ENDIF # L10N_framework
 

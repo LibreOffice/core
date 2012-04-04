@@ -19,8 +19,6 @@
 #  
 #**************************************************************
 
-
-
 PRJ=..$/..
 PRJNAME=swext
 TARGET=mediawiki
@@ -33,34 +31,19 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 DESCRIPTION:=$(MISC)$/$(TARGET)$/description.xml
-
-# .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-# PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/$(TARGET)$/license$/license_$i)
-# .ELSE
-PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/$(TARGET)$/license$/LICENSE_$i)
-# .ENDIF
+PACKLICS:=$(MISC)$/$(TARGET)$/license$/LICENSE
 
 common_build_zip=
 
 .INCLUDE : target.mk
 
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ELSE
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ENDIF
-
 ALLTAR: $(PACKLICS) $(DESCRIPTION)
 
-.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
-.IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
-PHONYDESC=.PHONY
-.ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
-$(DESCRIPTION) $(PHONYDESC) : $$(@:f)
+$(DESCRIPTION) : description.xml
     @@-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml license/LICENSE_xxx $@
-    @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
+    $(COPY) $< $@
+ 
+$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE_ALv2
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+ 

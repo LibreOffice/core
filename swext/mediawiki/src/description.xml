@@ -27,13 +27,13 @@
     </display-name>
     <registration>
         <simple-license accept-by="admin" default-license-id="lic-en-US">
-            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+            <license-text xlink:href="license/LICENSE" lang="isocode" license-id="lic-isocode"/>
         </simple-license>
     </registration>
     <dependencies>
-        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0 or StarOffice 9"/>
+        <OpenOffice.org-minimal-version value="3.0" d:name="Apache OpenOffice"/>
     </dependencies>
     <publisher>
-        <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
+        <name xlink:href="http://www.openoffice.org" lang="en">Apache Software Foundation</name>
     </publisher>
 </description>

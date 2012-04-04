@@ -28,12 +28,12 @@
   <identifier value="com.sun.PresenterScreen-UPDATED_PLATFORM" />
 
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.3" dep:name="OpenOffice.org 3.3"/>
+    <OpenOffice.org-minimal-version value="3.3" dep:name="Apache OpenOffice"/>
   </dependencies>
 
   <registration>
     <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-      <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+      <license-text xlink:href="license/LICENSE" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>
 
@@ -42,7 +42,7 @@
   <platform value="UPDATED_PLATFORM" />
 
   <publisher>
-      <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
+      <name xlink:href="http://www.openoffice.org" lang="en">Apache Software Foundation</name>
   </publisher>
 
   <display-name>

@@ -154,14 +154,11 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     @@-$(RM) $@.3.$(EXTNAME)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
-# default OOo license text!!!
+
+# default license text for Apache OpenOffice extensions is the Apache Licence 2
 # may not fit...
 .IF "$(CUSTOM_LICENSE)"==""
-.IF "$(GUI)" == "WNT"
-PACKLICDEPS=$(SOLARBINDIR)/osl/license$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-.ELSE			# "$(GUI)" == "WNT"
-PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-.ENDIF			# "$(GUI)" == "WNT"
+PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE_ALv2
 .ELSE			# "$(CUSTOM_LICENSE)" == ""
 PACKLICDEPS=$(CUSTOM_LICENSE)
 .ENDIF			# "$(CUSTOM_LICENSE)" == ""
