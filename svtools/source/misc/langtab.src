@@ -347,6 +347,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Komi-Zyrian" ; LANGUAGE_USER_KOMI_ZYRIAN ; > ;
         < "Komi-Permyak" ; LANGUAGE_USER_KOMI_PERMYAK ; > ;
         < "Pitjantjatjara" ; LANGUAGE_USER_PITJANTJATJARA ; > ;
+        < "English (Malawi)" ; LANGUAGE_USER_ENGLISH_MALAWI ; > ;
     };
 };
 

@@ -439,6 +439,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_LINGALA_DRCONGO,        "ln", "CD" },
     { LANGUAGE_USER_LOW_GERMAN,            "nds", "DE" },
     { LANGUAGE_USER_HILIGAYNON,            "hil", "PH" },
+    { LANGUAGE_USER_ENGLISH_MALAWI,         "en", "MW" },   /* en default for MW */
     { LANGUAGE_USER_NYANJA,                 "ny", "MW" },
     { LANGUAGE_USER_KASHUBIAN,             "csb", "PL" },
     { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU" },

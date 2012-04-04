@@ -541,6 +541,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KOMI_ZYRIAN           0x0669
 #define LANGUAGE_USER_KOMI_PERMYAK          0x066A
 #define LANGUAGE_USER_PITJANTJATJARA        0x066B
+#define LANGUAGE_USER_ENGLISH_MALAWI        0x8809  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 
