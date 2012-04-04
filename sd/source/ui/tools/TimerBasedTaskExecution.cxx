@@ -32,8 +32,7 @@
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
 #include <boost/weak_ptr.hpp>
-
-#undef VERBOSE
+#include "sal/log.hxx"
 
 namespace sd { namespace tools {
 
@@ -148,23 +147,17 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
             // mnMaxTimePerStep.  Note that the last step may take longer
             // than allowed.
             sal_uInt32 nStartTime (Time( Time::SYSTEM ).GetMSFromTime());
-#ifdef VERBOSE
-            OSL_TRACE("starting TimerBasedTaskExecution at %d", nStartTime);
-#endif
+            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
             do
             {
                 mpTask->RunNextStep();
                 sal_uInt32 nDuration (Time( Time::SYSTEM ).GetMSFromTime()-nStartTime);
-#ifdef VERBOSE
-            OSL_TRACE("executed step in %d", nDuration);
-#endif
+                SAL_INFO("sd.tools", OSL_THIS_FUNC << ": executed step in " << nDuration);
                 if (nDuration > mnMaxTimePerStep)
                     break;
             }
             while (mpTask->HasNextStep());
-#ifdef VERBOSE
-            OSL_TRACE("TimerBasedTaskExecution sleeping");
-#endif
+            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": TimerBasedTaskExecution sleeping");
             maTimer.Start();
         }
         else

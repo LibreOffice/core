@@ -42,18 +42,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-#undef VERBOSE
-//#define VERBOSE 1
-
 namespace {
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 0
 
 void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
     Reference<container::XNamed> xNamed (rxRequest, UNO_QUERY);
     if (xNamed.is())
-        OSL_TRACE("    %s\n",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " <<
             ::rtl::OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -105,14 +102,14 @@ void ChangeRequestQueueProcessor::AddRequest (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >= 2
     if (maQueue.empty())
     {
-        OSL_TRACE("Adding requests to empty queue");
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Adding requests to empty queue");
         ConfigurationTracer::TraceConfiguration(
             mxConfiguration, "current configuration of queue processor");
     }
-    OSL_TRACE("Adding request");
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Adding request");
     TraceRequest(rxRequest);
 #endif
 
@@ -131,9 +128,7 @@ void ChangeRequestQueueProcessor::StartProcessing (void)
         && mxConfiguration.is()
         && ! maQueue.empty())
     {
-#ifdef VERBOSE
-        OSL_TRACE("ChangeRequestQueueProcessor scheduling processing");
-#endif
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ChangeRequestQueueProcessor scheduling processing");
         mnUserEventId = Application::PostUserEvent(
             LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
     }
@@ -168,9 +163,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-#ifdef VERBOSE
-    OSL_TRACE("ProcessOneEvent");
-#endif
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ProcessOneEvent");
 
     if (mxConfiguration.is()
         && ! maQueue.empty())
@@ -182,7 +175,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
         // Execute the change request.
         if (xRequest.is())
         {
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >= 2
             TraceRequest(xRequest);
 #endif
             xRequest->execute(mxConfiguration);
@@ -190,14 +183,12 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
 
         if (maQueue.empty())
         {
-#ifdef VERBOSE
-            OSL_TRACE("All requests are processed");
-#endif
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
             // The queue is empty so tell the ConfigurationManager to update
             // its state.
             if (mpConfigurationUpdater.get() != NULL)
             {
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL >= 2
                 ConfigurationTracer::TraceConfiguration (
                     mxConfiguration, "updating to configuration");
 #endif

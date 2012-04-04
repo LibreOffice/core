@@ -40,8 +40,6 @@ using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 using ::rtl::OUString;
 
-#undef VERBOSE
-
 namespace {
 /** Use the XResourceId::compareTo() method to implement a compare operator
     for STL containers.
@@ -163,11 +161,9 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
 
     if (mpResourceContainer->find(rxResourceId) == mpResourceContainer->end())
     {
-#ifdef VERBOSE
-    OSL_TRACE("Configuration::addResource() %s",
-        OUStringToOString(
-            FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Configuration::addResource() " <<
+            OUStringToOString(
+                FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
         mpResourceContainer->insert(rxResourceId);
         PostEvent(rxResourceId, true);
     }
@@ -187,11 +183,9 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
     ResourceContainer::iterator iResource (mpResourceContainer->find(rxResourceId));
     if (iResource != mpResourceContainer->end())
     {
-#ifdef VERBOSE
-    OSL_TRACE("Configuration::removeResource() %s",
-        OUStringToOString(
-            FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Configuration::removeResource() " <<
+            OUStringToOString(
+                FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
         PostEvent(rxResourceId,false);
         mpResourceContainer->erase(iResource);
     }

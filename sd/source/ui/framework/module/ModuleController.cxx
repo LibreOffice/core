@@ -43,9 +43,6 @@ using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 using ::sd::tools::ConfigurationAccess;
 
-#undef VERBOSE
-//#define VERBOSE 2
-
 namespace sd { namespace framework {
 
 static const sal_uInt32 snFactoryPropertyCount (2);
@@ -197,20 +194,16 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
         OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
         aURLs);
 
-#if defined VERBOSE && VERBOSE>0
-    OSL_TRACE("ModuleController::adding factory %s",
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " <<
         OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
-#endif
 
     // Add the resource URLs to the map.
     ::std::vector<rtl::OUString>::const_iterator iResource;
     for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
     {
         (*mpResourceToFactoryMap)[*iResource] = sServiceName;
-#if defined VERBOSE && VERBOSE>1
-        OSL_TRACE("    %s",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " <<
             OUStringToOString(*iResource, RTL_TEXTENCODING_UTF8).getStr());
-#endif
     }
 }
 
@@ -268,10 +261,8 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
             // at the configuration controller.
             xGlobalFactory->createInstanceWithArguments(sServiceName, aArguments);
 
-#if defined VERBOSE && VERBOSE>0
-            OSL_TRACE("ModuleController::created startup service %s",
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " <<
                 OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
-#endif
         }
     }
     catch (Exception&)

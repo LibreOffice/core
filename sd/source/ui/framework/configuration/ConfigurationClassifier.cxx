@@ -36,10 +36,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#undef VERBOSE
-//#define VERBOSE 2
-
-
 namespace sd { namespace framework {
 
 ConfigurationClassifier::ConfigurationClassifier (
@@ -110,13 +106,9 @@ void ConfigurationClassifier::PartitionResources (
         aC2minusC1,
         aC1andC2);
 
-#if defined VERBOSE && VERBOSE >= 2
-    OSL_TRACE("copying resource ids to C1-C2\r");
-#endif
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": copying resource ids to C1-C2");
     CopyResources(aC1minusC2, mxConfiguration1, maC1minusC2);
-#if defined VERBOSE && VERBOSE >= 2
-    OSL_TRACE("copying resource ids to C2-C1\r");
-#endif
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": copying resource ids to C2-C1");
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
 
     // Process the unique resources that belong to both configurations.
@@ -199,21 +191,17 @@ void ConfigurationClassifier::CopyResources (
         rTarget.reserve(rTarget.size() + 1 + nL);
         rTarget.push_back(*iResource);
 
-#if defined VERBOSE && VERBOSE >= 2
-        OSL_TRACE("    copying %s\r",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    copying " <<
             OUStringToOString(FrameworkHelper::ResourceIdToString(*iResource),
                 RTL_TEXTENCODING_UTF8).getStr());
-#endif
 
         const Reference<XResourceId>* aA = aBoundResources.getConstArray();
         for (sal_Int32 i=0; i<nL; ++i)
         {
             rTarget.push_back(aA[i]);
-#if defined VERBOSE && VERBOSE >= 2
-            OSL_TRACE("    copying %s\r",
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    copying " <<
                 OUStringToOString(FrameworkHelper::ResourceIdToString(aA[i]),
                     RTL_TEXTENCODING_UTF8).getStr());
-#endif
         }
     }
 }
@@ -224,12 +212,12 @@ void ConfigurationClassifier::TraceResourceIdVector (
     const ResourceIdVector& rResources) const
 {
 
-    OSL_TRACE(pMessage);
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);
     ResourceIdVector::const_iterator iResource;
     for (iResource=rResources.begin(); iResource!=rResources.end(); ++iResource)
     {
         OUString sResource (FrameworkHelper::ResourceIdToString(*iResource));
-        OSL_TRACE("    %s\r",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " <<
             OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
     }
 }

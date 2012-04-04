@@ -41,9 +41,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#undef VERBOSE
-//#define VERBOSE 1
-
 namespace sd { namespace framework {
 
 //===== ConfigurationControllerResourceManager ================================
@@ -136,20 +133,16 @@ void ConfigurationControllerResourceManager::ActivateResource (
        return;
    }
 
-#if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("activating resource %s\n", OUStringToOString(
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " << OUStringToOString(
         FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
 
     // 1. Get the factory.
     const OUString sResourceURL (rxResourceId->getResourceURL());
     Reference<XResourceFactory> xFactory (mpResourceFactoryContainer->GetFactory(sResourceURL));
     if ( ! xFactory.is())
     {
-#if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("    no factory found fo %s\n",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    no factory found for " <<
             OUStringToOString(sResourceURL, RTL_TEXTENCODING_UTF8).getStr());
-#endif
         return;
     }
 
@@ -174,9 +167,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 
         if (xResource.is())
         {
-#if defined VERBOSE && VERBOSE>=1
-            OSL_TRACE("    successfully created");
-#endif
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    successfully created");
             // 3. Add resource to URL->Object map.
             AddResource(xResource, xFactory);
 
@@ -191,9 +182,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         }
         else
         {
-#if defined VERBOSE && VERBOSE>=1
-            OSL_TRACE("    resource creation failed");
-#endif
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    resource creation failed");
         }
     }
     catch (RuntimeException&)
@@ -219,7 +208,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     if ( ! rxResourceId.is())
         return;
 
-#if defined VERBOSE && VERBOSE>=1
+#if OSL_DEBUG_LEVEL >= 1
     bool bSuccess (false);
 #endif
     try
@@ -255,7 +244,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
                 }
             }
 
-#if defined VERBOSE && VERBOSE>=1
+#if OSL_DEBUG_LEVEL >= 1
             bSuccess = true;
 #endif
         }
@@ -265,13 +254,14 @@ void ConfigurationControllerResourceManager::DeactivateResource (
         DBG_UNHANDLED_EXCEPTION();
     }
 
-#if defined VERBOSE && VERBOSE>=1
+#if OSL_DEBUG_LEVEL >= 1
     if (bSuccess)
-        OSL_TRACE("successfully deactivated %s\n", OUStringToOString(
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": successfully deactivated " << OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
     else
-        OSL_TRACE("activating resource %s failed\n", OUStringToOString(
-            FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " << OUStringToOString(
+            FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr()
+            << " failed");
 #endif
 }
 
@@ -294,12 +284,11 @@ void ConfigurationControllerResourceManager::AddResource (
     aDescriptor.mxResourceFactory = rxFactory;
     maResourceMap[rxResource->getResourceId()] = aDescriptor;
 
-#if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationControllerResourceManager::AddResource(): added %s -> %x\n",
+#if OSL_DEBUG_LEVEL >= 2
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationControllerResourceManager::AddResource(): added " <<
         OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResource->getResourceId()),
-            RTL_TEXTENCODING_UTF8).getStr(),
-        rxResource.get());
+            RTL_TEXTENCODING_UTF8).getStr() << " -> " << rxResource.get());
 #endif
 }
 
@@ -315,12 +304,12 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     ResourceMap::iterator iResource (maResourceMap.find(rxResourceId));
     if (iResource != maResourceMap.end())
     {
-#if defined VERBOSE && VERBOSE>=2
-        OSL_TRACE("ConfigurationControllerResourceManager::RemoveResource(): removing %s -> %x\n",
+#if OSL_DEBUG_LEVEL >= 2
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationControllerResourceManager::RemoveResource(): removing " <<
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId),
-                RTL_TEXTENCODING_UTF8).getStr(),
-            *iResource);
+                RTL_TEXTENCODING_UTF8).getStr() <<
+                " -> " << &iResource);
 #endif
 
         aDescriptor = iResource->second;

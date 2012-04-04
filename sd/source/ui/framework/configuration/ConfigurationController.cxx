@@ -52,10 +52,6 @@ using namespace ::com::sun::star::drawing::framework;
 using rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
-#undef VERBOSE
-//#define VERBOSE 3
-
-
 namespace sd { namespace framework {
 
 Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
@@ -180,18 +176,14 @@ void SAL_CALL ConfigurationController::disposing (void)
     if (mpImplementation.get() == NULL)
         return;
 
-#if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::disposing");
-    OSL_TRACE("    requesting empty configuration\n");
-#endif
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::disposing");
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     requesting empty configuration");
     // To destroy all resources an empty configuration is requested and then,
     // synchronously, all resulting requests are processed.
     mpImplementation->mpQueueProcessor->Clear();
     restoreConfiguration(new Configuration(this,false));
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
-#if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("    all requests processed");
-#endif
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     all requests processed");
 
     // Now that all resources have been deactivated, mark the controller as
     // disposed.
@@ -337,19 +329,15 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     // we just return silently during that stage.
     if (rBHelper.bInDispose)
     {
-#if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("ConfigurationController::requestResourceActivation(): ignoring %s\n",
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation(): ignoring " <<
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
         return;
     }
 
-#if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationController::requestResourceActivation() %s\n",
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation() " <<
         OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
 
     if (rxResourceId.is())
     {
@@ -395,11 +383,9 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-#if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationController::requestResourceDeactivation() %s\n",
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceDeactivation() " <<
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-#endif
 
     if (rxResourceId.is())
     {
@@ -545,14 +531,14 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 
     // Get lists of resources that are to be activated or deactivated.
     Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
-#if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::restoreConfiguration(");
+#if OSL_DEBUG_LEVEL >=1
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::restoreConfiguration(");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");
     ConfigurationTracer::TraceConfiguration(xCurrentConfiguration, "current configuration");
 #endif
     ConfigurationClassifier aClassifier (rxNewConfiguration, xCurrentConfiguration);
     aClassifier.Partition();
-#if defined VERBOSE && VERBOSE>=3
+#if OSL_DEBUG_LEVEL >=2
     aClassifier.TraceResourceIdVector(
         "requested but not current resources:\n", aClassifier.GetC1minusC2());
     aClassifier.TraceResourceIdVector(

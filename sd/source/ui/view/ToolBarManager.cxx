@@ -1643,9 +1643,7 @@ void ToolBarShellList::UpdateShells (
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
-#ifdef VERBOSE
-            OSL_TRACE("deactivating tool bar shell %d", iShell->mnId);
-#endif
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << iShell->mnId);
             rpManager->DeactivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
@@ -1657,9 +1655,7 @@ void ToolBarShellList::UpdateShells (
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
-#ifdef VERBOSE
-            OSL_TRACE("activating tool bar shell %d", iShell->mnId);
-#endif
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << iShell->mnId);
             rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
