@@ -53,15 +53,14 @@ class FmFormObj: public SdrUnoObj
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xEnvironmentHistory;
     sal_Int32           m_nPos;
-    sal_Int32           m_nType;
 
     OutputDevice*       m_pLastKnownRefDevice;
                             // the last ref device we know, as set at the model
                             // only to be used for comparison with the current ref device!
 
 public:
-    SVX_DLLPUBLIC FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
-    SVX_DLLPUBLIC FmFormObj(sal_Int32 _nType);
+    SVX_DLLPUBLIC FmFormObj(const ::rtl::OUString& rModelName);
+    SVX_DLLPUBLIC FmFormObj();
 
     TYPEINFO();
 
@@ -104,10 +103,6 @@ public:
     */
     static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
     static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
-
-    /** returns the type of this form object. See fmglob.hxx
-    */
-    sal_Int32   getType() const;
 
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
 

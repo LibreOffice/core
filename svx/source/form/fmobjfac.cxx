@@ -237,9 +237,9 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 
         // create the actual object
         if ( !sServiceSpecifier.isEmpty() )
-            pObjFactory->pNewObj = new FmFormObj( sServiceSpecifier, pObjFactory->nIdentifier );
+            pObjFactory->pNewObj = new FmFormObj(sServiceSpecifier);
         else
-            pObjFactory->pNewObj = new FmFormObj( pObjFactory->nIdentifier );
+            pObjFactory->pNewObj = new FmFormObj();
 
         // initialize some properties which we want to differ from the defaults
         for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();

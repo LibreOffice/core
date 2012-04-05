@@ -2656,21 +2656,6 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
-/// export date according to ISO 8601
-void XMLTextFieldExport::ProcessDate(
-    enum XMLTokenEnum eName,
-    const ::com::sun::star::util::Date& rDate,
-    sal_uInt16 nPrefix)
-{
-    // the easiest way: delegate to ProcessDateTime (as date)
-    DateTime aDateTime;
-    aDateTime.Day = rDate.Day;
-    aDateTime.Month = rDate.Month;
-    aDateTime.Year = rDate.Year;
-    ProcessDateTime(eName, aDateTime, sal_True, nPrefix);
-}
-
-
 /// export a date, time, or duration
 void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
                                          sal_Int32 nMinutes,

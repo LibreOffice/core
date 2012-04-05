@@ -382,12 +382,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
             OCommonStatement::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
-// -----------------------------------------------------------------------------
-void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
-{
-    if( !_parameterIndex || _parameterIndex > m_nNumParams)
-        ::dbtools::throwInvalidIndexException(*this);
-}
+
 // -----------------------------------------------------------------------------
 void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {

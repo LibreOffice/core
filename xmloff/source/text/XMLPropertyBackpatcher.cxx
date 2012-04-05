@@ -53,47 +53,6 @@ XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
 {
 }
 
-template<class A>
-XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const OUString& sPropName,
-    const OUString& sPreserveName,
-    sal_Bool bDefault,
-    A aDef)
-:   sPropertyName(sPropName)
-,   bDefaultHandling(bDefault)
-,   bPreserveProperty(!sPreserveName.isEmpty())
-,   sPreservePropertyName(sPreserveName)
-,   aDefault(aDef)
-{
-}
-
-template<class A>
-XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const sal_Char* pPropName)
-:   bDefaultHandling(sal_False)
-,   bPreserveProperty(sal_False)
-{
-    DBG_ASSERT(pPropName != NULL, "need property name");
-    sPropertyName = OUString::createFromAscii(pPropName);
-}
-
-template<class A>
-XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const sal_Char* pPropName,
-    const sal_Char* pPreservePropName,
-    sal_Bool bDefault,
-    A aDef)
-:   bDefaultHandling(bDefault)
-,   bPreserveProperty(pPreservePropName != NULL)
-,   aDefault(aDef)
-{
-    DBG_ASSERT(pPropName != NULL, "need property name");
-    sPropertyName = OUString::createFromAscii(pPropName);
-    if (pPreservePropName != NULL)
-    {
-        sPreservePropertyName = OUString::createFromAscii(pPreservePropName);
-    }
-}
 
 template<class A>
 XMLPropertyBackpatcher<A>::~XMLPropertyBackpatcher()

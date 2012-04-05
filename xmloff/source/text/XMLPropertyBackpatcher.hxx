@@ -105,21 +105,6 @@ public:
     XMLPropertyBackpatcher(
         const ::rtl::OUString& sPropertyName);
 
-    XMLPropertyBackpatcher(
-        const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sPreservePropertyName,
-        sal_Bool bDefault,
-        A aDef);
-
-    XMLPropertyBackpatcher(
-        const sal_Char* pPropertyName);
-
-    XMLPropertyBackpatcher(
-        const sal_Char* pPropertyName,
-        const sal_Char* pPreservePropertyName,
-        sal_Bool bDefault,
-        A aDef);
-
     ~XMLPropertyBackpatcher();
 
     /// resolve a known ID.

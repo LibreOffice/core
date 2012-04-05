@@ -69,10 +69,9 @@ using namespace ::svxform;
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
-FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
+FmFormObj::FmFormObj(const ::rtl::OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
-          ,m_nType                  ( _nType        )
           ,m_pLastKnownRefDevice    ( NULL          )
 {
     DBG_CTOR(FmFormObj, NULL);
@@ -83,10 +82,9 @@ FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
 }
 
 //------------------------------------------------------------------
-FmFormObj::FmFormObj( sal_Int32 _nType )
+FmFormObj::FmFormObj()
           :SdrUnoObj                ( String()  )
           ,m_nPos                   ( -1        )
-          ,m_nType                  ( _nType    )
           ,m_pLastKnownRefDevice    ( NULL      )
 {
     DBG_CTOR(FmFormObj, NULL);
@@ -703,12 +701,6 @@ void FmFormObj::BrkCreate( SdrDragStat& rStat )
 {
     SdrUnoObj::BrkCreate( rStat );
     impl_isolateControlModel_nothrow();
-}
-
-// -----------------------------------------------------------------------------
-sal_Int32 FmFormObj::getType() const
-{
-    return m_nType;
 }
 
 // -----------------------------------------------------------------------------

@@ -78,9 +78,6 @@ namespace connectivity
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;
 
-
-            void checkParameterIndex(sal_Int32 _parameterIndex);
-
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const ::com::sun::star::uno::Any& rValue)

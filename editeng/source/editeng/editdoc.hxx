@@ -337,9 +337,6 @@ public:
     sal_uInt16&         GetIndex()                      { return nIndex; }
     void            SetIndex( sal_uInt16 n )            { nIndex = n; }
 
-    bool IsParaStart() const;
-    bool IsParaEnd() const;
-
     sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 
     EditPaM&    operator = ( const EditPaM& rPaM );

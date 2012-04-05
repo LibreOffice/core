@@ -1154,16 +1154,6 @@ void EditPaM::SetNode(ContentNode* p)
     pNode = p;
 }
 
-bool EditPaM::IsParaStart() const
-{
-    return nIndex == 0;
-}
-
-bool EditPaM::IsParaEnd() const
-{
-    return nIndex == pNode->Len();
-}
-
 sal_Bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
     if ( !pNode )

@@ -46,7 +46,7 @@ using namespace ::svxform;
     }
     else if ( ServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape")) )
     {
-        SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
+        SdrObject* pObj = new FmFormObj();
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
     }
     if (!xRet.is())

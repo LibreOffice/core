@@ -377,12 +377,6 @@ protected:
         sal_Bool bIsDate,           /// export as date (rather than date/time)?
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
-    /// export date according to ISO 8601
-    void ProcessDate(
-        enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
-        const ::com::sun::star::util::Date& rTime,  /// date value
-        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
-
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
         const ::com::sun::star::uno::Reference <
