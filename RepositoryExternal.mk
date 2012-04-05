@@ -1293,6 +1293,142 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 
 endif # SYSTEM_POSTGRESQL
 
+
+ifeq ($(SYSTEM_MOZILLA),YES)
+
+# Nothing needed here ATM
+define gb_LinkTarget__use_mozilla
+
+endef
+
+else # !SYSTEM_MOZILLA
+
+define gb_LinkTarget__use_mozilla
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DMOZILLA_INTERNAL_API \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(foreach subdir,\
+		addrbook \
+		chrome \
+		content \
+		embed_base \
+		intl \
+		locale \
+		mime \
+		mork \
+		mozldap \
+		msgbase \
+		necko \
+		nspr \
+		pref \
+		profile \
+		rdf \
+		string \
+		uconv \
+		xpcom \
+		xpcom_obsolete \
+		,-I$(OUTDIR_FOR_BUILD)/inc/mozilla/$(subdir)) \
+)
+
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	nspr4 \
+	xpcom \
+	xpcom_core \
+)
+
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	embed_base_s \
+	mozreg_s \
+)
+
+ifeq ($(GUI),WNT)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DMOZILLA_CLIENT \
+	-DMOZ_REFLOW_PERF \
+	-DMOZ_REFLOW_PERF_DSP \
+	-DMOZ_XUL \
+	-DOJI \
+	-DWIN32 \
+	-DXP_PC \
+	-DXP_WIN \
+	-DXP_WIN32 \
+	-D_WINDOWS \
+)
+
+ifeq ($(COM),GCC)
+
+$(call gb_LinkTarget_add_cxxflags,$(1),\
+	-Wall \
+	-Wcast-align \
+	-Wconversion \
+	-Wno-long-long \
+	-Woverloaded-virtual \
+	-Wpointer-arith \
+	-Wsynth \
+	-fno-rtti \
+)
+
+else
+
+ifneq ($(DBG_LEVEL),0)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-D_STL_NOFORCE_MANIFEST \
+)
+endif
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(OUTDIR_FOR_BUILD)/lib/embed_base_s.lib \
+	$(OUTDIR_FOR_BUILD)/lib/mozreg_s.lib \
+)
+
+endif
+
+else ifeq ($(GUI),UNX)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DMOZILLA_CLIENT \
+	-DXP_UNIX \
+	$(if $(filter LINUX,$(OS)),-DOJI) \
+	$(if $(filter LINUX MACOSX NETBSD,$(OS)),-DTRACING) \
+)
+
+$(call gb_LinkTarget_add_cflags,$(1),\
+	$(if $(filter LINUX,$(OS)),-g) \
+	$(if $(filter LINUX MACOSX NETBSD,$(OS)),-fPIC) \
+)
+
+$(call gb_LinkTarget_add_cxxflags,$(1),\
+	-Wcast-align \
+	-Wconversion \
+	-Wno-long-long \
+	-Woverloaded-virtual \
+	-Wpointer-arith \
+	-Wsynth \
+	$(if $(filter LINUX,$(OS)),-pthread) \
+	$(if $(filter MACOSX NETBSD,$(OS)),-Wno-deprecated) \
+)
+
+endif
+
+endef
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
+	xpcom \
+	xpcom_core \
+))
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	embed_base_s \
+	mozreg_s \
+))
+
+endif # SYSTEM_MOZILLA
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 

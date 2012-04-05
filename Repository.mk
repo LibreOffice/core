@@ -307,6 +307,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	macabdrv1 \
 	MacOSXSpell \
     merged \
+    mozabdrv \
+    mozbootstrap \
     msfilter \
     msword \
 	mysql \
@@ -520,6 +522,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     lomenubar \
     migrationoo2 \
     migrationoo3 \
+    mozab2 \
     msforms \
     mtfrenderer \
     nullcanvas \

@@ -92,4 +92,15 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_mozbootstrap \
+))
+else
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_mozab \
+	Library_mozabdrv \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
