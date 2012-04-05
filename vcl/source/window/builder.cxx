@@ -67,7 +67,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
     {
-        pWindow = new Dialog(pParent, WB_SIZEMOVE);
+        pWindow = new Dialog(pParent, WB_SIZEMOVE|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
     {
