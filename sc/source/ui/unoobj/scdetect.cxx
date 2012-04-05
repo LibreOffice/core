@@ -444,8 +444,10 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                 bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
+                bool bCsvSelected = (pPreselectedFilter ?
+                        pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) : false);
                 if ( pPreselectedFilter && ( ( pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
-                    ( !aPreselectedFilterName.Len() && pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) ) ) )
+                    ( !aPreselectedFilterName.Len() && bCsvSelected ) ) )
                     bIsXLS = true;
                 pFilter = 0;
                 if ( pStream )
@@ -676,9 +678,15 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 
                         for ( nFilter = 0 ; nFilter < nFilterCount ; nFilter++ )
                         {
+                            pSearch = ppFilterPatterns[ nFilter ];
+                            if (bCsvSelected && pSearch == pSylk)
+                                // SYLK 4 characters is really too weak to
+                                // override preselected CSV, already ID;Name
+                                // would trigger that. fdo#48347
+                                continue;
+
                             rStr.Seek( 0 ); // am Anfang war alles Uebel...
                             rStr >> nAkt;
-                            pSearch = ppFilterPatterns[ nFilter ];
                             bSync = sal_True;
                             while( !rStr.IsEof() && bSync )
                             {
@@ -759,7 +767,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             }
                             else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
                                 pFilter = pPreselectedFilter;
-                            else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
+                            else if ( bCsvSelected && bMaybeText )
                                 pFilter = pPreselectedFilter;
                             else if ( HTMLParser::IsHTMLFormat(aHeader.getStr()) )
                             {
@@ -789,7 +797,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     {
                         // 0-length stream, preselected Text/CSV is ok, user
                         // may want to write to that file later.
-                        if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) )
+                        if ( bCsvSelected )
                             pFilter = pPreselectedFilter;
                     }
                 }
