@@ -267,7 +267,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     SetText( aName );
 
     // Default options
-    OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM("\t"));
+    OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM(",;\t"));
     OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;

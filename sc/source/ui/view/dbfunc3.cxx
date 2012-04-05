@@ -2158,7 +2158,7 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
 
     ScSortParam aSortParam;
     pDBData->GetSortParam( aSortParam );
-    sal_Bool bSort = aSortParam.bDoSort[0];
+    sal_Bool bSort = aSortParam.maKeyState[0].bDoSort;
 
     ScSubTotalParam aSubTotalParam;
     pDBData->GetSubTotalParam( aSubTotalParam );

@@ -56,16 +56,6 @@ using ::std::endl;
 using ::std::vector;
 
 
-
-namespace {
-
-::std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
-{
-    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
-
-}
-
 class SheetPrinter
 {
     typedef ::mdds::mixed_type_matrix<OUString, bool> MatrixType;

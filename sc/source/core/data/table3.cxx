@@ -270,14 +270,14 @@ public:
 ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 {
     sal_uInt16 nUsedSorts = 1;
-    while ( nUsedSorts < nMaxSorts && aSortParam.bDoSort[nUsedSorts] )
+    while ( nUsedSorts < nMaxSorts && aSortParam.maKeyState[nUsedSorts].bDoSort )
         nUsedSorts++;
     ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
     if ( aSortParam.bByRow )
     {
         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
         {
-            SCCOL nCol = static_cast<SCCOL>(aSortParam.nField[nSort]);
+            SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
             ScColumn* pCol = &aCol[nCol];
             for ( SCROW nRow = nInd1; nRow <= nInd2; nRow++ )
             {
@@ -292,7 +292,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
     {
         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
         {
-            SCROW nRow = aSortParam.nField[nSort];
+            SCROW nRow = aSortParam.maKeyState[nSort].nField;
             for ( SCCOL nCol = static_cast<SCCOL>(nInd1);
                     nCol <= static_cast<SCCOL>(nInd2); nCol++ )
             {
@@ -473,7 +473,7 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                 else if (nVal1 > nVal2)
                     nRes = 1;
             }
-            if ( !aSortParam.bAscending[nSort] )
+            if ( !aSortParam.maKeyState[nSort].bAscending )
                 nRes = -nRes;
         }
         else
@@ -499,12 +499,12 @@ short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nInd
         ScSortInfo* pInfo2 = pArray->Get( nSort, nIndex2 );
         if ( aSortParam.bByRow )
             nRes = CompareCell( nSort,
-                pInfo1->pCell, static_cast<SCCOL>(aSortParam.nField[nSort]), pInfo1->nOrg,
-                pInfo2->pCell, static_cast<SCCOL>(aSortParam.nField[nSort]), pInfo2->nOrg );
+                pInfo1->pCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), pInfo1->nOrg,
+                pInfo2->pCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), pInfo2->nOrg );
         else
             nRes = CompareCell( nSort,
-                pInfo1->pCell, static_cast<SCCOL>(pInfo1->nOrg), aSortParam.nField[nSort],
-                pInfo2->pCell, static_cast<SCCOL>(pInfo2->nOrg), aSortParam.nField[nSort] );
+                pInfo1->pCell, static_cast<SCCOL>(pInfo1->nOrg), aSortParam.maKeyState[nSort].nField,
+                pInfo2->pCell, static_cast<SCCOL>(pInfo2->nOrg), aSortParam.maKeyState[nSort].nField );
     } while ( nRes == 0 && ++nSort < pArray->GetUsedSorts() );
     if( nRes == 0 )
     {
@@ -684,22 +684,22 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
     {
         do
         {
-            SCCOL nCol = static_cast<SCCOL>(aSortParam.nField[nSort]);
+            SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
             ScBaseCell* pCell1 = aCol[nCol].GetCell( nIndex1 );
             ScBaseCell* pCell2 = aCol[nCol].GetCell( nIndex2 );
             nRes = CompareCell( nSort, pCell1, nCol, nIndex1, pCell2, nCol, nIndex2 );
-        } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.bDoSort[nSort] );
+        } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.maKeyState[nSort].bDoSort );
     }
     else
     {
         do
         {
-            SCROW nRow = aSortParam.nField[nSort];
+            SCROW nRow = aSortParam.maKeyState[nSort].nField;
             ScBaseCell* pCell1 = aCol[nIndex1].GetCell( nRow );
             ScBaseCell* pCell2 = aCol[nIndex2].GetCell( nRow );
             nRes = CompareCell( nSort, pCell1, static_cast<SCCOL>(nIndex1),
                     nRow, pCell2, static_cast<SCCOL>(nIndex2), nRow );
-        } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.bDoSort[nSort] );
+        } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.maKeyState[nSort].bDoSort );
     }
     return nRes;
 }

@@ -735,26 +735,6 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
         getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 
-namespace {
-
-OUString lclReadDataValMessage( BiffInputStream& rStrm )
-{
-    // empty strings are single NUL characters (string length is 1)
-    OUString aMessage = rStrm.readUniString( true );
-    if( (aMessage.getLength() == 1) && (aMessage[ 0 ] == 0) )
-        aMessage = OUString();
-    return aMessage;
-}
-
-ApiTokenSequence lclReadDataValFormula( BiffInputStream& rStrm, FormulaParser& rParser )
-{
-    sal_uInt16 nFmlaSize = rStrm.readuInt16();
-    rStrm.skip( 2 );
-    return rParser.importFormula( CellAddress(), FORMULATYPE_VALIDATION, rStrm, &nFmlaSize );
-}
-
-} // namespace
-
 } // namespace xls
 } // namespace oox
 

@@ -64,6 +64,8 @@ class Rectangle;
 class SvStream;
 class ScDPSaveData;
 class ScDPOutput;
+class ScPivot;
+class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
@@ -208,6 +210,7 @@ public:
     bool                FillOldParam(ScPivotParam& rParam) const;
     bool                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
     bool                FillLabelData(ScPivotParam& rParam);
+    void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, sal_Bool bSetSource);
 
     bool                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
     bool                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );

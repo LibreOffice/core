@@ -334,7 +334,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     aOutPos.Row    = rParam.nDestRow;
 
     sal_uInt16 nSortCount = 0;
-    while ( nSortCount < MAXSORT && rParam.bDoSort[nSortCount] )
+    while ( nSortCount < rParam.GetSortKeyCount() && rParam.maKeyState[nSortCount].bDoSort )
         ++nSortCount;
 
     uno::Sequence<table::TableSortField> aFields(nSortCount);
@@ -343,8 +343,8 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
         table::TableSortField* pFieldArray = aFields.getArray();
         for (sal_uInt16 i=0; i<nSortCount; i++)
         {
-            pFieldArray[i].Field         = rParam.nField[i];
-            pFieldArray[i].IsAscending   = rParam.bAscending[i];
+            pFieldArray[i].Field         = rParam.maKeyState[i].nField;
+            pFieldArray[i].IsAscending   = rParam.maKeyState[i].bAscending;
             pFieldArray[i].FieldType     = table::TableSortFieldType_AUTOMATIC;     // immer Automatic
             pFieldArray[i].IsCaseSensitive = rParam.bCaseSens;
             pFieldArray[i].CollatorLocale = rParam.aCollatorLocale;
@@ -361,7 +361,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
 
     pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_MAXFLD ));
-    pArray[2].Value <<= (sal_Int32) MAXSORT;
+    pArray[2].Value <<= static_cast<sal_Int32>( rParam.GetSortKeyCount() );
 
     pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SORTFLD ));
     pArray[3].Value <<= aFields;
@@ -379,13 +379,15 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, rParam.bUserDef );
 
     pArray[8].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_UINDEX ));
-    pArray[8].Value <<= (sal_Int32) rParam.nUserIndex;
+    pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
     const beans::PropertyValue* pPropArray = rSeq.getConstArray();
     long nPropCount = rSeq.getLength();
+    sal_Int16 nSortSize = rParam.GetSortKeyCount();
+
     for (long nProp = 0; nProp < nPropCount; nProp++)
     {
         const beans::PropertyValue& rProp = pPropArray[nProp];
@@ -407,7 +409,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         else if (aPropName.EqualsAscii( SC_UNONAME_MAXFLD ))
         {
             sal_Int32 nVal;
-            if ( (rProp.Value >>= nVal) && nVal > MAXSORT )
+            if ( (rProp.Value >>= nVal) && nVal > nSortSize )
             {
                 //! specify exceptions
                 //! throw lang::IllegalArgumentException();
@@ -421,37 +423,37 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             {
                 sal_Int32 nCount = aSeq.getLength();
                 sal_Int32 i;
-                if ( nCount > MAXSORT )
+                if ( nCount > static_cast<sal_Int32>( rParam.GetSortKeyCount() ) )
                 {
-                    OSL_FAIL("Zu viele Sortierfelder");
-                    nCount = MAXSORT;
+                    nCount = nSortSize;
+                    rParam.maKeyState.resize(nCount);
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
                 for (i=0; i<nCount; i++)
                 {
-                    rParam.nField[i]     = (SCCOLROW)pFieldArray[i].Field;
-                    rParam.bAscending[i] = pFieldArray[i].SortAscending;
+                    rParam.maKeyState[i].nField     = static_cast<SCCOLROW>( pFieldArray[i].Field );
+                    rParam.maKeyState[i].bAscending = pFieldArray[i].SortAscending;
 
                     // FieldType wird ignoriert
-                    rParam.bDoSort[i] = sal_True;
+                    rParam.maKeyState[i].bDoSort = true;
                 }
-                for (i=nCount; i<MAXSORT; i++)
-                    rParam.bDoSort[i] = false;
+                for (i=nCount; i<nSortSize; i++)
+                    rParam.maKeyState[i].bDoSort = false;
             }
             else if ( rProp.Value >>= aNewSeq )
             {
                 sal_Int32 nCount = aNewSeq.getLength();
                 sal_Int32 i;
-                if ( nCount > MAXSORT )
+                if ( nCount > nSortSize )
                 {
-                    OSL_FAIL("Zu viele Sortierfelder");
-                    nCount = MAXSORT;
+                    nCount = nSortSize;
+                    rParam.maKeyState.resize(nCount);
                 }
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
                 for (i=0; i<nCount; i++)
                 {
-                    rParam.nField[i]     = (SCCOLROW)pFieldArray[i].Field;
-                    rParam.bAscending[i] = pFieldArray[i].IsAscending;
+                    rParam.maKeyState[i].nField     = static_cast<SCCOLROW>( pFieldArray[i].Field );
+                    rParam.maKeyState[i].bAscending = pFieldArray[i].IsAscending;
 
                     // only one is possible, sometime we should make it possible to have different for every entry
                     rParam.bCaseSens = pFieldArray[i].IsCaseSensitive;
@@ -459,10 +461,10 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.aCollatorAlgorithm = pFieldArray[i].CollatorAlgorithm;
 
                     // FieldType wird ignoriert
-                    rParam.bDoSort[i] = sal_True;
+                    rParam.maKeyState[i].bDoSort = true;
                 }
-                for (i=nCount; i<MAXSORT; i++)
-                    rParam.bDoSort[i] = false;
+                for (i=nCount; i<nSortSize; i++)
+                    rParam.maKeyState[i].bDoSort = false;
             }
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISCASE ))
@@ -1818,9 +1820,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescript
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
-        for (sal_uInt16 i=0; i<MAXSORT; i++)
-            if ( aParam.bDoSort[i] && aParam.nField[i] >= nFieldStart )
-                aParam.nField[i] -= nFieldStart;
+        for (sal_uInt16 i=0; i<aParam.GetSortKeyCount(); i++)
+            if ( aParam.maKeyState[i].bDoSort && aParam.maKeyState[i].nField >= nFieldStart )
+                aParam.maKeyState[i].nField -= nFieldStart;
     }
 
     uno::Sequence<beans::PropertyValue> aSeq( ScSortDescriptor::GetPropertyCount() );

@@ -282,7 +282,7 @@ bool ScDBDocFunc::RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool b
 
         ScSortParam aSortParam;
         pDBData->GetSortParam( aSortParam );
-        sal_Bool bSort = aSortParam.bDoSort[0];
+        sal_Bool bSort = aSortParam.maKeyState[0].bDoSort;
 
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );
@@ -585,7 +585,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     }
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
-    if ( aLocalParam.bDoSort[0] )
+    if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
         pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
 
     sal_Bool bSave = sal_True;
@@ -593,7 +593,8 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     {
         ScSortParam aOldSortParam;
         pDBData->GetSortParam( aOldSortParam );
-        if ( aOldSortParam.bDoSort[0] && aOldSortParam.bInplace )   // Inplace-Sortierung gemerkt?
+        if (aOldSortParam.GetSortKeyCount() &&
+            aOldSortParam.maKeyState[0].bDoSort && aOldSortParam.bInplace)
         {
             bSave = false;
             aOldSortParam.nDestCol = rSortParam.nDestCol;
