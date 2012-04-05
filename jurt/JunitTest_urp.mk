@@ -27,8 +27,8 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_urp))
 
-$(eval $(call gb_JunitTest_add_package_dependencies,jurt_urp,\
-    jurt_test_urp \
+$(eval $(call gb_JunitTest_add_customtarget_dependencies,jurt_urp,\
+    jurt/test/com/sun/star/lib/uno/protocols/urp \
 ))
 
 $(eval $(call gb_JunitTest_add_jars,jurt_urp,\

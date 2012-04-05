@@ -25,14 +25,28 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_PARTIALBUID := T
-include $(GBUILDDIR)/gbuild.mk
+$(eval $(call gb_CustomTarget_CustomTarget,jurt/test/com/sun/star/lib/uno/protocols/urp,new_style))
 
-libjpipe.jnilib :
-	$(SOLARENV)/bin/macosx-create-bundle $(call gb_Library_get_target,jpipe)
+JUTU := $(call gb_CustomTarget_get_workdir,jurt/test/com/sun/star/lib/uno/protocols/urp)
 
-.DEFAULT_GOAL := all
-.PHONY : all
-all : libjpipe.jnilib
+$(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) : $(JUTU)/done
+
+$(JUTU)/done : $(JUTU)/registry.rdb $(OUTDIR)/bin/types.rdb \
+		$(call gb_Executable_get_target_for_build,javamaker)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
+	$(call gb_Helper_execute,javamaker -BUCR -O$(JUTU) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
+	touch $@
+
+# TODO: would it be possible to reuse UnoApiTarget for this?
+$(JUTU)/registry.rdb : $(JUTU)/interfaces.urd \
+		$(call gb_Executable_get_target_for_build,regmerge)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RGM,1)
+	rm -f $@ && \
+	$(call gb_Helper_execute,regmerge $@ /UCR $<)
+
+$(JUTU)/interfaces.urd : $(SRCDIR)/jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl \
+		$(call gb_Executable_get_target_for_build,idlc) | $(JUTU)/urd/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
+	$(call gb_Helper_execute,idlc -O$(JUTU)/urd -I$(OUTDIR)/idl -cid -we $<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
