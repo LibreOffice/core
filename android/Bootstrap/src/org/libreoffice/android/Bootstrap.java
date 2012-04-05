@@ -139,6 +139,9 @@ public class Bootstrap extends NativeActivity
         }
         if (i != null)
             putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
+
+        // TMPDIR is used by osl_getTempDirURL()
+        putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
     }
 
     @Override
@@ -185,9 +188,6 @@ public class Bootstrap extends NativeActivity
             putenv(argv[0]);
             argv = Arrays.copyOfRange(argv, 1, argv.length-1);
         }
-
-        // TMPDIR is used by osl_getTempDirURL()
-        putenv("TMPDIR=" + getCacheDir().getAbsolutePath());
 
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
         // pathname of the mainLibrary.
