@@ -25,12 +25,22 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_PARTIALBUILD := T
-include $(GBUILDDIR)/gbuild_simple.mk
+$(eval $(call gb_CustomTarget_CustomTarget,unoil/climaker,new_style))
+
+UICM := $(call gb_CustomTarget_get_workdir,unoil/climaker)
+
+$(call gb_CustomTarget_get_target,unoil/climaker) : \
+	$(UICM)/cli_oootypes.dll \
+	$(UICM)/cli_oootypes.config \
+	$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
 
 include $(SRCDIR)/unoil/climaker/version.txt
 
-cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt
+$(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
+		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
+		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
+		$(call gb_Executable_get_target_for_build,climaker) | $(UICM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,climaker \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
@@ -43,22 +53,19 @@ cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt
 		--keyfile $(OUTDIR)/bin/cliuno.snk \
 		$(OUTDIR)/bin/offapi.rdb) > /dev/null)
 
-cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config $(SRCDIR)/unoil/climaker/version.txt
+$(UICM)/cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config \
+		$(SRCDIR)/unoil/climaker/version.txt | $(UICM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $^ $@)
 
-$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : cli_oootypes.dll cli_oootypes.config
+$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : $(UICM)/cli_oootypes.config \
+		$(UICM)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AL ,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	al -out:$@ \
 		-version:$(CLI_OOOTYPES_POLICY_VERSION) \
 		-keyfile:$(OUTDIR)/bin/cliuno.snk \
-		-link:cli_oootypes.config)
-
-.DEFAULT_GOAL := all
-.PHONY : all
-all : \
-	cli_oootypes.dll \
-	cli_oootypes.config \
-	$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
+		-link:$<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

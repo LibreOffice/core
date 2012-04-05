@@ -33,13 +33,14 @@ $(eval $(call gb_Module_add_targets,unoil,\
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,unoil,\
+    CustomTarget_javamaker \
     Jar_unoil \
-    Package_javamaker \
 ))
 endif
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,unoil,\
+    CustomTarget_climaker \
     Package_climaker \
 ))
 endif

@@ -27,8 +27,8 @@
 
 $(eval $(call gb_Jar_Jar,unoil))
 
-$(eval $(call gb_Jar_add_package_dependencies,unoil,\
-    unoil_javamaker \
+$(eval $(call gb_Jar_add_customtarget_dependencies,unoil,\
+    unoil/javamaker \
 ))
 
 $(eval $(call gb_Jar_add_packagedirs,unoil,\

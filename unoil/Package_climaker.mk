@@ -27,23 +27,8 @@
 
 $(eval $(call gb_Package_Package,unoil_climaker,$(WORKDIR)/CustomTarget/unoil/climaker))
 
-$(eval $(call gb_Package_add_customtarget,unoil_climaker,unoil/climaker))
-
 $(eval $(call gb_Package_add_file,unoil_climaker,bin/cli_oootypes.config,cli_oootypes.config))
 $(eval $(call gb_Package_add_file,unoil_climaker,bin/cli_oootypes.dll,cli_oootypes.dll))
 $(eval $(call gb_Package_add_file,unoil_climaker,bin/policy.1.0.cli_oootypes.dll,policy.1.0.cli_oootypes.dll))
-
-$(eval $(call gb_CustomTarget_add_dependencies,unoil/climaker,\
-    unoil/climaker/cli_oootypes_config \
-    unoil/climaker/version.txt \
-))
-
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,unoil/climaker,\
-    $(OUTDIR_FOR_BUILD)/bin/climaker$(gb_Executable_EXT_for_build) \
-    $(OUTDIR)/bin/cli_uretypes.dll \
-    $(OUTDIR)/bin/cliuno.snk \
-    $(OUTDIR)/bin/offapi.rdb \
-    $(OUTDIR)/bin/udkapi.rdb \
-))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

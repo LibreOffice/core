@@ -25,14 +25,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,unoil_javamaker,$(WORKDIR)/CustomTarget/unoil/javamaker))
+$(eval $(call gb_CustomTarget_CustomTarget,unoil/javamaker,new_style))
 
-$(eval $(call gb_Package_add_customtarget,unoil_javamaker,unoil/javamaker))
+UIJM := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
 
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,unoil/javamaker,\
-    $(OUTDIR_FOR_BUILD)/bin/javamaker$(gb_Executable_EXT_for_build) \
-    $(OUTDIR)/bin/offapi.rdb \
-    $(OUTDIR)/bin/udkapi.rdb \
-))
+$(call gb_CustomTarget_get_target,unoil/javamaker) : $(UIJM)/done
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(UIJM)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
+		$(call gb_Executable_get_target_for_build,javamaker) | $(UIJM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_execute,javamaker -BUCR -O$(UIJM) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
+	touch $@)
+
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
