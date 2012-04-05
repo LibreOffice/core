@@ -2613,6 +2613,7 @@ bool BiffFormulaParserImpl::readNlrSAddrAddData( BiffNlr& orNlr, BiffInputStream
 
 bool BiffFormulaParserImpl::readNlrSRangeAddData( BiffNlr& orNlr, bool& orbIsRow, BiffInputStream& rStrm )
 {
+    orbIsRow = false;
     swapStreamPosition( rStrm );
     // read number of cell addresses and relative flag
     sal_uInt32 nCount;
