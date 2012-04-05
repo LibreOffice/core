@@ -56,6 +56,8 @@ public class DocumentLoader
             // makes debugging work better, sigh
             Bootstrap.dlopen("libvcllo.so");
             Bootstrap.dlopen("libmergedlo.so");
+            Bootstrap.dlopen("libswdlo.so");
+            Bootstrap.dlopen("libswlo.so");
             
             com.sun.star.uno.XComponentContext xContext = null;
 
