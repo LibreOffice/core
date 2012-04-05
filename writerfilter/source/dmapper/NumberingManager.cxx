@@ -614,9 +614,17 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             OUString sNumRulesName = aPropNameSupplier.GetName( PROP_NUMBERING_RULES );
             xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
         }
-        catch( const uno::Exception& )
+        catch( const lang::IllegalArgumentException& )
         {
-            OSL_FAIL( "ListTable::CreateNumberingRules");
+            assert( !"Incorrect argument to UNO call" );
+        }
+        catch( const uno::RuntimeException& )
+        {
+            assert( !"Incorrect argument to UNO call" );
+        }
+        catch( const uno::Exception& e )
+        {
+            SAL_WARN( "writerfilter", "Exception: " << e.Message );
         }
     }
 
