@@ -107,6 +107,8 @@ public:
     virtual void SAL_CALL setTag( const ::rtl::OUString& aTag ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException);
     //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);

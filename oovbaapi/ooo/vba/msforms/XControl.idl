@@ -44,6 +44,7 @@ interface XControl
     [attribute] string RowSource;
     [attribute] boolean Enabled;
     [attribute] boolean Visible;
+    [attribute] long MousePointer;
     //Size. there are some defferent between Mso and OOo.
     //Mso use double but OOo use long. OOo 1 =  1/100mm but Mso use pt.
     //in Dialogs Mso uses pixels

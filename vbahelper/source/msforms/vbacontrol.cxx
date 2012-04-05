@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/form/XChangeListener.hpp>
 #include <ooo/vba/XControlProvider.hpp>
+#include <ooo/vba/msforms/fmMousePointer.hpp>
 #ifdef VBA_OOBUILD_HACK
 #include <svtools/bindablecontrolhelper.hxx>
 #endif
@@ -64,8 +65,8 @@
 #include "vbasystemaxcontrol.hxx"
 #include "vbaimage.hxx"
 #include <vbahelper/helperdecl.hxx>
-
-
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 using namespace com::sun::star;
 using namespace ooo::vba;
 
@@ -420,6 +421,85 @@ void SAL_CALL ScVbaControl::setTag( const ::rtl::OUString& aTag )
 void SAL_CALL ScVbaControl::setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException)
 {
      m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ), uno::makeAny( XLRGBToOORGB( _forecolor ) ) );
+}
+
+struct PointerStyles
+{
+   long msoPointerStyle;
+   PointerStyle loPointStyle;
+};
+
+// 1 -> 1 map of styles ( some dubious choices in there though )
+PointerStyles styles[] = {
+  /// assuming pointer default is Arrow
+  { msforms::fmMousePointer::fmMousePointerDefault, POINTER_ARROW },
+  { msforms::fmMousePointer::fmMousePointerArrow, POINTER_ARROW },
+  { msforms::fmMousePointer::fmMousePointerCross, POINTER_CROSS },
+  { msforms::fmMousePointer::fmMousePointerIBeam, POINTER_TEXT },
+  { msforms::fmMousePointer::fmMousePointerSizeNESW,  POINTER_AUTOSCROLL_NSWE   }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeNS,  POINTER_AUTOSCROLL_NS  },
+  { msforms::fmMousePointer::fmMousePointerSizeNWSE,  POINTER_AUTOSCROLL_NSWE  }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeWE,  POINTER_AUTOSCROLL_WE },
+  { msforms::fmMousePointer::fmMousePointerUpArrow, POINTER_WINDOW_NSIZE  },
+  { msforms::fmMousePointer::fmMousePointerHourGlass, POINTER_WAIT  },
+  { msforms::fmMousePointer::fmMousePointerNoDrop, POINTER_NOTALLOWED },
+  { msforms::fmMousePointer::fmMousePointerAppStarting, POINTER_WAIT },
+  { msforms::fmMousePointer::fmMousePointerHelp, POINTER_HELP },
+  { msforms::fmMousePointer::fmMousePointerSizeAll, POINTER_CROSS },
+  { msforms::fmMousePointer::fmMousePointerCustom, POINTER_ARROW }, // not supported I guess
+
+};
+
+long lcl_loPointerToMsoPointer( PointerStyle eType )
+{
+    long nRet = msforms::fmMousePointer::fmMousePointerDefault;
+    for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
+    {
+        if ( styles[ i ].loPointStyle == eType )
+        {
+            nRet = styles[ i ].msoPointerStyle;
+            break;
+        }
+    }
+    return nRet;
+}
+
+Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
+{
+    Pointer aPointer( POINTER_ARROW );
+    for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
+    {
+        if ( styles[ i ].msoPointerStyle == msoPointerStyle )
+        {
+            aPointer = Pointer( styles[ i ].loPointStyle );
+            break;
+         }
+    }
+    return aPointer;
+}
+
+::sal_Int32 SAL_CALL
+ScVbaControl::getMousePointer() throw (::com::sun::star::uno::RuntimeException)
+{
+    PointerStyle eType = POINTER_ARROW; // default ?
+    Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
+    if ( pWindow )
+    {
+        eType = pWindow->GetPointer().GetStyle();
+    }
+    return lcl_loPointerToMsoPointer( eType );
+}
+
+void SAL_CALL
+ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
+    if ( pWindow )
+    {
+        Pointer aPointer( POINTER_ARROW );
+        aPointer = lcl_msoPointerToLOPointer( _mousepointer );
+        pWindow->SetPointer( aPointer );
+    }
 }
 
 void ScVbaControl::fireEvent( script::ScriptEvent& evt )
