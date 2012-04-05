@@ -83,6 +83,7 @@ int UIPreviewApp::Main()
         Dialog *pDialog = dynamic_cast<Dialog*>(pWindow);
         if (pDialog)
         {
+            pDialog->SetText(rtl::OUString("LibreOffice ui-previewer"));
             pDialog->Execute();
         }
         else
@@ -92,7 +93,7 @@ int UIPreviewApp::Main()
     }
     catch (const uno::Exception &e)
     {
-        fprintf(stderr, "fatal error: \n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        fprintf(stderr, "fatal error: %s\n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
     return false;
 
