@@ -102,16 +102,20 @@ public class DocumentLoader
 
             // Loading the wanted document
             com.sun.star.beans.PropertyValue propertyValues[] =
-                new com.sun.star.beans.PropertyValue[1];
+                new com.sun.star.beans.PropertyValue[2];
             propertyValues[0] = new com.sun.star.beans.PropertyValue();
             propertyValues[0].Name = "Hidden";
             propertyValues[0].Value = new Boolean(true);
+            propertyValues[1] = new com.sun.star.beans.PropertyValue();
+            propertyValues[1].Name = "ReadOnly";
+            propertyValues[1].Value = new Boolean(true);
 
             String sUrl = "file://" + input;
 
             Object oDoc =
                 xCompLoader.loadComponentFromURL
                 (sUrl, "_blank", 0, propertyValues);
+            Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
