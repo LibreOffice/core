@@ -735,9 +735,6 @@ class ImplIntrospectionAdapter :
     public XEnumerationAccess, public  XIdlArray,
     public OWeakObject
 {
-    // Parent-Objekt
-    ImplIntrospectionAccess* mpAccess;
-
     // Untersuchtes Objekt
     const Any& mrInspectedObject;
 
@@ -757,8 +754,7 @@ class ImplIntrospectionAdapter :
     Reference<XIdlArray>            mxObjIdlArray;
 
 public:
-    ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,
-        const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
+    ImplIntrospectionAdapter( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
     ~ImplIntrospectionAdapter();
 
     // Methoden von XInterface
@@ -836,9 +832,9 @@ public:
         throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException );
 };
 
-ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,
-    const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ )
-        : mpAccess( pAccess_), mrInspectedObject( obj ), mpStaticImpl( pStaticImpl_ )
+ImplIntrospectionAdapter::ImplIntrospectionAdapter( const Any& obj,
+    IntrospectionAccessStatic_Impl* pStaticImpl_ )
+        : mrInspectedObject( obj ), mpStaticImpl( pStaticImpl_ )
 {
     mpStaticImpl->acquire();
 
@@ -1077,16 +1073,54 @@ Sequence< Property > ImplIntrospectionAdapter::getProperties(void) throw( Runtim
     return mpStaticImpl->getProperties();
 }
 
+namespace
+{
+    Property getPropertyImpl(IntrospectionAccessStatic_Impl *pStaticImpl, const OUString& Name, sal_Int32 PropertyConcepts)
+        throw( NoSuchElementException, RuntimeException )
+    {
+        Property aRet;
+        sal_Int32 i = pStaticImpl->getPropertyIndex( Name );
+        sal_Bool bFound = sal_False;
+        if( i != -1 )
+        {
+            sal_Int32 nConcept = pStaticImpl->getPropertyConcepts().getConstArray()[ i ];
+            if( (PropertyConcepts & nConcept) != 0 )
+            {
+                const Property* pProps = pStaticImpl->getProperties().getConstArray();
+                aRet = pProps[ i ];
+                bFound = sal_True;
+            }
+        }
+        if( !bFound )
+            throw NoSuchElementException() ;
+        return aRet;
+    }
+
+    sal_Bool hasPropertyImpl(IntrospectionAccessStatic_Impl *pStaticImpl, const OUString& Name, sal_Int32 PropertyConcepts)
+        throw( RuntimeException )
+    {
+        sal_Int32 i = pStaticImpl->getPropertyIndex( Name );
+        sal_Bool bRet = sal_False;
+        if( i != -1 )
+        {
+            sal_Int32 nConcept = pStaticImpl->getPropertyConcepts().getConstArray()[ i ];
+            if( (PropertyConcepts & nConcept) != 0 )
+                bRet = sal_True;
+        }
+        return bRet;
+    }
+}
+
 Property ImplIntrospectionAdapter::getPropertyByName(const OUString& Name)
     throw( RuntimeException )
 {
-    return mpAccess->getProperty( Name, PropertyConcept::ALL );
+    return getPropertyImpl(mpStaticImpl, Name, PropertyConcept::ALL);
 }
 
 sal_Bool ImplIntrospectionAdapter::hasPropertyByName(const OUString& Name)
     throw( RuntimeException )
 {
-    return mpAccess->hasProperty( Name, PropertyConcept::ALL );
+    return hasPropertyImpl(mpStaticImpl, Name, PropertyConcept::ALL);
 }
 
 // Methoden von XElementAccess
@@ -1231,36 +1265,13 @@ sal_Int32 ImplIntrospectionAccess::getSuppliedPropertyConcepts(void)
 Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 PropertyConcepts)
     throw( NoSuchElementException, RuntimeException )
 {
-    Property aRet;
-    sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
-    sal_Bool bFound = sal_False;
-    if( i != -1 )
-    {
-        sal_Int32 nConcept = mpStaticImpl->getPropertyConcepts().getConstArray()[ i ];
-        if( (PropertyConcepts & nConcept) != 0 )
-        {
-            const Property* pProps = mpStaticImpl->getProperties().getConstArray();
-            aRet = pProps[ i ];
-            bFound = sal_True;
-        }
-    }
-    if( !bFound )
-        throw NoSuchElementException() ;
-    return aRet;
+    return getPropertyImpl(mpStaticImpl, Name, PropertyConcepts);
 }
 
 sal_Bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
     throw( RuntimeException )
 {
-    sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
-    sal_Bool bRet = sal_False;
-    if( i != -1 )
-    {
-        sal_Int32 nConcept = mpStaticImpl->getPropertyConcepts().getConstArray()[ i ];
-        if( (PropertyConcepts & nConcept) != 0 )
-            bRet = sal_True;
-    }
-    return bRet;
+    return hasPropertyImpl(mpStaticImpl, Name, PropertyConcepts);
 }
 
 Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyConcepts)
@@ -1447,7 +1458,7 @@ Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type
     if( !mpAdapter )
     {
         ((ImplIntrospectionAccess*)this)->mpAdapter =
-            new ImplIntrospectionAdapter( this, maInspectedObject, mpStaticImpl );
+            new ImplIntrospectionAdapter( maInspectedObject, mpStaticImpl );
 
         // Selbst eine Referenz halten
         mpAdapter->acquire();
