@@ -310,7 +310,7 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
               aIter != m_aChildren.end(); /* increment is done in body */)
         {
             OHierarchyElementList_Impl::iterator aTmpIter = aIter;
-            aIter++;
+            ++aIter;
 
             if ( aTmpIter->second == aRef )
                 m_aChildren.erase( aTmpIter );

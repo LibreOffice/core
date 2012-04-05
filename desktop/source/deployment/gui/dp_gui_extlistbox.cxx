@@ -337,7 +337,7 @@ void ExtensionBox_Impl::select( const rtl::OUString & sName )
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     typedef ::std::vector< TEntry_Impl >::const_iterator It;
 
-    for ( It iIter = m_vEntries.begin(); iIter < m_vEntries.end(); iIter++ )
+    for ( It iIter = m_vEntries.begin(); iIter != m_vEntries.end(); ++iIter )
     {
         if ( sName.equals( (*iIter)->m_sTitle ) )
         {

@@ -1181,7 +1181,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
               citVecVec = vecExtensions.begin();
         sal_Int32 j = 0;
         uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > > seqSeq(vecExtensions.size());
-        for (;citVecVec != vecExtensions.end(); citVecVec++, j++)
+        for (;citVecVec != vecExtensions.end(); ++citVecVec, j++)
         {
             seqSeq[j] = comphelper::containerToSequence(*citVecVec);
         }

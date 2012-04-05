@@ -424,7 +424,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                     //Construct a string of all messages contained in the exceptions plus the respective download URLs
                     ::rtl::OUStringBuffer buf(256);
                     typedef ::std::vector< ::std::pair<OUString, cssu::Exception > >::const_iterator CIT;
-                    for (CIT j = vecExceptions.begin(); j != vecExceptions.end(); j++)
+                    for (CIT j = vecExceptions.begin(); j != vecExceptions.end(); ++j)
                     {
                         if (j != vecExceptions.begin())
                             buf.appendAscii("\n");

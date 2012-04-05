@@ -69,7 +69,7 @@ ExtensionProperties::ExtensionProperties(
     dp_misc::readProperties(props, contentProps);
 
     typedef ::std::list< ::std::pair< OUString, OUString> >::const_iterator CI;
-    for (CI i = props.begin(); i != props.end(); i++)
+    for (CI i = props.begin(); i != props.end(); ++i)
     {
         if (i->first.equals(OUSTR(PROP_SUPPRESS_LICENSE)))
             m_prop_suppress_license = i->second;

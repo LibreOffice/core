@@ -1217,7 +1217,7 @@ const rtl::OUString&  MergedSettings::getUserClassPath() const
 {
     ::std::vector< ::rtl::OString> ret;
     typedef ::std::vector< ::rtl::OUString>::const_iterator cit;
-    for (cit i = m_vmParams.begin(); i < m_vmParams.end(); i++)
+    for (cit i = m_vmParams.begin(); i != m_vmParams.end(); ++i)
     {
         ret.push_back( ::rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
     }

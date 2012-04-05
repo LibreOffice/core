@@ -367,7 +367,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
     //Notify the backend responsible for processing the different media
     //types that this extension was removed.
     ExtensionBackendDb::Data data = readDataFromDb(url);
-    for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); i++)
+    for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); ++i)
     {
         m_xRootRegistry->packageRemoved(i->first, i->second);
     }
@@ -1649,7 +1649,7 @@ BackendImpl::PackageImpl::getPackagesFromDb(
     ::std::vector<Reference<deployment::XPackage> > retVector;
 
     typedef ::std::vector< ::std::pair<OUString, OUString> >::const_iterator ITC;
-    for (ITC i = m_dbData.items.begin(); i != m_dbData.items.end(); i++)
+    for (ITC i = m_dbData.items.begin(); i != m_dbData.items.end(); ++i)
     {
         Reference<deployment::XPackage> xExtension =
             bindBundleItem(i->first, i->second, true, m_identifier, xCmdEnv);

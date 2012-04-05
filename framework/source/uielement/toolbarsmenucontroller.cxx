@@ -451,7 +451,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 aTbEntry.pCollatorWrapper = m_aIntlWrapper.getCaseCollator();
                 aSortedTbs.push_back( aTbEntry );
             }
-            pIter++;
+            ++pIter;
         }
 
         // sort toolbars

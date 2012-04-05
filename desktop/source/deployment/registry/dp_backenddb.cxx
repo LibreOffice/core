@@ -311,7 +311,7 @@ void BackendDb::writeVectorOfPair(
             Reference<css::xml::dom::XNode>(
                 vectorNode, css::uno::UNO_QUERY_THROW));
         typedef ::std::vector< ::std::pair< OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecPairs.begin(); i != vecPairs.end(); i++)
+        for (CIT i = vecPairs.begin(); i != vecPairs.end(); ++i)
         {
             const Reference<css::xml::dom::XElement> pairNode(
                 doc->createElementNS(sNameSpace, sPrefix + sPairTagName));
