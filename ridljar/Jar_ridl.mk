@@ -27,8 +27,8 @@
 
 $(eval $(call gb_Jar_Jar,ridl))
 
-$(eval $(call gb_Jar_add_package_dependencies,ridl,\
-    ridljar_javamaker \
+$(eval $(call gb_Jar_add_customtarget_dependencies,ridl,\
+    ridljar/javamaker \
 ))
 
 $(eval $(call gb_Jar_add_jars,ridl,\

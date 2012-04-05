@@ -29,9 +29,9 @@ $(eval $(call gb_Module_Module,ridljar))
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,ridljar,\
+    CustomTarget_javamaker \
     Jar_ridl \
     Jar_unoloader \
-    Package_javamaker \
     Zip_ridl \
     Zip_unoloader \
 ))
