@@ -182,14 +182,11 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
             {
-#if 0
-// FIXME this crashes in sc_unoapi currently; table3.cxx has nMaxSorts = 3...
                 ScSortKeyState key;
                 key.bDoSort = true;
                 key.nField = rSub.nField[i];
                 key.bAscending = rSub.bAscending;
                 maKeyState.push_back(key);
-#endif
             }
 
     //  dann dahinter die alten Einstellungen
