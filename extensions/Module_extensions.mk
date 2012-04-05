@@ -52,16 +52,21 @@ endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\
+	Library_updatefeed \
+))
+
+ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
+$(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_updchk \
 	Configuration_updchk \
 	Library_updatecheckui \
-	Library_updatefeed \
 	Library_updchk \
 ))
 
 $(eval $(call gb_Module_add_check_targets,extensions,\
     CppunitTest_extensions_test_update \
 ))
+endif
 endif
 
 ifeq ($(OS),WNT)

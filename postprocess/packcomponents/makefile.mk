@@ -167,9 +167,7 @@ my_components += \
     component/extensions/source/propctrlr/pcr \
     component/extensions/source/resource/res \
     component/extensions/source/scanner/scn \
-    component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
-    component/extensions/source/update/ui/updchk \
     component/fpicker/source/generic/fpicker \
     component/fpicker/source/office/fps_office \
     syssh \
@@ -260,6 +258,12 @@ my_components += kdebe1
 
 .IF "$(ENABLE_KDE4)" != ""
 my_components += kde4be1
+.END
+
+.IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
+my_components += \
+    component/extensions/source/update/check/updchk.uno \
+    component/extensions/source/update/ui/updchk
 .END
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"

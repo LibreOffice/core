@@ -34,5 +34,8 @@ Module gid_Module_Optional_Onlineupdate
     ParentID = gid_Module_Optional;
     Default = YES;
     Styles = (DONTSHOWINUSERINSTALL);
-    Files = (gid_File_Lib_Updchk, gid_File_Share_Registry_Onlineupdate_Xcd, gid_File_Bin_UnpackUpdate);
+    Files = (gid_File_Bin_UnpackUpdate,
+             gid_File_Lib_Updchk,
+             gid_File_Lib_Updchkui,
+             gid_File_Share_Registry_Onlineupdate_Xcd);
 End

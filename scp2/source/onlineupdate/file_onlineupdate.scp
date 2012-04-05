@@ -35,6 +35,8 @@ File gid_File_Lib_Updchk
     ComponentCondition="ISCHECKFORPRODUCTUPDATES=1";
 End
 
+STD_LIB_FILE(gid_File_Lib_Updchkui, updatecheckui)
+
 File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

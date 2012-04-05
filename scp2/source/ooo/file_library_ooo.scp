@@ -1498,8 +1498,6 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
-STD_LIB_FILE( gid_File_Lib_Updchkui , updatecheckui )
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
 
 #ifndef SYSTEM_OPENSSL

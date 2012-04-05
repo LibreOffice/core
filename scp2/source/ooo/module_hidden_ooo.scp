@@ -478,7 +478,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Hatchwindowfactory,
 	gid_File_Lib_Passwordcontainer,
 	gid_File_Lib_Svtmisc,
-    gid_File_Lib_Updchkui,
     gid_File_Lib_Updatefeed,
 	gid_File_Lib_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Assembly,

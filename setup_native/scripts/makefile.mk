@@ -42,9 +42,12 @@ UNIXTEXT= \
     $(BIN)$/javaloader.sh \
     $(BIN)$/register_extensions \
     $(BIN)$/deregister_extensions \
-    $(BIN)$/unpack_update.sh \
     $(BIN)$/update.sh \
     $(BIN)$/downloadscript.sh
+
+.IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
+UNIXTEXT += $(BIN)$/unpack_update.sh
+.END
 
 NOARCH=$(BIN)$/noarch
 FAKEDB=$(NOARCH)/fake-db-1.0-0.noarch.rpm

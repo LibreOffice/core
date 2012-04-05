@@ -46,7 +46,6 @@ MY_XCDS = \
     $(MISC)/lingucomponent.xcd \
     $(MISC)/main.xcd \
     $(MISC)/math.xcd \
-    $(MISC)/onlineupdate.xcd \
     $(MISC)/palm.xcd \
     $(MISC)/pocketexcel.xcd \
     $(MISC)/pocketword.xcd \
@@ -362,13 +361,6 @@ MY_FILES_math = \
     $(MY_MOD)/org/openoffice/Office/Embedding-math.xcu \
     $(MY_MOD)/org/openoffice/Setup-math.xcu
 
-.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
-MY_DEPS_onlineupdate = main
-MY_FILES_onlineupdate = \
-    $(MY_MOD)/org/openoffice/Office/Addons-onlineupdate.xcu \
-    $(MY_MOD)/org/openoffice/Office/Jobs-onlineupdate.xcu
-.ENDIF
-
 MY_DEPS_palm = main
 MY_FILES_palm = \
     $(MY_MOD)/fcfg_palm_filters.xcu \
@@ -464,6 +456,14 @@ MY_FILES_gnome += \
     $(MY_MOD)/org/openoffice/ucb/Configuration-gio.xcu
 .END
 .END
+
+.IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
+MY_XCDS += $(MISC)/onlineupdate.xcd \
+MY_DEPS_onlineupdate = main
+MY_FILES_onlineupdate = \
+    $(MY_MOD)/org/openoffice/Office/Addons-onlineupdate.xcu \
+    $(MY_MOD)/org/openoffice/Office/Jobs-onlineupdate.xcu
+.ENDIF
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"
 MY_XCDS += $(MISC)/ogltrans.xcd
