@@ -43,7 +43,7 @@ public:
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ) {}
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
     virtual const char* getDescription() const { return "AnimationSetNode"; }
 #endif
 

@@ -377,7 +377,7 @@ bool AnimationBaseNode::hasPendingAnimation() const
     return true;
 }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void AnimationBaseNode::showState() const
 {
     BaseNode::showState();

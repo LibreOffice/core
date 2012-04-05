@@ -205,7 +205,7 @@ namespace slideshow
             ENSURE_OR_RETURN_FALSE( pRenderer, "ViewShape::draw(): Invalid renderer" );
 
             pRenderer->setTransformation( rTransform );
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL >= 2
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState(aRenderState);
             ::canvas::tools::setRenderStateTransform(aRenderState,

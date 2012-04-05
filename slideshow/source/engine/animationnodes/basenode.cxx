@@ -686,7 +686,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 // Debug
 //=========================================================================
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void BaseNode::showState() const
 {
     const AnimationNode::NodeState eNodeState( getState() );

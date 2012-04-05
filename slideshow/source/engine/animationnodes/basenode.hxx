@@ -109,7 +109,7 @@ public:
     void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
 
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
     virtual void showState() const;
     virtual const char* getDescription() const;
     void showTreeFromWithin() const;

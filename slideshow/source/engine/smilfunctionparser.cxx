@@ -53,7 +53,7 @@
 #endif
 #include <boost/spirit/include/classic_core.hpp>
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL >= 2
 #include <iostream>
 #endif
 #include <functional>

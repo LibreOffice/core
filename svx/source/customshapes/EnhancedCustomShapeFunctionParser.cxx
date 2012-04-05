@@ -36,7 +36,7 @@
 // state not visible to this code!
 
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 #include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
 #endif

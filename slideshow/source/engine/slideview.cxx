@@ -210,7 +210,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
         pPolyPoly->draw();
     }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
     ::cppcanvas::CanvasSharedPtr pCliplessCanvas( pCanvas->clone() );
     pCliplessCanvas->setClip();
 
@@ -218,7 +218,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
     {
         ::cppcanvas::PolyPolygonSharedPtr pPolyPoly2(
             ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCliplessCanvas,
-                                                                          *(pCanvas->getClip()) ));
+                                                                          aPoly ));
         if( pPolyPoly2 )
         {
             pPolyPoly2->setRGBALineColor( 0x008000FFU );
@@ -610,7 +610,7 @@ private:
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
                 mpSprite->movePixel(
                     basegfx::B2DPoint(maLayerBoundsPixel.getMinimum()) +
                     basegfx::B2DPoint(10,10) );

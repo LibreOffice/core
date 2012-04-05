@@ -150,7 +150,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
     return bFinished;
 }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void BaseContainerNode::showState() const
 {
     for( std::size_t i=0; i<maChildren.size(); ++i )

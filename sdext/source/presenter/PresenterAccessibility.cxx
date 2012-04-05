@@ -59,8 +59,6 @@ using ::rtl::OUString;
 
 #define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
 
-#define VERBOSE
-
 //===== PresenterAccessibleObject =============================================
 
 namespace sdext { namespace presenter {
@@ -784,12 +782,8 @@ void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent& rEve
         throw (cssu::RuntimeException)
 {
     (void)rEvent;
-
-#ifdef VERBOSE
-    OSL_TRACE("PresenterAccessible::focusGained at %x and window %x\r", this,
-        mxMainWindow.get());
-#endif
-
+    SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusGained at " << this
+        << " and window " << mxMainWindow.get());
     AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
 }
 
@@ -797,11 +791,7 @@ void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent& rEvent
     throw (cssu::RuntimeException)
 {
     (void)rEvent;
-
-#ifdef VERBOSE
-    OSL_TRACE("PresenterAccessible::focusLost at %x\r", this);
-#endif
-
+    SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusLost at " << this);
     AccessibleFocusManager::Instance()->FocusObject(NULL);
 }
 

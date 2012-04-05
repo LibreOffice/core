@@ -47,7 +47,7 @@ public:
           mxTransitionFilterNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW)
         {}
 
-#if defined(VERBOSE)
+#if OSL_DEBUG_LEVEL >= 2
     virtual const char* getDescription() const
         { return "AnimationTransitionFilterNode"; }
 #endif

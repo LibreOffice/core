@@ -43,7 +43,7 @@ namespace slideshow
 {
     namespace internal
     {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
         int& debugGetCurrentOffset()
         {
             static int lcl_nOffset = 0; // to make each tree output distinct

@@ -2095,7 +2095,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             mbSlideShowIdle = false;
         }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
         // when slideshow is idle, issue an XUpdatable::update() call
         // exactly once after a previous animation sequence finished -
         // this might trigger screen dumps on some canvas

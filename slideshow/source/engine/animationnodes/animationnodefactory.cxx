@@ -604,7 +604,7 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
                                                rSlideSize )));
 }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
 {
     if( pRootNode )
