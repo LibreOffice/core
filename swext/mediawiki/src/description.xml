@@ -32,7 +32,7 @@
     </registration>
     <dependencies>
         <OpenOffice.org-minimal-version value="3.4" d:name="Apache OpenOffice"/>
-        <OpenOffice.org-minimal-version value="3.9" d:name="Apache OpenOffice"/>
+        <OpenOffice.org-maximal-version value="3.9" d:name="Apache OpenOffice"/>
     </dependencies>
     <publisher>
         <name xlink:href="http://www.openoffice.org" lang="en">Apache Software Foundation</name>

@@ -29,7 +29,7 @@
 
   <dependencies>
     <OpenOffice.org-minimal-version value="3.4" dep:name="Apache OpenOffice"/>
-    <OpenOffice.org-minimal-version value="3.9" dep:name="Apache OpenOffice"/>
+    <OpenOffice.org-maximal-version value="3.9" dep:name="Apache OpenOffice"/>
   </dependencies>
 
   <registration>
