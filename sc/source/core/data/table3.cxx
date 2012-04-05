@@ -203,8 +203,6 @@ short Compare( const String &sInput1, const String &sInput2,
 
 // STATIC DATA -----------------------------------------------------------
 
-const sal_uInt16 nMaxSorts = 3;     // maximale Anzahl Sortierkriterien in aSortParam
-
 struct ScSortInfo
 {
     ScBaseCell*     pCell;
@@ -219,15 +217,16 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 class ScSortInfoArray
 {
 private:
-    ScSortInfo**    pppInfo[nMaxSorts];
+    ScSortInfo***    pppInfo;
     SCSIZE          nCount;
     SCCOLROW        nStart;
-    sal_uInt16          nUsedSorts;
+    sal_uInt16      nUsedSorts;
 
 public:
                 ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
+                        pppInfo( new ScSortInfo**[nSorts]),
                         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
-                        nUsedSorts( Min( nSorts, nMaxSorts ) )
+                        nUsedSorts( nSorts )
                     {
                         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
                         {
@@ -270,7 +269,7 @@ public:
 ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 {
     sal_uInt16 nUsedSorts = 1;
-    while ( nUsedSorts < nMaxSorts && aSortParam.maKeyState[nUsedSorts].bDoSort )
+    while ( nUsedSorts < aSortParam.GetSortKeyCount() && aSortParam.maKeyState[nUsedSorts].bDoSort )
         nUsedSorts++;
     ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
     if ( aSortParam.bByRow )
@@ -680,6 +679,7 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
 {
     short nRes;
     sal_uInt16 nSort = 0;
+    const sal_uInt32 nMaxSorts = aSortParam.GetSortKeyCount();
     if (aSortParam.bByRow)
     {
         do
