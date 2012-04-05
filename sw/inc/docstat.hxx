@@ -43,6 +43,7 @@ struct SW_DLLPUBLIC SwDocStat
     /// all paragraphs, including empty/hidden ones
     sal_uLong           nAllPara;
     sal_uLong           nWord;
+    sal_uLong           nAsianWord;
     sal_uLong           nChar;
     sal_uLong           nCharExcludingSpaces;
     sal_Bool            bModified;

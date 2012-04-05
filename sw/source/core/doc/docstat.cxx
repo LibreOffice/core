@@ -43,6 +43,7 @@ SwDocStat::SwDocStat() :
     nPara(1),
     nAllPara(1),
     nWord(0),
+    nAsianWord(0),
     nChar(0),
     nCharExcludingSpaces(0),
     bModified(sal_True)
@@ -61,6 +62,7 @@ void SwDocStat::Reset()
     nPara   = 1;
     nAllPara= 1;
     nWord   = 0;
+    nAsianWord = 0;
     nChar   = 0;
     nCharExcludingSpaces = 0;
     bModified = sal_True;

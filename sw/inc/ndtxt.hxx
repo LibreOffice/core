@@ -173,6 +173,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     //
     SW_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
     SW_DLLPRIVATE sal_uLong GetParaNumberOfWords() const;
+    SW_DLLPRIVATE void SetParaNumberOfAsianWords( sal_uLong nTmpAsianWords ) const;
+    SW_DLLPRIVATE sal_uLong GetParaNumberOfAsianWords() const;
     SW_DLLPRIVATE void SetParaNumberOfChars( sal_uLong nTmpChars ) const;
     SW_DLLPRIVATE sal_uLong GetParaNumberOfChars() const;
     SW_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( sal_uLong nTmpChars ) const;

@@ -113,7 +113,7 @@ void SwDocTest::testPageDescName()
     CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=32463 for motivation
+//See https://bugs.freedesktop.org/show_bug.cgi?id=32463
 void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
@@ -225,8 +225,8 @@ void SwDocTest::testSwScanner()
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=39365 for motivation
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=40449
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=39365
     //Use a temporary rtl::OUString as the arg, as that's the trouble behind
     //fdo#40449 and fdo#39365
     {
@@ -248,7 +248,7 @@ void SwDocTest::testSwScanner()
             rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
     }
 
-    //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271 for motivation
+    //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
     {
         const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
 
@@ -261,13 +261,51 @@ void SwDocTest::testSwScanner()
         m_pDoc->InsertPoolItem(aPaM, aWestLangItem, 0 );
 
         SwDocStat aDocStat;
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
 
         CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nChar == 2);
         CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nCharExcludingSpaces == 2);
     }
+    {
+        const sal_Unicode test[] =
+        {
+            0x3053, 0x306E, 0x65E5, 0x672C, 0x8A9E, 0x306F, 0x6B63, 0x3057,
+            0x304F, 0x6570, 0x3048, 0x3089, 0x308C, 0x308B, 0x3067, 0x3057,
+            0x3087, 0x3046, 0x304B, 0x3002, 0x0041, 0x006E, 0x0064, 0x0020,
+            0x006C, 0x0065, 0x0074, 0x0027, 0x0073, 0x0020, 0x0074, 0x0068,
+            0x0072, 0x006F, 0x0077, 0x0020, 0x0073, 0x006F, 0x006D, 0x0065,
+            0x0020, 0x0045, 0x006E, 0x0067, 0x006C, 0x0069, 0x0073, 0x0068,
+            0x0020, 0x0069, 0x006E, 0x0020, 0x0074, 0x006F, 0x0020, 0x006D,
+            0x0061, 0x006B, 0x0065, 0x0020, 0x0069, 0x0074, 0x0020, 0x0069,
+            0x006E, 0x0074, 0x0065, 0x0072, 0x0065, 0x0073, 0x0074, 0x0069,
+            0x006E, 0x0067, 0x002E, 0x0020, 0x0020, 0x305D, 0x3057, 0x3066,
+            0x3001, 0x307E, 0x305F, 0x65E5, 0x672C, 0x8A9E, 0x3000, 0x3000,
+            0x3067, 0x3082, 0x4ECA, 0x56DE, 0x306F, 0x7A7A, 0x767D, 0x3092,
+            0x3000, 0x3000, 0x5165, 0x308C, 0x307E, 0x3057, 0x305F, 0x3002,
+            0x0020, 0x0020, 0x0053, 0x006F, 0x0020, 0x0068, 0x006F, 0x0077,
+            0x0020, 0x0064, 0x006F, 0x0065, 0x0073, 0x0020, 0x0074, 0x0068,
+            0x0069, 0x0073, 0x0020, 0x0064, 0x006F, 0x003F, 0x0020, 0x0020
+        };
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString(test,
+            SAL_N_ELEMENTS(test)));
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=89042 for motivation
+        SvxLanguageItem aCJKLangItem( LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE );
+        SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
+        m_pDoc->InsertPoolItem(aPaM, aCJKLangItem, 0 );
+        m_pDoc->InsertPoolItem(aPaM, aWestLangItem, 0 );
+
+        SwDocStat aDocStat;
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(test));
+        CPPUNIT_ASSERT_MESSAGE("58 words", aDocStat.nWord == 58);
+        CPPUNIT_ASSERT_MESSAGE("43 Asian characters and Korean syllables", aDocStat.nAsianWord == 43);
+        CPPUNIT_ASSERT_MESSAGE("105 non-whitespace chars", aDocStat.nCharExcludingSpaces == 105);
+        CPPUNIT_ASSERT_MESSAGE("128 characters", aDocStat.nChar == 128);
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=89042
     {
         SwDocStat aDocStat;
 
@@ -298,8 +336,7 @@ void SwDocTest::testSwScanner()
     }
 }
 
-
-//See https://bugs.freedesktop.org/show_bug.cgi?id=40599 for motivation
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40599
 void SwDocTest::testGraphicAnchorDeletion()
 {
     CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);

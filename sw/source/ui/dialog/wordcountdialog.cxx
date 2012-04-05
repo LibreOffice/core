@@ -42,6 +42,8 @@
 #include <swwait.hxx>
 #include <wrtsh.hxx>
 
+//TODO, add asian/non-asian word count to UI when CJK mode is enabled.
+
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #if defined _MSC_VER
 #pragma warning (disable : 4355)

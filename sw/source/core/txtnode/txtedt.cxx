@@ -680,6 +680,44 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     }
 }
 
+namespace
+{
+    //fdo#45271 for Asian words count characters instead of words
+    sal_Int32 forceEachAsianCodePointToWord(const rtl::OUString &rText, sal_Int32 nBegin, sal_Int32 nLen)
+    {
+        if (nLen > 1)
+        {
+            const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->GetBreakIter();
+
+            sal_uInt16 nCurrScript = rxBreak->getScriptType( rText, nBegin );
+
+            sal_Int32 indexUtf16 = nBegin;
+            rText.iterateCodePoints(&indexUtf16, 1);
+
+            //First character is Asian, consider it a word :-(
+            if (nCurrScript == i18n::ScriptType::ASIAN)
+            {
+                nLen = indexUtf16 - nBegin;
+                return nLen;
+            }
+
+            //First character was not Asian, consider appearance of any Asian character
+            //to be the end of the word
+            while (indexUtf16 < nBegin + nLen)
+            {
+                nCurrScript = rxBreak->getScriptType( rText, indexUtf16 );
+                if (nCurrScript == i18n::ScriptType::ASIAN)
+                {
+                    nLen = indexUtf16 - nBegin;
+                    return nLen;
+                }
+                rText.iterateCodePoints(&indexUtf16, 1);
+            }
+        }
+        return nLen;
+    }
+}
+
 sal_Bool SwScanner::NextWord()
 {
     nBegin = nBegin + nLen;
@@ -801,6 +839,9 @@ sal_Bool SwScanner::NextWord()
 
     if( ! nLen )
         return sal_False;
+
+    if ( nWordType == i18n::WordType::WORD_COUNT )
+        nLen = forceEachAsianCodePointToWord(aText, nBegin, nLen);
 
     aWord = aText.copy( nBegin, nLen );
 
@@ -1812,6 +1853,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     {
         // accumulate into DocStat record to return the values
         rStat.nWord += GetParaNumberOfWords();
+        rStat.nAsianWord += GetParaNumberOfAsianWords();
         rStat.nChar += GetParaNumberOfChars();
         rStat.nCharExcludingSpaces += GetParaNumberOfCharsExcludingSpaces();
         return;
@@ -1842,7 +1884,8 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     // all counts exclude hidden paras and hidden+redlined within para
     // definition of space/white chars in SwScanner (and BreakIter!)
     // uses both lcl_IsSkippableWhiteSpace and BreakIter getWordBoundary in SwScanner
-    sal_uInt32 nTmpWords = 0;        // count of all contiguous blocks of non-white chars
+    sal_uInt32 nTmpWords = 0;        // count of all words
+    sal_uInt32 nTmpAsianWords = 0;   //count of all Asian codepoints
     sal_uInt32 nTmpChars = 0;        // count of all chars
     sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
 
@@ -1862,7 +1905,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
             {
                 ++nTmpWords;
-                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(aScanner.GetWord());
+                const rtl::OUString &rWord = aScanner.GetWord();
+                if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+                    ++nTmpAsianWords;
+                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
             }
         }
     }
@@ -1890,7 +1936,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             while ( aScanner.NextWord() )
             {
                 ++nTmpWords;
-                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(aScanner.GetWord());
+                const rtl::OUString &rWord = aScanner.GetWord();
+                if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+                    ++nTmpAsianWords;
+                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
             }
 
             nTmpChars = pBreakIt->getGraphemeCount(aNumString);
@@ -1909,12 +1958,14 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     if ( isCountAll )
     {
         SetParaNumberOfWords( nTmpWords );
+        SetParaNumberOfAsianWords( nTmpAsianWords );
         SetParaNumberOfChars( nTmpChars );
         SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
         SetWordCountDirty( false );
     }
     // accumulate into DocStat record to return the values
     rStat.nWord += nTmpWords;
+    rStat.nAsianWord += nTmpAsianWords;
     rStat.nChar += nTmpChars;
     rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
 }
@@ -1928,6 +1979,7 @@ struct SwParaIdleData_Impl
     SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
     SwWrongList* pSmartTags;
     sal_uLong nNumberOfWords;
+    sal_uLong nNumberOfAsianWords;
     sal_uLong nNumberOfChars;
     sal_uLong nNumberOfCharsExcludingSpaces;
     bool bWordCountDirty;
@@ -1941,6 +1993,7 @@ struct SwParaIdleData_Impl
         pGrammarCheck       ( 0 ),
         pSmartTags          ( 0 ),
         nNumberOfWords      ( 0 ),
+        nNumberOfAsianWords ( 0 ),
         nNumberOfChars      ( 0 ),
         nNumberOfCharsExcludingSpaces ( 0 ),
         bWordCountDirty     ( true ),
@@ -2033,10 +2086,25 @@ void SwTxtNode::SetParaNumberOfWords( sal_uLong nNew ) const
         m_pParaIdleData_Impl->nNumberOfWords = nNew;
     }
 }
+
 sal_uLong SwTxtNode::GetParaNumberOfWords() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfWords : 0;
 }
+
+void SwTxtNode::SetParaNumberOfAsianWords( sal_uLong nNew ) const
+{
+    if ( m_pParaIdleData_Impl )
+    {
+        m_pParaIdleData_Impl->nNumberOfAsianWords = nNew;
+    }
+}
+
+sal_uLong SwTxtNode::GetParaNumberOfAsianWords() const
+{
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfAsianWords : 0;
+}
+
 void SwTxtNode::SetParaNumberOfChars( sal_uLong nNew ) const
 {
     if ( m_pParaIdleData_Impl )
@@ -2044,10 +2112,12 @@ void SwTxtNode::SetParaNumberOfChars( sal_uLong nNew ) const
         m_pParaIdleData_Impl->nNumberOfChars = nNew;
     }
 }
+
 sal_uLong SwTxtNode::GetParaNumberOfChars() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfChars : 0;
 }
+
 void SwTxtNode::SetWordCountDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
