@@ -184,7 +184,6 @@ class BinTextObject : public EditTextObject, public SfxItemPoolUser
 private:
     ContentInfoList         aContents;
     SfxItemPool*            pPool;
-    sal_Bool                    bOwnerOfPool;
     XParaPortionList*       pPortionInfo;
 
     sal_uInt32              nObjSettings;
@@ -193,8 +192,9 @@ private:
     sal_uInt16                  nUserType;
     sal_uInt16                  nScriptType;
 
-    sal_Bool                    bVertical;
-    sal_Bool                    bStoreUnicodeStrings;
+    bool                    bOwnerOfPool:1;
+    bool                    bVertical:1;
+    bool                    bStoreUnicodeStrings:1;
 
 protected:
     void                    DeleteContents();
@@ -274,7 +274,7 @@ public:
     sal_uInt16                  GetMetric() const           { return nMetric; }
     void                    SetMetric( sal_uInt16 n )       { nMetric = n; }
 
-    sal_Bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
+    bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
     void                    StoreUnicodeStrings( sal_Bool b ) { bStoreUnicodeStrings = b; }
 
     bool                    operator==( const BinTextObject& rCompare ) const;

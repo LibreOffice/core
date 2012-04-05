@@ -216,7 +216,7 @@ void EditTextObject::RemoveParagraph( sal_uInt16 /*nPara*/ )
 sal_Bool EditTextObject::HasPortionInfo() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 void EditTextObject::ClearPortionInfo()
@@ -227,13 +227,13 @@ void EditTextObject::ClearPortionInfo()
 sal_Bool EditTextObject::HasOnlineSpellErrors() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool EditTextObject::HasCharAttribs( sal_uInt16 ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
@@ -249,7 +249,7 @@ void EditTextObject::MergeParaAttribs( const SfxItemSet& /*rAttribs*/, sal_uInt1
 sal_Bool EditTextObject::IsFieldObject() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 const SvxFieldItem* EditTextObject::GetField() const
@@ -261,7 +261,7 @@ const SvxFieldItem* EditTextObject::GetField() const
 sal_Bool EditTextObject::HasField( TypeId /*aType*/ ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 SfxItemSet EditTextObject::GetParaAttribs( sal_uInt16 /*nPara*/ ) const
@@ -278,19 +278,19 @@ void EditTextObject::SetParaAttribs( sal_uInt16 /*nPara*/, const SfxItemSet& /*r
 sal_Bool EditTextObject::RemoveCharAttribs( sal_uInt16 /*nWhich*/ )
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool EditTextObject::RemoveParaAttribs( sal_uInt16 /*nWhich*/ )
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFamily /*eFamily*/ ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 void EditTextObject::GetStyleSheet( sal_uInt16 /*nPara*/, XubString& /*rName*/, SfxStyleFamily& /*eFamily*/ ) const
@@ -307,7 +307,7 @@ sal_Bool EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
                                             const XubString&, SfxStyleFamily )
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 void EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
@@ -341,7 +341,7 @@ void EditTextObject::SetObjectSettings( sal_uLong )
 sal_Bool EditTextObject::IsVertical() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return sal_False;
+    return false;
 }
 
 void EditTextObject::SetVertical( sal_Bool bVertical )
@@ -360,7 +360,7 @@ sal_uInt16 EditTextObject::GetScriptType() const
 sal_Bool EditTextObject::Store( SvStream& rOStream ) const
 {
     if ( rOStream.GetError() )
-        return sal_False;
+        return false;
 
     sal_Size nStartPos = rOStream.Tell();
 
@@ -377,7 +377,7 @@ sal_Bool EditTextObject::Store( SvStream& rOStream ) const
     rOStream << nStructSz;
     rOStream.Seek( nEndPos );
 
-    return rOStream.GetError() ? sal_False : sal_True;
+    return rOStream.GetError() ? false : true;
 }
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
@@ -474,7 +474,7 @@ void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 
         // set local variables
         pPool = pNewPool;
-        bOwnerOfPool = sal_True;
+        bOwnerOfPool = true;
     }
 }
 
@@ -515,12 +515,12 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
 
     if ( pPool )
     {
-        bOwnerOfPool = sal_False;
+        bOwnerOfPool = false;
     }
     else
     {
         pPool = EditEngine::CreatePool();
-        bOwnerOfPool =  sal_True;
+        bOwnerOfPool =  true;
     }
 
     if(!bOwnerOfPool && pPool)
@@ -529,8 +529,8 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
         pPool->AddSfxItemPoolUser(*this);
     }
 
-    bVertical = sal_False;
-    bStoreUnicodeStrings = sal_False;
+    bVertical = false;
+    bStoreUnicodeStrings = false;
     nScriptType = 0;
 }
 
@@ -545,7 +545,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     bVertical = r.bVertical;
     nScriptType = r.nScriptType;
     pPortionInfo = NULL;    // Do not copy PortionInfo
-    bStoreUnicodeStrings = sal_False;
+    bStoreUnicodeStrings = false;
 
     if ( !r.bOwnerOfPool )
     {
@@ -553,12 +553,12 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
         // since there is no other way to construct a BinTextObject
         // than it's regular constructor where that is ensured
         pPool = r.pPool;
-        bOwnerOfPool = sal_False;
+        bOwnerOfPool = false;
     }
     else
     {
         pPool = EditEngine::CreatePool();
-        bOwnerOfPool =  sal_True;
+        bOwnerOfPool =  true;
 
     }
 
@@ -747,7 +747,7 @@ void BinTextObject::RemoveParagraph( sal_uInt16 nPara )
 
 sal_Bool BinTextObject::HasPortionInfo() const
 {
-    return pPortionInfo ? sal_True : sal_False;
+    return pPortionInfo ? true : false;
 }
 
 void BinTextObject::ClearPortionInfo()
@@ -767,9 +767,9 @@ sal_Bool BinTextObject::HasOnlineSpellErrors() const
     {
         ContentInfo* p = aContents.GetObject( n );
         if ( p->GetWrongList() && !p->GetWrongList()->empty() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 
 }
 
@@ -781,16 +781,16 @@ sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
 
         sal_uInt16 nAttribs = pC->GetAttribs().Count();
         if ( nAttribs && !_nWhich )
-            return sal_True;
+            return true;
 
         for ( sal_uInt16 nAttr = nAttribs; nAttr; )
         {
             XEditAttribute* pX = pC->GetAttribs().GetObject( --nAttr );
             if ( pX->GetItem()->Which() == _nWhich )
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
@@ -814,7 +814,7 @@ void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>&
 
 void BinTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
-    sal_Bool bChanged = sal_False;
+    sal_Bool bChanged = false;
 
     for ( sal_uInt16 nPara = GetContents().Count(); nPara; )
     {
@@ -822,11 +822,11 @@ void BinTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nSt
 
         for ( sal_uInt16 nW = nStart; nW <= nEnd; nW++ )
         {
-            if ( ( pC->GetParaAttribs().GetItemState( nW, sal_False ) != SFX_ITEM_ON )
-                    && ( rAttribs.GetItemState( nW, sal_False ) == SFX_ITEM_ON ) )
+            if ( ( pC->GetParaAttribs().GetItemState( nW, false ) != SFX_ITEM_ON )
+                    && ( rAttribs.GetItemState( nW, false ) == SFX_ITEM_ON ) )
             {
                 pC->GetParaAttribs().Put( rAttribs.Get( nW ) );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
     }
@@ -837,7 +837,7 @@ void BinTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nSt
 
 sal_Bool BinTextObject::IsFieldObject() const
 {
-    return BinTextObject::GetField() ? sal_True : sal_False;
+    return BinTextObject::GetField() ? true : false;
 }
 
 const SvxFieldItem* BinTextObject::GetField() const
@@ -872,15 +872,15 @@ sal_Bool BinTextObject::HasField( TypeId aType ) const
             if ( pAttr->GetItem()->Which() == EE_FEATURE_FIELD )
             {
                 if ( !aType )
-                    return sal_True;
+                    return true;
 
                 const SvxFieldData* pFldData = ((const SvxFieldItem*)pAttr->GetItem())->GetField();
                 if ( pFldData && pFldData->IsA( aType ) )
-                    return sal_True;
+                    return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 SfxItemSet BinTextObject::GetParaAttribs( sal_uInt16 nPara ) const
@@ -898,7 +898,7 @@ void BinTextObject::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs
 
 sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
-    sal_Bool bChanged = sal_False;
+    sal_Bool bChanged = false;
 
     for ( sal_uInt16 nPara = GetContents().Count(); nPara; )
     {
@@ -911,7 +911,7 @@ sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
             {
                 pC->GetAttribs().Remove( nAttr );
                 DestroyAttrib( pAttr );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
     }
@@ -924,7 +924,7 @@ sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
 
 sal_Bool BinTextObject::RemoveParaAttribs( sal_uInt16 _nWhich )
 {
-    sal_Bool bChanged = sal_False;
+    sal_Bool bChanged = false;
 
     for ( sal_uInt16 nPara = GetContents().Count(); nPara; )
     {
@@ -933,7 +933,7 @@ sal_Bool BinTextObject::RemoveParaAttribs( sal_uInt16 _nWhich )
         if ( !_nWhich )
         {
             if( pC->GetParaAttribs().Count() )
-                bChanged = sal_True;
+                bChanged = true;
             pC->GetParaAttribs().ClearItem();
         }
         else
@@ -941,7 +941,7 @@ sal_Bool BinTextObject::RemoveParaAttribs( sal_uInt16 _nWhich )
             if ( pC->GetParaAttribs().GetItemState( _nWhich ) == SFX_ITEM_ON )
             {
                 pC->GetParaAttribs().ClearItem( _nWhich );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
     }
@@ -959,9 +959,9 @@ sal_Bool BinTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eF
     {
         ContentInfo* pC = GetContents().GetObject( nPara );
         if ( ( pC->GetFamily() == eFamily ) && ( pC->GetStyle() == rName ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 void BinTextObject::GetStyleSheet( sal_uInt16 nPara, XubString& rName, SfxStyleFamily& rFamily ) const
@@ -989,7 +989,7 @@ sal_Bool BinTextObject::ImpChangeStyleSheets(
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
     const sal_uInt16 nParagraphs = GetContents().Count();
-    sal_Bool bChanges = sal_False;
+    sal_Bool bChanges = false;
 
     for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
     {
@@ -1000,7 +1000,7 @@ sal_Bool BinTextObject::ImpChangeStyleSheets(
             {
                 pC->GetStyle() = rNewName;
                 pC->GetFamily() = eNewFamily;
-                bChanges = sal_True;
+                bChanges = true;
             }
         }
     }
@@ -1029,7 +1029,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     sal_uInt16 nVer = 602;
     rOStream << nVer;
 
-    rOStream << bOwnerOfPool;
+    rOStream << static_cast<sal_Bool>(bOwnerOfPool);
 
     // First store the pool, later only the Surregate
     if ( bOwnerOfPool )
@@ -1058,14 +1058,14 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         rtl::OStringBuffer aBuffer(rtl::OUStringToOString(pC->GetText(), eEncoding));
 
         // Symbols?
-        sal_Bool bSymbolPara = sal_False;
+        sal_Bool bSymbolPara = false;
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
                 aBuffer = rtl::OStringBuffer(rtl::OUStringToOString(pC->GetText(), RTL_TEXTENCODING_SYMBOL));
-                bSymbolPara = sal_True;
+                bSymbolPara = true;
             }
         }
         for ( sal_uInt16 nA = 0; nA < pC->GetAttribs().Count(); nA++ )
@@ -1164,10 +1164,10 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     rOStream << nUserType;
     rOStream << nObjSettings;
 
-    rOStream << bVertical;
+    rOStream << static_cast<sal_Bool>(bVertical);
     rOStream << nScriptType;
 
-    rOStream << bStoreUnicodeStrings;
+    rOStream << static_cast<sal_Bool>(bStoreUnicodeStrings);
     if ( bStoreUnicodeStrings )
     {
         for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1194,7 +1194,9 @@ void BinTextObject::CreateData( SvStream& rIStream )
     // The text object was first created with the current setting of
     // pTextObjectPool.
     sal_Bool bOwnerOfCurrent = bOwnerOfPool;
-    rIStream >> bOwnerOfPool;
+    sal_Bool b;
+    rIStream >> b;
+    bOwnerOfPool = b;
 
     if ( bOwnerOfCurrent && !bOwnerOfPool )
     {
@@ -1285,14 +1287,14 @@ void BinTextObject::CreateData( SvStream& rIStream )
         // But check for paragraph and character symbol attribs here,
         // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
 
-        sal_Bool bSymbolPara = sal_False;
+        sal_Bool bSymbolPara = false;
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
                 pC->GetText() = rtl::OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
-                bSymbolPara = sal_True;
+                bSymbolPara = true;
             }
         }
 
@@ -1391,7 +1393,9 @@ void BinTextObject::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 601 )
     {
-        rIStream >> bVertical;
+        sal_Bool bTmp;
+        rIStream >> bTmp;
+        bVertical = bTmp;
     }
 
     if ( nVersion >= 602 )
