@@ -217,7 +217,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 class ScSortInfoArray
 {
 private:
-    ScSortInfo***    pppInfo;
+    ScSortInfo***   pppInfo;
     SCSIZE          nCount;
     SCCOLROW        nStart;
     sal_uInt16      nUsedSorts;
@@ -245,6 +245,7 @@ public:
                                 delete ppInfo[j];
                             delete [] ppInfo;
                         }
+                        delete[] pppInfo;
                     }
     ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
                     { return (pppInfo[nSort])[ nInd - nStart ]; }
