@@ -37,7 +37,6 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include <queue>
 
 typedef ::std::queue<TelePacket> TelePacketQueue;
