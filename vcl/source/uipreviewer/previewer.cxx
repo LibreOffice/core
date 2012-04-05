@@ -84,6 +84,7 @@ int UIPreviewApp::Main()
         if (pDialog)
         {
             pDialog->SetText(rtl::OUString("LibreOffice ui-previewer"));
+            pDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
             pDialog->Execute();
         }
         else
