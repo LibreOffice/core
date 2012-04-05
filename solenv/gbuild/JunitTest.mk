@@ -124,13 +124,23 @@ $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(call 
 
 endef
 
+define gb_JunitTest_add_customtarget_dependency
+$(call gb_JavaClassSet_add_customtarget_dependency,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_JunitTest_add_customtarget_dependencies
+$(foreach dependency,$(2),$(call gb_JunitTest_add_customtarget_dependency,$(1),$(dependency)))
+
+endef
+
 define gb_JunitTest_add_package_dependency
 $(call gb_JavaClassSet_add_package_dependency,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_JunitTest_add_package_dependencies
-$(call gb_JavaClassSet_add_package_dependencies,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+$(foreach dependency,$(2),$(call gb_JunitTest_add_package_dependency,$(1),$(dependency)))
 
 endef
 
@@ -152,6 +162,9 @@ gb_JunitTest_add_sourcefile :=
 gb_JunitTest_add_sourcefiles :=
 gb_JunitTest_add_jar :=
 gb_JunitTest_add_jars :=
+gb_JunitTest_add_jar_classset :=
+gb_JunitTest_add_customtarget_dependency :=
+gb_JunitTest_add_customtarget_dependencies :=
 gb_JunitTest_add_package_dependency :=
 gb_JunitTest_add_package_dependencies :=
 

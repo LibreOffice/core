@@ -201,13 +201,23 @@ $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
+define gb_Jar_add_customtarget_dependency
+$(call gb_JavaClassSet_add_customtarget_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_Jar_add_customtarget_dependencies
+$(foreach customtarget,$(2),$(call gb_Jar_add_customtarget_dependency,$(1),$(customtarget)))
+
+endef
+
 define gb_Jar_add_package_dependency
 $(call gb_JavaClassSet_add_package_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_Jar_add_package_dependencies
-$(call gb_JavaClassSet_add_package_dependencies,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(foreach package,$(2),$(call gb_Jar_add_package_dependency,$(1),$(package)))
 
 endef
 
