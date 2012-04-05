@@ -68,13 +68,6 @@ namespace drawinglayer
             return *this;
         }
 
-        bool SdrFillTextAttribute::isDefault() const
-        {
-            return(getFill().isDefault()
-                && getFillFloatTransGradient().isDefault()
-                && getText().isDefault());
-        }
-
         bool SdrFillTextAttribute::operator==(const SdrFillTextAttribute& rCandidate) const
         {
             return(getFill() == rCandidate.getFill()

@@ -56,9 +56,6 @@ namespace drawinglayer
             SdrFillTextAttribute(const SdrFillTextAttribute& rCandidate);
             SdrFillTextAttribute& operator=(const SdrFillTextAttribute& rCandidate);
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
-
             // compare operator
             bool operator==(const SdrFillTextAttribute& rCandidate) const;
 
