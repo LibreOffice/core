@@ -1240,6 +1240,59 @@ endef
 
 endif # SYSTEM_HSQLDB
 
+
+ifeq ($(SYSTEM_POSTGRESQL),YES)
+
+define gb_LinkTarget__use_postgresql
+
+$(call gb_LinkTarget_add_defs,$(1),\
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(POSTGRESQL_INC) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lpq \
+)
+
+$(call gb_LinkTarget_add_ldflags,$(1),\
+	$(POSTGRESQL_LIB) \
+)
+
+endef
+
+else # !SYSTEM_POSTGRESQL
+
+define gb_LinkTarget__use_postgresql
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR_FOR_BUILD)/inc/postgresql \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	pq \
+)
+
+ifeq ($(GUI)$(COM),WNTMSC)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	openssl \
+	secur32 \
+	ws2_32 \
+	$(if $(filter YES,$(WITH_LDAP)),ldap) \
+)
+endif
+
+endef
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	pq \
+))
+
+endif # SYSTEM_POSTGRESQL
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 

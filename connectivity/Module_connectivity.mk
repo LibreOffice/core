@@ -83,4 +83,13 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_postgresql-sdbc \
+	Library_postgresql-sdbc-impl \
+	Package_postgresql-sdbc \
+	Rdb_postgresql-sdbc \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

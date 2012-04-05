@@ -525,6 +525,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
+    postgresql-sdbc \
+    postgresql-sdbc-impl \
     simplecanvas \
     slideshow \
     stringresource \
