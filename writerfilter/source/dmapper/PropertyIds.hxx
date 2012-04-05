@@ -187,6 +187,7 @@ enum PropertyIds
         ,PROP_IS_LANDSCAPE
         ,PROP_IS_ON
         ,PROP_IS_SPLIT_ALLOWED
+        ,PROP_IS_VISIBLE
         ,PROP_KEYWORDS
         ,PROP_LEFT_BORDER
         ,PROP_LEFT_BORDER_DISTANCE

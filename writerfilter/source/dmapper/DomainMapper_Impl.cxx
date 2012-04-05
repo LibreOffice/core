@@ -2157,6 +2157,8 @@ void DomainMapper_Impl::handleFieldAsk
         uno::Reference< beans::XPropertySet > xMaster =
             FindOrCreateFieldMaster
             ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
+        // An ASK field is always a string of characters
+        xMaster->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
 
         // attach the master to the field
         uno::Reference< text::XDependentTextField > xDependentField
@@ -2170,6 +2172,9 @@ void DomainMapper_Impl::handleFieldAsk
         xFieldProperties->setPropertyValue(
             rPropNameSupplier.GetName(PROP_HINT),
             uno::makeAny( sHint ));
+        xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+        // The ASK has no field value to display
+        xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_IS_VISIBLE), uno::makeAny(sal_False));
     }
     else
     {
@@ -2889,6 +2894,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                         bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
                         ::rtl::OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(),
                                 (bPageRef ? sizeof(" PAGEREF") : sizeof(" REF")));
+
+                        // Do we need a GetReference (default) or a GetExpression field?
+                        uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY );
+                        uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+
+                        if (!xFieldMasterAccess->hasByName("com.sun.star.text.FieldMaster.SetExpression." + sBookmark))
+                        {
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE),
                             uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
@@ -2919,6 +2931,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                         xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
+                        }
+                        else
+                        {
+                            xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField.GetExpression");
+                            xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
+                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_CONTENT), uno::makeAny(sBookmark));
+                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+                        }
                     }
                     break;
                     case FIELD_REVNUM       : break;
@@ -3067,8 +3087,11 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
                     else
                     {
                         uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
+                        // In case of SetExpression, the field result contains the content of the variable.
+                        uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
+                        bool bIsSetExpression = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression");
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_CURRENT_PRESENTATION),
+                                rPropNameSupplier.GetName(bIsSetExpression ? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
                     }
                 }
