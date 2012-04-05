@@ -729,6 +729,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             // further checks for filters only if they are preselected: ASCII, HTML, RTF, DBase
                             // without the preselection other filters (Writer) take precedence
                             // DBase can't be detected reliably, so it also needs preselection
+
                             bool bMaybeText = lcl_MayBeAscii( rStr );
 
                             // get file header
@@ -736,21 +737,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             const sal_Size nTrySize = 80;
                             ByteString aHeader = read_uInt8s_AsOString(rStr, nTrySize);
 
-                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
-                            {
-                                // test for HTML
-                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
-                                {
-                                    pFilter = pPreselectedFilter;
-                                }
-                                else
-                                {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
-                                    if ( bIsXLS )
-                                        bFakeXLS = true;
-                                }
-                            }
-                            else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                            if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
                             {
                                 // test for RTF
                                 pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
@@ -769,6 +756,28 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 pFilter = pPreselectedFilter;
                             else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
                                 pFilter = pPreselectedFilter;
+                            else if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            {
+                                // test for HTML
+
+                                // HTMLParser::IsHTMLFormat() is convinced that
+                                // anything containing a valid HTML tag would
+                                // indeed be HTML, which is a rather idiotic
+                                // assumption for us in the case of
+                                // "foo <br> bar" with a preselected CSV
+                                // filter. So keep this detection to the end.
+
+                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
+                                {
+                                    pFilter = pPreselectedFilter;
+                                }
+                                else
+                                {
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                    if ( bIsXLS )
+                                        bFakeXLS = true;
+                                }
+                            }
                         }
                     }
                 }
