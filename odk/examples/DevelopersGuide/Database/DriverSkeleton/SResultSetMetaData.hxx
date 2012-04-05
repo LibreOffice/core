@@ -56,7 +56,7 @@ namespace connectivity
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor, which is required for returning objects:
             OResultSetMetaData(OConnection* _pConnection) : m_pConnection(_pConnection){}
 
             /// Avoid ambigous cast error from the compiler.

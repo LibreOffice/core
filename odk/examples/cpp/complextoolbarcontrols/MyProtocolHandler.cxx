@@ -147,8 +147,8 @@ void SAL_CALL MyProtocolHandler::initialize( const Sequence< Any >& aArguments )
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
     {
-        // das erste Argument ist immer der Frame, da ein ProtocolHandler den braucht um Zugriff
-        // auf den Context zu haben, in dem er aufgerufen wird
+        // the first Argument is always the Frame, as a ProtocolHandler needs to have access
+        // to the context in which it is invoked.
         aArguments[0] >>= xFrame;
         mxFrame = xFrame;
     }
@@ -167,7 +167,7 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
         Reference < XTextViewCursorSupplier > xCursor( xCtrl, UNO_QUERY );
         Reference < XSpreadsheetView > xView( xCtrl, UNO_QUERY );
         if ( !xCursor.is() && !xView.is() )
-            // ohne ein entsprechendes Dokument funktioniert der Handler nicht
+            // without an appropriate corresponding document the handler doesn't function
             return xRet;
 
         if ( aURL.Path == "Command1" || aURL.Path == "Command2" || aURL.Path == "Command3" || aURL.Path == "Command4" || aURL.Path == "Command5"

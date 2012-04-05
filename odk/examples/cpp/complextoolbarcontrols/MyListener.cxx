@@ -99,8 +99,8 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
                         !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument")))
                        );
 
-    // Wir interessieren uns nur für Writer und Calc. Werden hier aber für
-    // alle neu geöffneten Dokumente benachrichtigt ...
+    // We are interested only in Writer and Calc. However, here we are
+    // notified of all newly opened Documents...
     if (!bCalc && !bWriter)
         return css::uno::Any();
 

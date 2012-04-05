@@ -43,26 +43,26 @@ namespace connectivity
 {
     struct OTypeInfo
     {
-        ::rtl::OUString aTypeName;      // Name des Types in der Datenbank
-        ::rtl::OUString aLiteralPrefix; // Prefix zum Quoten
-        ::rtl::OUString aLiteralSuffix; // Suffix zum Quoten
-        ::rtl::OUString aCreateParams;  // Parameter zum Erstellen
+        ::rtl::OUString aTypeName;      // Name of the the type in the database
+        ::rtl::OUString aLiteralPrefix; // Prefix for literals
+        ::rtl::OUString aLiteralSuffix; // Suffix for literals
+        ::rtl::OUString aCreateParams;  // Parameters to create
         ::rtl::OUString aLocalTypeName;
 
-        sal_Int32       nPrecision;     // Laenge des Types
+        sal_Int32       nPrecision;     // Length of the types
 
-        sal_Int16       nMaximumScale;  // Nachkommastellen
-        sal_Int16       nMinimumScale;  // Min Nachkommastellen
+        sal_Int16       nMaximumScale;  // Decimal places (precision)
+        sal_Int16       nMinimumScale;  // Min decimal places (precision)
 
-        sal_Int16       nType;          // Datenbanktyp
-        sal_Int16       nSearchType;    // kann nach dem Typen gesucht werden
+        sal_Int16       nType;          // Database type
+        sal_Int16       nSearchType;    // Can search for the type
         sal_Int16       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
 
-        sal_Bool        bCurrency       : 1,    // Waehrung
-                        bAutoIncrement  : 1,    // Ist es ein automatisch incrementierendes Feld
-                        bNullable       : 1,    // Kann das Feld NULL annehmen
-                        bCaseSensitive  : 1,    // Ist der Type Casesensitive
-                        bUnsigned       : 1,    // Ist der Type Unsigned
+        sal_Bool        bCurrency       : 1,    // Currency
+                        bAutoIncrement  : 1,    // Is this field auto incrementing?
+                        bNullable       : 1,    // Can this field assume a NULL value?
+                        bCaseSensitive  : 1,    // Is this type case-sensitive?
+                        bUnsigned       : 1,    // Is this type unsigned?
                         bEmpty_1        : 1,    // for later use
                         bEmpty_2        : 1;
 

@@ -94,7 +94,7 @@ namespace connectivity
             virtual ~OPreparedStatement();
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor, which is required for returning objects:
             OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql);
 
             //XInterface

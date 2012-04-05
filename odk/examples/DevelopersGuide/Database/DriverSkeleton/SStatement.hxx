@@ -159,7 +159,7 @@ namespace connectivity
         protected:
             virtual ~OStatement(){}
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor, which is required for returning objects:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
             DECLARE_SERVICE_INFO();
 
