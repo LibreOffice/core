@@ -1110,8 +1110,7 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
     rSequence[nIndex].Name = rtl::OUString (
         RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ViewId ) );
-    rtl::OUStringBuffer sBuffer (
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "view" ) ) );
+    rtl::OUStringBuffer sBuffer ( rtl::OUString( "view" ) );
     sBuffer.append( static_cast<sal_Int32>(nViewID));
     rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();
 
@@ -1187,11 +1186,11 @@ void ViewShell::AdaptDefaultsForChart(
             // set background to transparent (none)
             uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
             if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                xPageProp->setPropertyValue( ::rtl::OUString( "FillStyle" ),
                                              uno::makeAny( drawing::FillStyle_NONE ));
             // set no border
             if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
+                xPageProp->setPropertyValue( ::rtl::OUString( "LineStyle" ),
                                              uno::makeAny( drawing::LineStyle_NONE ));
         }
         catch( const uno::Exception & )
