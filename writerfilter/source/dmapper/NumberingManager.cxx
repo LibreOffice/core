@@ -125,8 +125,9 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         break;
 #endif
         case NS_rtf::LN_IXCHFOLLOW:
+        case NS_ooxml::LN_CT_Lvl_suff:
             m_nXChFollow = nValue;
-  break;
+        break;
         case NS_ooxml::LN_CT_TabStop_pos:
             m_nTabstop = nValue;
         break;
@@ -835,6 +836,23 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (m_pCurrentDefinition->GetCurrentLevel().get())
                     m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
             break;
+            case NS_ooxml::LN_CT_Lvl_suff:
+            {
+                if (m_pCurrentDefinition->GetCurrentLevel().get())
+                {
+                    SvxNumberFormat::LabelFollowedBy value = SvxNumberFormat::LISTTAB;
+                    if( rSprm.getValue()->getString() == "tab" )
+                        value = SvxNumberFormat::LISTTAB;
+                    else if( rSprm.getValue()->getString() == "space" )
+                        value = SvxNumberFormat::SPACE;
+                    else if( rSprm.getValue()->getString() == "nothing" )
+                        value = SvxNumberFormat::NOTHING;
+                    else
+                        SAL_WARN( "writerfilter", "Unknown ST_LevelSuffix value "
+                            << rSprm.getValue()->getString());
+                    m_pCurrentDefinition->GetCurrentLevel()->SetValue( nSprmId, value );
+                }
+            }
             case NS_ooxml::LN_CT_Lvl_lvlText:
             case NS_ooxml::LN_CT_Lvl_rPr : //contains LN_EG_RPrBase_rFonts
             {
@@ -880,10 +898,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if(pProperties.get())
                     pProperties->resolve(*this);
             }
-            break;
-            case NS_ooxml::LN_CT_Lvl_suff:
-                //todo: currently unsupported suffix
-                //can be: "none", "space", "tab"
             break;
             case NS_ooxml::LN_CT_Lvl_pStyle:
             {

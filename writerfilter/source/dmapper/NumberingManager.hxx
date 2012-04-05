@@ -8,6 +8,8 @@
 #include <dmapper/DomainMapper.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 
+#include <editeng/numitem.hxx>
+
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 namespace writerfilter {
@@ -48,7 +50,7 @@ public:
         ,m_nFPrev(-1)
         ,m_nFPrevSpace(-1)
         ,m_nFWord6(-1)
-        ,m_nXChFollow(-1)
+        ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
         {}
 
