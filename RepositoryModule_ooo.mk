@@ -86,6 +86,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     package \
     padmin \
     psprint_config \
+    rdbmaker \
     regexp \
     reportdesign \
     ridljar \

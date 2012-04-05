@@ -87,6 +87,7 @@ psprint_config\
 qadevOOo\
 regexp\
 reportdesign\
+rdbmaker\
 ridljar\
 rsc\
 sal\
@@ -214,7 +215,6 @@ postgresql\
 postprocess\
 python\
 pyuno\
-rdbmaker\
 readlicense_oo\
 redland\
 registry\
