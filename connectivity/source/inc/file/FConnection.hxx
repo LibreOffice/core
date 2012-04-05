@@ -31,7 +31,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #ifndef _MAP_
 #include <map>
 #endif

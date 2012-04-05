@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include <map>
 #include "connectivity/CommonTools.hxx"
 #include "OTypeInfo.hxx"

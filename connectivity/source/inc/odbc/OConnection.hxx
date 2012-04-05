@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "odbc/OFunctiondefs.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include "connectivity/CommonTools.hxx"
 #include "TConnection.hxx"
 #include "OTypeInfo.hxx"

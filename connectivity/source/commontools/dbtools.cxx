@@ -87,7 +87,7 @@
 
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 
 #include <algorithm>
 

@@ -43,7 +43,7 @@
 #include "connectivity/sqliterator.hxx"
 #include "connectivity/sqlparse.hxx"
 #include <connectivity/FValue.hxx>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/propertycontainer.hxx>

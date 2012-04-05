@@ -32,7 +32,7 @@
 #include "NDriver.hxx"
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/warningscontainer.hxx"

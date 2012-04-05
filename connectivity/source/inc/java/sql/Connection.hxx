@@ -31,7 +31,7 @@
 #include "java/lang/Object.hxx"
 #include "TConnection.hxx"
 #include "connectivity/CommonTools.hxx"
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include <cppuhelper/weakref.hxx>
 #include "AutoRetrievingBase.hxx"
 #include "java/sql/ConnectionLog.hxx"

@@ -43,6 +43,7 @@ $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/filtermanage
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/formattedcolumnvalue.hxx,formattedcolumnvalue.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/FValue.hxx,FValue.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/IParseContext.hxx,IParseContext.hxx))
+$(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/OSubComponent.hxx,OSubComponent.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/ParameterCont.hxx,ParameterCont.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/parameters.hxx,parameters.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/paramwrapper.hxx,paramwrapper.hxx))

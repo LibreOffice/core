@@ -32,7 +32,7 @@
 
 #include "MCatalog.hxx"
 #include "MColumnAlias.hxx"
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include "TConnection.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
