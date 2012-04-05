@@ -33,10 +33,12 @@
 
 # Some extensions that are installed indepently of the language.
 
-#[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
+# the presenter console extension
+[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
     file://presenter/presenter-screen.oxt
 
-#[ language=all && ENABLE_MINIMIZER=YES ]
+# the presentation minimizer
+[ language=all && ENABLE_MINIMIZER=YES ]
     file://minimizer/presentation-minimizer.oxt
 
 
