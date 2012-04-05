@@ -1593,16 +1593,16 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
                 Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_QUERY_THROW );
                 Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY_THROW );
 
-                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), Any( OUString( rText ) ) );
-                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), Any( sTargetURL ) );
+                xPropSet->setPropertyValue( OUString( "Label" ), Any( OUString( rText ) ) );
+                xPropSet->setPropertyValue( OUString( "TargetURL" ), Any( sTargetURL ) );
 
                 if( rTarget.Len() )
-                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), Any( OUString( rTarget ) ) );
+                    xPropSet->setPropertyValue( OUString( "TargetFrame" ), Any( OUString( rTarget ) ) );
 
-                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any( form::FormButtonType_URL ) );
+                xPropSet->setPropertyValue( OUString( "ButtonType" ), Any( form::FormButtonType_URL ) );
                 if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
                 {
-                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
+                    xPropSet->setPropertyValue( OUString( "DispatchURLInternal" ), Any( sal_True ) );
                 }
             }
             else
@@ -1628,15 +1628,15 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
-        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), Any( OUString( rText ) ) );
-        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), Any( sTargetURL ) );
+        xPropSet->setPropertyValue( OUString( "Label" ), Any( OUString( rText ) ) );
+        xPropSet->setPropertyValue( OUString( "TargetURL" ), Any( sTargetURL ) );
 
         if( rTarget.Len() )
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), Any( OUString( rTarget ) ) );
+            xPropSet->setPropertyValue( OUString( "TargetFrame" ), Any( OUString( rTarget ) ) );
 
-        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any(  form::FormButtonType_URL ) );
+        xPropSet->setPropertyValue( OUString( "ButtonType" ), Any(  form::FormButtonType_URL ) );
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
+            xPropSet->setPropertyValue( OUString( "DispatchURLInternal" ), Any( sal_True ) );
 
         Point aPos;
 

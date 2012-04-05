@@ -84,7 +84,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
-    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("masterviewtoolbar")));
+    ::rtl::OUString("masterviewtoolbar"));
 }
 
 namespace sd {
@@ -389,7 +389,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( xMgr.is() )
     {
         mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 >(
-                           xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" )) ),
+                           xMgr->createInstance( ::rtl::OUString("com.sun.star.scanner.ScannerManager" ) ),
                            ::com::sun::star::uno::UNO_QUERY );
 
         if( mxScannerManager.is() )

@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 #undef OUSTRING // Remove definition made in the SFX
-#define OUSTRING(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+#define OUSTRING(s) (::rtl::OUString(s))
 
 namespace {
 

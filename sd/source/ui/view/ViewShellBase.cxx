@@ -1142,14 +1142,14 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     {
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
-        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
+        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( "com.sun.star.frame.ModuleManager") ), UNO_QUERY_THROW );
         Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
         if( !aModuleIdentifier.isEmpty() )
         {
-            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ) ) ), UNO_QUERY );
+            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( "com.sun.star.frame.UICommandDescription" ) ), UNO_QUERY );
             if( xNameAccess.is() )
             {
                 Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
@@ -1241,7 +1241,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                 pHelper->GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
             pHelper->RunOnConfigurationEvent(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd")),
+                ::rtl::OUString("ConfigurationUpdateEnd"),
                 CurrentPageSetter(mrBase));
         }
     }

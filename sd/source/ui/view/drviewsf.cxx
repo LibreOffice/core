@@ -138,13 +138,13 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
 
                         form::FormButtonType eButtonType = form::FormButtonType_URL;
-                        const OUString sButtonType( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) );
+                        const OUString sButtonType( "ButtonType" );
                         if(xPropInfo->hasPropertyByName( sButtonType ) && (xPropSet->getPropertyValue( sButtonType ) >>= eButtonType ) )
                         {
                             OUString aString;
 
                             // Label
-                            const OUString sLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+                            const OUString sLabel( "Label" );
                             if(xPropInfo->hasPropertyByName(sLabel))
                             {
                                 if( xPropSet->getPropertyValue(sLabel) >>= aString )
@@ -152,7 +152,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // URL
-                            const OUString sTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+                            const OUString sTargetURL( "TargetURL" );
                             if(xPropInfo->hasPropertyByName(sTargetURL))
                             {
                                 if( xPropSet->getPropertyValue(sTargetURL) >>= aString )
@@ -160,7 +160,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // Target
-                            const OUString sTargetFrame( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ) );
+                            const OUString sTargetFrame( "TargetFrame" );
                             if(xPropInfo->hasPropertyByName(sTargetFrame) )
                             {
                                 if( xPropSet->getPropertyValue(sTargetFrame) >>= aString )

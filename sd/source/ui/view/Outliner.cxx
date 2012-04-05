@@ -212,7 +212,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
             Any                     aAny;
 
             aAny = aLinguConfig.GetProperty(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_SPELL_AUTO )) );
+                rtl::OUString( UPN_IS_SPELL_AUTO ) );
             aAny >>= bOnlineSpell;
         }
         catch( ... )
