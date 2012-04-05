@@ -334,7 +334,7 @@ IMPL_LINK( SmFontDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTDIALOG" ) ), &aHelpButton1 );
+        pHelp->Start( rtl::OUString( "HID_SMA_FONTDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -457,7 +457,7 @@ IMPL_LINK( SmFontSizeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTSIZEDIALOG" ) ), &aHelpButton1 );
+        pHelp->Start( rtl::OUString( "HID_SMA_FONTSIZEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -577,7 +577,7 @@ IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTTYPEDIALOG" ) ), &aHelpButton1 );
+        pHelp->Start( rtl::OUString( "HID_SMA_FONTTYPEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -790,7 +790,7 @@ IMPL_LINK( SmDistanceDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_DISTANCEDIALOG" ) ), &aHelpButton1 );
+        pHelp->Start( rtl::OUString( "HID_SMA_DISTANCEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -1113,7 +1113,7 @@ IMPL_LINK( SmAlignDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_ALIGNDIALOG" ) ), &aHelpButton1 );
+        pHelp->Start( rtl::OUString( "HID_SMA_ALIGNDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -1559,7 +1559,7 @@ IMPL_LINK( SmSymbolDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_SYMBOLDIALOG" ) ), &aHelpBtn );
+        pHelp->Start( rtl::OUString( "HID_SMA_SYMBOLDIALOG" ), &aHelpBtn );
     }
     return 0;
 }
@@ -2096,7 +2096,7 @@ IMPL_LINK( SmSymDefineDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_SYMDEFINEDIALOG" ) ), &aHelpBtn );
+        pHelp->Start( rtl::OUString( "HID_SMA_SYMDEFINEDIALOG" ), &aHelpBtn );
     }
     return 0;
 }
