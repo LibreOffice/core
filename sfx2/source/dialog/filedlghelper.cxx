@@ -1641,8 +1641,17 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 void FileDialogHelper_Impl::verifyPath()
 {
 #ifdef UNX
+    static char const s_FileScheme[] = "file://";
+    if (0 != rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
+                maPath.getStr(), maPath.getLength(),
+                s_FileScheme, RTL_CONSTASCII_LENGTH(s_FileScheme)))
+    {
+        return;
+    }
+    const OString sFullPath = OUStringToOString(
+            maPath.copy(RTL_CONSTASCII_LENGTH(s_FileScheme)) + maFileName,
+            osl_getThreadTextEncoding() );
     struct stat aFileStat;
-    const OString sFullPath = OUStringToOString( maPath.copy(RTL_CONSTASCII_LENGTH("file://")) + maFileName, osl_getThreadTextEncoding() );
     stat( sFullPath.getStr(), &aFileStat );
     // lp#905355, fdo#43895
     // Check that the file has read only permission and is in /tmp -- this is
