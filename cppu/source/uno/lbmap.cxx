@@ -683,7 +683,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     {
         OUString aMappingName(
             getMappingName( pFrom, pTo, pAddPurpose ? OUString(pAddPurpose) : OUString() ) );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         OString cstr( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "> inserting new mapping: %s", cstr.getStr() );
 #endif
@@ -723,7 +723,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
         rData.aMapping2Entry.erase( pEntry->pMapping );
         rData.aName2Entry.erase( pEntry->aMappingName );
         aGuard.clear();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         OString cstr( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
         OSL_TRACE( "> revoking mapping %s", cstr.getStr() );
 #endif
