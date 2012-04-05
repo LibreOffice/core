@@ -83,6 +83,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
         else
             pWindow = new VclHButtonBox(pParent);
     }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkGrid")))
+    {
+        pWindow = new VclGrid(pParent);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
     {
         pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
@@ -357,6 +361,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
         {
             name = reader.getAttributeValue(false);
             rtl::OString sKey(name.begin, name.length);
+            sKey = sKey.replace('_', '-');
             reader.nextItem(
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
@@ -371,10 +376,19 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 pCurrent->setChildProperty(sKey, static_cast<sal_uInt16>(sValue.toInt32()));
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("pack_type")))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("pack-type")))
             {
                 sal_Int32 nPackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
-                pCurrent->setChildProperty(rtl::OString("pack-type"), nPackType);
+                pCurrent->setChildProperty(sKey, nPackType);
+            }
+            else if (
+                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-attach")) ||
+                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-attach")) ||
+                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) ||
+                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))
+                    )
+            {
+                pCurrent->setChildProperty(sKey, sValue.toInt32());
             }
             else
                 fprintf(stderr, "unknown packing %s\n", sKey.getStr());
@@ -396,7 +410,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
             reader.nextItem(
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
-            rMap[sProperty] = sValue;
+            rMap[sProperty] = sValue.replace('_', '-');;
         }
     }
 }
