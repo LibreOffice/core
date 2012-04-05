@@ -856,11 +856,11 @@ static int osl_file_queryLocking (sal_uInt32 uFlags)
 
 #ifdef UNX
 
-oslFileError
-SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
+static oslFileError
+osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char *path )
 {
     oslFileError eRet;
-    FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM);
+    FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM, path);
     if (!pImpl)
     {
         eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
@@ -877,6 +877,12 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
     pImpl->m_buffer = (sal_uInt8*) address;
 
     return osl_File_E_None;
+}
+
+oslFileError
+SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
+{
+    return osl_openMemoryAsFile( address, size, pHandle, "<anon>" );
 }
 
 #endif
@@ -901,20 +907,27 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     /* Opening a file from /assets read-only means
      * we should mmap it from the .apk file
      */
-    if (!(uFlags & osl_File_OpenFlag_Write) &&
-        strncmp (cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
+    if (strncmp (cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
     {
+        if (uFlags & osl_File_OpenFlag_Write)
+        {
+            // Or should we just silently "open" it read-only and let write
+            // attempts, if any, fail then later?
+            OSL_TRACE("osl_openFile(%s, writeable), not possible!", cpFilePath);
+            errno = EPERM;
+            return osl_File_E_PERM;
+        }
         void *address;
         size_t size;
         address = lo_apkentry(cpFilePath, &size);
-        OSL_TRACE("osl_openFile(%s): %p",
+        OSL_TRACE("osl_openFile(%s) => %p",
                   cpFilePath, address);
         if (address == NULL)
         {
             errno = ENOENT;
             return osl_File_E_NOENT;
         }
-        return osl_openMemoryAsFile(address, size, pHandle);
+        return osl_openMemoryAsFile(address, size, pHandle, cpFilePath);
     }
 #endif
 
@@ -952,7 +965,14 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     /* open the file */
     int fd = open( cpFilePath, flags, mode );
     if (-1 == fd)
-        return oslTranslateFileError (OSL_FET_ERROR, errno);
+    {
+        int saved_errno = errno;
+        OSL_TRACE("osl_openFile(%s, %s) failed: %s",
+                  cpFilePath,
+                  flags & O_RDWR ? "writeable":"readonly",
+                  strerror(saved_errno));
+        return oslTranslateFileError (OSL_FET_ERROR, saved_errno);
+    }
 
     /* reset O_NONBLOCK flag */
     if (flags & O_NONBLOCK)
@@ -960,13 +980,25 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         int f = fcntl (fd, F_GETFL, 0);
         if (-1 == f)
         {
-            eRet = oslTranslateFileError (OSL_FET_ERROR, errno);
+            int saved_errno = errno;
+            OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_GETFL) failed: %s",
+                      cpFilePath,
+                      flags & O_RDWR ? "writeable":"readonly",
+                      fd,
+                      strerror(saved_errno));
+            eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
         }
         if (-1 == fcntl (fd, F_SETFL, (f & ~O_NONBLOCK)))
         {
-            eRet = oslTranslateFileError (OSL_FET_ERROR, errno);
+            int saved_errno = errno;
+            OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_SETFL) failed: %s",
+                      cpFilePath,
+                      flags & O_RDWR ? "writeable":"readonly",
+                      fd,
+                      strerror(saved_errno));
+            eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
         }
@@ -976,13 +1008,21 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     struct stat aFileStat;
     if (-1 == fstat (fd, &aFileStat))
     {
-        eRet = oslTranslateFileError (OSL_FET_ERROR, errno);
+        int saved_errno = errno;
+        OSL_TRACE("osl_openFile(%s, %s): fstat(%d) failed: %s",
+                  cpFilePath,
+                  flags & O_RDWR ? "writeable":"readonly",
+                  fd,
+                  strerror(saved_errno));
+        eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
         (void) close(fd);
         return eRet;
     }
     if (!S_ISREG(aFileStat.st_mode))
     {
         /* we only open regular files here */
+        OSL_TRACE("osl_openFile(%s): not a regular file",
+                  cpFilePath);
         (void) close(fd);
         return osl_File_E_INVAL;
     }
@@ -1011,7 +1051,13 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
 
             if (-1 == fcntl (fd, F_SETLK, &aflock))
             {
-                eRet = oslTranslateFileError (OSL_FET_ERROR, errno);
+                int saved_errno = errno;
+                OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_SETLK) failed: %s",
+                          cpFilePath,
+                          flags & O_RDWR ? "writeable":"readonly",
+                          fd,
+                          strerror(saved_errno));
+                eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
                 (void) close(fd);
                 return eRet;
             }
@@ -1031,9 +1077,10 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
-    OSL_TRACE("osl_openFile(%d, %s) => %s", pImpl->m_fd,
+    OSL_TRACE("osl_openFile(%s, %s) => %d",
+              rtl_string_getStr(pImpl->m_strFilePath),
               flags & O_RDWR ? "writeable":"readonly",
-              rtl_string_getStr(pImpl->m_strFilePath));
+              pImpl->m_fd);
 
     *pHandle = (oslFileHandle)(pImpl);
     return osl_File_E_None;
@@ -1072,6 +1119,8 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     if (pImpl == 0)
         return osl_File_E_INVAL;
 
+    OSL_TRACE("osl_closeFile(%s:%d)", rtl_string_getStr(pImpl->m_strFilePath), pImpl->m_fd);
+
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
         delete pImpl;
@@ -1084,7 +1133,6 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     (void) pthread_mutex_lock (&(pImpl->m_mutex));
 
     /* close(2) implicitly (and unconditionally) unlocks */
-    OSL_TRACE("osl_closeFile(%d) => %s", pImpl->m_fd, rtl_string_getStr(pImpl->m_strFilePath));
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
     {
