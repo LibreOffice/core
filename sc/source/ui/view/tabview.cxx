@@ -407,13 +407,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
     bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
 
-    //  Scrollbar-Einstellungen koennen vom Sfx ueberschrieben werden:
-    SfxScrollingMode eMode = aViewData.GetViewShell()->GetScrollingMode();
-    if ( eMode == SCROLLING_NO )
-        bHScroll = bVScroll = false;
-    else if ( eMode == SCROLLING_YES || eMode == SCROLLING_AUTO )   //! Auto ???
-        bHScroll = bVScroll = true;
-
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScroll = bVScroll = bTabControl = bHeaders = bOutlMode = bHOutline = bVOutline = false;
 
@@ -899,16 +892,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
 
 IMPL_LINK_NOARG(ScTabView, TabBarResize)
 {
-    sal_Bool bHScrollMode = aViewData.IsHScrollMode();
-
-    //  Scrollbar-Einstellungen koennen vom Sfx ueberschrieben werden:
-    SfxScrollingMode eMode = aViewData.GetViewShell()->GetScrollingMode();
-    if ( eMode == SCROLLING_NO )
-        bHScrollMode = false;
-    else if ( eMode == SCROLLING_YES || eMode == SCROLLING_AUTO )   //! Auto ???
-        bHScrollMode = sal_True;
-
-    if( bHScrollMode )
+    if (aViewData.IsHScrollMode())
     {
         const long nOverlap = 0;    // ScrollBar::GetWindowOverlapPixel();
         long nSize = pTabControl->GetSplitSize();
@@ -1571,13 +1555,6 @@ void ScTabView::UpdateShow()
 
     sal_Bool bShowH = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     sal_Bool bShowV = ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
-
-    //  Scrollbar-Einstellungen koennen vom Sfx ueberschrieben werden:
-    SfxScrollingMode eMode = aViewData.GetViewShell()->GetScrollingMode();
-    if ( eMode == SCROLLING_NO )
-        bHScrollMode = bVScrollMode = false;
-    else if ( eMode == SCROLLING_YES || eMode == SCROLLING_AUTO )   //! Auto ???
-        bHScrollMode = bVScrollMode = sal_True;
 
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = false;

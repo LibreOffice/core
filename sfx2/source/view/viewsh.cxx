@@ -301,7 +301,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_bIsShowView(SFX_VIEW_NO_SHOW != (nFlags & SFX_VIEW_NO_SHOW))
 ,   m_bGotOwnership(false)
 ,   m_bGotFrameOwnership(false)
-,   m_eScroll(SCROLLING_DEFAULT)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(0)
 ,   m_pAccExec(0)
@@ -1838,13 +1837,6 @@ void SfxViewShell::DiscardClients_Impl()
 
     for ( size_t n = 0; n < pClients->size(); )
         delete pClients->at( n );
-}
-
-//--------------------------------------------------------------------
-
-SfxScrollingMode SfxViewShell::GetScrollingMode() const
-{
-    return pImp->m_eScroll;
 }
 
 //--------------------------------------------------------------------

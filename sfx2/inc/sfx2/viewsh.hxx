@@ -83,14 +83,6 @@ class NotifyEvent;
 #define SFX_PRINTERROR_NONE          0
 #define SFX_PRINTERROR_BUSY          1
 
-enum SfxScrollingMode
-{
-    SCROLLING_NO,
-    SCROLLING_YES,
-    SCROLLING_AUTO,
-    SCROLLING_DEFAULT
-};
-
 // "Verified" using www.apple.com and Netscape 3.01
 #define DEFAULT_MARGIN_WIDTH 8
 #define DEFAULT_MARGIN_HEIGHT 12
@@ -206,9 +198,6 @@ public:
 
     virtual void                JumpToMark( const String& rMark );
     void                        VisAreaChanged(const Rectangle& rRect);
-
-    // Behavior Flags
-    SfxScrollingMode            GetScrollingMode() const;
 
     // Misc
     virtual sal_uInt16              PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );

@@ -63,11 +63,8 @@ struct SfxViewShell_Impl
     bool                        m_bHasPrintOptions;
     bool                        m_bPlugInsActive;
     bool                        m_bIsShowView;
-    // FIXME UNUSED ???
-    //bool                        m_bOwnsMenu;
     bool                        m_bGotOwnership;
     bool                        m_bGotFrameOwnership;
-    SfxScrollingMode            m_eScroll;
     sal_uInt16                      m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     ::std::auto_ptr< ::svt::AcceleratorExecute >    m_pAccExec;

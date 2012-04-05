@@ -1076,36 +1076,18 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = sal_True;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-    sal_Bool bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
-    sal_Bool bShowH = sal_False,
-         bShowV = sal_False,
-         bAuto  = sal_False,
-         bHAuto = bBrowse;
-    switch( GetScrollingMode() )
+    sal_Bool bShowH = sal_True,
+         bShowV = sal_True,
+         bAuto  = sal_True,
+         bHAuto = sal_True;
+
+    const SwViewOption *pVOpt = pWrtShell->GetViewOptions();
+    if ( !pVOpt->IsReadonly() || pVOpt->IsStarOneSetting() )
     {
-    case SCROLLING_DEFAULT:
-        {
-            const SwViewOption *pVOpt = pWrtShell->GetViewOptions();
-            if ( !pVOpt->IsReadonly() || pVOpt->IsStarOneSetting() )
-            {
-                bShowH = pVOpt->IsViewHScrollBar();
-                bShowV = pVOpt->IsViewVScrollBar();
-                bAuto = bHAuto = sal_True;
-                break;
-            }
-        }
-        /* kein break hier */
-    case SCROLLING_AUTO:
-        bAuto = bHAuto = sal_True;
-        bShowH = bShowV = sal_True;
-        break;
-    case SCROLLING_YES:
-        bShowH = bShowV = sal_True;
-        break;
-    case SCROLLING_NO:
-        bShowH = bShowV = bHAuto = sal_False;
-        break;
+        bShowH = pVOpt->IsViewHScrollBar();
+        bShowV = pVOpt->IsViewVScrollBar();
     }
+
     SwDocShell* pDocSh = GetDocShell();
     sal_Bool bIsPreview = pDocSh->IsPreview();
     if( bIsPreview )
