@@ -48,14 +48,6 @@
         Additional information
         from DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
-        SvxFontHeightToolBoxControl
-        ---------------------------
-        Item type:      SvxFontHeightItem
-        Execute-Id:     SID_ATTR_CHAR_FONTHEIGHT
-                        -> SvxFontHeightItem
-        Additional information
-        from DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
-
         SvxFontColorToolBoxControl
         --------------------------
         Item type:      SvxFontColorItem
@@ -173,7 +165,6 @@
 class SvxLineItem;
 class SvxBoxInfoItem;
 class SvxFontItem;
-class SvxFontHeightItem;
 class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;
@@ -256,35 +247,6 @@ public:
 
 
 //========================================================================
-// class SvxFontHeightToolBoxControl -------------------------------------
-//========================================================================
-
-/*
-class SvxFontSizeItem;
-class SvxFontItem;
-class SvxFontSizeBox_Impl;
-
-class SVX_DLLPUBLIC SvxFontHeightToolBoxControl : public SfxToolBoxControl
-{
-    SvxFontSizeBox_Impl* pBox;                          // ItemWindow f"ur quick-access
-    ::com::sun::star::awt::FontDescriptor aCurrentFont; // Kopie des aktuellen Fonts
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontHeightToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFontHeightToolBoxControl();
-
-    // new controller API
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    virtual Window*     CreateItemWindow( Window *pParent );
-};
-*/
-
-
-//========================================================================
 // class SvxFontColorToolBoxControl --------------------------------------
 //========================================================================
 
@@ -334,7 +296,6 @@ public:
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
     virtual void                Select( sal_Bool bMod1 = sal_False );
-
 };
 
 
