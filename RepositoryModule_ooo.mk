@@ -67,6 +67,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18npool \
     i18nutil \
     idl \
+    idlc \
     javaunohelper \
     jvmaccess \
     jvmfwk \

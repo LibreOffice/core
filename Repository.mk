@@ -53,6 +53,11 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     xpdfimport \
 ))
 
+$(eval $(call gb_Helper_register_executables,SDK, \
+    idlc \
+    idlcpp \
+))
+
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \

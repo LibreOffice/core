@@ -66,6 +66,7 @@ hwpfilter\
 i18npool\
 i18nutil\
 idl\
+idlc\
 io\
 javaunohelper\
 jurt\
@@ -176,7 +177,6 @@ hunspell\
 hyphen\
 icc\
 icu\
-idlc\
 instsetoo_native\
 jfreereport\
 jpeg\
