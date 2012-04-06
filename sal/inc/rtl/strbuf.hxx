@@ -130,7 +130,7 @@ public:
 
         @param      length   the initial capacity.
      */
-    explicit OStringBuffer(sal_Int32 length)
+    explicit OStringBuffer(int length)
         : pData(NULL)
         , nCapacity( length )
     {

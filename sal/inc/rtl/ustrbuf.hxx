@@ -125,7 +125,7 @@ public:
 
         @param      length   the initial capacity.
      */
-    explicit OUStringBuffer(sal_Int32 length)
+    explicit OUStringBuffer(int length)
         : pData(NULL)
         , nCapacity( length )
     {
@@ -155,7 +155,7 @@ public:
         : pData(NULL)
         , nCapacity( N - 1 + 16 )
     {
-        rtl_uStringbuffer_newFromStr_WithLength( &pData, literal, N - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, N - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
