@@ -1292,6 +1292,10 @@ sal_Bool ListBox::IsMultiSelectionEnabled() const
 Size ListBox::CalcMinimumSize() const
 {
     Size aSz;
+
+    if (!mpImplLB)
+        return aSz;
+
     if ( !IsDropDownBox() )
         aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
     else
