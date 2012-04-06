@@ -51,8 +51,11 @@ CFLAGSCXX=-pipe $(ARCH_FLAGS)
 # FIXME still does not compile fully CFLAGSCXX+=-std=gnu++0x
 .ENDIF
 
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+.IF "$(dbgutil)"==""
+CFLAGSEXCEPTIONS+= -fno-enforce-eh-specs
+.ENDIF
 PICSWITCH:=
 
 CFLAGSOBJGUIST=

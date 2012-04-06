@@ -120,10 +120,12 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions
 
+ifeq ($(gb_PRODUCT),$(true))
 # Clang doesn't have this option
 ifneq ($(COM_GCC_IS_CLANG),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs
+endif
 endif
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \

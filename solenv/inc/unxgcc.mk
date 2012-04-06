@@ -83,8 +83,10 @@ CFLAGSENABLESYMBOLS=-g
 CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(dbgutil)"==""
 .IF "$(COM_GCC_IS_CLANG)" != "TRUE"
 CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 .ENDIF
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions

@@ -107,8 +107,10 @@ OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(dbgutil)"==""
 .IF "$(COM_GCC_IS_CLANG)" != "TRUE"
 CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 .ENDIF
 
 # Comp Flags for files that do not need exceptions enabled (C and C++)

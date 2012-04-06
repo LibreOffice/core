@@ -93,8 +93,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 # FIXME still does not compile fully gb_CXXFLAGS += -std=gnu++0x
 endif
 
+ifeq ($(gb_PRODUCT),$(true))
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs \
+endif
 
 # At least sal defines its own __main, which would cause DLLs linking against
 # sal to pick up sal's __main instead of the one from MinGW's dllcrt2.o:
