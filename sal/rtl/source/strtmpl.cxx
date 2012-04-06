@@ -1195,9 +1195,10 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 /* ----------------------------------------------------------------------- */
 
 // Used when creating from string literals.
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis,
-                                                    const sal_Char* pCharStr,
-                                                    sal_Int32 nLen )
+void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThis,
+                                                     const sal_Char* pCharStr,
+                                                     sal_Int32 nLen,
+                                                     sal_Int32 allocExtra )
     SAL_THROW_EXTERN_C()
 {
     if ( !nLen )
@@ -1209,10 +1210,12 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis
     if ( *ppThis )
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen + allocExtra );
     assert( *ppThis != NULL );
     if ( (*ppThis) )
     {
+        (*ppThis)->length = nLen; // fix after possible allocExtra != 0
+        (*ppThis)->buffer[nLen] = 0;
         IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
         sal_Int32 nCount;
         for( nCount = nLen; nCount > 0; --nCount )

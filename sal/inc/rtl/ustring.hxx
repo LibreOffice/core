@@ -204,7 +204,7 @@ public:
     OUString( const char (&literal)[ N ] )
     {
         pData = 0;
-        rtl_uString_newFromLiteral( &pData, literal, N - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, N - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -222,7 +222,7 @@ public:
     {
         (void) value; // unused
         pData = 0;
-        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
     }
 #endif
@@ -231,7 +231,7 @@ public:
     OUString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
         pData = 0;
-        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -249,7 +249,7 @@ public:
     OUString( T&, typename internal::ExceptConstCharArrayDetector< T >::Type = internal::Dummy() )
     {
         pData = 0;
-        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
     }
     /**
@@ -260,7 +260,7 @@ public:
     OUString( const T&, typename internal::ExceptCharArrayDetector< T >::Type = internal::Dummy() )
     {
         pData = 0;
-        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
     }
 #endif
@@ -372,7 +372,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
     {
-        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
 

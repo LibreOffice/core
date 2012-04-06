@@ -206,7 +206,7 @@ public:
     OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
     {
         pData = 0;
-        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -285,7 +285,7 @@ public:
     typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
 

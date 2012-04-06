@@ -1243,16 +1243,13 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromAscii(
         rtl_uString ** newStr, const sal_Char * value ) SAL_THROW_EXTERN_C();
 
-/** Allocate a new string that contains a copy of a string literal.
-
-    This is similar to rtl_uString_newFromAscii(), except that
-    length of the string literal is explicitly passed to the function,
-    and embedded \0's are included in the string.
-
-    @since LibreOffice 3.6
- */
+/**
+ @internal
+ @since LibreOffice 3.6
+*/
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromLiteral(
-        rtl_uString ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+        rtl_uString ** newStr, const sal_Char * value, sal_Int32 len,
+        sal_Int32 allocExtra ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string from an array of Unicode code points.
 
