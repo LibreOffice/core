@@ -271,7 +271,7 @@ namespace pcr
 
                 aScriptEvent = *pAssignedEvent;
 
-                if ( !aScriptEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
+                if ( aScriptEvent.ScriptType != "StarBasic" )
                     continue;
 
                 // this is an old-style macro specification:

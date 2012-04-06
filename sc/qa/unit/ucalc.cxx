@@ -325,11 +325,11 @@ void Test::testInput()
 
     m_pDoc->SetString(0, 0, 0, numstr);
     m_pDoc->GetString(0, 0, 0, test);
-    bool bTest = test.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("10.5"));
+    bool bTest = test == "10.5";
     CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
     m_pDoc->SetString(0, 0, 0, str);
     m_pDoc->GetString(0, 0, 0, test);
-    bTest = test.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("'apple'"));
+    bTest = test == "'apple'";
     CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
 
     m_pDoc->DeleteTab(0);
@@ -1870,7 +1870,7 @@ void Test::testPivotTableNamedSource()
     m_pDoc->MoveTab(1, 0);
     rtl::OUString aTabName;
     m_pDoc->GetName(0, aTabName);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name.", aTabName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Table")));
+    CPPUNIT_ASSERT_MESSAGE( "Wrong sheet name.", aTabName == "Table" );
     CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
                            pDPObj->GetOutRange().aStart.Tab() == 0);
 
@@ -2603,7 +2603,7 @@ void Test::testSheetMove()
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
     rtl::OUString aName;
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TestTab1")));
+    CPPUNIT_ASSERT_MESSAGE( "sheets should have changed places", aName == "TestTab1" );
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
@@ -2623,7 +2623,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TestTab2")));
+    CPPUNIT_ASSERT_MESSAGE( "sheets should have changed places", aName == "TestTab2" );
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -2873,9 +2873,9 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     pDoc->CalcAll();
 
     rtl::OUString aRes = pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.2")));
+    CPPUNIT_ASSERT_MESSAGE( "Unexpected result with T.", aRes == "1.2" );
     aRes = pDoc->GetString(0, 1, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Foo")));
+    CPPUNIT_ASSERT_MESSAGE( "Unexpected result with T.", aRes == "Foo" );
     aRes = pDoc->GetString(0, 2, 0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
@@ -3647,22 +3647,22 @@ void Test::testToggleRefFlag()
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=$B$100")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=$B$100" );
 
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=B$100")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=B$100" );
 
         // column relative / row absolute -> column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=$B100")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=$B100" );
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=B100")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=B100" );
     }
 
     {
@@ -3678,22 +3678,22 @@ void Test::testToggleRefFlag()
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R2C[-3]")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R2C[-3]" );
 
         // column relative / row absolute - > column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R[-4]C1")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R[-4]C1" );
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R[-4]C[-3]")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R[-4]C[-3]" );
 
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=R2C1")));
+        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R2C1" );
     }
 
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and

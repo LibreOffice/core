@@ -2904,8 +2904,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                         // domain elements
                         if( bExportContent )
                         {
-                            bool bIsScatterChart = aChartType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType"));
-                            bool bIsBubbleChart = aChartType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType"));
+                            bool bIsScatterChart = aChartType == "com.sun.star.chart2.ScatterChartType";
+                            bool bIsBubbleChart = aChartType == "com.sun.star.chart2.BubbleChartType";
                             Reference< chart2::data::XDataSequence > xYValuesForBubbleChart;
                             if( bIsBubbleChart )
                             {
@@ -3684,9 +3684,7 @@ void SchXMLExport::_ExportContent()
             // range string, as this is our only indicator for having own or
             // external data. @todo: fix this in the file format!
             Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
-            if( ! (xDPServiceInfo.is() &&
-                   xDPServiceInfo->getImplementationName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.chart.InternalDataProvider" ))))
+            if( ! (xDPServiceInfo.is() && xDPServiceInfo->getImplementationName() == "com.sun.star.comp.chart.InternalDataProvider" ))
             {
                 bIncludeTable = sal_False;
             }

@@ -227,8 +227,7 @@ static void test_proxyfac_(
     }
     catch (const lang::DisposedException & exc)
     {
-        if (! exc.Message.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("my test exception") ))
+        if ( exc.Message != "my test exception" )
             throw;
     }
 }

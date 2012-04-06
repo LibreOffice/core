@@ -106,7 +106,7 @@ namespace connectivity
     {
         sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
         {
-            return _sUrl.copy(0,16).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:mysql:odbc:"));
+            return _sUrl.copy(0,16) == "sdbc:mysql:odbc:";
         }
         //--------------------------------------------------------------------
         sal_Bool isNativeUrl(const ::rtl::OUString& _sUrl)

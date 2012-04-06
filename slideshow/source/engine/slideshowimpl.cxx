@@ -1045,8 +1045,7 @@ public:
     {}
 
     void operator()( beans::PropertyValue const& rProperty ) const {
-        if (rProperty.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("Prefetch") ))
+        if (rProperty.Name == "Prefetch" )
         {
             uno::Sequence<uno::Any> seq;
             if ((rProperty.Value >>= seq) && seq.getLength() == 2)
@@ -1055,13 +1054,11 @@ public:
                 seq[1] >>= mpSlideShowImpl->mxPrefetchAnimationNode;
             }
         }
-        else if (rProperty.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("SkipAllMainSequenceEffects") ))
+        else if ( rProperty.Name == "SkipAllMainSequenceEffects" )
         {
             rProperty.Value >>= mrbSkipAllMainSequenceEffects;
         }
-        else if (rProperty.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("SkipSlideTransition") ))
+        else if ( rProperty.Name == "SkipSlideTransition" )
         {
             rProperty.Value >>= mrbSkipSlideTransition;
         }
@@ -1572,8 +1569,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("AutomaticAdvancement") ))
+    if ( rProperty.Name == "AutomaticAdvancement" )
     {
         double nTimeout(0.0);
         mbAutomaticAdvancementMode = (rProperty.Value >>= nTimeout);
@@ -1585,8 +1581,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("UserPaintColor") ))
+    if ( rProperty.Name == "UserPaintColor" )
     {
         sal_Int32 nColor(0);
         if (rProperty.Value >>= nColor)
@@ -1616,8 +1611,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     }
 
     //adding support for erasing features in UserPaintOverlay
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("EraseAllInk") ))
+    if ( rProperty.Name == "EraseAllInk" )
     {
         bool nEraseAllInk(false);
         if (rProperty.Value >>= nEraseAllInk)
@@ -1633,8 +1627,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("SwitchPenMode") ))
+    if ( rProperty.Name == "SwitchPenMode" )
     {
         bool nSwitchPenMode(false);
         if (rProperty.Value >>= nSwitchPenMode)
@@ -1651,8 +1644,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("SwitchEraserMode") ))
+    if ( rProperty.Name == "SwitchEraserMode" )
     {
         bool nSwitchEraserMode(false);
         if (rProperty.Value >>= nSwitchEraserMode)
@@ -1669,8 +1661,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("EraseInk") ))
+    if ( rProperty.Name == "EraseInk" )
     {
         sal_Int32 nEraseInk(100);
         if (rProperty.Value >>= nEraseInk)
@@ -1687,8 +1678,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     }
 
     // new Property for pen's width
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("UserPaintStrokeWidth") ))
+    if ( rProperty.Name == "UserPaintStrokeWidth" )
     {
         double nWidth(4.0);
         if (rProperty.Value >>= nWidth)
@@ -1702,8 +1692,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("AdvanceOnClick") ))
+    if ( rProperty.Name == "AdvanceOnClick" )
     {
         sal_Bool bAdvanceOnClick = sal_False;
         if (! (rProperty.Value >>= bAdvanceOnClick))
@@ -1712,8 +1701,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("DisableAnimationZOrder") ))
+    if ( rProperty.Name == "DisableAnimationZOrder" )
     {
         sal_Bool bDisableAnimationZOrder = sal_False;
         if (! (rProperty.Value >>= bDisableAnimationZOrder))
@@ -1722,8 +1710,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ImageAnimationsAllowed") ) )
+    if ( rProperty.Name == "ImageAnimationsAllowed" )
     {
         if (! (rProperty.Value >>= mbImageAnimationsAllowed))
             return false;
@@ -1740,8 +1727,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("MouseVisible") ))
+    if ( rProperty.Name == "MouseVisible" )
     {
         if (! (rProperty.Value >>= mbMouseVisible))
             return false;
@@ -1751,14 +1737,12 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ForceManualAdvance") ))
+    if ( rProperty.Name == "ForceManualAdvance" )
     {
         return (rProperty.Value >>= mbForceManualAdvance);
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("RehearseTimings") ))
+    if ( rProperty.Name == "RehearseTimings" )
     {
         bool bRehearseTimings = false;
         if (! (rProperty.Value >>= bRehearseTimings))
@@ -1788,8 +1772,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("WaitSymbolBitmap") ))
+    if ( rProperty.Name == "WaitSymbolBitmap" )
     {
         uno::Reference<rendering::XBitmap> xBitmap;
         if (! (rProperty.Value >>= xBitmap))

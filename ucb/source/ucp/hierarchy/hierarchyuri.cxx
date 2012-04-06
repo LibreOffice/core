@@ -72,8 +72,7 @@ void HierarchyUri::init() const
         // Scheme is case insensitive.
         rtl::OUString aScheme
             = m_aUri.copy( 0, HIERARCHY_URL_SCHEME_LENGTH ).toAsciiLowerCase();
-        if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_URL_SCHEME ) ) )
+        if ( aScheme == HIERARCHY_URL_SCHEME )
         {
             m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
 

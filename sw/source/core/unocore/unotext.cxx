@@ -1982,8 +1982,7 @@ lcl_ApplyRowProperties(
     for (sal_Int32 nProperty = 0; nProperty < rRowProperties.getLength();
          ++nProperty)
     {
-        if (pProperties[ nProperty ].Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("TableColumnSeparators")))
+        if ( pProperties[ nProperty ].Name == "TableColumnSeparators" )
         {
             // add the separators to access the cell's positions
             // for vertical merging later

@@ -1123,9 +1123,7 @@ UUIInteractionHelper::getContextProperty()
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
         beans::PropertyValue aProperty;
-        if ((m_aProperties[i] >>= aProperty)
-            && aProperty.
-                   Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Context")))
+        if ((m_aProperties[i] >>= aProperty) && aProperty.Name == "Context" )
         {
             rtl::OUString aContext;
             aProperty.Value >>= aContext;

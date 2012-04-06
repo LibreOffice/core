@@ -760,8 +760,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
                     const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
                     for ( sal_Int32 i = 0; i < nCount; ++i )
                     {
-                        if ( pModuleDescr[ i ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "ooSetupFactoryEmptyDocumentURL" ) ) )
+                        if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
                         {
                             pModuleDescr[ i ].Value >>= sFactoryURL;
                             break;

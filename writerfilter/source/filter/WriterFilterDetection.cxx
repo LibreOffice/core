@@ -148,7 +148,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
 
 sal_Bool WriterFilterDetection_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) );
+   return ServiceName == SERVICE_NAME1;
 }
 
 

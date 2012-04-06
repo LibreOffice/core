@@ -169,10 +169,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     rtl::OUStringBuffer sText(m_aVendorTextStr);
     sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
-    sal_uInt32 nCopyrightId =
-        utl::ConfigManager::getProductName().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("LibreOffice"))
-        ? ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
+    sal_uInt32 nCopyrightId = utl::ConfigManager::getProductName() == "LibreOffice" ? ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
     String aProductCopyrightTextStr(ResId(nCopyrightId, *rId.GetResMgr()));
     sText.append(aProductCopyrightTextStr);
     sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));

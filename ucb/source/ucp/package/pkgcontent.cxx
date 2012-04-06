@@ -99,17 +99,10 @@ ContentProperties::ContentProperties( const rtl::OUString& rContentType )
   bEncrypted( sal_False ),
   bHasEncryptedEntries( sal_False )
 {
-    bIsFolder = rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) )
-                || rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_FOLDER_CONTENT_TYPE ) );
+    bIsFolder = rContentType == PACKAGE_FOLDER_CONTENT_TYPE || rContentType == PACKAGE_ZIP_FOLDER_CONTENT_TYPE;
     bIsDocument = !bIsFolder;
 
-    OSL_ENSURE( bIsFolder ||
-                rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) )
-                || rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_STREAM_CONTENT_TYPE ) ),
+    OSL_ENSURE( bIsFolder || rContentType == PACKAGE_STREAM_CONTENT_TYPE || rContentType == PACKAGE_ZIP_STREAM_CONTENT_TYPE,
                 "ContentProperties::ContentProperties - Unknown type!" );
 }
 
@@ -474,8 +467,7 @@ uno::Any SAL_CALL Content::execute(
 {
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertyValues
@@ -496,8 +488,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertyValues( Properties );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // setPropertyValues
@@ -530,8 +521,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
@@ -540,8 +530,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getPropertySetInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -550,8 +539,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+    else if ( aCommand.Name == "open" )
     {
         //////////////////////////////////////////////////////////////////
         // open
@@ -572,9 +560,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = open( aOpenCommand, Environment );
     }
-    else if ( !m_aUri.isRootFolder()
-              && aCommand.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( !m_aUri.isRootFolder() && aCommand.Name == "insert" )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -598,9 +584,7 @@ uno::Any SAL_CALL Content::execute(
                              : ucb::NameClash::ERROR;
         insert( aArg.Data, nNameClash, Environment );
     }
-    else if ( !m_aUri.isRootFolder()
-              && aCommand.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( !m_aUri.isRootFolder() && aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -635,8 +619,7 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) )
+    else if ( aCommand.Name == "transfer" )
     {
         //////////////////////////////////////////////////////////////////
         // transfer
@@ -658,9 +641,7 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( aInfo, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
-              isFolder() )
+    else if ( aCommand.Name == "createNewContent" && isFolder() )
     {
         //////////////////////////////////////////////////////////////////
         // createNewContent
@@ -683,8 +664,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= createNewContent( aInfo );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "flush" ) ) )
+    else if ( aCommand.Name == "flush" )
     {
         //////////////////////////////////////////////////////////////////
         // flush
@@ -869,41 +849,34 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             // Process Core properties.
 
-            if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            if ( rProp.Name == "ContentType" )
             {
                 xRow->appendString ( rProp, rData.aContentType );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( rProp.Name == "Title" )
             {
                 xRow->appendString ( rProp, rData.aTitle );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( rProp.Name == "IsDocument" )
             {
                 xRow->appendBoolean( rProp, rData.bIsDocument );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 xRow->appendBoolean( rProp, rData.bIsFolder );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            else if ( rProp.Name == "CreatableContentsInfo" )
             {
                 xRow->appendObject(
                     rProp, uno::makeAny(
                         rData.getCreatableContentsInfo(
                             PackageUri( rContentId ) ) ) );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+            else if ( rProp.Name == "MediaType" )
             {
                 xRow->appendString ( rProp, rData.aMediaType );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            else if ( rProp.Name == "Size" )
             {
                 // Property only available for streams.
                 if ( rData.bIsDocument )
@@ -911,8 +884,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Compressed" ) ) )
+            else if ( rProp.Name == "Compressed" )
             {
                 // Property only available for streams.
                 if ( rData.bIsDocument )
@@ -920,8 +892,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+            else if ( rProp.Name == "Encrypted" )
             {
                 // Property only available for streams.
                 if ( rData.bIsDocument )
@@ -929,8 +900,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) ) )
+            else if ( rProp.Name == "HasEncryptedEntries" )
             {
                 // Property only available for root folder.
                 PackageUri aURI( rContentId );
@@ -1125,8 +1095,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         const beans::PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1134,8 +1103,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1143,8 +1111,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1152,8 +1119,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1161,8 +1127,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rValue.Name == "Title" )
         {
             if ( m_aUri.isRootFolder() )
             {
@@ -1214,8 +1179,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        else if ( rValue.Name == "MediaType" )
         {
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
@@ -1240,8 +1204,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        else if ( rValue.Name == "Size" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1249,8 +1212,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Compressed" ) ) )
+        else if ( rValue.Name == "Compressed" )
         {
             // Property only available for streams.
             if ( m_aProps.bIsDocument )
@@ -1286,8 +1248,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+        else if ( rValue.Name == "Encrypted" )
         {
             // Property only available for streams.
             if ( m_aProps.bIsDocument )
@@ -1323,8 +1284,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) ) )
+        else if ( rValue.Name == "HasEncryptedEntries" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1332,8 +1292,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "EncryptionKey" ) ) )
+        else if ( rValue.Name == "EncryptionKey" )
         {
             // @@@ This is a temporary solution. In the future submitting
             //     the key should be done using an interaction handler!
@@ -2034,8 +1993,7 @@ void Content::transfer(
             rValue.Name   = rProp.Name;
             rValue.Handle = rProp.Handle;
 
-            if ( !bHadTitle && rProp.Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            if ( !bHadTitle && rProp.Name == "Title" )
             {
                 // Set new title instead of original.
                 bHadTitle = sal_True;

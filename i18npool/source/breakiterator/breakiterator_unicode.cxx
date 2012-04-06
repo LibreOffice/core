@@ -134,7 +134,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                 rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             }
-            else if (!rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("th"))) //use icu's breakiterator for Thai
+            else if ( rLocale.Language != "th" ) //use icu's breakiterator for Thai
             {
                 status = U_ZERO_ERROR;
                 OStringBuffer aUDName(64);

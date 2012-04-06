@@ -157,7 +157,7 @@ rtl::OUString SEInitializer_NssImpl_getImplementationName ()
 sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SE_SERVICE_NAME )) || ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( NSS_SERVICE_NAME ));
+    return ( ServiceName == SE_SERVICE_NAME || ServiceName == NSS_SERVICE_NAME );
 }
 
 cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )

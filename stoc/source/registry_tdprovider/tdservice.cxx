@@ -349,8 +349,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
         for (sal_uInt16 i = 0; i < ctorCount; ++i) {
             rtl::OUString name(reader.getMethodName(i));
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
-                || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("void")))
+                || (reader.getMethodReturnTypeName(i) != "void")
                 || (name.isEmpty()
                     && (ctorCount != 1 || reader.getMethodParameterCount(i) != 0
                         || reader.getMethodExceptionCount(i) != 0)))

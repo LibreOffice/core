@@ -1332,7 +1332,7 @@ void SAL_CALL FSStorage::setPropertyValue( const ::rtl::OUString& aPropertyName,
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) || aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OpenMode")) )
+    if ( aPropertyName == "URL" || aPropertyName == "OpenMode" )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO

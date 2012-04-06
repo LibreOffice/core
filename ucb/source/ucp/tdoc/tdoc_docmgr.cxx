@@ -200,10 +200,8 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
     Events documentation: OOo Developer's Guide / Writing UNO Components / Jobs
 */
 
-    if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnLoadFinished" ) ) // document loaded
-         || Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnCreate" ) ) ) // document created
+    if ( Event.EventName == "OnLoadFinished" // document loaded
+      || Event.EventName == "OnCreate" )     // document created
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -259,8 +257,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             }
         }
     }
-    else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OfficeDocumentsListener::notifyClosing" ) ) )
+    else if ( Event.EventName == "OfficeDocumentsListener::notifyClosing" )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -314,8 +311,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             }
         }
     }
-    else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnSaveDone" ) ) )
+    else if ( Event.EventName == "OnSaveDone" )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -350,8 +346,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                         "OnSaveDone event notified for unknown document!" );
         }
     }
-    else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) ) )
+    else if ( Event.EventName == "OnSaveAsDone" )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -389,8 +384,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                         "OnSaveAsDone event notified for unknown document!" );
         }
     }
-    else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnTitleChanged" ) ) )
+    else if ( Event.EventName == "OnTitleChanged" )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -744,8 +738,7 @@ bool OfficeDocumentsManager::isBasicIDE(
         if ( !aModule.isEmpty() )
         {
             // Filter unwanted items, that are no real documents.
-            if ( aModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.star.script.BasicIDE" ) ) )
+            if ( aModule == "com.sun.star.script.BasicIDE" )
             {
                 return true;
             }

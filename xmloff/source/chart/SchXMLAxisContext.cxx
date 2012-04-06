@@ -766,9 +766,8 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                           const OUString& rODFVersionOfFile,
                           bool bAxisPositionAttributeImported )
 {
-    if( ( rODFVersionOfFile.isEmpty() || rODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.0"))
-        || rODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.1"))
-        || ( rODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.2")) && !bAxisPositionAttributeImported ) ) )
+    if( ( rODFVersionOfFile.isEmpty() || rODFVersionOfFile == "1.0" || rODFVersionOfFile == "1.1"
+        || ( rODFVersionOfFile == "1.2" && !bAxisPositionAttributeImported ) ) )
     {
         try
         {

@@ -1161,7 +1161,7 @@ void XMLFilterSettingsDialog::initFilterList()
                     continue;
 
                 // if this is not an XSLTFilter entry, skip it
-                if( !aUserData[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) ) )
+                if( aUserData[0] != "com.sun.star.documentconversion.XSLTFilter" )
                     continue;
 
                 // get filter information from userdata

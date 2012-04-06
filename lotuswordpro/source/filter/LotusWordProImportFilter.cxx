@@ -259,7 +259,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         //Note, we should attempt to use InputStream here first!
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+        if ( pValue[i].Name == "URL" )
             pValue[i].Value >>= sURL;
     }
 
@@ -309,11 +309,11 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
+        if ( pValue[i].Name == "TypeName" )
             pValue[i].Value >>= sTypeName;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+        else if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+        else if ( pValue[i].Name == "URL" )
             pValue[i].Value >>= sURL;
     }
 
@@ -356,7 +356,7 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArgu
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+            if ( pValue[i].Name == "Type" )
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -375,8 +375,7 @@ OUString LotusWordProImportFilter_getImplementationName ()
 sal_Bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+    return ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2;
 }
 Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)

@@ -308,7 +308,7 @@ uno::Any SAL_CALL Content::execute(
     }
 #endif
 
-#define COMMAND_IS(cmd,name) ( (cmd).Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( name ) ) )
+#define COMMAND_IS(cmd,name) ( (cmd).Name == name )
 
     if ( COMMAND_IS( aCommand, "getPropertyValues" ) ) {
         uno::Sequence< beans::Property > Properties;
@@ -834,8 +834,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")),
                       static_cast< cppu::OWeakObject * >( this ) );
 
-        } else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) ||
-                rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) ) {
+        } else if ( rValue.Name == "DateCreated" || rValue.Name == "DateModified" ) {
             // FIXME: should be able to set the timestamps
             aRet[ n ] <<= getReadOnlyException( this );
         } else {

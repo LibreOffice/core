@@ -953,7 +953,7 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
     OUStringPair aPair = StringHelper::convertStringToPair( aLine );
     orKey = aPair.first;
     orData = aPair.second;
-    return (!orKey.isEmpty() && (!orData.isEmpty() || !orKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "end" ) ))) ?
+    return ( !orKey.isEmpty() && (!orData.isEmpty() || orKey != "end" )) ?
         LINETYPE_DATA : LINETYPE_END;
 }
 

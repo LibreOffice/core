@@ -172,9 +172,7 @@ int test_ftplist(void) {
     if(vec.size() != 3)
         ++number_of_errors;
 
-    if(!(vec[0].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dir1")) &&
-         vec[1].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dir2")) &&
-         vec[2].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file1"))))
+    if(!(vec[0].m_aName == "dir1" && vec[1].m_aName == "dir2" && vec[2].m_aName == "file1" ))
        ++number_of_errors;
 
     TESTEVAL;
@@ -234,8 +232,7 @@ int test_ftpproperties(void) {
 
     ftp::FTPDirentry ade(url.direntry());
 
-    if(!(ade.m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) &&
-         ade.isFile()))
+    if(!(ade.m_aName == "file" && ade.isFile()))
         ++number_of_errors;
 
     TESTEVAL;

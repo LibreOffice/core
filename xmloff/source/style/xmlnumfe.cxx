@@ -847,7 +847,7 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
         sal_Bool bFound = sal_False;
         for ( sal_Int32 j=0; j < nCnt && !bFound; j++ )
         {
-            if ( !aCals[j].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gregorian") ) )
+            if ( aCals[j] != "gregorian" )
             {
                 aCalendar = aCals[j];
                 bFound = sal_True;

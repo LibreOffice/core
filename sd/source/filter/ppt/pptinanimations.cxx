@@ -684,7 +684,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     OUString aAttributeName( xAnimate->getAttributeName() );
 
-    if( (nNodeType == AnimationNodeType::SET) && aAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fill.on" ) ) )
+    if( (nNodeType == AnimationNodeType::SET) && aAttributeName == "fill.on" )
         return false;
 
     const ImplAttributeNameConversion* p = gImplConversionList;
@@ -967,7 +967,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "solid" ) ) ? FillStyle_SOLID : FillStyle_NONE;
+            rValue <<= aString == "solid" ? FillStyle_SOLID : FillStyle_NONE;
             bRet = true;
         }
     }
@@ -978,7 +978,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) ? ::com::sun::star::drawing::LineStyle_SOLID : ::com::sun::star::drawing::LineStyle_NONE;
+            rValue <<= aString == "true" ? ::com::sun::star::drawing::LineStyle_SOLID : ::com::sun::star::drawing::LineStyle_NONE;
             bRet = true;
         }
     }
@@ -989,7 +989,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bold" ) ) ? com::sun::star::awt::FontWeight::BOLD : com::sun::star::awt::FontWeight::NORMAL;
+            rValue <<= aString == "bold" ? com::sun::star::awt::FontWeight::BOLD : com::sun::star::awt::FontWeight::NORMAL;
             bRet = true;
         }
     }
@@ -1000,7 +1000,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "italic" ) ) ? com::sun::star::awt::FontSlant_ITALIC : com::sun::star::awt::FontSlant_NONE;
+            rValue <<= aString == "italic" ? com::sun::star::awt::FontSlant_ITALIC : com::sun::star::awt::FontSlant_NONE;
             bRet = true;
         }
     }
@@ -1011,7 +1011,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) ? com::sun::star::awt::FontUnderline::SINGLE : com::sun::star::awt::FontUnderline::NONE;
+            rValue <<= aString == "true" ? com::sun::star::awt::FontUnderline::SINGLE : com::sun::star::awt::FontUnderline::NONE;
             bRet = true;
         }
     }
@@ -1034,7 +1034,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visible" ) ) ? sal_True : sal_False;
+            rValue <<= aString == "visible" ? sal_True : sal_False;
             bRet = true;
         }
     }
@@ -1679,7 +1679,7 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
                     OUString aContext;
                     if( aSet.getProperty( DFF_ANIM_RUNTIMECONTEXT ) >>= aContext )
                     {
-                        if( !aContext.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PPT") ) )
+                        if( aContext != "PPT" )
                             bWrongContext = true;
                     }
                 }

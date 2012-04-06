@@ -733,9 +733,7 @@ void ChartExport::_ExportContent()
             // range string, as this is our only indicator for having own or
             // external data. @todo: fix this in the file format!
             Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
-            if( ! (xDPServiceInfo.is() &&
-                   xDPServiceInfo->getImplementationName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.chart.InternalDataProvider" ))))
+            if( ! (xDPServiceInfo.is() && xDPServiceInfo->getImplementationName() == "com.sun.star.comp.chart.InternalDataProvider" ))
             {
                 bIncludeTable = sal_False;
             }

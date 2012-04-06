@@ -217,8 +217,7 @@ inline InterfaceEntry * ObjectEntry::find(
     OUString const & type_name =
         OUString::unacquired(
             &((typelib_TypeDescription *) pTypeDescr_)->pTypeName );
-    if (type_name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
+    if ( type_name == "com.sun.star.uno.XInterface" )
     {
         return &aInterfaces[ 0 ];
     }

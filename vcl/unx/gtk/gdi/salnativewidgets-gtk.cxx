@@ -439,7 +439,7 @@ void GtkData::initNWF( void )
             (char *)NULL);
     pSVData->maNWFData.mnMenuFormatExtraBorder = horizontal_padding;
 
-    if( SalGetDesktopEnvironment().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE")) )
+    if( SalGetDesktopEnvironment() == "KDE" )
     {
         // #i97196# ensure a widget exists and the style engine was loaded
         NWEnsureGTKButton( SalX11Screen( 0 ) );

@@ -2189,7 +2189,7 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                 if ( rProps.getLength() != 1 )
                     continue;
 
-                if ( !rProps[ 0 ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                if ( rProps[ 0 ].Name != "Title" )
                     continue;
 
                 Sequence < ::rtl::OUString > aNames(1);

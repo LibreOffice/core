@@ -203,9 +203,7 @@ void SvXMLMetaExport::_MExport()
                                sDefTarget );
 
         //! define strings for xlink:show values
-        const XMLTokenEnum eShow =
-            sDefTarget.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_blank"))
-                ? XML_NEW : XML_REPLACE;
+        const XMLTokenEnum eShow = sDefTarget == "_blank" ? XML_NEW : XML_REPLACE;
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eShow );
 
         SvXMLElementExport aElem( mrExport,

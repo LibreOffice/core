@@ -81,17 +81,13 @@ using namespace tdoc_ucp;
 //=========================================================================
 static ContentType lcl_getContentType( const rtl::OUString & rType )
 {
-    if ( rType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_ROOT_CONTENT_TYPE ) ) )
+    if ( rType == TDOC_ROOT_CONTENT_TYPE )
         return ROOT;
-    else if ( rType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_DOCUMENT_CONTENT_TYPE ) ) )
+    else if ( rType == TDOC_DOCUMENT_CONTENT_TYPE )
         return DOCUMENT;
-    else if ( rType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ) ) )
+    else if ( rType == TDOC_FOLDER_CONTENT_TYPE )
         return FOLDER;
-    else if ( rType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
+    else if ( rType == TDOC_STREAM_CONTENT_TYPE )
         return STREAM;
     else
     {
@@ -135,10 +131,7 @@ Content* Content::create(
     if ( Info.Type.isEmpty() )
         return 0;
 
-    if ( !Info.Type.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ) ) &&
-         !Info.Type.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
+    if ( Info.Type != TDOC_FOLDER_CONTENT_TYPE && Info.Type != TDOC_STREAM_CONTENT_TYPE )
     {
         OSL_FAIL( "Content::create - unsupported content type!" );
         return 0;
@@ -395,8 +388,7 @@ uno::Any SAL_CALL Content::execute(
 {
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertyValues
@@ -417,8 +409,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertyValues( Properties );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // setPropertyValues
@@ -451,8 +442,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
@@ -460,8 +450,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertySetInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -469,8 +458,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+    else if ( aCommand.Name == "open" )
     {
         //////////////////////////////////////////////////////////////////
         // open
@@ -491,8 +479,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = open( aOpenCommand, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name == "insert" )
     {
         //////////////////////////////////////////////////////////////////
         // insert ( Supported by folders and streams only )
@@ -551,8 +538,7 @@ uno::Any SAL_CALL Content::execute(
                              : ucb::NameClash::ERROR;
         insert( aArg.Data, nNameClash, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete ( Supported by folders and streams only )
@@ -606,8 +592,7 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) )
+    else if ( aCommand.Name == "transfer" )
     {
         //////////////////////////////////////////////////////////////////
         // transfer ( Supported by document and folders only )
@@ -648,8 +633,7 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( aInfo, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) )
+    else if ( aCommand.Name == "createNewContent" )
     {
         //////////////////////////////////////////////////////////////////
         // createNewContent ( Supported by document and folders only )
@@ -742,9 +726,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
-        sal_Bool bCreateFolder =
-            Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ) );
+        sal_Bool bCreateFolder = Info.Type == TDOC_FOLDER_CONTENT_TYPE;
 
 #ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         // streams cannot be created as direct children of document root
@@ -755,9 +737,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             return uno::Reference< ucb::XContent >();
         }
 #endif
-        if ( !bCreateFolder &&
-             !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
+        if ( !bCreateFolder && Info.Type != TDOC_STREAM_CONTENT_TYPE )
         {
             OSL_FAIL( "Content::createNewContent - unsupported type!" );
             return uno::Reference< ucb::XContent >();
@@ -1008,34 +988,28 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             // Process Core properties.
 
-            if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            if ( rProp.Name == "ContentType" )
             {
                 xRow->appendString ( rProp, rData.getContentType() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( rProp.Name == "Title" )
             {
                 xRow->appendString ( rProp, rData.getTitle() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( rProp.Name == "IsDocument" )
             {
                 xRow->appendBoolean( rProp, rData.getIsDocument() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 xRow->appendBoolean( rProp, rData.getIsFolder() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            else if ( rProp.Name == "CreatableContentsInfo" )
             {
                 xRow->appendObject(
                     rProp, uno::makeAny( rData.getCreatableContentsInfo() ) );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
+            else if ( rProp.Name == "Storage" )
             {
                 // Storage is only supported by folders.
                 ContentType eType = rData.getType();
@@ -1047,8 +1021,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "DocumentModel" ) ) )
+            else if ( rProp.Name == "DocumentModel" )
             {
                 // DocumentModel is only supported by documents.
                 ContentType eType = rData.getType();
@@ -1221,8 +1194,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         const beans::PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(  "ContentType" ) ) )
+        if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1230,8 +1202,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1239,8 +1210,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1248,8 +1218,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1257,8 +1226,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rValue.Name == "Title" )
         {
             // Title is read-only for root and documents.
             ContentType eType = m_aProps.getType();
@@ -1311,8 +1279,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
+        else if ( rValue.Name == "Storage" )
         {
             ContentType eType = m_aProps.getType();
             if ( eType == FOLDER )
@@ -1331,8 +1298,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                             static_cast< cppu::OWeakObject * >( this ) );
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DocumentModel" ) ) )
+        else if ( rValue.Name == "DocumentModel" )
         {
             ContentType eType = m_aProps.getType();
             if ( eType == DOCUMENT )
@@ -2037,8 +2003,7 @@ void Content::transfer(
     rtl::OUString aScheme
         = rInfo.SourceURL.copy( 0, TDOC_URL_SCHEME_LENGTH + 2 )
             .toAsciiLowerCase();
-    if ( !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( TDOC_URL_SCHEME ":/" ) ) )
+    if ( aScheme != TDOC_URL_SCHEME ":/" )
     {
         // Invalid scheme.
         ucbhelper::cancelCommandExecution(

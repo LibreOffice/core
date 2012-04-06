@@ -1022,7 +1022,7 @@ public:
 
         ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
         ::rtl::OUString aFooIntern = aFoo.intern();
-        CPPUNIT_ASSERT_MESSAGE("string contents", aFooIntern.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
+        CPPUNIT_ASSERT_MESSAGE( "string contents", aFooIntern == "foo" );
         CPPUNIT_ASSERT_MESSAGE("string length", aFooIntern.getLength() == 3);
         // We have to dup due to no atomic 'intern' bit-set operation
         CPPUNIT_ASSERT_MESSAGE("intern dups", aFoo.pData != aFooIntern.pData);
@@ -1246,7 +1246,7 @@ void convertFromString::test() {
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT(t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc")));
+    CPPUNIT_ASSERT( t == "abc" );
 }
 
 // -----------------------------------------------------------------------------

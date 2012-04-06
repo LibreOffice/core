@@ -341,9 +341,7 @@ void TableDesignPane::onSelectionChanged()
             }
 
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
-            if( xDesc.is() &&
-                ( xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TableShape" ) ) ||
-                  xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TableShape" ) ) ) )
+            if( xDesc.is() && ( xDesc->getShapeType() == "com.sun.star.drawing.TableShape" || xDesc->getShapeType() == "com.sun.star.presentation.TableShape" ) )
             {
                 xNewSelection = Reference< XPropertySet >::query( xDesc );
             }

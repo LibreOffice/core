@@ -72,7 +72,7 @@ static inline void checkInterface( Type const & rType )
 //--------------------------------------------------------------------------------------------------
 static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW(())
 {
-    return (((OUString const *)&pStr)->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) != sal_False);
+    return (*((OUString const *)&pStr) == "com.sun.star.uno.XInterface");
 }
 //--------------------------------------------------------------------------------------------------
 static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW(())

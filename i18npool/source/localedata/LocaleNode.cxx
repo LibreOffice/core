@@ -234,7 +234,7 @@ void print_node( const LocaleNode* p, int depth=0 )
 void LocaleNode :: generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString aDTD = getAttr().getValueByName("versionDTD");
-    if (!aDTD.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(LOCALE_VERSION_DTD)))
+    if ( aDTD != LOCALE_VERSION_DTD )
     {
         ++nError;
         fprintf( stderr, "Error: Locale versionDTD is not %s, see comment in locale.dtd\n", LOCALE_VERSION_DTD);
@@ -661,7 +661,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
     {
         LocaleNode * currNode = getChildAt (i);
-        if (currNode->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateAcceptancePattern")))
+        if ( currNode->getName() == "DateAcceptancePattern" )
         {
             if (mnSection > 0)
                 incError( "DateAcceptancePattern only handled in LC_FORMAT, not LC_FORMAT_1");
@@ -670,7 +670,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             --formatCount;
             continue;   // for
         }
-        if (!currNode->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FormatElement")))
+        if ( currNode->getName() != "FormatElement" )
         {
             incErrorStr( "Undefined element in LC_FORMAT", currNode->getName());
             --formatCount;
@@ -690,7 +690,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
-        bool bDefault = str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "true"));
+        bool bDefault = str == "true";
         of.writeDefaultParameter("FormatElement", str, formatCount);
 
         aType = currNodeAttr.getValueByName("type");
@@ -1488,7 +1488,7 @@ static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode
     OUString aFullName = currNode->getChildAt(2)->getValue();
     OUString aNarrName;
     LocaleNode* p = (currNode->getNumberOfChildren() > 3 ? currNode->getChildAt(3) : 0);
-    if (p && p->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DefaultNarrowName")))
+    if ( p && p->getName() == "DefaultNarrowName" )
         aNarrName = p->getValue();
     else
     {
@@ -1561,7 +1561,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         LocaleNode * calNode = getChildAt (i);
         OUString calendarID = calNode -> getAttr().getValueByName("unoid");
         of.writeParameter( "calendarID", calendarID, i);
-        bool bGregorian = calendarID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "gregorian"));
+        bool bGregorian = calendarID == "gregorian";
         if (!bHasGregorian)
             bHasGregorian = bGregorian;
         str = calNode -> getAttr().getValueByName("default");
@@ -1595,7 +1595,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = daysNode -> getChildAt(j);
                 OUString dayID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("dayID", dayID, i, j);
-                if (j == 0 && bGregorian && !dayID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "sun")))
+                if ( j == 0 && bGregorian && dayID != "sun" )
                     incError( "First day of a week of a Gregorian calendar must be <DayID>sun</DayID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
@@ -1627,7 +1627,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
                 OUString monthID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("monthID", monthID, i, j);
-                if (j == 0 && bGregorian && !monthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                if ( j == 0 && bGregorian && monthID != "jan" )
                     incError( "First month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
@@ -1636,7 +1636,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
 
         // Generate genitive Months of Year
         // Optional, if not present fall back to month nouns.
-        if (!calNode->getChildAt(nChild)->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GenitiveMonths")))
+        if ( calNode->getChildAt(nChild)->getName() != "GenitiveMonths" )
             --nChild;
         LocaleNode * genitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
@@ -1662,7 +1662,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = genitiveMonthsNode -> getChildAt(j);
                 OUString genitiveMonthID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("genitiveMonthID", genitiveMonthID, i, j);
-                if (j == 0 && bGregorian && !genitiveMonthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                if ( j == 0 && bGregorian && genitiveMonthID != "jan" )
                     incError( "First genitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
@@ -1672,7 +1672,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate partitive Months of Year
         // Optional, if not present fall back to genitive months, or nominative 
         // months (nouns) if that isn't present either.
-        if (!calNode->getChildAt(nChild)->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PartitiveMonths")))
+        if ( calNode->getChildAt(nChild)->getName() != "PartitiveMonths" )
             --nChild;
         LocaleNode * partitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
@@ -1698,7 +1698,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = partitiveMonthsNode -> getChildAt(j);
                 OUString partitiveMonthID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("partitiveMonthID", partitiveMonthID, i, j);
-                if (j == 0 && bGregorian && !partitiveMonthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                if ( j == 0 && bGregorian && partitiveMonthID != "jan" )
                     incError( "First partitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
@@ -1730,9 +1730,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = erasNode -> getChildAt(j);
                 OUString eraID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("eraID", eraID, i, j);
-                if (j == 0 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "bc")))
+                if ( j == 0 && bGregorian && eraID != "bc" )
                     incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
-                if (j == 1 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "ad")))
+                if ( j == 1 && bGregorian && eraID != "ad" )
                     incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
                 of.writeAsciiString("\n");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);

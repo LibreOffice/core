@@ -65,8 +65,7 @@ void Uri::init() const
         // Check for proper scheme. (Scheme is case insensitive.)
         rtl::OUString aScheme
             = m_aUri.copy( 0, TDOC_URL_SCHEME_LENGTH ).toAsciiLowerCase();
-        if ( !aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TDOC_URL_SCHEME ) ) )
+        if ( aScheme != TDOC_URL_SCHEME )
         {
             // Invaild scheme.
             return;

@@ -339,7 +339,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdFont = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDFONT));
+        bool bIsStdFont = importGuid( rInStrm ) == OLE_GUID_STDFONT;
         OSL_ENSURE( bIsStdFont, "OleHelper::importStdFont - unexpected header GUID, expected StdFont" );
         if( !bIsStdFont )
             return false;
@@ -357,7 +357,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdPic = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDPIC));
+        bool bIsStdPic = importGuid( rInStrm ) == OLE_GUID_STDPIC;
         OSL_ENSURE( bIsStdPic, "OleHelper::importStdPic - unexpected header GUID, expected StdPic" );
         if( !bIsStdPic )
             return false;
@@ -374,7 +374,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdHlink = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDHLINK));
+        bool bIsStdHlink = importGuid( rInStrm ) == OLE_GUID_STDHLINK;
         OSL_ENSURE( bIsStdHlink, "OleHelper::importStdHlink - unexpected header GUID, expected StdHlink" );
         if( !bIsStdHlink )
             return false;

@@ -898,8 +898,7 @@ void RTFDocumentImpl::text(OUString& rString)
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
-            if (rString.copy(0, 2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("do"))
-                    && rString.copy(2).toInt32() > 0)
+            if ( rString.copy(0, 2) == "do" && rString.copy(2).toInt32() > 0 )
                 dispatchFlag(RTF_SUB);
             break;
         default: bRet = false; break;

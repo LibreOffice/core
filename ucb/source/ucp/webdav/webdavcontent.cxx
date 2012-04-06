@@ -409,8 +409,7 @@ uno::Any SAL_CALL Content::execute(
 
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(
-             RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertyValues
@@ -431,8 +430,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertyValues( Properties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // setPropertyValues
@@ -465,8 +463,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
@@ -476,8 +473,7 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= getPropertySetInfo( Environment,
                                      sal_False /* don't cache data */ );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -486,8 +482,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment, sal_False );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+    else if ( aCommand.Name == "open" )
     {
         //////////////////////////////////////////////////////////////////
         // open
@@ -518,8 +513,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = open( aOpenCommand, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name == "insert" )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -540,8 +534,7 @@ uno::Any SAL_CALL Content::execute(
 
         insert( arg.Data, arg.ReplaceExisting, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -583,9 +576,7 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "transfer" ) )
-              && isFolder( Environment ) )
+    else if ( aCommand.Name == "transfer" && isFolder( Environment ) )
     {
         //////////////////////////////////////////////////////////////////
         // transfer
@@ -607,8 +598,7 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( transferArgs, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "post" ) ) )
+    else if ( aCommand.Name == "post" )
     {
         //////////////////////////////////////////////////////////////////
         // post
@@ -629,9 +619,7 @@ uno::Any SAL_CALL Content::execute(
 
         post( aArg, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "lock" ) ) &&
-              supportsExclusiveWriteLock( Environment ) )
+    else if ( aCommand.Name == "lock" && supportsExclusiveWriteLock( Environment ) )
     {
         //////////////////////////////////////////////////////////////////
         // lock
@@ -639,9 +627,7 @@ uno::Any SAL_CALL Content::execute(
 
         lock( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "unlock" ) ) &&
-              supportsExclusiveWriteLock( Environment ) )
+    else if ( aCommand.Name == "unlock" && supportsExclusiveWriteLock( Environment ) )
     {
         //////////////////////////////////////////////////////////////////
         // unlock
@@ -649,9 +635,7 @@ uno::Any SAL_CALL Content::execute(
 
         unlock( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
-              isFolder( Environment ) )
+    else if ( aCommand.Name == "createNewContent" && isFolder( Environment ) )
     {
         //////////////////////////////////////////////////////////////////
         // createNewContent
@@ -997,11 +981,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     if ( Info.Type.isEmpty() )
         return uno::Reference< ucb::XContent >();
 
-    if ( ( !Info.Type.equalsAsciiL(
-               RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
-         &&
-         ( !Info.Type.equalsAsciiL(
-             RTL_CONSTASCII_STRINGPARAM( WEBDAV_CONTENT_TYPE ) ) ) )
+    if ( ( Info.Type != WEBDAV_COLLECTION_TYPE ) && ( Info.Type != WEBDAV_CONTENT_TYPE ) )
         return uno::Reference< ucb::XContent >();
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -1013,8 +993,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sal_Bool isCollection;
-    if ( Info.Type.equalsAsciiL(
-             RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
+    if ( Info.Type == WEBDAV_COLLECTION_TYPE )
     {
         aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Collection"));
         isCollection = sal_True;
@@ -1430,8 +1409,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const rtl::OUString rName = rProperties[ n ].Name;
-        if ( rName.equalsAsciiL(
-                      RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
+        if ( rName == "BaseURI" )
         {
             // Add BaseURI property, if requested.
             xProps->addProperty(
@@ -1439,8 +1417,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                  uno::makeAny( getBaseURI( xResAccess ) ),
                  true );
         }
-        else if ( rName.equalsAsciiL(
-                      RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        else if ( rName == "CreatableContentsInfo" )
         {
             // Add CreatableContentsInfo property, if requested.
             sal_Bool bFolder = sal_False;
@@ -1560,8 +1537,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     "Property is read-only!" )),
                 static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rName.equalsAsciiL(
-                      RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rName == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1569,8 +1545,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     "Property is read-only!" )),
                 static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rName.equalsAsciiL(
-                      RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rName == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1661,8 +1636,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+            else if ( rName == "DateCreated" )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
@@ -1670,8 +1644,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+            else if ( rName == "DateModified" )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
@@ -1679,8 +1652,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+            else if ( rName == "MediaType" )
             {
                 // Read-only property!
                 // (but could be writable, if 'getcontenttype' would be)
@@ -1689,8 +1661,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            if ( rName.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            if ( rName == "CreatableContentsInfo" )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
@@ -2513,30 +2484,24 @@ void Content::transfer(
         // Check source's and target's URL scheme
         //
         const rtl::OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
-        if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+        if ( aScheme == WEBDAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
         }
-        else if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
+        else if ( aScheme == DAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
         }
-        else if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
+        else if ( aScheme == DAVS_URL_SCHEME )
         {
             sourceURI.SetScheme(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTPS_URL_SCHEME )) );
         }
         else
         {
-            if ( !aScheme.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
-                 !aScheme.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) )
+            if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
@@ -2549,12 +2514,10 @@ void Content::transfer(
             }
         }
 
-        if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+        if ( targetURI.GetScheme().toAsciiLowerCase() == WEBDAV_URL_SCHEME )
             targetURI.SetScheme(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
-        else if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
+        else if ( targetURI.GetScheme().toAsciiLowerCase() == DAV_URL_SCHEME )
             targetURI.SetScheme(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
 
@@ -3205,8 +3168,7 @@ const Content::ResourceType & Content::getResourceType(
         const rtl::OUString aScheme(
             rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
 
-        if ( aScheme.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) ) )
+        if ( aScheme == FTP_URL_SCHEME )
         {
             eResourceType = FTP;
         }

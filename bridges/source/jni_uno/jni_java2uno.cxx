@@ -425,8 +425,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 #endif
 
         // special IQueryInterface.queryInterface()
-        if (method_name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("queryInterface") ))
+        if ( method_name == "queryInterface" )
         {
             // oid
             JLocalAutoRef jo_oid(

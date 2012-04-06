@@ -142,8 +142,7 @@ OUString RtfFilter::getImplementationName(  ) throw (uno::RuntimeException)
 #define SERVICE_NAME2 "com.sun.star.document.ExportFilter"
 sal_Bool RtfFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    return (rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-            rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ));
+    return ( rServiceName == SERVICE_NAME1 || rServiceName == SERVICE_NAME2 );
 }
 
 uno::Sequence< OUString > RtfFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException)

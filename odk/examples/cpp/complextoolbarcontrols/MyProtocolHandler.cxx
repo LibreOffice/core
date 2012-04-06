@@ -170,13 +170,8 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
             // ohne ein entsprechendes Dokument funktioniert der Handler nicht
             return xRet;
 
-        if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command1" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command2" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command3" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command4" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command5" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command6" ) ) ||
-             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command7" ) ) )
+        if ( aURL.Path == "Command1" || aURL.Path == "Command2" || aURL.Path == "Command3" || aURL.Path == "Command4" || aURL.Path == "Command5"
+          || aURL.Path == "Command6" || aURL.Path == "Command7" )
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
@@ -212,10 +207,7 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
 sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& ServiceName )
     throw (RuntimeException)
 {
-    return (
-            ServiceName.equalsAscii(MYPROTOCOLHANDLER_SERVICENAME  ) ||
-            ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
-           );
+    return ( ServiceName.equalsAscii(MYPROTOCOLHANDLER_SERVICENAME) || ServiceName == "com.sun.star.frame.ProtocolHandler" );
 }
 
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(  )

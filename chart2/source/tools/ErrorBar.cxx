@@ -176,8 +176,7 @@ struct StaticErrorBarInfo : public rtl::StaticAggregate< uno::Reference< beans::
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xLSeq, uno::UNO_QUERY );
-    return ( xServiceInfo.is() && xServiceInfo->getImplementationName().equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.chart2.LabeledDataSequence")));
+    return ( xServiceInfo.is() && xServiceInfo->getImplementationName() == "com.sun.star.comp.chart2.LabeledDataSequence" );
 }
 
 } // anonymous namespace

@@ -528,10 +528,10 @@ getQualifier(const char* i_name) {
     DBG_ASSERT(i_qname, "SfxDocumentMetaData: getNameSpace: argument is null");
     const char * ns = "";
     ::rtl::OUString n = getQualifier(i_qname).first;
-    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xlink"))) ns = s_nsXLink;
-    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dc"))) ns = s_nsDC;
-    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office"))) ns = s_nsODF;
-    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("meta"))) ns = s_nsODFMeta;
+    if ( n == "xlink" ) ns = s_nsXLink;
+    if ( n == "dc" ) ns = s_nsDC;
+    if ( n == "office" ) ns = s_nsODF;
+    if ( n == "meta" ) ns = s_nsODFMeta;
     DBG_ASSERT(*ns, "SfxDocumentMetaData: unknown namespace prefix");
     return ::rtl::OUString::createFromAscii(ns);
 }
@@ -1110,8 +1110,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
                 static_cast<const char*>("office:target-frame-name"),
                 m_DefaultTarget));
         // xlink:show: _blank -> new, any other value -> replace
-        const sal_Char* show = m_DefaultTarget.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_blank"))
-            ? "new" : "replace";
+        const sal_Char* show = m_DefaultTarget == "_blank" ? "new" : "replace";
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:show"),
                 ::rtl::OUString::createFromAscii(show)));
@@ -1209,8 +1208,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             while (xNode.is()) {
                 if (css::xml::dom::NodeType_ELEMENT_NODE ==xNode->getNodeType())
                 {
-                    if (xNode->getNamespaceURI().equalsAscii(s_nsODF) &&
-                        xNode->getLocalName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document-meta")))
+                    if ( xNode->getNamespaceURI().equalsAscii(s_nsODF) && xNode->getLocalName() == "document-meta" )
                     {
                         xRElem.set(xNode, css::uno::UNO_QUERY_THROW);
                         break;
@@ -1362,7 +1360,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("string")) || true) { // default
+        } else if ( type == "string" || true) { // default
             any <<= text;
         }
         try {

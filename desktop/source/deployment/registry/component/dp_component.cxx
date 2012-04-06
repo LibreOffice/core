@@ -407,8 +407,7 @@ BackendImpl::ComponentPackageImpl::getRDB() const
             that->initServiceRdbFiles();
         }
     }
-    if (m_loader.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
+    if ( m_loader == "com.sun.star.loader.SharedLibrary" )
         return that->m_xNativeRDB;
     else
         return that->m_xCommonRDB;
@@ -420,8 +419,7 @@ BackendImpl::ComponentPackageImpl::getRDB_RO() const
 {
     BackendImpl * that = getMyBackend();
 
-    if (m_loader.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
+    if ( m_loader == "com.sun.star.loader.SharedLibrary" )
         return that->m_xNativeRDB_RO;
     else
         return that->m_xCommonRDB_RO;
@@ -498,9 +496,7 @@ void BackendImpl::initServiceRdbFiles()
             &oldRDB, makeURL( getCachePath(), m_commonRDB_RO),
             xCmdEnv, false /* no throw */ );
     }
-    m_commonRDB = m_commonRDB_RO.equalsAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("common.rdb") )
-        ? OUSTR("common_.rdb") : OUSTR("common.rdb");
+    m_commonRDB = m_commonRDB_RO == "common.rdb" ? OUSTR("common_.rdb") : OUSTR("common.rdb");
     if (oldRDB.get().is())
     {
         if (! cacheDir.transferContent(
@@ -729,13 +725,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType(mediaType_);
-    if (mediaType.isEmpty() ||
-        mediaType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(
-                "application/vnd.sun.star.uno-component") ) ||
-        mediaType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(
-                "application/vnd.sun.star.uno-typelibrary") ))
+    if ( mediaType.isEmpty() || mediaType == "application/vnd.sun.star.uno-component" || mediaType == "application/vnd.sun.star.uno-typelibrary" )
     {
         // detect exact media-type:
         ::ucbhelper::Content ucbContent;
@@ -961,11 +951,7 @@ void BackendImpl::unorc_verify_init(
                                 RTL_CONSTASCII_LENGTH("?$ORIGIN/"));
                             state = 2;
                         }
-                        else if (state <= 2 &&
-                                 token.equalsAsciiL(
-                                     RTL_CONSTASCII_STRINGPARAM(
-                                         "${$ORIGIN/${_OS}_${_ARCH}rc:"
-                                         "UNO_SERVICES}")))
+                        else if ( state <= 2 && token == "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}" )
                         {
                             state = 3;
                         }
@@ -1605,9 +1591,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                 m_loader, url, getRDB());
         // Only write to unorc after successful registration; it may fail if
         // there is no suitable java
-        if (m_loader.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2")) &&
-            !jarManifestHeaderPresent(url, OUSTR("UNO-Type-Path"), xCmdEnv))
+        if (m_loader == "com.sun.star.loader.Java2" && !jarManifestHeaderPresent(url, OUSTR("UNO-Type-Path"), xCmdEnv))
         {
             that->addToUnoRc(RCITEM_JAR_TYPELIB, url, xCmdEnv);
             data.javaTypeLibrary = true;

@@ -299,7 +299,7 @@ namespace basprov
         {
             // Provider has been created with application context for user
             // or share
-            if ( !m_sScriptingContext.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
+            if ( m_sScriptingContext != "user" )
             {
                 m_bIsUserCtx = false;
             }

@@ -160,8 +160,7 @@ namespace io_acceptor
             try
             {
                 cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
-                if (aDesc.getName().equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("pipe")))
+                if ( aDesc.getName() == "pipe" )
                 {
                     rtl::OUString aName(
                         aDesc.getParameter(
@@ -184,8 +183,7 @@ namespace io_acceptor
                         throw;
                     }
                 }
-                else if (aDesc.getName().equalsAsciiL(
-                             RTL_CONSTASCII_STRINGPARAM("socket")))
+                else if ( aDesc.getName() == "socket" )
                 {
                     rtl::OUString aHost;
                     if (aDesc.hasParameter(

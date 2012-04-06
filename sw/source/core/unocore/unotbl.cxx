@@ -3615,13 +3615,10 @@ OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.CellRange" ) ) ||
-         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterProperties" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesAsian" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesComplex") ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphProperties" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphPropertiesAsian" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphPropertiesComplex" ) );
+        rServiceName == "com.sun.star.text.CellRange" || rServiceName == "com.sun.star.style.CharacterProperties"
+     || rServiceName == "com.sun.star.style.CharacterPropertiesAsian" || rServiceName == "com.sun.star.style.CharacterPropertiesComplex"
+     || rServiceName == "com.sun.star.style.ParagraphProperties" || rServiceName == "com.sun.star.style.ParagraphPropertiesAsian"
+     || rServiceName == "com.sun.star.style.ParagraphPropertiesComplex";
 }
 
 uno::Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( uno::RuntimeException )

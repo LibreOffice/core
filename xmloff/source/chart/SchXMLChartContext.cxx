@@ -581,8 +581,7 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
     const SvXMLImport & rImport )
 {
     bool bResult = false;
-    if( rServiceName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" )))
+    if( rServiceName == "com.sun.star.chart2.DonutChartType" )
     {
         bResult = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( rImport.GetModel() );
     }
@@ -758,9 +757,9 @@ void SchXMLChartContext::EndElement()
         return;
 
     bool bHasOwnData = false;
-    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
+    if( m_aXLinkHRefAttributeToIndicateDataProvider == "." ) //data comes from the chart itself
         bHasOwnData = true;
-    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
+    else if( m_aXLinkHRefAttributeToIndicateDataProvider == ".." ) //data comes from the parent application
         bHasOwnData = false;
     else if( !m_aXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
         bHasOwnData = m_bHasTableElement;
@@ -769,7 +768,7 @@ void SchXMLChartContext::EndElement()
 
     if( xNewDoc->hasInternalDataProvider())
     {
-        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) )
+        if( !m_bHasTableElement && m_aXLinkHRefAttributeToIndicateDataProvider != "." )
         {
             //#i103147# ODF, workaround broken files with a missing table:cell-range-address at the plot-area
             bool bSwitchSuccessful = SchXMLTools::switchBackToDataProviderFromParent( xNewDoc, maLSequencesPerIndex );
@@ -939,8 +938,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
             uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
             for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
             {
-                if( aChartTypes[nCTIdx]->getChartType().equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType")))
+                if( aChartTypes[nCTIdx]->getChartType() == "com.sun.star.chart2.CandleStickChartType" )
                 {
                     xDSContainer.set( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xCTProp( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );

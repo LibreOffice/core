@@ -1289,7 +1289,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                                 nSelPos = pFilterBox->GetEntryPos(rQueryStr);
                             }
                         }
-                        else if (rEntry.eOp == SC_TOPVAL && rQueryStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("10")))
+                        else if ( rEntry.eOp == SC_TOPVAL && rQueryStr == "10" )
                             nSelPos = SC_AUTOFILTER_TOP10;
                         else
                             nSelPos = SC_AUTOFILTER_CUSTOM;

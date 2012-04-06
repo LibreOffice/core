@@ -588,16 +588,14 @@ namespace frm
                 if (xVclWindow.is())
                 {
                     Any aValue;
-                    if  (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) )
+                    if  (   aText == "1"
                         ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("TRUE"))
                         ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IS TRUE"))
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
-                    else if (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "0" ) )
-                            ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("FALSE"))
-                            )
+                    else if ( aText == "0" || aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("FALSE")) )
                     {
                         aValue <<= (sal_Int32)STATE_NOCHECK;
                     }

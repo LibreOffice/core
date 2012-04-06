@@ -114,10 +114,7 @@ HierarchyContent* HierarchyContent::create(
     if ( Info.Type.isEmpty() )
         return 0;
 
-    if ( !Info.Type.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) ) &&
-         !Info.Type.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ) )
+    if ( Info.Type != HIERARCHY_FOLDER_CONTENT_TYPE && Info.Type != HIERARCHY_LINK_CONTENT_TYPE )
         return 0;
 
     return new HierarchyContent( rxSMgr, pProvider, Identifier, Info );
@@ -146,10 +143,7 @@ HierarchyContent::HierarchyContent(
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
   : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-  m_aProps( Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) )
-            ? HierarchyEntryData::FOLDER
-            : HierarchyEntryData::LINK ),
+  m_aProps( Info.Type == HIERARCHY_FOLDER_CONTENT_TYPE ? HierarchyEntryData::FOLDER : HierarchyEntryData::LINK ),
   m_eState( TRANSIENT ),
   m_pProvider( pProvider ),
   m_bCheckedReadOnly( false ),
@@ -373,8 +367,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 {
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertyValues
@@ -395,8 +388,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         aRet <<= getPropertyValues( Properties );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // setPropertyValues
@@ -429,8 +421,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
@@ -438,8 +429,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         aRet <<= getPropertySetInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -447,8 +437,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "open" ) ) && isFolder() )
+    else if ( aCommand.Name == "open" && isFolder() )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -471,9 +460,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
                 = new DynamicResultSet( m_xSMgr, this, aOpenCommand );
         aRet <<= xSet;
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "insert" ) ) &&
-              ( m_eKind != ROOT ) && !isReadOnly() )
+    else if ( aCommand.Name == "insert" && ( m_eKind != ROOT ) && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -498,9 +485,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
                              : ucb::NameClash::ERROR;
         insert( nNameClash, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "delete" ) ) &&
-              ( m_eKind != ROOT ) && !isReadOnly() )
+    else if ( aCommand.Name == "delete" && ( m_eKind != ROOT ) && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -536,9 +521,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) &&
-              isFolder() && !isReadOnly() )
+    else if ( aCommand.Name == "transfer" && isFolder() && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // transfer
@@ -561,9 +544,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         transfer( aInfo, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
-              isFolder() && !isReadOnly() )
+    else if ( aCommand.Name == "createNewContent" && isFolder() && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // createNewContent
@@ -638,13 +619,9 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
-        sal_Bool bCreateFolder =
-            Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) );
+        sal_Bool bCreateFolder = Info.Type == HIERARCHY_FOLDER_CONTENT_TYPE;
 
-        if ( !bCreateFolder &&
-             !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ) )
+        if ( !bCreateFolder && Info.Type != HIERARCHY_LINK_CONTENT_TYPE )
             return uno::Reference< ucb::XContent >();
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -794,10 +771,7 @@ bool HierarchyContent::isReadOnly()
                 sal_Int32 nCount = aNames.getLength();
                 for ( sal_Int32 n = 0; n < nCount; ++n )
                 {
-                    if ( aNames[ n ].equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.ucb.HierarchyDataReadWriteAccess"
-                             ) ) )
+                    if ( aNames[ n ] == "com.sun.star.ucb.HierarchyDataReadWriteAccess" )
                     {
                         m_bIsReadOnly = false;
                         break;
@@ -985,34 +959,28 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 
             // Process Core properties.
 
-            if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            if ( rProp.Name == "ContentType" )
             {
                 xRow->appendString ( rProp, rData.getContentType() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( rProp.Name == "Title" )
             {
                 xRow->appendString ( rProp, rData.getTitle() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( rProp.Name == "IsDocument" )
             {
                 xRow->appendBoolean( rProp, rData.getIsDocument() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 xRow->appendBoolean( rProp, rData.getIsFolder() );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            else if ( rProp.Name == "CreatableContentsInfo" )
             {
                 xRow->appendObject(
                     rProp, uno::makeAny( rData.getCreatableContentsInfo() ) );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "TargetURL" ) ) )
+            else if ( rProp.Name == "TargetURL" )
             {
                 // TargetURL is only supported by links.
 
@@ -1162,8 +1130,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     {
         const beans::PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(  "ContentType" ) ) )
+        if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1171,8 +1138,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1180,8 +1146,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1189,8 +1154,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1198,8 +1162,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rValue.Name == "Title" )
         {
             if ( isReadOnly() )
             {
@@ -1255,8 +1218,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 }
             }
         }
-        else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "TargetURL" ) ) )
+        else if ( rValue.Name == "TargetURL" )
         {
             if ( isReadOnly() )
             {
@@ -1830,8 +1792,7 @@ void HierarchyContent::transfer(
             rValue.Name   = rProp.Name;
             rValue.Handle = rProp.Handle;
 
-            if ( !bHadTitle && rProp.Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            if ( !bHadTitle && rProp.Name == "Title" )
             {
                 // Set new title instead of original.
                 bHadTitle = sal_True;

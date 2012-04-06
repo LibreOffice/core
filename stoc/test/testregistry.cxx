@@ -206,7 +206,7 @@ void test_SimpleRegistry(
 
     TEST_ENSHURE( xServInfo.is(), "test_SimpleRegistry error2");
 
-    TEST_ENSHURE( xServInfo->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry") ), "test_SimpleRegistry error3");
+    TEST_ENSHURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.SimpleRegistry", "test_SimpleRegistry error3");
     TEST_ENSHURE( xServInfo->supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))), "test_SimpleRegistry error4");
     TEST_ENSHURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_SimpleRegistry error5");
     xServInfo.clear();
@@ -356,10 +356,7 @@ void test_SimpleRegistry(
 
         xRootKey = xReg->getRootKey();
         xKey = xRootKey->openKey( OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ) );
-        TEST_ENSHURE(
-            xKey.is() && xKey->isValid() &&
-            xKey->getKeyName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("/ThirdKey/FirstSubKey/WithSubSubKey") ),
-            "test_SimpleRegistry error 1213" );
+        TEST_ENSHURE( xKey.is() && xKey->isValid() && xKey->getKeyName() == "/ThirdKey/FirstSubKey/WithSubSubKey", "test_SimpleRegistry error 1213" );
         xKey->closeKey();
         TEST_ENSHURE(
             xRootKey->getKeyType( OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ) ) ==

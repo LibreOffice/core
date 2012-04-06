@@ -169,32 +169,11 @@ css::uno::Any Default::getPropertyValue(rtl::OUString const & PropertyName)
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    if (PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("EnableATToolSupport")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ExternalMailer")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("SourceViewFontHeight")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("SourceViewFontName")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")) ||
-        PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
+    if ( PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
+      || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"
+      || PropertyName == "ooInetFTPProxyPort" || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
+      || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
+      || PropertyName == "ooInetProxyType" )
     {
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     }

@@ -98,10 +98,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * #i109007# KDE3 seems to have the same problem.
 		 * And same applies for KDE4.
                  */
-                if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) ||
-                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")) ||
-		    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) ||
-		    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
+                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde" || rModuleBase == "kde4" )
                 {
                     pCloseModule = NULL;
                 }
@@ -216,8 +213,7 @@ static SalInstance* check_headless_plugin()
     for( int i = 0; i < nParams; i++ )
     {
         osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-headless")) ||
-            aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--headless")) )
+        if( aParam == "-headless" || aParam == "--headless" )
         {
             return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
         }

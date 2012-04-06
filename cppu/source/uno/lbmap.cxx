@@ -427,7 +427,7 @@ static Mapping loadExternalMapping(
         oslModule hModule = 0;
         OUString aName;
 
-        if (EnvDcp::getTypeName(rFrom.getTypeName()).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
             hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
         if (! hModule)
             hModule = loadModule( aName = getBridgeName( rFrom, rTo, rAddPurpose ) );

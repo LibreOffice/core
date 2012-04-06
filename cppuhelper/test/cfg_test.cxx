@@ -113,14 +113,14 @@ ServiceImpl0::ServiceImpl0( Reference< XComponentContext > const & xContext ) SA
     OSL_VERIFY( n == 13 );
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop1") ) >>= val );
-    OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("value of serviceprop1") ) );
+    OSL_VERIFY( val == "value of serviceprop1" );
     // impl properties
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop0") ) >>= n );
     OSL_VERIFY( n == 15 );
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop1") ) >>= val );
-    OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("value of implprop1") ) );
+    OSL_VERIFY( val == "value of implprop1" );
 }
 // XInitialization
 //__________________________________________________________________________________________________
@@ -131,11 +131,11 @@ void ServiceImpl0::initialize( const Sequence< Any >& rArgs )
     OUString val;
     OSL_VERIFY( rArgs.getLength() == 3 );
     OSL_VERIFY( rArgs[ 0 ] >>= val );
-    OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("first argument") ) );
+    OSL_VERIFY( val == "first argument" );
     OSL_VERIFY( rArgs[ 1 ] >>= val );
-    OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("second argument") ) );
+    OSL_VERIFY( val == "second argument" );
     OSL_VERIFY( rArgs[ 2 ] >>= val );
-    OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("third argument") ) );
+    OSL_VERIFY( val == "third argument" );
 }
 // XServiceInfo
 //__________________________________________________________________________________________________

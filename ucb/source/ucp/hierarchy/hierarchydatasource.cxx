@@ -392,11 +392,8 @@ HierarchyDataSource::createInstanceWithArguments(
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     // Check service specifier.
-    bool bReadOnly  = !!ServiceSpecifier.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( READ_SERVICE_NAME ) );
-    bool bReadWrite = !bReadOnly &&
-                      ServiceSpecifier.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( READWRITE_SERVICE_NAME ) );
+    bool bReadOnly  = ServiceSpecifier == READ_SERVICE_NAME;
+    bool bReadWrite = !bReadOnly && ServiceSpecifier == READWRITE_SERVICE_NAME;
 
     if ( !bReadOnly && !bReadWrite )
     {
@@ -419,8 +416,7 @@ HierarchyDataSource::createInstanceWithArguments(
             beans::PropertyValue aProp;
             if ( Arguments[ n ] >>= aProp )
             {
-                if ( aProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( CFGPROPERTY_NODEPATH ) ) )
+                if ( aProp.Name == CFGPROPERTY_NODEPATH )
                 {
                     rtl::OUString aPath;
                     if ( aProp.Value >>= aPath )
@@ -452,9 +448,7 @@ HierarchyDataSource::createInstanceWithArguments(
                         return uno::Reference< uno::XInterface >();
                     }
                 }
-                else if ( aProp.Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                CFGPROPERTY_LAZYWRITE ) ) )
+                else if ( aProp.Name == CFGPROPERTY_LAZYWRITE )
                 {
                     if ( aProp.Value.getValueType() == getCppuBooleanType() )
                     {

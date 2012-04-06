@@ -982,30 +982,17 @@ namespace DOM
     {
         // does not need mutex currently
         events::CEvent *pEvent = 0;
-        if (
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMSubtreeModified"))          ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeInserted"))             ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeRemoved"))              ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeRemovedFromDocument"))  ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeInsertedIntoDocument")) ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMAttrModified"))             ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMCharacterDataModified")))
+        if ( aType == "DOMSubtreeModified" || aType == "DOMNodeInserted" || aType == "DOMNodeRemoved"
+          || aType == "DOMNodeRemovedFromDocument" || aType == "DOMNodeInsertedIntoDocument" || aType == "DOMAttrModified"
+          || aType == "DOMCharacterDataModified")
         {
             pEvent = new events::CMutationEvent;
 
-        } else if (
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMFocusIn"))  ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMFocusOut")) ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMActivate")))
+        } else if ( aType == "DOMFocusIn" || aType == "DOMFocusOut" || aType == "DOMActivate")
         {
             pEvent = new events::CUIEvent;
-        } else if (
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("click"))     ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mousedown")) ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseup"))   ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseover")) ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mousemove")) ||
-            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseout")) )
+        } else if ( aType == "click"     || aType == "mousedown" || aType == "mouseup"
+                 || aType == "mouseover" || aType == "mousemove" || aType == "mouseout" )
         {
             pEvent = new events::CMouseEvent;
         }

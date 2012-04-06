@@ -1788,7 +1788,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
                 }
             }
         }
-        else if( !bDefaultFound && aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
+        else if( !bDefaultFound && aExtension == "default" )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;

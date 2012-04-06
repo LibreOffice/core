@@ -117,7 +117,7 @@ namespace dbaccess
             o_rLocalName = i_rElementName.copy( nSeparatorPos + 1 );
         }
 
-        OSL_ENSURE( o_rNamespace.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config" ) ), "SettingsImport::split: unexpected namespace!" );
+        OSL_ENSURE( o_rNamespace == "config", "SettingsImport::split: unexpected namespace!" );
             // our recovery file is kind of hand-made, so there shouldn't be anything else than "config".
             // If there is, then just ignore it ...
     }

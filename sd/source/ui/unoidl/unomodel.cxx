@@ -1158,19 +1158,15 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 {
     ::SolarMutexGuard aGuard;
 
-    if (
-        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.OfficeDocument"))) ||
-        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GenericDrawingDocument"))) ||
-        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory")))
-       )
+    if ( ServiceName == "com.sun.star.document.OfficeDocument"
+      || ServiceName == "com.sun.star.drawing.GenericDrawingDocument"
+      || ServiceName == "com.sun.star.drawing.DrawingDocumentFactory" )
     {
         return sal_True;
     }
 
-    return (
-            ( mbImpressDoc && ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument"))) ||
-            (!mbImpressDoc && ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")))
-           );
+    return ( ( mbImpressDoc && ServiceName == "com.sun.star.presentation.PresentationDocument" )
+         || ( !mbImpressDoc && ServiceName == "com.sun.star.drawing.DrawingDocument" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames() throw(uno::RuntimeException)

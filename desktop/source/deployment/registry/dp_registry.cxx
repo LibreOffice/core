@@ -235,10 +235,7 @@ void PackageRegistryImpl::insertBackend(
             //The package backend shall also be called to determine the mediatype
             //(XPackageRegistry.bindPackage) when the URL points to a directory.
             const bool bExtension = mediaType.equals(OUSTR("application/vnd.sun.star.package-bundle"));
-            if (fileFilter.isEmpty() ||
-                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*.*") ) ||
-                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ) ||
-                bExtension)
+            if (fileFilter.isEmpty() || fileFilter == "*.*" || fileFilter == "*" || bExtension)
             {
                 m_ambiguousBackends.insert( xBackend );
             }

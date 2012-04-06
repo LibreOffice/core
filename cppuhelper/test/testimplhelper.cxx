@@ -349,24 +349,24 @@ static void dotest( const Reference< XInterface > & xOriginal )
     }
 
     Reference< A > xa( xOriginal, UNO_QUERY );
-    OSL_ENSURE( xa->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### A failed!" );
+    OSL_ENSURE( xa->a() == "a", "### A failed!" );
     Reference< BA > xba( xa, UNO_QUERY );
-    OSL_ENSURE( xba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### BA failed!" );
-    OSL_ENSURE( xba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### BA failed!" );
+    OSL_ENSURE( xba->ba() == "ba", "### BA failed!" );
+    OSL_ENSURE( xba->a() == "a" ), "### BA failed!" );
     Reference< CA > xca( xba, UNO_QUERY );
-    OSL_ENSURE( xca->ca().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ca") ), "### CA failed!" );
-    OSL_ENSURE( xca->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### CA failed!" );
+    OSL_ENSURE( xca->ca() == "ca", "### CA failed!" );
+    OSL_ENSURE( xca->a() == "a", "### CA failed!" );
     Reference< DBA > xdba( xca, UNO_QUERY );
-    OSL_ENSURE( xdba->dba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dba") ), "### DBA failed!" );
-    OSL_ENSURE( xdba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### DBA failed!" );
-    OSL_ENSURE( xdba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### DBA failed!" );
+    OSL_ENSURE( xdba->dba() == "dba", "### DBA failed!" );
+    OSL_ENSURE( xdba->ba() == "ba", "### DBA failed!" );
+    OSL_ENSURE( xdba->a() == "a", "### DBA failed!" );
     Reference< E > xe( xdba, UNO_QUERY );
-    OSL_ENSURE( xe->e().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("e") ), "### E failed!" );
+    OSL_ENSURE( xe->e() == "e", "### E failed!" );
     Reference< FE > xfe( xe, UNO_QUERY );
-    OSL_ENSURE( xfe->fe().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fe") ), "### FE failed!" );
+    OSL_ENSURE( xfe->fe() == "fe", "### FE failed!" );
     Reference< G > xg( xfe, UNO_QUERY );
-    OSL_ENSURE( xg->g().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("g") ), "### G failed!" );
-    OSL_ENSURE( xg->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### G failed!" );
+    OSL_ENSURE( xg->g() == "g", "### G failed!" );
+    OSL_ENSURE( xg->a() == "a", "### G failed!" );
 
     // type provider
     Reference< lang::XTypeProvider > xProv( xg, UNO_QUERY );
@@ -466,16 +466,16 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     dotest( xWeakImpl );
     Reference< H > xH( xWeakImpl, UNO_QUERY );
     Reference< I > xI( xH, UNO_QUERY );
-    OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h") ) );
-    OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i") ) );
+    OSL_ASSERT( xH->h() == "h" );
+    OSL_ASSERT( xI->i() == "i" );
 
     xWeakAggImpl = (OWeakObject *)new TestAggImplInh();
     Reference< lang::XTypeProvider > xTP7( xWeakAggImpl, UNO_QUERY );
     dotest( xWeakAggImpl );
     xH.set( xWeakAggImpl, UNO_QUERY );
     xI.set( xH, UNO_QUERY );
-    OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h2") ) );
-    OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i2") ) );
+    OSL_ASSERT( xH->h() == "h2" );
+    OSL_ASSERT( xI->i() == "i2" );
 
     //
     OSL_ASSERT(
@@ -545,8 +545,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     }
     catch (RuntimeException & rExc)
     {
-        OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("runtime exc") ) && rExc.Context == xImpl,
-                     "### unexpected exception content!" );
+        OSL_ENSURE( rExc.Message == "runtime exc" && rExc.Context == xImpl, "### unexpected exception content!" );
         try
         {
             throwException( makeAny( Exception(
@@ -558,8 +557,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         }
         catch (Exception & rExc2)
         {
-            OSL_ENSURE( rExc2.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("exc") ) && rExc2.Context == xImpl,
-                         "### unexpected exception content!" );
+            OSL_ENSURE( rExc2.Message == "exc" && rExc2.Context == xImpl, "### unexpected exception content!" );
             try
             {
                 throwException( makeAny( lang::IllegalAccessException(
@@ -567,8 +565,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
             }
             catch (lang::IllegalAccessException & rExc3)
             {
-                OSL_ENSURE( rExc3.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc3.Context == xImpl,
-                             "### unexpected exception content!" );
+                OSL_ENSURE( rExc3.Message == "axxess exc" && rExc3.Context == xImpl, "### unexpected exception content!" );
                 return;
             }
         }

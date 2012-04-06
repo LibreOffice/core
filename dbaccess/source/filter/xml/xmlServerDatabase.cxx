@@ -90,10 +90,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     if ( !sType.isEmpty() )
     {
         ::rtl::OUStringBuffer sURL;
-        if  (   sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:jdbc" ) )
-            ||  sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysqlc" ) )
-            ||  sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:mysqlc" ) )
-            )
+        if  ( sType == "sdbc:mysql:jdbc" || sType == "sdbc:mysqlc" || sType == "sdbc:mysql:mysqlc" )
         {
             sURL.append( sType );
             sURL.append( sal_Unicode( ':' ) );

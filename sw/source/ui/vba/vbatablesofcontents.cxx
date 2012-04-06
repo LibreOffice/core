@@ -77,7 +77,7 @@ public:
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
             uno::Reference< text::XDocumentIndex > xToc( xDocIndexes->getByIndex(i), uno::UNO_QUERY_THROW );
-            if( xToc->getServiceName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")) )
+            if( xToc->getServiceName() == "com.sun.star.text.ContentIndex" )
             {
                 maToc.push_back( xToc );
             }

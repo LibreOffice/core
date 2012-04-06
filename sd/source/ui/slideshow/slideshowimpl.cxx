@@ -798,9 +798,7 @@ bool SlideshowImpl::startPreview(
             const Sequence<OUString> supportedServices(
                 xServiceInfo->getSupportedServiceNames() );
             for ( sal_Int32 pos = supportedServices.getLength(); pos--; ) {
-                if (supportedServices[pos].equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.drawing.MasterPage") )) {
+                if ( supportedServices[pos] == "com.sun.star.drawing.MasterPage" ) {
                     OSL_FAIL("sd::SlideshowImpl::startPreview() "
                               "not allowed on master page!");
                     return false;
@@ -1355,8 +1353,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
             Reference< XShape > xShape;
             xShapes->getByIndex( nShape ) >>= xShape;
 
-            if( xShape.is() &&
-                xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape") ) )
+            if( xShape.is() && xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
             {
                 Reference< XShapes > xSubShapes( xShape, UNO_QUERY );
                 if( xSubShapes.is() )

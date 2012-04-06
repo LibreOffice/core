@@ -132,7 +132,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
 }
 
 static inline sal_Bool SAL_CALL isCJK( const Locale& rLocale ) {
-        return rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) || rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) || rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko"));
+        return rLocale.Language == "zh" || rLocale.Language == "ja" || rLocale.Language == "ko";
 }
 
 Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int32 nStartPos,

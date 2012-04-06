@@ -126,12 +126,12 @@ static const char s_prefix  [] = "id";  // prefix for generated xml:id
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_content));
+    return i_rPath == s_content;
 }
 
 static bool isStylesFile (::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_styles));
+    return i_rPath == s_styles;
 }
 
 

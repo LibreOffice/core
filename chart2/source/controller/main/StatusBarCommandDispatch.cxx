@@ -77,8 +77,8 @@ void StatusBarCommandDispatch::fireStatusEvent(
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
     bool bFireAll( rURL.isEmpty() );
-    bool bFireContext(  bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Context")));
-    bool bFireModified( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:ModifiedStatus")));
+    bool bFireContext(  bFireAll || rURL == ".uno:Context" );
+    bool bFireModified( bFireAll || rURL == ".uno:ModifiedStatus" );
 
     if( bFireContext )
     {

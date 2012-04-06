@@ -1042,8 +1042,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 {
     if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
-        if( !rTargetFrameName.isEmpty() &&
-            rTargetFrameName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_self")))
+        if( !rTargetFrameName.isEmpty() && rTargetFrameName == "_self" )
             return m_aDispatchContainer.getDispatchForURL( rURL );
     }
     return uno::Reference< frame::XDispatch > ();

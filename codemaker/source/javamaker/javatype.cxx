@@ -2198,8 +2198,7 @@ void handleInterfaceType(
                  || mflags == RT_MODE_ATTRIBUTE_SET)
                 && reader.getMethodName(j) == attrNameUtf16)
             {
-                if (!reader.getMethodReturnTypeName(j).equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("void"))
+                if (reader.getMethodReturnTypeName(j) != "void"
                     || reader.getMethodParameterCount(j) != 0
                     || (mflags == RT_MODE_ATTRIBUTE_GET
                         ? getter != SAL_MAX_UINT16
@@ -2895,8 +2894,7 @@ void handleService(
                                   reader.getMethodName(i)));
             bool defaultCtor = name.getLength() == 0;
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
-                || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("void")))
+                || (reader.getMethodReturnTypeName(i) != "void")
                 || (defaultCtor
                     && (methods != 1 || reader.getMethodParameterCount(i) != 0
                         || reader.getMethodExceptionCount(i) != 0)))

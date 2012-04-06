@@ -204,7 +204,7 @@ namespace slideshow
             uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
             rtl::OUString sCLSID;
             getPropertyValue( sCLSID, xProp, OUSTR("CLSID"));
-            if( sCLSID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("12DCAE26-281F-416F-a234-c3086127382e")) && local_getMetafileForChart( xSource, xContainingPage, rMtf ) )
+            if( sCLSID == "12DCAE26-281F-416F-a234-c3086127382e" && local_getMetafileForChart( xSource, xContainingPage, rMtf ) )
                 return true;
             return getMetaFile( xSource, xContainingPage, rMtf, mtfLoadFlags, rxContext );
         }

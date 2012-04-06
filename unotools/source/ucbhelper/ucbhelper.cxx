@@ -288,9 +288,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 != 0)
             {
                 // Make sure the only required bootstrap property is "Title":
-                if (info[i].Properties.getLength() != 1
-                    || !info[i].Properties[0].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("Title")))
+                if ( info[i].Properties.getLength() != 1 || info[i].Properties[0].Name != "Title" )
                 {
                     continue;
                 }

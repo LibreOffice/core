@@ -148,7 +148,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
-        if  ( !_rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
+        if  ( _rEvent.PropertyName != "DataField" )
             // not interested in
             return;
 

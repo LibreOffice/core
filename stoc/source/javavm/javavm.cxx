@@ -643,9 +643,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                               "bad call to initialize")),
             static_cast< cppu::OWeakObject * >(this));
     css::beans::NamedValue val;
-    if (rArguments.getLength() == 1 && (rArguments[0] >>= val)
-        && val.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "UnoVirtualMachine")))
+    if (rArguments.getLength() == 1 && (rArguments[0] >>= val) && val.Name == "UnoVirtualMachine" )
     {
         OSL_ENSURE(
             sizeof (sal_Int64) >= sizeof (jvmaccess::UnoVirtualMachine *),
@@ -1136,15 +1134,13 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         setINetSettingsInVM(value != 0);
         return;
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetHTTPProxyName")))
+    else if ( aAccessor == "ooInetHTTPProxyName" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "http.proxyHost"));
         rEvent.Element >>= aPropertyValue;
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetHTTPProxyPort")))
+    else if ( aAccessor == "ooInetHTTPProxyPort" )
     {
         aPropertyName
             = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort"));
@@ -1152,15 +1148,13 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetHTTPSProxyName")))
+    else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "https.proxyHost"));
         rEvent.Element >>= aPropertyValue;
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetHTTPSProxyPort")))
+    else if ( aAccessor == "ooInetHTTPSProxyPort" )
     {
         aPropertyName
             = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyPort"));
@@ -1168,15 +1162,13 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetFTPProxyName")))
+    else if ( aAccessor == "ooInetFTPProxyName" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "ftp.proxyHost"));
         rEvent.Element >>= aPropertyValue;
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetFTPProxyPort")))
+    else if ( aAccessor == "ooInetFTPProxyPort" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "ftp.proxyPort"));
@@ -1184,8 +1176,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                        "ooInetNoProxy")))
+    else if ( aAccessor == "ooInetNoProxy" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "http.nonProxyHosts"));

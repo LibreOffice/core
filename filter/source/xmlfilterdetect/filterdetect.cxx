@@ -154,15 +154,15 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
     sal_Int32 location=nLength;
     for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ))
+        if ( pValue[i].Name == "TypeName" )
         {
             location=i;
         }
-        else if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ))
+        else if ( pValue[i].Name == "URL" )
         {
             pValue[i].Value >>= sUrl;
         }
-        else if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ))
+        else if ( pValue[i].Name == "InputStream" )
         {
             pValue[i].Value >>= xInStream ;
         }
@@ -207,7 +207,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
             {
                 ::rtl::OUString tmpStr;
                 lProps[j].Value >>=tmpStr;
-                if ((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && !tmpStr.isEmpty())
+                if ( lProps[j].Name == "ClipboardFormat" && !tmpStr.isEmpty() )
                 {
                     sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                 }
@@ -248,18 +248,18 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
 
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+            if ( pValue[i].Name == "Type" )
             {
                  pValue[i].Value >>= msFilterName;
 
             }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "UserData" ) ) )
+            else if ( pValue[i].Name == "UserData" )
             {
 
                 pValue[i].Value >>= msUserData;
 
             }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TemplateName" ) ) )
+            else if ( pValue[i].Name == "TemplateName" )
             {
 
               pValue[i].Value>>=msTemplateName;

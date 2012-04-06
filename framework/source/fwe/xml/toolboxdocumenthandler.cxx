@@ -353,9 +353,9 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_VISIBLE:
                             {
-                                if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
                                     bVisible = sal_True;
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
                                     bVisible = sal_False;
                                 else
                                 {

@@ -219,9 +219,7 @@ void Data::initProperties(
                 // works if the specified exceptions are of the exact type, not
                 // of a supertype:
                 for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
-                    if (excs[j]->getName().equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.beans.UnknownPropertyException")))
+                    if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
                     {
                         getUnknown = true;
                         break;
@@ -229,15 +227,10 @@ void Data::initProperties(
                 }
                 excs = attr->getSetExceptions();
                 for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
-                    if (excs[j]->getName().equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.beans.UnknownPropertyException")))
+                    if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
                     {
                         setUnknown = true;
-                    } else if (excs[j]->getName().equalsAsciiL(
-                                   RTL_CONSTASCII_STRINGPARAM(
-                                       "com.sun.star.beans."
-                                       "PropertyVetoException")))
+                    } else if ( excs[j]->getName() == "com.sun.star.beans.PropertyVetoException" )
                     {
                         attrAttribs
                             |= css::beans::PropertyAttribute::CONSTRAINED;

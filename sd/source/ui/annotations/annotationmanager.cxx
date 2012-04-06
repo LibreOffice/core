@@ -258,9 +258,7 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
 // XEventListener
 void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if( aEvent.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnAnnotationInserted") ) ||
-        aEvent.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnAnnotationRemoved") ) ||
-        aEvent.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnAnnotationChanged" )) )
+    if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
     {
         UpdateTags();
     }

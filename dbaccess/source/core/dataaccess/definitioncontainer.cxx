@@ -614,7 +614,7 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ClearableMutexGuard aGuard(m_aMutex);
-    if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME || evt.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ))
+    if( evt.PropertyName == (rtl::OUString) PROPERTY_NAME || evt.PropertyName ==  "Title" )
     {
         m_bInPropertyChange = sal_True;
         try
@@ -641,7 +641,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
 {
     MutexGuard aGuard(m_aMutex);
 
-    if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME || aEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+    if( aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME || aEvent.PropertyName == "Title" )
     {
         ::rtl::OUString sNewName;
         aEvent.NewValue >>= sNewName;

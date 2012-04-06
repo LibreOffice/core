@@ -106,7 +106,7 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
         CPPUNIT_ASSERT(xNamed.is());
         rtl::OUString aName = xNamed->getName();
         maFieldNames.push_back(aName);
-        CPPUNIT_ASSERT( !aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Data")) );
+        CPPUNIT_ASSERT( aName != "Data" );
 
         uno::Reference< beans::XPropertySet > xPropSet( xNamed, UNO_QUERY_THROW);
         CPPUNIT_ASSERT( xPropSet.is() );

@@ -486,7 +486,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
     {
         // try to open the element as storage
-        if( !aIt->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VBA" ) ) )
+        if( *aIt != "VBA" )
         {
             StorageRef xSubStrg = rVbaPrjStrg.openSubStorage( *aIt, false );
             if( xSubStrg.get() ) try

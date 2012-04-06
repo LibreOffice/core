@@ -326,16 +326,14 @@ void SAL_CALL uno_ext_getMapping(
 
     try
     {
-        if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_CLI) ) &&
-            to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        if ( from_env_typename == UNO_LB_CLI && to_env_typename == UNO_LB_UNO )
         {
             Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
             mapping = &bridge->m_cli2uno;
             uno_registerMapping(
                 &mapping, Bridge_free, pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
         }
-        else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
-                 to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_CLI) ))
+        else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_CLI )
         {
             Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
             mapping = &bridge->m_uno2cli;

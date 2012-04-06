@@ -260,7 +260,7 @@ void ScDbNameDlg::Init()
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
                     rtl::OUString aDBName = pDBData->GetName();
-                    if (!aDBName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
+                    if ( aDBName != STR_DB_LOCAL_NONAME )
                         aEdName.SetText(aDBName);
 
                     aBtnHeader.Check( pDBData->HasHeader() );

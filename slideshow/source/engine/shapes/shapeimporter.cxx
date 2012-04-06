@@ -283,18 +283,14 @@ ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<beans::XPropertySet> const& xPropSet,
     rtl::OUString const& shapeType ) const
 {
-    if( shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ) ||
-        shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape") ) )
+    if( shapeType == "com.sun.star.drawing.MediaShape" || shapeType == "com.sun.star.presentation.MediaShape" )
     {
         // Media shape (video etc.). This is a special object
         return createMediaShape(xCurrShape,
                                 mnAscendingPrio,
                                 mrContext);
     }
-    else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape") ))
+    else if( shapeType == "com.sun.star.drawing.PluginShape" )
     {
         // PropertyValues to copy from XShape to plugin
         static const char* aPropertyValues[] =
@@ -314,8 +310,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
     }
-    else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape") ))
+    else if( shapeType == "com.sun.star.drawing.AppletShape" )
     {
         // PropertyValues to copy from XShape to applet
         static const char* aPropertyValues[] =
@@ -337,10 +332,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
     }
-    else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape") ) ||
-             shapeType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OLE2Shape") ) )
+    else if( shapeType == "com.sun.star.drawing.OLE2Shape" || shapeType == "com.sun.star.presentation.OLE2Shape" )
     {
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
@@ -350,12 +342,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   true,
                                   mrContext );
     }
-    else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.drawing.GraphicObjectShape") ) ||
-             shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.presentation.GraphicObjectShape") ) )
+    else if( shapeType == "com.sun.star.drawing.GraphicObjectShape" || shapeType == "com.sun.star.presentation.GraphicObjectShape" )
     {
         GraphicObject aGraphicObject;
 
@@ -491,12 +478,7 @@ bool ShapeImporter::isSkip(
     // they can be non empty when user edits the default texts
     if(mbConvertingMasterPage)
     {
-        if(shapeType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation."
-                                           "TitleTextShape") ) ||
-            shapeType.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation."
-                                           "OutlinerShape") ))
+        if( shapeType == "com.sun.star.presentation.TitleTextShape" || shapeType == "com.sun.star.presentation.OutlinerShape" )
         {
             return true;
         }
@@ -602,9 +584,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
             // is this shape presentation-invisible?
             if( !isSkip(xPropSet, shapeType, xDrawnInSlideshow) )
             {
-                bIsGroupShape = shapeType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com.sun.star.drawing.GroupShape") );
+                bIsGroupShape = shapeType == "com.sun.star.drawing.GroupShape";
 
                 if( rTop.mpGroupShape ) // in group particle mode?
                 {

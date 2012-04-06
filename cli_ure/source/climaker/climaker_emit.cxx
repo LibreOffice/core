@@ -648,13 +648,11 @@ Assembly * TypeEmitter::type_resolve(
     OUString uno_name( xType->getName() );
     if (TypeClass_EXCEPTION == xType->getTypeClass())
     {
-        if (uno_name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                       "com.sun.star.uno.Exception") ))
+        if ( uno_name == "com.sun.star.uno.Exception" )
         {
             return get_type_Exception();
         }
-        if (uno_name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                       "com.sun.star.uno.RuntimeException") ))
+        if ( uno_name == "com.sun.star.uno.RuntimeException" )
         {
             return get_type_RuntimeException();
         }
@@ -723,8 +721,7 @@ Assembly * TypeEmitter::type_resolve(
     Reference< reflection::XInterfaceTypeDescription2 > const & xType )
 {
     OUString uno_name( xType->getName() );
-    if (uno_name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
+    if ( uno_name == "com.sun.star.uno.XInterface" )
     {
         return __typeof (::System::Object);
     }
@@ -750,8 +747,7 @@ Assembly * TypeEmitter::type_resolve(
                 Reference<reflection::XInterfaceTypeDescription2> xIfaceTd =
                     resolveInterfaceTypedef(seqBaseTypes[i]);
 
-                if (xIfaceTd->getName().equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
+                if ( xIfaceTd->getName() != "com.sun.star.uno.XInterface" )
                 {
                     vecBaseTypes.push_back(xIfaceTd);
                 }
@@ -867,8 +863,7 @@ Assembly * TypeEmitter::type_resolve(
             Reference<reflection::XInterfaceTypeDescription2> aBaseType =
                 resolveInterfaceTypedef( seqBaseTypes[i]);
 
-            if (aBaseType->getName().equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
+            if ( aBaseType->getName() != "com.sun.star.uno.XInterface" )
             {
                 ::System::String * basetype_name = to_cts_name( aBaseType->getName() );
                 iface_entry * base_entry = dynamic_cast< iface_entry * >(

@@ -317,36 +317,28 @@ css::uno::Any WinInetBackend::getPropertyValue(
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    if (PropertyName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
+    if ( PropertyName == "ooInetFTPProxyName" )
     {
         return css::uno::makeAny(valueFtpProxyName_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
+    } else if ( PropertyName == "ooInetFTPProxyPort" )
     {
         return css::uno::makeAny(valueFtpProxyPort_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
+    } else if ( PropertyName == "ooInetHTTPProxyName" )
     {
         return css::uno::makeAny(valueHttpProxyName_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
+    } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
         return css::uno::makeAny(valueHttpProxyPort_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
+    } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
         return css::uno::makeAny(valueHttpsProxyName_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
+    } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
         return css::uno::makeAny(valueHttpsProxyPort_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")))
+    } else if ( PropertyName == "ooInetNoProxy" )
     {
         return css::uno::makeAny(valueNoProxy_);
-    } else if (PropertyName.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
+    } else if ( PropertyName == "ooInetProxyType" )
     {
         return css::uno::makeAny(valueProxyType_);
     } else {

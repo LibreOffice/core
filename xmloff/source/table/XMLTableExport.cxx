@@ -158,7 +158,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         const OUString* pSNS( sSNS.getConstArray() );
         while( --n > 0 )
         {
-            if( (*pSNS++).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+            if( (*pSNS++) == "com.sun.star.drawing.TableShape" )
             {
                 mbExportTables = true;
                 break;

@@ -988,7 +988,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
     throw(::com::sun::star::uno::RuntimeException)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    if ( rURL.isEmpty() && rArgs.getLength() == 1 && rArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SetEmbedded")) )
+    if ( rURL.isEmpty() && rArgs.getLength() == 1 && rArgs[0].Name == "SetEmbedded" )
     {
         // allows to set a windowless document to EMBEDDED state
         // but _only_ before load() or initNew() methods
@@ -2029,7 +2029,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"")) )
+        if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {

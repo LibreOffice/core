@@ -2385,9 +2385,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
         i_rImport.GetTextImport()->GetTextListHelper() );
     if (m_ListId.isEmpty())
       {
-        OSL_ENSURE( ! i_rImport.GetODFVersion().equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("1.2") ),
-            "invalid numbered-paragraph: no list-id (1.2)");
+        OSL_ENSURE( i_rImport.GetODFVersion() != "1.2", "invalid numbered-paragraph: no list-id (1.2)" );
         m_ListId = rTextListsHelper.GetNumberedParagraphListId(m_Level,
             StyleName);
         OSL_ENSURE(!m_ListId.isEmpty(), "numbered-paragraph: no ListId");

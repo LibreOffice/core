@@ -460,8 +460,7 @@ void SvxRubyDialog::Update()
         const PropertyValue* pProps = rProps.getConstArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(nAdjust > -2 &&
-                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyAdjust)))
+            if(nAdjust > -2 && pProps[nProp].Name == cRubyAdjust )
             {
                 sal_Int16 nTmp = sal_Int16();
                 pProps[nProp].Value >>= nTmp;
@@ -470,8 +469,7 @@ void SvxRubyDialog::Update()
                 else if(nAdjust != nTmp)
                     nAdjust = -2;
             }
-            if(nPosition > -2 &&
-                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyIsAbove)))
+            if(nPosition > -2 && pProps[nProp].Name == cRubyIsAbove )
             {
                 sal_Bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
                 if(!nRuby)
@@ -479,8 +477,7 @@ void SvxRubyDialog::Update()
                 else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )
                     nPosition = -2;
             }
-            if(bCharStyleEqual &&
-                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyCharStyleName)))
+            if(bCharStyleEqual && pProps[nProp].Name == cRubyCharStyleName )
             {
                 pProps[nProp].Value >>= sTmp;
                 if(!nRuby)

@@ -76,21 +76,15 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
 
     for ( sal_Int32 nInd = 0; nInd < aMedDescr.getLength(); nInd++ )
     {
-        if ( aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ComponentData" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentTitle" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JumpMark" ) )
-          // || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) makes no sence for embedded objects
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ReadOnly" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartPresentation" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewData" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewId" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MacroExecutionMode" ) )
-          || aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UpdateDocMode" ) )
-          || (aMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentBaseURL" ) ) && bCanUseDocumentBaseURL) )
+        if ( aMedDescr[nInd].Name == "ComponentData" || aMedDescr[nInd].Name == "DocumentTitle"
+          || aMedDescr[nInd].Name == "InteractionHandler" || aMedDescr[nInd].Name == "JumpMark"
+          // || aMedDescr[nInd].Name == "Password" // makes no sence for embedded objects
+          || aMedDescr[nInd].Name == "Preview" || aMedDescr[nInd].Name == "ReadOnly"
+          || aMedDescr[nInd].Name == "StartPresentation" || aMedDescr[nInd].Name == "RepairPackage"
+          || aMedDescr[nInd].Name == "StatusIndicator" || aMedDescr[nInd].Name == "ViewData"
+          || aMedDescr[nInd].Name == "ViewId" || aMedDescr[nInd].Name == "MacroExecutionMode"
+          || aMedDescr[nInd].Name == "UpdateDocMode"
+          || (aMedDescr[nInd].Name == "DocumentBaseURL" && bCanUseDocumentBaseURL) )
         {
             aResult.realloc( ++nResLen );
             aResult[nResLen-1] = aMedDescr[nInd];

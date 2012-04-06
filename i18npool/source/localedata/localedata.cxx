@@ -557,7 +557,7 @@ Sequence< CalendarItem2 > LocaleData::getCalendarItems(
         throw(RuntimeException)
 {
     Sequence< CalendarItem2 > aItems;
-    if (OUString( allCalendars[rnOffset]).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ref")))
+    if ( OUString( allCalendars[rnOffset] ) == "ref" )
     {
         aItems = getCalendarItemByName( OUString( allCalendars[rnOffset+1]), rLocale, calendarsSeq, nWhichItem);
         rnOffset += 2;
@@ -1428,10 +1428,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
                 pFunction, &pCachedItem);
     }
 
-    if (!pSymbol && l > 0 && c > 0 &&
-            rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
-            (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
-             rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))))
+    if (!pSymbol && l > 0 && c > 0 && rLocale.Language == "zh" && (rLocale.Country == "HK" || rLocale.Country == "MO"))
     {
         // if the country code is HK or MO, one more step to try TW.
         pSymbol = rLookupTable.getFunctionSymbolByName(
@@ -1575,7 +1572,7 @@ sal_Bool SAL_CALL
 LocaleData::supportsService(const OUString& rServiceName)
         throw( RuntimeException )
 {
-    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(clocaledata));
+    return rServiceName == clocaledata;
 }
 
 Sequence< OUString > SAL_CALL

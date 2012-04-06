@@ -221,8 +221,7 @@ uno::Any SAL_CALL Content::execute(
 {
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertyValues
@@ -243,8 +242,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertyValues( Properties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         //////////////////////////////////////////////////////////////////
         // setPropertyValues
@@ -277,8 +275,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
@@ -287,8 +284,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getPropertySetInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -297,8 +293,7 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+    else if ( aCommand.Name == "open" )
     {
         ucb::OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -440,8 +435,7 @@ uno::Any SAL_CALL Content::execute(
                                     -1 ) ),
                 Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name == "insert" )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -522,8 +516,7 @@ uno::Any SAL_CALL Content::execute(
         // imported.
         getContentProvider()->saveDocument(aProp->m_sDocumentId);
     }
-    else if ( aCommand.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "getCasePreservingURL" ) ) )
+    else if ( aCommand.Name == "getCasePreservingURL" )
     {
         rtl::OUString CasePreservingURL = openDoc();
         aRet <<= CasePreservingURL;
@@ -605,53 +598,43 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             // Process Core properties.
 
-            if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            if ( rProp.Name == "ContentType" )
             {
                 xRow->appendString ( rProp, rData->m_sContentType );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( rProp.Name == "Title" )
             {
                 xRow->appendString ( rProp, rData->m_sTitle );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( rProp.Name == "IsDocument" )
             {
                 xRow->appendBoolean( rProp, rData->m_bIsDocument );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 xRow->appendBoolean( rProp, rData->m_bIsFolder );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+            else if ( rProp.Name == "DateCreated" )
             {
                 xRow->appendTimestamp( rProp, rData->m_aDateCreated );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+            else if ( rProp.Name == "DateModified" )
             {
                 xRow->appendTimestamp( rProp, rData->m_aDateModified );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+            else if ( rProp.Name == "IsReadOnly" )
             {
                 xRow->appendBoolean( rProp, rData->m_bIsReadOnly );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Author" ) ) )
+            else if ( rProp.Name == "Author" )
             {
                 xRow->appendString ( rProp, rData->m_sAuthor );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Subject" ) ) )
+            else if ( rProp.Name == "Subject" )
             {
                 xRow->appendString ( rProp, rData->m_sSubject );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Keywords" ) ) )
+            else if ( rProp.Name == "Keywords" )
             {
                 xRow->appendString ( rProp, rData->m_sKeywords );
             }

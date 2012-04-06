@@ -134,8 +134,7 @@ sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)) ||
-        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_HH_CONV_DICTIONARY)))
+    if ( rServiceName == SN_CONV_DICTIONARY || rServiceName == SN_HH_CONV_DICTIONARY )
         bRes = sal_True;
     return bRes;
 }

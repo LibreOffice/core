@@ -97,8 +97,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     {
         uno::Reference< frame::XModel > xModel( m_xModel );
 
-        if( xModel.is() && (rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" ))
-            || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Redo" ))) )
+        if( xModel.is() && ( rURL.Path == "Undo" || rURL.Path == "Redo" ) )
         {
             CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
@@ -107,8 +106,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             m_aCachedDispatches[ C2U(".uno:Redo") ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
-        else if( xModel.is() && (rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Context" ))
-                 || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModifiedStatus" ))) )
+        else if( xModel.is() && ( rURL.Path == "Context" || rURL.Path == "ModifiedStatus" ) )
         {
             Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), uno::UNO_QUERY );
             CommandDispatch * pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );

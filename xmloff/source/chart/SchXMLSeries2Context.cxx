@@ -374,10 +374,10 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
             m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
 
-        bool bIsCandleStick = maGlobalChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
+        bool bIsCandleStick = maGlobalChartTypeName == "com.sun.star.chart2.CandleStickChartType";
         if( !maSeriesChartTypeName.isEmpty() )
         {
-            bIsCandleStick = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
+            bIsCandleStick = maSeriesChartTypeName == "com.sun.star.chart2.CandleStickChartType";
         }
         else
         {
@@ -509,8 +509,8 @@ void SchXMLSeries2Context::EndElement()
     // special handling for different chart types.  This is necessary as the
     // roles are not yet saved in the file format
     sal_Int32 nDomainCount = maDomainAddresses.size();
-    bool bIsScatterChart = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType"));
-    bool bIsBubbleChart = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType"));
+    bool bIsScatterChart = maSeriesChartTypeName == "com.sun.star.chart2.ScatterChartType";
+    bool bIsBubbleChart = maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType";
     bool bDeleteSeries = false;
     std::vector< DomainInfo > aDomainInfos;
 

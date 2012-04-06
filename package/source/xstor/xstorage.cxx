@@ -5075,9 +5075,8 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) ) )
-           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
+                 || aPropertyName == "IsRoot" )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -5106,9 +5105,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
     }
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-      && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) )
-        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MEDIATYPE_FALLBACK_USED_PROPERTY ) )
-        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) ) )
+      && ( aPropertyName == "MediaType" || aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY || aPropertyName == "Version" ) )
     {
         try
         {
@@ -6071,7 +6068,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
             throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         // TODO/LATER: Currently it is only implemented for MediaType property of substorages, might be changed in future
-        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || aPropertyName != "MediaType" )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         if ( !pElement->m_pStorage )

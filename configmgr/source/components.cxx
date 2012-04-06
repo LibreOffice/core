@@ -221,7 +221,7 @@ Components & Components::getSingleton(
 }
 
 bool Components::allLocales(rtl::OUString const & locale) {
-    return locale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"));
+    return locale == "*";
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(

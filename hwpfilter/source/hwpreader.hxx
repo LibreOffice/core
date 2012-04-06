@@ -351,7 +351,7 @@ extern "C"
 
             OUString aImplementationName = OUString::createFromAscii( pImplName );
 
-            if (aImplementationName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( IMPLEMENTATION_NAME )) )
+            if (aImplementationName == IMPLEMENTATION_NAME )
             {
                 xRet = createSingleFactory( xSMgr, aImplementationName,
                                             HwpImportFilter_CreateInstance,

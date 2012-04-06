@@ -2382,7 +2382,7 @@ sal_Bool impl_maxOpenDocCountReached()
                     continue;
 
                 // a) do not count the help window
-                if (xFrame->getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OFFICE_HELP_TASK")))
+                if ( xFrame->getName() == "OFFICE_HELP_TASK" )
                     continue;
 
                 // b) count all other frames

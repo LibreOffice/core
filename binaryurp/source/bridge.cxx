@@ -744,8 +744,7 @@ void Bridge::handleCommitChangeRequest(
     assert(ok);
     (void) ok; // avoid warnings
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
-        if (s[i].Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("CurrentContext")))
+        if ( s[i].Name == "CurrentContext" )
         {
             ccMode = true;
         } else {

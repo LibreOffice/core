@@ -802,9 +802,9 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
-    sal_Bool isChinese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
-    sal_Bool isJapanese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja"));
-    sal_Bool isKorean = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko"));
+    sal_Bool isChinese = aLocale.Language == "zh";
+    sal_Bool isJapanese = aLocale.Language == "ja";
+    sal_Bool isKorean = aLocale.Language == "ko";
 
     if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {

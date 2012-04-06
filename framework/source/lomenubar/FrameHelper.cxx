@@ -654,7 +654,7 @@ FrameHelper::getLabelFromCommandURL (OUString commandURL)
 
     for (sal_Int32 i = 0; i < commandProps.getLength(); i++)
     {
-        if ( commandProps[i].Name.equalsAsciiL (RTL_CONSTASCII_STRINGPARAM ("Label")))
+        if ( commandProps[i].Name == "Label" )
         {
             commandProps[i].Value >>= label;
             label = label.replace ((sal_Unicode)0x007e, (sal_Unicode)0x005f);

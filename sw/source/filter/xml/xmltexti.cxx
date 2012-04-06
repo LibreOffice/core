@@ -259,7 +259,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     SwFrmFmt *pFrmFmt = 0;
     SwOLENode *pOLENd = 0;
-    if( rHRef.copy( 0, nPos ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.ServiceName") ) )
+    if( rHRef.copy( 0, nPos ) == "vnd.sun.star.ServiceName" )
     {
         sal_Bool bInsert = sal_False;
         SvGlobalName aClassName;

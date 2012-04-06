@@ -2356,7 +2356,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             }
                             else
                             {
-                                if( !aMethName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("queryInterface")) )
+                                if( aMethName != "queryInterface" )
                                 {
                                     rMethodConcept_i |= MethodConcept::DANGEROUS;
                                     continue;
@@ -2471,7 +2471,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                                 OUString aMethName2 = rxMethod_k->getName();
                                 OUString aStartStr2 = aMethName2.copy( 0, 3 );
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aStartStr2.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("set")) ) )
+                                if( aStartStr2 != "set" )
                                     continue;
 
                                 // Ist es denn der gleiche Name?

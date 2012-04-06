@@ -522,8 +522,7 @@ void DemoApp::Main()
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
-            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
+        if( aParam == "--help" || aParam == "-h" )
                 bHelp = true;
     }
 

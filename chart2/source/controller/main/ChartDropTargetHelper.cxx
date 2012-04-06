@@ -118,8 +118,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
             if( aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aBytes ))
             {
                 ::std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
-                if( aStrings.size() >= 3 &&
-                    aStrings[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "soffice" )))
+                if( aStrings.size() >= 3 && aStrings[0] == "soffice" )
                 {
                     OUString aDocName( aStrings[1] );
                     OUString aRangeString( aStrings[2] );

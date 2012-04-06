@@ -391,8 +391,7 @@ OUString XmlFilterAdaptor_getImplementationName ()
 sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-           ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) );
+    return ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2;
 }
 Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
     throw (RuntimeException)

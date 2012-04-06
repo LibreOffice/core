@@ -1458,17 +1458,13 @@ void BackendImpl::PackageImpl::scanBundle(
         {
             if (!(fullPath.isEmpty() || mediaType.isEmpty()))
                 break;
-            if (attribs[i].Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("FullPath") ))
+            if ( attribs[i].Name == "FullPath" )
                 attribs[i].Value >>= fullPath;
-            else if (attribs[i].Name.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM("MediaType") ))
+            else if ( attribs[i].Name == "MediaType" )
                 attribs[i].Value >>= mediaType;
         }
 
-        if (fullPath.isEmpty() || mediaType.isEmpty() ||
-            mediaType.equalsAsciiL( // opt: exclude common text/xml
-                RTL_CONSTASCII_STRINGPARAM("text/xml") ))
+        if ( fullPath.isEmpty() || mediaType.isEmpty() || mediaType == "text/xml" )// opt: exclude common text/xml
             continue;
 
         String type, subType;

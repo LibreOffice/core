@@ -133,7 +133,7 @@ namespace logging
         //----------------------------------------------------------------
         void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const ::rtl::OUString& _rSettingName, Any& _inout_rSettingValue )
         {
-            if ( !_rSettingName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileURL" ) ) )
+            if ( _rSettingName != "FileURL" )
                 // not interested in this setting
                 return;
 

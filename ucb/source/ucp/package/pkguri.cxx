@@ -119,13 +119,9 @@ void PackageUri::init() const
         m_aScheme = aPureUri.copy(
             0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
 
-        if ( m_aScheme.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) )
-          || m_aScheme.equalsAsciiL(
-              RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
+        if ( m_aScheme == PACKAGE_URL_SCHEME || m_aScheme == PACKAGE_ZIP_URL_SCHEME )
         {
-            if ( m_aScheme.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_URL_SCHEME ) ) )
+            if ( m_aScheme == PACKAGE_ZIP_URL_SCHEME )
             {
                 m_aParam +=
                     ( !m_aParam.isEmpty()

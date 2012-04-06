@@ -80,9 +80,7 @@ void AnimationCommandNode::activate_st()
     {
         double fMediaTime=0.0;
         beans::PropertyValue aMediaTime;
-        if( (mxCommandNode->getParameter() >>= aMediaTime) &&
-            aMediaTime.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("MediaTime") ))
+        if( (mxCommandNode->getParameter() >>= aMediaTime) && aMediaTime.Name == "MediaTime" )
         {
             aMediaTime.Value >>= fMediaTime;
         }

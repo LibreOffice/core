@@ -849,8 +849,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
                         {
                                 // Don't add the style name properties
-                            bool bIsParaStyleName = aPropValues[nProp].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParaStyleName" ) );
-                            bool bIsCharStyleName = aPropValues[nProp].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharStyleName" ) );
+                            bool bIsParaStyleName = aPropValues[nProp].Name == "ParaStyleName";
+                            bool bIsCharStyleName = aPropValues[nProp].Name == "CharStyleName";
                             if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
                                 aSortedPropVals.Insert( aPropValues[nProp] );

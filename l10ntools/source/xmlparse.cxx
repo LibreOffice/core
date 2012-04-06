@@ -667,7 +667,7 @@ void XMLElement::ChangeLanguageTag( const rtl::OUString &rValue )
     {
         for (size_t i = 0; i < pAttributes->size(); ++i)
         {
-            if ( (*pAttributes)[ i ]->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
+            if ( (*pAttributes)[ i ]->GetName() == "xml-lang" )
                 (*pAttributes)[ i ]->setValue(rValue);
         }
     }

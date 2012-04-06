@@ -592,9 +592,7 @@ static sal_Bool performTest(
                 bRet &= check(v0 == 33, "transportPolySequence, element 0");
                 rtl::OUString v1;
                 tps3.member[1] >>= v1;
-                bRet &= check(
-                    v1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ABC")),
-                    "transportPolySequence, element 1");
+                bRet &= check( v1 == "ABC", "transportPolySequence, element 1" );
                 bRet &= check(
                     xLBT->getNullPolyLong().member == 0, "getNullPolyLong");
                 bRet &= check(
@@ -1181,16 +1179,13 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
             i = 1;
         }
         bool noCurrentContext = false;
-        if (i < rArgs.getLength()
-            && rArgs[i].equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("noCurrentContext")))
+        if ( i < rArgs.getLength() && rArgs[i] == "noCurrentContext" )
         {
             noCurrentContext = true;
             ++i;
         }
         bool stress = false;
-        if (i < rArgs.getLength()
-            && rArgs[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("stress")))
+        if ( i < rArgs.getLength() && rArgs[i] == "stress" )
         {
             stress = true;
             ++i;

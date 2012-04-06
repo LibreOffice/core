@@ -259,12 +259,10 @@ Service::createInstanceWithArguments(
         }
     }
     bool update;
-    if (ServiceSpecifier.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(accessServiceName)))
+    if ( ServiceSpecifier == accessServiceName )
     {
         update = false;
-    } else if (ServiceSpecifier.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM(updateAccessServiceName)))
+    } else if ( ServiceSpecifier == updateAccessServiceName )
     {
         update = true;
     } else {

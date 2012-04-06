@@ -404,9 +404,7 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
     OSL_TRACE("SupportsDocumentConfig: %s", PRTSTR(aModuleId));
 
-    if  (  aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.script.BasicIDE" ) )
-        || aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.frame.Bibliography" ) )
-        )
+    if  ( aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography" )
     {
         return sal_False;
     }

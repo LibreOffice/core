@@ -80,11 +80,7 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
     // a) indicate completed open of the first document in which case launch thread
     // b) indicate close of application without any documents opened, in which case skip launching thread but drop references break cyclic dependencies in
     // case of e.g. cancel from open/new database wizard or impress wizard
-    if (
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew"))) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad"))) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
-       )
+    if ( aEvent.EventName == "OnNew" || aEvent.EventName == "OnLoad" || aEvent.EventName == "OnCloseApp" )
     {
         // this thread must be started one times only ...
         // cancel listener connection before!
@@ -108,7 +104,7 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
         aLock.clear();
         // <- SAFE
 
-        if (!aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
+        if ( aEvent.EventName != "OnCloseApp" )
         {
             rtl::Reference< LateInitThread >(new LateInitThread())->launch();
                 //TODO: a protocol is missing how to join with the launched

@@ -2121,7 +2121,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
                 sFilterService = OUString( pEntry->sFilterService,
                                            pEntry->nFilterServiceLen,
                                               RTL_TEXTENCODING_ASCII_US );
-                bIsChart = sModelService.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( XML_MODEL_SERVICE_CHART ));
+                bIsChart = sModelService == XML_MODEL_SERVICE_CHART;
                 break;
             }
             pEntry++;

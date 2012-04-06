@@ -801,9 +801,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
                     moduleDescr.getConstArray();
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
-                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "ooSetupFactoryEmptyDocumentURL") ))
+                    if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
                         OSL_TRACE("factory url for doc images is %s",

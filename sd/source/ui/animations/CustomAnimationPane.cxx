@@ -1256,10 +1256,8 @@ static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
     {
         const OUString sShapeType( xShape->getShapeType() );
 
-        if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TitleTextShape") ) ||
-            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OutlinerShape") ) ||
-            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.SubtitleShape") ) ||
-            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape") ) )
+        if( sShapeType == "com.sun.star.presentation.TitleTextShape" || sShapeType == "com.sun.star.presentation.OutlinerShape" ||
+            sShapeType == "com.sun.star.presentation.SubtitleShape" || sShapeType == "com.sun.star.drawing.TextShape" )
         {
             const OUString sFillStyle( RTL_CONSTASCII_USTRINGPARAM("FillStyle" ) );
             const OUString sLineStyle( RTL_CONSTASCII_USTRINGPARAM("LineStyle" ) );

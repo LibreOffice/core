@@ -332,7 +332,7 @@ namespace dbmm
                 bool bCausedByNewStyleReport =
                         ( _rDocument.eType == eReport )
                     &&  ( aError.isExtractableTo( ::cppu::UnoType< WrongFormatException >::get() ) )
-                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.sun.xml.report" ) ) );
+                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ) == "application/vnd.sun.xml.report" );
 
                 if ( bCausedByNewStyleReport )
                 {
@@ -1636,9 +1636,7 @@ namespace dbmm
         Any aException;
         try
         {
-            if  (   !_rScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Script" ) )
-                ||  _rScriptType.isEmpty()
-                )
+            if  ( _rScriptType != "Script" || _rScriptType.isEmpty() )
             {
                 OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: no or unknown script type!" );
@@ -1669,7 +1667,7 @@ namespace dbmm
 
             ::rtl::OUString sLocation = xUri->getParameter(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "location" ) ) );
-            if ( !sLocation.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) )
+            if ( sLocation != "document" )
             {
                 // only document libraries must be migrated, of course
                 return false;

@@ -2157,7 +2157,7 @@ VbaStorageObject::VbaStorageObject( const ObjectBase& rParent, const StorageRef&
 
 void VbaStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrgPath.isEmpty() && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dir" ) ) )
+    if( rStrgPath.isEmpty() && rStrmName == "dir" )
         VbaDirStreamObject( *this, rxStrm, rSysFileName, mrVbaData ).dump();
     else if( mrVbaData.isModuleStream( rStrmName ) )
         VbaModuleStreamObject( *this, rxStrm, rSysFileName, mrVbaData, mrVbaData.getStreamOffset( rStrmName ) ).dump();
@@ -2191,7 +2191,7 @@ VbaProjectStorageObject::VbaProjectStorageObject( const ObjectBase& rParent, con
 
 void VbaProjectStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrgPath.isEmpty() && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PROJECT" ) ) )
+    if( rStrgPath.isEmpty() && rStrmName == "PROJECT" )
         TextLineStreamObject( *this, rxStrm, maVbaData.meTextEnc, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );

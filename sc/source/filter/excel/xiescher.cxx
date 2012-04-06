@@ -2835,7 +2835,7 @@ void XclImpPictureObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     if( (rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord() )
     {
         // page background is stored as hidden picture with name "__BkgndObj"
-        if (IsHidden() && (GetObjName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("__BkgndObj"))))
+        if ( IsHidden() && (GetObjName() == "__BkgndObj") )
             GetPageSettings().ReadImgData( rStrm );
         else
             maGraphic = XclImpDrawing::ReadImgData( GetRoot(), rStrm );

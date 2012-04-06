@@ -242,10 +242,10 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[]ModuleA.StructA")) )->createObject(aAny);
 
-    TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]ModuleA.StructA")), "test_RegCoreReflection(): error 54");
+    TEST_ENSHURE( aAny.getValueTypeName() == "[]ModuleA.StructA", "test_RegCoreReflection(): error 54" );
     xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("[][]ModuleA.StructA")))->createObject(aAny);
 
-    TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[][]ModuleA.StructA") ), "test_RegCoreReflection(): error 56");
+    TEST_ENSHURE( aAny.getValueTypeName() == "[][]ModuleA.StructA", "test_RegCoreReflection(): error 56" );
 
 //      xClass = xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.XIntroTest") ));
 
@@ -254,7 +254,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 //      TEST_ENSHURE(xClass->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings")))->getReturnType()->getComponentType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("string")), "test_RegCoreReflection(): error 60");
 
 //      xClass->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings")))->getReturnType()->createObject(aAny);
-//      TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[]string") ),  "test_RegCoreReflection(): error 61");
+//      TEST_ENSHURE( aAny.getValueTypeName() == "[]string",  "test_RegCoreReflection(): error 61" );
 
     TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("[][][]unsigned long")))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
 

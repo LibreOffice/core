@@ -165,7 +165,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         SCCOL nOldCol2;
         SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
-        sal_Bool bIsNoName = ( pData->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) );
+        sal_Bool bIsNoName = ( pData->GetName() == STR_DB_LOCAL_NONAME );
 
         if (!bSelected)
         {

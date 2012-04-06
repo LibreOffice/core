@@ -248,9 +248,7 @@ UUIInteractionHelper::handleInteractiveIOException(
                                                RTL_CONSTASCII_USTRINGPARAM(
                                                    "Removable")),
                                            &bRemovable);
-                    nErrorCode
-                        = aResourceType.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM("volume"))
+                    nErrorCode = aResourceType == "volume"
                         ? (bRemovable
                            ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
                            : ERRCODE_UUI_IO_NOTREADY_VOLUME)
@@ -301,12 +299,9 @@ UUIInteractionHelper::handleInteractiveIOException(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "ResourceType")),
                         &aResourceType);
-                    nErrorCode
-                        = aResourceType.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM("volume"))
+                    nErrorCode = aResourceType == "volume"
                         ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
-                        : (aResourceType.equalsAsciiL(
-                               RTL_CONSTASCII_STRINGPARAM("folder"))
+                        : (aResourceType == "folder"
                            ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
                            : ERRCODE_UUI_IO_NOTEXISTS);
                     aArguments.push_back(aArgUri);

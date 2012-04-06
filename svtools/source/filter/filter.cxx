@@ -1353,7 +1353,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         sal_Int32 i;
         for ( i = 0; i < pFilterData->getLength(); i++ )
         {
-            if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PreviewSizeHint")) )
+            if ( (*pFilterData)[ i ].Name == "PreviewSizeHint" )
             {
                 awt::Size aSize;
                 if ( (*pFilterData)[ i ].Value >>= aSize )
@@ -1365,7 +1365,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                         nImportFlags &=~GRFILTER_I_FLAGS_FOR_PREVIEW;
                 }
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AllowPartialStreamRead")) )
+            else if ( (*pFilterData)[ i ].Name == "AllowPartialStreamRead" )
             {
                 (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
                 if ( bAllowPartialStreamRead )
@@ -1373,7 +1373,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                 else
                     nImportFlags &=~GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CreateNativeLink")) )
+            else if ( (*pFilterData)[ i ].Name == "CreateNativeLink" )
             {
                 (*pFilterData)[ i ].Value >>= bCreateNativeLink;
             }
@@ -1928,7 +1928,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     sal_Int32 k, j, i = 0;
                     for ( i = 0; i < pFilterData->getLength(); i++ )
                     {
-                        if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AdditionalChunks")) )
+                        if ( (*pFilterData)[ i ].Name == "AdditionalChunks" )
                         {
                             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )

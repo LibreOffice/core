@@ -266,11 +266,7 @@ namespace
 {
     bool isAlreadyPureenUS(const com::sun::star::lang::Locale &rLocale)
     {
-        return (
-                 rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en")) &&
-                 rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("US")) &&
-                 rLocale.Variant.isEmpty()
-               );
+        return ( rLocale.Language == "en" && rLocale.Country == "US" && rLocale.Variant.isEmpty() );
     }
 }
 

@@ -649,11 +649,7 @@ namespace xforms
         if ( nInvalidityReason )
             return nInvalidityReason;
 
-        bool bValid =
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) ||
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) ||
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("false"));
+        bool bValid = sValue == "0" || sValue == "1" || sValue == "true" || sValue == "false";
         return bValid ? 0 : RID_STR_XFORMS_INVALID_VALUE;
     }
 

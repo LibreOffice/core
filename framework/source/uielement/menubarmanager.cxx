@@ -518,11 +518,8 @@ throw ( RuntimeException )
                 #ifdef UNIX
                 //enable some slots hardly, because UNIX clipboard does not notify all changes
                 // Can be removed if follow up task will be fixed directly within applications.
-                if (
-                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Paste"))) ||
-                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteSpecial"))) ||
-                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteClipboard")))      // special for draw/impress
-                   )
+                if ( pMenuItemHandler->aMenuItemURL == ".uno:Paste" || pMenuItemHandler->aMenuItemURL == ".uno:PasteSpecial"
+                    || pMenuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )      // special for draw/impress
                     bEnabledItem = sal_True;
                 #endif
 
@@ -842,9 +839,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         m_bActive = sal_True;
 
         ::rtl::OUString aMenuCommand( m_aMenuItemCommand );
-        if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowMenu)) ||
-             m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialWindowMenu)) ||
-             aMenuCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
+        if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aMenuCommand == aSpecialWindowCommand )
              MenuManager::UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
@@ -1253,8 +1248,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         {
             sal_uInt16          nItemId  = pMenu->GetItemId( nPos );
             ::rtl::OUString aCommand = pMenu->GetItemCommand( nItemId );
-            if ( nItemId == SID_MDIWINDOWLIST ||
-                 aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
+            if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand)
             {
                 // Retrieve addon popup menus and add them to our menu bar
                 Reference< com::sun::star::frame::XModel >      xModel;
@@ -1354,13 +1348,13 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
                 // Check if this is the help menu. Add menu item if needed
-                if ( nItemId == SID_HELPMENU || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotHelpMenu)) || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpMenu)) )
+                if ( nItemId == SID_HELPMENU || aItemCommand == aSlotHelpMenu || aItemCommand == aCmdHelpMenu )
                 {
                     // Check if this is the help menu. Add menu item if needed
                     CheckAndAddMenuExtension( pPopup );
                 }
-                else if (( nItemId == SID_ADDONLIST || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdToolsMenu)) ) &&
-                         AddonMenuManager::HasAddonMenuElements() )
+                else if (( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
+                        AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );

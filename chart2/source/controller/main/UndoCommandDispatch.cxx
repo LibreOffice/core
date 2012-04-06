@@ -92,9 +92,9 @@ void UndoCommandDispatch::fireStatusEvent(
             aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoActionTitle());
         }
 
-        if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Undo")))
+        if( bFireAll || rURL == ".uno:Undo" )
             fireStatusEventForURL( C2U(".uno:Undo"), aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );
-        if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Redo")))
+        if( bFireAll || rURL == ".uno:Redo" )
             fireStatusEventForURL( C2U(".uno:Redo"), aRedoState, m_xUndoManager->isRedoPossible(), xSingleListener );
     }
 }

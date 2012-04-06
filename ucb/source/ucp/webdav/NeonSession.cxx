@@ -1677,8 +1677,7 @@ void NeonSession::abort()
 // -------------------------------------------------------------------
 const ucbhelper::InternetProxyServer & NeonSession::getProxySettings() const
 {
-    if ( m_aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
-         m_aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
+    if ( m_aScheme == "http" || m_aScheme == "https" )
     {
         return m_rProxyDecider.getProxy( m_aScheme,
                                          m_aHostName,

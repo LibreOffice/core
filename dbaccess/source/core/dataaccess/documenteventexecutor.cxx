@@ -190,10 +190,7 @@ namespace dbaccess
                 // no script is assigned to this event
                 return;
 
-            bool bDispatchScriptURL =
-                (   sEventType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Script" ) )
-                ||  sEventType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Service" ) )
-                );
+            bool bDispatchScriptURL = ( sEventType == "Script" || sEventType == "Service" );
             bool bNonEmptyScript = !sScript.isEmpty();
 
             OSL_ENSURE( bDispatchScriptURL && bNonEmptyScript,

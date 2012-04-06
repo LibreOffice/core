@@ -66,8 +66,7 @@ inline bool type_equals(
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
-            ::rtl::OUString::unacquired( &type->pTypeName ).equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ));
+            ::rtl::OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
 }
 
 //==============================================================================

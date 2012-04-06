@@ -740,8 +740,7 @@ void XMLTableFormulaImportContext::ProcessAttribute(
             aValueHelper.ProcessAttribute( nAttrToken, sAttrValue );
             break;
         case XML_TOK_TEXTFIELD_DISPLAY:
-            if ( sAttrValue.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("formula")) )
+            if ( sAttrValue == "formula" )
                  bIsShowFormula = sal_True;
             break;
         default:

@@ -221,18 +221,15 @@ void NeonUri::calculateURI ()
     switch ( mPort )
     {
     case DEFAULT_HTTP_PORT:
-        bAppendPort
-            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) );
+        bAppendPort = mScheme != "http";
         break;
 
     case DEFAULT_HTTPS_PORT:
-        bAppendPort
-            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) );
+        bAppendPort = mScheme != "https";
         break;
 
     case DEFAULT_FTP_PORT:
-        bAppendPort
-            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ftp" ) );
+        bAppendPort = mScheme != "ftp";
         break;
     }
     if ( bAppendPort )

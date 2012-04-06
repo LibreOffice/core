@@ -154,8 +154,7 @@ css::uno::Any Content::execute(
         css::uno::Exception, css::ucb::CommandAbortedException,
         css::uno::RuntimeException)
 {
-    if (!command.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("getCasePreservingURL")))
+    if ( command.Name != "getCasePreservingURL" )
     {
         throw css::uno::RuntimeException();
     }

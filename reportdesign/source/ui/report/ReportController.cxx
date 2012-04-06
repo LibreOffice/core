@@ -1640,7 +1640,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 openZoomDialog();
             }
-            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Zoom")) )
+            else if ( aArgs.getLength() == 1 && aArgs[0].Name == "Zoom" )
             {
                 SvxZoomItem aZoomItem;
                 aZoomItem.PutValue(aArgs[0].Value);
@@ -1650,7 +1650,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             }
             break;
         case SID_ATTR_ZOOMSLIDER:
-            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ZoomSlider")) )
+            if ( aArgs.getLength() == 1 && aArgs[0].Name == "ZoomSlider" )
             {
                 SvxZoomSliderItem aZoomSlider;
                 aZoomSlider.PutValue(aArgs[0].Value);
@@ -2818,19 +2818,19 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
             }
             else
             {
-                if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ShowRuler")) )
+                if ( *commandName == "ShowRuler" )
                     OSL_VERIFY( rCommandValue >>= m_bShowRuler );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelplinesMove")) )
+                else if ( *commandName == "HelplinesMove" )
                     OSL_VERIFY( rCommandValue >>= m_bHelplinesMove );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GridVisible")) )
+                else if ( *commandName == "GridVisible" )
                     OSL_VERIFY( rCommandValue >>= m_bGridVisible );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GridUse")) )
+                else if ( *commandName == "GridUse" )
                     OSL_VERIFY( rCommandValue >>= m_bGridUse );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ControlProperties")) )
+                else if ( *commandName == "ControlProperties" )
                     OSL_VERIFY( rCommandValue >>= m_bShowProperties );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LastPropertyBrowserPage")) )
+                else if ( *commandName == "LastPropertyBrowserPage" )
                     OSL_VERIFY( rCommandValue >>= m_sLastActivePage );
-                else if ( commandName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SplitPosition")) )
+                else if ( *commandName == "SplitPosition" )
                     OSL_VERIFY( rCommandValue >>= m_nSplitPos );
             }
         }
@@ -4093,7 +4093,7 @@ void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (
 // -----------------------------------------------------------------------------
 bool OReportController::isUiVisible() const
 {
-    return !m_sMode.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("remote"));
+    return m_sMode != "remote";
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const

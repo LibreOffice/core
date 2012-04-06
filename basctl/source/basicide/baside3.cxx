@@ -838,8 +838,7 @@ sal_Bool DialogWindow::SaveDialog()
                             aExtension = aCompleteName.copy( iDot + 1 );
                         }
 
-                        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) ||
-                            aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
+                        if( aExtension == "properties" || aExtension == "default" )
                         {
                             if( aPureName.indexOf( aDialogName_ ) == 0 )
                             {

@@ -1475,7 +1475,7 @@ static void columnMetaData2DatabaseTypeDescription(
     queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
     while( rs->next() )
     {
-        if( row->getString( 9 ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("d")) && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
+        if( row->getString( 9 ) == "d" && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
         {
             oidMap[row->getInt(12)] = DatabaseTypeDescription();
             if( domains )
@@ -1646,7 +1646,7 @@ static void columnMetaData2DatabaseTypeDescription(
             row[1] <<= sNewSchema;
             row[2] <<= sNewTable;
             row[3] <<= xRow->getString(3);
-            if( xRow->getString(8).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("d")) )
+            if( xRow->getString(8) == "d" )
             {
                 DatabaseTypeDescription desc( domainMap[xRow->getInt(11)] );
                 type = typeNameToDataType( desc.typeName, desc.typeType );

@@ -1311,7 +1311,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
+    if ( rServiceName != "com.sun.star.text.TextContent" )
     {
         throw uno::RuntimeException();
     }

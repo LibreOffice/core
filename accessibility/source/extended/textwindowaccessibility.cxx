@@ -1248,15 +1248,13 @@ void Document::changeParagraphAttributes(
         // they do not replace the old attributes as required by
         // XAccessibleEditableText.setAttributes:
         for (::sal_Int32 i = 0; i < rAttributeSet.getLength(); ++i)
-            if (rAttributeSet[i].Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("CharColor")))
+            if ( rAttributeSet[i].Name == "CharColor" )
                 m_rEngine.SetAttrib(::TextAttribFontColor(
                                         mapFontColor(rAttributeSet[i].Value)),
                                     nNumber, static_cast< ::sal_uInt16 >(nBegin),
                                     static_cast< ::sal_uInt16 >(nEnd));
                     // XXX  numeric overflow (2x)
-            else if (rAttributeSet[i].Name.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM("CharWeight")))
+            else if ( rAttributeSet[i].Name == "CharWeight" )
                 m_rEngine.SetAttrib(::TextAttribFontWeight(
                                         mapFontWeight(rAttributeSet[i].Value)),
                                     nNumber, static_cast< ::sal_uInt16 >(nBegin),

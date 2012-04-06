@@ -552,14 +552,12 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
             return m_aEmptyProxy;
     }
 
-    if ( rProtocol.toAsciiLowerCase()
-            .equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ftp" ) ) )
+    if ( rProtocol.toAsciiLowerCase() == "ftp" )
     {
         if ( !m_aFtpProxy.aName.isEmpty() && m_aFtpProxy.nPort >= 0 )
             return m_aFtpProxy;
     }
-    else if ( rProtocol.toAsciiLowerCase()
-                  .equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
+    else if ( rProtocol.toAsciiLowerCase() == "https" )
     {
         if ( !m_aHttpsProxy.aName.isEmpty() )
             return m_aHttpsProxy;
@@ -591,8 +589,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
             rtl::OUString aKey;
             if ( ( rElem.Accessor >>= aKey ) && !aKey.isEmpty() )
             {
-                if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    PROXY_TYPE_KEY ) ) )
+                if ( aKey == PROXY_TYPE_KEY )
                 {
                     if ( !( rElem.Element >>= m_nProxyType ) )
                     {
@@ -600,8 +597,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                     "Error getting config item value!" );
                     }
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    NO_PROXY_LIST_KEY ) ) )
+                else if ( aKey == NO_PROXY_LIST_KEY )
                 {
                     rtl::OUString aNoProxyList;
                     if ( !( rElem.Element >>= aNoProxyList ) )
@@ -612,8 +608,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
 
                     setNoProxyList( aNoProxyList );
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTP_PROXY_NAME_KEY ) ) )
+                else if ( aKey == HTTP_PROXY_NAME_KEY )
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
                     {
@@ -621,8 +616,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                     "Error getting config item value!" );
                     }
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTP_PROXY_PORT_KEY ) ) )
+                else if ( aKey == HTTP_PROXY_PORT_KEY )
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
                     {
@@ -633,8 +627,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     if ( m_aHttpProxy.nPort == -1 )
                         m_aHttpProxy.nPort = 80; // standard HTTP port.
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTPS_PROXY_NAME_KEY ) ) )
+                else if ( aKey == HTTPS_PROXY_NAME_KEY )
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
                     {
@@ -642,8 +635,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                     "Error getting config item value!" );
                     }
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTPS_PROXY_PORT_KEY ) ) )
+                else if ( aKey == HTTPS_PROXY_PORT_KEY )
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
                     {
@@ -654,8 +646,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     if ( m_aHttpsProxy.nPort == -1 )
                         m_aHttpsProxy.nPort = 443; // standard HTTPS port.
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    FTP_PROXY_NAME_KEY ) ) )
+                else if ( aKey == FTP_PROXY_NAME_KEY )
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
                     {
@@ -663,8 +654,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                                     "Error getting config item value!" );
                     }
                 }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    FTP_PROXY_PORT_KEY ) ) )
+                else if ( aKey == FTP_PROXY_PORT_KEY )
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
                     {

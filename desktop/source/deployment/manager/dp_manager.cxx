@@ -139,14 +139,9 @@ void PackageManagerImpl::initActivationLayer(
                 Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
                 OUString title( xRow->getString( 1 /* Title */ ) );
                 // xxx todo: remove workaround for tdoc
-                if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                            "this_is_a_dummy_stream_just_there_"
-                                            "as_a_workaround_for_a_"
-                                            "temporary_limitation_of_the_"
-                                            "storage_api_implementation") ))
+                if ( title == "this_is_a_dummy_stream_just_there_as_a_workaround_for_a_temporary_limitation_of_the_storage_api_implementation" )
                     continue;
-                if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                             "META-INF") ) )
+                if ( title == "META-INF" )
                     continue;
 
                 ::ucbhelper::Content sourceContent(

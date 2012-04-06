@@ -1770,21 +1770,16 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    if (
-        (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ))) ||
-        (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.GenericTextDocument")))
-       )
-    return sal_True;
+    if ( rServiceName == "com.sun.star.document.OfficeDocument" || rServiceName == "com.sun.star.text.GenericTextDocument" )
+        return sal_True;
 
     sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
     sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
     sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
-    return (
-            (bWebDoc    && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument"   ))) ||
-            (bGlobalDoc && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument"))) ||
-            (bTextDoc   && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"  )))
-           );
+    return ( (bWebDoc    && rServiceName == "com.sun.star.text.WebDocument")
+          || (bGlobalDoc && rServiceName == "com.sun.star.text.GlobalDocument")
+          || (bTextDoc   && rServiceName == "com.sun.star.text.TextDocument") );
 }
 
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )

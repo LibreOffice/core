@@ -810,8 +810,7 @@ rtl::OUString expandMacros(
                 if (n == 1) {
                     buf.append(lookup(file, mode, false, seg[0], requestStack));
                 } else if (n == 2) {
-                    if (seg[0].equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(".link")))
+                    if ( seg[0] == ".link" )
                     {
                         osl::File f(seg[1]);
                         rtl::ByteSequence seq;
@@ -843,8 +842,7 @@ rtl::OUString expandMacros(
                                     rtl::Bootstrap(seg[0]).getHandle()),
                                 mode, false, seg[1], requestStack));
                     }
-                } else if (seg[0].equalsAsciiL(
-                               RTL_CONSTASCII_STRINGPARAM(".override")))
+                } else if ( seg[0] == ".override" )
                 {
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(

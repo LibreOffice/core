@@ -221,10 +221,7 @@ BibFrameController_Impl::~BibFrameController_Impl()
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return (
-            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Bibliography")) ||
-            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Controller"))
-           );
+    return ( sServiceName == "com.sun.star.frame.Bibliography" || sServiceName == "com.sun.star.frame.Controller" );
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException)
@@ -574,8 +571,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         {
             RemoveFilter();
         }
-        else if(_rURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
-                aCommand.EqualsAscii("CloseDoc"))
+        else if( _rURL.Complete == "slot:5503" || aCommand.EqualsAscii("CloseDoc") )
         {
             Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
                                         DisposeHdl ), 0 );
@@ -740,10 +736,10 @@ void BibFrameController_Impl::addStatusListener(
         uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getDataSources();
         aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
     }
-    else if(aURL.Path == C2U("Bib/sdbsource") ||
-            aURL.Path == C2U("Bib/Mapping") ||
-            aURL.Path == C2U("Bib/autoFilter") ||
-            aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bib/standardFilter")))
+    else if( aURL.Path == "Bib/sdbsource" ||
+             aURL.Path == "Bib/Mapping" ||
+             aURL.Path == "Bib/autoFilter" ||
+             aURL.Path == "Bib/standardFilter" )
     {
         aEvent.IsEnabled  = sal_True;
     }

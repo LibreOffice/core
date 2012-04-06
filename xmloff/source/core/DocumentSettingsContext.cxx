@@ -711,12 +711,8 @@ void XMLConfigItemContext::ManipulateConfigItem()
 
         mrAny <<= nTmp;
     }
-    else if( (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ColorTableURL" ) ) ) ||
-             (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LineEndTableURL" ) ) ) ||
-             (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HatchTableURL" ) ) ) ||
-             (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DashTableURL" ) ) ) ||
-             (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GradientTableURL") ) ) ||
-             (mrItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BitmapTableURL" ) ) ) )
+    else if( (mrItemName == "ColorTableURL") || (mrItemName == "LineEndTableURL") || (mrItemName == "HatchTableURL")
+          || (mrItemName == "DashTableURL") || (mrItemName == "GradientTableURL") || (mrItemName == "BitmapTableURL") )
     {
         if( GetImport().getServiceFactory().is() ) try
         {

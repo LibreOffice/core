@@ -76,7 +76,7 @@ CurrentContext::~CurrentContext() {}
 css::uno::Any CurrentContext::getValueByName(::rtl::OUString const & Name)
     throw (css::uno::RuntimeException)
 {
-    return Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(KEY))
+    return Name == KEY
         ? css::uno::makeAny(::rtl::OUString::createFromAscii(VALUE))
         : css::uno::Any();
 }
@@ -120,7 +120,7 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
         }
         ::rtl::OUString s;
         OSL_VERIFY(a >>= s);
-        return s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(VALUE));
+        return s == VALUE;
     } else {
         return other->perform(
             this, setSteps >= 0 ? setSteps - 1 : -1, checkSteps - 1);

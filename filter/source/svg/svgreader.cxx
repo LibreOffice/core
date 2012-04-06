@@ -181,7 +181,7 @@ struct AnnotatingVisitor
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                    if ( sValue.copy(0,1) == "#" )
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);
@@ -219,7 +219,7 @@ struct AnnotatingVisitor
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                    if ( sValue.copy(0,1) == "#" )
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);
@@ -826,7 +826,7 @@ struct AnnotatingVisitor
             case XML_HREF:
             {
                 ElementRefMapType::iterator aFound=maStopIdMap.end();
-                if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                if ( sValue.copy(0,1) == "#" )
                     aFound = maStopIdMap.find(sValue.copy(1));
                 else
                     aFound = maStopIdMap.find(sValue);
@@ -2430,7 +2430,7 @@ struct ShapeRenderingVisitor
                 aFont.SetColor(getVclColor(maCurrState.maFillColor));
                 aFont.SetFillColor(getVclColor(maCurrState.maFillColor));
 
-                if( !maCurrState.maFontStyle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("normal")) )
+                if( maCurrState.maFontStyle != "normal" )
                     aFont.SetItalic(ITALIC_NORMAL); // TODO: discriminate
                 if( maCurrState.mnFontWeight != 400.0 )
                     aFont.SetWeight(WEIGHT_BOLD); // TODO: discriminate

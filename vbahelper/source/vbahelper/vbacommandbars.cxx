@@ -118,7 +118,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     if( aSource >>= sBarName )
     {
         // some built-in command bars
-        if( m_pCBarHelper->getModuleId().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") ) )
+        if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
         {
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Worksheet Menu Bar") ) )
             {
@@ -132,7 +132,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
                 aRet <<= uno::Reference< XCommandBar >( new VbaDummyCommandBar( this, mxContext, sBarName, office::MsoBarType::msoBarTypePopup ) );
             }
         }
-        else if( m_pCBarHelper->getModuleId().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument") ) )
+        else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
         {
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Menu Bar") ) )
             {
@@ -226,9 +226,9 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
     if( nIndex == 1 )
     {
         uno::Any aSource;
-        if( m_pCBarHelper->getModuleId().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+        if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
             aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar"));
-        else if( m_pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
+        else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
             aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Menu Bar"));
         if( aSource.hasValue() )
             return createCollectionObject( aSource );

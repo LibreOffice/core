@@ -1587,9 +1587,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream& o)
     inc();
     sal_Int16 nBases = m_reader.getSuperTypeCount();
     OSL_ASSERT(nBases > 0);
-    if (nBases == 1
-        && m_reader.getSuperTypeName(0).equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")))
+    if (nBases == 1 && m_reader.getSuperTypeName(0) == "com/sun/star/uno/XInterface" )
     {
         nBases = 0;
     }
@@ -2215,9 +2213,7 @@ void InterfaceType::dumpExceptionSpecification(
             rtl::OUString name(
                 m_reader.getMethodExceptionTypeName(
                     static_cast< sal_uInt16 >(methodIndex), i));
-            if (!name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/RuntimeException")))
+            if ( name != "com/sun/star/uno/RuntimeException" )
             {
                 if (!first) {
                     out << ", ";
@@ -2269,9 +2265,7 @@ sal_Int32 InterfaceType::dumpExceptionTypeNames(
     sal_uInt16 n = m_reader.getMethodExceptionCount(methodIndex);
     for (sal_uInt16 i = 0; i < n; ++i) {
         rtl::OUString name(m_reader.getMethodExceptionTypeName(methodIndex, i));
-        if (!name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/RuntimeException")))
+        if ( name != "com/sun/star/uno/RuntimeException" )
         {
             dumpExceptionTypeName(out, prefix, count++, name);
         }

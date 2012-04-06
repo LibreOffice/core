@@ -1156,9 +1156,7 @@ String SvtURLBox::GetURL()
                 success =
                     UCBContentHelper::GetTitle(aURL,&aTitle);
 
-            if( success &&
-                !(aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))
-                  || aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))) )
+            if( success && aTitle != "/" && aTitle != "." )
             {
                     aObj.SetName( aTitle );
                     if ( bSlash )

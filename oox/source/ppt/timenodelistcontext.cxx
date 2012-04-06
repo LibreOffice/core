@@ -196,7 +196,7 @@ namespace oox { namespace ppt {
                     if( maTo >>= aString )
                     {
                         OSL_TRACE( "Magic conversion %s", OUSTRING_TO_CSTR( aString ) );
-                        maTo = makeAny( aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visible" ) ) ? sal_True : sal_False );
+                        maTo = makeAny( aString == "visible" ? sal_True : sal_False );
                         if( !maTo.has<sal_Bool>() )
                             OSL_TRACE( "conversion failed" );
                     }

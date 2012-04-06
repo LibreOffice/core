@@ -534,9 +534,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
 
             if (_aImplName.isEmpty() && _aServiceName.isEmpty())
             {
-                OSL_ASSERT(
-                    rName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("uno.ComponentContext") ) );
+                OSL_ASSERT( rName == "uno.ComponentContext" );
                 xRet = _xContext;
             }
             else if (_bSingleInstance)

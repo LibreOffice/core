@@ -151,7 +151,7 @@ bool ObjectCopySource::isView() const
         {
             ::rtl::OUString sObjectType;
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_TYPE ) >>= sObjectType );
-            bIsView = sObjectType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
+            bIsView = sObjectType == "VIEW";
         }
     }
     catch( const Exception& )

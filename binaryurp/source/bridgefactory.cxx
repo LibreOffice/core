@@ -142,8 +142,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
             throw css::bridge::BridgeExistsException(
                 sName, static_cast< cppu::OWeakObject * >(this));
         }
-        if (!(sProtocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("urp")) &&
-              aConnection.is()))
+        if ( sProtocol != "urp" || !aConnection.is() )
         {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(

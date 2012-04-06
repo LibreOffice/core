@@ -1681,9 +1681,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
             }
         }
-        if(bExcept &&
-            (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletRelSize")) ||
-             rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletColor")) ) )
+        if(bExcept && (rProp.Name == "BulletRelSize" || rProp.Name == "BulletColor" ) )
         {
             bExcept = sal_False;
         }

@@ -2337,7 +2337,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         pEntry->maDisplayText = aDisplayText;
 
         // detect the image
-        if( !aValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SEPARATOR_STR)) )
+        if( aValue != SEPARATOR_STR )
         {
             INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
             pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );

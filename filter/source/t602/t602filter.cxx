@@ -155,19 +155,18 @@ T602ImportFilter::~T602ImportFilter()
     const PropertyValue * pValue = Descriptor.getConstArray();
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+        if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= mxInputStream;
-/*        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FilterName" ) ) )
+/*        else if ( pValue[i].Name == "FilterName" )
             pValue[i].Value >>= aFilterName;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
+        else if ( pValue[i].Name == "TypeName" )
             pValue[i].Value >>= aTypeName; */
     }
 
     if (!mxInputStream.is())
         return ::rtl::OUString();
 
-/*    if ( aFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "T602Document" ) )  ||
-           aTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_T602_Document" ) ) )
+/*    if ( aFilterName == "T602Document" || aTypeName == "writer_T602_Document" )
         // preselection by type (extension) or filter name: no reason to check type
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_T602_Document" ) ); */
 
@@ -210,7 +209,7 @@ void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& aArguments )
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+            if ( pValue[i].Name == "Type" )
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -262,7 +261,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     OUString sURL;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+        if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= mxInputStream;
     }
 
@@ -893,8 +892,7 @@ OUString T602ImportFilter_getImplementationName ()
 sal_Bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 
 Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
@@ -1221,7 +1219,7 @@ OUString T602ImportFilterDialog_getImplementationName ()
 sal_Bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) ) );
+    return ServiceName == SERVICE_NAME;
 }
 
 Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )

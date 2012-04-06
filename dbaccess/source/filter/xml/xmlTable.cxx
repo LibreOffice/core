@@ -91,10 +91,10 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 m_sStyleName = sValue;
                 break;
             case XML_TOK_APPLY_FILTER:
-                m_bApplyFilter = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
+                m_bApplyFilter = sValue == "true";
                 break;
             case XML_TOK_APPLY_ORDER:
-                m_bApplyOrder = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
+                m_bApplyOrder = sValue == "true";
                 break;
         }
     }

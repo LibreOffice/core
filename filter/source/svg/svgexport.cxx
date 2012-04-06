@@ -1434,9 +1434,9 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     OUString aShapeClass = implGetClassFromShape( rxShape );
                     if( mbPresentation )
                     {
-                        sal_Bool bIsPageNumber = aShapeClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Slide_Number" ) );
-                        sal_Bool bIsFooter = aShapeClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Footer" ) );
-                        sal_Bool bIsDateTime = aShapeClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Date/Time" ) );
+                        sal_Bool bIsPageNumber = aShapeClass == "Slide_Number";
+                        sal_Bool bIsFooter = aShapeClass == "Footer";
+                        sal_Bool bIsDateTime = aShapeClass == "Date/Time";
                         if( bIsPageNumber || bIsDateTime || bIsFooter )
                         {
                             // to notify to the SVGActionWriter::ImplWriteActions method

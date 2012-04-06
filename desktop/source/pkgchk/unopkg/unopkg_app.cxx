@@ -284,10 +284,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         osl_getCommandArg( nPos, &subCommand.pData );
         ++nPos;
         subCommand = subCommand.trim();
-        subcmd_add = subCommand.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("add") );
-        subcmd_gui = subCommand.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("gui") );
+        subcmd_add = subCommand == "add";
+        subcmd_gui = subCommand == "gui";
 
         // sun-command options and packages:
         while (nPos < nCount)
@@ -345,8 +343,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         }
         else
         {
-            if (repository.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("shared") )) {
+            if ( repository == "shared" ) {
                 option_shared = true;
             }
             else if (option_shared) {
@@ -437,9 +434,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(xCmdEnv);
 
-        if (subcmd_add ||
-            subCommand.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("remove") ))
+        if ( subcmd_add || subCommand == "remove" )
         {
             for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
             {

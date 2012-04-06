@@ -461,8 +461,7 @@ JNI_type_info const * JNI_info::get_type_info(
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, OUString const & uno_name ) const
 {
-    if (uno_name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
+    if ( uno_name == "com.sun.star.uno.XInterface" )
     {
         return m_XInterface_type_info;
     }

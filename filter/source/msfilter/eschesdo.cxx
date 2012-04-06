@@ -248,7 +248,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             rtl::OUString sCustomShapeType;
             MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType );
-            if ( sCustomShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-502ad400" ) ) || sCustomShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-60da8460" ) ) )
+            if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
             {
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
                 if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )

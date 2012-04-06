@@ -1717,7 +1717,7 @@ sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName,
     // The name "Data" always refers to the data layout field.
     rFieldId.maFieldName = rFieldName;
     rFieldId.mnFieldIdx = 0;
-    rFieldId.mbDataLayout = rFieldName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_DATALAYOUT_NAME ) );
+    rFieldId.mbDataLayout = rFieldName == SC_DATALAYOUT_NAME;
 
     pDPObj->GetSource();    // IsDimNameInUse doesn't update source data
 

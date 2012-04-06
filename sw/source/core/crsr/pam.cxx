@@ -744,7 +744,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
 
         sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
         if ( pFieldmark )
-            bUnhandledMark = pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) );
+            bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
     }
 
     if (!bRet)

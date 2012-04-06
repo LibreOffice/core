@@ -177,9 +177,8 @@ MenuManager::MenuManager(
             {
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
-                if (( nItemId == SID_ADDONLIST ||
-                    aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) ) &&
-                    AddonMenuManager::HasAddonMenuElements() )
+                if ( ( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu )
+                    && AddonMenuManager::HasAddonMenuElements() )
                 {
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
@@ -215,8 +214,7 @@ MenuManager::MenuManager(
         }
         else
         {
-            if ( nItemId == SID_NEWDOCDIRECT ||
-                 aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotNewDocDirect)) )
+            if ( nItemId == SID_NEWDOCDIRECT || aItemCommand == aSlotNewDocDirect )
             {
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
@@ -230,8 +228,7 @@ MenuManager::MenuManager(
                            pMenu->SetItemImage( nItemId, aImage );
                 }
             }
-            else if ( nItemId == SID_AUTOPILOTMENU ||
-                      aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotAutoPilot)) )
+            else if ( nItemId == SID_AUTOPILOTMENU || aItemCommand == aSlotAutoPilot )
             {
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
@@ -790,14 +787,10 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             aCommand = aCommand.copy(RTL_CONSTASCII_LENGTH(UNO_COMMAND));
         }
 
-        if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileMenu)) ||
-             m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialFileMenu)) ||
-             aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileCommand)) )
+        if ( m_aMenuItemCommand == aSpecialFileMenu || m_aMenuItemCommand == aSlotSpecialFileMenu || aCommand == aSpecialFileCommand )
             UpdateSpecialFileMenu( pMenu );
-        else if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowMenu)) ||
-                  m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialWindowMenu)) ||
-                  aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
-                  UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
+        else if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aCommand == aSpecialWindowCommand )
+            UpdateSpecialWindowMenu( pMenu, getServiceFactory(), m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
         if ( bShowMenuImages != m_bShowMenuImages )

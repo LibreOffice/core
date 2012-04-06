@@ -461,8 +461,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
             if ( rProps.getLength() != 1 )
                 continue;
 
-            if ( !rProps[ 0 ].Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
             Sequence<rtl::OUString> aNames(1);
@@ -735,8 +734,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
             if ( rProps.getLength() != 1 )
                 continue;
 
-            if ( !rProps[ 0 ].Name.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
             Sequence<rtl::OUString> aNames(1);

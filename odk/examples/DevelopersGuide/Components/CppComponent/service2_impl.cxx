@@ -158,8 +158,7 @@ sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     // this object only supports one service, so the test is simple
-    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                         "my_module.MyService2") );
+    return serviceName == "my_module.MyService2";
 }
 
 Sequence< OUString > MyService2Impl::getSupportedServiceNames()

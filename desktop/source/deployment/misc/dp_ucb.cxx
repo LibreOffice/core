@@ -133,9 +133,7 @@ bool create_folder(
         {
             // make sure the only required bootstrap property is "Title":
             Sequence<beans::Property> const & rProps = info.Properties;
-            if (rProps.getLength() != 1 ||
-                !rProps[ 0 ].Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("Title") ))
+            if ( rProps.getLength() != 1 || rProps[ 0 ].Name != "Title" )
                 continue;
 
             try {

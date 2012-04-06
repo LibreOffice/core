@@ -70,12 +70,12 @@ inline bool getBoolAttr(
     ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
+        if ( aValue == "true" )
         {
             *pRet = sal_True;
             return true;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("false") ))
+        else if ( aValue == "false" )
         {
             *pRet = sal_False;
             return true;
@@ -139,14 +139,8 @@ public:
     inline bool isEventElement(
         sal_Int32 nUid, ::rtl::OUString const & rLocalName )
     {
-        return ((XMLNS_SCRIPT_UID == nUid &&
-                 (rLocalName.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM("event") ) ||
-                  rLocalName.equalsAsciiL(
-                      RTL_CONSTASCII_STRINGPARAM("listener-event") ))) ||
-                (XMLNS_DIALOGS_UID == nUid &&
-                 rLocalName.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM("event") )));
+        return ((XMLNS_SCRIPT_UID == nUid && (rLocalName == "event" || rLocalName == "listener-event" )) ||
+                (XMLNS_DIALOGS_UID == nUid && rLocalName == "event" ));
     }
 
     void addStyle(

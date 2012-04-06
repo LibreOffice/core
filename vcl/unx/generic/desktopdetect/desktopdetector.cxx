@@ -263,7 +263,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         for( int i = 0; i < nParams; i++ )
         {
             rtl_getAppCommandArg( i, &aParam.pData );
-            if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
+            if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
             {
                 osl_getCommandArg( i+1, &aParam.pData );
                 aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );

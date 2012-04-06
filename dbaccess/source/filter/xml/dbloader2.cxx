@@ -165,7 +165,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         {
             ::rtl::OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
-            if ( sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)) || sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_VND_SUN_XML_BASE_ASCII)) )
+            if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII || sMediaType == MIMETYPE_VND_SUN_XML_BASE_ASCII )
             {
                 if ( bStreamFromDescr && sURL.compareTo( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ), 14 ) != COMPARE_EQUAL )
                 {
@@ -346,7 +346,7 @@ namespace
                 URL aURL;
                 aURL.Complete = _rURL;
                 xTransformer->parseStrict( aURL );
-                bDoesAllow = aURL.Arguments.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Interactive" ) );
+                bDoesAllow = aURL.Arguments == "Interactive";
             }
         }
         catch( const Exception& )

@@ -681,9 +681,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createInstance" );
     Reference< XServiceInfo > xRet;
-    if  (  ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier )
-        || ( _sServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) ) )
-        )
+    if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier || _sServiceSpecifier == "com.sun.star.sdb.SingleSelectQueryAnalyzer" )
     {
         xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );
         m_aComposers.push_back(WeakReferenceHelper(xRet));

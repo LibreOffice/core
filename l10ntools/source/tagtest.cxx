@@ -396,11 +396,11 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 
 sal_Bool TokenInfo::IsPropertyRelevant( const rtl::OString &rName, const rtl::OUString &rValue ) const
 {
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("alt")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
+    if ( aTagName == "alt" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("xml-lang")) )
         return sal_False;
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ahelp")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("visibility")) && rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("visible")) )
+    if ( aTagName == "ahelp" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("visibility")) && rValue == "visible" )
         return sal_False;
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && (rName.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) || rName.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))) )
+    if ( aTagName == "image" && (rName.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) || rName.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))) )
         return sal_False;
 
     return sal_True;
@@ -415,7 +415,7 @@ sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const rtl::
                rValue.EqualsAscii("appl") ||
                rValue.EqualsAscii("distrib");
     } */
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("caseinline")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
+    if ( aTagName == "caseinline" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("select")) )
     {
         return !rValue.isEmpty();
     }
@@ -426,9 +426,9 @@ sal_Bool TokenInfo::IsPropertyValueValid( const rtl::OString &rName, const rtl::
 
 sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const rtl::OUString &rValue ) const
 {
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("name")) )
+    if ( aTagName == "link" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("name")) )
         return sal_False;
-    if ( aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")) )
+    if ( aTagName == "link" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")) )
     {   // check for external reference
         return
             !(rValue.matchIgnoreAsciiCaseAsciiL(
@@ -444,12 +444,12 @@ sal_Bool TokenInfo::IsPropertyInvariant( const rtl::OString &rName, const rtl::O
 sal_Bool TokenInfo::IsPropertyFixable( const rtl::OString &rName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ahelp")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("hid")))
-         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("link")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")))
-         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("alt")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
-         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("variable")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
-         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("src")))
-         || (aTagName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image")) && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")) ))
+    if ( (aTagName == "ahelp" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("hid")))
+         || (aTagName == "link" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("href")))
+         || (aTagName == "alt" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+         || (aTagName == "variable" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")))
+         || (aTagName == "image" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("src")))
+         || (aTagName == "image" && rName.equalsL(RTL_CONSTASCII_STRINGPARAM("id")) ))
         return sal_True;
     return sal_False;
 }

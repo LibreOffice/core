@@ -775,14 +775,12 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         case TypeClass_STRING:
         {
             const OUString & aStr = *(const OUString *)rVal.getValue();
-            if (aStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0") ) ||
-                aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) ))
+            if ( aStr == "0" || aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) ))
             {
                 sal_Bool bFalse = sal_False;
                 aRet.setValue( &bFalse, getCppuBooleanType() );
             }
-            else if (aStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("1") ) ||
-                     aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) ))
+            else if ( aStr == "1" || aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) ))
             {
                 sal_Bool bTrue = sal_True;
                 aRet.setValue( &bTrue, getCppuBooleanType() );

@@ -324,7 +324,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
     if ( m_sLoadedScheme.isEmpty() )
         m_sLoadedScheme = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
 
-    if ( !sScheme.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("default")) )
+    if ( sScheme != "default" )
     {
         ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("default"));
         if ( ExistsScheme(sDefault) )

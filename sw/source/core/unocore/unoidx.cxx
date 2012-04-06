@@ -464,20 +464,13 @@ throw (uno::RuntimeException)
     SolarMutexGuard g;
 
     return C2U("com.sun.star.text.BaseIndex") == rServiceName
-        || ((TOX_INDEX == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentIndex")))
-        || ((TOX_CONTENT == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")))
-        || ((TOX_USER == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.UserDefinedIndex")))
-        || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.IllustrationsIndex")))
-        || ((TOX_TABLES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TableIndex")))
-        || ((TOX_OBJECTS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ObjectIndex")))
-        || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.Bibliography")));
+        || ((TOX_INDEX == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.DocumentIndex")
+        || ((TOX_CONTENT == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.ContentIndex")
+        || ((TOX_USER == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.UserDefinedIndex")
+        || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.IllustrationsIndex")
+        || ((TOX_TABLES == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.TableIndex")
+        || ((TOX_OBJECTS == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.ObjectIndex")
+        || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.Bibliography");
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2790,8 +2783,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
-            if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("TokenType")))
+            if ( pProperties[j].Name == "TokenType" )
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
@@ -2805,8 +2797,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                     }
                 }
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("CharacterStyleName")))
+            else if ( pProperties[j].Name == "CharacterStyleName" )
             {
                 String sCharStyleName;
                 SwStyleNameMapper::FillUIName(
@@ -2818,15 +2809,13 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
                     sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("TabStopRightAligned")))
+            else if ( pProperties[j].Name == "TabStopRightAligned" )
             {
                 const sal_Bool bRight = lcl_AnyToBool(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
                                     SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT;
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("TabStopPosition")))
+            else if ( pProperties[j].Name == "TabStopPosition" )
             {
                 sal_Int32 nPosition = 0;
                 if (!(pProperties[j].Value >>= nPosition))
@@ -2840,8 +2829,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nTabStopPosition = nPosition;
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("TabStopFillCharacter")))
+            else if ( pProperties[j].Name == "TabStopFillCharacter" )
             {
                 const OUString sFillChar =
                     lcl_AnyToString(pProperties[j].Value);
@@ -2852,14 +2840,12 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 aToken.cTabFillChar =
                     sFillChar.isEmpty() ? ' ' : sFillChar[0];
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("Text")))
+            else if ( pProperties[j].Name == "Text" )
                {
                 const OUString sText = lcl_AnyToString(pProperties[j].Value);
                 aToken.sText = sText;
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("ChapterFormat")))
+            else if ( pProperties[j].Name == "ChapterFormat" )
             {
                 sal_Int16 nFormat = lcl_AnyToInt16(pProperties[j].Value);
                 switch(nFormat)
@@ -2885,8 +2871,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 aToken.nChapterFormat = nFormat;
             }
 // #i53420#
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("ChapterLevel")))
+            else if ( pProperties[j].Name == "ChapterLevel" )
             {
                 const sal_Int16 nLevel = lcl_AnyToInt16(pProperties[j].Value);
                 if( nLevel < 1 || nLevel > MAXLEVEL )
@@ -2895,8 +2880,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nOutlineLevel = nLevel;
             }
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
+            else if ( pProperties[j].Name == "BibliographyDataField" )
             {
                 sal_Int16 nType = 0;
                 pProperties[j].Value >>= nType;
@@ -2910,8 +2894,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 aToken.nAuthorityField = nType;
             }
             // #i21237#
-            else if (pProperties[j].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("WithTab")))
+            else if ( pProperties[j].Name == "WithTab" )
             {
                 aToken.bWithTab = lcl_AnyToBool(pProperties[j].Value);
             }

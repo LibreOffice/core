@@ -106,11 +106,10 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 #endif
 
     writerfilter::dmapper::SourceDocumentType eType =
-        (m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ||
-         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007_Template" ) ) ||
-         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_OOXML" ) ) ||
-         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_OOXML_Text_Template" ) )) ?
-                writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
+        (m_sFilterName == "writer_MS_Word_2007" || m_sFilterName == "writer_MS_Word_2007_Template" ||
+         m_sFilterName == "writer_OOXML" || m_sFilterName == "writer_OOXML_Text_Template" ) ?
+            writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
+
     writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, eType));
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
@@ -204,7 +203,7 @@ void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) thr
        nLength = aAnySeq.getLength();
        for ( sal_Int32 i = 0 ; i < nLength; i++)
        {
-           if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+           if ( pValue[i].Name == "Type" )
            {
                pValue[i].Value >>= m_sFilterName;
                break;
@@ -225,8 +224,7 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 
 sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-           ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ));
+   return (ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME1 );
 }
 
 

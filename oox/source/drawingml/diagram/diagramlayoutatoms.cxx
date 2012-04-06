@@ -130,8 +130,7 @@ const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
 {
     bool bDecisionVar=true;
     // HACK
-    if( maCond.mnFunc==XML_var && maCond.mnArg==XML_dir &&
-        maCond.mnOp==XML_equ && !maCond.msVal.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("norm")) )
+    if( maCond.mnFunc == XML_var && maCond.mnArg == XML_dir && maCond.mnOp == XML_equ && maCond.msVal != "norm" )
         bDecisionVar=false;
 
     if( bDecisionVar )

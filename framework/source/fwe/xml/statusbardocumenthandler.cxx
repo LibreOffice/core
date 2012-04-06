@@ -291,17 +291,17 @@ throw(  SAXException, RuntimeException )
 
                             case SB_ATTRIBUTE_ALIGN:
                             {
-                                if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_LEFT )) )
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_LEFT )
                                 {
                                     nItemBits |= ItemStyle::ALIGN_LEFT;
                                     nItemBits &= ~ItemStyle::ALIGN_CENTER;
                                 }
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_CENTER )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_CENTER )
                                 {
                                     nItemBits |= ItemStyle::ALIGN_CENTER;
                                     nItemBits &= ~ItemStyle::ALIGN_LEFT;
                                 }
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_RIGHT )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_RIGHT )
                                 {
                                     nItemBits |= ItemStyle::ALIGN_RIGHT;
                                 }
@@ -316,17 +316,17 @@ throw(  SAXException, RuntimeException )
 
                             case SB_ATTRIBUTE_STYLE:
                             {
-                                if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_IN )) )
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_IN )
                                 {
                                     nItemBits |= ItemStyle::DRAW_IN3D;
                                     nItemBits &= ~ItemStyle::DRAW_OUT3D;
                                 }
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_OUT )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_OUT )
                                 {
                                     nItemBits |= ItemStyle::DRAW_OUT3D;
                                     nItemBits &= ~ItemStyle::DRAW_IN3D;
                                 }
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_FLAT )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_FLAT )
                                 {
                                     nItemBits |= ItemStyle::DRAW_FLAT;
                                 }
@@ -341,9 +341,9 @@ throw(  SAXException, RuntimeException )
 
                             case SB_ATTRIBUTE_AUTOSIZE:
                             {
-                                if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
                                     nItemBits |= ItemStyle::AUTO_SIZE;
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
                                     nItemBits &= ~ItemStyle::AUTO_SIZE;
                                 else
                                 {
@@ -356,9 +356,9 @@ throw(  SAXException, RuntimeException )
 
                             case SB_ATTRIBUTE_OWNERDRAW:
                             {
-                                if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
                                     nItemBits |= ItemStyle::OWNER_DRAW;
-                                else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
                                     nItemBits &= ~ItemStyle::OWNER_DRAW;
                                 else
                                 {

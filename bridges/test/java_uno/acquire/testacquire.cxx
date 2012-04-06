@@ -119,8 +119,7 @@ private:
 css::uno::Any Interface::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    return type.getTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                               "com.sun.star.uno.XInterface"))
+    return type.getTypeName() == "com.sun.star.uno.XInterface"
         ? css::uno::makeAny(css::uno::Reference< css::uno::XInterface >(this))
         : css::uno::Any();
 }
@@ -153,10 +152,8 @@ protected:
 css::uno::Any Base::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    return type.getTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                               "test.javauno.acquire.XBase"))
-        ? css::uno::makeAny(
-            css::uno::Reference< test::javauno::acquire::XBase >(this))
+    return type.getTypeName() == "test.javauno.acquire.XBase"
+        ? css::uno::makeAny(css::uno::Reference< test::javauno::acquire::XBase >(this))
         : Interface::queryInterface(type);
 }
 
@@ -182,8 +179,7 @@ private:
 css::uno::Any Derived::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    return (type.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("test.javauno.acquire.XDerived")))
+    return ( type.getTypeName() == "test.javauno.acquire.XDerived" )
         ? css::uno::makeAny(
             css::uno::Reference< test::javauno::acquire::XDerived >(this))
         : Interface::queryInterface(type);

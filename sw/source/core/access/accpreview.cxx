@@ -63,10 +63,7 @@ OUString SwAccessiblePreview::getImplementationName( )
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
 {
-    return rServiceName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( sServiceName) ) ||
-        rServiceName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( sAccessibleServiceName ) );
+    return rServiceName == sServiceName || rServiceName == sAccessibleServiceName;
 }
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )

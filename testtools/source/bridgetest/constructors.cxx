@@ -140,7 +140,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (*static_cast< ::sal_Unicode const * >(arguments[10].getValue())
               == 'X')
           && (arguments[11] >>= arg11)
-          && arg11.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg11 == "test"
           && (arguments[12] >>= arg12)
           && arg12 == ::cppu::UnoType< css::uno::Any >::get()
           && (arguments[13] >>= arg13) && arg13
@@ -177,7 +177,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
                    arguments[24].getValue()))[0]
               == 'X')
           && (arguments[25] >>= arg25) && arg25.getLength() == 1
-          && arg25[0].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg25[0] == "test"
           && (arguments[26] >>= arg26) && arg26.getLength() == 1
           && arg26[0] == ::cppu::UnoType< css::uno::Any >::get()
           && (arguments[27] >>= arg27) && arg27.getLength() == 1
@@ -312,7 +312,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[5] >>= arg5) && arg5.member == SAL_MIN_INT32
           && (arguments[6] >>= arg6) && arg6.member == SAL_MIN_INT64
           && (arguments[7] >>= arg7) && arg7.member == 'X'
-          && (arguments[8] >>= arg8) && arg8.member.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && (arguments[8] >>= arg8) && arg8.member == "test"
           && (arguments[9] >>= arg9) && arg9.member == 0.123f
           && (arguments[10] >>= arg10) && arg10.member == 0.456
           && (arguments[11] >>= arg11)
@@ -321,8 +321,8 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[14] >>= arg14) && arg14.member.member1 == 'X' && arg14.member.member2 == arg1b
           && (arguments[15] >>= arg15) && arg15.member.member1.member1 == 'X'
           && arg15.member.member1.member2 == arg1b
-          && arg15.member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
-          && (arguments[16] >>= arg16) && arg16.member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg15.member.member2 == "test"
+          && (arguments[16] >>= arg16) && arg16.member1 == "test"
           && arg16.member2.member1 == 'X'
           && arg16.member2.member2.member == arg1b
           && (arguments[17] >>= arg17) && arg17.member1.member1 == 'X'
@@ -348,7 +348,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (static_cast< ttb::TestPolyStruct<css::uno::Sequence<
               ::sal_Unicode> > const *>(arguments[25].getValue())->member[0]) == 'X'
           && (arguments[26] >>= arg26) && arg26.member.getLength() == 1
-          && arg26.member[0].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg26.member[0] == "test"
           && (arguments[27] >>= arg27) && arg27.member.getLength() == 1
           && arg27.member[0] == 0.123f
           && (arguments[28] >>= arg28) && arg28.member.getLength() == 1
@@ -377,9 +377,9 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[37] >>= arg37) && arg37.getLength() == 1
           && arg37[0].member.member1.member1 == 'X'
           && arg37[0].member.member1.member2 == arg1b
-          && arg37[0].member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg37[0].member.member2 == "test"
           && (arguments[38] >>= arg38) && arg38.getLength() == 1
-          && arg38[0].member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg38[0].member1 == "test"
           && arg38[0].member2.member1 == 'X'
           && arg38[0].member2.member2.member == arg1b
           && (arguments[39] >>= arg39) && arg39.getLength() == 1
@@ -397,10 +397,10 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && arg42[0].getLength() == 1
           && arg42[0][0].member.member1.member1 == 'X'
           && arg42[0][0].member.member1.member2 == arg1b
-          && arg42[0][0].member.member2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg42[0][0].member.member2 == "test"
           && (arguments[43] >>= arg43) && arg43.getLength() == 1
           && arg43[0].getLength() == 1
-          && arg43[0][0].member1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test"))
+          && arg43[0][0].member1 == "test"
           && arg43[0][0].member2.member1 == 'X'
           && arg43[0][0].member2.member2.member == arg1b
           && (arguments[44] >>= arg44) && arg44.getLength() == 1

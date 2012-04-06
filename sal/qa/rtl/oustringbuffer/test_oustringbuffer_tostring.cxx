@@ -53,12 +53,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
 void test::oustringbuffer::ToString::testToString() {
     rtl::OUStringBuffer sb(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test string")));
     rtl::OUString str = sb.toString();
-    CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
+    CPPUNIT_ASSERT( str == "test string" );
     // returned OUString must be independent from sb
     sb.append( (sal_Unicode)'a' );
-    CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
+    CPPUNIT_ASSERT( str == "test string" );
     sb.setLength(0);
-    CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
+    CPPUNIT_ASSERT( str == "test string" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

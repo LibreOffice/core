@@ -3118,8 +3118,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
     if ( rCal.getUniqueID() != rGregorian )
     {
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-        if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "Dummy" ) ) )
+        if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID == "Dummy" )
         {
             if ( !rOrgCalendar.Len() )
             {
@@ -3172,7 +3171,7 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
         const CalendarWrapper& rCal, sal_Int16 nNatNum )
 {
     using namespace ::com::sun::star::i18n;
-    if ( rCal.getUniqueID().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gengou" ) ) )
+    if ( rCal.getUniqueID() == "gengou" )
     {
         sal_Unicode cEra;
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );

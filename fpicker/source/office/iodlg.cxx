@@ -2071,8 +2071,7 @@ void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
 short SvtFileDialog::PrepareExecute()
 {
     rtl::OUString aEnvValue;
-    if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) &&
-         aEnvValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ) )
+    if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
     {
         try
         {

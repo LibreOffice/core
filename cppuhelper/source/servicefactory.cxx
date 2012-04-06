@@ -256,8 +256,7 @@ static void add_access_control_entries(
                       "single-user-id");
             entry.value <<= ac_user;
             context_values.push_back( entry );
-            if (! ac_mode.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("single-user") ))
+            if ( ac_mode != "single-user" )
             {
                 throw SecurityException(
                     OUSTR("set UNO_AC=single-user "
@@ -267,8 +266,7 @@ static void add_access_control_entries(
         }
         else
         {
-            if (! ac_mode.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("single-default-user") ))
+            if ( ac_mode != "single-default-user" )
             {
                 throw SecurityException(
                     OUSTR("set UNO_AC=single-default-user "

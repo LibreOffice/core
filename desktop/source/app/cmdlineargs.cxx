@@ -596,56 +596,56 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, oArg.copy(RTL_CONSTASCII_LENGTH("language=")) );
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "writer" )) == sal_True )
+    else if ( oArg == "writer" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "calc" )) == sal_True )
+    else if ( oArg == "calc" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "draw" )) == sal_True )
+    else if ( oArg == "draw" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "impress" )) == sal_True )
+    else if ( oArg == "impress" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "base" )) == sal_True )
+    else if ( oArg == "base" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "global" )) == sal_True )
+    else if ( oArg == "global" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "math" )) == sal_True )
+    else if ( oArg == "math" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
         m_bDocumentArgs = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "web" )) == sal_True )
+    else if ( oArg == "web" )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
         if ( !bAlreadySet )

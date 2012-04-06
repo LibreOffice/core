@@ -383,8 +383,7 @@ bool DataInterpreter::HasCategories(
         GetProperty( rArguments, C2U(("HasCategories"))) >>= bHasCategories;
 
     for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.getLength(); ++nLSeqIdx )
-        bHasCategories = ( rData[nLSeqIdx].is() &&
-                           GetRole( rData[nLSeqIdx]->getValues()).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")));
+        bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
 
     return bHasCategories;
 }

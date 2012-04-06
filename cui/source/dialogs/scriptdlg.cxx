@@ -243,9 +243,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                     moduleDescr.getConstArray();
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
-                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "ooSetupFactoryEmptyDocumentURL") ))
+                    if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
                         break;

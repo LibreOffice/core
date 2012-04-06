@@ -127,8 +127,7 @@ static String _getTabString()
         Sequence< NamedValue > sMaterial;
         if (xHolder->getMaterial() >>= sMaterial) {
             for (int i=0; i < sMaterial.getLength(); i++) {
-                if ((sMaterial[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("title"))) &&
-                    (sMaterial[i].Value >>= aTabString))
+                if (( sMaterial[i].Name == "title" ) && ( sMaterial[i].Value >>= aTabString ))
                 {
                     result += ' ';
                     result += String(aTabString);

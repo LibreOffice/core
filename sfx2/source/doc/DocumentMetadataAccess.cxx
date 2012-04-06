@@ -108,20 +108,17 @@ static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_content));
+    return i_rPath == s_content;
 }
 
 static bool isStylesFile (::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_styles));
+    return i_rPath == s_styles;
 }
 
 static bool isReservedFile(::rtl::OUString const & i_rPath)
 {
-    return isContentFile(i_rPath)
-        || isStylesFile(i_rPath)
-        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_meta))
-        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_settings));
+    return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == s_meta || i_rPath == s_settings;
 }
 
 
@@ -244,8 +241,8 @@ static bool isFileNameValid(const ::rtl::OUString & i_rFileName)
       const ::rtl::OUString segment(
         i_rFileName.getToken(0, static_cast<sal_Unicode> ('/'), idx) );
       if (segment.isEmpty()      ||  // no empty segments
-          segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))  ||  // no . segments
-          segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")) ||  // no .. segments
+          segment == "."         ||  // no . segments
+          segment == ".."        ||  // no .. segments
           !::comphelper::OStorageHelper::IsValidZipEntryFileName(
               segment, sal_False))      // no invalid characters
                                       return false;

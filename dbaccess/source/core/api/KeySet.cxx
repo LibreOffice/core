@@ -360,7 +360,7 @@ void OKeySet::executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OU
             for(;pAnd != pAndEnd;++pAnd)
             {
                 ::rtl::OUString sValue;
-                if ( !(pAnd->Value >>= sValue) || !(sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("?")) || sValue.matchAsciiL(":",1,0)) )
+                if ( !(pAnd->Value >>= sValue) || !( sValue == "?" || sValue.matchAsciiL( ":",1,0 ) ) )
                 { // we have a criteria which has to be taken into account for updates
                     m_aFilterColumns.push_back(pAnd->Name);
                 }

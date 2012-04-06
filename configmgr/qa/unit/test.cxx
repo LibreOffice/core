@@ -291,9 +291,7 @@ void RecursiveTest::disposing(css::lang::EventObject const & Source)
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
     throw (css::uno::RuntimeException)
 {
-    CPPUNIT_ASSERT(
-        evt.Source == properties_ &&
-        evt.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")));
+    CPPUNIT_ASSERT( evt.Source == properties_ && evt.PropertyName == "Label" );
     if (count_ > 0) {
         --count_;
         step();
@@ -406,7 +404,7 @@ void Test::testKeySet() {
                 RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
         s);
-    CPPUNIT_ASSERT(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("baa")));
+    CPPUNIT_ASSERT( s == "baa" );
 }
 
 void Test::testKeyReset() {
@@ -422,7 +420,7 @@ void Test::testKeyReset() {
                     RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
             s);
-        CPPUNIT_ASSERT(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Foo")));
+        CPPUNIT_ASSERT( s == "Foo" );
     }
 }
 
@@ -436,8 +434,7 @@ void Test::testSetSetMemberName() {
                     ".uno:FontworkShapeType")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
         s);
-    CPPUNIT_ASSERT(
-        s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Shape")));
+    CPPUNIT_ASSERT( s == "Fontwork Shape" );
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
@@ -468,8 +465,7 @@ void Test::testSetSetMemberName() {
                     ".uno:FontworkShapeType")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
         s);
-    CPPUNIT_ASSERT(
-        s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Gallery")));
+    CPPUNIT_ASSERT( s == "Fontwork Gallery" );
 }
 
 void Test::testReadCommands() {

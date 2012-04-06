@@ -524,7 +524,7 @@ namespace
 {
     bool lcl_isValidDocumentURL( const ::rtl::OUString& _rDocURL )
     {
-        return ( !_rDocURL.isEmpty() && !_rDocURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:object" ) ) );
+        return ( !_rDocURL.isEmpty() && _rDocURL != "private:object" );
     }
 }
 

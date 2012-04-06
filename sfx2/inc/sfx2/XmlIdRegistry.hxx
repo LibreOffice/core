@@ -51,9 +51,7 @@ extern inline bool
 isValidXmlId(::rtl::OUString const & i_rStreamName,
     ::rtl::OUString const & i_rIdref)
 {
-    return isValidNCName(i_rIdref) &&
-        (i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) ||
-         i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("styles.xml")));
+    return isValidNCName(i_rIdref) && ( i_rStreamName == "content.xml" || i_rStreamName == "styles.xml" );
 }
 
 

@@ -359,9 +359,7 @@ OUString implReadBootstrapKey( const OUString& _rKey )
 
 void SplashScreen::loadConfig()
 {
-    _bShowLogo = !implReadBootstrapKey(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Logo"))).
-        equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0"));
+    _bShowLogo = implReadBootstrapKey( "Logo" ) != "0";
 
     OUString sProgressFrameColor = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressFrameColor" ) ) );

@@ -2046,7 +2046,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewControlle
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    if ( !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Default" ) ) && !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) ) )
+    if ( _ViewName != "Default" && _ViewName != "Preview" )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
     if ( !_Frame.is() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 3 );

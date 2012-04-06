@@ -2381,8 +2381,7 @@ OUString SwXTextFieldMasters::getImplementationName(void) throw( uno::RuntimeExc
 
 sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.TextFieldMasters" ));
+    return rServiceName == "com.sun.star.text.TextFieldMasters";
 }
 
 uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2600,8 +2599,7 @@ OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeExcep
 
 sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.TextFields" ));
+    return rServiceName == "com.sun.star.text.TextFields";
 }
 
 uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2691,8 +2689,7 @@ OUString SwXFieldEnumeration::getImplementationName(void) throw( uno::RuntimeExc
 
 sal_Bool SwXFieldEnumeration::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.FieldEnumeration" ));
+    return rServiceName == "com.sun.star.text.FieldEnumeration";
 }
 
 uno::Sequence< OUString > SwXFieldEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )

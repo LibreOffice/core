@@ -1224,7 +1224,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             aLocale.Variant = OUString();
         else if( !aLocale.Country.isEmpty() )
             aLocale.Country = OUString();
-        else if( ! aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
+        else if( aLocale.Language != "en" )
             aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         else
             aLocale.Language = OUString();

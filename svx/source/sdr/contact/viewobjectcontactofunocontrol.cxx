@@ -1493,10 +1493,9 @@ namespace sdr { namespace contact {
     {
         SolarMutexGuard aSolarGuard;
 
-        DBG_ASSERT( _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) || _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "alive" ) ),
-            "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
+        DBG_ASSERT( _rSource.NewMode == "design" || _rSource.NewMode == "alive", "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
 
-        m_eControlDesignMode = _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) ? eDesign : eAlive;
+        m_eControlDesignMode = _rSource.NewMode == "design" ? eDesign : eAlive;
 
         impl_switchDesignModeListening_nothrow( impl_isControlDesignMode_nothrow() );
 

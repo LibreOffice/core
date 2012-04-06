@@ -78,7 +78,7 @@ namespace
     // Note that '-' isn't a hyphen to RemoveHyphens.
     bModified = linguistic::RemoveHyphens(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT(str2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("a-b--c---")));
+    CPPUNIT_ASSERT( str2 == "a-b--c---" );
 
     bModified = linguistic::RemoveHyphens(str3);
     CPPUNIT_ASSERT(bModified);
@@ -86,7 +86,7 @@ namespace
 
     bModified = linguistic::RemoveHyphens(str4);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT(str4.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf")));
+    CPPUNIT_ASSERT( str4 == "asdf" );
   }
 
   void LngMiscTest::testRemoveControlChars()
@@ -109,15 +109,15 @@ namespace
 
     bModified = linguistic::RemoveControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT(str2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf")));
+    CPPUNIT_ASSERT( str2 == "asdf" );
 
     bModified = linguistic::RemoveControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT(str3.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdfasdf")));
+    CPPUNIT_ASSERT( str3 == "asdfasdf" );
 
     bModified = linguistic::RemoveControlChars(str4);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT(str4.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(" ")));
+    CPPUNIT_ASSERT( str4 == " " );
   }
 
   void LngMiscTest::testReplaceControlChars()
@@ -140,11 +140,11 @@ namespace
 
     bModified = linguistic::ReplaceControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT(str2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf")));
+    CPPUNIT_ASSERT( str2 == "asdf" );
 
     bModified = linguistic::ReplaceControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT(str3.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf asdf")));
+    CPPUNIT_ASSERT( str3 == "asdf asdf" );
 
     bModified = linguistic::ReplaceControlChars(str4);
     CPPUNIT_ASSERT(bModified);

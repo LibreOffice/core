@@ -375,8 +375,7 @@ OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeExcep
 
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
 {
-    return aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ADDIN_SERVICE ) ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MY_SERVICE ) );
+    return aServiceName == ADDIN_SERVICE || aServiceName == MY_SERVICE;
 }
 
 uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException )

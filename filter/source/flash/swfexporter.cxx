@@ -517,7 +517,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
         if( xShape.is() )
         {
             Reference< XShapes > xShapes2( xShape, UNO_QUERY );
-            if( xShapes2.is() && xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
+            if( xShapes2.is() && xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
                 // export the contents of group shapes, but we only ever stream at the top
                 // recursive level anyway, so pass false for streaming.
                 exportShapes( xShapes2, false, bMaster);
@@ -605,8 +605,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
             GDIMetaFile     aMtf;
             Reference< XComponent > xComponent( xShape, UNO_QUERY );
 
-            bool bIsOleObject = xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OLE2Shape"))
-                                || xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"));
+            bool bIsOleObject = xShape->getShapeType() == "com.sun.star.presentation.OLE2Shape" || xShape->getShapeType() == "com.sun.star.drawing.OLE2Shape";
 
             getMetaFile( xComponent, aMtf );
 

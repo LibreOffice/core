@@ -118,7 +118,7 @@ SAL_IMPLEMENT_MAIN()
 
     TEST_ENSHURE( xServInfo.is(), "testloader error4");
 
-    TEST_ENSHURE( xServInfo->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.stoc.DLLComponentLoader") ), "testloader error5");
+    TEST_ENSHURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
     TEST_ENSHURE( xServInfo->supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ), "testloader error6");
     TEST_ENSHURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
 

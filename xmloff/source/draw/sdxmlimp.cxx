@@ -418,7 +418,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         const OUString* pSNS( sSNS.getConstArray() );
         while( --n > 0 )
         {
-            if( (*pSNS++).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+            if( (*pSNS++) == "com.sun.star.drawing.TableShape" )
             {
                 mbIsTableShapeSupported = true;
                 break;

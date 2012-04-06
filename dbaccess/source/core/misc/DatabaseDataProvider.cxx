@@ -278,7 +278,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
                 ::rtl::OUString aRole;
                 if  (   xSeqProp.is()
                     &&  ( xSeqProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ) ) ) >>= aRole )
-                    &&  aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "categories" ) )
+                    &&  aRole == "categories"
                     )
                 {
                     bHasCategories = sal_True;

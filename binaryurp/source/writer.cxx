@@ -169,8 +169,7 @@ void Writer::execute() {
             if (item.request) {
                 sendRequest(
                     item.tid, item.oid, item.type, item.member, item.arguments,
-                    (!item.oid.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("UrpProtocolProperties")) &&
+                    (item.oid != "UrpProtocolProperties" &&
                      !item.member.equals(
                          css::uno::TypeDescription(
                              rtl::OUString(

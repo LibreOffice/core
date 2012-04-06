@@ -1156,10 +1156,7 @@ bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
     //       with a predefined semantic). Additional Core properties introduced
     //       be a client app must be handled by the client app itself, because
     //       the UCB does not know the semantics of those properties.
-    return ( rPropName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( TARGET_DIR_URL ) ) ||
-             rPropName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PROPERTY_DIRLIST ) ) );
+    return ( rPropName == TARGET_DIR_URL || rPropName == PROPERTY_DIRLIST );
 }
 
 //-----------------------------------------------------------------------------
@@ -2595,8 +2592,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 OUString aType;
                 OUString aHierURL;
 
-                if ( aChildTitle.compareToAscii( "sfx.tlx" ) == 0
-                  || aChildTitle.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "groupuinames.xml" ) ) )
+                if ( aChildTitle.compareToAscii( "sfx.tlx" ) == 0 || aChildTitle == "groupuinames.xml" )
                     continue;
 
                 // only StarOffice templates are accepted

@@ -72,12 +72,12 @@ inline bool getBoolAttr(
         xAttributes->getValueByUidName( uid, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
+        if ( aValue == "true" )
         {
             *pRet = sal_True;
             return true;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("false") ))
+        else if ( aValue == "false" )
         {
             *pRet = sal_False;
             return true;

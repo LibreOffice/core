@@ -472,8 +472,7 @@ void CreateCategories(
                                 {
                                     OUString aConvertedRange( rRangeAddress );
                                     bool bRangeConverted = false;
-                                    if( ! (xNewDoc->hasInternalDataProvider() &&
-                                           aConvertedRange.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("categories"))))
+                                    if( ! (xNewDoc->hasInternalDataProvider() && aConvertedRange == "categories"))
                                     {
                                         Reference< chart2::data::XRangeXMLConversion > xXMLConv( xDataProvider, uno::UNO_QUERY );
                                         if( xXMLConv.is())
@@ -636,8 +635,7 @@ Reference< chart2::XRegressionCurve > getRegressionCurve(
             if( xServiceName.is())
             {
                 OUString aServiceName( xServiceName->getServiceName());
-                if( aServiceName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+                if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
                     continue;
             }
             // take first non-empty curve

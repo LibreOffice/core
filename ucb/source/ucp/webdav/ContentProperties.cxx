@@ -247,16 +247,12 @@ void ContentProperties::UCBNamesToDAVNames(
     {
         const beans::Property & rProp = rProps[ n ];
 
-        if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        if ( rProp.Name == "Title" )
         {
             // Title is always obtained from resource's URI.
             continue;
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) )
-                  ||
-                  ( rProp.Name == DAVProperties::CREATIONDATE ) )
+        else if ( rProp.Name == "DateCreated" || rProp.Name == DAVProperties::CREATIONDATE )
         {
             if ( !bCreationDate )
             {
@@ -264,10 +260,7 @@ void ContentProperties::UCBNamesToDAVNames(
                 bCreationDate = sal_True;
             }
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DateModified" ) )
-                  ||
-                  ( rProp.Name == DAVProperties::GETLASTMODIFIED ) )
+        else if ( rProp.Name == "DateModified" || rProp.Name == DAVProperties::GETLASTMODIFIED )
         {
             if ( !bLastModified )
             {
@@ -276,10 +269,7 @@ void ContentProperties::UCBNamesToDAVNames(
                 bLastModified = sal_True;
             }
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "MediaType" ) )
-                  ||
-                  ( rProp.Name == DAVProperties::GETCONTENTTYPE ) )
+        else if ( rProp.Name == "MediaType" || rProp.Name == DAVProperties::GETCONTENTTYPE )
         {
             if ( !bContentType )
             {
@@ -288,10 +278,7 @@ void ContentProperties::UCBNamesToDAVNames(
                 bContentType = sal_True;
             }
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Size" ) )
-                  ||
-                  ( rProp.Name == DAVProperties::GETCONTENTLENGTH ) )
+        else if ( rProp.Name == "Size" || rProp.Name == DAVProperties::GETCONTENTLENGTH )
         {
             if ( !bContentLength )
             {
@@ -300,16 +287,7 @@ void ContentProperties::UCBNamesToDAVNames(
                 bContentLength = sal_True;
             }
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) )
-                  ||
-                  rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) )
-                  ||
-                  rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) )
-                  ||
-                  ( rProp.Name == DAVProperties::RESOURCETYPE ) )
+        else if ( rProp.Name == "ContentType" || rProp.Name == "IsDocument" || rProp.Name == "IsFolder" || rProp.Name == DAVProperties::RESOURCETYPE )
         {
             if ( !bResourceType )
             {
@@ -347,20 +325,17 @@ void ContentProperties::UCBNamesToHTTPNames(
     {
         const beans::Property & rProp = rProps[ n ];
 
-        if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+        if ( rProp.Name == "DateModified" )
         {
             propertyNames.push_back(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Last-Modified")) );
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        else if ( rProp.Name == "MediaType" )
         {
             propertyNames.push_back(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content-Type")) );
         }
-        else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        else if ( rProp.Name == "Size" )
         {
             propertyNames.push_back(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content-Length")) );
@@ -460,8 +435,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
-    else if ( rName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+    else if ( rName == "Content-Length" )
     {
         // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
         // Only DAV resources have this property.
@@ -502,8 +476,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
-    else if ( rName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
+    else if ( rName == "Last-Modified" )
     {
         // Do not map Last-Modified entity header to DAV:getlastmodified!
         // Only DAV resources have this property.

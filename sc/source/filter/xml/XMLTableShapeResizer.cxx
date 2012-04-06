@@ -61,7 +61,7 @@ ScMyOLEFixer::~ScMyOLEFixer()
 
 sal_Bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape >& rShape)
 {
-    return rShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"));
+    return rShape->getShapeType() == "com.sun.star.drawing.OLE2Shape";
 }
 
 void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,

@@ -136,8 +136,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                                        "system.desktop-environment" ) )
                 );
                 rtl::OUString aDesktopEnvironment;
-                if ((aValue >>= aDesktopEnvironment)
-                    && aDesktopEnvironment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME")))
+                if ( (aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME" )
                 {
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();

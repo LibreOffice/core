@@ -179,11 +179,11 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
             Reference< XInterface >(), Any() );
     }
-    else if (mpLibArray && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("libraries") ))
+    else if ( mpLibArray && rLocalName == "libraries" )
     {
         return new LibrariesElement( rLocalName, xAttributes, 0, this );
     }
-    else if (mpLibDesc && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
+    else if ( mpLibDesc && rLocalName == "library" )
     {
         LibDescriptor& aDesc = *mpLibDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;

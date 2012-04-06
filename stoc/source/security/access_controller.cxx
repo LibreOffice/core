@@ -364,8 +364,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
             // avoid ref-counting
             OUString const & typeName =
                 *reinterpret_cast< OUString const * >( &acc.pType->pTypeName );
-            if (typeName.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("com.sun.star.security.XAccessControlContext") ))
+            if ( typeName == "com.sun.star.security.XAccessControlContext" )
             {
                 return Reference< security::XAccessControlContext >(
                     *reinterpret_cast< security::XAccessControlContext ** const >( acc.pData ) );

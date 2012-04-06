@@ -1639,7 +1639,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                         ::rtl::OUString sFileExtension = aURLObj.GetExtension();
                         if ( sFileExtension.isEmpty() )
                         {
-                            sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
+                            sFileExtension = sFirstFilter == "*.*" ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
                             aPathStr = sFileExtension.isEmpty() ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
                         }
                         else
@@ -1667,7 +1667,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                             }
                             if ( !bValidFilter )
                             {
-                                sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? rtl::OUString()
+                                sFileExtension = sFirstFilter == "*.*" ? rtl::OUString()
                                                                                  : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
                                 aPathStr = sFileExtension.isEmpty() ? aPathStr
                                                                     : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
@@ -1713,33 +1713,33 @@ ConvertCountryCode(const OUString& language)
 {
     sal_Int32 nCode = 0;
 
-    if( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ar")) ) nCode = 966; // Arabic
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("cs")) ) nCode = 42; // Czech
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("da")) ) nCode = 45;  // Danish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("de")) ) nCode = 49;  // German
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en")) ) nCode = 1;   // English
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("es")) ) nCode = 34;  // Spanish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("el")) ) nCode = 30;  // Greek
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fa")) ) nCode = 98;  // Persian = Farsi
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fi")) ) nCode = 358;  // Finnish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fr")) ) nCode = 33;  // French
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("he")) ) nCode = 972;     // Hebrew
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hi")) ) nCode = 91;  // Indian = Hindi
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hu")) ) nCode = 36;  // Hungarian
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("it")) ) nCode = 39;  // Italian
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ) nCode = 81;  // Japanese
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) ) nCode = 82;  // Korean
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("nl")) ) nCode = 31;  // Dutch
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("no")) ) nCode = 47;  // Norwegian
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pl")) ) nCode = 48;  // Polish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pt")) ) nCode = 351;     // Portuguese
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")) ) nCode = 7;   // Russian
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sv")) ) nCode = 46;  // Swedish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("th")) ) nCode = 66;  // Thai
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("tk")) ) nCode = 90;  // Turkish
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ur")) ) nCode = 92;  // Urdu
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vi")) ) nCode = 84;  // Vietnamese
-    else if ( language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) ) nCode = 86;  // Simplified Chinese
+    if( language == "ar" ) nCode = 966; // Arabic
+    else if ( language == "cs" ) nCode = 42; // Czech
+    else if ( language == "da" ) nCode = 45;  // Danish
+    else if ( language == "de" ) nCode = 49;  // German
+    else if ( language == "en" ) nCode = 1;   // English
+    else if ( language == "es" ) nCode = 34;  // Spanish
+    else if ( language == "el" ) nCode = 30;  // Greek
+    else if ( language == "fa" ) nCode = 98;  // Persian = Farsi
+    else if ( language == "fi" ) nCode = 358;  // Finnish
+    else if ( language == "fr" ) nCode = 33;  // French
+    else if ( language == "he" ) nCode = 972;     // Hebrew
+    else if ( language == "hi" ) nCode = 91;  // Indian = Hindi
+    else if ( language == "hu" ) nCode = 36;  // Hungarian
+    else if ( language == "it" ) nCode = 39;  // Italian
+    else if ( language == "ja" ) nCode = 81;  // Japanese
+    else if ( language == "ko" ) nCode = 82;  // Korean
+    else if ( language == "nl" ) nCode = 31;  // Dutch
+    else if ( language == "no" ) nCode = 47;  // Norwegian
+    else if ( language == "pl" ) nCode = 48;  // Polish
+    else if ( language == "pt" ) nCode = 351;     // Portuguese
+    else if ( language == "ru" ) nCode = 7;   // Russian
+    else if ( language == "sv" ) nCode = 46;  // Swedish
+    else if ( language == "th" ) nCode = 66;  // Thai
+    else if ( language == "tk" ) nCode = 90;  // Turkish
+    else if ( language == "ur" ) nCode = 92;  // Urdu
+    else if ( language == "vi" ) nCode = 84;  // Vietnamese
+    else if ( language == "zh" ) nCode = 86;  // Simplified Chinese
 
     return nCode;
 }

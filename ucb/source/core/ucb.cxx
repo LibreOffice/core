@@ -632,9 +632,7 @@ Any SAL_CALL UniversalContentBroker::execute(
     //       ctor in ucbcmds.cxx when adding new commands!
     //////////////////////////////////////////////////////////////////////
 
-    if ( ( aCommand.Handle == GETCOMMANDINFO_HANDLE ) ||
-         aCommand.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( GETCOMMANDINFO_NAME ) ) )
+    if ( ( aCommand.Handle == GETCOMMANDINFO_HANDLE ) || aCommand.Name == GETCOMMANDINFO_NAME )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -642,9 +640,7 @@ Any SAL_CALL UniversalContentBroker::execute(
 
         aRet <<= getCommandInfo();
     }
-    else if ( ( aCommand.Handle == GLOBALTRANSFER_HANDLE ) ||
-              aCommand.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(GLOBALTRANSFER_NAME ) ) )
+    else if ( ( aCommand.Handle == GLOBALTRANSFER_HANDLE ) || aCommand.Name == GLOBALTRANSFER_NAME )
     {
         //////////////////////////////////////////////////////////////////
         // globalTransfer

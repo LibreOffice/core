@@ -141,11 +141,11 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             sal_Int32 i = 0;
             for ( i = 0; i < pFilterData->getLength(); i++ )
             {
-                if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compression" ) ) )
+                if ( (*pFilterData)[ i ].Name == "Compression" )
                     (*pFilterData)[ i ].Value >>= mnCompLevel;
-                else if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Interlaced" ) ) )
+                else if ( (*pFilterData)[ i ].Name == "Interlaced" )
                     (*pFilterData)[ i ].Value >>= mnInterlaced;
-                else if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxChunkSize" ) ) )
+                else if ( (*pFilterData)[ i ].Name == "MaxChunkSize" )
                 {
                     sal_Int32 nVal = 0;
                     if ( (*pFilterData)[ i ].Value >>= nVal )

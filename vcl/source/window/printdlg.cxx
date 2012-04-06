@@ -1185,7 +1185,7 @@ void PrintDialog::setupOptionalUI()
         bool bSwitchPage = false;
         if( !aGroupingHint.isEmpty() )
             bSwitchPage = true;
-        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) || (bOnStaticPage && ! bSubgroupOnStaticPage )  )
+        else if( aCtrlType == "Subgroup" || (bOnStaticPage && ! bSubgroupOnStaticPage ) )
             bSwitchPage = true;
         if( bSwitchPage )
         {
@@ -1230,8 +1230,7 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
-        if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) ) ||
-            ( ! pCurParent && ! (bOnStaticPage || !aGroupingHint.isEmpty() ) ) )
+        if( aCtrlType == "Group" || ( ! pCurParent && ! (bOnStaticPage || !aGroupingHint.isEmpty() ) ) )
         {
             // add new tab page
             TabPage* pNewGroup = new TabPage( &maTabCtrl );
@@ -1285,10 +1284,7 @@ void PrintDialog::setupOptionalUI()
             pIndent->setChild( pCurColumn );
         }
         // EVIL
-        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) &&
-                 aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LayoutPage" ) ) &&
-                 aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintProspect" ) )
-                 )
+        else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
         {
             maNUpPage.maBrochureBtn.SetText( aText );
             maNUpPage.maBrochureBtn.Show();
@@ -1331,7 +1327,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) && pCurParent )
+            if( aCtrlType == "Bool" && pCurParent )
             {
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
@@ -1361,7 +1357,7 @@ void PrintDialog::setupOptionalUI()
                 // add checkbox to current column
                 pDependencyRow->addWindow( pNewBox );
             }
-            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) && pCurParent )
+            else if( aCtrlType == "Radio" && pCurParent )
             {
                 sal_Int32 nCurHelpText = 0;
                 boost::shared_ptr<vcl::RowOrColumn> pRadioColumn( pCurColumn );
@@ -1421,10 +1417,7 @@ void PrintDialog::setupOptionalUI()
                     pLabel->setLabel( pBtn );
                 }
             }
-            else if( ( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) )   ||
-                       aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )  ||
-                       aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) )
-                     ) && pCurParent )
+            else if( ( aCtrlType == "List" || aCtrlType == "Range" || aCtrlType == "Edit" ) && pCurParent )
             {
                 // create a row in the current column
                 boost::shared_ptr<vcl::RowOrColumn> pFieldColumn( new vcl::RowOrColumn( pCurColumn.get(), false ) );

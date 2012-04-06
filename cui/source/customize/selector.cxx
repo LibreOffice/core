@@ -315,7 +315,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
             Sequence< Reference< browse::XBrowseNode > > children =
                 _rxRootNode->getChildNodes();
 
-            sal_Bool bIsRootNode = _rxRootNode->getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Root"));
+            sal_Bool bIsRootNode = _rxRootNode->getName() == "Root";
 
             /* To mimic current starbasic behaviour we
             need to make sure that only the current document
@@ -586,7 +586,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
     Image aImage;
     if ( bIsRootNode )
     {
-        if ( node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) || node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
+        if ( node->getName() == "user" || node->getName() == "share" )
         {
             aImage = m_hdImage;
         }
@@ -619,9 +619,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                     moduleDescr.getConstArray();
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
-                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "ooSetupFactoryEmptyDocumentURL") ))
+                    if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
                         break;

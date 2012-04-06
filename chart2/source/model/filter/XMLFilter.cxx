@@ -120,13 +120,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
             {
                 // properties understood by storage factory
                 // (see package/source/xstor/xfactory.cxx for details)
-                if ( rMediaDescriptor[i].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ))
-                    || rMediaDescriptor[i].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Password" ))
-                    || rMediaDescriptor[i].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-                    )
+                if ( rMediaDescriptor[i].Name == "InteractionHandler" || rMediaDescriptor[i].Name == "Password" || rMediaDescriptor[i].Name == "RepairPackage" )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
                 }
@@ -187,19 +181,12 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
             ::std::vector< beans::PropertyValue > aPropertiesForStorage;
             for( sal_Int32 i=rMediaDescriptor.getLength(); i--; )
             {
-                if( rMediaDescriptor[i].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "InputStream" )))
+                if( rMediaDescriptor[i].Name == "InputStream" )
                     xStream.set( rMediaDescriptor[i].Value, uno::UNO_QUERY );
 
                 // properties understood by storage factory
                 // (see package/source/xstor/xfactory.cxx for details)
-                if ( rMediaDescriptor[i].Name.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ))
-                     || rMediaDescriptor[i].Name.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "Password" ))
-                     || rMediaDescriptor[i].Name.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-                    )
+                if ( rMediaDescriptor[i].Name == "InteractionHandler" || rMediaDescriptor[i].Name == "Password" || rMediaDescriptor[i].Name == "RepairPackage" )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
                 }
@@ -827,7 +814,7 @@ void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDes
 {
     apphelper::MediaDescriptorHelper aMDHelper( _rMediaDescriptor );
     if( aMDHelper.ISSET_FilterName )
-        rOutOASIS = aMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("chart8"));
+        rOutOASIS = aMDHelper.FilterName == "chart8";
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString XMLFilter::getMediaType(bool _bOasis)
@@ -843,7 +830,7 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
 {
     apphelper::MediaDescriptorHelper aMDHelper( _rMediaDescriptor );
     if( aMDHelper.ISSET_FilterName )
-        rOutOASIS = aMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Base) Report Chart"));
+        rOutOASIS = aMDHelper.FilterName == "StarOffice XML (Base) Report Chart";
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString XMLReportFilterHelper::getMediaType(bool )

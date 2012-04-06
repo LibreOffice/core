@@ -101,29 +101,21 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
     Reference< XRegressionCurve > xResult;
 
     // todo: use factory methods with service name
-    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                "com.sun.star.chart2.LinearRegressionCurve" )))
+    if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
-        xResult.set(
-            new LinearRegressionCurve( xContext ));
+        xResult.set( new LinearRegressionCurve( xContext ) );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
-        xResult.set(
-            new LogarithmicRegressionCurve( xContext ));
+        xResult.set( new LogarithmicRegressionCurve( xContext ) );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.ExponentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
-        xResult.set(
-            new ExponentialRegressionCurve( xContext ));
+        xResult.set( new ExponentialRegressionCurve( xContext ) );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.PotentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
-        xResult.set(
-            new PotentialRegressionCurve( xContext ));
+        xResult.set( new PotentialRegressionCurve( xContext ) );
     }
 
     return xResult;
@@ -137,30 +129,25 @@ Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionC
     Reference< XRegressionCurveCalculator > xResult;
 
     // todo: use factory methods with service name
-    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.MeanValueRegressionCurve" )))
+    if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
-        xResult.set( new MeanValueRegressionCurveCalculator());
+        xResult.set( new MeanValueRegressionCurveCalculator() );
     }
-    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.LinearRegressionCurve" )))
+    if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
-        xResult.set( new LinearRegressionCurveCalculator());
+        xResult.set( new LinearRegressionCurveCalculator() );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
-        xResult.set( new LogarithmicRegressionCurveCalculator());
+        xResult.set( new LogarithmicRegressionCurveCalculator() );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.ExponentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
-        xResult.set( new ExponentialRegressionCurveCalculator());
+        xResult.set( new ExponentialRegressionCurveCalculator() );
     }
-    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.chart2.PotentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
-        xResult.set( new PotentialRegressionCurveCalculator());
+        xResult.set( new PotentialRegressionCurveCalculator() );
     }
 
     return xResult;
@@ -192,15 +179,12 @@ void RegressionCurveHelper::initializeCurveCalculator(
             if( xProp->getPropertyValue(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ))) >>= aRole )
             {
-                if( bUseXValuesIfAvailable &&
-                    ! bXValuesFound &&
-                    aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "values-x" )))
+                if( bUseXValuesIfAvailable && !bXValuesFound && aRole == "values-x" )
                 {
                     aXValues = DataSequenceToDoubleSequence( xSeq );
                     bXValuesFound = true;
                 }
-                else if( ! bYValuesFound &&
-                         aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "values-y" )))
+                else if( !bYValuesFound && aRole == "values-y" )
                 {
                     aYValues = DataSequenceToDoubleSequence( xSeq );
                     bYValuesFound = true;
@@ -537,28 +521,23 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
         {
             ::rtl::OUString aServiceName( xServName->getServiceName() );
 
-            if( aServiceName.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))
+            if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
             {
                 eResult = REGRESSION_TYPE_LINEAR;
             }
-            else if( aServiceName.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+            else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
             {
                 eResult = REGRESSION_TYPE_LOG;
             }
-            else if( aServiceName.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ExponentialRegressionCurve" )))
+            else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
             {
                 eResult = REGRESSION_TYPE_EXP;
             }
-            else if( aServiceName.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.PotentialRegressionCurve" )))
+            else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
             {
                 eResult = REGRESSION_TYPE_POWER;
             }
-            else if( aServiceName.equalsAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+            else if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
             {
                 eResult = REGRESSION_TYPE_MEAN_VALUE;
             }
@@ -604,28 +583,23 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
         return aResult;
 
     OUString aServiceName( xServiceName->getServiceName());
-    if( aServiceName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+    if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
         aResult = ::chart::SchResId::getResString( STR_REGRESSION_MEAN );
     }
-    else if( aServiceName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
         aResult = ::chart::SchResId::getResString( STR_REGRESSION_LINEAR );
     }
-    else if( aServiceName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
         aResult = ::chart::SchResId::getResString( STR_REGRESSION_LOG );
     }
-    else if( aServiceName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ExponentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
         aResult = ::chart::SchResId::getResString( STR_REGRESSION_EXP );
     }
-    else if( aServiceName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.PotentialRegressionCurve" )))
+    else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
         aResult = ::chart::SchResId::getResString( STR_REGRESSION_POWER );
     }

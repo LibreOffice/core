@@ -678,18 +678,13 @@ namespace rtl_Bootstrap
         void testRecursion() {
             rtl::OUString t(RTL_CONSTASCII_USTRINGPARAM("$RECURSIVE"));
             Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
-            CPPUNIT_ASSERT_MESSAGE(
-                "recursion detection",
-                t.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("***RECURSION DETECTED***")));
+            CPPUNIT_ASSERT_MESSAGE( "recursion detection", t == "***RECURSION DETECTED***" );
         }
 
         void testLink() {
             rtl::OUString t(RTL_CONSTASCII_USTRINGPARAM("$LINKED"));
             Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
-            CPPUNIT_ASSERT_MESSAGE(
-                "link file",
-                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("qadev17")));
+            CPPUNIT_ASSERT_MESSAGE( "link file", t == "qadev17");
         }
 
         void testOverride() {
@@ -697,16 +692,12 @@ namespace rtl_Bootstrap
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${.override:$ORIGIN/" SAL_CONFIGFILE("rtl") ":ORIGIN}"));
             Bootstrap(t_getSourcePath("rtl")).expandMacrosFrom(t1);
-            CPPUNIT_ASSERT_MESSAGE(
-                "override ORIGIN",
-                t1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("direct")));
+            CPPUNIT_ASSERT_MESSAGE( "override ORIGIN", t1 == "direct" );
             rtl::OUString t2(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${.override:$ORIGIN/" SAL_CONFIGFILE("none") ":MYVAR}"));
             Bootstrap::expandMacros(t2);
-            CPPUNIT_ASSERT_MESSAGE(
-                "override MYVAR",
-                t2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("src680_test")));
+            CPPUNIT_ASSERT_MESSAGE( "override MYVAR", t2 == "src680_test" );
         }
 
         void testNonexisting() {
@@ -714,9 +705,7 @@ namespace rtl_Bootstrap
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${$ORIGIN/" SAL_CONFIGFILE("none") ":MYVAR}"));
             Bootstrap::expandMacros(t);
-            CPPUNIT_ASSERT_MESSAGE(
-                "nonexisting",
-                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("src680_test")));
+            CPPUNIT_ASSERT_MESSAGE( "nonexisting", t == "src680_test" );
         }
 
         void testSection() {
@@ -732,10 +721,7 @@ namespace rtl_Bootstrap
             b.appendAscii(RTL_CONSTASCII_STRINGPARAM(":Other_Section:EXPAND}"));
             rtl::OUString t(b.makeStringAndClear());
             Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
-            CPPUNIT_ASSERT_MESSAGE(
-                "section expansion",
-                t.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("$FILE")));
+            CPPUNIT_ASSERT_MESSAGE( "section expansion", t == "$FILE" );
                 // the correct answer would be "testshl2 file" instead, but
                 // expansion including a section currently erroneously does not
                 // recursively expand macros in the resulting replacement text

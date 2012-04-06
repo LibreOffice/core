@@ -1001,7 +1001,7 @@ void xforms::getInstanceData(
         const PropertyValue& rValue = pValues[n];
 #define PROP(NAME) \
         if( p##NAME != NULL && \
-            rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(#NAME)) ) \
+            rValue.Name == #NAME ) \
             rValue.Value >>= (*p##NAME)
         PROP(ID);
         PROP(Instance);

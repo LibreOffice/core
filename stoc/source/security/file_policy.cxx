@@ -467,46 +467,46 @@ void FilePolicy::refresh()
     OUString token( reader.getToken() );
     while (!token.isEmpty())
     {
-        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_grant)))
+        if ( token != s_grant )
             reader.error( OUSTR("expected >grant< token!") );
         OUString userId;
         token = reader.assureToken();
-        if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_user))) // next token is user-id
+        if ( token == s_user ) // next token is user-id
         {
             userId = reader.assureQuotedToken();
             token = reader.assureToken();
         }
-        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_openBrace)))
+        if ( token != s_openBrace )
             reader.error( OUSTR("expected opening brace >{<!") );
         token = reader.assureToken();
         // permissions list
-        while (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_closingBrace)))
+        while ( token != s_closingBrace )
         {
-            if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_permission)))
+            if ( token != s_permission )
                 reader.error( OUSTR("expected >permission< or closing brace >}<!") );
 
             token = reader.assureToken(); // permission type
             Any perm;
-            if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_filePermission))) // FilePermission
+            if ( token == s_filePermission ) // FilePermission
             {
                 OUString url( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= io::FilePermission( url, actions );
             }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_socketPermission))) // SocketPermission
+            else if ( token == s_socketPermission ) // SocketPermission
             {
                 OUString host( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= connection::SocketPermission( host, actions );
             }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_runtimePermission))) // RuntimePermission
+            else if ( token == s_runtimePermission ) // RuntimePermission
             {
                 OUString name( reader.assureQuotedToken() );
                 perm <<= security::RuntimePermission( name );
             }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_allPermission))) // AllPermission
+            else if ( token == s_allPermission ) // AllPermission
             {
                 perm <<= security::AllPermission();
             }

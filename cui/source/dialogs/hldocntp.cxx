@@ -197,15 +197,15 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
                 rDynamicMenuEntry[e].Value >>= aTargetName;
         }
         //#i96822# business cards, labels and database should not be inserted here
-        if( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/swriter?slot=21051" ) ) ||
-                aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/swriter?slot=21052" )) ||
-                aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/sdatabase?Interactive" )))
+        if( aDocumentUrl == "private:factory/swriter?slot=21051" ||
+            aDocumentUrl == "private:factory/swriter?slot=21052" ||
+            aDocumentUrl == "private:factory/sdatabase?Interactive" )
             continue;
 
         // Insert into listbox
         if ( !aDocumentUrl.isEmpty() )
         {
-            if ( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:factory/simpress?slot=6686" ) ) )              // SJ: #106216# do not start
+            if ( aDocumentUrl == "private:factory/simpress?slot=6686" )              // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data

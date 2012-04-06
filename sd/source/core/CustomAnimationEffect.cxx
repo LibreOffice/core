@@ -1322,9 +1322,7 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
 
 static bool implIsColorAttribute( const OUString& rAttributeName )
 {
-    return rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FillColor") ) ||
-           rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("LineColor") ) ||
-           rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CharColor") );
+    return rAttributeName == "FillColor" || rAttributeName == "LineColor" || rAttributeName == "CharColor";
 }
 
 // --------------------------------------------------------------------
@@ -1824,8 +1822,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 
             while( nLength-- )
             {
-                if( !p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "text-only" ) ) &&
-                    !p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-property" ) ) )
+                if( p->Name != "text-only" && p->Name != "preset-property" )
                 {
                     aNewUserData.push_back( *p );
                     bFilter = true;

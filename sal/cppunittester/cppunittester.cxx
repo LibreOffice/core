@@ -188,7 +188,7 @@ SAL_IMPLEMENT_MAIN() {
     while (index < rtl_getAppCommandArgCount())
     {
         rtl::OUString arg = getArgument(index);
-        if (!arg.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--protector")))
+        if ( arg != "--protector" )
         {
             if (testlib.empty())
             {

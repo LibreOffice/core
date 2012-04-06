@@ -365,8 +365,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
                             bIs3d )
                         {
-                            if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.PieChartType" ))
-                                || maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" )) )
+                            if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
                             {
                                 ::rtl::OUString aPropName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartingAngle")) );
                                 uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
@@ -415,8 +414,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 if( ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
                     bIs3d )
                 {
-                    if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.AreaChartType" )) ||
-                        maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LineChartType" )) )
+                    if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
                     {
                         aDeepProperty <<= uno::makeAny( true );
                     }
@@ -440,9 +438,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     //
 
     bool bCreateInternalDataProvider = false;
-    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
+    if( m_rXLinkHRefAttributeToIndicateDataProvider == "." ) //data comes from the chart itself
         bCreateInternalDataProvider = true;
-    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider == ".." ) //data comes from the parent application
         bCreateInternalDataProvider = false;
     else if( !m_rXLinkHRefAttributeToIndicateDataProvider.isEmpty() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
         bCreateInternalDataProvider = true;
@@ -595,9 +593,7 @@ void SchXMLPlotAreaContext::EndElement()
         }
 
         // set correct number of lines at series
-        if( ! m_aGlobalSeriesImportInfo.rbAllRangeAddressesAvailable &&
-            mnNumOfLinesProp > 0 &&
-            maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ColumnChartType" )))
+        if( ! m_aGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && mnNumOfLinesProp > 0 && maChartTypeServiceName == "com.sun.star.chart2.ColumnChartType" )
         {
             try
             {

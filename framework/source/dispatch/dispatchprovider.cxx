@@ -187,7 +187,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
-    return (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)));
+    return aURL.Complete == CMD_UNO_SHOWSTARTMODULE;
 }
 
 /**
@@ -412,10 +412,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
        )
     {
         // There exist a hard coded interception for special URLs.
-        if (
-            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseDoc"))) ||
-            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseWin")))
-           )
+        if ( aURL.Complete == ".uno:CloseDoc" || aURL.Complete == ".uno:CloseWin" )
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             // In case the frame is not a top one, is not based on system window and has a parent,

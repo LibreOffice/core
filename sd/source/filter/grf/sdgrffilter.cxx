@@ -399,7 +399,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
         if( !bIsLinked )
                xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
 
-        if( bIsLinked || aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || aMimeType.isEmpty() )
+        if( bIsLinked || aMimeType == "image/x-vclgraphic" || aMimeType.isEmpty() )
         {
             // this failed, try to detect it from graphic stream and URL
             OUString aURL( sGraphicURL );
@@ -421,7 +421,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             }
         }
 
-        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || aMimeType.isEmpty() )
+        if( aMimeType == "image/x-vclgraphic" || aMimeType.isEmpty() )
         {
             // this also failed, now set a mimetype that fits graphic best
 

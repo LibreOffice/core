@@ -308,9 +308,7 @@ void Test::testVoid() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -408,9 +406,7 @@ void Test::testBoolean() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -509,9 +505,7 @@ void Test::testByte() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -610,9 +604,7 @@ void Test::testShort() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -713,9 +705,7 @@ void Test::testUnsignedShort() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -810,9 +800,7 @@ void Test::testLong() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -907,9 +895,7 @@ void Test::testUnsignedLong() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1004,9 +990,7 @@ void Test::testHyper() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1101,9 +1085,7 @@ void Test::testUnsignedHyper() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1198,9 +1180,7 @@ void Test::testFloat() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1295,9 +1275,7 @@ void Test::testDouble() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1397,9 +1375,7 @@ void Test::testChar() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1494,9 +1470,7 @@ void Test::testString() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            (a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", (a >>= b) && b == "1" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1591,9 +1565,7 @@ void Test::testType() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1689,9 +1661,7 @@ void Test::testSequence() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1792,9 +1762,7 @@ void Test::testEnum() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1893,9 +1861,7 @@ void Test::testStruct() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -1949,10 +1915,7 @@ void Test::testStruct() {
 void Test::testPoly() {
     css::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
-    CPPUNIT_ASSERT_MESSAGE(
-        "type name",
-        a.getValueType().getTypeName().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("Poly<[]char>")));
+    CPPUNIT_ASSERT_MESSAGE( "type name", a.getValueType().getTypeName() == "Poly<[]char>" );
     CPPUNIT_ASSERT_MESSAGE(
         "constructor",
         a == css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()));
@@ -2018,9 +1981,7 @@ void Test::testException() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -2136,9 +2097,7 @@ void Test::testInterface() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
@@ -2252,9 +2211,7 @@ void Test::testNull() {
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());

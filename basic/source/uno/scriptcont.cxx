@@ -326,24 +326,20 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
 
         script::ModuleInfo aModInfo;
         aModInfo.ModuleType = ModuleType::UNKNOWN;
-        if( aMod.aModuleType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("normal") ))
+        if( aMod.aModuleType == "normal" )
         {
             aModInfo.ModuleType = ModuleType::NORMAL;
         }
-        else if( aMod.aModuleType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("class") ))
+        else if( aMod.aModuleType == "class" )
         {
             aModInfo.ModuleType = ModuleType::CLASS;
         }
-        else if( aMod.aModuleType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("form") ))
+        else if( aMod.aModuleType == "form" )
         {
             aModInfo.ModuleType = ModuleType::FORM;
             aModInfo.ModuleObject = mxOwnerDocument;
         }
-        else if( aMod.aModuleType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("document") ))
+        else if( aMod.aModuleType == "document" )
         {
             aModInfo.ModuleType = ModuleType::DOCUMENT;
 

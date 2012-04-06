@@ -239,7 +239,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 {
     SvXMLNamespaceMap *pRewindMap = 0;
 
-    bool bRect = rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "presentation:show-shape" ) );
+    bool bRect = rName == "presentation:show-shape";
     (void)bRect;
 
     // Process namespace attributes. This must happen before creating the

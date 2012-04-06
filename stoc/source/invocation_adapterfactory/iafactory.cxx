@@ -352,9 +352,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
     OUString const & name =
         *reinterpret_cast< OUString const * >( &pSource->pType->pTypeName );
 
-    if (name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(
-                "com.sun.star.reflection.InvocationTargetException") ))
+    if ( name == "com.sun.star.reflection.InvocationTargetException" )
     {
         // unwrap invocation target exception
         uno_Any * target_exc =

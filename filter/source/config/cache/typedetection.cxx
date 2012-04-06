@@ -251,21 +251,13 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             // one type TextAscii and two filters registered for these one type.
             // But then we loose automatic opening of CSV files in calc instead of opening these files
             // inside writer.
-            if (
-                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"))) &&
-                (
-                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text"))) ||
-                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text_encoded")))
-                )
-               )
+            if ( sDocumentService == "com.sun.star.sheet.SpreadsheetDocument"
+                && ( sRealType == "writer_Text" || sRealType == "writer_Text_encoded" ) )
             {
                 sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_Text_txt_csv_StarCalc" ));
             }
             else
-            if (
-                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"))) &&
-                (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_Text_txt_csv_StarCalc")))
-               )
+            if ( sDocumentService == "com.sun.star.text.TextDocument" && sRealType == "calc_Text_txt_csv_StarCalc" )
             {
                 sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_Text" ));
             }

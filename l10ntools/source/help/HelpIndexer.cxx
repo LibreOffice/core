@@ -57,10 +57,7 @@ bool HelpIndexer::indexDocuments() {
     }
 
     rtl::OUString sLang = d_lang.getToken(0, '-');
-    bool bUseCJK =
-        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
-        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) ||
-        sLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
+    bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
 
     // Construct the analyzer appropriate for the given language
     lucene::analysis::Analyzer *analyzer;

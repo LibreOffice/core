@@ -807,13 +807,13 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
+        if ( pBM->GetFieldname( ) == ODF_FORMCHECKBOX )
         { // a checkbox...
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
             bool checked = pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
-        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
+        else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
         { // a list...
             rtl::OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );
@@ -838,13 +838,13 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
+        if ( pBM->GetFieldname( ) == ODF_FORMCHECKBOX )
         {
             Width( rInf.GetTxtHeight(  ) );
             Height( rInf.GetTxtHeight(  ) );
             SetAscent( rInf.GetAscent(  ) );
         }
-        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
+        else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
         {
             ::rtl::OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );

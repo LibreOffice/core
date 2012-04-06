@@ -2786,7 +2786,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         while (aPartIt != aItEnd)
                         {
-                            if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\l")))
+                            if ( *aPartIt == "\\l" )
                             {
                                 ++aPartIt;
 
@@ -2796,12 +2796,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 sURL = OUString('#');
                                 sURL += *aPartIt;
                             }
-                            else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\m")) ||
-                                     aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\n")))
+                            else if ( *aPartIt == "\\m" || *aPartIt == "\\n" )
                             {
                             }
-                            else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\o")) ||
-                                     aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\t")))
+                            else if ( *aPartIt == "\\o" || *aPartIt == "\\t" )
                             {
                                 ++aPartIt;
 

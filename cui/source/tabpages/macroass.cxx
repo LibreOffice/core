@@ -131,7 +131,7 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
 {
     String aName( pMacro->GetMacName() );
     String aEntry;
-    if ( ! pMacro->GetLanguage().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("JavaScript")) )
+    if ( pMacro->GetLanguage() != "JavaScript" )
     {
         sal_uInt16 nCount = comphelper::string::getTokenCount(aName, '.');
         aEntry = aName.GetToken( nCount-1, '.' );

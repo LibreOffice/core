@@ -87,9 +87,9 @@ throw (RuntimeException)
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+        if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+        else if ( pValue[i].Name == "URL" )
             pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
@@ -156,11 +156,11 @@ throw( com::sun::star::uno::RuntimeException )
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
+        if ( pValue[i].Name == "TypeName" )
             location=i;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+        else if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+        else if ( pValue[i].Name == "URL" )
             pValue[i].Value >>= sURL;
     }
 
@@ -219,7 +219,7 @@ throw (Exception, RuntimeException)
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+            if ( pValue[i].Name == "Type" )
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -238,8 +238,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL MSWorksImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
-    return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 Sequence< OUString > SAL_CALL MSWorksImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)

@@ -423,8 +423,7 @@ void handleDirectory(
                     handleDirectory(
                         stat.getFileURL(), 1, stat.getFileName(),
                         rtl::OUString());
-                } else if (stat.getFileName().equalsAsciiL(
-                               RTL_CONSTASCII_STRINGPARAM("clone")))
+                } else if ( stat.getFileName() == "clone" )
                 {
                     handleDirectory(
                         stat.getFileURL(), -1, rtl::OUString(),
