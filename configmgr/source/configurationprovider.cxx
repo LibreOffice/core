@@ -365,7 +365,7 @@ void Service::setLocale(css::lang::Locale const & eLocale)
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(*lock_);
     css::lang::Locale loc;
-    if (locale_.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))) {
+    if ( locale_ == "*" ) {
         loc.Language = locale_;
     } else if (! locale_.isEmpty()) {
         try {

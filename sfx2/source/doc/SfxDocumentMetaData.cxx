@@ -1320,7 +1320,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                 ::rtl::OUString::createFromAscii(s_nsODFMeta),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value-type")));
         ::rtl::OUString text = getNodeText(*it);
-        if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float"))) {
+        if ( type == "float" ) {
             double d;
             if (::sax::Converter::convertDouble(d, text)) {
                 any <<= d;
@@ -1329,7 +1329,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("date"))) {
+        } else if ( type == "date" ) {
             bool isDateTime;
             css::util::Date d;
             css::util::DateTime dt;
@@ -1344,7 +1344,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("time"))) {
+        } else if ( type == "time" ) {
             css::util::Duration ud;
             if (textToDuration(ud, text)) {
                 any <<= ud;
@@ -1353,7 +1353,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean"))) {
+        } else if ( type == "boolean" ) {
             bool b;
             if (::sax::Converter::convertBool(b, text)) {
                 any <<= b;

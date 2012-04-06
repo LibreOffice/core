@@ -53,7 +53,7 @@ namespace uno = css::uno ;
 }
 
 css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
-    if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ExternalMailer"))) {
+    if ( id == "ExternalMailer" ) {
         KEMailSettings aEmailSettings;
         QString aClientProgram;
         ::rtl::OUString sClientProgram;
@@ -269,7 +269,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( nPort ) );
         }
-    } else if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy"))) {
+    } else if ( id == "ooInetNoProxy" ) {
         QString aNoProxyFor;
         switch ( KProtocolManager::proxyType() )
         {
@@ -291,7 +291,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sNoProxyFor ) );
         }
-    } else if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"))) {
+    } else if ( id == "ooInetProxyType" ) {
         int nProxyType;
         switch ( KProtocolManager::proxyType() )
         {

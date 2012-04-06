@@ -480,24 +480,24 @@ bool Bootstrap_Impl::getValue(
     if (override && getDirectValue(key, value, mode, requestStack)) {
         return true;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_OS"))) {
+    if ( key == "_OS" ) {
         rtl_uString_assign(
             value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_OS)).pData);
         return true;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_ARCH"))) {
+    if ( key == "_ARCH" ) {
         rtl_uString_assign(
             value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_ARCH)).pData);
         return true;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_CPPU_ENV"))) {
+    if ( key == "_CPPU_ENV" ) {
         rtl_uString_assign(
             value,
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MY_STRING(CPPU_ENV))).
              pData));
         return true;
     }
-    if (key.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN"))) {
+    if ( key == "ORIGIN" ) {
         rtl_uString_assign(
             value,
             _iniName.copy(
@@ -507,21 +507,21 @@ bool Bootstrap_Impl::getValue(
     if (getAmbienceValue(key, value, mode, requestStack)) {
         return true;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG"))) {
+    if ( key == "SYSUSERCONFIG" ) {
         rtl::OUString v;
         bool b = osl::Security().getConfigDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
         return b;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME"))) {
+    if ( key == "SYSUSERHOME" ) {
         rtl::OUString v;
         bool b = osl::Security().getHomeDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
         return b;
     }
-    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSBINDIR"))) {
+    if ( key == "SYSBINDIR" ) {
         getExecutableDirectory_Impl(value);
         return true;
     }

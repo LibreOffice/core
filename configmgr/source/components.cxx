@@ -540,14 +540,14 @@ Components::Components(
         }
         rtl::OUString type(conf.copy(i, c - i));
         rtl::OUString url(expand(conf.copy(c + 1, n - c - 1)));
-        if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xcsxcu"))) {
+        if ( type == "xcsxcu" ) {
             parseXcsXcuLayer(layer, url);
             layer += 2; //TODO: overflow
         } else if ( type == "bundledext" )
         {
             parseXcsXcuIniLayer(layer, url, false);
             layer += 2; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sharedext"))) {
+        } else if ( type == "sharedext" ) {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(
@@ -559,7 +559,7 @@ Components::Components(
             sharedExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
             layer += 2; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("userext"))) {
+        } else if ( type == "userext" ) {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(
@@ -571,13 +571,13 @@ Components::Components(
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
             layer += 2; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("module"))) {
+        } else if ( type == "module" ) {
             parseModuleLayer(layer, url);
             ++layer; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("res"))) {
+        } else if ( type == "res" ) {
             parseResLayer(layer, url);
             ++layer; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("user"))) {
+        } else if ( type == "user" ) {
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(

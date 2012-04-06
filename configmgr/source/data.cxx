@@ -224,7 +224,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     if (path != 0) {
         path->clear();
     }
-    if (pathRepresentation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
+    if ( pathRepresentation == "/" ) {
         if (canonicRepresentation != 0) {
             *canonicRepresentation = pathRepresentation;
         }

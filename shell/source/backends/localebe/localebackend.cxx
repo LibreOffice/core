@@ -294,7 +294,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    if (PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale"))) {
+    if ( PropertyName == "Locale" ) {
         return css::uno::makeAny(
             css::beans::Optional< css::uno::Any >(
                 true, css::uno::makeAny(getLocale())));

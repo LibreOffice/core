@@ -282,12 +282,12 @@ void processSegments(
     for (sal_Int32 i = 0; i < count; ++i) {
         if (processSpecialSegments) {
             rtl::OUString segment(uriReference->getPathSegment(i));
-            if (segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))) {
+            if ( segment == "." ) {
                 if (!base && i == count - 1) {
                     segments.push_back(0);
                 }
                 continue;
-            } else if (segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".."))) {
+            } else if ( segment == ".." ) {
                 if (segments.empty()
                     || /*MSVC trouble: std::*/abs(segments.back()) == 1)
                 {

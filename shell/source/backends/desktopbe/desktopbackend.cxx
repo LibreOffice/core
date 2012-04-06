@@ -237,19 +237,19 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
     }
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
-    if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME"))) {
+    if ( desktop == "GNOME" ) {
         backend = createBackend(
             context,
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.configuration.backend.GconfBackend")));
-    } else if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE"))) {
+    } else if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.configuration.backend.KDEBackend")));
-    } else if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE4"))) {
+    } else if ( desktop == "KDE4" ) {
         backend = createBackend(
             context,
             rtl::OUString(

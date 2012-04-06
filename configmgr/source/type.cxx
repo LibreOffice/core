@@ -150,7 +150,7 @@ Type getDynamicType(css::uno::Any const & value) {
     case css::uno::TypeClass_SEQUENCE: //TODO
         {
             rtl::OUString name(value.getValueType().getTypeName());
-            if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]byte"))) {
+            if ( name == "[]byte" ) {
                 return TYPE_HEXBINARY;
             } else if (name.equalsAsciiL(
                            RTL_CONSTASCII_STRINGPARAM("[]boolean")))

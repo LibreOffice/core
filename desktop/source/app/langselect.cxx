@@ -394,7 +394,7 @@ Sequence< OUString > LanguageSelection::getInstalledLanguages()
 static Sequence< OUString > _getFallbackLocales(const OUString& aIsoLang)
 {
     Sequence< OUString > seqFallbacks;
-    if (aIsoLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh-HK"))) {
+    if ( aIsoLang == "zh-HK" ) {
         seqFallbacks = Sequence< OUString >(1);
         seqFallbacks[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("zh-TW"));
     }

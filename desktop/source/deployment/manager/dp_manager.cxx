@@ -351,7 +351,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<deployment::XPackageManager> xPackageManager( that );
 
     OUString packages, logFile, stamp;
-    if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") )) {
+    if ( context == "user" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages");
         that->m_registrationData = OUSTR(
@@ -373,7 +373,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //the virtual store).
         stamp = OUSTR("$UNO_USER_PACKAGES_CACHE");
     }
-    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") )) {
+    else if ( context == "shared" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages");
         that->m_registrationData = OUSTR(
@@ -384,7 +384,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt");
         stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE");
     }
-    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") )) {
+    else if ( context == "bundled" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
         that->m_registrationData = OUSTR(
@@ -396,7 +396,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
-    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") )) {
+    else if ( context == "bundled_prereg" ) {
         //This is a bundled repository but the registration data
         //is in the brand layer: share/prereg
         //It is special because the registration data are copied at the first startup
@@ -414,7 +414,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         logFile = OUSTR(
             "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/log.txt");
     }
-    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") )) {
+    else if ( context == "tmp" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions");
         that->m_registrationData = OUSTR(
