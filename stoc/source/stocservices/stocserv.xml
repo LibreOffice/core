@@ -45,6 +45,12 @@ from one type to another if possible.
         <supported-service>
             com.sun.star.uri.ExternalUriReferenceTranslator
         </supported-service>
+        <type>com.sun.star.lang.WrappedTargetRuntimeException</type>
+        <type>com.sun.star.uri.RelativeUriExcessParentSegments</type>
+        <type>com.sun.star.uri.XExternalUriReferenceTranslator</type>
+        <type>com.sun.star.uri.XUriReference</type>
+        <type>com.sun.star.uri.XUriReferenceFactory</type>
+        <type>com.sun.star.uri.XUriSchemeParser</type>
     </component-description>
     <component-description>
         <author>Stephan Bergmann</author>
@@ -74,6 +80,24 @@ from one type to another if possible.
         <supported-service>
             com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript
         </supported-service>
+        <type>com.sun.star.uri.XVndSunStarScriptUrlReference</type>
+    </component-description>
+    <component-description>
+        <author>Stephan Bergmann</author>
+        <name>
+            com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand
+        </name>
+        <description>
+            Instances of this service parse textual representations of absolute
+            &#x201C;vnd.sun.star.expand&#x201D; URLs.
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>C++</language>
+        <status value="under_construction"/>
+        <supported-service>
+            com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand
+        </supported-service>
+        <type>com.sun.star.uri.XVndSunStarExpandUrlReference</type>
     </component-description>
     <component-description>
         <author>Stephan Bergmann</author>
@@ -88,6 +112,9 @@ from one type to another if possible.
         <supported-service>
             com.sun.star.uri.VndSunStarPkgUrlReferenceFactory
         </supported-service>
+        <type>com.sun.star.uno.DeploymentException</type>
+        <type>com.sun.star.uri.UriReferenceFactory</type>
+        <type>com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory</type>
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>

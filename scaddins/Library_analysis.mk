@@ -35,8 +35,9 @@ $(eval $(call gb_Library_set_include,analysis,\
 	-I$(WORKDIR)/UnoApiHeaders/offapi \
 ))
 
-$(eval $(call gb_Library_add_api,analysis,\
-    offapi \
+$(eval $(call gb_Library_add_internal_comprehensive_api,analysis,\
+	offapi \
+	scaddins \
     udkapi \
 ))
 

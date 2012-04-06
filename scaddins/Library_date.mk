@@ -35,8 +35,9 @@ $(eval $(call gb_Library_set_include,date,\
 	-I$(WORKDIR)/UnoApiHeaders/offapi \
 ))
 
-$(eval $(call gb_Library_add_api,date,\
-    offapi \
+$(eval $(call gb_Library_add_internal_comprehensive_api,date,\
+	offapi \
+	scaddins \
     udkapi \
 ))
 

@@ -181,6 +181,9 @@ $(eval $(foreach method,\
 	add_libs \
 	set_library_path_flags \
 	add_api \
+	add_internal_api \
+	add_internal_bootstrap_api \
+	add_internal_comprehensive_api \
 	add_linked_libs \
 	add_linked_static_libs \
 	use_external \

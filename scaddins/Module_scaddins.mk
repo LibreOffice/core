@@ -31,6 +31,7 @@ $(eval $(call gb_Module_Module,scaddins))
 $(eval $(call gb_Module_add_targets,scaddins,\
     AllLangResTarget_analysis \
     AllLangResTarget_date \
+	InternalUnoApi_scaddins \
     Library_analysis \
     Library_date \
 ))

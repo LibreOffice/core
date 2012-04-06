@@ -505,10 +505,22 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
+    acceptor \
     binaryurp \
     bootstrap \
+    connector \
+    introspection \
+    invocadapt \
+    invocation \
+    javaloader \
+    javavm \
+    namingservice \
+    proxyfac \
     reflection \
     stocservices \
+    streams \
+    textinstream \
+    textoutstream \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \

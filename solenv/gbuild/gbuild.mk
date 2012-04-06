@@ -303,6 +303,9 @@ include $(foreach class, \
 	JunitTest \
 	Module \
 	UnoApiTarget \
+	UnoApi \
+	UnoApiMerge \
+	InternalUnoApi \
 	Zip \
 	Configuration \
 	Extension \
