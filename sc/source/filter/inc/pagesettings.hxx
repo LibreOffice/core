@@ -125,31 +125,6 @@ public:
     /** Imports the PICTURE record from the passed stream. */
     void                importPicture( const ::oox::core::Relations& rRelations, SequenceInputStream& rStrm );
 
-    /** Imports the LEFTMARGIN record from the passed BIFF stream. */
-    void                importLeftMargin( BiffInputStream& rStrm );
-    /** Imports the RIGHTMARGIN record from the passed BIFF stream. */
-    void                importRightMargin( BiffInputStream& rStrm );
-    /** Imports the TOPMARGIN record from the passed BIFF stream. */
-    void                importTopMargin( BiffInputStream& rStrm );
-    /** Imports the BOTTOMMARGIN record from the passed BIFF stream. */
-    void                importBottomMargin( BiffInputStream& rStrm );
-    /** Imports the SETUP record from the passed BIFF stream. */
-    void                importPageSetup( BiffInputStream& rStrm );
-    /** Imports the HCENTER record from the passed BIFF stream. */
-    void                importHorCenter( BiffInputStream& rStrm );
-    /** Imports the VCENTER record from the passed BIFF stream. */
-    void                importVerCenter( BiffInputStream& rStrm );
-    /** Imports the PRINTHEADERS record from the passed BIFF stream. */
-    void                importPrintHeaders( BiffInputStream& rStrm );
-    /** Imports the PRINTGRIDLINES record from the passed BIFF stream. */
-    void                importPrintGridLines( BiffInputStream& rStrm );
-    /** Imports the HEADER record from the passed BIFF stream. */
-    void                importHeader( BiffInputStream& rStrm );
-    /** Imports the FOOTER record from the passed BIFF stream. */
-    void                importFooter( BiffInputStream& rStrm );
-    /** Imports the PICTURE record from the passed BIFF stream. */
-    void                importPicture( BiffInputStream& rStrm );
-
     /** Sets whether percentual scaling or fit to width/height scaling is used. */
     void                setFitToPagesMode( bool bFitToPages );
 
