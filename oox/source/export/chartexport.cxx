@@ -662,24 +662,24 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                 bool bBrokenRangeAvailable = false;
                 for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
                 {
-                    if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+                    if ( aArgs[i].Name == "CellRangeRepresentation" )
                         aArgs[i].Value >>= sCellRange;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("BrokenCellRangeForExport")))
+                    else if ( aArgs[i].Name == "BrokenCellRangeForExport" )
                     {
                         if( aArgs[i].Value >>= sBrokenRange )
                             bBrokenRangeAvailable = true;
                     }
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
+                    else if ( aArgs[i].Name == "DataRowSource" )
                     {
                         ::com::sun::star::chart::ChartDataRowSource eRowSource;
                         aArgs[i].Value >>= eRowSource;
                         mbRowSourceColumns = ( eRowSource == ::com::sun::star::chart::ChartDataRowSource_COLUMNS );
                     }
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
+                    else if ( aArgs[i].Name == "FirstCellAsLabel" )
                         aArgs[i].Value >>= mbHasSeriesLabels;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SequenceMapping")))
+                    else if ( aArgs[i].Name == "SequenceMapping" )
                         aArgs[i].Value >>= maSequenceMapping;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TableNumberList")))
+                    else if ( aArgs[i].Name == "TableNumberList" )
                         aArgs[i].Value >>= msTableNumberList;
                 }
 

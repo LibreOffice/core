@@ -1259,25 +1259,25 @@ namespace
 -----------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
 {
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter")))
+    if ( sName == "swriter" )
         return E_WRITER;
     if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/Web"))) // sometimes they are registerd for swriter/web :-(
         return E_WRITERWEB;
     if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/GlobalDocument"))) // sometimes they are registerd for swriter/globaldocument :-(
         return E_WRITERGLOBAL;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("scalc")))
+    if ( sName == "scalc" )
         return E_CALC;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdraw")))
+    if ( sName == "sdraw" )
         return E_DRAW;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("simpress")))
+    if ( sName == "simpress" )
         return E_IMPRESS;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("schart")))
+    if ( sName == "schart" )
         return E_CHART;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("smath")))
+    if ( sName == "smath" )
         return E_MATH;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbasic")))
+    if ( sName == "sbasic" )
         return E_BASIC;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdatabase")))
+    if ( sName == "sdatabase" )
         return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;

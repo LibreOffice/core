@@ -543,7 +543,7 @@ Components::Components(
         if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xcsxcu"))) {
             parseXcsXcuLayer(layer, url);
             layer += 2; //TODO: overflow
-        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("bundledext")))
+        } else if ( type == "bundledext" )
         {
             parseXcsXcuIniLayer(layer, url, false);
             layer += 2; //TODO: overflow

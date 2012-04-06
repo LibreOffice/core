@@ -161,19 +161,19 @@ void Window::setProperties( const uno::Sequence< beans::PropertyValue >& i_rProp
     const beans::PropertyValue* pVals = i_rProps.getConstArray();
     for( sal_Int32 i = 0; i < i_rProps.getLength(); i++ )
     {
-        if( pVals[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Enabled")) )
+        if ( pVals[i].Name == "Enabled" )
         {
             sal_Bool bVal = sal_True;
             if( pVals[i].Value >>= bVal )
                 Enable( bVal );
         }
-        else if( pVals[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Visible")) )
+        else if ( pVals[i].Name == "Visible" )
         {
             sal_Bool bVal = sal_True;
             if( pVals[i].Value >>= bVal )
                 Show( bVal );
         }
-        else if( pVals[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text")) )
+        else if ( pVals[i].Name == "Text" )
         {
             rtl::OUString aText;
             if( pVals[i].Value >>= aText )

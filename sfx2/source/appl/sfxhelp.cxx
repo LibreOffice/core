@@ -474,7 +474,7 @@ String SfxHelp::GetHelpModuleName_Impl()
                 xCont->getByName( aModuleIdentifier ) >>= lProps;
             for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
-                if ( lProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryShortName")) )
+                if ( lProps[i].Name == "ooSetupFactoryShortName" )
                 {
                     lProps[i].Value >>= aFactoryShortName;
                     break;
@@ -491,9 +491,9 @@ String SfxHelp::GetHelpModuleName_Impl()
     if ( !aFactoryShortName.isEmpty() )
     {
         // Map some module identifiers to their "real" help module string.
-        if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart2")) )
+        if ( aFactoryShortName == "chart2" )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BasicIDE")) )
+        else if ( aFactoryShortName == "BasicIDE" )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))

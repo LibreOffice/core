@@ -409,7 +409,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 xSeriesProp->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")),
                                                uno::makeAny( sal_Int32( 0x000000 ))); // black
         }
-        else if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.PieChartType")))
+        else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
         {
             //@todo: this property should be saved
             Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
@@ -427,7 +427,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         if( xSeqProp.is())
         {
             OUString aMainRole(RTL_CONSTASCII_USTRINGPARAM("values-y"));
-            if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) )
+            if ( maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType" )
                 aMainRole = OUString(RTL_CONSTASCII_USTRINGPARAM( "values-size" ));
             xSeqProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "Role" )), uno::makeAny( aMainRole ));
         }

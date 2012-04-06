@@ -369,9 +369,9 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
+                if ( aPropValue.Name == "Frame" )
                     aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CommandURL")) )
+                else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= aCommandURL;
             }
         }

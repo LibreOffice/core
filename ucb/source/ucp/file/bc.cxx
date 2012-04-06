@@ -274,7 +274,7 @@ sal_Bool SAL_CALL
 BaseContent::supportsService( const rtl::OUString& ServiceName )
     throw( RuntimeException)
 {
-    if (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ucb.FileContent")))
+    if ( ServiceName == "com.sun.star.ucb.FileContent" )
         return true;
     else
         return false;
@@ -355,7 +355,7 @@ BaseContent::execute( const Command& aCommand,
     {
         aAny <<= getCommandInfo();
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("setPropertyValues")))
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         Sequence< beans::PropertyValue > sPropertyValues;
 
@@ -365,7 +365,7 @@ BaseContent::execute( const Command& aCommand,
         else
             aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertyValues")))
+    else if ( aCommand.Name == "getPropertyValues" )
     {
         Sequence< beans::Property > ListOfRequestedProperties;
 
@@ -376,7 +376,7 @@ BaseContent::execute( const Command& aCommand,
             aAny <<= getPropertyValues( CommandId,
                                         ListOfRequestedProperties );
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("open")))
+    else if ( aCommand.Name == "open" )
     {
         OpenCommandArgument2 aOpenArgument;
         if( ! ( aCommand.Argument >>= aOpenArgument ) )
@@ -389,7 +389,7 @@ BaseContent::execute( const Command& aCommand,
                 aAny <<= result;
         }
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("delete")))
+    else if ( aCommand.Name == "delete" )
     {
         if( ! aCommand.Argument.has< sal_Bool >() )
             m_pMyShell->installError( CommandId,
@@ -397,7 +397,7 @@ BaseContent::execute( const Command& aCommand,
         else
             deleteContent( CommandId );
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("transfer")))
+    else if ( aCommand.Name == "transfer" )
     {
         TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
@@ -406,7 +406,7 @@ BaseContent::execute( const Command& aCommand,
         else
             transfer( CommandId, aTransferInfo );
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("insert")))
+    else if ( aCommand.Name == "insert" )
     {
         InsertCommandArgument aInsertArgument;
         if( ! ( aCommand.Argument >>= aInsertArgument ) )
@@ -415,7 +415,7 @@ BaseContent::execute( const Command& aCommand,
         else
             insert( CommandId,aInsertArgument );
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCasePreservingURL")))
+    else if ( aCommand.Name == "getCasePreservingURL" )
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property(
@@ -428,7 +428,7 @@ BaseContent::execute( const Command& aCommand,
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("createNewContent")))
+    else if ( aCommand.Name == "createNewContent" )
     {
         ucb::ContentInfo aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -830,16 +830,16 @@ BaseContent::getPropertyValues(
             const beans::Property& rProp = pProps[ n ];
             Any& rValue = pValues[ n ];
 
-            if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContentType")))
+            if ( rProp.Name == "ContentType" )
             {
                 rValue <<= m_bFolder ? m_pMyShell->FolderContentType
                     : m_pMyShell->FileContentType;
             }
-            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFolder")))
+            else if ( rProp.Name == "IsFolder" )
             {
                 rValue <<= m_bFolder;
             }
-            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsDocument")))
+            else if ( rProp.Name == "IsDocument" )
             {
                 rValue <<= sal_Bool( !m_bFolder );
             }

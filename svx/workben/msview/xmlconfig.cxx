@@ -98,23 +98,23 @@ void ConfigHandler::errorThrow( const OUString& rErrorMessage ) throw (SAXExcept
 
 ElementConfigType ConfigHandler::parseType( const OUString& sType ) throw (SAXException )
 {
-    if( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("uint") ) )
+    if ( sType == "uint" )
     {
         return ECT_UINT;
     }
-    else if( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("byte") ) )
+    else if ( sType == "byte" )
     {
         return ECT_BYTE;
     }
-    else if( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("unistring") ) )
+    else if ( sType == "unistring" )
     {
         return ECT_UNISTRING;
     }
-    else if( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("float") ) )
+    else if ( sType == "float" )
     {
         return ETC_FLOAT;
     }
-    else if( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hexdump") ) )
+    else if ( sType == "hexdump" )
     {
     }
     else

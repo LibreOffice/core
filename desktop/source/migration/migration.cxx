@@ -1080,9 +1080,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         {
             for(int i=0; i<aProp.getLength(); ++i)
             {
-                if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                     aProp[i].Value >>= aMigrationItem.m_sCommandURL;
-                else if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
@@ -1098,9 +1098,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         {
             for(int i=0; i<aProp.getLength(); ++i)
             {
-                if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                     aProp[i].Value >>= aMigrationItem.m_sCommandURL;
-                else if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
@@ -1209,11 +1209,11 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 for (sal_Int32 j=0; j<aPropSeq.getLength(); ++j)
                 {
                     ::rtl::OUString sPropName = aPropSeq[j].Name;
-                    if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
+                    if ( sPropName == ITEM_DESCRIPTOR_COMMANDURL )
                         aPropSeq[j].Value >>= sCommandURL;
-                    else if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)))
+                    else if ( sPropName == ITEM_DESCRIPTOR_LABEL )
                         aPropSeq[j].Value >>= sLabel;
-                    else if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
+                    else if ( sPropName == ITEM_DESCRIPTOR_CONTAINER )
                         aPropSeq[j].Value >>= xChild;
                 }
 
@@ -1250,7 +1250,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                     xTemp->getByIndex(i) >>= aTempPropSeq;
                     for (sal_Int32 j=0; j<aTempPropSeq.getLength(); ++j)
                     {
-                        if (aTempPropSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
+                        if ( aTempPropSeq[j].Name == ITEM_DESCRIPTOR_COMMANDURL )
                         {
                             aTempPropSeq[j].Value >>= sCmd;
                             break;

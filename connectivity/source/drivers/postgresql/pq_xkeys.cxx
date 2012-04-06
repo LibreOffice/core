@@ -117,9 +117,9 @@ Keys::~Keys()
 static sal_Int32 string2keytype( const rtl::OUString &type )
 {
     sal_Int32 ret = com::sun::star::sdbcx::KeyType::UNIQUE;
-    if( type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("p")) )
+    if ( type == "p" )
         ret = com::sun::star::sdbcx::KeyType::PRIMARY;
-    else if( type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("f")) )
+    else if ( type == "f" )
         ret =  com::sun::star::sdbcx::KeyType::FOREIGN;
     return ret;
 }

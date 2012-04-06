@@ -138,28 +138,28 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
-        if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
+        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
         {
             rProp[i].Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
         {
             rProp[i].Value >>= rSubMenu;
         }
-        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
         {
             rProp[i].Value >>= rLabel;
         }
-        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
         {
             rProp[i].Value >>= rType;
         }
-        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
         {
             rProp[i].Value >>= rStyle;
         }

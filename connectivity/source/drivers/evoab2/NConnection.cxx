@@ -121,9 +121,9 @@ void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< Pro
                 }
         }
 
-    if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:groupwise")))
+    if ( url == "sdbc:address:evolution:groupwise" )
         setSDBCAddressType(SDBCAddress::EVO_GWISE);
-    else if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:ldap")))
+    else if ( url == "sdbc:address:evolution:ldap" )
         setSDBCAddressType(SDBCAddress::EVO_LDAP);
     else
         setSDBCAddressType(SDBCAddress::EVO_LOCAL);

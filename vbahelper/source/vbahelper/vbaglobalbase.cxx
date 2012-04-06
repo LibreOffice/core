@@ -104,7 +104,7 @@ uno::Reference< uno::XInterface > SAL_CALL
 VbaGlobalsBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xReturn;
-    if ( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAppService)) )
+    if ( aServiceSpecifier == sAppService )
     {
         // try to extract the Application from the context
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
@@ -120,7 +120,7 @@ VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& aServiceSpec
 {
 
     uno::Reference< uno::XInterface > xReturn;
-    if ( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAppService)) )
+    if ( aServiceSpecifier == sAppService )
     {
         // try to extract the Application from the context
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );

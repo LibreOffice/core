@@ -87,39 +87,39 @@ using namespace ::com::sun::star;
 static sal_Int16 GetFilterFormat(const rtl::OUString& rExt)
 {
     sal_Int16 nFormat = FORMAT_UNKNOWN;
-    if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("JPG")))
+    if ( rExt == "JPG" )
         nFormat = FORMAT_JPG;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PNG")))
+    else if ( rExt == "PNG" )
         nFormat = FORMAT_PNG;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BMP")))
+    else if ( rExt == "BMP" )
         nFormat = FORMAT_BMP;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GIF")))
+    else if ( rExt == "GIF" )
         nFormat = FORMAT_GIF;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PBM")))
+    else if ( rExt == "PBM" )
         nFormat = FORMAT_PBM;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PGM")))
+    else if ( rExt == "PGM" )
         nFormat = FORMAT_PGM;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PPM")))
+    else if ( rExt == "PPM" )
         nFormat = FORMAT_PPM;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PCT")))
+    else if ( rExt == "PCT" )
         nFormat = FORMAT_PCT;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RAS")))
+    else if ( rExt == "RAS" )
         nFormat = FORMAT_RAS;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TIF")))
+    else if ( rExt == "TIF" )
         nFormat = FORMAT_TIF;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XPM")))
+    else if ( rExt == "XPM" )
         nFormat = FORMAT_XPM;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WMF")))
+    else if ( rExt == "WMF" )
         nFormat = FORMAT_WMF;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EMF")))
+    else if ( rExt == "EMF" )
         nFormat = FORMAT_EMF;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EPS")))
+    else if ( rExt == "EPS" )
         nFormat = FORMAT_EPS;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MET")))
+    else if ( rExt == "MET" )
         nFormat = FORMAT_MET;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SVG")))
+    else if ( rExt == "SVG" )
         nFormat = FORMAT_SVG;
-    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SVM")))
+    else if ( rExt == "SVM" )
         nFormat = FORMAT_SVM;
     return nFormat;
 }

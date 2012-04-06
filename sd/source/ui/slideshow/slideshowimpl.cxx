@@ -3506,22 +3506,22 @@ void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArg
 
 void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue ) throw (IllegalArgumentException)
 {
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RehearseTimings") ) )
+    if ( rProperty == "RehearseTimings" )
     {
         if( rValue >>= mbRehearseTimings )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Preview") ) )
+    else if ( rProperty == "Preview" )
     {
         if( rValue >>= mbPreview )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AnimationNode") ) )
+    else if ( rProperty == "AnimationNode" )
     {
         if( rValue >>= mxAnimationNode )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ParentWindow") ) )
+    else if ( rProperty == "ParentWindow" )
     {
         Reference< XWindow > xWindow;
         if( rValue >>= xWindow )
@@ -3530,17 +3530,17 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
             return;
         }
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AllowAnimations") ) )
+    else if ( rProperty == "AllowAnimations" )
     {
         if( rValue >>= mbAnimationAllowed )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AllowAnimations") ) )
+    else if ( rProperty == "AllowAnimations" )
     {
         if( rValue >>= mbAnimationAllowed )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FirstPage") ) )
+    else if ( rProperty == "FirstPage" )
     {
         OUString aPresPage;
         if( rValue >>= aPresPage )
@@ -3556,32 +3556,32 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
                 return;
         }
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("IsAlwaysOnTop") ) )
+    else if ( rProperty == "IsAlwaysOnTop" )
     {
         if( rValue >>= mbAlwaysOnTop )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("IsAutomatic") ) )
+    else if ( rProperty == "IsAutomatic" )
     {
         if( rValue >>= mbManual )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("IsEndless") ) )
+    else if ( rProperty == "IsEndless" )
     {
         if( rValue >>= mbEndless )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("IsFullScreen") ) )
+    else if ( rProperty == "IsFullScreen" )
     {
         if( rValue >>= mbFullScreen )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("IsMouseVisible") ) )
+    else if ( rProperty == "IsMouseVisible" )
     {
         if( rValue >>= mbMouseVisible )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Pause") ) )
+    else if ( rProperty == "Pause" )
     {
         sal_Int32 nPause = -1;
         if( (rValue >>= nPause) && (nPause >= 0) )
@@ -3590,12 +3590,12 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
             return;
         }
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StartWithNavigator") ) )
+    else if ( rProperty == "StartWithNavigator" )
     {
         if( rValue >>= mbStartWithNavigator )
             return;
     }
-    else if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UsePen") ) )
+    else if ( rProperty == "UsePen" )
     {
         if( rValue >>= mbMouseAsPen )
             return;

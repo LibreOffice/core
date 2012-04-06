@@ -54,9 +54,9 @@ SvxMacro::SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLan
     : aMacName( rMacName ), aLibName( rLanguage),
       pFunctionObject(NULL), eType( EXTENDED_STYPE)
 {
-    if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_STARBASIC)))
+    if ( rLanguage == SVX_MACRO_LANGUAGE_STARBASIC )
         eType=STARBASIC;
-    else if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
+    else if ( rLanguage == SVX_MACRO_LANGUAGE_JAVASCRIPT )
         eType=JAVASCRIPT;
 }
 

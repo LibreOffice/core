@@ -534,7 +534,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         Sequence< ::rtl::OUString > aCtrlList = xCtrlInfo->getSupportedControls();
         sal_uInt32 nCount = aCtrlList.getLength();
         for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
-            if ( aCtrlList[ nCtrl ].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SelectionBox")) )
+            if ( aCtrlList[ nCtrl ] == "SelectionBox" )
             {
                 bSelectionBoxFound = sal_False;
                 break;

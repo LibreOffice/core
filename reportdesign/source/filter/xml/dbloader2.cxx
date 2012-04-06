@@ -74,7 +74,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
                 {
                     ::rtl::OUString sMediaType;
                     xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
-                    if ( sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)) )
+                    if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
                         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
                     ::comphelper::disposeComponent(xProp);
                 }

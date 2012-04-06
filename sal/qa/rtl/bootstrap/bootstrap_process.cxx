@@ -52,7 +52,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_SERVICES")),
             suValue );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("service.rdb")) )
+        if ( suValue == "service.rdb" )
         {
             return 10;
         }
@@ -63,7 +63,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
+        if ( suValue == "true" )
         {
             return 20;
         }
@@ -74,7 +74,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("QADEV_BOOTSTRAP")),
             suValue );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sun&ms")) )
+        if ( suValue == "sun&ms" )
         {
             return 30;
         }
@@ -85,7 +85,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("RTLVALUE")),
             suValue );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("qadev17")) )
+        if ( suValue == "qadev17" )
         {
             return 40;
         }
@@ -96,7 +96,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
+        if ( suValue == "true" )
         {
             return 50;
         }
@@ -107,7 +107,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("ABCDE")),
             suValue, suDefault );
-        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mydefault")) )
+        if ( suValue == "mydefault" )
         {
             return 60;
         }

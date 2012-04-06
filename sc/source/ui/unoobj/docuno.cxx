@@ -377,7 +377,7 @@ void ScPrintUIOptions::SetDefaults()
                             aPropertyValue.Value <<= nContent;
                             aUIProp[nPropPos].Value <<= aPropertyValue;
                         }
-                        else if ( aPropertyValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsIncludeEmptyPages") ) )
+                        else if ( aPropertyValue.Name == "IsIncludeEmptyPages" )
                         {
                             ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, ! bSuppress );
                             aUIProp[nPropPos].Value <<= aPropertyValue;

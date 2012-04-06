@@ -71,7 +71,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
     uno::Reference < io::XInputStream > xInputStream;
     for( sal_Int32 nProperty = 0; nProperty < nPropertyCount; ++nProperty )
     {
-        if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TypeName")) )
+        if ( pValues[nProperty].Name == "TypeName" )
             rDescriptor[nProperty].Value >>= sTypeName;
         else if ( pValues[nProperty].Name == "URL" )
             pValues[nProperty].Value >>= sURL;

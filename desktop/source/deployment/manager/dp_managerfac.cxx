@@ -148,11 +148,11 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     {
         OSL_ASSERT( insertion.first->second.get() == xRet );
         // hold user, shared mgrs for whole process: live deployment
-        if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
+        if ( context == "user" )
             m_xUserMgr = xRet;
-        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
+        else if ( context == "shared" )
             m_xSharedMgr = xRet;
-        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") ))
+        else if ( context == "bundled" )
             m_xBundledMgr = xRet;
     }
     else

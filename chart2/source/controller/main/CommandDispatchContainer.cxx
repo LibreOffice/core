@@ -158,7 +158,7 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
 
     for( sal_Int32 nPos = 0; nPos < nCount; ++nPos )
     {
-        if( aDescriptors[ nPos ].FrameName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_self")))
+        if ( aDescriptors[ nPos ].FrameName == "_self" )
             aRet[ nPos ] = getDispatchForURL( aDescriptors[ nPos ].FeatureURL );
     }
     return aRet;

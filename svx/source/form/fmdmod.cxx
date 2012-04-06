@@ -44,7 +44,7 @@ using namespace ::svxform;
     {
         xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
     }
-    else if ( ServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape")) )
+    else if ( ServiceSpecifier == "com.sun.star.drawing.ControlShape" )
     {
         SdrObject* pObj = new FmFormObj();
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));

@@ -703,7 +703,7 @@ sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)))
+    if ( rServiceName == SN_CONV_DICTIONARY )
         bRes = sal_True;
     return bRes;
 }

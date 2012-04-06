@@ -772,12 +772,12 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     sal_Int32 nMasterRel = 0;
     for( ; nLength--; pValue++ )
     {
-        if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("after-effect") ) )
+        if ( pValue->Name == "after-effect" )
         {
             pValue->Value >>= bAfterEffect;
             nRemoved++;
         }
-        else if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("master-rel") ) )
+        else if ( pValue->Name == "master-rel" )
         {
             pValue->Value >>= nMasterRel;
             nRemoved++;
@@ -2226,7 +2226,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 {
                     nCommand = EffectCommands::STOPAUDIO;
                 }
-                else if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("play") ) )
+                else if ( aParam == "play" )
                 {
                     nCommand = EffectCommands::PLAY;
                 }
@@ -2242,11 +2242,11 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                     }
                     nCommand = EffectCommands::PLAY;
                 }
-                else if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("togglePause") ) )
+                else if ( aParam == "togglePause" )
                 {
                     nCommand = EffectCommands::TOGGLEPAUSE;
                 }
-                else if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("stop") ) )
+                else if ( aParam == "stop" )
                 {
                     nCommand = EffectCommands::STOP;
                 }

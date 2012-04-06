@@ -246,11 +246,11 @@ void exportXFormsInstance( SvXMLExport& rExport,
     {
         OUString sName = pInstance[i].Name;
         const Any& rAny = pInstance[i].Value;
-        if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ID") ) )
+        if ( sName == "ID" )
             rAny >>= sId;
-        else if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+        else if ( sName == "URL" )
             rAny >>= sURL;
-        else if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Instance") ))
+        else if ( sName == "Instance" )
             rAny >>= xDoc;
     }
 

@@ -788,35 +788,35 @@ inline Any ManagerImpl::getSimpleType( const OUString & rName )
 {
     Any aRet;
 
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("string") ))
+    if ( rName == "string" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_STRING, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("long") ))
+    else if ( rName == "long" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_LONG, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("unsigned long") ))
+    else if ( rName == "unsigned long" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_UNSIGNED_LONG, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("boolean") ))
+    else if ( rName == "boolean" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_BOOLEAN, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("char") ))
+    else if ( rName == "char" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_CHAR, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("byte") ))
+    else if ( rName == "byte" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_BYTE, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short") ))
+    else if ( rName == "short" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_SHORT, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("unsigned short") ))
+    else if ( rName == "unsigned short" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_UNSIGNED_SHORT, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hyper") ))
+    else if ( rName == "hyper" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_HYPER, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("unsigned hyper") ))
+    else if ( rName == "unsigned hyper" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_UNSIGNED_HYPER, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("float") ))
+    else if ( rName == "float" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_FLOAT, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("double") ))
+    else if ( rName == "double" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_DOUBLE, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("any") ))
+    else if ( rName == "any" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_ANY, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("void") ))
+    else if ( rName == "void" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_VOID, rName ) );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("type") ))
+    else if ( rName == "type" )
         aRet <<= Reference< XTypeDescription >( new SimpleTypeDescriptionImpl( TypeClass_TYPE, rName ) );
 
     return aRet;

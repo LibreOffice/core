@@ -755,7 +755,7 @@ void TableDesignFamily::setPropertyValue( const OUString& , const Any&  ) throw 
 
 Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ))
+    if ( PropertyName == "DisplayName" )
     {
         OUString sDisplayName( SVX_RESSTR( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
         return Any( sDisplayName );

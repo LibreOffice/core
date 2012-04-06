@@ -312,7 +312,7 @@ void SAL_CALL ChartModel::storeToURL(
     uno::Sequence< beans::PropertyValue > aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
-    if( rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("private:stream")))
+    if ( rURL == "private:stream" )
     {
         try
         {

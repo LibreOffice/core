@@ -559,7 +559,7 @@ sal_Bool test8()
     for( sal_Int32 i=0; i<seqTypes.getLength(); i++)
     {
         OUString name= seqTypes[i].getTypeName();
-        if( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XUnloadingPreference")))
+        if ( name == "com.sun.star.uno.XUnloadingPreference" )
             b_ifaceSupported= sal_True;
     }
 

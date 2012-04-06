@@ -882,17 +882,17 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_ImageMapRectangleObject) ) )
+    if ( aServiceSpecifier == sUNO_Service_ImageMapRectangleObject )
     {
         return SvUnoImageMapRectangleObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_ImageMapCircleObject) ) )
+    if ( aServiceSpecifier == sUNO_Service_ImageMapCircleObject )
     {
         return SvUnoImageMapCircleObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_ImageMapPolygonObject) ) )
+    if ( aServiceSpecifier == sUNO_Service_ImageMapPolygonObject )
     {
         return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
     }
@@ -1055,7 +1055,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
         xRet = (uno::XWeak*)pShape;
     }
-    else if( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+    else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
         SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor );
         if( pShape && !mbClipBoard )
@@ -1802,9 +1802,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
-            if( rxOptions[ nProperty ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RenderDevice")) )
+            if ( rxOptions[ nProperty ].Name == "RenderDevice" )
                 rxOptions[ nProperty ].Value >>= xRenderDevice;
-            else if ( rxOptions[ nProperty ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ExportNotesPages")) )
+            else if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
             {
                 rxOptions[ nProperty].Value >>= bExportNotesPages;
                 if ( bExportNotesPages )

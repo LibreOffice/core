@@ -156,13 +156,13 @@ Type getDynamicType(css::uno::Any const & value) {
                            RTL_CONSTASCII_STRINGPARAM("[]boolean")))
             {
                 return TYPE_BOOLEAN_LIST;
-            } else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]short")))
+            } else if ( name == "[]short" )
             {
                 return TYPE_SHORT_LIST;
-            } else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]long")))
+            } else if ( name == "[]long" )
             {
                 return TYPE_INT_LIST;
-            } else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]hyper")))
+            } else if ( name == "[]hyper" )
             {
                 return TYPE_LONG_LIST;
             } else if (name.equalsAsciiL(

@@ -108,7 +108,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
                         {
                             rtl::OUString sDocumentService;
                             rProperty.Value >>= sDocumentService;
-                            if ( sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
+                            if ( sDocumentService == "com.sun.star.presentation.PresentationDocument" )
                                 bImpressFilter = sal_True;
                             else
                                 j = aFilterProperties.getLength();

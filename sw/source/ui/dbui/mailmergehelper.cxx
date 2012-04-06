@@ -770,7 +770,7 @@ uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyN
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if( rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
+    if ( rPropertyName == "URL" )
         aRet <<= m_aURL;
     return aRet;
 }

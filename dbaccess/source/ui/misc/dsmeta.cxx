@@ -153,9 +153,9 @@ namespace dbaui
                 {
                     ::rtl::OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
-                    if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserPassword")) )
+                    if ( sAuth == "UserPassword" )
                         aInit = AuthUserPwd;
-                    else if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Password")) )
+                    else if ( sAuth == "Password" )
                         aInit = AuthPwd;
                 }
                 s_aSupport.insert(Supported::value_type(*pIter,aInit));

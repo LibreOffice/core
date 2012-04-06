@@ -112,7 +112,7 @@ namespace dbaui
         SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:DBNewForm")) )
+        if ( m_aCommandURL == ".uno:DBNewForm" )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm"))           ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"))           ,sal_True));

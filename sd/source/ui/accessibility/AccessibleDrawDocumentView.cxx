@@ -298,7 +298,7 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleDrawDocumentView::propertyChange");
-    if (rEventObject.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CurrentPage")))
+    if ( rEventObject.PropertyName == "CurrentPage" )
     {
         OSL_TRACE ("    current page changed");
 
@@ -333,7 +333,7 @@ void SAL_CALL
         else
             OSL_TRACE ("View invalid");
     }
-    else if (rEventObject.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VisibleArea")))
+    else if ( rEventObject.PropertyName == "VisibleArea" )
     {
         OSL_TRACE ("    visible area changed");
         if (mpChildrenManager != NULL)
@@ -397,7 +397,7 @@ void SAL_CALL
     {
         uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
         OUString sFirstService = aServices[0];
-        if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
             if( aServices.getLength() >= 2 &&
                 aServices[1].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationView")))
@@ -413,13 +413,13 @@ void SAL_CALL
                 sName = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
             }
         }
-        else if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.NotesView")))
+        else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
             sName = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
         }
-        else if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.HandoutView")))
+        else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 
@@ -454,7 +454,7 @@ void SAL_CALL
     {
         uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
         OUString sFirstService = aServices[0];
-        if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
             if( aServices.getLength() >= 2 &&
                 aServices[1].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationView")))
@@ -470,13 +470,13 @@ void SAL_CALL
                 sDescription = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
             }
         }
-        else if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.NotesView")))
+        else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
             sDescription = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
         }
-        else if (sFirstService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.HandoutView")))
+        else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 

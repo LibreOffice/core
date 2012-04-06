@@ -158,7 +158,7 @@ void SAL_CALL ExportDocumentHandler::endDocument() throw (uno::RuntimeException,
 void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     bool bExport = true;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:chart")) )
+    if ( _sName == "office:chart" )
     {
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNewAttribs = pList;
@@ -201,12 +201,12 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         m_xDelegatee->endElement(sTableCalc);
         bExport = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table")) )
+    else if ( _sName == "table:table" )
     {
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_RPT,XML_DETAIL),NULL);
         lcl_exportPrettyPrinting(m_xDelegatee);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-header-rows")) )
+    else if ( _sName == "table:table-header-rows" )
     {
         m_bCountColumnHeader = true;
     }
@@ -214,7 +214,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
     {
         ++m_nColumnCount;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-rows")) )
+    else if ( _sName == "table:table-rows" )
     {
         m_xDelegatee->startElement(_sName,xAttribs);
         exportTableRows();
@@ -224,17 +224,17 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
     }
     else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-row")) || _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell"))) )
         bExport = false;
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart:plot-area")))
+    else if ( _sName == "chart:plot-area" )
     {
         SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
         pList->RemoveAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")));
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart:categories")))
+    else if ( _sName == "chart:categories" )
     {
         static ::rtl::OUString s_sCellAddress(lcl_createAttribute(XML_NP_TABLE,XML_CELL_RANGE_ADDRESS));
         lcl_correctCellAddress(s_sCellAddress,xAttribs);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart:series")))
+    else if ( _sName == "chart:series" )
     {
         static ::rtl::OUString s_sCellAddress(lcl_createAttribute(XML_NP_CHART,XML_VALUES_CELL_RANGE_ADDRESS));
         lcl_correctCellAddress(s_sCellAddress,xAttribs);
@@ -257,21 +257,21 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 {
     bool bExport = true;
     ::rtl::OUString sNewName = _sName;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:chart")) )
+    if ( _sName == "office:chart" )
     {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_REPORT);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table")) )
+    else if ( _sName == "table:table" )
     {
         m_xDelegatee->endElement(_sName);
         lcl_exportPrettyPrinting(m_xDelegatee);
         sNewName = lcl_createAttribute(XML_NP_RPT,XML_DETAIL);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-header-rows")) )
+    else if ( _sName == "table:table-header-rows" )
     {
         m_bCountColumnHeader = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-rows")) )
+    else if ( _sName == "table:table-rows" )
         m_bTableRowsStarted = false;
     else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-row")) || _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell"))) )
         bExport = false;

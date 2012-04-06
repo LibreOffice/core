@@ -524,7 +524,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     SAL_THROW( (RuntimeException) )
 {
 #ifdef CONTEXT_DIAG
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
+    if ( rName == "dump_maps" )
     {
         ::fprintf( stderr, ">>> dumping out ComponentContext %p m_map:\n", this );
         typedef ::std::map< OUString, ContextEntry * > t_sorted; // sorted map
@@ -653,7 +653,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
     throw (RuntimeException)
 {
     // to determine the root context:
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_root") ))
+    if ( rName == "_root" )
     {
         if (m_xDelegate.is())
             return m_xDelegate->getValueByName( rName );
@@ -723,15 +723,15 @@ void ComponentContext::disposing()
             pEntry->value >>= xComp;
             if (xComp.is())
             {
-                if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_SINGLETON) ))
+                if ( iPos->first == TDMGR_SINGLETON )
                 {
                     xTDMgr = xComp;
                 }
-                else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_SINGLETON) ))
+                else if ( iPos->first == AC_SINGLETON )
                 {
                     xAC = xComp;
                 }
-                else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_POLICY) ))
+                else if ( iPos->first == AC_POLICY )
                 {
                     xPolicy = xComp;
                 }
@@ -770,7 +770,7 @@ ComponentContext::ComponentContext(
     {
         ContextEntry_Init const & rEntry = pEntries[ nPos ];
 
-        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
+        if ( rEntry.name == SMGR_SINGLETON )
         {
             rEntry.value >>= m_xSMgr;
         }

@@ -383,9 +383,9 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-            if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_DOWNSEARCH)))
+            if ( sItemCommand == COMMAND_DOWNSEARCH )
                 m_nDownSearchId = i;
-            else if (sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_UPSEARCH)))
+            else if ( sItemCommand == COMMAND_UPSEARCH )
                 m_nUpSearchId = i;
         }
     }
@@ -426,7 +426,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
         return;
 
     ::rtl::OUString aFeatureURL = rEvent.FeatureURL.Complete;
-    if (aFeatureURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AppendSearchHistory")))
+    if ( aFeatureURL == "AppendSearchHistory" )
     {
         m_pFindTextFieldControl->Remember_Impl(m_pFindTextFieldControl->GetText());
     }
@@ -554,7 +554,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-            if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_FINDTEXT)) )
+            if ( sItemCommand == COMMAND_FINDTEXT )
             {
                 Window* pItemWin = pToolBox->GetItemWindow(i);
                 if (pItemWin)
@@ -798,7 +798,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDi
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
-    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.findbar:")) )
+    if ( aURL.Protocol == "vnd.sun.star.findbar:" )
         xDispatch = this;
 
     return xDispatch;
@@ -819,7 +819,7 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
 void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
 {
     //vnd.sun.star.findbar:FocusToFindbar  - set cursor to the FindTextFieldControl of the findbar
-    if ( aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FocusToFindbar")) )
+    if ( aURL.Path == "FocusToFindbar" )
     {
         css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
         if(!xPropSet.is())
@@ -852,7 +852,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             for ( sal_uInt16 i=0; i<nItemCount; ++i )
             {
                 ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FindText")) )
+                if ( sItemCommand == ".uno:FindText" )
                 {
                     Window* pItemWin = pToolBox->GetItemWindow( i );
                     if ( pItemWin )

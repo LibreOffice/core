@@ -347,7 +347,7 @@ UcbContentProviderProxy::getContentProvider()
             m_xProvider
                 = Reference< XContentProvider >(
                       m_xSMgr->createInstance( m_aService ), UNO_QUERY );
-            if(m_aArguments.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NoConfig")))
+            if ( m_aArguments == "NoConfig" )
             {
                 Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);
                 if(xInit.is()) {

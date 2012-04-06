@@ -231,7 +231,7 @@ namespace DOM
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));
             }
-            else if (attr_qname.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xmlns")))
+            else if ( attr_qname == "xmlns" )
             {
                 // new default prefix
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));

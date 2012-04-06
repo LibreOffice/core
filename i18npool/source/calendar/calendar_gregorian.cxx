@@ -1043,7 +1043,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_YEAR:
-                if (aCalendar.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gengou")))
+                if ( aCalendar.Name == "gengou" )
                     sprintf(aStr, "%02d", value);     // #100211# - checked
                 else
                     sprintf(aStr, "%d", value);     // #100211# - checked

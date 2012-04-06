@@ -94,15 +94,15 @@ PackageRegistryBackend::PackageRegistryBackend(
     if (readOnly)
         m_readOnly = *readOnly;
 
-    if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
+    if ( m_context == "user" )
         m_eContext = CONTEXT_USER;
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
+    else if ( m_context == "shared" )
         m_eContext = CONTEXT_SHARED;
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") ))
+    else if ( m_context == "bundled" )
         m_eContext = CONTEXT_BUNDLED;
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
+    else if ( m_context == "tmp" )
         m_eContext = CONTEXT_TMP;
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") ))
+    else if ( m_context == "bundled_prereg" )
         m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))

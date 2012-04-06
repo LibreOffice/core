@@ -92,7 +92,7 @@ bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRang
     bool bOk;
     if ( bCompile )
         pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if ( rName == STR_DB_LOCAL_NONAME )
     {
         pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
         bOk = true;

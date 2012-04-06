@@ -832,15 +832,15 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             changePropertyValue(rValue,n,m_aProps->m_sTitle,nChanged,aRet,aChanges);
         }
-        else if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "Author") ) )
+        else if ( rValue.Name == "Author" )
         {
             changePropertyValue(rValue,n,m_aProps->m_sAuthor,nChanged,aRet,aChanges);
         }
-        else if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "Keywords") ) )
+        else if ( rValue.Name == "Keywords" )
         {
             changePropertyValue(rValue,n,m_aProps->m_sKeywords,nChanged,aRet,aChanges);
         }
-        else if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "Subject") ) )
+        else if ( rValue.Name == "Subject" )
         {
             changePropertyValue(rValue,n,m_aProps->m_sSubject,nChanged,aRet,aChanges);
         }

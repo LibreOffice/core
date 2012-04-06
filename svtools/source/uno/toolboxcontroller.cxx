@@ -225,13 +225,13 @@ throw ( Exception, RuntimeException )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Frame") ))
+                if ( aPropValue.Name == "Frame" )
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CommandURL") ))
+                else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ServiceManager") ))
+                else if ( aPropValue.Name == "ServiceManager" )
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ParentWindow") ))
+                else if ( aPropValue.Name == "ParentWindow" )
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name == "ModuleName" )
                     aPropValue.Value >>= m_pImpl->m_sModuleName;

@@ -379,11 +379,11 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             // TODO: dialogs in packages
             Reference< XLibraryContainer > xLibContainer;
 
-            if ( sLocation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
+            if ( sLocation == "application" )
             {
                 xLibContainer = Reference< XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
             }
-            else if ( sLocation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")) )
+            else if ( sLocation == "document" )
             {
                 Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
                 if ( xDocumentScripts.is() )

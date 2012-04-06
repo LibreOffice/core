@@ -2561,17 +2561,17 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     uno::Reference< XConnection> xConnection;
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
-        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
+        if ( pValues[nPos].Name == cDataSourceName )
             pValues[nPos].Value >>= sDataSource;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
+        else if ( pValues[nPos].Name == cCommand )
             pValues[nPos].Value >>= sDataTableOrQuery;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
+        else if ( pValues[nPos].Name == cCursor )
             pValues[nPos].Value >>= xResSet;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
+        else if ( pValues[nPos].Name == cSelection )
             pValues[nPos].Value >>= aSelection;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
+        else if ( pValues[nPos].Name == cCommandType )
             pValues[nPos].Value >>= nCmdType;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
+        else if ( pValues[nPos].Name == cActiveConnection )
             pValues[nPos].Value >>= xConnection;
     }
     if(sDataSource.isEmpty() || sDataTableOrQuery.isEmpty() || !xResSet.is())

@@ -1233,45 +1233,45 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 }
 
                 // did we find any of the non-default cases?
-                if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout")) )
+                if ( pValues->Name == "PrinterIndependentLayout" )
                     bPrinterIndependentLayout = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddExternalLeading")) )
+                else if ( pValues->Name == "AddExternalLeading" )
                     bAddExternalLeading = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells")) )
+                else if ( pValues->Name == "AddParaSpacingToTableCells" )
                     bAddParaSpacingToTableCells = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
+                else if ( pValues->Name == "UseFormerLineSpacing" )
                     bUseFormerLineSpacing = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning")) )
+                else if ( pValues->Name == "UseFormerObjectPositioning" )
                     bUseFormerObjectPositioning = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping")) )
+                else if ( pValues->Name == "UseFormerTextWrapping" )
                     bUseFormerTextWrapping = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
+                else if ( pValues->Name == "UseOldNumbering" )
                     bUseOldNumbering = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutlineLevelYieldsNumbering")) )
+                else if ( pValues->Name == "OutlineLevelYieldsNumbering" )
                     bOutlineLevelYieldsOutlineRule = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
+                else if ( pValues->Name == "ConsiderTextWrapOnObjPos" )
                     bConsiderWrapOnObjPos = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering")) )
+                else if ( pValues->Name == "IgnoreFirstLineIndentInNumbering" )
                     bIgnoreFirstLineIndentInNumbering = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak")) )
+                else if ( pValues->Name == "DoNotJustifyLinesWithManualBreak" )
                     bDoNotJustifyLinesWithManualBreak = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont")) )
+                else if ( pValues->Name == "DoNotResetParaAttrsForNumFont" )
                     bDoNotResetParaAttrsForNumFont = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
+                else if ( pValues->Name == "LoadReadonly" )
                     bLoadReadonly = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage")) )
+                else if ( pValues->Name == "DoNotCaptureDrawObjsOnPage" )
                     bDoNotCaptureDrawObjsOnPage = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames")) )
+                else if ( pValues->Name == "ClipAsCharacterAnchoredWriterFlyFrames" )
                     bClipAsCharacterAnchoredWriterFlyFrames = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading")) )
+                else if ( pValues->Name == "UnxForceZeroExtLeading" )
                     bUnixForceZeroExtLeading = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics")) )
+                else if ( pValues->Name == "UseOldPrinterMetrics" )
                     bUseOldPrinterMetrics = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66")) )
+                else if ( pValues->Name == "SmallCapsPercentage66" )
                     bSmallCapsPercentage66 = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabOverflow")) )
+                else if ( pValues->Name == "TabOverflow" )
                     bTabOverflow = true;
-                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UnbreakableNumberings")) )
+                else if ( pValues->Name == "UnbreakableNumberings" )
                     bUnbreakableNumberings = true;
             }
             catch( Exception& )

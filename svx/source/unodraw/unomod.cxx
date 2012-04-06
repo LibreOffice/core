@@ -394,17 +394,17 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapRectangleObject") ) )
+    if ( aServiceSpecifier == "com.sun.star.image.ImageMapRectangleObject" )
     {
         return SvUnoImageMapRectangleObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapCircleObject") ) )
+    if ( aServiceSpecifier == "com.sun.star.image.ImageMapCircleObject" )
     {
         return SvUnoImageMapCircleObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapPolygonObject") ) )
+    if ( aServiceSpecifier == "com.sun.star.image.ImageMapPolygonObject" )
     {
         return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
     }

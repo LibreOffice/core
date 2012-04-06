@@ -776,7 +776,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
         implts_registerDocument(xDocument);
     }
     // document modified => set its modify state new (means modified against the original file!)
-    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_MODIFYCHANGED)))
+    else if ( aEvent.EventName == EVENT_ON_MODIFYCHANGED )
     {
         implts_updateModifiedState(xDocument);
     }
@@ -807,7 +807,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
        Dont remove temp. files or change the modified state of the document!
        It was not realy saved to the original file ...
     */
-    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVETODONE)))
+    else if ( aEvent.EventName == EVENT_ON_SAVETODONE )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
@@ -824,7 +824,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
     // document closed => remove temp. files and configuration entries
-    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_UNLOAD)))
+    else if ( aEvent.EventName == EVENT_ON_UNLOAD )
     {
         implts_deregisterDocument(xDocument, sal_True); // sal_True => stop listening for disposing() !
     }
@@ -854,7 +854,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
         ::rtl::OUString sPath;
         pChanges[i].Accessor >>= sPath;
 
-        if (sPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_AUTOSAVE_ENABLED)))
+        if ( sPath == CFG_ENTRY_AUTOSAVE_ENABLED )
         {
             sal_Bool bEnabled = sal_False;
             if (pChanges[i].Element >>= bEnabled)
@@ -872,7 +872,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
             }
         }
         else
-        if (sPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)))
+        if ( sPath == CFG_ENTRY_AUTOSAVE_TIMEINTERVALL )
             pChanges[i].Element >>= m_nAutoSaveTimeIntervall;
     }
 
@@ -2878,27 +2878,27 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 //-----------------------------------------------
 sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 {
-    if (aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)))
+    if ( aURL.Protocol == CMD_PROTOCOL )
     {
-        if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_PREPARE_EMERGENCY_SAVE)))
+        if ( aURL.Path == CMD_DO_PREPARE_EMERGENCY_SAVE )
             return AutoRecovery::E_PREPARE_EMERGENCY_SAVE;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_EMERGENCY_SAVE)))
+        else if ( aURL.Path == CMD_DO_EMERGENCY_SAVE )
             return AutoRecovery::E_EMERGENCY_SAVE;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_RECOVERY)))
+        else if ( aURL.Path == CMD_DO_RECOVERY )
             return AutoRecovery::E_RECOVERY;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_BACKUP)))
+        else if ( aURL.Path == CMD_DO_ENTRY_BACKUP )
             return AutoRecovery::E_ENTRY_BACKUP;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP)))
+        else if ( aURL.Path == CMD_DO_ENTRY_CLEANUP )
             return AutoRecovery::E_ENTRY_CLEANUP;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_SAVE)))
+        else if ( aURL.Path == CMD_DO_SESSION_SAVE )
             return AutoRecovery::E_SESSION_SAVE;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_QUIET_QUIT)))
+        else if ( aURL.Path == CMD_DO_SESSION_QUIET_QUIT )
             return AutoRecovery::E_SESSION_QUIET_QUIT;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_RESTORE)))
+        else if ( aURL.Path == CMD_DO_SESSION_RESTORE )
             return AutoRecovery::E_SESSION_RESTORE;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_DISABLE_RECOVERY)))
+        else if ( aURL.Path == CMD_DO_DISABLE_RECOVERY )
             return AutoRecovery::E_DISABLE_AUTORECOVERY;
-        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SET_AUTOSAVE_STATE)))
+        else if ( aURL.Path == CMD_DO_SET_AUTOSAVE_STATE )
             return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 

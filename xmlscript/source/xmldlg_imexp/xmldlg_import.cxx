@@ -293,11 +293,11 @@ bool StyleElement::importBorderStyle(
     if (getStringAttr(
             &aValue, OUSTR("border"),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID )) {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        if ( aValue == "none" )
             _border = BORDER_NONE;
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("3d") ))
+        else if ( aValue == "3d" )
             _border = BORDER_3D;
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("simple") ))
+        else if ( aValue == "simple" )
             _border = BORDER_SIMPLE;
         else {
             _border = BORDER_SIMPLE_COLOR;
@@ -330,15 +330,15 @@ bool StyleElement::importVisualEffectStyle(
     if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("look") ),
                        _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        if ( aValue == "none" )
         {
             _visualEffect = awt::VisualEffect::NONE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("3d") ))
+        else if ( aValue == "3d" )
         {
             _visualEffect = awt::VisualEffect::LOOK3D;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("simple") ))
+        else if ( aValue == "simple" )
         {
             _visualEffect = awt::VisualEffect::FLAT;
         }
@@ -413,27 +413,27 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-family") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("decorative") ))
+        if ( aValue == "decorative" )
         {
             _descr.Family = awt::FontFamily::DECORATIVE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("modern") ))
+        else if ( aValue == "modern" )
         {
             _descr.Family = awt::FontFamily::MODERN;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("roman") ))
+        else if ( aValue == "roman" )
         {
             _descr.Family = awt::FontFamily::ROMAN;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("script") ))
+        else if ( aValue == "script" )
         {
             _descr.Family = awt::FontFamily::SCRIPT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("swiss") ))
+        else if ( aValue == "swiss" )
         {
             _descr.Family = awt::FontFamily::SWISS;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system") ))
+        else if ( aValue == "system" )
         {
             _descr.Family = awt::FontFamily::SYSTEM;
         }
@@ -451,43 +451,43 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-charset") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ansi") ))
+        if ( aValue == "ansi" )
         {
             _descr.CharSet = awt::CharSet::ANSI;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("mac") ))
+        else if ( aValue == "mac" )
         {
             _descr.CharSet = awt::CharSet::MAC;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_437") ))
+        else if ( aValue == "ibmpc_437" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_437;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_850") ))
+        else if ( aValue == "ibmpc_850" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_850;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_860") ))
+        else if ( aValue == "ibmpc_860" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_860;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_861") ))
+        else if ( aValue == "ibmpc_861" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_861;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_863") ))
+        else if ( aValue == "ibmpc_863" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_863;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ibmpc_865") ))
+        else if ( aValue == "ibmpc_865" )
         {
             _descr.CharSet = awt::CharSet::IBMPC_865;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system") ))
+        else if ( aValue == "system" )
         {
             _descr.CharSet = awt::CharSet::SYSTEM;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("symbol") ))
+        else if ( aValue == "symbol" )
         {
             _descr.CharSet = awt::CharSet::SYMBOL;
         }
@@ -505,11 +505,11 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-pitch") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixed") ))
+        if ( aValue == "fixed" )
         {
             _descr.Pitch = awt::FontPitch::FIXED;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("variable") ))
+        else if ( aValue == "variable" )
         {
             _descr.Pitch = awt::FontPitch::VARIABLE;
         }
@@ -544,19 +544,19 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-slant") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("oblique") ))
+        if ( aValue == "oblique" )
         {
             _descr.Slant = awt::FontSlant_OBLIQUE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("italic") ))
+        else if ( aValue == "italic" )
         {
             _descr.Slant = awt::FontSlant_ITALIC;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("reverse_oblique") ))
+        else if ( aValue == "reverse_oblique" )
         {
             _descr.Slant = awt::FontSlant_REVERSE_OBLIQUE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("reverse_italic") ))
+        else if ( aValue == "reverse_italic" )
         {
             _descr.Slant = awt::FontSlant_REVERSE_ITALIC;
         }
@@ -574,71 +574,71 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-underline") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single") ))
+        if ( aValue == "single" )
         {
             _descr.Underline = awt::FontUnderline::SINGLE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("double") ))
+        else if ( aValue == "double" )
         {
             _descr.Underline = awt::FontUnderline::DOUBLE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dotted") ))
+        else if ( aValue == "dotted" )
         {
             _descr.Underline = awt::FontUnderline::DOTTED;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dash") ))
+        else if ( aValue == "dash" )
         {
             _descr.Underline = awt::FontUnderline::DASH;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("longdash") ))
+        else if ( aValue == "longdash" )
         {
             _descr.Underline = awt::FontUnderline::LONGDASH;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dashdot") ))
+        else if ( aValue == "dashdot" )
         {
             _descr.Underline = awt::FontUnderline::DASHDOT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dashdotdot") ))
+        else if ( aValue == "dashdotdot" )
         {
             _descr.Underline = awt::FontUnderline::DASHDOTDOT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("smallwave") ))
+        else if ( aValue == "smallwave" )
         {
             _descr.Underline = awt::FontUnderline::SMALLWAVE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("wave") ))
+        else if ( aValue == "wave" )
         {
             _descr.Underline = awt::FontUnderline::WAVE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("doublewave") ))
+        else if ( aValue == "doublewave" )
         {
             _descr.Underline = awt::FontUnderline::DOUBLEWAVE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bold") ))
+        else if ( aValue == "bold" )
         {
             _descr.Underline = awt::FontUnderline::BOLD;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bolddotted") ))
+        else if ( aValue == "bolddotted" )
         {
             _descr.Underline = awt::FontUnderline::BOLDDOTTED;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bolddash") ))
+        else if ( aValue == "bolddash" )
         {
             _descr.Underline = awt::FontUnderline::BOLDDASH;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("boldlongdash") ))
+        else if ( aValue == "boldlongdash" )
         {
             _descr.Underline = awt::FontUnderline::BOLDLONGDASH;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bolddashdot") ))
+        else if ( aValue == "bolddashdot" )
         {
             _descr.Underline = awt::FontUnderline::BOLDDASHDOT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bolddashdotdot") ))
+        else if ( aValue == "bolddashdotdot" )
         {
             _descr.Underline = awt::FontUnderline::BOLDDASHDOTDOT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("boldwave") ))
+        else if ( aValue == "boldwave" )
         {
             _descr.Underline = awt::FontUnderline::BOLDWAVE;
         }
@@ -656,23 +656,23 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-strikeout") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single") ))
+        if ( aValue == "single" )
         {
             _descr.Strikeout = awt::FontStrikeout::SINGLE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("double") ))
+        else if ( aValue == "double" )
         {
             _descr.Strikeout = awt::FontStrikeout::DOUBLE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bold") ))
+        else if ( aValue == "bold" )
         {
             _descr.Strikeout = awt::FontStrikeout::BOLD;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("slash") ))
+        else if ( aValue == "slash" )
         {
             _descr.Strikeout = awt::FontStrikeout::SLASH;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("x") ))
+        else if ( aValue == "x" )
         {
             _descr.Strikeout = awt::FontStrikeout::X;
         }
@@ -710,15 +710,15 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-type") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("raster") ))
+        if ( aValue == "raster" )
         {
             _descr.Type = awt::FontType::RASTER;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("device") ))
+        else if ( aValue == "device" )
         {
             _descr.Type = awt::FontType::DEVICE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("scalable") ))
+        else if ( aValue == "scalable" )
         {
             _descr.Type = awt::FontType::SCALABLE;
         }
@@ -737,15 +737,15 @@ bool StyleElement::importFontStyle(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-relief") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        if ( aValue == "none" )
         {
             _fontRelief = awt::FontRelief::NONE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("embossed") ))
+        else if ( aValue == "embossed" )
         {
             _fontRelief = awt::FontRelief::EMBOSSED;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("engraved") ))
+        else if ( aValue == "engraved" )
         {
             _fontRelief = awt::FontRelief::ENGRAVED;
         }
@@ -763,31 +763,31 @@ bool StyleElement::importFontStyle(
             OUString( RTL_CONSTASCII_USTRINGPARAM("font-emphasismark") ),
             _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        if ( aValue == "none" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::NONE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dot") ))
+        else if ( aValue == "dot" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::DOT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("circle") ))
+        else if ( aValue == "circle" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::CIRCLE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("disc") ))
+        else if ( aValue == "disc" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::DISC;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("accent") ))
+        else if ( aValue == "accent" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::ACCENT;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("above") ))
+        else if ( aValue == "above" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::ABOVE;
         }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("below") ))
+        else if ( aValue == "below" )
         {
             _fontEmphasisMark = awt::FontEmphasisMark::BELOW;
         }
@@ -929,19 +929,19 @@ bool ImportContext::importAlignProperty(
     if (!aAlign.isEmpty())
     {
         sal_Int16 nAlign;
-        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
+        if ( aAlign == "left" )
         {
             nAlign = 0;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        else if ( aAlign == "center" )
         {
             nAlign = 1;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right") ))
+        else if ( aAlign == "right" )
         {
             nAlign = 2;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        else if ( aAlign == "none" )
         {
             nAlign = 0; // default
         }
@@ -969,15 +969,15 @@ bool ImportContext::importVerticalAlignProperty(
     {
         style::VerticalAlignment eAlign;
 
-        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top") ))
+        if ( aAlign == "top" )
         {
             eAlign = style::VerticalAlignment_TOP;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        else if ( aAlign == "center" )
         {
             eAlign = style::VerticalAlignment_MIDDLE;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom") ))
+        else if ( aAlign == "bottom" )
         {
             eAlign = style::VerticalAlignment_BOTTOM;
         }
@@ -1112,19 +1112,19 @@ bool ImportContext::importImageAlignProperty(
     if (!aAlign.isEmpty())
     {
         sal_Int16 nAlign;
-        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
+        if ( aAlign == "left" )
         {
             nAlign = 0;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top") ))
+        else if ( aAlign == "top" )
         {
             nAlign = 1;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right") ))
+        else if ( aAlign == "right" )
         {
             nAlign = 2;
         }
-        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom") ))
+        else if ( aAlign == "bottom" )
         {
             nAlign = 3;
         }
@@ -1151,55 +1151,55 @@ bool ImportContext::importImagePositionProperty(
     if (!aPosition.isEmpty())
     {
         sal_Int16 nPosition;
-        if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-top") ))
+        if ( aPosition == "left-top" )
         {
             nPosition = awt::ImagePosition::LeftTop;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-center") ))
+        else if ( aPosition == "left-center" )
         {
             nPosition = awt::ImagePosition::LeftCenter;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-bottom") ))
+        else if ( aPosition == "left-bottom" )
         {
             nPosition = awt::ImagePosition::LeftBottom;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-top") ))
+        else if ( aPosition == "right-top" )
         {
             nPosition = awt::ImagePosition::RightTop;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-center") ))
+        else if ( aPosition == "right-center" )
         {
             nPosition = awt::ImagePosition::RightCenter;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-bottom") ))
+        else if ( aPosition == "right-bottom" )
         {
             nPosition = awt::ImagePosition::RightBottom;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-left") ))
+        else if ( aPosition == "top-left" )
         {
             nPosition = awt::ImagePosition::AboveLeft;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-center") ))
+        else if ( aPosition == "top-center" )
         {
             nPosition = awt::ImagePosition::AboveCenter;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-right") ))
+        else if ( aPosition == "top-right" )
         {
             nPosition = awt::ImagePosition::AboveRight;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-left") ))
+        else if ( aPosition == "bottom-left" )
         {
             nPosition = awt::ImagePosition::BelowLeft;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-center") ))
+        else if ( aPosition == "bottom-center" )
         {
             nPosition = awt::ImagePosition::BelowCenter;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-right") ))
+        else if ( aPosition == "bottom-right" )
         {
             nPosition = awt::ImagePosition::BelowRight;
         }
-        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        else if ( aPosition == "center" )
         {
             nPosition = awt::ImagePosition::Centered;
         }
@@ -1226,19 +1226,19 @@ bool ImportContext::importButtonTypeProperty(
     if (!buttonType.isEmpty())
     {
         sal_Int16 nButtonType;
-        if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("standard") ))
+        if ( buttonType == "standard" )
         {
             nButtonType = awt::PushButtonType_STANDARD;
         }
-        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ok") ))
+        else if ( buttonType == "ok" )
         {
             nButtonType = awt::PushButtonType_OK;
         }
-        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("cancel") ))
+        else if ( buttonType == "cancel" )
         {
             nButtonType = awt::PushButtonType_CANCEL;
         }
-        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("help") ))
+        else if ( buttonType == "help" )
         {
             nButtonType = awt::PushButtonType_HELP;
         }
@@ -1265,51 +1265,51 @@ bool ImportContext::importDateFormatProperty(
     if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
-        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short") ))
+        if ( aFormat == "system_short" )
         {
             nFormat = 0;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short_YY") ))
+        else if ( aFormat == "system_short_YY" )
         {
             nFormat = 1;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short_YYYY") ))
+        else if ( aFormat == "system_short_YYYY" )
         {
             nFormat = 2;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_long") ))
+        else if ( aFormat == "system_long" )
         {
             nFormat = 3;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_DDMMYY") ))
+        else if ( aFormat == "short_DDMMYY" )
         {
             nFormat = 4;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_MMDDYY") ))
+        else if ( aFormat == "short_MMDDYY" )
         {
             nFormat = 5;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYMMDD") ))
+        else if ( aFormat == "short_YYMMDD" )
         {
             nFormat = 6;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_DDMMYYYY") ))
+        else if ( aFormat == "short_DDMMYYYY" )
         {
             nFormat = 7;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_MMDDYYYY") ))
+        else if ( aFormat == "short_MMDDYYYY" )
         {
             nFormat = 8;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYYYMMDD") ))
+        else if ( aFormat == "short_YYYYMMDD" )
         {
             nFormat = 9;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYMMDD_DIN5008") ))
+        else if ( aFormat == "short_YYMMDD_DIN5008" )
         {
             nFormat = 10;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYYYMMDD_DIN5008") ))
+        else if ( aFormat == "short_YYYYMMDD_DIN5008" )
         {
             nFormat = 11;
         }
@@ -1336,27 +1336,27 @@ bool ImportContext::importTimeFormatProperty(
     if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
-        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h_short") ))
+        if ( aFormat == "24h_short" )
         {
             nFormat = 0;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h_long") ))
+        else if ( aFormat == "24h_long" )
         {
             nFormat = 1;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h_short") ))
+        else if ( aFormat == "12h_short" )
         {
             nFormat = 2;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h_long") ))
+        else if ( aFormat == "12h_long" )
         {
             nFormat = 3;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration_short") ))
+        else if ( aFormat == "Duration_short" )
         {
             nFormat = 4;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration_long") ))
+        else if ( aFormat == "Duration_long" )
         {
             nFormat = 5;
         }
@@ -1383,11 +1383,11 @@ bool ImportContext::importOrientationProperty(
     if (!aOrient.isEmpty())
     {
         sal_Int32 nOrient;
-        if (aOrient.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("horizontal") ))
+        if ( aOrient == "horizontal" )
         {
             nOrient = 0;
         }
-        else if (aOrient.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vertical") ))
+        else if ( aOrient == "vertical" )
         {
             nOrient = 1;
         }
@@ -1414,15 +1414,15 @@ bool ImportContext::importLineEndFormatProperty(
     if (!aFormat.isEmpty())
     {
         sal_Int16 nFormat;
-        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("carriage-return") ))
+        if ( aFormat == "carriage-return" )
         {
             nFormat = awt::LineEndFormat::CARRIAGE_RETURN;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("line-feed") ))
+        else if ( aFormat == "line-feed" )
         {
             nFormat = awt::LineEndFormat::LINE_FEED;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("carriage-return-line-feed") ))
+        else if ( aFormat == "carriage-return-line-feed" )
         {
             nFormat = awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED;
         }
@@ -1450,19 +1450,19 @@ bool ImportContext::importSelectionTypeProperty(
     {
         view::SelectionType eSelectionType;
 
-        if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        if ( aSelectionType == "none" )
         {
             eSelectionType = view::SelectionType_NONE;
         }
-        else if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single") ))
+        else if ( aSelectionType == "single" )
         {
             eSelectionType = view::SelectionType_SINGLE;
         }
-        else if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("multi") ))
+        else if ( aSelectionType == "multi" )
         {
             eSelectionType = view::SelectionType_MULTI;
         }
-        else  if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("range") ))
+        else  if ( aSelectionType == "range" )
         {
             eSelectionType = view::SelectionType_RANGE;
         }
@@ -1601,7 +1601,7 @@ void ImportContext::importEvents(
                     }
 
                     // script:event element
-                    if (aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+                    if ( aLocalName == "event" )
                     {
                         OUString aEventName;
                         if (! getStringAttr(
@@ -1960,7 +1960,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
             Reference< XInterface >(), Any() );
     }
     // window
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("window") ))
+    else if ( rLocalName == "window" )
     {
         return new WindowElement( rLocalName, xAttributes, 0, this );
     }

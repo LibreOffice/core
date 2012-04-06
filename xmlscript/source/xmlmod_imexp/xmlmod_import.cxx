@@ -184,7 +184,7 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
             Reference< XInterface >(), Any() );
     }
     // window
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("module") ))
+    else if ( rLocalName == "module" )
     {
         mrModuleDesc.aName = xAttributes->getValueByUidName(
             XMLNS_SCRIPT_UID,

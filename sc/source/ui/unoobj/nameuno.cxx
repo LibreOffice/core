@@ -693,7 +693,7 @@ void SAL_CALL ScNamedRangesObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SC_UNO_MODIFY_BROADCAST)))
+    if ( rPropertyName == SC_UNO_MODIFY_BROADCAST )
     {
         aValue >>= mbModifyAndBroadcast;
     }
@@ -704,7 +704,7 @@ Any SAL_CALL ScNamedRangesObj::getPropertyValue( const rtl::OUString& rPropertyN
                         uno::RuntimeException)
 {
     Any aRet;
-    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SC_UNO_MODIFY_BROADCAST)))
+    if ( rPropertyName == SC_UNO_MODIFY_BROADCAST )
     {
         aRet <<= mbModifyAndBroadcast;
     }

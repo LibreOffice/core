@@ -141,11 +141,11 @@ sal_Bool XFlatXml::importer(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
+        if ( aName == "InputStream" )
             aSourceData[i].Value >>= xInputStream;
-        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
+        else if ( aName == "FileName" )
             aSourceData[i].Value >>= aFileName;
-        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
+        else if ( aName == "URL" )
             aSourceData[i].Value >>= aURL;
     }
 
@@ -203,7 +203,7 @@ sal_Bool XFlatXml::exporter(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
+        if ( aName == "OutputStream" )
             aSourceData[i].Value >>= rOutputStream;
         else if ( aName == "URL" )
             aSourceData[i].Value >>= sURL;

@@ -277,7 +277,7 @@ namespace oox { namespace ppt {
                             {
                                 nCommand = EffectCommands::STOPAUDIO;
                             }
-                            else if( msCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("play") ) )
+                            else if ( msCommand == "play" )
                             {
                                 nCommand = EffectCommands::PLAY;
                             }
@@ -293,11 +293,11 @@ namespace oox { namespace ppt {
                                 }
                                 nCommand = EffectCommands::PLAY;
                             }
-                            else if( msCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("togglePause") ) )
+                            else if ( msCommand == "togglePause" )
                             {
                                 nCommand = EffectCommands::TOGGLEPAUSE;
                             }
-                            else if( msCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("stop") ) )
+                            else if ( msCommand == "stop" )
                             {
                                 nCommand = EffectCommands::STOP;
                             }

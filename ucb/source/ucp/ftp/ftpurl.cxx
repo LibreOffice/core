@@ -341,7 +341,7 @@ rtl::OUString FTPURL::parent(bool internal) const
 
     if(last.isEmpty())
         bff.appendAscii("..");
-    else if(last.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
+    else if ( last == ".." )
         bff.append(last).appendAscii("/..");
 
     bff.append(m_aType);

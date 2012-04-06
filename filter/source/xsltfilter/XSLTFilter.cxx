@@ -284,13 +284,13 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
             {
                 aName = aSourceData[i].Name;
                 Any value = aSourceData[i].Value;
-                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
+                if ( aName == "InputStream" )
                     value >>= xInputStream;
-                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
+                else if ( aName == "FileName" )
                     value >>= aFileName;
-                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
+                else if ( aName == "URL" )
                     value >>= aURL;
-                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InteractionHandler")))
+                else if ( aName == "InteractionHandler" )
                     value >>= xInterActionHandler;
             }
         OSL_ASSERT(xInputStream.is());
@@ -443,15 +443,15 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
-                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Indent")))
+                if ( aName == "Indent" )
                     aSourceData[i].Value >>= bIndent;
-                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocType_Public")))
+                if ( aName == "DocType_Public" )
                     aSourceData[i].Value >>= aDoctypePublic;
-                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocType_System")))
+                if ( aName == "DocType_System" )
                     aSourceData[i].Value >>= aDoctypeSystem;
-                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
+                if ( aName == "OutputStream" )
                     aSourceData[i].Value >>= m_rOutputStream;
-                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
+                else if ( aName == "URL" )
                     aSourceData[i].Value >>= sURL;
             }
 

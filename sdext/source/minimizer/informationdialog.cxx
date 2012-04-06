@@ -398,7 +398,7 @@ sal_Bool InformationDialog::execute()
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    if ( rEvent.ActionCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("button")) )
+    if ( rEvent.ActionCommand == "button" )
     {
         mrInformationDialog.endExecute( sal_True );
     }

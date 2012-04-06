@@ -177,21 +177,21 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
     for(;pArgIter != pArgEnd;++pArgIter)
     {
-        if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")) )
+        if ( pArgIter->Name == "DataRowSource" )
         {
             ::com::sun::star::chart::ChartDataRowSource eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
         }
-        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")) )
+        else if ( pArgIter->Name == "CellRangeRepresentation" )
         {
             ::rtl::OUString sRange;
             pArgIter->Value >>= sRange;
             if ( !sRange.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all")) )
                 return sal_False;
         }
-        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")) )
+        else if ( pArgIter->Name == "FirstCellAsLabel" )
         {
             sal_Bool bFirstCellAsLabel = sal_True;
             pArgIter->Value >>= bFirstCellAsLabel;

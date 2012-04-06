@@ -874,19 +874,19 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
         const OUString& rName = pValues->Name;
         const uno::Any rValue = pValues->Value;
 
-        if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaTop") ) )
+        if ( rName == "VisibleAreaTop" )
         {
             rValue >>= aVisArea.Y;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaLeft") ) )
+        else if ( rName == "VisibleAreaLeft" )
         {
             rValue >>= aVisArea.X;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaWidth") ) )
+        else if ( rName == "VisibleAreaWidth" )
         {
             rValue >>= aVisArea.Width;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaHeight") ) )
+        else if ( rName == "VisibleAreaHeight" )
         {
             rValue >>= aVisArea.Height;
         }

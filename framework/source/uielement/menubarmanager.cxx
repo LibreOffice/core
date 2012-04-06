@@ -883,7 +883,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
                 // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
                 // Only non-popup menu items can have a short-cut
-                if ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpIndex)) )
+                if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
                 {
                     KeyCode aKeyCode( KEY_F1 );
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
@@ -1481,7 +1481,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
             // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
             // Only non-popup menu items can have a short-cut
-            if ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpIndex)) )
+            if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
             {
                 KeyCode aKeyCode( KEY_F1 );
                 pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );

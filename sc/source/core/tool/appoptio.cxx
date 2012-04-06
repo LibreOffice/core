@@ -143,7 +143,7 @@ void ScAppOptions::GetDefaultFormulaSeparators(
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
-    if (rLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")))
+    if ( rLang == "ru" )
         // Don't do automatic guess for these languages, and fall back to
         // the old separator set.
         return;

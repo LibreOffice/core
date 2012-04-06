@@ -2797,19 +2797,19 @@ void XMLMacroFieldImportContext::PrepareField(
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
-            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ScriptType")) )
+            if ( aValues[i].Name == "ScriptType" )
             {
                 // ignore ScriptType
             }
-            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Library")) )
+            else if ( aValues[i].Name == "Library" )
             {
                 aValues[i].Value >>= sLibraryName;
             }
-            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MacroName")) )
+            else if ( aValues[i].Name == "MacroName" )
             {
                 aValues[i].Value >>= sMacroName;
             }
-            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) )
+            if ( aValues[i].Name == "Script" )
             {
                 aValues[i].Value >>= sScriptURL;
             }

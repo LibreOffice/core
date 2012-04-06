@@ -703,7 +703,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
         {
             nTmp = document::PrinterIndependentLayout::LOW_RESOLUTION;
         }
-        else if( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("disabled")) )
+        else if ( sValue == "disabled" )
         {
             nTmp = document::PrinterIndependentLayout::DISABLED;
         }

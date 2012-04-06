@@ -203,7 +203,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 
     // a little quickfix for 2.0 to let applications clear api
     // created items that are not used
-    if( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("~clear~") ) )
+    if ( aApiName == "~clear~" )
     {
         dispose();
         return;

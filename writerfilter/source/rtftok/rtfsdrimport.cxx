@@ -97,7 +97,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
     {
-        if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
+        if ( i->first == "shapeType" )
         {
             nType = i->second.toInt32();
             switch (nType)
@@ -115,17 +115,17 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             if (xPropertySet.is())
                 xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
+        else if ( i->first == "wzName" )
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
             m_rImport.getState().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzDescription")))
+        else if ( i->first == "wzDescription" )
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
             m_rImport.getState().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pib")))
+        else if ( i->first == "pib" )
         {
             m_rImport.setDestinationText(i->second);
             bPib = true;
@@ -135,14 +135,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillBackColor")))
+        else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")) && xPropertySet.is())
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineBackColor")))
+        else if ( i->first == "lineBackColor" )
             ; // Ignore: complementer of lineColor
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")) && xPropertySet.is())
         {
@@ -160,7 +160,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny);
             }
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pVerticies")))
+        else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
             sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
@@ -203,7 +203,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aPropertyValue.Value <<= aCoordinates;
             aPathPropVec.push_back(aPropertyValue);
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pSegmentInfo")))
+        else if ( i->first == "pSegmentInfo" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
             sal_Int32 nSize = 0;
@@ -261,13 +261,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aPropertyValue.Value <<= aSegments;
             aPathPropVec.push_back(aPropertyValue);
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoLeft")))
+        else if ( i->first == "geoLeft" )
             aViewBox.X = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoTop")))
+        else if ( i->first == "geoTop" )
             aViewBox.Y = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoRight")))
+        else if ( i->first == "geoRight" )
             aViewBox.Width = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoBottom")))
+        else if ( i->first == "geoBottom" )
             aViewBox.Height = i->second.toInt32();
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<

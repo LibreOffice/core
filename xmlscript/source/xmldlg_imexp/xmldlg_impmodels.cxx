@@ -61,14 +61,14 @@ Reference< xml::input::XElement > Frame::startChildElement(
        return new EventElement(
             nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    else if ( rLocalName == "bulletinboard" )
     {
         // Create new DialogImport for this container
         DialogImport* pFrameImport = new DialogImport( *_pImport );
         pFrameImport->_xDialogModel = m_xContainer;
         return new BulletinBoardElement( rLocalName, xAttributes, this,  pFrameImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
+    else if ( rLocalName == "title" )
     {
         getStringAttr( &_label,
             OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
@@ -134,7 +134,7 @@ rtl::OUString _label(RTL_CONSTASCII_USTRINGPARAM("foo"));
         return new EventElement(
             nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    else if ( rLocalName == "bulletinboard" )
     {
         // Create new DialogImport for this container
 
@@ -196,7 +196,7 @@ Reference< xml::input::XElement > Page::startChildElement(
         return new EventElement(
             nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    else if ( rLocalName == "bulletinboard" )
     {
 
         DialogImport* pPageImport = new DialogImport( *_pImport );
@@ -1536,7 +1536,7 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // title
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
+    else if ( rLocalName == "title" )
     {
         getStringAttr( &_label,
                        OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
@@ -1548,7 +1548,7 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
             rLocalName, xAttributes, this, _pImport );
     }
     // radio
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
+    else if ( rLocalName == "radio" )
     {
         // dont create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
@@ -1710,7 +1710,7 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // radio
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
+    else if ( rLocalName == "radio" )
     {
         // dont create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
@@ -1818,7 +1818,7 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // menuitem
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("menuitem") ))
+    else if ( rLocalName == "menuitem" )
     {
         OUString aValue(
             xAttributes->getValueByUidName(
@@ -1894,7 +1894,7 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // menupopup
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("menupopup") ))
+    else if ( rLocalName == "menupopup" )
     {
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
@@ -1984,7 +1984,7 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // menupopup
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("menupopup") ))
+    else if ( rLocalName == "menupopup" )
     {
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
@@ -2270,128 +2270,128 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // button
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("button") ))
+    else if ( rLocalName == "button" )
     {
         return new ButtonElement( rLocalName, xAttributes, this, _pImport );
     }
     // checkbox
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("checkbox") ))
+    else if ( rLocalName == "checkbox" )
     {
         return new CheckBoxElement( rLocalName, xAttributes, this, _pImport );
     }
     // combobox
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("combobox") ))
+    else if ( rLocalName == "combobox" )
     {
         return new ComboBoxElement( rLocalName, xAttributes, this, _pImport );
     }
     // listbox
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("menulist") ))
+    else if ( rLocalName == "menulist" )
     {
         return new MenuListElement( rLocalName, xAttributes, this, _pImport );
     }
     // radiogroup
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radiogroup") ))
+    else if ( rLocalName == "radiogroup" )
     {
         return new RadioGroupElement( rLocalName, xAttributes, this, _pImport );
     }
     // titledbox
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("titledbox") ))
+    else if ( rLocalName == "titledbox" )
     {
         return new TitledBoxElement( rLocalName, xAttributes, this, _pImport );
     }
     // text
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("text") ))
+    else if ( rLocalName == "text" )
     {
         return new TextElement( rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("linklabel") ))
+    else if ( rLocalName == "linklabel" )
     {
         return new FixedHyperLinkElement( rLocalName, xAttributes, this, _pImport );
     }
     // textfield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("textfield") ))
+    else if ( rLocalName == "textfield" )
     {
         return new TextFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // img
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("img") ))
+    else if ( rLocalName == "img" )
     {
         return new ImageControlElement( rLocalName, xAttributes, this, _pImport );
     }
     // filecontrol
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("filecontrol") ))
+    else if ( rLocalName == "filecontrol" )
     {
         return new FileControlElement( rLocalName, xAttributes, this, _pImport );
     }
     // treecontrol
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("treecontrol") ))
+    else if ( rLocalName == "treecontrol" )
     {
         return new TreeControlElement( rLocalName, xAttributes, this, _pImport );
     }
     // currencyfield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("currencyfield") ))
+    else if ( rLocalName == "currencyfield" )
     {
         return new CurrencyFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // datefield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("datefield") ))
+    else if ( rLocalName == "datefield" )
     {
         return new DateFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // datefield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("numericfield") ))
+    else if ( rLocalName == "numericfield" )
     {
         return new NumericFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // timefield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("timefield") ))
+    else if ( rLocalName == "timefield" )
     {
         return new TimeFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // patternfield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("patternfield") ))
+    else if ( rLocalName == "patternfield" )
     {
         return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // formattedfield
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("formattedfield") ))
+    else if ( rLocalName == "formattedfield" )
     {
         return new FormattedFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // fixedline
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixedline") ))
+    else if ( rLocalName == "fixedline" )
     {
         return new FixedLineElement( rLocalName, xAttributes, this, _pImport );
     }
     // scrollbar
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("scrollbar") ))
+    else if ( rLocalName == "scrollbar" )
     {
         return new ScrollBarElement( rLocalName, xAttributes, this, _pImport );
     }
     // spinbutton
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("spinbutton") ) )
+    else if ( rLocalName == "spinbutton" )
     {
         return new SpinButtonElement( rLocalName, xAttributes, this, _pImport );
     }
     // progressmeter
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("progressmeter") ))
+    else if ( rLocalName == "progressmeter" )
     {
         return new ProgressBarElement( rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("multipage") ))
+    else if ( rLocalName == "multipage" )
     {
         return new MultiPage( rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("frame") ))
+    else if ( rLocalName == "frame" )
     {
         return new Frame( rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("page") ))
+    else if ( rLocalName == "page" )
     {
         return new Page( rLocalName, xAttributes, this, _pImport );
     }
     // bulletinboard
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    else if ( rLocalName == "bulletinboard" )
     {
         return new BulletinBoardElement( rLocalName, xAttributes, this, _pImport );
     }
@@ -2477,7 +2477,7 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // style
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("style") ))
+    else if ( rLocalName == "style" )
     {
         return new StyleElement( rLocalName, xAttributes, this, _pImport );
     }
@@ -2510,12 +2510,12 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // styles
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("styles") ))
+    else if ( rLocalName == "styles" )
     {
         return new StylesElement( rLocalName, xAttributes, this, _pImport );
     }
     // bulletinboard
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    else if ( rLocalName == "bulletinboard" )
     {
         return new BulletinBoardElement( rLocalName, xAttributes, this, _pImport );
     }

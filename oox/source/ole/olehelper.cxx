@@ -404,7 +404,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
         else // hyperlink moniker
         {
             OUString aGuid = importGuid( rInStrm );
-            if( aGuid.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_FILEMONIKER)) )
+            if ( aGuid == OLE_GUID_FILEMONIKER )
             {
                 // file name, maybe relative and with directory up-count
                 sal_Int16 nUpLevels;
@@ -425,7 +425,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
                     for( sal_Int16 nLevel = 0; nLevel < nUpLevels; ++nLevel )
                         orHlinkInfo.maTarget = CREATE_OUSTRING( "../" ) + orHlinkInfo.maTarget;
             }
-            else if( aGuid.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_URLMONIKER)) )
+            else if ( aGuid == OLE_GUID_URLMONIKER )
             {
                 // URL, maybe relative and with leading '../'
                 sal_Int32 nBytes = rInStrm.readInt32();

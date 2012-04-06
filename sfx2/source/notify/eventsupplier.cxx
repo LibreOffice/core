@@ -212,13 +212,13 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
         sal_Int32 nIndex = 0;
         while ( nIndex < nCount )
         {
-            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
+            if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
                 aProperties[ nIndex ].Value >>= aType;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
+            else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
                 aProperties[ nIndex ].Value >>= aScript;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
+            else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
+            else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
                 OSL_FAIL("Unknown property value!");
@@ -390,13 +390,13 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         while ( nIndex < nCount )
         {
-            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
+            if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
                 aProperties[ nIndex ].Value >>= aType;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
+            else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
                 aProperties[ nIndex ].Value >>= aScriptURL;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
+            else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
+            else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
                 OSL_FAIL("Unknown propery value!");
@@ -406,11 +406,11 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         // Get the type
         ScriptType  eType( STARBASIC );
-        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
+        if ( aType == STAR_BASIC )
             eType = STARBASIC;
         else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) && !aScriptURL.isEmpty())
             eType = EXTENDED_STYPE;
-        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
+        else if ( aType == SVX_MACRO_LANGUAGE_JAVASCRIPT )
             eType = JAVASCRIPT;
         else {
             SAL_WARN( "sfx2.notify", "ConvertToMacro: Unknown macro type" );
@@ -418,7 +418,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         if ( !aMacroName.isEmpty() )
         {
-            if (aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")))
+            if ( aLibrary == "application" )
                 aLibrary = SFX_APP()->GetName();
             else
                 aLibrary = ::rtl::OUString();
@@ -458,7 +458,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     if ( !aScript.isEmpty() )
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
 
-    if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
+    if ( aType == STAR_BASIC )
     {
         if ( !aScript.isEmpty() )
         {
@@ -469,7 +469,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                 if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
                 {
                     rtl::OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-                    if (aBasMgrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
+                    if ( aBasMgrName == "." )
                         aLibrary = pDoc->GetTitle();
                     else
                         aLibrary = SFX_APP()->GetName();

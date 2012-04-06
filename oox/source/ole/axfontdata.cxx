@@ -117,7 +117,7 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
     OUString aGuid = OleHelper::importGuid( rInStrm );
     if( aGuid.equalsAscii( AX_GUID_CFONT ) )
         return importBinaryModel( rInStrm );
-    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDFONT) ) )
+    if ( aGuid == OLE_GUID_STDFONT )
         return importStdFont( rInStrm );
     return false;
 }

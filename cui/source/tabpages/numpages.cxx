@@ -128,17 +128,17 @@ SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& r
     SvxNumSettings_ImplPtr pNew = new SvxNumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
-        if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+        if ( pValues[j].Name == cNumberingType )
             pValues[j].Value >>= pNew->nNumberType;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
+        else if ( pValues[j].Name == cPrefix )
             pValues[j].Value >>= pNew->sPrefix;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
+        else if ( pValues[j].Name == cSuffix )
             pValues[j].Value >>= pNew->sSuffix;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
+        else if ( pValues[j].Name == cParentNumbering )
             pValues[j].Value >>= pNew->nParentNumbering;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+        else if ( pValues[j].Name == cBulletChar )
             pValues[j].Value >>= pNew->sBulletChar;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+        else if ( pValues[j].Name == cBulletFontName )
             pValues[j].Value >>= pNew->sBulletFont;
     }
     return pNew;

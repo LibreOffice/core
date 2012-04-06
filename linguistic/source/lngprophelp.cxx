@@ -529,7 +529,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            if (pVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UPN_MAX_NUMBER_OF_SUGGESTIONS)))
+            if ( pVal[i].Name == UPN_MAX_NUMBER_OF_SUGGESTIONS )
             {
                 pVal[i].Value >>= nResMaxNumberOfSuggestions;
             }

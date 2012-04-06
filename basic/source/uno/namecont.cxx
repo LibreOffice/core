@@ -3344,11 +3344,11 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPack
     {
         const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
         rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
+        if ( aMediaType == sBasicLibMediaType )
         {
             xScriptPackage = xPackage;
         }
-        else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
+        else if ( aMediaType == sDialogLibMediaType )
         {
             rbPureDialogLib = true;
             xScriptPackage = xPackage;

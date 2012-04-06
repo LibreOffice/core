@@ -181,13 +181,13 @@ static sal_Int32 readLogLevelFromConfiguration()
     OUString str;
     if( bootstrapHandle.getFrom( ASCII_STR( "PQ_LOGLEVEL" ), str ) )
     {
-        if( str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NONE")) )
+        if ( str == "NONE" )
             loglevel = LogLevel::NONE;
-        else if( str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ERROR")) )
+        else if ( str == "ERROR" )
             loglevel = LogLevel::ERROR;
-        else if( str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SQL")) )
+        else if ( str == "SQL" )
             loglevel = LogLevel::SQL;
-        else if( str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("INFO")) )
+        else if ( str == "INFO" )
             loglevel = LogLevel::INFO;
         else
         {

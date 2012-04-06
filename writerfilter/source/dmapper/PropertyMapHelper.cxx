@@ -81,7 +81,7 @@ void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyV
         {
         }
 
-        if (pValues[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TableColumnSeparators")))
+        if ( pValues[n].Name == "TableColumnSeparators" )
         {
             lcl_DumpTableColumnSeparators(pLogger, pValues[n].Value);
         }

@@ -129,13 +129,13 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConfigurationSource")) )
+        if ( Args[n].Name == "ConfigurationSource" )
             Args[n].Value >>= xConfigSource;
-        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
+        else if ( Args[n].Name == "Frame" )
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")) )
+        else if ( Args[n].Name == "ResourceURL" )
             Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Persistent")) )
+        else if ( Args[n].Name == "Persistent" )
             Args[n].Value >>= bPersistent;
         else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
             Args[n].Value >>= bExtraMode;

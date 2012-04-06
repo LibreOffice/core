@@ -729,7 +729,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
            lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException)
 {
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    if ( PropertyName == "DefaultContext" )
     {
         Reference< XComponentContext > xContext;
         if (aValue >>= xContext)
@@ -754,7 +754,7 @@ Any SAL_CALL OServiceManagerWrapper::getPropertyValue(
     const OUString& PropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
 {
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    if ( PropertyName == "DefaultContext" )
     {
         MutexGuard aGuard( m_mutex );
         if( m_xContext.is() )
@@ -1041,7 +1041,7 @@ void OServiceManager::setPropertyValue(
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    if ( PropertyName == "DefaultContext" )
     {
         Reference< XComponentContext > xContext;
         if (aValue >>= xContext)
@@ -1068,7 +1068,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    if ( PropertyName == "DefaultContext" )
     {
         MutexGuard aGuard( m_mutex );
         if( m_xContext.is() )
@@ -1939,7 +1939,7 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Registry") ))
+    if ( PropertyName == "Registry" )
     {
         MutexGuard aGuard( m_mutex );
         if( m_xRegistry.is() )

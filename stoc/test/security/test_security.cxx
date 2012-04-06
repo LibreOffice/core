@@ -132,7 +132,7 @@ void user_CurrentContext::release()
 Any user_CurrentContext::getValueByName( OUString const & name )
     throw (RuntimeException)
 {
-    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(USER_CREDS ".id") ))
+    if ( name == USER_CREDS ".id" )
     {
         return m_userId;
     }

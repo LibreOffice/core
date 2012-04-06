@@ -148,7 +148,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
 {
     uno::Reference< xml::sax::XAttributeList > xNewAttribs = _xAttrList;
     bool bExport = true;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:report")) )
+    if ( _sName == "office:report" )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
@@ -196,7 +196,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         bExport = false;
         m_bImportedChart = true;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-field")) )
+    else if ( _sName == "rpt:master-detail-field" )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
@@ -244,7 +244,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-component"))
         ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-element")))
         bExport = false;
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart:plot-area")))
+    else if ( _sName == "chart:plot-area" )
     {
         sal_Bool bHasCategories = sal_True;
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
@@ -260,7 +260,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                 sLocalName = sAttrName;
             else
                 sLocalName = sAttrName.copy( nColonPos + 1L );
-            if ( sLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("data-source-has-labels")) )
+            if ( sLocalName == "data-source-has-labels" )
             {
                 const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
                 bHasCategories = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("both"));
@@ -271,7 +271,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
         for(;pArgIter != pArgEnd;++pArgIter)
         {
-            if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasCategories")) )
+            if ( pArgIter->Name == "HasCategories" )
             {
                 pArgIter->Value <<= bHasCategories;
                 break;
@@ -293,11 +293,11 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 {
     bool bExport = true;
     ::rtl::OUString sNewName = _sName;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:report")) )
+    if ( _sName == "office:report" )
     {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_CHART);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-fields")) )
+    else if ( _sName == "rpt:master-detail-fields" )
     {
         if ( !m_aMasterFields.empty() )
             m_xDatabaseDataProvider->setMasterFields(uno::Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));

@@ -69,7 +69,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= aFilterData;
         else if ( pValue[ i ].Name == "StatusIndicator" )
             pValue[ i ].Value >>= xStatusIndicator;
-        else if( pValue[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InteractionHandler")) )
+        else if ( pValue[i].Name == "InteractionHandler" )
             pValue[i].Value >>= xIH;
     }
 

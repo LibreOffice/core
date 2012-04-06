@@ -1431,7 +1431,7 @@ namespace
     bool isBadTNR(const OUString &rName, ::std::set< OUString >& rSet)
     {
         bool bRet = false;
-        if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Berling Antiqua")))
+        if ( rName == "Berling Antiqua" )
         {
             ::std::set< OUString >::iterator aEnd = rSet.end();
             ::std::set< OUString >::iterator aI = rSet.find(OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")));

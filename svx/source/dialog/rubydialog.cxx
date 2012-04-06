@@ -399,9 +399,9 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
         const PropertyValue* pProps = aProps.getConstArray();
         for(sal_Int32 nProp = 0; nProp < aProps.getLength(); nProp++)
         {
-            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyBaseText)))
+            if ( pProps[nProp].Name == cRubyBaseText )
                 pProps[nProp].Value >>= sLeft;
-            else if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyText)))
+            else if ( pProps[nProp].Name == cRubyText )
                 pProps[nProp].Value >>= sRight;
         }
     }
@@ -431,9 +431,9 @@ void SvxRubyDialog::GetText()
             PropertyValue* pProps = rProps.getArray();
             for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
             {
-                if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyBaseText)))
+                if ( pProps[nProp].Name == cRubyBaseText )
                     pProps[nProp].Value <<= OUString(aEditArr[i]->GetText());
-                else if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyText)))
+                else if ( pProps[nProp].Name == cRubyText )
                     pProps[nProp].Value <<= OUString(aEditArr[i + 1]->GetText());
             }
         }
@@ -610,7 +610,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyAdjust)))
+            if ( pProps[nProp].Name == cRubyAdjust )
                 pProps[nProp].Value <<= nAdjust;
         }
         SetModified(sal_True);
@@ -631,7 +631,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyIsAbove)))
+            if ( pProps[nProp].Name == cRubyIsAbove )
                 pProps[nProp].Value.setValue(&bAbove, rType);
         }
         SetModified(sal_True);
@@ -653,7 +653,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyCharStyleName)))
+            if ( pProps[nProp].Name == cRubyCharStyleName )
             {
                 pProps[nProp].Value <<= sStyleName;
             }

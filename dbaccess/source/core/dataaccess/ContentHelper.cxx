@@ -322,7 +322,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
     for(;pBegin != pEnd;++pBegin)
     {
         *pBegin >>= aValue;
-        if ( aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")) )
+        if ( aValue.Name == "Parent" )
         {
             m_xParentContainer.set(aValue.Value,UNO_QUERY);
         }

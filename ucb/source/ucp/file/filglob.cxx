@@ -219,7 +219,7 @@ namespace fileaccess {
         if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
             aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-        if( aParent.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://")) )
+        if ( aParent == "file://" )
             aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
 
         return aParent;

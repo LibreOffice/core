@@ -336,14 +336,14 @@ FilePermission::FilePermission(
 {
     if (! m_allFiles)
     {
-        if (m_url.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ))
+        if ( m_url == "*" )
         {
             OUStringBuffer buf( 64 );
             buf.append( getWorkingDir() );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/*") );
             m_url = buf.makeStringAndClear();
         }
-        else if (m_url.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("-") ))
+        else if ( m_url == "-" )
         {
             OUStringBuffer buf( 64 );
             buf.append( getWorkingDir() );

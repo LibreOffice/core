@@ -483,7 +483,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             xExtensionManager->reinstallDeployedExtensions(
                 repository, Reference<task::XAbortChannel>(), xCmdEnv);
         }
-        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("list") ))
+        else if ( subCommand == "list" )
         {
             ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
             ::comphelper::sequenceToContainer(vecExtUnaccepted,
@@ -572,7 +572,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
             printf_packages(allExtensions, vecUnaccepted, xCmdEnv );
         }
-        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("validate") ))
+        else if ( subCommand == "validate" )
         {
             ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
             ::comphelper::sequenceToContainer(
@@ -610,7 +610,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                         extension, Reference<task::XAbortChannel>(), xCmdEnv);
             }
         }
-        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gui") ))
+        else if ( subCommand == "gui" )
         {
             Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                 deployment::ui::PackageManagerDialog::createAndInstall(
@@ -626,7 +626,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
         }
-        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("sync")))
+        else if ( subCommand == "sync" )
         {
             if (! dp_misc::office_is_running())
             {

@@ -551,7 +551,7 @@ void SdStyleFamily::setPropertyValue( const OUString& , const Any&  ) throw (Unk
 
 Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ))
+    if ( PropertyName == "DisplayName" )
     {
         SolarMutexGuard aGuard;
         OUString sDisplayName;

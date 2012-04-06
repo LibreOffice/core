@@ -947,33 +947,33 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         sal_Int32 nFilterProperty      = 0                            ;
         for( nFilterProperty=0; nFilterProperty<nFilterPropertyCount; ++nFilterProperty )
         {
-            if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileFormatVersion")) )
+            if ( lFilterProperties[nFilterProperty].Name == "FileFormatVersion" )
             {
                 lFilterProperties[nFilterProperty].Value >>= nFormatVersion;
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TemplateName")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "TemplateName" )
             {
                 lFilterProperties[nFilterProperty].Value >>= sDefaultTemplate;
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Flags")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
             {
                 lFilterProperties[nFilterProperty].Value >>= nFlags;
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UIName")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "UIName" )
             {
                 lFilterProperties[nFilterProperty].Value >>= sUIName;
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserData")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "UserData" )
             {
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > lUserData;
                 lFilterProperties[nFilterProperty].Value >>= lUserData;
                 sUserData = implc_convertStringlistToString( lUserData, ',', ::rtl::OUString() );
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocumentService")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "DocumentService" )
             {
                 lFilterProperties[nFilterProperty].Value >>= sServiceName;
             }
-            else if( lFilterProperties[nFilterProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Type")) )
+            else if ( lFilterProperties[nFilterProperty].Name == "Type" )
             {
                 lFilterProperties[nFilterProperty].Value >>= sType;
                 // Try to get filter .. but look for any exceptions!
@@ -995,25 +995,25 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                     sal_Int32 nTypeProperty      = 0                          ;
                     for( nTypeProperty=0; nTypeProperty<nTypePropertyCount; ++nTypeProperty )
                     {
-                        if( lTypeProperties[nTypeProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat")) )
+                        if ( lTypeProperties[nTypeProperty].Name == "ClipboardFormat" )
                         {
                             lTypeProperties[nTypeProperty].Value >>= sHumanName;
                         }
-                        else if( lTypeProperties[nTypeProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocumentIconID")) )
+                        else if ( lTypeProperties[nTypeProperty].Name == "DocumentIconID" )
                         {
                             lTypeProperties[nTypeProperty].Value >>= nDocumentIconId;
                         }
-                        else if( lTypeProperties[nTypeProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")) )
+                        else if ( lTypeProperties[nTypeProperty].Name == "MediaType" )
                         {
                             lTypeProperties[nTypeProperty].Value >>= sMimeType;
                         }
-                        else if( lTypeProperties[nTypeProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Extensions")) )
+                        else if ( lTypeProperties[nTypeProperty].Name == "Extensions" )
                         {
                             ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensions;
                             lTypeProperties[nTypeProperty].Value >>= lExtensions;
                             sExtension = implc_convertStringlistToString( lExtensions, ';', DEFINE_CONST_UNICODE("*.") );
                         }
-                        else if( lTypeProperties[nTypeProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLPattern")) )
+                        else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
                         {
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > lPattern;
                                 lTypeProperties[nTypeProperty].Value >>= lPattern;

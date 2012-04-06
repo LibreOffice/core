@@ -161,19 +161,19 @@ throw ( Exception, RuntimeException )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_CONFIGSOURCE)))
+                if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGSOURCE )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGSOURCE, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_FRAME)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_FRAME )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_FRAME, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_PERSISTENT)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_PERSISTENT )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_PERSISTENT, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_RESOURCEURL)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_RESOURCEURL )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_RESOURCEURL, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_TYPE)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_TYPE )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_TYPE, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_CONFIGLISTENER)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGLISTENER )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGLISTENER, aPropValue.Value );
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UIELEMENT_PROPNAME_NOCLOSE)))
+                else if ( aPropValue.Name == UIELEMENT_PROPNAME_NOCLOSE )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_NOCLOSE, aPropValue.Value );
             }
         }

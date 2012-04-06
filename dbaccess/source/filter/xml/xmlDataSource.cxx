@@ -144,13 +144,13 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_BOOLEAN_COMPARISON_MODE:
                 aProperty.Name = PROPERTY_BOOLEANCOMPARISONMODE;
-                if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-integer")) )
+                if ( sValue == "equal-integer" )
                     aProperty.Value <<= sal_Int32(0);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("is-boolean")) )
+                else if ( sValue == "is-boolean" )
                     aProperty.Value <<= sal_Int32(1);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-boolean")) )
+                else if ( sValue == "equal-boolean" )
                     aProperty.Value <<= sal_Int32(2);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-use-only-zero")) )
+                else if ( sValue == "equal-use-only-zero" )
                     aProperty.Value <<= sal_Int32(3);
                 break;
             case XML_TOK_USE_CATALOG:

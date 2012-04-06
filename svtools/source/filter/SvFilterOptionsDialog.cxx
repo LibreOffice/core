@@ -142,7 +142,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
             break;
     }
     if ( i == nCount )
@@ -164,11 +164,11 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
         }
-        else if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SelectionOnly")) )
+        else if ( maMediaDescriptor[ i ].Name == "SelectionOnly" )
         {
             maMediaDescriptor[ i ].Value >>= mbExportSelection;
         }

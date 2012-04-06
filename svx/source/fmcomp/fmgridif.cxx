@@ -2460,7 +2460,7 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     m_aMode = Mode;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
-    if ( Mode.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterMode")) )
+    if ( Mode == "FilterMode" )
         pGrid->SetFilterMode(sal_True);
     else
     {

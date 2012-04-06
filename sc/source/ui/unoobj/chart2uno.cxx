@@ -1051,7 +1051,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
         rtl::OUString sName(aArguments[i].Name);
-        if (aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+        if ( aArguments[i].Name == "CellRangeRepresentation" )
         {
             aArguments[i].Value >>= aRangeRepresentation;
         }
@@ -1460,7 +1460,7 @@ ScChart2DataProvider::createDataSource(
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
         rtl::OUString sName(aArguments[i].Name);
-        if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
+        if ( aArguments[i].Name == "DataRowSource" )
         {
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             if( ! (aArguments[i].Value >>= eSource))
@@ -1471,19 +1471,19 @@ ScChart2DataProvider::createDataSource(
             }
             bOrientCol = (eSource == chart::ChartDataRowSource_COLUMNS);
         }
-        else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
+        else if ( aArguments[i].Name == "FirstCellAsLabel" )
         {
             bLabel = ::cppu::any2bool(aArguments[i].Value);
         }
-        else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasCategories")))
+        else if ( aArguments[i].Name == "HasCategories" )
         {
             bCategories = ::cppu::any2bool(aArguments[i].Value);
         }
-        else if (aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+        else if ( aArguments[i].Name == "CellRangeRepresentation" )
         {
             aArguments[i].Value >>= aRangeRepresentation;
         }
-        else if (aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SequenceMapping")))
+        else if ( aArguments[i].Name == "SequenceMapping" )
         {
             aArguments[i].Value >>= aSequenceMapping;
         }
@@ -2319,7 +2319,7 @@ void SAL_CALL ScChart2DataProvider::setPropertyValue(
                     lang::IllegalArgumentException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_INCLUDEHIDDENCELLS)))
+    if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
     {
         if ( !(rValue >>= m_bIncludeHiddenCells))
             throw lang::IllegalArgumentException();
@@ -2335,7 +2335,7 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_INCLUDEHIDDENCELLS)))
+    if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
         aRet <<= m_bIncludeHiddenCells;
     else
         throw beans::UnknownPropertyException();
@@ -3497,12 +3497,12 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
                     lang::IllegalArgumentException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ROLE)))
+    if ( rPropertyName == SC_UNONAME_ROLE )
     {
         if ( !(rValue >>= m_aRole))
             throw lang::IllegalArgumentException();
     }
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_INCLUDEHIDDENCELLS)))
+    else if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
     {
         sal_Bool bOldValue = m_bIncludeHiddenCells;
         if ( !(rValue >>= m_bIncludeHiddenCells))
@@ -3522,11 +3522,11 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ROLE)))
+    if ( rPropertyName == SC_UNONAME_ROLE )
         aRet <<= m_aRole;
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_INCLUDEHIDDENCELLS)))
+    else if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
         aRet <<= m_bIncludeHiddenCells;
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SC_UNONAME_HIDDENVALUES)))
+    else if ( rPropertyName == SC_UNONAME_HIDDENVALUES )
     {
         // This property is read-only thus cannot be set externally via
         // setPropertyValue(...).

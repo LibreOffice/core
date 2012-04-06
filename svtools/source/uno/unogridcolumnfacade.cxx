@@ -147,7 +147,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL ColumnChangeMultiplexer::columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException)
     {
-        if ( i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataColumnIndex")) )
+        if ( i_event.AttributeName == "DataColumnIndex" )
         {
             SolarMutexGuard aGuard;
             if ( m_pColumnImplementation != NULL )
@@ -157,7 +157,7 @@ namespace svt { namespace table
 
         ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
 
-        if ( i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HorizontalAlign")) )
+        if ( i_event.AttributeName == "HorizontalAlign" )
             nChangedAttributes |= COL_ATTRS_APPEARANCE;
 
         if  (   i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ColumnWidth"))

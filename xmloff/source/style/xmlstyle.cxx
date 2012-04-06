@@ -614,19 +614,19 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
         nFamily = XML_STYLE_FAMILY_TABLE_ROW;
     else if( IsXMLToken( rValue, XML_TABLE_CELL ) )
         nFamily = XML_STYLE_FAMILY_TABLE_CELL;
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)))
+    else if ( rValue == XML_STYLE_FAMILY_SD_GRAPHICS_NAME )
     {
         nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)))
+    else if ( rValue == XML_STYLE_FAMILY_SD_PRESENTATION_NAME )
     {
         nFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_POOL_NAME)))
+    else if ( rValue == XML_STYLE_FAMILY_SD_POOL_NAME )
     {
         nFamily = XML_STYLE_FAMILY_SD_POOL_ID;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)))
+    else if ( rValue == XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME )
     {
         nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID;
     }

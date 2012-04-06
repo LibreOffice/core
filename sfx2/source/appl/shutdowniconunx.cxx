@@ -189,9 +189,9 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
         Sequence < PropertyValue >& aEntry = aMenu[n];
         for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
         {
-            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+            if ( aEntry[m].Name == "URL" )
                 aEntry[m].Value >>= aURL;
-            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
+            if ( aEntry[m].Name == "Title" )
                 aEntry[m].Value >>= aDescription;
         }
 

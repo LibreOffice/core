@@ -1065,7 +1065,7 @@ static bool loadEnv(OUString const  & cLibStem,
     oslModule hMod;
     uno_initEnvironmentFunc fpInit = NULL;
 
-    if (cLibStem.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno")) )
+    if ( cLibStem == CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" )
         fpInit = CPPU_ENV_uno_initEnvironment;
     else
     {
@@ -1116,7 +1116,7 @@ static uno_Environment * initDefaultEnvironment(
     OUString envTypeName = cppu::EnvDcp::getTypeName(rEnvDcp);
 
     // create default environment
-    if (envTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+    if ( envTypeName == UNO_LB_UNO )
     {
         uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
         that->computeObjectIdentifier = unoenv_computeObjectIdentifier;

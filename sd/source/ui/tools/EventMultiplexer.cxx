@@ -555,11 +555,11 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 {
     ThrowIfDisposed();
 
-    if (rEvent.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCurrentPagePropertyName)))
+    if ( rEvent.PropertyName == aCurrentPagePropertyName )
     {
         CallListeners(EventMultiplexerEvent::EID_CURRENT_PAGE);
     }
-    else if (rEvent.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aEditModePropertyName)))
+    else if ( rEvent.PropertyName == aEditModePropertyName )
     {
         bool bIsMasterPageMode (false);
         rEvent.NewValue >>= bIsMasterPageMode;

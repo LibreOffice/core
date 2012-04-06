@@ -150,7 +150,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                     beans::PropertyValue * pCellRange = 0;
                                     for( sal_Int32 i=0; i<aArguments.getLength(); ++i )
                                     {
-                                        if( aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+                                        if ( aArguments[i].Name == "CellRangeRepresentation" )
                                         {
                                             pCellRange = (aArguments.getArray() + i);
                                             aArguments[i].Value >>= aOldRange;

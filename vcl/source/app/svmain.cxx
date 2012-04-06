@@ -249,7 +249,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString
 {
     uno::Any retVal;
 
-    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("system.desktop-environment")))
+    if ( Name == "system.desktop-environment" )
     {
         retVal = uno::makeAny( Application::GetDesktopEnvironment() );
     }

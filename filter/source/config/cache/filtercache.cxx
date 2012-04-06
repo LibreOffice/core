@@ -1689,7 +1689,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (pLocale == lLocales.end())
     {
 #if OSL_DEBUG_LEVEL > 0
-        if (sActLocale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+        if ( sActLocale == "en-US" )
             return;
         ::rtl::OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
 

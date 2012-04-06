@@ -350,7 +350,7 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::bean
 Any SAL_CALL ConstItemContainer::getPropertyValue( const ::rtl::OUString& PropertyName )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if (PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROPNAME_UINAME)))
+    if ( PropertyName == PROPNAME_UINAME )
         return makeAny( m_aUIName );
 
     throw UnknownPropertyException();

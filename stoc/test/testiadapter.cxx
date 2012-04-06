@@ -347,7 +347,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
         Sequence< TestElement > aSeq;
         TestData aData;
 
-        if (rFunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setValues") ))
+        if ( rFunctionName == "setValues" )
         {
             OSL_ASSERT( rParams.getLength() == 17 );
             aBool = *(sal_Bool *)rParams[0].getValue();
@@ -375,7 +375,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex.realloc( 0 );
             rOutParam.realloc( 0 );
         }
-        else if (rFunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setValues2") ))
+        else if ( rFunctionName == "setValues2" )
         {
             aBool = *(sal_Bool *)rParams[0].getValue();
             aChar = *(sal_Unicode *)rParams[1].getValue();
@@ -437,7 +437,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParam[15] <<= aSeq;
             rOutParam[16] <<= aData;
         }
-        else if (rFunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getValues") ))
+        else if ( rFunctionName == "getValues" )
         {
             aRet <<= _xLBT->getValues( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                                        nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
@@ -481,7 +481,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParam[15] <<= aSeq;
             rOutParam[16] <<= aData;
         }
-        else if (rFunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("raiseException") ))
+        else if ( rFunctionName == "raiseException" )
         {
             aRet <<= _xLBT->raiseException( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                                             nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
@@ -556,41 +556,41 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
 void XLB_Invocation::setValue( const OUString & rName, const Any & rValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Bool") ))
+    if ( rName == "Bool" )
         _xLBT->setBool( *(const sal_Bool *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Byte") ))
+    else if ( rName == "Byte" )
         _xLBT->setByte( *(const sal_Int8 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Char") ))
+    else if ( rName == "Char" )
         _xLBT->setChar( *(const sal_Unicode *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Short") ))
+    else if ( rName == "Short" )
         _xLBT->setShort( *(const sal_Int16 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UShort") ))
+    else if ( rName == "UShort" )
         _xLBT->setUShort( *(const sal_uInt16 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Long") ))
+    else if ( rName == "Long" )
         _xLBT->setLong( *(const sal_Int32 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ULong") ))
+    else if ( rName == "ULong" )
         _xLBT->setULong( *(const sal_uInt32 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Hyper") ))
+    else if ( rName == "Hyper" )
         _xLBT->setHyper( *(const sal_Int64 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UHyper") ))
+    else if ( rName == "UHyper" )
         _xLBT->setUHyper( *(const sal_uInt64 *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Float") ))
+    else if ( rName == "Float" )
         _xLBT->setFloat( *(const float *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Double") ))
+    else if ( rName == "Double" )
         _xLBT->setDouble( *(const double *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Enum") ))
+    else if ( rName == "Enum" )
         _xLBT->setEnum( *(const TestEnum *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("String") ))
+    else if ( rName == "String" )
         _xLBT->setString( *(const OUString *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Interface") ))
+    else if ( rName == "Interface" )
         _xLBT->setInterface( *(const Reference< XInterface > *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Any") ))
+    else if ( rName == "Any" )
         _xLBT->setAny( rValue );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Sequence") ))
+    else if ( rName == "Sequence" )
         _xLBT->setSequence( *(const Sequence< TestElement > *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Struct") ))
+    else if ( rName == "Struct" )
         _xLBT->setStruct( *(const TestData *)rValue.getValue() );
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RuntimeException") ))
+    else if ( rName == "RuntimeException" )
         _xLBT->setRuntimeException( *(const sal_Int32 *)rValue.getValue() );
 }
 //__________________________________________________________________________________________________
@@ -598,47 +598,47 @@ Any XLB_Invocation::getValue( const OUString & rName )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     Any aRet;
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Bool") ))
+    if ( rName == "Bool" )
     {
         sal_Bool aBool = _xLBT->getBool();
         aRet.setValue( &aBool, ::getCppuBooleanType() );
     }
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Byte") ))
+    else if ( rName == "Byte" )
         aRet <<= _xLBT->getByte();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Char") ))
+    else if ( rName == "Char" )
     {
         sal_Unicode aChar = _xLBT->getChar();
         aRet.setValue( &aChar, ::getCppuCharType() );
     }
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Short") ))
+    else if ( rName == "Short" )
         aRet <<= _xLBT->getShort();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UShort") ))
+    else if ( rName == "UShort" )
         aRet <<= _xLBT->getUShort();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Long") ))
+    else if ( rName == "Long" )
         aRet <<= _xLBT->getLong();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ULong") ))
+    else if ( rName == "ULong" )
         aRet <<= _xLBT->getULong();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Hyper") ))
+    else if ( rName == "Hyper" )
         aRet <<= _xLBT->getHyper();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UHyper") ))
+    else if ( rName == "UHyper" )
         aRet <<= _xLBT->getUHyper();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Float") ))
+    else if ( rName == "Float" )
         aRet <<= _xLBT->getFloat();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Double") ))
+    else if ( rName == "Double" )
         aRet <<= _xLBT->getDouble();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Enum") ))
+    else if ( rName == "Enum" )
         aRet <<= _xLBT->getEnum();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("String") ))
+    else if ( rName == "String" )
         aRet <<= _xLBT->getString();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Interface") ))
+    else if ( rName == "Interface" )
         aRet <<= _xLBT->getInterface();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Any") ))
+    else if ( rName == "Any" )
         aRet <<= _xLBT->getAny();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Sequence") ))
+    else if ( rName == "Sequence" )
         aRet <<= _xLBT->getSequence();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Struct") ))
+    else if ( rName == "Struct" )
         aRet <<= _xLBT->getStruct();
-    else if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RuntimeException") ))
+    else if ( rName == "RuntimeException" )
         aRet <<= _xLBT->getRuntimeException();
     return aRet;
 }

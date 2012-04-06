@@ -3080,7 +3080,7 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     {
         sal_Int32 nIndex = 0;
         rtl::OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
-        if( aMimetype.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text/plain")) )
+        if ( aMimetype == "text/plain" )
         {
             mpDDInfo->bIsStringSupported = sal_True;
             break;

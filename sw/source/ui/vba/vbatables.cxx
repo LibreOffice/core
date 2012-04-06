@@ -36,7 +36,7 @@ sal_Bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable 
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
+    if ( aImplName == "SwXHeadFootText" )
         return sal_True;
     return sal_False;
 }

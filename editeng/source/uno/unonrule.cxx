@@ -290,7 +290,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
         const OUString& rPropName = rProp.Name;
         const Any& aVal = rProp.Value;
 
-        if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)))
+        if ( rPropName == UNO_NAME_NRULE_NUMBERINGTYPE )
         {
             sal_Int16 nSet = sal_Int16();
             aVal >>= nSet;
@@ -311,7 +311,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_PREFIX)))
+        else if ( rPropName == UNO_NAME_NRULE_PREFIX )
         {
             OUString aPrefix;
             if( aVal >>= aPrefix )
@@ -320,7 +320,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_SUFFIX)))
+        else if ( rPropName == UNO_NAME_NRULE_SUFFIX )
         {
             OUString aSuffix;
             if( aVal >>= aSuffix )
@@ -329,7 +329,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLETID)))
+        else if ( rPropName == UNO_NAME_NRULE_BULLETID )
         {
             sal_Int16 nSet = sal_Int16();
             if( aVal >>= nSet )
@@ -341,7 +341,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 }
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("BulletChar")))
+        else if ( rPropName == "BulletChar" )
         {
             OUString aStr;
             if( aVal >>= aStr )
@@ -357,7 +357,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)))
+        else if ( rPropName == UNO_NAME_NRULE_ADJUST )
         {
             sal_Int16 nAdjust = sal_Int16();
             if( aVal >>= nAdjust )
@@ -366,7 +366,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_FONT)))
+        else if ( rPropName == UNO_NAME_NRULE_BULLET_FONT )
         {
             awt::FontDescriptor aDesc;
             if( aVal >>= aDesc )
@@ -377,7 +377,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Graphic")))
+        else if ( rPropName == "Graphic" )
         {
             Reference< awt::XBitmap > xBmp;
             if( aVal >>= xBmp )
@@ -388,7 +388,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicURL")))
+        else if ( rPropName == "GraphicURL" )
         {
             OUString aURL;
             if( aVal >>= aURL )
@@ -399,7 +399,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicSize")))
+        else if ( rPropName == "GraphicSize" )
         {
             awt::Size aUnoSize;
             if( aVal >>= aUnoSize )
@@ -408,7 +408,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_START_WITH)))
+        else if ( rPropName == UNO_NAME_NRULE_START_WITH )
         {
             sal_Int16 nStart = sal_Int16();
             if( aVal >>= nStart )
@@ -417,7 +417,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_LEFT_MARGIN)))
+        else if ( rPropName == UNO_NAME_NRULE_LEFT_MARGIN )
         {
             sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
@@ -426,7 +426,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_FIRST_LINE_OFFSET)))
+        else if ( rPropName == UNO_NAME_NRULE_FIRST_LINE_OFFSET )
         {
             sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
@@ -435,7 +435,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SymbolTextDistance")))
+        else if ( rPropName == "SymbolTextDistance" )
         {
             sal_Int32 nTextDistance = 0;
             if( aVal >>= nTextDistance )
@@ -444,7 +444,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)))
+        else if ( rPropName == UNO_NAME_NRULE_BULLET_COLOR )
         {
             sal_Int32 nColor = 0;
             if( aVal >>= nColor )
@@ -453,7 +453,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
                 continue;
             }
         }
-        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)))
+        else if ( rPropName == UNO_NAME_NRULE_BULLET_RELSIZE )
         {
             sal_Int16 nSize = sal_Int16();
             if( aVal >>= nSize )

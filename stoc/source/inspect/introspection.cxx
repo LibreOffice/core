@@ -2365,7 +2365,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         }
                         else if( rxMethod_i->getDeclaringClass()->equals( mxAggregationClass ) )
                         {
-                            if( aMethName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setDelegator")) )
+                            if ( aMethName == "setDelegator" )
                             {
                                 rMethodConcept_i |= MethodConcept::DANGEROUS;
                                 continue;
@@ -2398,7 +2398,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
 
                         // Ist es eine get-Methode?
                         aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("get")) )
+                        if ( aStartStr == "get" )
                         {
                             // Namen der potentiellen Property
                             aPropName = aMethName.copy( 3 );
@@ -2519,7 +2519,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                         }
 
                         // Ist es eine addListener-Methode?
-                        else if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("add")) )
+                        else if ( aStartStr == "add" )
                         {
                             OUString aListenerStr( RTL_CONSTASCII_USTRINGPARAM("Listener" ) );
 
@@ -2608,7 +2608,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
 
                         // Ist es eine set-Methode ohne zugehoerige get-Methode?
                         aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("set")) )
+                        if ( aStartStr == "set" )
                         {
                             // Namen der potentiellen Property
                             aPropName = aMethName.copy( 3 );

@@ -502,35 +502,35 @@ GtkPrintDialog::impl_initCustomTab()
         for (int n = 0; n != aOptProp.getLength(); n++)
         {
             const beans::PropertyValue& rEntry(aOptProp[ n ]);
-            if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text")))
+            if ( rEntry.Name == "Text" )
             {
                 rtl::OUString aValue;
                 rEntry.Value >>= aValue;
                 aText = aValue.replace('~', '_');
             }
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ControlType")))
+            else if ( rEntry.Name == "ControlType" )
                 rEntry.Value >>= aCtrlType;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Choices")))
+            else if ( rEntry.Name == "Choices" )
                 rEntry.Value >>= aChoices;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChoicesDisabled")))
+            else if ( rEntry.Name == "ChoicesDisabled" )
                 rEntry.Value >>= aChoicesDisabled;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Property")))
+            else if ( rEntry.Name == "Property" )
             {
                 beans::PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
             }
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DependsOnName")))
+            else if ( rEntry.Name == "DependsOnName" )
                 rEntry.Value >>= aDependsOnName;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DependsOnEntry")))
+            else if ( rEntry.Name == "DependsOnEntry" )
                 rEntry.Value >>= nDependsOnValue;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AttachToDependency")))
+            else if ( rEntry.Name == "AttachToDependency" )
                 rEntry.Value >>= bUseDependencyRow;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinValue")))
+            else if ( rEntry.Name == "MinValue" )
                 rEntry.Value >>= nMinValue;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MaxValue")))
+            else if ( rEntry.Name == "MaxValue" )
                 rEntry.Value >>= nMaxValue;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpId")))
+            else if ( rEntry.Name == "HelpId" )
             {
                 uno::Sequence<rtl::OUString> aHelpIds;
                 lcl_extractHelpTextsOrIds(rEntry, aHelpIds);
@@ -545,16 +545,16 @@ GtkPrintDialog::impl_initCustomTab()
                 else // fallback
                     aHelpTexts = aHelpIds;
             }
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpText")))
+            else if ( rEntry.Name == "HelpText" )
                 lcl_extractHelpTextsOrIds(rEntry, aHelpTexts);
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InternalUIOnly")))
+            else if ( rEntry.Name == "InternalUIOnly" )
                 rEntry.Value >>= bIgnore;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Enabled")))
+            else if ( rEntry.Name == "Enabled" )
             {
                 // Ignore this. We use UIControlOptions::isUIOptionEnabled
                 // to check whether a control should be enabled.
             }
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GroupingHint")))
+            else if ( rEntry.Name == "GroupingHint" )
             {
                 // Ignore this. We cannot add/modify controls to/on existing
                 // tabs of the Gtk print dialog.
@@ -565,7 +565,7 @@ GtkPrintDialog::impl_initCustomTab()
             }
         }
 
-        if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrintContent")))
+        if ( aPropertyName == "PrintContent" )
             bGtkInternal = true;
 
         if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Group")) || !pCurParent)
@@ -591,7 +591,7 @@ GtkPrintDialog::impl_initCustomTab()
         // special case: we need to map these to controls of the gtk print dialog
         else if (bGtkInternal)
         {
-            if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrintContent")))
+            if ( aPropertyName == "PrintContent" )
             {
                 // What to print? And, more importantly, is there a selection?
                 impl_initPrintContent(aChoicesDisabled);
@@ -672,7 +672,7 @@ GtkPrintDialog::impl_initCustomTab()
                 GtkWidget* const pHbox = gtk_hbox_new(FALSE, 12);
                 gtk_container_set_border_width(GTK_CONTAINER(pHbox), 0);
 
-                if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("List")))
+                if ( aCtrlType == "List" )
                 {
                    pWidget = lcl_combo_box_text_new();
 

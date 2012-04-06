@@ -1127,27 +1127,27 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
 
         sal_Int32 nId = ID_UNKNOWN;
 
-        if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
+        if ( aFieldType == "DateTime" )
         {
             nId = ID_DATEFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+        else if ( aFieldType == "URL" )
         {
             nId = ID_URLFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
+        else if ( aFieldType == "PageNumber" )
         {
             nId = ID_PAGEFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
+        else if ( aFieldType == "PageCount" )
         {
             nId = ID_PAGESFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
+        else if ( aFieldType == "SheetName" )
         {
             nId = ID_TABLEFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
+        else if ( aFieldType == "FileName" )
         {
             nId = ID_EXT_FILEFIELD;
         }
@@ -1158,11 +1158,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
         {
             nId = ID_FILEFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
+        else if ( aFieldType == "Author" )
         {
             nId = ID_AUTHORFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Measure") ) )
+        else if ( aFieldType == "Measure" )
         {
             nId = ID_MEASUREFIELD;
         }

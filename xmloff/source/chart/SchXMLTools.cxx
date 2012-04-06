@@ -341,25 +341,25 @@ XMLTokenEnum getTokenByChartType(
         {
             OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
 
-            if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Line")))
+            if ( aServiceName == "Line" )
                 eResult = XML_LINE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Area")))
+            else if ( aServiceName == "Area" )
                 eResult = XML_AREA;
             else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bar")) ||
                      (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Column"))))
                 eResult = XML_BAR;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pie")))
+            else if ( aServiceName == "Pie" )
                 eResult = XML_CIRCLE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Donut")))
+            else if ( aServiceName == "Donut" )
                 eResult = XML_RING;
             else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XY"))) ||
                      (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Scatter"))))
                 eResult = XML_SCATTER;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bubble")))
+            else if ( aServiceName == "Bubble" )
                 eResult = XML_BUBBLE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Net")))
+            else if ( aServiceName == "Net" )
                 eResult = XML_RADAR;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilledNet")))
+            else if ( aServiceName == "FilledNet" )
                 eResult = XML_FILLED_RADAR;
             else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stock"))) ||
                      (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CandleStick"))))

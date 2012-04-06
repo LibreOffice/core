@@ -52,7 +52,7 @@ sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< text::XText >
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
+    if ( aImplName == "SwXHeadFootText" )
         return sal_True;
     return sal_False;
 }

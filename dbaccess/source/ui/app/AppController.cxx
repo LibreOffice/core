@@ -1114,7 +1114,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         const PropertyValue* pEnd  = pIter + aArgs.getLength();
                         for( ; pIter != pEnd ; ++pIter)
                         {
-                            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FormatStringId")) )
+                            if ( pIter->Name == "FormatStringId" )
                             {
                                 SotFormatStringId nFormatId = 0;
                                 if ( pIter->Value >>= nFormatId )
@@ -2886,7 +2886,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Type")) )
+            if ( pIter->Name == "Type" )
             {
                 sal_Int32 nType = 0;
                 pIter->Value >>= nType;
@@ -2894,7 +2894,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
                     throw IllegalArgumentException();
                 eType = static_cast< ElementType >( nType );
             }
-            else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Selection")) )
+            else if ( pIter->Name == "Selection" )
                 pIter->Value >>= aSelection;
         }
 

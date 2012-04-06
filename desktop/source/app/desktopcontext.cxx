@@ -48,7 +48,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 {
     Any retVal;
 
-    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(JAVA_INTERACTION_HANDLER_NAME)))
+    if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
         retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
     }

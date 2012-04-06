@@ -1128,7 +1128,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     rtl::OUString aPropertyName2;
     rtl::OUString aPropertyValue;
     bool bSecurityChanged = false;
-    if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
+    if ( aAccessor == "ooInetProxyType" )
     {
         // Proxy none, manually
         sal_Int32 value = 0;
@@ -1194,7 +1194,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NetAccess")))
+    else if ( aAccessor == "NetAccess" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "appletviewer.security.mode"));
@@ -1219,7 +1219,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             return;
         bSecurityChanged = true;
     }
-    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Security")))
+    else if ( aAccessor == "Security" )
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "stardiv.security.disableSecurity"));
@@ -1347,7 +1347,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
                     rtl::OUString sName( jcharName);
                     jboolean bIsSandbox;
-                    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.lib.sandbox.SandboxSecurity")))
+                    if ( sName == "com.sun.star.lib.sandbox.SandboxSecurity" )
                         bIsSandbox= JNI_TRUE;
                     else
                         bIsSandbox= JNI_FALSE;

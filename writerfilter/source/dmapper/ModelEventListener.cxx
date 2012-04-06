@@ -57,7 +57,7 @@ ModelEventListener::~ModelEventListener()
 
 void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    if( rEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnFocus")))
+    if ( rEvent.EventName == "OnFocus" )
     {
         try
         {

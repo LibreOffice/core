@@ -585,12 +585,12 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
             }
             // If the shape has an absolute position, set the properties accordingly.
-            if (maTypeModel.maPosition.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("absolute")))
+            if ( maTypeModel.maPosition == "absolute" )
             {
                 aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
                 aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
             }
-            if (maTypeModel.maPositionVerticalRelative.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("page")))
+            if ( maTypeModel.maPositionVerticalRelative == "page" )
             {
                 aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
             }

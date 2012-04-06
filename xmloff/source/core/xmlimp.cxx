@@ -579,7 +579,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if ( rAttrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:version")) )
+        if ( rAttrName == "office:version" )
         {
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 

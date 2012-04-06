@@ -207,13 +207,13 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
+        else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
+        else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")) )
+        else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.formula.FormulaProperties")) )
+        else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
         else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||

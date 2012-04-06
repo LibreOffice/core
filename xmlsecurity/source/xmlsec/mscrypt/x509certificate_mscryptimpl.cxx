@@ -389,7 +389,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
             ::rtl::OUString objId = ::rtl::OUString::createFromAscii( pExtn->pszObjId );
 
-            if ( objId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2.5.29.17")) )
+            if ( objId == "2.5.29.17" )
                 xExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
             else
                 xExtn = new CertificateExtension_XmlSecImpl() ;

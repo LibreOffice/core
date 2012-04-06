@@ -977,7 +977,7 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sProp
 {
     uno::Any aRet;
 
-    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    if ( sPropertyName == "DisplayName" )
     {
         SolarMutexGuard aGuard;
         sal_uInt32 nResId = 0;

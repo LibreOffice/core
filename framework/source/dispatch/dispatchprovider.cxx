@@ -430,7 +430,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             else
                 xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
         }
-        else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseFrame")))
+        else if ( aURL.Complete == ".uno:CloseFrame" )
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
 
         if ( ! xDispatcher.is())

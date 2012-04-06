@@ -177,7 +177,7 @@ void RtfModelTest::testFdo45553()
         {
             uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
             OUString aStr = xRange->getString();
-            if (aStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("space-before")))
+            if ( aStr == "space-before" )
             {
                 sal_Int32 nMargin = 0;
                 uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
@@ -185,7 +185,7 @@ void RtfModelTest::testFdo45553()
                 aValue >>= nMargin;
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(120)), nMargin);
             }
-            else if (aStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("space-after")))
+            else if ( aStr == "space-after" )
             {
                 sal_Int32 nMargin = 0;
                 uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
@@ -325,13 +325,13 @@ void RtfModelTest::testFdo46662()
     {
         const beans::PropertyValue& rProp = aProps[i];
 
-        if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ParentNumbering")))
+        if ( rProp.Name == "ParentNumbering" )
         {
             sal_Int16 nValue;
             rProp.Value >>= nValue;
             CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nValue);
         }
-        else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Suffix")))
+        else if ( rProp.Name == "Suffix" )
         {
             rtl::OUString sValue;
             rProp.Value >>= sValue;

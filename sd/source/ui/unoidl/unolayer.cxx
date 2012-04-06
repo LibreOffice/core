@@ -91,23 +91,23 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
 
 String SdLayer::convertToInternalName( const OUString& rName )
 {
-    if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_background) ) )
+    if ( rName == sUNO_LayerName_background )
     {
         return String( SdResId( STR_LAYER_BCKGRND ) );
     }
-    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_background_objects) ) )
+    else if ( rName == sUNO_LayerName_background_objects )
     {
         return  String( SdResId( STR_LAYER_BCKGRNDOBJ ) );
     }
-    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_layout) ) )
+    else if ( rName == sUNO_LayerName_layout )
     {
         return  String( SdResId( STR_LAYER_LAYOUT ) );
     }
-    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_controls) ) )
+    else if ( rName == sUNO_LayerName_controls )
     {
         return  String( SdResId( STR_LAYER_CONTROLS ) );
     }
-    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_measurelines) ) )
+    else if ( rName == sUNO_LayerName_measurelines )
     {
         return  String( SdResId( STR_LAYER_MEASURELINES ) );
     }

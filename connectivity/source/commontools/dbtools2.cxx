@@ -868,7 +868,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
             const PropertyValue* pEnd  = pIter + aArgs.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ComponentData")) )
+                if ( pIter->Name == "ComponentData" )
                 {
                     Sequence<PropertyValue> aDocumentContext;
                     pIter->Value >>= aDocumentContext;

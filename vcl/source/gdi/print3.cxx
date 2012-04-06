@@ -1396,7 +1396,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             {
                 rEntry.Value >>= aDep.mnDependsOnEntry;
             }
-            else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChoicesDisabled")) )
+            else if ( rEntry.Name == "ChoicesDisabled" )
             {
                 rEntry.Value >>= aChoicesDisabled;
             }

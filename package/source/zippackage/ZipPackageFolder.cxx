@@ -780,7 +780,7 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8
 void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
 {
-    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
+    if ( aPropertyName == "MediaType" )
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
@@ -788,9 +788,9 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aProper
 
         aValue >>= sMediaType;
     }
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Version")))
+    else if ( aPropertyName == "Version" )
         aValue >>= m_sVersion;
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
+    else if ( aPropertyName == "Size" )
         aValue >>= aEntry.nSize;
     else
         throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );

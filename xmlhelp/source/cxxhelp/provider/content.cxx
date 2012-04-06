@@ -311,7 +311,7 @@ uno::Any SAL_CALL Content::execute(
 {
     uno::Any aRet;
 
-    if ( aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertyValues")) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
@@ -322,7 +322,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= getPropertyValues( Properties );
     }
-    else if ( aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("setPropertyValues")) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         uno::Sequence<beans::PropertyValue> propertyValues;
 
@@ -345,17 +345,17 @@ uno::Any SAL_CALL Content::execute(
 
         aRet <<= ret;
     }
-    else if ( aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertySetInfo")) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         // Note: Implemented by base class.
         aRet <<= getPropertySetInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCommandInfo")) )
+    else if ( aCommand.Name == "getCommandInfo" )
     {
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("open")) )
+    else if ( aCommand.Name == "open" )
     {
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -457,26 +457,26 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         const beans::Property& rProp = rProperties[n];
 
-        if ( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContentType")) )
+        if ( rProp.Name == "ContentType" )
             xRow->appendString(
                 rProp,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "application/vnd.sun.star.help" )) );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
+        else if ( rProp.Name == "Title" )
             xRow->appendString ( rProp,m_aURLParameter.get_title() );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsReadOnly")) )
+        else if ( rProp.Name == "IsReadOnly" )
             xRow->appendBoolean( rProp,true );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsDocument")) )
+        else if ( rProp.Name == "IsDocument" )
             xRow->appendBoolean(
                 rProp,
                 m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFolder")) )
+        else if ( rProp.Name == "IsFolder" )
             xRow->appendBoolean(
                 rProp,
                 ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsErrorDocument")) )
+        else if ( rProp.Name == "IsErrorDocument" )
             xRow->appendBoolean( rProp, m_aURLParameter.isErrorDocument() );
-        else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")) )
+        else if ( rProp.Name == "MediaType" )
             if( m_aURLParameter.isPicture() )
                 xRow->appendString(
                     rProp,
@@ -495,7 +495,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xRow->appendVoid( rProp );
         else if( m_aURLParameter.isModule() )
-            if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KeywordList")) )
+            if ( rProp.Name == "KeywordList" )
             {
                 KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
@@ -506,7 +506,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aAny <<= inf->getKeywordList();
                 xRow->appendObject( rProp,aAny );
             }
-            else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KeywordRef")) )
+            else if ( rProp.Name == "KeywordRef" )
             {
                 KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
@@ -517,7 +517,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aAny <<= inf->getIdList();
                 xRow->appendObject( rProp,aAny );
             }
-            else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KeywordAnchorForRef")) )
+            else if ( rProp.Name == "KeywordAnchorForRef" )
             {
                 KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
@@ -528,7 +528,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aAny <<= inf->getAnchorList();
                 xRow->appendObject( rProp,aAny );
             }
-            else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KeywordTitleForRef")) )
+            else if ( rProp.Name == "KeywordTitleForRef" )
             {
                 KeywordInfo *inf =
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
@@ -539,7 +539,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aAny <<= inf->getTitleList();
                 xRow->appendObject( rProp,aAny );
             }
-            else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SearchScopes")) )
+            else if ( rProp.Name == "SearchScopes" )
             {
                 uno::Sequence< rtl::OUString > seq( 2 );
                 seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Heading" ));
@@ -548,7 +548,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 aAny <<= seq;
                 xRow->appendObject( rProp,aAny );
             }
-            else if( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Order")) )
+            else if ( rProp.Name == "Order" )
             {
                 StaticModuleInformation *inf =
                     m_pDatabases->getStaticInformationForModule(

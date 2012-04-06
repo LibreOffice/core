@@ -2626,7 +2626,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
         const OUString& rPropName = pProperties[n].Name;
 
         // old and new sortdescriptor
-        if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortInTable")))
+        if ( rPropName == "IsSortInTable" )
         {
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
@@ -2637,7 +2637,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Delimiter")))
+        else if ( rPropName == "Delimiter" )
         {
             sal_Unicode uChar = sal_Unicode();
             if (aValue >>= uChar)
@@ -2650,7 +2650,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // old sortdescriptor
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortColumns")))
+        else if ( rPropName == "SortColumns" )
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2663,7 +2663,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if ( rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsCaseSensitive")))
+        else if ( rPropName == "IsCaseSensitive" )
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2676,7 +2676,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CollatorLocale")))
+        else if ( rPropName == "CollatorLocale" )
         {
             bOldSortdescriptor = sal_True;
             lang::Locale aLocale;
@@ -2764,7 +2764,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // new sortdescriptor
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortColumns")))
+        else if ( rPropName == "IsSortColumns" )
         {
             bNewSortdescriptor = sal_True;
             if (aValue.getValueType() == ::getBooleanCppuType())
@@ -2777,7 +2777,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortFields")))
+        else if ( rPropName == "SortFields" )
         {
             bNewSortdescriptor = sal_True;
             uno::Sequence < table::TableSortField > aFields;

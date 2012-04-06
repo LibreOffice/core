@@ -580,22 +580,22 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXT)))
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_CONTEXT )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextSensitive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_NOCLOSE)))
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_NOCLOSE )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bNoClose = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXTACTIVE)))
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_CONTEXTACTIVE )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextActive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_SOFTCLOSE)))
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_SOFTCLOSE )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bSoftClose = bValue;

@@ -590,61 +590,61 @@ void CustomAnimationPane::updateLayout()
 
 static sal_Int32 getPropertyType( const OUString& rProperty )
 {
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Direction") ) )
+    if ( rProperty == "Direction" )
         return nPropertyTypeDirection;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Spokes") ) )
+    if ( rProperty == "Spokes" )
         return nPropertyTypeSpokes;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Zoom") ) )
+    if ( rProperty == "Zoom" )
         return nPropertyTypeZoom;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Accelerate") ) )
+    if ( rProperty == "Accelerate" )
         return nPropertyTypeAccelerate;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Decelerate") ) )
+    if ( rProperty == "Decelerate" )
         return nPropertyTypeDecelerate;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Color1") ) )
+    if ( rProperty == "Color1" )
         return nPropertyTypeFirstColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Color2") ) )
+    if ( rProperty == "Color2" )
         return nPropertyTypeSecondColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FillColor") ) )
+    if ( rProperty == "FillColor" )
         return nPropertyTypeFillColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ColorStyle") ) )
+    if ( rProperty == "ColorStyle" )
         return nPropertyTypeColorStyle;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AutoReverse") ) )
+    if ( rProperty == "AutoReverse" )
         return nPropertyTypeAutoReverse;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FontStyle") ) )
+    if ( rProperty == "FontStyle" )
         return nPropertyTypeFont;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CharColor") ) )
+    if ( rProperty == "CharColor" )
         return nPropertyTypeCharColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CharHeight") ) )
+    if ( rProperty == "CharHeight" )
         return nPropertyTypeCharHeight;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CharDecoration") ) )
+    if ( rProperty == "CharDecoration" )
         return nPropertyTypeCharDecoration;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("LineColor") ) )
+    if ( rProperty == "LineColor" )
         return nPropertyTypeLineColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Rotate") ) )
+    if ( rProperty == "Rotate" )
         return nPropertyTypeRotate;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Transparency") ) )
+    if ( rProperty == "Transparency" )
         return nPropertyTypeTransparency;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Color") ) )
+    if ( rProperty == "Color" )
         return nPropertyTypeColor;
 
-    if( rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Scale") ) )
+    if ( rProperty == "Scale" )
         return nPropertyTypeScale;
 
     return nPropertyTypeNone;

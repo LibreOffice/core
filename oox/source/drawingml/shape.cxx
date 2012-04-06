@@ -394,7 +394,7 @@ Reference< XShape > Shape::createAndInsert(
     aTransformation.scale(1/360.0, 1/360.0);
 
     // special for lineshape
-    if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape")) )
+    if ( aServiceName == "com.sun.star.drawing.LineShape" )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -415,7 +415,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
-    else if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape")) )
+    else if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );

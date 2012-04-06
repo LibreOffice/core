@@ -514,7 +514,7 @@ void NewMenuController::impl_setPopupMenu()
                 {
                     for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                     {
-                        if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryEmptyDocumentURL")) )
+                        if ( aSeq[y].Name == "ooSetupFactoryEmptyDocumentURL" )
                         {
                             aSeq[y].Value >>= m_aEmptyDocURL;
                             break;

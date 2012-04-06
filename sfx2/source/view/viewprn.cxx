@@ -610,7 +610,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     const beans::PropertyValue* pVal = rProps.getConstArray();
     for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
     {
-        if( pVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterName")) )
+        if ( pVal[i].Name == "PrinterName" )
         {
             rtl::OUString aPrinterName;
             pVal[i].Value >>= aPrinterName;
@@ -717,18 +717,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
                 for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
                 {
-                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Copies")) )
+                    if ( aProps[nProp].Name == "Copies" )
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"));
-                    else if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RangeText")) )
+                    else if ( aProps[nProp].Name == "RangeText" )
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
-                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Asynchron")) )
+                    if ( aProps[nProp].Name == "Asynchron" )
                     {
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
-                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Silent")) )
+                    if ( aProps[nProp].Name == "Silent" )
                     {
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MonitorVisible"));
                         sal_Bool bPrintSilent = sal_False;

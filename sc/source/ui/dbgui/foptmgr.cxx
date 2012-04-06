@@ -189,7 +189,7 @@ void ScFilterOptionsMgr::Init()
                 rBtnHeader.Check( pDBData->HasHeader() );
                 theDbName = pDBData->GetName();
 
-                if ( theDbName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) )
+                if ( theDbName == STR_DB_LOCAL_NONAME )
                     rBtnHeader.Enable();
                 else
                     rBtnHeader.Disable();

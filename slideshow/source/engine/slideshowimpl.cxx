@@ -1809,7 +1809,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return (rProperty.Value >>= mbNoSlideTransitions);
     }
 
-    if (rProperty.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSoundEnabled")))
+    if ( rProperty.Name == "IsSoundEnabled" )
     {
         uno::Sequence<uno::Any> aValues;
         uno::Reference<presentation::XSlideShowView> xView;

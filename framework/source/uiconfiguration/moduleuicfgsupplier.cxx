@@ -215,7 +215,7 @@ throw ( NoSuchElementException, RuntimeException)
             xCont->getByName(ModuleIdentifier) >>= lProps;
             for (sal_Int32 i=0; i<lProps.getLength(); ++i)
             {
-                if (lProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryShortName")))
+                if ( lProps[i].Name == "ooSetupFactoryShortName" )
                 {
                     lProps[i].Value >>= sShort;
                     break;

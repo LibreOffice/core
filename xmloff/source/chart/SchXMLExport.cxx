@@ -2722,7 +2722,7 @@ void SchXMLExportHelper_Impl::exportSeries(
             OUString aLabelRole = aCTSeq[nCTIdx]->getRoleOfSequenceForSeriesLabel();
 
             // special export for stock charts
-            if( aChartType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType")))
+            if ( aChartType == "com.sun.star.chart2.CandleStickChartType" )
             {
                 sal_Bool bJapaneseCandleSticks = sal_False;
                 Reference< beans::XPropertySet > xCTProp( aCTSeq[nCTIdx], uno::UNO_QUERY );
@@ -3756,24 +3756,24 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 bool bBrokenRangeAvailable = false;
                 for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
                 {
-                    if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+                    if ( aArgs[i].Name == "CellRangeRepresentation" )
                         aArgs[i].Value >>= sCellRange;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("BrokenCellRangeForExport")))
+                    else if ( aArgs[i].Name == "BrokenCellRangeForExport" )
                     {
                         if( aArgs[i].Value >>= sBrokenRange )
                             bBrokenRangeAvailable = true;
                     }
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
+                    else if ( aArgs[i].Name == "DataRowSource" )
                     {
                         chart::ChartDataRowSource eRowSource;
                         aArgs[i].Value >>= eRowSource;
                         mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
                     }
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
+                    else if ( aArgs[i].Name == "FirstCellAsLabel" )
                         aArgs[i].Value >>= mbHasSeriesLabels;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SequenceMapping")))
+                    else if ( aArgs[i].Name == "SequenceMapping" )
                         aArgs[i].Value >>= maSequenceMapping;
-                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TableNumberList")))
+                    else if ( aArgs[i].Name == "TableNumberList" )
                         aArgs[i].Value >>= msTableNumberList;
                 }
 

@@ -68,7 +68,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     const beans::PropertyValue* pValues = rValues.getConstArray();
     for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
     {
-        if(pValues[nValue].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Command")))
+        if ( pValues[nValue].Name == "Command" )
         {
             String sDescription = m_aDescriptionFI.GetText();
             OUString sTemp;

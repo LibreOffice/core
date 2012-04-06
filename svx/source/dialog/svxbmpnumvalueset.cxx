@@ -310,17 +310,17 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     aNumberingTypes[i] = 0;
                     for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
                     {
-                        if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+                        if ( pValues[nProperty].Name == cNumberingType )
                             pValues[nProperty].Value >>= aNumberingTypes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+                        else if ( pValues[nProperty].Name == cBulletFontName )
                             pValues[nProperty].Value >>= sFontNames[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+                        else if ( pValues[nProperty].Name == cBulletChar )
                             pValues[nProperty].Value >>= sBulletChars[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
+                        else if ( pValues[nProperty].Name == cPrefix )
                             pValues[nProperty].Value >>= sPrefixes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
+                        else if ( pValues[nProperty].Name == cSuffix )
                             pValues[nProperty].Value >>= sSuffixes[i];
-                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
+                        else if ( pValues[nProperty].Name == cParentNumbering )
                             pValues[nProperty].Value >>= aParentNumberings[i];
                     }
                     Sequence< PropertyValue > aProperties(2);

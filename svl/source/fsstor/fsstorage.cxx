@@ -1350,9 +1350,9 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const ::rtl::OUString& aPropertyN
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+    if ( aPropertyName == "URL" )
         return uno::makeAny( m_pImpl->m_aURL );
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OpenMode")) )
+    else if ( aPropertyName == "OpenMode" )
         return uno::makeAny( m_pImpl->m_nMode );
 
     throw beans::UnknownPropertyException(); // TODO

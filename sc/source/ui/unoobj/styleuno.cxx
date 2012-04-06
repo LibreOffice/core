@@ -1040,7 +1040,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPr
 {
     uno::Any aRet;
 
-    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    if ( sPropertyName == "DisplayName" )
     {
         SolarMutexGuard aGuard;
         sal_uInt32 nResId = 0;
@@ -1873,7 +1873,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                     if (*pValue >>= nPages)
                                     {
                                         ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
-                                        if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX)))
+                                        if ( rPropertyName == SC_UNO_PAGE_SCALETOX )
                                             aItem.SetWidth(static_cast<sal_uInt16>(nPages));
                                         else
                                             aItem.SetHeight(static_cast<sal_uInt16>(nPages));
@@ -2061,7 +2061,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                     case ATTR_PAGE_SCALETO:
                         {
                             ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(ATTR_PAGE_SCALETO));
-                            if (aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX)))
+                            if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
                             else
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));

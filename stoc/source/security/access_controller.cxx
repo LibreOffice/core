@@ -485,19 +485,19 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     OUString mode;
     if (m_xComponentContext->getValueByName( OUSTR("/services/" SERVICE_NAME "/mode") ) >>= mode)
     {
-        if (mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("off") ))
+        if ( mode == "off" )
         {
             m_mode = OFF;
         }
-        else if (mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("on") ))
+        else if ( mode == "on" )
         {
             m_mode = ON;
         }
-        else if (mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dynamic-only") ))
+        else if ( mode == "dynamic-only" )
         {
             m_mode = DYNAMIC_ONLY;
         }
-        else if (mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single-user") ))
+        else if ( mode == "single-user" )
         {
             m_xComponentContext->getValueByName(
                 OUSTR("/services/" SERVICE_NAME "/single-user-id") ) >>= m_singleUserId;
@@ -510,7 +510,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
             }
             m_mode = SINGLE_USER;
         }
-        else if (mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single-default-user") ))
+        else if ( mode == "single-default-user" )
         {
             m_mode = SINGLE_DEFAULT_USER;
         }

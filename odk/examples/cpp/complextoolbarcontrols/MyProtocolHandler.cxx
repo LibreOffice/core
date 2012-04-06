@@ -373,7 +373,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
 
 void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
 {
-    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:")) )
+    if ( aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
     {
         if ( aURL.Path == "Command1" )
         {

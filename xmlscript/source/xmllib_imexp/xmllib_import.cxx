@@ -238,7 +238,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // library
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
+    else if ( rLocalName == "library" )
     {
         LibDescriptor aDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
@@ -300,7 +300,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
     // library
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("element") ))
+    else if ( rLocalName == "element" )
     {
         OUString aValue( xAttributes->getValueByUidName(
             _pImport->XMLNS_LIBRARY_UID,

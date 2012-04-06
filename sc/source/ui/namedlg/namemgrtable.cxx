@@ -134,7 +134,7 @@ void ScRangeManagerTable::Init()
     {
         const ScRangeName* pLocalRangeName = itr->second;
         ScRangeNameLine aLine;
-        if (itr->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_GLOBAL_RANGE_NAME)))
+        if ( itr->first == STR_GLOBAL_RANGE_NAME )
             aLine.aScope = maGlobalString;
         else
             aLine.aScope = itr->first;

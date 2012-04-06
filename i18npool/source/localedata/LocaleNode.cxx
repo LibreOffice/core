@@ -128,31 +128,31 @@ LocaleNode::~LocaleNode()
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
 {
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INFO")))
+    if ( name == "LC_INFO" )
         return new LCInfoNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CTYPE")))
+    if ( name == "LC_CTYPE" )
         return new LCCTYPENode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT")))
+    if ( name == "LC_FORMAT" )
         return new LCFormatNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT_1")))
+    if ( name == "LC_FORMAT_1" )
         return new LCFormatNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CALENDAR")))
+    if ( name == "LC_CALENDAR" )
         return new LCCalendarNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CURRENCY")))
+    if ( name == "LC_CURRENCY" )
         return new LCCurrencyNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_TRANSLITERATION")))
+    if ( name == "LC_TRANSLITERATION" )
         return new LCTransliterationNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_COLLATION")))
+    if ( name == "LC_COLLATION" )
         return new LCCollationNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INDEX")))
+    if ( name == "LC_INDEX" )
         return new LCIndexNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_SEARCH")))
+    if ( name == "LC_SEARCH" )
         return new LCSearchNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_MISC")))
+    if ( name == "LC_MISC" )
         return new LCMiscNode (name,attr);
-      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_NumberingLevel")))
+      if ( name == "LC_NumberingLevel" )
                 return new LCNumberingLevelNode (name, attr);
-      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_OutLineNumberingLevel")))
+      if ( name == "LC_OutLineNumberingLevel" )
                 return new LCOutlineNumberingLevelNode (name, attr);
 
     return new LocaleNode(name,attr);
@@ -447,7 +447,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         incError( "DateSeparator equals TimeSeparator.");
     if (aDecSep == aThoSep)
         incError( "DecimalSeparator equals ThousandSeparator.");
-    if (aThoSep.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( " ")))
+    if ( aThoSep == " " )
         incError( "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
     if (aListSep == aDecSep)
         fprintf( stderr, "Warning: %s\n",
@@ -624,7 +624,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
     of.writeParameter("replaceTo", str, mnSection);
     // Remember the replaceTo value for "[CURRENCY]" to check format codes.
-    if (strFrom.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "[CURRENCY]")))
+    if ( strFrom == "[CURRENCY]" )
         sTheCurrencyReplaceTo = str;
     // Remember the currency symbol if present.
     if (str.indexOfAsciiL( "[$", 2) == 0)

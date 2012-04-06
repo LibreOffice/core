@@ -83,46 +83,46 @@ namespace canvas
             beans::PropertyValue aProp;
             if( (rArgs[i] >>= aProp) )
             {
-                if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Colors")) )
+                if ( aProp.Name == "Colors" )
                 {
                     aProp.Value >>= colorSequence;
                 }
-                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stops")) )
+                else if ( aProp.Name == "Stops" )
                 {
                     aProp.Value >>= colorStops;
                 }
-                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AspectRatio")) )
+                else if ( aProp.Name == "AspectRatio" )
                 {
                     aProp.Value >>= fAspectRatio;
                 }
             }
         }
 
-        if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LinearGradient")) )
+        if ( rServiceName == "LinearGradient" )
         {
             return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EllipticalGradient")) )
+        else if ( rServiceName == "EllipticalGradient" )
         {
             return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RectangularGradient")) )
+        else if ( rServiceName == "RectangularGradient" )
         {
             return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalLineHatch")) )
+        else if ( rServiceName == "VerticalLineHatch" )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OrthogonalLinesHatch")) )
+        else if ( rServiceName == "OrthogonalLinesHatch" )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ThreeCrossingLinesHatch")) )
+        else if ( rServiceName == "ThreeCrossingLinesHatch" )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FourCrossingLinesHatch")) )
+        else if ( rServiceName == "FourCrossingLinesHatch" )
         {
             // TODO: NYI
         }

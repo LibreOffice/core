@@ -766,7 +766,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
         if ( !m_pData->m_bDisposing )
         {
-            if ( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_beamer")) )
+            if ( sTargetFrameName == "_beamer" )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
                 if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
@@ -783,7 +783,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     return xProv->queryDispatch( aURL, sTargetFrameName, ::com::sun::star::frame::FrameSearchFlag::SELF );
             }
 
-            if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:")) )
+            if ( aURL.Protocol == ".uno:" )
             {
                 rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
                 sal_Bool      bMasterCommand( !aMasterCommand.isEmpty() );
@@ -839,7 +839,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) )
+            else if ( aURL.Protocol == "slot:" )
             {
                 sal_uInt16 nId = (sal_uInt16) aURL.Path.toInt32();
 

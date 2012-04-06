@@ -454,7 +454,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     {
         // We cant check a preselected type for a given stream!
         // So we must believe, that it can work ...
-        if (aParsedURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("private:stream")))
+        if ( aParsedURL.Complete == "private:stream" )
             bBreakDetection = sal_True;
     }
 
@@ -813,9 +813,9 @@ namespace
     {
         if (rA == rB)
             return false;
-        if (rA.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
+        if ( rA == "com.sun.star.text.FormatDetector" )
             return false;
-        if (rB.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
+        if ( rB == "com.sun.star.text.FormatDetector" )
             return true;
         return rA < rB;
     }

@@ -1192,9 +1192,9 @@ void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno
         ::rtl::OUString aTbxTitle;
         for ( sal_Int32 j = 0; j < rTbxSeq.getLength(); j++ )
         {
-            if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")))
+            if ( rTbxSeq[j].Name == "ResourceURL" )
                 rTbxSeq[j].Value >>= aTbxResName;
-            else if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UIName")))
+            else if ( rTbxSeq[j].Name == "UIName" )
                 rTbxSeq[j].Value >>= aTbxTitle;
         }
 

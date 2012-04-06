@@ -118,9 +118,9 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     if (hModule) {
         sal_uInt16 **(*func)(sal_Int16*)=NULL;
         const sal_Char *func_name=NULL;
-        if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")))
+        if ( rLocale.Language == "zh" )
             func_name=(OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
-        else if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")))
+        else if ( rLocale.Language == "ko" )
             func_name="get_ko_phonetic";
         if (func_name)
             func=(sal_uInt16 **(*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);

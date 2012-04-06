@@ -87,11 +87,11 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     }
     uno::Reference< lang::XServiceInfo > xServiceInfo( xCurrentText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXBodyText")) )
+    if ( aImplName == "SwXBodyText" )
     {
         return word::WdSeekView::wdSeekMainDocument;
     }
-    else if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
+    else if ( aImplName == "SwXHeadFootText" )
     {
         if( HeaderFooterHelper::isHeader( mxModel ) )
         {
@@ -112,7 +112,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
                 return word::WdSeekView::wdSeekPrimaryFooter;
         }
     }
-    else if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXFootnote")) )
+    else if ( aImplName == "SwXFootnote" )
     {
         if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") ) ) )
             return word::WdSeekView::wdSeekEndnotes;
@@ -313,7 +313,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
             rtl::OUString aPageStyleName;
             xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
-            if( aPageStyleName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("First Page")) )
+            if ( aPageStyleName == "First Page" )
             {
                 // go to the beginning of where the next style is used
                 sal_Bool hasNextPage = sal_False;

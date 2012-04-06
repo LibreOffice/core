@@ -108,11 +108,11 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
+        if ( m_aCommandURL == ".uno:ZoomSlider" )
         {
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomSliderControl(m_nSlotId = SID_ATTR_ZOOMSLIDER,m_nId,*pStatusBar));
         }
-        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
+        else if ( m_aCommandURL == ".uno:Zoom" )
         {
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomStatusBarControl(m_nSlotId = SID_ATTR_ZOOM,m_nId,*pStatusBar));
         }
@@ -135,7 +135,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 
     if ( m_pController.is() )
     {
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
+        if ( m_aCommandURL == ".uno:ZoomSlider" )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
@@ -145,7 +145,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
                 static_cast<SvxZoomSliderControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
             }
         }
-        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
+        else if ( m_aCommandURL == ".uno:Zoom" )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )

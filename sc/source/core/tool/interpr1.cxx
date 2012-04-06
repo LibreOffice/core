@@ -2330,11 +2330,11 @@ void ScInterpreter::ScCellExternal()
     ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
 
-    if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COL")))
+    if ( aInfoType == "COL" )
         PushInt(nCol + 1);
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ROW")))
+    else if ( aInfoType == "ROW" )
         PushInt(nRow + 1);
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SHEET")))
+    else if ( aInfoType == "SHEET" )
     {
         // For SHEET, No idea what number we should set, but let's always set
         // 1 if the external sheet exists, no matter what sheet.  Excel does
@@ -2344,7 +2344,7 @@ void ScInterpreter::ScCellExternal()
         else
             SetError(errNoName);
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ADDRESS")))
+    else if ( aInfoType == "ADDRESS" )
     {
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
         ScTokenArray aArray;
@@ -2355,7 +2355,7 @@ void ScInterpreter::ScCellExternal()
         aComp.CreateStringFromTokenArray(aStr);
         PushString(aStr);
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FILENAME")))
+    else if ( aInfoType == "FILENAME" )
     {
         // 'file URI'#$SheetName
 
@@ -2374,7 +2374,7 @@ void ScInterpreter::ScCellExternal()
         aBuf.append(aTabName);
         PushString(aBuf.makeStringAndClear());
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CONTENTS")))
+    else if ( aInfoType == "CONTENTS" )
     {
         switch (pToken->GetType())
         {
@@ -2391,7 +2391,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(ScGlobal::GetEmptyString());
         }
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TYPE")))
+    else if ( aInfoType == "TYPE" )
     {
         sal_Unicode c = 'v';
         switch (pToken->GetType())
@@ -2407,14 +2407,14 @@ void ScInterpreter::ScCellExternal()
         }
         PushString(rtl::OUString(c));
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FORMAT")))
+    else if ( aInfoType == "FORMAT" )
     {
         String aFmtStr;
         sal_uLong nFmt = aFmt.mbIsSet ? aFmt.mnIndex : 0;
         getFormatString(pFormatter, nFmt, aFmtStr);
         PushString(aFmtStr);
     }
-    else if (aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COLOR")))
+    else if ( aInfoType == "COLOR" )
     {
         // 1 = negative values are colored, otherwise 0
         int nVal = 0;
@@ -2425,7 +2425,7 @@ void ScInterpreter::ScCellExternal()
         }
         PushInt(nVal);
     }
-    else if(aInfoType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PARENTHESES")))
+    else if ( aInfoType == "PARENTHESES" )
     {
         // 1 = format string contains a '(' character, otherwise 0
         int nVal = 0;

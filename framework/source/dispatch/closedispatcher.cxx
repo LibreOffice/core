@@ -193,11 +193,11 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // If not - we have to break this operation. But an optional listener must be informed.
     // BTW: We save the information about the requested operation. Because
     // we need it later.
-    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEDOC)))
+    if ( aURL.Complete == URL_CLOSEDOC )
         m_eOperation = E_CLOSE_DOC;
-    else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEWIN)))
+    else if ( aURL.Complete == URL_CLOSEWIN )
         m_eOperation = E_CLOSE_WIN;
-    else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEFRAME)))
+    else if ( aURL.Complete == URL_CLOSEFRAME )
         m_eOperation = E_CLOSE_FRAME;
     else
     {
@@ -230,7 +230,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     sal_Bool bIsSynchron = sal_False;
     for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
     {
-        if ( lArguments[nArgs].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SynchronMode")) )
+        if ( lArguments[nArgs].Name == "SynchronMode" )
         {
             lArguments[nArgs].Value >>= bIsSynchron;
             break;

@@ -553,7 +553,7 @@ namespace
         virtual uno::Any SAL_CALL getValueByName(rtl::OUString const& rName)
             throw()
         {
-            if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/singletons/com.sun.star.deployment.PackageInformationProvider")))
+            if ( rName == "/singletons/com.sun.star.deployment.PackageInformationProvider" )
             {
                 uno::Reference<deployment::XPackageInformationProvider> const xProvider(new PackageInformationProvider());
                 uno::Any aComponent;

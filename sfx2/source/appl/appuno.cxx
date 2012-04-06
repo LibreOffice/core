@@ -459,14 +459,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 rtl::OUString aName = rProp.Name;
-                if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFrame)) )
+                if ( aName == sFrame )
                 {
                     Reference< XFrame > xFrame;
                     OSL_VERIFY( rProp.Value >>= xFrame );
                     rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
                 }
                 else
-                if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sHidden)) )
+                if ( aName == sHidden )
                 {
                     sal_Bool bVal = sal_False;
                     if (rProp.Value >>= bVal)
@@ -484,17 +484,17 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 rtl::OUString aName = rProp.Name;
-                if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModel)) )
+                if ( aName == sModel )
                     rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sComponentData)) )
+                else if ( aName == sComponentData )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_COMPONENTDATA, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sComponentContext)) )
+                else if ( aName == sComponentContext )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_COMPONENTCONTEXT, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStatusInd)) )
+                else if ( aName == sStatusInd )
                 {
                     Reference< ::com::sun::star::task::XStatusIndicator > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -502,7 +502,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sInteractionHdl)) )
+                else if ( aName == sInteractionHdl )
                 {
                     Reference< ::com::sun::star::task::XInteractionHandler > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -510,11 +510,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sViewData)) )
+                else if ( aName == sViewData )
                     rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFilterData)) )
+                else if ( aName == sFilterData )
                     rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sInputStream)) )
+                else if ( aName == sInputStream )
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -522,7 +522,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStream)) )
+                else if ( aName == sStream )
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -530,7 +530,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_STREAM, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sUCBContent)) )
+                else if ( aName == sUCBContent )
                 {
                     Reference< XContent > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -538,7 +538,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sOutputStream)) )
+                else if ( aName == sOutputStream )
                 {
                     Reference< XOutputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -546,7 +546,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sPostData)) )
+                else if ( aName == sPostData )
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = (rProp.Value >>= xVal);
@@ -554,7 +554,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFrame)) )
+                else if ( aName == sFrame )
                 {
                     Reference< XFrame > xFrame;
                     sal_Bool bOK = (rProp.Value >>= xFrame);
@@ -562,7 +562,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAsTemplate)) )
+                else if ( aName == sAsTemplate )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -570,7 +570,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sOpenNewView)) )
+                else if ( aName == sOpenNewView )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -578,7 +578,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sViewId)) )
+                else if ( aName == sViewId )
                 {
                     sal_Int16 nVal = -1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
@@ -586,7 +586,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sPluginMode)) )
+                else if ( aName == sPluginMode )
                 {
                     sal_Int16 nVal = -1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
@@ -594,7 +594,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sReadOnly)) )
+                else if ( aName == sReadOnly )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -602,7 +602,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDdeReconnect)) )
+                else if ( aName == sDdeReconnect )
                 {
                     sal_Bool bVal = sal_True;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -610,7 +610,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DDE_RECONNECT_ONLOAD, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStartPresentation)) )
+                else if ( aName == sStartPresentation )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -618,7 +618,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSelectionOnly)) )
+                else if ( aName == sSelectionOnly )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -626,7 +626,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sHidden)) )
+                else if ( aName == sHidden )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -634,7 +634,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sMinimized)) )
+                else if ( aName == sMinimized )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -642,7 +642,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSilent)) )
+                else if ( aName == sSilent )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -650,7 +650,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sPreview)) )
+                else if ( aName == sPreview )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -658,7 +658,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sViewOnly)) )
+                else if ( aName == sViewOnly )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -666,7 +666,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDontEdit)) )
+                else if ( aName == sDontEdit )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -674,7 +674,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sUseSystemDialog)) )
+                else if ( aName == sUseSystemDialog )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -682,7 +682,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStandardDir)) )
+                else if ( aName == sStandardDir )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -690,7 +690,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBlackList)) )
+                else if ( aName == sBlackList )
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > xVal;
                     sal_Bool bOK = (rProp.Value >>= xVal);
@@ -702,7 +702,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         rSet.Put( stringList );
                     }
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFileName)) )
+                else if ( aName == sFileName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -710,7 +710,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvagedFile)) )
+                else if ( aName == sSalvagedFile )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
@@ -718,7 +718,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFolderName)) )
+                else if ( aName == sFolderName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
@@ -726,7 +726,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFrameName)) )
+                else if ( aName == sFrameName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
@@ -734,7 +734,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK && !sVal.isEmpty())
                         rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sMediaType)) )
+                else if ( aName == sMediaType )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -742,7 +742,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sTemplateName)) )
+                else if ( aName == sTemplateName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -750,7 +750,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sTemplateRegionName)) )
+                else if ( aName == sTemplateRegionName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -758,7 +758,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sJumpMark)) )
+                else if ( aName == sJumpMark )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -766,7 +766,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sCharacterSet)) )
+                else if ( aName == sCharacterSet )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -774,7 +774,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFilterFlags)) )
+                else if ( aName == sFilterFlags )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -782,7 +782,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sMacroExecMode)) )
+                else if ( aName == sMacroExecMode )
                 {
                     sal_Int16 nVal =-1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
@@ -790,7 +790,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sUpdateDocMode)) )
+                else if ( aName == sUpdateDocMode )
                 {
                     sal_Int16 nVal =-1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
@@ -798,7 +798,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sRepairPackage)) )
+                else if ( aName == sRepairPackage )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -806,7 +806,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDocumentTitle)) )
+                else if ( aName == sDocumentTitle )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -814,7 +814,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDocumentBaseURL)) )
+                else if ( aName == sDocumentBaseURL )
                 {
                     ::rtl::OUString sVal;
                     // the base url can be set to empty ( for embedded objects for example )
@@ -823,7 +823,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_BASEURL, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sHierarchicalDocumentName)) )
+                else if ( aName == sHierarchicalDocumentName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -831,7 +831,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sCopyStreamIfPossible)) )
+                else if ( aName == sCopyStreamIfPossible )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -839,7 +839,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sNoAutoSave)) )
+                else if ( aName == sNoAutoSave )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -847,15 +847,15 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModifyPasswordInfo)) )
+                else if ( aName == sModifyPasswordInfo )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sEncryptionData)) )
+                else if ( aName == sEncryptionData )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
+                else if ( aName == sSuggestedSaveAsDir )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -863,7 +863,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
+                else if ( aName == sSuggestedSaveAsName )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());

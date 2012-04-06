@@ -164,7 +164,7 @@ namespace XSLT
     void SAL_CALL
     OleHandler::insertByName(const OUString& streamName, const OString& content)
     {
-        if (streamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("oledata.mso")))
+        if ( streamName == "oledata.mso" )
             {
                 initRootStorageFromBase64(content);
             }
@@ -178,7 +178,7 @@ namespace XSLT
     const OString
     SAL_CALL OleHandler::getByName(const OUString& streamName)
     {
-        if (streamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("oledata.mso")))
+        if ( streamName == "oledata.mso" )
         {
             //get the length and seek to 0
             Reference<XSeekable> xSeek (m_rootStream, UNO_QUERY);
