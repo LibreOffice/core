@@ -91,7 +91,7 @@ gb_UnoApiTarget_XML2CMPCOMMAND := $(gb_Helper_set_ld_path) $(gb_UnoApiTarget_XML
 gb_UnoApiTarget_XMLRDB := $(call gb_UnoApiTarget_get_target,types)
 
 define gb_UnoApiTarget__get_types
-$(if $(1),$(foreach type,$(shell $(gb_UnoApiTarget_XML2CMPCOMMAND) -types stdout $(1)),$(addprefix -T,$(type))))
+$(if $(1),$(foreach type,$(shell $(gb_UnoApiTarget_XML2CMPCOMMAND) -types stdout $(call gb_Helper_native_path,$(1))),$(addprefix -T,$(type))))
 endef
 
 define gb_UnoApiTarget__command_impl
