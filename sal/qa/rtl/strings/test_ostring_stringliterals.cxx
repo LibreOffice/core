@@ -84,6 +84,7 @@ CPPUNIT_TEST_SUITE_END();
     rtl_string_unittest_const_literal = false, \
     ( void ) rtl::OString( argument ), \
     result_tmp = rtl_string_unittest_const_literal, \
+    rtl_string_unittest_const_literal = false, \
     ( void ) rtl::OStringBuffer( argument ), \
     rtl_string_unittest_const_literal && result_tmp )
 
