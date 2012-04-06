@@ -39,8 +39,6 @@ $(eval $(call gb_SrsTarget_set_include,connectivity/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,connectivity/res,\
-	connectivity/source/resource/conn_error_message.src \
-	connectivity/source/resource/conn_log_res.src \
 	connectivity/source/resource/conn_shared_res.src \
 ))
 

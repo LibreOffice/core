@@ -28,7 +28,9 @@
 $(eval $(call gb_Module_Module,connectivity))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
+	AllLangResTarget_cnr \
+	AllLangResTarget_sdbcl \
+	AllLangResTarget_sdberr \
 	Package_inc \
 	Package_xml \
 	Library_dbtools \
