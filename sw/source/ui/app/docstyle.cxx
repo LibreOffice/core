@@ -636,7 +636,8 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         String aDesc;
         const SfxPoolItem* pItem = aIter.FirstItem();
 
-        String sPageNum, sModel, sBreak;
+        rtl::OUString sPageNum;
+        String sModel, sBreak;
         sal_Bool bHasWesternFontPrefix = sal_False;
         sal_Bool bHasCJKFontPrefix = sal_False;
         SvtCJKOptions aCJKOptions;
@@ -729,7 +730,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
             aDesc += SW_RESSTR(STR_PAGEBREAK);
             aDesc += sPlus;
             aDesc += sModel;
-            if(sPageNum != String(UniString::CreateFromInt32(0)))
+            if (sPageNum != "0")
             {
                 aDesc += sPlus;
                 aDesc += SW_RESSTR(STR_PAGEOFFSET);

@@ -136,7 +136,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
             Any aCol = xCols->getByName(rFldName);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue( UniString::CreateFromAscii("Type"));
+            Any aType = xCol->getPropertyValue(rtl::OUString("Type"));
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)

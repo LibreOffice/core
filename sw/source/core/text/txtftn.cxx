@@ -1582,8 +1582,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
 {
-    UniString aTmp; // = UniString::CreateFromInt32( 0 );
-    return new SwErgoSumPortion( rExpand, aTmp );
+    return new SwErgoSumPortion( rExpand, rtl::OUString() );
 }
 
 SwErgoSumPortion::SwErgoSumPortion( const XubString &rExp, const XubString& rStr )
