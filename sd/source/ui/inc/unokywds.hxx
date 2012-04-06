@@ -29,187 +29,179 @@
 #ifndef _SD_UNOKYWDS_HXX_
 #define _SD_UNOKYWDS_HXX_
 
-#include <tools/solar.h>
-
-#ifndef SD_DEFINE_KEYWORDS
-#define SD_CONSTASCII_ACTION( n, s ) extern sal_Char n[sizeof(s)]
-#else
-#define SD_CONSTASCII_ACTION( n, s ) sal_Char n[sizeof(s)] = s
-#endif
-
 #define UNO_PREFIX "com.sun.star."
 
 // SdXImpressDocument
-SD_CONSTASCII_ACTION( sUNO_Service_DrawingDocument, UNO_PREFIX "drawing.DrawingDocument" );
-SD_CONSTASCII_ACTION( sUNO_Service_PresentationDocument, UNO_PREFIX "drawing.PresentationDocument" );
+const char sUNO_Service_DrawingDocument[] = UNO_PREFIX "drawing.DrawingDocument";
+const char sUNO_Service_PresentationDocument[] = UNO_PREFIX "drawing.PresentationDocument";
 
 // SdUnoStyleFamilies
-SD_CONSTASCII_ACTION( sUNO_SdUnoStyleFamilies, "SdUnoStyleFamilies" );
-SD_CONSTASCII_ACTION( sUNO_Graphic_Style_Family_Name, "graphics" );
+const char sUNO_SdUnoStyleFamilies[] = "SdUnoStyleFamilies";
+const char sUNO_Graphic_Style_Family_Name[] = "graphics";
 
 // SdUnoPseudoStyleFamily
-SD_CONSTASCII_ACTION( sUNO_SdUnoPseudoStyleFamily, "SdUnoPseudoStyleFamily" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Title, "title" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_SubTitle, "subtitle" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Background, "background" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Background_Objects, "backgroundobjects" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Notes, "notes" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline1, "outline1" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline2, "outline2" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline3, "outline3" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline4, "outline4" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline5, "outline5" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline6, "outline6" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline7, "outline7" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline8, "outline8" );
-SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline9, "outline9" );
+const char sUNO_SdUnoPseudoStyleFamily[] = "SdUnoPseudoStyleFamily";
+const char sUNO_PseudoSheet_Title[] = "title";
+const char sUNO_PseudoSheet_SubTitle[] = "subtitle";
+const char sUNO_PseudoSheet_Background[] = "background";
+const char sUNO_PseudoSheet_Background_Objects[] = "backgroundobjects";
+const char sUNO_PseudoSheet_Notes[] = "notes";
+const char sUNO_PseudoSheet_Outline1[] = "outline1";
+const char sUNO_PseudoSheet_Outline2[] = "outline2";
+const char sUNO_PseudoSheet_Outline3[] = "outline3";
+const char sUNO_PseudoSheet_Outline4[] = "outline4";
+const char sUNO_PseudoSheet_Outline5[] = "outline5";
+const char sUNO_PseudoSheet_Outline6[] = "outline6";
+const char sUNO_PseudoSheet_Outline7[] = "outline7";
+const char sUNO_PseudoSheet_Outline8[] = "outline8";
+const char sUNO_PseudoSheet_Outline9[] = "outline9";
 
 // SdUnoPseudoStyle
-SD_CONSTASCII_ACTION( sUNO_SdUnoPseudoStyle, "SdUnoPseudoStyle" );
+const char sUNO_SdUnoPseudoStyle[] = "SdUnoPseudoStyle";
 
 // SdUnoGraphicStyleFamily
-SD_CONSTASCII_ACTION( sUNO_SdUnoGraphicStyleFamily, "SdUnoGraphicStyleFamily" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_standard, "standard" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_objwitharrow, "objectwitharrow" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_objwithshadow, "objectwithshadow" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_objwithoutfill, "objectwithoutfill" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_text, "text" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_textbody, "textbody" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_textbodyjust, "textbodyjustfied" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_textbodyindent, "textbodyindent" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_title, "title" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_title1, "title1" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_title2, "title2" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_headline, "headline" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_headline1, "headline1" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_headline2, "headline2" );
-SD_CONSTASCII_ACTION( sUNO_StyleName_measure, "measure" );
+const char sUNO_SdUnoGraphicStyleFamily[] = "SdUnoGraphicStyleFamily";
+const char sUNO_StyleName_standard[] = "standard";
+const char sUNO_StyleName_objwitharrow[] = "objectwitharrow";
+const char sUNO_StyleName_objwithshadow[] = "objectwithshadow";
+const char sUNO_StyleName_objwithoutfill[] = "objectwithoutfill";
+const char sUNO_StyleName_text[] = "text";
+const char sUNO_StyleName_textbody[] = "textbody";
+const char sUNO_StyleName_textbodyjust[] = "textbodyjustfied";
+const char sUNO_StyleName_textbodyindent[] = "textbodyindent";
+const char sUNO_StyleName_title[] = "title";
+const char sUNO_StyleName_title1[] = "title1";
+const char sUNO_StyleName_title2[] = "title2";
+const char sUNO_StyleName_headline[] = "headline";
+const char sUNO_StyleName_headline1[] = "headline1";
+const char sUNO_StyleName_headline2[] = "headline2";
+const char sUNO_StyleName_measure[] = "measure";
 
 // SdUnoGraphicStyle
-SD_CONSTASCII_ACTION( sUNO_SdUnoGraphicStyle, "SdUnoGraphicStyle" );
+const char sUNO_SdUnoGraphicStyle[] = "SdUnoGraphicStyle";
 
 // SdUnoPageBackground
-SD_CONSTASCII_ACTION( sUNO_SdUnoPageBackground, "SdUnoPageBackground" );
+const char sUNO_SdUnoPageBackground[] = "SdUnoPageBackground";
 
 // SdLayerManager
-SD_CONSTASCII_ACTION( sUNO_SdLayerManager, "SdUnoLayerManager" );
+const char sUNO_SdLayerManager[] = "SdUnoLayerManager";
 
 // SdLayer
-SD_CONSTASCII_ACTION( sUNO_SdLayer, "SdUnoLayer" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_background,         "background" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_background_objects, "backgroundobjects" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_layout,             "layout" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_controls,           "controls" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_measurelines,       "measurelines" );
+const char sUNO_SdLayer[] = "SdUnoLayer";
+const char sUNO_LayerName_background[] = "background";
+const char sUNO_LayerName_background_objects[] = "backgroundobjects";
+const char sUNO_LayerName_layout[] = "layout";
+const char sUNO_LayerName_controls[] = "controls";
+const char sUNO_LayerName_measurelines[] = "measurelines";
 
 // SdXShape
-SD_CONSTASCII_ACTION( sUNO_shape_style, "Style" );
-SD_CONSTASCII_ACTION( sUNO_shape_layername, "LayerName" );
-SD_CONSTASCII_ACTION( sUNO_shape_zorder, "ZOrder" );
+const char sUNO_shape_style[] = "Style";
+const char sUNO_shape_layername[] = "LayerName";
+const char sUNO_shape_zorder[] = "ZOrder";
 
 // services
-SD_CONSTASCII_ACTION( sUNO_Service_StyleFamily, UNO_PREFIX "style.StyleFamily" );
-SD_CONSTASCII_ACTION( sUNO_Service_StyleFamilies, UNO_PREFIX "style.StyleFamilies" );
-SD_CONSTASCII_ACTION( sUNO_Service_Style, UNO_PREFIX "style.Style" );
-SD_CONSTASCII_ACTION( sUNO_Service_FillProperties, UNO_PREFIX "drawing.FillProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_LineProperties, UNO_PREFIX "drawing.LineProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_ParagraphProperties, UNO_PREFIX "style.ParagraphProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_CharacterProperties, UNO_PREFIX "style.CharacterProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_Text, UNO_PREFIX "drawing.Text" );
-SD_CONSTASCII_ACTION( sUNO_Service_TextProperties, UNO_PREFIX "drawing.TextProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_ShadowProperties, UNO_PREFIX "drawing.ShadowProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_ConnectorProperties, UNO_PREFIX "drawing.ConnectorProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_MeasureProperties, UNO_PREFIX "drawing.MeasureProperties" );
-SD_CONSTASCII_ACTION( sUNO_Service_PageBackground, UNO_PREFIX "drawing.PageBackground" );
-SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayer, UNO_PREFIX "drawing.Layer" );
-SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayerManager, UNO_PREFIX "drawing.LayerManager" );
-SD_CONSTASCII_ACTION( sUNO_Service_GraphicObjectShape, UNO_PREFIX "drawing.GraphicObjectShape" );
-SD_CONSTASCII_ACTION( sUNO_Service_ImageMapRectangleObject, UNO_PREFIX "image.ImageMapRectangleObject" );
-SD_CONSTASCII_ACTION( sUNO_Service_ImageMapCircleObject, UNO_PREFIX "image.ImageMapCircleObject" );
-SD_CONSTASCII_ACTION( sUNO_Service_ImageMapPolygonObject, UNO_PREFIX "image.ImageMapPolygonObject" );
+const char sUNO_Service_StyleFamily[] = UNO_PREFIX "style.StyleFamily";
+const char sUNO_Service_StyleFamilies[] = UNO_PREFIX "style.StyleFamilies";
+const char sUNO_Service_Style[] = UNO_PREFIX "style.Style";
+const char sUNO_Service_FillProperties[] = UNO_PREFIX "drawing.FillProperties";
+const char sUNO_Service_LineProperties[] = UNO_PREFIX "drawing.LineProperties";
+const char sUNO_Service_ParagraphProperties[] = UNO_PREFIX "style.ParagraphProperties";
+const char sUNO_Service_CharacterProperties[] = UNO_PREFIX "style.CharacterProperties";
+const char sUNO_Service_Text[] = UNO_PREFIX "drawing.Text";
+const char sUNO_Service_TextProperties[] = UNO_PREFIX "drawing.TextProperties";
+const char sUNO_Service_ShadowProperties[] = UNO_PREFIX "drawing.ShadowProperties";
+const char sUNO_Service_ConnectorProperties[] = UNO_PREFIX "drawing.ConnectorProperties";
+const char sUNO_Service_MeasureProperties[] = UNO_PREFIX "drawing.MeasureProperties";
+const char sUNO_Service_PageBackground[] = UNO_PREFIX "drawing.PageBackground";
+const char sUNO_Service_DrawingLayer[] = UNO_PREFIX "drawing.Layer";
+const char sUNO_Service_DrawingLayerManager[] = UNO_PREFIX "drawing.LayerManager";
+const char sUNO_Service_GraphicObjectShape[] = UNO_PREFIX "drawing.GraphicObjectShape";
+const char sUNO_Service_ImageMapRectangleObject[] = UNO_PREFIX "image.ImageMapRectangleObject";
+const char sUNO_Service_ImageMapCircleObject[] = UNO_PREFIX "image.ImageMapCircleObject";
+const char sUNO_Service_ImageMapPolygonObject[] = UNO_PREFIX "image.ImageMapPolygonObject";
 
 // properties
-SD_CONSTASCII_ACTION( sUNO_Prop_Background,             "Background" );
-SD_CONSTASCII_ACTION( sUNO_Prop_ForbiddenCharacters,    "ForbiddenCharacters" );
-SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit,                "MapUnit" );
-SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea,            "VisibleArea" );
-SD_CONSTASCII_ACTION( sUNO_Prop_Aspect,                 "Aspect" );
-SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
-SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
-SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
-SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
-SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundVisible,    "IsBackgroundVisible" );
-SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible, "IsBackgroundObjectsVisible" );
-SD_CONSTASCII_ACTION( sUNO_Prop_UserDefinedAttributes, "UserDefinedAttributes" );
-SD_CONSTASCII_ACTION( sUNO_Prop_BookmarkURL,            "BookmarkURL" );
-SD_CONSTASCII_ACTION( sUNO_Prop_RuntimeUID,             "RuntimeUID" );
-SD_CONSTASCII_ACTION( sUNO_Prop_HasValidSignatures,     "HasValidSignatures" );
+const char sUNO_Prop_Background[] = "Background";
+const char sUNO_Prop_ForbiddenCharacters[] = "ForbiddenCharacters";
+const char sUNO_Prop_MapUnit[] = "MapUnit";
+const char sUNO_Prop_VisibleArea[] = "VisibleArea";
+const char sUNO_Prop_Aspect[] = "Aspect";
+const char sUNO_Prop_TabStop[] = "TabStop";
+const char sUNO_Prop_CharLocale[] = "CharLocale";
+const char sUNO_Prop_AutomContFocus[] = "AutomaticControlFocus";
+const char sUNO_Prop_ApplyFrmDsgnMode[] = "ApplyFormDesignMode";
+const char sUNO_Prop_IsBackgroundVisible[] = "IsBackgroundVisible";
+const char sUNO_Prop_IsBackgroundObjectsVisible[] = "IsBackgroundObjectsVisible";
+const char sUNO_Prop_UserDefinedAttributes[] = "UserDefinedAttributes";
+const char sUNO_Prop_BookmarkURL[] = "BookmarkURL";
+const char sUNO_Prop_RuntimeUID[] = "RuntimeUID";
+const char sUNO_Prop_HasValidSignatures[] = "HasValidSignatures";
 
 // view settings
-SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesDrawing,               "SnapLinesDrawing" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesNotes,                 "SnapLinesNotes" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesHandout,               "SnapLinesHandout" );
-SD_CONSTASCII_ACTION( sUNO_View_RulerIsVisible,                 "RulerIsVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_PageKind,                       "PageKind" );
-SD_CONSTASCII_ACTION( sUNO_View_SelectedPage,                   "SelectedPage" );
-SD_CONSTASCII_ACTION( sUNO_View_IsLayerMode,                    "IsLayerMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsQuickEdit,                    "IsQuickEdit" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDoubleClickTextEdit,          "IsDoubleClickTextEdit" );
-SD_CONSTASCII_ACTION( sUNO_View_IsClickChangeRotation,          "IsClickChangeRotation" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDragWithCopy,                 "IsDragWithCopy" );
-SD_CONSTASCII_ACTION( sUNO_View_SlidesPerRow,                   "SlidesPerRow" );
-SD_CONSTASCII_ACTION( sUNO_View_DrawMode,                       "DrawMode" );
-SD_CONSTASCII_ACTION( sUNO_View_PreviewDrawMode,                "PreviewDrawMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInPageMode,        "IsShowPreviewInPageMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInMasterPageMode,  "IsShowPreviewInMasterPageMode" );
-SD_CONSTASCII_ACTION( sUNO_View_SetShowPreviewInOutlineMode,    "SetShowPreviewInOutlineMode" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeStandard,               "EditModeStandard" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeNotes,                  "EditModeNotes" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeHandout,                "EditModeHandout" );
-SD_CONSTASCII_ACTION( sUNO_View_VisArea,                        "VisArea" );
+const char sUNO_View_ViewId[] = "ViewId";
+const char sUNO_View_SnapLinesDrawing[] = "SnapLinesDrawing";
+const char sUNO_View_SnapLinesNotes[] = "SnapLinesNotes";
+const char sUNO_View_SnapLinesHandout[] = "SnapLinesHandout";
+const char sUNO_View_RulerIsVisible[] = "RulerIsVisible";
+const char sUNO_View_PageKind[] = "PageKind";
+const char sUNO_View_SelectedPage[] = "SelectedPage";
+const char sUNO_View_IsLayerMode[] = "IsLayerMode";
+const char sUNO_View_IsQuickEdit[] = "IsQuickEdit";
+const char sUNO_View_IsDoubleClickTextEdit[] = "IsDoubleClickTextEdit";
+const char sUNO_View_IsClickChangeRotation[] = "IsClickChangeRotation";
+const char sUNO_View_IsDragWithCopy[] = "IsDragWithCopy";
+const char sUNO_View_SlidesPerRow[] = "SlidesPerRow";
+const char sUNO_View_DrawMode[] = "DrawMode";
+const char sUNO_View_PreviewDrawMode[] = "PreviewDrawMode";
+const char sUNO_View_IsShowPreviewInPageMode[] = "IsShowPreviewInPageMode";
+const char sUNO_View_IsShowPreviewInMasterPageMode[] = "IsShowPreviewInMasterPageMode";
+const char sUNO_View_SetShowPreviewInOutlineMode[] = "SetShowPreviewInOutlineMode";
+const char sUNO_View_EditModeStandard[] = "EditModeStandard";
+const char sUNO_View_EditModeNotes[] = "EditModeNotes";
+const char sUNO_View_EditModeHandout[] = "EditModeHandout";
+const char sUNO_View_VisArea[] = "VisArea";
 
-SD_CONSTASCII_ACTION( sUNO_View_GridIsVisible,                  "GridIsVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_GridIsFront,                    "GridIsFront" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToGrid,                   "IsSnapToGrid" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToPageMargins,            "IsSnapToPageMargins" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToSnapLines,              "IsSnapToSnapLines" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectFrame,            "IsSnapToObjectFrame" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectPoints,           "IsSnapToObjectPoints" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapLinesVisible,             "IsSnapLinesVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDragStripes,                  "IsDragStripes" );
-SD_CONSTASCII_ACTION( sUNO_View_IsPlusHandlesAlwaysVisible,     "IsPlusHandlesAlwaysVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,             "IsFrameDragSingles" );
-SD_CONSTASCII_ACTION( sUNO_View_IsMarkedHitMovesAlways,         "IsMarkedHitMovesAlways" );
-SD_CONSTASCII_ACTION( sUNO_View_EliminatePolyPointLimitAngle,   "EliminatePolyPointLimitAngle" );
-SD_CONSTASCII_ACTION( sUNO_View_IsEliminatePolyPoints,          "IsEliminatePolyPoints" );
-SD_CONSTASCII_ACTION( sUNO_View_IsLineDraft,                    "IsLineDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsFillDraft,                    "IsFillDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsTextDraft,                    "IsTextDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsGrafDraft,                    "IsGrafDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_ActiveLayer,                    "ActiveLayer" );
-SD_CONSTASCII_ACTION( sUNO_View_NoAttribs,                      "NoAttribs" );
-SD_CONSTASCII_ACTION( sUNO_View_NoColors,                       "NoColors" );
-SD_CONSTASCII_ACTION( sUNO_View_GridCoarseWidth,                "GridCoarseWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_GridCoarseHeight,               "GridCoarseHeight" );
-SD_CONSTASCII_ACTION( sUNO_View_GridFineWidth,                  "GridFineWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_GridFineHeight,                 "GridFineHeight" );
-SD_CONSTASCII_ACTION( sUNO_View_IsAngleSnapEnabled,             "IsAngleSnapEnabled" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapAngle,                      "SnapAngle" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXNumerator,        "GridSnapWidthXNumerator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXDenominator,      "GridSnapWidthXDenominator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYNumerator,        "GridSnapWidthYNumerator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYDenominator,      "GridSnapWidthYDenominator" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleLayers,                  "VisibleLayers" );
-SD_CONSTASCII_ACTION( sUNO_View_PrintableLayers,                "PrintableLayers" );
-SD_CONSTASCII_ACTION( sUNO_View_LockedLayers,                   "LockedLayers" );
+const char sUNO_View_GridIsVisible[] = "GridIsVisible";
+const char sUNO_View_GridIsFront[] = "GridIsFront";
+const char sUNO_View_IsSnapToGrid[] = "IsSnapToGrid";
+const char sUNO_View_IsSnapToPageMargins[] = "IsSnapToPageMargins";
+const char sUNO_View_IsSnapToSnapLines[] = "IsSnapToSnapLines";
+const char sUNO_View_IsSnapToObjectFrame[] = "IsSnapToObjectFrame";
+const char sUNO_View_IsSnapToObjectPoints[] = "IsSnapToObjectPoints";
+const char sUNO_View_IsSnapLinesVisible[] = "IsSnapLinesVisible";
+const char sUNO_View_IsDragStripes[] = "IsDragStripes";
+const char sUNO_View_IsPlusHandlesAlwaysVisible[] = "IsPlusHandlesAlwaysVisible";
+const char sUNO_View_IsFrameDragSingles[] = "IsFrameDragSingles";
+const char sUNO_View_IsMarkedHitMovesAlways[] = "IsMarkedHitMovesAlways";
+const char sUNO_View_EliminatePolyPointLimitAngle[] = "EliminatePolyPointLimitAngle";
+const char sUNO_View_IsEliminatePolyPoints[] = "IsEliminatePolyPoints";
+const char sUNO_View_IsLineDraft[] = "IsLineDraft";
+const char sUNO_View_IsFillDraft[] = "IsFillDraft";
+const char sUNO_View_IsTextDraft[] = "IsTextDraft";
+const char sUNO_View_IsGrafDraft[] = "IsGrafDraft";
+const char sUNO_View_ActiveLayer[] = "ActiveLayer";
+const char sUNO_View_NoAttribs[] = "NoAttribs";
+const char sUNO_View_NoColors[] = "NoColors";
+const char sUNO_View_GridCoarseWidth[] = "GridCoarseWidth";
+const char sUNO_View_GridCoarseHeight[] = "GridCoarseHeight";
+const char sUNO_View_GridFineWidth[] = "GridFineWidth";
+const char sUNO_View_GridFineHeight[] = "GridFineHeight";
+const char sUNO_View_IsAngleSnapEnabled[] = "IsAngleSnapEnabled";
+const char sUNO_View_SnapAngle[] = "SnapAngle";
+const char sUNO_View_GridSnapWidthXNumerator[] = "GridSnapWidthXNumerator";
+const char sUNO_View_GridSnapWidthXDenominator[] = "GridSnapWidthXDenominator";
+const char sUNO_View_GridSnapWidthYNumerator[] = "GridSnapWidthYNumerator";
+const char sUNO_View_GridSnapWidthYDenominator[] = "GridSnapWidthYDenominator";
+const char sUNO_View_VisibleLayers[] = "VisibleLayers";
+const char sUNO_View_PrintableLayers[] = "PrintableLayers";
+const char sUNO_View_LockedLayers[] = "LockedLayers";
 
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaTop,                 "VisibleAreaTop" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaLeft,                "VisibleAreaLeft" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaWidth,               "VisibleAreaWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaHeight,              "VisibleAreaHeight" );
+const char sUNO_View_VisibleAreaTop[] = "VisibleAreaTop";
+const char sUNO_View_VisibleAreaLeft[] = "VisibleAreaLeft";
+const char sUNO_View_VisibleAreaWidth[] = "VisibleAreaWidth";
+const char sUNO_View_VisibleAreaHeight[] = "VisibleAreaHeight";
 
-SD_CONSTASCII_ACTION( sUNO_View_ZoomOnPage,                     "ZoomOnPage" );
+const char sUNO_View_ZoomOnPage[] = "ZoomOnPage";
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

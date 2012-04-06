@@ -428,7 +428,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/unoidl/randomnode \
     sd/source/ui/unoidl/unocpres \
     sd/source/ui/unoidl/unodoc \
-    sd/source/ui/unoidl/unokywds \
     sd/source/ui/unoidl/unolayer \
     sd/source/ui/unoidl/unomodel \
     sd/source/ui/unoidl/unomodule \
