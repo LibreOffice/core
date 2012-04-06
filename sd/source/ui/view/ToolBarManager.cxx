@@ -58,9 +58,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#undef OUSTRING // Remove definition made in the SFX
-#define OUSTRING(s) (::rtl::OUString(s))
-
 namespace {
 
 using namespace sd;
@@ -359,21 +356,21 @@ private:
 
 //===== ToolBarManager ========================================================
 
-const ::rtl::OUString ToolBarManager::msToolBar(OUSTRING("toolbar"));
-const ::rtl::OUString ToolBarManager::msOptionsToolBar(OUSTRING("optionsbar"));
-const ::rtl::OUString ToolBarManager::msCommonTaskToolBar(OUSTRING("commontaskbar"));
-const ::rtl::OUString ToolBarManager::msViewerToolBar(OUSTRING("viewerbar"));
-const ::rtl::OUString ToolBarManager::msSlideSorterToolBar(OUSTRING("slideviewtoolbar"));
-const ::rtl::OUString ToolBarManager::msSlideSorterObjectBar(OUSTRING("slideviewobjectbar"));
-const ::rtl::OUString ToolBarManager::msOutlineToolBar(OUSTRING("outlinetoolbar"));
-const ::rtl::OUString ToolBarManager::msMasterViewToolBar(OUSTRING("masterviewtoolbar"));
-const ::rtl::OUString ToolBarManager::msDrawingObjectToolBar(OUSTRING("drawingobjectbar"));
-const ::rtl::OUString ToolBarManager::msGluePointsToolBar(OUSTRING("gluepointsobjectbar"));
-const ::rtl::OUString ToolBarManager::msTextObjectBar(OUSTRING("textobjectbar"));
-const ::rtl::OUString ToolBarManager::msBezierObjectBar(OUSTRING("bezierobjectbar"));
-const ::rtl::OUString ToolBarManager::msGraphicObjectBar(OUSTRING("graphicobjectbar"));
-const ::rtl::OUString ToolBarManager::msMediaObjectBar(OUSTRING("mediaobjectbar"));
-const ::rtl::OUString ToolBarManager::msTableObjectBar(OUSTRING("tableobjectbar"));
+const ::rtl::OUString ToolBarManager::msToolBar("toolbar");
+const ::rtl::OUString ToolBarManager::msOptionsToolBar("optionsbar");
+const ::rtl::OUString ToolBarManager::msCommonTaskToolBar("commontaskbar");
+const ::rtl::OUString ToolBarManager::msViewerToolBar("viewerbar");
+const ::rtl::OUString ToolBarManager::msSlideSorterToolBar("slideviewtoolbar");
+const ::rtl::OUString ToolBarManager::msSlideSorterObjectBar("slideviewobjectbar");
+const ::rtl::OUString ToolBarManager::msOutlineToolBar("outlinetoolbar");
+const ::rtl::OUString ToolBarManager::msMasterViewToolBar("masterviewtoolbar");
+const ::rtl::OUString ToolBarManager::msDrawingObjectToolBar("drawingobjectbar");
+const ::rtl::OUString ToolBarManager::msGluePointsToolBar("gluepointsobjectbar");
+const ::rtl::OUString ToolBarManager::msTextObjectBar("textobjectbar");
+const ::rtl::OUString ToolBarManager::msBezierObjectBar("bezierobjectbar");
+const ::rtl::OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
+const ::rtl::OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
+const ::rtl::OUString ToolBarManager::msTableObjectBar("tableobjectbar");
 
 
 ::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
@@ -597,8 +594,7 @@ void ToolBarManager::ToolBarsDestroyed(void)
 
 //===== ToolBarManager::Implementation =======================================
 
-const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix(
-    OUSTRING("private:resource/toolbar/"));
+const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix("private:resource/toolbar/");
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
@@ -673,7 +669,7 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
             try
             {
                 Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);
-                Any aValue (xFrameProperties->getPropertyValue(OUSTRING("LayoutManager")));
+                Any aValue (xFrameProperties->getPropertyValue("LayoutManager"));
                 aValue >>= mxLayouter;
             }
             catch (const RuntimeException&)

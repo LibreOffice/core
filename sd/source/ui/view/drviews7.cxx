@@ -1503,8 +1503,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     if( xPropSet.is() )
                     {
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
-                        if( xPropInfo.is() && xPropInfo->hasPropertyByName(
-                            rtl::OUString( "TargetURL")))
+                        if( xPropInfo.is() && xPropInfo->hasPropertyByName( "TargetURL") )
                         {
                             bDisableEditHyperlink = sal_False;
                         }

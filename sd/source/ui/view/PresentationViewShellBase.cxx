@@ -85,14 +85,10 @@ PresentationViewShellBase::PresentationViewShellBase (
             UNO_QUERY);
         if (xFrameSet.is())
         {
-            Reference<beans::XPropertySet> xLayouterSet (
-                xFrameSet->getPropertyValue(::rtl::OUString("LayoutManager")),
-                UNO_QUERY);
+            Reference<beans::XPropertySet> xLayouterSet(xFrameSet->getPropertyValue("LayoutManager"), UNO_QUERY);
             if (xLayouterSet.is())
             {
-                xLayouterSet->setPropertyValue(
-                    ::rtl::OUString("AutomaticToolbars"),
-                    makeAny(sal_False));
+                xLayouterSet->setPropertyValue("AutomaticToolbars", makeAny(sal_False));
             }
         }
     }
