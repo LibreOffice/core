@@ -75,7 +75,7 @@ MY_FILES_calc = \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
 MY_FILES_calc += \
-    $(MY_MOD)/DataAccess/calc.xcu
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
 .ENDIF
 
 MY_DEPS_cjk = main
@@ -281,14 +281,14 @@ MY_FILES_main = \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
 MY_FILES_main += \
-    $(MY_MOD)/DataAccess/dbase.xcu \
-    $(MY_MOD)/DataAccess/flat.xcu \
-    $(MY_MOD)/DataAccess/mysql.xcu \
-    $(MY_MOD)/DataAccess/odbc.xcu
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 .ENDIF
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
-    $(MY_MOD)/DataAccess/macab.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
     $(MY_MOD)/org/openoffice/Inet-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-macosx.xcu \
@@ -308,7 +308,7 @@ MY_FILES_main += \
         # VCL-unixdesktop.xcu must come after VCL.xcu
 .ELIF "$(GUIBASE)" == "WIN"
 MY_FILES_main += \
-    $(MY_MOD)/DataAccess/ado.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-ado.xcu \
     $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
@@ -324,26 +324,26 @@ MY_FILES_main += \
 ERROR : unknown-GUIBASE
 .END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
-MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
 .END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
-    $(MY_MOD)/DataAccess/hsqldb.xcu \
-    $(MY_MOD)/DataAccess/jdbc.xcu
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
+    $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
 .END
 .IF "$(ENABLE_TDEAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/tdeab.xcu
 .END
 .IF "$(ENABLE_KAB)" == "TRUE"
-MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
 .END
 .IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
         "$(OS)" != "MACOSX"
 .IF "$(OS)" == "WNT"
-MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 .ELSE
-MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
 .END
 .END
 .IF "$(SYSTEM_LIBEXTTEXTCAT_DATA)" != ""
@@ -439,7 +439,7 @@ MY_FILES_binfilter = \
 .IF "$(BUILD_POSTGRESQL_SDBC)" == "YES"
 MY_XCDS += $(MISC)/postgresqlsdbc.xcd
 MY_DEPS_postgresqlsdbc = main
-MY_FILES_postgresqlsdbc = $(MY_MOD)/DataAccess/postgresql.xcu
+MY_FILES_postgresqlsdbc = $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
 .END
 
 .IF "$(GUIBASE)" == "unx" && \

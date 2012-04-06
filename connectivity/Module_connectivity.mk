@@ -31,6 +31,11 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_cnr \
 	AllLangResTarget_sdbcl \
 	AllLangResTarget_sdberr \
+	Configuration_calc \
+	Configuration_dbase \
+	Configuration_flat \
+	Configuration_mysql \
+	Configuration_odbc \
 	Library_calc \
 	Library_dbase \
 	Library_dbpool2 \
@@ -49,6 +54,8 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_hsqldb \
+	Configuration_hsqldb \
+	Configuration_jdbc \
 	Jar_ConnectivityTools \
 	Jar_sdbc_hsqldb \
 	Library_hsqldb \
@@ -60,6 +67,7 @@ ifeq ($(GUI),UNX)
 
 ifeq ($(ENABLE_KAB),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_kab \
 	Library_kab1 \
 	Library_kabdrv1 \
 ))
@@ -67,6 +75,7 @@ endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_macab \
 	Library_macab1 \
 	Library_macabdrv1 \
 ))
@@ -76,18 +85,21 @@ endif
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_ado \
 	Library_ado \
 ))
 endif
 
 ifeq ($(ENABLE_EVOAB2),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_evoab2 \
 	Library_evoab2 \
 ))
 endif
 
 ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_postgresql \
 	Library_postgresql-sdbc \
 	Library_postgresql-sdbc-impl \
 	Package_postgresql-sdbc \
@@ -100,10 +112,22 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozbootstrap \
 ))
 else
+
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozab \
 	Library_mozabdrv \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_mozab \
+))
+else
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_mozab2 \
+))
+endif
+
 endif
 
 # FIXME: Does not work. Convert to JUnit.
