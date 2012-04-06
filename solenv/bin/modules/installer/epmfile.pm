@@ -387,7 +387,7 @@ sub create_epm_header
 
     if ( $installer::globals::iswindowsbuild || $installer::globals::isos2 )
     {
-        $licensefilename = "license.txt";
+        $licensefilename = "LICENSE.txt";
         $readmefilename = "readme.txt";
     }
     else
@@ -401,12 +401,12 @@ sub create_epm_header
     {
         if ( $installer::globals::iswindowsbuild || $installer::globals::isos2 )
         {
-            $licensefilename = "license_$searchlanguage.txt";
+            $licensefilename = "LICENSE.txt";
             $readmefilename = "readme_$searchlanguage.txt";
         }
         else
         {
-            $licensefilename = "LICENSE_$searchlanguage";
+            $licensefilename = "LICENSE";
             $readmefilename = "README_$searchlanguage";
         }
     }
@@ -490,19 +490,12 @@ sub create_epm_header
     }
     else
     {
-        for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
-        {
-            my $onefile = ${$filesinproduct}[$i];
-            my $filename = $onefile->{'Name'};
-
-            if ( $filename eq $licensefilename )
-            {
-                $foundlicensefile = 1;
-                $line = "%license" . " " . $onefile->{'sourcepath'} . "\n";
-                push(@epmheader, $line);
-                last;
-            }
-        }
+        # refer to the license in the matching AOO installation
+        # TODO: sync AOO dest license full path with lpacks/sdks/exts
+        my $licpath = "openoffice.org3/program/" . $licensefilename;
+        $foundlicensefile = 1;
+        $line = "%license " . $licpath . "\n";
+        push(@epmheader, $line);
     }
 
     if (!($foundlicensefile))
