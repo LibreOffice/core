@@ -25,6 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+include $(SRCDIR)/unoil/climaker/version.txt
+
 $(eval $(call gb_CustomTarget_CustomTarget,unoil/climaker,new_style))
 
 UICM := $(call gb_CustomTarget_get_workdir,unoil/climaker)
@@ -33,8 +35,6 @@ $(call gb_CustomTarget_get_target,unoil/climaker) : \
 	$(UICM)/cli_oootypes.dll \
 	$(UICM)/cli_oootypes.config \
 	$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
-
-include $(SRCDIR)/unoil/climaker/version.txt
 
 $(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
