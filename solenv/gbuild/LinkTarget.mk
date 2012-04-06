@@ -907,7 +907,7 @@ $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
 
 endef
 
-define gb_LinkTarget_add_custom_headers
+define gb_LinkTarget__add_custom_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
 ifeq ($(gb_FULLDEPS),$(true))
@@ -915,6 +915,11 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_
 endif
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_CustomTarget_get_target,$(2)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
+
+endef
+
+define gb_LinkTarget_add_custom_headers
+$(foreach customtarget,$(2),$(call gb_LinkTarget__add_custom_headers,$(1),$(customtarget)))
 
 endef
 
