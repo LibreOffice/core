@@ -260,7 +260,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aShapetextBuffer(),
     m_pCurrentBuffer(0),
     m_bHasFootnote(false),
-    m_bIsSubstream(false),
     m_pSuperstream(0),
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0),
@@ -312,11 +311,6 @@ Stream& RTFDocumentImpl::Mapper()
     return *m_pMapperStream;
 }
 
-void RTFDocumentImpl::setSubstream(bool bIsSubtream)
-{
-    m_bIsSubstream = bIsSubtream;
-}
-
 void RTFDocumentImpl::setSuperstream(RTFDocumentImpl *pSuperstream)
 {
     m_pSuperstream = pSuperstream;
@@ -329,7 +323,7 @@ void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
 
 bool RTFDocumentImpl::isSubstream() const
 {
-    return m_bIsSubstream;
+    return m_pSuperstream != 0;
 }
 
 void RTFDocumentImpl::finishSubstream()
@@ -360,7 +354,6 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     sal_uInt32 nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
-    pImpl->setSubstream(true);
     pImpl->setSuperstream(this);
     pImpl->setIgnoreFirst(rIgnoreFirst);
     if (!m_aAuthor.isEmpty())
@@ -388,7 +381,7 @@ void RTFDocumentImpl::checkFirstRun()
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
         Mapper().table(NS_ooxml::LN_settings_settings, pTable);
         // start initial paragraph
-        if (!m_bIsSubstream)
+        if (!m_pSuperstream)
             Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
         m_bFirstRun = false;
@@ -499,7 +492,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
     Mapper().endParagraphGroup();
-    if (!m_bIsSubstream)
+    if (!m_pSuperstream)
         Mapper().endSectionGroup();
     if (!bFinal)
     {
@@ -1149,7 +1142,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FOOTERL:
         case RTF_FOOTERR:
         case RTF_FOOTERF:
-            if (!m_bIsSubstream)
+            if (!m_pSuperstream)
             {
                 Id nId = 0;
                 sal_uInt32 nPos = m_nGroupStartPos - 1;
@@ -1170,7 +1163,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             }
             break;
         case RTF_FOOTNOTE:
-            if (!m_bIsSubstream)
+            if (!m_pSuperstream)
             {
                 Id nId = NS_rtf::LN_footnote;
 
@@ -1227,7 +1220,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
             break;
         case RTF_ANNOTATION:
-            if (!m_bIsSubstream)
+            if (!m_pSuperstream)
             {
                 resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_annotation);
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;

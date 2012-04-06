@@ -441,8 +441,6 @@ namespace writerfilter {
                 RTFBuffer_t* m_pCurrentBuffer;
 
                 bool m_bHasFootnote;
-                /// If this is a substream.
-                bool m_bIsSubstream;
                 /// Superstream of this substream.
                 RTFDocumentImpl *m_pSuperstream;
                 std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
