@@ -259,9 +259,12 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
-    // todo: this is not the bullet char
-    if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+    if( !m_pParaStyle.get())
+    {
+        // todo: this is not the bullet char
+        if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
+            aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+    }
 
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, m_nTabstop ) );
 
@@ -302,8 +305,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
                     beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
             break;
             case PROP_CHAR_FONT_NAME:
-                aNumberingProperties.push_back(
-                    beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                if( !m_pParaStyle.get())
+                {
+                    aNumberingProperties.push_back(
+                        beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                }
             break;
             default:
             {
