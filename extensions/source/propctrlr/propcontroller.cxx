@@ -746,7 +746,7 @@ namespace pcr
     {
         if ( _rEvent.Source == m_xModel )
         {
-            if ( _rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+            if ( _rEvent.PropertyName == "IsReadOnly" )
                 impl_updateReadOnlyView_nothrow();
             return;
         }

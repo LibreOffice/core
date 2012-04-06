@@ -1061,37 +1061,37 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
-        if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
+        if ( pValue->Name == "ViewAreaTop" )
         {
             pValue->Value >>= nTmp;
             aRect.setY( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
+        else if ( pValue->Name == "ViewAreaLeft" )
         {
             pValue->Value >>= nTmp;
             aRect.setX( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
+        else if ( pValue->Name == "ViewAreaWidth" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
             aSize.Width() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
+        else if ( pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
             aSize.Height() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
+        else if ( pValue->Name == "ShowRedlineChanges" )
         {
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
             bChangeShowRedline = sal_True;
         }
 // Headers and footers are not displayed in BrowseView anymore
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "InBrowseMode" ) ) )
+        else if ( pValue->Name == "InBrowseMode" )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
             bChangeBrowseMode = sal_True;

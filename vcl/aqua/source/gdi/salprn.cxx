@@ -373,7 +373,7 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     uno::Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
     for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( aPageParms[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
+        if ( aPageParms[ nProperty ].Name == "PageSize" )
         {
             awt::Size aSize;
             aPageParms[ nProperty].Value >>= aSize;

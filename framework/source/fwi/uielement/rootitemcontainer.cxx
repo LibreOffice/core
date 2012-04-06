@@ -126,7 +126,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                     Reference< XIndexAccess > xIndexAccess;
                     for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                     {
-                        if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
+                        if ( aPropSeq[j].Name == "ItemDescriptorContainer" )
                         {
                             aPropSeq[j].Value >>= xIndexAccess;
                             nContainerIndex = j;

@@ -130,41 +130,41 @@ namespace cmis
             fprintf( stderr, "Property: %s\n", rtl::OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
-            if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            if ( rProp.Name == "IsDocument" )
             {
                 if ( m_pObject->getBaseType( ) == "cmis:document" )
                     xRow->appendBoolean( rProp, true );
                 else
                     xRow->appendVoid( rProp );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 if( m_pObject->getBaseType( ) == "cmis:folder" )
                     xRow->appendBoolean( rProp, true );
                 else
                     xRow->appendVoid( rProp );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TitleOnServer" ) ) )
+            else if ( rProp.Name == "TitleOnServer" )
             {
                 // TODO Set the path instead of the name
                 xRow->appendString( rProp, rtl::OUString::createFromAscii( m_pObject->getName().c_str() ) );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+            else if ( rProp.Name == "IsReadOnly" )
             {
                 // TODO Fix this value
                 xRow->appendBoolean( rProp, sal_True );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+            else if ( rProp.Name == "DateCreated" )
             {
                 // TODO Fix this value
                 xRow->appendVoid( rProp );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+            else if ( rProp.Name == "DateModified" )
             {
                 // TODO Fix this value
                 xRow->appendVoid( rProp );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            else if ( rProp.Name == "Size" )
             {
                 libcmis::Document* document = dynamic_cast< libcmis::Document* >( m_pObject.get( ) );
                 if ( NULL != document )
@@ -480,32 +480,32 @@ namespace cmis
     {
         uno::Any aRet;
 
-        if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ))
+        if ( aCommand.Name == "getPropertyValues" )
         {
             uno::Sequence< beans::Property > Properties;
             if ( !( aCommand.Argument >>= Properties ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             aRet <<= getPropertyValues( Properties, xEnv );
         }
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ))
+        else if ( aCommand.Name == "getPropertySetInfo" )
             aRet <<= getPropertySetInfo( xEnv, sal_False );
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ))
+        else if ( aCommand.Name == "getCommandInfo" )
             aRet <<= getCommandInfo( xEnv, sal_False );
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) ))
+        else if ( aCommand.Name == "open" )
         {
             ucb::OpenCommandArgument2 aOpenCommand;
             if ( !( aCommand.Argument >>= aOpenCommand ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             aRet = open( aOpenCommand, xEnv );
         }
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "transfer" ) ))
+        else if ( aCommand.Name == "transfer" )
         {
             ucb::TransferInfo transferArgs;
             if ( !( aCommand.Argument >>= transferArgs ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             transfer( transferArgs, xEnv );
         }
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ))
+        else if ( aCommand.Name == "setPropertyValues" )
         {
             uno::Sequence< beans::PropertyValue > aProperties;
             if ( !( aCommand.Argument >>= aProperties ) || !aProperties.getLength() )
@@ -520,14 +520,14 @@ namespace cmis
                     ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             aRet <<= createNewContent( arg );
         }
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ))
+        else if ( aCommand.Name == "insert" )
         {
             ucb::InsertCommandArgument arg;
             if ( !( aCommand.Argument >>= arg ) )
                     ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             insert( arg.Data, arg.ReplaceExisting, xEnv );
         }
-        else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ))
+        else if ( aCommand.Name == "delete" )
         {
             sal_Bool bDeletePhysical = sal_False;
             aCommand.Argument >>= bDeletePhysical;
@@ -575,9 +575,9 @@ namespace cmis
         bool create_document;
         const char *name;
 
-        if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMIS_FILE_TYPE ) ) )
+        if ( Info.Type == CMIS_FILE_TYPE )
             create_document = true;
-        else if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMIS_FOLDER_TYPE ) ) )
+        else if ( Info.Type == CMIS_FOLDER_TYPE )
             create_document = false;
         else
         {

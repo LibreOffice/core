@@ -431,7 +431,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     sal_Bool bToBeEncr = sal_False;
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+        if ( m_aProps[nInd].Name == "Encrypted" )
         {
             if ( !( m_aProps[nInd].Value >>= bToBeEncr ) )
             {
@@ -482,7 +482,7 @@ void OWriteStream_Impl::SetDecrypted()
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+        if ( m_aProps[nInd].Name == "Encrypted" )
             m_aProps[nInd].Value <<= sal_False;
     }
 }
@@ -506,7 +506,7 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
     // introduce encryption info
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+        if ( m_aProps[nInd].Name == "Encrypted" )
             m_aProps[nInd].Value <<= sal_True;
     }
 
@@ -950,7 +950,7 @@ void OWriteStream_Impl::Commit()
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        if ( m_aProps[nInd].Name == "Size" )
         {
             if ( m_pAntiImpl && !m_bHasInsertedStreamOptimization && m_pAntiImpl->m_xSeekable.is() )
             {
@@ -1063,7 +1063,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
+            if ( aResult[nInd].Name == "UseCommonStoragePasswordEncryption" )
             {
                 aResult[nInd].Value <<= bUseCommonEncryption;
                 return aResult;
@@ -1087,7 +1087,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                     uno::Reference< uno::XInterface >() );
 
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+            if ( aResult[nInd].Name == "RelationsInfo" )
             {
                 aResult[nInd].Value = aValue;
                 return aResult;
@@ -2453,7 +2453,7 @@ void OWriteStream::CloseOutput_Impl()
 
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( m_pImpl->m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            if ( m_pImpl->m_aProps[nInd].Name == "Size" )
                 m_pImpl->m_aProps[nInd].Value <<= ((sal_Int32)m_xSeekable->getLength());
         }
     }
@@ -2813,7 +2813,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Target" ) ) )
+        if ( aSeq[nInd].First == "Target" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -2838,7 +2838,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+        if ( aSeq[nInd].First == "Type" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -2865,7 +2865,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Id" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
                     return aSeq[nInd1];
@@ -2898,7 +2898,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Type" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
                 {
@@ -3014,7 +3014,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const ::rtl::OUString& sID 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Id" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
                 {
@@ -3264,7 +3264,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); // TODO
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+    else if ( aPropertyName == "Size" )
         throw beans::PropertyVetoException(); // TODO
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
            && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) ) )
@@ -3291,13 +3291,13 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         throw lang::DisposedException();
     }
 
-    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelId" ) ) )
+    if ( aProp == "RelId" )
     {
         return uno::makeAny( m_pImpl->GetNewRelId() );
     }
 
     ::rtl::OUString aPropertyName;
-    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) )
+    if ( aProp == "IsEncrypted" )
         aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
     else
         aPropertyName = aProp;
@@ -3318,7 +3318,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
         return uno::makeAny( m_pImpl->m_bUseCommonEncryption );
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+    else if ( aPropertyName == "Size" )
     {
         CheckInitOnDemand();
 

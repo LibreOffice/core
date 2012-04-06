@@ -1130,11 +1130,11 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     uno::Reference< io::XStream > xCachedVisualRepresentation;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
-        if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StoreVisualReplacement" ) ) )
+        if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
             lObjArgs[nInd].Value >>= bStoreVis;
-        else if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisualReplacement" ) ) )
+        else if ( lObjArgs[nInd].Name == "VisualReplacement" )
             lObjArgs[nInd].Value >>= xCachedVisualRepresentation;
-        else if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CanTryOptimization" ) ) )
+        else if ( lObjArgs[nInd].Name == "CanTryOptimization" )
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
@@ -1391,7 +1391,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     m_bReadOnly = sal_False;
     sal_Int32 nInd = 0;
     for ( nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ReadOnly" ) ) )
+        if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
 #ifdef WNT
@@ -1401,7 +1401,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     SwitchOwnPersistence( xStorage, sEntName );
 
     for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-        if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StoreVisualReplacement" ) ) )
+        if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
             lObjArgs[nInd].Value >>= m_bStoreVisRepl;
 
 #ifdef WNT
@@ -1469,7 +1469,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             // use URL ( may be content or stream later ) from MediaDescriptor to initialize object
             ::rtl::OUString aURL;
             for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-                if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+                if ( lArguments[nInd].Name == "URL" )
                     lArguments[nInd].Value >>= aURL;
 
             if ( aURL.isEmpty() )

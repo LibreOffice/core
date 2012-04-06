@@ -73,11 +73,11 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
     {
         if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TypeName")) )
             rDescriptor[nProperty].Value >>= sTypeName;
-        else if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "URL" )) )
+        else if ( pValues[nProperty].Name == "URL" )
             pValues[nProperty].Value >>= sURL;
-        else if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "Stream" )) )
+        else if ( pValues[nProperty].Name == "Stream" )
             pValues[nProperty].Value >>= xStream;
-        else if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "InputStream" )) )
+        else if ( pValues[nProperty].Name == "InputStream" )
             pValues[nProperty].Value >>= xInputStream;
     }
     bool bBinary = sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97" )) ||
@@ -113,7 +113,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else
         {
             uno::Reference< embed::XStorage > xDocStorage;
-            if( sURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:stream" ) ) )
+            if ( sURL == "private:stream" )
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
             else
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(
@@ -124,7 +124,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                 const ::rtl::OUString* pNames = aNames.getConstArray();
                 for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
                 {
-                    if(pNames[nName].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "word" )))
+                    if ( pNames[nName] == "word" )
                     {
                         bWord = true;
                         if( sTypeName.isEmpty() )

@@ -462,24 +462,24 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     OUString aStr;
     while( nArgs-- )
     {
-        if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PublishMode" ) ) )
+        if ( pParams->Name == "PublishMode" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             meMode = (HtmlPublishMode)temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IndexURL" ) ) )
+        else if ( pParams->Name == "IndexURL" )
         {
             pParams->Value >>= aStr;
             maIndexUrl = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Format" ) ) )
+        else if ( pParams->Name == "Format" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             meFormat = (PublishingFormat)temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compression" ) ) )
+        else if ( pParams->Name == "Compression" )
         {
             pParams->Value >>= aStr;
             String aTmp( aStr );
@@ -491,19 +491,19 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
                 mnCompression = (sal_Int16)aTmp.ToInt32();
             }
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+        else if ( pParams->Name == "Width" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             mnWidthPixel = (sal_uInt16)temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseButtonSet" ) ) )
+        else if ( pParams->Name == "UseButtonSet" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             mnButtonThema = (sal_Int16)temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportNotes" ) ) )
+        else if ( pParams->Name == "IsExportNotes" )
         {
             if( mbImpress )
             {
@@ -512,118 +512,118 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
                 mbNotes = temp;
             }
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportContentsPage" ) ) )
+        else if ( pParams->Name == "IsExportContentsPage" )
         {
             sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbContentsPage = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Author" ) ) )
+        else if ( pParams->Name == "Author" )
         {
             pParams->Value >>= aStr;
             maAuthor = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EMail" ) ) )
+        else if ( pParams->Name == "EMail" )
         {
             pParams->Value >>= aStr;
             maEMail = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HomepageURL" ) ) )
+        else if ( pParams->Name == "HomepageURL" )
         {
             pParams->Value >>= aStr;
             maHomePage = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserText" ) ) )
+        else if ( pParams->Name == "UserText" )
         {
             pParams->Value >>= aStr;
             maInfo = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableDownload" ) ) )
+        else if ( pParams->Name == "EnableDownload" )
         {
             sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbDownload = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SlideSound" ) ) )
+        else if ( pParams->Name == "SlideSound" )
         {
             sal_Bool temp = sal_True;
             pParams->Value >>= temp;
             mbSlideSound = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HiddenSlides" ) ) )
+        else if ( pParams->Name == "HiddenSlides" )
         {
             sal_Bool temp = sal_True;
             pParams->Value >>= temp;
             mbHiddenSlides = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BackColor" ) ) )
+        else if ( pParams->Name == "BackColor" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maBackColor = temp;
             mbUserAttr = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextColor" ) ) )
+        else if ( pParams->Name == "TextColor" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maTextColor = temp;
             mbUserAttr = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkColor" ) ) )
+        else if ( pParams->Name == "LinkColor" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maLinkColor = temp;
             mbUserAttr = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLinkColor" ) ) )
+        else if ( pParams->Name == "VLinkColor" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maVLinkColor = temp;
             mbUserAttr = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ALinkColor" ) ) )
+        else if ( pParams->Name == "ALinkColor" )
         {
             sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maALinkColor = temp;
             mbUserAttr = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsUseDocumentColors" ) ) )
+        else if ( pParams->Name == "IsUseDocumentColors" )
         {
             sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbDocColors = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskSlideDuration" ) ) )
+        else if ( pParams->Name == "KioskSlideDuration" )
         {
             sal_Int32 temp = sal_False;
             pParams->Value >>= temp;
             mnSlideDuration = temp;
             mbAutoSlide = true;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskEndless" ) ) )
+        else if ( pParams->Name == "KioskEndless" )
         {
             sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbEndless = temp;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastCGIURL" ) ) )
+        else if ( pParams->Name == "WebCastCGIURL" )
         {
             pParams->Value >>= aStr;
             maCGIPath = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastTargetURL" ) ) )
+        else if ( pParams->Name == "WebCastTargetURL" )
         {
             pParams->Value >>= aStr;
             maURLPath = aStr;
         }
-        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastScriptLanguage" ) ) )
+        else if ( pParams->Name == "WebCastScriptLanguage" )
         {
             pParams->Value >>= aStr;
-            if( aStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "asp" ) ) )
+            if ( aStr == "asp" )
             {
                 meScript = SCRIPT_ASP;
             }

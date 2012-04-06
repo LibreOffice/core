@@ -156,7 +156,7 @@ CustomAnimationPreset::CustomAnimationPreset( CustomAnimationEffectPtr pEffect )
 
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "text-only" ) ) )
+        if ( p->Name == "text-only" )
         {
             mbIsTextOnly = true;
             break;

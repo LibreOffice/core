@@ -313,7 +313,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
+    if ( aPropertyName == "IsArrayFunction" )
     {
         if( !(aValue >>= mbArray) )
             throw lang::IllegalArgumentException();
@@ -337,7 +337,7 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aProp
 {
     SolarMutexGuard aGuard;
 
-    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
+    if ( aPropertyName == "IsArrayFunction" )
         return uno::Any( mbArray );
 
     if ( !pOptions )

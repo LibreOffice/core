@@ -196,7 +196,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
             break;
     }
     if ( i == nCount )
@@ -218,7 +218,7 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
             break;

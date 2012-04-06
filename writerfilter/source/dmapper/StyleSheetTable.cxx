@@ -818,7 +818,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
                             xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
                         }
-                        else if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text body" ) ) )
+                        else if ( sConvertedStyleName == "Text body" )
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
                         else if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 1" ) ) ||
                                 sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 2" ) ) ||

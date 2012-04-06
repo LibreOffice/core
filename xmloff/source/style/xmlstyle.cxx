@@ -630,7 +630,7 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     {
         nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID;
     }
-    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( XML_STYLE_FAMILY_SCH_CHART_NAME )))
+    else if ( rValue == XML_STYLE_FAMILY_SCH_CHART_NAME )
     {
         nFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
     }

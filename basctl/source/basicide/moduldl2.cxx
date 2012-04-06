@@ -948,7 +948,7 @@ void LibPage::InsertLib()
                                 if ( bReplace )
                                 {
                                     // check, if the library is the Standard library
-                                    if ( aLibName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
+                                    if ( aLibName == "Standard" )
                                     {
                                         ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_REPLACESTDLIB ) ) ).Execute();
                                         continue;

@@ -837,12 +837,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                 const OUString& rPropName = pProps->Name;
                 const Any& rValue = pProps->Value;
 
-                if( rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
+                if ( rPropName == "FileName" )
                 {
                     if( !(rValue >>= msOrigFileName ) )
                         return sal_False;
                 }
-                else if (rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+                else if ( rPropName == "FilterName" )
                 {
                     if( !(rValue >>= msFilterName ) )
                         return sal_False;

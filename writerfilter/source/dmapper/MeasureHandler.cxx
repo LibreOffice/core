@@ -69,7 +69,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Height_hRule: // 90666;
         {
             ::rtl::OUString sHeightType = rVal.getString();
-            if( sHeightType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "exact" ) ) )
+            if ( sHeightType == "exact" )
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
         break;

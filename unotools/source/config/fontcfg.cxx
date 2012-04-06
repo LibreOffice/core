@@ -335,11 +335,11 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     {
         return aFallBackArabic;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "th" ) ) )
+    else if ( aLocale.Language == "th" )
     {
         return aFallBackThai;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ko" ) ) )
+    else if ( aLocale.Language == "ko" )
     {
         return aFallBackKorean;
     }
@@ -355,14 +355,14 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     {
         return aFallbackLatin2;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "zh" ) ) )
+    else if ( aLocale.Language == "zh" )
     {
         if( ! aLocale.Country.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cn" ) ) )
             return aFallBackChineseTRD;
         else
             return aFallBackChineseSIM;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ja" ) ) )
+    else if ( aLocale.Language == "ja" )
     {
         return aFallBackJapanese;
     }

@@ -170,12 +170,12 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
             {
                 case 5 :
                 {
-                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "downward" ) ) )
+                    if ( rPresetSubType == "downward" )
                     {
                         nPresetSubType = 5;
                         bTranslated = sal_True;
                     }
-                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
+                    else if ( rPresetSubType == "across" )
                     {
                         nPresetSubType = 10;
                         bTranslated = sal_True;
@@ -184,7 +184,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                 break;
                 case 17 :
                 {
-                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
+                    if ( rPresetSubType == "across" )
                     {
                         nPresetSubType = 10;
                         bTranslated = sal_True;
@@ -193,22 +193,22 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                 break;
                 case 18 :
                 {
-                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-top" ) ) )
+                    if ( rPresetSubType == "right-to-top" )
                     {
                         nPresetSubType = 3;
                         bTranslated = sal_True;
                     }
-                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-bottom" ) ) )
+                    else if ( rPresetSubType == "right-to-bottom" )
                     {
                         nPresetSubType = 6;
                         bTranslated = sal_True;
                     }
-                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-top" ) ) )
+                    else if ( rPresetSubType == "left-to-top" )
                     {
                         nPresetSubType = 9;
                         bTranslated = sal_True;
                     }
-                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-bottom" ) ) )
+                    else if ( rPresetSubType == "left-to-bottom" )
                     {
                         nPresetSubType = 12;
                         bTranslated = sal_True;
@@ -394,7 +394,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
 
                                     while( nLength-- )
                                     {
-                                        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-element" ) ) )
+                                        if ( p->Name == "master-element" )
                                         {
                                             p->Value >>= xMaster;
                                             break;
@@ -783,7 +783,7 @@ sal_Bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNod
     sal_Int32 nLength = aUserData.getLength();
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+        if ( p->Name == "node-type" )
         {
         if ( p->Value >>= nType )
             return sal_True;
@@ -896,23 +896,23 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
     sal_Int32 nLength = rUserData.getLength();
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+        if ( p->Name == "node-type" )
         {
         pAny[ DFF_ANIM_NODE_TYPE ] = &(p->Value);
         }
-        else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-class" ) ) )
+        else if ( p->Name == "preset-class" )
         {
         pAny[ DFF_ANIM_PRESET_CLASS ] = &(p->Value);
         }
-        else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
+        else if ( p->Name == "preset-id" )
         {
         pAny[ DFF_ANIM_PRESET_ID ] = &(p->Value);
         }
-        else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-sub-type" ) ) )
+        else if ( p->Name == "preset-sub-type" )
         {
         pAny[ DFF_ANIM_PRESET_SUB_TYPE ] = &(p->Value);
         }
-        else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-element" ) ) )
+        else if ( p->Name == "master-element" )
         {
         pAny[ DFF_ANIM_AFTEREFFECT ] = &(p->Value);;
         }
@@ -1467,7 +1467,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillStyle" ) ) )
+    else if ( rAttributeName == "FillStyle" )
     {
         ::com::sun::star::drawing::FillStyle eFillStyle;
         if ( rSourceValue >>= eFillStyle )
@@ -1478,7 +1478,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "solid" ) );
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LineStyle" ) ) )
+    else if ( rAttributeName == "LineStyle" )
     {
         ::com::sun::star::drawing::LineStyle eLineStyle;
         if ( rSourceValue >>= eLineStyle )
@@ -1489,7 +1489,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharWeight" ) ) )
+    else if ( rAttributeName == "CharWeight" )
     {
         float fFontWeight = 0.0;
         if ( rSourceValue >>= fFontWeight )
@@ -1500,7 +1500,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharUnderline" ) ) )
+    else if ( rAttributeName == "CharUnderline" )
     {
         sal_Int16 nFontUnderline = 0;
         if ( rSourceValue >>= nFontUnderline )
@@ -1511,7 +1511,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharPosture" ) ) )
+    else if ( rAttributeName == "CharPosture" )
     {
         ::com::sun::star::awt::FontSlant eFontSlant;
         if ( rSourceValue >>= eFontSlant )
@@ -1522,7 +1522,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );  // ?
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Visibility" ) ) )
+    else if ( rAttributeName == "Visibility" )
     {
         sal_Bool bVisible = sal_True;
         if ( rSourceValue >>= bVisible )

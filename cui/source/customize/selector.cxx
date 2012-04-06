@@ -345,12 +345,12 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                         // then the user & share are added at depth=1
                     )
                 {
-                    if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
+                    if ( sUIName == "user" )
                     {
                         sUIName = m_sMyMacros;
                         bIsRootNode = sal_True;
                     }
-                    else if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
+                    else if ( sUIName == "share" )
                     {
                         sUIName = m_sProdMacros;
                         bIsRootNode = sal_True;
@@ -743,7 +743,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                         {
                             for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
                             {
-                                if ( aPropSeq[k].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ) )
+                                if ( aPropSeq[k].Name == "Name" )
                                 {
                                     aPropSeq[k].Value >>= aLabel;
                                     break;

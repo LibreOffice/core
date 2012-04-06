@@ -122,7 +122,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
             if( xInfo->supportsService( rServiceName ) )
             {
                 // special case for impress documents which supports same service as draw documents
-                if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
+                if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
                     // so if we want a draw we need to check if its not an impress
                     if( !xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument") ) ) )
@@ -353,22 +353,22 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 for( sal_Int32  nValue = 0; (nValue < aValues.getLength()) && (nFound != 15); nValue++, pValues++ )
                 {
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                    if ( pValues->Name == "Type" )
                     {
                         pValues->Value >>= aType;
                         nFound |= 1;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+                    else if ( pValues->Name == "DocumentService" )
                     {
                         pValues->Value >>= aService;
                         nFound |= 2;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Flags" ) ) )
+                    else if ( pValues->Name == "Flags" )
                     {
                         pValues->Value >>= nFlags;
                         nFound |= 4;
                     }
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
+                    if ( pValues->Name == "UIName" )
                     {
                         pValues->Value >>= aInterfaceName;
                         nFound |= 8;
@@ -392,7 +392,7 @@ void XMLFilterTestDialog::onExportBrowse()
                             OUString aExtension;
                             for( nValue = 0; nValue < aValues2.getLength(); nValue++, pValues2++ )
                             {
-                                if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Extensions" ) ) )
+                                if ( pValues2->Name == "Extensions" )
                                 {
                                     Sequence< OUString > aExtensions;
                                     if( pValues2->Value >>= aExtensions )

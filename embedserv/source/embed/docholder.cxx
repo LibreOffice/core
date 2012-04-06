@@ -1158,7 +1158,7 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentBorder" ) ) )
+            if ( aArgs[nInd].Name == "DocumentBorder" )
             {
                 uno::Sequence< sal_Int32 > aRect;
                 if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )

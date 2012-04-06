@@ -96,7 +96,7 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
             rProp.Value >>= sFilterName;
         else if ( aPropName == ::rtl::OUString(FILTER_OPTIONS_NAME) )
             rProp.Value >>= sFilterOptions;
-        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        else if ( aPropName == "InputStream" )
             rProp.Value >>= xInputStream;
     }
 }

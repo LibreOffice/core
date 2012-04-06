@@ -616,7 +616,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                         sal_Int32 nLength = aUserData.getLength();
                         while( nLength-- )
                         {
-                            if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+                            if ( p->Name == "node-type" )
                             {
                                 sal_Int16 nNodeType = 0;
                                 p->Value >>= nNodeType;
@@ -2222,7 +2222,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             {
             case 0: // event
             case 1: // call
-                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "onstopaudio" ) ) )
+                if ( aParam == "onstopaudio" )
                 {
                     nCommand = EffectCommands::STOPAUDIO;
                 }

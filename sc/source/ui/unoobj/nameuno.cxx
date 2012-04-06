@@ -396,7 +396,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISSHAREDFMLA ) ) )
+    if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
         bool bIsShared = false;
         if( aValue >>= bIsShared )
@@ -413,21 +413,21 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& rPrope
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNO_LINKDISPBIT ) ) )
+    if ( rPropertyName == SC_UNO_LINKDISPBIT )
     {
         //  no target bitmaps for individual entries (would be all equal)
         // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_RANGENAME );
     }
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNO_LINKDISPNAME ) ) )
+    else if ( rPropertyName == SC_UNO_LINKDISPNAME )
         aRet <<= rtl::OUString( aName );
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_TOKENINDEX ) ) )
+    else if ( rPropertyName == SC_UNONAME_TOKENINDEX )
     {
         // get index for use in formula tokens (read-only)
         ScRangeData* pData = GetRangeData_Impl();
         if (pData)
             aRet <<= static_cast<sal_Int32>(pData->GetIndex());
     }
-    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISSHAREDFMLA ) ) )
+    else if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
         if( ScRangeData* pData = GetRangeData_Impl() )
             aRet <<= static_cast< bool >( pData->HasType( RT_SHARED ) );

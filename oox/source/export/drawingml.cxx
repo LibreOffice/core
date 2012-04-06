@@ -1015,7 +1015,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                     if ( pValue ) {
                         OUString aPropName( pPropValue[ i ].Name );
                         DBG(printf ("pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
-                        if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NumberingType" ) ) )
+                        if ( aPropName == "NumberingType" )
                             nNumberingType = *( (sal_Int16*)pValue );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) ) {
                             if( *(OUString*)pValue == US( ")" ) )
@@ -1025,12 +1025,12 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                                 bSDot = true;
                             else if( *(OUString*)pValue == US( ")" ) )
                                 bPBehind = true;
-                        } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletChar" ) ) )
+                        } else if ( aPropName == "BulletChar" )
                         {
                             aBulletChar = String ( *( (String*)pValue ) ).GetChar( 0 );
                             //printf ("bullet char: %d\n", aBulletChar.getStr());
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletFont" ) ) )
+                        else if ( aPropName == "BulletFont" )
                         {
                             aFontDesc = *( (awt::FontDescriptor*)pValue );
                             bHasFontDesc = true;
@@ -1039,7 +1039,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
                             // Because there might exist a lot of damaged documemts I added this two lines
                             // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ) )
+                            if ( aFontDesc.Name == "StarSymbol" )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                         } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletRelSize" ) ) ) {
@@ -1047,7 +1047,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicURL" ) ) ) {
                             aGraphicURL = ( *(OUString*)pValue );
                             DBG(printf ("graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
-                        } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicSize" ) ) )
+                        } else if ( aPropName == "GraphicSize" )
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (awt::Size*)0) )
                             {

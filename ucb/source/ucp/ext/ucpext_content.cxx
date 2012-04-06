@@ -217,7 +217,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         Any aRet;
 
-        if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
+        if ( aCommand.Name == "getPropertyValues" )
         {
             Sequence< Property > Properties;
             if ( !( aCommand.Argument >>= Properties ) )
@@ -230,7 +230,7 @@ namespace ucb { namespace ucp { namespace ext
 
             aRet <<= getPropertyValues( Properties, i_rEvironment );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
+        else if ( aCommand.Name == "setPropertyValues" )
         {
             Sequence< PropertyValue > aProperties;
             if ( !( aCommand.Argument >>= aProperties ) )
@@ -251,17 +251,17 @@ namespace ucb { namespace ucp { namespace ext
 
             aRet <<= setPropertyValues( aProperties, i_rEvironment );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+        else if ( aCommand.Name == "getPropertySetInfo" )
         {
             // implemented by base class.
             aRet <<= getPropertySetInfo( i_rEvironment );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+        else if ( aCommand.Name == "getCommandInfo" )
         {
             // implemented by base class.
             aRet <<= getCommandInfo( i_rEvironment );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+        else if ( aCommand.Name == "open" )
         {
             OpenCommandArgument2 aOpenCommand;
               if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -423,19 +423,19 @@ namespace ucb { namespace ucp { namespace ext
                 const Property& rProp = pProps[ n ];
 
                 // Process Core properties.
-                if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+                if ( rProp.Name == "ContentType" )
                 {
                     xRow->appendString ( rProp, ContentProvider::getArtificialNodeContentType() );
                 }
-                else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                else if ( rProp.Name == "Title" )
                 {
                     xRow->appendString ( rProp, i_rTitle );
                 }
-                else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+                else if ( rProp.Name == "IsDocument" )
                 {
                     xRow->appendBoolean( rProp, sal_False );
                 }
-                else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+                else if ( rProp.Name == "IsFolder" )
                 {
                     xRow->appendBoolean( rProp, sal_True );
                 }

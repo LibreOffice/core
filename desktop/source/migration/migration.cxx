@@ -107,7 +107,7 @@ static const char XDG_CONFIG_PART[] = "/.config";
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
+                        if ( aPropSeq[i].Name == "Label" )
                         {
                             aPropSeq[i].Value >>= aStr;
                             break;

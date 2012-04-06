@@ -128,9 +128,9 @@ throw ( Exception, RuntimeException )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
+                if ( aPropValue.Name == "ResourceURL" )
                     aPropValue.Value >>= m_aResourceURL;
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+                else if ( aPropValue.Name == "Frame" )
                 {
                     Reference< XFrame > xFrame;
                     aPropValue.Value >>= xFrame;

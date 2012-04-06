@@ -201,25 +201,25 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
     for(sal_Int32 i=0; i<rArguments.getLength(); ++i, ++pArguments)
     {
         const beans::PropertyValue& aProperty = *pArguments;
-        if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataRowSource" ) ))
+        if ( aProperty.Name == "DataRowSource" )
         {
             ::com::sun::star::chart::ChartDataRowSource eRowSource;
             if( aProperty.Value >>= eRowSource )
                 bUseColumns = (eRowSource==::com::sun::star::chart::ChartDataRowSource_COLUMNS);
         }
-        else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstCellAsLabel" ) ))
+        else if ( aProperty.Name == "FirstCellAsLabel" )
         {
             aProperty.Value >>= bFirstCellAsLabel;
         }
-        else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasCategories" ) ))
+        else if ( aProperty.Name == "HasCategories" )
         {
             aProperty.Value >>= bHasCategories;
         }
-        else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRangeRepresentation" ) ))
+        else if ( aProperty.Name == "CellRangeRepresentation" )
         {
             aProperty.Value >>= rRangeRepresentation;
         }
-        else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SequenceMapping" ) ))
+        else if ( aProperty.Name == "SequenceMapping" )
         {
             aProperty.Value >>= rSequenceMapping;
         }
@@ -383,19 +383,19 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
         for(sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
         {
             const beans::PropertyValue& aProperty = *pArguments;
-            if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataRowSource" ) ))
+            if ( aProperty.Name == "DataRowSource" )
             {
                 bHasDataRowSource =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
                         ::getCppuType( reinterpret_cast<
                                        const ::com::sun::star::chart::ChartDataRowSource * >(0))));
             }
-            else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstCellAsLabel" ) ))
+            else if ( aProperty.Name == "FirstCellAsLabel" )
             {
                 bHasFirstCellAsLabel =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
             }
-            else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRangeRepresentation" ) ))
+            else if ( aProperty.Name == "CellRangeRepresentation" )
             {
                 ::rtl::OUString aRange;
                 bHasCellRangeRepresentation =

@@ -148,11 +148,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+                if ( aPropValue.Name == "Frame" )
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ))
+                else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ServiceManager" ) ))
+                else if ( aPropValue.Name == "ServiceManager" )
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
             }
         }

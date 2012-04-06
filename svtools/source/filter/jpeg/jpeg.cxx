@@ -604,7 +604,7 @@ JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValu
         const beans::PropertyValue* pValues = pFilterData->getConstArray();
         while( nArgs-- )
         {
-            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+            if ( pValues->Name == "StatusIndicator" )
             {
                 pValues->Value >>= xStatusIndicator;
             }

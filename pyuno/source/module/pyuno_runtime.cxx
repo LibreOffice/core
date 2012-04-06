@@ -188,11 +188,11 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
     OUString str;
     if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGLEVEL" ), str ) )
     {
-        if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NONE" ) ) )
+        if ( str == "NONE" )
             *pLevel = LogLevel::NONE;
-        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CALL" ) ) )
+        else if ( str == "CALL" )
             *pLevel = LogLevel::CALL;
-        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ARGS" ) ) )
+        else if ( str == "ARGS" )
             *pLevel = LogLevel::ARGS;
         else
         {
@@ -205,9 +205,9 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         *ppFile = stdout;
         if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGTARGET" ), str ) )
         {
-            if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stdout" ) ) )
+            if ( str == "stdout" )
                 *ppFile = stdout;
-            else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stderr" ) ) )
+            else if ( str == "stderr" )
                 *ppFile = stderr;
             else
             {

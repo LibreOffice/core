@@ -159,7 +159,7 @@ namespace oox { namespace ppt {
                             sal_Int32 nLength = aUserData.getLength();
                             while( nLength-- )
                             {
-                                if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+                                if ( p->Name == "node-type" )
                                 {
                                     sal_Int16 nNodeType = 0;
                                     p->Value >>= nNodeType;

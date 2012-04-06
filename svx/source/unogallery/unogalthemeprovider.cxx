@@ -182,7 +182,7 @@ void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >&
     {
         const beans::PropertyValue& rProp = aParams[ i ];
 
-        if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ProvideHiddenThemes" ) ) )
+        if ( rProp.Name == "ProvideHiddenThemes" )
             rProp.Value >>= mbHiddenThemes;
     }
 }

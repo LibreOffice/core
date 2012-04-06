@@ -273,7 +273,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         {
             for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
             {
-                if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
+                if ( aPropSeq[i].Name == "Label" )
                 {
                     aPropSeq[i].Value >>= aStr;
                     break;
@@ -383,32 +383,32 @@ enum ETypeFamily
         {
             case E_MS_DOC:
             {
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ))
+                if ( sModule == "com.sun.star.text.TextDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
+                if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ))
+                if ( sModule == "com.sun.star.drawing.DrawingDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
+                if ( sModule == "com.sun.star.presentation.PresentationDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
             }
             break;
 
             case E_OOO_DOC:
             {
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ))
+                if ( sModule == "com.sun.star.text.TextDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
+                if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ))
+                if ( sModule == "com.sun.star.drawing.DrawingDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ));
                 else
-                if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
+                if ( sModule == "com.sun.star.presentation.PresentationDocument" )
                     sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ));
             }
             break;

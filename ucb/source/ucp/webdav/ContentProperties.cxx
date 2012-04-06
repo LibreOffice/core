@@ -479,7 +479,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ]
             = PropertyValue( rValue, true );
     }
-    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
+    else if ( rName == "Content-Type" )
     {
         // Do NOT map Content-Type entity header to DAV:getcontenttype!
         // Only DAV resources have this property.

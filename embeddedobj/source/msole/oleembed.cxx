@@ -293,7 +293,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
             if ( aFilterAnyData >>= aFilterData )
             {
                 for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                    if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+                    if ( aFilterData[nInd].Name == "DocumentService" )
                         aFilterData[nInd].Value >>= aDocServiceName;
             }
 

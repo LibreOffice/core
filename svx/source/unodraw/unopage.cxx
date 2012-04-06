@@ -582,7 +582,7 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
             rInventor = SdrInventor;
             rType = OBJ_TABLE;
         }
-        else if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape" )) )
+        else if ( aName == "com.sun.star.presentation.MediaShape" )
         {
             rInventor = SdrInventor;
             rType = OBJ_MEDIA;

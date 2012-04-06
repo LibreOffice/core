@@ -230,12 +230,12 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
 {
     ThrowIfDisposed();
 
-    if( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnStartPresentation" ) ) )
+    if ( Event.EventName == "OnStartPresentation" )
     {
         mpPresenterScreen = new PresenterScreen(mxComponentContext, mxModel);
         mpPresenterScreen->InitializePresenterScreen();
     }
-    else if( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnEndPresentation" ) ) )
+    else if ( Event.EventName == "OnEndPresentation" )
     {
         if (mpPresenterScreen.is())
         {

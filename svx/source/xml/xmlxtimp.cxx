@@ -484,32 +484,32 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
         sal_Bool bOOoFormat = (XML_NAMESPACE_OFFICE == nPrefix);
         Type aType = mrTable->getElementType();
 
-        if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "color-table" ) ) )
+        if ( rLocalName == "color-table" )
         {
             if( aType == ::getCppuType((const sal_Int32*)0) )
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_color, mrTable, bOOoFormat );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "marker-table" ) ) )
+        else if ( rLocalName == "marker-table" )
         {
             if( aType == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_marker, mrTable, bOOoFormat );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dash-table" ) ) )
+        else if ( rLocalName == "dash-table" )
         {
             if( aType == ::getCppuType((const drawing::LineDash*)0) )
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_dash, mrTable, bOOoFormat );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hatch-table" ) ) )
+        else if ( rLocalName == "hatch-table" )
         {
             if( aType == ::getCppuType((const drawing::Hatch*)0) )
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_hatch, mrTable, bOOoFormat );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gradient-table" ) ) )
+        else if ( rLocalName == "gradient-table" )
         {
             if( aType == ::getCppuType((const awt::Gradient*)0))
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_gradient, mrTable, bOOoFormat );
         }
-        else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bitmap-table" ) ) )
+        else if ( rLocalName == "bitmap-table" )
         {
             if( aType == ::getCppuType((const OUString*)0))
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_bitmap, mrTable, bOOoFormat );

@@ -389,7 +389,7 @@ throw(beans::UnknownPropertyException, beans::PropertyVetoException,
 
         if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
             rProp.Value >>= msPassword;
-        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        else if ( aPropName == "InputStream" )
             rProp.Value >>= mxInputStream;
     }
 }

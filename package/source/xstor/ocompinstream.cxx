@@ -389,7 +389,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Target" ) ) )
+        if ( aSeq[nInd].First == "Target" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -414,7 +414,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+        if ( aSeq[nInd].First == "Type" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -441,7 +441,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Id" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
                     return aSeq[nInd1];
@@ -474,7 +474,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Type" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
                 {
@@ -505,7 +505,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
-        if ( m_aProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+        if ( m_aProperties[aInd].Name == "RelationsInfo" )
         {
             if ( m_aProperties[aInd].Value >>= aResult )
                 return aResult;
@@ -655,12 +655,12 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
     }
 
     ::rtl::OUString aPropertyName;
-    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) )
+    if ( aProp == "IsEncrypted" )
         aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
     else
         aPropertyName = aProp;
 
-    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+    if ( aPropertyName == "RelationsInfo" )
         throw beans::UnknownPropertyException(); // TODO
 
     // all the provided properties are accessible

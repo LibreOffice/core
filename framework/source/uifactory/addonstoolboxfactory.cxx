@@ -173,11 +173,11 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
+        if ( Args[n].Name == "ConfigurationData" )
             Args[n].Value >>= aConfigData;
-        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+        else if ( Args[n].Name == "Frame" )
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
+        else if ( Args[n].Name == "ResourceURL" )
             Args[n].Value >>= aResourceURL;
     }
 

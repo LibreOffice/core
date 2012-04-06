@@ -889,7 +889,7 @@ namespace
                 {
                     Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
                     ::rtl::OUString sModule = xCheck->identify( xFrame );
-                    if ( sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.frame.StartModule" ) ) )
+                    if ( sModule == "com.sun.star.frame.StartModule" )
                         return xFrame;
                 }
                 catch( const UnknownModuleException& )

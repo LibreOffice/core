@@ -987,11 +987,11 @@ void makeRedline( SwPaM& rPaM,
     IDocumentRedlineAccess* pRedlineAccess = rPaM.GetDoc();
 
     RedlineType_t eType = nsRedlineType_t::REDLINE_INSERT;
-    if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Delete" ) ))
+    if ( rRedlineType == "Delete" )
         eType = nsRedlineType_t::REDLINE_DELETE;
-    else if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Format" ) ))
+    else if ( rRedlineType == "Format" )
         eType = nsRedlineType_t::REDLINE_FORMAT;
-    else if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "TextTable" ) ))
+    else if ( rRedlineType == "TextTable" )
         eType = nsRedlineType_t::REDLINE_TABLE;
     else if( !rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Insert" ) ))
         throw lang::IllegalArgumentException();

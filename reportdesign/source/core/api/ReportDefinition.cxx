@@ -2245,7 +2245,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
+            if ( aValue.Name == "Storage" )
                 aValue.Value >>= xStorage;
         }
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);

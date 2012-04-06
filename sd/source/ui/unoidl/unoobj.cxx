@@ -447,7 +447,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     {
         uno::Any aRet( mpShape->_getPropertyDefault(aPropertyName) );
 
-        if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+        if ( aPropertyName == sUNO_shape_layername )
         {
             OUString aName;
             if( aRet >>= aName )
@@ -688,7 +688,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     {
         uno::Any aAny( aValue );
 
-        if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+        if ( aPropertyName == sUNO_shape_layername )
         {
             OUString aName;
             if( aAny >>= aName )
@@ -848,7 +848,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     {
         aRet = mpShape->_getPropertyValue(PropertyName);
 
-        if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+        if ( PropertyName == sUNO_shape_layername )
         {
             OUString aName;
             if( aRet >>= aName )
@@ -1451,7 +1451,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 sBuffer.append( aLibName );
                 sBuffer.append( sal_Unicode('.') );
 
-                if( aStrLibrary.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) ) )
+                if ( aStrLibrary == "StarOffice" )
                 {
                     sBuffer.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
                 }

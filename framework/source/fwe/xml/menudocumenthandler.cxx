@@ -288,7 +288,7 @@ throw( SAXException, RuntimeException )
         ++m_nElementDepth;
         m_xReader->startElement( aName, xAttrList );
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUBAR )))
+    else if ( aName == ELEMENT_MENUBAR )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
@@ -369,7 +369,7 @@ throw( SAXException, RuntimeException )
         ++m_nElementDepth;
         m_xReader->startElement( rName, xAttrList );
     }
-    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
+    else if ( rName == ELEMENT_MENU )
     {
         ++m_nElementDepth;
 
@@ -397,13 +397,13 @@ throw( SAXException, RuntimeException )
             {
                 ::rtl::OUString aName = xAttrList->getNameByIndex( i );
                 ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
-                if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ID )))
+                if ( aName == ATTRIBUTE_ID )
                     aCommandId = aValue;
-                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_LABEL )))
+                else if ( aName == ATTRIBUTE_LABEL )
                     aLabel = aValue;
-                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
+                else if ( aName == ATTRIBUTE_HELPID )
                     aHelpId = aValue;
-                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+                else if ( aName == ATTRIBUTE_STYLE )
                 {
                     ::rtl::OUString aTemp( aValue );
                     sal_Int32 nIndex = 0;
@@ -412,11 +412,11 @@ throw( SAXException, RuntimeException )
                         ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
                         if ( !aToken.isEmpty() )
                         {
-                            if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                            if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                            else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                            else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                            else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
+                            else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                         }
                     }
@@ -522,7 +522,7 @@ throw( SAXException, RuntimeException )
         ++m_nElementDepth;
         m_xReader->startElement( aName, xAttrList );
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUPOPUP )))
+    else if ( aName == ELEMENT_MENUPOPUP )
     {
         ++m_nElementDepth;
         m_bMenuPopupMode = sal_True;
@@ -607,7 +607,7 @@ throw( SAXException, RuntimeException )
 
     if ( m_bMenuMode )
         m_xReader->startElement( rName, xAttrList );
-    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
+    else if ( rName == ELEMENT_MENU )
     {
         ::rtl::OUString aHelpId;
         ::rtl::OUString aCommandId;
@@ -632,13 +632,13 @@ throw( SAXException, RuntimeException )
         {
             ::rtl::OUString aName = xAttrList->getNameByIndex( i );
             ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
-            if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ID )))
+            if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_LABEL )))
+            else if ( aName == ATTRIBUTE_LABEL )
                 aLabel = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
+            else if ( aName == ATTRIBUTE_HELPID )
                 aHelpId = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+            else if ( aName == ATTRIBUTE_STYLE )
             {
                 ::rtl::OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
@@ -647,11 +647,11 @@ throw( SAXException, RuntimeException )
                     ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
-                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                        if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                        else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
+                        else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
@@ -678,7 +678,7 @@ throw( SAXException, RuntimeException )
         m_xReader = Reference< XDocumentHandler >( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
         m_xReader->startDocument();
     }
-    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
+    else if ( rName == ELEMENT_MENUITEM )
     {
         ::rtl::OUString aHelpId;
         ::rtl::OUString aCommandId;
@@ -689,13 +689,13 @@ throw( SAXException, RuntimeException )
         {
             ::rtl::OUString aName = xAttrList->getNameByIndex( i );
             ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
-            if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ID )))
+            if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_LABEL )))
+            else if ( aName == ATTRIBUTE_LABEL )
                 aLabel = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
+            else if ( aName == ATTRIBUTE_HELPID )
                 aHelpId = aValue;
-            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+            else if ( aName == ATTRIBUTE_STYLE )
             {
                 ::rtl::OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
@@ -704,11 +704,11 @@ throw( SAXException, RuntimeException )
                     ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
-                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                        if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                        else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
+                        else if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
@@ -728,7 +728,7 @@ throw( SAXException, RuntimeException )
 
         m_nNextElementExpected = ELEM_CLOSE_MENUITEM;
     }
-    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUSEPARATOR )))
+    else if ( rName == ELEMENT_MENUSEPARATOR )
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
         aMenuSeparator[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));

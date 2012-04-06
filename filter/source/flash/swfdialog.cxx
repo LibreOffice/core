@@ -241,7 +241,7 @@ Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 
     for( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
             break;
     }
 
@@ -263,7 +263,7 @@ void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name == "FilterData" )
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;

@@ -201,11 +201,11 @@ NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
 sal_Int16
 NumberFormatCodeMapper::mapElementTypeStringToShort(const ::rtl::OUString& formatType)
 {
-    if(formatType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "short" ) ))
+    if ( formatType == "short" )
         return com::sun::star::i18n::KNumberFormatType::SHORT;
-    if(formatType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "medium" ) ))
+    if ( formatType == "medium" )
         return com::sun::star::i18n::KNumberFormatType::MEDIUM;
-    if(formatType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "long" ) ))
+    if ( formatType == "long" )
         return com::sun::star::i18n::KNumberFormatType::LONG;
 
     return com::sun::star::i18n::KNumberFormatType::SHORT;
@@ -240,21 +240,21 @@ NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
 sal_Int16
 NumberFormatCodeMapper::mapElementUsageStringToShort(const ::rtl::OUString& formatUsage)
 {
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DATE" ) ))
+    if ( formatUsage == "DATE" )
         return com::sun::star::i18n::KNumberFormatUsage::DATE;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TIME" ) ))
+    if ( formatUsage == "TIME" )
         return com::sun::star::i18n::KNumberFormatUsage::TIME;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DATE_TIME" ) ))
+    if ( formatUsage == "DATE_TIME" )
         return com::sun::star::i18n::KNumberFormatUsage::DATE_TIME;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FIXED_NUMBER" ) ))
+    if ( formatUsage == "FIXED_NUMBER" )
         return com::sun::star::i18n::KNumberFormatUsage::FIXED_NUMBER;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FRACTION_NUMBER" ) ))
+    if ( formatUsage == "FRACTION_NUMBER" )
         return com::sun::star::i18n::KNumberFormatUsage::FRACTION_NUMBER;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PERCENT_NUMBER" ) ))
+    if ( formatUsage == "PERCENT_NUMBER" )
         return  com::sun::star::i18n::KNumberFormatUsage::PERCENT_NUMBER;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CURRENCY" ) ))
+    if ( formatUsage == "CURRENCY" )
         return com::sun::star::i18n::KNumberFormatUsage::CURRENCY;
-    if(formatUsage.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SCIENTIFIC_NUMBER" ) ))
+    if ( formatUsage == "SCIENTIFIC_NUMBER" )
         return com::sun::star::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER;
 
     return 0;

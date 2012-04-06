@@ -804,7 +804,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
 {
     if (mpBaseContext)
     {
-        if( maConfigItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" ) ) )
+        if ( maConfigItemName == "ForbiddenCharacters" )
         {
             uno::Reference< i18n::XForbiddenCharacters > xForbChars;
 
@@ -891,7 +891,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
-        else if( maConfigItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Symbols" ) ) )
+        else if ( maConfigItemName == "Symbols" )
         {
             uno::Reference< container::XIndexAccess > xIndex( maProps.GetIndexContainer(), uno::UNO_QUERY );
 

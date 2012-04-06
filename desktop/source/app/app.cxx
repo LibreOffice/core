@@ -2425,7 +2425,7 @@ void Desktop::OpenClients()
         OUString aPreloadData;
 
         aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "QuickstartPreloadConfiguration" )), aPreloadData, aDefault );
-        if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
+        if ( aPreloadData == "1" )
         {
             if ( rArgs.IsWriter()  ||
                  rArgs.IsCalc()    ||

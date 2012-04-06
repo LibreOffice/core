@@ -334,7 +334,7 @@ namespace dbaccess
 
         if ( m_aStates.empty() )
         {
-            if ( i_Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "office:settings" ) ) )
+            if ( i_Name == "office:settings" )
             {
                 pNewState = new OfficeSettingsImport( m_aSettings );
             }
@@ -503,7 +503,7 @@ namespace dbaccess
             break;
 
         case REPORT:
-            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.report.ReportDefinition" ) ) )
+            if ( sModuleIdentifier == "com.sun.star.report.ReportDefinition" )
             {
                 // it's an SRB report designer
                 m_aCompDesc.bForEditing = true;
@@ -516,7 +516,7 @@ namespace dbaccess
             break;
 
         default:
-            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.RelationDesign" ) ) )
+            if ( sModuleIdentifier == "com.sun.star.sdb.RelationDesign" )
             {
                 m_eType = RELATION_DESIGN;
                 m_aCompDesc.bForEditing = true;

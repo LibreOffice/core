@@ -419,11 +419,11 @@ uno::Any SAL_CALL Content::execute(
               }
         }
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "close" ) ) )
+    else if ( aCommand.Name == "close" )
     {
         getContentProvider()->closeDocument(m_aProps->m_sDocumentId);
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -828,7 +828,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         const beans::PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        if ( rValue.Name == "Title" )
         {
             changePropertyValue(rValue,n,m_aProps->m_sTitle,nChanged,aRet,aChanges);
         }

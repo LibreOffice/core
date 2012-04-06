@@ -199,7 +199,7 @@ bool XMLFilterTabDialog::onOk()
 
                         for( nValue = 0; (nValue < nValueCount) && (nErrorId == 0); nValue++, pValues++ )
                         {
-                            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
+                            if ( pValues->Name == "UIName" )
                             {
                                 OUString aInterfaceName;
                                 pValues->Value >>= aInterfaceName;

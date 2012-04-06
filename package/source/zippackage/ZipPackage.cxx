@@ -691,9 +691,9 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             }
             else if ( ( aArguments[ind] >>= aNamedValue ) )
             {
-                if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) )
+                if ( aNamedValue.Name == "RepairPackage" )
                     aNamedValue.Value >>= m_bForceRecovery;
-                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PackageFormat" ) ) )
+                else if ( aNamedValue.Name == "PackageFormat" )
                 {
                     // setting this argument to true means Package format
                     // setting it to false means plain Zip format
@@ -705,7 +705,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
+                else if ( aNamedValue.Name == "StorageFormat" )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;
@@ -734,7 +734,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowRemoveOnInsert" ) ) )
+                else if ( aNamedValue.Name == "AllowRemoveOnInsert" )
                 {
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
                     m_pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
@@ -1730,14 +1730,14 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
       ||aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( IS_INCONSISTENT_PROPERTY ) )
       ||aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MEDIATYPE_FALLBACK_USED_PROPERTY ) ) )
         throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_KEY_PROPERTY ) ) )
+    else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( !( aValue >>= m_aEncryptionKey ) )
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
 
         m_aStorageEncryptionKeys.realloc( 0 );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
+    else if ( aPropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         // this property is only necessary to support raw passwords in storage API;
         // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
@@ -1766,7 +1766,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         m_aStorageEncryptionKeys = aKeys;
         m_aEncryptionKey.realloc( 0 );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ) )
+    else if ( aPropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
     {
         uno::Sequence< beans::NamedValue > aAlgorithms;
         if ( m_pZipFile || !( aValue >>= aAlgorithms ) || aAlgorithms.getLength() == 0 )
@@ -1777,7 +1777,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
         for ( sal_Int32 nInd = 0; nInd < aAlgorithms.getLength(); nInd++ )
         {
-            if ( aAlgorithms[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartKeyGenerationAlgorithm" ) ) )
+            if ( aAlgorithms[nInd].Name == "StartKeyGenerationAlgorithm" )
             {
                 sal_Int32 nID = 0;
                 if ( !( aAlgorithms[nInd].Value >>= nID )
@@ -1786,7 +1786,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
                 m_nStartKeyGenerationID = nID;
             }
-            else if ( aAlgorithms[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncryptionAlgorithm" ) ) )
+            else if ( aAlgorithms[nInd].Name == "EncryptionAlgorithm" )
             {
                 sal_Int32 nID = 0;
                 if ( !( aAlgorithms[nInd].Value >>= nID )
@@ -1795,7 +1795,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
                 m_nCommonEncryptionID = nID;
             }
-            else if ( aAlgorithms[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ChecksumAlgorithm" ) ) )
+            else if ( aAlgorithms[nInd].Name == "ChecksumAlgorithm" )
             {
                 sal_Int32 nID = 0;
                 if ( !( aAlgorithms[nInd].Value >>= nID )
@@ -1824,12 +1824,12 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     Any aAny;
-    if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( ENCRYPTION_KEY_PROPERTY ) ) )
+    if ( PropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         aAny <<= m_aEncryptionKey;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ) )
+    else if ( PropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
     {
         ::comphelper::SequenceAsHashMap aAlgorithms;
         aAlgorithms[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartKeyGenerationAlgorithm" ) ) ] <<= m_nStartKeyGenerationID;
@@ -1838,27 +1838,27 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         aAny <<= aAlgorithms.getAsConstNamedValueList();
         return aAny;
     }
-    if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
+    if ( PropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         aAny <<= m_aStorageEncryptionKeys;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( HAS_ENCRYPTED_ENTRIES_PROPERTY ) ) )
+    else if ( PropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY )
     {
         aAny <<= m_bHasEncryptedEntries;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( HAS_NONENCRYPTED_ENTRIES_PROPERTY ) ) )
+    else if ( PropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY )
     {
         aAny <<= m_bHasNonEncryptedEntries;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( IS_INCONSISTENT_PROPERTY ) ) )
+    else if ( PropertyName == IS_INCONSISTENT_PROPERTY )
     {
         aAny <<= m_bInconsistent;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( MEDIATYPE_FALLBACK_USED_PROPERTY ) ) )
+    else if ( PropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY )
     {
         aAny <<= m_bMediaTypeFallbackUsed;
         return aAny;

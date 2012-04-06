@@ -617,7 +617,7 @@ void DocumentHolder::FindConnectPoints(
         xMenu->getByIndex( nInd ) >>= aProps;
         rtl::OUString aCommand;
         for ( sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); nSeqInd++ )
-            if ( aProps[nSeqInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ) )
+            if ( aProps[nSeqInd].Name == "CommandURL" )
             {
                 aProps[nSeqInd].Value >>= aCommand;
                 break;
@@ -626,9 +626,9 @@ void DocumentHolder::FindConnectPoints(
         if ( aCommand.isEmpty() )
             throw uno::RuntimeException();
 
-        if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:PickList" ) ) )
+        if ( aCommand == ".uno:PickList" )
             nConnectPoints[0] = nInd;
-        else if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:WindowList" ) ) )
+        else if ( aCommand == ".uno:WindowList" )
             nConnectPoints[1] = nInd;
     }
 }

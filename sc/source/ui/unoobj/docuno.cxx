@@ -367,12 +367,12 @@ void ScPrintUIOptions::SetDefaults()
             for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
             {
                 rtl::OUString aName = aUIProp[nPropPos].Name;
-                if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
+                if ( aName == "Property" )
                 {
                     beans::PropertyValue aPropertyValue;
                     if ( aUIProp[nPropPos].Value >>= aPropertyValue )
                     {
-                        if ( aPropertyValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintContent" ) ) )
+                        if ( aPropertyValue.Name == "PrintContent" )
                         {
                             aPropertyValue.Value <<= nContent;
                             aUIProp[nPropPos].Value <<= aPropertyValue;
@@ -824,28 +824,28 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
     {
-        if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsOnlySelectedSheets" ) ) )
+        if ( rOptions[i].Name == "IsOnlySelectedSheets" )
         {
             rOptions[i].Value >>= bSelectedSheetsOnly;
         }
-        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsIncludeEmptyPages" ) ) )
+        else if ( rOptions[i].Name == "IsIncludeEmptyPages" )
         {
             rOptions[i].Value >>= bIncludeEmptyPages;
         }
-        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageRange" ) ) )
+        else if ( rOptions[i].Name == "PageRange" )
         {
             rOptions[i].Value >>= aPageRange;
         }
-        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
+        else if ( rOptions[i].Name == "PrintRange" )
         {
             rOptions[i].Value >>= nPrintRange;
         }
-        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintContent" ) ) )
+        else if ( rOptions[i].Name == "PrintContent" )
         {
             bHasPrintContent = true;
             rOptions[i].Value >>= nPrintContent;
         }
-        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "View" ) ) )
+        else if ( rOptions[i].Name == "View" )
         {
             rOptions[i].Value >>= xView;
         }

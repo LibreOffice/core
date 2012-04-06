@@ -3461,9 +3461,9 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
             {
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
-                    if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                    if ( aPropSeq[n].Name == "Name" )
                         aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillGradient" )))
+                    else if ( aPropSeq[n].Name == "FillGradient" )
                     {
                         if ( aPropSeq[n].Value >>= aGradient2 )
                             bGradient = true;
@@ -4057,9 +4057,9 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             {
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
-                    if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                    if ( aPropSeq[n].Name == "Name" )
                         aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillHatch" )))
+                    else if ( aPropSeq[n].Name == "FillHatch" )
                     {
                         if ( aPropSeq[n].Value >>= aUnoHatch )
                             bHatch = true;

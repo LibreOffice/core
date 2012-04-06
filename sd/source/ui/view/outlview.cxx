@@ -1938,7 +1938,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             if( pStyleSheet )
             {
                 const OUString aName( pStyleSheet->GetApiName() );
-                if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title" ) ) )
+                if ( aName == "title" )
                     bPage = true;
             }
         }

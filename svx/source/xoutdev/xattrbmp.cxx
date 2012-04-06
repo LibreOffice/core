@@ -712,11 +712,11 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
         {
             for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
             {
-                if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                if ( aPropSeq[n].Name == "Name" )
                     bSetName = (aPropSeq[n].Value >>= aName);
-                else if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillBitmapURL" )))
+                else if ( aPropSeq[n].Name == "FillBitmapURL" )
                     bSetURL = (aPropSeq[n].Value >>= aURL);
-                else if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bitmap" )))
+                else if ( aPropSeq[n].Name == "Bitmap" )
                     bSetBitmap = (aPropSeq[n].Value >>= xBmp);
             }
         }

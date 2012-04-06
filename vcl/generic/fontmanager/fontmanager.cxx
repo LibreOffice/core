@@ -2936,53 +2936,53 @@ bool PrintFontManager::readOverrideMetrics()
         const NamedValue* pProps = aMetrics.getConstArray();
         for( sal_Int32 n = 0; n < nProps; n++ )
         {
-            if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FamilyName" ) ) )
+            if ( pProps[n].Name == "FamilyName" )
                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME,
                                                           getString(pProps[n].Value),
                                                           sal_True );
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PSName" ) ) )
+            else if ( pProps[n].Name == "PSName" )
                 pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME,
                                                       getString(pProps[n].Value),
                                                       sal_True );
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StyleName" ) ) )
+            else if ( pProps[n].Name == "StyleName" )
                 pFont->m_aStyleName = getString(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Italic" ) ) )
+            else if ( pProps[n].Name == "Italic" )
                 pFont->m_eItalic = static_cast<FontItalic>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+            else if ( pProps[n].Name == "Width" )
                 pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Weight" ) ) )
+            else if ( pProps[n].Name == "Weight" )
                 pFont->m_eWeight = static_cast<FontWeight>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Pitch" ) ) )
+            else if ( pProps[n].Name == "Pitch" )
                 pFont->m_ePitch = static_cast<FontPitch>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encoding" ) ) )
+            else if ( pProps[n].Name == "Encoding" )
                 pFont->m_aEncoding = static_cast<rtl_TextEncoding>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontEncodingOnly" ) ) )
+            else if ( pProps[n].Name == "FontEncodingOnly" )
                 pFont->m_bFontEncodingOnly = getBool(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricXWidth" ) ) )
+            else if ( pProps[n].Name == "GlobalMetricXWidth" )
                 pFont->m_aGlobalMetricX.width = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricXHeight" ) ) )
+            else if ( pProps[n].Name == "GlobalMetricXHeight" )
                 pFont->m_aGlobalMetricX.height = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricYWidth" ) ) )
+            else if ( pProps[n].Name == "GlobalMetricYWidth" )
                 pFont->m_aGlobalMetricY.width = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricYHeight" ) ) )
+            else if ( pProps[n].Name == "GlobalMetricYHeight" )
                 pFont->m_aGlobalMetricY.height = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Ascend" ) ) )
+            else if ( pProps[n].Name == "Ascend" )
                 pFont->m_nAscend = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Descend" ) ) )
+            else if ( pProps[n].Name == "Descend" )
                 pFont->m_nDescend = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Leading" ) ) )
+            else if ( pProps[n].Name == "Leading" )
                 pFont->m_nLeading = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XMin" ) ) )
+            else if ( pProps[n].Name == "XMin" )
                 pFont->m_nXMin = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "YMin" ) ) )
+            else if ( pProps[n].Name == "YMin" )
                 pFont->m_nYMin = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XMax" ) ) )
+            else if ( pProps[n].Name == "XMax" )
                 pFont->m_nXMax = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "YMax" ) ) )
+            else if ( pProps[n].Name == "YMax" )
                 pFont->m_nYMax = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerticalSubstitutes" ) ) )
+            else if ( pProps[n].Name == "VerticalSubstitutes" )
                 pFont->m_bHaveVerticalSubstitutedGlyphs = getBool(pProps[n].Value);
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncodingVector" ) ) )
+            else if ( pProps[n].Name == "EncodingVector" )
             {
                 Sequence< NamedValue > aEncoding;
                 pProps[n].Value >>= aEncoding;
@@ -2995,7 +2995,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_aEncodingVector[ cCode ] = nGlyph;
                 }
             }
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NonEncoded" ) ) )
+            else if ( pProps[n].Name == "NonEncoded" )
             {
                 Sequence< NamedValue > aEncoding;
                 pProps[n].Value >>= aEncoding;
@@ -3008,7 +3008,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_aNonEncoded[ cCode ] = OUStringToOString(aGlyphName,RTL_TEXTENCODING_ASCII_US);
                 }
             }
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharacterMetrics" ) ) )
+            else if ( pProps[n].Name == "CharacterMetrics" )
             {
                 // fill pFont->m_pMetrics->m_aMetrics
                 // expect triples of int: int -> CharacterMetric.{ width, height }
@@ -3022,7 +3022,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_pMetrics->m_aMetrics[ pInts[m] ].height = static_cast<short int>(pInts[m+2]);
                 }
             }
-            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XKernPairs" ) ) )
+            else if ( pProps[n].Name == "XKernPairs" )
             {
                 // fill pFont->m_pMetrics->m_aXKernPairs
                 // expection name: <unicode1><unicode2> value: ((height << 16)| width)

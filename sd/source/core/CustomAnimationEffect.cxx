@@ -176,27 +176,27 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
 
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+        if ( p->Name == "node-type" )
         {
             p->Value >>= mnNodeType;
         }
-        else if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
+        else if ( p->Name == "preset-id" )
         {
             p->Value >>= maPresetId;
         }
-        else if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-sub-type" ) ) )
+        else if ( p->Name == "preset-sub-type" )
         {
             p->Value >>= maPresetSubType;
         }
-        else if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-class" ) ) )
+        else if ( p->Name == "preset-class" )
         {
             p->Value >>= mnPresetClass;
         }
-        else if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-property" ) ) )
+        else if ( p->Name == "preset-property" )
         {
             p->Value >>= maProperty;
         }
-        else if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "group-id" ) ) )
+        else if ( p->Name == "group-id" )
         {
             p->Value >>= mnGroupId;
         }
@@ -416,7 +416,7 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
             const NamedValue* p = aUserData.getConstArray();
             while( nLength-- )
             {
-                if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+                if ( p->Name == "node-type" )
                 {
                     p->Value >>= nNodeType;
                     break;
@@ -448,7 +448,7 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
                 NamedValue* p = aUserData.getArray();
                 while( nLength-- )
                 {
-                    if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-class" ) ) )
+                    if ( p->Name == "preset-class" )
                     {
                         p->Value <<= mnPresetClass;
                         bFound = true;
@@ -489,7 +489,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
                 NamedValue* p = aUserData.getArray();
                 while( nLength-- )
                 {
-                    if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
+                    if ( p->Name == "node-type" )
                     {
                         p->Value <<= mnNodeType;
                         bFound = true;
@@ -530,7 +530,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
             NamedValue* p = aUserData.getArray();
             while( nLength-- )
             {
-                if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "group-id" ) ) )
+                if ( p->Name == "group-id" )
                 {
                     p->Value <<= mnGroupId;
                     bFound = true;
@@ -3132,7 +3132,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
 
         while( nLength-- )
         {
-            if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-element" ) ) )
+            if ( p->Name == "master-element" )
             {
                 p->Value >>= xMaster;
                 break;

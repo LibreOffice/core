@@ -109,7 +109,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 sURL.append(sDatabaseName);
             }
         }
-        else if ( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "jdbc:oracle:thin" ) ) )
+        else if ( sType == "jdbc:oracle:thin" )
         {
             sURL.appendAscii("jdbc:oracle:thin:@");
             sURL.append(sHostName);
@@ -124,7 +124,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 sURL.append(sDatabaseName);
             }
         }
-        else if ( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:address:ldap" ) ) )
+        else if ( sType == "sdbc:address:ldap" )
         {
             sURL.appendAscii("sdbc:address:ldap:");
             sURL.append(sHostName);

@@ -807,7 +807,7 @@ bool ScOptSolverDlg::FindTimeout( sal_Int32& rTimeout )
     for (sal_Int32 nProp=0; nProp<nPropCount && !bFound; ++nProp)
     {
         const beans::PropertyValue& rValue = maProperties[nProp];
-        if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_TIMEOUT ) ) )
+        if ( rValue.Name == SC_UNONAME_TIMEOUT )
             bFound = ( rValue.Value >>= rTimeout );
     }
     return bFound;

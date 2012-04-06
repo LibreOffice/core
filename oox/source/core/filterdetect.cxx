@@ -163,7 +163,7 @@ void SAL_CALL FilterDetectDocHandler::processingInstruction(
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
-    if( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) ) )
+    if ( aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" )
     {
         Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  com::sun::star::uri::UriReferenceFactory::create( mxContext );
         try
@@ -202,7 +202,7 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
         rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.template.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "MS Excel 2007 XML Template" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.sheet.binary.macroEnabled.main" ) ) )
+    if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return CREATE_OUSTRING( "MS Excel 2007 Binary" );
 
     if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ) ||

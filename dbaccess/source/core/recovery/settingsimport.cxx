@@ -154,7 +154,7 @@ namespace dbaccess
         ::rtl::OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
-        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item-set" ) ) )
+        if ( sLocalName == "config-item-set" )
             return new ConfigItemSetImport( m_rSettings );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -273,9 +273,9 @@ namespace dbaccess
         ::rtl::OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
-        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item-set" ) ) )
+        if ( sLocalName == "config-item-set" )
             return new ConfigItemSetImport( m_aChildSettings );
-        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item" ) ) )
+        if ( sLocalName == "config-item" )
             return new ConfigItemImport( m_aChildSettings );
 
 #if OSL_DEBUG_LEVEL > 0

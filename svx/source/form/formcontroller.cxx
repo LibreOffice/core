@@ -3524,7 +3524,7 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
 
     m_aMode = Mode;
 
-    if ( Mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterMode" ) ) )
+    if ( Mode == "FilterMode" )
         startFiltering();
     else
         stopFiltering();
@@ -4184,7 +4184,7 @@ void SAL_CALL FormController::dispatch( const URL& _rURL, const Sequence< Proper
         return;
     }
 
-    if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:/InteractionHandler" ) ) )
+    if ( _rURL.Complete == "private:/InteractionHandler" )
     {
         Reference< XInteractionRequest > xRequest;
         OSL_VERIFY( _rArgs[0].Value >>= xRequest );

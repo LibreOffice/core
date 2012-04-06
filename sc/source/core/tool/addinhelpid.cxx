@@ -169,12 +169,12 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     pCurrHelpIds = NULL;
     sal_uInt32 nSize = 0;
 
-    if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.Analysis" ) ) )
+    if ( rServiceName == "com.sun.star.sheet.addin.Analysis" )
     {
         pCurrHelpIds = pAnalysisHelpIds;
         nSize = sizeof( pAnalysisHelpIds );
     }
-    else if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.DateFunctions" ) ) )
+    else if ( rServiceName == "com.sun.star.sheet.addin.DateFunctions" )
     {
         pCurrHelpIds = pDateFuncHelpIds;
         nSize = sizeof( pDateFuncHelpIds );

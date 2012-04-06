@@ -205,7 +205,7 @@ sal_Bool XFlatXml::exporter(
         aName = aSourceData[i].Name;
         if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
             aSourceData[i].Value >>= rOutputStream;
-        else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL" ) ))
+        else if ( aName == "URL" )
             aSourceData[i].Value >>= sURL;
     }
 

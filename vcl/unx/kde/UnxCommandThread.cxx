@@ -188,27 +188,27 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
     ::rtl::OUString aCommandName = aList.front();
     aList.pop_front();
 
-    if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "accept" ) ) )
+    if ( aCommandName == "accept" )
     {
         m_aResult = sal_True;
         m_aExecCondition.set();
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "reject" ) ) )
+    else if ( aCommandName == "reject" )
     {
         m_aResult = sal_False;
         m_aExecCondition.set();
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fileSelectionChanged" ) ) )
+    else if ( aCommandName == "fileSelectionChanged" )
     {
         if ( m_pNotifyThread )
             m_pNotifyThread->fileSelectionChanged();
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "files" ) ) )
+    else if ( aCommandName == "files" )
     {
         m_aGetFiles = aList;
         m_aGetFilesCondition.set();
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "value" ) ) )
+    else if ( aCommandName == "value" )
     {
         ::rtl::OUString aType;
         if ( !aList.empty() )
@@ -217,14 +217,14 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
             aList.pop_front();
         }
 
-        if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bool" ) ) )
+        if ( aType == "bool" )
         {
             sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
 
             m_aGetValue <<= bValue;
             m_aGetValueCondition.set();
         }
-        else if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "int" ) ) )
+        else if ( aType == "int" )
         {
             sal_Int32 nValue = 0;
             if ( !aList.empty() )
@@ -233,7 +233,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
             m_aGetValue <<= nValue;
             m_aGetValueCondition.set();
         }
-        else if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "string" ) ) )
+        else if ( aType == "string" )
         {
             ::rtl::OUString aValue;
             if ( !aList.empty() )
@@ -242,7 +242,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
             m_aGetValue <<= aValue;
             m_aGetValueCondition.set();
         }
-        else if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stringList" ) ) )
+        else if ( aType == "stringList" )
         {
             uno::Sequence< ::rtl::OUString > aSequence( aList.size() );
             sal_Int32 nIdx = 0;
@@ -258,12 +258,12 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
             m_aGetValueCondition.set();
         }
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "currentFilter" ) ) )
+    else if ( aCommandName == "currentFilter" )
     {
         m_aGetCurrentFilter = aList.empty()? ::rtl::OUString(): aList.front();
         m_aGetCurrentFilterCondition.set();
     }
-    else if ( aCommandName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "currentDirectory" ) ) )
+    else if ( aCommandName == "currentDirectory" )
     {
         m_aGetDirectory = aList.empty()? ::rtl::OUString(): aList.front();
         m_aGetDirectoryCondition.set();

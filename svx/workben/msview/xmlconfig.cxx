@@ -169,32 +169,32 @@ void SAL_CALL ConfigHandler::startElement(const OUString& aName, const Reference
 {
     ElementConfigPtr pElement;
 
-    if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config" ) ) )
+    if ( aName == "config" )
     {
         return;
     }
 
-    if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "container" ) ) )
+    if ( aName == "container" )
     {
         pElement = importAtomConfig( xAttribs, true );
     }
-    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "atom" ) ) )
+    else if ( aName == "atom" )
     {
         pElement = importAtomConfig( xAttribs, false );
     }
-    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "element" ) ) )
+    else if ( aName == "element" )
     {
         pElement = importElementConfig( xAttribs );
     }
-    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "value" ) ) )
+    else if ( aName == "value" )
     {
         pElement = importValueElementConfig( xAttribs );
     }
-    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "switch" ) ) )
+    else if ( aName == "switch" )
     {
         pElement = importSwitchConfig( xAttribs );
     }
-    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "case" ) ) )
+    else if ( aName == "case" )
     {
         pElement = importCaseConfig( xAttribs );
     }
@@ -285,7 +285,7 @@ ElementConfigPtr ConfigHandler::importCaseConfig( const Reference< XAttributeLis
 
 void SAL_CALL ConfigHandler::endElement(const OUString& aName) throw( SAXException, RuntimeException )
 {
-    if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config" ) ) )
+    if ( aName == "config" )
     {
         return;
     }

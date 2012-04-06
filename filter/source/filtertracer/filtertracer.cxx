@@ -116,19 +116,19 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
-        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LogLevel" ) ) )
+        if ( rProp.Name == "LogLevel" )
             rProp.Value >>= mnLogLevel;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClassFilter" ) ) )
+        else if ( rProp.Name == "ClassFilter" )
             rProp.Value >>= msClassFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MethodFilter" ) ) )
+        else if ( rProp.Name == "MethodFilter" )
             rProp.Value >>= msMethodFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MessageFilter" ) ) )
+        else if ( rProp.Name == "MessageFilter" )
             rProp.Value >>= msMessageFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
+        else if ( rProp.Name == "OutputStream" )
             rProp.Value >>= mxOutputStream;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if ( rProp.Name == "URL" )
             rProp.Value >>= msURL;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentHandler" ) ) )
+        else if ( rProp.Name == "DocumentHandler" )
             rProp.Value >>= mxDocumentHandler;
     }
 

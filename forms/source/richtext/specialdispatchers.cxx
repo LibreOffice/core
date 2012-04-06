@@ -174,7 +174,7 @@ namespace frm
         const PropertyValue* pLookupEnd = _rArguments.getConstArray() + _rArguments.getLength();
         while ( pLookup != pLookupEnd )
         {
-            if ( pLookup->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enable" ) ) )
+            if ( pLookup->Name == "Enable" )
                 break;
             ++pLookup;
         }
