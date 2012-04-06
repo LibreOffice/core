@@ -9612,12 +9612,14 @@ Selection Window::GetSurroundingTextSelection() const
   return Selection( 0, 0 );
 }
 
-//Poor man's equivalent, when widget want's to renegotiate
+//Poor man's equivalent, when widget wants to renegotiate
 //size, get parent dialog and call resize on it
 void Window::queueResize()
 {
     Dialog *pParent = GetParentDialog();
     if (!pParent)
+        return;
+    if (pParent->IsInClose())
         return;
     if (!pParent->isLayoutEnabled())
         return;
