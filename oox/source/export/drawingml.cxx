@@ -1017,10 +1017,10 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         DBG(printf ("pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
                         if ( aPropName == "NumberingType" )
                             nNumberingType = *( (sal_Int16*)pValue );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) ) {
+                        else if ( aPropName == "Prefix" ) {
                             if( *(OUString*)pValue == US( ")" ) )
                                 bPBoth = true;
-                        } else if  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Suffix" ) ) ) {
+                        } else if ( aPropName == "Suffix" ) {
                             if( *(OUString*)pValue == US( "." ) )
                                 bSDot = true;
                             else if( *(OUString*)pValue == US( ")" ) )
@@ -1042,9 +1042,9 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                             if ( aFontDesc.Name == "StarSymbol" )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
-                        } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletRelSize" ) ) ) {
+                        } else if ( aPropName == "BulletRelSize" ) {
                             nBulletRelSize = *( (sal_Int16*)pValue );
-                        } else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicURL" ) ) ) {
+                        } else if ( aPropName == "GraphicURL" ) {
                             aGraphicURL = ( *(OUString*)pValue );
                             DBG(printf ("graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
                         } else if ( aPropName == "GraphicSize" )

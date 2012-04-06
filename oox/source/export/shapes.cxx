@@ -720,7 +720,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                     rProp.Value >>= bFlipV;
                 if ( rProp.Name == "AdjustmentValues" )
                     nAdjustmentValuesIndex = i;
-                else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
+                else if ( rProp.Name == "Handles" ) {
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = sal_False;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here

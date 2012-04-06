@@ -100,7 +100,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
         "serviceManager - "
         "No rdb URI specified" ) ;
 
-    if( sUnoUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "local" ) ) ) {
+    if ( sUnoUrl == "local" ) {
         Reference< XSimpleRegistry > xSimpleRegistry = createSimpleRegistry();
         OSL_ENSURE( xSimpleRegistry.is() ,
             "serviceManager - "

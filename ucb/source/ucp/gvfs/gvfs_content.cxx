@@ -609,7 +609,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     for( sal_Int32 n = 0; n < nProps; ++n ) {
         const beans::Property& rProp = pProps[ n ];
 
-        if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) ) {
+        if ( rProp.Name == "Title" ) {
             if (m_info.name && m_info.name[0] == '/')
                 g_warning ("Odd NFS title on item '%s' == '%s'",
                        getURI(), m_info.name);
@@ -619,20 +619,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else if ( rProp.Name == "ContentType" )
             xRow->appendString( rProp, getContentType () );
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ) {
+        else if ( rProp.Name == "IsDocument" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE)
                 xRow->appendBoolean( rProp, ( m_info.type == GNOME_VFS_FILE_TYPE_REGULAR ||
                                   m_info.type == GNOME_VFS_FILE_TYPE_UNKNOWN ) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ) {
+        else if ( rProp.Name == "IsFolder" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE)
                 xRow->appendBoolean( rProp, ( m_info.type == GNOME_VFS_FILE_TYPE_DIRECTORY ) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) ) {
+        else if ( rProp.Name == "IsReadOnly" ) {
 
             GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
 
@@ -652,7 +652,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendVoid( rProp );
             gnome_vfs_file_info_unref (fileInfo);
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ) {
+        else if ( rProp.Name == "Size" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_SIZE)
                 xRow->appendLong( rProp, m_info.size );
             else
@@ -665,21 +665,21 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
              rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsCompactDisk" ) ) )
             xRow->appendBoolean( rProp, sal_False );
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) ) {
+        else if ( rProp.Name == "DateCreated" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_CTIME)
                 xRow->appendTimestamp( rProp, getDateFromUnix( m_info.ctime ) );
             else
                 xRow->appendVoid( rProp );
         }
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) ) {
+        else if ( rProp.Name == "DateModified" ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_MTIME)
                 xRow->appendTimestamp( rProp, getDateFromUnix( m_info.mtime ) );
             else
                 xRow->appendVoid( rProp );
         }
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) ) {
+        else if ( rProp.Name == "MediaType" ) {
             // We do this by sniffing in gnome-vfs; rather expensively.
 #ifdef DEBUG
             g_warning ("FIXME: Requested mime-type - an expensive op. indeed!");
@@ -804,7 +804,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
             aRet[ n ] <<= getReadOnlyException( this );
 
-        else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) ) {
+        else if ( rValue.Name == "Title" ) {
             if ( rValue.Value >>= aNewTitle ) {
                 if ( aNewTitle.isEmpty() )
                     aRet[ n ] <<= lang::IllegalArgumentException

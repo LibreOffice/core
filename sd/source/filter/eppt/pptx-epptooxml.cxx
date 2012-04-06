@@ -739,11 +739,11 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
     DBG(printf("write attribute name: %s\n", USS( rAttributeName )));
 
     const char* sAttributeName = NULL;
-    if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Visibility" ) ) ) {
+    if ( rAttributeName == "Visibility" ) {
     sAttributeName = "style.visibility";
-    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "X" ) ) ) {
+    } else if ( rAttributeName == "X" ) {
     sAttributeName = "ppt_x";
-    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Y" ) ) ) {
+    } else if ( rAttributeName == "Y" ) {
     sAttributeName = "ppt_y";
     }
 
