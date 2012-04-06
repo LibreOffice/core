@@ -1245,9 +1245,6 @@ ifeq ($(SYSTEM_POSTGRESQL),YES)
 
 define gb_LinkTarget__use_postgresql
 
-$(call gb_LinkTarget_add_defs,$(1),\
-)
-
 $(call gb_LinkTarget_set_include,$(1),\
 	$(POSTGRESQL_INC) \
 	$$(INCLUDE) \
