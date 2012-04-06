@@ -29,11 +29,6 @@ $(eval $(call gb_Library_Library,purpenvhelper))
 
 $(eval $(call gb_Library_set_soversion_script,purpenvhelper,3,$(SRCDIR)/cppu/util/uno_purpenvhelpergcc3.map))
 
-$(eval $(call gb_Library_set_include,purpenvhelper,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
-))
-
 $(eval $(call gb_Library_add_defs,purpenvhelper,\
 	-DPURPENV_DLLIMPLEMENTATION \
 ))

@@ -27,11 +27,6 @@
 
 $(eval $(call gb_Library_Library,unsafe_uno))
 
-$(eval $(call gb_Library_set_include,unsafe_uno,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
-))
-
 $(eval $(call gb_Library_use_api,unsafe_uno,\
 	udkapi \
 	offapi \

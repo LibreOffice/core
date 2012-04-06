@@ -28,12 +28,12 @@
 $(eval $(call gb_Module_Module,cppu))
 
 $(eval $(call gb_Module_add_targets,cppu,\
+	InternalUnoApi_cppu \
 	Library_affine_uno \
 	Library_cppu \
 	Library_log_uno \
 	Library_purpenvhelper \
 	Library_unsafe_uno \
-	Package_generated \
 	Package_inc \
 ))
 

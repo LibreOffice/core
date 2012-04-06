@@ -27,11 +27,6 @@
 
 $(eval $(call gb_Library_Library,affine_uno))
 
-$(eval $(call gb_Library_set_include,affine_uno,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
-))
-
 $(eval $(call gb_Library_use_api,affine_uno,\
 	udkapi \
 	offapi \

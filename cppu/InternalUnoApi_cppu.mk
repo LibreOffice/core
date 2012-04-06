@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -13,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -25,15 +25,23 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,cppu_generated))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,cppu))
 
-$(eval $(call gb_Package_add_customtarget,cppu_generated,cppu/qa))
-
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,cppu/qa,\
-	$(gb_UnoApiTarget_CPPUMAKERTARGET) \
-	$(gb_UnoApiTarget_IDLCTARGET) \
-	$(gb_UnoApiTarget_REGMERGETARGET) \
-	$(OUTDIR_FOR_BUILD)/bin/udkapi.rdb \
+$(eval $(call gb_InternalUnoApi_use_api,cppu,\
+    udkapi \
 ))
 
-# vim: set noet sw=4 ts=4:
+$(eval $(call gb_InternalUnoApi_set_include,cppu,\
+    -I$(OUTDIR)/idl \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_InternalUnoApi_add_idlfiles,cppu,cppu/qa,\
+    types \
+))
+
+$(eval $(call gb_InternalUnoApi_add_idlfiles,cppu,cppu/qa/cppumaker,\
+    types \
+))
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

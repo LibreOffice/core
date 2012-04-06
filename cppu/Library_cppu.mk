@@ -29,13 +29,7 @@ $(eval $(call gb_Library_Library,cppu))
 
 $(eval $(call gb_Library_set_soversion_script,cppu,3,$(SRCDIR)/cppu/util/cppu.map))
 
-# Unit tests depend on cppu_generated custom target
-$(eval $(call gb_Library_use_package,cppu,cppu_generated))
-
-$(eval $(call gb_Library_set_include,cppu,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
-))
+$(eval $(call gb_Library_use_package,cppu,cppu_inc))
 
 $(eval $(call gb_Library_use_api,cppu,\
 	udkapi \

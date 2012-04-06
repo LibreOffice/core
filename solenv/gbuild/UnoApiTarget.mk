@@ -56,7 +56,7 @@ define gb_UnoApiPartTarget__command
 	$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-		$(call gb_Helper_convert_native,$(INCLUDE) $(DEFS) \
+		$(call gb_Helper_convert_native,$(INCLUDE) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
 		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose -C \
 		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3))))) && \

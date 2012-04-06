@@ -37,10 +37,9 @@ $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_reference, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,cppu_qa_reference,\
-	-I$(WORKDIR)/CustomTarget/cppu/qa \
-	-I$(SRCDIR)/cppu/inc \
-	$$(INCLUDE) \
+$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_qa_reference, \
+	cppu \
+	udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:
