@@ -329,7 +329,7 @@ bool NamedTableCopySource::isView() const
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
+    return sTableType == "VIEW";
 }
 
 //------------------------------------------------------------------------

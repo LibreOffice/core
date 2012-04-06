@@ -481,7 +481,7 @@ rtl::OUString ONSSInitializer_getImplementationName ()
 sal_Bool SAL_CALL ONSSInitializer_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( NSS_SERVICE_NAME ));
+    return ServiceName == NSS_SERVICE_NAME;
 }
 
 cssu::Sequence< rtl::OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )

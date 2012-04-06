@@ -199,7 +199,7 @@ rtl::OUString SEInitializer_MSCryptImpl_getImplementationName ()
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
+    return ServiceName == SERVICE_NAME;
 }
 
 cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )

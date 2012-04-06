@@ -360,7 +360,7 @@ OUString FrameJob_getImplementationName ()
 sal_Bool SAL_CALL FrameJob_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( FRAMEJOB_SERVICE_NAME ) );
+    return ServiceName == FRAMEJOB_SERVICE_NAME;
 }
 
 Sequence< OUString > SAL_CALL FrameJob_getSupportedServiceNames(  )

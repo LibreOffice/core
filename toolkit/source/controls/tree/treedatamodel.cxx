@@ -651,7 +651,7 @@ OUString SAL_CALL MutableTreeNode::getImplementationName(  ) throw (RuntimeExcep
 sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.awt.tree.MutableTreeNode" ) );
+    return ServiceName == "com.sun.star.awt.tree.MutableTreeNode";
 }
 
 //---------------------------------------------------------------------

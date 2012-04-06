@@ -124,7 +124,7 @@ Reference< XInterface >
 sal_Bool SAL_CALL SdHtmlOptionsDialog_supportsService( const ::rtl::OUString& ServiceName )
     throw( RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
+    return ServiceName == SERVICE_NAME;
 }
 
 Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()

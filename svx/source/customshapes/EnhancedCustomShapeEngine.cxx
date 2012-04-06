@@ -64,7 +64,7 @@ rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
 sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShapeEngine" ) );
+    return ServiceName == "com.sun.star.drawing.CustomShapeEngine";
 }
 SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
     throw( NMSP_UNO::RuntimeException )

@@ -281,7 +281,7 @@ OUString FilterDetect_getImplementationName ()
 sal_Bool SAL_CALL FilterDetect_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) );
+    return ServiceName == SERVICE_NAME1;
 }
 Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
     throw (RuntimeException)

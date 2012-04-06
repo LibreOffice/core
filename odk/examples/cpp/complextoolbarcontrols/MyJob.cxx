@@ -68,7 +68,7 @@ OUString MyJob_getImplementationName ()
 sal_Bool SAL_CALL MyJob_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
+    return ServiceName == SERVICE_NAME;
 }
 
 Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )

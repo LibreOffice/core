@@ -163,7 +163,7 @@ Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (Ru
 }
 
 // XServiceInfo
-sal_Char pSvxUnoNumberingRulesService[sizeof("com.sun.star.text.NumberingRules")] = "com.sun.star.text.NumberingRules";
+const char pSvxUnoNumberingRulesService[] = "com.sun.star.text.NumberingRules";
 
 OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException)
 {
@@ -172,7 +172,7 @@ OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeE
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSvxUnoNumberingRulesService ) );
+    return ServiceName == pSvxUnoNumberingRulesService;
 }
 
 Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException)

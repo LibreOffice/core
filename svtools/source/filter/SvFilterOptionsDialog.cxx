@@ -69,7 +69,7 @@ OUString SvFilterOptionsDialog_getImplementationName()
 sal_Bool SAL_CALL SvFilterOptionsDialog_supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
+    return ServiceName == SERVICE_NAME;
 }
 
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceNames()

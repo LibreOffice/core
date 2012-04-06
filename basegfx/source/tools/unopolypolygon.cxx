@@ -454,7 +454,7 @@ namespace unotools
 
     sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
+        return ServiceName == SERVICE_NAME;
     }
 
     uno::Sequence< ::rtl::OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()  throw( uno::RuntimeException )

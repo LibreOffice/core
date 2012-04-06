@@ -42,7 +42,7 @@ rtl::OUString FilterTracer_getImplementationName()
 sal_Bool SAL_CALL FilterTracer_supportsService( const rtl::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.util.logging.Logger" ) );
+    return ServiceName == "com.sun.star.util.logging.Logger";
 }
 SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames()
     throw( NMSP_UNO::RuntimeException )

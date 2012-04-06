@@ -45,7 +45,7 @@ NMSP_RTL::OUString PptImporter_getImplementationName()
 sal_Bool SAL_CALL PptImporter_supportsService( const NMSP_RTL::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
+    return ServiceName == SERVICE_NAME;
 }
 
 SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter_getSupportedServiceNames()

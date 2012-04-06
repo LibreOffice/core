@@ -119,7 +119,7 @@ sal_Bool SAL_CALL
 DesktopJob_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( DESKTOPJOB_SERVICE_NAME ) );
+    return ServiceName == DESKTOPJOB_SERVICE_NAME;
 }
 
 Sequence< OUString > SAL_CALL

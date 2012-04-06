@@ -1588,7 +1588,7 @@ OUString SAL_CALL ColorPicker::getImplementationName(  ) throw (RuntimeException
 
 sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName ) throw (RuntimeException)
 {
-    return sServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.ui.dialogs.ColorPicker" ) );
+    return sServiceName == "com.sun.star.ui.dialogs.ColorPicker";
 }
 
 // --------------------------------------------------------------------

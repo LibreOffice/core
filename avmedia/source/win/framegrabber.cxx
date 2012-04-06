@@ -229,7 +229,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ) );
+    return ServiceName == AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME;
 }
 
 // ------------------------------------------------------------------------------

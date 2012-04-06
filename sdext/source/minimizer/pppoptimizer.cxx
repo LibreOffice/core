@@ -86,7 +86,7 @@ OUString SAL_CALL PPPOptimizer::getImplementationName()
 sal_Bool SAL_CALL PPPOptimizer::supportsService( const OUString& rServiceName )
     throw ( RuntimeException )
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
+    return rServiceName == SERVICE_NAME;
 }
 
 Sequence< OUString > SAL_CALL PPPOptimizer::getSupportedServiceNames()

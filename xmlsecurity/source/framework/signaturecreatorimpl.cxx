@@ -245,7 +245,7 @@ rtl::OUString SignatureCreatorImpl_getImplementationName ()
 sal_Bool SAL_CALL SignatureCreatorImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
+    return ServiceName == SERVICE_NAME;
 }
 
 cssu::Sequence< rtl::OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )

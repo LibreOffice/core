@@ -80,7 +80,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
 sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_WIN_MANAGER_SERVICENAME ) );
+    return ServiceName == AVMEDIA_WIN_MANAGER_SERVICENAME;
 }
 
 // ------------------------------------------------------------------------------
