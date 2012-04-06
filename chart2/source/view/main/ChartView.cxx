@@ -2883,13 +2883,13 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
         beans::PropertyValue* pDataValues = aZoomFactors.getArray();
         while( nFilterArgs-- )
         {
-            if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXNumerator" ) ) )
+            if ( pDataValues->Name == "ScaleXNumerator" )
                 pDataValues->Value >>= m_nScaleXNumerator;
-            else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXDenominator" ) ) )
+            else if ( pDataValues->Name == "ScaleXDenominator" )
                 pDataValues->Value >>= m_nScaleXDenominator;
-            else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYNumerator" ) ) )
+            else if ( pDataValues->Name == "ScaleYNumerator" )
                 pDataValues->Value >>= m_nScaleYNumerator;
-            else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYDenominator" ) ) )
+            else if ( pDataValues->Name == "ScaleYDenominator" )
                 pDataValues->Value >>= m_nScaleYDenominator;
 
             pDataValues++;

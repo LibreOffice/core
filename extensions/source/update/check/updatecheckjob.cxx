@@ -199,14 +199,14 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
-        if ( namedValues[ n ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DynamicData" ) ) )
+        if ( namedValues[ n ].Name == "DynamicData" )
         {
             uno::Sequence<beans::NamedValue> aListProp;
             if ( namedValues[n].Value >>= aListProp )
             {
                 for ( sal_Int32 i=aListProp.getLength(); i-- > 0; )
                 {
-                    if ( aListProp[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "updateList" ) ) )
+                    if ( aListProp[ i ].Name == "updateList" )
                     {
                         handleExtensionUpdates( aListProp );
                         return uno::Any();

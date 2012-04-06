@@ -273,7 +273,7 @@ namespace oox { namespace ppt {
                             break;
                         case XML_evt:
                         case XML_call:
-                            if( msCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "onstopaudio" ) ) )
+                            if ( msCommand == "onstopaudio" )
                             {
                                 nCommand = EffectCommands::STOPAUDIO;
                             }

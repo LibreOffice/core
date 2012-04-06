@@ -143,11 +143,11 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
         case XML_graphicData :          // CT_GraphicalObjectData
         {
             OUString sUri( xAttribs->getOptionalValue( XML_uri ) );
-            if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/presentationml/2006/ole" ) ) )
+            if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" )
                 xRet.set( new OleObjectGraphicDataContext( *this, mpShapePtr ) );
-            else if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ) ) )
+            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" )
                 xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
-            else if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) ) )
+            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" )
                 xRet.set( new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart ) );
             else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
                 xRet.set( new table::TableContext( *this, mpShapePtr ) );

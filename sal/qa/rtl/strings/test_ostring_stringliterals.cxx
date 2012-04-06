@@ -83,12 +83,15 @@ CPPUNIT_TEST_SUITE_END();
     ( \
     rtl_string_unittest_const_literal = false, \
     ( void ) rtl::OString( argument ), \
-    rtl_string_unittest_const_literal )
+    result_tmp = rtl_string_unittest_const_literal, \
+    ( void ) rtl::OStringBuffer( argument ), \
+    rtl_string_unittest_const_literal && result_tmp )
 
 void test::ostring::StringLiterals::checkCtors()
 {
 // string literal ctors do not work with SFINAE broken and are disabled
 #ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+    bool result_tmp;
     CPPUNIT_ASSERT( CONST_CTOR_USED( "test" ));
     const char good1[] = "test";
     CPPUNIT_ASSERT( CONST_CTOR_USED( good1 ));
@@ -144,6 +147,7 @@ char test::ostring::StringLiterals::bad6[] = "test";
 void test::ostring::StringLiterals::testcall( const char str[] )
 {
 #ifndef _MSC_VER
+    bool result_tmp;
     CPPUNIT_ASSERT( !CONST_CTOR_USED( str ));
 #else
     // MSVC just errors out on this for some reason, which is fine as well

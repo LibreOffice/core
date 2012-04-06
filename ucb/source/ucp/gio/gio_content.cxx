@@ -414,7 +414,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
     {
         const beans::Property& rProp = pProps[ n ];
 
-        if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        if ( rProp.Name == "IsDocument" )
         {
             if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE))
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_REGULAR ||
@@ -422,14 +422,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rProp.Name == "IsFolder" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_DIRECTORY ));
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rProp.Name == "Title" )
         {
             if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
             {
@@ -439,65 +439,65 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+        else if ( rProp.Name == "IsReadOnly" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE ) )
                 xRow->appendBoolean( rProp, !g_file_info_get_attribute_boolean( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+        else if ( rProp.Name == "DateCreated" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_TIME_CREATED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CREATED)) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+        else if ( rProp.Name == "DateModified" )
         {
             if( g_file_info_has_attribute( pInfo,  G_FILE_ATTRIBUTE_TIME_CHANGED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CHANGED)) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        else if ( rProp.Name == "Size" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE) )
                 xRow->appendLong( rProp, ( g_file_info_get_size( pInfo ) ));
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsVolume" ) ) )
+        else if ( rProp.Name == "IsVolume" )
         {
             //What do we use this for ?
             xRow->appendBoolean( rProp, sal_False );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsCompactDisc" ) ) )
+        else if ( rProp.Name == "IsCompactDisc" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRemoveable" ) ) )
+        else if ( rProp.Name == "IsRemoveable" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFloppy" ) ) )
+        else if ( rProp.Name == "IsFloppy" )
         {
             xRow->appendBoolean( rProp, sal_False );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsHidden" ) ) )
+        else if ( rProp.Name == "IsHidden" )
         {
             if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_is_hidden ( pInfo ) ) );
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        else if ( rProp.Name == "CreatableContentsInfo" )
         {
             xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
         }
@@ -670,7 +670,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
         }
-        else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rValue.Name == "Title" )
         {
             rtl::OUString aNewTitle;
             if (!( rValue.Value >>= aNewTitle ))
@@ -915,32 +915,32 @@ uno::Any SAL_CALL Content::execute(
 #endif
     uno::Any aRet;
 
-    if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ))
+    if ( aCommand.Name == "getPropertyValues" )
     {
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= getPropertyValues( Properties, xEnv );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ))
+    else if ( aCommand.Name == "getPropertySetInfo" )
         aRet <<= getPropertySetInfo( xEnv, sal_False );
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ))
+    else if ( aCommand.Name == "getCommandInfo" )
         aRet <<= getCommandInfo( xEnv, sal_False );
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) ))
+    else if ( aCommand.Name == "open" )
     {
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet = open( aOpenCommand, xEnv );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "transfer" ) ))
+    else if ( aCommand.Name == "transfer" )
     {
         ucb::TransferInfo transferArgs;
         if ( !( aCommand.Argument >>= transferArgs ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         transfer( transferArgs, xEnv );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ))
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) || !aProperties.getLength() )
@@ -955,14 +955,14 @@ uno::Any SAL_CALL Content::execute(
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= createNewContent( arg );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ))
+    else if ( aCommand.Name == "insert" )
     {
         ucb::InsertCommandArgument arg;
         if ( !( aCommand.Argument >>= arg ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         insert( arg.Data, arg.ReplaceExisting, xEnv );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ))
+    else if ( aCommand.Name == "delete" )
     {
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
@@ -1142,9 +1142,9 @@ uno::Reference< ucb::XContent >
     bool create_document;
     const char *name;
 
-    if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GIO_FILE_TYPE ) ) )
+    if ( Info.Type == GIO_FILE_TYPE )
         create_document = true;
-    else if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GIO_FOLDER_TYPE ) ) )
+    else if ( Info.Type == GIO_FOLDER_TYPE )
         create_document = false;
     else
     {

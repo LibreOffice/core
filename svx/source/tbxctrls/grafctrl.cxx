@@ -146,7 +146,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
 
-    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
+    if ( maCommand == ".uno:GrafGamma" )
     {
         SetDecimalDigits( 2 );
 
@@ -230,9 +230,9 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
     {
         long nValue;
 
-        if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
+        if ( maCommand == ".uno:GrafTransparence" )
             nValue = ( (SfxUInt16Item*) pItem )->GetValue();
-        else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
+        else if ( maCommand == ".uno:GrafGamma" )
             nValue = ( (SfxUInt32Item*) pItem )->GetValue();
         else
             nValue = ( (SfxInt16Item*) pItem )->GetValue();

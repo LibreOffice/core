@@ -111,7 +111,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
         SolarMutexGuard aSolarGuard;
         try
         {
-            if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
+            if ( URL.Path == "Undo" )
                 m_xUndoManager->undo();
             else
                 m_xUndoManager->redo();

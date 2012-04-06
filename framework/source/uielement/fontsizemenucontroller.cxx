@@ -107,7 +107,7 @@ rtl::OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::
                 Sequence< PropertyValue > aPrinterSeq = xPrintable->getPrinter();
                 for ( int i = 0; i < aPrinterSeq.getLength(); i++ )
                 {
-                    if ( aPrinterSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ))
+                    if ( aPrinterSeq[i].Name == "Name" )
                     {
                         aPrinterSeq[i].Value >>= aPrinterName;
                         break;

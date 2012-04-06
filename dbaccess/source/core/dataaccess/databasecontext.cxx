@@ -411,7 +411,7 @@ void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODat
         const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
         for ( ; pProp != pPropsEnd; ++pProp )
         {
-            if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AuthFailedPassword" ) ) )
+            if ( pProp->Name == "AuthFailedPassword" )
             {
                 OSL_VERIFY( pProp->Value >>= sAuthFailedPassword );
             }

@@ -914,7 +914,7 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
     while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // some eng countries should be mapped to a specific english language
-    if ( aLowerLang.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
+    if ( aLowerLang == "en" )
     {
         const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
         do

@@ -693,11 +693,11 @@ AnimationNodeContext::AnimationNodeContext(
                         if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_PRESET_ID ) )
                         {
                             const OUString& rValue = xAttrList->getValueByIndex( nAttribute );
-                            if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooo-entrance-random" ) ) )
+                            if ( rValue == "ooo-entrance-random" )
                             {
                                 nPresetClass = EffectPresetClass::ENTRANCE;
                             }
-                            else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooo-exit-random" ) ) )
+                            else if ( rValue == "ooo-exit-random" )
                             {
                                 nPresetClass = EffectPresetClass::EXIT;
                             }

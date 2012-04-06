@@ -1587,7 +1587,7 @@ namespace xmloff
         {
             ::rtl::OUString sDefaultControl;
             OSL_VERIFY( aDefaultControlPropertyPos->Value >>= sDefaultControl );
-            if ( sDefaultControl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stardiv.one.form.control.Edit" ) ) )
+            if ( sDefaultControl == "stardiv.one.form.control.Edit" )
             {
                 // complete remove this property value from the array. Today's "default value" of the "DefaultControl"
                 // property is sufficient

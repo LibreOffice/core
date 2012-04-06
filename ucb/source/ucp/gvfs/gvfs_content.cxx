@@ -496,9 +496,9 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     bool create_document;
     const char *name;
 
-        if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GVFS_FILE_TYPE ) ) )
+        if ( Info.Type == GVFS_FILE_TYPE )
         create_document = true;
-    else if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GVFS_FOLDER_TYPE ) ) )
+    else if ( Info.Type == GVFS_FOLDER_TYPE )
         create_document = false;
     else {
 #ifdef DEBUG
@@ -616,7 +616,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             xRow->appendString( rProp, GnomeToOUString( m_info.name ) );
         }
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        else if ( rProp.Name == "ContentType" )
             xRow->appendString( rProp, getContentType () );
 
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ) {
@@ -658,7 +658,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xRow->appendVoid( rProp );
         }
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsHidden" ) ) )
+        else if ( rProp.Name == "IsHidden" )
             xRow->appendBoolean( rProp, ( m_info.name && m_info.name[0] == '.' ) );
 
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsVolume" ) ) ||
@@ -685,7 +685,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             g_warning ("FIXME: Requested mime-type - an expensive op. indeed!");
 #endif
             xRow->appendVoid( rProp );
-        } else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        } else if ( rProp.Name == "CreatableContentsInfo" )
             xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
 
         else {

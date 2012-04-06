@@ -239,7 +239,7 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
 
     ::rtl::OUString aFilterName;
     for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-        if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+        if ( aArgs[nInd].Name == "FilterName" )
             aArgs[nInd].Value >>= aFilterName;
 
     if ( aFilterName.isEmpty() && !aTypeName.isEmpty() )

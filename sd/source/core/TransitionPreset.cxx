@@ -80,7 +80,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
     const NamedValue* p = aUserData.getConstArray();
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
+        if ( p->Name == "preset-id" )
         {
             p->Value >>= maPresetId;
             break;

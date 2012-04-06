@@ -851,7 +851,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                 if ( lcl_extractOpenMode( pIter->Value, nOpenMode ) )
                     continue;
 
-                if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MacroExecutionMode" ) ) )
+                if ( pIter->Name == "MacroExecutionMode" )
                 {
                     sal_Int16 nMacroExecMode( !aDocumentMacroMode ? MacroExecMode::USE_CONFIG : *aDocumentMacroMode );
                     OSL_VERIFY( pIter->Value >>= nMacroExecMode );
@@ -1054,7 +1054,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     if ( m_bInExecute )
         return aRet;
 
-    if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
+    if ( aCommand.Name == "copyTo" )
     {
         Sequence<Any> aIni;
         aCommand.Argument >>= aIni;
@@ -1076,11 +1076,11 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
         xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
+    else if ( aCommand.Name == "preview" )
     {
         onCommandPreview(aRet);
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name == "insert" )
     {
         Sequence<Any> aIni;
         aCommand.Argument >>= aIni;
@@ -1105,7 +1105,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     {
         onCommandGetDocumentProperties( aRet );
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -1130,11 +1130,11 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     {
         aRet <<= impl_close_throw();
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "show" ) ) )
+    else if ( aCommand.Name == "show" )
     {
         impl_showOrHideComponent_throw( true );
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hide" ) ) )
+    else if ( aCommand.Name == "hide" )
     {
         impl_showOrHideComponent_throw( false );
     }

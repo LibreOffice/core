@@ -825,17 +825,17 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     if ( pValue )
                     {
                         ::rtl::OUString aPropName( pPropValue[ i ].Name );
-                        if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NumberingType" ) ) )
+                        if ( aPropName == "NumberingType" )
                             nNumberingType = *( (sal_Int16*)pValue );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Adjust" ) ) )
+                        else if ( aPropName == "Adjust" )
                             nHorzAdjust = *( (sal_Int16*)pValue );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletChar" ) ) )
+                        else if ( aPropName == "BulletChar" )
                         {
                             String aString( *( (String*)pValue ) );
                             if ( aString.Len() )
                                 cBulletId = aString.GetChar( 0 );
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletFont" ) ) )
+                        else if ( aPropName == "BulletFont" )
                         {
                             aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
 
@@ -843,13 +843,13 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
                             // Because there might exist a lot of damaged documemts I added this two lines
                             // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ) )
+                            if ( aFontDesc.Name == "StarSymbol" )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicURL" ) ) )
+                        else if ( aPropName == "GraphicURL" )
                             aGraphicURL = ( *(::rtl::OUString*)pValue );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicSize" ) ) )
+                        else if ( aPropName == "GraphicSize" )
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
                             {
@@ -860,28 +860,28 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 aBuGraSize.nB = aSize.Height;
                             }
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartWith" ) ) )
+                        else if ( aPropName == "StartWith" )
                             nStartWith = *( (sal_Int16*)pValue );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LeftMargin" ) ) )
+                        else if ( aPropName == "LeftMargin" )
                             nTextOfs = nTextOfs + static_cast< sal_Int16 >( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstLineOffset" ) ) )
+                        else if ( aPropName == "FirstLineOffset" )
                             nBulletOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletColor" ) ) )
+                        else if ( aPropName == "BulletColor" )
                         {
                             sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
                             nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
                             nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
                             nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletRelSize" ) ) )
+                        else if ( aPropName == "BulletRelSize" )
                         {
                             nBulletRealSize = *( (sal_Int16*)pValue );
                             nParaFlags |= 0x40;
                             nBulletFlags |= 8;
                         }
-                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) )
+                        else if ( aPropName == "Prefix" )
                             sPrefix = ( *(::rtl::OUString*)pValue );
-                        else if  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Suffix" ) ) )
+                        else if ( aPropName == "Suffix" )
                             sSuffix = ( *(::rtl::OUString*)pValue );
 #ifdef DBG_UTIL
                         else if ( ! (

@@ -149,6 +149,75 @@ public:
         rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN // see OUString ctors
+    template< int N >
+    OUStringBuffer( const char (&literal)[ N ] )
+        : pData(NULL)
+        , nCapacity( N - 1 + 16 )
+    {
+        rtl_uStringbuffer_newFromStr_WithLength( &pData, literal, N - 1 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    OUStringBuffer( char (&value)[ N ] )
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) value; // unused
+        pData = 0;
+        nCapacity = 10;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+#endif
+#else // HAVE_SFINAE_ANONYMOUS_BROKEN
+    template< typename T >
+    OUStringBuffer( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+        : pData(NULL)
+        , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
+    {
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
+
+#ifdef RTL_STRING_UNITTEST
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUStringBuffer( T&, typename internal::ExceptConstCharArrayDetector< T >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        nCapacity = 10;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUStringBuffer( const T&, typename internal::ExceptCharArrayDetector< T >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        nCapacity = 10;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+#endif
+
     /** Assign to this a copy of value.
      */
     OUStringBuffer& operator = ( const OUStringBuffer& value )

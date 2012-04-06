@@ -52,13 +52,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fastsax_component_getFactory(
 
         OUString aImplementationName( OUString::createFromAscii( pImplName ) );
 
-        if (aImplementationName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PARSER_IMPLEMENTATION_NAME  ) ) )
+        if ( aImplementationName == PARSER_IMPLEMENTATION_NAME  )
         {
             xRet = createSingleFactory( xSMgr, aImplementationName,
                                         FastSaxParser_CreateInstance,
                                         FastSaxParser::getSupportedServiceNames_Static() );
         }
-        else if (aImplementationName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME  ) ) )
+        else if ( aImplementationName == SERIALIZER_IMPLEMENTATION_NAME  )
         {
             xRet = createSingleFactory( xSMgr, aImplementationName,
                                         FastSaxSerializer_CreateInstance,

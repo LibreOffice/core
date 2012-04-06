@@ -713,12 +713,12 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                 const PropertyValue& rProp = aGeometrySeq[ i ];
                 DBG(printf("geometry property: %s\n", USS( rProp.Name )));
 
-                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredX" ) ))
+                if ( rProp.Name == "MirroredX" )
                     rProp.Value >>= bFlipH;
 
-                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredY" ) ))
+                if ( rProp.Name == "MirroredY" )
                     rProp.Value >>= bFlipV;
-                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AdjustmentValues" ) ))
+                if ( rProp.Name == "AdjustmentValues" )
                     nAdjustmentValuesIndex = i;
                 else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
                     if( !bIsDefaultObject )

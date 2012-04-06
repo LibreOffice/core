@@ -1507,7 +1507,7 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
     if ( !pMenu )
     {
         ::framework::MenuConfiguration aConf( m_xServiceManager );
-        if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:AddDirect" ) ))
+        if ( m_aCommandURL == ".uno:AddDirect" )
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU );
         else
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU );

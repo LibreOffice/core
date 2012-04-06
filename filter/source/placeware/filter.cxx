@@ -109,7 +109,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
         {
             pValue[i].Value >>= xInteractionHandler;
         }
-        else if ( pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "StatusIndicator" ) ) )
+        else if ( pValue[i].Name == "StatusIndicator" )
         {
             pValue[i].Value >>= xStatusIndicator;
         }

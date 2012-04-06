@@ -145,7 +145,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
 sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno::RuntimeException)
 {
     rtl::OUString pageStyle = getStyleOfFirstPage();
-    if( pageStyle.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "First Page" ) ) )
+    if ( pageStyle == "First Page" )
         return sal_True;
 
     return sal_False;

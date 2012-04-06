@@ -2816,9 +2816,9 @@ sal_Bool SfxObjectShell::IsInformationLost()
     ::rtl::OUString aPreusedFilterName;
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
-        if ( aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+        if ( aProps[nInd].Name == "FilterName" )
             aProps[nInd].Value >>= aFilterName;
-        else if ( aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreusedFilterName" ) ) )
+        else if ( aProps[nInd].Name == "PreusedFilterName" )
             aProps[nInd].Value >>= aPreusedFilterName;
     }
 

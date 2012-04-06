@@ -767,7 +767,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
         sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
         return lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ));
     }
-    else if( aRangeRepresentation.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "last" )))
+    else if ( aRangeRepresentation == "last" )
     {
         sal_Int32 nIndex = (m_bDataInColumns
                             ? m_aInternalData.getColumnCount()

@@ -140,12 +140,12 @@ void PropertyChgHelper::GetCurrentValues()
             sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_IGNORE_CONTROL_CHARACTERS ) ))
+            if ( pPropName[i] == UPN_IS_IGNORE_CONTROL_CHARACTERS )
             {
                 pbVal    = &bIsIgnoreControlCharacters;
                 pbResVal = &bResIsIgnoreControlCharacters;
             }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_USE_DICTIONARY_LIST ) ))
+            else if ( pPropName[i] == UPN_IS_USE_DICTIONARY_LIST )
             {
                 pbVal    = &bIsUseDictionaryList;
                 pbResVal = &bResIsUseDictionaryList;
@@ -419,17 +419,17 @@ void PropertyHelper_Spell::GetCurrentValues()
             sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_SPELL_UPPER_CASE ) ))
+            if ( pPropName[i] == UPN_IS_SPELL_UPPER_CASE )
             {
                 pbVal    = &bIsSpellUpperCase;
                 pbResVal = &bResIsSpellUpperCase;
             }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_SPELL_WITH_DIGITS ) ))
+            else if ( pPropName[i] == UPN_IS_SPELL_WITH_DIGITS )
             {
                 pbVal    = &bIsSpellWithDigits;
                 pbResVal = &bResIsSpellWithDigits;
             }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_SPELL_CAPITALIZATION ) ))
+            else if ( pPropName[i] == UPN_IS_SPELL_CAPITALIZATION )
             {
                 pbVal    = &bIsSpellCapitalization;
                 pbResVal = &bResIsSpellCapitalization;
@@ -604,17 +604,17 @@ void PropertyHelper_Hyphen::GetCurrentValues()
             sal_Int16  *pnVal    = NULL,
                    *pnResVal = NULL;
 
-            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_LEADING ) ))
+            if ( pPropName[i] == UPN_HYPH_MIN_LEADING )
             {
                 pnVal    = &nHyphMinLeading;
                 pnResVal = &nResHyphMinLeading;
             }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_TRAILING ) ))
+            else if ( pPropName[i] == UPN_HYPH_MIN_TRAILING )
             {
                 pnVal    = &nHyphMinTrailing;
                 pnResVal = &nResHyphMinTrailing;
             }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_WORD_LENGTH ) ))
+            else if ( pPropName[i] == UPN_HYPH_MIN_WORD_LENGTH )
             {
                 pnVal    = &nHyphMinWordLength;
                 pnResVal = &nResHyphMinWordLength;
@@ -693,11 +693,11 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
         {
             sal_Int16 *pnResVal = NULL;
 
-            if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_LEADING ) ))
+            if ( pVal[i].Name == UPN_HYPH_MIN_LEADING )
                 pnResVal = &nResHyphMinLeading;
-            else if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_TRAILING ) ))
+            else if ( pVal[i].Name == UPN_HYPH_MIN_TRAILING )
                 pnResVal = &nResHyphMinTrailing;
-            else if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_WORD_LENGTH ) ))
+            else if ( pVal[i].Name == UPN_HYPH_MIN_WORD_LENGTH )
                 pnResVal = &nResHyphMinWordLength;
 
             DBG_ASSERT( pnResVal, "unknown property" );

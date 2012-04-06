@@ -480,7 +480,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 #endif
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart=no" )))
+    else if ( oArg == "quickstart=no" )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_True );
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_False );

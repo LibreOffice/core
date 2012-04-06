@@ -70,32 +70,33 @@ CPPUNIT_TEST_SUITE_END();
 #define VALID_CONVERSION( expression ) \
     ( \
     rtl_string_unittest_invalid_conversion = false, \
-    ( void ) ( expression ), \
+    ( void ) rtl::OUString( expression ), \
+    ( void ) rtl::OUStringBuffer( expression ), \
     !rtl_string_unittest_invalid_conversion )
 
 void test::oustring::StringLiterals::checkCtors()
 {
-    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( "test" )));
+    CPPUNIT_ASSERT( VALID_CONVERSION( "test" ));
     const char good1[] = "test";
-    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( good1 )));
+    CPPUNIT_ASSERT( VALID_CONVERSION( good1 ));
 
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( (const char*) "test" )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( (const char*) "test" ));
     const char* bad1 = good1;
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad1 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( bad1 ));
     char bad2[] = "test";
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad2 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( bad2 ));
     char* bad3 = bad2;
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad3 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( bad3 ));
     const char* bad4[] = { "test1" };
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad4[ 0 ] )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( bad4[ 0 ] ));
     testcall( good1 );
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
 // but there does not appear a way to detect this by compile time (runtime will complain).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
     const char bad5[][ 6 ] = { "test", "test2" };
-//    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( bad5[ 0 ] )));
-    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( bad5[ 1 ] )));
+//    CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 0 ] ));
+    CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 1 ] ));
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
 // Also check that embedded \0 is included.

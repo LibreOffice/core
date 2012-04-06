@@ -454,7 +454,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
                 // Unreachable
         }
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name == "insert" )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -473,7 +473,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
             // Unreachable
         }
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name == "delete" )
     {
         //////////////////////////////////////////////////////////////////
         // delete

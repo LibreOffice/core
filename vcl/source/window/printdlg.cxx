@@ -1095,58 +1095,58 @@ void PrintDialog::setupOptionalUI()
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text" ) ) )
+            if ( rEntry.Name == "Text" )
             {
                 rEntry.Value >>= aText;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ControlType" ) ) )
+            else if ( rEntry.Name == "ControlType" )
             {
                 rEntry.Value >>= aCtrlType;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Choices" ) ) )
+            else if ( rEntry.Name == "Choices" )
             {
                 rEntry.Value >>= aChoices;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ChoicesDisabled" ) ) )
+            else if ( rEntry.Name == "ChoicesDisabled" )
             {
                 rEntry.Value >>= aChoicesDisabled;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
+            else if ( rEntry.Name == "Property" )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
+            else if ( rEntry.Name == "Enabled" )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GroupingHint" ) ) )
+            else if ( rEntry.Name == "GroupingHint" )
             {
                 rEntry.Value >>= aGroupingHint;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnName" ) ) )
+            else if ( rEntry.Name == "DependsOnName" )
             {
                 rEntry.Value >>= aDependsOnName;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnEntry" ) ) )
+            else if ( rEntry.Name == "DependsOnEntry" )
             {
                 rEntry.Value >>= nDependsOnValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AttachToDependency" ) ) )
+            else if ( rEntry.Name == "AttachToDependency" )
             {
                 rEntry.Value >>= bUseDependencyRow;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MinValue" ) ) )
+            else if ( rEntry.Name == "MinValue" )
             {
                 rEntry.Value >>= nMinValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxValue" ) ) )
+            else if ( rEntry.Name == "MaxValue" )
             {
                 rEntry.Value >>= nMaxValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HelpText" ) ) )
+            else if ( rEntry.Name == "HelpText" )
             {
                 if( ! (rEntry.Value >>= aHelpTexts) )
                 {
@@ -1158,7 +1158,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HelpId" ) ) )
+            else if ( rEntry.Name == "HelpId" )
             {
                 if( ! (rEntry.Value >>= aHelpIds ) )
                 {
@@ -1170,7 +1170,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HintNoLayoutPage" ) ) )
+            else if ( rEntry.Name == "HintNoLayoutPage" )
             {
                 sal_Bool bNoLayoutPage = sal_False;
                 rEntry.Value >>= bNoLayoutPage;
@@ -1198,25 +1198,25 @@ void PrintDialog::setupOptionalUI()
             bOnStaticPage = false;
             bSubgroupOnStaticPage = false;
 
-            if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
+            if ( aGroupingHint == "PrintRange" )
             {
                 pCurColumn = maJobPage.mxPrintRange;
                 pCurParent = &maJobPage;            // set job page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OptionsPage" ) ) )
+            else if ( aGroupingHint == "OptionsPage" )
             {
                 pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maOptionsPage.getLayout());
                 pCurParent = &maOptionsPage;        // set options page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OptionsPageOptGroup" ) ) )
+            else if ( aGroupingHint == "OptionsPageOptGroup" )
             {
                 pCurColumn = maOptionsPage.mxOptGroup;
                 pCurParent = &maOptionsPage;        // set options page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LayoutPage" ) ) )
+            else if ( aGroupingHint == "LayoutPage" )
             {
                 pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maNUpPage.getLayout());
                 pCurParent = &maNUpPage;            // set layout page as current parent
@@ -1261,7 +1261,7 @@ void PrintDialog::setupOptionalUI()
                )
             {
                 Window* pNewSub = NULL;
-                if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
+                if ( aGroupingHint == "PrintRange" )
                     pNewSub = new FixedText( pCurParent, WB_VCENTER );
                 else
                     pNewSub = new FixedLine( pCurParent );
@@ -1447,7 +1447,7 @@ void PrintDialog::setupOptionalUI()
                     pLabel->setLabel( pHeading );
                 }
 
-                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) ) )
+                if ( aCtrlType == "List" )
                 {
                     ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
                     maControls.push_front( pList );
@@ -1480,7 +1480,7 @@ void PrintDialog::setupOptionalUI()
                     else
                         pFieldColumn->addWindow( pList );
                 }
-                else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
+                else if ( aCtrlType == "Range" )
                 {
                     NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
                     maControls.push_front( pField );
@@ -1513,7 +1513,7 @@ void PrintDialog::setupOptionalUI()
                     else
                         pFieldColumn->addWindow( pField );
                 }
-                else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) ) )
+                else if ( aCtrlType == "Edit" )
                 {
                     Edit* pField = new Edit( pCurParent, WB_BORDER );
                     maControls.push_front( pField );
@@ -2219,7 +2219,7 @@ void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
                 {
                     pBox->Check( bVal );
                 }
-                else if( i_rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintProspect" ) ) )
+                else if ( i_rProperty == "PrintProspect" )
                 {
                     // EVIL special case
                     if( bVal )

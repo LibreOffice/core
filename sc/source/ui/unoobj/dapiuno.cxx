@@ -3442,11 +3442,11 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                 if (pMember)
                 {
                     bool bGetNewIndex = false;
-                    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
+                    if ( aPropertyName == SC_UNONAME_SHOWDETAIL )
                         pMember->SetShowDetails(cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
+                    else if ( aPropertyName == SC_UNONAME_ISHIDDEN )
                         pMember->SetIsVisible(!cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
+                    else if ( aPropertyName == SC_UNONAME_POS )
                     {
                         sal_Int32 nNewPos = 0;
                         if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
@@ -3492,7 +3492,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                 Reference< XNamed > xMember( xMembersIndex->getByIndex( mnIndex ), UNO_QUERY );
                 String sName( xMember->getName() );
                 ScDPSaveMember* pMember = pDim->GetExistingMemberByName( sName );
-                if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
+                if ( aPropertyName == SC_UNONAME_SHOWDETAIL )
                 {
                     if (pMember && pMember->HasShowDetails())
                     {
@@ -3507,7 +3507,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= true;
                     }
                 }
-                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
+                else if ( aPropertyName == SC_UNONAME_ISHIDDEN )
                 {
                     if (pMember && pMember->HasIsVisible())
                     {
@@ -3522,7 +3522,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= false;
                     }
                 }
-                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
+                else if ( aPropertyName == SC_UNONAME_POS )
                 {
                     aRet <<= mnIndex;
                 }

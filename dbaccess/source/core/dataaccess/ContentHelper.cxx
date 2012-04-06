@@ -357,7 +357,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     {
         const PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
@@ -366,7 +366,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                             ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
@@ -375,7 +375,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                             ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
@@ -384,7 +384,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                             ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rValue.Name == "Title" )
         {
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
@@ -462,19 +462,19 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 
             // Process Core properties.
 
-            if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            if ( rProp.Name == "ContentType" )
             {
                 xRow->appendString ( rProp, getContentType() );
             }
-            else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( rProp.Name == "Title" )
             {
                 xRow->appendString ( rProp, m_pImpl->m_aProps.aTitle );
             }
-            else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( rProp.Name == "IsDocument" )
             {
                 xRow->appendBoolean( rProp, m_pImpl->m_aProps.bIsDocument );
             }
-            else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( rProp.Name == "IsFolder" )
             {
                 xRow->appendBoolean( rProp, m_pImpl->m_aProps.bIsFolder );
             }

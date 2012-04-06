@@ -1552,7 +1552,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         // Mandatory props.
         //////////////////////////////////////////////////////////////////
 
-        if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        if ( rName == "ContentType" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1578,7 +1578,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rName == "Title" )
         {
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
@@ -1653,7 +1653,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 continue;
             }
 
-            if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            if ( rName == "Size" )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
@@ -2581,7 +2581,7 @@ void Content::transfer(
         if ( aTitle.isEmpty() )
             aTitle = sourceURI.GetPathBaseNameUnescaped();
 
-        if ( aTitle.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "/" ) ) )
+        if ( aTitle == "/" )
         {
             // kso: ???
             aTitle = rtl::OUString();

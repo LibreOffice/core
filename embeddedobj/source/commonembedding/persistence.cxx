@@ -110,7 +110,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
     for ( sal_Int32 nInd = 0; nInd < nLength; nInd++ )
     {
         aResult[nInd].Name = aOrig[nInd].Name;
-        if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AsTemplate" ) ) )
+        if ( aResult[nInd].Name == "AsTemplate" )
         {
             aResult[nInd].Value <<= sal_True;
             bAsTemplateSet = sal_True;
@@ -1013,32 +1013,32 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
     m_bReadOnly = sal_False;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ReadOnly" ) ) )
+        if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
     // TODO: use lObjArgs for StoreVisualReplacement
     for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
-        if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutplaceDispatchInterceptor" ) ) )
+        if ( lObjArgs[nObjInd].Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
             if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
                 m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DefaultParentBaseURL" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "DefaultParentBaseURL" )
         {
             lObjArgs[nObjInd].Value >>= m_aDefaultParentBaseURL;
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Parent" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "Parent" )
         {
             lObjArgs[nObjInd].Value >>= m_xParent;
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IndividualMiscStatus" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "IndividualMiscStatus" )
         {
             sal_Int64 nMiscStatus=0;
             lObjArgs[nObjInd].Value >>= nMiscStatus;
             m_nMiscStatus |= nMiscStatus;
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CloneFrom" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "CloneFrom" )
         {
             uno::Reference < embed::XEmbeddedObject > xObj;
             lObjArgs[nObjInd].Value >>= xObj;
@@ -1049,7 +1049,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 m_nClonedMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
             }
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutplaceFrameProperties" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "OutplaceFrameProperties" )
         {
             uno::Sequence< uno::Any > aOutFrameProps;
             uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
@@ -1073,19 +1073,19 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             else
                 OSL_FAIL( "OCommonEmbeddedObject::setPersistentEntry: illegal type for argument 'OutplaceFrameProperties'!" );
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModuleName" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "ModuleName" )
         {
             lObjArgs[nObjInd].Value >>= m_aModuleName;
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedScriptSupport" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "EmbeddedScriptSupport" )
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bEmbeddedScriptSupport );
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentRecoverySupport" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "DocumentRecoverySupport" )
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RecoveryStorage" ) ) )
+        else if ( lObjArgs[nObjInd].Name == "RecoveryStorage" )
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xRecoveryStorage );
         }
@@ -1219,7 +1219,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
         // StoreVisualReplacement and VisualReplacement args have no sence here
-        if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CanTryOptimization" ) ) )
+        if ( lObjArgs[nInd].Name == "CanTryOptimization" )
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
@@ -1352,7 +1352,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
         // StoreVisualReplacement and VisualReplacement args have no sence here
-        if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CanTryOptimization" ) ) )
+        if ( lObjArgs[nInd].Name == "CanTryOptimization" )
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
@@ -1703,13 +1703,13 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         ::rtl::OUString aNewLinkFilter;
         for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         {
-            if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+            if ( lArguments[nInd].Name == "URL" )
             {
                 // the new URL
                 lArguments[nInd].Value >>= m_aLinkURL;
                 m_aLinkFilterName = ::rtl::OUString();
             }
-            else if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+            else if ( lArguments[nInd].Name == "FilterName" )
             {
                 lArguments[nInd].Value >>= aNewLinkFilter;
                 m_aLinkFilterName = ::rtl::OUString();
@@ -1746,7 +1746,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 
     // TODO: use lObjArgs for StoreVisualReplacement
     for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
-        if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutplaceDispatchInterceptor" ) ) )
+        if ( lObjArgs[nObjInd].Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
             if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
@@ -1762,7 +1762,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 
     m_bReadOnly = sal_False;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ReadOnly" ) ) )
+        if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
     if ( bOldReadOnlyValue != m_bReadOnly && !m_bIsLink )

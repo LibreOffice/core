@@ -555,11 +555,11 @@ void ODBFilter::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     const PropertyValue *pEnd = pIter + aViewProps.getLength();
     for (; pIter != pEnd; ++pIter)
     {
-        if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Queries" ) ) )
+        if ( pIter->Name == "Queries" )
         {
             fillPropertyMap(pIter->Value,m_aQuerySettings);
         }
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Tables" ) ) )
+        else if ( pIter->Name == "Tables" )
         {
             fillPropertyMap(pIter->Value,m_aTablesSettings);
         }
@@ -572,7 +572,7 @@ void ODBFilter::SetConfigurationSettings(const Sequence<PropertyValue>& aConfigP
     const PropertyValue *pEnd = pIter + aConfigProps.getLength();
     for (; pIter != pEnd; ++pIter)
     {
-        if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "layout-settings" ) ) )
+        if ( pIter->Name == "layout-settings" )
         {
             Sequence<PropertyValue> aWindows;
             pIter->Value >>= aWindows;

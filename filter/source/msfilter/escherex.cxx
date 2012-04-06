@@ -753,33 +753,33 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                     /* todo:
                     calculate the best option for ArrowLenght and ArrowWidth
                     */
-                    if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Arrow concave" ) ) )
+                    if ( aApiName == "Arrow concave" )
                         reLineEnd = ESCHER_LineArrowStealthEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Square 45" ) ) )
+                    else if ( aApiName == "Square 45" )
                         reLineEnd = ESCHER_LineArrowDiamondEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Small Arrow" ) ) )
+                    else if ( aApiName == "Small Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Dimension Lines" ) ) )
+                    else if ( aApiName == "Dimension Lines" )
                     {
                         rnArrowLength = 0;
                         rnArrowWidth  = 2;
                         reLineEnd = ESCHER_LineArrowOvalEnd;
                     }
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Double Arrow" ) ) )
+                    else if ( aApiName == "Double Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Rounded short Arrow" ) ) )
+                    else if ( aApiName == "Rounded short Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Symmetric Arrow" ) ) )
+                    else if ( aApiName == "Symmetric Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Line Arrow" ) ) )
+                    else if ( aApiName == "Line Arrow" )
                         reLineEnd = ESCHER_LineArrowOpenEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Rounded large Arrow" ) ) )
+                    else if ( aApiName == "Rounded large Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Circle" ) ) )
+                    else if ( aApiName == "Circle" )
                         reLineEnd = ESCHER_LineArrowOvalEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Square" ) ) )
+                    else if ( aApiName == "Square" )
                         reLineEnd = ESCHER_LineArrowDiamondEnd;
-                    else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Arrow" ) ) )
+                    else if ( aApiName == "Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
                 }
                 else if ( comphelper::string::getTokenCount(aArrowStartName, ' ') == 2 )
@@ -3258,18 +3258,18 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                 for ( i = 0; i < nCount; i++ )
                 {
                     const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-                    if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                    if ( rProp.Name == "Type" )
                     {
                         if ( rProp.Value >>= rShapeType )
                             eShapeType = EnhancedCustomShapeTypeNames::Get( rShapeType );
                     }
-                    else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredX" ) ) )
+                    else if ( rProp.Name == "MirroredX" )
                     {
                         sal_Bool bMirroredX = sal_Bool();
                         if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
                             nMirrorFlags  |= SHAPEFLAG_FLIPH;
                     }
-                    else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredY" ) ) )
+                    else if ( rProp.Name == "MirroredY" )
                     {
                         sal_Bool bMirroredY = sal_Bool();
                         if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )

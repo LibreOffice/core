@@ -122,7 +122,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
+                if ( aPropValue.Name == "ConfigurationData" )
                     aPropValue.Value >>= m_aConfigData;
             }
         }

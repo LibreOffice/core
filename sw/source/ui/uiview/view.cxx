@@ -1294,61 +1294,61 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
         for (sal_Int16 i = 0 ; i < nLength; i++)
         {
-            if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLeft" ) ) )
+            if ( pValue->Name == "ViewLeft" )
             {
                pValue->Value >>= nX;
                nX = MM100_TO_TWIP( nX );
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
+            else if ( pValue->Name == "ViewTop" )
             {
                pValue->Value >>= nY;
                nY = MM100_TO_TWIP( nY );
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
+            else if ( pValue->Name == "VisibleLeft" )
             {
                pValue->Value >>= nLeft;
                nLeft = MM100_TO_TWIP( nLeft );
                bGotVisibleLeft = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleTop" ) ) )
+            else if ( pValue->Name == "VisibleTop" )
             {
                pValue->Value >>= nTop;
                nTop = MM100_TO_TWIP( nTop );
                bGotVisibleTop = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleRight" ) ) )
+            else if ( pValue->Name == "VisibleRight" )
             {
                pValue->Value >>= nRight;
                nRight = MM100_TO_TWIP( nRight );
                bGotVisibleRight = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleBottom" ) ) )
+            else if ( pValue->Name == "VisibleBottom" )
             {
                pValue->Value >>= nBottom;
                nBottom = MM100_TO_TWIP( nBottom );
                bGotVisibleBottom = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomType" ) ) )
+            else if ( pValue->Name == "ZoomType" )
             {
                pValue->Value >>= nZoomType;
                bGotZoomType = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomFactor" ) ) )
+            else if ( pValue->Name == "ZoomFactor" )
             {
                pValue->Value >>= nZoomFactor;
                bGotZoomFactor = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLayoutColumns" ) ) )
+            else if ( pValue->Name == "ViewLayoutColumns" )
             {
                pValue->Value >>= nViewLayoutColumns;
                bGotViewLayoutColumns = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLayoutBookMode" ) ) )
+            else if ( pValue->Name == "ViewLayoutBookMode" )
             {
                bViewLayoutBookMode = * (sal_Bool *) pValue->Value.getValue();
                bGotViewLayoutBookMode = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
+            else if ( pValue->Name == "IsSelectedFrame" )
             {
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = sal_True;

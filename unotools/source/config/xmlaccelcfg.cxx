@@ -259,7 +259,7 @@ throw( SAXException, RuntimeException )
 {
     m_nElementDepth++;
 
-    if ( aElementName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORLIST )))
+    if ( aElementName == ELEMENT_ACCELERATORLIST )
     {
         // acceleratorlist
         if ( m_bAcceleratorMode )
@@ -271,7 +271,7 @@ throw( SAXException, RuntimeException )
         else
             m_bAcceleratorMode = sal_True;
     }
-    else if ( aElementName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORITEM )))
+    else if ( aElementName == ELEMENT_ACCELERATORITEM )
     {
         // accelerator item
         if ( !m_bAcceleratorMode )
@@ -293,11 +293,11 @@ throw( SAXException, RuntimeException )
                 OUString aName = xAttrList->getNameByIndex( i );
                 OUString aValue = xAttrList->getValueByIndex( i );
 
-                if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_URL )))
+                if ( aName == ATTRIBUTE_URL )
                     aItem.aCommand = aValue;
-                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_MODIFIER )))
+                else if ( aName == ATTRIBUTE_MODIFIER )
                     aItem.nModifier = (sal_uInt16)aValue.toInt32();
-                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_KEYCODE )))
+                else if ( aName == ATTRIBUTE_KEYCODE )
                     aItem.nCode = (sal_uInt16)aValue.toInt32();
             }
 
@@ -324,7 +324,7 @@ void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
 {
     m_nElementDepth--;
 
-    if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORLIST )))
+    if ( aName == ELEMENT_ACCELERATORLIST )
     {
         // acceleratorlist
         if ( !m_bAcceleratorMode )
@@ -334,7 +334,7 @@ void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
-    else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_ACCELERATORITEM )))
+    else if ( aName == ELEMENT_ACCELERATORITEM )
     {
         if ( !m_bItemCloseExpected )
         {

@@ -1463,7 +1463,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                 case ATTR_PAGE_SCALETO:
                     {
                         const ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(nWhich));
-                        if (aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX )))
+                        if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
                             aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
                         else
                             aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
@@ -1843,7 +1843,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                     rtl::OUString aName;
                                     if ( *pValue >>= aName )
                                     {
-                                        if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_PAPERBIN_DEFAULTNAME ) ) )
+                                        if ( aName == SC_PAPERBIN_DEFAULTNAME )
                                             bFound = sal_True;
                                         else
                                         {

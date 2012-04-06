@@ -459,9 +459,9 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     for ( sal_Int32 i = 0 ; i < nLength; ++i)
     {
-        if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
+        if ( pValue[ i ].Name == "OutputStream" )
             pValue[ i ].Value >>= xOStm;
-        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
+        else if ( pValue[ i ].Name == "FileName" )
         {
             ::rtl::OUString aFileName;
 

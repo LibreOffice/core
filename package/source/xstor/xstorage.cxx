@@ -495,7 +495,7 @@ void OStorage_Impl::OpenOwnPackage()
                     aArguments.realloc( ++nArgNum );
                     aArguments[nArgNum-1] <<= aNamedValue;
                 }
-                else if ( m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+                else if ( m_xProperties[aInd].Name == "Password" )
                 {
                     // TODO: implement password setting for documents
                     // the password entry must be removed after setting
@@ -5007,7 +5007,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( aPropertyName == "MediaType" )
         {
             aValue >>= m_pImpl->m_aMediaType;
             m_pImpl->m_bControlMediaType = sal_True;
@@ -5015,7 +5015,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             m_pImpl->m_bBroadcastModified = sal_True;
             m_pImpl->m_bIsModified = sal_True;
         }
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
+        else if ( aPropertyName == "Version" )
         {
             aValue >>= m_pImpl->m_aVersion;
             m_pImpl->m_bControlVersion = sal_True;
@@ -5040,7 +5040,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfoStream" ) ) )
+        if ( aPropertyName == "RelationsInfoStream" )
         {
             uno::Reference< io::XInputStream > xInRelStream;
             if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -5063,7 +5063,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+        else if ( aPropertyName == "RelationsInfo" )
         {
             if ( aValue >>= m_pImpl->m_aRelInfo )
             {
@@ -5132,18 +5132,18 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                                         aCaught );
         }
 
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( aPropertyName == "MediaType" )
             return uno::makeAny( m_pImpl->m_aMediaType );
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
+        else if ( aPropertyName == "Version" )
             return uno::makeAny( m_pImpl->m_aVersion );
         else
             return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
+    else if ( aPropertyName == "IsRoot" )
     {
         return uno::makeAny( m_pData->m_bIsRoot );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenMode" ) ) )
+    else if ( aPropertyName == "OpenMode" )
     {
         return uno::makeAny( m_pImpl->m_nStorageMode );
     }
@@ -5158,7 +5158,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                     return m_pImpl->m_xProperties[aInd].Value;
             }
 
-            if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+            if ( aPropertyName == "URL" )
                 return uno::makeAny( ::rtl::OUString() );
 
             return uno::makeAny( sal_False ); // RepairPackage
@@ -5334,7 +5334,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Target" ) ) )
+        if ( aSeq[nInd].First == "Target" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -5359,7 +5359,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+        if ( aSeq[nInd].First == "Type" )
             return aSeq[nInd].Second;
 
     return ::rtl::OUString();
@@ -5386,7 +5386,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Id" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
                     return aSeq[nInd1];
@@ -5419,7 +5419,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Type" )
             {
                 // the type is usually an URL, so the check should be case insensitive
                 if ( aSeq[nInd1][nInd2].Second.equalsIgnoreAsciiCase( sType ) )
@@ -5536,7 +5536,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const ::rtl::OUString& sID  )
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            if ( aSeq[nInd1][nInd2].First == "Id" )
             {
                 if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
                 {

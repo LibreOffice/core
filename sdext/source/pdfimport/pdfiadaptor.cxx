@@ -83,9 +83,9 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                        rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                        rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
             #endif
-            if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedSubstream" ) ) )
+            if ( pAttribs[i].Name == "EmbeddedSubstream" )
                 pAttribs[i].Value >>= xSubStream;
-            else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+            else if ( pAttribs[i].Name == "Password" )
             {
                 nPwPos = i;
                 pAttribs[i].Value >>= aPwd;
@@ -97,7 +97,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             uno::Reference< io::XInputStream > xInput;
             for( sal_Int32 i = 0; i < nAttribs; i++ )
             {
-                if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+                if ( pAttribs[i].Name == "InputStream" )
                 {
                     pAttribs[i].Value >>= xInput;
                     break;
@@ -292,15 +292,15 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
         OSL_TRACE("importer Attrib: %s", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
-        if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        if ( pAttribs->Name == "InputStream" )
             pAttribs->Value >>= xInput;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if ( pAttribs->Name == "URL" )
             pAttribs->Value >>= aURL;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+        else if ( pAttribs->Name == "StatusIndicator" )
             pAttribs->Value >>= xStatus;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+        else if ( pAttribs->Name == "InteractionHandler" )
             pAttribs->Value >>= xInteractionHandler;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+        else if ( pAttribs->Name == "Password" )
             pAttribs->Value >>= aPwd;
     }
     if( !xInput.is() )

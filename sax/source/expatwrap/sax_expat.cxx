@@ -1041,7 +1041,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
 
         OUString aImplementationName = OUString::createFromAscii( pImplName );
 
-        if (aImplementationName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( IMPLEMENTATION_NAME  ) ) )
+        if ( aImplementationName == IMPLEMENTATION_NAME  )
         {
             xRet = createSingleFactory( xSMgr, aImplementationName,
                                         SaxExpatParser_CreateInstance,

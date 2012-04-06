@@ -710,7 +710,7 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& a
 void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw( beans::UnknownPropertyException, beans::PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
-    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" )) )
+    if ( aPropertyName == "MediaType" )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -732,14 +732,14 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                             2 );
 
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+    else if ( aPropertyName == "Size" )
     {
         if ( !( aValue >>= aEntry.nSize ) )
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Wrong type for Size property!\n" ) ),
                                             uno::Reference< XInterface >(),
                                             2 );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+    else if ( aPropertyName == "Encrypted" )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -763,7 +763,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                             2 );
 
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_KEY_PROPERTY ) ) )
+    else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -808,7 +808,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 
         m_aStorageEncryptionKeys.realloc( 0 );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
+    else if ( aPropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -870,37 +870,37 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         throw( beans::UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     Any aAny;
-    if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+    if ( PropertyName == "MediaType" )
     {
         aAny <<= sMediaType;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
+    else if ( PropertyName == "Size" )
     {
         aAny <<= aEntry.nSize;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
+    else if ( PropertyName == "Encrypted" )
     {
         aAny <<= ((m_nStreamMode == PACKAGE_STREAM_RAW) ? sal_True : bToBeEncrypted);
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WasEncrypted" ) ) )
+    else if ( PropertyName == "WasEncrypted" )
     {
         aAny <<= bIsEncrypted;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
+    else if ( PropertyName == "Compressed" )
     {
         aAny <<= bToBeCompressed;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_KEY_PROPERTY ) ) )
+    else if ( PropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         aAny <<= m_aEncryptionKey;
         return aAny;
     }
-    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
+    else if ( PropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         aAny <<= m_aStorageEncryptionKeys;
         return aAny;

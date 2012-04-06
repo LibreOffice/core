@@ -99,12 +99,12 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/embeddings" ) ) )
+        else if ( rStrgPath == "ppt/embeddings" )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/activeX" ) ) )
+        else if ( rStrgPath == "ppt/activeX" )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();

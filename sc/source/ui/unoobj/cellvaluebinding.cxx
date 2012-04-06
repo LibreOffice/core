@@ -589,7 +589,7 @@ namespace calc
             NamedValue aValue;
             if ( *pLoop >>= aValue )
             {
-                if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BoundCell" ) ) )
+                if ( aValue.Name == "BoundCell" )
                 {
                     if ( aValue.Value >>= aAddress )
                         bFoundAddress = sal_True;

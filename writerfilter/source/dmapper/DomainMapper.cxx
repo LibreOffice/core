@@ -3032,9 +3032,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     {
         sal_Int16 nEscapement = 0;
         sal_Int8 nProp  = 58;
-        if( sStringValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "superscript" ) ))
+        if ( sStringValue == "superscript" )
                 nEscapement = 101;
-        else if( sStringValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "subscript" ) ))
+        else if ( sStringValue == "subscript" )
                 nEscapement = -101;
         else
             nProp = 100;

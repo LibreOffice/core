@@ -155,6 +155,60 @@ public:
     }
 
     /**
+        @overload
+        @since LibreOffice 3.6
+     */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN // see the OString ctors
+    OStringBuffer( const char* value )
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+#else
+    template< typename T >
+    OStringBuffer( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
+    template< typename T >
+    OStringBuffer( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
+    /**
+      Constructs a string buffer so that it represents the same
+        sequence of characters as the string literal.
+
+      If there are any embedded \0's in the string literal, the result is undefined.
+      Use the overload that explicitly accepts length.
+
+      @since LibreOffice 3.6
+
+      @param    literal       a string literal
+    */
+    template< typename T >
+    OStringBuffer( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy())
+        : pData(NULL)
+        , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
+    {
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
+
+    /**
         Constructs a string buffer so that it represents the same
         sequence of characters as the string argument.
 

@@ -300,12 +300,12 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     {
         const beans::PropertyValue& rProp = pPropArray[i];
 
-        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_OPERATOR ) ) )
+        if ( rProp.Name == SC_UNONAME_OPERATOR )
         {
             sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
             aEntry.meMode = lcl_ConditionOperatorToModeNew( eOper );
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULA1 ) ) )
+        else if ( rProp.Name == SC_UNONAME_FORMULA1 )
         {
             rtl::OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
@@ -317,7 +317,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maTokens1 = aTokens;
             }
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULA2 ) ) )
+        else if ( rProp.Name == SC_UNONAME_FORMULA2 )
         {
             rtl::OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
@@ -329,44 +329,44 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maTokens2 = aTokens;
             }
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SOURCEPOS ) ) )
+        else if ( rProp.Name == SC_UNONAME_SOURCEPOS )
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
                 aEntry.maPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SOURCESTR ) ) )
+        else if ( rProp.Name == SC_UNONAME_SOURCESTR )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maPosStr = String( aStrVal );
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_STYLENAME ) ) )
+        else if ( rProp.Name == SC_UNONAME_STYLENAME )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PARA );
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULANMSP1 ) ) )
+        else if ( rProp.Name == SC_UNONAME_FORMULANMSP1 )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExprNmsp1 = aStrVal;
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULANMSP2 ) ) )
+        else if ( rProp.Name == SC_UNONAME_FORMULANMSP2 )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExprNmsp2 = aStrVal;
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_GRAMMAR1 ) ) )
+        else if ( rProp.Name == SC_UNONAME_GRAMMAR1 )
         {
             sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
                 aEntry.meGrammar1 = static_cast< FormulaGrammar::Grammar >( nVal );
         }
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_GRAMMAR2 ) ) )
+        else if ( rProp.Name == SC_UNONAME_GRAMMAR2 )
         {
             sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )

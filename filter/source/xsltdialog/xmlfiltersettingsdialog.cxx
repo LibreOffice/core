@@ -413,7 +413,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
 
             for( nValue = 0; nValue < nValueCount; nValue++, pValues++ )
             {
-                if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
+                if ( pValues->Name == "UIName" )
                 {
                     OUString aInterfaceName;
                     pValues->Value >>= aInterfaceName;
@@ -745,7 +745,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     for( nIndex = 0; nIndex < nCount; nIndex++ )
                     {
                         OUString aName( aSequence[nIndex].Name );
-                        if( aSequence[nIndex].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Types" ) ) )
+                        if ( aSequence[nIndex].Name == "Types" )
                         {
                             Sequence< OUString > aTypes;
                             if( aSequence[nIndex].Value >>= aTypes )
@@ -859,7 +859,7 @@ void XMLFilterSettingsDialog::onDelete()
 
                         for( nValue = 0; (nValue < nValueCount) && !bTypeStillUsed; nValue++, pValues++ )
                         {
-                            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                            if ( pValues->Name == "Type" )
                             {
                                 OUString aType;
                                 pValues->Value >>= aType;
@@ -1113,39 +1113,39 @@ void XMLFilterSettingsDialog::initFilterList()
 
                 for( nValue = 0; nValue < nValueCount; nValue++, pValues++ )
                 {
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                    if ( pValues->Name == "Type" )
                     {
                         pValues->Value >>= pTempFilter->maType;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
+                    else if ( pValues->Name == "UIName" )
                     {
                         pValues->Value >>= pTempFilter->maInterfaceName;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+                    else if ( pValues->Name == "DocumentService" )
                     {
                         pValues->Value >>= pTempFilter->maDocumentService;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterService" ) ) )
+                    else if ( pValues->Name == "FilterService" )
                     {
                         pValues->Value >>= aFilterService;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Flags" ) ) )
+                    else if ( pValues->Name == "Flags" )
                     {
                         pValues->Value >>= pTempFilter->maFlags;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
+                    else if ( pValues->Name == "UserData" )
                     {
                         pValues->Value >>= aUserData;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileFormatVersion" ) ) )
+                    else if ( pValues->Name == "FileFormatVersion" )
                     {
                         pValues->Value >>= pTempFilter->maFileFormatVersion;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TemplateName" ) ) )
+                    else if ( pValues->Name == "TemplateName" )
                     {
                         pValues->Value >>= pTempFilter->maImportTemplate;
                     }
-                    else if(pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Finalized" ) ))
+                    else if ( pValues->Name == "Finalized" )
                     {
                         pValues->Value >>= pTempFilter->mbReadonly;
                     }
@@ -1192,12 +1192,12 @@ void XMLFilterSettingsDialog::initFilterList()
                             for( nValue2 = 0; nValue2 < nValueCount2; nValue2++, pValues2++ )
                             {
 /*
-                                if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+                                if ( pValues2->Name == "MediaType" )
                                 {
                                     pValues2->Value >>= pTempFilter->maDocType;
                                 } else
 */
-                                if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClipboardFormat" ) ) )
+                                if ( pValues2->Name == "ClipboardFormat" )
                                 {
                                     OUString aDocType;
                                     pValues2->Value >>= aDocType;
@@ -1207,7 +1207,7 @@ void XMLFilterSettingsDialog::initFilterList()
 
                                     pTempFilter->maDocType = aDocType;
                                 }
-                                else if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Extensions" ) ) )
+                                else if ( pValues2->Name == "Extensions" )
                                 {
                                     Sequence< OUString > aExtensions;
                                     if( pValues2->Value >>= aExtensions )
@@ -1225,11 +1225,11 @@ void XMLFilterSettingsDialog::initFilterList()
                                         }
                                     }
                                 }
-                                else if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentIconID" ) ) )
+                                else if ( pValues2->Name == "DocumentIconID" )
                                 {
                                     pValues2->Value >>= pTempFilter->mnDocumentIconID;
                                 }
-                                else if(pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Finalized" ) ))
+                                else if ( pValues2->Name == "Finalized" )
                                 {
                                     // both the filter and the type may be finalized
                                     sal_Bool bTemp = sal_False;

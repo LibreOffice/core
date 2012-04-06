@@ -315,7 +315,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     throw (com::sun::star::uno::RuntimeException)
 {
     com::sun::star::uno::Any ret;
-    if( Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "java-vm.interaction-handler" ) ) )
+    if ( Name == "java-vm.interaction-handler" )
     {
         // Currently, for accessbility no interaction handler shall be offered.
         // There may be introduced later on a handler using native toolkits

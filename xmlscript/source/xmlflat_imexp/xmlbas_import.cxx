@@ -84,12 +84,12 @@ namespace xmlscript
             ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
             if ( !aValue.isEmpty() )
             {
-                if ( aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) )
+                if ( aValue == "true" )
                 {
                     *pRet = sal_True;
                     return true;
                 }
-                else if ( aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "false" ) ) )
+                else if ( aValue == "false" )
                 {
                     *pRet = sal_False;
                     return true;
@@ -214,7 +214,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
                 Reference< XInterface >(), Any() );
         }
-        else if ( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "library-linked" ) ) )
+        else if ( rLocalName == "library-linked" )
         {
             if ( xAttributes.is() )
             {
@@ -253,7 +253,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                 }
             }
         }
-        else if ( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "library-embedded" ) ) )
+        else if ( rLocalName == "library-embedded" )
         {
             // TODO: create password protected libraries
 
@@ -355,7 +355,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
                 Reference< XInterface >(), Any() );
         }
-        else if ( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "module" ) ) )
+        else if ( rLocalName == "module" )
         {
             if ( xAttributes.is() )
             {
@@ -420,7 +420,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
                 Reference< XInterface >(), Any() );
         }
-        else if ( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "source-code" ) ) )
+        else if ( rLocalName == "source-code" )
         {
             // TODO: password protected libraries
 
@@ -574,7 +574,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
                 Reference< XInterface >(), Any() );
         }
-        else if ( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "libraries" ) ) )
+        else if ( rLocalName == "libraries" )
         {
             Reference< script::XLibraryContainer2 > xLibContainer;
 

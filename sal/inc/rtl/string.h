@@ -888,8 +888,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newS
 
 /**
  @internal
+ @since LibreOffice 3.6
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromLiteral( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromLiteral( rtl_String ** newStr, const sal_Char * value, sal_Int32 len, sal_Int32 allocExtra ) SAL_THROW_EXTERN_C();
 
 /** Assign a new value to a string.
 

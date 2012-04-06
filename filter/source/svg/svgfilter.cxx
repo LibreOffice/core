@@ -170,7 +170,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
             for ( sal_Int32 i = 0 ; i < nLength; ++i)
             {
-                if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PagePos" ) ) )
+                if ( pValue[ i ].Name == "PagePos" )
                 {
                     pValue[ i ].Value >>= nPageToExport;
                 }
@@ -273,7 +273,7 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     const sal_Int32 nAttribs = io_rDescriptor.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++ )
     {
-        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        if ( pAttribs[i].Name == "InputStream" )
             pAttribs[i].Value >>= xInput;
     }
 

@@ -119,7 +119,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         return 0;
 
     // TODO: according to spec, value may contain "auto"
-    if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "auto" ) ) )
+    if ( rValue == "auto" )
     {
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - special value 'auto' must be handled by caller" );
         return nRefValue;

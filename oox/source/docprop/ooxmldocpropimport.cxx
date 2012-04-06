@@ -92,7 +92,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
         for( sal_Int32 nEntryIndex = 0, nEntryLength = rEntries.getLength(); nEntryIndex < nEntryLength; ++nEntryIndex )
         {
             const StringPair& rEntry = rEntries[ nEntryIndex ];
-            if( rEntry.First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Target" ) ) )
+            if ( rEntry.First == "Target" )
             {
                 Reference< XExtendedStorageStream > xExtStream(
                     xHierarchy->openStreamElementByHierarchicalName( rEntry.Second, ElementModes::READ ), UNO_QUERY_THROW );

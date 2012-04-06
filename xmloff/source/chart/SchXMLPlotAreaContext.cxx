@@ -487,7 +487,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
                 // for NetCharts there were no xAxis exported to older files
                 // so we need to add the x axis here for those old NetChart files
-                if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.NetChartType" )) )
+                if ( maChartTypeServiceName == "com.sun.star.chart2.NetChartType" )
                     bAddMissingXAxisForNetCharts = true;
 
                 //Issue 59288
@@ -499,7 +499,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_4( GetImport().GetModel() ) )
             {
                 //issue74660
-                if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ColumnChartType" )) )
+                if ( maChartTypeServiceName == "com.sun.star.chart2.ColumnChartType" )
                     bAdaptXAxisOrientationForOld2DBarCharts = true;
             }
 

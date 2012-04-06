@@ -217,7 +217,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
         if ( aFilterAnyData >>= aFilterData )
         {
             for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+                if ( aFilterData[nInd].Name == "DocumentService" )
                     aFilterData[nInd].Value >>= aDocServiceName;
         }
     }
@@ -322,7 +322,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
             {
                 aResult[nInd + 1].Name = aObjPropNames[nInd];
 
-                if ( aObjPropNames[nInd].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectVerbs" ) ) )
+                if ( aObjPropNames[nInd] == "ObjectVerbs" )
                 {
                     uno::Sequence< ::rtl::OUString > aVerbShortcuts;
                     if ( xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts )
@@ -586,7 +586,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
     ::rtl::OUString aFilterName;
 
     for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
-        if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+        if ( aMediaDescr[nInd].Name == "FilterName" )
             aMediaDescr[nInd].Value >>= aFilterName;
 
     if ( aFilterName.isEmpty() )
@@ -608,7 +608,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
         // get FilterName
         for ( sal_Int32 nInd = 0; nInd < aTempMD.getLength(); nInd++ )
-            if ( aTempMD[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+            if ( aTempMD[nInd].Name == "FilterName" )
                 aTempMD[nInd].Value >>= aFilterName;
 
         if ( !aFilterName.isEmpty() )
@@ -650,7 +650,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 {
     ::rtl::OUString aDocName;
     for ( sal_Int32 nInd = 0; nInd < aObject.getLength(); nInd++ )
-        if ( aObject[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectDocumentServiceName" ) ) )
+        if ( aObject[nInd].Name == "ObjectDocumentServiceName" )
         {
             aObject[nInd].Value >>= aDocName;
             break;
@@ -661,7 +661,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
     sal_Bool bNeedsAddition = sal_True;
     for ( sal_Int32 nMedInd = 0; nMedInd < aMediaDescr.getLength(); nMedInd++ )
-        if ( aMediaDescr[nMedInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+        if ( aMediaDescr[nMedInd].Name == "DocumentService" )
         {
             aMediaDescr[nMedInd].Value <<= aDocName;
             bNeedsAddition = sal_False;

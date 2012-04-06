@@ -148,9 +148,9 @@ throw (uno::Exception, uno::RuntimeException)
         beans::PropertyValue aPropValue;
         if ( Arguments[i] >>= aPropValue )
         {
-            if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+            if ( aPropValue.Name == "Frame" )
                 aPropValue.Value >>= xFrame;
-            else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
+            else if ( aPropValue.Name == "ResourceURL" )
                 aPropValue.Value >>= aResourceURL;
         }
     }

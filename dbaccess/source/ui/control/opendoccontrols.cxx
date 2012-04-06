@@ -105,7 +105,7 @@ namespace dbaui
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {
                         ::rtl::OUString sPropertyName( aProperties[i].Name );
-                        if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Label" ) ) )
+                        if ( sPropertyName == "Label" )
                         {
                             aProperties[i].Value >>= sLabel;
                             break;

@@ -152,7 +152,7 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
             int nProps = aRenderParms.getLength();
             for( int i = 0; i < nProps; i++ )
             {
-                if( aRenderParms[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtraPrintUIOptions" ) ) )
+                if ( aRenderParms[i].Name == "ExtraPrintUIOptions" )
                 {
                     Sequence< beans::PropertyValue > aUIProps;
                     aRenderParms[i].Value >>= aUIProps;

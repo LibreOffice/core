@@ -747,7 +747,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
                     rtl::OUString aPageStyleName;
                     xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
                     sal_Bool bFirstPage = sal_False;
-                    if( aPageStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "First Page" ) ) )
+                    if ( aPageStyleName == "First Page" )
                         bFirstPage = sal_True;
                     if( nView == word::WdSeekView::wdSeekFirstPageHeader )
                     {

@@ -2365,7 +2365,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
         const beans::PropertyValue *pProps = rOptions.getConstArray();
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
-            if (pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "View" ) ))
+            if ( pProps[i].Name == "View" )
             {
                 aTmp = pProps[i].Value;
                 break;

@@ -502,19 +502,19 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
 {
     sal_uInt16 nResult = 0;
 
-    if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "scalc" ) ) )
+    if ( aFactoryShortName == "scalc" )
     {
         nResult = BMP_128X128_CALC_DOC;
     }
-    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) )
+    else if ( aFactoryShortName == "sdraw" )
     {
         nResult = BMP_128X128_DRAW_DOC;
     }
-    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) )
+    else if ( aFactoryShortName == "simpress" )
     {
         nResult = BMP_128X128_IMPRESS_DOC;
     }
-    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "smath" ) ) )
+    else if ( aFactoryShortName == "smath" )
     {
         nResult = BMP_128X128_MATH_DOC;
     }

@@ -170,7 +170,7 @@ Interceptor::dispatch(
 
             while( nInd < aNewArgs.getLength() )
             {
-                if ( aNewArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SaveTo" ) ) )
+                if ( aNewArgs[nInd].Name == "SaveTo" )
                 {
                     aNewArgs[nInd].Value <<= sal_True;
                     break;

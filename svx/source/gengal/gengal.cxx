@@ -286,16 +286,16 @@ int GalApp::Main()
             aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--name" ) ) )
+        else if ( aParam == "--name" )
             aName = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--path" ) ) )
+        else if ( aParam == "--path" )
             aPath = Smartify( GetCommandLineParam( ++i ) );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--destdir" ) ) )
+        else if ( aParam == "--destdir" )
             aDestDir = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--number-from" ) ) )
+        else if ( aParam == "--number-from" )
              nNumFrom = GetCommandLineParam( ++i ).ToInt32();
 
         else

@@ -1768,7 +1768,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
             aExtension = aCompleteName.copy( iDot + 1 );
         }
 
-        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) )
+        if ( aExtension == "properties" )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;

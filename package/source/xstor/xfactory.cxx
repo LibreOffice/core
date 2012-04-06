@@ -210,7 +210,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
                     aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
                 }
-                else if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
+                else if ( aDescr[nInd].Name == "StorageFormat" )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;

@@ -443,34 +443,34 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     const PropertyValue* pValues = aDescriptor.getConstArray();
     while( nArgs-- )
     {
-        if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+        if ( pValues->Name == "FilterName" )
         {
             pValues->Value >>= rSettings.maFilterName;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        else if ( pValues->Name == "MediaType" )
         {
             pValues->Value >>= rSettings.maMediaType;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if ( pValues->Name == "URL" )
         {
             if( !( pValues->Value >>= rSettings.maURL ) )
             {
                 pValues->Value >>= rSettings.maURL.Complete;
             }
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
+        else if ( pValues->Name == "OutputStream" )
         {
             pValues->Value >>= rSettings.mxOutputStream;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicRenderer" ) ) )
+        else if ( pValues->Name == "GraphicRenderer" )
         {
             pValues->Value >>= rSettings.mxGraphicRenderer;
         }
-        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+        else if ( pValues->Name == "StatusIndicator" )
         {
             pValues->Value >>= rSettings.mxStatusIndicator;
         }
-        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+        else if ( pValues->Name == "InteractionHandler" )
         {
             pValues->Value >>= rSettings.mxInteractionHandler;
         }
@@ -486,7 +486,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
         {
             pValues->Value >>= rSettings.mbExportOnlyBackground;
         }
-        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        else if ( pValues->Name == "FilterData" )
         {
             pValues->Value >>= rSettings.maFilterData;
 
@@ -494,7 +494,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
             PropertyValue* pDataValues = rSettings.maFilterData.getArray();
             while( nFilterArgs-- )
             {
-                if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
+                if ( pDataValues->Name == "Translucent" )
                 {
                     if ( !( pDataValues->Value >>= rSettings.mbTranslucent ) )  // SJ: TODO: The GIF Transparency is stored as int32 in
                     {                                               // configuration files, this has to be changed to boolean
@@ -503,11 +503,11 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                             rSettings.mbTranslucent = nTranslucent != 0;
                     }
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelWidth" ) ) )
+                else if ( pDataValues->Name == "PixelWidth" )
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelHeight" ) ) )
+                else if ( pDataValues->Name == "PixelHeight" )
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                 }
@@ -521,24 +521,24 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                     pDataValues->Value >>= rSettings.mnHeight;
                     pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+                else if ( pDataValues->Name == "ExportOnlyBackground" )
                 {
                     pDataValues->Value >>= rSettings.mbExportOnlyBackground;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HighContrast" ) ) )
+                else if ( pDataValues->Name == "HighContrast" )
                 {
                     pDataValues->Value >>= rSettings.mbUseHighContrast;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
+                else if ( pDataValues->Name == "PageNumber" )
                 {
                     pDataValues->Value >>= mnPageNumber;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScrollText" ) ) )
+                else if ( pDataValues->Name == "ScrollText" )
                 {
                     // #110496# Read flag solitary scroll text metafile
                     pDataValues->Value >>= rSettings.mbScrollText;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CurrentPage" ) ) )
+                else if ( pDataValues->Name == "CurrentPage" )
                 {
                     Reference< XDrawPage >  xPage;
                     pDataValues->Value >>= xPage;
@@ -549,25 +549,25 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                             mpCurrentPage = pUnoPage->GetSdrPage();
                     }
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXNumerator" ) ) )
+                else if ( pDataValues->Name == "ScaleXNumerator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
                         rSettings.maScaleX = Fraction( nVal, rSettings.maScaleX.GetDenominator() );
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXDenominator" ) ) )
+                else if ( pDataValues->Name == "ScaleXDenominator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
                         rSettings.maScaleX = Fraction( rSettings.maScaleX.GetNumerator(), nVal );
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYNumerator" ) ) )
+                else if ( pDataValues->Name == "ScaleYNumerator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
                         rSettings.maScaleY = Fraction( nVal, rSettings.maScaleY.GetDenominator() );
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYDenominator" ) ) )
+                else if ( pDataValues->Name == "ScaleYDenominator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
