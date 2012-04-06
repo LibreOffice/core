@@ -808,9 +808,9 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
         {
 
             rtl::OUString sFormula = xCell->getFormula();
-            if ( sFormula.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("=TRUE()") ) ) )
+            if ( sFormula == "=TRUE()" )
                 aValue <<= sal_True;
-            else if ( sFormula.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("=FALSE()") ) ) )
+            else if ( sFormula == "=FALSE()" )
                 aValue <<= false;
             else
             {

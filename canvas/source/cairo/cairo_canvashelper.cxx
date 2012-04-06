@@ -826,8 +826,7 @@ namespace cairocanvas
                         uno::Reference< lang::XServiceInfo > xRef( aTexture.Gradient, uno::UNO_QUERY );
 
                         OSL_TRACE( "gradient fill" );
-                        if( xRef.is() &&
-                            xRef->getImplementationName().equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME ) ) ) )
+                        if( xRef.is() && xRef->getImplementationName() == PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME )
                         {
                             // TODO(Q1): Maybe use dynamic_cast here
 

@@ -263,7 +263,7 @@ private:
         for ( sal_Int32 i = 0; i < langNodes.getLength(); i++ )
         {
             Reference< browse::XBrowseNode > xbn;
-            if ( langNodes[ i ]->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno_packages"))) )
+            if ( langNodes[ i ]->getName() == "uno_packages" )
             {
                 xbn.set( new LocationBrowseNode( langNodes[ i ] ) );
             }

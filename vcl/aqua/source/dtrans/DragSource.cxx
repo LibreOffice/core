@@ -368,7 +368,7 @@ OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
 
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-  return ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource")));
+  return ServiceName == "com.sun.star.datatransfer.dnd.OleDragSource";
 }
 
 

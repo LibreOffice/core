@@ -153,7 +153,7 @@ void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObjec
 void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException)
 {
     const ::com::sun::star::beans::PropertyValue* pArguments = aArgs.getConstArray();
-    if (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/AddGridColumn"))))
+    if ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
     {
         // search the argument describing the column to create
         ::rtl::OUString sControlType;
@@ -162,21 +162,21 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         sal_uInt16 i;
         for ( i = 0; i < aArgs.getLength(); ++i, ++pArguments )
         {
-            if (pArguments->Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnType"))))
+            if ( pArguments->Name == "ColumnType" )
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const ::rtl::OUString*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
                 if (bCorrectType)
                     sControlType = ::comphelper::getString(pArguments->Value);
             }
-            else if (pArguments->Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnPosition"))))
+            else if ( pArguments->Name == "ColumnPosition" )
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const sal_Int16*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
                 if (bCorrectType)
                     nControlPos = ::comphelper::getINT16(pArguments->Value);
             }
-            else if (pArguments->Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnProperties"))))
+            else if ( pArguments->Name == "ColumnProperties" )
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
@@ -228,11 +228,11 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         // append the column
         xColContainer->insertByIndex(nControlPos, makeAny(xNewCol));
     }
-    else if (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/ClearView"))))
+    else if ( aURL.Complete == ".uno:FormSlots/ClearView" )
     {
         ClearView();
     }
-    else if (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/AttachToForm"))))
+    else if ( aURL.Complete == ".uno:FormSlots/AttachToForm" )
     {
         if (!m_pDataSourceImpl)
             return;
@@ -241,7 +241,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         // search the arguments for the master form
         for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
         {
-            if ((pArguments->Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MasterForm")))) && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE))
+            if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {
                 xMasterForm = Reference< XRowSet > (*(Reference< XInterface > *)pArguments->Value.getValue(), UNO_QUERY);
                 break;
@@ -268,22 +268,19 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
 
     m_bInQueryDispatch = sal_True;
 
-    if  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/AttachToForm"))))
+    if  (   ( aURL.Complete == ".uno:FormSlots/AttachToForm" )
             // attach a new external form
-        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/AddGridColumn"))))
+        ||  ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
             // add a column to the grid
-        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/ClearView"))))
+        ||  ( aURL.Complete == ".uno:FormSlots/ClearView" )
             // clear the grid
         )
         xReturn = (::com::sun::star::frame::XDispatch*)this;
 
     if  (   !xReturn.is()
-        &&  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/moveToFirst"))))
-            ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/moveToPrev"))))
-            ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/moveToNext"))))
-            ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/moveToLast"))))
-            ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/moveToNew"))))
-            ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/undoRecord"))))
+        &&  (   (aURL.Complete == ".uno:FormSlots/moveToFirst" ) ||  (aURL.Complete == ".uno:FormSlots/moveToPrev" )
+            ||  (aURL.Complete == ".uno:FormSlots/moveToNext" ) ||  (aURL.Complete == ".uno:FormSlots/moveToLast" )
+            ||  (aURL.Complete == ".uno:FormSlots/moveToNew" ) ||  (aURL.Complete == ".uno:FormSlots/undoRecord" )
             )
         )
     {

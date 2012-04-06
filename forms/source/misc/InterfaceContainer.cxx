@@ -94,7 +94,7 @@ lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
     const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
+        if ( pDesc->ScriptType == "VBAInterop" )
             return true;
     }
     return false;
@@ -110,7 +110,7 @@ lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
     sal_Int32 nCopied = 0;
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( !pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
+        if ( pDesc->ScriptType != "VBAInterop" )
         {
             sStripped[ nCopied++ ] = *pDesc;
         }

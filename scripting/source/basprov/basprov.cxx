@@ -372,11 +372,11 @@ namespace basprov
         // apparantly illegal '.' in it ( in imported VBA )
 
         BasicManager* pBasicMgr =  NULL;
-        if ( aLocation.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document")) ) )
+        if ( aLocation == "document" )
         {
             pBasicMgr = m_pDocBasicManager;
         }
-        else if ( aLocation.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application")) ) )
+        else if ( aLocation == "application" )
         {
             pBasicMgr = m_pAppBasicManager;
         }

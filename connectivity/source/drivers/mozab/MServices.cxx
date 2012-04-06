@@ -137,7 +137,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                 MozabDriver::getSupportedServiceNames_Static(),
                 MozabDriver_CreateInstance, ::cppu::createSingleFactory);
         }
-        else if (aImplName.equals(  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap"))  ))
+        else if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
         {
             Sequence< ::rtl::OUString > aSNS( 1 );
             aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));

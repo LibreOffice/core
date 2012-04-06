@@ -136,18 +136,17 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     sShapeType = xShapeDescriptor->getShapeType();
     OSL_TRACE("ScVbaShape::getType: %s", rtl::OUStringToOString( sShapeType, RTL_TEXTENCODING_UTF8 ).getStr() );
     // office::MsoShapeType::msoDiagram to "com.sun.star.drawing.GroupShape"
-    if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) ) )
+    if( sShapeType == "com.sun.star.drawing.GroupShape" )
         return office::MsoShapeType::msoGroup;
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
         return office::MsoShapeType::msoPicture;
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")) ) ||
-            sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.ControlShape" || sShapeType == "FrameShape" )
         return office::MsoShapeType::msoOLEControlObject;
     // OOo don't support office::MsoShapeType::msoComment as a Shape.
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.OLE2Shape" )
         return office::MsoShapeType::msoChart;
     // Art characters office::MsoShapeType::msoTextEffect, in OOo corresponding to "com.sun.star.drawing.CustomShape"
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.ConnectorShape" )
     {
         enum drawing::ConnectorType connectorType;
         uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
@@ -159,12 +158,11 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
         else
             return office::MsoShapeType::msoAutoShape;
     }
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.LineShape" )
         return office::MsoShapeType::msoLine;
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")) ) ||
-            sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.CustomShape" || sShapeType == "com.sun.star.drawing.RectangleShape" )
         return office::MsoShapeType::msoAutoShape;
-    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TextShape")) ) )
+    else if( sShapeType == "com.sun.star.drawing.TextShape" )
         return office::MsoShapeType::msoTextBox;
     else
         throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("the shape type do not be supported: ")) + sShapeType, uno::Reference< uno::XInterface >() );

@@ -142,7 +142,7 @@ namespace dlgprov
 
     void DialogVBAScriptListenerImpl::firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* )
     {
-        if ( aScriptEvent.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop")) ) && mxListener.is() )
+        if ( aScriptEvent.ScriptType == "VBAInterop" && mxListener.is() )
         {
             ScriptEvent aScriptEventCopy( aScriptEvent );
             aScriptEventCopy.ScriptCode = msDialogLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( msDialogCodeName );
@@ -244,7 +244,7 @@ namespace dlgprov
                     Any aElement = xEventCont->getByName( pNames[ j ] );
                     aElement >>= aDesc;
                     rtl::OUString sKey = aDesc.ScriptType;
-                    if ( aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ) || aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO")) ) )
+                    if ( aDesc.ScriptType == "Script" || aDesc.ScriptType == "UNO" )
                     {
                         sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
                         sKey = aDesc.ScriptCode.copy( 0, nIndex );

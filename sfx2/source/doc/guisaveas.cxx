@@ -552,7 +552,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
            {
                sal_Int32 nPropertyCount = aProps.getLength();
                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                   if( aProps[nProperty].Name.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent"))) )
+                   if( aProps[nProperty].Name == "UIComponent" )
                    {
                     ::rtl::OUString aServiceName;
                        aProps[nProperty].Value >>= aServiceName;

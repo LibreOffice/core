@@ -95,7 +95,7 @@ public:
     }
     virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
     {
-        if ( rPropName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("EditingDuration" ) ) ) )
+        if ( rPropName == "EditingDuration" )
         {
             sal_Int32 nSecs = 0;
             mxProps->getPropertyValue( rPropName ) >>= nSecs;
@@ -143,7 +143,7 @@ public:
             OSL_TRACE("Got exception");
         }
         uno::Any aReturn;
-        if ( rPropName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount")) ) ) // special processing needed
+        if ( rPropName == "LineCount" ) // special processing needed
         {
             if ( mpDocShell )
             {

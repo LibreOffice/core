@@ -310,7 +310,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             rtl::OUString sCommand;
             for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it )
             {
-                if ( it->Name.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") ) ) )
+                if ( it->Name == "CommandURL" )
                     it->Value >>= sCommand;
             }
             if ( TBCBitMap* pIcon = pSpecificInfo->getIcon() )

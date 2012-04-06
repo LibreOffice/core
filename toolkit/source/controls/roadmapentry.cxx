@@ -95,7 +95,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
 
 sal_Bool SAL_CALL ORoadmapEntry::supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return ServiceName.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.RoadmapItem")) );
+    return ServiceName == "com.sun.star.awt.RoadmapItem";
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)

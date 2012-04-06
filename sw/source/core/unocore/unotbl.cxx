@@ -1047,7 +1047,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if(IsValid())
     {
         // Hack to support hidden property to transfer textDirection
-        if  ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FRMDirection") ) ) )
+        if  ( rPropertyName == "FRMDirection" )
         {
             SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
             sal_Int16 nNum = 0;

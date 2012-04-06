@@ -407,10 +407,8 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
 //---------------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    if  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/BrowserAttribs"))))
-        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/RowHeight"))))
-        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnAttribs"))))
-        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnWidth"))))
+    if  (   ( aURL.Complete == ".uno:GridSlots/BrowserAttribs" ) || ( aURL.Complete == ".uno:GridSlots/RowHeight" )
+        ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
         )
     {
         return (::com::sun::star::frame::XDispatch*)this;

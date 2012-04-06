@@ -1440,8 +1440,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             // Thus, keep the position, before the caption point is set and
             // restore it afterwards.
             awt::Point aKeepedPosition( 0, 0 );
-            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
-                 getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
+            if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
             {
                     aKeepedPosition = getPosition();
             }
@@ -1453,8 +1452,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             else
                 xPrSet->setPropertyValue(rPropertyName, aValue);
             // #i31698# - restore object position, if caption point is set.
-            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
-                 getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
+            if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
             {
                 setPosition( aKeepedPosition );
             }
@@ -1649,21 +1647,21 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
 
             // #i31698# - convert the position (translation)
             // of the drawing object in the transformation
-            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation"))) )
+            if ( rPropertyName == "Transformation" )
             {
                 drawing::HomogenMatrix3 aMatrix;
                 aRet >>= aMatrix;
                 aRet <<= _ConvertTransformationToLayoutDir( aMatrix );
             }
             // #i36248#
-            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) )
+            else if ( rPropertyName == "StartPosition" )
             {
                 awt::Point aStartPos;
                 aRet >>= aStartPos;
                 // #i59051#
                 aRet <<= _ConvertStartOrEndPosToLayoutDir( aStartPos );
             }
-            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) )
+            else if ( rPropertyName == "EndPosition" )
             {
                 awt::Point aEndPos;
                 aRet >>= aEndPos;
@@ -1671,7 +1669,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 aRet <<= _ConvertStartOrEndPosToLayoutDir( aEndPos );
             }
             // #i59051#
-            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier"))) )
+            else if ( rPropertyName == "PolyPolygonBezier" )
             {
                 drawing::PolyPolygonBezierCoords aPath;
                 aRet >>= aPath;

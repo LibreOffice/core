@@ -101,7 +101,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
 
         if ( rInfo.bFolder )
         {
-            if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF/" ) ) ) )
+            if ( aPath == "META-INF/" )
             {
                 // META-INF is not allowed to contain subfolders
                 bHasUnexpected = sal_True;
@@ -114,9 +114,9 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
         }
         else
         {
-            if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF/" ) ) ) )
+            if ( aPath == "META-INF/" )
             {
-                if ( !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ) )
+                if ( rShortName != "manifest.xml"
                   && rShortName.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "signatures" ) ) ) == -1 )
                 {
                     // a stream from META-INF with unexpected name
@@ -129,8 +129,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
             {
                 // the stream is not in META-INF and ist notregistered in manifest.xml,
                 // check whether it is an internal part of the package format
-                if ( !aPath.isEmpty()
-                  || !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) ) ) )
+                if ( !aPath.isEmpty() || rShortName != "mimetype" )
                 {
                     // if it is not "mimetype" from the root it is not a part of the package
                     bHasUnexpected = sal_True;

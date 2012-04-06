@@ -92,7 +92,7 @@ void ShareControlFile::OpenStream()
         ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv );
 
         uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
-        if ( !xContId.is() || !xContId->getContentProviderScheme().equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file" ) ) ) )
+        if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )
             throw io::IOException(); // the implementation supports only local files for now
 
         uno::Reference< io::XStream > xStream;

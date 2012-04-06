@@ -115,7 +115,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
     try
     {
         rtl::OUString sDiagramType = mxChartDocument->getDiagram()->getDiagramType();
-        if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ))))
+        if ( sDiagramType == "com.sun.star.chart.AreaDiagram" )
         {
             if (is3D())
             {
@@ -126,14 +126,14 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                 nChartType = getStackedType(xlAreaStacked, xlAreaStacked100, xlArea);
             }
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.PieDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.PieDiagram" )
         {
             if (is3D())
                 nChartType = xl3DPie;
             else
                 nChartType = xlPie;                 /*TODO XlChartType  xlPieExploded, XlChartType xlPieOfPie */
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.BarDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.BarDiagram" )
         {
             sal_Int32 nSolidType = chart::ChartSolidType::RECTANGULAR_SOLID;
             if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(SOLIDTYPE))
@@ -164,7 +164,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                     break;
                 }
             }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.StockDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.StockDiagram" )
         {
             sal_Bool bVolume = false;
             mxDiagramPropertySet->getPropertyValue(VOLUME) >>= bVolume;
@@ -177,7 +177,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                 nChartType = getStockUpDownValue(xlStockOHLC, xlStockHLC);
             }
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.XYDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.XYDiagram" )
         {
             sal_Bool bHasLines = false;
             mxDiagramPropertySet->getPropertyValue(LINES) >>= bHasLines;
@@ -196,7 +196,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                 nChartType = xlXYScatter;
             }
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.LineDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.LineDiagram" )
         {
             if (is3D())
             {
@@ -211,11 +211,11 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
                 nChartType = getStackedType(xlLineStacked, xlLineStacked100, xlLine);
             }
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.DonutDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.DonutDiagram" )
         {
             nChartType = xlDoughnut;                    // TODO DoughnutExploded ??
         }
-        else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.NetDiagram"))))
+        else if ( sDiagramType == "com.sun.star.chart.NetDiagram" )
         {
             nChartType = getMarkerType(xlRadarMarkers, xlRadar);
         }

@@ -279,9 +279,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
         // use the solution only for OOXML format currently
         if ( !aFilterName.isEmpty()
-          && ( aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "Calc MS Excel 2007 XML" ) ) )
-            || aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "Impress MS PowerPoint 2007 XML" ) ) )
-            || aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "MS Word 2007 XML" ) ) ) ) )
+          && ( aFilterName == "Calc MS Excel 2007 XML" || aFilterName == "Impress MS PowerPoint 2007 XML" || aFilterName == "MS Word 2007 XML" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) )),

@@ -246,8 +246,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 if ( xDoc.is() )
                 {
                     uno::Reference< xml::dom::XElement > xRoot = xDoc->getDocumentElement();
-                    if ( xRoot.is() &&
-                         xRoot->getTagName().equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("description"))) )
+                    if ( xRoot.is() && xRoot->getTagName() == "description" )
                     {
                         uno::Reference< xml::xpath::XXPathAPI > xPath(
                             m_ctx->getServiceManager()->createInstanceWithContext(

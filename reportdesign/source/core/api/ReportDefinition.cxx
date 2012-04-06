@@ -2896,7 +2896,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException)
 {
-    return aFlavor.MimeType.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")));
+    return aFlavor.MimeType == "image/png";
 }
 
 // -----------------------------------------------------------------------------

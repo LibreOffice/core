@@ -863,7 +863,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                 {
                     sal_Int32 nPropertyCount = aProps.getLength();
                     for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                        if( aProps[nProperty].Name.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent"))) )
+                        if( aProps[nProperty].Name == "UIComponent" )
                         {
                             ::rtl::OUString aServiceName;
                             aProps[nProperty].Value >>= aServiceName;
@@ -3340,7 +3340,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
         uno::Sequence< ::rtl::OUString > aSubElements = xSource->getElementNames();
         for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
         {
-            if ( aSubElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ) ) ) )
+            if ( aSubElements[nInd] == "Configurations" )
             {
                 // The workaround for compatibility with SO7, "Configurations" substorage must be preserved
                 if ( xSource->isStorageElement( aSubElements[nInd] ) )

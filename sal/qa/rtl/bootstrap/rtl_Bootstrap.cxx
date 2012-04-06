@@ -490,7 +490,7 @@ namespace rtl_Bootstrap
                 rtl_bootstrap_get_from_handle(bsHandle, suKeyName.pData, &suValue.pData, NULL);
                 printUString( suValue);
 
-                CPPUNIT_ASSERT_MESSAGE("Can not use the handle which is returned by getHandle!", suValue.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("be pseudo")) ) == sal_True );
+                CPPUNIT_ASSERT_MESSAGE( "Can not use the handle which is returned by getHandle!", suValue == "be pseudo" );
             }
 
         CPPUNIT_TEST_SUITE(getHandle);
@@ -645,13 +645,13 @@ namespace rtl_Bootstrap
                 t_print("SOFROMVALUE3:");
                 printUString( suMacro );
 
-                if (suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testshl2_file")) ) == sal_True)
+                if ( suMacro == "testshl2_file" )
                 {
                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE3' is read from the wrong ini file.", 0 );
                 }
                 else
                 {
-                    CPPUNIT_ASSERT_MESSAGE("SOFROMVALUE3 should contain 'rtlfile'.", suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rtlfile")) ) == sal_True );
+                    CPPUNIT_ASSERT_MESSAGE( "SOFROMVALUE3 should contain 'rtlfile'.", suMacro == "rtlfile" );
                 }
             }
         void expandMacrosFrom_003()

@@ -69,8 +69,7 @@ bool isAccessibilitySupportDesired()
 {
     OUString sValue;
     if ((sal_True == ::rtl::Bootstrap::get(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY")), sValue))
-        && sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("1")))
+        OUString(RTL_CONSTASCII_USTRINGPARAM("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY")), sValue)) && sValue == "1"
         )
         return false;
 

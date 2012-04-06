@@ -272,9 +272,9 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= aProxyMode;
 
-            if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manual")) ) )
+            if( aProxyMode == "manual" )
                 return uno::makeAny( (sal_Int32) 1 );
-            else if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none")) ) )
+            else if( aProxyMode == "none" )
                 return uno::makeAny( (sal_Int32) 0 );
         }
             break;

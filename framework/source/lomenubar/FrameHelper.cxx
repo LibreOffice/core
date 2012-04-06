@@ -482,7 +482,7 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
             continue;
 
         // We drop the WindowList, doesn't work properly and it's useless anyhow
-        if (oUCommand.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:WindowList"))))
+        if ( oUCommand == ".uno:WindowList" )
             continue;
 
         //We set the default properties (in case it was not visible or a separator)
@@ -721,7 +721,7 @@ FrameHelper::dispatchCommand (OUString command)
 
     // This is a special case, we don't want the helper to be disconnected from the frame
     // when PrintPreview dettaches. See the frameAction method.
-    if (command.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PrintPreview"))))
+    if ( command == ".uno:PrintPreview" )
     {
         m_blockDetach = TRUE;
     }
@@ -854,7 +854,7 @@ FrameHelper::findShortcutForCommand (OUString command)
     {}
 
     //NOTE: For some reason this item does not return its shortcut. Setting manually:
-    if (command.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:HelpIndex"))))
+    if ( command == ".uno:HelpIndex" )
     {
         kev.KeyCode = awt::Key::F1;
     }

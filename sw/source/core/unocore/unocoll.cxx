@@ -258,7 +258,7 @@ public:
     {
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
-        if ( aName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisDocument" ) ) ) )
+        if ( aName == "ThisDocument" )
             return sal_True;
         return sal_False;
     }

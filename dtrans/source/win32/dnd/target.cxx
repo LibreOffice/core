@@ -270,7 +270,7 @@ OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
 // XServiceInfo
 sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_SERVICE_NAME ))))
+    if( ServiceName == DNDTARGET_SERVICE_NAME )
         return sal_True;
     return sal_False;
 }

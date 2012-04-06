@@ -184,19 +184,19 @@ namespace connectivity
                     ++itor)
                 {
                         struct ini_NameValue * aValue = &(*itor);
-                        if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
+                        if ( aValue->sName == "Name" )
                         {
                             profileName = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRelative"))))
+                        else if ( aValue->sName == "IsRelative" )
                         {
                             sIsRelative = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path"))))
+                        else if ( aValue->sName == "Path" )
                         {
                             profilePath = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default"))))
+                        else if ( aValue->sName == "Default" )
                         {
                             sIsDefault = aValue->sValue;
                         }

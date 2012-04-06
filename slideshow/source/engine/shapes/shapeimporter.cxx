@@ -464,7 +464,7 @@ bool ShapeImporter::isSkip(
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
-            if( layerName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"))))
+            if( layerName == "DrawnInSlideshow" )
             {
                 //Transform shapes into PolyPolygons
                 importPolygons(xPropSet);

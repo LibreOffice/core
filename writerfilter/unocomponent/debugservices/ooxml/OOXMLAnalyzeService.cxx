@@ -270,7 +270,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
 sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AnalyzeService::SERVICE_NAME )) );
+    return ServiceName == AnalyzeService::SERVICE_NAME;
 }
 uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {

@@ -584,8 +584,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
-            if ( mpImpl->mStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ) )
-              && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
             {
                 throw xml::sax::SAXException(
                         ::rtl::OUString(

@@ -795,7 +795,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
                                     const & xParent) const
 {
     OSL_ASSERT(xParent.is());
-    if (xParent->getNodeName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simple-license"))))
+    if ( xParent->getNodeName() == "simple-license" )
     {
         css::uno::Reference<css::xml::dom::XNode> nodeDefault;
         try {

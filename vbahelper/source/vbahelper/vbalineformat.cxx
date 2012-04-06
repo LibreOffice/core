@@ -48,39 +48,28 @@ sal_Int32
 ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( rtl::OUString sLineName )
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
-    if (sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Small Arrow"))) ||
-        sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Arrow"))) ||
-        sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("msArrowEnd"))) ||
-        sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Double Arrow"))))
+    if ( sLineName == "Small Arrow" || sLineName == "Arrow" || sLineName == "msArrowEnd" || sLineName == "Double Arrow")
     {
         // msoArrowheadTriangle
         nLineType = office::MsoArrowheadStyle::msoArrowheadTriangle;
     }
-    else if (sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Square 45"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Square"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("msArrowDiamondEnd"))))
+    else if ( sLineName == "Square 45" || sLineName == "Square" || sLineName == "msArrowDiamondEnd")
     {
         // msoArrowheadDiamond
         nLineType = office::MsoArrowheadStyle::msoArrowheadDiamond;
     }
-    else if (sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Circle"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("msArrowOvalEnd"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dimension Lines"))) )
+    else if (sLineName == "Circle" || sLineName == "msArrowOvalEnd" || sLineName == "Dimension Lines" )
     {
         // msoArrowheadOval
         nLineType = office::MsoArrowheadStyle::msoArrowheadOval;
     }
-    else if (sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Arrow concave"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("msArrowStealthEnd"))))
+    else if ( sLineName == "Arrow concave" || sLineName == "msArrowStealthEnd" )
     {
         // msoArrowheadStealth
         nLineType = office::MsoArrowheadStyle::msoArrowheadStealth;
     }
-    else if (sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rounded short Arrow"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rounded large Arrow"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Symmetric Arrow"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("msArrowOpenEnd"))) ||
-             sLineName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line Arrow"))))
+    else if ( sLineName == "Rounded short Arrow" || sLineName == "Rounded large Arrow" || sLineName == "Symmetric Arrow"
+           || sLineName == "msArrowOpenEnd" || sLineName == "Line Arrow" )
     {
         // msoArrowheadOpen
         nLineType = office::MsoArrowheadStyle::msoArrowheadOpen;

@@ -192,7 +192,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         try {
             uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ));
             aAny >>= aMediaType;
-            if ( aMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) )
+            if ( aMediaType == "application/vnd.sun.star.oleobject" )
                 aEmbedFactory = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) );
         }
         catch ( const uno::Exception& )

@@ -197,7 +197,7 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
 
         uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
         for ( int nInd = 0; nInd < aResArgs.getLength(); nInd++ )
-            if ( aResArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ) ) ) )
+            if ( aResArgs[nInd].Name == "MacroExecutionMode" )
             {
                 aResArgs[nInd].Value >>= m_nMacroExecMode;
                 break;

@@ -315,7 +315,7 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
 
 sal_Bool SAL_CALL XMLScanner_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLScanner::SERVICE_NAME )) );
+    return ServiceName == XMLScanner::SERVICE_NAME;
 }
 uno::Sequence< rtl::OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {

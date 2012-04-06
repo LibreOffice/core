@@ -67,7 +67,7 @@ namespace rtl_OUString
                 memset(pBuffer, 0, 2 * 8);
                 free(pBuffer);
 
-                sal_Bool bResult = aStrToTest.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a String")));
+                sal_Bool bResult = aStrToTest == "a String";
                 CPPUNIT_ASSERT_MESSAGE("String must not be empty",  bResult == sal_True);
             }
 
@@ -889,10 +889,10 @@ public:
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'a'", suToken == "a" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'b'", suToken == "b" );
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -903,13 +903,13 @@ public:
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'a'", suToken == "a" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'b'", suToken == "b" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'c'", suToken == "c" );
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -920,13 +920,13 @@ public:
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'a'", suToken == "a" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be a 'b'", suToken == "b" );
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -937,13 +937,13 @@ public:
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("longer"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be 'longer'", suToken == "longer" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("then"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be 'then'", suToken == "then" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ever"))) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE( "Token should be 'ever'", suToken == "ever" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);

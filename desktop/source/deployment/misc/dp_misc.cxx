@@ -219,7 +219,7 @@ bool needToSyncRepostitory(OUString const & name)
 {
     OUString folder;
     OUString file;
-    if (name.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
+    if ( name == "bundled" )
     {
         folder = OUString(
             RTL_CONSTASCII_USTRINGPARAM("$BUNDLED_EXTENSIONS"));
@@ -227,7 +227,7 @@ bool needToSyncRepostitory(OUString const & name)
             RTL_CONSTASCII_USTRINGPARAM(
                 "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
     }
-    else if (name.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("shared"))))
+    else if ( name == "shared" )
     {
         folder = OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -375,18 +375,13 @@ bool office_is_running()
         sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
         if (
 #if defined UNIX
-            sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
+            sFile == SOFFICE2
 #elif defined WNT
             //osl_getExecutableFile should deliver "soffice.bin" on windows
             //even if swriter.exe, scalc.exe etc. was started. This is a bug
             //in osl_getExecutableFile
-            sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE1)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SBASE)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SCALC)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SDRAW)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SIMPRESS)))
-            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SWRITER)))
+            sFile == SOFFICE1 || sFile == SOFFICE2 || sFile == SBASE || sFile == SCALC
+            || sFile == SDRAW || sFile == SIMPRESS || sFile == SWRITER
 #else
 #error "Unsupported platform"
 #endif

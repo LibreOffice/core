@@ -720,7 +720,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             if ( !sMediaType.isEmpty() )
             {
                 if ( sMediaType.indexOf ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
-                 || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
+                 || sMediaType == "application/vnd.sun.star.oleobject" )
                     bToBeCompressed = sal_True;
                 else if ( !m_bCompressedIsSetFromOutside )
                     bToBeCompressed = sal_False;

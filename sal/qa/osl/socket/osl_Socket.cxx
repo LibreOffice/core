@@ -1382,7 +1382,7 @@ namespace osl_SocketAddr
             // LLA: IMHO localhost, or hostname by itself should be ok.
             rtl::OUString suThisHost = getThisHostname( );
             bool bOk = false;
-            if (suThisHost.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost"))))
+            if ( suThisHost == "localhost" )
             {
                 bOk = true;
             }

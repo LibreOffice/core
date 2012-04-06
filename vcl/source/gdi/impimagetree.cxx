@@ -315,7 +315,7 @@ void ImplImageTree::resetZips() {
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
     }
-    if ( m_style.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"))) )
+    if ( m_style == "default" )
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(

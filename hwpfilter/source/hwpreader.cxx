@@ -3161,25 +3161,25 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* 문서요약 */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+        if( hconv( hbox->str3, gstr ) == "title" )
         {
             rstartEl( ascii("text:title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("subject"))))
+        else if( hconv( hbox->str3, gstr ) == "subject" )
         {
             rstartEl( ascii("text:subject"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:subject") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("author"))))
+        else if( hconv( hbox->str3, gstr ) == "author" )
         {
             rstartEl( ascii("text:author-name"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:author-name") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("keywords"))))
+        else if( hconv( hbox->str3, gstr ) == "keywords" )
         {
             rstartEl( ascii("text:keywords"), rList );
             rchars(  hconv(hbox->str2, gstr) );
@@ -3189,61 +3189,61 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* 개인정보 */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
+        if( hconv( hbox->str3, gstr ) == "User" )
         {
             rstartEl( ascii("text:sender-lastname"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-lastname") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Company"))))
+        else if( hconv( hbox->str3, gstr ) == "Company" )
         {
             rstartEl( ascii("text:sender-company"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-company") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Position"))))
+        else if( hconv( hbox->str3, gstr ) == "Position" )
         {
             rstartEl( ascii("text:sender-title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Division"))))
+        else if( hconv( hbox->str3, gstr ) == "Division" )
         {
             rstartEl( ascii("text:sender-position"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-position") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Fax"))))
+        else if( hconv( hbox->str3, gstr ) == "Fax" )
         {
             rstartEl( ascii("text:sender-fax"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-fax") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Pager"))))
+        else if( hconv( hbox->str3, gstr ) == "Pager" )
         {
             rstartEl( ascii("text:phone-private"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:phone-private") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("E-mail"))))
+        else if( hconv( hbox->str3, gstr ) == "E-mail" )
         {
             rstartEl( ascii("text:sender-email"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-email") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Zipcode(office)"))))
+        else if( hconv( hbox->str3, gstr ) == "Zipcode(office)" )
         {
             rstartEl( ascii("text:sender-postal-code"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-postal-code") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Phone(office)"))))
+        else if( hconv( hbox->str3, gstr ) == "Phone(office)" )
         {
             rstartEl( ascii("text:sender-phone-work"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-phone-work") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Address(office)"))))
+        else if( hconv( hbox->str3, gstr ) == "Address(office)" )
         {
             rstartEl( ascii("text:sender-street"), rList );
             rchars(  hconv(hbox->str2, gstr) );

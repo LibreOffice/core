@@ -277,11 +277,11 @@ short SvInsertOleDlg::Execute()
                             OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
                             for ( sal_Int32 nInd = 0; nInd < aNewInf.Options.getLength(); nInd++ )
-                                if ( aNewInf.Options[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Icon" ) ) ) )
+                                if ( aNewInf.Options[nInd].Name == "Icon" )
                                 {
                                     aNewInf.Options[nInd].Value >>= m_aIconMetaFile;
                                 }
-                                else if ( aNewInf.Options[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconFormat" ) ) ) )
+                                else if ( aNewInf.Options[nInd].Name == "IconFormat" )
                                 {
                                     datatransfer::DataFlavor aFlavor;
                                     if ( aNewInf.Options[nInd].Value >>= aFlavor )

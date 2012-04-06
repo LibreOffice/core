@@ -1646,10 +1646,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
             // check that only acceptable parameters are provided here
-            if ( !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VersionComment" ) ) )
-              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
-              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ) )
-              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) ) ) )
+            if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
+              && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator" )
             {
                 m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed." ) ) );
                 m_pData->m_pObjectShell->StoreLog();

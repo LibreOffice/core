@@ -1071,7 +1071,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
             if (aArguments[i] >>= namedValue )
             {
 
-                if ( namedValue.Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ) ) )
+                if ( namedValue.Name == "StandardDir" )
                 {
                     ::rtl::OUString sStandardDir;
 
@@ -1083,7 +1083,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
                         m_aStandardDir = sStandardDir;
                     }
                 }
-                else if ( namedValue.Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlackList" ) ) ) )
+                else if ( namedValue.Name == "BlackList" )
                 {
                     namedValue.Value >>= m_aBlackList;
                 }

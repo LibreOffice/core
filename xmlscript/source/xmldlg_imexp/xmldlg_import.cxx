@@ -1569,7 +1569,7 @@ void ImportContext::importEvents(
                                           "attribute(s) of event!") ),
                             Reference< XInterface >(), Any() );
                     }
-                    if ( descr.ScriptType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ) ) )
+                    if ( descr.ScriptType == "StarBasic" )
                     {
                         OUString aLocation;
                         if (getStringAttr( &aLocation,
@@ -1586,7 +1586,7 @@ void ImportContext::importEvents(
                             descr.ScriptCode = buf.makeStringAndClear();
                         }
                     }
-                    else if ( descr.ScriptType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) ) ) )
+                    else if ( descr.ScriptType == "Script" )
                     {
                         // Check if there is a protocol, if not assume
                         // this is an early scripting framework url ( without

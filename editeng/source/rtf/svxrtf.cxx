@@ -61,10 +61,9 @@ CharSet lcl_GetDefaultTextEncodingForRTF()
     aLocale = Application::GetSettings().GetLocale();
     aLangString = aLocale.Language;
 
-    if ( aLangString.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ru" )) )
-      || aLangString.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "uk" )) ) )
+    if ( aLangString == "ru" || aLangString == "uk" )
         return RTL_TEXTENCODING_MS_1251;
-    if ( aLangString.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "tr" )) ) )
+    if ( aLangString == "tr" )
         return RTL_TEXTENCODING_MS_1254;
     else
         return RTL_TEXTENCODING_MS_1252;

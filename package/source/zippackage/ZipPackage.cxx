@@ -349,8 +349,7 @@ void ZipPackage::parseManifest()
                                             pStream->SetToBeCompressed ( sal_True );
                                             pStream->SetToBeEncrypted ( sal_True );
                                             pStream->SetIsEncrypted ( sal_True );
-                                            if ( !m_bHasEncryptedEntries
-                                              && pStream->getName().equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ) ) )
+                                            if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
                                             {
                                                 m_bHasEncryptedEntries = sal_True;
                                                 m_nStartKeyGenerationID = nStartKeyAlg;
@@ -633,18 +632,18 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                         do
                         {
                             ::rtl::OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                            if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "repairpackage" )) ) )
+                            if ( aCommand == "repairpackage" )
                             {
                                 m_bForceRecovery = sal_True;
                                 break;
                             }
-                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "purezip" )) ) )
+                            else if ( aCommand == "purezip" )
                             {
                                 m_nFormat = embed::StorageFormats::ZIP;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
-                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "ofopxml" )) ) )
+                            else if ( aCommand == "ofopxml" )
                             {
                                 m_nFormat = embed::StorageFormats::OFOPXML;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );

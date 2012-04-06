@@ -365,9 +365,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if ( xModule.is() )
             {
                 ::rtl::OUString aModuleID = xModule->getIdentifier();
-                bStoreMeta = ( !aModuleID.isEmpty()
-                  && ( aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FormDesign" ) ) )
-                    || aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TextReportDesign" ) ) ) ) );
+                bStoreMeta = ( !aModuleID.isEmpty() && ( aModuleID == "com.sun.star.sdb.FormDesign" || aModuleID == "com.sun.star.sdb.TextReportDesign" ) );
             }
         }
         catch( uno::Exception& )

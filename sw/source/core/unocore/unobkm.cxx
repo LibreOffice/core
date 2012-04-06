@@ -704,7 +704,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::RuntimeException)
 {
     SolarMutexGuard g;
-    if ( PropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    if ( PropertyName == "Checked" )
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         sal_Bool bChecked( sal_False );
@@ -726,7 +726,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
     SolarMutexGuard g;
-    if ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    if ( rPropertyName == "Checked" )
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         if ( pCheckboxFm )

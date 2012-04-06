@@ -403,8 +403,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 
     StringHashMap::const_iterator aIter = aNamespaces.find( aNsAlias );
     if ( aIter != aNamespaces.end()
-      && ( aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NAMESPACE ) ) )
-        || aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_OASIS_NAMESPACE ) ) ) ) )
+      && ( aIter->second == MANIFEST_NAMESPACE || aIter->second == MANIFEST_OASIS_NAMESPACE ) )
     {
         // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
         aResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NSPREFIX ) );

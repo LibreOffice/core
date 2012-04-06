@@ -152,7 +152,7 @@ void test_coreReflection()
 
         if (reader.isValid())
         {
-            REG_ENSURE(reader.getTypeName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA"))), "testCoreReflection error 9a2");
+            REG_ENSURE(reader.getTypeName() == "ModuleA", "testCoreReflection error 9a2");
 
             RTConstValue aReadConst = reader.getFieldConstValue(4);
             REG_ENSURE( aReadConst.m_type == RT_TYPE_INT32, "testCoreReflection error 9a3");
@@ -267,7 +267,7 @@ void test_coreReflection()
 
         if (reader.isValid())
         {
-            REG_ENSURE(reader.getTypeName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA/XInterfaceA"))), "testCoreReflection error 9c2");
+            REG_ENSURE(reader.getTypeName() == "ModuleA/XInterfaceA", "testCoreReflection error 9c2");
 
             RTUik retUik;
             reader.getUik(retUik);
@@ -332,13 +332,13 @@ void test_coreReflection()
 
         if (reader.isValid())
         {
-            REG_ENSURE(reader.getTypeName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA/ServiceA"))), "testCoreReflection error 9e3");
+            REG_ENSURE(reader.getTypeName() == "ModuleA/ServiceA", "testCoreReflection error 9e3");
 
             sal_uInt32 referenceCount = reader.getReferenceCount();
             REG_ENSURE( referenceCount == 4, "testCoreReflection error 9e4");
 
             OUString refName = reader.getReferenceName(0);
-            REG_ENSURE(refName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA/XInterfaceA"))), "testCoreReflection error 9e5");
+            REG_ENSURE(refName == "ModuleA/XInterfaceA", "testCoreReflection error 9e5");
         }
     }
 
@@ -402,7 +402,7 @@ void test_registry_CppApi()
     REG_ENSURE(!key4.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("2")), key3), "test_registry_CppApi error 6c");
     REG_ENSURE(!key5.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("1")), key4), "test_registry_CppApi error 6d");
     REG_ENSURE(!rootKey.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/myThirdKey/1")), key4), "test_registry_CppApi error 6e");
-    REG_ENSURE(key4.getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myThirdKey/1"))), "test_registry_CppApi error 6f");
+    REG_ENSURE(key4.getName() == "/myThirdKey/1", "test_registry_CppApi error 6f");
 
     REG_ENSURE(!rootKey.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("myFourthKey")), key6), "test_registry_CppApi error 7");
     REG_ENSURE(!rootKey.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("myFifthKey")), key6), "test_registry_CppApi error 7a");
@@ -417,7 +417,7 @@ void test_registry_CppApi()
 
     OUString linkTarget;
     REG_ENSURE(!key6.getLinkTarget(OUString(RTL_CONSTASCII_USTRINGPARAM("myFirstLink")), linkTarget), "test_registry_CppApi error 7f");
-    REG_ENSURE(linkTarget.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X"))), "test_registry_CppApi error 7g");
+    REG_ENSURE(linkTarget == "/myFourthKey/X", "test_registry_CppApi error 7g");
 
     RegistryKeyNames* pSubKeyNames = new RegistryKeyNames();
     sal_uInt32           nSubKeys=0;
@@ -427,7 +427,7 @@ void test_registry_CppApi()
 
     for (sal_uInt32 i=0; i < pSubKeyNames->getLength(); i++)
     {
-        if (pSubKeyNames->getElement(i).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/mySixthKey/myFirstLink"))))
+        if ( pSubKeyNames->getElement(i) == "/mySixthKey/myFirstLink" )
         {
             RegKeyType keyType;
             REG_ENSURE(!rootKey.getKeyType(pSubKeyNames->getElement(i), &keyType), "test_registry_CppApi error 7j");
@@ -439,22 +439,22 @@ void test_registry_CppApi()
     delete pSubKeyNames;
 
     REG_ENSURE(!rootKey.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/mySixthKey/myFirstLink")), key6), "test_registry_CppApi error 7l");
-//    REG_ENSURE(key6.getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X"))), "test_registry_CppApi error 7m");
+//    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m");
 
     REG_ENSURE(!rootKey.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("myFifthKey")), key6), "test_registry_CppApi error 7m1");
     REG_ENSURE(!key6.createLink(OUString(RTL_CONSTASCII_USTRINGPARAM("mySecondLink")),
                                  OUString(RTL_CONSTASCII_USTRINGPARAM("/mySixthKey/myFirstLink"))), "test_registry_CppApi error 7m2");
 
     REG_ENSURE(!rootKey.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFifthKey/mySecondLink")), key6), "test_registry_CppApi error 7m3");
-//    REG_ENSURE(key6.getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X"))), "test_registry_CppApi error 7m4");
+//    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m4");
 
     REG_ENSURE(!rootKey.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFifthKey/mySecondLink/myFirstLinkSubKey")), key7), "test_registry_CppApi error 7m5");
-    REG_ENSURE(key7.getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X/myFirstLinkSubKey"))), "test_registry_CppApi error 7m6");
+    REG_ENSURE(key7.getName() == "/myFourthKey/X/myFirstLinkSubKey", "test_registry_CppApi error 7m6");
 
     REG_ENSURE(!key7.createLink(OUString(RTL_CONSTASCII_USTRINGPARAM("myThirdLink")), OUString(RTL_CONSTASCII_USTRINGPARAM("/myFifthKey/mySecondLink"))), "test_registry_CppApi error 7m7");
     REG_ENSURE(!rootKey.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X/myFirstLinkSubKey/myThirdLink")), key7), "test_registry_CppApi error 7m8");
 //    REG_ENSURE(!key7.openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFirstLinkSubKey/myThirdLink/myFirstLinkSubKey/myThirdLink")), key6), "test_registry_CppApi error 7m9");
-//    REG_ENSURE(key7.getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFourthKey/X"))), "test_registry_CppApi error 7m10");
+//    REG_ENSURE(key7.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m10");
     REG_ENSURE(!key7.closeKey(), "test_registry_CppApi error 7m11");
 
     REG_ENSURE(!rootKey.deleteLink(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFifthKey/mySecondLink"))), "test_registry_CppApi error 7m12");
@@ -475,8 +475,8 @@ void test_registry_CppApi()
 
     nSubKeys = subKeyNames.getLength();
     REG_ENSURE(nSubKeys == 2, "test_registry_CppApi error 7n1");
-    REG_ENSURE(subKeyNames.getElement(0).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/mySixthKey/myFirstLink"))), "test_registry_CppApi error 7p1)");
-    REG_ENSURE(subKeyNames.getElement(1).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/mySixthKey/mySixthSubKey"))), "test_registry_CppApi error 7p2");
+    REG_ENSURE(subKeyNames.getElement(0) == "/mySixthKey/myFirstLink", "test_registry_CppApi error 7p1)");
+    REG_ENSURE(subKeyNames.getElement(1) =="/mySixthKey/mySixthSubKey", "test_registry_CppApi error 7p2");
 
 
     RegistryKeyArray subKeys;
@@ -486,8 +486,8 @@ void test_registry_CppApi()
 
     nSubKeys = subKeys.getLength();
     REG_ENSURE(nSubKeys == 2, "test_registry_CppApi error 7o1");
-    REG_ENSURE(subKeys.getElement(0).getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFirstKey/mySecondSubKey"))), "test_registry_CppApi error 7p1)");
-    REG_ENSURE(subKeys.getElement(1).getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("/myFirstKey/X"))), "test_registry_CppApi error 7p2");
+    REG_ENSURE(subKeys.getElement(0).getName() == "/myFirstKey/mySecondSubKey", "test_registry_CppApi error 7p1)");
+    REG_ENSURE(subKeys.getElement(1).getName() == "/myFirstKey/X", "test_registry_CppApi error 7p2");
 
     REG_ENSURE(!rootKey.closeSubKeys(subKeys), "test_registry_CppApi error 7q)");
 

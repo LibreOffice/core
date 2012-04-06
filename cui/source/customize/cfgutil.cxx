@@ -657,7 +657,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
 
                     ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
                     ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
-                    if ( rootNode->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root") ) ) )
+                    if ( rootNode->getName() == "Root" )
                     {
                         bIsRootNode = sal_True;
                     }
@@ -1085,7 +1085,7 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
 
                         ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
                         ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share" ));
-                        if ( rootNode->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root") ) ) )
+                        if ( rootNode->getName() == "Root" )
                         {
                             bIsRootNode = sal_True;
                         }

@@ -314,7 +314,7 @@ SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType )
     {
         // some type names available in VBA can not be directly used in COM
         ::rtl::OUString aOLEType = aType;
-        if ( aOLEType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SAXXMLReader30" ) ) ) )
+        if ( aOLEType == "SAXXMLReader30" )
             aOLEType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Msxml2.SAXXMLReader.3.0" ) );
 
         Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
@@ -1778,7 +1778,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                 break;
             }
             ::rtl::OUString aInterfaceName = xClass->getName();
-            if ( aInterfaceName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.XAutomationObject" ) ) ) )
+            if ( aInterfaceName == "com.sun.star.bridge.oleautomation.XAutomationObject" )
             {
                 // there is a hack in the extensions/source/ole/oleobj.cxx  to return the typename of the automation object, lets check if it
                 // matches
@@ -1787,7 +1787,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                 {
                     rtl::OUString sTypeName;
                     xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sTypeName;
-                    if ( sTypeName.isEmpty() || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
+                    if ( sTypeName.isEmpty() || sTypeName == "IDispatch" )
                         // can't check type, leave it pass
                         result = true;
                     else

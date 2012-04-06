@@ -1464,19 +1464,19 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         ::com::sun::star::uno::Any rVal = evt.NewValue;
         evt.NewValue >>= rVal;
         ::rtl::OUString sPropertyName = evt.PropertyName;
-        if ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" )) ) )
+        if ( sPropertyName == "Enabled" )
         {
             sal_Bool bEnable = false;
             evt.NewValue >>= bEnable;
             pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
         }
-        else if ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )) ) )
+        else if ( sPropertyName == "Label" )
         {
             ::rtl::OUString sLabel;
             evt.NewValue >>= sLabel;
             pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
         }
-        else if  ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )) ) )
+        else if  ( sPropertyName == "ID" )
         {
             sal_Int32 nNewID = 0;
             evt.NewValue >>= nNewID;

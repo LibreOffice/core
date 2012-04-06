@@ -179,7 +179,7 @@ bool SchXMLSeriesHelper::isCandleStickSeries(
             if( xChartType.is() )
             {
                 rtl::OUString aServiceName( xChartType->getChartType() );
-                if( aServiceName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" ) ) ) )
+                if( aServiceName == "com.sun.star.chart2.CandleStickChartType" )
                     bRet = true;
             }
         }

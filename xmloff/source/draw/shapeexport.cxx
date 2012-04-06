@@ -293,7 +293,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     {
                         OUString aFamilyName;
                         xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
-                        if(!aFamilyName.isEmpty() && !aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics"))))
+                        if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
                 }

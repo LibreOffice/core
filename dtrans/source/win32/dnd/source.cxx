@@ -344,7 +344,7 @@ OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
 // XServiceInfo
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_SERVICE_NAME ))))
+    if( ServiceName == DNDSOURCE_SERVICE_NAME )
         return sal_True;
     return sal_False;
 }

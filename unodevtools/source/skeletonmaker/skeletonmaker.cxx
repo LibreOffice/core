@@ -165,16 +165,16 @@ SAL_IMPLEMENT_MAIN()
 
     // check command
     rtl_getAppCommandArg(nPos++, &arg.pData);
-    if ( arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("dump"))) ) {
+    if ( arg == "dump" ) {
         options.dump = true;
-    } else if ( arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("component"))) ) {
+    } else if ( arg == "component" ) {
         options.dump = false;
         options.shortnames = true;
-    } else if ( arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("calc-add-in"))) ) {
+    } else if ( arg == "calc-add-in" ) {
         options.dump = false;
         options.shortnames = true;
         options.componenttype = 2;
-    } else if ( arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("add-on"))) ) {
+    } else if ( arg == "add-on" ) {
         options.dump = false;
         options.shortnames = true;
         options.componenttype = 3;

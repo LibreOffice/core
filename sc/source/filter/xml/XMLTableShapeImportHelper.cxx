@@ -66,7 +66,7 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 
 void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, sal_Int16 nLayerID, const rtl::OUString& sType) const
 {
-    if (sType.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))))
+    if ( sType == "com.sun.star.drawing.ControlShape" )
         nLayerID = SC_LAYER_CONTROLS;
     if (nLayerID != -1)
     {

@@ -218,10 +218,10 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
     if( !bAnimate )
     {
         //the appear effect cannot be animated without text
-        if( this->GetPresetId().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear")) ) )
+        if( this->GetPresetId() == "ooo-entrance-appear" )
             return;
         //the random effect may be the appear effect and than has the same problem
-        if( this->GetPresetId().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random")) ) )
+        if( this->GetPresetId() == "ooo-entrance-random" )
         {
             //this case is not 100% correct -> feel free to complete
             //i consider this case as seldom and not that problematic and a simple correct fix is not in sight

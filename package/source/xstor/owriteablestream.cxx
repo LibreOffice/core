@@ -3178,9 +3178,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
 
         if ( !m_pImpl->m_bCompressedSetExplicit )
         {
-            if ( aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/jpeg" ) ) )
-              || aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) ) )
-              || aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/gif" ) ) ) )
+            if ( aType == "image/jpeg" || aType == "image/png" || aType == "image/gif" )
                 bCompressedValueFromType = sal_False;
         }
 

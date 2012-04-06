@@ -190,7 +190,7 @@ void SbiStream::MapError()
         ::rtl::OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
                             INetURLObject::DECODE_WITH_CHARSET );
 
-        if(left.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"))))
+        if( left == "user" )
         {
             user = right;
             break;

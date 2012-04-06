@@ -99,7 +99,7 @@ OString getPluginJarPath(
     OUString sName1(RTL_CONSTASCII_USTRINGPARAM("javaplugin.jar"));
     OUString sName2(RTL_CONSTASCII_USTRINGPARAM("plugin.jar"));
     OUString sPath;
-    if (sVendor.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SUN_MICRO))))
+    if ( sVendor == SUN_MICRO )
     {
         SunVersion ver142("1.4.2-ea");
         SunVersion ver150("1.5.0-ea");

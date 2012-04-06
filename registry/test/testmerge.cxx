@@ -189,7 +189,7 @@ void test_merge()
     RegistryKey rootKey, key1, mkey1, key2, mkey2, key1u2, mkey1u2;
 
     REG_ENSURE(!myRegistry->create(OUString(RTL_CONSTASCII_USTRINGPARAM("mergetest.rdb"))), "testMerge error 1");
-    REG_ENSURE(myRegistry->getName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("mergetest.rdb"))), "testMerge error 1.a)");
+    REG_ENSURE(myRegistry->getName() == "mergetest.rdb", "testMerge error 1.a)");
     REG_ENSURE(!myRegistry->openRootKey(rootKey), "testMerge error 2");
     REG_ENSURE(!myRegistry->loadKey(rootKey, OUString(RTL_CONSTASCII_USTRINGPARAM("/stardiv/IchbineinMergeKey")),
                 OUString(RTL_CONSTASCII_USTRINGPARAM("merge1.rdb"))), "testMerge error 3");

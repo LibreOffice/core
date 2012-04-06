@@ -1257,16 +1257,8 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             // remove the property if it does not have a value ( user left the dialog field empty)
             // or if the port is set to 0
             aPropertyValue= aPropertyValue.trim();
-            if(
-               aPropertyValue.isEmpty() ||
-               (
-                (
-                 aPropertyName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort"))) ||
-                 aPropertyName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort"))) /*||
-                 aPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM("socksProxyPort")))*/
-                ) &&
-                aPropertyValue.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0")))
-               )
+            if( aPropertyValue.isEmpty() ||
+               ( ( aPropertyName == "ftp.proxyPort" || aPropertyName == "http.proxyPort" /*|| aPropertyName == "socksProxyPort"*/ ) && aPropertyValue == "0" )
               )
             {
                 // call java.lang.System.getProperties

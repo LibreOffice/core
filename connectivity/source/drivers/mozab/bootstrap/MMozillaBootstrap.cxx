@@ -257,7 +257,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
         {
                 ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplementationName ) );
                 Reference< XSingleServiceFactory > xFactory;
-                if (aImplName.equals(  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap"))  ))
+                if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
                 {
                     Sequence< ::rtl::OUString > aSNS( 1 );
                     aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));

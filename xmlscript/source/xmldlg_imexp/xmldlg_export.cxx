@@ -1263,7 +1263,7 @@ void ElementDescriptor::readEvents()
                                 descr.AddListenerParam );
                         }
                     }
-                    if ( descr.ScriptType.equals( OUString(  RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ) ) )
+                    if ( descr.ScriptType == "StarBasic" )
                     {
                         // separate optional location
                         sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );

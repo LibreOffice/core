@@ -498,7 +498,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         // Instead here I chose a name that should be illegal both in COM and
         // UNO ( from an IDL point of view ) therefore I think this is a safe
         // hack
-        if ( aPropertyName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$GetTypeName")) ))
+        if ( aPropertyName == "$GetTypeName" )
         {
             if ( pInfo && m_sTypeName.getLength() == 0 )
             {

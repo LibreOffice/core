@@ -549,7 +549,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
     if( !maList.empty() )
     {
         SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ];
-        if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("handout"))))
+        if( pObj0->GetName() == "handout" )
         {
             switch( maList.size() )
             {
@@ -578,7 +578,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
             {
                 case 1:
                 {
-                    if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+                    if( pObj0->GetName() == "title" )
                     {
                         mnTypeId = 19; // AUTOLAYOUT_ONLY_TITLE
                     }
@@ -592,35 +592,29 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 {
                     SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
-                    if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("subtitle"))))
+                    if( pObj1->GetName() == "subtitle" )
                     {
                         mnTypeId = 0; // AUTOLAYOUT_TITLE
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("outline"))))
+                    else if( pObj1->GetName() == "outline" )
                     {
                         mnTypeId = 1; // AUTOLAYOUT_ENUM
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("chart"))))
+                    else if( pObj1->GetName() == "chart" )
                     {
                         mnTypeId = 2; // AUTOLAYOUT_CHART
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("table"))))
+                    else if( pObj1->GetName() == "table" )
                     {
                         mnTypeId = 8; // AUTOLAYOUT_TAB
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
+                    else if( pObj1->GetName() == "object" )
                     {
                         mnTypeId = 11; // AUTOLAYOUT_OBJ
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                    else if( pObj1->GetName() == "vertical_outline" )
                     {
-                        if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_title"))))
+                        if( pObj0->GetName() == "vertical_title" )
                         {
                             // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
                             mnTypeId = 28;
@@ -642,21 +636,17 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
                     SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
-                    if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("outline"))))
+                    if( pObj1->GetName() == "outline" )
                     {
-                        if(pObj2->GetName().equals(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("outline"))))
+                        if( pObj2->GetName() == "outline" )
                         {
                             mnTypeId = 3; // AUTOLAYOUT_2TEXT
                         }
-                        else if(pObj2->GetName().equals(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("chart"))))
+                        else if( pObj2->GetName() == "chart" )
                         {
                             mnTypeId = 4; // AUTOLAYOUT_TEXTCHART
                         }
-                        else if(pObj2->GetName().equals(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("graphic"))))
+                        else if( pObj2->GetName() == "graphic" )
                         {
                             mnTypeId = 6; // AUTOLAYOUT_TEXTCLIP
                         }
@@ -672,15 +662,13 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                             }
                         }
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("chart"))))
+                    else if( pObj1->GetName() == "chart" )
                     {
                         mnTypeId = 7; // AUTOLAYOUT_CHARTTEXT
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("graphic"))))
+                    else if( pObj1->GetName() == "graphic" )
                     {
-                        if(pObj2->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                        if( pObj2->GetName() == "vertical_outline" )
                         {
                             // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
                             mnTypeId = 30;
@@ -690,8 +678,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                             mnTypeId = 9; // AUTOLAYOUT_CLIPTEXT
                         }
                     }
-                    else if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                    else if( pObj1->GetName() == "vertical_outline" )
                     {
                         // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
                         mnTypeId = 27;
@@ -714,8 +701,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
                     SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
-                    if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
+                    if( pObj1->GetName() == "object" )
                     {
                         if(pObj1->GetX() < pObj2->GetX())
                         {
@@ -736,8 +722,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 {
                     SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
-                    if(pObj1->GetName().equals(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
+                    if( pObj1->GetName() == "object" )
                     {
                         mnTypeId = 18; // AUTOLAYOUT_4OBJ
                     }

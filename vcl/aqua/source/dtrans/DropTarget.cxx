@@ -593,7 +593,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
   {
-    return ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget")));
+    return ServiceName == "com.sun.star.datatransfer.dnd.OleDropTarget";
   }
 
 

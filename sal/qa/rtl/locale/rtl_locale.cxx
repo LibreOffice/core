@@ -143,13 +143,13 @@ public:
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage = aLocale.getLanguage();
-        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale language must be 'de'", suLanguage == "de" );
     }
     void getLanguage_002()
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage(rtl_locale_getLanguage(aLocale.getData()), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale language must be 'de'", suLanguage == "de" );
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -182,13 +182,13 @@ public:
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry = aLocale.getCountry();
-        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale country must be 'DE'", suCountry == "DE" );
     }
     void getCountry_002()
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry(rtl_locale_getCountry(aLocale.getData()), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale country must be 'DE'", suCountry == "DE" );
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -221,13 +221,13 @@ public:
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant = aLocale.getVariant();
-        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale variant must be 'hochdeutsch'", suVariant == "hochdeutsch" );
     }
     void getVariant_002()
     {
         rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant(rtl_locale_getVariant(aLocale.getData()), SAL_NO_ACQUIRE);
-        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
+        CPPUNIT_ASSERT_MESSAGE( "locale variant must be 'hochdeutsch'", suVariant == "hochdeutsch" );
     }
 
     // Change the following lines only, if you add, remove or rename

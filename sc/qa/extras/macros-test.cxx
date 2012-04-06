@@ -158,7 +158,7 @@ void ScMacrosTest::testVba()
         rtl::OUString aStringRes;
         aRet >>= aStringRes;
         std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
-        CPPUNIT_ASSERT_MESSAGE("script reported failure",aStringRes.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OK") )) );
+        CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
     }
 }

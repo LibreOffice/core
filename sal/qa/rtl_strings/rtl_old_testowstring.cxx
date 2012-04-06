@@ -282,13 +282,13 @@ void oldtests::test_OString2OUStringAndViceVersa()
 {
     OString s1("Hallo jetzt komm ich");
     OUString u1 = OStringToOUString(s1, RTL_TEXTENCODING_MS_1252);
-    TEST_ENSURE( u1.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo jetzt komm ich"))), "test_OString2OWStringAndViceVersa error 1" );
+    TEST_ENSURE( u1 == "Hallo jetzt komm ich", "test_OString2OWStringAndViceVersa error 1" );
     u1 = OStringToOUString(s1, RTL_TEXTENCODING_IBM_850);
-    TEST_ENSURE( u1.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo jetzt komm ich"))), "test_OString2OWStringAndViceVersa error 2" );
+    TEST_ENSURE( u1 == "Hallo jetzt komm ich", "test_OString2OWStringAndViceVersa error 2" );
     u1 = OStringToOUString(s1, RTL_TEXTENCODING_ISO_8859_15);
-    TEST_ENSURE( u1.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo jetzt komm ich"))), "test_OString2OWStringAndViceVersa error 3" );
+    TEST_ENSURE( u1 == "Hallo jetzt komm ich", "test_OString2OWStringAndViceVersa error 3" );
     u1 = OStringToOUString(s1, RTL_TEXTENCODING_ASCII_US);
-    TEST_ENSURE( u1.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo jetzt komm ich"))), "test_OString2OWStringAndViceVersa error 4" );
+    TEST_ENSURE( u1 == "Hallo jetzt komm ich", "test_OString2OWStringAndViceVersa error 4" );
 
     OString s2 = OUStringToOString(u1, RTL_TEXTENCODING_MS_1252);
     TEST_ENSURE( s2.equals("Hallo jetzt komm ich"), "test_OString2OWStringAndViceVersa error 5" );

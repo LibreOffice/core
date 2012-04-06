@@ -426,8 +426,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
             uno::Reference< frame::XModel > xModel( xLoadable, uno::UNO_QUERY_THROW );
             uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
             for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
-                if ( aProps[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) )
-                  && ( aProps[nInd].Value >>= m_aLinkPassword ) )
+                if ( aProps[nInd].Name == "Password" && ( aProps[nInd].Value >>= m_aLinkPassword ) )
                 {
                     m_bLinkHasPassword = sal_True;
                     break;
@@ -712,7 +711,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
     sal_Int32 nInd = 0;
 
     for ( nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentBaseURL" ) ) ) )
+        if ( lArguments[nInd].Name == "DocumentBaseURL" )
         {
             lArguments[nInd].Value >>= aBaseURL;
             break;
@@ -721,7 +720,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
     if ( aBaseURL.isEmpty() )
     {
         for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-            if ( lObjArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultParentBaseURL" ) ) ) )
+            if ( lObjArgs[nInd].Name == "DefaultParentBaseURL" )
             {
                 lObjArgs[nInd].Value >>= aBaseURL;
                 break;

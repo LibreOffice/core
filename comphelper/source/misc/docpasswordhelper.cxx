@@ -116,18 +116,17 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPas
 
         for ( sal_Int32 nInd = 0; nInd < aInfo.getLength(); nInd++ )
         {
-            if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "algorithm-name" ) ) ) )
+            if ( aInfo[nInd].Name == "algorithm-name" )
                 aInfo[nInd].Value >>= sAlgorithm;
-            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "salt" ) ) ) )
+            else if ( aInfo[nInd].Name == "salt" )
                 aInfo[nInd].Value >>= aSalt;
-            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iteration-count" ) ) ) )
+            else if ( aInfo[nInd].Name == "iteration-count" )
                 aInfo[nInd].Value >>= nCount;
-            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hash" ) ) ) )
+            else if ( aInfo[nInd].Name == "hash" )
                 aInfo[nInd].Value >>= aHash;
         }
 
-        if ( sAlgorithm.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PBKDF2" ) ) )
-          && aSalt.getLength() && nCount > 0 && aHash.getLength() )
+        if ( sAlgorithm == "PBKDF2" && aSalt.getLength() && nCount > 0 && aHash.getLength() )
         {
             uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, aHash.getLength() );
             for ( sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aHash.getLength() && aNewHash[nInd] == aHash[nInd]; nInd ++ )

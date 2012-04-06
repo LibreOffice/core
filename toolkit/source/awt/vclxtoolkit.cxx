@@ -1375,7 +1375,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         return mxClipboard;
     }
 
-    else if( clipboardName.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection")) ) )
+    else if( clipboardName == "Selection" )
     {
         return mxSelection;
     }

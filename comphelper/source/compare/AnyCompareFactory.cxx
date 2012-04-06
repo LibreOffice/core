@@ -132,7 +132,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
 
-    if( aPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) )
+    if( aPropertyName == "Title" )
         return m_rAnyCompare;
 
     return Reference< XAnyCompare >();

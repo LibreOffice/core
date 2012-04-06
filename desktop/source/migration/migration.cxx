@@ -135,43 +135,43 @@ static const char XDG_CONFIG_PART[] = "/.config";
 {
     ::rtl::OUString sIdentifier;
 
-    if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartModule"))))
+    if ( sShortName == "StartModule" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter"))))
+    else if ( sShortName == "swriter" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc"))))
+    else if ( sShortName == "scalc" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw"))))
+    else if ( sShortName == "sdraw" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress"))))
+    else if ( sShortName == "simpress" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath"))))
+    else if ( sShortName == "smath" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"))))
+    else if ( sShortName == "schart" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE"))))
+    else if ( sShortName == "BasicIDE" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbapp"))))
+    else if ( sShortName == "dbapp" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sglobal"))))
+    else if ( sShortName == "sglobal" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sweb"))))
+    else if ( sShortName == "sweb" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swxform"))))
+    else if ( sShortName == "swxform" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xforms.XMLFormDocument"));
 
-    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sbibliography"))))
+    else if ( sShortName == "sbibliography" )
         sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Bibliography"));
 
     return sIdentifier;

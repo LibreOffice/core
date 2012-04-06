@@ -213,7 +213,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
             sal_Int32 nPropertyCount = aProps.getLength();
             for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
             {
-                if( aProps[nProperty].Name.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent"))) )
+                if( aProps[nProperty].Name == "UIComponent" )
                 {
                     ::rtl::OUString aServiceName;
                     aProps[nProperty].Value >>= aServiceName;
@@ -260,7 +260,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //add them to the args
                                 for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
                                 {
-                                    if( aPropsFromDialog[ nInd ].Name.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData")) ) )
+                                    if( aPropsFromDialog[ nInd ].Name == "FilterData" )
                                     {
                                         //found the filterdata, add to the storing argument
                                         rArgs.realloc( ++rNumArgs );
