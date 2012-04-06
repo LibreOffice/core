@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,javaunohelper,\
     Library_juh \
     Library_juhx \
     Jar_juh \
-    Package_cppumaker \
     Zip_juh \
 ))
 endif

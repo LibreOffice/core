@@ -27,13 +27,8 @@
 
 $(eval $(call gb_Library_Library,juhx))
 
-$(eval $(call gb_Library_use_package,juhx,\
-    javaunohelper_cppumaker \
-))
-
-$(eval $(call gb_Library_set_include,juhx,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/CustomTarget/javaunohelper/cppumaker \
+$(eval $(call gb_Library_use_internal_comprehensive_api,juhx,\
+    udkapi \
 ))
 
 $(eval $(call gb_Library_use_libraries,juhx,\
