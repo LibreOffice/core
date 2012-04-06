@@ -30,15 +30,10 @@ $(eval $(call gb_Library_Library,date))
 
 $(eval $(call gb_Library_set_componentfile,date,scaddins/source/datefunc/date))
 
-$(eval $(call gb_Library_set_include,date,\
-    $$(INCLUDE) \
-	-I$(WORKDIR)/UnoApiHeaders/offapi \
-))
-
 $(eval $(call gb_Library_use_internal_comprehensive_api,date,\
 	offapi \
 	scaddins \
-    udkapi \
+	udkapi \
 ))
 
 $(eval $(call gb_Library_use_libraries,date,\

@@ -30,15 +30,10 @@ $(eval $(call gb_Library_Library,analysis))
 
 $(eval $(call gb_Library_set_componentfile,analysis,scaddins/source/analysis/analysis))
 
-$(eval $(call gb_Library_set_include,analysis,\
-    $$(INCLUDE) \
-	-I$(WORKDIR)/UnoApiHeaders/offapi \
-))
-
 $(eval $(call gb_Library_use_internal_comprehensive_api,analysis,\
 	offapi \
 	scaddins \
-    udkapi \
+	udkapi \
 ))
 
 $(eval $(call gb_Library_use_libraries,analysis,\
@@ -48,12 +43,6 @@ $(eval $(call gb_Library_use_libraries,analysis,\
 	tl \
     $(gb_STDLIBS) \
 ))
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_use_libraries,analysis,\
-    uwinapi \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,analysis,\
 	scaddins/source/analysis/analysis \
