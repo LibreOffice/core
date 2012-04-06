@@ -754,10 +754,10 @@ OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException)
 
 sal_Bool SAL_CALL Cell::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.table.cell" ) ) == 0 )
+    if( ServiceName == "com.sun.star.table.cell" )
         return sal_True;
 
-    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.cell" ) ) == 0 )
+    if( ServiceName == "com.sun.star.drawing.cell" )
         return sal_True;
 
     return SvxUnoTextBase::supportsService( ServiceName );
