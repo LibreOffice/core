@@ -28,7 +28,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -46,11 +49,13 @@ public:
     virtual void tearDown();
     void testN751054();
     void testN751117();
+    void testN751017();
 
     CPPUNIT_TEST_SUITE(OoxmlModelTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN751054);
     CPPUNIT_TEST(testN751117);
+    CPPUNIT_TEST(testN751017);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -117,6 +122,53 @@ void OoxmlModelTest::testN751117()
     // The second shape should be a line
     uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
+}
+
+void OoxmlModelTest::testN751017()
+{
+    load("n751017.docx");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xMasters(xTextFieldsSupplier->getTextFieldMasters());
+    // Make sure we have a variable named foo.
+    CPPUNIT_ASSERT(xMasters->hasByName("com.sun.star.text.FieldMaster.SetExpression.foo"));
+
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    bool bFoundSet(false), bFoundGet(false);
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xFields->nextElement(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xServiceInfo, uno::UNO_QUERY);
+        sal_Int16 nValue = 0;
+        OUString aValue;
+        if (xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression"))
+        {
+            bFoundSet = true;
+            uno::Reference<text::XDependentTextField> xDependentTextField(xServiceInfo, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xMasterProps(xDependentTextField->getTextFieldMaster());
+
+            // First step: did we set foo to "bar"?
+            xMasterProps->getPropertyValue("Name") >>= aValue;
+            CPPUNIT_ASSERT_EQUAL(OUString("foo"), aValue);
+            xPropertySet->getPropertyValue("SubType") >>= nValue;
+            CPPUNIT_ASSERT_EQUAL(text::SetVariableType::STRING, nValue);
+            xPropertySet->getPropertyValue("Content") >>= aValue;
+            CPPUNIT_ASSERT_EQUAL(OUString("bar"), aValue);
+        }
+        else if (xServiceInfo->supportsService("com.sun.star.text.TextField.GetExpression"))
+        {
+            // Second step: check the value of foo.
+            bFoundGet = true;
+            xPropertySet->getPropertyValue("Content") >>= aValue;
+            CPPUNIT_ASSERT_EQUAL(OUString("foo"), aValue);
+            xPropertySet->getPropertyValue("SubType") >>= nValue;
+            CPPUNIT_ASSERT_EQUAL(text::SetVariableType::STRING, nValue);
+            xPropertySet->getPropertyValue("CurrentPresentation") >>= aValue;
+            CPPUNIT_ASSERT_EQUAL(OUString("bar"), aValue);
+        }
+    }
+    CPPUNIT_ASSERT(bFoundSet);
+    CPPUNIT_ASSERT(bFoundGet);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OoxmlModelTest);
