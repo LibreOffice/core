@@ -42,9 +42,6 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
-    component/connectivity/source/cpool/dbpool2 \
-    component/connectivity/source/dbtools/dbtools \
-    component/connectivity/source/manager/sdbc2 \
     component/configmgr/source/configmgr \
     component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
@@ -136,7 +133,7 @@ my_components = \
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
 
 my_components += \
-    calc \
+    component/connectivity/source/drivers/calc/calc \
     component/dbaccess/source/ext/macromigration/dbmm \
     component/dbaccess/source/filter/xml/dbaxml \
     component/dbaccess/util/dba \
@@ -146,11 +143,16 @@ my_components += \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
-    dbase \
-    flat \
+    component/connectivity/source/drivers/dbase/dbase \
+    component/connectivity/source/drivers/cpool/dbpool2 \
+    component/connectivity/source/drivers/dbtools/dbtools \
+    component/connectivity/source/drivers/flat/flat \
     localebe1 \
-    mysql \
-    odbc \
+    component/connectivity/source/drivers/mysql/mysql \
+    component/connectivity/source/drivers/odbc/odbc \
+    component/connectivity/source/drivers/sdbc2/sdbc2 \
+
+.ENDIF
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 
@@ -253,7 +255,7 @@ my_components += tdebe1
 .END
 
 .IF "$(ENABLE_KAB)" != ""
-my_components += kab1
+my_components += component/connectivity/source/drivers/kab/kab1
 .END
 
 .IF "$(ENABLE_KDE)" != ""
@@ -288,8 +290,8 @@ my_components += \
     component/wizards/com/sun/star/wizards/agenda/agenda \
     component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \
-    hsqldb \
-    jdbc \
+    component/connectivity/source/drivers/hsqldb/hsqldb \
+    component/connectivity/source/drivers/jdbc/jdbc \
     component/wizards/com/sun/star/wizards/letter/letter \
     component/wizards/com/sun/star/wizards/query/query \
     component/wizards/com/sun/star/wizards/report/report \
@@ -321,7 +323,7 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    macab1 \
+    component/connectivity/source/drivers/macab/macab1 \
     macbe1 \
     component/fpicker/source/aqua/fps_aqua \
     component/vcl/vcl.macosx
@@ -335,7 +337,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT"
 my_components += \
-    ado \
+    component/connectivity/source/drivers/ado/ado \
     smplmail \
     wininetbe1 \
     component/dtrans/source/generic/dtrans \
@@ -377,7 +379,7 @@ my_components += \
 .IF "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
     "$(WITH_MOZILLA)" != "NO"
-my_components += mozab
+my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
 my_components += mozbootstrap
 .END
@@ -388,7 +390,7 @@ my_components += cmdmail
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_EVOAB2)" != ""
-my_components += evoab
+my_components += component/connectivity/source/drivers/evoab2/evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
