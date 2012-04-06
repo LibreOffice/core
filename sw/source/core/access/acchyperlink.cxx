@@ -90,8 +90,8 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
             ViewShell *pVSh = xPara->GetShell();
             if( pVSh )
             {
-                LoadURL( rINetFmt.GetValue(), pVSh, URLLOAD_NOFILTER,
-                         &rINetFmt.GetTargetFrame() );
+                LoadURL(*pVSh, rINetFmt.GetValue(), URLLOAD_NOFILTER,
+                         rINetFmt.GetTargetFrame());
                 OSL_ENSURE( pTxtAttr == rINetFmt.GetTxtINetFmt(),
                          "lost my txt attr" );
                 const SwTxtINetFmt* pTxtAttr2 = rINetFmt.GetTxtINetFmt();

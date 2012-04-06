@@ -28,21 +28,15 @@
 #ifndef _SWURL_HXX
 #define _SWURL_HXX
 
-#include <tools/solar.h>
+#include <rtl/ustring.hxx>
 
-
-class UniString;
 class ViewShell;
 
 #define URLLOAD_NOFILTER            0x0000
 #define URLLOAD_NEWVIEW             0x8000
 
-
-void LoadURL( const UniString& rName, ViewShell* pSh,
-              sal_uInt16 nFilter = URLLOAD_NOFILTER,
-              const UniString *pTargetFrameName = 0 );
-
-
+void LoadURL( ViewShell& rSh, const rtl::OUString& rName,
+              sal_uInt16 nFilter, const rtl::OUString& rTargetFrameName );
 
 #endif
 

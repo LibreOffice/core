@@ -4263,7 +4263,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     {
                                         String sURL(pField->GetURL());
                                         String sTarget(pField->GetTargetFrame());
-                                        ::LoadURL( sURL, &rSh, nFilter, &sTarget);
+                                        ::LoadURL(rSh, sURL, nFilter, sTarget);
                                     }
                                     bCallShadowCrsr = sal_False;
                                 }

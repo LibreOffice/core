@@ -331,7 +331,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
     }
 
     // damit die Vorlagenumsetzung sofort angezeigt wird
-    ::LoadURL( rItem.GetValue(), this, nFilter, &rItem.GetTargetFrame() );
+    ::LoadURL( *this, rItem.GetValue(), nFilter, rItem.GetTargetFrame() );
     const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
     if( pTxtAttr )
     {
@@ -362,35 +362,31 @@ sal_Bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
             GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, sal_False );
         }
 
-        ::LoadURL( sURL, this, nFilter, &sTargetFrameName);
+        ::LoadURL(*this, sURL, nFilter, sTargetFrameName);
     }
     return bRet;
 }
 
 
-void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
-              const String *pTargetFrameName )
+void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
+              const rtl::OUString& rTargetFrameName )
 {
-    OSL_ENSURE( rURL.Len() && pVSh, "what should be loaded here?" );
-    if( !rURL.Len() || !pVSh )
+    OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
+    if( rURL.isEmpty() )
         return ;
 
     // die Shell kann auch 0 sein !!!!!
-    SwWrtShell *pSh = 0;
-    if ( pVSh && pVSh->ISA(SwCrsrShell) )
-    {
-        //Eine CrsrShell ist auch immer eine WrtShell
-        pSh = (SwWrtShell*)pVSh;
-    }
-    else
+    if ( !rVSh.ISA(SwCrsrShell) )
         return;
 
-    SwDocShell* pDShell = pSh->GetView().GetDocShell();
+    //Eine CrsrShell ist auch immer eine WrtShell
+    SwWrtShell &rSh = (SwWrtShell&)rVSh;
+
+    SwDocShell* pDShell = rSh.GetView().GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
-    String sTargetFrame;
-    if( pTargetFrameName && pTargetFrameName->Len() )
-        sTargetFrame = *pTargetFrameName;
-    else if( pDShell ) {
+    rtl::OUString sTargetFrame(rTargetFrameName);
+    if (sTargetFrame.isEmpty() && pDShell)
+    {
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -402,7 +398,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
     String sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
-    SfxViewFrame* pViewFrm = pSh->GetView().GetViewFrame();
+    SfxViewFrame* pViewFrm = rSh.GetView().GetViewFrame();
     SfxFrameItem aView( SID_DOCFRAME, pViewFrm );
     SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
@@ -413,7 +409,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
     SfxBoolItem aBrowse( SID_BROWSE, sal_True );
 
     if( nFilter & URLLOAD_NEWVIEW )
-        aTargetFrameName.SetValue( String::CreateFromAscii("_blank") );
+        aTargetFrameName.SetValue( rtl::OUString("_blank") );
 
     const SfxPoolItem* aArr[] = {
                 &aName,

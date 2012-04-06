@@ -373,7 +373,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
     if( USHRT_MAX != nExecId )
         rDis.GetBindings()->Execute( nExecId );
     if( USHRT_MAX != nFilter )
-        ::LoadURL( sURL, &rSh, nFilter, &sTargetFrameName);
+        ::LoadURL(rSh, sURL, nFilter, sTargetFrameName);
 
     if( pClipCntnr )
     {
