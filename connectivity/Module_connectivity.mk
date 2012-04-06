@@ -31,19 +31,19 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_cnr \
 	AllLangResTarget_sdbcl \
 	AllLangResTarget_sdberr \
-	Package_inc \
-	Package_xml \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
 	Library_calc \
-	Library_odbcbase \
-	Library_odbc \
-	Library_mysql \
+	Library_dbase \
+	Library_dbpool2 \
+	Library_dbtools \
 	Library_file \
 	Library_flat \
-	Library_dbase \
+	Library_mysql \
+	Library_odbc \
+	Library_odbcbase \
+	Library_sdbc2 \
 	Package_generated \
+	Package_inc \
+	Package_xml \
 ))
 
 ifneq ($(SOLAR_JAVA),)
