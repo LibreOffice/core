@@ -93,14 +93,14 @@ End
 
 #if defined MACOSX
 ScpAction scp_Copy_License_Txt_Sdk
-    README_ALL_LANG(Copy, LICENSE);
-    README_ALL_LANG(Name, LICENSE);
+    Copy = "LICENSE";
+    Name = "LICENSE";
     Styles = (SCPZIP_REPLACE);
     Subdir = "LICENSEs";
 End
 ScpAction scp_Copy_Notice_Txt_Sdk
-    README_ALL_LANG(Copy, NOTICE);
-    README_ALL_LANG(Name, NOTICE);
+    Copy = "NOTICE";
+    Name = "NOTICE";
     Styles = (SCPZIP_REPLACE);
     Subdir = "LICENSEs";
 End
