@@ -28,11 +28,11 @@
 $(eval $(call gb_Module_Module,cppuhelper))
 
 $(eval $(call gb_Module_add_targets,cppuhelper,\
+	InternalUnoApi_cppuhelper \
 	Library_cppuhelper \
 	Package_findsofficepath \
 	Package_inc \
 	Package_unorc \
-	Package_unotypes \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppuhelper,\
