@@ -1813,18 +1813,6 @@ void Output::writeBool( bool bData )
     StringHelper::appendBool( maLine, bData );
 }
 
-void Output::writeColorABGR( sal_Int32 nColor )
-{
-    writeChar( 'a' );
-    writeDec( static_cast< sal_uInt8 >( nColor >> 24 ) );
-    writeAscii( ",r" );
-    writeDec( static_cast< sal_uInt8 >( nColor ) );
-    writeAscii( ",g" );
-    writeDec( static_cast< sal_uInt8 >( nColor >> 8 ) );
-    writeAscii( ",b" );
-    writeDec( static_cast< sal_uInt8 >( nColor >> 16 ) );
-}
-
 void Output::writeDateTime( const DateTime& rDateTime )
 {
     writeDec( rDateTime.Year, 4, '0' );
@@ -1848,27 +1836,6 @@ void Output::writeColIndex( sal_Int32 nCol )
 void Output::writeRowIndex( sal_Int32 nRow )
 {
     StringHelper::appendAddrRow( maLine, nRow, true );
-}
-
-void Output::writeColRowRange( sal_Int32 nColRow1, sal_Int32 nColRow2 )
-{
-    writeDec( nColRow1 );
-    writeChar( OOX_DUMP_RANGESEP );
-    writeDec( nColRow2 );
-}
-
-void Output::writeColRange( sal_Int32 nCol1, sal_Int32 nCol2 )
-{
-    writeColIndex( nCol1 );
-    writeChar( OOX_DUMP_RANGESEP );
-    writeColIndex( nCol2 );
-}
-
-void Output::writeRowRange( sal_Int32 nRow1, sal_Int32 nRow2 )
-{
-    writeRowIndex( nRow1 );
-    writeChar( OOX_DUMP_RANGESEP );
-    writeRowIndex( nRow2 );
 }
 
 // ----------------------------------------------------------------------------
@@ -2381,28 +2348,6 @@ OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen,
     OUString aString = aBuffer.makeStringAndClear();
     if( bHideTrailingNul )
         aString = StringHelper::trimTrailingNul( aString );
-    writeStringItem( rName( "text" ), aString );
-    return aString;
-}
-
-OUString InputObjectBase::dumpNullCharArray( const String& rName, rtl_TextEncoding eTextEnc )
-{
-    OStringBuffer aBuffer;
-    sal_uInt8 nChar;
-    for( *mxStrm >> nChar; !mxStrm->isEof() && (nChar > 0); *mxStrm >> nChar )
-        aBuffer.append( static_cast< sal_Char >( nChar ) );
-    OUString aString = OStringToOUString( aBuffer.makeStringAndClear(), eTextEnc );
-    writeStringItem( rName( "text" ), aString );
-    return aString;
-}
-
-OUString InputObjectBase::dumpNullUnicodeArray( const String& rName )
-{
-    OUStringBuffer aBuffer;
-    sal_uInt16 nChar;
-    for( *mxStrm >> nChar; !mxStrm->isEof() && (nChar > 0); *mxStrm >> nChar )
-        aBuffer.append( static_cast< sal_Unicode >( nChar ) );
-    OUString aString = aBuffer.makeStringAndClear();
     writeStringItem( rName( "text" ), aString );
     return aString;
 }

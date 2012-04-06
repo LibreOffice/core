@@ -1066,13 +1066,9 @@ public:
     void                writeString( const ::rtl::OUString& rStr );
     void                writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );
-    void                writeColorABGR( sal_Int32 nColor );
     void                writeDateTime( const ::com::sun::star::util::DateTime& rDateTime );
     void                writeColIndex( sal_Int32 nCol );
     void                writeRowIndex( sal_Int32 nRow );
-    void                writeColRowRange( sal_Int32 nColRow1, sal_Int32 nColRow2 );
-    void                writeColRange( sal_Int32 nCol1, sal_Int32 nCol2 );
-    void                writeRowRange( sal_Int32 nRow1, sal_Int32 nRow2 );
 
     template< typename Type >
     inline void         writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )
@@ -1530,9 +1526,6 @@ protected:
 
     ::rtl::OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul = false );
     ::rtl::OUString     dumpUnicodeArray( const String& rName, sal_Int32 nLen, bool bHideTrailingNul = false );
-
-    ::rtl::OUString     dumpNullCharArray( const String& rName, rtl_TextEncoding eTextEnc );
-    ::rtl::OUString     dumpNullUnicodeArray( const String& rName );
 
     ::com::sun::star::util::DateTime dumpFileTime( const String& rName = EMPTY_STRING );
     ::rtl::OUString     dumpGuid( const String& rName = EMPTY_STRING );

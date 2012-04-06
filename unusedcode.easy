@@ -798,12 +798,6 @@ oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPr
 oox::core::BinaryFilterBase::BinaryFilterBase(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::core::FilterBase::openSubStorage(rtl::OUString const&, bool) const
 oox::core::FilterBase::requestEncryptionData(comphelper::IDocPasswordVerifier&) const
-oox::dump::InputObjectBase::dumpNullCharArray(oox::dump::String const&, unsigned short)
-oox::dump::InputObjectBase::dumpNullUnicodeArray(oox::dump::String const&)
-oox::dump::Output::writeColRange(int, int)
-oox::dump::Output::writeColRowRange(int, int)
-oox::dump::Output::writeColorABGR(int)
-oox::dump::Output::writeRowRange(int, int)
 oox::dump::SequenceRecordObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, oox::dump::String const&)
 oox::dump::StringHelper::appendRange(rtl::OUStringBuffer&, oox::dump::TokenRange const&, bool)
 oox::dump::StringHelper::appendRangeList(rtl::OUStringBuffer&, std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
