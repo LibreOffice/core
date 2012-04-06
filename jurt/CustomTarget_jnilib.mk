@@ -25,41 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+$(eval $(call gb_CustomTarget_CustomTarget,jurt/util,new_style))
 
-ifneq ($(SOLAR_JAVA),)
+JUJL := $(call gb_CustomTarget_get_workdir,jurt/util)
 
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
-))
+$(call gb_CustomTarget_get_target,jurt/util) : $(JUJL)/libjpipe.jnilib
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,jurt,\
-    CustomTarget_jnilib \
-    Package_jnilib \
-))
-endif
+$(JUJL)/libjpipe.jnilib : $(call gb_Library_get_target,jpipe) | $(JUJL)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MCB,1)
+	cd $(dir $@) && $(SOLARENV)/bin/macosx-create-bundle $<
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    CustomTarget_test_urp \
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-))
-
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
