@@ -47,6 +47,6 @@ $(JUTU)/registry.rdb : $(JUTU)/interfaces.urd \
 $(JUTU)/interfaces.urd : $(SRCDIR)/jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl \
 		$(call gb_Executable_get_target_for_build,idlc) | $(JUTU)/urd/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
-	$(call gb_Helper_execute,idlc -O$(JUTU)/urd -I$(OUTDIR)/idl -cid -we $<)
+	$(call gb_Helper_execute,idlc -O$(JUTU) -I$(OUTDIR)/idl -cid -we $<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
