@@ -27,8 +27,11 @@
 
 $(eval $(call gb_Library_Library,evoab2))
 
+$(eval $(call gb_Library_add_package_headers,calc,\
+	connectivity_generated \
+))
+
 $(eval $(call gb_Library_set_include,evoab2,\
-	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 ))

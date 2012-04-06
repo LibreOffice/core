@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	Library_dbase \
+	Package_generated \
 ))
 
 ifneq ($(SOLAR_JAVA),)

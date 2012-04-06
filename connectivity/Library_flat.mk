@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,flat))
 
+$(eval $(call gb_Library_add_package_headers,calc,\
+	connectivity_generated \
+))
+
 $(eval $(call gb_Library_set_componentfile,flat,connectivity/source/drivers/flat/flat))
 
 $(eval $(call gb_Library_add_api,flat,\
@@ -38,7 +42,6 @@ $(eval $(call gb_Library_set_include,flat,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
-	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,flat,\
