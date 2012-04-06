@@ -775,7 +775,6 @@ dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
 dp_misc::TRACE(rtl::OString const&)
 dp_misc::writeConsoleError(rtl::OString const&)
-drawinglayer::attribute::SdrFillTextAttribute::isDefault() const
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrTextAttribute::getPropertiesVersion() const
 drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
@@ -799,25 +798,15 @@ oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPr
 oox::core::BinaryFilterBase::BinaryFilterBase(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::core::FilterBase::openSubStorage(rtl::OUString const&, bool) const
 oox::core::FilterBase::requestEncryptionData(comphelper::IDocPasswordVerifier&) const
-oox::dump::Output::writeAddress(oox::dump::Address const&)
+oox::dump::InputObjectBase::dumpNullCharArray(oox::dump::String const&, unsigned short)
+oox::dump::InputObjectBase::dumpNullUnicodeArray(oox::dump::String const&)
+oox::dump::Output::writeColRange(int, int)
+oox::dump::Output::writeColRowRange(int, int)
 oox::dump::Output::writeColorABGR(int)
-oox::dump::Output::writeRange(oox::dump::Range const&)
-oox::dump::Output::writeRangeList(std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
-oox::dump::OutputObjectBase::writeAddressItem(oox::dump::String const&, oox::dump::Address const&)
-oox::dump::OutputObjectBase::writeColIndexItem(oox::dump::String const&, int)
-oox::dump::OutputObjectBase::writeColRangeItem(oox::dump::String const&, int, int)
-oox::dump::OutputObjectBase::writeRangeItem(oox::dump::String const&, oox::dump::Range const&)
-oox::dump::OutputObjectBase::writeRangeListItem(oox::dump::String const&, std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
-oox::dump::OutputObjectBase::writeRowIndexItem(oox::dump::String const&, int)
-oox::dump::OutputObjectBase::writeRowRangeItem(oox::dump::String const&, int, int)
-oox::dump::OutputObjectBase::writeTokenAddress3dItem(oox::dump::String const&, rtl::OUString const&, oox::dump::TokenAddress const&, bool)
-oox::dump::OutputObjectBase::writeTokenAddressItem(oox::dump::String const&, oox::dump::TokenAddress const&, bool)
-oox::dump::OutputObjectBase::writeTokenRange3dItem(oox::dump::String const&, rtl::OUString const&, oox::dump::TokenRange const&, bool)
-oox::dump::OutputObjectBase::writeTokenRangeItem(oox::dump::String const&, oox::dump::TokenRange const&, bool)
+oox::dump::Output::writeRowRange(int, int)
 oox::dump::SequenceRecordObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, oox::dump::String const&)
-oox::dump::StdHlinkObject::StdHlinkObject(oox::dump::InputObjectBase const&)
-oox::dump::StringHelper::appendToken(rtl::OUStringBuffer&, long, unsigned short)
-oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
+oox::dump::StringHelper::appendRange(rtl::OUStringBuffer&, oox::dump::TokenRange const&, bool)
+oox::dump::StringHelper::appendRangeList(rtl::OUStringBuffer&, std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
 oox::ole::OleHelper::importStdHlink(oox::ole::StdHlinkInfo&, oox::BinaryInputStream&, bool)
 oox::xls::BiffAutoFilterContext::BiffAutoFilterContext(oox::xls::WorksheetHelper const&, oox::xls::AutoFilter&)
 oox::xls::BiffCodecHelper::implReadFilePass(oox::xls::BiffInputStream&, oox::xls::BiffType)
@@ -889,9 +878,6 @@ sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::View::LockRedraw(unsigned char)
 sd::ViewShellBase::RegisterFactory(unsigned short)
-sd::framework::ConfigurationClassifier::GetC1andC2() const
-sd::framework::ConfigurationClassifier::TraceResourceIdVector(char const*, std::__debug::vector<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>, std::allocator<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> > > const&) const
-sd::framework::ConfigurationTracer::TraceConfiguration(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration> const&, char const*)
 sd::slidesorter::cache::GenericPageCache::ReleasePreviewBitmap(SdrPage const*)
 sd::slidesorter::controller::SelectionFunction::EventDescriptor::EventDescriptor(KeyEvent const&, sd::slidesorter::SlideSorter&)
 sd::slidesorter::model::VisualState::SetVisualStateBlend(double)
