@@ -587,6 +587,15 @@ protected:
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
 
+    /*
+     * Widgets call this to inform their owner container that the widget wants
+     * to renegotiate its size. Should be called when a widget has a new size
+     * request. e.g. a FixedText Control gets a new label.
+     *
+     * akin to gtk_widget_queue_resize
+     */
+    SAL_DLLPRIVATE void queue_resize();
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
@@ -1063,10 +1072,29 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
 
-    // Advisory Sizing - what is a good size for this widget ?
+    /*
+     * Advisory Sizing - what is a good size for this widget
+     *
+     * Retrieves the preferred size of a widget ignoring
+     * "width-request" and "height-request" properties.
+     *
+     * Implement this in sub-classes to tell layout
+     * the preferred widget size.
+     */
     virtual Size GetOptimalSize(WindowSizeType eType) const;
+
+    /*
+     * Retrieves the preferred size of a widget taking
+     * into account the "width-request" and "height-request" properties.
+     *
+     * Overrides the result of GetOptimalSize to honor the
+     * width-request and height-request properties.
+     *
+     * @see GetOptimalSize
+     *
+     * akin to gtk_widget_get_preferred_size
+     */
     Size get_preferred_size() const;
-    void queueResize();
 
     virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
     virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;

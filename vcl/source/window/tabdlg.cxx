@@ -260,7 +260,7 @@ void TabDialog::StateChanged( StateChangedType nType )
 void TabDialog::AdjustLayout()
 {
     ImplPosControls();
-    queueResize();
+    queue_resize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

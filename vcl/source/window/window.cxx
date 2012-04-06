@@ -4913,7 +4913,7 @@ void Window::UserEvent( sal_uLong, void* )
 
 void Window::StateChanged( StateChangedType )
 {
-    queueResize();
+    queue_resize();
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 
@@ -9614,7 +9614,7 @@ Selection Window::GetSurroundingTextSelection() const
 
 //Poor man's equivalent, when widget wants to renegotiate
 //size, get parent dialog and call resize on it
-void Window::queueResize()
+void Window::queue_resize()
 {
     Dialog *pParent = GetParentDialog();
     if (!pParent)

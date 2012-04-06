@@ -1911,14 +1911,14 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
 
             // Erst hier setzen, damit Resize nicht TabPage umpositioniert
             pItem->mpTabPage = pTabPage;
-            queueResize();
+            queue_resize();
             if ( pItem->mnId == mnCurPageId )
                 ImplChangeTabPage( pItem->mnId, 0 );
         }
         else
         {
             pItem->mpTabPage = NULL;
-            queueResize();
+            queue_resize();
         }
     }
 }
