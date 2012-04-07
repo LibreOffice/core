@@ -374,7 +374,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
 
             //find the file in the element list
             typedef ::std::vector< ::rtl::OUString >::const_iterator CIT;
-            for (CIT aIter = sElementList.begin(); aIter < sElementList.end(); aIter++)
+            for (CIT aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
             {
                 ::rtl::OUString sElementListURI = *aIter;
                 if (alg == OOo2Document)

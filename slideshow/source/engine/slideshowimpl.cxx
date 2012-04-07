@@ -902,7 +902,7 @@ PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawP
         if(aIter->first == xDrawPage)
             bFound = true;
         else
-            aIter++;
+            ++aIter;
     }
 
     return aIter;

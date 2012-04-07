@@ -2349,7 +2349,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     DBG_ASSERT( (nInvPos != aPositions.end()), "InvPos ?!" );
 
     ::std::set< sal_uInt32 >::iterator i = nInvPos;
-    i++;
+    ++i;
     while ( i != aPositions.end() )
     {
         TextPortion* pNew = new TextPortion( static_cast<sal_uInt16>(*i++) - static_cast<sal_uInt16>(*nInvPos++) );
