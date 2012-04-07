@@ -1317,12 +1317,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	pq \
 )
 
 ifeq ($(GUI)$(COM),WNTMSC)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	openssl \
 	secur32 \
 	ws2_32 \
@@ -1379,13 +1379,13 @@ $(call gb_LinkTarget_set_include,$(1),\
 		,-I$(OUTDIR_FOR_BUILD)/inc/mozilla/$(subdir)) \
 )
 
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	nspr4 \
 	xpcom \
 	xpcom_core \
 )
 
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	embed_base_s \
 	mozreg_s \
 )
@@ -1626,5 +1626,138 @@ $(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/js.jar)
 endef
 
 endif # SYSTEM_RHINO
+
+ifeq ($(SYSTEM_APACHE_COMMONS),YES)
+
+define gb_JavaClassSet__use_commons-codec
+$(call gb_JavaClassSet_use_system_jar,$(1),$(COMMONS_CODEC_JAR))
+endef
+
+define gb_JavaClassSet__use_commons-httpclient
+$(call gb_JavaClassSet_use_system_jar,$(1),$(COMMONS_HTTPCLIENT_JAR))
+endef
+
+define gb_JavaClassSet__use_commons-lang
+$(call gb_JavaClassSet_usadd_linked_libse_system_jar,$(1),$(COMMONS_LANG_JAR))
+endef
+
+define gb_JavaClassSet__use_commons-logging
+$(call gb_JavaClassSet_use_system_jar,$(1),$(COMMONS_LOGGING_JAR))
+endef
+
+else # !SYSTEM_APACHE_COMMONS
+
+define gb_JavaClassSet__use_commons-codec
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/commons-codec-1.3.jar)
+endef
+
+define gb_JavaClassSet__use_commons-httpclient
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/commons-httpclient-3.1.jar)
+endef
+
+define gb_JavaClassSet__use_commons-lang
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/commons-lang-2.3.jar)
+endef
+
+define gb_JavaClassSet__use_commons-logging
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/commons-logging-1.1.1.jar)
+endef
+
+endif # SYSTEM_APACHE_COMMONS
+
+
+ifeq ($(SYSTEM_JFREEREPORT),YES)
+
+define gb_JavaClassSet__use_flow-engine
+$(call gb_JavaClassSet_use_system_jar,$(1),$(JFREEREPORT_JAR))
+endef
+
+define gb_JavaClassSet__use_flute
+$(call gb_JavaClassSet_use_system_jar,$(1),$(FLUTE_JAR))
+endef
+
+define gb_JavaClassSet__use_libbase
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBBASE_JAR))
+endef
+
+define gb_JavaClassSet__use_libfonts
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBFONTS_JAR))
+endef
+
+define gb_JavaClassSet__use_libformula
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBFORMULA_JAR))
+endef
+
+define gb_JavaClassSet__use_liblayout
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBLAYOUT_JAR))
+endef
+
+define gb_JavaClassSet__use_libloader
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBLOADER_JAR))
+endef
+
+define gb_JavaClassSet__use_librepository
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBREPOSITORY_JAR))
+endef
+
+define gb_JavaClassSet__use_libserializer
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBSERIALIZER_JAR))
+endef
+
+define gb_JavaClassSet__use_libxml
+$(call gb_JavaClassSet_use_system_jar,$(1),$(LIBXML_JAR))
+endef
+
+define gb_JavaClassSet__use_sac
+$(call gb_JavaClassSet_use_system_jar,$(1),$(SAC_JAR))
+endef
+
+else # !SYSTEM_JFREEREPORT
+
+define gb_JavaClassSet__use_flow-engine
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/flow-engine-0.9.4.jar)
+endef
+
+define gb_JavaClassSet__use_flute
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/flute-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_libbase
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libbase-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_libfonts
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libfonts-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_libformula
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libformula-1.1.7.jar)
+endef
+
+define gb_JavaClassSet__use_liblayout
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/liblayout-0.2.10.jar)
+endef
+
+define gb_JavaClassSet__use_libloader
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libloader-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_librepository
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/librepository-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_libserializer
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libserializer-1.1.6.jar)
+endef
+
+define gb_JavaClassSet__use_libxml
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/libxml-1.1.7.jar)
+endef
+
+define gb_JavaClassSet__use_sac
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/sac.jar)
+endef
+
+endif # SYSTEM_JFREEREPORT
 
 # vim: set noet sw=4 ts=4:
