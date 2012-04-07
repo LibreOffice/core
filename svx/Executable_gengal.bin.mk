@@ -48,7 +48,7 @@ $(eval $(call gb_Executable_add_cxxflags,$(gengalbin),\
     $$(CXXFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
     sal \
     tl \
     svl \
@@ -65,12 +65,12 @@ $(eval $(call gb_Executable_add_exception_objects,$(gengalbin),\
     svx/source/gengal/gengal \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,$(gengalbin),\
+$(eval $(call gb_Executable_use_static_libraries,$(gengalbin),\
     vclmain \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
     kernel32 \
     msvcrt \
     $(gb_Library_win32_OLDNAMES) \
@@ -80,7 +80,7 @@ $(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
     dl \
     pthread \
 ))

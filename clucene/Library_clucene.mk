@@ -49,12 +49,12 @@ $(eval $(call gb_Library_add_defs,clucene,\
 ))
 
 # clucene does not depend on sal nor needs uwinapi here
-$(eval $(call gb_Library_add_linked_libs,clucene,\
+$(eval $(call gb_Library_use_libraries,clucene,\
     $(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,clucene,\
+$(eval $(call gb_Library_use_libraries,clucene,\
     dl \
     m \
     pthread \

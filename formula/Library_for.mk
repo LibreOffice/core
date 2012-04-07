@@ -40,12 +40,12 @@ $(eval $(call gb_Library_add_defs,for,\
     -DFORMULA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,for,\
+$(eval $(call gb_Library_use_api,for,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,for,\
+$(eval $(call gb_Library_use_libraries,for,\
     comphelper \
     cppu \
     cppuhelper \

@@ -32,7 +32,7 @@ $(eval $(call gb_Library_Library,npsoplugin))
 
 $(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
 
-$(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
+$(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 	npsoenv \
 	nputils \
 ))
@@ -65,11 +65,11 @@ endif # GUI=UNX
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
+$(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 	ooopathutils \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,npsoplugin,\
+$(eval $(call gb_Library_use_libraries,npsoplugin,\
 	ws2_32 \
 	shell32 \
 	ole32 \

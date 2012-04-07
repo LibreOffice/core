@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,fps_office))
 
 $(eval $(call gb_Library_set_componentfile,fps_office,fpicker/source/office/fps_office))
 
-$(eval $(call gb_Library_add_api,fps_office,\
+$(eval $(call gb_Library_use_api,fps_office,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fps_office,\
+$(eval $(call gb_Library_use_libraries,fps_office,\
 	comphelper \
 	cppu \
 	cppuhelper \

@@ -39,12 +39,12 @@ $(eval $(call gb_Library_add_defs,ucbhelper,\
 	-DUCBHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,ucbhelper,\
+$(eval $(call gb_Library_use_api,ucbhelper,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucbhelper,\
+$(eval $(call gb_Library_use_libraries,ucbhelper,\
 	cppu \
 	cppuhelper \
 	sal \

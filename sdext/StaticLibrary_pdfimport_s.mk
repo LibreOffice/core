@@ -29,7 +29,7 @@ include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 
-$(eval $(call gb_StaticLibrary_add_api,pdfimport_s,\
+$(eval $(call gb_StaticLibrary_use_api,pdfimport_s,\
     offapi \
     udkapi \
 ))
@@ -38,7 +38,7 @@ $(eval $(call gb_StaticLibrary_use_externals,pdfimport_s,\
     zlib \
 ))
 
-$(eval $(call gb_StaticLibrary_add_custom_headers,pdfimport_s,sdext/pdfimport))
+$(eval $(call gb_StaticLibrary_use_custom_headers,pdfimport_s,sdext/pdfimport))
 
 $(eval $(call gb_StaticLibrary_set_include,pdfimport_s,\
     -I$(SRCDIR)/sdext/source/pdfimport/inc \

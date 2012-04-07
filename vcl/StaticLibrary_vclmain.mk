@@ -40,7 +40,7 @@ $(eval $(call gb_StaticLibrary_set_include,vclmain,\
     -I$(SRCDIR)/solenv/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_add_api,vclmain,\
+$(eval $(call gb_StaticLibrary_use_api,vclmain,\
     offapi \
     udkapi \
 ))

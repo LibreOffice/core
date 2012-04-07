@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Jar_Jar,unoil))
 
-$(eval $(call gb_Jar_add_customtarget_dependencies,unoil,\
+$(eval $(call gb_Jar_use_customtargets,unoil,\
     unoil/javamaker \
 ))
 

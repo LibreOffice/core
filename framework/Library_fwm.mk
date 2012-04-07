@@ -36,12 +36,12 @@ $(eval $(call gb_Library_set_include,fwm,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,fwm,\
+$(eval $(call gb_Library_use_api,fwm,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fwm,\
+$(eval $(call gb_Library_use_libraries,fwm,\
     comphelper \
     cppu \
     cppuhelper \

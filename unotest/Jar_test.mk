@@ -33,14 +33,14 @@ $(eval $(call gb_Jar_set_jarclasspath,test,\
 	unoil.jar \
 ))
 
-$(eval $(call gb_Jar_add_jars,test,\
+$(eval $(call gb_Jar_use_jars,test,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/OOoRunner.jar \
 ))
 
-$(eval $(call gb_Jar_add_system_jars,test,\
+$(eval $(call gb_Jar_use_system_jars,test,\
 	$(OOO_JUNIT_JAR) \
 ))
 

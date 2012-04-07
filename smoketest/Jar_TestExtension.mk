@@ -36,7 +36,7 @@ $(eval $(call gb_Jar_set_jarclasspath,TestExtension,\
 	unoil.jar \
 ))
 
-$(eval $(call gb_Jar_add_jars,TestExtension,\
+$(eval $(call gb_Jar_use_jars,TestExtension,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \

@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,rtftok,\
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 ))
 
-$(eval $(call gb_Library_add_api,rtftok,\
+$(eval $(call gb_Library_use_api,rtftok,\
 	offapi \
 	udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,rtftok,\
 	$(writerfilter_debug_flags) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,rtftok,\
+$(eval $(call gb_Library_use_libraries,rtftok,\
 	cppu \
 	cppuhelper \
 	oox \

@@ -32,7 +32,7 @@ $(eval $(call gb_JunitTest_set_defs,MODULE_TYPE,\
 	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/MODULE/DOCUMENTPATH \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,MODULE_TYPE,\
+$(eval $(call gb_JunitTest_use_jars,MODULE_TYPE,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

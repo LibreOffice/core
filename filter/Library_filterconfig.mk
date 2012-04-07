@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,filterconfig))
 
 $(eval $(call gb_Library_set_componentfile,filterconfig,filter/source/config/cache/filterconfig1))
 
-$(eval $(call gb_Library_add_api,filterconfig,\
+$(eval $(call gb_Library_use_api,filterconfig,\
 	udkapi \
 	offapi \
 ))
@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_include,filterconfig,\
 	-I$(SRCDIR)/filter/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,filterconfig,\
+$(eval $(call gb_Library_use_libraries,filterconfig,\
 	fwe \
 	utl \
 	tl \

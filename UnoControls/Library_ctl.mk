@@ -33,12 +33,12 @@ $(eval $(call gb_Library_set_include,ctl,\
     -I$(SRCDIR)/UnoControls/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,ctl,\
+$(eval $(call gb_Library_use_api,ctl,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ctl,\
+$(eval $(call gb_Library_use_libraries,ctl,\
     cppu \
     cppuhelper \
     sal \

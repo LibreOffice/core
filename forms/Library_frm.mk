@@ -33,13 +33,13 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(SRCDIR)/forms/source/solar/inc \
 ))
 
-$(eval $(call gb_Library_add_api,frm,\
+$(eval $(call gb_Library_use_api,frm,\
     offapi \
     oovbaapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,frm,\
+$(eval $(call gb_Library_use_libraries,frm,\
     comphelper \
     cppu \
     cppuhelper \

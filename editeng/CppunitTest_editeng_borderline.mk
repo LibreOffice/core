@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,editeng_borderline, \
     editeng/qa/items/borderline_test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
+$(eval $(call gb_CppunitTest_use_libraries,editeng_borderline, \
     xo \
     basegfx \
     editeng \
@@ -63,7 +63,7 @@ $(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,editeng_borderline,\
+$(eval $(call gb_CppunitTest_use_api,editeng_borderline,\
     offapi \
     udkapi \
 ))

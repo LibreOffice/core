@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_defs,xmlreader,\
 	-DOOO_DLLIMPLEMENTATION_XMLREADER \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xmlreader,\
+$(eval $(call gb_Library_use_libraries,xmlreader,\
     cppu \
 	sal \
     $(gb_STDLIBS) \
@@ -47,7 +47,7 @@ $(eval $(call gb_Library_add_exception_objects,xmlreader,\
 	xmlreader/source/xmlreader \
 ))
 
-$(eval $(call gb_Library_add_api,xmlreader,\
+$(eval $(call gb_Library_use_api,xmlreader,\
     offapi \
     udkapi \
 ))

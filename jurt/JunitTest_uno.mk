@@ -27,12 +27,12 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_uno))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_uno,\
+$(eval $(call gb_JunitTest_use_jars,jurt_uno,\
     $(OUTDIR)/bin/OOoRunnerLight.jar \
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_uno,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_uno,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_uno,\
     jurt/test/com/sun/star/uno/AnyConverter_Test \

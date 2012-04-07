@@ -48,6 +48,6 @@ $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 
 #uwinapi is part of STDLIBS on windows, but it is created in sal, which
 #depends on this module.
-$(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
+$(eval $(call gb_Executable_use_libraries,xml2cmp,\
     $(filter-out uwinapi,$(gb_STDLIBS)) \
 ))

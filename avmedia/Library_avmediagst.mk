@@ -36,7 +36,7 @@ $(eval $(call gb_Library_set_include,avmediagst,\
 	$(shell pkg-config --cflags gstreamer-0.10, gstreamer-plugins-base-0.10) \
 ))
 
-$(eval $(call gb_Library_add_api,avmediagst,\
+$(eval $(call gb_Library_use_api,avmediagst,\
 	udkapi \
 	offapi \
 ))
@@ -47,7 +47,7 @@ $(eval $(call gb_Library_add_defs,avmediagst,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,avmediagst,\
+$(eval $(call gb_Library_use_libraries,avmediagst,\
 	comphelper \
 	cppu \
 	cppuhelper \

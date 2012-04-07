@@ -39,7 +39,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,reportdesign_complex,\
 	reportdesign/qa/complex/reportdesign/FileURL \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,reportdesign_complex,\
+$(eval $(call gb_JunitTest_use_jars,reportdesign_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

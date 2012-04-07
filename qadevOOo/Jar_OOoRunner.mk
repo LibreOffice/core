@@ -39,7 +39,7 @@ $(eval $(call gb_Jar_set_jarclasspath,OOoRunner,\
 
 $(eval $(call gb_Jar_set_manifest,OOoRunner,$(SRCDIR)/qadevOOo/runner/manifest))
 
-$(eval $(call gb_Jar_add_jars,OOoRunner,\
+$(eval $(call gb_Jar_use_jars,OOoRunner,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

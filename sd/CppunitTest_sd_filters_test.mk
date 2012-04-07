@@ -33,7 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_filters_test, \
     sd/qa/unit/filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -73,18 +73,18 @@ $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sd_filters_test,\
+$(eval $(call gb_CppunitTest_use_api,sd_filters_test,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sd_filters_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sd_filters_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sd_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

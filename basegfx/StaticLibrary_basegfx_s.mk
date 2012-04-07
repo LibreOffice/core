@@ -47,7 +47,7 @@ $(eval $(call gb_StaticLibrary_add_cxxflags,basegfx_s,\
 endif
 endif
 
-$(eval $(call gb_StaticLibrary_add_api,basegfx_s,\
+$(eval $(call gb_StaticLibrary_use_api,basegfx_s,\
     offapi \
     udkapi \
 ))

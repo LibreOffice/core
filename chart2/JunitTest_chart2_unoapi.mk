@@ -35,7 +35,7 @@ $(eval $(call gb_JunitTest_set_defs,chart2_unoapi,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/chart2/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,chart2_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,chart2_unoapi,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

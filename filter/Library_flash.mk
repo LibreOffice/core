@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,flash))
 
 $(eval $(call gb_Library_set_componentfile,flash,filter/source/flash/flash))
 
-$(eval $(call gb_Library_add_api,flash,\
+$(eval $(call gb_Library_use_api,flash,\
 	udkapi \
 	offapi \
 ))
@@ -30,7 +30,7 @@ $(eval $(call gb_Library_set_include,flash,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,flash,\
+$(eval $(call gb_Library_use_libraries,flash,\
 	svt \
 	vcl \
 	utl \

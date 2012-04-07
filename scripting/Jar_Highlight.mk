@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,Highlight))
 
-$(eval $(call gb_Jar_add_jars,Highlight,\
+$(eval $(call gb_Jar_use_jars,Highlight,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \

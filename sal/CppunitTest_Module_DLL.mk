@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,Module_DLL,\
     sal/qa/osl/module/osl_Module_DLL \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,Module_DLL,\
+$(eval $(call gb_CppunitTest_use_libraries,Module_DLL,\
     sal \
     $(gb_STDLIBS) \
 ))

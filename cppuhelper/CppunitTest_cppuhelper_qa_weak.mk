@@ -31,11 +31,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppuhelper_qa_weak,\
     cppuhelper/qa/weak/test_weak \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,cppuhelper_qa_weak,\
+$(eval $(call gb_CppunitTest_use_api,cppuhelper_qa_weak,\
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppuhelper_qa_weak,\
+$(eval $(call gb_CppunitTest_use_libraries,cppuhelper_qa_weak,\
 	cppu \
     cppuhelper \
 	sal \

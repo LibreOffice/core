@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,index_data))
 
-$(eval $(call gb_Library_add_linked_libs,index_data,\
+$(eval $(call gb_Library_use_libraries,index_data,\
     $(gb_STDLIBS) \
 ))
 

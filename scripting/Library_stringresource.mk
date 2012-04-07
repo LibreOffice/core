@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,stringresource,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,stringresource,\
+$(eval $(call gb_Library_use_api,stringresource,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,stringresource,\
+$(eval $(call gb_Library_use_libraries,stringresource,\
 	cppu \
 	cppuhelper \
 	sal \

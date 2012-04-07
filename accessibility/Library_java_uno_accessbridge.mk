@@ -27,14 +27,14 @@
 
 $(eval $(call gb_Library_Library,java_uno_accessbridge))
 
-$(eval $(call gb_Library_add_custom_headers,java_uno_accessbridge,accessibility/bridge/inc))
+$(eval $(call gb_Library_use_custom_headers,java_uno_accessbridge,accessibility/bridge/inc))
 
-$(eval $(call gb_Library_add_api,java_uno_accessbridge,\
+$(eval $(call gb_Library_use_api,java_uno_accessbridge,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,java_uno_accessbridge,\
+$(eval $(call gb_Library_use_libraries,java_uno_accessbridge,\
     cppu \
     jvmaccess \
     sal \

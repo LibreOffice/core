@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,ScriptProviderForBeanShell))
 
-$(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
+$(eval $(call gb_Jar_use_jars,ScriptProviderForBeanShell,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \

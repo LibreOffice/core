@@ -39,7 +39,7 @@ $(eval $(call gb_Jar_set_jarclasspath,XMergeBridge,\
 	xmerge.jar \
 ))
 
-$(eval $(call gb_Jar_add_jars,XMergeBridge,\
+$(eval $(call gb_Jar_use_jars,XMergeBridge,\
 	$(OUTDIR)/bin/xmerge.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/ridl.jar \

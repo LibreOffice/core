@@ -32,12 +32,12 @@ $(eval $(call gb_Library_set_include,dbaxml,\
     -I$(SRCDIR)/dbaccess/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,dbaxml,\
+$(eval $(call gb_Library_use_api,dbaxml,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbaxml,\
+$(eval $(call gb_Library_use_libraries,dbaxml,\
     comphelper \
     cppu \
     cppuhelper \

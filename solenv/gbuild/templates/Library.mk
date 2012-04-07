@@ -50,7 +50,7 @@ $(eval $(call gb_Library_set_include,LIB,\
 
 # add libraries to be linked to LIB; again these names need to be given as
 # specified in Repository.mk
-$(eval $(call gb_Library_add_linked_libs,LIB,\
+$(eval $(call gb_Library_use_libraries,LIB,\
 	$(gb_STDLIBS) \
 ))
 

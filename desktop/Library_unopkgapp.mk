@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,unopkgapp,\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,unopkgapp,\
+$(eval $(call gb_Library_use_api,unopkgapp,\
     offapi \
     udkapi \
 ))
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_defs,unopkgapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,unopkgapp,\
+$(eval $(call gb_Library_use_libraries,unopkgapp,\
     comphelper \
     cppu \
     cppuhelper \

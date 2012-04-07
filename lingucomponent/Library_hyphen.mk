@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,hyphen,\
 	-I$(SRCDIR)/lingucomponent/source/lingutil \
 ))
 
-$(eval $(call gb_Library_add_api,hyphen,\
+$(eval $(call gb_Library_use_api,hyphen,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,hyphen,\
+$(eval $(call gb_Library_use_libraries,hyphen,\
 	$(gb_STDLIBS) \
 	cppu \
 	cppuhelper \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,hyphen,\
 	utl \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,hyphen,\
+$(eval $(call gb_Library_use_static_libraries,hyphen,\
 	ulingu \
 ))
 

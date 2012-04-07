@@ -37,12 +37,12 @@ $(eval $(call gb_Library_add_defs,sdui,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,sdui,\
+$(eval $(call gb_Library_use_api,sdui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sdui,\
+$(eval $(call gb_Library_use_libraries,sdui,\
     basegfx \
     comphelper \
     cppcanvas \

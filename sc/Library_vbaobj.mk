@@ -36,13 +36,13 @@ $(eval $(call gb_Library_add_defs,vbaobj,\
 	-DVBA_OOBUILD_HACK \
 ))
 
-$(eval $(call gb_Library_add_api,vbaobj,\
+$(eval $(call gb_Library_use_api,vbaobj,\
     offapi \
     oovbaapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vbaobj,\
+$(eval $(call gb_Library_use_libraries,vbaobj,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -150,7 +150,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,vbaobj,\
+$(eval $(call gb_Library_use_libraries,vbaobj,\
 	advapi32 \
 	$(gb_Library_win32_OLDNAMES) \
 	uwinapi \

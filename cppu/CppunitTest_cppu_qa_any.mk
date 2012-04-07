@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_qa_any, \
 	cppu/qa/test_any \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppu_qa_any, \
+$(eval $(call gb_CppunitTest_use_libraries,cppu_qa_any, \
 	cppu \
 	sal \
 	$(gb_STDLIBS) \

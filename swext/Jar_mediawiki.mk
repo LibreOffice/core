@@ -36,7 +36,7 @@ $(eval $(call gb_Jar_set_manifest,mediawiki,$(SRCDIR)/swext/mediawiki/src/com/su
 ifeq ($(SYSTEM_APACHE_COMMONS),YES)
 # FIXME: use gb_Jar_use_externals?
 # for the build
-$(eval $(call gb_Jar_add_jars,mediawiki,\
+$(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(COMMONS_CODEC_JAR) \
 	$(COMMONS_LANG_JAR) \
 	$(COMMONS_HTTPCLIENT_JAR) \
@@ -58,7 +58,7 @@ $(eval $(call gb_Jar_set_jarclasspath,mediawiki,\
 ))
 endif
 
-$(eval $(call gb_Jar_add_jars,mediawiki,\
+$(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \
@@ -66,7 +66,7 @@ $(eval $(call gb_Jar_add_jars,mediawiki,\
 ))
 
 ifneq ($(SYSTEM_APACHE_COMMONS),YES)
-$(eval $(call gb_Jar_add_jars,mediawiki,\
+$(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(OUTDIR)/bin/commons-codec-1.3.jar \
 	$(OUTDIR)/bin/commons-lang-2.3.jar \
 	$(OUTDIR)/bin/commons-httpclient-3.1.jar \

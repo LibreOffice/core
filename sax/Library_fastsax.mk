@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,fastsax,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_add_api,fastsax,\
+$(eval $(call gb_Library_use_api,fastsax,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fastsax,\
+$(eval $(call gb_Library_use_libraries,fastsax,\
 	cppu \
 	cppuhelper \
 	sal \

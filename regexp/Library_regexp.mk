@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,i18nregexp))
 
 $(eval $(call gb_Library_add_package_headers,i18nregexp,regexp_inc))
 
-$(eval $(call gb_Library_add_api,i18nregexp,\
+$(eval $(call gb_Library_use_api,i18nregexp,\
     offapi \
     udkapi \
 ))
@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_defs,i18nregexp,\
 	-DREGEXP_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,i18nregexp,\
+$(eval $(call gb_Library_use_libraries,i18nregexp,\
 	sal \
 	i18nutil \
     $(gb_STDLIBS) \

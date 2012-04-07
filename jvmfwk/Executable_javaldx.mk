@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Executable_Executable,javaldx))
 
-$(eval $(call gb_Executable_add_linked_libs,javaldx,\
+$(eval $(call gb_Executable_use_libraries,javaldx,\
     jvmfwk \
     sal \
     $(gb_STDLIBS) \

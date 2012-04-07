@@ -67,13 +67,13 @@ $(eval $(call gb_Library_set_defs,sd,\
 ))
 endif
 
-$(eval $(call gb_Library_add_api,sd,\
+$(eval $(call gb_Library_use_api,sd,\
     animations \
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sd,\
+$(eval $(call gb_Library_use_libraries,sd,\
     avmedia \
     basegfx \
     canvastools \

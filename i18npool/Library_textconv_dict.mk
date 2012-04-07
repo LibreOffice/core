@@ -33,12 +33,12 @@ $(eval $(call gb_Library_set_include,textconv_dict,\
 	-I$(SRCDIR)/i18npool/inc \
 ))
 
-$(eval $(call gb_Library_add_api,textconv_dict,\
+$(eval $(call gb_Library_use_api,textconv_dict,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,textconv_dict,\
+$(eval $(call gb_Library_use_libraries,textconv_dict,\
     $(gb_STDLIBS) \
 ))
 

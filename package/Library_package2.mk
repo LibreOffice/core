@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,package2,\
 	-I$(SRCDIR)/package/inc \
 ))
 
-$(eval $(call gb_Library_add_api,package2,\
+$(eval $(call gb_Library_use_api,package2,\
 	udkapi \
 	offapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,package2,\
 	-DDLLIMPLEMENTATION_PACKAGE \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,package2,\
+$(eval $(call gb_Library_use_libraries,package2,\
 	comphelper \
 	cppu \
 	cppuhelper \

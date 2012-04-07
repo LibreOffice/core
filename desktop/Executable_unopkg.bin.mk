@@ -40,7 +40,7 @@ $(eval $(call gb_Executable_set_include,$(unopkgbin),\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,$(unopkgbin),\
+$(eval $(call gb_Executable_use_libraries,$(unopkgbin),\
     comphelper \
     sal \
     tl \

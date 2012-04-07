@@ -28,7 +28,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,binaryurp_test-unmarshal))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,binaryurp_test-unmarshal,\
+$(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -36,11 +36,11 @@ $(eval $(call gb_CppunitTest_add_linked_libs,binaryurp_test-unmarshal,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_library_objects,binaryurp_test-unmarshal,\
+$(eval $(call gb_CppunitTest_use_library_objects,binaryurp_test-unmarshal,\
 	binaryurp \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,binaryurp_test-unmarshal,\
+$(eval $(call gb_CppunitTest_use_api,binaryurp_test-unmarshal,\
 	udkapi \
 ))
 

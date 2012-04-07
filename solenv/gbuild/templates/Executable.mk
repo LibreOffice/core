@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_set_include,EXEC,\
 #	-Dfoo \
 #))
 
-$(eval $(call gb_Executable_add_linked_libs,EXEC,\
+$(eval $(call gb_Executable_use_libraries,EXEC,\
 	$(gb_STDLIBS) \
 ))
 

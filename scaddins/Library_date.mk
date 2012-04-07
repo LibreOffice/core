@@ -35,13 +35,13 @@ $(eval $(call gb_Library_set_include,date,\
 	-I$(WORKDIR)/UnoApiHeaders/offapi \
 ))
 
-$(eval $(call gb_Library_add_internal_comprehensive_api,date,\
+$(eval $(call gb_Library_use_internal_comprehensive_api,date,\
 	offapi \
 	scaddins \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,date,\
+$(eval $(call gb_Library_use_libraries,date,\
 	cppu \
 	cppuhelper \
 	sal \

@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_chart_regression_test, \
     sc/qa/extras/regression-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_chart_regression_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_chart_regression_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -74,7 +74,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_chart_regression_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_chart_regression_test,\
+$(eval $(call gb_CppunitTest_use_api,sc_chart_regression_test,\
     offapi \
     oovbaapi \
     udkapi \
@@ -82,12 +82,12 @@ $(eval $(call gb_CppunitTest_add_api,sc_chart_regression_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_chart_regression_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_chart_regression_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_chart_regression_test,\
     oovbaapi \
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_chart_regression_test,\
+$(eval $(call gb_CppunitTest_use_components,sc_chart_regression_test,\
     basic/util/sb \
     chart2/source/controller/chartcontroller \
     chart2/source/model/chartmodel \

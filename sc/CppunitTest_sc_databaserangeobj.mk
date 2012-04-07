@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_databaserangeobj, \
     sc/qa/extras/scdatabaserangeobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_databaserangeobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_databaserangeobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -78,18 +78,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_databaserangeobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_databaserangeobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_databaserangeobj,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_databaserangeobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_databaserangeobj,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_databaserangeobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_databaserangeobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_databaserangeobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

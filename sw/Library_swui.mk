@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,swui,\
+$(eval $(call gb_Library_use_api,swui,\
 	udkapi \
 	offapi \
 ))
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_cxxflags,swui,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,swui,\
+$(eval $(call gb_Library_use_libraries,swui,\
     comphelper \
     cppu \
     cppuhelper \

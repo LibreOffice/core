@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     -I$(SRCDIR)/starmath/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_api,starmath_qa_cppunit,\
     offapi \
     udkapi \
 ))
@@ -42,13 +42,13 @@ $(eval $(call gb_CppunitTest_set_defs,starmath_qa_cppunit,\
     -DSMDLL \
 ))
 
-$(eval $(call gb_CppunitTest_add_library_objects,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_library_objects,starmath_qa_cppunit,\
     sm \
 ))
 
 $(call gb_CxxObject_get_target,starmath/qa/cppunit/test_starmath): $(WORKDIR)/AllLangRes/sm
 
-$(eval $(call gb_CppunitTest_add_linked_libs,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     comphelper \
     cppu \
     cppuhelper \
@@ -77,11 +77,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\
 
 $(eval $(call gb_CppunitTest_uses_ure,starmath_qa_cppunit))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,starmath_qa_cppunit,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
@@ -89,13 +89,13 @@ $(eval $(call gb_CppunitTest_add_components,starmath_qa_cppunit,\
     sfx2/util/sfx \
 ))
 
-$(eval $(call gb_CppunitTest_add_old_components,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
     component/vcl/vcl \
     mcnttype \
 ))
 
 ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_CppunitTest_add_old_components,starmath_qa_cppunit,\
+$(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
     ftransl \
     sysdtrans \
 ))

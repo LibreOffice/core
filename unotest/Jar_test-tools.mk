@@ -33,7 +33,7 @@ $(eval $(call gb_Jar_set_jarclasspath,test-tools,\
 	unoil.jar \
 ))
 
-$(eval $(call gb_Jar_add_jars,test-tools,\
+$(eval $(call gb_Jar_use_jars,test-tools,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \

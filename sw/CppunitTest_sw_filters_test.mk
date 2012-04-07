@@ -41,7 +41,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test, \
 
 $(call gb_CxxObject_get_target,sw/qa/core/filters-test): $(WORKDIR)/AllLangRes/sw
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_filters_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
     sw \
     sfx \
     svl \
@@ -66,18 +66,18 @@ $(eval $(call gb_CppunitTest_set_include,sw_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_filters_test,\
+$(eval $(call gb_CppunitTest_use_api,sw_filters_test,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_filters_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_filters_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

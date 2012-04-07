@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_include,chartmodel,\
     -I$(SRCDIR)/chart2/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,chartmodel,\
+$(eval $(call gb_Library_use_api,chartmodel,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_api,chartmodel,\
 #     CFLAGS+=-ftemplate-depth-128
 # .ENDIF
 
-$(eval $(call gb_Library_add_linked_libs,chartmodel,\
+$(eval $(call gb_Library_use_libraries,chartmodel,\
     charttools \
     comphelper \
     cppu \

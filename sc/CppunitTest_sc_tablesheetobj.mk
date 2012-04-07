@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetobj, \
     sc/qa/extras/sctablesheetobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_spreadsheetobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -79,18 +79,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_spreadsheetobj,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_spreadsheetobj,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_spreadsheetobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_spreadsheetobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_spreadsheetobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_spreadsheetobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

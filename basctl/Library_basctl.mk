@@ -38,12 +38,12 @@ $(eval $(call gb_Library_set_include,basctl,\
 	-I$(WORKDIR)/SdiTarget/basctl/sdi \
 ))
 
-$(eval $(call gb_Library_add_api,basctl,\
+$(eval $(call gb_Library_use_api,basctl,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,basctl,\
+$(eval $(call gb_Library_use_libraries,basctl,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -124,7 +124,7 @@ $(eval $(call gb_SdiTarget_set_include,basctl/sdi/basslots,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,basctl,\
+$(eval $(call gb_Library_use_libraries,basctl,\
 	advapi32 \
 	gdi32 \
 	shell32 \

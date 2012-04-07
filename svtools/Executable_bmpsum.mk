@@ -34,12 +34,12 @@ $(eval $(call gb_Executable_set_include,bmpsum,\
     -I$(SRCDIR)/svtools/inc/svtools \
 ))
 
-$(eval $(call gb_Executable_add_api,bmpsum,\
+$(eval $(call gb_Executable_use_api,bmpsum,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,bmpsum,\
+$(eval $(call gb_Executable_use_libraries,bmpsum,\
     sal \
     comphelper \
     tl \

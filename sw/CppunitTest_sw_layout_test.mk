@@ -33,7 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_layout_test, \
     sw/qa/core/layout-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_layout_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_layout_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -75,7 +75,7 @@ $(eval $(call gb_CppunitTest_set_include,sw_layout_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_layout_test,\
+$(eval $(call gb_CppunitTest_use_api,sw_layout_test,\
     offapi \
     oovbaapi \
     udkapi \
@@ -83,12 +83,12 @@ $(eval $(call gb_CppunitTest_add_api,sw_layout_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_layout_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_layout_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_layout_test,\
     oovbaapi \
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_layout_test,\
+$(eval $(call gb_CppunitTest_use_components,sw_layout_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,dbui,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,dbui,\
+$(eval $(call gb_Library_use_api,dbui,\
     offapi \
     udkapi \
 ))
@@ -65,7 +65,7 @@ $(eval $(call gb_Library_add_defs,dbui,\
 	-DDBACCESS_DLLIMPLEMENTATION\
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbui,\
+$(eval $(call gb_Library_use_libraries,dbui,\
 	comphelper \
 	cppuhelper \
 	cppu \
@@ -90,7 +90,7 @@ $(eval $(call gb_Library_add_linked_libs,dbui,\
     $(gb_STDLIBS) \
 ))
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,dbui,\
+$(eval $(call gb_Library_use_libraries,dbui,\
 	ole32 \
 	oleaut32 \
 	uuid \

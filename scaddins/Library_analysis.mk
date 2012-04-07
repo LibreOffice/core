@@ -35,13 +35,13 @@ $(eval $(call gb_Library_set_include,analysis,\
 	-I$(WORKDIR)/UnoApiHeaders/offapi \
 ))
 
-$(eval $(call gb_Library_add_internal_comprehensive_api,analysis,\
+$(eval $(call gb_Library_use_internal_comprehensive_api,analysis,\
 	offapi \
 	scaddins \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,analysis,\
+$(eval $(call gb_Library_use_libraries,analysis,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,analysis,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,analysis,\
+$(eval $(call gb_Library_use_libraries,analysis,\
     uwinapi \
 ))
 endif

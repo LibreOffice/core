@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
     sw/qa/core/Test-BigPtrArray \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -80,18 +80,18 @@ $(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_api,sw_swdoc_test,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_swdoc_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_swdoc_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \

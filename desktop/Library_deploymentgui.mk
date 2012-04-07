@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,deploymentgui,\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,deploymentgui,\
+$(eval $(call gb_Library_use_api,deploymentgui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,deploymentgui,\
+$(eval $(call gb_Library_use_libraries,deploymentgui,\
     comphelper \
     cppu \
     cppuhelper \
@@ -61,7 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,deploymentgui,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_linked_libs,deploymentgui,\
+$(eval $(call gb_Library_use_libraries,deploymentgui,\
     ole32 \
 ))
 

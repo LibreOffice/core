@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_locale,\
     sal/qa/rtl/locale/rtl_locale \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_locale,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_locale,\
     sal \
     $(gb_STDLIBS) \
 ))

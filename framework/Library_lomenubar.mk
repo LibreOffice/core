@@ -31,7 +31,7 @@ $(eval $(call gb_Library_Library,lomenubar))
 $(eval $(call gb_Library_set_componentfile,lomenubar,framework/util/lomenubar))
 
 
-$(eval $(call gb_Library_add_api,lomenubar,\
+$(eval $(call gb_Library_use_api,lomenubar,\
     offapi \
     udkapi \
 ))
@@ -41,7 +41,7 @@ $(eval $(call gb_Library_use_externals,lomenubar,\
 	dbusmenugtk \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,lomenubar,\
+$(eval $(call gb_Library_use_libraries,lomenubar,\
 	sal \
 	cppu \
 	cppuhelper \

@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,i18npool,\
 	-I$(SRCDIR)/i18npool/inc \
 ))
 
-$(eval $(call gb_Library_add_api,i18npool,\
+$(eval $(call gb_Library_use_api,i18npool,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,i18npool,\
+$(eval $(call gb_Library_use_libraries,i18npool,\
 	comphelper \
 	cppu \
 	cppuhelper \

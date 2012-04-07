@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_defs,cppuhelper,\
 	-DCPPUHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,cppuhelper,\
+$(eval $(call gb_Library_use_libraries,cppuhelper,\
 	cppu \
 	sal \
 	salhelper \

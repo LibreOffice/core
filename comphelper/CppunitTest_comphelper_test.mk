@@ -31,12 +31,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/string/test_string \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,comphelper_test, \
+$(eval $(call gb_CppunitTest_use_api,comphelper_test, \
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,comphelper_test, \
+$(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
     comphelper \
     cppuhelper \
     cppu \

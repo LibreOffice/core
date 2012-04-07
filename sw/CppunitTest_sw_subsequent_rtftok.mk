@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_rtftok, \
     sw/qa/extras/rtftok/rtftok \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_subsequent_rtftok, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtftok, \
     cppu \
     sal \
     test \
@@ -43,18 +43,18 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_subsequent_rtftok, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtftok,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_subsequent_rtftok))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_subsequent_rtftok,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \

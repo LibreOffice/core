@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppuhelper_cppu_unourl,\
     cppuhelper/qa/unourl/cppu_unourl \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppuhelper_cppu_unourl,\
+$(eval $(call gb_CppunitTest_use_libraries,cppuhelper_cppu_unourl,\
 	cppu \
     cppuhelper \
 	sal \

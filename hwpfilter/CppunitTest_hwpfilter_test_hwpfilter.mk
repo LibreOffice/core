@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,hwpfilter_test_hwpfilter, \
     hwpfilter/qa/cppunit/test_hwpfilter \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
+$(eval $(call gb_CppunitTest_use_libraries,hwpfilter_test_hwpfilter, \
     ucbhelper \
     comphelper \
     cppu \
@@ -49,18 +49,18 @@ $(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,hwpfilter_test_hwpfilter,\
+$(eval $(call gb_CppunitTest_use_api,hwpfilter_test_hwpfilter,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,hwpfilter_test_hwpfilter))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,hwpfilter_test_hwpfilter,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,hwpfilter_test_hwpfilter,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,hwpfilter_test_hwpfilter,\
+$(eval $(call gb_CppunitTest_use_components,hwpfilter_test_hwpfilter,\
     configmgr/source/configmgr \
     hwpfilter/source/hwp \
     ucb/source/core/ucb1 \

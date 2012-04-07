@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,ucpfile1))
 
 $(eval $(call gb_Library_set_componentfile,ucpfile1,ucb/source/ucp/file/ucpfile1))
 
-$(eval $(call gb_Library_add_api,ucpfile1,\
+$(eval $(call gb_Library_use_api,ucpfile1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucpfile1,\
+$(eval $(call gb_Library_use_libraries,ucpfile1,\
 	cppu \
 	cppuhelper \
 	sal \

@@ -31,11 +31,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppuhelper_cppu_ifcontainer,\
     cppuhelper/qa/ifcontainer/cppu_ifcontainer \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,cppuhelper_cppu_ifcontainer,\
+$(eval $(call gb_CppunitTest_use_api,cppuhelper_cppu_ifcontainer,\
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppuhelper_cppu_ifcontainer,\
+$(eval $(call gb_CppunitTest_use_libraries,cppuhelper_cppu_ifcontainer,\
 	cppu \
     cppuhelper \
 	sal \

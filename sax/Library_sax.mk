@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,sax,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_add_api,sax,\
+$(eval $(call gb_Library_use_api,sax,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,sax,\
 	-DSAX_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sax,\
+$(eval $(call gb_Library_use_libraries,sax,\
 	comphelper \
 	cppu \
 	cppuhelper \

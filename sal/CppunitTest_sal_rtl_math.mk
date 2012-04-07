@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_math, \
     sal/qa/rtl/math/test-rtl-math \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_math, \
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_math, \
     sal \
     $(gb_STDLIBS) \
 ))

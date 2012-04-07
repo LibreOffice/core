@@ -35,7 +35,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sot_complex,\
     sot/qa/complex/olesimplestorage/TestHelper \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,sot_complex,\
+$(eval $(call gb_JunitTest_use_jars,sot_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

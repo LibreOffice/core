@@ -37,12 +37,12 @@ $(eval $(call gb_Library_set_include,fsstorage,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,fsstorage,\
+$(eval $(call gb_Library_use_api,fsstorage,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fsstorage,\
+$(eval $(call gb_Library_use_libraries,fsstorage,\
     comphelper \
     cppu \
     cppuhelper \

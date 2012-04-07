@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_package_headers,svt,svtools_inc))
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
-$(eval $(call gb_Library_add_api,svt,\
+$(eval $(call gb_Library_use_api,svt,\
 	udkapi \
 	offapi \
 ))
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,svt,\
     -DSVT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,svt,\
+$(eval $(call gb_Library_use_libraries,svt,\
     basegfx \
     comphelper \
     cppu \
@@ -274,7 +274,7 @@ $(eval $(call gb_Library_add_cobjects,svt,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,svt,\
+$(eval $(call gb_Library_use_libraries,svt,\
     advapi32 \
     gdi32 \
     ole32 \

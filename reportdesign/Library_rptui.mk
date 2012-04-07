@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,rptui,\
     -I$(SRCDIR)/reportdesign/source/ui/inc \
 ))
 
-$(eval $(call gb_Library_add_api,rptui,\
+$(eval $(call gb_Library_use_api,rptui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,rptui,\
+$(eval $(call gb_Library_use_libraries,rptui,\
     comphelper \
     cppu \
     cppuhelper \

@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,itg))
 
-$(eval $(call gb_Library_add_api,itg,\
+$(eval $(call gb_Library_use_api,itg,\
 	udkapi \
 	offapi \
 ))
@@ -28,7 +28,7 @@ $(eval $(call gb_Library_set_include,itg,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,itg,\
+$(eval $(call gb_Library_use_libraries,itg,\
 	vcl \
 	tl \
 	sal \

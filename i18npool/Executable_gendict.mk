@@ -32,7 +32,7 @@ $(eval $(call gb_Executable_set_include,gendict,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,gendict,\
+$(eval $(call gb_Executable_use_libraries,gendict,\
 	sal \
 	$(gb_STDLIBS) \
 ))

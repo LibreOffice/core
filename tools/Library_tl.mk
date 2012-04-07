@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,tl))
 
 $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
 
-$(eval $(call gb_Library_add_custom_headers,tl,tools/reversemap))
+$(eval $(call gb_Library_use_custom_headers,tl,tools/reversemap))
 
 $(eval $(call gb_Library_set_include,tl,\
     -I$(SRCDIR)/tools/inc \
@@ -41,12 +41,12 @@ $(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,tl,\
+$(eval $(call gb_Library_use_api,tl,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,tl,\
+$(eval $(call gb_Library_use_libraries,tl,\
     basegfx \
     comphelper \
     i18nisolang1 \
@@ -130,7 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/win/source/dll/toolsdll \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,tl,\
+$(eval $(call gb_Library_use_libraries,tl,\
     mpr \
     ole32 \
     shell32 \

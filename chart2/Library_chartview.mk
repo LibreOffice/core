@@ -37,12 +37,12 @@ $(eval $(call gb_Library_add_defs,chartview,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 
-$(eval $(call gb_Library_add_api,chartview,\
+$(eval $(call gb_Library_use_api,chartview,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,chartview,\
+$(eval $(call gb_Library_use_libraries,chartview,\
     basegfx \
     charttools \
     comphelper \

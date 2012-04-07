@@ -37,11 +37,11 @@ $(eval $(call gb_Library_add_defs,sunjavaplugin,\
 ))
 endif
 
-$(eval $(call gb_Library_add_api,sunjavaplugin,\
+$(eval $(call gb_Library_use_api,sunjavaplugin,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
+$(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     cppu \
     cppuhelper \
     sal \
@@ -50,13 +50,13 @@ $(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
 ))
 
 ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
+$(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     lo-bootstrap \
 ))
 endif
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,sunjavaplugin,\
+$(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     advapi32 \
     uwinapi \
 ))

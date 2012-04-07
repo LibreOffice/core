@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,avmediawin,\
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,avmediawin,\
+$(eval $(call gb_Library_use_api,avmediawin,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,avmediawin,\
+$(eval $(call gb_Library_use_libraries,avmediawin,\
 	comphelper \
 	cppu \
 	cppuhelper \

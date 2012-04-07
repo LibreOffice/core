@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,ScriptProviderForJava))
 
-$(eval $(call gb_Jar_add_jars,ScriptProviderForJava,\
+$(eval $(call gb_Jar_use_jars,ScriptProviderForJava,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \

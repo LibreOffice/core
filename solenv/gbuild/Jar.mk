@@ -169,25 +169,45 @@ $(call gb_Jar_get_target,$(1)) : $(2)
 
 endef
 
-# remember: classpath is "inherited" to ClassSet
 define gb_Jar_add_jar
-$(call gb_JavaClassSet_add_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_jar: use gb_Jar_use_jar instead.)
+endef
+
+# remember: classpath is "inherited" to ClassSet
+define gb_Jar_use_jar
+$(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_Jar_add_system_jar
-$(call gb_JavaClassSet_add_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_system_jar: use gb_Jar_use_system_jar instead.)
+endef
+
+define gb_Jar_use_system_jar
+$(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
-# specify jars with imported modules
 define gb_Jar_add_jars
-$(call gb_JavaClassSet_add_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_jars: use gb_Jar_use_jars instead.)
+endef
+
+# specify jars with imported modules
+define gb_Jar_use_jars
+$(call gb_JavaClassSet_use_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_Jar_add_system_jars
-$(call gb_JavaClassSet_add_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_system_jars: use gb_Jar_use_system_jars instead.)
+endef
+
+define gb_Jar_use_system_jars
+$(call gb_JavaClassSet_use_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
@@ -202,22 +222,42 @@ $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
 define gb_Jar_add_customtarget_dependency
-$(call gb_JavaClassSet_add_customtarget_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_customtarget_dependency: use gb_Jar_use_customtarget instead.)
+endef
+
+define gb_Jar_use_customtarget
+$(call gb_JavaClassSet_use_customtarget,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_Jar_add_customtarget_dependencies
-$(foreach customtarget,$(2),$(call gb_Jar_add_customtarget_dependency,$(1),$(customtarget)))
+$$(call gb_Output_error,\
+ gb_Jar_add_customtarget_dependencies: use gb_Jar_use_customtargets instead.)
+endef
+
+define gb_Jar_use_customtargets
+$(foreach customtarget,$(2),$(call gb_Jar_use_customtarget,$(1),$(customtarget)))
 
 endef
 
 define gb_Jar_add_package_dependency
-$(call gb_JavaClassSet_add_package_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$$(call gb_Output_error,\
+ gb_Jar_add_package_dependency: use gb_Jar_use_package instead.)
+endef
+
+define gb_Jar_use_package
+$(call gb_JavaClassSet_use_package,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
 define gb_Jar_add_package_dependencies
-$(foreach package,$(2),$(call gb_Jar_add_package_dependency,$(1),$(package)))
+$$(call gb_Output_error,\
+ gb_Jar_add_package_dependencies: use gb_Jar_use_packages instead.)
+endef
+
+define gb_Jar_use_packages
+$(foreach package,$(2),$(call gb_Jar_use_package,$(1),$(package)))
 
 endef
 

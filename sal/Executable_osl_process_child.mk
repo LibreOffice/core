@@ -29,7 +29,7 @@
 # See qa/osl/process/osl_process.cxx:411
 $(eval $(call gb_Executable_Executable,osl_process_child))
 
-$(eval $(call gb_Executable_add_linked_libs,osl_process_child,\
+$(eval $(call gb_Executable_use_libraries,osl_process_child,\
 	sal \
 	$(gb_STDLIBS) \
 ))

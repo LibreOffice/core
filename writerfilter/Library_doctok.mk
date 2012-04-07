@@ -44,12 +44,12 @@ $(eval $(call gb_Library_add_defs,doctok,\
 	$(writerfilter_debug_flags) \
 ))
 
-$(eval $(call gb_Library_add_api,doctok,\
+$(eval $(call gb_Library_use_api,doctok,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,doctok,\
+$(eval $(call gb_Library_use_libraries,doctok,\
     cppu \
     cppuhelper \
     resourcemodel \

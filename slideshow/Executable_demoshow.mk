@@ -48,12 +48,12 @@ $(eval $(call gb_Executable_set_defs,demoshow,\
 ))
 endif
 
-$(eval $(call gb_Library_add_api,demoshow,\
+$(eval $(call gb_Library_use_api,demoshow,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,demoshow,\
+$(eval $(call gb_Executable_use_libraries,demoshow,\
     basegfx \
     comphelper \
     cppcanvas \

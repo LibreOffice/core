@@ -27,12 +27,12 @@
 
 $(eval $(call gb_Library_Library,SunPresentationMinimizer))
 
-$(eval $(call gb_Library_add_api,SunPresentationMinimizer,\
+$(eval $(call gb_Library_use_api,SunPresentationMinimizer,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,SunPresentationMinimizer,\
+$(eval $(call gb_Library_use_libraries,SunPresentationMinimizer,\
     cppu \
     cppuhelper \
     sal \

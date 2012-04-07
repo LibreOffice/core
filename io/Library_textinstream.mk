@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Library_Library,textinstream))
 
-$(eval $(call gb_Library_add_api,textinstream,\
+$(eval $(call gb_Library_use_api,textinstream,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,textinstream,\
+$(eval $(call gb_Library_use_libraries,textinstream,\
     cppu \
     cppuhelper \
     sal \

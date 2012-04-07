@@ -43,7 +43,7 @@ $(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
     $(call gb_Library_get_target,localedata_en) \
 
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     avmedia \
     basegfx \
     comphelper \
@@ -82,18 +82,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_ucalc,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \

@@ -32,16 +32,16 @@ $(eval $(call gb_Executable_set_include,spadmin.bin,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,spadmin.bin,\
+$(eval $(call gb_Executable_use_static_libraries,spadmin.bin,\
     vclmain \
 ))
 
-$(eval $(call gb_Executable_add_api,spadmin.bin,\
+$(eval $(call gb_Executable_use_api,spadmin.bin,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+$(eval $(call gb_Executable_use_libraries,spadmin.bin,\
     spa \
     svt \
     vcl \
@@ -61,13 +61,13 @@ $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
 ))
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+$(eval $(call gb_Executable_use_libraries,spadmin.bin,\
     pthread \
 ))
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+$(eval $(call gb_Executable_use_libraries,spadmin.bin,\
     dl \
 ))
 endif

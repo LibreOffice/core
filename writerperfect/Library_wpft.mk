@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,wpft,\
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_add_api,wpft,\
+$(eval $(call gb_Library_use_api,wpft,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,wpft,\
+$(eval $(call gb_Library_use_libraries,wpft,\
 	cppu \
 	cppuhelper \
 	vcl \
@@ -54,7 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,wpft,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,wpft,\
+$(eval $(call gb_Library_use_static_libraries,wpft,\
 	writerperfect \
 ))
 

@@ -29,7 +29,7 @@
 
 $(eval $(call gb_JunitTest_JunitTest,bean_complex))
 
-$(eval $(call gb_JunitTest_add_jars,bean_complex,\
+$(eval $(call gb_JunitTest_use_jars,bean_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

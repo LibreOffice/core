@@ -35,13 +35,13 @@ $(eval $(call gb_Library_set_include,vbaevents,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,vbaevents,\
+$(eval $(call gb_Library_use_api,vbaevents,\
 	offapi \
 	oovbaapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vbaevents,\
+$(eval $(call gb_Library_use_libraries,vbaevents,\
 	comphelper \
 	cppu \
 	cppuhelper \

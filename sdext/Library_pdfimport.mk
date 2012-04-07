@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,pdfimport))
 
-$(eval $(call gb_Library_add_api,pdfimport,\
+$(eval $(call gb_Library_use_api,pdfimport,\
     offapi \
     udkapi \
 ))
@@ -37,13 +37,13 @@ $(eval $(call gb_Library_set_include,pdfimport,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,pdfimport,\
+$(eval $(call gb_Library_use_libraries,pdfimport,\
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,pdfimport,\
+$(eval $(call gb_Library_use_static_libraries,pdfimport,\
     basegfx_s \
     pdfimport_s \
 ))

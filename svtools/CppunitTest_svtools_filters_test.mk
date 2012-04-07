@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svtools_filters_test, \
     svtools/qa/cppunit/filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,svtools_filters_test, \
+$(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -48,18 +48,18 @@ $(eval $(call gb_CppunitTest_set_include,svtools_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,svtools_filters_test,\
+$(eval $(call gb_CppunitTest_use_api,svtools_filters_test,\
     udkapi \
     offapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,svtools_filters_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,svtools_filters_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,svtools_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,svtools_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,svtools_filters_test,\
     configmgr/source/configmgr \
 ))
 

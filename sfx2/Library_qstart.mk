@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,qstart_gtk,\
     -I$(SRCDIR)/sfx2/inc/sfx2 \
 ))
 
-$(eval $(call gb_Library_add_api,qstart_gtk,\
+$(eval $(call gb_Library_use_api,qstart_gtk,\
 	udkapi \
 	offapi \
 ))
@@ -51,7 +51,7 @@ $(eval $(call gb_Library_add_defs,qstart_gtk,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
+$(eval $(call gb_Library_use_libraries,qstart_gtk,\
     comphelper \
     cppu \
     cppuhelper \

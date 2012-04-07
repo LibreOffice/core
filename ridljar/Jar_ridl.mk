@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Jar_Jar,ridl))
 
-$(eval $(call gb_Jar_add_customtarget_dependencies,ridl,\
+$(eval $(call gb_Jar_use_customtargets,ridl,\
     ridljar/javamaker \
 ))
 
-$(eval $(call gb_Jar_add_jars,ridl,\
+$(eval $(call gb_Jar_use_jars,ridl,\
     $(WORKDIR)/CustomTarget/ridljar/javamaker/class \
 ))
 

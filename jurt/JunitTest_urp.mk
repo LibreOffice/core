@@ -27,16 +27,16 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_urp))
 
-$(eval $(call gb_JunitTest_add_customtarget_dependencies,jurt_urp,\
+$(eval $(call gb_JunitTest_use_customtargets,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_urp,\
+$(eval $(call gb_JunitTest_use_jars,jurt_urp,\
     $(OUTDIR)/bin/ridl.jar \
     $(WORKDIR)/CustomTarget/jurt/test/com/sun/star/lib/uno/protocols/urp \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_urp,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_urp,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_urp,\
     jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test \

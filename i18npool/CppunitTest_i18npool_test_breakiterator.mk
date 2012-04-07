@@ -32,12 +32,12 @@ $(eval $(call gb_CppunitTest_set_include,i18npool_test_breakiterator,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,i18npool_test_breakiterator,\
+$(eval $(call gb_CppunitTest_use_api,i18npool_test_breakiterator,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,i18npool_test_breakiterator,\
+$(eval $(call gb_CppunitTest_use_libraries,i18npool_test_breakiterator,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -50,11 +50,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
 
 $(eval $(call gb_CppunitTest_uses_ure,i18npool_test_breakiterator))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,i18npool_test_breakiterator,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,i18npool_test_breakiterator,\
 	types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,i18npool_test_breakiterator,\
+$(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
 	i18npool/util/i18npool \
 ))
 

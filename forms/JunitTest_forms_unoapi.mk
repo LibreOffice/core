@@ -35,7 +35,7 @@ $(eval $(call gb_JunitTest_set_defs,forms_unoapi,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/forms/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,forms_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,forms_unoapi,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

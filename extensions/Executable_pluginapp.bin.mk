@@ -30,7 +30,7 @@
 
 $(eval $(call gb_Executable_Executable,pluginapp.bin))
 
-$(eval $(call gb_Executable_add_external_headers,pluginapp.bin,np_sdk_inc))
+$(eval $(call gb_Executable_use_package,pluginapp.bin,np_sdk_inc))
 
 $(eval $(call gb_Executable_use_external,pluginapp.bin,mozilla_headers))
 
@@ -39,7 +39,7 @@ $(eval $(call gb_Executable_set_include,pluginapp.bin,\
 	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
-$(eval $(call gb_Executable_add_api,pluginapp.bin,\
+$(eval $(call gb_Executable_use_api,pluginapp.bin,\
 	offapi \
 	udkapi \
 ))
@@ -49,11 +49,11 @@ $(eval $(call gb_Executable_add_exception_objects,pluginapp.bin,\
 	extensions/source/plugin/unx/npnapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,pluginapp.bin,\
+$(eval $(call gb_Executable_use_static_libraries,pluginapp.bin,\
 	plugcon \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,pluginapp.bin,\
+$(eval $(call gb_Executable_use_libraries,pluginapp.bin,\
 	sal \
 ))
 

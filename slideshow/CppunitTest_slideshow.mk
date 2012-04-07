@@ -46,14 +46,14 @@ $(eval $(call gb_CppunitTest_set_defs,slideshow,\
 ))
 endif
 
-$(eval $(call gb_CppunitTest_add_api,slideshow,\
+$(eval $(call gb_CppunitTest_use_api,slideshow,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_library_objects,slideshow,slideshow))
+$(eval $(call gb_CppunitTest_use_library_objects,slideshow,slideshow))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,slideshow,\
+$(eval $(call gb_CppunitTest_use_libraries,slideshow,\
     avmedia \
     basegfx \
     canvastools \

@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_add_defs,simpress,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,simpress,\
+$(eval $(call gb_Executable_use_libraries,simpress,\
     $(gb_STDLIBS) \
 ))
 

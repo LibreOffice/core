@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     -I$(SRCDIR)/chart2/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,chartcontroller,\
+$(eval $(call gb_Library_use_api,chartcontroller,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_api,chartcontroller,\
 #     CFLAGS+=-ftemplate-depth-128
 # .ENDIF
 
-$(eval $(call gb_Library_add_linked_libs,chartcontroller,\
+$(eval $(call gb_Library_use_libraries,chartcontroller,\
     basegfx \
     charttools \
     chartview \

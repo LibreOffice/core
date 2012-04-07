@@ -30,7 +30,7 @@
 
 $(eval $(call gb_Executable_Executable,nsplugin))
 
-$(eval $(call gb_Executable_add_api,nsplugin,\
+$(eval $(call gb_Executable_use_api,nsplugin,\
 	offapi \
 	udkapi \
 ))
@@ -41,11 +41,11 @@ $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
 	extensions/source/nsplugin/source/so_main \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,nsplugin,\
+$(eval $(call gb_Executable_use_static_libraries,nsplugin,\
 	npsoenv \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,nsplugin,\
+$(eval $(call gb_Executable_use_libraries,nsplugin,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -63,11 +63,11 @@ $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
 	extensions/source/nsplugin/source/nsp_windows \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,nsplugin,\
+$(eval $(call gb_Executable_use_static_libraries,nsplugin,\
 	ooopathutils \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,nsplugin,\
+$(eval $(call gb_Executable_use_libraries,nsplugin,\
 	ws2_32 \
 	shell32 \
 	ole32 \

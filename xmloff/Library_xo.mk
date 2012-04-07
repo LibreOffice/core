@@ -41,12 +41,12 @@ $(eval $(call gb_Library_add_defs,xo,\
     -DXMLOFF_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,xo,\
+$(eval $(call gb_Library_use_api,xo,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xo,\
+$(eval $(call gb_Library_use_libraries,xo,\
     basegfx \
     comphelper \
     cppu \

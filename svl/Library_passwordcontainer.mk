@@ -37,12 +37,12 @@ $(eval $(call gb_Library_set_include,passwordcontainer,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,passwordcontainer,\
+$(eval $(call gb_Library_use_api,passwordcontainer,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
+$(eval $(call gb_Library_use_libraries,passwordcontainer,\
     cppu \
     cppuhelper \
     sal \

@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,xstor,\
 	-I$(SRCDIR)/package/inc \
 ))
 
-$(eval $(call gb_Library_add_api,xstor,\
+$(eval $(call gb_Library_use_api,xstor,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xstor,\
+$(eval $(call gb_Library_use_libraries,xstor,\
 	comphelper \
 	cppu \
 	cppuhelper \

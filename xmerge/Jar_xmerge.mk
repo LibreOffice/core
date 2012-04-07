@@ -31,7 +31,7 @@ $(eval $(call gb_Jar_Jar,xmerge))
 
 $(eval $(call gb_Jar_set_manifest,xmerge,$(SRCDIR)/xmerge/source/xmerge/xmerge.mf))
 
-$(eval $(call gb_Jar_add_jars,xmerge,\
+$(eval $(call gb_Jar_use_jars,xmerge,\
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/jurt.jar \

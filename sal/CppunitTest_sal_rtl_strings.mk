@@ -37,7 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_strings,\
     sal/qa/rtl/strings/test_oustring_stringliterals \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_strings,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_strings,\
     sal \
     $(gb_STDLIBS) \
 ))

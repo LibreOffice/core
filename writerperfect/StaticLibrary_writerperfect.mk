@@ -38,7 +38,7 @@ $(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
 	wpg \
 ))
 
-$(eval $(call gb_StaticLibrary_add_api,writerperfect,\
+$(eval $(call gb_StaticLibrary_use_api,writerperfect,\
     offapi \
     udkapi \
 ))

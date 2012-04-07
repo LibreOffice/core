@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 	-DSAL_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sal,\
+$(eval $(call gb_Library_use_libraries,sal,\
 	$(if $(filter $(GUI),UNX), \
 		$(if $(filter $(OS),ANDROID),, \
 			pthread \

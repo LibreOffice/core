@@ -45,12 +45,12 @@ $(eval $(call gb_Library_add_defs,ooxml,\
 	$(writerfilter_debug_flags) \
 ))
 
-$(eval $(call gb_Library_add_api,ooxml,\
+$(eval $(call gb_Library_use_api,ooxml,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ooxml,\
+$(eval $(call gb_Library_use_libraries,ooxml,\
     comphelper \
     cppu \
     cppuhelper \

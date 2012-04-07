@@ -33,7 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_regression_test, \
     sw/qa/extras/regression-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_regression_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_regression_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -76,7 +76,7 @@ $(eval $(call gb_CppunitTest_set_include,sw_regression_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_regression_test,\
+$(eval $(call gb_CppunitTest_use_api,sw_regression_test,\
     offapi \
     oovbaapi \
     udkapi \
@@ -84,12 +84,12 @@ $(eval $(call gb_CppunitTest_add_api,sw_regression_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_regression_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_regression_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_regression_test,\
     oovbaapi \
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_regression_test,\
+$(eval $(call gb_CppunitTest_use_components,sw_regression_test,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

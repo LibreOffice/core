@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,sal_textenc))
 
 $(eval $(call gb_Library_set_soversion_script,sal_textenc,3,$(SRCDIR)/sal/util/sal_textenc/saltextenc.map))
 
-$(eval $(call gb_Library_add_linked_libs,sal_textenc,\
+$(eval $(call gb_Library_use_libraries,sal_textenc,\
 	sal \
 	$(gb_STDLIBS) \
 ))

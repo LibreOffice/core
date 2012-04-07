@@ -36,7 +36,7 @@ $(eval $(call gb_Library_set_include,cppcanvas,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,cppcanvas,\
+$(eval $(call gb_Library_use_api,cppcanvas,\
     offapi \
     udkapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_defs,cppcanvas,\
 	-DCPPCANVAS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,cppcanvas,\
+$(eval $(call gb_Library_use_libraries,cppcanvas,\
 	basegfx \
 	canvastools \
 	comphelper \

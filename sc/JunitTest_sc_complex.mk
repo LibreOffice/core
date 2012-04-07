@@ -36,7 +36,7 @@ $(eval $(call gb_JunitTest_add_classes,sc_complex, \
     complex.sc.CalcRTL \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,sc_complex, \
+$(eval $(call gb_JunitTest_use_jars,sc_complex, \
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/jurt.jar \
     $(OUTDIR)/bin/ridl.jar \

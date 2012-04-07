@@ -32,13 +32,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sax_cppunit, \
 	sax/qa/cppunit/test_converter \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sax_cppunit, \
+$(eval $(call gb_CppunitTest_use_libraries,sax_cppunit, \
 	sax \
 	sal \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sax_cppunit,\
+$(eval $(call gb_CppunitTest_use_api,sax_cppunit,\
     offapi \
     udkapi \
 ))

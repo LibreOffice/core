@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,mcnttype,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,mcnttype,\
+$(eval $(call gb_Library_use_api,mcnttype,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+$(eval $(call gb_Library_use_libraries,mcnttype,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -53,7 +53,7 @@ $(eval $(call gb_Library_add_exception_objects,mcnttype,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+$(eval $(call gb_Library_use_libraries,mcnttype,\
 	uwinapi \
 ))
 endif

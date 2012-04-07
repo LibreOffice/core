@@ -37,11 +37,11 @@ $(eval $(call gb_Library_add_defs,jvmaccess,\
     -DJVMACCESS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,jvmaccess,\
+$(eval $(call gb_Library_use_api,jvmaccess,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,jvmaccess,\
+$(eval $(call gb_Library_use_libraries,jvmaccess,\
     cppu \
     sal \
     salhelper \

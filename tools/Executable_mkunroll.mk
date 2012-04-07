@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_add_defs,mkunroll,\
     -D_TOOLS_STRINGLIST \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,mkunroll,\
+$(eval $(call gb_Executable_use_libraries,mkunroll,\
     basegfx \
     sal \
     tl \

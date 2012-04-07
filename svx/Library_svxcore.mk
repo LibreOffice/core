@@ -37,7 +37,7 @@ $(eval $(call gb_Library_add_package_headers,svxcore,\
     svx_sdi \
 ))
 
-$(eval $(call gb_Library_add_api,svxcore,\
+$(eval $(call gb_Library_use_api,svxcore,\
 	udkapi \
 	offapi \
 ))
@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_defs,svxcore,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
+$(eval $(call gb_Library_use_libraries,svxcore,\
     avmedia \
     basegfx \
     sb \

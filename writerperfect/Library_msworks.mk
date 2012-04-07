@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,msworks,\
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_add_api,msworks,\
+$(eval $(call gb_Library_use_api,msworks,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,msworks,\
+$(eval $(call gb_Library_use_libraries,msworks,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,msworks,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,msworks,\
+$(eval $(call gb_Library_use_static_libraries,msworks,\
 	writerperfect \
 ))
 

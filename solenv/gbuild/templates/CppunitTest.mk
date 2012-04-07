@@ -30,7 +30,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,MODULE_NAME))
 $(eval $(call gb_CppunitTest_add_exception_objects,MODULE_NAME, \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,MODULE_NAME, \
+$(eval $(call gb_CppunitTest_use_libraries,MODULE_NAME, \
 	$(gb_STDLIBS) \
 ))
 

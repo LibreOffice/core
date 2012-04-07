@@ -48,11 +48,11 @@ $(eval $(call gb_Library_set_include,bootstrap,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_internal_bootstrap_api,bootstrap,\
+$(eval $(call gb_Library_use_internal_bootstrap_api,bootstrap,\
     bootstrap \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,bootstrap,\
+$(eval $(call gb_Library_use_libraries,bootstrap,\
     cppu \
     cppuhelper \
     reg \

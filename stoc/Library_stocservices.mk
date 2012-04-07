@@ -42,11 +42,11 @@ $(eval $(call gb_Library_set_include,stocservices,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_internal_api,stocservices,\
+$(eval $(call gb_Library_use_internal_api,stocservices,\
     stocserv \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,stocservices,\
+$(eval $(call gb_Library_use_libraries,stocservices,\
     cppu \
     cppuhelper \
     sal \

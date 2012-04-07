@@ -63,12 +63,12 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/xmldata \
 ))
 
-$(eval $(call gb_Library_add_api,configmgr, \
+$(eval $(call gb_Library_use_api,configmgr, \
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,configmgr, \
+$(eval $(call gb_Library_use_libraries,configmgr, \
     comphelper \
     cppu \
     cppuhelper \

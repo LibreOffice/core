@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpr
     lotuswordpro/qa/cppunit/test_lotuswordpro \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
+$(eval $(call gb_CppunitTest_use_libraries,lotuswordpro_test_lotuswordpro, \
     comphelper \
     cppu \
     cppuhelper \
@@ -49,18 +49,18 @@ $(eval $(call gb_CppunitTest_set_include,lotuswordpro_test_lotuswordpro,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,lotuswordpro_test_lotuswordpro,\
+$(eval $(call gb_CppunitTest_use_api,lotuswordpro_test_lotuswordpro,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,lotuswordpro_test_lotuswordpro))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,lotuswordpro_test_lotuswordpro,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,lotuswordpro_test_lotuswordpro,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,lotuswordpro_test_lotuswordpro,\
+$(eval $(call gb_CppunitTest_use_components,lotuswordpro_test_lotuswordpro,\
     configmgr/source/configmgr \
     lotuswordpro/util/lwpfilter \
     ucb/source/core/ucb1 \

@@ -40,7 +40,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
 ))
 
-$(eval $(call gb_Library_add_api,xsec_xmlsec,\
+$(eval $(call gb_Library_use_api,xsec_xmlsec,\
 	udkapi \
 	offapi \
 ))
@@ -50,17 +50,17 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	xmlsec1 \
 ))
 else
-$(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_static_libraries,xsec_xmlsec,\
 	xmlsec1 \
 ))
 endif
 
 
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -98,11 +98,11 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_MSCRYPTO \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	xmlsec1-mscrypto \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	crypt32 \
 	advapi32 \
 ))
@@ -124,7 +124,7 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_NSS \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_static_libraries,xsec_xmlsec,\
 	xmlsec1-nss \
 ))
 
@@ -168,7 +168,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	-I$(OUTDIR)/inc/mozilla/nss \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	nspr4 \
 	nss3 \
 ))
@@ -176,7 +176,7 @@ $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
 endif # ifeq ($(SYSTEM_NSS),YES)
 
 ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	dl \
 ))
 endif

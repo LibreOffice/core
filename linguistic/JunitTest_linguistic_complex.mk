@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,linguistic_complex,\
 	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/linguistic/qa/complex/linguistic/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,linguistic_complex,\
+$(eval $(call gb_JunitTest_use_jars,linguistic_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

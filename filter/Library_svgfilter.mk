@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,svgfilter))
 
-$(eval $(call gb_Library_add_custom_headers,svgfilter,filter/source/svg))
+$(eval $(call gb_Library_use_custom_headers,svgfilter,filter/source/svg))
 
 $(eval $(call gb_Library_set_componentfile,svgfilter,filter/source/svg/svgfilter))
 
@@ -27,12 +27,12 @@ $(eval $(call gb_Library_add_defs,svgfilter,\
 	-DUSE_MODERN_SPIRIT \
 ))
 
-$(eval $(call gb_Library_add_api,svgfilter,\
+$(eval $(call gb_Library_use_api,svgfilter,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,svgfilter,\
+$(eval $(call gb_Library_use_libraries,svgfilter,\
 	svxcore \
 	editeng \
 	xo \

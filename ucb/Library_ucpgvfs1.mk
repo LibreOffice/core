@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,ucpgvfs1,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,ucpgvfs1,\
+$(eval $(call gb_Library_use_api,ucpgvfs1,\
 	offapi \
 	udkapi \
 ))
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_libs,ucpgvfs1,\
 	$(GNOMEVFS_LIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucpgvfs1,\
+$(eval $(call gb_Library_use_libraries,ucpgvfs1,\
 	cppu \
 	cppuhelper \
 	sal \

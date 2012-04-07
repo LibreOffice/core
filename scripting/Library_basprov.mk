@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,basprov,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,basprov,\
+$(eval $(call gb_Library_use_api,basprov,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,basprov,\
+$(eval $(call gb_Library_use_libraries,basprov,\
 	comphelper \
 	cppu \
 	cppuhelper \

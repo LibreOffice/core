@@ -31,7 +31,7 @@ $(eval $(call gb_JunitTest_add_classes,sc_unoapi, \
     org.openoffice.test.UnoApiTest \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,sc_unoapi, \
+$(eval $(call gb_JunitTest_use_jars,sc_unoapi, \
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/jurt.jar \
     $(OUTDIR)/bin/ridl.jar \

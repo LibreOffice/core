@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_defs,sdext_pdfimport,\
         $(dir $(call gb_Executable_get_target,xpdfimport)))\" \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sdext_pdfimport,\
+$(eval $(call gb_CppunitTest_use_api,sdext_pdfimport,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_CppunitTest_use_externals,sdext_pdfimport,\
     zlib \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sdext_pdfimport,\
+$(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
     comphelper \
     cppu \
     cppuhelper \
@@ -56,7 +56,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sdext_pdfimport,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_static_libs,sdext_pdfimport,\
+$(eval $(call gb_CppunitTest_use_static_libraries,sdext_pdfimport,\
     basegfx_s \
     pdfimport_s \
 ))
@@ -67,11 +67,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sdext_pdfimport))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sdext_pdfimport,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sdext_pdfimport,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sdext_pdfimport,\
+$(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     i18npool/util/i18npool \

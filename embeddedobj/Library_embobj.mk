@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,embobj,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,embobj,\
+$(eval $(call gb_Library_use_api,embobj,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,embobj,\
+$(eval $(call gb_Library_use_libraries,embobj,\
 	comphelper \
 	cppu \
 	cppuhelper \

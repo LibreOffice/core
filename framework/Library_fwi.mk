@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_defs,fwi,\
     -DFWI_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,fwi,\
+$(eval $(call gb_Library_use_api,fwi,\
 	udkapi \
 	offapi \
 ))
@@ -45,7 +45,7 @@ $(eval $(call gb_Library_set_include,fwi,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fwi,\
+$(eval $(call gb_Library_use_libraries,fwi,\
     comphelper \
     cppu \
     cppuhelper \
@@ -77,7 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,fwi,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,fwi,\
+$(eval $(call gb_Library_use_libraries,fwi,\
     advapi32 \
 ))
 endif

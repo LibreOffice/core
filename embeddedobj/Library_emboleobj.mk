@@ -40,12 +40,12 @@ $(eval $(call gb_Library_set_include,emboleobj,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,emboleobj,\
+$(eval $(call gb_Library_use_api,emboleobj,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,emboleobj,\
+$(eval $(call gb_Library_use_libraries,emboleobj,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -68,7 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,emboleobj,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_linked_libs,emboleobj,\
+$(eval $(call gb_Library_use_libraries,emboleobj,\
 	embobj \
 	gdi32 \
 	ole32 \

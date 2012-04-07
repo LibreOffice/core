@@ -31,12 +31,12 @@ $(eval $(call gb_Library_add_defs,subsequenttest,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))
 
-$(eval $(call gb_Library_add_api,subsequenttest,\
+$(eval $(call gb_Library_use_api,subsequenttest,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,subsequenttest,\
+$(eval $(call gb_Library_use_libraries,subsequenttest,\
     comphelper \
     cppu \
     cppuhelper \

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,PresenterScreen))
 
-$(eval $(call gb_Library_add_api,PresenterScreen,\
+$(eval $(call gb_Library_use_api,PresenterScreen,\
     offapi \
     udkapi \
 ))
@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_defs,PresenterScreen,\
     -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(PLATFORMID)\" \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,PresenterScreen,\
+$(eval $(call gb_Library_use_libraries,PresenterScreen,\
     cppu \
     cppuhelper \
     sal \

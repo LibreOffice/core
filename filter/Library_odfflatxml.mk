@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,odfflatxml))
 
 $(eval $(call gb_Library_set_componentfile,odfflatxml,filter/source/odfflatxml/odfflatxml))
 
-$(eval $(call gb_Library_add_api,odfflatxml,\
+$(eval $(call gb_Library_use_api,odfflatxml,\
 	udkapi \
 	offapi \
 ))
@@ -39,7 +39,7 @@ $(eval $(call gb_Library_set_include,odfflatxml,\
 	-I$(SRCDIR)/filter/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,odfflatxml,\
+$(eval $(call gb_Library_use_libraries,odfflatxml,\
 	xo \
 	tl \
 	ucbhelper \

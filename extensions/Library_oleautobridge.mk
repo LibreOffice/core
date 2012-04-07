@@ -31,7 +31,7 @@ $(eval $(call gb_Library_Library,oleautobridge))
 
 $(eval $(call gb_Library_set_componentfile,oleautobridge,extensions/source/ole/oleautobridge))
 
-$(eval $(call gb_Library_add_api,oleautobridge,\
+$(eval $(call gb_Library_use_api,oleautobridge,\
 	udkapi \
 	offapi \
 ))
@@ -41,7 +41,7 @@ $(eval $(call gb_Library_set_include,oleautobridge,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,oleautobridge,\
+$(eval $(call gb_Library_use_libraries,oleautobridge,\
 	cppuhelper \
 	cppu \
 	sal \

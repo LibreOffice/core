@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_subsequent_filters_test, \
     sc/qa/unit/subsequent_filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_subsequent_filters_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -75,18 +75,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_subsequent_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_subsequent_filters_test,\
+$(eval $(call gb_CppunitTest_use_api,sc_subsequent_filters_test,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_subsequent_filters_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_subsequent_filters_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_subsequent_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     chart2/source/controller/chartcontroller \
     chart2/source/tools/charttools \
     chart2/source/model/chartmodel \
@@ -125,11 +125,11 @@ $(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
 
 ifeq ($(ENABLE_XMLSEC),YES)
 ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec.windows \
 ))
 else
-$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec \
 ))
 endif

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,resourcemodel))
 
-$(eval $(call gb_Library_add_custom_headers,resourcemodel,writerfilter/source))
+$(eval $(call gb_Library_use_custom_headers,resourcemodel,writerfilter/source))
 
 $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
@@ -41,12 +41,12 @@ $(eval $(call gb_Library_add_defs,resourcemodel,\
 	$(writerfilter_debug_flags) \
 ))
 
-$(eval $(call gb_Library_add_api,resourcemodel,\
+$(eval $(call gb_Library_use_api,resourcemodel,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,resourcemodel,\
+$(eval $(call gb_Library_use_libraries,resourcemodel,\
     comphelper \
     cppu \
     cppuhelper \

@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,ucb1,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,ucb1,\
+$(eval $(call gb_Library_use_api,ucb1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucb1,\
+$(eval $(call gb_Library_use_libraries,ucb1,\
 	comphelper \
 	cppu \
 	cppuhelper \

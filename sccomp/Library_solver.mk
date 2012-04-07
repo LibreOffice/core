@@ -30,12 +30,12 @@ $(eval $(call gb_Library_Library,solver))
 
 $(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/solver))
 
-$(eval $(call gb_Library_add_api,solver,\
+$(eval $(call gb_Library_use_api,solver,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,solver,\
+$(eval $(call gb_Library_use_libraries,solver,\
 	comphelper \
 	cppu \
 	cppuhelper \

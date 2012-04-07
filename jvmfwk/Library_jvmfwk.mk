@@ -37,18 +37,18 @@ $(eval $(call gb_Library_add_defs,jvmfwk,\
     -DJVMFWK_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,jvmfwk,\
+$(eval $(call gb_Library_use_api,jvmfwk,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,jvmfwk,\
+$(eval $(call gb_Library_use_libraries,jvmfwk,\
     cppuhelper \
     sal \
 	$(gb_STDLIBS) \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,jvmfwk,\
+$(eval $(call gb_Library_use_libraries,jvmfwk,\
     advapi32 \
 ))
 endif

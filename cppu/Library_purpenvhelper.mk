@@ -38,12 +38,12 @@ $(eval $(call gb_Library_add_defs,purpenvhelper,\
 	-DPURPENV_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,purpenvhelper,\
+$(eval $(call gb_Library_use_api,purpenvhelper,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,purpenvhelper,\
+$(eval $(call gb_Library_use_libraries,purpenvhelper,\
 	cppu \
 	sal \
 	$(gb_STDLIBS) \

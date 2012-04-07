@@ -32,12 +32,12 @@ $(eval $(call gb_Library_set_include,spl,\
     -I$(SRCDIR)/desktop/inc \
 ))
 
-$(eval $(call gb_Library_add_api,spl,\
+$(eval $(call gb_Library_use_api,spl,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,spl,\
+$(eval $(call gb_Library_use_libraries,spl,\
     comphelper \
     cppu \
     cppuhelper \

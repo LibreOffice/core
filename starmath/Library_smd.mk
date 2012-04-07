@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,smd,\
 	-I$(SRCDIR)/starmath/inc \
 ))
 
-$(eval $(call gb_Library_add_api,smd,\
+$(eval $(call gb_Library_use_api,smd,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,smd,\
+$(eval $(call gb_Library_use_libraries,smd,\
 	cppu \
 	cppuhelper \
 	sal \

@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,editeng,\
+$(eval $(call gb_Library_use_api,editeng,\
 	udkapi \
 	offapi \
 ))
@@ -132,7 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
 
 # add libraries to be linked to editeng; again these names need to be given as
 # specified in Repository.mk
-$(eval $(call gb_Library_add_linked_libs,editeng,\
+$(eval $(call gb_Library_use_libraries,editeng,\
     xo \
     basegfx \
     lng \

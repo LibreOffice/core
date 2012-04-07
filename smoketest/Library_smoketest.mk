@@ -27,12 +27,12 @@
 
 $(eval $(call gb_Library_Library,smoketest))
 
-$(eval $(call gb_Library_add_api,smoketest,\
+$(eval $(call gb_Library_use_api,smoketest,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,smoketest,\
+$(eval $(call gb_Library_use_libraries,smoketest,\
 	cppu \
 	cppuhelper \
 	sal \

@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,cached1))
 
 $(eval $(call gb_Library_set_componentfile,cached1,ucb/source/cacher/cached1))
 
-$(eval $(call gb_Library_add_api,cached1,\
+$(eval $(call gb_Library_use_api,cached1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,cached1,\
+$(eval $(call gb_Library_use_libraries,cached1,\
 	cppu \
 	cppuhelper \
 	sal \

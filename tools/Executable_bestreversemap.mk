@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_set_include,bestreversemap,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,bestreversemap,\
+$(eval $(call gb_Executable_use_libraries,bestreversemap,\
 	sal \
 	$(gb_STDLIBS) \
 ))

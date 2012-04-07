@@ -31,7 +31,7 @@ $(eval $(call gb_Library_add_nativeres,fps,fps/src))
 
 $(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
 
-$(eval $(call gb_Library_add_api,fps,\
+$(eval $(call gb_Library_use_api,fps,\
 	offapi \
 	udkapi \
 ))
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_defs,fps,\
 	-D_WIN32_WINNT=0x0600 \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fps,\
+$(eval $(call gb_Library_use_libraries,fps,\
 	comphelper \
 	cppu \
 	cppuhelper \

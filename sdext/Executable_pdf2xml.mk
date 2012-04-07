@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Executable_Executable,pdf2xml))
 
-$(eval $(call gb_Executable_add_api,pdf2xml,\
+$(eval $(call gb_Executable_use_api,pdf2xml,\
     offapi \
     udkapi \
 ))
@@ -41,7 +41,7 @@ $(eval $(call gb_Executable_set_include,pdf2xml,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,pdf2xml,\
+$(eval $(call gb_Executable_use_libraries,pdf2xml,\
     basegfx \
     comphelper \
     cppu \
@@ -49,7 +49,7 @@ $(eval $(call gb_Executable_add_linked_libs,pdf2xml,\
     sal \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,pdf2xml,\
+$(eval $(call gb_Executable_use_static_libraries,pdf2xml,\
     pdfimport_s \
 ))
 

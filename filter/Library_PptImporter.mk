@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,PptImporter))
 
-$(eval $(call gb_Library_add_api,PptImporter,\
+$(eval $(call gb_Library_use_api,PptImporter,\
 	udkapi \
 	offapi \
 ))
@@ -28,7 +28,7 @@ $(eval $(call gb_Library_set_include,PptImporter,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,PptImporter,\
+$(eval $(call gb_Library_use_libraries,PptImporter,\
 	sot \
 	tl \
 	cppuhelper \

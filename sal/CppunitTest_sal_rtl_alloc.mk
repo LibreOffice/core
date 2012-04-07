@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_alloc,\
     sal/qa/rtl/alloc/rtl_alloc \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_alloc,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_alloc,\
     sal \
     $(gb_STDLIBS) \
 ))

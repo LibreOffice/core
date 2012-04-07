@@ -27,7 +27,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,ulingu))
 
-$(eval $(call gb_StaticLibrary_add_api,ulingu,\
+$(eval $(call gb_StaticLibrary_use_api,ulingu,\
 	udkapi \
 	offapi \
 ))

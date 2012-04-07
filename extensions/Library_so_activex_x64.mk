@@ -32,7 +32,7 @@ $(eval $(call gb_Library_Library,so_activex_x64))
 
 $(eval $(call gb_Library_set_x64,so_activex_x64,YES))
 
-$(eval $(call gb_Library_add_custom_headers,so_activex_x64,extensions/source/activex/idl))
+$(eval $(call gb_Library_use_custom_headers,so_activex_x64,extensions/source/activex/idl))
 
 $(eval $(call gb_Library_set_include,so_activex_x64,\
 	$$(INCLUDE) \
@@ -40,7 +40,7 @@ $(eval $(call gb_Library_set_include,so_activex_x64,\
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))
 
-$(eval $(call gb_Library_add_api,so_activex_x64,\
+$(eval $(call gb_Library_use_api,so_activex_x64,\
 	offapi \
 	udkapi \
 ))
@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_ldflags,so_activex_x64,\
 	/DEF:$(call gb_Helper_convert_native,$(SRCDIR)/extensions/source/activex/so_activex.def) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,so_activex_x64,\
+$(eval $(call gb_Library_use_libraries,so_activex_x64,\
 	uuid \
 	advapi32 \
 	ole32 \

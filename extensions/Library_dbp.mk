@@ -42,7 +42,7 @@ $(eval $(call gb_Library_add_defs,dbp,\
 	-DCOMPMOD_NAMESPACE=dbp \
 ))
 
-$(eval $(call gb_Library_add_api,dbp,\
+$(eval $(call gb_Library_use_api,dbp,\
 	offapi \
 	udkapi \
 ))
@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,dbp,\
 	extensions/source/dbpilots/wizardservices \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbp,\
+$(eval $(call gb_Library_use_libraries,dbp,\
 	svt \
 	vcl \
 	tl \

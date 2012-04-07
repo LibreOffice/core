@@ -33,7 +33,7 @@ svl/qa/unit/test_lngmisc \
 ))
 
 # add a list of all needed libraries here
-$(eval $(call gb_CppunitTest_add_linked_libs,svl_lngmisc, \
+$(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \
     cppu \
     cppuhelper \
     sal \
@@ -43,7 +43,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,svl_lngmisc, \
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_CppunitTest_add_linked_libs,svl_lngmisc, \
+$(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \
 	oleaut32 \
 ))
 endif

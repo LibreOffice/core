@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,dict_ja))
 
-$(eval $(call gb_Library_add_linked_libs,dict_ja,\
+$(eval $(call gb_Library_use_libraries,dict_ja,\
     $(gb_STDLIBS) \
 ))
 

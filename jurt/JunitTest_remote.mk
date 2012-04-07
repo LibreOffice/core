@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_remote))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_remote,\
+$(eval $(call gb_JunitTest_use_jars,jurt_remote,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_remote,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_remote,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_remote,\
     jurt/test/com/sun/star/lib/uno/environments/remote/JavaThreadPoolFactory_Test \

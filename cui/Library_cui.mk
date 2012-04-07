@@ -40,12 +40,12 @@ $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
 ))
 
-$(eval $(call gb_Library_add_api,cui,\
+$(eval $(call gb_Library_use_api,cui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,cui,\
+$(eval $(call gb_Library_use_libraries,cui,\
     avmedia \
     basegfx \
     comphelper \
@@ -78,7 +78,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,cui,\
+$(eval $(call gb_Library_use_libraries,cui,\
     advapi32 \
     shlwapi \
 ))

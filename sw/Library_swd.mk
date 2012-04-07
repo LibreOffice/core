@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(SRCDIR)/sw/source/ui/inc \
 ))
 
-$(eval $(call gb_Library_add_api,swd,\
+$(eval $(call gb_Library_use_api,swd,\
 	udkapi \
 	offapi \
 ))
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,swd,\
     -DSWD_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,swd,\
+$(eval $(call gb_Library_use_libraries,swd,\
     comphelper \
     cppu \
     cppuhelper \

@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,cairocanvas,\
+$(eval $(call gb_Library_use_api,cairocanvas,\
     offapi \
     udkapi \
 ))
@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_cxxflags,cairocanvas,\
 
 endif
 
-$(eval $(call gb_Library_add_linked_libs,cairocanvas,\
+$(eval $(call gb_Library_use_libraries,cairocanvas,\
 	sal \
 	cppu \
 	basegfx \
@@ -99,7 +99,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_win32_cairo \
 ))
-$(eval $(call gb_Library_add_linked_libs,cairocanvas,\
+$(eval $(call gb_Library_use_libraries,cairocanvas,\
 	gdi32 \
 ))
 
@@ -115,7 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 ))
 
 # freetype? fontconfig? -> test on Solaris
-$(eval $(call gb_Library_add_linked_libs,cairocanvas,\
+$(eval $(call gb_Library_use_libraries,cairocanvas,\
 	X11 \
 	Xrender \
 ))

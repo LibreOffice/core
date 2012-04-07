@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,unoexceptionprotector))
 
 $(eval $(call gb_Library_add_package_headers,unoexceptionprotector,unotest_inc))
 
-$(eval $(call gb_Library_add_api,unoexceptionprotector,\
+$(eval $(call gb_Library_use_api,unoexceptionprotector,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,unoexceptionprotector,\
+$(eval $(call gb_Library_use_libraries,unoexceptionprotector,\
 	cppu \
 	cppuhelper \
 	sal \

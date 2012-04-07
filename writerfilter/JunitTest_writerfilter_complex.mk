@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,writerfilter_complex,\
 	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/writerfilter/qa/complex/ooxml/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,writerfilter_complex,\
+$(eval $(call gb_JunitTest_use_jars,writerfilter_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

@@ -31,7 +31,7 @@ $(eval $(call gb_Executable_add_defs,kdefilepicker,\
 	$(KDE_CFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,kdefilepicker,\
+$(eval $(call gb_Executable_use_libraries,kdefilepicker,\
 	sal \
 	$(gb_STDLIBS) \
 ))

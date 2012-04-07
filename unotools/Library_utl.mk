@@ -47,14 +47,14 @@ $(eval $(call gb_Library_add_defs,utl,\
     -DUNOTOOLS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,utl,\
+$(eval $(call gb_Library_use_api,utl,\
     offapi \
     udkapi \
 ))
 
 # add libraries to be linked to utl; again these names need to be given as
 # specified in Repository.mk
-$(eval $(call gb_Library_add_linked_libs,utl,\
+$(eval $(call gb_Library_use_libraries,utl,\
     comphelper \
     cppu \
     cppuhelper \

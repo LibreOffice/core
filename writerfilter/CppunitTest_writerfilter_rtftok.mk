@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
 	writerfilter/qa/cppunittests/rtftok/testrtftok \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_rtftok, \
+$(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -47,18 +47,18 @@ $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_rtftok, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,writerfilter_rtftok,\
+$(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
 	offapi \
 	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,writerfilter_rtftok))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,writerfilter_rtftok,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,writerfilter_rtftok,\
 	types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,writerfilter_rtftok,\
+$(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	configmgr/source/configmgr \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \

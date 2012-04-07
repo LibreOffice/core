@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,visioimport,\
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_add_api,visioimport,\
+$(eval $(call gb_Library_use_api,visioimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,visioimport,\
+$(eval $(call gb_Library_use_libraries,visioimport,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -51,7 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,visioimport,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,visioimport,\
+$(eval $(call gb_Library_use_static_libraries,visioimport,\
 	writerperfect \
 ))
 

@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,xsltfilter))
 
 $(eval $(call gb_Library_set_componentfile,xsltfilter,filter/source/xsltfilter/xsltfilter))
 
-$(eval $(call gb_Library_add_api,xsltfilter,\
+$(eval $(call gb_Library_use_api,xsltfilter,\
 	udkapi \
 	offapi \
 ))
@@ -30,7 +30,7 @@ $(eval $(call gb_Library_set_include,xsltfilter,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsltfilter,\
+$(eval $(call gb_Library_use_libraries,xsltfilter,\
 	xo \
 	tl \
 	package2 \

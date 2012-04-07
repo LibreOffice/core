@@ -30,12 +30,12 @@ $(eval $(call gb_Library_Library,uui))
 
 $(eval $(call gb_Library_set_componentfile,uui,uui/util/uui))
 
-$(eval $(call gb_Library_add_api,uui,\
+$(eval $(call gb_Library_use_api,uui,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,uui,\
+$(eval $(call gb_Library_use_libraries,uui,\
 	comphelper \
 	cppu \
 	cppuhelper \

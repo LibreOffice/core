@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,xsltdlg))
 
 $(eval $(call gb_Library_set_componentfile,xsltdlg,filter/source/xsltdialog/xsltdlg))
 
-$(eval $(call gb_Library_add_api,xsltdlg,\
+$(eval $(call gb_Library_use_api,xsltdlg,\
 	udkapi \
 	offapi \
 ))
@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_include,xsltdlg,\
 	-I$(SRCDIR)/filter/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsltdlg,\
+$(eval $(call gb_Library_use_libraries,xsltdlg,\
 	sfx \
 	svt \
 	tk \

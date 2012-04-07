@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,fax))
 
-$(eval $(call gb_Jar_add_jars,fax,\
+$(eval $(call gb_Jar_use_jars,fax,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

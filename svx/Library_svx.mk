@@ -36,7 +36,7 @@ $(eval $(call gb_Library_set_include,svx,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,svx,\
+$(eval $(call gb_Library_use_api,svx,\
 	udkapi \
 	offapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,svx,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,svx,\
+$(eval $(call gb_Library_use_libraries,svx,\
     basegfx \
     sb \
     comphelper \
@@ -224,7 +224,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ))
 else
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,svx,\
+$(eval $(call gb_Library_use_libraries,svx,\
     advapi32 \
 ))
 $(eval $(call gb_Library_add_exception_objects,svx,\

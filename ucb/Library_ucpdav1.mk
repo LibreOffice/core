@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,ucpdav1))
 
 $(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
 
-$(eval $(call gb_Library_add_api,ucpdav1,\
+$(eval $(call gb_Library_use_api,ucpdav1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucpdav1,\
+$(eval $(call gb_Library_use_libraries,ucpdav1,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -75,13 +75,13 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,ucpdav1,\
+$(eval $(call gb_Library_use_libraries,ucpdav1,\
 	ws2_32 \
 ))
 endif
 
 ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_add_linked_libs,ucpdav1,\
+$(eval $(call gb_Library_use_libraries,ucpdav1,\
 	dl \
 	nsl \
 	socket \

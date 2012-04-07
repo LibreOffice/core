@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,msword))
 
 $(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
 
-$(eval $(call gb_Library_add_external_headers,msword,writerfilter_sprmids))
+$(eval $(call gb_Library_use_package,msword,writerfilter_sprmids))
 
 $(eval $(call gb_Library_set_include,msword,\
     -I$(SRCDIR)/sw/source/core/inc \
@@ -40,12 +40,12 @@ $(eval $(call gb_Library_set_include,msword,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,msword,\
+$(eval $(call gb_Library_use_api,msword,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,msword,\
+$(eval $(call gb_Library_use_libraries,msword,\
     basegfx \
     comphelper \
     cppu \

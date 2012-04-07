@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangeobj, \
     sc/qa/extras/scnamedrangeobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_namedrangeobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_namedrangeobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -78,18 +78,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_namedrangeobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_namedrangeobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_namedrangeobj,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_namedrangeobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_namedrangeobj,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_namedrangeobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_namedrangeobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_namedrangeobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

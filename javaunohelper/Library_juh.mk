@@ -36,11 +36,11 @@ $(eval $(call gb_Library_set_include,juh,\
     -I$(WORKDIR)/CustomTarget/javaunohelper/cppumaker \
 ))
 
-$(eval $(call gb_Library_add_api,juh,\
+$(eval $(call gb_Library_use_api,juh,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,juh,\
+$(eval $(call gb_Library_use_libraries,juh,\
     sal \
     $(gb_STDLIBS) \
 ))

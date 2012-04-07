@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_tcwf,\
     sal/qa/osl/file/test_cpy_wrt_file \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_tcwf,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_tcwf,\
     sal \
     $(gb_STDLIBS) \
 ))

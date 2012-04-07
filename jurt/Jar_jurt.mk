@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Jar_Jar,jurt))
 
-$(eval $(call gb_Jar_add_jars,jurt,\
+$(eval $(call gb_Jar_use_jars,jurt,\
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/unoloader.jar \
 ))

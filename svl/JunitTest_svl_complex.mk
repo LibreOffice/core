@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,svl_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svl/qa/complex/broken_document/test_documents \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,svl_complex,\
+$(eval $(call gb_JunitTest_use_jars,svl_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

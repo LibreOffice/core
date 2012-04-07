@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,expwrap,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_add_api,expwrap,\
+$(eval $(call gb_Library_use_api,expwrap,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,expwrap,\
+$(eval $(call gb_Library_use_libraries,expwrap,\
 	cppu \
 	cppuhelper \
 	sal \

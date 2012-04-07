@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,wpgimport,\
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_add_api,wpgimport,\
+$(eval $(call gb_Library_use_api,wpgimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,wpgimport,\
+$(eval $(call gb_Library_use_libraries,wpgimport,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -51,7 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,wpgimport,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,wpgimport,\
+$(eval $(call gb_Library_use_static_libraries,wpgimport,\
 	writerperfect \
 ))
 

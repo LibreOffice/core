@@ -32,7 +32,7 @@ $(eval $(call gb_JunitTest_set_defs,unotools_complex,\
 	$$(DEFS) \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,unotools_complex,\
+$(eval $(call gb_JunitTest_use_jars,unotools_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

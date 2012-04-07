@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,fpicker))
 
 $(eval $(call gb_Library_set_componentfile,fpicker,fpicker/source/generic/fpicker))
 
-$(eval $(call gb_Library_add_api,fpicker,\
+$(eval $(call gb_Library_use_api,fpicker,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fpicker,\
+$(eval $(call gb_Library_use_libraries,fpicker,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -45,7 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,fpicker,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_static_libs,fpicker,\
+$(eval $(call gb_Library_use_static_libraries,fpicker,\
 	odma_lib \
 ))
 endif

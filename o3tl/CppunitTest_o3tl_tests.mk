@@ -30,7 +30,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,o3tl_tests))
 
 $(eval $(call gb_CppunitTest_add_package_headers,o3tl_tests,o3tl_inc))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,o3tl_tests,\
+$(eval $(call gb_CppunitTest_use_libraries,o3tl_tests,\
 	sal \
     $(gb_STDLIBS) \
 ))

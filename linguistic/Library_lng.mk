@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,lng,\
 	-I$(SRCDIR)/linguistic/inc \
 ))
 
-$(eval $(call gb_Library_add_api,lng,\
+$(eval $(call gb_Library_use_api,lng,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,lng,\
 	-DLNG_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,lng,\
+$(eval $(call gb_Library_use_libraries,lng,\
 	comphelper \
 	cppu \
 	cppuhelper \

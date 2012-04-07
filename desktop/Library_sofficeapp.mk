@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
-$(eval $(call gb_Library_add_api,sofficeapp,\
+$(eval $(call gb_Library_use_api,sofficeapp,\
     offapi \
     udkapi \
 ))
@@ -47,7 +47,7 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sofficeapp,\
+$(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \
     cppu \
     cppuhelper \

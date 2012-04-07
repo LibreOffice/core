@@ -28,7 +28,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,headless))
 
-$(eval $(call gb_StaticLibrary_add_api,headless,\
+$(eval $(call gb_StaticLibrary_use_api,headless,\
     offapi \
     udkapi \
 ))

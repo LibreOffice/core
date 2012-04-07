@@ -37,7 +37,7 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
-$(eval $(call gb_Library_add_api,sfx,\
+$(eval $(call gb_Library_use_api,sfx,\
 	udkapi \
 	offapi \
 ))
@@ -62,7 +62,7 @@ $(eval $(call gb_Library_add_defs,sfx,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,sfx,\
+$(eval $(call gb_Library_use_libraries,sfx,\
     comphelper \
     cppu \
     cppuhelper \
@@ -259,7 +259,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \
 ))
-$(eval $(call gb_Library_add_linked_libs,sfx,\
+$(eval $(call gb_Library_use_libraries,sfx,\
     objc \
     Cocoa \
 ))
@@ -276,7 +276,7 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -UPRECOMPILED_HEADERS \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sfx,\
+$(eval $(call gb_Library_use_libraries,sfx,\
     gdi32 \
     advapi32 \
     ole32 \

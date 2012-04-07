@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_getsystempathfromfile
     sal/qa/osl/getsystempathfromfileurl/test-getsystempathfromfileurl \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_getsystempathfromfileurl,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_osl_getsystempathfromfileurl,\
     sal \
     $(gb_STDLIBS) \
 ))

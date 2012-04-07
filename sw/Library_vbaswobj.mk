@@ -38,13 +38,13 @@ $(eval $(call gb_Library_set_include,vbaswobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,vbaswobj,\
+$(eval $(call gb_Library_use_api,vbaswobj,\
 	udkapi \
 	offapi \
 	oovbaapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vbaswobj,\
+$(eval $(call gb_Library_use_libraries,vbaswobj,\
     comphelper \
     cppu \
     cppuhelper \

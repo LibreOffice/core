@@ -29,7 +29,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,officecfg_cppheader_test))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,officecfg_cppheader_test,\
+$(eval $(call gb_CppunitTest_use_libraries,officecfg_cppheader_test,\
     $(gb_STDLIBS) \
 ))
 
@@ -37,7 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,officecfg_cppheader_test, \
     officecfg/qa/cppheader \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,officecfg_cppheader_test, \
+$(eval $(call gb_CppunitTest_use_api,officecfg_cppheader_test, \
     udkapi \
 ))
 

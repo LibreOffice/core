@@ -31,12 +31,12 @@ $(eval $(call gb_Library_set_include,hwp,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,hwp,\
+$(eval $(call gb_Library_use_api,hwp,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,hwp,\
+$(eval $(call gb_Library_use_libraries,hwp,\
     comphelper \
     cppu \
     cppuhelper \
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_use_external,hwp,zlib))
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_linked_libs,hwp,\
+$(eval $(call gb_Library_use_libraries,hwp,\
     ole32 \
     uuid \
 ))

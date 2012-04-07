@@ -44,7 +44,7 @@ endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
-$(eval $(call gb_Library_add_custom_headers,vcl,vcl/generic/fontmanager))
+$(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
@@ -58,12 +58,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 ))
 
-$(eval $(call gb_Library_add_api,vcl,\
+$(eval $(call gb_Library_use_api,vcl,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     tl \
     utl \
     sot \
@@ -79,7 +79,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 
 ifneq ($(OS),IOS)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     jvmaccess \
 ))
 endif
@@ -288,7 +288,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
 else
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     version \
 ))
 endif
@@ -383,7 +383,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/window/salmenu \
     vcl/aqua/source/window/salobj \
 ))
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -464,7 +464,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_headless_code) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
 	basebmp \
 ))
 
@@ -495,7 +495,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_headless_code) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
 	basebmp \
 ))
 
@@ -563,7 +563,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salobj \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     advapi32 \
     gdi32 \
     gdiplus \
@@ -588,7 +588,7 @@ endif
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
+$(eval $(call gb_Library_use_libraries,vcl,\
     dl \
     m \
     pthread \
@@ -608,7 +608,7 @@ endif
 endif
 
 ifneq ($(OS),IOS)
-$(eval $(call gb_Library_add_linked_static_libs,vcl,\
+$(eval $(call gb_Library_use_static_libraries,vcl,\
     vclmain \
 ))
 endif

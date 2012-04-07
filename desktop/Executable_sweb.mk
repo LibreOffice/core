@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_add_defs,sweb,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,sweb,\
+$(eval $(call gb_Executable_use_libraries,sweb,\
     $(gb_STDLIBS) \
 ))
 

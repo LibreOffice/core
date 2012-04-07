@@ -45,7 +45,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basebmp_test, \
 	basebmp/test/tools \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,basebmp_test, \
+$(eval $(call gb_CppunitTest_use_libraries,basebmp_test, \
 	basebmp \
 	basegfx \
 	sal \

@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,comphelper_complex,\
     comphelper/qa/complex/comphelper/SequenceOutputStreamUnitTest \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,comphelper_complex,\
+$(eval $(call gb_JunitTest_use_jars,comphelper_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

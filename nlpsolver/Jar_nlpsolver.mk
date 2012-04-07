@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,nlpsolver))
 
-$(eval $(call gb_Jar_add_jars,nlpsolver,\
+$(eval $(call gb_Jar_use_jars,nlpsolver,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

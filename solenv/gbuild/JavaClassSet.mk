@@ -106,9 +106,14 @@ $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $(2)
 
 endef
 
+define gb_JavaClassSet_add_jar
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_jar: use gb_JavaClassSet_use_jar instead.)
+endef
+
 # problem: currently we can't get these dependencies to work
 # build order dependency is a hack to get these prerequisites out of the way in the build command
-define gb_JavaClassSet_add_jar
+define gb_JavaClassSet_use_jar
 $(call gb_JavaClassSet_get_target,$(1)) : $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
@@ -118,27 +123,47 @@ endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_system_jar: use gb_JavaClassSet_use_system_jar instead.)
+endef
+
+define gb_JavaClassSet_use_system_jar
 $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(strip $(2))
 
 endef
 
 define gb_JavaClassSet_add_jars
-$(foreach jar,$(2),$(call gb_JavaClassSet_add_jar,$(1),$(jar)))
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_jars: use gb_JavaClassSet_use_jars instead.)
+endef
+
+define gb_JavaClassSet_use_jars
+$(foreach jar,$(2),$(call gb_JavaClassSet_use_jar,$(1),$(jar)))
 
 endef
 
 define gb_JavaClassSet_add_system_jars
-$(foreach jar,$(2),$(call gb_JavaClassSet_add_system_jar,$(1),$(jar)))
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_system_jars: use gb_JavaClassSet_use_system_jars instead.)
+endef
+
+define gb_JavaClassSet_use_system_jars
+$(foreach jar,$(2),$(call gb_JavaClassSet_use_system_jar,$(1),$(jar)))
 
 endef
 
-# gb_JavaClassSet_add_jar_classset: Like gb_JavaClassSet_add_jar, but instead of
+define gb_JavaClassSet_add_jar_classset
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_jar_classset: use gb_JavaClassSet_use_jar_classset instead.)
+endef
+
+# gb_JavaClassSet_use_jar_classset: Like gb_JavaClassSet_use_jar, but instead of
 # using the jar, use the directory tree with the class files that make up the
 # jar.  This is sometimes necessary in JunitTests that have test classes in
 # packages that belong to a sealed jar.
 # $1: token identifying this JavaClassSet
 # $2: token identifying the Jar being used
-define gb_JavaClassSet_add_jar_classset
+define gb_JavaClassSet_use_jar_classset
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
 $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$(gb_CLASSPATHSEP))$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2)))
@@ -160,14 +185,24 @@ $(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
 endef
 
 define gb_JavaClassSet_add_customtarget_dependency
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_customtarget_dependency: use gb_JavaClassSet_use_customtarget instead.)
+endef
+
+define gb_JavaClassSet_use_customtarget
 $(call gb_JavaClassSet_get_preparation_target,$(1)) : \
 	$(call gb_CustomTarget_get_target,$(2))
 
 endef
 
 define gb_JavaClassSet_add_package_dependency
+$$(call gb_Output_error,\
+ gb_JavaClassSet_add_package_dependency: use gb_JavaClassSet_use_package instead.)
+endef
+
+define gb_JavaClassSet_use_package
 $(call gb_JavaClassSet_get_preparation_target,$(1)) : \
-	$(call gb_Package_get_target,$(2))
+       $(call gb_Package_get_target,$(2))
 
 endef
 

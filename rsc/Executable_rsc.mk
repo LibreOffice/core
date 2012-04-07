@@ -34,7 +34,7 @@ $(eval $(call gb_Executable_set_include,rsc,\
 	-I$(WORKDIR)/YaccTarget/rsc/source/parser \
 ))
 
-$(eval $(call gb_Executable_add_api,rsc,\
+$(eval $(call gb_Executable_use_api,rsc,\
 	udkapi \
 	offapi \
 ))
@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_add_defs,rsc,\
 	-DSOLAR \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,rsc,\
+$(eval $(call gb_Executable_use_libraries,rsc,\
 	i18nisolang1 \
 	comphelper \
 	sal \

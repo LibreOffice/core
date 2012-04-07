@@ -43,7 +43,7 @@ gb_LinkTarget__use_Mesa:=
 else
 
 define gb_LinkTarget__use_Mesa
-$(eval $(call gb_LinkTarget_add_external_headers,$(1),Mesa_inc))
+$(eval $(call gb_LinkTarget_use_package,$(1),Mesa_inc))
 endef
 
 endif
@@ -69,7 +69,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 
 define gb_LinkTarget__use_cppunit
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
     cppunit \
 )
 
@@ -94,7 +94,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_zlib
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	zlib \
 )
 
@@ -125,7 +125,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/external/jpeg \
 )
 
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	jpeglib \
 )
 
@@ -163,7 +163,7 @@ $(if $(filter-out ascii_expat_xmlparse,$(2)),\
 		-DXML_UNICODE \
 ))
 
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
 	expat_xmltok \
 )
@@ -209,7 +209,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc/hunspell \
 )
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
 )
 
@@ -236,7 +236,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_cmis
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	cmislib \
 )
 
@@ -270,11 +270,11 @@ endif
 
 define gb_LinkTarget__use_libexttextcat
 ifeq ($(OS),WNT)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	libexttextcat \
 )
 else
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	exttextcat \
 )
 endif
@@ -305,7 +305,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 define gb_LinkTarget__use_libxml2
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	xml2 \
 )
 
@@ -332,7 +332,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_libxslt
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	xslt \
 )
 
@@ -373,7 +373,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	neon \
 )
 
@@ -403,7 +403,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_librdf
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	rdf \
 )
 
@@ -448,7 +448,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/cairo \
 	$(FREETYPE_CFLAGS) \
 )
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	cairo \
 )
 ifneq ($(OS),WNT)
@@ -457,7 +457,7 @@ $(call gb_LinkTarget_add_static_libs,$(1),\
 	pixman-1 \
 )
 else
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	pixman-1 \
 )
 endif
@@ -502,7 +502,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	graphite2_off \
 ))
 define gb_LinkTarget__use_graphite
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
     graphite2_off \
 )
 
@@ -553,13 +553,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_icudt
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icudt \
 )
 
 endef
 define gb_LinkTarget__use_icuin
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icuin \
 )
 
@@ -574,13 +574,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_icudata
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icudata$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icui18n
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icui18n$(gb_ICU_suffix) \
 )
 
@@ -588,19 +588,19 @@ endef
 endif
 
 define gb_LinkTarget__use_icule
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icule$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icutu
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icutu$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icuuc
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	icuuc$(gb_ICU_suffix) \
 )
 
@@ -636,17 +636,17 @@ endif
 
 define gb_LinkTarget__use_openssl
 ifeq ($(OS),WNT)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	crypto \
 	ssl \
 )
 else
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	crypto \
 	ssl \
 )
 ifeq ($(OS),SOLARIS)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	nsl \
 	socket \
 )
@@ -676,7 +676,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_cdr
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	cdrlib \
 )
 
@@ -703,7 +703,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_visio
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	visiolib \
 )
 
@@ -730,7 +730,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_wpd
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	wpdlib \
 )
 
@@ -757,7 +757,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_wpg
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	wpglib \
 )
 
@@ -784,7 +784,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_wps
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	wpslib \
 )
 
@@ -811,7 +811,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lcms2
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	lcms2 \
 )
 
@@ -834,7 +834,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lpsolve55
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	lpsolve55 \
 )
 
@@ -951,11 +951,11 @@ endif
 
 define gb_LinkTarget__use_berkeleydb
 ifneq ($(OS),WNT)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	db-4.7 \
 )
 else
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	db47 \
 )
 endif
@@ -985,7 +985,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 
 define gb_LinkTarget__use_png
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	png \
 )
 
@@ -1012,7 +1012,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_curl
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	curl \
 )
 
@@ -1098,18 +1098,18 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	fofi \
 	Goo \
 	xpdf \
 )
 
 ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	objc \
 )
 else ifeq ($(OS),WNT)
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	advapi32 \
 	gdi32 \
 )
@@ -1141,7 +1141,7 @@ endef
 else # !SYSTEM_CLUCENE
 
 define gb_LinkTarget__use_clucene
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
 	clucene \
 )
 
@@ -1253,7 +1253,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 
 define gb_LinkTarget__use_plc4
-$(call gb_LinkTarget_add_linked_libs,$(1),\
+$(call gb_LinkTarget_use_libraries,$(1),\
     plc4 \
 )
 
@@ -1266,13 +1266,13 @@ endif
 ifeq ($(SYSTEM_SAXON),YES)
 
 define gb_JavaClassSet__use_saxon
-$(call gb_JavaClassSet_add_system_jar,$(1),$(SAXON_JAR))
+$(call gb_JavaClassSet_use_system_jar,$(1),$(SAXON_JAR))
 endef
 
 else # !SYSTEM_SAXON
 
 define gb_JavaClassSet__use_saxon
-$(call gb_JavaClassSet_add_jar,$(1),$(OUTDIR)/bin/saxon9.jar)
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/saxon9.jar)
 endef
 
 endif # SYSTEM_SAXON
@@ -1280,13 +1280,13 @@ endif # SYSTEM_SAXON
 ifeq ($(SYSTEM_BSH),YES)
 
 define gb_JavaClassSet__use_bsh
-$(call gb_JavaClassSet_add_system_jar,$(1),$(BSH_JAR))
+$(call gb_JavaClassSet_use_system_jar,$(1),$(BSH_JAR))
 endef
 
 else # !SYSTEM_BSH
 
 define gb_JavaClassSet__use_bsh
-$(call gb_JavaClassSet_add_jar,$(1),$(OUTDIR)/bin/bsh.jar)
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/bsh.jar)
 endef
 
 endif # SYSTEM_BSH

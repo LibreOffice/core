@@ -36,12 +36,12 @@ $(eval $(call gb_Library_set_include,i18nsearch,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,i18nsearch,\
+$(eval $(call gb_Library_use_api,i18nsearch,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,i18nsearch,\
+$(eval $(call gb_Library_use_libraries,i18nsearch,\
 	cppu \
 	cppuhelper \
 	i18nregexp \

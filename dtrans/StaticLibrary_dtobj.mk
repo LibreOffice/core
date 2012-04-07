@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_set_include,dtobj,\
 	-I$(SRCDIR)/solenv/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_add_api,dtobj,\
+$(eval $(call gb_StaticLibrary_use_api,dtobj,\
 	udkapi \
 	offapi \
 ))

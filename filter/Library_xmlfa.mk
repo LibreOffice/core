@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,xmlfa))
 
 $(eval $(call gb_Library_set_componentfile,xmlfa,filter/source/xmlfilteradaptor/xmlfa))
 
-$(eval $(call gb_Library_add_api,xmlfa,\
+$(eval $(call gb_Library_use_api,xmlfa,\
 	udkapi \
 	offapi \
 ))
@@ -30,7 +30,7 @@ $(eval $(call gb_Library_set_include,xmlfa,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xmlfa,\
+$(eval $(call gb_Library_use_libraries,xmlfa,\
 	tl \
 	comphelper \
 	cppuhelper \

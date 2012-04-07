@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,uwinapi))
 
-$(eval $(call gb_Library_add_linked_libs,uwinapi,\
+$(eval $(call gb_Library_use_libraries,uwinapi,\
 	$(if $(filter $(COM),MSC), \
 		kernel32 \
 		msvcrt \

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Jar_Jar,java_accessibility))
 
-$(eval $(call gb_Jar_add_jars,java_accessibility,\
+$(eval $(call gb_Jar_use_jars,java_accessibility,\
     $(OUTDIR)/bin/jurt.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/unoil.jar \

@@ -34,12 +34,12 @@ $(eval $(call gb_Executable_set_include,odbcconfig,\
 	-I$(SRCDIR)/dbaccess/inc \
 ))
 
-$(eval $(call gb_Library_add_api,odbcconfig,\
+$(eval $(call gb_Library_use_api,odbcconfig,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,odbcconfig,\
+$(eval $(call gb_Executable_use_libraries,odbcconfig,\
     $(gb_STDLIBS) \
 ))
 

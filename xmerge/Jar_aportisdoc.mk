@@ -33,7 +33,7 @@ $(eval $(call gb_Jar_add_packagefile,aportisdoc,META-INF/converter.xml,$(SRCDIR)
 
 $(eval $(call gb_Jar_set_packageroot,aportisdoc,org))
 
-$(eval $(call gb_Jar_add_jars,aportisdoc,\
+$(eval $(call gb_Jar_use_jars,aportisdoc,\
 	$(OUTDIR)/bin/xmerge.jar \
 ))
 

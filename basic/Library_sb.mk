@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,sb,\
 	-I$(SRCDIR)/basic/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,sb,\
+$(eval $(call gb_Library_use_api,sb,\
 	udkapi \
 	offapi \
 	oovbaapi \
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,sb,\
 	-DBASIC_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sb,\
+$(eval $(call gb_Library_use_libraries,sb,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -145,12 +145,12 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 ))
 
 # Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
-# $(eval $(call gb_Library_add_linked_libs,sb,\
+# $(eval $(call gb_Library_use_libraries,sb,\
 	canvastools \
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,sb,\
+$(eval $(call gb_Library_use_libraries,sb,\
 	uwinapi \
 	oleaut32 \
 ))

@@ -27,12 +27,12 @@
 
 $(eval $(call gb_Library_Library,fps_odma))
 
-$(eval $(call gb_Library_add_api,fps_odma,\
+$(eval $(call gb_Library_use_api,fps_odma,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fps_odma,\
+$(eval $(call gb_Library_use_libraries,fps_odma,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,fps_odma,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_static_libs,fps_odma,\
+$(eval $(call gb_Library_use_static_libraries,fps_odma,\
 	odma_lib \
 ))
 endif

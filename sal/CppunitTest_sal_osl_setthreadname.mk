@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_setthreadname, \
 	sal/qa/osl/setthreadname/test-setthreadname \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_setthreadname, \
+$(eval $(call gb_CppunitTest_use_libraries,sal_osl_setthreadname, \
     sal \
     $(gb_STDLIBS) \
 ))

@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,unoxml_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/unoxml/qa/complex/unoxml/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,unoxml_complex,\
+$(eval $(call gb_JunitTest_use_jars,unoxml_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

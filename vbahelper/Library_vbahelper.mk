@@ -42,7 +42,7 @@ $(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,vbahelper,\
+$(eval $(call gb_Library_use_api,vbahelper,\
 	udkapi \
 	offapi \
 	oovbaapi \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_api,vbahelper,\
 
 # add libraries to be linked to vbahelper; again these names need to be given as
 # specified in Repository.mk
-$(eval $(call gb_Library_add_linked_libs,vbahelper,\
+$(eval $(call gb_Library_use_libraries,vbahelper,\
     comphelper \
     cppu \
     cppuhelper \

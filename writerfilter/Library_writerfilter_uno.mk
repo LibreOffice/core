@@ -36,12 +36,12 @@ $(eval $(call gb_Library_add_defs,writerfilter_uno,\
 	-DWRITERFILTER_WRITERFILTER_UNO_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,writerfilter_uno,\
+$(eval $(call gb_Library_use_api,writerfilter_uno,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,writerfilter_uno,\
+$(eval $(call gb_Library_use_libraries,writerfilter_uno,\
     comphelper \
     cppu \
     cppuhelper \

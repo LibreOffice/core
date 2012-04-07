@@ -39,12 +39,12 @@ $(eval $(call gb_Library_add_defs,emser,\
 	-UNOMINMAX \
 ))
 
-$(eval $(call gb_Library_add_api,emser,\
+$(eval $(call gb_Library_use_api,emser,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,emser,\
+$(eval $(call gb_Library_use_libraries,emser,\
 	cppu \
 	cppuhelper \
 	gdi32 \

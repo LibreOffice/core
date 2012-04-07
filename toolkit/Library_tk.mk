@@ -42,12 +42,12 @@ $(eval $(call gb_Library_add_defs,tk,\
     -DTOOLKIT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,tk,\
+$(eval $(call gb_Library_use_api,tk,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,tk,\
+$(eval $(call gb_Library_use_libraries,tk,\
     comphelper \
     cppu \
     cppuhelper \
@@ -142,7 +142,7 @@ endif
 
 ifneq ($(GUIBASE),headless)
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_add_linked_libs,tk,\
+$(eval $(call gb_Library_use_libraries,tk,\
     X11 \
 ))
 endif

@@ -23,7 +23,7 @@
 
 $(eval $(call gb_Library_Library,merged))
 
-$(eval $(call gb_Library_add_linked_libs,merged,\
+$(eval $(call gb_Library_use_libraries,merged,\
 	basegfx \
 	comphelper \
 	cppu \
@@ -58,12 +58,12 @@ $(eval $(call gb_Library_use_externals,merged,\
 endif
 
 # gb_MERGEDLIBS is defined in solenv/gbuild/extensions/pre_MergedLibsList.mk
-$(eval $(call gb_Library_add_library_objects,merged,\
+$(eval $(call gb_Library_use_library_objects,merged,\
 	$(gb_MERGEDLIBS) \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,merged,\
+$(eval $(call gb_Library_use_libraries,merged,\
 	advapi32 \
 	gdi32 \
 	ole32 \
@@ -76,14 +76,14 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_linked_libs,merged,\
+$(eval $(call gb_Library_use_libraries,merged,\
     objc \
     Cocoa \
 ))
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_linked_libs,merged,\
+$(eval $(call gb_Library_use_libraries,merged,\
     objc \
     Cocoa \
 ))

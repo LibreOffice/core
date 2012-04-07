@@ -41,12 +41,12 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
-$(eval $(call gb_Library_add_api,vclplug_gtk,\
+$(eval $(call gb_Library_use_api,vclplug_gtk,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
+$(eval $(call gb_Library_use_libraries,vclplug_gtk,\
     vclplug_gen \
     vcl \
     tl \
@@ -114,7 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
+$(eval $(call gb_Library_use_libraries,vclplug_gtk,\
     dl \
     m \
     pthread \

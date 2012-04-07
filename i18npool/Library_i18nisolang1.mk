@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,i18nisolang1,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,i18nisolang1,\
+$(eval $(call gb_Library_use_api,i18nisolang1,\
 	udkapi \
 	offapi \
 ))
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_defs,i18nisolang1,\
 	-DI18NISOLANG_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,i18nisolang1,\
+$(eval $(call gb_Library_use_libraries,i18nisolang1,\
 	sal \
 	$(gb_STDLIBS) \
 ))

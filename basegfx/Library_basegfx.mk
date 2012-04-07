@@ -51,12 +51,12 @@ $(eval $(call gb_Library_add_cxxflags,basegfx,\
 endif
 endif
 
-$(eval $(call gb_Library_add_api,basegfx,\
+$(eval $(call gb_Library_use_api,basegfx,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,basegfx,\
+$(eval $(call gb_Library_use_libraries,basegfx,\
 	cppu \
 	cppuhelper \
 	sal \

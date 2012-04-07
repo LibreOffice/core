@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_defs,comphelper,\
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,comphelper,\
+$(eval $(call gb_Library_use_libraries,comphelper,\
     cppu \
     cppuhelper \
     sal \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_api,comphelper,\
+$(eval $(call gb_Library_use_api,comphelper,\
 	udkapi \
 	offapi \
 ))

@@ -34,7 +34,7 @@ $(eval $(call gb_JunitTest_set_defs,sm_unoapi,\
 	-Dorg.openoffice.test.arg.xcl=$(SRCDIR)/starmath/qa/unoapi/knownissues.xcl \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,sm_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,sm_unoapi,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

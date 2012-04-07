@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_macros_test, \
     dbaccess/qa/extras/macros-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,dbaccess_macros_test, \
+$(eval $(call gb_CppunitTest_use_libraries,dbaccess_macros_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -77,7 +77,7 @@ $(eval $(call gb_CppunitTest_set_include,dbaccess_macros_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,dbaccess_macros_test,\
+$(eval $(call gb_CppunitTest_use_api,dbaccess_macros_test,\
     offapi \
     oovbaapi \
     udkapi \
@@ -85,12 +85,12 @@ $(eval $(call gb_CppunitTest_add_api,dbaccess_macros_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,dbaccess_macros_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,dbaccess_macros_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,dbaccess_macros_test,\
     oovbaapi \
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,dbaccess_macros_test,\
+$(eval $(call gb_CppunitTest_use_components,dbaccess_macros_test,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

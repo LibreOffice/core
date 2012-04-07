@@ -28,12 +28,12 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,svl_urihelper))
 
-$(eval $(call gb_CppunitTest_add_api,svl_urihelper, \
+$(eval $(call gb_CppunitTest_use_api,svl_urihelper, \
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,svl_urihelper, \
+$(eval $(call gb_CppunitTest_use_components,svl_urihelper, \
     ucb/source/core/ucb1 \
 ))
 
@@ -41,7 +41,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svl_urihelper, \
 svl/qa/unit/test_URIHelper \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,svl_urihelper, \
+$(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     cppu \
     cppuhelper \
     sal \
@@ -51,7 +51,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,svl_urihelper, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,svl_urihelper, \
+$(eval $(call gb_CppunitTest_use_type_rdbs,svl_urihelper, \
     types \
 ))
 

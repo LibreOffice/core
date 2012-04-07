@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_java))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_java,\
+$(eval $(call gb_JunitTest_use_jars,jurt_java,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_java,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_java,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_java,\
     jurt/test/com/sun/star/lib/uno/environments/java/java_environment_Test \

@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 	writerfilter/qa/cppunittests/doctok/testdoctok \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
+$(eval $(call gb_CppunitTest_use_libraries,writerfilter_doctok, \
 	cppu \
 	cppuhelper \
 	doctok \
@@ -48,7 +48,7 @@ $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	-I$(SRCDIR)/writerfilter/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,writerfilter_doctok,\
+$(eval $(call gb_CppunitTest_use_api,writerfilter_doctok,\
 	offapi \
 	udkapi \
 ))

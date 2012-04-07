@@ -38,12 +38,12 @@ $(eval $(call gb_Library_set_include,sdbt,\
 	-I$(SRCDIR)/dbaccess/source/sdbtools/inc \
 ))
 
-$(eval $(call gb_Library_add_api,sdbt,\
+$(eval $(call gb_Library_use_api,sdbt,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sdbt,\
+$(eval $(call gb_Library_use_libraries,sdbt,\
     comphelper \
     cppu \
     cppuhelper \

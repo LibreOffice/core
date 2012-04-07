@@ -194,12 +194,22 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 endef
 
 define gb_Extension_add_package_dependency
+$$(call gb_Output_error,\
+ gb_Extension_add_package_dependency: use gb_Extension_use_package instead.)
+endef
+
+define gb_Extension_use_package
 $(call gb_Extension_get_target,$(1)) : $(call gb_Package_get_target,$(2))
 
 endef
 
 define gb_Extension_add_package_dependencies
-$(foreach package,$(2),$(call gb_Extension_add_package_dependency,$(1),$(package)))
+$$(call gb_Output_error,\
+ gb_Extension_add_package_dependencies: use gb_Extension_use_packages instead.)
+endef
+
+define gb_Extension_use_packages
+$(foreach package,$(2),$(call gb_Extension_use_package,$(1),$(package)))
 
 endef
 

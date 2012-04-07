@@ -37,11 +37,11 @@ endif
 
 endif
 
-$(eval $(call gb_Library_add_internal_api,javaloader,\
+$(eval $(call gb_Library_use_internal_api,javaloader,\
     javaloader \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,javaloader,\
+$(eval $(call gb_Library_use_libraries,javaloader,\
     cppu \
     cppuhelper \
     jvmaccess \

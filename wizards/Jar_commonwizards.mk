@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,commonwizards))
 
-$(eval $(call gb_Jar_add_jars,commonwizards,\
+$(eval $(call gb_Jar_use_jars,commonwizards,\
 	$(OUTDIR_FOR_BUILD)/bin/ridl.jar \
 	$(OUTDIR_FOR_BUILD)/bin/unoil.jar \
 	$(OUTDIR_FOR_BUILD)/bin/jurt.jar \

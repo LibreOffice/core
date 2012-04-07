@@ -36,19 +36,19 @@ $(eval $(call gb_Library_set_include,updchk,\
 	-I$(SRCDIR)/extensions/inc \
 ))
 
-$(eval $(call gb_Library_add_api,updchk,\
+$(eval $(call gb_Library_use_api,updchk,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,updchk,\
+$(eval $(call gb_Library_use_libraries,updchk,\
 	cppuhelper \
 	cppu \
 	sal \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,updchk,\
+$(eval $(call gb_Library_use_libraries,updchk,\
 	ole32 \
 	shell32 \
 	wininet \

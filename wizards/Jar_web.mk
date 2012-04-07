@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,web))
 
-$(eval $(call gb_Jar_add_jars,web,\
+$(eval $(call gb_Jar_use_jars,web,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

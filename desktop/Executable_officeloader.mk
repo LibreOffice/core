@@ -31,7 +31,7 @@ $(eval $(call gb_Executable_set_include,officeloader,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,officeloader,\
+$(eval $(call gb_Executable_use_libraries,officeloader,\
     sal \
     $(gb_STDLIBS) \
 ))

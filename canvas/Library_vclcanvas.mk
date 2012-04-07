@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,vclcanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,vclcanvas,\
+$(eval $(call gb_Library_use_api,vclcanvas,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclcanvas,\
+$(eval $(call gb_Library_use_libraries,vclcanvas,\
 	basegfx \
 	canvastools \
 	comphelper \

@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_condition,\
     sal/qa/osl/condition/osl_Condition \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_condition,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_osl_condition,\
     sal \
     $(gb_STDLIBS) \
 ))

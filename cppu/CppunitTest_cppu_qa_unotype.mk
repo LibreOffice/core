@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_qa_unotype, \
 	cppu/qa/test_unotype \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppu_qa_unotype, \
+$(eval $(call gb_CppunitTest_use_libraries,cppu_qa_unotype, \
 	cppu \
 	sal \
 	$(gb_STDLIBS) \

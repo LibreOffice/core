@@ -48,7 +48,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/writer/TextPortionEnumerationTest \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,sw_complex,\
+$(eval $(call gb_JunitTest_use_jars,sw_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

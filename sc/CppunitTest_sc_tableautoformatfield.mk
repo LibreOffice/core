@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_tableautoformatfield, \
     sc/qa/extras/tableautoformatfield \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_tableautoformatfield, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
     avmedia \
     basegfx \
     comphelper \
@@ -78,18 +78,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_tableautoformatfield,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_tableautoformatfield,\
+$(eval $(call gb_CppunitTest_use_api,sc_tableautoformatfield,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_tableautoformatfield))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_tableautoformatfield,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_tableautoformatfield,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_tableautoformatfield,\
+$(eval $(call gb_CppunitTest_use_components,sc_tableautoformatfield,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

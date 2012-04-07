@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_add_defs,so_checksum,\
     -D_TOOLS_STRINGLIST \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,so_checksum,\
+$(eval $(call gb_Executable_use_libraries,so_checksum,\
     sal \
     tl \
     $(gb_STDLIBS) \

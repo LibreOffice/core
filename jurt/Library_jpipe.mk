@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,jpipe))
 
-$(eval $(call gb_Library_add_linked_libs,jpipe,\
+$(eval $(call gb_Library_use_libraries,jpipe,\
     $(gb_STDLIBS) \
 ))
 
@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
 
 else
 
-$(eval $(call gb_Library_add_linked_libs,jpipe,\
+$(eval $(call gb_Library_use_libraries,jpipe,\
     sal \
 ))
 

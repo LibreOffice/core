@@ -32,7 +32,7 @@ $(eval $(call gb_Library_Library,ldapbe2))
 
 $(eval $(call gb_Library_set_componentfile,ldapbe2,extensions/source/config/ldap/ldapbe2))
 
-$(eval $(call gb_Library_add_api,ldapbe2,\
+$(eval $(call gb_Library_use_api,ldapbe2,\
 	offapi \
 	udkapi \
 ))
@@ -64,7 +64,7 @@ $(eval $(call gb_Library_add_exception_objects,ldapbe2,\
 	extensions/source/config/ldap/ldapuserprofilebe \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ldapbe2,\
+$(eval $(call gb_Library_use_libraries,ldapbe2,\
 	cppuhelper \
 	cppu \
 	salhelper \

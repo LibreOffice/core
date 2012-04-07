@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,gdipluscanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,gdipluscanvas,\
+$(eval $(call gb_Library_use_api,gdipluscanvas,\
     offapi \
     udkapi \
 ))
@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,gdipluscanvas,\
+$(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	cppu \
 	tk \
 	sal \
@@ -67,12 +67,12 @@ $(eval $(call gb_Library_add_linked_libs,gdipluscanvas,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,gdipluscanvas,\
+$(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	gdi32 \
 	gdiplus \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,gdipluscanvas,\
+$(eval $(call gb_Library_use_static_libraries,gdipluscanvas,\
 	directxcanvas \
 ))
 

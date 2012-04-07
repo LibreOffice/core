@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Executable_Executable,pdfunzip))
 
-$(eval $(call gb_Executable_add_api,pdfunzip,\
+$(eval $(call gb_Executable_use_api,pdfunzip,\
     offapi \
     udkapi \
 ))
@@ -41,14 +41,14 @@ $(eval $(call gb_Executable_set_include,pdfunzip,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,pdfunzip,\
+$(eval $(call gb_Executable_use_libraries,pdfunzip,\
     basegfx \
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,pdfunzip,\
+$(eval $(call gb_Executable_use_static_libraries,pdfunzip,\
     pdfimport_s \
 ))
 

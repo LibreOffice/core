@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,pcr))
 
 $(eval $(call gb_Library_set_componentfile,pcr,extensions/source/propctrlr/pcr))
 
-$(eval $(call gb_Library_add_api,pcr,\
+$(eval $(call gb_Library_use_api,pcr,\
 	udkapi \
 	offapi \
 ))
@@ -40,7 +40,7 @@ $(eval $(call gb_Library_set_include,pcr,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,pcr,\
+$(eval $(call gb_Library_use_libraries,pcr,\
 	svx \
 	svxcore \
 	editeng \

@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,vclplug_gen,\
     -I$(SRCDIR)/solenv/inc \
 ))
 
-$(eval $(call gb_Library_add_api,vclplug_gen,\
+$(eval $(call gb_Library_use_api,vclplug_gen,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
+$(eval $(call gb_Library_use_libraries,vclplug_gen,\
     vcl \
     tl \
     utl \
@@ -173,7 +173,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
+$(eval $(call gb_Library_use_libraries,vclplug_gen,\
     dl \
     m \
     pthread \

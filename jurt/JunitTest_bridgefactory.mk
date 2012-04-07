@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_bridgefactory))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_bridgefactory,\
+$(eval $(call gb_JunitTest_use_jars,jurt_bridgefactory,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_bridgefactory,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_bridgefactory,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_bridgefactory,\
     jurt/test/com/sun/star/comp/bridgefactory/BridgeFactory_Test \

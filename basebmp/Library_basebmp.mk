@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,basebmp,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,basebmp,\
+$(eval $(call gb_Library_use_api,basebmp,\
 	offapi \
 	udkapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_defs,basebmp,\
 	-DBASEBMP_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,basebmp,\
+$(eval $(call gb_Library_use_libraries,basebmp,\
     basegfx \
     sal \
     $(gb_STDLIBS) \

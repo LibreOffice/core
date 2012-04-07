@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,xcr,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,xcr,\
+$(eval $(call gb_Library_use_api,xcr,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,xcr,\
 	-DXCR_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xcr,\
+$(eval $(call gb_Library_use_libraries,xcr,\
 	comphelper \
 	cppu \
 	cppuhelper \

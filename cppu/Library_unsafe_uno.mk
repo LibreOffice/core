@@ -32,12 +32,12 @@ $(eval $(call gb_Library_set_include,unsafe_uno,\
 	-I$(SRCDIR)/cppu/inc \
 ))
 
-$(eval $(call gb_Library_add_api,unsafe_uno,\
+$(eval $(call gb_Library_use_api,unsafe_uno,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,unsafe_uno,\
+$(eval $(call gb_Library_use_libraries,unsafe_uno,\
 	purpenvhelper \
 	sal \
 	$(gb_STDLIBS) \

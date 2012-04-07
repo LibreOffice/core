@@ -37,7 +37,7 @@ $(eval $(call gb_Executable_add_defs,crashrep_com,\
     $(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,crashrep_com,\
+$(eval $(call gb_Executable_use_libraries,crashrep_com,\
     $(gb_STDLIBS) \
 ))
 

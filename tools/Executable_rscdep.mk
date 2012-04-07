@@ -38,14 +38,14 @@ $(eval $(call gb_Executable_add_defs,rscdep,\
     -D_TOOLS_STRINGLIST \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
+$(eval $(call gb_Executable_use_libraries,rscdep,\
     comphelper \
     sal \
     tl \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_api,rscdep,\
+$(eval $(call gb_Executable_use_api,rscdep,\
     udkapi \
     offapi \
 ))
@@ -62,7 +62,7 @@ $(eval $(call gb_Executable_add_defs,rscdep,\
     -DHAVE_GETOPT \
 ))
 else
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
+$(eval $(call gb_Executable_use_libraries,rscdep,\
     gnu_getopt \
 ))
 endif

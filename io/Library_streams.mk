@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Library_Library,streams))
 
-$(eval $(call gb_Library_add_internal_api,streams,\
+$(eval $(call gb_Library_use_internal_api,streams,\
     stm \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,streams,\
+$(eval $(call gb_Library_use_libraries,streams,\
     cppu \
     cppuhelper \
     sal \

@@ -29,7 +29,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,odma_lib))
 
 $(eval $(call gb_StaticLibrary_add_package_headers,odma_lib,ucb_odma_inc))
 
-$(eval $(call gb_StaticLibrary_add_api,odma_lib,\
+$(eval $(call gb_StaticLibrary_use_api,odma_lib,\
     offapi \
     udkapi \
 ))

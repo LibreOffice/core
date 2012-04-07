@@ -35,11 +35,11 @@ $(eval $(call gb_Library_set_include,canvasfactory,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,canvasfactory,\
+$(eval $(call gb_Library_use_api,canvasfactory,\
 	offapi \
 	udkapi \
 ))
-$(eval $(call gb_Library_add_linked_libs,canvasfactory,\
+$(eval $(call gb_Library_use_libraries,canvasfactory,\
 	cppu \
 	cppuhelper \
 	sal \

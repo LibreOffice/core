@@ -37,11 +37,11 @@ endif
 
 endif
 
-$(eval $(call gb_Library_add_internal_api,introspection,\
+$(eval $(call gb_Library_use_internal_api,introspection,\
     insp \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,introspection,\
+$(eval $(call gb_Library_use_libraries,introspection,\
     cppu \
     cppuhelper \
     sal \

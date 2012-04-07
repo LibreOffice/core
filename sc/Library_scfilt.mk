@@ -33,12 +33,12 @@ $(eval $(call gb_Library_set_include,scfilt,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,scfilt,\
+$(eval $(call gb_Library_use_api,scfilt,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,scfilt,\
+$(eval $(call gb_Library_use_libraries,scfilt,\
 	basegfx \
 	comphelper \
 	cppu \

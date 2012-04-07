@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,localedata_others))
 
-$(eval $(call gb_Library_add_linked_libs,localedata_others,\
+$(eval $(call gb_Library_use_libraries,localedata_others,\
 	localedata_en \
     $(gb_STDLIBS) \
 ))

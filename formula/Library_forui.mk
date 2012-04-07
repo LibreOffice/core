@@ -37,12 +37,12 @@ $(eval $(call gb_Library_add_defs,forui,\
     -DFORMULA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,forui,\
+$(eval $(call gb_Library_use_api,forui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,forui,\
+$(eval $(call gb_Library_use_libraries,forui,\
     comphelper \
     cppu \
     cppuhelper \

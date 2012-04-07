@@ -149,17 +149,32 @@ $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 endef
 
 define gb_CppunitTest_add_type_rdb
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_type_rdb: use gb_CppunitTest_use_type_rdb instead.)
+endef
+
+define gb_CppunitTest_use_type_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(2)
 
 endef
 
 define gb_CppunitTest_add_type_rdbs
-$(foreach rdb,$(2),$(call gb_CppunitTest_add_type_rdb,$(1),$(rdb)))
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_type_rdbs: use gb_CppunitTest_use_type_rdbs instead.)
+endef
+
+define gb_CppunitTest_use_type_rdbs
+$(foreach rdb,$(2),$(call gb_CppunitTest_use_type_rdb,$(1),$(rdb)))
 
 endef
 
 define gb_CppunitTest_add_service_rdb
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_service_rdb: use gb_CppunitTest_use_service_rdb instead.)
+endef
+
+define gb_CppunitTest_use_service_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_RdbTarget_get_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : \
     UNO_SERVICES += $(call gb_RdbTarget_get_target,$(2))
@@ -167,11 +182,21 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 endef
 
 define gb_CppunitTest_add_service_rdbs
-$(foreach rdb,$(2),$(call gb_CppunitTest_add_service_rdb,$(1),$(rdb)))
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_service_rdbs: use gb_CppunitTest_use_service_rdbs instead.)
+endef
+
+define gb_CppunitTest_use_service_rdbs
+$(foreach rdb,$(2),$(call gb_CppunitTest_use_service_rdb,$(1),$(rdb)))
 
 endef
 
 define gb_CppunitTest_add_component
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_component: use gb_CppunitTest_use_component instead.)
+endef
+
+define gb_CppunitTest_use_component
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : \
@@ -194,11 +219,21 @@ $(filter-out \
 endef
 
 define gb_CppunitTest_add_components
-$(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(call gb_CppunitTest_add_component,$(1),$(component)))
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_components: use gb_CppunitTest_use_components instead.)
+endef
+
+define gb_CppunitTest_use_components
+$(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(call gb_CppunitTest_use_component,$(1),$(component)))
 
 endef
 
 define gb_CppunitTest_add_old_component
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_old_component: use gb_CppunitTest_use_old_component instead.)
+endef
+
+define gb_CppunitTest_use_old_component
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(call gb_CppunitTest__get_old_component_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : \
@@ -207,7 +242,12 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 endef
 
 define gb_CppunitTest_add_old_components
-$(foreach component,$(2),$(call gb_CppunitTest_add_old_component,$(1),$(component)))
+$$(call gb_Output_error,\
+ gb_CppunitTest_add_old_components: use gb_CppunitTest_use_old_components instead.)
+endef
+
+define gb_CppunitTest_use_old_components
+$(foreach component,$(2),$(call gb_CppunitTest_use_old_component,$(1),$(component)))
 
 endef
 
@@ -220,15 +260,20 @@ endef
 
 $(eval $(foreach method,\
 	add_api \
+	use_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \
 	add_cxxobjects \
 	add_exception_objects \
 	add_executable_objects \
+	use_executable_objects \
 	add_library_objects \
+	use_library_objects \
 	add_linked_libs \
+	use_libraries \
 	add_linked_static_libs \
+	use_static_libraries \
 	add_noexception_objects \
 	add_objcobject \
 	add_objcobjects \

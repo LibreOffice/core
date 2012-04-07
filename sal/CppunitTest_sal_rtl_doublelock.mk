@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_doublelock,\
     sal/qa/rtl/doublelock/rtl_doublelocking \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_doublelock,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_doublelock,\
     sal \
     $(gb_STDLIBS) \
 ))

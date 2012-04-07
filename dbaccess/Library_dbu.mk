@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(WORKDIR)/inc/dbaccess \
 ))
 
-$(eval $(call gb_Library_add_api,dbu,\
+$(eval $(call gb_Library_use_api,dbu,\
     offapi \
     udkapi \
 ))
@@ -51,7 +51,7 @@ $(eval $(call gb_Library_add_cxxflags,dbu,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,dbu,\
+$(eval $(call gb_Library_use_libraries,dbu,\
     comphelper \
     cppu \
     cppuhelper \
@@ -76,7 +76,7 @@ $(eval $(call gb_Library_add_linked_libs,dbu,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,dbu,\
+$(eval $(call gb_Library_use_libraries,dbu,\
     ole32 \
     oleaut32 \
     uuid \

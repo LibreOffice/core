@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilottableobj, \
     sc/qa/extras/scdatapilottableobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_datapilottableobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_datapilottableobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -78,18 +78,18 @@ $(eval $(call gb_CppunitTest_set_include,sc_datapilottableobj,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_datapilottableobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_datapilottableobj,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_datapilottableobj))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_datapilottableobj,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sc_datapilottableobj,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_datapilottableobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_datapilottableobj,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

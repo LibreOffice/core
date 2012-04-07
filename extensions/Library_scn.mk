@@ -30,12 +30,12 @@ $(eval $(call gb_Library_Library,scn))
 
 $(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
 
-$(eval $(call gb_Library_add_api,scn,\
+$(eval $(call gb_Library_use_api,scn,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,scn,\
+$(eval $(call gb_Library_use_libraries,scn,\
 	svt \
 	vcl \
 	tl \
@@ -64,7 +64,7 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scanunx \
 ))
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,scn,\
+$(eval $(call gb_Library_use_libraries,scn,\
 	dl \
 ))
 endif

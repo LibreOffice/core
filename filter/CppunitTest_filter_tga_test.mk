@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_tga_test, \
     filter/qa/cppunit/filters-tga-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,filter_tga_test, \
+$(eval $(call gb_CppunitTest_use_libraries,filter_tga_test, \
     itg \
 	sal \
 	test \
@@ -45,18 +45,18 @@ $(eval $(call gb_CppunitTest_set_include,filter_tga_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,filter_tga_test,\
+$(eval $(call gb_CppunitTest_use_api,filter_tga_test,\
     udkapi \
     offapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,filter_tga_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,filter_tga_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,filter_tga_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,filter_tga_test,\
+$(eval $(call gb_CppunitTest_use_components,filter_tga_test,\
     configmgr/source/configmgr \
 ))
 

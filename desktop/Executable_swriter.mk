@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_add_defs,swriter,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,swriter,\
+$(eval $(call gb_Executable_use_libraries,swriter,\
     $(gb_STDLIBS) \
 ))
 

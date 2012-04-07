@@ -35,13 +35,13 @@ $(eval $(call gb_Library_set_include,dlgprov,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,dlgprov,\
+$(eval $(call gb_Library_use_api,dlgprov,\
 	offapi \
 	oovbaapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dlgprov,\
+$(eval $(call gb_Library_use_libraries,dlgprov,\
 	comphelper \
 	cppu \
 	cppuhelper \

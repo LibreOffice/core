@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_defs,vclplug_kde,\
     -DVCLPLUG_KDE_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,vclplug_kde,\
+$(eval $(call gb_Library_use_api,vclplug_kde,\
     offapi \
     udkapi \
 ))
@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_libs,vclplug_kde,\
     $$(KDE_LIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
+$(eval $(call gb_Library_use_libraries,vclplug_kde,\
     vclplug_gen \
     vcl \
     tl \
@@ -95,7 +95,7 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_kde,\
 $(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
+$(eval $(call gb_Library_use_libraries,vclplug_kde,\
     dl \
     m \
     pthread \

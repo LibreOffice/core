@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ooxmltok, \
     sw/qa/extras/ooxmltok/ooxmltok \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sw_subsequent_ooxmltok, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmltok, \
     cppu \
     sal \
     test \
@@ -43,18 +43,18 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_subsequent_ooxmltok, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sw_subsequent_ooxmltok,\
+$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmltok,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_subsequent_ooxmltok))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sw_subsequent_ooxmltok,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sw_subsequent_ooxmltok,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sw_subsequent_ooxmltok,\
+$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmltok,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \

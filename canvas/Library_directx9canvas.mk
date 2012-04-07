@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,directx9canvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,directx9canvas,\
+$(eval $(call gb_Library_use_api,directx9canvas,\
     offapi \
     udkapi \
 ))
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_defs,directx9canvas,\
 	-UNOMINMAX \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,directx9canvas,\
+$(eval $(call gb_Library_use_libraries,directx9canvas,\
 	cppu \
 	tk \
 	sal \
@@ -61,13 +61,13 @@ $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,directx9canvas,\
+$(eval $(call gb_Library_use_libraries,directx9canvas,\
 	d3d9 \
 	gdi32 \
 	gdiplus \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,directx9canvas,\
+$(eval $(call gb_Library_use_static_libraries,directx9canvas,\
 	directxcanvas \
 ))
 

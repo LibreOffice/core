@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,agenda))
 
-$(eval $(call gb_Jar_add_jars,agenda,\
+$(eval $(call gb_Jar_use_jars,agenda,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

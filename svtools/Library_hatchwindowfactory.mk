@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,hatchwindowfactory,\
     -I$(SRCDIR)/svtools/inc \
 ))
 
-$(eval $(call gb_Library_add_api,hatchwindowfactory,\
+$(eval $(call gb_Library_use_api,hatchwindowfactory,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
+$(eval $(call gb_Library_use_libraries,hatchwindowfactory,\
     cppu \
     cppuhelper \
     sal \

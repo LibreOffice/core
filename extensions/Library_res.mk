@@ -32,12 +32,12 @@ $(eval $(call gb_Library_Library,res))
 
 $(eval $(call gb_Library_set_componentfile,res,extensions/source/resource/res))
 
-$(eval $(call gb_Library_add_api,res,\
+$(eval $(call gb_Library_use_api,res,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,res,\
+$(eval $(call gb_Library_use_libraries,res,\
 	vcl \
 	tl \
 	comphelper \

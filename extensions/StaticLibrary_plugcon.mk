@@ -31,7 +31,7 @@ endif
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
-$(eval $(call gb_StaticLibrary_add_external_headers,plugcon,np_sdk_inc))
+$(eval $(call gb_StaticLibrary_use_package,plugcon,np_sdk_inc))
 
 $(eval $(call gb_StaticLibrary_use_external,plugcon,mozilla_headers))
 
@@ -40,7 +40,7 @@ $(eval $(call gb_StaticLibrary_set_include,plugcon,\
 	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_add_api,plugcon,\
+$(eval $(call gb_StaticLibrary_use_api,plugcon,\
 	offapi \
 	udkapi \
 ))

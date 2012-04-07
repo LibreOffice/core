@@ -32,7 +32,7 @@ $(eval $(call gb_Executable_set_include,cppunit/cppunittester,\
 	-I$(SRCDIR)/sal/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,cppunit/cppunittester,\
+$(eval $(call gb_Executable_use_libraries,cppunit/cppunittester,\
 	sal \
 	$(gb_STDLIBS) \
 ))

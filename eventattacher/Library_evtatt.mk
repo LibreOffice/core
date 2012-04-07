@@ -32,7 +32,7 @@ $(eval $(call gb_Library_Library,evtatt))
 
 $(eval $(call gb_Library_set_componentfile,evtatt,eventattacher/source/evtatt))
 
-$(eval $(call gb_Library_add_linked_libs,evtatt,\
+$(eval $(call gb_Library_use_libraries,evtatt,\
 	cppuhelper \
 	cppu \
 	sal \
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,evtatt,\
 	eventattacher/source/eventattacher \
 ))
 
-$(eval $(call gb_Library_add_api,evtatt,\
+$(eval $(call gb_Library_use_api,evtatt,\
 	udkapi \
 ))
 

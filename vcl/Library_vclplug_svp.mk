@@ -42,12 +42,12 @@ $(eval $(call gb_Library_add_defs,vclplug_svp,\
     -DVCLPLUG_SVP_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,vclplug_svp,\
+$(eval $(call gb_Library_use_api,vclplug_svp,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
+$(eval $(call gb_Library_use_libraries,vclplug_svp,\
     vcl \
     tl \
     utl \
@@ -76,12 +76,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/headless/svpdata \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,vclplug_svp,\
+$(eval $(call gb_Library_use_static_libraries,vclplug_svp,\
     headless \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
+$(eval $(call gb_Library_use_libraries,vclplug_svp,\
     dl \
     m \
     pthread \

@@ -601,6 +601,11 @@ $(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
 endef
 
 define gb_LinkTarget_add_api
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_api: use gb_LinkTarget_use_api instead.)
+endef
+
+define gb_LinkTarget_use_api
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
 	$$(foreach api,$(2),$$(call gb_Package_get_target,$$(api)_inc))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -611,7 +616,7 @@ endif
 
 endef
 
-define gb_LinkTarget__add_internal_api_one
+define gb_LinkTarget__use_internal_api_one
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_UnoApiHeadersTarget_get_$(3)target,$(api)))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
@@ -621,27 +626,48 @@ endif
 
 endef
 
-define gb_LinkTarget__add_internal_api
-$(foreach api,$(2),$(call gb_LinkTarget__add_internal_api_one,$(1),$(api),$(3)))
+define gb_LinkTarget__use_internal_api
+$(foreach api,$(2),$(call gb_LinkTarget__use_internal_api_one,$(1),$(api),$(3)))
 
 endef
 
 define gb_LinkTarget_add_internal_api
-$(call gb_LinkTarget__add_internal_api,$(1),$(2))
-
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_internal_api: use gb_LinkTarget_use_internal_api instead.)
 endef
 
 define gb_LinkTarget_add_internal_bootstrap_api
-$(call gb_LinkTarget__add_internal_api,$(1),$(2),bootstrap_)
-
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_internal_bootstrap_api: use gb_LinkTarget_use_internal_bootstrap_api instead.)
 endef
 
 define gb_LinkTarget_add_internal_comprehensive_api
-$(call gb_LinkTarget__add_internal_api,$(1),$(2),comprehensive_)
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_internal_comprehensive_api: use gb_LinkTarget_use_internal_comprehensive_api instead.)
+endef
+
+
+define gb_LinkTarget_use_internal_api
+$(call gb_LinkTarget__use_internal_api,$(1),$(2))
+
+endef
+
+define gb_LinkTarget_use_internal_bootstrap_api
+$(call gb_LinkTarget__use_internal_api,$(1),$(2),bootstrap_)
+
+endef
+
+define gb_LinkTarget_use_internal_comprehensive_api
+$(call gb_LinkTarget__use_internal_api,$(1),$(2),comprehensive_)
 
 endef
 
 define gb_LinkTarget_add_linked_libs
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_linked_libs: use gb_LinkTarget_use_libraries instead.)
+endef
+
+define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
@@ -660,6 +686,11 @@ $$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_headers_target,$$(lib))
 endef
 
 define gb_LinkTarget_add_linked_static_libs
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_linked_static_libs: use gb_LinkTarget_use_static_libraries instead.)
+endef
+
+define gb_LinkTarget_use_static_libraries
 ifneq (,$$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info, currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). Static libraries must be registered in Repository.mk))
@@ -674,6 +705,12 @@ $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 endef
 
 define gb_LinkTarget_add_linked_static_external_libs
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_linked_static_external_libs: use gb_LinkTarget_use_static_external_libraries instead.)
+endef
+
+# TODO: why do we need this?
+define gb_LinkTarget_use_static_external_libraries
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
 
@@ -835,11 +872,12 @@ define gb_LinkTarget_add_exception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(CXXFLAGS))
 endef
 
-define gb_LinkTarget_add_cobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
+define gb_LinkTarget_add_linktarget_objects
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_linktarget_objects: use gb_LinkTarget__use_linktarget_objects instead.)
 endef
 
-define gb_LinkTarget_add_linktarget_objects
+define gb_LinkTarget__use_linktarget_objects
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
 ifneq ($(OS),IOS)
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
@@ -848,17 +886,31 @@ endif
 endef
 
 define gb_LinkTarget_add_library_objects
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_library_objects: use gb_LinkTarget_use_library_objects instead.)
+endef
+
+define gb_LinkTarget_use_library_objects
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
-$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
+$(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
 
 endef
 
 define gb_LinkTarget_add_executable_objects
-$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach exe,$(2),$(call gb_Executable_get_linktargetname,$(lib))))
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_executable_objects: use gb_LinkTarget_use_executable_objects instead.)
+endef
 
+define gb_LinkTarget_use_executable_objects
+$(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach exe,$(2),$(call gb_Executable_get_linktargetname,$(lib))))
+
+endef
+
+define gb_LinkTarget_add_cobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_cxxobjects
@@ -937,7 +989,12 @@ $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
 
 endef
 
-define gb_LinkTarget__add_custom_headers
+define gb_LinkTarget_add_custom_headers
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_custom_headers: use gb_LinkTarget_use_custom_headers instead.)
+endef
+
+define gb_LinkTarget__use_custom_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
 ifeq ($(gb_FULLDEPS),$(true))
@@ -948,8 +1005,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_t
 
 endef
 
-define gb_LinkTarget_add_custom_headers
-$(foreach customtarget,$(2),$(call gb_LinkTarget__add_custom_headers,$(1),$(customtarget)))
+define gb_LinkTarget_use_custom_headers
+$(foreach customtarget,$(2),$(call gb_LinkTarget__use_custom_headers,$(1),$(customtarget)))
 
 endef
 
@@ -959,12 +1016,19 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_P
 
 endef
 
+# add SDI (svidl) headers
 define gb_LinkTarget_add_sdi_headers
 $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
 endef
 
 define gb_LinkTarget_add_external_headers
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_external_headers: use gb_LinkTarget_use_package instead.)
+endef
+
+# use a header package, possibly from another module (i.e. via OUTDIR)
+define gb_LinkTarget_use_package
 $(call gb_LinkTarget_get_headers_target,$(1) : |$(call gb_Package_get_target,$(2)))
 endef
 

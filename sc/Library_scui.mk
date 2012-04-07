@@ -31,12 +31,12 @@ $(eval $(call gb_Library_set_include,scui,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,scui,\
+$(eval $(call gb_Library_use_api,scui,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,scui,\
+$(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \
 	cppu \
 	editeng \
@@ -114,7 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,scui,\
+$(eval $(call gb_Library_use_libraries,scui,\
 	advapi32 \
 	$(gb_Library_win32_OLDNAMES) \
 	uwinapi \

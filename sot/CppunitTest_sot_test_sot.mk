@@ -36,7 +36,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sot_test_sot, \
     sot/qa/cppunit/test_sot \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sot_test_sot, \
+$(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
     comphelper \
     cppu \
     cppuhelper \
@@ -51,14 +51,14 @@ $(eval $(call gb_CppunitTest_set_include,sot_test_sot,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sot_test_sot,\
+$(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
     offapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sot_test_sot))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sot_test_sot,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sot_test_sot,\
     types \
 ))
 

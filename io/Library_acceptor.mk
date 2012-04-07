@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Library_Library,acceptor))
 
-$(eval $(call gb_Library_add_internal_api,acceptor,\
+$(eval $(call gb_Library_use_internal_api,acceptor,\
     acceptor \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,acceptor,\
+$(eval $(call gb_Library_use_libraries,acceptor,\
     cppu \
     cppuhelper \
     sal \

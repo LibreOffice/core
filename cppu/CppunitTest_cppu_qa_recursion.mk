@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_qa_recursion, \
 	cppu/qa/test_recursion \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,cppu_qa_recursion, \
+$(eval $(call gb_CppunitTest_use_libraries,cppu_qa_recursion, \
 	cppu \
 	sal \
 	$(gb_STDLIBS) \

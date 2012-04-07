@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_set_include,oosplash,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,oosplash,\
+$(eval $(call gb_Executable_use_libraries,oosplash,\
     sal \
     $(gb_STDLIBS) \
 ))
@@ -80,7 +80,7 @@ endif
 
 ifeq ($(OS),SOLARIS)
 
-$(eval $(call gb_Executable_add_linked_libs,oosplash,\
+$(eval $(call gb_Executable_use_libraries,oosplash,\
     -lsocket \
 ))
 

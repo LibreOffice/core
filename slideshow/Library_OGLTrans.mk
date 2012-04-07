@@ -43,12 +43,12 @@ $(eval $(call gb_Library_add_defs,OGLTrans,\
 ))
 endif
 
-$(eval $(call gb_Library_add_api,OGLTrans,\
+$(eval $(call gb_Library_use_api,OGLTrans,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,OGLTrans,\
+$(eval $(call gb_Library_use_libraries,OGLTrans,\
     canvastools \
     comphelper \
     cppu \
@@ -75,14 +75,14 @@ $(eval $(call gb_Library_add_objcxxobjects,OGLTrans,\
     , $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,OGLTrans,\
+$(eval $(call gb_Library_use_libraries,OGLTrans,\
     Cocoa \
     GLUT \
     OpenGL \
 ))
 
 else ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_add_linked_libs,OGLTrans,\
+$(eval $(call gb_Library_use_libraries,OGLTrans,\
     gdi32 \
     glu32 \
     opengl32 \
@@ -101,7 +101,7 @@ $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionImpl \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,OGLTrans,\
+$(eval $(call gb_Library_use_libraries,OGLTrans,\
     GL \
     GLU \
     X11 \

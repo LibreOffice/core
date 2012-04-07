@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,sysdtrans,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,sysdtrans,\
+$(eval $(call gb_Library_use_api,sysdtrans,\
 	udkapi \
 	offapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_defs,sysdtrans,\
 	-DUNICODE \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sysdtrans,\
+$(eval $(call gb_Library_use_libraries,sysdtrans,\
 	advapi32 \
 	cppu \
 	cppuhelper \
@@ -58,7 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,sysdtrans,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,sysdtrans,\
+$(eval $(call gb_Library_use_static_libraries,sysdtrans,\
 	dtobj \
 ))
 

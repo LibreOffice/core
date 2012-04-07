@@ -36,12 +36,12 @@ $(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_api,sd_uimpress,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     avmedia \
     basegfx \
     canvastools \
@@ -78,11 +78,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sd_uimpress))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,sd_uimpress,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \

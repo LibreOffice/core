@@ -29,7 +29,7 @@
 
 $(eval $(call gb_Jar_Jar,officebean))
 
-$(eval $(call gb_Jar_add_jars,officebean,\
+$(eval $(call gb_Jar_use_jars,officebean,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

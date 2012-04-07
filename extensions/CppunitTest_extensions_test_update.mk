@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
 	extensions/qa/update/test_update \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
+$(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	updchk \
 	cppu \
 	cppuhelper \
@@ -43,7 +43,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update,\
+$(eval $(call gb_CppunitTest_use_libraries,extensions_test_update,\
 	shell32 \
 	ole32 \
 ))
@@ -56,18 +56,18 @@ $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	-I$(SRCDIR)/extensions/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,extensions_test_update,\
+$(eval $(call gb_CppunitTest_use_api,extensions_test_update,\
 	offapi \
 	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,extensions_test_update))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,extensions_test_update,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,extensions_test_update,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
+$(eval $(call gb_CppunitTest_use_components,extensions_test_update,\
     configmgr/source/configmgr \
     extensions/source/update/feed/updatefeed \
     ucb/source/core/ucb1 \

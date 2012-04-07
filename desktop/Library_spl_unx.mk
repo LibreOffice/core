@@ -27,12 +27,12 @@
 
 $(eval $(call gb_Library_Library,spl_unx))
 
-$(eval $(call gb_Library_add_api,spl_unx,\
+$(eval $(call gb_Library_use_api,spl_unx,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,spl_unx,\
+$(eval $(call gb_Library_use_libraries,spl_unx,\
     cppu \
     cppuhelper \
     sal \

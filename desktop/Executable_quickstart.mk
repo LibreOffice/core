@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_set_include,quickstart,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,quickstart,\
+$(eval $(call gb_Executable_use_libraries,quickstart,\
     comdlg32 \
     gdi32 \
     ole32 \
@@ -44,7 +44,7 @@ $(eval $(call gb_Executable_add_linked_libs,quickstart,\
 
 ifeq ($(COM),GCC)
 
-$(eval $(call gb_Executable_add_linked_libs,quickstart,\
+$(eval $(call gb_Executable_use_libraries,quickstart,\
     uuid \
 ))
 

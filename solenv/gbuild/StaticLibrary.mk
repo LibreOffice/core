@@ -80,7 +80,6 @@ gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary_get_
 endef
 
 $(eval $(foreach method,\
-	add_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \
@@ -107,11 +106,16 @@ $(eval $(foreach method,\
 	set_ldflags \
 	add_libs \
 	set_library_path_flags \
+	add_api \
+	use_api \
 	add_linked_libs \
+	use_libraries \
 	add_linked_static_libs \
+	use_static_libraries \
 	use_external \
 	use_externals \
 	add_custom_headers \
+	use_custom_headers \
 	add_package_headers \
 	add_sdi_headers \
 	set_warnings_not_errors \

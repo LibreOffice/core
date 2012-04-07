@@ -54,7 +54,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
 	dbaccess/qa/complex/dbaccess/TestCase \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,dbaccess_complex,\
+$(eval $(call gb_JunitTest_use_jars,dbaccess_complex,\
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/test.jar \

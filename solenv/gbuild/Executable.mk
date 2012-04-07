@@ -105,14 +105,21 @@ $(eval $(foreach method,\
 	add_libs \
 	set_library_path_flags \
 	add_api \
+	use_api \
 	add_internal_api \
+	use_internal_api \
 	add_internal_bootstrap_api \
+	use_internal_bootstrap_api \
 	add_internal_comprehensive_api \
+	use_internal_comprehensive_api \
 	add_linked_libs \
+	use_libraries \
 	add_linked_static_libs \
+	use_static_libraries \
 	use_external \
 	use_externals \
 	add_custom_headers \
+	use_custom_headers \
 	add_package_headers \
 	add_sdi_headers \
 	add_nativeres \

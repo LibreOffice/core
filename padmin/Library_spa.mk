@@ -32,12 +32,12 @@ $(eval $(call gb_Library_add_defs,spa,\
     -DSPA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_api,spa,\
+$(eval $(call gb_Library_use_api,spa,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,spa,\
+$(eval $(call gb_Library_use_libraries,spa,\
     svt \
     vcl \
     utl \
@@ -63,14 +63,14 @@ $(eval $(call gb_Library_add_exception_objects,spa,\
 ))
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_add_linked_libs,spa,\
+$(eval $(call gb_Library_use_libraries,spa,\
     m \
     pthread \
 ))
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,spa,\
+$(eval $(call gb_Library_use_libraries,spa,\
     dl \
 ))
 endif

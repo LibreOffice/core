@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_tiff_test, \
     filter/qa/cppunit/filters-tiff-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,filter_tiff_test, \
+$(eval $(call gb_CppunitTest_use_libraries,filter_tiff_test, \
     iti \
 	sal \
 	test \
@@ -45,18 +45,18 @@ $(eval $(call gb_CppunitTest_set_include,filter_tiff_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,filter_tiff_test,\
+$(eval $(call gb_CppunitTest_use_api,filter_tiff_test,\
     udkapi \
     offapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,filter_tiff_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,filter_tiff_test,\
+$(eval $(call gb_CppunitTest_use_type_rdbs,filter_tiff_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,filter_tiff_test,\
+$(eval $(call gb_CppunitTest_use_components,filter_tiff_test,\
     configmgr/source/configmgr \
 ))
 

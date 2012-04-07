@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,EvolutionarySolver))
 
-$(eval $(call gb_Jar_add_jars,EvolutionarySolver,\
+$(eval $(call gb_Jar_use_jars,EvolutionarySolver,\
 ))
 
 $(eval $(call gb_Jar_set_packageroot,EvolutionarySolver,net/adaptivebox))

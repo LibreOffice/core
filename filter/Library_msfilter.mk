@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_package_headers,msfilter,filter_inc))
 
 $(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfilter))
 
-$(eval $(call gb_Library_add_api,msfilter,\
+$(eval $(call gb_Library_use_api,msfilter,\
 	udkapi \
 	offapi \
 ))
@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_defs,msfilter,\
 	-DMSFILTER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,msfilter,\
+$(eval $(call gb_Library_use_libraries,msfilter,\
 	svxcore \
 	editeng \
 	sfx \

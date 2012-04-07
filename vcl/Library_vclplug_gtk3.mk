@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
-$(eval $(call gb_Library_add_api,vclplug_gtk3,\
+$(eval $(call gb_Library_use_api,vclplug_gtk3,\
     offapi \
     udkapi \
 ))
@@ -58,7 +58,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
     $$(GTHREAD_LIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
+$(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
     vcl \
     tl \
     utl \
@@ -113,12 +113,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/window/gtk3gtkobject \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,vclplug_gtk3,\
+$(eval $(call gb_Library_use_static_libraries,vclplug_gtk3,\
     headless \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
+$(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
     dl \
     m \
     pthread \

@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_util))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_util,\
+$(eval $(call gb_JunitTest_use_jars,jurt_util,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_util,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_util,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_util,\
     jurt/test/com/sun/star/lib/util/NativeLibraryLoader_Test \

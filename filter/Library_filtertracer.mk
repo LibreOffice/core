@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,filtertracer))
 
-$(eval $(call gb_Library_add_api,filtertracer,\
+$(eval $(call gb_Library_use_api,filtertracer,\
 	udkapi \
 	offapi \
 ))
@@ -28,7 +28,7 @@ $(eval $(call gb_Library_set_include,filtertracer,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,filtertracer,\
+$(eval $(call gb_Library_use_libraries,filtertracer,\
 	utl \
 	tl \
 	cppuhelper \

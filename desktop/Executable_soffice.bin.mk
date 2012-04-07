@@ -40,7 +40,7 @@ $(eval $(call gb_Executable_set_include,$(sofficebin),\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
+$(eval $(call gb_Executable_use_libraries,$(sofficebin),\
     sal \
     sofficeapp \
     $(gb_STDLIBS) \
@@ -52,7 +52,7 @@ $(eval $(call gb_Executable_add_cobjects,$(sofficebin),\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Executable_add_linked_static_libs,$(sofficebin),\
+$(eval $(call gb_Executable_use_static_libraries,$(sofficebin),\
     ooopathutils \
     winextendloaderenv \
 ))

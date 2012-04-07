@@ -32,7 +32,7 @@ $(eval $(call gb_Library_Library,pl))
 
 $(eval $(call gb_Library_set_componentfile,pl,extensions/source/plugin/pl))
 
-$(eval $(call gb_Library_add_external_headers,pl,np_sdk_inc))
+$(eval $(call gb_Library_use_package,pl,np_sdk_inc))
 
 $(eval $(call gb_Library_use_external,pl,mozilla_headers))
 
@@ -41,7 +41,7 @@ $(eval $(call gb_Library_set_include,pl,\
 	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
-$(eval $(call gb_Library_add_api,pl,\
+$(eval $(call gb_Library_use_api,pl,\
 	offapi \
 	udkapi \
 ))
@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_libs,pl,\
 endif # OS=SOLARIS
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_linked_libs,pl,\
+$(eval $(call gb_Library_use_libraries,pl,\
 	version \
 	ole32 \
 	advapi32 \
@@ -109,7 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,pl,\
 	extensions/source/plugin/unx/unxmgr \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,pl,\
+$(eval $(call gb_Library_use_static_libraries,pl,\
     plugcon \
 ))
 
@@ -121,7 +121,7 @@ endif # GUIBASE=aqua
 
 endif # GUI=UNX
 
-$(eval $(call gb_Library_add_linked_libs,pl,\
+$(eval $(call gb_Library_use_libraries,pl,\
 	tk \
 	vcl \
 	svl \

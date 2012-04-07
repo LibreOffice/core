@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,ucb_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/ucb/qa/complex/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,ucb_complex,\
+$(eval $(call gb_JunitTest_use_jars,ucb_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \

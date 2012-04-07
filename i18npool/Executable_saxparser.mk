@@ -32,12 +32,12 @@ $(eval $(call gb_Executable_set_include,saxparser,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_api,saxparser,\
+$(eval $(call gb_Executable_use_api,saxparser,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,saxparser,\
+$(eval $(call gb_Executable_use_libraries,saxparser,\
 	cppu \
 	cppuhelper \
 	sal \

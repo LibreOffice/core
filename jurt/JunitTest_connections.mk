@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_connections))
 
-$(eval $(call gb_JunitTest_add_jars,jurt_connections,\
+$(eval $(call gb_JunitTest_use_jars,jurt_connections,\
     $(OUTDIR)/bin/ridl.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_jar_classset,jurt_connections,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_connections,jurt))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_connections,\
     jurt/test/com/sun/star/comp/connections/PipedConnection_Test \

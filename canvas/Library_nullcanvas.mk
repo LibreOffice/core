@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,nullcanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,nullcanvas,\
+$(eval $(call gb_Library_use_api,nullcanvas,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,nullcanvas,\
+$(eval $(call gb_Library_use_libraries,nullcanvas,\
 	basegfx \
 	canvastools \
 	comphelper \

@@ -38,18 +38,18 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_urlobj \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,tools_test, \
+$(eval $(call gb_CppunitTest_use_api,tools_test, \
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,tools_test, \
+$(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     sal \
     tl \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_static_libs,tools_test, \
+$(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \
     ooopathutils \
 ))
 

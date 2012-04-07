@@ -34,12 +34,12 @@ $(eval $(call gb_Executable_set_include,g2g,\
     -I$(SRCDIR)/svtools/inc/svtools \
 ))
 
-$(eval $(call gb_Executable_add_api,g2g,\
+$(eval $(call gb_Executable_use_api,g2g,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,g2g,\
+$(eval $(call gb_Executable_use_libraries,g2g,\
     jvmfwk \
     sal \
     svt \

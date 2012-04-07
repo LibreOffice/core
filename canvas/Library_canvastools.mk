@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,canvastools,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_add_api,canvastools,\
+$(eval $(call gb_Library_use_api,canvastools,\
 	offapi \
 	udkapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_defs,canvastools,\
 	-DCANVASTOOLS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,canvastools,\
+$(eval $(call gb_Library_use_libraries,canvastools,\
 	basegfx \
 	comphelper \
 	cppu \
@@ -77,7 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,canvastools,\
 	canvas/source/tools/bitmap \
 	canvas/source/tools/image \
 ))
-$(eval $(call gb_Library_add_linked_libs,canvastools,\
+$(eval $(call gb_Library_use_libraries,canvastools,\
 	agg \
 ))
 ifneq ($(strip $(AGG_VERSION)),)
@@ -88,7 +88,7 @@ endif
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,canvastools,\
+$(eval $(call gb_Library_use_libraries,canvastools,\
 	winmm \
 ))
 endif

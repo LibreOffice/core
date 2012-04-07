@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,pdffilter))
 
 $(eval $(call gb_Library_set_componentfile,pdffilter,filter/source/pdf/pdffilter))
 
-$(eval $(call gb_Library_add_api,pdffilter,\
+$(eval $(call gb_Library_use_api,pdffilter,\
 	udkapi \
 	offapi \
 ))
@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_include,pdffilter,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,pdffilter,\
+$(eval $(call gb_Library_use_libraries,pdffilter,\
 	svt \
 	sfx \
 	tk \

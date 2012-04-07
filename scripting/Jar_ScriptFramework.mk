@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,ScriptFramework))
 
-$(eval $(call gb_Jar_add_jars,ScriptFramework,\
+$(eval $(call gb_Jar_use_jars,ScriptFramework,\
 	$(OUTDIR)/bin/juh.jar \
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/ridl.jar \

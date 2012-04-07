@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_oustringbuffer,\
     sal/qa/rtl/oustringbuffer/test_oustringbuffer_utf32 \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_oustringbuffer,\
+$(eval $(call gb_CppunitTest_use_libraries,sal_rtl_oustringbuffer,\
     sal \
     $(gb_STDLIBS) \
 ))

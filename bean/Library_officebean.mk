@@ -46,7 +46,7 @@ endif
 
 ifeq ($(GUI),WNT)
 
-$(eval $(call gb_Library_add_linked_libs,officebean,\
+$(eval $(call gb_Library_use_libraries,officebean,\
     jawt \
 ))
 
@@ -63,7 +63,7 @@ $(eval $(call gb_Library_add_ldflags,officebean,\
 
 endif
 
-$(eval $(call gb_Library_add_linked_libs,officebean,\
+$(eval $(call gb_Library_use_libraries,officebean,\
     $(gb_STDLIBS) \
 ))
 

@@ -29,12 +29,12 @@ $(eval $(call gb_CppunitTest_CppunitTest,smoketest))
 
 $(eval $(call gb_CppunitTest_abort_on_assertion,smoketest))
 
-$(eval $(call gb_CppunitTest_add_api,smoketest,\
+$(eval $(call gb_CppunitTest_use_api,smoketest,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,smoketest,\
+$(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 	cppu \
 	cppuhelper \
 	sal \

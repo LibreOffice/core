@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_set_include,gencoll_rule,\
 	-I$(SRCDIR)/i18npool/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,gencoll_rule,\
+$(eval $(call gb_Executable_use_libraries,gencoll_rule,\
 	sal \
 	$(gb_STDLIBS) \
 ))

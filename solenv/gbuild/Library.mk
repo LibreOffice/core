@@ -101,7 +101,7 @@ $(call gb_Library__set_soversion_script_platform,$(1),$(2),$(3))
 endef
 
 # The dependency from workdir component target to outdir library should ensure
-# that gb_CppunitTest_add_component can transitively depend on the library.
+# that gb_CppunitTest_use_component can transitively depend on the library.
 # But the component target also must be delivered, so a new phony target
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
@@ -163,6 +163,7 @@ $(eval $(foreach method,\
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_library_objects \
+	use_library_objects \
 	add_grammar \
 	add_grammars \
 	add_cflags \
@@ -181,15 +182,23 @@ $(eval $(foreach method,\
 	add_libs \
 	set_library_path_flags \
 	add_api \
+	use_api \
 	add_internal_api \
+	use_internal_api \
 	add_internal_bootstrap_api \
+	use_internal_bootstrap_api \
 	add_internal_comprehensive_api \
+	use_internal_comprehensive_api \
 	add_linked_libs \
+	use_libraries \
 	add_linked_static_libs \
+	use_static_libraries \
 	use_external \
 	use_externals \
 	add_custom_headers \
+	use_custom_headers \
 	add_external_headers \
+	use_package \
 	add_package_headers \
 	add_sdi_headers \
 	export_objects_list \

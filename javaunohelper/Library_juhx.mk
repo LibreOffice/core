@@ -36,7 +36,7 @@ $(eval $(call gb_Library_set_include,juhx,\
     -I$(WORKDIR)/CustomTarget/javaunohelper/cppumaker \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,juhx,\
+$(eval $(call gb_Library_use_libraries,juhx,\
     cppu \
     cppuhelper \
     jvmaccess \

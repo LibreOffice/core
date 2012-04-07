@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Jar_Jar,query))
 
-$(eval $(call gb_Jar_add_jars,query,\
+$(eval $(call gb_Jar_use_jars,query,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

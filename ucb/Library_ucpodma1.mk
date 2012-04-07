@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,ucpodma1))
 
 $(eval $(call gb_Library_set_componentfile,ucpodma1,ucb/source/ucp/odma/ucpodma1))
 
-$(eval $(call gb_Library_add_api,ucpodma1,\
+$(eval $(call gb_Library_use_api,ucpodma1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ucpodma1,\
+$(eval $(call gb_Library_use_libraries,ucpodma1,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -43,7 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,ucpodma1,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,ucpodma1,\
+$(eval $(call gb_Library_use_static_libraries,ucpodma1,\
 	odma_lib \
 ))
 

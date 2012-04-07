@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_include,inprocserv,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,inprocserv,\
+$(eval $(call gb_Library_use_libraries,inprocserv,\
 	gdi32 \
 	ole32 \
 	uuid \

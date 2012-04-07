@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,mtfrenderer))
 
 $(eval $(call gb_Library_set_componentfile,mtfrenderer,cppcanvas/source/uno/mtfrenderer))
 
-$(eval $(call gb_Library_add_linked_libs,mtfrenderer,\
+$(eval $(call gb_Library_use_libraries,mtfrenderer,\
 	sal \
 	cppu \
 	cppuhelper \
@@ -40,7 +40,7 @@ $(eval $(call gb_Library_add_linked_libs,mtfrenderer,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_api,mtfrenderer,\
+$(eval $(call gb_Library_use_api,mtfrenderer,\
     offapi \
     udkapi \
 ))

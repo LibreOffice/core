@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,fps_aqua))
 
 $(eval $(call gb_Library_set_componentfile,fps_aqua,fpicker/source/aqua/fps_aqua))
 
-$(eval $(call gb_Library_add_api,fps_aqua,\
+$(eval $(call gb_Library_use_api,fps_aqua,\
 	offapi \
 	udkapi \
 ))
@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_libs,fps_aqua,\
     -framework CoreFoundation \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,fps_aqua,\
+$(eval $(call gb_Library_use_libraries,fps_aqua,\
 	cppu \
 	cppuhelper \
 	sal \

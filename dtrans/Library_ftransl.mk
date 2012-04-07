@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,ftransl,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,ftransl,\
+$(eval $(call gb_Library_use_api,ftransl,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,ftransl,\
+$(eval $(call gb_Library_use_libraries,ftransl,\
 	advapi32 \
 	cppu \
 	cppuhelper \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,ftransl,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,ftransl,\
+$(eval $(call gb_Library_use_static_libraries,ftransl,\
 	dtobj \
 ))
 
