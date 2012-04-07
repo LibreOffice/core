@@ -149,12 +149,6 @@ namespace canvas
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
                                const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
-                               const ::com::sun::star::uno::Sequence< double >&     stops );
-        ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
-                               const ::basegfx::B2DPolygon&                     rGradientPoly,
-                               GradientType                                     eType,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
                                const ::com::sun::star::uno::Sequence< double >&     stops,
                                double                                           nAspectRatio );
         ParametricPolyPolygon( const ::com::sun::star::uno::Reference<

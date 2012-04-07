@@ -702,7 +702,6 @@ cairocanvas::CanvasHelper::flush() const
 cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
 cairocanvas::TextLayout::draw(_cairo*)
-canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&, basegfx::B2DPolygon const&, canvas::ParametricPolyPolygon::GradientType, com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<double> > const&, com::sun::star::uno::Sequence<double> const&)
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 canvas::tools::ElapsedTime::getTimeBase() const

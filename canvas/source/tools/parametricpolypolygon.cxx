@@ -238,21 +238,6 @@ namespace canvas
                                                   const ::basegfx::B2DPolygon&                          rGradientPoly,
                                                   GradientType                                          eType,
                                                   const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops ) :
-        ParametricPolyPolygon_Base( m_aMutex ),
-        mxDevice( rDevice ),
-        maValues( rGradientPoly,
-                  rColors,
-                  rStops,
-                  1.0,
-                  eType )
-    {
-    }
-
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                  const ::basegfx::B2DPolygon&                          rGradientPoly,
-                                                  GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
                                                   const uno::Sequence< double >&                        rStops,
                                                   double                                                nAspectRatio ) :
         ParametricPolyPolygon_Base( m_aMutex ),
