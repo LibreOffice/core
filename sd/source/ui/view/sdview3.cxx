@@ -975,13 +975,11 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         svt::EmbeddedObjectRef::TryRunningState( xObj );
                         uno::Reference< beans::XPropertySet > xProps( xObj->getComponent(), uno::UNO_QUERY );
                         if ( xProps.is() &&
-                             ( xProps->getPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
+                             ( xProps->getPropertyValue( "DisableDataTableDialog" ) >>= bDisableDataTableDialog ) &&
                              bDisableDataTableDialog )
                         {
-                            xProps->setPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ),
-                                uno::makeAny( sal_False ) );
-                            xProps->setPropertyValue( ::rtl::OUString( "DisableComplexChartTypes" ),
-                                uno::makeAny( sal_False ) );
+                            xProps->setPropertyValue( "DisableDataTableDialog" , uno::makeAny( sal_False ) );
+                            xProps->setPropertyValue( "DisableComplexChartTypes" , uno::makeAny( sal_False ) );
                             uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                             if ( xModifiable.is() )
                             {
@@ -1022,13 +1020,12 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance(
-                                   ::rtl::OUString( "com.sun.star.embed.MSOLEObjectSystemCreator") ),
+                            ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.embed.MSOLEObjectSystemCreator"),
                             uno::UNO_QUERY_THROW );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                                 xTmpStor,
-                                                                ::rtl::OUString( "DummyName" ),
+                                                                "DummyName" ,
                                                                 uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information

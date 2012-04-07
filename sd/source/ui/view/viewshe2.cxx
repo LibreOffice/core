@@ -828,6 +828,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
     bool bChangeDefaultsForChart = false;
+    rtl::OUString aName;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
@@ -835,11 +836,11 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         /**********************************************************
         * Leeres OLE-Objekt mit OLE-Objekt versehen
         **********************************************************/
-        String aName = pObj->GetProgName();
+        aName = pObj->GetProgName();
         ::rtl::OUString aObjName;
         SvGlobalName aClass;
 
-        if( aName.EqualsAscii( "StarChart" ) || aName.EqualsAscii("StarOrg") )
+        if( aName == "StarChart"  || aName == "StarOrg" )
         {
             if( SvtModuleOptions().IsChart() )
             {
@@ -847,12 +848,12 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
                 bChangeDefaultsForChart = true;
             }
         }
-        else if( aName.EqualsAscii( "StarCalc" ))
+        else if( aName == "StarCalc" )
         {
             if( SvtModuleOptions().IsCalc() )
                 aClass = SvGlobalName( SO3_SC_CLASSID );
         }
-        else if( aName.EqualsAscii( "StarMath" ))
+        else if( aName == "StarMath" )
         {
             if( SvtModuleOptions().IsMath() )
                 aClass = SvGlobalName( SO3_SM_CLASSID );
@@ -863,7 +864,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( !xObj.is() )
         {
-            aName = String();
+            aName = "";
 
             // Dialog "OLE-Objekt einfuegen" aufrufen
             GetDocSh()->SetWaitCursor( sal_False );
@@ -891,7 +892,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             /******************************************************
             * Das leere OLE-Objekt bekommt ein neues IPObj
             ******************************************************/
-            if (aName.Len())
+            if (!aName.isEmpty())
             {
                 pObj->SetObjRef(xObj);
                 pObj->SetName(aObjName);
@@ -1108,9 +1109,8 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell().get() != NULL)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
-    rSequence[nIndex].Name = rtl::OUString (
-        RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ViewId ) );
-    rtl::OUStringBuffer sBuffer ( rtl::OUString( "view" ) );
+    rSequence[nIndex].Name = rtl::OUString( sUNO_View_ViewId );
+    rtl::OUStringBuffer sBuffer( "view" );
     sBuffer.append( static_cast<sal_Int32>(nViewID));
     rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();
 
@@ -1186,12 +1186,10 @@ void ViewShell::AdaptDefaultsForChart(
             // set background to transparent (none)
             uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
             if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( "FillStyle" ),
-                                             uno::makeAny( drawing::FillStyle_NONE ));
+                xPageProp->setPropertyValue( "FillStyle" , uno::makeAny( drawing::FillStyle_NONE ));
             // set no border
             if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( "LineStyle" ),
-                                             uno::makeAny( drawing::LineStyle_NONE ));
+                xPageProp->setPropertyValue( "LineStyle" , uno::makeAny( drawing::LineStyle_NONE ));
         }
         catch( const uno::Exception & )
         {
