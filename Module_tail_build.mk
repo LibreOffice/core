@@ -66,6 +66,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     package \
     padmin \
     psprint_config \
+    reportbuilder \
     reportdesign \
     sc \
     scaddins \
