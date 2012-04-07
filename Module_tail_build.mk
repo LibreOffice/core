@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     canvas \
     chart2 \
     configmgr \
+    connectivity \
     cppcanvas \
     cui \
     dbaccess \
