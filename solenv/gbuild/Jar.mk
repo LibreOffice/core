@@ -134,6 +134,12 @@ $(call gb_Jar_get_workdir,$(1))/$(strip $(2)) : $(3) $(call gb_JavaClassSet_get_
 
 endef
 
+# gb_Jar_add_packagefiles jar target-dir file(s)
+define gb_Jar_add_packagefiles
+$(foreach file,$(3),$(call gb_Jar_add_packagefile,$(1),$(if $(strip $(2)),$(strip $(2))/)$(notdir $(file)),$(file)))
+
+endef
+
 define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
 
