@@ -95,7 +95,7 @@ endif
 
 ifeq ($(gb_PRODUCT),$(true))
 gb_LinkTarget_EXCEPTIONFLAGS += \
-	-fno-enforce-eh-specs \
+	-fno-enforce-eh-specs
 endif
 
 # At least sal defines its own __main, which would cause DLLs linking against
