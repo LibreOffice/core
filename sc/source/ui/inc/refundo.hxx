@@ -30,6 +30,7 @@
 #define SC_REFUNDO_HXX
 
 #include <tools/solar.h>
+#include "scdllapi.h"
 
 class ScDocument;
 class ScDBCollection;
@@ -57,7 +58,7 @@ private:
     ScUnoRefList*               pUnoRefs;
 
 public:
-                ScRefUndoData( const ScDocument* pDoc );
+    SC_DLLPUBLIC ScRefUndoData( const ScDocument* pDoc );
                 ~ScRefUndoData();
 
     void        DeleteUnchanged( const ScDocument* pDoc );

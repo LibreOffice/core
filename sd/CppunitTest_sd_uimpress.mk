@@ -41,8 +41,6 @@ $(eval $(call gb_CppunitTest_add_api,sd_uimpress,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_library_objects,sd_uimpress,sd))
-
 $(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
     avmedia \
     basegfx \
@@ -58,6 +56,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
     sal \
     salhelper \
     sb \
+    sd \
     sfx \
     sot \
     svl \

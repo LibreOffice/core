@@ -39,6 +39,7 @@ class SfxFilter;
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
+#include "scdllapi.h"
 
 /**
  * This class is a wrapper for a Load-On-Demand-DLL. One instance per
@@ -47,7 +48,7 @@ class SfxFilter;
  *
  * Remember: Do export this class! It is used by the application.
  */
-class ScDLL
+class SC_DLLPUBLIC ScDLL
 {
 public:
                     // Ctor/Dtor must be linked to the application

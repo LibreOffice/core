@@ -229,7 +229,7 @@ public:
     Filename
  --------------------------------------------------------------------*/
 
-class SwFileNameFieldType : public SwFieldType
+class SW_DLLPUBLIC SwFileNameFieldType : public SwFieldType
 {
     SwDoc *pDoc;
 public:

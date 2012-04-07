@@ -30,6 +30,7 @@
 
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
+#include "swdllapi.h"
 
 namespace sw { class Filters; }
 
@@ -40,7 +41,7 @@ namespace sw { class Filters; }
 */
 namespace SwGlobals
 {
-    void ensure();
+    SW_DLLPUBLIC void ensure();
 
     sw::Filters & getFilters();
 }

@@ -34,8 +34,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
     sw/qa/core/Test-BigPtrArray \
 ))
 
-$(eval $(call gb_CppunitTest_add_library_objects,sw_swdoc_test,sw))
-
 $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     avmedia \
     basegfx \
@@ -58,6 +56,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     svt \
     svx \
     svxcore \
+    sw \
     swd \
 	test \
     tk \

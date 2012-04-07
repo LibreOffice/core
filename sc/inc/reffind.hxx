@@ -36,7 +36,7 @@ class ScDocument;
 
 // -----------------------------------------------------------------------
 
-class ScRefFinder
+class SC_DLLPUBLIC ScRefFinder
 {
 private:
     String      aFormula;

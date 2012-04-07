@@ -218,7 +218,7 @@ public:
 
                         TYPEINFO();
 
-                        SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
+    SD_DLLPUBLIC        SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
                         ~SdDrawDocument();
 
     virtual SdrModel*   AllocModel() const;

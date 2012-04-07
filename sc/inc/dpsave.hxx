@@ -258,7 +258,7 @@ private:
 
 public:
     SC_DLLPUBLIC ScDPSaveData();
-    ScDPSaveData(const ScDPSaveData& r);
+    SC_DLLPUBLIC ScDPSaveData(const ScDPSaveData& r);
     SC_DLLPUBLIC ~ScDPSaveData();
 
     ScDPSaveData& operator= ( const ScDPSaveData& r );
@@ -294,7 +294,7 @@ public:
      *         manages its life cycle; hence the caller must
      *         <i>not</i> delete this object.
      */
-    ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC ScDPSaveDimension* GetDataLayoutDimension();
     SC_DLLPUBLIC ScDPSaveDimension* GetExistingDataLayoutDimension() const;
 
@@ -310,7 +310,7 @@ public:
     ScDPSaveDimension* GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
     long GetDataDimensionCount() const;
 
-    void SetPosition( ScDPSaveDimension* pDim, long nNew );
+    SC_DLLPUBLIC void SetPosition( ScDPSaveDimension* pDim, long nNew );
     SC_DLLPUBLIC void SetColumnGrand( bool bSet );
     bool GetColumnGrand() const
         { return bool(nColumnGrandMode); }
@@ -319,11 +319,11 @@ public:
     bool GetRowGrand() const
         { return bool(nRowGrandMode); }
 
-    void SetIgnoreEmptyRows( bool bSet );
+    SC_DLLPUBLIC void SetIgnoreEmptyRows( bool bSet );
     bool GetIgnoreEmptyRows() const
         { return bool(nIgnoreEmptyMode); }
 
-    void SetRepeatIfEmpty( bool bSet );
+    SC_DLLPUBLIC void SetRepeatIfEmpty( bool bSet );
     bool GetRepeatIfEmpty() const
         { return bool(nRepeatEmptyMode); }
 

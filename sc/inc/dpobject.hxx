@@ -283,9 +283,9 @@ public:
         ScDocument* mpDoc;
     public:
         SheetCaches(ScDocument* pDoc);
-        bool hasCache(const ScRange& rRange) const;
+        SC_DLLPUBLIC bool hasCache(const ScRange& rRange) const;
         const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
-        size_t size() const;
+        SC_DLLPUBLIC size_t size() const;
 
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
@@ -308,10 +308,10 @@ public:
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
-        bool hasCache(const rtl::OUString& rName) const;
+        SC_DLLPUBLIC bool hasCache(const rtl::OUString& rName) const;
         const ScDPCache* getCache(
             const ::rtl::OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
-        size_t size() const;
+        SC_DLLPUBLIC size_t size() const;
     private:
         ScDPCache* getExistingCache(const rtl::OUString& rName);
 
@@ -370,8 +370,8 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
-    bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    SC_DLLPUBLIC sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    SC_DLLPUBLIC bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
@@ -395,15 +395,15 @@ public:
      *
      * @return new name for data pilot object.
      */
-    ::rtl::OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
+    SC_DLLPUBLIC ::rtl::OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
 
-    void FreeTable(ScDPObject* pDPObj);
+    SC_DLLPUBLIC void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
-    SheetCaches& GetSheetCaches();
-    NameCaches& GetNameCaches();
+    SC_DLLPUBLIC SheetCaches& GetSheetCaches();
+    SC_DLLPUBLIC NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
 
 private:
