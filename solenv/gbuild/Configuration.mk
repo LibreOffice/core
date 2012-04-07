@@ -78,6 +78,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--noout \
 		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
 		--stringparam root $(subst $(XCSFILE),,$(3)) \
+		$(if $(SCHEMA_ROOT),--stringparam schemaRoot $(SCHEMA_ROOT)) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
 		$(3) && \
 	$(gb_XSLTPROC) --nonet \
@@ -348,6 +349,9 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration_get_clean_target,$(1)) : \
 	 $(call gb_Zip_get_clean_target,$(1)_$(lang))))
+
+$(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT :=
+
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
 
 endef
@@ -490,6 +494,17 @@ endef
 # $(call gb_Configuration_add_localized_datas,zipfile,prefix,xcufile)
 define gb_Configuration_add_localized_datas
 $(foreach xcu,$(3),$(call gb_Configuration_add_localized_data,$(1),$(2),$(xcu)))
+
+endef
+
+# Set extra registry this configuration can use schemas from.
+#
+# Example:
+# # foo needs schemas from the main configuration
+# $(eval $(call gb_Configuration_use_configuration,foo,officecfg))
+define gb_Configuration_use_configuration
+$(call gb_Configuration_get_target,$(1)) : $(call gb_Configuration_get_target,$(2))
+$(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT := $(gb_Configuration_registry)/schema
 
 endef
 

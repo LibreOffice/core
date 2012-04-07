@@ -38,6 +38,7 @@
 
 <!-- Parameter -->
 <xsl:param name="root">../registry/schema</xsl:param>
+<xsl:param name="schemaRoot"/>
 <xsl:param name="componentName"/>
 
 	<xsl:template match = "/">
@@ -121,9 +122,25 @@
 <!-- locate a component file -->
 	<xsl:template name="locateFile">
 		<xsl:param name="componentName"/>
-		<xsl:variable name ="file"><xsl:value-of select="$root"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcs</xsl:variable>
-		<xsl:if	test="not( document($file) )">
-			<xsl:message terminate ="yes">**Error: unable to locate document '<xsl:value-of select="translate($componentName,'.','/')"/>.xcd'</xsl:message>
+		<xsl:variable name="path"><xsl:value-of select="translate($componentName,'.','/')"/>.xcs</xsl:variable>
+		<xsl:variable name ="file">
+			<xsl:variable name ="tryfile" select="concat($root,'/',$path)"/>
+			<xsl:choose>
+				<xsl:when test="document($tryfile)">
+					<xsl:value-of select="$tryfile"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="$schemaRoot">
+						<xsl:variable name="globalfile" select="concat($schemaRoot,'/',$path)"/>
+						<xsl:if test="document($globalfile)">
+							<xsl:value-of select="$globalfile"/>
+						</xsl:if>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:if test="not($file)">
+			<xsl:message terminate ="yes">**Error: unable to locate document '<xsl:value-of select="$path"/>'</xsl:message>
 		</xsl:if>
 		<xsl:value-of select="$file"/>
 	</xsl:template>
