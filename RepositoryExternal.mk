@@ -1120,6 +1120,39 @@ endef
 endif # SYSTEM_POPPLER
 
 
+ifeq ($(SYSTEM_CLUCENE),YES)
+
+define gb_LinkTarget__use_clucene
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I%,$(CLUCENE_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(filter -I%,$(CLUCENE_CFLAGS)) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(CLUCENE_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_CLUCENE
+
+define gb_LinkTarget__use_clucene
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	clucene \
+)
+
+endef
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
+	clucene \
+))
+
+endif # SYSTEM_CLUCENE
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 

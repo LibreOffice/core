@@ -358,7 +358,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
     avmediawin \
     cached1 \
-    clucene \
     collator_data \
     deployment \
     deploymentgui \

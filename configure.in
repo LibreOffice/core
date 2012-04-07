@@ -5855,13 +5855,13 @@ AC_MSG_CHECKING([which clucene to use])
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CLUCENE=YES
-    PKG_CHECK_MODULES(LIBCLUCENE, libclucene-core)
+    PKG_CHECK_MODULES(CLUCENE, libclucene-core)
 
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
-    CXXFLAGS="$CXXFLAGS $LIBCLUCENE_CFLAGS"
-    CPPFLAGS="$CPPFLAGS $LIBCLUCENE_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $CLUCENE_CFLAGS"
+    CPPFLAGS="$CPPFLAGS $CLUCENE_CFLAGS"
     dnl http://sourceforge.net/tracker/index.php?func=detail&aid=3392466&group_id=80013&atid=558446
     dnl https://bugzilla.redhat.com/show_bug.cgi?id=794795
     AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
@@ -5870,15 +5870,15 @@ if test "$with_system_clucene" = "yes"; then
     CPPFLAGS=$save_CPPFLAGS
     AC_LANG_POP([C++])
 
-    LIBCLUCENE_LIBS="$LIBCLUCENE_LIBS -lclucene-contribs-lib"
+    CLUCENE_LIBS="$CLUCENE_LIBS -lclucene-contribs-lib"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CLUCENE=NO
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
 AC_SUBST(SYSTEM_CLUCENE)
-AC_SUBST(LIBCLUCENE_CFLAGS)
-AC_SUBST(LIBCLUCENE_LIBS)
+AC_SUBST(CLUCENE_CFLAGS)
+AC_SUBST(CLUCENE_LIBS)
 
 dnl ===================================================================
 dnl Check for system expat
