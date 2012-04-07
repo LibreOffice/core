@@ -94,6 +94,7 @@ psprint_config\
 qadevOOo\
 regexp\
 registry\
+reportbuilder\
 reportdesign\
 rdbmaker\
 ridljar\
@@ -225,7 +226,6 @@ pyuno\
 readlicense_oo\
 redland\
 remotebridges\
-reportbuilder\
 rhino\
 saxon\
 scp2\

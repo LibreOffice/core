@@ -91,6 +91,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     psprint_config \
     rdbmaker \
     regexp \
+    reportbuilder \
     reportdesign \
     ridljar \
     rsc \
