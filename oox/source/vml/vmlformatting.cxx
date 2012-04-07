@@ -248,7 +248,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             sal_Int32 nModToken = XML_TOKEN_INVALID;
             switch( AttributeConversion::decodeToken( aColorIndex.copy( 0, nOpenParen ) ) )
             {
-                case XML_darken:    nModToken = XML_shade;
+                case XML_darken:    nModToken = XML_shade;break;
                 case XML_lighten:   nModToken = XML_tint;
             }
             sal_Int32 nValue = aColorIndex.copy( nOpenParen + 1, nCloseParen - nOpenParen - 1 ).toInt32();
