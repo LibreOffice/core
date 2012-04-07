@@ -1067,8 +1067,6 @@ public:
     void                writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );
     void                writeDateTime( const ::com::sun::star::util::DateTime& rDateTime );
-    void                writeColIndex( sal_Int32 nCol );
-    void                writeRowIndex( sal_Int32 nRow );
 
     template< typename Type >
     inline void         writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )

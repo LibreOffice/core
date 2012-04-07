@@ -763,9 +763,6 @@ The following structure describes the permissions used in PDF security
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )
     { DrawPixel( rPt, Color( COL_TRANSPARENT ) ); }
-    void                DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
-    void                DrawPixel( const Polygon& rPts, const Color& rColor )
-    { Push(); SetLineColor( rColor ); DrawPixel( rPts ); Pop(); }
 
     void                DrawLine( const Point& rStartPt, const Point& rEndPt );
     void                DrawLine( const Point& rStartPt, const Point& rEndPt,

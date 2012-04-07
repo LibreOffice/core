@@ -104,25 +104,6 @@ Slider::Slider( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-void Slider::ImplLoadRes( const ResId& rResId )
-{
-    Control::ImplLoadRes( rResId );
-
-    sal_Int16 nMin          = ReadShortRes();
-    sal_Int16 nMax          = ReadShortRes();
-    sal_Int16 nThumbPos     = ReadShortRes();
-    sal_Int16 nPage         = ReadShortRes();
-    sal_Int16 nStep         = ReadShortRes();
-    /* sal_Int16 nVisibleSize   = */ ReadShortRes();
-
-    SetRange( Range( nMin, nMax ) );
-    SetLineSize( nStep );
-    SetPageSize( nPage );
-    SetThumbPos( nThumbPos );
-}
-
-// -----------------------------------------------------------------------
-
 void Slider::ImplInitSettings()
 {
     Window* pParent = GetParent();

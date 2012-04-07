@@ -9131,48 +9131,6 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
     setFillColor( aOldFillColor );
 }
 
-void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
-{
-    MARK( "drawPixel with Polygon" );
-
-    updateGraphicsState();
-
-    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) && ! pColors )
-        return;
-
-    sal_uInt16 nPoints = rPoints.GetSize();
-    OStringBuffer aLine( nPoints*40 );
-    aLine.append( "q " );
-    if( ! pColors )
-    {
-        appendNonStrokingColor( m_aGraphicsStack.front().m_aLineColor, aLine );
-        aLine.append( ' ' );
-    }
-
-    OStringBuffer aPixel(32);
-    aPixel.append( ' ' );
-    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIX()), aPixel );
-    aPixel.append( ' ' );
-    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aPixel );
-    OString aPixelStr = aPixel.makeStringAndClear();
-    for( sal_uInt16 i = 0; i < nPoints; i++ )
-    {
-        if( pColors )
-        {
-            if( pColors[i] == Color( COL_TRANSPARENT ) )
-                continue;
-
-            appendNonStrokingColor( pColors[i], aLine );
-            aLine.append( ' ' );
-        }
-        m_aPages.back().appendPoint( rPoints[i], aLine );
-        aLine.append( aPixelStr );
-        aLine.append( " re f\n" );
-    }
-    aLine.append( "Q\n" );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
-}
-
 class AccessReleaser
 {
     BitmapReadAccess* m_pAccess;

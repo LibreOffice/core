@@ -55,12 +55,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection)
-    :OTable_Base( _pTables, _pConnection, sal_True )
-    ,m_pConnection( _pConnection )
-{
-    construct();
-}
 // -------------------------------------------------------------------------
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
                 const ::rtl::OUString& _Name, const ::rtl::OUString& _Type, const ::rtl::OUString& _Description )

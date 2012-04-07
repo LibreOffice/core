@@ -1231,7 +1231,6 @@ public:
     void drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
 
     void drawPixel( const Point& rPt, const Color& rColor );
-    void drawPixel( const Polygon& rPts, const Color* pColors = NULL );
 
     void drawRectangle( const Rectangle& rRect );
     void drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound );

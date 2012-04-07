@@ -448,7 +448,7 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
 }
 
 // ::com::sun::star::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( UnoControlModel )
+IMPL_XUNOTUNNEL_MINIMAL( UnoControlModel )
 
 // XInterface
 IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )

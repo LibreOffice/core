@@ -44,7 +44,6 @@ namespace connectivity
             OConnection*    m_pConnection;
 
         public:
-            OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection);
             OTable( sdbcx::OCollection* _pTables,
                     OConnection* _pConnection,
                     const ::rtl::OUString& _Name,

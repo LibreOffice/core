@@ -71,7 +71,6 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplUpdateRects( sal_Bool bUpdate = sal_True );
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );

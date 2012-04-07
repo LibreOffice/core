@@ -148,14 +148,6 @@ public:
                             BinaryInputStream& rInStrm,
                             bool bWithGuid );
 
-    /** Imports an OLE StdHlink from the current position of the passed binary
-        stream.
-     */
-    static bool         importStdHlink(
-                            StdHlinkInfo& orHlinkInfo,
-                            BinaryInputStream& rInStrm,
-                            bool bWithGuid );
-
 private:
                         OleHelper();        // not implemented
                         ~OleHelper();       // not implemented

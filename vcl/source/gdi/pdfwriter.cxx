@@ -186,11 +186,6 @@ void PDFWriter::DrawPixel( const Point& rPos, const Color& rColor )
     pImplementation->drawPixel( rPos, rColor );
 }
 
-void PDFWriter::DrawPixel( const Polygon& rPts, const Color* pColors )
-{
-    pImplementation->drawPixel( rPts, pColors );
-}
-
 void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
     pImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );

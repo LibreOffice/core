@@ -641,9 +641,6 @@ public:
      */
     static bool         skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId );
 
-    /** Imports a picture from an IMGDATA record. */
-    static void         importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff );
-
 private:
                         BiffHelper();   // not implemented
                         ~BiffHelper();  // not implemented

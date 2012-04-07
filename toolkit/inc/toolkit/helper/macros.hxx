@@ -31,7 +31,7 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#define IMPL_XUNOTUNNEL( ClassName ) \
+#define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
 sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
 { \
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
@@ -47,7 +47,10 @@ namespace \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
     return the##ClassName##UnoTunnelId::get().getSeq(); \
-} \
+}
+
+#define IMPL_XUNOTUNNEL( ClassName ) \
+IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \

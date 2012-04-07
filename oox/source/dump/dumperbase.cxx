@@ -1828,16 +1828,6 @@ void Output::writeDateTime( const DateTime& rDateTime )
     writeDec( rDateTime.Seconds, 2, '0' );
 }
 
-void Output::writeColIndex( sal_Int32 nCol )
-{
-    StringHelper::appendAddrCol( maLine, nCol, true );
-}
-
-void Output::writeRowIndex( sal_Int32 nRow )
-{
-    StringHelper::appendAddrRow( maLine, nRow, true );
-}
-
 // ----------------------------------------------------------------------------
 
 bool Output::implIsValid() const
