@@ -58,7 +58,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_external,OGLTrans,Mesa))
+$(eval $(call gb_Library_use_external,OGLTrans,mesa_headers))
 
 $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLTrans/ogltrans))
 

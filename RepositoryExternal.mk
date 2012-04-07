@@ -36,17 +36,44 @@
 # in the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
 
+# External headers
+
 ifeq ($(SYSTEM_MESA_HEADERS),YES)
 
-gb_LinkTarget__use_Mesa:=
+gb_LinkTarget__use_mesa_headers :=
 
 else
 
-define gb_LinkTarget__use_Mesa
+define gb_LinkTarget__use_mesa_headers
 $(eval $(call gb_LinkTarget_use_package,$(1),Mesa_inc))
+
 endef
 
 endif
+
+ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
+
+define gb_LinkTarget__use_mozilla_headers
+$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
+$(eval $(call gb_LinkTarget_set_include,$(1),\
+	$(MOZILLA_HEADERS_CFLAGS) \
+	$$(INCLUDE) \
+))
+
+endef
+
+else #!SYSTEM_MOZILLA_HEADERS
+
+define gb_LinkTarget__use_mozilla_headers
+$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
+$(eval $(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/npsdk \
+	$$(INCLUDE) \
+))
+
+endef
+
+endif #SYSTEM_MOZILLA_HEADERS
 
 ifeq ($(SYSTEM_ODBC_HEADERS),YES)
 
@@ -65,6 +92,8 @@ $(call gb_LinkTarget_use_package,$(1),odbc_inc)
 endef
 
 endif
+
+# External libraries
 
 ifeq ($(SYSTEM_CPPUNIT),YES)
 
@@ -1093,30 +1122,16 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 endef
 
-ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
+define gb_LinkTarget__use_gobject
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(GOBJECT_LIBS) \
+)
 
-define gb_LinkTarget__use_mozilla_headers
-$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
-$(eval $(call gb_LinkTarget_set_include,$(1),\
-	$(MOZILLA_HEADERS_CFLAGS) \
+$(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-))
-
+	$(GOBJECT_CFLAGS) \
+)
 endef
-
-else #!SYSTEM_MOZILLA_HEADERS
-
-define gb_LinkTarget__use_mozilla_headers
-$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
-$(eval $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/npsdk \
-	$$(INCLUDE) \
-))
-
-endef
-
-endif #SYSTEM_MOZILLA_HEADERS
-
 
 ifneq ($(VALGRIND_CFLAGS),)
 
