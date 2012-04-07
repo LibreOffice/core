@@ -236,13 +236,12 @@ SfxViewShell* ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);
-    pBase->LateInit(OUString());
+    pBase->LateInit("");
     return pBase;
 }
 void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
-    pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,"Default");
+    pFactory = new SfxViewFactory( &CreateInstance,&InitFactory,nPrio,"Default" );
     InitFactory();
 }
 void ViewShellBase::InitFactory()

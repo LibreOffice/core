@@ -466,7 +466,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     return aLines.makeStringAndClear();
 }
 
-#define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( RTL_CONSTASCII_USTRINGPARAM( n ) ), v ) )
+#define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( n ), v ) )
 void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, sal_Bool )
 {
     std::vector< std::pair< OUString, Any > > aUserData;

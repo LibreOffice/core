@@ -50,7 +50,7 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);
-    pBase->LateInit(::rtl::OUString());
+    pBase->LateInit("");
     return pBase;
 }
 void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )

@@ -901,7 +901,7 @@ namespace {
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
-            : PrinterPage(ePageKind, rMapMode, bPrintMarkedOnly, ::rtl::OUString(),
+            : PrinterPage(ePageKind, rMapMode, bPrintMarkedOnly, "",
                 Point(), nDrawMode, eOrientation, nPaperTray),
               mnFirstPageIndex(nFirstPageIndex),
               mnSecondPageIndex(nSecondPageIndex),
@@ -2006,10 +2006,10 @@ private:
             if (mpOptions->IsPrintPageName())
             {
                 rInfo.msPageString = pPage->GetName();
-                rInfo.msPageString += ::rtl::OUString(sal_Unicode(' '));
+                rInfo.msPageString += rtl::OUString(sal_Unicode(' '));
             }
             else
-                rInfo.msPageString = ::rtl::OUString();
+                rInfo.msPageString = "";
             rInfo.msPageString += rInfo.msTimeDate;
 
             long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();

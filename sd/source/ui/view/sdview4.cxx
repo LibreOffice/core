@@ -488,8 +488,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                         //TODO/MBA: testing
                         ::rtl::OUString aName;
                         uno::Sequence < beans::PropertyValue > aMedium(1);
-                        aMedium[0].Name = ::rtl::OUString( "URL" );
-                        aMedium[0].Value <<= ::rtl::OUString( aCurrentDropFile );
+                        aMedium[0].Name = "URL" ;
+                        aMedium[0].Value <<=  ::rtl::OUString(aCurrentDropFile) ;
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );

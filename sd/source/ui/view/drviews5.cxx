@@ -551,7 +551,7 @@ void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::
 
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
-    rSequence[nIndex].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ZoomOnPage ));
+    rSequence[nIndex].Name = sUNO_View_ZoomOnPage ;
     rSequence[nIndex].Value <<= (sal_Bool)mbZoomOnPage;
 }
 
