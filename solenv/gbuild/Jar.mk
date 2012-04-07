@@ -241,26 +241,6 @@ $(foreach customtarget,$(2),$(call gb_Jar_use_customtarget,$(1),$(customtarget))
 
 endef
 
-define gb_Jar_add_package_dependency
-$$(call gb_Output_error,\
- gb_Jar_add_package_dependency: use gb_Jar_use_package instead.)
-endef
-
-define gb_Jar_use_package
-$(call gb_JavaClassSet_use_package,$(call gb_Jar_get_classsetname,$(1)),$(2))
-
-endef
-
-define gb_Jar_add_package_dependencies
-$$(call gb_Output_error,\
- gb_Jar_add_package_dependencies: use gb_Jar_use_packages instead.)
-endef
-
-define gb_Jar_use_packages
-$(foreach package,$(2),$(call gb_Jar_use_package,$(1),$(package)))
-
-endef
-
 # possible directories for jar files containing UNO services 
 gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_JAVA_DIR/ \

@@ -195,15 +195,4 @@ $(call gb_JavaClassSet_get_preparation_target,$(1)) : \
 
 endef
 
-define gb_JavaClassSet_add_package_dependency
-$$(call gb_Output_error,\
- gb_JavaClassSet_add_package_dependency: use gb_JavaClassSet_use_package instead.)
-endef
-
-define gb_JavaClassSet_use_package
-$(call gb_JavaClassSet_get_preparation_target,$(1)) : \
-       $(call gb_Package_get_target,$(2))
-
-endef
-
 # vim: set noet sw=4:

@@ -159,26 +159,6 @@ $(foreach dependency,$(2),$(call gb_JunitTest_use_customtarget,$(1),$(dependency
 
 endef
 
-define gb_JunitTest_add_package_dependency
-$$(call gb_Output_error,\
- gb_JunitTest_add_package_dependency: use gb_JunitTest_use_package instead.)
-endef
-
-define gb_JunitTest_use_package
-$(call gb_JavaClassSet_use_package,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
-
-endef
-
-define gb_JunitTest_add_package_dependencies
-$$(call gb_Output_error,\
- gb_JunitTest_add_package_dependencies: use gb_JunitTest_use_packages instead.)
-endef
-
-define gb_JunitTest_use_packages
-$(foreach dependency,$(2),$(call gb_JunitTest_use_package,$(1),$(dependency)))
-
-endef
-
 else # OOO_JUNIT_JAR
 
 .PHONY : $(call gb_JunitTest_get_target,$(1))
@@ -200,8 +180,6 @@ gb_JunitTest_use_jars :=
 gb_JunitTest_use_jar_classset :=
 gb_JunitTest_use_customtarget :=
 gb_JunitTest_use_customtargets :=
-gb_JunitTest_use_package :=
-gb_JunitTest_use_packages :=
 
 endif # OOO_JUNIT_JAR
 # vim: set noet sw=4:
