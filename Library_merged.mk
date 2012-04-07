@@ -23,6 +23,11 @@
 
 $(eval $(call gb_Library_Library,merged))
 
+# gb_MERGEDLIBS is defined in solenv/gbuild/extensions/pre_MergedLibsList.mk
+$(eval $(call gb_Library_use_library_objects,merged,\
+	$(gb_MERGEDLIBS) \
+))
+
 $(eval $(call gb_Library_use_libraries,merged,\
 	basegfx \
 	comphelper \
@@ -34,21 +39,21 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	sal \
 	salhelper \
 	sax \
-	sot \
-	svl \
 	tl \
 	ucbhelper \
 	utl \
-	vcl \
 	xmlreader \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	graphite \
+	icule \
 	icuuc \
 	jpeg \
+	lcms2 \
 	libxml2 \
-	telepathy \
+	nss3 \
 	zlib \
 ))
 
@@ -58,21 +63,57 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 endif
 
-# gb_MERGEDLIBS is defined in solenv/gbuild/extensions/pre_MergedLibsList.mk
-$(eval $(call gb_Library_use_library_objects,merged,\
-	$(gb_MERGEDLIBS) \
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_use_libraries,merged,\
+	jvmaccess \
 ))
+endif
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_use_externals,merged,\
+	fontconfig \
+	freetype \
+))
+endif
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_use_libraries,merged,\
+	dl \
+	m \
+	pthread \
+))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,merged,\
 	advapi32 \
 	gdi32 \
+	gdiplus \
+	imm32 \
+	mpr \
+	msimg32 \
+	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
 	shell32 \
 	user32 \
 	uuid \
+	version \
 	winmm \
+	winspool \
+))
+endif
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_libraries,merged,\
+	AppleRemote \
+	objc \
+))
+$(eval $(call gb_Library_use_externals,merged,\
+	carbon \
+	cocoa \
+	corefoundation \
+	quicktime \
 ))
 endif
 
@@ -80,12 +121,30 @@ ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,merged,\
 	libotouch \
 ))
+$(eval $(call gb_Library_add_libs,merged,\
+	-llog \
+	-landroid \
+	-llo-bootstrap \
+))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_libraries,merged,\
-    objc \
-    Cocoa \
+ifeq ($(OS),IOS)
+$(eval $(call gb_Library_use_externals,merged,\
+	corefoundation \
+	uikit \
+))
+endif
+
+ifneq ($(ENABLE_LIBRSVG),NO)
+$(eval $(call gb_Library_use_externals,merged,\
+	cairo \
+))
+endif
+
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Library_use_externals,merged,\
+	gtk \
+	telepathy \
 ))
 endif
 

@@ -69,7 +69,6 @@ copy-stuff:
 		   forlo \
 		   foruilo \
 		   frmlo \
-		   fsstorage.uno \
 		   gcc3_uno \
 		   hwplo \
 		   i18nisolang1gcc3 \
@@ -103,11 +102,9 @@ copy-stuff:
 		   scfiltlo \
 		   sddlo \
 		   smdlo \
-		   sotlo \
 		   stocservices.uno \
 		   store \
 		   svgfilterlo \
-		   svllo \
 		   swdlo \
 		   swlo \
 		   t602filterlo \
@@ -127,7 +124,6 @@ copy-stuff:
 		   vbaswobj.uno \
 		   wpftdrawlo \
 		   wpftwriterlo \
-		   vcllo \
 		   xml2 \
 		   xmlfdlo \
 		   xmlreader \

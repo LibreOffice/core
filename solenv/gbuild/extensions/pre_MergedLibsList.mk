@@ -37,6 +37,7 @@ gb_MERGEDLIBS := \
 	drawinglayer \
 	editeng \
 	filterconfig \
+	fsstorage \
 	fwe \
 	fwi \
 	fwk \
@@ -45,7 +46,9 @@ gb_MERGEDLIBS := \
 	sb \
 	sfx \
 	sofficeapp \
+	sot \
 	spl \
+	svl \
 	svt \
 	svx \
 	svxcore \
@@ -53,6 +56,7 @@ gb_MERGEDLIBS := \
 	ucb1 \
 	ucpfile1 \
 	uui \
+	vcl \
 	xmlscript \
 	xo \
 

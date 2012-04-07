@@ -933,7 +933,6 @@ public class DocumentLoader
 
             // Load a lot of shlibs here explicitly in advance because that
             // makes debugging work better, sigh
-            Bootstrap.dlopen("libvcllo.so");
             Bootstrap.dlopen("libmergedlo.so");
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");

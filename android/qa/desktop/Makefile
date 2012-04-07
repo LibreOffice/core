@@ -101,7 +101,6 @@ copy-stuff: buildrcs
 		  expwrap.uno \
 		  forlo \
 		  foruilo \
-		  fsstorage.uno \
 		  gcc3_uno \
 		  hyphenlo \
 		  i18nisolang1gcc3 \
@@ -127,11 +126,9 @@ copy-stuff: buildrcs
 		  reflection.uno \
 		  reg \
 		  saxlo \
-		  sotlo \
 		  spelllo \
 		  stocservices.uno \
 		  store \
-		  svllo \
 		  test \
 		  tllo \
 		  ucbhelper4gcc3 \
@@ -144,7 +141,6 @@ copy-stuff: buildrcs
 		  unoxmllo \
 		  utllo \
 		  vbahelperlo \
-		  vcllo \
 		  xml2 \
 		  xmlreader \
 		  xmlsecurity \

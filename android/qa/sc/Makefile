@@ -91,10 +91,8 @@ copy-stuff:
 		  saxlo \
 		  sclo \
 		  scfiltlo \
-		  sotlo \
 		  stocservices.uno \
 		  store \
-		  svllo \
 		  textinstream.uno \
 		  test \
 		  tllo \
@@ -108,7 +106,6 @@ copy-stuff:
 		  unoxmllo \
 		  utllo \
 		  vbahelperlo \
-		  vcllo \
 		  xml2 \
 		  xmlreader \
 		  xstor \

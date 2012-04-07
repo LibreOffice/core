@@ -39,7 +39,6 @@ copy-stuff:
 		   forlo \
 		   foruilo \
 		   frmlo \
-		   fsstorage.uno \
 		   gcc3_uno \
 		   hwplo \
 		   hyphenlo \
@@ -79,12 +78,10 @@ copy-stuff:
 		   sdlo \
 		   sddlo \
 		   smdlo \
-		   sotlo \
 		   spelllo \
 		   stocservices.uno \
 		   store \
 		   svgfilterlo \
-		   svllo \
 		   swdlo \
 		   swlo \
 		   swdlo \
@@ -105,7 +102,6 @@ copy-stuff:
 		   vbaswobj.uno \
 		   wpftdrawlo \
 		   wpftwriterlo \
-		   vcllo \
 		   xml2 \
 		   xmlfdlo \
 		   xmlreader \
