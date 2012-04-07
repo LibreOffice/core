@@ -40,11 +40,7 @@ $(eval $(call gb_Library_set_include,odbc,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-ifeq ($(SYSTEM_ODBC_HEADERS),YES)
-$(eval $(call gb_Library_add_defs,odbc,\
-	-DSYSTEM_ODBC_HEADERS \
-))
-endif
+$(eval $(call gb_Library_use_external,odbc,odbc_headers))
 
 $(eval $(call gb_Library_add_linked_libs,odbc,\
 	odbcbase \

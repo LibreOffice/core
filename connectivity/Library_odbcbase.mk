@@ -46,11 +46,7 @@ $(eval $(call gb_Library_add_defs,odbcbase,\
 	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
 ))
 
-ifeq ($(SYSTEM_ODBC_HEADERS),YES)
-$(eval $(call gb_Library_add_defs,odbcbase,\
-	-DSYSTEM_ODBC_HEADERS \
-))
-endif
+$(eval $(call gb_Library_use_external,odbcbase,odbc_headers))
 
 $(eval $(call gb_Library_add_linked_libs,odbcbase,\
 	cppu \

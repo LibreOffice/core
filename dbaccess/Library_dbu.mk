@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_api,dbu,\
 
 $(eval $(call gb_Library_add_defs,dbu,\
     -DDBACCESS_DLLIMPLEMENTATION \
-    $(if $(filter YES,$(SYSTEM_ODBC_HEADERS)),-DSYSTEM_ODBC_HEADERS) \
 ))
 
 ifeq ($(GUI)$(COM),WNTGCC) # for adoint.h
@@ -50,6 +49,8 @@ $(eval $(call gb_Library_add_cxxflags,dbu,\
     -fpermissive \
 ))
 endif
+
+$(eval $(call gb_Library_use_external,dbu,odbc_headers))
 
 $(eval $(call gb_Library_use_libraries,dbu,\
     comphelper \

@@ -48,6 +48,24 @@ endef
 
 endif
 
+ifeq ($(SYSTEM_ODBC_HEADERS),YES)
+
+define gb_LinkTarget__use_odbc_headers
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_ODBC_HEADERS \
+)
+
+endef
+
+else
+
+define gb_LinkTarget__use_odbc_headers
+$(call gb_LinkTarget_use_package,$(1),odbc_inc)
+
+endef
+
+endif
+
 ifeq ($(SYSTEM_CPPUNIT),YES)
 
 define gb_LinkTarget__use_cppunit
