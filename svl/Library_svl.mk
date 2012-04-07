@@ -28,7 +28,10 @@
 
 $(eval $(call gb_Library_Library,svl))
 
-$(eval $(call gb_Library_use_package,svl,svl_inc))
+$(eval $(call gb_Library_use_packages,svl,\
+	rsc_inc \
+	svl_inc \
+))
 
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
