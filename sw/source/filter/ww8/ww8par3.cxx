@@ -457,7 +457,6 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
 {
 }
 
-SV_IMPL_PTRARR( WW8LFOInfos, WW8LFOInfo_Ptr );
 
 
 // Hilfs-Methoden ////////////////////////////////////////////////////////////
@@ -1052,7 +1051,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_),
-    rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_), pLFOInfos(0),
+    rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_),
     nUniqueList(1)
 {
     // LST und LFO gibts erst ab WW8
@@ -1062,7 +1061,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             || ( rFib.lcbPlfLfo < 2) ) return; // offensichtlich keine Listen da
 
     // Arrays anlegen
-    pLFOInfos = new WW8LFOInfos;
     bool bLVLOk = true;
 
     nLastLFOPosition = USHRT_MAX;
@@ -1243,7 +1241,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             for (int i = 0; i < nMaxSize; ++i)
                 pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
         }
-        pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
+        pLFOInfos.push_back(pLFOInfo);
         bOk = true;
     }
 
@@ -1252,23 +1250,21 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 2.2 fuer alle LFO die zugehoerigen LFOLVL einlesen
         //
-        sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
-        for (sal_uInt16 nLfo = 0; nLfo < nLFOInfos; ++nLfo)
+        size_t nLFOInfos = pLFOInfos.size();
+        for (size_t nLfo = 0; nLfo < nLFOInfos; ++nLfo)
         {
             bOk = false;
-            WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLfo );
-            if (!pLFOInfo)
-                break;
+            WW8LFOInfo& rLFOInfo = pLFOInfos[nLfo];
             // stehen hierfuer ueberhaupt LFOLVL an ?
-            if( pLFOInfo->bOverride )
+            if( rLFOInfo.bOverride )
             {
-                WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
+                WW8LSTInfo* pParentListInfo = GetLSTByListId(rLFOInfo.nIdLst);
                 if (!pParentListInfo)
                     break;
                 //
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
                 //
-                SwNumRule* pParentNumRule = pLFOInfo->pNumRule;
+                SwNumRule* pParentNumRule = rLFOInfo.pNumRule;
                 OSL_ENSURE(pParentNumRule, "ww: Impossible lists, please report");
                 if( !pParentNumRule )
                     break;
@@ -1285,15 +1281,15 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 {
                     sal_uInt16 nRul = rDoc.MakeNumRule(
                         rDoc.GetUniqueNumRuleName( &sPrefix ), pParentNumRule);
-                    pLFOInfo->pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
-                    pLFOInfo->pNumRule->SetAutoRule(false);
+                    rLFOInfo.pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
+                    rLFOInfo.pNumRule->SetAutoRule(false);
                 }
                 else
                 {
                     sal_uInt16 nRul = rDoc.MakeNumRule(
                         rDoc.GetUniqueNumRuleName(), pParentNumRule);
-                    pLFOInfo->pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
-                    pLFOInfo->pNumRule->SetAutoRule(true);  // = default
+                    rLFOInfo.pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
+                    rLFOInfo.pNumRule->SetAutoRule(true);  // = default
                 }
                 //
                 // 2.2.2 alle LFOLVL (und ggfs. LVL) fuer die neue NumRule
@@ -1321,7 +1317,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 rSt.SeekRel(-4);
 
                 std::deque<bool> aNotReallyThere(WW8ListManager::nMaxLevel);
-                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
@@ -1355,7 +1351,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         // 2.2.2.2 eventuell auch den zugehoerigen LVL einlesen
                         //
                         SwNumFmt aNumFmt(
-                            pLFOInfo->pNumRule->Get(aLFOLVL.nLevel));
+                            rLFOInfo.pNumRule->Get(aLFOLVL.nLevel));
                         if (aBits1 & 0x20)
                         {
                             aLFOLVL.bFormat = true;
@@ -1365,7 +1361,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                             bLVLOk = ReadLVL(aNumFmt, aItemSet[nLevel],
                                 pParentListInfo->aIdSty[nLevel],
                                 aLFOLVL.bStartAt, aNotReallyThere, nLevel,
-                                pLFOInfo->maParaSprms[nLevel]);
+                                rLFOInfo.maParaSprms[nLevel]);
 
                             if (!bLVLOk)
                                 break;
@@ -1378,12 +1374,12 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         //
                         // 2.2.2.3 das NumFmt in die NumRule aufnehmen
                         //
-                        pLFOInfo->pNumRule->Set(aLFOLVL.nLevel, aNumFmt);
+                        rLFOInfo.pNumRule->Set(aLFOLVL.nLevel, aNumFmt);
                     }
                     bLVLOk = true;
 
                     if (nMaxLevel > aLFOLVL.nLevel)
-                        pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
+                        rLFOInfo.maOverrides[aLFOLVL.nLevel] = aLFOLVL;
                 }
                 if( !bLVLOk )
                     break;
@@ -1392,9 +1388,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 sal_uInt16 aFlagsNewCharFmt = 0;
                 bool bNewCharFmtCreated = false;
-                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                 {
-                    AdjustLVL( nLevel, *pLFOInfo->pNumRule, aItemSet, aCharFmt,
+                    AdjustLVL( nLevel, *rLFOInfo.pNumRule, aItemSet, aCharFmt,
                         bNewCharFmtCreated, sPrefix );
                     if( bNewCharFmtCreated )
                         aFlagsNewCharFmt += (1 << nLevel);
@@ -1402,7 +1398,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 // 2.2.4 ItemPools leeren und loeschen
                 //
-                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                     delete aItemSet[ nLevel ];
                 bOk = true;
             }
@@ -1429,20 +1425,19 @@ WW8ListManager::~WW8ListManager()
         }
         delete *aIter;
     }
-
-    if (pLFOInfos)
-    {
-        for(sal_uInt16 nInfo = pLFOInfos->Count(); nInfo; )
+    boost::ptr_vector<WW8LFOInfo >::reverse_iterator aIter;
+        for (aIter = pLFOInfos.rbegin() ;
+            aIter < pLFOInfos.rend();
+            ++aIter )
         {
-            WW8LFOInfo *pActInfo = pLFOInfos->GetObject(--nInfo);
-            if (pActInfo->bOverride && pActInfo->pNumRule
-                && !pActInfo->bUsedInDoc && pActInfo->pNumRule->IsAutoRule())
+            if (aIter->bOverride
+                && aIter->pNumRule
+                && !aIter->bUsedInDoc
+                && aIter->pNumRule->IsAutoRule())
             {
-                rDoc.DelNumRule( pActInfo->pNumRule->GetName() );
+                rDoc.DelNumRule( aIter->pNumRule->GetName() );
             }
         }
-        delete pLFOInfos;
-    }
 }
 
 bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
@@ -1477,31 +1472,27 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     const sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode)
 {
-    sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
-    if( nLFOInfos <= nLFOPosition )
+    if (pLFOInfos.size() <= nLFOPosition)
         return 0;
 
-    WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLFOPosition );
+    WW8LFOInfo& rLFOInfo = pLFOInfos[nLFOPosition];
 
-    if( !pLFOInfo )
-        return 0;
+    bool bFirstUse = !rLFOInfo.bUsedInDoc;
+    rLFOInfo.bUsedInDoc = true;
 
-    bool bFirstUse = !pLFOInfo->bUsedInDoc;
-    pLFOInfo->bUsedInDoc = true;
-
-    if( !pLFOInfo->pNumRule )
+    if( !rLFOInfo.pNumRule )
         return 0;
 
     // #i25545#
     // #i100132# - a number format does not have to exist on given list level
-    SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
+    SwNumFmt pFmt(rLFOInfo.pNumRule->Get(nLevel));
 
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
         if ( pFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
             pFmt.SetNumAdjust(SVX_ADJUST_LEFT);
         else if ( pFmt.GetNumAdjust() == SVX_ADJUST_LEFT)
             pFmt.SetNumAdjust(SVX_ADJUST_RIGHT);
-        pLFOInfo->pNumRule->Set(nLevel, pFmt);
+        rLFOInfo.pNumRule->Set(nLevel, pFmt);
     }
     nLastLFOPosition = nLFOPosition;
     /*
@@ -1516,21 +1507,21 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     is a simple list. Something that word 2000 does anyway, that 97 didn't, to
     my bewilderment.
     */
-    if (nLevel && pLFOInfo->pNumRule->IsContinusNum())
-        pLFOInfo->pNumRule->SetContinusNum(false);
+    if (nLevel && rLFOInfo.pNumRule->IsContinusNum())
+        rLFOInfo.pNumRule->SetContinusNum(false);
 
-    if( (!pLFOInfo->bOverride) && (!pLFOInfo->bLSTbUIDSet) )
+    if( (!rLFOInfo.bOverride) && (!rLFOInfo.bLSTbUIDSet) )
     {
-        WW8LSTInfo* pParentListInfo = GetLSTByListId( pLFOInfo->nIdLst );
+        WW8LSTInfo* pParentListInfo = GetLSTByListId( rLFOInfo.nIdLst );
         if( pParentListInfo )
             pParentListInfo->bUsedInDoc = true;
-        pLFOInfo->bLSTbUIDSet = true;
+        rLFOInfo.bLSTbUIDSet = true;
     }
 
-    if (pLFOInfo->maParaSprms.size() > nLevel)
-        rParaSprms = pLFOInfo->maParaSprms[nLevel];
+    if (rLFOInfo.maParaSprms.size() > nLevel)
+        rParaSprms = rLFOInfo.maParaSprms[nLevel];
 
-    SwNumRule *pRet = pLFOInfo->pNumRule;
+    SwNumRule *pRet = rLFOInfo.pNumRule;
 
     bool bRestart(false);
     sal_uInt16 nStart(0);
@@ -1541,13 +1532,13 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
       Check if there were overrides for this level
     */
-    if (pLFOInfo->bOverride && nLevel < pLFOInfo->nLfoLvl)
+    if (rLFOInfo.bOverride && nLevel < rLFOInfo.nLfoLvl)
     {
-        WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
+        WW8LSTInfo* pParentListInfo = GetLSTByListId(rLFOInfo.nIdLst);
         OSL_ENSURE(pParentListInfo, "ww: Impossible lists, please report");
         if (pParentListInfo && pParentListInfo->pNumRule)
         {
-            const WW8LFOLVL &rOverride = pLFOInfo->maOverrides[nLevel];
+            const WW8LFOLVL &rOverride = rLFOInfo.maOverrides[nLevel];
             bool bNoChangeFromParent =
                 IsEqualFormatting(*pRet, *(pParentListInfo->pNumRule));
 
@@ -1565,7 +1556,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
                             pParentListInfo->pNumRule->Get(nLevel);
                         if (
                              rFmt.GetStart() ==
-                             pLFOInfo->maOverrides[nLevel].nStartAt
+                             rLFOInfo.maOverrides[nLevel].nStartAt
                            )
                         {
                             bRestart = true;
@@ -1574,7 +1565,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
                         {
                             bNewstart = true;
                             nStart = writer_cast<sal_uInt16>
-                                (pLFOInfo->maOverrides[nLevel].nStartAt);
+                                (rLFOInfo.maOverrides[nLevel].nStartAt);
                         }
                     }
                 }

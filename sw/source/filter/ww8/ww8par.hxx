@@ -142,8 +142,6 @@ namespace com{namespace sun {namespace star{
 //-----------------------------------------
 
 struct WW8LFOInfo;
-typedef WW8LFOInfo* WW8LFOInfo_Ptr;
-SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16)
 
 class WW8Reader : public StgReader
 {
@@ -177,7 +175,7 @@ private:
     const WW8Fib&    rFib;
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
-    WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
+    boost::ptr_vector<WW8LFOInfo > pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     sal_uInt16       nUniqueList; // current number for creating unique list names
     sal_uInt8* GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
