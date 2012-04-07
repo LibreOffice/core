@@ -49,7 +49,6 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 .DELETE_ON_ERROR:
 
 SHELL := /bin/sh
-MAKEFLAGS+=-r
 true := T
 false :=
 define NEWLINE

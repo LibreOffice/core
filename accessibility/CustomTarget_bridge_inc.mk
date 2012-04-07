@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge/inc,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge/inc))
 
 ACBI := $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)
 

@@ -26,66 +26,23 @@
 #
 #*************************************************************************
 
-# N.B.: putting the "+" there at the start activates the GNU make job server
-define gb_CustomTarget__command
-+$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
-	O='$(OUTDIR)' S='$(SRCDIR)' W='$(WORKDIR)' gb_AWK='$(gb_AWK)' \
-	gb_XSLTPROC='$(gb_XSLTPROC)' GBUILDDIR='$(GBUILDDIR)' SRCDIR='$(SRCDIR)' \
-	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
-	touch $(1))
-
-endef
-
 # the .dir is for make 3.81, which ignores trailing /
 $(call gb_CustomTarget_get_workdir,%)/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CustomTarget_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),MAK,3)
-	$(if $(NEW_STYLE),touch $@,\
-	$(call gb_CustomTarget__command,$@,$*))
+	$(call gb_Output_announce,$*,$(true),CUS,3)
+	touch $@
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),MAK,3)
+	$(call gb_Output_announce,$*,$(false),CUS,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
 		rm -f $(call gb_CustomTarget_get_target,$*))
 
-define gb_CustomTarget__get_makefile
-$(SRCDIR)/$(1)/Makefile
-endef
-
 define gb_CustomTarget_CustomTarget
-$(call gb_CustomTarget_get_target,$(1)) : NEW_STYLE := $(2)
-ifeq ($(2),)
-$(call gb_CustomTarget_get_target,$(1)) : \
-  $(call gb_CustomTarget__get_makefile,$(1))
-else
-$$(eval $$(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
-endif
-
-endef
-
-
-define gb_CustomTarget_add_dependency
-$(call gb_CustomTarget_get_target,$(1)) : $(SRCDIR)/$(2)
-
-endef
-
-define gb_CustomTarget_add_dependencies
-$(foreach dependency,$(2),$(call gb_CustomTarget_add_dependency,$(1),$(dependency)))
-
-endef
-
-define gb_CustomTarget_add_outdir_dependency
-$(call gb_CustomTarget_get_target,$(1)) : $(2)
-
-endef
-
-define gb_CustomTarget_add_outdir_dependencies
-$(foreach dependency,$(2),$(call gb_CustomTarget_add_outdir_dependency,$(1),$(dependency)))
+$(eval $(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
 
 endef
 

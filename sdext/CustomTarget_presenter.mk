@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,sdext/source/presenter/help/en-US/com.sun.PresenterScreen,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,sdext/source/presenter/help/en-US/com.sun.PresenterScreen))
 
 SEPR := $(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)
 

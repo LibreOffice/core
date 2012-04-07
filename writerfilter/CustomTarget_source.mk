@@ -27,7 +27,7 @@
 #*************************************************************************
 
 
-$(eval $(call gb_CustomTarget_CustomTarget,writerfilter/source,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,writerfilter/source))
 
 WFSG := $(call gb_CustomTarget_get_workdir,writerfilter/source)
 WFDIR := $(SRCDIR)/writerfilter/source/

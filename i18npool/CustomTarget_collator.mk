@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator))
 
 IPCO := $(call gb_CustomTarget_get_workdir,i18npool/collator)
 TXTLIST := $(notdir $(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt))

@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde4,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde4))
 
 VCKM := $(call gb_CustomTarget_get_workdir,vcl/unx/kde4)
 

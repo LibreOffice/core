@@ -27,7 +27,7 @@
 
 include $(SRCDIR)/unoil/climaker/version.txt
 
-$(eval $(call gb_CustomTarget_CustomTarget,unoil/climaker,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,unoil/climaker))
 
 UICM := $(call gb_CustomTarget_get_workdir,unoil/climaker)
 

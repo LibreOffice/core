@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex))
 
 EXSA := $(call gb_CustomTarget_get_workdir,extensions/source/activex)
 

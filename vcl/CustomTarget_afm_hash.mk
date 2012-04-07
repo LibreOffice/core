@@ -23,7 +23,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,vcl/generic/fontmanager,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/generic/fontmanager))
 
 VCFM := $(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)
 

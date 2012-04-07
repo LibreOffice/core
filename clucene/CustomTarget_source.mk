@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,clucene/source,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,clucene/source))
 
 CLSO := $(call gb_CustomTarget_get_workdir,clucene/source)
 

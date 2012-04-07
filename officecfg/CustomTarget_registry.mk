@@ -29,7 +29,7 @@
 OCDIR := $(SRCDIR)/officecfg/registry
 include $(OCDIR)/files.mk
 
-$(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry,new_style))
+$(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry))
 
 OCRG := $(call gb_CustomTarget_get_workdir,officecfg/registry)
 
