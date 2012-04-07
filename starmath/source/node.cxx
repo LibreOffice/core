@@ -647,8 +647,8 @@ void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, in
     //Dump subnodes
     int myid = id;
     const SmNode *pNode;
-    USHORT nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize;  i++)
+    sal_uInt16 nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->DumpAsDot(out, NULL, i, ++id, myid);
 
