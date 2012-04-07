@@ -171,8 +171,8 @@ my_components += \
     component/fpicker/source/generic/fpicker \
     component/fpicker/source/office/fps_office \
     syssh \
-    tvhlp1 \
-    ucpchelp1 \
+    component/xmlhelp/source/treeview/tvhlp1 \
+    component/xmlhelp/util/ucpchelp1 \
 
 .ENDIF
 

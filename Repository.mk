@@ -381,10 +381,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     subsequenttest \
     test \
     textconv_dict \
+    tvhlp1 \
     ucb1 \
     ucpdav1 \
     ucpfile1 \
     ucpftp1 \
+    ucpchelp1 \
     ucphier1 \
     ucppkg1 \
     unoexceptionprotector \

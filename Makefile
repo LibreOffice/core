@@ -133,6 +133,7 @@ writerfilter\
 writerperfect\
 xmerge\
 xml2cmp\
+xmlhelp\
 xmloff\
 xmlreader\
 xmlscript\
@@ -236,7 +237,6 @@ udm\
 unodevtools\
 vigra\
 x11_extensions\
-xmlhelp\
 xpdf\
 xsltml\
 zlib\
