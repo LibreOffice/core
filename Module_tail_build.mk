@@ -92,6 +92,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
     writerperfect \
     xmerge \
+    xmlhelp \
     xmloff \
     xmlscript \
     xmlsecurity \
