@@ -47,7 +47,7 @@ $(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDI
 endef
 
 define gb_Helper_abbreviate_dirs_native
-$(call gb_Helper_convert_native,$(call gb_Helper_abbreviate_dirs,$(1)))
+$(call gb_Helper_native_path,$(call gb_Helper_abbreviate_dirs,$(1)))
 endef
 
 define gb_Helper_make_clean_target

@@ -134,14 +134,6 @@ define gb_Helper_extend_ld_path
 $(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
 endef
 
-
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
 # Convert path to native notation
 define gb_Helper_native_path
 $(1)
@@ -154,7 +146,5 @@ endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
-
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_get_rcfile = $(1)rc

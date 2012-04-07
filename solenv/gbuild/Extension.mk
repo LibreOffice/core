@@ -77,8 +77,8 @@ $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXTARGET)
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		$(gb_Extension_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
-			-i $(call gb_Helper_native_path,$(filter %.xml,$^)) \
-			-o $(call gb_Helper_native_path,$@) \
+			-i $(filter %.xml,$^) \
+			-o $@ \
 			-m $(SDF) \
 			-l all)
 endif

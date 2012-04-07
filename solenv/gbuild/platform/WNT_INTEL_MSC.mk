@@ -245,26 +245,12 @@ endif
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
 
-gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(strip \
-$(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE), \
-$(subst $(WORKDIR),$(gb_Helper_WORKDIR_NATIVE), \
-$(subst $(OUTDIR),$(gb_Helper_OUTDIR_NATIVE), \
-$(1)))))
-endef
-
+gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
 # Convert path to native notation
 define gb_Helper_native_path
-$(shell cygpath -m $(1))
+$(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE),$(1))
 endef
 
 # Convert path to file URL.
@@ -355,7 +341,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
-		$(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(call gb_Helper_native_path,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \

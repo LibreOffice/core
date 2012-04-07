@@ -56,7 +56,7 @@ define gb_UnoApiPartTarget__command
 	$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-		$(call gb_Helper_convert_native,$(INCLUDE) \
+		$(call gb_Helper_native_path,$(INCLUDE) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
 		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose -C \
 		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3))))) && \
@@ -95,7 +95,7 @@ $(if $(1),$(foreach type,$(shell $(gb_UnoApiTarget_XML2CMPCOMMAND) -types stdout
 endef
 
 define gb_UnoApiTarget__command_impl
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(call gb_Helper_convert_native,$(2))) && \
+RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(call gb_Helper_native_path,$(2))) && \
 $(1) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE}
 endef
@@ -121,8 +121,8 @@ $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$*,$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
 		-f -t \
-		-r1 $(call gb_Helper_convert_native,$(UNOAPI_REFERENCE)) \
-		-r2 $(call gb_Helper_convert_native,$(1)))
+		-r1 $(call gb_Helper_native_path,$(UNOAPI_REFERENCE)) \
+		-r2 $(call gb_Helper_native_path,$(1)))
 endef
 
 define gb_UnoApiTarget__check_mode
@@ -275,7 +275,7 @@ gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=
 
 define gb_UnoApiHeadersTarget__command
 RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
-	$(call gb_Helper_convert_native,-Gc $(4) -BUCR \
+	$(call gb_Helper_native_path,-Gc $(4) -BUCR \
 	-O$(3) $(call gb_UnoApiTarget_get_target,$(2)) $(UNOAPI_DEPS))) && \
 $(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE} && \

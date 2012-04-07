@@ -42,7 +42,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(filter-out $(JARDEPS),$(4)), \
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-			$(call gb_Helper_convert_native,\
+			$(call gb_Helper_native_path,\
 			$(filter-out $(JARDEPS),$(4)))) && \
 		$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
 			$(gb_JavaClassSet_JAVACDEBUG) \

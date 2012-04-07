@@ -54,7 +54,7 @@ $(eval $(call gb_Library_add_exception_objects,so_activex,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,so_activex,\
-	/DEF:$(call gb_Helper_convert_native,$(SRCDIR)/extensions/source/activex/so_activex.def) \
+	/DEF:$(call gb_Helper_native_path,$(SRCDIR)/extensions/source/activex/so_activex.def) \
 ))
 
 $(eval $(call gb_Library_use_libraries,so_activex,\

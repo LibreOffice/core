@@ -41,7 +41,7 @@ $(eval $(call gb_WinResTarget_add_file,activex_res,extensions/source/activex/so_
 
 $(eval $(call gb_WinResTarget_set_defs,activex_res,\
 	$$(DEFS) \
-	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(call gb_Helper_convert_native,$(SRCDIR)),../../..,$(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/extensions/source/activex/idl))) \
+	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(call gb_Helper_native_path,$(SRCDIR)),../../..,$(call gb_Helper_native_path,$(WORKDIR)/CustomTarget/extensions/source/activex/idl))) \
 ))
 
 $(call gb_WinResTarget_get_target,activex_res) : $(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb

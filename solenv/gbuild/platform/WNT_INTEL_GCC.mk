@@ -130,18 +130,6 @@ gb_STDLIBS := \
 
 # Helper class
 
-# Convert parameters filesystem root to native notation
-# does some real work only on Windows, and this file is for
-# cross-compilation.
-define gb_Helper_convert_native
-$(1)
-endef
-
-# Convert path to native notation
-define gb_Helper_native_path
-$(1)
-endef
-
 # Convert path to file URL.
 define gb_Helper_make_url
 file://$(strip $(1))
