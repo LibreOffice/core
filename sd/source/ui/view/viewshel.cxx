@@ -229,7 +229,7 @@ void ViewShell::construct(void)
         mpScrollBarBox.reset(new ScrollBarBox(GetParentWindow(), WB_SIZEABLE));
     }
 
-    String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
+    rtl::OUString aName( "ViewShell" );
     SetName (aName);
 
     GetDoc()->StartOnlineSpelling(sal_False);

@@ -68,8 +68,6 @@ using namespace ::com::sun::star::accessibility;
 
 class SfxViewFrame;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace accessibility {
 
 
@@ -399,31 +397,30 @@ void SAL_CALL
         OUString sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
-            if( aServices.getLength() >= 2 &&
-                aServices[1].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationView")))
+            if( aServices.getLength() >= 2 && aServices[1] == "com.sun.star.presentation.PresentationView")
             {
                 SolarMutexGuard aGuard;
 
-                sName = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
+                sName = ResId::toString(SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
             }
             else
             {
                 SolarMutexGuard aGuard;
 
-                sName = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
+                sName = ResId::toString( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
             }
         }
         else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
-            sName = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
+            sName = ResId::toString( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
         }
         else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 
-            sName = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
+            sName = ResId::toString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
         }
         else
         {
@@ -432,7 +429,7 @@ void SAL_CALL
     }
     else
     {
-        sName = OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleDrawDocumentView"));
+        sName = "AccessibleDrawDocumentView";
     }
     return sName;
 }
@@ -456,31 +453,30 @@ void SAL_CALL
         OUString sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
-            if( aServices.getLength() >= 2 &&
-                aServices[1].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationView")))
+            if( aServices.getLength() >= 2 && aServices[1] == "com.sun.star.presentation.PresentationView")
             {
                 SolarMutexGuard aGuard;
 
-                sDescription = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
+                sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
             }
             else
             {
                 SolarMutexGuard aGuard;
 
-                sDescription = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
+                sDescription = ResId::toString( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
             }
         }
         else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
-            sDescription = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
+            sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
         }
         else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 
-            sDescription = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
+            sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
         }
         else
         {
@@ -489,7 +485,7 @@ void SAL_CALL
     }
     else
     {
-        sDescription = OUString(RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
+        sDescription = "Accessible Draw Document";
     }
     return sDescription;
 }
@@ -694,7 +690,7 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
 void AccessibleDrawDocumentView::UpdateAccessibleName (void)
 {
     OUString sNewName (CreateAccessibleName());
-    sNewName += A2S(": ");
+    sNewName += ": ";
 
     // Add the number of the current slide.
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
@@ -705,7 +701,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
             try
             {
                 sal_Int16 nPageNumber (0);
-                if (xProperties->getPropertyValue(A2S("Number")) >>= nPageNumber)
+                if (xProperties->getPropertyValue("Number") >>= nPageNumber)
                 {
                     sNewName += OUString::valueOf(sal_Int32(nPageNumber));
                 }
@@ -722,7 +718,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
         Reference<container::XIndexAccess> xPages (xPagesSupplier->getDrawPages(), UNO_QUERY);
         if (xPages.is())
         {
-            sNewName += A2S(" / ");
+            sNewName += " / ";
             sNewName += OUString::valueOf(xPages->getCount());
         }
     }

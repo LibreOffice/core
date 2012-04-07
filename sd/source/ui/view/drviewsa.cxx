@@ -378,7 +378,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mbIsRulerDrag = sal_False;
 
-    String aName( RTL_CONSTASCII_USTRINGPARAM("DrawViewShell"));
+    rtl::OUString aName( "DrawViewShell" );
     SetName (aName);
 
     mnLockCount = 0UL;
@@ -751,11 +751,11 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
         // Allways show the slide/page number.
-        String aString (SdResId( STR_SD_PAGE ));
-        aString += sal_Unicode(' ');
-        aString += UniString::CreateFromInt32( maTabControl.GetCurPageId() );
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aString += UniString::CreateFromInt32( GetDoc()->GetSdPageCount( mePageKind ) );
+        OUString aOUString = ResId::toString(SdResId( STR_SD_PAGE ));
+        aOUString += " ";
+        aOUString += OUString::valueOf( maTabControl.GetCurPageId() );
+        aOUString += " / " ;
+        aOUString += OUString::valueOf( GetDoc()->GetSdPageCount( mePageKind ) );
 
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on
@@ -793,14 +793,14 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                 if( pLayer )
                 {
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ));
-                    aString += pLayer->GetName();
-                    aString += sal_Unicode(')');
+                    aOUString += " (" ;
+                    aOUString += pLayer->GetName();
+                    aOUString += ")";
                 }
             }
         }
 
-        rSet.Put (SfxStringItem (SID_STATUS_PAGE, aString));
+        rSet.Put (SfxStringItem (SID_STATUS_PAGE, aOUString));
     }
     // Layout
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )

@@ -956,19 +956,19 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 pValue->Value >>= aSnapGridWidthYDom;
             }
-            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleLayers ) ) )
+            else if (!bImpress && pValue->Name == sUNO_View_VisibleLayers  )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
                 SetVisibleLayers( aSetOfBytes );
             }
-            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PrintableLayers ) ) )
+            else if (!bImpress && pValue->Name == sUNO_View_PrintableLayers )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
                 SetPrintableLayers( aSetOfBytes );
             }
-            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_LockedLayers ) ) )
+            else if (!bImpress && pValue->Name == sUNO_View_LockedLayers )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
