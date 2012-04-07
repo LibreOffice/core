@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,tl))
 
-$(eval $(call gb_Library_add_package_headers,tl,tools_inc))
+$(eval $(call gb_Library_use_package,tl,tools_inc))
 
 $(eval $(call gb_Library_use_custom_headers,tl,tools/reversemap))
 

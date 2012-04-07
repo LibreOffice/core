@@ -41,6 +41,6 @@ $(eval $(call gb_CppunitTest_use_api,officecfg_cppheader_test, \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_add_package_headers,officecfg_cppheader_test,officecfg_cppheader))
+$(eval $(call gb_CppunitTest_use_package,officecfg_cppheader_test,officecfg_cppheader))
 
 ## vim: set noet sw=4 ts=4:

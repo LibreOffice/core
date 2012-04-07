@@ -1011,9 +1011,8 @@ $(foreach customtarget,$(2),$(call gb_LinkTarget__use_custom_headers,$(1),$(cust
 endef
 
 define gb_LinkTarget_add_package_headers
-$(foreach package,$(2),$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_Package_get_target,$(package))))
-$(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_Package_get_clean_target,$(package)))
-
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_package_headers: use gb_LinkTarget_use_package instead.)
 endef
 
 # add SDI (svidl) headers
@@ -1029,7 +1028,13 @@ endef
 
 # use a header package, possibly from another module (i.e. via OUTDIR)
 define gb_LinkTarget_use_package
-$(call gb_LinkTarget_get_headers_target,$(1) : |$(call gb_Package_get_target,$(2)))
+$(call gb_LinkTarget_get_headers_target,$(1) : | \
+	$(call gb_Package_get_target,$(strip $(2))))
+
+endef
+
+define gb_LinkTarget_use_packages
+$(foreach package,$(2),$(call gb_LinkTarget_use_package,$(1),$(package)))
 endef
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.

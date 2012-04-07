@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,dba))
 
-$(eval $(call gb_Library_add_package_headers,dba,\
+$(eval $(call gb_Library_use_package,dba,\
 	dbaccess_inc \
 ))
 

@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,xcr))
 
-$(eval $(call gb_Library_add_package_headers,xcr,xmlscript_inc))
+$(eval $(call gb_Library_use_package,xcr,xmlscript_inc))
 
 $(eval $(call gb_Library_set_componentfile,xcr,xmlscript/util/xcr))
 

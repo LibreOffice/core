@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,fsstorage))
 
-$(eval $(call gb_Library_add_package_headers,fsstorage,svl_inc))
+$(eval $(call gb_Library_use_package,fsstorage,svl_inc))
 
 $(eval $(call gb_Library_set_componentfile,fsstorage,svl/source/fsstor/fsstorage))
 

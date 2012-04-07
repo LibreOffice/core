@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,i18nsearch))
 
-$(eval $(call gb_Library_add_package_headers,i18nsearch,i18npool_inc))
+$(eval $(call gb_Library_use_package,i18nsearch,i18npool_inc))
 
 $(eval $(call gb_Library_set_componentfile,i18nsearch,i18npool/source/search/i18nsearch))
 

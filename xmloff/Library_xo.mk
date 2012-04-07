@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,xo))
 
 $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 
-$(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
+$(eval $(call gb_Library_use_package,xo,xmloff_inc))
 
 $(eval $(call gb_Library_set_include,xo,\
     -I$(SRCDIR)/xmloff/inc \

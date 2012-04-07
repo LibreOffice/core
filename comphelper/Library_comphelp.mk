@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,comphelper))
 
-$(eval $(call gb_Library_add_package_headers,comphelper,comphelper_inc))
+$(eval $(call gb_Library_use_package,comphelper,comphelper_inc))
 
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,for))
 
-$(eval $(call gb_Library_add_package_headers,for,\
+$(eval $(call gb_Library_use_package,for,\
 	formula_inc \
 ))
 

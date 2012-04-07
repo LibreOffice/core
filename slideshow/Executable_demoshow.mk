@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Executable_Executable,demoshow))
 
-$(eval $(call gb_Executable_add_package_headers,demoshow,sd_qa_unit))
+$(eval $(call gb_Executable_use_package,demoshow,sd_qa_unit))
 
 $(eval $(call gb_Executable_set_include,demoshow,\
     $$(INCLUDE) \

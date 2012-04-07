@@ -199,6 +199,7 @@ $(eval $(foreach method,\
 	use_custom_headers \
 	add_external_headers \
 	use_package \
+	use_packages \
 	add_package_headers \
 	add_sdi_headers \
 	export_objects_list \

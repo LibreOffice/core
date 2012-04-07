@@ -282,6 +282,8 @@ $(eval $(foreach method,\
 	add_asmobject \
 	add_asmobjects \
 	add_package_headers \
+	use_package \
+	use_packages \
 	add_sdi_headers \
 	add_cflags \
 	set_cflags \

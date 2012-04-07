@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,oox))
 
-$(eval $(call gb_Library_add_package_headers,oox,\
+$(eval $(call gb_Library_use_packages,oox,\
     oox_inc \
     oox_generated \
     oox_source \

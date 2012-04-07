@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,i18nisolang1))
 
-$(eval $(call gb_Library_add_package_headers,i18nisolang1,i18npool_inc))
+$(eval $(call gb_Library_use_package,i18nisolang1,i18npool_inc))
 
 $(eval $(call gb_Library_set_include,i18nisolang1,\
 	$$(INCLUDE) \

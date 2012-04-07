@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,svt))
 
-$(eval $(call gb_Library_add_package_headers,svt,svtools_inc))
+$(eval $(call gb_Library_use_package,svt,svtools_inc))
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 

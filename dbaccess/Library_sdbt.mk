@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,sdbt))
 
-$(eval $(call gb_Library_add_package_headers,sdbt,\
+$(eval $(call gb_Library_use_package,sdbt,\
 	dbaccess_inc \
 ))
 

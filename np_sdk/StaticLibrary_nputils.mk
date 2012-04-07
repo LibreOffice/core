@@ -27,7 +27,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,nputils))
 
-$(eval $(call gb_StaticLibrary_add_package_headers,nputils,np_sdk_inc))
+$(eval $(call gb_StaticLibrary_use_package,nputils,np_sdk_inc))
 
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
 	mozilla_headers \

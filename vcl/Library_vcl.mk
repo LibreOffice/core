@@ -42,7 +42,7 @@ else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
+$(eval $(call gb_Library_use_package,vcl,vcl_inc))
 
 $(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
 

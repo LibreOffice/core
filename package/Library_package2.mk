@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,package2))
 
-$(eval $(call gb_Library_add_package_headers,package2,package_inc))
+$(eval $(call gb_Library_use_package,package2,package_inc))
 
 $(eval $(call gb_Library_set_componentfile,package2,package/util/package2))
 

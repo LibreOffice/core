@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,juhx))
 
-$(eval $(call gb_Library_add_package_headers,juhx,\
+$(eval $(call gb_Library_use_package,juhx,\
     javaunohelper_cppumaker \
 ))
 

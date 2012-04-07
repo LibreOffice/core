@@ -29,8 +29,10 @@ $(eval $(call gb_Library_Library,cppuhelper))
 
 $(eval $(call gb_Library_set_soversion_script,cppuhelper,3,$(SRCDIR)/cppuhelper/source/gcc3.map))
 
-$(eval $(call gb_Library_add_package_headers,cppuhelper,cppuhelper_generated))
-$(eval $(call gb_Library_add_package_headers,cppuhelper,cppuhelper_inc))
+$(eval $(call gb_Library_use_packages,cppuhelper,\
+	cppuhelper_generated \
+	cppuhelper_inc \
+))
 
 $(eval $(call gb_Library_set_include,cppuhelper,\
 	-I$(WORKDIR)/CustomTarget/cppuhelper/unotypes \

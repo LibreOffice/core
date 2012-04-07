@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,avmedia))
 
-$(eval $(call gb_Library_add_package_headers,avmedia,avmedia_inc))
+$(eval $(call gb_Library_use_package,avmedia,avmedia_inc))
 
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
 

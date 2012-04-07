@@ -31,7 +31,7 @@ $(eval $(call gb_Library_Library,utl))
 
 # declare packages that will be delivered before compilation of utl
 # learn more about TYPE in the Package.mk template
-$(eval $(call gb_Library_add_package_headers,utl,unotools_inc))
+$(eval $(call gb_Library_use_package,utl,unotools_inc))
 
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))

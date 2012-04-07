@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,drawinglayer))
 
-$(eval $(call gb_Library_add_package_headers,drawinglayer,drawinglayer_inc))
+$(eval $(call gb_Library_use_package,drawinglayer,drawinglayer_inc))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \

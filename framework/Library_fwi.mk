@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,fwi))
 
-$(eval $(call gb_Library_add_package_headers,fwi,framework_inc))
+$(eval $(call gb_Library_use_package,fwi,framework_inc))
 
 $(eval $(call gb_Library_add_defs,fwi,\
     -DFWI_DLLIMPLEMENTATION \

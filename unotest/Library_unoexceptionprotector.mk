@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,unoexceptionprotector))
 
-$(eval $(call gb_Library_add_package_headers,unoexceptionprotector,unotest_inc))
+$(eval $(call gb_Library_use_package,unoexceptionprotector,unotest_inc))
 
 $(eval $(call gb_Library_use_api,unoexceptionprotector,\
 	udkapi \

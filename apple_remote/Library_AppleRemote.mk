@@ -29,7 +29,7 @@
 
 $(eval $(call gb_Library_Library,AppleRemote))
 
-$(eval $(call gb_Library_add_package_headers,AppleRemote,\
+$(eval $(call gb_Library_use_package,AppleRemote,\
     apple_remote_inc \
 ))
 

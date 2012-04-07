@@ -33,7 +33,7 @@ $(eval $(call gb_Library_Library,LIB))
 
 # declare packages that will be delivered before compilation of LIB
 # learn more about TYPE in the Package.mk template
-$(eval $(call gb_Library_add_package_headers,LIB,MODULE_TYPE))
+$(eval $(call gb_Library_use_package,LIB,MODULE_TYPE))
 
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,LIB,MODULE/COMPONENT_FILE))

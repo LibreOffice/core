@@ -27,7 +27,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,LIB))
 
-$(eval $(call gb_StaticLibrary_add_package_headers,LIB,MODULE_inc))
+$(eval $(call gb_StaticLibrary_use_package,LIB,MODULE_inc))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,LIB,\
 ))

@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,sax))
 
-$(eval $(call gb_Library_add_package_headers,sax,\
+$(eval $(call gb_Library_use_package,sax,\
 	sax_inc \
 ))
 

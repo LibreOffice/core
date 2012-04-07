@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,tk))
 
 $(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk))
 
-$(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
+$(eval $(call gb_Library_use_package,tk,toolkit_inc))
 
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \

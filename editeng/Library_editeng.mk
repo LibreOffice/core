@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,editeng))
 
-$(eval $(call gb_Library_add_package_headers,editeng,editeng_inc))
+$(eval $(call gb_Library_use_package,editeng,editeng_inc))
 
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
