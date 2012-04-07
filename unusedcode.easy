@@ -298,8 +298,6 @@ VCLXDevice::IsCreatedWithToolkit() const
 VCLXPrinterServer::getImplementationId()
 VCLXPrinterServer::getTypes()
 VCLXRadioButton::getFirstActionListener()
-VbaFontBase::getUnderline()
-VbaFontBase::setUnderline(com::sun::star::uno::Any const&)
 VbaFoundFilesEnum::SetFileList(com::sun::star::uno::Sequence<rtl::OUString>&)
 VbaFoundFilesEnum::VbaFoundFilesEnum()
 VclEventListeners2::~VclEventListeners2()
