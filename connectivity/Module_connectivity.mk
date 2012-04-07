@@ -106,4 +106,8 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
+	JunitTest_complex \
+))
+
 # vim: set noet sw=4 ts=4:
