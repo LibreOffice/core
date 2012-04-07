@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,mozbootstrap,\
 	cppu \
 	cppuhelper \
 	sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,mozbootstrap,\

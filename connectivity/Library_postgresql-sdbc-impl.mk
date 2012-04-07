@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,postgresql-sdbc-impl,\
 	cppuhelper \
 	sal \
 	salhelper \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
