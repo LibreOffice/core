@@ -1147,7 +1147,7 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 	clucene \
 ))
 
