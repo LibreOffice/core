@@ -45,6 +45,7 @@ clucene\
 codemaker\
 comphelper\
 configmgr\
+connectivity\
 cppcanvas\
 cppu\
 cppuhelper\
@@ -162,7 +163,6 @@ boost\
 bridges\
 cairo\
 cli_ure\
-connectivity\
 cosv\
 cppunit\
 crashrep\
