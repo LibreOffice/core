@@ -20,6 +20,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+# AsmObject class
+
+gb_AsmObject_get_source = $(1)/$(2).s
+
+# $(call gb_AsmObject__command,object,relative-source,source,dep-file)
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs,\
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		-c $(3) \
+		-o $(1) \
+		-I$(dir $(3)) \
+		$(INCLUDE)) && \
+	echo "$(1) : $(3)" > $(4)
+endef
 
 # CObject class
 
