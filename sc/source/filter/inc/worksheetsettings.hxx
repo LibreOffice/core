@@ -109,25 +109,6 @@ public:
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( SequenceInputStream& rStrm );
 
-    /** Imports sheet properties from a SHEETEXT record. */
-    void                importSheetExt( BiffInputStream& rStrm );
-    /** Imports sheet properties from a SHEETPR record. */
-    void                importSheetPr( BiffInputStream& rStrm );
-    /** Imports protection status from the PROTECT record. */
-    void                importProtect( BiffInputStream& rStrm );
-    /** Imports object protection status from the OBJECTPROTECT record. */
-    void                importObjectProtect( BiffInputStream& rStrm );
-    /** Imports scenario protection status from the SCENPROTECT record. */
-    void                importScenProtect( BiffInputStream& rStrm );
-    /** Imports sheet password hash from the PASSWORD record. */
-    void                importPassword( BiffInputStream& rStrm );
-    /** Imports protection settings from the SHEETPROTECTION record. */
-    void                importSheetProtection( BiffInputStream& rStrm );
-    /** Imports the VBA code module name from the CODENAME record. */
-    void                importCodeName( BiffInputStream& rStrm );
-    /** Imports phonetic settings from the PHONETICPR record. */
-    void                importPhoneticPr( BiffInputStream& rStrm );
-
     /** Converts the imported worksheet settings. */
     void                finalizeImport();
 
