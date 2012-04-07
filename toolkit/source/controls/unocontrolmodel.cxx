@@ -155,12 +155,6 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
 {
 }
 
-UnoControlModel* UnoControlModel::Clone() const
-{
-    OSL_FAIL( "UnoControlModel::Clone() ?!" );
-    return NULL;
-}
-
 ::com::sun::star::uno::Sequence<sal_Int32> UnoControlModel::ImplGetPropertyIds() const
 {
     sal_uInt32 nIDs = maData.size();
