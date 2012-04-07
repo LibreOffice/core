@@ -108,10 +108,6 @@ $(eval $(foreach method,\
 	set_library_path_flags \
 	add_api \
 	use_api \
-	add_linked_libs \
-	use_libraries \
-	add_linked_static_libs \
-	use_static_libraries \
 	use_external \
 	use_externals \
 	add_custom_headers \
