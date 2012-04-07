@@ -115,12 +115,10 @@ const char * const aSource3[ ] =
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
+
 void oldtestfile::test_file_001()
 {
-#ifdef WIN32
-    return;
-#endif
-
+#ifndef WIN32
     OUString base1( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla" ) );
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
@@ -142,15 +140,12 @@ void oldtestfile::test_file_001()
     OUString err1( RTL_CONSTASCII_USTRINGPARAM( "../.." ) );
     OUString target;
     // CPPUNIT_ASSERT_MESSAGE("failure #11",  osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) );
-
+#endif
 }
 
 void oldtestfile::test_file_002()
 {
-#ifdef WIN32
-    return;
-#endif
-
+#ifndef WIN32
     OUString base2( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla/blubs/schnubbel" ) );
     int i;
     for(  i = 0 ; aSource2[i] ; i +=2 )
@@ -166,16 +161,13 @@ void oldtestfile::test_file_002()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
-//      fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
     }
+#endif
 }
 
 void oldtestfile::test_file_004()
 {
-#ifdef WIN32
-    return;
-#endif
-
+#ifndef WIN32
     OUString base4( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla/" ) );
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
@@ -192,9 +184,7 @@ void oldtestfile::test_file_004()
         OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
         //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
-
-
-// fprintf( stderr, "test_file done\n" );
+#endif
 }
 
 } // namespace osl_test_file
