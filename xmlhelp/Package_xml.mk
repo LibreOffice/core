@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Package_Package,xmlhelp_xml,$(SRCDIR)/xmlhelp/util))
 
-$(eval $(call gb_Package_add_file,bin/embed.xsl,embed.xsl))
-$(eval $(call gb_Package_add_file,bin/idxcaption.xsl,idxcaption.xsl))
-$(eval $(call gb_Package_add_file,bin/idxcontent.xsl,idxcontent.xsl))
-$(eval $(call gb_Package_add_file,bin/main_transform.xsl,main_transform.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xml,bin/embed.xsl,embed.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xml,bin/idxcaption.xsl,idxcaption.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xml,bin/idxcontent.xsl,idxcontent.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xml,bin/main_transform.xsl,main_transform.xsl))
 
-$(eval $(call gb_Package_add_file,xml/ucpchelp.xml,ucpchelp.xml))
+$(eval $(call gb_Package_add_file,xmlhelp_xml,xml/ucpchelp.xml,ucpchelp.xml))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
