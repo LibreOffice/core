@@ -93,10 +93,7 @@ $(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
-    ucpchelp1 \
+    xmlhelp/util/ucpchelp1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
