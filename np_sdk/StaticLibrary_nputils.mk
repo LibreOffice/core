@@ -27,8 +27,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,nputils))
 
-$(eval $(call gb_StaticLibrary_use_package,nputils,np_sdk_inc))
-
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
 	mozilla_headers \
 ))
@@ -37,19 +35,16 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_StaticLibrary_add_defs,nputils,\
 	-DNO_X11 \
 ))
-
 endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_exception_objects,nputils,\
 	np_sdk/mozsrc/npwin \
 ))
-
 else
 $(eval $(call gb_StaticLibrary_add_cobjects,nputils,\
 	np_sdk/mozsrc/npunix \
 ))
-
 endif
 
 # vim: set noet sw=4 ts=4:
