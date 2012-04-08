@@ -61,9 +61,7 @@ $(eval $(call gb_CppunitTest_use_components,hwpfilter_test_hwpfilter,\
     ucb/source/ucp/file/ucpfile1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,hwpfilter_test_hwpfilter))
 
 # we need to explicitly depend on library hwp because it is not implied
 # by a link relation

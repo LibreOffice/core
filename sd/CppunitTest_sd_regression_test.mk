@@ -116,11 +116,17 @@ $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
+$(eval $(call gb_CppunitTest_use_configuration,sd_regression_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sd_regression_test))
+
+$(eval $(call gb_CppunitTest_use_extra_configuration,sd_regression_test,\
+	$(OUTDIR)/unittest/registry \
+))
+
 $(eval $(call gb_CppunitTest_set_args,sd_regression_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
-    # .../spool is required for the (somewhat strange) filter configuration
 
 # we need to explicitly depend on library sdfilt because it is not implied
 # by a link relation

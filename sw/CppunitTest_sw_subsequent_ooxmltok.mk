@@ -74,8 +74,12 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmltok,\
     writerfilter/util/writerfilter \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sw_subsequent_ooxmltok,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
+$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ooxmltok))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ooxmltok))
+
+$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_ooxmltok,\
+	$(OUTDIR)/unittest/registry \
 ))
 
 # vim: set noet sw=4 ts=4:

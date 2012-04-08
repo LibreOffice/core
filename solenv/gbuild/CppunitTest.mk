@@ -63,6 +63,8 @@ gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip
 define gb_CppunitTest__make_args
 $(ARGS) \
 --headless \
+$(if $(strip $(CONFIGURATION_LAYERS)),\
+	"-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
 $(if $(strip $(UNO_TYPES)),\
 	"-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(strip $(UNO_SERVICES)),\
@@ -117,6 +119,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
 $(call gb_CppunitTest_get_target,$(1)) : ARGS :=
+$(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
@@ -265,6 +268,34 @@ $(foreach component,$(2),$(call gb_CppunitTest_use_old_component,$(1),$(componen
 endef
 
 gb_ComponentTarget__get_old_component_target = $(OUTDIR)/xml/$(1).component
+
+define gb_CppunitTest__use_configuration
+$(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS += $(2):$(call gb_CppunitTarget__make_url,$(3))
+
+endef
+
+# Use standard configuration.
+define gb_CppunitTest_use_configuration
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,officecfg)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(gb_Configuration_registry))
+
+endef
+
+# Use configuration for filters.
+#
+# Okay, this is not exactly true, because there may be configuration
+# for more things than just filters in spool, but it is good enough.
+define gb_CppunitTest_use_filter_configuration
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,fcfg_langpack)
+$(call gb_CppunitTest__use_configuration,$(1),module,$(gb_Configuration_registry)/spool)
+
+endef
+
+# Use extra configuration dir(s).
+define gb_CppunitTest_use_extra_configuration
+$(foreach extra,$(2),$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(extra)))
+
+endef
 
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_linktargetname,$$(1)),$$(2),$$(3))

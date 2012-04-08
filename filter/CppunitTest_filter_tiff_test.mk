@@ -54,8 +54,6 @@ $(eval $(call gb_CppunitTest_use_components,filter_tiff_test,\
     configmgr/source/configmgr \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,filter_tiff_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,filter_tiff_test))
 
 # vim: set noet sw=4 ts=4:

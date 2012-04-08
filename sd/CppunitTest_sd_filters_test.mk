@@ -106,10 +106,9 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sd_filters_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool)" \
-))
-    # .../spool is required for the (somewhat strange) filter configuration
+$(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sd_filters_test))
 
 # we need to explicitly depend on library sdfilt because it is not implied
 # by a link relation

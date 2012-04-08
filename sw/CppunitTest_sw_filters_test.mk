@@ -90,9 +90,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     xmlhelp/util/ucpchelp1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))
 
 # we need to explicitly depend on library msword because it is not implied
 # by a link relation

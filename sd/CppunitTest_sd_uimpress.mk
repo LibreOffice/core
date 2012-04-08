@@ -82,8 +82,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     i18npool/util/i18npool \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,sd_uimpress))
 
 # vim: set noet sw=4 ts=4:

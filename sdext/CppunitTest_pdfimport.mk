@@ -73,8 +73,6 @@ $(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
     ucb/source/ucp/file/ucpfile1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sdext_pdfimport,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,sdext_pdfimport))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

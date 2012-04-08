@@ -69,8 +69,6 @@ $(eval $(call gb_CppunitTest_use_components,extensions_test_update,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,extensions_test_update,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,extensions_test_update))
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

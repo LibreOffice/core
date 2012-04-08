@@ -59,9 +59,7 @@ $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	writerfilter/util/writerfilter \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,writerfilter_rtftok))
 
 # we need to explicitly depend on library rtftok and writerfilter because it is not implied
 # by a link relation

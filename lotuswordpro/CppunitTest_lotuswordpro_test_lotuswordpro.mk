@@ -61,9 +61,7 @@ $(eval $(call gb_CppunitTest_use_components,lotuswordpro_test_lotuswordpro,\
     ucb/source/ucp/file/ucpfile1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,lotuswordpro_test_lotuswordpro))
 
 # we need to explicitly depend on library lwpft because it is not implied
 # by a link relation

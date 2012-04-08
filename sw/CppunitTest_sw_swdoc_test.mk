@@ -97,9 +97,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,sw_swdoc_test))
 
 # we need to explicitly depend on the sw resource files needed at unit-test
 # runtime

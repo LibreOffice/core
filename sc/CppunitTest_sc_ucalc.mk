@@ -97,8 +97,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
-))
+$(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))
 
 # vim: set noet sw=4 ts=4:

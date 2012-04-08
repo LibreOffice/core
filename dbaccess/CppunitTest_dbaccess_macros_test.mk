@@ -116,10 +116,13 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_macros_test,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,dbaccess_macros_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
+$(eval $(call gb_CppunitTest_use_configuration,dbaccess_macros_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_macros_test))
+
+$(eval $(call gb_CppunitTest_use_extra_configuration,dbaccess_macros_test,\
+	$(OUTDIR)/unittest/registry \
 ))
-    # .../spool is required for the (somewhat strange) filter configuration
 
 # we need to
 # a) explicitly depend on library msword because it is not implied by a link

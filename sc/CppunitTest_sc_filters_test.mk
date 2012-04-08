@@ -116,10 +116,9 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool)" \
-))
-    # .../spool is required for the (somewhat strange) filter configuration
+$(eval $(call gb_CppunitTest_use_configuration,sc_filters_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sc_filters_test))
 
 # we need to
 # a) explicitly depend on library msword because it is not implied by a link
