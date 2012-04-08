@@ -60,13 +60,11 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 # TODO: move this to platform under suitable name
 gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip $(1))
 
-gb_CppunitTest__get_uno_type_target = $(OUTDIR)/bin/$(1).rdb
 define gb_CppunitTest__make_args
 $(ARGS) \
 --headless \
 $(if $(strip $(UNO_TYPES)),\
-	"-env:UNO_TYPES=$(foreach rdb,$(UNO_TYPES),\
-		$(call gb_CppunitTarget__make_url,$(call gb_CppunitTest__get_uno_type_target,$(rdb))))") \
+	"-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(URE),\
@@ -92,7 +90,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 		STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
 		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
-		$(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) \
+		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))
 
 define gb_CppunitTest_CppunitTest
@@ -138,7 +136,6 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 
 endef
 
-# TODO: Once we build the services.rdb with gbuild we should use its *_get_target method
 define gb_CppunitTest_uses_ure
 $(call gb_CppunitTest_use_type_rdb,$(1),udkapi)
 $(call gb_CppunitTest_use_service_rdb,$(1),ure/services)
@@ -152,8 +149,8 @@ $$(call gb_Output_error,\
 endef
 
 define gb_CppunitTest_use_type_rdb
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,$(2))
-$(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(2)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(call gb_UnoApi_get_target,$(2))
 
 endef
 
