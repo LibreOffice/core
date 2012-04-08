@@ -52,8 +52,7 @@ using ::rtl::OUString;
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartArea" ));
+static const OUString lcl_aServiceName("com.sun.star.comp.chart.ChartArea");
 
 struct StaticUpDownBarWrapperPropertyArray_Initializer
 {
@@ -143,7 +142,7 @@ UpDownBarWrapper::UpDownBarWrapper(
     bool bUp, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_aPropertySetName( bUp ? C2U("WhiteDay") : C2U("BlackDay") )
+        , m_aPropertySetName( bUp ? "WhiteDay" : "BlackDay" )
 {
 }
 

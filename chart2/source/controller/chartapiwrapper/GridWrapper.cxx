@@ -184,7 +184,7 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedDefaultProperty( C2U("LineColor"), C2U("LineColor"), uno::makeAny( sal_Int32( 0x000000) ) ) ); // black
+    aWrappedProperties.push_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::makeAny( sal_Int32( 0x000000) ) ) ); // black
 
     return aWrappedProperties;
 }
@@ -194,10 +194,10 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartGrid" );
-    aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 2 ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartGrid";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
+    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
 
     return aServices;
 }

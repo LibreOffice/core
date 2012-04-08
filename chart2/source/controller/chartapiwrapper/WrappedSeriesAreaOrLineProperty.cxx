@@ -46,7 +46,7 @@ WrappedSeriesAreaOrLineProperty::WrappedSeriesAreaOrLineProperty(
     , const rtl::OUString& rInnerAreaTypeName
     , const rtl::OUString& rInnerLineTypeName
     , DataSeriesPointWrapper* pDataSeriesPointWrapper )
-    : WrappedProperty( rOuterName, C2U( "" ) )
+    : WrappedProperty( rOuterName, rtl::OUString() )
     , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
     , m_aInnerAreaTypeName( rInnerAreaTypeName )
     , m_aInnerLineTypeName( rInnerLineTypeName )

@@ -64,7 +64,7 @@ private:
 };
 
 WrappedScaleTextProperty::WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : ::chart::WrappedProperty( C2U( "ScaleText" ), rtl::OUString() )
+    : ::chart::WrappedProperty( "ScaleText" , rtl::OUString() )
     , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -76,7 +76,7 @@ WrappedScaleTextProperty::~WrappedScaleTextProperty()
 void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize") );
+    static const OUString aRefSizeName( "ReferencePageSize" );
 
     if( xInnerPropertySet.is() )
     {
@@ -84,7 +84,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
         if( ! (rOuterValue >>= bNewValue) )
         {
             if( rOuterValue.hasValue() )
-                throw lang::IllegalArgumentException( C2U("Property ScaleText requires value of type boolean"), 0, 0 );
+                throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", 0, 0 );
         }
 
         try
@@ -107,7 +107,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
 Any WrappedScaleTextProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize") );
+    static const OUString aRefSizeName( "ReferencePageSize" );
 
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
@@ -142,7 +142,7 @@ enum
 void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "ScaleText" ),
+        Property( "ScaleText",
                   PROP_CHART_SCALE_TEXT,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::MAYBEVOID

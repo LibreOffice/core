@@ -91,7 +91,7 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
 {
     sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("stock properties require type sal_Bool"), 0, 0 );
+        throw lang::IllegalArgumentException( "stock properties require type sal_Bool", 0, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -144,7 +144,7 @@ public:
 };
 
 WrappedVolumeProperty::WrappedVolumeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedStockProperty( C2U("Volume"), uno::makeAny(sal_False) , spChart2ModelContact )
+        : WrappedStockProperty( "Volume", uno::makeAny(sal_False) , spChart2ModelContact )
 {
 }
 WrappedVolumeProperty::~WrappedVolumeProperty()
@@ -166,8 +166,8 @@ WrappedVolumeProperty::~WrappedVolumeProperty()
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                     DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
 
-            if(    aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) )
-                || aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
+            if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeLowHighClose"
+                || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
                 m_aOuterValue <<= sal_Bool(sal_True);
             else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= sal_Bool(sal_False);
@@ -187,17 +187,17 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 
     if( bNewValue ) //add volume
     {
-        if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) ), uno::UNO_QUERY );
-        else if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ), uno::UNO_QUERY );
+        if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeLowHighClose" ), uno::UNO_QUERY );
+        else if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
     }
     else //remove volume
     {
-        if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ), uno::UNO_QUERY );
-        else if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) ), uno::UNO_QUERY );
+        if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
+        else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockOpenLowHighClose" ), uno::UNO_QUERY );
     }
     return xTemplate;
 }
@@ -216,7 +216,7 @@ public:
     uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( sal_Bool bNewValue, const rtl::OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const;
 };
 WrappedUpDownProperty::WrappedUpDownProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedStockProperty( C2U("UpDown"), uno::makeAny(sal_False) , spChart2ModelContact )
+        : WrappedStockProperty( "UpDown", uno::makeAny(sal_False) , spChart2ModelContact )
 {
 }
 WrappedUpDownProperty::~WrappedUpDownProperty()
@@ -237,8 +237,8 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                     DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
 
-            if(    aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) )
-                || aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
+            if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockOpenLowHighClose"
+                || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
                 m_aOuterValue <<= sal_Bool(sal_True);
             else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= sal_Bool(sal_False);
@@ -253,17 +253,17 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTempla
     uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
     if( bNewValue ) //add open series
     {
-        if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) ), uno::UNO_QUERY );
-        else if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ), uno::UNO_QUERY );
+        if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockOpenLowHighClose" ), uno::UNO_QUERY );
+        else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
     }
     else //remove open series
     {
-        if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ), uno::UNO_QUERY );
-        else if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
-            xTemplate.set( xFactory->createInstance( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) ), uno::UNO_QUERY );
+        if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
+        else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
+            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeLowHighClose" ), uno::UNO_QUERY );
     }
     return xTemplate;
 }
@@ -283,14 +283,14 @@ enum
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Volume" ),
+        Property( "Volume",
                   PROP_CHART_STOCK_VOLUME,
                   ::getCppuType( reinterpret_cast< sal_Bool * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "UpDown" ),
+        Property( "UpDown",
                   PROP_CHART_STOCK_UPDOWN,
                   ::getCppuType( reinterpret_cast< sal_Bool * >(0)),
                   beans::PropertyAttribute::BOUND

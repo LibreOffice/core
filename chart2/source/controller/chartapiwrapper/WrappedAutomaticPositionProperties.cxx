@@ -61,7 +61,7 @@ public:
 };
 
 WrappedAutomaticPositionProperty::WrappedAutomaticPositionProperty()
-    : ::chart::WrappedProperty( C2U( "AutomaticPosition" ), rtl::OUString() )
+    : ::chart::WrappedProperty( "AutomaticPosition" , rtl::OUString() )
 {
 }
 WrappedAutomaticPositionProperty::~WrappedAutomaticPositionProperty()
@@ -75,15 +75,15 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
     {
         bool bNewValue = true;
         if( ! (rOuterValue >>= bNewValue) )
-            throw lang::IllegalArgumentException( C2U("Property AutomaticPosition requires value of type boolean"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", 0, 0 );
 
         try
         {
             if( bNewValue )
             {
-                Any aRelativePosition( xInnerPropertySet->getPropertyValue( C2U( "RelativePosition" ) ) );
+                Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
                 if( aRelativePosition.hasValue() )
-                    xInnerPropertySet->setPropertyValue( C2U( "RelativePosition" ), Any() );
+                    xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
             }
         }
         catch( const uno::Exception & ex )
@@ -99,7 +99,7 @@ Any WrappedAutomaticPositionProperty::getPropertyValue( const Reference< beans::
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
     {
-        Any aRelativePosition( xInnerPropertySet->getPropertyValue( C2U( "RelativePosition" ) ) );
+        Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
         if( !aRelativePosition.hasValue() )
             aRet <<= true;
     }
@@ -133,7 +133,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "AutomaticPosition" ),
+        Property( "AutomaticPosition",
                   PROP_CHART_AUTOMATIC_POSITION,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND

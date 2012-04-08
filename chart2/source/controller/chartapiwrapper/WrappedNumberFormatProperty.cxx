@@ -43,7 +43,7 @@ namespace wrapper
 //.............................................................................
 
 WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedDirectStateProperty( C2U("NumberFormat"), C2U("NumberFormat") )
+        : WrappedDirectStateProperty( "NumberFormat", "NumberFormat" )
         , m_spChart2ModelContact(spChart2ModelContact)
 {
     m_aOuterValue = getPropertyDefault( 0 );
@@ -63,12 +63,12 @@ void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, cons
 {
     sal_Int32 nFormat = 0;
     if( ! (rOuterValue >>= nFormat) )
-        throw lang::IllegalArgumentException( C2U("Property 'NumberFormat' requires value of type sal_Int32"), 0, 0 );
+        throw lang::IllegalArgumentException( "Property 'NumberFormat' requires value of type sal_Int32", 0, 0 );
 
     m_aOuterValue = rOuterValue;
     if(xInnerPropertySet.is())
     {
-        bool bUseSourceFormat = !xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();
+        bool bUseSourceFormat = !xInnerPropertySet->getPropertyValue( "NumberFormat" ).hasValue();
         if( bUseSourceFormat )
         {
             uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
@@ -114,7 +114,7 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 //-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
-        : WrappedProperty( C2U("LinkNumberFormatToSource"), C2U("") )
+    : WrappedProperty( "LinkNumberFormatToSource", rtl::OUString() )
         , m_pWrappedNumberFormatProperty( pWrappedNumberFormatProperty )
 {
     if( m_pWrappedNumberFormatProperty )
@@ -164,7 +164,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
                 aValue <<= sal_Int32( 0 );
         }
 
-        xInnerPropertySet->setPropertyValue( C2U("NumberFormat"), aValue );
+        xInnerPropertySet->setPropertyValue( "NumberFormat", aValue );
     }
 }
 
@@ -176,7 +176,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
         OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
-    bool bLink = ! xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();
+    bool bLink = ! xInnerPropertySet->getPropertyValue( "NumberFormat" ).hasValue();
     return uno::makeAny( bLink );
 }
 

@@ -125,7 +125,7 @@ public:
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
-            throw ::com::sun::star::lang::IllegalArgumentException( C2U("statistic property requires different type"), 0, 0 );
+            throw ::com::sun::star::lang::IllegalArgumentException( "statistic property requires different type", 0, 0 );
 
         if( m_ePropertyType == DIAGRAM )
         {

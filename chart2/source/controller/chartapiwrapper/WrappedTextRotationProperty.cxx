@@ -41,7 +41,7 @@ namespace chart
 {
 
 WrappedTextRotationProperty::WrappedTextRotationProperty( bool bDirectState )
-    : ::chart::WrappedProperty( C2U( "TextRotation" ), C2U( "TextRotation" ) )
+    : ::chart::WrappedProperty( "TextRotation" , "TextRotation" )
     , m_bDirectState( bDirectState )
 {
 }

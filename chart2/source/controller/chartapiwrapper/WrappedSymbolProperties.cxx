@@ -204,28 +204,28 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "SymbolType" ),
+        Property( "SymbolType",
                   PROP_CHART_SYMBOL_TYPE,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "SymbolBitmapURL" ),
+        Property( "SymbolBitmapURL",
                   PROP_CHART_SYMBOL_BITMAP_URL,
                   ::getCppuType( reinterpret_cast< ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "SymbolSize" ),
+        Property( "SymbolSize",
                   PROP_CHART_SYMBOL_SIZE,
                   ::getCppuType( reinterpret_cast< awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Lines" ),
+        Property( "Lines",
                   PROP_CHART_SYMBOL_AND_LINES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -251,7 +251,7 @@ void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< Wrapp
 WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< sal_Int32 >( C2U("SymbolType")
+        : WrappedSeriesOrDiagramProperty< sal_Int32 >( "SymbolType"
             , uno::makeAny( ::com::sun::star::chart::ChartSymbolType::NONE )
             , spChart2ModelContact
             , ePropertyType )
@@ -266,7 +266,7 @@ sal_Int32 WrappedSymbolTypeProperty::getValueFromSeries( const Reference< beans:
     sal_Int32 aRet = 0;
     m_aDefaultValue >>= aRet;
     chart2::Symbol aSymbol;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol ) )
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol ) )
         aRet = lcl_getSymbolType( aSymbol );
     return aRet;
 }
@@ -277,10 +277,10 @@ void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPrope
         return;
 
     chart2::Symbol aSymbol;
-    xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol;
+    xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol;
 
     lcl_setSymbolTypeToSymbol( nSymbolType, aSymbol );
-    xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+    xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
 }
 
 Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -339,7 +339,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
 WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< OUString >( C2U("SymbolBitmapURL")
+        : WrappedSeriesOrDiagramProperty< OUString >( "SymbolBitmapURL"
             , uno::makeAny( OUString() ), spChart2ModelContact, ePropertyType  )
 {
 }
@@ -353,7 +353,7 @@ OUString WrappedSymbolBitmapURLProperty::getValueFromSeries( const Reference< be
     OUString aRet;
     m_aDefaultValue >>= aRet;
     chart2::Symbol aSymbol;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol )
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol )
         && aSymbol.Graphic.is())
     {
         GraphicObject aGrObj( Graphic( aSymbol.Graphic ));
@@ -373,7 +373,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         return;
 
     chart2::Symbol aSymbol;
-    if( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol )
+    if( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol )
     {
         bool bMatchesPrefix =
             aNewGraphicURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ));
@@ -382,7 +382,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
             GraphicObject aGrObj = GraphicObject(
                 rtl::OUStringToOString(aNewGraphicURL.copy( RTL_CONSTASCII_LENGTH(UNO_NAME_GRAPHOBJ_URLPREFIX) ), RTL_TEXTENCODING_ASCII_US));
             aSymbol.Graphic.set( aGrObj.GetGraphic().GetXGraphic());
-            xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+            xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
         }
         else
         {
@@ -391,14 +391,13 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
                 // @todo: get factory from some context?
                 Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
                 Reference< graphic::XGraphicProvider > xGraphProv(
-                    xFact->createInstance( C2U("com.sun.star.graphic.GraphicProvider")), uno::UNO_QUERY_THROW );
+                    xFact->createInstance( "com.sun.star.graphic.GraphicProvider"), uno::UNO_QUERY_THROW );
                 Sequence< beans::PropertyValue > aArgs(1);
-                aArgs[0] = beans::PropertyValue(
-                    C2U("URL"), -1, uno::makeAny( aNewGraphicURL ),
+                aArgs[0] = beans::PropertyValue( "URL", -1, uno::makeAny( aNewGraphicURL ),
                     beans::PropertyState_DIRECT_VALUE );
                 aSymbol.Graphic.set( xGraphProv->queryGraphic( aArgs ));
                 OSL_ENSURE( aSymbol.Graphic.is(), "Invalid URL for Symbol Bitmap" );
-                xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+                xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
             }
             catch( const uno::Exception & ex )
             {
@@ -434,7 +433,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
             bool bFoundSize = false;
             try
             {
-                if( (xProp->getPropertyValue( C2U( "Size100thMM" ) ) >>= aSize) )
+                if( (xProp->getPropertyValue( "Size100thMM" ) >>= aSize) )
                 {
                     if( aSize.Width == 0 && aSize.Height == 0 )
                         aSize = aDefaultSize;
@@ -450,7 +449,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
             if(!bFoundSize)
             {
                 awt::Size aAWTPixelSize(10,10);
-                if(  (xProp->getPropertyValue( C2U( "SizePixel" ) ) >>= aAWTPixelSize) )
+                if(  (xProp->getPropertyValue( "SizePixel" ) >>= aAWTPixelSize) )
                 {
                     Size aPixelSize(aAWTPixelSize.Width,aAWTPixelSize.Height);
                     Size aNewSize = ( OutputDevice::LogicToLogic( aPixelSize, MAP_PIXEL, MAP_100TH_MM ));
@@ -474,7 +473,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
 WrappedSymbolSizeProperty::WrappedSymbolSizeProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< awt::Size >( C2U("SymbolSize")
+        : WrappedSeriesOrDiagramProperty< awt::Size >( "SymbolSize"
             , uno::makeAny( awt::Size(250,250) ), spChart2ModelContact, ePropertyType  )
 {
 }
@@ -488,7 +487,7 @@ awt::Size WrappedSymbolSizeProperty::getValueFromSeries( const Reference< beans:
     awt::Size aRet;
     m_aDefaultValue >>= aRet;
     chart2::Symbol aSymbol;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol ))
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol ))
         aRet = aSymbol.Size;
     return aRet;
 }
@@ -501,11 +500,11 @@ void WrappedSymbolSizeProperty::setValueToSeries(
         return;
 
     chart2::Symbol aSymbol;
-    if( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol )
+    if( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol )
     {
         aSymbol.Size = aNewSize;
         lcl_correctSymbolSizeForBitmaps(aSymbol);
-        xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+        xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
     }
 }
 
@@ -520,7 +519,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
     {
         chart2::Symbol aSymbol;
         Reference< beans::XPropertySet > xSeriesPropertySet( xInnerPropertyState, uno::UNO_QUERY );
-        if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol ))
+        if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol ))
         {
             if(  chart2::SymbolStyle_NONE != aSymbol.Style )
                 return beans::PropertyState_DIRECT_VALUE;
@@ -538,7 +537,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< sal_Bool >( C2U("Lines")
+        : WrappedSeriesOrDiagramProperty< sal_Bool >( "Lines"
             , uno::makeAny( sal_True ), spChart2ModelContact, ePropertyType  )
 {
 }
@@ -561,17 +560,17 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
         return;
 
     drawing::LineStyle eOldLineStyle( drawing::LineStyle_SOLID );
-    xSeriesPropertySet->getPropertyValue( C2U("LineStyle") ) >>= eOldLineStyle;
+    xSeriesPropertySet->getPropertyValue( "LineStyle" ) >>= eOldLineStyle;
     if( bDrawLines )
     {
         //#i114298# don't overwrite dashed lines with solid lines here
         if( eOldLineStyle == drawing::LineStyle_NONE )
-            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ) );
+            xSeriesPropertySet->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
     }
     else
     {
         if( eOldLineStyle != drawing::LineStyle_NONE )
-            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ) );
+            xSeriesPropertySet->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
     }
 }
 

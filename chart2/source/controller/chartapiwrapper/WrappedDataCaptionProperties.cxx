@@ -118,7 +118,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "DataCaption" ),
+        Property( "DataCaption",
                   PROP_CHART_DATAPOINT_DATA_CAPTION,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -146,7 +146,7 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
       ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
     , tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< sal_Int32 >( C2U("DataCaption")
+        : WrappedSeriesOrDiagramProperty< sal_Int32 >( "DataCaption"
             , uno::makeAny( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
 {
 }
@@ -159,7 +159,7 @@ sal_Int32 WrappedDataCaptionProperty::getValueFromSeries( const Reference< beans
     sal_Int32 aRet = 0;
     m_aDefaultValue >>= aRet;
     chart2::DataPointLabel aLabel;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Label")) >>= aLabel ) )
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Label") >>= aLabel ) )
         aRet = lcl_LabelToCaption( aLabel );
     return aRet;
 }
@@ -170,7 +170,7 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
         return;
 
     chart2::DataPointLabel aLabel = lcl_CaptionToLabel( nCaption );
-    xSeriesPropertySet->setPropertyValue( C2U("Label"), uno::makeAny( aLabel ) );
+    xSeriesPropertySet->setPropertyValue( "Label", uno::makeAny( aLabel ) );
 }
 
 //-----------------------------------------------------------------------------

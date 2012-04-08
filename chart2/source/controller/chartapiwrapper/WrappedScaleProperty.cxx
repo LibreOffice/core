@@ -58,52 +58,52 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
     switch( m_eScaleProperty )
     {
         case SCALE_PROP_MAX:
-            m_aOuterName = C2U("Max");
+            m_aOuterName = "Max";
             break;
         case SCALE_PROP_MIN:
-            m_aOuterName = C2U("Min");
+            m_aOuterName = "Min";
             break;
         case SCALE_PROP_ORIGIN:
-            m_aOuterName = C2U("Origin");
+            m_aOuterName = "Origin";
             break;
         case SCALE_PROP_STEPMAIN:
-            m_aOuterName = C2U("StepMain");
+            m_aOuterName = "StepMain";
             break;
         case SCALE_PROP_STEPHELP:
-            m_aOuterName = C2U("StepHelp");
+            m_aOuterName = "StepHelp";
             break;
         case SCALE_PROP_STEPHELP_COUNT:
-            m_aOuterName = C2U("StepHelpCount");
+            m_aOuterName = "StepHelpCount";
             break;
         case SCALE_PROP_AUTO_MAX:
-            m_aOuterName = C2U("AutoMax");
+            m_aOuterName = "AutoMax";
             break;
         case SCALE_PROP_AUTO_MIN:
-            m_aOuterName = C2U("AutoMin");
+            m_aOuterName = "AutoMin";
             break;
         case SCALE_PROP_AUTO_ORIGIN:
-            m_aOuterName = C2U("AutoOrigin");
+            m_aOuterName = "AutoOrigin";
             break;
         case SCALE_PROP_AUTO_STEPMAIN:
-            m_aOuterName = C2U("AutoStepMain");
+            m_aOuterName = "AutoStepMain";
             break;
         case SCALE_PROP_AUTO_STEPHELP:
-            m_aOuterName = C2U("AutoStepHelp");
+            m_aOuterName = "AutoStepHelp";
             break;
         case SCALE_PROP_AXIS_TYPE:
-            m_aOuterName = C2U("AxisType");
+            m_aOuterName = "AxisType";
             break;
         case SCALE_PROP_DATE_INCREMENT:
-            m_aOuterName = C2U("TimeIncrement");
+            m_aOuterName = "TimeIncrement";
             break;
         case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-            m_aOuterName = C2U("ExplicitTimeIncrement");
+            m_aOuterName = "ExplicitTimeIncrement";
             break;
         case SCALE_PROP_LOGARITHMIC:
-            m_aOuterName = C2U("Logarithmic");
+            m_aOuterName = "Logarithmic";
             break;
         case SCALE_PROP_REVERSEDIRECTION:
-            m_aOuterName = C2U("ReverseDirection");
+            m_aOuterName = "ReverseDirection";
             break;
         default:
             OSL_FAIL("unknown scale property");

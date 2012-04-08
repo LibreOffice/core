@@ -78,7 +78,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
 {
     sal_Int32 nNewValue = 0;
     if( ! (rOuterValue >>= nNewValue) )
-        throw lang::IllegalArgumentException( C2U("GapWidth and Overlap property require value of type sal_Int32"), 0, 0 );
+        throw lang::IllegalArgumentException( "GapWidth and Overlap property require value of type sal_Int32", 0, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -171,7 +171,7 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
 
 WrappedGapwidthProperty::WrappedGapwidthProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : WrappedBarPositionProperty_Base( C2U("GapWidth"), C2U("GapwidthSequence"), DEFAULT_GAPWIDTH, spChart2ModelContact )
+    : WrappedBarPositionProperty_Base( "GapWidth", "GapwidthSequence", DEFAULT_GAPWIDTH, spChart2ModelContact )
 {
 }
 WrappedGapwidthProperty::~WrappedGapwidthProperty()
@@ -182,7 +182,7 @@ WrappedGapwidthProperty::~WrappedGapwidthProperty()
 
 WrappedBarOverlapProperty::WrappedBarOverlapProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : WrappedBarPositionProperty_Base( C2U("Overlap"), C2U("OverlapSequence"), DEFAULT_OVERLAP, spChart2ModelContact )
+    : WrappedBarPositionProperty_Base( "Overlap", "OverlapSequence", DEFAULT_OVERLAP, spChart2ModelContact )
 {
 }
 WrappedBarOverlapProperty::~WrappedBarOverlapProperty()

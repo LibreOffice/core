@@ -101,16 +101,16 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             if( m_bAxis )
             {
                 if( m_bMain )
-                    m_aOuterName = C2U( "HasXAxis" );
+                    m_aOuterName = "HasXAxis";
                 else
-                    m_aOuterName = C2U( "HasSecondaryXAxis" );
+                    m_aOuterName = "HasSecondaryXAxis";
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = C2U( "HasXAxisGrid" );
+                    m_aOuterName = "HasXAxisGrid";
                 else
-                    m_aOuterName = C2U( "HasXAxisHelpGrid" );
+                    m_aOuterName = "HasXAxisHelpGrid";
             }
         }
         break;
@@ -120,14 +120,14 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             {
                 OSL_ENSURE(m_bMain == true,"there is no secondary z axis at the old api");
                 m_bMain = true;
-                m_aOuterName = C2U( "HasZAxis" );
+                m_aOuterName = "HasZAxis";
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = C2U( "HasZAxisGrid" );
+                    m_aOuterName = "HasZAxisGrid";
                 else
-                    m_aOuterName = C2U( "HasZAxisHelpGrid" );
+                    m_aOuterName = "HasZAxisHelpGrid";
             }
         }
         break;
@@ -136,16 +136,16 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             if( m_bAxis )
             {
                 if( m_bMain )
-                    m_aOuterName = C2U( "HasYAxis" );
+                    m_aOuterName = "HasYAxis";
                 else
-                    m_aOuterName = C2U( "HasSecondaryYAxis" );
+                    m_aOuterName = "HasSecondaryYAxis";
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = C2U( "HasYAxisGrid" );
+                    m_aOuterName = "HasYAxisGrid";
                 else
-                    m_aOuterName = C2U( "HasYAxisHelpGrid" );
+                    m_aOuterName = "HasYAxisHelpGrid";
             }
         }
         break;
@@ -161,7 +161,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
 {
     sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
     sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -254,23 +254,23 @@ WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 
     switch( nTitleIndex )
     {
         case 0:
-            m_aOuterName = C2U( "HasXAxisTitle" );
+            m_aOuterName = "HasXAxisTitle";
             m_eTitleType = TitleHelper::X_AXIS_TITLE;
             break;
         case 2:
-            m_aOuterName = C2U( "HasZAxisTitle" );
+            m_aOuterName = "HasZAxisTitle";
             m_eTitleType = TitleHelper::Z_AXIS_TITLE;
             break;
         case 3:
-            m_aOuterName = C2U( "HasSecondaryXAxisTitle" );
+            m_aOuterName = "HasSecondaryXAxisTitle";
             m_eTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
             break;
         case 4:
-            m_aOuterName = C2U( "HasSecondaryYAxisTitle" );
+            m_aOuterName = "HasSecondaryYAxisTitle";
             m_eTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
             break;
         default:
-            m_aOuterName = C2U( "HasYAxisTitle" );
+            m_aOuterName = "HasYAxisTitle";
             m_eTitleType = TitleHelper::Y_AXIS_TITLE;
             break;
     }
@@ -285,7 +285,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
     sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -372,14 +372,14 @@ WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty( bool bMain
     switch( m_nDimensionIndex )
     {
         case 0:
-            m_aOuterName = m_bMain ? C2U( "HasXAxisDescription" ) : C2U( "HasSecondaryXAxisDescription" );
+            m_bMain ? m_aOuterName = "HasXAxisDescription" : m_aOuterName = "HasSecondaryXAxisDescription";
             break;
         case 2:
             OSL_ENSURE(m_bMain,"there is no description available for a secondary z axis");
-            m_aOuterName = C2U( "HasZAxisDescription" );
+            m_aOuterName = "HasZAxisDescription";
             break;
         default:
-            m_aOuterName = m_bMain ? C2U( "HasYAxisDescription" ) : C2U( "HasSecondaryYAxisDescription" );
+            m_bMain ? m_aOuterName = "HasYAxisDescription" : m_aOuterName = "HasSecondaryYAxisDescription";
             break;
     }
 }
@@ -393,7 +393,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
     sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -408,10 +408,10 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
         //create axis if needed
         xProp.set( AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext ), uno::UNO_QUERY );
         if( xProp.is() )
-            xProp->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+            xProp->setPropertyValue( "Show", uno::makeAny( sal_False ) );
     }
     if( xProp.is() )
-        xProp->setPropertyValue( C2U( "DisplayLabels" ), rOuterValue );
+        xProp->setPropertyValue( "DisplayLabels", rOuterValue );
 }
 
 Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -421,7 +421,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans:
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( C2U( "DisplayLabels" ));
+        aRet = xProp->getPropertyValue( "DisplayLabels" );
     else
         aRet <<= sal_False;
     return aRet;

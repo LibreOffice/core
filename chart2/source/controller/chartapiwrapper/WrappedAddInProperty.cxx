@@ -43,7 +43,7 @@ namespace wrapper
 {
 
 WrappedAddInProperty::WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper )
-    : ::chart::WrappedProperty( C2U( "AddIn" ), OUString() )
+    : ::chart::WrappedProperty( "AddIn", OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
@@ -56,7 +56,7 @@ void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Refer
 {
     Reference< util::XRefreshable > xAddIn;
     if( ! (rOuterValue >>= xAddIn) )
-        throw lang::IllegalArgumentException( C2U("AddIn properties require type XRefreshable"), 0, 0 );
+        throw lang::IllegalArgumentException( "AddIn properties require type XRefreshable", 0, 0 );
 
     m_rChartDocumentWrapper.setAddIn( xAddIn );
 }
@@ -70,7 +70,7 @@ Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet
 //.............................................................................
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
-    : ::chart::WrappedProperty( C2U( "BaseDiagram" ), OUString() )
+    : ::chart::WrappedProperty( "BaseDiagram" , OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
@@ -83,7 +83,7 @@ void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const
 {
     rtl::OUString aBaseDiagram;
     if( ! (rOuterValue >>= aBaseDiagram) )
-        throw lang::IllegalArgumentException( C2U("BaseDiagram properties require type OUString"), 0, 0 );
+        throw lang::IllegalArgumentException( "BaseDiagram properties require type OUString", 0, 0 );
 
     m_rChartDocumentWrapper.setBaseDiagram( aBaseDiagram );
 }
@@ -97,7 +97,7 @@ Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPrope
 //.............................................................................
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
-    : ::chart::WrappedProperty( C2U( "AdditionalShapes" ), OUString() )
+    : ::chart::WrappedProperty( "AdditionalShapes" , OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
@@ -108,7 +108,7 @@ WrappedAdditionalShapesProperty::~WrappedAdditionalShapesProperty()
 void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue*/, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    throw lang::IllegalArgumentException( C2U("AdditionalShapes is a read only property"), 0, 0 );
+    throw lang::IllegalArgumentException( "AdditionalShapes is a read only property", 0, 0 );
 }
 
 Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -120,7 +120,7 @@ Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::X
 //.............................................................................
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
-    : ::chart::WrappedProperty( C2U( "RefreshAddInAllowed" ), OUString() )
+    : ::chart::WrappedProperty( "RefreshAddInAllowed" , OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
 {
 }
@@ -133,7 +133,7 @@ void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValu
 {
     sal_Bool bUpdateAddIn = sal_True;
     if( ! (rOuterValue >>= bUpdateAddIn) )
-        throw lang::IllegalArgumentException( C2U("The property RefreshAddInAllowed requires type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException( "The property RefreshAddInAllowed requires type boolean", 0, 0 );
 
     m_rChartDocumentWrapper.setUpdateAddIn( bUpdateAddIn );
 }

@@ -140,7 +140,7 @@ namespace wrapper
 MinMaxLineWrapper::MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_aWrappedLineJointProperty( C2U("LineJoint"), uno::makeAny( drawing::LineJoint_NONE ))
+        , m_aWrappedLineJointProperty( "LineJoint", uno::makeAny( drawing::LineJoint_NONE ))
 {
 }
 
@@ -204,10 +204,10 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const ::rtl::OUString& rPrope
                     xPropSet = Reference< beans::XPropertySet >(aSeriesSeq[0],uno::UNO_QUERY);
                     if(xPropSet.is())
                     {
-                        if( rPropertyName.equals( C2U("LineColor")) )
-                            xPropSet->setPropertyValue( C2U("Color"), rValue );
-                        else if( rPropertyName.equals( C2U("LineTransparence")) )
-                            xPropSet->setPropertyValue( C2U("Transparency"), rValue );
+                        if( rPropertyName == "LineColor" )
+                            xPropSet->setPropertyValue( "Color", rValue );
+                        else if( rPropertyName == "LineTransparence" )
+                            xPropSet->setPropertyValue( "Transparency", rValue );
                         else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
                             m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
                         else
@@ -248,10 +248,10 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const ::rtl::OUString& rP
     }
     if(xPropSet.is())
     {
-        if( rPropertyName.equals( C2U("LineColor")) )
-            aRet = xPropSet->getPropertyValue( C2U("Color") );
-        else if( rPropertyName.equals( C2U("LineTransparence")) )
-            aRet = xPropSet->getPropertyValue( C2U("Transparency") );
+        if( rPropertyName == "LineColor" )
+            aRet = xPropSet->getPropertyValue( "Color" );
+        else if( rPropertyName == "LineTransparence" )
+            aRet = xPropSet->getPropertyValue( "Transparency" );
         else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
             aRet = m_aWrappedLineJointProperty.getPropertyValue( xPropSet );
         else
@@ -427,9 +427,9 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
 Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartLine" );
-    aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 2 ] = C2U( "com.sun.star.drawing.LineProperties" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartLine";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
 
     return aServices;
 }

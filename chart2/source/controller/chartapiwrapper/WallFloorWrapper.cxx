@@ -164,8 +164,8 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
     // exported. Because in the old chart the defaults is as follows:
     // Floor: SOLID (new and old model default), Wall: NONE, except for some chart types (line, scatter)
     if( m_bWall )
-        aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("FillStyle"), C2U("FillStyle") ));
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("FillColor"), C2U("FillColor") ));
+        aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillStyle", "FillStyle" ));
+    aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillColor", "FillColor" ));
 
     return aWrappedProperties;
 }
@@ -175,10 +175,10 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
 Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 1 ] = C2U( "com.sun.star.drawing.FillProperties" );
-    aServices[ 2 ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 1 ] = "com.sun.star.drawing.FillProperties";
+    aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
+    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
 
     return aServices;
 }

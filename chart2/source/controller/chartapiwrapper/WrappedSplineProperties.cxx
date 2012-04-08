@@ -109,7 +109,7 @@ public:
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
-            throw ::com::sun::star::lang::IllegalArgumentException( C2U("spline property requires different type"), 0, 0 );
+            throw ::com::sun::star::lang::IllegalArgumentException( "spline property requires different type", 0, 0 );
 
         m_aOuterValue = rOuterValue;
 
@@ -194,21 +194,21 @@ enum
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "SplineType" ),
+        Property( "SplineType",
                   PROP_CHART_SPLINE_TYPE,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "SplineOrder" ),
+        Property( "SplineOrder",
                   PROP_CHART_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "SplineResolution" ),
+        Property( "SplineResolution",
                   PROP_CHART_SPLINE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -221,14 +221,14 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
-    rList.push_back( new WrappedSplineProperty<sal_Int32>( C2U("SplineOrder"),      C2U("SplineOrder"), uno::makeAny(sal_Int32(3)), spChart2ModelContact ) );
-    rList.push_back( new WrappedSplineProperty<sal_Int32>( C2U("SplineResolution"), C2U("CurveResolution"), uno::makeAny(sal_Int32(20)), spChart2ModelContact ) );
+    rList.push_back( new WrappedSplineProperty<sal_Int32>( "SplineOrder", "SplineOrder", uno::makeAny(sal_Int32(3)), spChart2ModelContact ) );
+    rList.push_back( new WrappedSplineProperty<sal_Int32>( "SplineResolution", "CurveResolution", uno::makeAny(sal_Int32(20)), spChart2ModelContact ) );
 }
 
 //-----------------------------------------------------------------------------
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : WrappedSplineProperty<sal_Int32>( C2U("SplineType"), C2U("CurveStyle"), uno::makeAny(sal_Int32(0)), spChart2ModelContact )
+    : WrappedSplineProperty<sal_Int32>( "SplineType", "CurveStyle", uno::makeAny(sal_Int32(0)), spChart2ModelContact )
 {
 }
 WrappedSplineTypeProperty::~WrappedSplineTypeProperty()

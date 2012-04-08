@@ -76,7 +76,7 @@ protected:
 };
 
 WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
-    : ::chart::WrappedProperty( C2U( "String" ), OUString() )
+    : ::chart::WrappedProperty( "String", OUString() )
     , m_xContext( xContext )
 {
 }
@@ -129,7 +129,7 @@ public:
 };
 
 WrappedStackedTextProperty::WrappedStackedTextProperty()
-    : ::chart::WrappedProperty( C2U( "StackedText" ), C2U( "StackCharacters" ) )
+    : ::chart::WrappedProperty( "StackedText", "StackCharacters" )
 {
 }
 WrappedStackedTextProperty::~WrappedStackedTextProperty()
@@ -142,8 +142,7 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Title" ));
+static const OUString lcl_aServiceName("com.sun.star.comp.chart.Title");
 
 enum
 {
@@ -156,20 +155,20 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "String" ),
+        Property( "String",
                   PROP_TITLE_STRING,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextRotation" ),
+        Property( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "StackedText" ),
+        Property( "StackedText",
                   PROP_TITLE_TEXT_STACKED,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -250,7 +249,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
-        xPropertySet->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+        xPropertySet->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
     }
 }
 
@@ -271,7 +270,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
 OUString SAL_CALL TitleWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return C2U( "com.sun.star.chart.ChartTitle" );
+    return rtl::OUString( "com.sun.star.chart.ChartTitle" );
 }
 
 // ____ XComponent ____
@@ -484,8 +483,8 @@ void TitleWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
-            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+        if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
+            xProp->setPropertyValue( "ReferencePageSize", uno::makeAny(
                             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -494,7 +493,7 @@ Any TitleWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
+        aRet = xProp->getPropertyValue( "ReferencePageSize" );
 
     return aRet;
 }
@@ -541,10 +540,10 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
 Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartTitle" );
-    aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
-    aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartTitle";
+    aServices[ 1 ] = "com.sun.star.drawing.Shape";
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 3 ] = "com.sun.star.style.CharacterProperties";
 
     return aServices;
 }

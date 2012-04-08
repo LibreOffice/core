@@ -129,7 +129,7 @@ Any WrappedCharacterHeightProperty_Base::convertOuterToInnerValue( const Any& rO
 //-----------------------------------------------------------------------------
 
 WrappedCharacterHeightProperty::WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
-        : WrappedCharacterHeightProperty_Base( C2U( "CharHeight" ), pRefSizePropProvider )
+        : WrappedCharacterHeightProperty_Base( "CharHeight", pRefSizePropProvider )
 {
 }
 WrappedCharacterHeightProperty::~WrappedCharacterHeightProperty()
@@ -139,7 +139,7 @@ WrappedCharacterHeightProperty::~WrappedCharacterHeightProperty()
 //-----------------------------------------------------------------------------
 
 WrappedAsianCharacterHeightProperty::WrappedAsianCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
-        : WrappedCharacterHeightProperty_Base( C2U( "CharHeightAsian" ), pRefSizePropProvider )
+        : WrappedCharacterHeightProperty_Base( "CharHeightAsian", pRefSizePropProvider )
 {
 }
 WrappedAsianCharacterHeightProperty::~WrappedAsianCharacterHeightProperty()
@@ -149,7 +149,7 @@ WrappedAsianCharacterHeightProperty::~WrappedAsianCharacterHeightProperty()
 //-----------------------------------------------------------------------------
 
 WrappedComplexCharacterHeightProperty::WrappedComplexCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
-        : WrappedCharacterHeightProperty_Base( C2U( "CharHeightComplex" ), pRefSizePropProvider )
+        : WrappedCharacterHeightProperty_Base( "CharHeightComplex", pRefSizePropProvider )
 {
 }
 WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty()
