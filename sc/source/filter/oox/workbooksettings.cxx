@@ -195,44 +195,6 @@ void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
     maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
 }
 
-void WorkbookSettings::importCalcCount( BiffInputStream& rStrm )
-{
-    maCalcSettings.mnIterateCount = rStrm.readuInt16();
-}
-
-void WorkbookSettings::importCalcMode( BiffInputStream& rStrm )
-{
-    sal_Int16 nCalcMode = rStrm.readInt16() + 1;
-    static const sal_Int32 spnCalcModes[] = { XML_autoNoTable, XML_manual, XML_auto };
-    maCalcSettings.mnCalcMode = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
-}
-
-void WorkbookSettings::importDelta( BiffInputStream& rStrm )
-{
-    rStrm >> maCalcSettings.mfIterateDelta;
-}
-
-void WorkbookSettings::importIteration( BiffInputStream& rStrm )
-{
-    maCalcSettings.mbIterate = rStrm.readuInt16() != 0;
-}
-
-void WorkbookSettings::importRefMode( BiffInputStream& rStrm )
-{
-    maCalcSettings.mnRefMode = (rStrm.readuInt16() == 0) ? XML_R1C1 : XML_A1;
-}
-
-void WorkbookSettings::importSaveRecalc( BiffInputStream& rStrm )
-{
-    maCalcSettings.mbCalcOnSave = rStrm.readuInt16() != 0;
-}
-
-void WorkbookSettings::importUncalced( BiffInputStream& )
-{
-    // existence of this record indicates incomplete recalc
-    maCalcSettings.mbCalcCompleted = false;
-}
-
 void WorkbookSettings::finalizeImport()
 {
     // default settings

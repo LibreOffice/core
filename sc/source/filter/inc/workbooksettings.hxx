@@ -111,20 +111,6 @@ public:
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );
-    /** Imports the CALCCOUNT record. */
-    void                importCalcCount( BiffInputStream& rStrm );
-    /** Imports the CALCMODE record. */
-    void                importCalcMode( BiffInputStream& rStrm );
-    /** Imports the DELTA record. */
-    void                importDelta( BiffInputStream& rStrm );
-    /** Imports the ITERATION record. */
-    void                importIteration( BiffInputStream& rStrm );
-    /** Imports the REFMODE record. */
-    void                importRefMode( BiffInputStream& rStrm );
-    /** Imports the SAVERECALC record. */
-    void                importSaveRecalc( BiffInputStream& rStrm );
-    /** Imports the UNCALCED record. */
-    void                importUncalced( BiffInputStream& rStrm );
 
     /** Converts the imported workbook settings. */
     void                finalizeImport();
