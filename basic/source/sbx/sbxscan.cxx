@@ -800,13 +800,13 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 }
                 else
                 {
-                    rRes = String::CreateFromInt32( nMin );
+                    rRes = rtl::OUString::valueOf(nMin);
                 }
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_W ))
             {
                 sal_Int32 nWeekDay = implGetWeekDay( nNumber );
-                rRes = String::CreateFromInt32( nWeekDay );
+                rRes = rtl::OUString::valueOf(nWeekDay);
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_Y ))
             {
@@ -814,7 +814,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 double dBaseDate;
                 implDateSerial( nYear, 1, 1, dBaseDate );
                 sal_Int32 nYear32 = 1 + sal_Int32( nNumber - dBaseDate );
-                rRes = String::CreateFromInt32( nYear32 );
+                rRes = rtl::OUString::valueOf(nYear32);
             }
             else
             {
