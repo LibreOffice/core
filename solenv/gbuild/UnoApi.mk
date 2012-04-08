@@ -130,19 +130,28 @@ $(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(idl)))
 
 endef
 
-define gb_UnoApi__add_api
-$(call gb_UnoApiHeadersTarget_add_rdbfile,$(1),$(2))
+define gb_UnoApi__use_api
+$(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
 
 endef
 
 define gb_UnoApi_add_api
-$(foreach rdb,$(2),$(call gb_UnoApi__add_api,$(1),$(rdb)))
+$$(call gb_Output_error,gb_UnoApi_add_api: use gb_UnoApi_use_api instead.)
+endef
+
+define gb_UnoApi_use_api
+$(foreach rdb,$(2),$(call gb_UnoApi__use_api,$(1),$(rdb)))
 
 endef
 
 define gb_UnoApi_add_reference_rdbfile
-$(call gb_UnoApiTarget_add_reference_rdbfile,$(1),$(2))
+$$(call gb_Output_error,gb_UnoApi_add_reference_rdbfile: use gb_UnoApi_set_reference_rdbfile instead.)
+
+endef
+
+define gb_UnoApi_set_reference_rdbfile
+$(call gb_UnoApiTarget_set_reference_rdbfile,$(1),$(2))
 
 endef
 

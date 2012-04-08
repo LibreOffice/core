@@ -28,7 +28,7 @@
 
 $(eval $(call gb_UnoApi_UnoApi,oovbaapi))
 
-$(eval $(call gb_UnoApi_add_api,oovbaapi,\
+$(eval $(call gb_UnoApi_use_api,oovbaapi,\
     udkapi \
     offapi \
 ))

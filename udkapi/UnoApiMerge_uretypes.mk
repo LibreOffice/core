@@ -28,7 +28,7 @@
 
 $(eval $(call gb_UnoApiMerge_UnoApiMerge,ure/types))
 
-$(eval $(call gb_UnoApiMerge_add_rdbfiles,ure/types,\
+$(eval $(call gb_UnoApiMerge_use_api,ure/types,\
     udkapi \
 ))
 

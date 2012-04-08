@@ -45,7 +45,7 @@ $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 
 $(call gb_UnoApiTarget_set_root,$(1)_out,/)
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
-$(call gb_UnoApiTarget_merge_rdbfile,$(1),$(1)_out)
+$(call gb_UnoApiTarget_merge_api,$(1),$(1)_out)
 
 $(call gb_InternalUnoApi_get_target,$(1)) :| $(dir $(call gb_InternalUnoApi_get_target,$(1))).dir
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1)_out)
@@ -68,15 +68,23 @@ $(call gb_UnoApiTarget_add_idlfiles,$(1)_out,$(2),$(3))
 
 endef
 
-define gb_InternalUnoApi__add_api
-$(call gb_UnoApiHeadersTarget_add_rdbfile,$(1),$(2))
+define gb_InternalUnoApi__use_api
+$(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 
 endef
 
 define gb_InternalUnoApi_add_api
-$(foreach rdb,$(2),$(call gb_InternalUnoApi__add_api,$(1),$(rdb)))
+$$(call gb_Output_error,gb_InternalUnoApi_add_api: use gb_InternalUnoApi_use_api instead.)
+endef
 
+define gb_InternalUnoApi_use_api
+$(foreach rdb,$(2),$(call gb_InternalUnoApi__use_api,$(1),$(rdb)))
+
+endef
+
+define gb_InternalUnoApi_add_api_dependency
+$$(call gb_Output_error,gb_InternalUnoApi_add_api_dependency: use gb_InternalUnoApi_define_api_dependency instead.)
 endef
 
 # Express that the rdb $(2) depends on rdb $(3).
@@ -89,13 +97,17 @@ endef
 # I suppose it would be possible to store the list of required rdbs for
 # a rdb to a file and then load it when headers' generation is requested,
 # but it feels like overkill...
-define gb_InternalUnoApi_add_api_dependency
-$(call gb_UnoApiHeadersTarget_add_rdbfile,$(2),$(3))
+define gb_InternalUnoApi_define_api_dependency
+$(call gb_UnoApiHeadersTarget_use_api,$(2),$(3))
 
 endef
 
 define gb_InternalUnoApi_add_api_dependencies
-$(foreach dep,$(3),$(call gb_InternalUnoApi_add_api_dependency,$(1),$(2),$(dep)))
+$$(call gb_Output_error,gb_InternalUnoApi_add_api_dependencies: use gb_InternalUnoApi_define_api_dependencies instead.)
+endef
+
+define gb_InternalUnoApi_define_api_dependencies
+$(foreach dep,$(3),$(call gb_InternalUnoApi_define_api_dependency,$(1),$(2),$(dep)))
 
 endef
 

@@ -27,12 +27,12 @@
 
 $(eval $(call gb_InternalUnoApi_InternalUnoApi,scaddins))
 
-$(eval $(call gb_InternalUnoApi_add_api,scaddins,\
+$(eval $(call gb_InternalUnoApi_use_api,scaddins,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_InternalUnoApi_add_api_dependencies,scaddins,offapi,\
+$(eval $(call gb_InternalUnoApi_define_api_dependencies,scaddins,offapi,\
     udkapi \
 ))
 

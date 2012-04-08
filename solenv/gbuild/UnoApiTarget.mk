@@ -223,11 +223,19 @@ $(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
 endef
 
 define gb_UnoApiTarget_merge_rdbfiles
-$(foreach rdb,$(2),$(call gb_UnoApiTarget_merge_rdbfile,$(1),$(rdb)))
+$$(call gb_Output_error,gb_UnoApiTarget_merge_rdbfiles: use gb_UnoApiTarget_merge_api instead.)
+endef
+
+define gb_UnoApiTarget_merge_api
+$(foreach rdb,$(2),$(call gb_UnoApiTarget__merge_api,$(1),$(rdb)))
 
 endef
 
 define gb_UnoApiTarget_merge_rdbfile
+$$(call gb_Output_error,gb_UnoApiTarget_merge_rdbfile: use gb_UnoApiTarget_merge_api instead.)
+endef
+
+define gb_UnoApiTarget__merge_api
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE += $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 
@@ -242,6 +250,10 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XMLRDB)
 endef
 
 define gb_UnoApiTarget_add_reference_rdbfile
+$$(call gb_Output_error,gb_UnoApiTarget_add_reference_rdbfile: use gb_UnoApiTarget_set_reference_rdbfile instead.)
+endef
+
+define gb_UnoApiTarget_set_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
 
 endef
@@ -311,21 +323,29 @@ define gb_UnoApiHeadersTarget_add_headerfile
 
 endef
 
-define gb_UnoApiHeadersTarget__add_rdbfile
+define gb_UnoApiHeadersTarget__use_api_for_target
 $(call gb_UnoApiHeadersTarget_get_$(3),$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_UnoApiHeadersTarget_get_$(3),$(1)) : UNOAPI_DEPS += -X$(call gb_UnoApiTarget_get_target,$(2))
 
 endef
 
 define gb_UnoApiHeadersTarget_add_rdbfile
-$(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),target)
-$(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),bootstrap_target)
-$(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),comprehensive_target)
+$$(call gb_Output_error,gb_UnoApiHeadersTarget_add_rdbfile: use gb_UnoApiHeadersTarget_use_api instead.)
+endef
+
+define gb_UnoApiHeadersTarget__use_api
+$(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),target)
+$(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),bootstrap_target)
+$(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),comprehensive_target)
 
 endef
 
 define gb_UnoApiHeadersTarget_add_rdbfiles
-$(foreach rdb,$(2),$(call gb_UnoApiHeadersTarget_add_rdbfile,$(1),$(rdb)))
+$$(call gb_Output_error,gb_UnoApiHeadersTarget_add_rdbfiles: use gb_UnoApiHeadersTarget_use_api instead.)
+endef
+
+define gb_UnoApiHeadersTarget_use_api
+$(foreach rdb,$(2),$(call gb_UnoApiHeadersTarget__use_api,$(1),$(rdb)))
 
 endef
 

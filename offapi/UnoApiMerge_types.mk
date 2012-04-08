@@ -28,12 +28,12 @@
 
 $(eval $(call gb_UnoApiMerge_UnoApiMerge,types))
 
-$(eval $(call gb_UnoApiMerge_add_rdbfiles,types,\
+$(eval $(call gb_UnoApiMerge_use_api,types,\
     udkapi \
     offapi \
 ))
 
-$(eval $(call gb_UnoApiMerge_add_reference_rdbfile,types,\
+$(eval $(call gb_UnoApiMerge_set_reference_rdbfile,types,\
     offapi/type_reference/types \
 ))
 

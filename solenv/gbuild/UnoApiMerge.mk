@@ -45,17 +45,30 @@ $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiMerge_get_target,$(1))
 endef
 
 define gb_UnoApiMerge_add_rdbfile
-$(call gb_UnoApiTarget_merge_rdbfile,$(1),$(2))
+$$(call gb_Output_error,gb_UnoApiMerge_add_rdbfile: use gb_UnoApiMerge_use_api instead.)
+endef
+
+define gb_UnoApiMerge__use_api
+$(call gb_UnoApiTarget_merge_api,$(1),$(2))
 
 endef
 
 define gb_UnoApiMerge_add_rdbfiles
-$(foreach rdb,$(2),$(call gb_UnoApiMerge_add_rdbfile,$(1),$(rdb)))
+$$(call gb_Output_error,gb_UnoApiMerge_add_rdbfiles: use gb_UnoApiMerge_use_api instead.)
+endef
+
+define gb_UnoApiMerge_use_api
+$(foreach rdb,$(2),$(call gb_UnoApiMerge__use_api,$(1),$(rdb)))
 
 endef
 
 define gb_UnoApiMerge_add_reference_rdbfile
-$(call gb_UnoApiTarget_add_reference_rdbfile,$(1),$(2))
+$$(call gb_Output_error,gb_UnoApiMerge_add_reference_rdbfile: use gb_UnoApiMerge_set_reference_rdbfile instead.)
+
+endef
+
+define gb_UnoApiMerge_set_reference_rdbfile
+$(call gb_UnoApiTarget_set_reference_rdbfile,$(1),$(2))
 
 endef
 
