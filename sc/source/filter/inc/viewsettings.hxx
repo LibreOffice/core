@@ -127,15 +127,6 @@ public:
     /** Imports the CHARTSHEETVIEW record containing view settings of a chart sheet. */
     void                importChartSheetView( SequenceInputStream& rStrm );
 
-    /** Imports the WINDOW2 record containing sheet view settings. */
-    void                importWindow2( BiffInputStream& rStrm );
-    /** Imports the PANE record containing sheet pane settings. */
-    void                importPane( BiffInputStream& rStrm );
-    /** Imports the SCL record containing sheet zoom settings. */
-    void                importScl( BiffInputStream& rStrm );
-    /** Imports the SELECTION record containing selection settings for a pane. */
-    void                importSelection( BiffInputStream& rStrm );
-
     /** Converts all imported sheet view settings. */
     void                finalizeImport();
 
