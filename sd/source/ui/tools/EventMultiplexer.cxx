@@ -710,8 +710,7 @@ void EventMultiplexer::Implementation::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SlideSorterController object has already been disposed")),
+            "SlideSorterController object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

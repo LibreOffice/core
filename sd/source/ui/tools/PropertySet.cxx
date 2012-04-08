@@ -223,8 +223,7 @@ void PropertySet::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PropertySet object has already been disposed")),
+                "PropertySet object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

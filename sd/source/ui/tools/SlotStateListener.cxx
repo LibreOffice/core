@@ -133,7 +133,7 @@ util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
     if (xServiceManager.is())
     {
         uno::Reference<util::XURLTransformer> xTransformer(xServiceManager->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+            "com.sun.star.util.URLTransformer"),
             uno::UNO_QUERY);
         if (xTransformer.is())
             xTransformer->parseStrict(aURL);
@@ -209,9 +209,7 @@ void SlotStateListener::ThrowIfDisposed (void)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SlideSorterController object has already been disposed")),
+        throw lang::DisposedException ("SlideSorterController object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

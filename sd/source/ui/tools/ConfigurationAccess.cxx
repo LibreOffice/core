@@ -52,7 +52,7 @@ ConfigurationAccess::ConfigurationAccess (
     {
         Reference<lang::XMultiServiceFactory> xProvider (
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")),
+                "com.sun.star.configuration.ConfigurationProvider",
                 rxContext),
             UNO_QUERY);
         if (xProvider.is())
@@ -70,7 +70,7 @@ ConfigurationAccess::ConfigurationAccess (
 {
     Reference<lang::XMultiServiceFactory> xProvider (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+            "com.sun.star.configuration.ConfigurationProvider"),
         UNO_QUERY);
     if (xProvider.is())
         Initialize(xProvider, rsRootName, eMode);
@@ -88,27 +88,25 @@ void ConfigurationAccess::Initialize (
     {
         Sequence<Any> aCreationArguments(3);
         aCreationArguments[0] = makeAny(beans::PropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            "nodepath",
             0,
             makeAny(rsRootName),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[1] = makeAny(beans::PropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+            "depth",
             0,
             makeAny((sal_Int32)-1),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[2] = makeAny(beans::PropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
+            "lazywrite",
             0,
             makeAny(true),
             beans::PropertyState_DIRECT_VALUE));
         OUString sAccessService;
         if (eMode == READ_ONLY)
-            sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationAccess"));
+            sAccessService = "com.sun.star.configuration.ConfigurationAccess";
         else
-            sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationUpdateAccess"));
+            sAccessService = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
         mxRoot = rxProvider->createInstanceWithArguments(
             sAccessService,
