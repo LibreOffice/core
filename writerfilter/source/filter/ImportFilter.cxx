@@ -224,7 +224,7 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 
 sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-   return (ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME1 );
+   return (ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 
 
