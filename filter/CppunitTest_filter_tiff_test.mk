@@ -52,10 +52,6 @@ $(eval $(call gb_CppunitTest_use_api,filter_tiff_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,filter_tiff_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,filter_tiff_test,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,filter_tiff_test,\
     configmgr/source/configmgr \
 ))

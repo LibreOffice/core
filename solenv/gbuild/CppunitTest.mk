@@ -137,7 +137,6 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 endef
 
 define gb_CppunitTest_uses_ure
-$(call gb_CppunitTest_use_type_rdb,$(1),udkapi)
 $(call gb_CppunitTest_use_service_rdb,$(1),ure/services)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 
@@ -145,10 +144,15 @@ endef
 
 define gb_CppunitTest_add_type_rdb
 $$(call gb_Output_error,\
- gb_CppunitTest_add_type_rdb: use gb_CppunitTest_use_type_rdb instead.)
+ gb_CppunitTest_add_type_rdb: use gb_CppunitTest_use_api instead.)
 endef
 
 define gb_CppunitTest_use_type_rdb
+$$(call gb_Output_error,\
+ gb_CppunitTest_use_type_rdb: use gb_CppunitTest_use_api instead.)
+endef
+
+define gb_CppunitTest__use_api
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(call gb_UnoApi_get_target,$(2))
 
@@ -156,11 +160,17 @@ endef
 
 define gb_CppunitTest_add_type_rdbs
 $$(call gb_Output_error,\
- gb_CppunitTest_add_type_rdbs: use gb_CppunitTest_use_type_rdbs instead.)
+ gb_CppunitTest_add_type_rdbs: use gb_CppunitTest_use_api instead.)
 endef
 
 define gb_CppunitTest_use_type_rdbs
-$(foreach rdb,$(2),$(call gb_CppunitTest_use_type_rdb,$(1),$(rdb)))
+$$(call gb_Output_error,\
+ gb_CppunitTest_use_type_rdbs: use gb_CppunitTest_use_api instead.)
+endef
+
+define gb_CppunitTest_use_api
+$(call gb_LinkTarget_use_api,$(call gb_CppunitTest__get_linktargetname,$(1)),$(2))
+$(foreach rdb,$(2),$(call gb_CppunitTest__use_api,$(1),$(rdb)))
 
 endef
 
@@ -254,7 +264,6 @@ endef
 
 $(eval $(foreach method,\
 	add_api \
-	use_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \

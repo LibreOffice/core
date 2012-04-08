@@ -67,10 +67,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sdext_pdfimport))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sdext_pdfimport,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

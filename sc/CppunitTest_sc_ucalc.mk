@@ -89,10 +89,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_ucalc,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
     framework/util/fwk \

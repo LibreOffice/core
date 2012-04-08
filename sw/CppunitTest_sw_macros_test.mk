@@ -84,11 +84,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_macros_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_macros_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sw_macros_test,\
-    oovbaapi \
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
     basic/util/sb \
     comphelper/util/comphelp \

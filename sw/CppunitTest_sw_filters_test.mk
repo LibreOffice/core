@@ -73,10 +73,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_filters_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_filters_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sw_filters_test,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

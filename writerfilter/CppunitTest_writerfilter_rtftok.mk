@@ -54,10 +54,6 @@ $(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
 
 $(eval $(call gb_CppunitTest_uses_ure,writerfilter_rtftok))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,writerfilter_rtftok,\
-	types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	configmgr/source/configmgr \
 	ucb/source/core/ucb1 \

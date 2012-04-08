@@ -58,10 +58,6 @@ $(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sot_test_sot))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sot_test_sot,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_set_args,sot_test_sot,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))

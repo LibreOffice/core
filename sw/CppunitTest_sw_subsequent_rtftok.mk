@@ -50,10 +50,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtftok,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_subsequent_rtftok))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sw_subsequent_rtftok,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
     configmgr/source/configmgr \
     fileaccess/source/fileacc \

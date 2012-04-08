@@ -84,11 +84,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_regression_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_regression_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sw_regression_test,\
-    oovbaapi \
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sw_regression_test,\
     basic/util/sb \
     comphelper/util/comphelp \

@@ -82,10 +82,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_subsequent_filters_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_subsequent_filters_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_subsequent_filters_test,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     chart2/source/controller/chartcontroller \
     chart2/source/tools/charttools \

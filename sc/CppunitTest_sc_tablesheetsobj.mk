@@ -85,10 +85,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_spreadsheetsobj,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_spreadsheetsobj))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_spreadsheetsobj,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsobj,\
     basic/util/sb \
     comphelper/util/comphelp \

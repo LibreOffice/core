@@ -82,10 +82,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_filters_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_filters_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_filters_test,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     basic/util/sb \
     chart2/source/controller/chartcontroller \

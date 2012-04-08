@@ -87,10 +87,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_swdoc_test,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_swdoc_test))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sw_swdoc_test,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

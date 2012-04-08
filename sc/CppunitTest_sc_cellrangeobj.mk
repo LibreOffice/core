@@ -86,10 +86,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_cellrangesbase,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_cellrangesbase))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_cellrangesbase,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_cellrangesbase,\
 	basic/util/sb \
     comphelper/util/comphelp \

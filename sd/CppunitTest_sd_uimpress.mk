@@ -78,10 +78,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sd_uimpress))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sd_uimpress,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \
     framework/util/fwk \

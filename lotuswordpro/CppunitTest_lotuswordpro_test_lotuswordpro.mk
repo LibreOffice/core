@@ -56,10 +56,6 @@ $(eval $(call gb_CppunitTest_use_api,lotuswordpro_test_lotuswordpro,\
 
 $(eval $(call gb_CppunitTest_uses_ure,lotuswordpro_test_lotuswordpro))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,lotuswordpro_test_lotuswordpro,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,lotuswordpro_test_lotuswordpro,\
     configmgr/source/configmgr \
     lotuswordpro/util/lwpfilter \

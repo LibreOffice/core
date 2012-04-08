@@ -85,10 +85,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_namedrangeobj,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_namedrangeobj))
 
-$(eval $(call gb_CppunitTest_use_type_rdbs,sc_namedrangeobj,\
-    types \
-))
-
 $(eval $(call gb_CppunitTest_use_components,sc_namedrangeobj,\
     basic/util/sb \
     comphelper/util/comphelp \
