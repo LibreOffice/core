@@ -49,6 +49,8 @@ $(eval $(call gb_CppunitTest_use_api,svtools_filters_test,\
     offapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,svtools_filters_test))
+
 $(eval $(call gb_CppunitTest_use_components,svtools_filters_test,\
     configmgr/source/configmgr \
 ))

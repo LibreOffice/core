@@ -83,6 +83,8 @@ $(eval $(call gb_CppunitTest_use_api,sc_namedrangesobj,\
     udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,sc_namedrangesobj))
+
 $(eval $(call gb_CppunitTest_use_components,sc_namedrangesobj,\
     basic/util/sb \
     comphelper/util/comphelp \

@@ -146,7 +146,9 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS += $(2)
 endef
 
 define gb_CppunitTest_uses_ure
-$$(call gb_Output_error,gb_CppunitTest_uses_ure: use gb_CppunitTest_use_api instead.))
+$(call gb_CppunitTest_use_rdb,$(1),ure/services)
+$(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
+
 endef
 
 define gb_CppunitTest_add_type_rdb
@@ -178,8 +180,6 @@ endef
 define gb_CppunitTest_use_api
 $(call gb_LinkTarget_use_api,$(call gb_CppunitTest__get_linktargetname,$(1)),$(2))
 $(foreach rdb,$(2),$(call gb_CppunitTest__use_api,$(1),$(rdb)))
-$(call gb_CppunitTest_use_rdb,$(1),ure/services)
-$(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 
 endef
 

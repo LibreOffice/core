@@ -75,6 +75,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\
     starmath/qa/cppunit/test_starmath \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,starmath_qa_cppunit))
+
 $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     configmgr/source/configmgr \
     framework/util/fwk \

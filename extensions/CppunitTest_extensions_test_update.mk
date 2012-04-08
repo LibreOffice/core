@@ -61,6 +61,8 @@ $(eval $(call gb_CppunitTest_use_api,extensions_test_update,\
 	udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,extensions_test_update))
+
 $(eval $(call gb_CppunitTest_use_components,extensions_test_update,\
     configmgr/source/configmgr \
     extensions/source/update/feed/updatefeed \

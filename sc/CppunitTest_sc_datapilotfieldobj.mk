@@ -83,6 +83,8 @@ $(eval $(call gb_CppunitTest_use_api,sc_datapilotfieldobj,\
     udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,sc_datapilotfieldobj))
+
 $(eval $(call gb_CppunitTest_use_components,sc_datapilotfieldobj,\
     basic/util/sb \
     comphelper/util/comphelp \

@@ -48,6 +48,8 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmltok,\
     udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,sw_subsequent_ooxmltok))
+
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmltok,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
