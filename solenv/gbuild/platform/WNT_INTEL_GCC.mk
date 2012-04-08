@@ -142,6 +142,11 @@ define gb_Helper_native_path
 $(1)
 endef
 
+# Convert path to file URL.
+define gb_Helper_make_url
+file://$(strip $(1))
+endef
+
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).s

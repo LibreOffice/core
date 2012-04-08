@@ -57,20 +57,17 @@ endif
 
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
-# TODO: move this to platform under suitable name
-gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip $(1))
-
 define gb_CppunitTest__make_args
 --headless \
 $(if $(strip $(CONFIGURATION_LAYERS)),\
 	"-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
 $(if $(strip $(UNO_TYPES)),\
-	"-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_CppunitTarget__make_url,$(item)))") \
+	"-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
 $(if $(strip $(UNO_SERVICES)),\
-	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_CppunitTarget__make_url,$(item)))") \
+	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))) \
+		-env:$(dir)=$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))) \
 	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector) \
 $(ARGS)
 endef
@@ -278,7 +275,7 @@ endef
 gb_ComponentTarget__get_old_component_target = $(OUTDIR)/xml/$(1).component
 
 define gb_CppunitTest__use_configuration
-$(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS += $(2):$(call gb_CppunitTarget__make_url,$(3))
+$(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS += $(2):$(call gb_Helper_make_url,$(3))
 
 endef
 

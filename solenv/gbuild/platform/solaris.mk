@@ -164,6 +164,11 @@ define gb_Helper_native_path
 $(1)
 endef
 
+# Convert path to file URL.
+define gb_Helper_make_url
+file://$(strip $(1))
+endef
+
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += \
 	-Wl,--dynamic-list-cpp-new \

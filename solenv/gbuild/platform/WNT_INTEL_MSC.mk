@@ -267,6 +267,11 @@ define gb_Helper_native_path
 $(shell cygpath -m $(1))
 endef
 
+# Convert path to file URL.
+define gb_Helper_make_url
+file:///$(strip $(1))
+endef
+
 # YaccTarget class
 
 define gb_YaccTarget__command

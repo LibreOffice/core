@@ -28,7 +28,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sdext_pdfimport))
 
 $(eval $(call gb_CppunitTest_add_defs,sdext_pdfimport,\
-    -DPDFIMPORT_EXECUTABLE_LOCATION=\"$(call gb_CppunitTarget__make_url,\
+    -DPDFIMPORT_EXECUTABLE_LOCATION=\"$(call gb_Helper_make_url,\
         $(dir $(call gb_Executable_get_target,xpdfimport)))\" \
 ))
 
