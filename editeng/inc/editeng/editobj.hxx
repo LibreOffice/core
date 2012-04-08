@@ -85,12 +85,12 @@ public:
     static EditTextObject*  Create( SvStream& rIStream,
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
 
-    virtual sal_uInt16      GetParagraphCount() const;
+    virtual size_t GetParagraphCount() const;
 
-    virtual XubString   GetText( sal_uInt16 nParagraph ) const;
-    virtual void        Insert( const EditTextObject& rObj, sal_uInt16 nPara );
-    virtual void        RemoveParagraph( sal_uInt16 nPara );
-    virtual EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 ) const;
+    virtual String GetText(size_t nParagraph) const;
+    virtual void Insert(const EditTextObject& rObj, size_t nPara);
+    virtual void RemoveParagraph(size_t nPara);
+    virtual EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
 
     virtual sal_Bool        HasPortionInfo() const;
     virtual void        ClearPortionInfo();
@@ -109,12 +109,12 @@ public:
     virtual const SvxFieldItem* GetField() const;
     virtual sal_Bool        HasField( TypeId aType = NULL ) const;
 
-    virtual SfxItemSet  GetParaAttribs( sal_uInt16 nPara ) const;
-    virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );
+    virtual SfxItemSet GetParaAttribs(size_t nPara) const;
+    virtual void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
     virtual sal_Bool        HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void        GetStyleSheet( sal_uInt16 nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
-    virtual void        SetStyleSheet( sal_uInt16 nPara, const XubString& rName, const SfxStyleFamily& eFamily );
+    virtual void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
+    virtual void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
     virtual sal_Bool        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                             const XubString& rNewName, SfxStyleFamily eNewFamily );
     virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );

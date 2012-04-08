@@ -167,22 +167,23 @@ public:
 
     WrongList*          GetWrongList() const            { return pWrongs; }
     void                SetWrongList( WrongList* p )    { pWrongs = p; }
-    bool                operator==( const ContentInfo& rCompare ) const;
+    bool operator==( const ContentInfo& rCompare ) const;
+    bool operator!=( const ContentInfo& rCompare ) const;
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;
 };
-
-typedef ContentInfo* ContentInfoPtr;
-SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1 )
 
 class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {
     using EditTextObject::operator==;
     using EditTextObject::isWrongListEqual;
 
+public:
+    typedef boost::ptr_vector<ContentInfo> ContentInfosType;
+
 private:
-    ContentInfoList         aContents;
+    ContentInfosType        aContents;
     SfxItemPool*            pPool;
     XParaPortionList*       pPortionInfo;
 
@@ -197,7 +198,6 @@ private:
     bool                    bStoreUnicodeStrings:1;
 
 protected:
-    void                    DeleteContents();
     virtual void            StoreData( SvStream& rOStream ) const;
     virtual void            CreateData( SvStream& rIStream );
     sal_Bool                    ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
@@ -228,18 +228,18 @@ public:
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
     void                    DestroyAttrib( XEditAttribute* pAttr );
 
-    ContentInfoList&        GetContents()           { return aContents; }
-    const ContentInfoList&  GetContents() const     { return aContents; }
+    ContentInfosType&       GetContents();
+    const ContentInfosType& GetContents() const;
     SfxItemPool*            GetPool() const         { return pPool; }
     XParaPortionList*       GetPortionInfo() const  { return pPortionInfo; }
     void                    SetPortionInfo( XParaPortionList* pP )
                                 { pPortionInfo = pP; }
 
-    virtual sal_uInt16          GetParagraphCount() const;
-    virtual String          GetText( sal_uInt16 nParagraph ) const;
-    virtual void            Insert( const EditTextObject& rObj, sal_uInt16 nPara );
-    virtual EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 ) const;
-    virtual void            RemoveParagraph( sal_uInt16 nPara );
+    virtual size_t GetParagraphCount() const;
+    virtual String GetText(size_t nParagraph) const;
+    virtual void Insert(const EditTextObject& rObj, size_t nPara);
+    virtual EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
+    virtual void RemoveParagraph(size_t nPara);
 
     virtual sal_Bool            HasPortionInfo() const;
     virtual void            ClearPortionInfo();
@@ -258,12 +258,12 @@ public:
     virtual const SvxFieldItem* GetField() const;
     virtual sal_Bool            HasField( TypeId Type = NULL ) const;
 
-    SfxItemSet              GetParaAttribs( sal_uInt16 nPara ) const;
-    void                    SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );
+    virtual SfxItemSet GetParaAttribs(size_t nPara) const;
+    virtual void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
     virtual sal_Bool            HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void            GetStyleSheet( sal_uInt16 nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
-    virtual void            SetStyleSheet( sal_uInt16 nPara, const XubString& rName, const SfxStyleFamily& eFamily );
+    virtual void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
+    virtual void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
     virtual sal_Bool            ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                                 const String& rNewName, SfxStyleFamily eNewFamily );
     virtual void            ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );

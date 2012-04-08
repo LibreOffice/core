@@ -1239,12 +1239,12 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
             bConvertItems = sal_True;
     }
 
-    sal_uInt16 nContents = rTextObject.GetContents().Count();
+    size_t nContents = rTextObject.GetContents().size();
     sal_uInt16 nPara = aEditDoc.GetPos( aPaM.GetNode() );
 
-    for ( sal_uInt16 n = 0; n < nContents; n++, nPara++ )
+    for (size_t n = 0; n < nContents; ++n, ++nPara)
     {
-        ContentInfo* pC = rTextObject.GetContents().GetObject( n );
+        ContentInfo* pC = &rTextObject.GetContents()[n];
         sal_Bool bNewContent = aPaM.GetNode()->Len() ? sal_False: sal_True;
         sal_uInt16 nStartPos = aPaM.GetIndex();
 
