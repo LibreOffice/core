@@ -137,7 +137,7 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 endef
 
 define gb_CppunitTest_uses_ure
-$(call gb_CppunitTest_use_service_rdb,$(1),ure/services)
+$(call gb_CppunitTest_use_rdb,$(1),ure/services)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 
 endef
@@ -176,10 +176,14 @@ endef
 
 define gb_CppunitTest_add_service_rdb
 $$(call gb_Output_error,\
- gb_CppunitTest_add_service_rdb: use gb_CppunitTest_use_service_rdb instead.)
+ gb_CppunitTest_add_service_rdb: use gb_CppunitTest_use_rdb instead.)
 endef
 
 define gb_CppunitTest_use_service_rdb
+$$(call gb_Output_error,gb_CppunitTest_use_service_rdb: use gb_CppunitTest_use_rdb instead.))
+endef
+
+define gb_CppunitTest_use_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Rdb_get_outdir_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(call gb_Rdb_get_outdir_target,$(2))
 
@@ -187,11 +191,15 @@ endef
 
 define gb_CppunitTest_add_service_rdbs
 $$(call gb_Output_error,\
- gb_CppunitTest_add_service_rdbs: use gb_CppunitTest_use_service_rdbs instead.)
+ gb_CppunitTest_add_service_rdbs: use gb_CppunitTest_use_rdbs instead.)
 endef
 
 define gb_CppunitTest_use_service_rdbs
-$(foreach rdb,$(2),$(call gb_CppunitTest_use_service_rdb,$(1),$(rdb)))
+$$(call gb_Output_error,gb_CppunitTest_use_service_rdbs: use gb_CppunitTest_use_rdbs instead.))
+endef
+
+define gb_CppunitTest_use_rdbs
+$(foreach rdb,$(2),$(call gb_CppunitTest_use_rdb,$(1),$(rdb)))
 
 endef
 
