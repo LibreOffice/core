@@ -142,7 +142,7 @@ UpDownBarWrapper::UpDownBarWrapper(
     bool bUp, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_aPropertySetName( bUp ? "WhiteDay" : "BlackDay" )
+        , m_aPropertySetName( bUp ? OUString( "WhiteDay" ) : OUString( "BlackDay" ))
 {
 }
 
