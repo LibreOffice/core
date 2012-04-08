@@ -65,12 +65,10 @@ define gb_CppunitTest__make_args
 $(ARGS) \
 --headless \
 $(if $(strip $(UNO_TYPES)),\
-	"-env:UNO_TYPES=$(foreach rdb,udkapi $(UNO_TYPES),\
+	"-env:UNO_TYPES=$(foreach rdb,$(UNO_TYPES),\
 		$(call gb_CppunitTarget__make_url,$(call gb_CppunitTest__get_uno_type_target,$(rdb))))") \
 $(if $(strip $(UNO_SERVICES)),\
-	"-env:UNO_SERVICES=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/ure/services.rdb) \
-		$(foreach item,$(UNO_SERVICES),\
-			$(call gb_CppunitTarget__make_url,$(item)))") \
+	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
 		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))))
@@ -142,8 +140,8 @@ endef
 
 # TODO: Once we build the services.rdb with gbuild we should use its *_get_target method
 define gb_CppunitTest_uses_ure
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,udkapi)
-$(call gb_CppunitTest_get_target,$(1)) : $(OUTDIR)/xml/ure/services.rdb
+$(call gb_CppunitTest_use_type_rdb,$(1),udkapi)
+$(call gb_CppunitTest_use_service_rdb,$(1),ure/services)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 
 endef
@@ -175,9 +173,8 @@ $$(call gb_Output_error,\
 endef
 
 define gb_CppunitTest_use_service_rdb
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_RdbTarget_get_target,$(2))
-$(call gb_CppunitTest_get_target,$(1)) : \
-    UNO_SERVICES += $(call gb_RdbTarget_get_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Rdb_get_outdir_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(call gb_Rdb_get_outdir_target,$(2))
 
 endef
 
