@@ -304,18 +304,6 @@ namespace sw { namespace mark
     MarkManager::MarkManager(SwDoc& rDoc)
         : m_pDoc(&rDoc)
     { }
-#ifdef DBG_UTIL
-    void MarkManager::dumpFieldmarks( ) const
-    {
-        const_iterator_t pIt = m_vFieldmarks.begin();
-        for (; pIt != m_vFieldmarks.end( ); pIt++)
-        {
-            rtl::OUString str = (*pIt)->ToString();
-            OSL_TRACE("%s\n",
-                ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-#endif
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)

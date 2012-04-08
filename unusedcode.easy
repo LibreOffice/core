@@ -790,7 +790,6 @@ nullcanvas::SpriteCanvasHelper::backgroundPaint(basegfx::B2DRange const&)
 nullcanvas::SpriteCanvasHelper::genericUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
-ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
 oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::core::BinaryFilterBase::BinaryFilterBase(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::core::FilterBase::openSubStorage(rtl::OUString const&, bool) const
@@ -872,4 +871,3 @@ svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const&, unsigned short&)
 svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const*, unsigned short)
 svxform::SvLBoxEntrySortedArray::Insert(svxform::SvLBoxEntrySortedArray const*, unsigned short, unsigned short)
 svxform::SvLBoxEntrySortedArray::Remove(SvLBoxEntry* const&, unsigned short)
-sw::mark::MarkManager::dumpFieldmarks() const

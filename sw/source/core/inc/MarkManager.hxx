@@ -45,9 +45,6 @@ namespace sw { namespace mark
     {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
-#ifdef DBG_UTIL
-            void dumpFieldmarks( ) const;
-#endif
             // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const ::rtl::OUString& rName, IDocumentMarkAccess::MarkType eMark);
 

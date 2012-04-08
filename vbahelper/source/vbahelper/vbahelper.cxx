@@ -476,23 +476,6 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     dispatchExecute( pViewShell, SID_VIEWSHELL1 );
 }
 
-sal_Int32 extractIntFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
-{
-    switch( rAny.getValueType().getTypeClass() )
-    {
-        case uno::TypeClass_FLOAT:
-            return static_cast< sal_Int32 >( rAny.get< float >() );
-        case uno::TypeClass_DOUBLE:
-            return static_cast< sal_Int32 >( rAny.get< double >() );
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_LONG:
-            return rAny.get< sal_Int32 >();
-        default:;
-    }
-    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to integer." ) ), 0 );
-}
-
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
 {
     switch( rAny.getValueType().getTypeClass() )
