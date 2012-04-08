@@ -190,11 +190,6 @@ void WorkbookSettings::importCalcPr( SequenceInputStream& rStrm )
     maCalcSettings.mbConcurrent    = getFlag( nFlags, BIFF12_CALCPR_CONCURRENT );
 }
 
-void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
-{
-    maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
-}
-
 void WorkbookSettings::finalizeImport()
 {
     // default settings

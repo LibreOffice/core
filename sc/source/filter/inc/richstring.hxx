@@ -164,8 +164,6 @@ public:
     void                importPhoneticPr( const AttributeList& rAttribs );
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( SequenceInputStream& rStrm );
-    /** Imports phonetic settings from the PHONETICPR record. */
-    void                importPhoneticPr( BiffInputStream& rStrm );
 
     /** Imports phonetic settings from a rich string. */
     void                importStringData( SequenceInputStream& rStrm );

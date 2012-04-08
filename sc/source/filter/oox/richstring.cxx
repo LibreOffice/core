@@ -251,15 +251,6 @@ void PhoneticSettings::importPhoneticPr( SequenceInputStream& rStrm )
     maModel.setBiffData( nType, nAlignment );
 }
 
-void PhoneticSettings::importPhoneticPr( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFontId, nFlags;
-    rStrm >> nFontId >> nFlags;
-    maModel.mnFontId = nFontId;
-    maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
-    // following: range list with cells showing phonetic text
-}
-
 void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;

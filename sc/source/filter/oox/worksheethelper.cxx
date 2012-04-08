@@ -1473,16 +1473,6 @@ VmlDrawing& WorksheetHelper::getVmlDrawing() const
     return mrSheetGlob.getVmlDrawing();
 }
 
-BiffSheetDrawing& WorksheetHelper::getBiffDrawing() const
-{
-    return mrSheetGlob.getBiffDrawing();
-}
-
-void WorksheetHelper::setSheetType( WorksheetType eSheetType )
-{
-    mrSheetGlob.setSheetType( eSheetType );
-}
-
 void WorksheetHelper::setPageBreak( const PageBreakModel& rModel, bool bRowBreak )
 {
     mrSheetGlob.setPageBreak( rModel, bRowBreak );
@@ -1496,58 +1486,6 @@ void WorksheetHelper::setHyperlink( const HyperlinkModel& rModel )
 void WorksheetHelper::setValidation( const ValidationModel& rModel )
 {
     mrSheetGlob.setValidation( rModel );
-}
-
-void WorksheetHelper::setLabelRanges( const ApiCellRangeList& rColRanges, const ApiCellRangeList& rRowRanges )
-{
-    const CellAddress& rMaxPos = getAddressConverter().getMaxApiAddress();
-    PropertySet aPropSet( getSheet() );
-
-    if( !rColRanges.empty() )
-    {
-        Reference< XLabelRanges > xLabelRanges( aPropSet.getAnyProperty( PROP_ColumnLabelRanges ), UNO_QUERY );
-        if( xLabelRanges.is() )
-        {
-            for( ApiCellRangeList::const_iterator aIt = rColRanges.begin(), aEnd = rColRanges.end(); aIt != aEnd; ++aIt )
-            {
-                CellRangeAddress aDataRange = *aIt;
-                if( aDataRange.EndRow < rMaxPos.Row )
-                {
-                    aDataRange.StartRow = aDataRange.EndRow + 1;
-                    aDataRange.EndRow = rMaxPos.Row;
-                }
-                else if( aDataRange.StartRow > 0 )
-                {
-                    aDataRange.EndRow = aDataRange.StartRow - 1;
-                    aDataRange.StartRow = 0;
-                }
-                xLabelRanges->addNew( *aIt, aDataRange );
-            }
-        }
-    }
-
-    if( !rRowRanges.empty() )
-    {
-        Reference< XLabelRanges > xLabelRanges( aPropSet.getAnyProperty( PROP_RowLabelRanges ), UNO_QUERY );
-        if( xLabelRanges.is() )
-        {
-            for( ApiCellRangeList::const_iterator aIt = rRowRanges.begin(), aEnd = rRowRanges.end(); aIt != aEnd; ++aIt )
-            {
-                CellRangeAddress aDataRange = *aIt;
-                if( aDataRange.EndColumn < rMaxPos.Column )
-                {
-                    aDataRange.StartColumn = aDataRange.EndColumn + 1;
-                    aDataRange.EndColumn = rMaxPos.Column;
-                }
-                else if( aDataRange.StartColumn > 0 )
-                {
-                    aDataRange.EndColumn = aDataRange.StartColumn - 1;
-                    aDataRange.StartColumn = 0;
-                }
-                xLabelRanges->addNew( *aIt, aDataRange );
-            }
-        }
-    }
 }
 
 void WorksheetHelper::setDrawingPath( const OUString& rDrawingPath )
@@ -1583,11 +1521,6 @@ void WorksheetHelper::setBaseColumnWidth( sal_Int32 nWidth )
 void WorksheetHelper::setDefaultColumnWidth( double fWidth )
 {
     mrSheetGlob.setDefaultColumnWidth( fWidth );
-}
-
-void WorksheetHelper::setDefaultColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId )
-{
-    mrSheetGlob.convertColumnFormat( nFirstCol, nLastCol, nXfId );
 }
 
 void WorksheetHelper::setColumnModel( const ColumnModel& rModel )

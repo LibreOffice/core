@@ -248,19 +248,13 @@ public:
     SheetViewSettings&  getSheetViewSettings() const;
     /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     VmlDrawing&         getVmlDrawing() const;
-    /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
-    BiffSheetDrawing&   getBiffDrawing() const;
 
-    /** Changes the current sheet type. */
-    void                setSheetType( WorksheetType eSheetType );
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
     void                setHyperlink( const HyperlinkModel& rModel );
     /** Inserts the data validation settings into the spreadsheet. */
     void                setValidation( const ValidationModel& rModel );
-    /** Sets the passed label ranges to the current sheet. */
-    void                setLabelRanges( const ApiCellRangeList& rColRanges, const ApiCellRangeList& rRowRanges );
     /** Sets the path to the DrawingML fragment of this sheet. */
     void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
@@ -279,8 +273,6 @@ public:
     /** Sets default width for all columns. This function overrides the base
         width set with the setBaseColumnWidth() function. */
     void                setDefaultColumnWidth( double fWidth );
-    /** Converts default cell formatting for a range of columns. */
-    void                setDefaultColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId );
     /** Sets column settings for a specific range of columns.
         @descr  Column default formatting is converted directly, other settings
         are cached and converted in the finalizeWorksheetImport() call. */

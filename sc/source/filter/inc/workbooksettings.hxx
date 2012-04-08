@@ -109,9 +109,6 @@ public:
     /** Imports the CALCPR record containing workbook calculation settings. */
     void                importCalcPr( SequenceInputStream& rStrm );
 
-    /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
-    void                setSaveExtLinkValues( bool bSaveExtLinks );
-
     /** Converts the imported workbook settings. */
     void                finalizeImport();
 
