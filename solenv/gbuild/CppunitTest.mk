@@ -146,6 +146,10 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS += $(2)
 endef
 
 define gb_CppunitTest_uses_ure
+$$(call gb_Output_error,gb_CppunitTest_uses_ure: use gb_CppunitTest_use_ure instead.))
+endef
+
+define gb_CppunitTest_use_ure
 $(call gb_CppunitTest_use_rdb,$(1),ure/services)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 

@@ -79,7 +79,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_regression_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sd_regression_test))
+$(eval $(call gb_CppunitTest_use_ure,sd_regression_test))
 
 $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
     basic/util/sb \

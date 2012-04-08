@@ -48,7 +48,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtftok,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sw_subsequent_rtftok))
+$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_rtftok))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
     configmgr/source/configmgr \

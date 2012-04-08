@@ -51,4 +51,4 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,svl_urihelper))
+$(eval $(call gb_CppunitTest_use_ure,svl_urihelper))

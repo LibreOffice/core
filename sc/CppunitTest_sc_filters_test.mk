@@ -80,7 +80,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_filters_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_filters_test))
+$(eval $(call gb_CppunitTest_use_ure,sc_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     basic/util/sb \

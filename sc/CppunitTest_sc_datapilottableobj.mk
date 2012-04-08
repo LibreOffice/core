@@ -83,7 +83,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_datapilottableobj,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_datapilottableobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_datapilottableobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_datapilottableobj,\
 	basic/util/sb \

@@ -82,7 +82,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_macros_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sw_macros_test))
+$(eval $(call gb_CppunitTest_use_ure,sw_macros_test))
 
 $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
     basic/util/sb \

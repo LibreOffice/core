@@ -78,7 +78,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_filters_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sd_filters_test))
+$(eval $(call gb_CppunitTest_use_ure,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     basic/util/sb \

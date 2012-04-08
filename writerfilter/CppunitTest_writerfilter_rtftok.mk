@@ -52,7 +52,7 @@ $(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,writerfilter_rtftok))
+$(eval $(call gb_CppunitTest_use_ure,writerfilter_rtftok))
 
 $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	configmgr/source/configmgr \

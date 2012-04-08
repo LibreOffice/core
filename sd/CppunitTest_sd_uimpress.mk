@@ -76,7 +76,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
     sd/qa/unit/uimpress \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sd_uimpress))
+$(eval $(call gb_CppunitTest_use_ure,sd_uimpress))
 
 $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \

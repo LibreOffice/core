@@ -50,7 +50,7 @@ $(eval $(call gb_CppunitTest_use_api,hwpfilter_test_hwpfilter,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,hwpfilter_test_hwpfilter))
+$(eval $(call gb_CppunitTest_use_ure,hwpfilter_test_hwpfilter))
 
 $(eval $(call gb_CppunitTest_use_components,hwpfilter_test_hwpfilter,\
     configmgr/source/configmgr \
