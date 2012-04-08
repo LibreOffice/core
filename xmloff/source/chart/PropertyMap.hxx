@@ -94,6 +94,7 @@
 #define MAP_FULL( ApiName, NameSpace, XMLTokenName, XMLType, ContextId, EarliestODFVersionForExport ) { ApiName, sizeof(ApiName)-1, XML_NAMESPACE_##NameSpace, xmloff::token::XMLTokenName, XMLType|XML_TYPE_PROP_CHART, ContextId, EarliestODFVersionForExport }
 #define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_010 }
 #define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012 }
+#define MAP_ENTRY_ODF_EXT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_LATEST }
 #define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFVER_010 }
 #define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_010 }
 #define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_012 }
@@ -192,6 +193,13 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
       MAP_ENTRY( "RegressionCurves", CHART, XML_REGRESSION_TYPE, XML_SCH_TYPE_REGRESSION_TYPE ),
       MAP_ENTRY_ODF12( "ErrorBarRangePositive", CHART, XML_ERROR_UPPER_RANGE, XML_TYPE_STRING ),
       MAP_ENTRY_ODF12( "ErrorBarRangeNegative", CHART, XML_ERROR_LOWER_RANGE, XML_TYPE_STRING ),
+
+    // errorbars properties (chart2)
+    MAP_ENTRY_ODF_EXT( "PositiveError", CHART, XML_ERROR_LOWER_LIMIT, XML_TYPE_DOUBLE),
+    MAP_ENTRY_ODF_EXT( "NegativeError", CHART, XML_ERROR_UPPER_LIMIT, XML_TYPE_DOUBLE),
+    MAP_ENTRY_ODF_EXT( "Weigth", CHART, XML_ERROR_STANDARD_WEIGTH, XML_TYPE_DOUBLE),
+    MAP_ENTRY_ODF_EXT( "ShowPositiveError", CHART, XML_ERROR_UPPER_INDICATOR, XML_TYPE_BOOL),
+    MAP_ENTRY_ODF_EXT( "ShowNegativeError", CHART, XML_ERROR_LOWER_INDICATOR, XML_TYPE_BOOL),
 
     // series/data-point properties
     MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_NUMBER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER ),   // convert one constant

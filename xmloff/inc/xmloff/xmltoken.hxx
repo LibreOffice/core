@@ -3162,6 +3162,7 @@ namespace xmloff { namespace token {
         XML_HORIZONTAL_BAR,
         XML_VERTICAL_BAR,
 
+        XML_ERROR_STANDARD_WEIGTH, // errorbar standard deviation error weigth
         XML_TOKEN_END
     };
 
