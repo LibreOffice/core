@@ -3121,7 +3121,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
     const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
     /// Dont export X ErrorBars for older ODF versions.
-    if ( !bYError && nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+    if ( !bYError && nCurrentVersion != SvtSaveOptions::ODFVER_LATEST )
         return;
 
     if (xSeriesProp.is())
@@ -3162,12 +3162,34 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         {
             if( bExportContent && nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
             {
+                uno::Reference< chart2::XChartDocument > xNewDoc(mrExport.GetModel(), uno::UNO_QUERY);
+
                 // register data ranges for error bars for export in local table
                 ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
                     lcl_getErrorBarSequences( xErrorBarProp ));
                 for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
                          aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
+                    if ( nCurrentVersion == SvtSaveOptions::ODFVER_LATEST )
+                    {
+                        rtl::OUString aRole, aRange;
+                        Reference< beans::XPropertySet > xSeqProp( *aIt, uno::UNO_QUERY_THROW );
+                        xSeqProp->getPropertyValue("Role") >>= aRole;
+
+                        aRange = lcl_ConvertRange((*aIt)->getSourceRangeRepresentation(), xNewDoc );
+
+                        if ( aRole.indexOf("positive") != -1 )
+                        {
+                            if ( bPositive )
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ERROR_UPPER_RANGE, aRange );
+                        }
+                        else
+                        {
+                            if ( bNegative )
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ERROR_LOWER_RANGE, aRange );
+                        }
+                    }
+
                     m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
                 }
             }
