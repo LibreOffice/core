@@ -117,7 +117,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_regression_test,\
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))

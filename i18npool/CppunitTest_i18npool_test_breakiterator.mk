@@ -52,10 +52,6 @@ $(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
 	i18npool/util/i18npool \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,i18npool_test_breakiterator,\
-   --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-))
-
 $(call gb_CppunitTest_get_target,i18npool_test_breakiterator) : $(call gb_Module_get_target,i18npool)
 
 # vim: set noet sw=4 ts=4:

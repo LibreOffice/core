@@ -95,8 +95,4 @@ $(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
 ))
 endif
 
-$(eval $(call gb_CppunitTest_set_args,starmath_qa_cppunit,\
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-))
-
 # vim: set noet sw=4 ts=4:

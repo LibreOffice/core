@@ -60,7 +60,6 @@ $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\
-	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
 

@@ -69,7 +69,8 @@ $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))))
+		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))) \
+	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector)
 endef
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)

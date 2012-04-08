@@ -50,8 +50,3 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     utl \
     $(gb_STDLIBS) \
 ))
-
-$(eval $(call gb_CppunitTest_set_args,svl_urihelper, \
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) \
-        unoexceptionprotector \
-))
