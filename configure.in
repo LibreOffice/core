@@ -9509,7 +9509,7 @@ AC_MSG_CHECKING([for Barcode extension integration])
 BARCODE_EXTENSION_PACK=
 if test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
-    BARCODE_EXTENSION_PACK="7e7efc5d4a03126bb9ae3ae9aa2c4e87-Barcode_1.3.1.0.oxt"
+    BARCODE_EXTENSION_PACK="3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
