@@ -59,16 +59,16 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 
 define gb_CppunitTest__make_args
 --headless \
-$(if $(strip $(CONFIGURATION_LAYERS)),\
-	"-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
-$(if $(strip $(UNO_TYPES)),\
-	"-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
-$(if $(strip $(UNO_SERVICES)),\
-	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
 $(if $(URE),\
-	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-		-env:$(dir)=$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))) \
-	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector) \
+    $(if $(strip $(CONFIGURATION_LAYERS)),\
+	    "-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
+    $(if $(strip $(UNO_TYPES)),\
+	    "-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
+    $(if $(strip $(UNO_SERVICES)),\
+	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
+    $(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
+	    -env:$(dir)=$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))) \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector) \
 $(ARGS)
 endef
 
