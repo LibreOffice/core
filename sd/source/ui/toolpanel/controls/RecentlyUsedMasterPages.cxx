@@ -62,15 +62,12 @@ namespace {
 
 static const OUString& GetPathToImpressConfigurationRoot (void)
 {
-    static const OUString sPathToImpressConfigurationRoot (
-        RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/"));
+    static const OUString sPathToImpressConfigurationRoot ("/org.openoffice.Office.Impress/");
     return sPathToImpressConfigurationRoot;
 }
 static const OUString& GetPathToSetNode (void)
 {
-    static const OUString sPathToSetNode(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages"));
+    static const OUString sPathToSetNode("MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages");
     return sPathToSetNode;
 }
 
@@ -285,7 +282,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                 ++iDescriptor,++nIndex)
         {
             // Create new child.
-            OUString sKey (RTL_CONSTASCII_USTRINGPARAM("index_"));
+            OUString sKey ("index_");
             sKey += OUString::valueOf(nIndex);
             Reference<container::XNameReplace> xChild(
                 xChildFactory->createInstance(), UNO_QUERY);

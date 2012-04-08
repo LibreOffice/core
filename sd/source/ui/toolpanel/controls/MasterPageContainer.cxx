@@ -999,17 +999,14 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
     if ( ! mxModel.is())
     {
         // Get the desktop a s service factory.
-        ::rtl::OUString sDesktopServiceName (
-            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
+        ::rtl::OUString sDesktopServiceName ( "com.sun.star.frame.Desktop");
         uno::Reference<frame::XComponentLoader> xDesktop (
             ::comphelper::getProcessServiceFactory()->createInstance(
                 sDesktopServiceName),
             uno::UNO_QUERY);
 
         // Create a new model.
-        ::rtl::OUString sModelServiceName (
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.presentation.PresentationDocument"));
+        ::rtl::OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");
         mxModel = uno::Reference<frame::XModel>(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 sModelServiceName),
@@ -1042,7 +1039,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
                 uno::Reference<beans::XPropertySet> xProperties(xNewPage, uno::UNO_QUERY);
                 if (xProperties.is())
                     xProperties->setPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")),
+                        "Layout",
                         makeAny((sal_Int16)AUTOLAYOUT_TITLE));
             }
         }

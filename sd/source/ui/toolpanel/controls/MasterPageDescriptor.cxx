@@ -291,15 +291,15 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
     {
         if (msURL.isEmpty())
             meURLClassification = URLCLASS_UNKNOWN;
-        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
+        else if (msURL.indexOf("presnt")>=0)
         {
             meURLClassification = URLCLASS_PRESENTATION;
         }
-        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout")))>=0)
+        else if (msURL.indexOf("layout")>=0)
         {
             meURLClassification = URLCLASS_LAYOUT;
         }
-        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("educate")))>=0)
+        else if (msURL.indexOf("educate")>=0)
         {
             meURLClassification = URLCLASS_OTHER;
         }

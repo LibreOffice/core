@@ -117,14 +117,14 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ToolPanelFactory_getImplementationName() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.drawing.ToolPanelFactory" ) );
+        return ::rtl::OUString( "com.sun.star.comp.drawing.ToolPanelFactory" ) ;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory_getSupportedServiceNames (void)
         throw (RuntimeException)
     {
-        const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DefaultToolPanelFactory" ) );
+        const ::rtl::OUString sServiceName( "com.sun.star.drawing.DefaultToolPanelFactory" );
         return Sequence< ::rtl::OUString >( &sServiceName, 1 );
     }
 
@@ -153,7 +153,7 @@ namespace sd { namespace toolpanel
         const Reference< XWindow > xParentWindow( aArgs.getOrDefault( "ParentWindow", Reference< XWindow >() ) );
         if ( !xDocFrame.is() || !xParentWindow.is() )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "For creating a standard tool panel, a Frame and a Parent window are needed." ) ),
+                "For creating a standard tool panel, a Frame and a Parent window are needed." ,
                 *this,
                 2
             );
@@ -174,7 +174,7 @@ namespace sd { namespace toolpanel
 
         if ( !pViewFrame || !pViewFrame->HasChildWindow( SID_TASKPANE ) )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal frame." ) ),
+                "Illegal frame." ,
                 *this,
                 2
             );
@@ -183,7 +183,7 @@ namespace sd { namespace toolpanel
         ToolPanelChildWindow* pToolPanelWindow( dynamic_cast< ToolPanelChildWindow* >( pViewFrame->GetChildWindow( SID_TASKPANE ) ) );
         if ( !pToolPanelWindow )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No Impress document, or no Impress Task Pane." ) ),
+                "No Impress document, or no Impress Task Pane." ,
                 *this,
                 2
             );
@@ -200,7 +200,7 @@ namespace sd { namespace toolpanel
 
         if ( !pToolPanelShell )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wrong document type." ) ),
+                "Wrong document type." ,
                 *this,
                 2
             );
@@ -208,7 +208,7 @@ namespace sd { namespace toolpanel
         ::Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
         if ( !pParentWindow || !pToolPanelShell->IsPanelAnchorWindow( *pParentWindow ) )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported parent window." ) ),
+                "Unsupported parent window." ,
                 *this,
                 2
             );

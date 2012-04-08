@@ -709,7 +709,7 @@ namespace
         default:
             break;
         }
-        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal panel ID" ) ), NULL );
+        throw RuntimeException( "illegal panel ID" , NULL );
     }
 }
 

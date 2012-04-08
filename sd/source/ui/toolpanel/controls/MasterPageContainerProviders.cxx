@@ -128,9 +128,7 @@ Image TemplatePreviewProvider::operator() (
         try
         {
             uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
-                xServiceManager->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.embed.StorageFactory"))),
+                xServiceManager->createInstance( "com.sun.star.embed.StorageFactory"),
                 uno::UNO_QUERY);
 
             if (xStorageFactory.is())
@@ -148,14 +146,12 @@ Image TemplatePreviewProvider::operator() (
                     {
                         uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnails")),
+                                "Thumbnails",
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "thumbnail.png"))));
+                                xStorage->cloneStreamElement("thumbnail.png"));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
@@ -180,15 +176,12 @@ Image TemplatePreviewProvider::operator() (
                     if ( ! xIStream.is())
                     {
                         uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnail")),
+                            xDocStorage->openStorageElement( "Thumbnail",
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "thumbnail.png"))));
+                                xStorage->cloneStreamElement("thumbnail.png"));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
