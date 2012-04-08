@@ -85,7 +85,7 @@ using com::sun::star::xml::sax::XParser;
 void callHandler(uno::Reference < XDocumentHandler > xDocHandler);
 
 
-static bool handleEmbeddedWPG(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
     OdgGenerator exporter(pHandler, streamType);
 
@@ -95,6 +95,22 @@ static bool handleEmbeddedWPG(const WPXBinaryData &data, OdfDocumentHandler *pHa
         fileFormat = libwpg::WPG_WPG1;
 
     return libwpg::WPGraphics::parse(const_cast<WPXInputStream *>(data.getDataStream()), &exporter, fileFormat);
+}
+
+static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &output)
+{
+    WPXString svgOutput;
+    libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
+
+    if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(input.getDataStream())))
+        fileFormat = libwpg::WPG_WPG1;
+
+    if (!libwpg::WPGraphics::generateSVG(const_cast<WPXInputStream *>(input.getDataStream()), svgOutput, fileFormat))
+        return false;
+
+    output.clear();
+    output.append((unsigned char *)svgOutput.cstr(), strlen(svgOutput.cstr()));
+    return true;
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
@@ -159,7 +175,8 @@ throw (RuntimeException)
     DocumentHandler xHandler(xInternalHandler);
 
     OdtGenerator collector(&xHandler, ODF_FLAT_XML);
-    collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPG);
+	collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
+	collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
     if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
         return sal_True;
     return sal_False;
