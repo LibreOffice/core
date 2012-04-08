@@ -349,14 +349,6 @@ BiffCodecHelper::BiffCodecHelper( const WorkbookHelper& rHelper ) :
 {
 }
 
-/*static*/ BiffDecoderRef BiffCodecHelper::implReadFilePass( BiffInputStream& rStrm, BiffType eBiff )
-{
-    rStrm.enableDecoder( false );
-    BiffDecoderRef xDecoder = (eBiff == BIFF8) ? lclReadFilePassBiff8( rStrm ) : lclReadFilePass_XOR( rStrm );
-    rStrm.setDecoder( xDecoder );
-    return xDecoder;
-}
-
 void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
 {
     if( mxDecoder.get() )

@@ -113,34 +113,6 @@ private:
 };
 
 // ============================================================================
-// ============================================================================
-
-class BiffExternalSheetDataContext : public BiffWorkbookContextBase
-{
-public:
-    explicit            BiffExternalSheetDataContext( const WorkbookHelper& rHelper, bool bImportDefNames );
-    virtual             ~BiffExternalSheetDataContext();
-
-    /** Tries to import a record related to external links and defined names. */
-    virtual void        importRecord( BiffInputStream& rStrm );
-
-private:
-    void                importExternSheet( BiffInputStream& rStrm );
-    void                importExternalBook( BiffInputStream& rStrm );
-    void                importExternalName( BiffInputStream& rStrm );
-    void                importXct( BiffInputStream& rStrm );
-    void                importCrn( BiffInputStream& rStrm );
-    void                importDefinedName( BiffInputStream& rStrm );
-
-    /** Sets the passed cell value to the passed position in the sheet cache. */
-    void                setCellValue( const BinAddress& rBinAddr, const ::com::sun::star::uno::Any& rValue );
-
-private:
-    ExternalLinkRef     mxExtLink;              /// Current external link.
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
-                        mxSheetCache;           /// The sheet cache used to store external cell values.
-    bool                mbImportDefNames;
-};
 
 } // namespace xls
 } // namespace oox

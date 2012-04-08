@@ -422,8 +422,6 @@ public:
     explicit            BiffDrawingBase( const WorksheetHelper& rHelper,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage );
 
-    /** Imports a plain OBJ record (without leading DFF data). */
-    void                importObj( BiffInputStream& rStrm );
     /** Sets the object with the passed identifier to be skipped on import. */
     void                setSkipObj( sal_uInt16 nObjId );
 

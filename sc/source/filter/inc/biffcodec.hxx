@@ -168,9 +168,6 @@ class BiffCodecHelper : public WorkbookHelper
 public:
     explicit            BiffCodecHelper( const WorkbookHelper& rHelper );
 
-    /** Implementation helper, reads the FILEPASS and returns a decoder object. */
-    static BiffDecoderRef implReadFilePass( BiffInputStream& rStrm, BiffType eBiff );
-
     /** Clones the contained decoder object if existing and sets it at the passed stream. */
     void                cloneDecoder( BiffInputStream& rStrm );
 

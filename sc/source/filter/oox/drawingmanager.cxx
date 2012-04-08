@@ -1089,43 +1089,6 @@ BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Referenc
 {
 }
 
-void BiffDrawingBase::importObj( BiffInputStream& rStrm )
-{
-    BiffDrawingObjectRef xDrawingObj;
-
-#if 0
-    /*  #i61786# In BIFF8 streams, OBJ records may occur without MSODRAWING
-        records. In this case, the OBJ records are in BIFF5 format. Do a sanity
-        check here that there is no DFF data loaded before. */
-    DBG_ASSERT( maDffStrm.Tell() == 0, "BiffDrawingBase::importObj - unexpected DFF stream data, OBJ will be ignored" );
-    if( maDffStrm.Tell() == 0 ) switch( GetBiff() )
-#else
-    switch( getBiff() )
-#endif
-    {
-        case BIFF3:
-            xDrawingObj = BiffDrawingObjectBase::importObjBiff3( *this, rStrm );
-        break;
-        case BIFF4:
-            xDrawingObj = BiffDrawingObjectBase::importObjBiff4( *this, rStrm );
-        break;
-        case BIFF5:
-// TODO: add BIFF8 when DFF is supported
-//        case BIFF8:
-            xDrawingObj = BiffDrawingObjectBase::importObjBiff5( *this, rStrm );
-        break;
-        default:;
-    }
-
-    if( xDrawingObj.get() )
-    {
-        // insert into maRawObjs or into the last open group object
-        maRawObjs.insertGrouped( xDrawingObj );
-        // to be able to find objects by ID
-        maObjMapId[ xDrawingObj->getObjId() ] = xDrawingObj;
-    }
-}
-
 void BiffDrawingBase::finalizeImport()
 {
     Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );

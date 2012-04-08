@@ -94,21 +94,6 @@ private:
 
 // ============================================================================
 
-class BiffAutoFilterContext : public BiffWorksheetContextBase
-{
-public:
-    explicit            BiffAutoFilterContext( const WorksheetHelper& rHelper, AutoFilter& rAutoFilter );
-
-protected:
-    /** Imports all records related to the current auto filter. */
-    virtual void        importRecord( BiffInputStream& rStrm );
-
-private:
-    AutoFilter&         mrAutoFilter;
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

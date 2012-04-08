@@ -163,23 +163,6 @@ void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-BiffAutoFilterContext::BiffAutoFilterContext( const WorksheetHelper& rHelper, AutoFilter& rAutoFilter ) :
-    BiffWorksheetContextBase( rHelper ),
-    mrAutoFilter( rAutoFilter )
-{
-}
-
-void BiffAutoFilterContext::importRecord( BiffInputStream& rStrm )
-{
-    switch( rStrm.getRecId() )
-    {
-        // nothing to read for BIFF_ID_AUTOFILTER
-        case BIFF_ID_FILTERCOLUMN:  mrAutoFilter.createFilterColumn().importFilterColumn( rStrm );  break;
-    }
-}
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 
