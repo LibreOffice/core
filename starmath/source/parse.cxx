@@ -2424,9 +2424,7 @@ void SmParser::Error(SmParseError eError)
 
     AddError(eError, pSNode);
 
-    // Even if the newline token is unexpected, do not skip it. (fdo#41739)
-    if (m_aCurToken.eType != TNEWLINE)
-        NextToken();
+    NextToken();
 }
 
 
