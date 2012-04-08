@@ -61,7 +61,6 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(strip $(1))
 
 define gb_CppunitTest__make_args
-$(ARGS) \
 --headless \
 $(if $(strip $(CONFIGURATION_LAYERS)),\
 	"-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
@@ -72,7 +71,8 @@ $(if $(strip $(UNO_SERVICES)),\
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
 		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))) \
-	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector)
+	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector) \
+$(ARGS)
 endef
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
@@ -136,7 +136,15 @@ $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT := TRUE
 endef
 
 define gb_CppunitTest_set_args
-$(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
+$$(call gb_Output_error,gb_CppunitTest_set_args: use gb_CppunitTest_add_arguments instead.))
+endef
+
+# Add additional command line arguments for the test.
+#
+# You should practically never need to use this, as there are special
+# functions for adding many commonly used arguments.
+define gb_CppunitTest_add_arguments
+$(call gb_CppunitTest_get_target,$(1)) : ARGS += $(2)
 
 endef
 

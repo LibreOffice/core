@@ -48,9 +48,7 @@ else
 my_soffice:=path:$(OUTDIR)/installation/opt/program/soffice
 endif
 
-$(eval $(call gb_CppunitTest_set_args,smoketest,\
-	-env:UNO_SERVICES=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/ure/services.rdb) \
-	-env:UNO_TYPES=$(call gb_CppunitTarget__make_url,$(OUTDIR)/bin/types.rdb) \
+$(eval $(call gb_CppunitTest_add_arguments,smoketest,\
 	-env:arg-soffice=$(my_soffice) \
 	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
 	-env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
