@@ -237,19 +237,18 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
     // Do not throw an excepetion at the moment.  This leads to a crash
     // under Solaris on relead.  See issue i70929 for details.
     //    ThrowIfDisposed();
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawController" ) );
+    return OUString("DrawController") ;
 }
 
 
 
-static OUString ssServiceName (RTL_CONSTASCII_USTRINGPARAM(
-    "com.sun.star.drawing.DrawingDocumentDrawView"));
+static OUString ssServiceName( "com.sun.star.drawing.DrawingDocumentDrawView");
 
 sal_Bool SAL_CALL DrawController::supportsService (
     const OUString& rsServiceName)
     throw(RuntimeException)
 {
-    // Do not throw an excepetion at the moment.  This leads to a crash
+    // Do not throw an exception at the moment.  This leads to a crash
     // under Solaris on relead.  See issue i70929 for details.
     //    ThrowIfDisposed();
     return rsServiceName.equals(ssServiceName);
@@ -525,8 +524,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch (const uno::Exception&)
         {
             OSL_FAIL(
-                (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
-                    "exception caught: ") +
+                ("sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught: " +
                     ::rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 )).getStr() );
@@ -640,55 +638,54 @@ void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
 {
     rProperties.push_back(
-        beans::Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),
+        beans::Property("VisibleArea",
             PROPERTY_WORKAREA,
             ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
     rProperties.push_back(
         beans::Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("SubController") ),
+            "SubController",
             PROPERTY_SUB_CONTROLLER,
             ::getCppuType((const Reference<drawing::XDrawSubController>*)0),
             beans::PropertyAttribute::BOUND));
     rProperties.push_back(
         beans::Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),
+            "CurrentPage",
             PROPERTY_CURRENTPAGE,
             ::getCppuType((const Reference< drawing::XDrawPage > *)0),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),
+        beans::Property("IsLayerMode",
             PROPERTY_LAYERMODE,
             ::getCppuBooleanType(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),
+        beans::Property("IsMasterPageMode",
             PROPERTY_MASTERPAGEMODE,
             ::getCppuBooleanType(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),
+        beans::Property("ActiveLayer",
             PROPERTY_ACTIVE_LAYER,
             ::getCppuBooleanType(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomValue") ),
+        beans::Property("ZoomValue",
             PROPERTY_ZOOMVALUE,
             ::getCppuType((const sal_Int16*)0),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomType") ),
+        beans::Property("ZoomType",
             PROPERTY_ZOOMTYPE,
             ::getCppuType((const sal_Int16*)0),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOffset") ),
+        beans::Property("ViewOffset",
             PROPERTY_VIEWOFFSET,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("DrawViewMode") ),
+        beans::Property("DrawViewMode",
             PROPERTY_DRAWVIEWMODE,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
@@ -807,7 +804,7 @@ sal_Bool DrawController::convertFastPropertyValue (
         }
         catch (const beans::UnknownPropertyException&)
         {
-            // The prperty is unknown and thus an illegal argument to this method.
+            // The property is unknown and thus an illegal argument to this method.
             throw com::sun::star::lang::IllegalArgumentException();
         }
     }
@@ -911,8 +908,7 @@ void DrawController::ThrowIfDisposed (void) const
     {
         OSL_TRACE ("Calling disposed DrawController object. Throwing exception:");
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "DrawController object has already been disposed")),
+            "DrawController object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

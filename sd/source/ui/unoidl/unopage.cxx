@@ -1363,17 +1363,17 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
                 if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
                 {
                     // fake a empty PageShape if its a title shape on the master page
-                    pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape")));
+                    pShape->SetShapeType("com.sun.star.presentation.PageShape");
                 }
                 else
                 {
-                    pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape")));
+                    pShape->SetShapeType("com.sun.star.presentation.TitleTextShape");
                 }
                 eKind = PRESOBJ_NONE;
                 break;
             case OBJ_OUTLINETEXT:
                 pShape = new SvxShapeText( pObj );
-                pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape")));
+                pShape->SetShapeType("com.sun.star.presentation.OutlinerShape");
                 eKind = PRESOBJ_NONE;
                 break;
             }
@@ -1387,60 +1387,60 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
 
         if( eKind != PRESOBJ_NONE )
         {
-            String aShapeType( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation."));
+            OUString aShapeType("com.sun.star.presentation.");
 
             switch( eKind )
             {
             case PRESOBJ_TITLE:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TitleTextShape") );
+                aShapeType += "TitleTextShape";
                 break;
             case PRESOBJ_OUTLINE:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OutlinerShape") );
+                aShapeType += "OutlinerShape";
                 break;
             case PRESOBJ_TEXT:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SubtitleShape") );
+                aShapeType += "SubtitleShape";
                 break;
             case PRESOBJ_GRAPHIC:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape") );
+                aShapeType += "GraphicObjectShape";
                 break;
             case PRESOBJ_OBJECT:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OLE2Shape") );
+                aShapeType += "OLE2Shape";
                 break;
             case PRESOBJ_CHART:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("ChartShape") );
+                aShapeType += "ChartShape";
                 break;
             case PRESOBJ_ORGCHART:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OrgChartShape") );
+                aShapeType += "OrgChartShape";
                 break;
             case PRESOBJ_CALC:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("CalcShape") );
+                aShapeType += "CalcShape";
                 break;
             case PRESOBJ_TABLE:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TableShape") );
+                aShapeType += "TableShape";
                 break;
             case PRESOBJ_MEDIA:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("MediaShape") );
+                aShapeType += "MediaShape";
                 break;
             case PRESOBJ_PAGE:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("PageShape") );
+                aShapeType += "PageShape";
                 break;
             case PRESOBJ_HANDOUT:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HandoutShape") );
+                aShapeType += "HandoutShape";
                 break;
             case PRESOBJ_NOTES:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("NotesShape") );
+                aShapeType += "NotesShape";
                 break;
             case PRESOBJ_FOOTER:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("FooterShape") );
+                aShapeType += "FooterShape";
                 break;
             case PRESOBJ_HEADER:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HeaderShape") );
+                aShapeType += "HeaderShape";
                 break;
             case PRESOBJ_SLIDENUMBER:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SlideNumberShape") );
+                aShapeType += "SlideNumberShape";
                 break;
             case PRESOBJ_DATETIME:
-                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("DateTimeShape") );
+                aShapeType += "DateTimeShape";
                 break;
             case PRESOBJ_NONE:
             case PRESOBJ_IMAGE:
@@ -2004,7 +2004,7 @@ SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
 OUString SAL_CALL SdPageLinkTargets::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdPageLinkTargets") );
+    return OUString( "SdPageLinkTargets" );
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
@@ -2016,7 +2016,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceNam
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    const OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.LinkTargets") );
+    const OUString aSN( "com.sun.star.document.LinkTargets" );
     Sequence< OUString > aSeq( &aSN, 1);
     return aSeq;
 }
@@ -2145,7 +2145,7 @@ OUString getPageApiName( SdPage* pPage )
         if( aPageName.isEmpty() )
         {
             OUStringBuffer sBuffer;
-            sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sEmptyPageName ) );
+            sBuffer.appendAscii( sEmptyPageName );
             const sal_Int32 nPageNum = ( ( pPage->GetPageNum() - 1 ) >> 1 ) + 1;
             sBuffer.append( nPageNum );
             aPageName = sBuffer.makeStringAndClear();
@@ -2227,7 +2227,7 @@ String SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 // XServiceInfo
 OUString SAL_CALL SdDrawPage::getImplementationName() throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdDrawPage") );
+    return OUString( "SdDrawPage" );
 }
 
 Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -2786,7 +2786,7 @@ Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::Run
 // XServiceInfo
 OUString SAL_CALL SdMasterPage::getImplementationName() throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdMasterPage") );
+    return OUString( "SdMasterPage" );
 }
 
 Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno::RuntimeException)

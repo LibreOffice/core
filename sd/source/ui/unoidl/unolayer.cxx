@@ -122,23 +122,23 @@ OUString SdLayer::convertToExternalName( const String& rName )
     const String aCompare( rName );
     if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) )
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background) );
+        return OUString( sUNO_LayerName_background );
     }
     else if( rName == String( SdResId( STR_LAYER_BCKGRNDOBJ ) ) )
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background_objects) );
+        return OUString( sUNO_LayerName_background_objects );
     }
     else if( rName == String( SdResId( STR_LAYER_LAYOUT ) ) )
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_layout) );
+        return OUString( sUNO_LayerName_layout );
     }
     else if( rName == String( SdResId( STR_LAYER_CONTROLS ) ) )
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_controls) );
+        return OUString( sUNO_LayerName_controls );
     }
     else if( rName == String( SdResId( STR_LAYER_MEASURELINES ) ) )
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_measurelines) );
+        return OUString( sUNO_LayerName_measurelines );
     }
     else
     {

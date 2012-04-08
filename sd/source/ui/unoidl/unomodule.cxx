@@ -44,13 +44,13 @@ using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL SdUnoModule_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.DrawingModule" ) );
+    return rtl::OUString( "com.sun.star.comp.Draw.DrawingModule" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL SdUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"));
+    aSeq[0] = "com.sun.star.drawing.ModuleDispatcher";
     return aSeq;
 }
 

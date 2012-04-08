@@ -185,7 +185,7 @@ Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMu
 
 OUString RandomNode__getImplementationName() throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "sd::RandomAnimationNode" ) );
+    return OUString( "sd::RandomAnimationNode" ) ;
 }
 
 // --------------------------------------------------------------------
@@ -609,8 +609,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
         // no presets? give empty node!
         Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
         Reference< XEnumerationAccess > aEmptyEnumAccess(
-            xServiceFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.ParallelTimeContainer" ))),
+            xServiceFactory->createInstance( "com.sun.star.animations.ParallelTimeContainer" ),
             UNO_QUERY );
 
         if( aEmptyEnumAccess.is() )

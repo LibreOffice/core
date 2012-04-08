@@ -348,8 +348,7 @@ uno::Sequence<beans::PropertyValue>
     try {
         // create Settings/ sub storage.
         uno::Reference< embed::XStorage > xSubStorage;
-        xSubStorage = xStorage->openStorageElement(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ),
+        xSubStorage = xStorage->openStorageElement( "Settings" ,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
         if( !xSubStorage.is() )
             return aRet;
@@ -373,7 +372,7 @@ uno::Sequence<beans::PropertyValue>
                     rtl::OUString aResult;
                     if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
                     {
-                        rtl::OUString aRealPath( RTL_CONSTASCII_USTRINGPARAM( "Settings/" ) );
+                        rtl::OUString aRealPath( "Settings/" );
                         aRealPath += aResult;
                         aRet[i].Value <<= aRealPath;
                     }
@@ -1228,7 +1227,7 @@ void SAL_CALL DocumentSettings::firePropertiesChangeEvent( const Sequence< OUStr
 OUString SAL_CALL DocumentSettings::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.DocumentSettings"));
+    return OUString( "com.sun.star.comp.Draw.DocumentSettings" );
 }
 
 sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName )
@@ -1250,14 +1249,14 @@ Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     Sequence< OUString > aSeq( 2 );
-    aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
+    aSeq[0] = "com.sun.star.document.Settings" ;
     if( mpModel->IsImpressDocument() )
     {
-        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DocumentSettings") );
+        aSeq[1] = "com.sun.star.presentation.DocumentSettings" ;
     }
     else
     {
-        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DocumentSettings") );
+        aSeq[1] = "com.sun.star.drawing.DocumentSettings" ;
     }
 
     return aSeq;

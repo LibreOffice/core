@@ -1156,21 +1156,21 @@ uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  ) throw
 }
 
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
-: maStrOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
-  maStrServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.documents.Events") ),
-  maStrEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
-  maStrPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
-  maStrLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-  maStrMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
-  maStrClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
-  maStrBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
-  maStrEffect( RTL_CONSTASCII_USTRINGPARAM("Effect") ),
-  maStrPlayFull( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ),
-  maStrVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-  maStrSoundURL( RTL_CONSTASCII_USTRINGPARAM("SoundURL") ),
-  maStrSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
-  maStrStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") ),
-  maStrScript( RTL_CONSTASCII_USTRINGPARAM("Script") ),
+: maStrOnClick( "OnClick" ),
+  maStrServiceName( "com.sun.star.documents.Events" ),
+  maStrEventType( "EventType" ),
+  maStrPresentation( "Presentation" ),
+  maStrLibrary("Library"),
+  maStrMacroName("MacroName"),
+  maStrClickAction( "ClickAction" ),
+  maStrBookmark( "Bookmark" ),
+  maStrEffect( "Effect" ),
+  maStrPlayFull( "PlayFull" ),
+  maStrVerb( "Verb" ),
+  maStrSoundURL( "SoundURL" ),
+  maStrSpeed( "Speed" ),
+  maStrStarBasic( "StarBasic" ),
+  maStrScript( "Script" ),
   mpShape( pShape ), mxShape( pShape )
 {
 }
@@ -1453,7 +1453,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 
                 if ( aStrLibrary == "StarOffice" )
                 {
-                    sBuffer.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+                    sBuffer.append( "BASIC" );
                 }
                 else
                 {
@@ -1573,7 +1573,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+            aAny <<= OUString( "StarOffice" );
             pProperties->Name = maStrLibrary;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1713,7 +1713,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  ) throw(uno::RuntimeException
 OUString SAL_CALL SdUnoEventsAccess::getImplementationName(  )
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdUnoEventsAccess" ) );
+    return OUString( "SdUnoEventsAccess" );
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )

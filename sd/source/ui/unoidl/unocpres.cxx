@@ -75,7 +75,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdXCustomPresentation );
 OUString SAL_CALL SdXCustomPresentation::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdXCustomPresentation") );
+    return OUString( "SdXCustomPresentation" ) ;
 }
 
 sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& Servic
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.CustomPresentation") );
+    OUString aSN( "com.sun.star.presentation.CustomPresentation" );
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }
@@ -304,7 +304,7 @@ SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw()
 OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdXCustomPresentationAccess") );
+    return OUString( "SdXCustomPresentationAccess" );
 }
 
 sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
@@ -316,7 +316,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    const OUString aNS( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.CustomPresentationAccess") );
+    const OUString aNS( "com.sun.star.presentation.CustomPresentationAccess" );
     uno::Sequence< OUString > aSeq( &aNS, 1 );
     return aSeq;
 }

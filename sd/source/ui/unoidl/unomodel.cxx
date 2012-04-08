@@ -617,7 +617,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
         if( !rList.empty() )
         {
-            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
+            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.IndexedPropertyValues"));
 
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
@@ -1094,51 +1094,51 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     sal_uInt16 i(0);
 
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapRectangleObject));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapCircleObject));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapPolygonObject));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.NamespaceMap"));
+    aSNS[i++] = "com.sun.star.drawing.DashTable";
+    aSNS[i++] = "com.sun.star.drawing.GradientTable";
+    aSNS[i++] = "com.sun.star.drawing.HatchTable";
+    aSNS[i++] = "com.sun.star.drawing.BitmapTable";
+    aSNS[i++] = "com.sun.star.drawing.TransparencyGradientTable";
+    aSNS[i++] = "com.sun.star.drawing.MarkerTable";
+    aSNS[i++] = "com.sun.star.text.NumberingRules";
+    aSNS[i++] = "com.sun.star.drawing.Background";
+    aSNS[i++] = "com.sun.star.document.Settings";
+    aSNS[i++] = sUNO_Service_ImageMapRectangleObject;
+    aSNS[i++] = sUNO_Service_ImageMapCircleObject;
+    aSNS[i++] = sUNO_Service_ImageMapPolygonObject;
+    aSNS[i++] = "com.sun.star.xml.NamespaceMap";
 
     // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TableShape"));
+    aSNS[i++] = "com.sun.star.document.ExportGraphicObjectResolver";
+    aSNS[i++] = "com.sun.star.document.ImportGraphicObjectResolver";
+    aSNS[i++] = "com.sun.star.document.ExportEmbeddedObjectResolver";
+    aSNS[i++] = "com.sun.star.document.ImportEmbeddedObjectResolver";
+    aSNS[i++] = "com.sun.star.drawing.TableShape";
 
     if(mbImpressDoc)
     {
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OLE2Shape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TableShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OrgChartShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DocumentSettings"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.FooterShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HeaderShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideNumberShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DateTimeShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.CalcShape"));
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.MediaShape"));
+        aSNS[i++] = "com.sun.star.presentation.TitleTextShape";
+        aSNS[i++] = "com.sun.star.presentation.OutlinerShape";
+        aSNS[i++] = "com.sun.star.presentation.SubtitleShape";
+        aSNS[i++] = "com.sun.star.presentation.GraphicObjectShape";
+        aSNS[i++] = "com.sun.star.presentation.ChartShape";
+        aSNS[i++] = "com.sun.star.presentation.PageShape";
+        aSNS[i++] = "com.sun.star.presentation.OLE2Shape";
+        aSNS[i++] = "com.sun.star.presentation.TableShape";
+        aSNS[i++] = "com.sun.star.presentation.OrgChartShape";
+        aSNS[i++] = "com.sun.star.presentation.NotesShape";
+        aSNS[i++] = "com.sun.star.presentation.HandoutShape";
+        aSNS[i++] = "com.sun.star.presentation.DocumentSettings";
+        aSNS[i++] = "com.sun.star.presentation.FooterShape";
+        aSNS[i++] = "com.sun.star.presentation.HeaderShape";
+        aSNS[i++] = "com.sun.star.presentation.SlideNumberShape";
+        aSNS[i++] = "com.sun.star.presentation.DateTimeShape";
+        aSNS[i++] = "com.sun.star.presentation.CalcShape";
+        aSNS[i++] = "com.sun.star.presentation.MediaShape";
     }
     else
     {
-        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DocumentSettings"));
+        aSNS[i++] = "com.sun.star.drawing.DocumentSettings";
     }
 
     DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
@@ -1150,7 +1150,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 OUString SAL_CALL SdXImpressDocument::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdXImpressDocument"));
+    return OUString( "SdXImpressDocument" );
 }
 
 sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )
@@ -1176,14 +1176,14 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames(
     uno::Sequence< OUString > aSeq( 4 );
     OUString* pServices = aSeq.getArray();
 
-    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
-    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GenericDrawingDocument"));
-    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
+    *pServices++ = "com.sun.star.document.OfficeDocument";
+    *pServices++ = "com.sun.star.drawing.GenericDrawingDocument";
+    *pServices++ = "com.sun.star.drawing.DrawingDocumentFactory";
 
     if( mbImpressDoc )
-        *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+        *pServices++ = "com.sun.star.presentation.PresentationDocument";
     else
-        *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+        *pServices++ = "com.sun.star.drawing.DrawingDocument";
 
     return aSeq;
 }
@@ -1453,7 +1453,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         }
         aRenderer.realloc( 1 );
 
-        aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+        aRenderer[ 0 ].Name = "PageSize" ;
         aRenderer[ 0 ].Value <<= aPageSize;
     }
     return aRenderer;
@@ -1559,9 +1559,9 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
 
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
-    const rtl::OUString sGroup   ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
-    const rtl::OUString sOnClick ( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
-    const rtl::OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
+    const rtl::OUString sGroup   ( "com.sun.star.drawing.GroupShape");
+    const rtl::OUString sOnClick ( "OnClick" );
+    const rtl::OUString sBookmark( "Bookmark" );
 
     if ( xShape->getShapeType().equals( sGroup ) )
     {
@@ -1907,7 +1907,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                                         // if necessary, the master page interactions will be exported first
                                         sal_Bool bIsBackgroundObjectsVisible = sal_False;   // #i39428# IsBackgroundObjectsVisible not available for Draw
-                                        const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
+                                        const rtl::OUString sIsBackgroundObjectsVisible( "IsBackgroundObjectsVisible" );
                                         if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sIsBackgroundObjectsVisible ) )
                                             xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible;
                                         if ( mbImpressDoc && bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
@@ -1945,8 +1945,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         // exporting transition effects to pdf
                                         if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
                                         {
-                                            const rtl::OUString sEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) );
-                                            const rtl::OUString sSpeed ( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) );
+                                            const rtl::OUString sEffect( "Effect" );
+                                            const rtl::OUString sSpeed ( "Speed" );
                                             sal_Int32 nTime = 800;
                                             presentation::AnimationSpeed aAs;
                                             if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
@@ -2500,7 +2500,7 @@ const char pSdDrawPagesAccessService[] = "com.sun.star.drawing.DrawPages";
 
 OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdDrawPagesAccess" ) );
+    return OUString( "SdDrawPagesAccess" );
 }
 
 sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
@@ -2510,7 +2510,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceNam
 
 uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSdDrawPagesAccessService ) );
+    OUString aService( pSdDrawPagesAccessService );
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
@@ -2769,7 +2769,7 @@ const char pSdMasterPagesAccessService[] = "com.sun.star.drawing.MasterPages";
 
 OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdMasterPagesAccess" ) );
+    return OUString( "SdMasterPagesAccess" );
 }
 
 sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
@@ -2779,7 +2779,7 @@ sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSdMasterPagesAccessService ) );
+    OUString aService( pSdMasterPagesAccessService );
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
@@ -2957,7 +2957,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
 OUString SAL_CALL SdDocLinkTargets::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdDocLinkTargets") );
+    return OUString( "SdDocLinkTargets" );
 }
 
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
@@ -2969,7 +2969,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    const OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.LinkTargets") );
+    const OUString aSN( "com.sun.star.document.LinkTargets" );
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }

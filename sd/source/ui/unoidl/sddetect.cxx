@@ -232,7 +232,7 @@ SdFilterDetect::~SdFilterDetect()
                         // error during storage creation means _here_ that the medium
                         // is broken, but we can not handle it in medium since unpossibility
                         // to create a storage does not _always_ means that the medium is broken
-                        aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                        aMedium.SetError( aMedium.GetLastStorageCreationState(),  OSL_LOG_PREFIX  );
                         if ( xInteraction.is() )
                         {
                             OUString empty;
@@ -409,7 +409,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -418,7 +418,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -428,7 +428,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = "ReadOnly";
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -439,7 +439,7 @@ SdFilterDetect::~SdFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = "RepairPackage";
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -453,7 +453,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = "AsTemplate";
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -467,7 +467,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = "DocumentTitle";
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -514,14 +514,14 @@ UNOSEQUENCE< rtl::OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames()
 UNOSEQUENCE< rtl::OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection"  ;
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SdFilterDetect::impl_getStaticImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.FormatDetector" ));
+    return rtl::OUString( "com.sun.star.comp.draw.FormatDetector" );
 }
 
 /* Helper for registry */

@@ -92,8 +92,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
         {
             try
             {
-                Any aNumber = xSet->getPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number")));
+                Any aNumber = xSet->getPropertyValue("Number");
                 sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
                 nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
@@ -167,7 +166,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     if (xProperties.is())
     {
         sal_uInt16 nPageNumber(0);
-        if (xProperties->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))) >>= nPageNumber)
+        if (xProperties->getPropertyValue("Number") >>= nPageNumber)
         {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
                 nPageNumber-1,
@@ -227,7 +226,7 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoSlideView") );
+    return OUString( "com.sun.star.comp.sd.SdUnoSlideView" );
 }
 
 sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -237,7 +236,7 @@ sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlidesView") );
+    OUString aSN( "com.sun.star.presentation.SlidesView" );
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }

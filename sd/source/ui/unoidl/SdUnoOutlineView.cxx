@@ -213,7 +213,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoOutlineView") );
+    return OUString("com.sun.star.comp.sd.SdUnoOutlineView");
 }
 
 sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlineView") );
+    OUString aSN( "com.sun.star.presentation.OutlineView" );
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }

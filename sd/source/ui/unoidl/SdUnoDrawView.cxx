@@ -620,7 +620,7 @@ Any SdUnoDrawView::getDrawViewMode() const
 // XServiceInfo
 OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoDrawView") );
+    return OUString( "com.sun.star.comp.sd.SdUnoDrawView") ;
 }
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -630,7 +630,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) 
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView") );
+    OUString aSN("com.sun.star.drawing.DrawingDocumentDrawView");
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }
