@@ -110,8 +110,4 @@ $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sd_filters_test))
 
-# we need to explicitly depend on library sdfilt because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,sd_filters_test) : $(call gb_Library_get_target,sdfilt)
-
 # vim: set noet sw=4 ts=4:

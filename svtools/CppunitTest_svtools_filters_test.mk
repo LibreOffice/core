@@ -44,10 +44,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,svtools_filters_test,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,svtools_filters_test,\
     udkapi \
     offapi \

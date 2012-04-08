@@ -47,10 +47,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sot_test_sot,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
     offapi \
     udkapi \

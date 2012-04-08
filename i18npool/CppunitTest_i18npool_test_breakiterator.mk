@@ -28,10 +28,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_breakiterator))
 
-$(eval $(call gb_CppunitTest_set_include,i18npool_test_breakiterator,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,i18npool_test_breakiterator,\
 	udkapi \
 	offapi \
@@ -51,7 +47,5 @@ $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
 $(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
 	i18npool/util/i18npool \
 ))
-
-$(call gb_CppunitTest_get_target,i18npool_test_breakiterator) : $(call gb_Module_get_target,i18npool)
 
 # vim: set noet sw=4 ts=4:

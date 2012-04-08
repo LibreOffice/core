@@ -76,7 +76,6 @@ $(eval $(call gb_CppunitTest_set_include,sc_spreadsheetobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sc_spreadsheetobj,\
@@ -126,10 +125,7 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,sc_spreadsheetobj,\
 	$(OUTDIR)/unittest/registry \
 ))
 
-# we need to
-# a) explicitly depend on library msword because it is not implied by a link
-#    relation
-# b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_spreadsheetobj) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+# we need to explicitly depend on the sc resource files needed at unit-test runtime
+$(call gb_CppunitTest_get_target,sc_spreadsheetobj) : $(WORKDIR)/AllLangRes/sc
 
 # vim: set noet sw=4 ts=4:

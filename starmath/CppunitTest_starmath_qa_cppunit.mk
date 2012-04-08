@@ -81,10 +81,10 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     i18npool/util/i18npool \
     toolkit/util/tk \
     sfx2/util/sfx \
+    vcl/vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
-    component/vcl/vcl \
     mcnttype \
 ))
 

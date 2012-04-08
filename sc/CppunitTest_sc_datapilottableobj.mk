@@ -125,12 +125,11 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,sc_datapilottableobj,\
 ))
 
 # we need to
-# a) explicitly depend on library msword because it is not implied by a link
+# a) explicitly depend on library localedata_en because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
 $(call gb_CppunitTest_get_target,sc_datapilottableobj) : \
     $(WORKDIR)/AllLangRes/sc \
     $(call gb_Library_get_target,localedata_en) \
-    $(call gb_Library_get_target,scfilt) \
 
 # vim: set noet sw=4 ts=4:

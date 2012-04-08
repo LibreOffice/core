@@ -45,10 +45,6 @@ $(eval $(call gb_CppunitTest_use_libraries,hwpfilter_test_hwpfilter, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,hwpfilter_test_hwpfilter,\
     offapi \
     udkapi \
@@ -62,10 +58,5 @@ $(eval $(call gb_CppunitTest_use_components,hwpfilter_test_hwpfilter,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,hwpfilter_test_hwpfilter))
-
-# we need to explicitly depend on library hwp because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,hwpfilter_test_hwpfilter) : \
-	$(call gb_Library_get_target,hwp)
 
 # vim: set noet sw=4 ts=4:

@@ -128,8 +128,4 @@ $(eval $(call gb_CppunitTest_add_arguments,sd_regression_test,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
 
-# we need to explicitly depend on library sdfilt because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,sd_regression_test) : $(call gb_Library_get_target,sdfilt)
-
 # vim: set noet sw=4 ts=4:

@@ -41,10 +41,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_tga_test, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,filter_tga_test,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,filter_tga_test,\
     udkapi \
     offapi \
