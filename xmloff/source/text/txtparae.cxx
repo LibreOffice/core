@@ -2182,6 +2182,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
     static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
     bool bPrevCharIsSpace = bPrvChrIsSpc;
 
+    /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
+     * bookmarks are used instead of fieldmarks. */
+    FieldmarkType openFieldMark = NONE;
+
     while( rTextEnum->hasMoreElements() )
     {
         Reference<XPropertySet> xPropSet(rTextEnum->nextElement(), UNO_QUERY);
@@ -2196,7 +2200,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             if( sType.equals(sText))
             {
                 exportTextRange( xTxtRange, bAutoStyles,
-                                 bPrevCharIsSpace );
+                                 bPrevCharIsSpace, openFieldMark);
             }
             else if( sType.equals(sTextField))
             {
@@ -2261,6 +2265,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStart))
             {
+                /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
                 {
                     Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
@@ -2280,6 +2285,46 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     }
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
                 }
+                /* The OpenDocument standard does not include support for TextMarks for now, so use bookmarks instead. */
+                else
+                {
+                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xFormField.is())
+                    {
+                        Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                        if (xParameters.is() && xParameters->hasByName("Name"))
+                        {
+                            const Any aValue = xParameters->getByName("Name");
+                            const Type aValueType = aValue.getValueType();
+                            if (aValueType == ::getCppuType((OUString*)0))
+                            {
+                                OUString sValue;
+                                aValue >>= sValue;
+                                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
+                            }
+                        }
+                        GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
+                        GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
+                        const OUString sFieldType = xFormField->getFieldType();
+                        if (sFieldType ==  ODF_FORMTEXT)
+                        {
+                            openFieldMark = TEXT;
+                        }
+                        else if (sFieldType == ODF_FORMCHECKBOX)
+                        {
+                            openFieldMark = CHECK;
+                        }
+                        else
+                        {
+                            openFieldMark = NONE;
+                        }
+                    }
+                    else
+                    {
+                        GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
+                        GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
+                    }
+                }
             }
             else if (sType.equals(sTextFieldEnd))
             {
@@ -2287,6 +2332,27 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                }
+                else
+                {
+                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xFormField.is())
+                    {
+                        Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                        if (xParameters.is() && xParameters->hasByName("Name"))
+                        {
+                            const Any aValue = xParameters->getByName("Name");
+                            const Type aValueType = aValue.getValueType();
+                            if (aValueType == ::getCppuType((OUString*)0))
+                            {
+                                OUString sValue;
+                                aValue >>= sValue;
+                                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
+                            }
+                        }
+                    }
+                    GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_END, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_TEXT,XML_BOOKMARK_END, sal_False);
                 }
             }
             else if (sType.equals(sTextFieldStartEnd))
@@ -2310,6 +2376,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     }
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
                 }
+                else
+                {
+                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xBookmark.is())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                    }
+                    GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK, sal_False);
+                }
             }
             else if (sType.equals(sSoftPageBreak))
             {
@@ -2330,7 +2406,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else
             {
                 // no TextPortionType property -> non-Writer app -> text
-                exportTextRange( xTxtRange, bAutoStyles, bPrevCharIsSpace );
+                exportTextRange( xTxtRange, bAutoStyles, bPrevCharIsSpace, openFieldMark );
             }
         }
     }
@@ -3218,7 +3294,8 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
 void XMLTextParagraphExport::exportTextRange(
         const Reference < XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
-        bool& rPrevCharIsSpace )
+        bool& rPrevCharIsSpace,
+        FieldmarkType& openFieldMark )
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     if( bAutoStyles )
@@ -3271,7 +3348,16 @@ void XMLTextParagraphExport::exportTextRange(
                 SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(),
                                           XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
                                           sal_False );
+                if (openFieldMark == TEXT)
+                {
+                    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_TEXT_INPUT, sal_False );
+                }
                 exportText( aText, rPrevCharIsSpace );
+                if (openFieldMark == TEXT)
+                {
+                    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_TEXT_INPUT, sal_False );
+                }
+                openFieldMark = NONE;
             }
         }
     }

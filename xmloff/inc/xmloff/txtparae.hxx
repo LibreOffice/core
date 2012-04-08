@@ -110,6 +110,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
 
     enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
+public:
+
+    enum FieldmarkType { NONE, TEXT, CHECK }; // Used for simulating fieldmarks in OpenDocument 1.n Strict (for n <= 2). CHECK currently ignored.
 
 protected:
 
@@ -430,7 +433,8 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
-        bool& rPrevCharWasSpace );
+        bool& rPrevCharWasSpace,
+        FieldmarkType& openFieldmarkType );
 
     void exportListChange( const XMLTextNumRuleInfo& rPrvInfo,
                            const XMLTextNumRuleInfo& rNextInfo );
