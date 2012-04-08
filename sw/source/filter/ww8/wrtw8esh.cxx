@@ -2805,11 +2805,10 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
         STREAM_SHARE_DENYALL);
 
     //Create a destination storage for the microsoft control
-    String sStorageName('_');
-    sStorageName += String::CreateFromInt32((sal_uInt32)(sal_uIntPtr)pObj);
-    SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName,
+    rtl::OUStringBuffer sStorageName;
+    sStorageName.append('_').append(reinterpret_cast<sal_Int64>(pObj));
+    SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
                  STREAM_READWRITE|STREAM_SHARE_DENYALL);
-
 
     if (!xOleStg.Is())
         return false;
