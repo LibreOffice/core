@@ -118,6 +118,7 @@ public:
     void _closeListLevel();
 
     OdfEmbeddedObject _findEmbeddedObjectHandler(const WPXString &mimeType);
+    OdfEmbeddedImage _findEmbeddedImageHandler(const WPXString &mimeType);
 
     OdfDocumentHandler *mpHandler;
     bool mbUsed; // whether or not it has been before (you can only use me once!)
@@ -148,6 +149,7 @@ public:
 
     // embedded object handlers
     std::map<WPXString, OdfEmbeddedObject, ltstr > mObjectHandlers;
+    std::map<WPXString, OdfEmbeddedImage, ltstr > mImageHandlers;
 
     // metadata
     std::vector<DocumentElement *> mMetaData;
@@ -187,7 +189,7 @@ OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mWriterListStates(),
     mParagraphManager(), mSpanManager(), mFontManager(),
     mSectionStyles(), mTableStyles(), mFrameStyles(), mFrameAutomaticStyles(),
-    mObjectHandlers(), mMetaData(),
+    mObjectHandlers(), mImageHandlers(), mMetaData(),
     miNumListStyles(0),
     mBodyElements(),
     mpCurrentContentElements(&mBodyElements),
@@ -262,6 +264,15 @@ OdfEmbeddedObject OdtGeneratorPrivate::_findEmbeddedObjectHandler(const WPXStrin
 {
     std::map<WPXString, OdfEmbeddedObject, ltstr>::iterator i = mObjectHandlers.find(mimeType);
     if (i != mObjectHandlers.end())
+        return i->second;
+
+    return 0;
+}
+
+OdfEmbeddedImage OdtGeneratorPrivate::_findEmbeddedImageHandler(const WPXString &mimeType)
+{
+    std::map<WPXString, OdfEmbeddedImage, ltstr>::iterator i = mImageHandlers.find(mimeType);
+    if (i != mImageHandlers.end())
         return i->second;
 
     return 0;
@@ -1247,18 +1258,40 @@ void OdtGenerator::insertBinaryObject(const WPXPropertyList &propList, const WPX
         return;
 
     OdfEmbeddedObject tmpObjectHandler = mpImpl->_findEmbeddedObjectHandler(propList["libwpd:mimetype"]->getStr());
+    OdfEmbeddedImage tmpImageHandler = mpImpl->_findEmbeddedImageHandler(propList["libwpd:mimetype"]->getStr());
 
-    if (tmpObjectHandler)
+    if (tmpObjectHandler || tmpImageHandler)
     {
-        std::vector<DocumentElement *> tmpContentElements;
-        InternalHandler tmpHandler(&tmpContentElements);
-
-        if (tmpObjectHandler(data, &tmpHandler, ODF_FLAT_XML) && !tmpContentElements.empty())
+        if (tmpObjectHandler)
         {
-            mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("draw:object"));
-            for (std::vector<DocumentElement *>::const_iterator iter = tmpContentElements.begin(); iter != tmpContentElements.end(); ++iter)
-                mpImpl->mpCurrentContentElements->push_back(*iter);
-            mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("draw:object"));
+            std::vector<DocumentElement *> tmpContentElements;
+            InternalHandler tmpHandler(&tmpContentElements);
+
+            if (tmpObjectHandler(data, &tmpHandler, ODF_FLAT_XML) && !tmpContentElements.empty())
+            {
+                mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("draw:object"));
+                for (std::vector<DocumentElement *>::const_iterator iter = tmpContentElements.begin(); iter != tmpContentElements.end(); ++iter)
+                    mpImpl->mpCurrentContentElements->push_back(*iter);
+                mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("draw:object"));
+            }
+        }
+        if (tmpImageHandler)
+        {
+            WPXBinaryData output;
+            if (tmpImageHandler(data, output))
+            {
+                mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("draw:image"));
+
+                mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("office:binary-data"));
+
+                WPXString binaryBase64Data = output.getBase64Data();
+
+                mpImpl->mpCurrentContentElements->push_back(new CharDataElement(binaryBase64Data.cstr()));
+
+                mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("office:binary-data"));
+
+                mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("draw:image"));
+            }
         }
     }
     else
@@ -1344,6 +1377,11 @@ void OdtGenerator::defineCharacterStyle(WPXPropertyList const &)
 void OdtGenerator::registerEmbeddedObjectHandler(const WPXString &mimeType, OdfEmbeddedObject objectHandler)
 {
     mpImpl->mObjectHandlers[mimeType] = objectHandler;
+}
+
+void OdtGenerator::registerEmbeddedImageHandler(const WPXString &mimeType, OdfEmbeddedImage imageHandler)
+{
+    mpImpl->mImageHandlers[mimeType] = imageHandler;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,6 +38,7 @@
 
 
 typedef bool (*OdfEmbeddedObject)(const WPXBinaryData &data, OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+typedef bool (*OdfEmbeddedImage)(const WPXBinaryData &input, WPXBinaryData &output);
 
 class OdtGeneratorPrivate;
 
@@ -113,6 +114,7 @@ public:
 
     // Register special converter for certain embedded binary objects
     void registerEmbeddedObjectHandler(const WPXString &mimeType, OdfEmbeddedObject objectHandler);
+    void registerEmbeddedImageHandler(const WPXString &mimeType, OdfEmbeddedImage imageHandler);
 
 private:
     OdtGeneratorPrivate *mpImpl;
