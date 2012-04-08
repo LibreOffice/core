@@ -71,8 +71,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_filters_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sw_filters_test))
-
 $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

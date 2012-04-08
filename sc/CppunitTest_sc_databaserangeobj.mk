@@ -83,8 +83,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_databaserangeobj,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_databaserangeobj))
-
 $(eval $(call gb_CppunitTest_use_components,sc_databaserangeobj,\
     basic/util/sb \
     comphelper/util/comphelp \

@@ -65,8 +65,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
     sdext/source/pdfimport/test/tests \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sdext_pdfimport))
-
 $(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

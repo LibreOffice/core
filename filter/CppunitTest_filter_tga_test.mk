@@ -50,8 +50,6 @@ $(eval $(call gb_CppunitTest_use_api,filter_tga_test,\
     offapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,filter_tga_test))
-
 $(eval $(call gb_CppunitTest_use_components,filter_tga_test,\
     configmgr/source/configmgr \
 ))

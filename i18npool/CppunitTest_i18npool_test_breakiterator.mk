@@ -48,8 +48,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
     i18npool/qa/cppunit/test_breakiterator \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,i18npool_test_breakiterator))
-
 $(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
 	i18npool/util/i18npool \
 ))

@@ -80,8 +80,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_macros_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_macros_test))
-
 $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     basic/util/sb \
     comphelper/util/comphelp \

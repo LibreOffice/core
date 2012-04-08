@@ -87,8 +87,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
-
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
     framework/util/fwk \

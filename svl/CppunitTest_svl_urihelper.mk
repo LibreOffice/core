@@ -55,5 +55,3 @@ $(eval $(call gb_CppunitTest_set_args,svl_urihelper, \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) \
         unoexceptionprotector \
 ))
-
-$(eval $(call gb_CppunitTest_uses_ure,svl_urihelper))

@@ -85,8 +85,6 @@ $(eval $(call gb_CppunitTest_use_api,sw_swdoc_test,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sw_swdoc_test))
-
 $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \

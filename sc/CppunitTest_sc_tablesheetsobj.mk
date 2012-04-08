@@ -83,8 +83,6 @@ $(eval $(call gb_CppunitTest_use_api,sc_spreadsheetsobj,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_spreadsheetsobj))
-
 $(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsobj,\
     basic/util/sb \
     comphelper/util/comphelp \
