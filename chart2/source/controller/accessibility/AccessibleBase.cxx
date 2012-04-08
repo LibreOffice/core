@@ -118,8 +118,7 @@ bool AccessibleBase::CheckDisposeState( bool bThrowException /* default: true */
     if( bThrowException &&
         m_bIsDisposed )
     {
-        throw lang::DisposedException(
-            C2U("component has state DEFUNC" ),
+        throw lang::DisposedException("component has state DEFUNC",
             static_cast< uno::XWeak * >( const_cast< AccessibleBase * >( this )));
     }
     return m_bIsDisposed;
@@ -861,25 +860,25 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
                 case OBJECTTYPE_DATA_POINT:
                     if( eColType == ACC_BASE_FOREGROUND )
                     {
-                        aPropName = C2U("BorderColor");
-                        aStylePropName = C2U("BorderTransparency");
+                        aPropName = "BorderColor";
+                        aStylePropName = "BorderTransparency";
                     }
                     else
                     {
-                        aPropName = C2U("Color");
-                        aStylePropName = C2U("Transparency");
+                        aPropName = "Color";
+                        aStylePropName = "Transparency";
                     }
                     break;
                 default:
                     if( eColType == ACC_BASE_FOREGROUND )
                     {
-                        aPropName = C2U("LineColor");
-                        aStylePropName = C2U("LineTransparence");
+                        aPropName = "LineColor";
+                        aStylePropName = "LineTransparence";
                     }
                     else
                     {
-                        aPropName = C2U("FillColor");
-                        aStylePropName = C2U("FillTransparence");
+                        aPropName = "FillColor";
+                        aStylePropName = "FillTransparence";
                     }
                     break;
             }

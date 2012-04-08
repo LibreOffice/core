@@ -697,9 +697,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
     if( xDiaProp.is())
     {
-        xDiaProp->getPropertyValue( C2U("Stacked")) >>= bStacked;
-        xDiaProp->getPropertyValue( C2U("Percent")) >>= bPercent;
-        xDiaProp->getPropertyValue( C2U("Deep")) >>= bDeep;
+        xDiaProp->getPropertyValue("Stacked") >>= bStacked;
+        xDiaProp->getPropertyValue("Percent") >>= bPercent;
+        xDiaProp->getPropertyValue("Deep") >>= bDeep;
     }
 
     //detect arguments for the new data source
@@ -716,7 +716,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
         bHasCategories = true;
 
-    aRangeString = C2U("all");
+    aRangeString = "all";
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
@@ -761,8 +761,8 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 uno::Sequence< ::rtl::OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartDataArray" );
-    aServices[ 1 ] = C2U( "com.sun.star.chart.ChartData" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartDataArray";
+    aServices[ 1 ] = "com.sun.star.chart.ChartData";
 
     return aServices;
 }

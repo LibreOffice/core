@@ -334,7 +334,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
         {
             AccessibleElementInfo aAccInfo;
-            aAccInfo.m_aOID = ObjectIdentifier( C2U( "ROOT" ) );
+            aAccInfo.m_aOID = ObjectIdentifier("ROOT");
             aAccInfo.m_xChartDocument = uno::WeakReference< chart2::XChartDocument >(
                 uno::Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY ));
             aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;

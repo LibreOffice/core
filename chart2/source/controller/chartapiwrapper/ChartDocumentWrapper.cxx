@@ -119,27 +119,27 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
 {
     static tServiceNameMap aServiceNameMap(
         tMakeServiceNameMap
-        ( C2U( "com.sun.star.chart.AreaDiagram" ),                    SERVICE_NAME_AREA_DIAGRAM )
-        ( C2U( "com.sun.star.chart.BarDiagram" ),                     SERVICE_NAME_BAR_DIAGRAM )
-        ( C2U( "com.sun.star.chart.DonutDiagram" ),                   SERVICE_NAME_DONUT_DIAGRAM )
-        ( C2U( "com.sun.star.chart.LineDiagram" ),                    SERVICE_NAME_LINE_DIAGRAM )
-        ( C2U( "com.sun.star.chart.NetDiagram" ),                     SERVICE_NAME_NET_DIAGRAM )
-        ( C2U( "com.sun.star.chart.FilledNetDiagram" ),               SERVICE_NAME_FILLED_NET_DIAGRAM )
-        ( C2U( "com.sun.star.chart.PieDiagram" ),                     SERVICE_NAME_PIE_DIAGRAM )
-        ( C2U( "com.sun.star.chart.StockDiagram" ),                   SERVICE_NAME_STOCK_DIAGRAM )
-        ( C2U( "com.sun.star.chart.XYDiagram" ),                      SERVICE_NAME_XY_DIAGRAM )
-        ( C2U( "com.sun.star.chart.BubbleDiagram" ),                  SERVICE_NAME_BUBBLE_DIAGRAM )
+        ( "com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM )
+        ( "com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM )
+        ( "com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM )
+        ( "com.sun.star.chart.LineDiagram",                    SERVICE_NAME_LINE_DIAGRAM )
+        ( "com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM )
+        ( "com.sun.star.chart.FilledNetDiagram",               SERVICE_NAME_FILLED_NET_DIAGRAM )
+        ( "com.sun.star.chart.PieDiagram",                     SERVICE_NAME_PIE_DIAGRAM )
+        ( "com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM )
+        ( "com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM )
+        ( "com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM )
 
-        ( C2U( "com.sun.star.drawing.DashTable" ),                    SERVICE_NAME_DASH_TABLE )
-        ( C2U( "com.sun.star.drawing.GradientTable" ),                SERVICE_NAME_GARDIENT_TABLE )
-        ( C2U( "com.sun.star.drawing.HatchTable" ),                   SERVICE_NAME_HATCH_TABLE )
-        ( C2U( "com.sun.star.drawing.BitmapTable" ),                  SERVICE_NAME_BITMAP_TABLE )
-        ( C2U( "com.sun.star.drawing.TransparencyGradientTable" ),    SERVICE_NAME_TRANSP_GRADIENT_TABLE )
-        ( C2U( "com.sun.star.drawing.MarkerTable" ),                  SERVICE_NAME_MARKER_TABLE )
+        ( "com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE )
+        ( "com.sun.star.drawing.GradientTable",                SERVICE_NAME_GARDIENT_TABLE )
+        ( "com.sun.star.drawing.HatchTable",                   SERVICE_NAME_HATCH_TABLE )
+        ( "com.sun.star.drawing.BitmapTable",                  SERVICE_NAME_BITMAP_TABLE )
+        ( "com.sun.star.drawing.TransparencyGradientTable",    SERVICE_NAME_TRANSP_GRADIENT_TABLE )
+        ( "com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE )
 
-        ( C2U( "com.sun.star.xml.NamespaceMap" ),                     SERVICE_NAME_NAMESPACE_MAP )
-        ( C2U( "com.sun.star.document.ExportGraphicObjectResolver" ), SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER )
-        ( C2U( "com.sun.star.document.ImportGraphicObjectResolver" ), SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER )
+        ( "com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP )
+        ( "com.sun.star.document.ExportGraphicObjectResolver", SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER )
+        ( "com.sun.star.document.ImportGraphicObjectResolver", SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER )
         );
 
     return aServiceNameMap;
@@ -165,19 +165,19 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "HasMainTitle" ),
+        Property( "HasMainTitle",
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "HasSubTitle" ),
+        Property( "HasSubTitle",
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "HasLegend" ),
+        Property( "HasLegend",
                   PROP_DOCUMENT_HAS_LEGEND,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -185,13 +185,13 @@ void lcl_AddPropertiesToVector(
 
     // really needed?
     rOutProperties.push_back(
-        Property( C2U( "DataSourceLabelsInFirstRow" ),
+        Property( "DataSourceLabelsInFirstRow",
                   PROP_DOCUMENT_LABELS_IN_FIRST_ROW,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "DataSourceLabelsInFirstColumn" ),
+        Property( "DataSourceLabelsInFirstColumn",
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -199,26 +199,26 @@ void lcl_AddPropertiesToVector(
 
     //add-in
     rOutProperties.push_back(
-        Property( C2U( "AddIn" ),
+        Property( "AddIn",
                   PROP_DOCUMENT_ADDIN,
                   ::getCppuType( reinterpret_cast< Reference< util::XRefreshable > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "BaseDiagram" ),
+        Property( "BaseDiagram",
                   PROP_DOCUMENT_BASEDIAGRAM,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "AdditionalShapes" ),
+        Property( "AdditionalShapes",
                   PROP_DOCUMENT_ADDITIONAL_SHAPES,
                   ::getCppuType( reinterpret_cast< Reference< drawing::XShapes > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::READONLY ));
     rOutProperties.push_back(
-        Property( C2U( "RefreshAddInAllowed" ),
+        Property( "RefreshAddInAllowed",
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -226,19 +226,19 @@ void lcl_AddPropertiesToVector(
 
     // table:null-date // i99104
     rOutProperties.push_back(
-        Property( C2U( "NullDate" ),
+        Property( "NullDate",
                   PROP_DOCUMENT_NULL_DATE,
                   ::getCppuType( static_cast< const ::com::sun::star::util::DateTime * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "DisableComplexChartTypes" ),
+        Property( "DisableComplexChartTypes",
                   PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
                   ::getBooleanCppuType(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
     rOutProperties.push_back(
-        Property( C2U( "DisableDataTableDialog" ),
+        Property( "DisableDataTableDialog",
                   PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
                   ::getBooleanCppuType(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
@@ -301,7 +301,7 @@ private: //member
 };
 
 WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedProperty(C2U("DataSourceLabelsInFirstRow"),OUString())
+            : WrappedProperty("DataSourceLabelsInFirstRow",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
@@ -317,7 +317,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
 {
     sal_Bool bLabelsInFirstRow = sal_True;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
-        throw lang::IllegalArgumentException( C2U("Property DataSourceLabelsInFirstRow requires value of type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
 
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
@@ -402,7 +402,7 @@ private: //member
 };
 
 WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedProperty(C2U("DataSourceLabelsInFirstColumn"),OUString())
+            : WrappedProperty("DataSourceLabelsInFirstColumn",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
@@ -418,7 +418,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
 {
     sal_Bool bLabelsInFirstRow = sal_True;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
-        throw lang::IllegalArgumentException( C2U("Property DataSourceLabelsInFirstRow requires value of type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
 
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
@@ -502,7 +502,7 @@ private: //member
 };
 
 WrappedHasLegendProperty::WrappedHasLegendProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedProperty(C2U("HasLegend"),OUString())
+            : WrappedProperty("HasLegend",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -516,7 +516,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 {
     sal_Bool bNewValue = sal_True;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Property HasLegend requires value of type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException("Property HasLegend requires value of type boolean", 0, 0 );
 
     try
     {
@@ -525,10 +525,10 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
         {
             Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
             sal_Bool bOldValue = sal_True;
-            Any aAOld = xLegendProp->getPropertyValue( C2U("Show") );
+            Any aAOld = xLegendProp->getPropertyValue("Show");
             aAOld >>= bOldValue;
             if( bOldValue != bNewValue )
-                xLegendProp->setPropertyValue( C2U("Show"), uno::makeAny( bNewValue ));
+                xLegendProp->setPropertyValue("Show", uno::makeAny( bNewValue ));
         }
     }
     catch (const uno::Exception& ex)
@@ -546,7 +546,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
         Reference< beans::XPropertySet > xLegendProp(
             LegendHelper::getLegend( m_spChart2ModelContact->getChartModel() ), uno::UNO_QUERY );
         if( xLegendProp.is())
-            aRet = xLegendProp->getPropertyValue( C2U("Show"));
+            aRet = xLegendProp->getPropertyValue("Show");
         else
             aRet <<= sal_False;
     }
@@ -589,7 +589,7 @@ private: //member
 };
 
 WrappedHasMainTitleProperty::WrappedHasMainTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedProperty(C2U("HasMainTitle"),OUString())
+            : WrappedProperty("HasMainTitle",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -603,12 +603,12 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
 {
     sal_Bool bNewValue = sal_True;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Property HasMainTitle requires value of type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException("Property HasMainTitle requires value of type boolean", 0, 0 );
 
     try
     {
         if( bNewValue )
-            TitleHelper::createTitle( TitleHelper::MAIN_TITLE, C2U("main-title"), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            TitleHelper::createTitle( TitleHelper::MAIN_TITLE, "main-title", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
         else
             TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() );
     }
@@ -665,7 +665,7 @@ private: //member
 };
 
 WrappedHasSubTitleProperty::WrappedHasSubTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedProperty(C2U("HasSubTitle"),OUString())
+            : WrappedProperty("HasSubTitle",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -679,13 +679,13 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
 {
     sal_Bool bNewValue = sal_True;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( C2U("Property HasSubTitle requires value of type boolean"), 0, 0 );
+        throw lang::IllegalArgumentException("Property HasSubTitle requires value of type boolean", 0, 0 );
 
 
     try
     {
         if( bNewValue )
-            TitleHelper::createTitle( TitleHelper::SUB_TITLE, C2U("sub-title"), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            TitleHelper::createTitle( TitleHelper::SUB_TITLE, "sub-title", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
         else
             TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() );
     }
@@ -972,8 +972,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
     throw (uno::RuntimeException)
 {
     if( m_bIsDisposed )
-        throw lang::DisposedException(
-            C2U("ChartDocumentWrapper is disposed" ),
+        throw lang::DisposedException("ChartDocumentWrapper is disposed",
             static_cast< ::cppu::OWeakObject* >( this ));
 
     m_bIsDisposed = true;
@@ -1200,8 +1199,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Area" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Area"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1211,8 +1210,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     // this is for bar and column (the latter is the default if
                     // no "Vertical=false" property was set)
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Column" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Column"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1220,8 +1219,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Donut" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Donut"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1229,8 +1228,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Line" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Line"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1238,8 +1237,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Net" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Net"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1247,16 +1246,16 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.FilledNet" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.FilledNet"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
             case SERVICE_NAME_PIE_DIAGRAM:
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Pie" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Pie"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1264,8 +1263,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.StockLowHighClose" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.StockLowHighClose"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1273,8 +1272,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.ScatterLineSymbol" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.ScatterLineSymbol"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1283,8 +1282,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xManagerFact.is())
                 {
                     xTemplate.set(
-                        xManagerFact->createInstance(
-                            C2U( "com.sun.star.chart2.template.Bubble" )), uno::UNO_QUERY );
+                        xManagerFact->createInstance("com.sun.star.chart2.template.Bubble"),
+                                uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
                 break;
@@ -1359,7 +1358,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         xResult.set( xChartRenderer );
         bServiceFound = true;
     }
-    else if( aServiceSpecifier.equals( C2U("com.sun.star.comp.chart2.DataSeriesWrapper") ) )
+    else if( aServiceSpecifier == "com.sun.star.comp.chart2.DataSeriesWrapper" )
     {
         Reference< beans::XPropertySet > xDataSeries( new DataSeriesPointWrapper( m_spChart2ModelContact ) );
         xResult.set( xDataSeries );
@@ -1487,8 +1486,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     if( m_bIsDisposed )
     {
         if( rDelegator.is() )
-            throw lang::DisposedException(
-                C2U("ChartDocumentWrapper is disposed" ),
+            throw lang::DisposedException("ChartDocumentWrapper is disposed",
                 static_cast< ::cppu::OWeakObject* >( this ));
         else
             return;
@@ -1564,9 +1562,9 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedBaseDiagramProperty( *this ) );
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U("NullDate"),Any() ) ); // i99104
-    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "DisableComplexChartTypes" ), uno::makeAny( sal_False ) ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "DisableDataTableDialog" ), uno::makeAny( sal_False ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableComplexChartTypes", uno::makeAny( sal_False ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableDataTableDialog", uno::makeAny( sal_False ) ) );
 
     return aWrappedProperties;
 }
@@ -1576,10 +1574,10 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
 uno::Sequence< ::rtl::OUString > ChartDocumentWrapper::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartDocument" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartDocument";
     aServices[ 1 ] = CHART_CHARTAPIWRAPPER_SERVICE_NAME;
-    aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 3 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 

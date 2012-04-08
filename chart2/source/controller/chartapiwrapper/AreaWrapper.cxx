@@ -133,7 +133,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
 ::rtl::OUString SAL_CALL AreaWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return C2U( "com.sun.star.chart.ChartArea" );
+    return rtl::OUString( "com.sun.star.chart.ChartArea" );
 }
 
 // ____ XComponent ____
@@ -182,7 +182,7 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("LineStyle"), C2U("LineStyle") ) );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty("LineStyle","LineStyle") );
 
     return aWrappedProperties;
 }
@@ -192,10 +192,10 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
 Sequence< ::rtl::OUString > AreaWrapper::getSupportedServiceNames_Static()
 {
     Sequence< ::rtl::OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ 2 ] = C2U( "com.sun.star.drawing.FillProperties" );
-    aServices[ 3 ] = C2U( "com.sun.star.drawing.LineProperties" );
+    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
+    aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
+    aServices[ 3 ] = "com.sun.star.drawing.LineProperties";
 
     return aServices;
 }

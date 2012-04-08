@@ -117,28 +117,28 @@ void lcl_AddPropertiesToVector(
 {
     //Properties for scaling:
     rOutProperties.push_back(
-        Property( C2U( "Max" ),
+        Property( "Max",
                   PROP_AXIS_MAX,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "Min" ),
+        Property( "Min",
                   PROP_AXIS_MIN,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "StepMain" ),
+        Property( "StepMain",
                   PROP_AXIS_STEPMAIN,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "StepHelpCount" ),
+        Property( "StepHelpCount",
                   PROP_AXIS_STEPHELP_COUNT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -146,70 +146,70 @@ void lcl_AddPropertiesToVector(
 
     //deprecated property use 'StepHelpCount' instead
     rOutProperties.push_back(
-        Property( C2U( "StepHelp" ),
+        Property( "StepHelp",
                   PROP_AXIS_STEPHELP,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "AutoMax" ),
+        Property( "AutoMax",
                   PROP_AXIS_AUTO_MAX,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AutoMin" ),
+        Property( "AutoMin",
                   PROP_AXIS_AUTO_MIN,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AutoStepMain" ),
+        Property( "AutoStepMain",
                   PROP_AXIS_AUTO_STEPMAIN,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AutoStepHelp" ),
+        Property( "AutoStepHelp",
                   PROP_AXIS_AUTO_STEPHELP,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AxisType" ),
+        Property( "AxisType",
                   PROP_AXIS_TYPE,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), //type com::sun::star::chart::ChartAxisType
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TimeIncrement" ),
+        Property( "TimeIncrement",
                   PROP_AXIS_TIME_INCREMENT,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "ExplicitTimeIncrement" ),
+        Property( "ExplicitTimeIncrement",
                   PROP_AXIS_EXPLICIT_TIME_INCREMENT,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
                   beans::PropertyAttribute::READONLY |
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "Logarithmic" ),
+        Property( "Logarithmic",
                   PROP_AXIS_LOGARITHMIC,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ReverseDirection" ),
+        Property( "ReverseDirection",
                   PROP_AXIS_REVERSEDIRECTION,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -217,34 +217,34 @@ void lcl_AddPropertiesToVector(
 
     //todo: this property is missing in the API
     rOutProperties.push_back(
-        Property( C2U( "Visible" ),
+        Property( "Visible",
                   PROP_AXIS_VISIBLE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CrossoverPosition" ),
+        Property( "CrossoverPosition",
                   PROP_AXIS_CROSSOVER_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CrossoverValue" ),
+        Property( "CrossoverValue",
                   PROP_AXIS_CROSSOVER_VALUE,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
 
     rOutProperties.push_back(
-        Property( C2U( "Origin" ),
+        Property( "Origin",
                   PROP_AXIS_ORIGIN,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "AutoOrigin" ),
+        Property( "AutoOrigin",
                   PROP_AXIS_AUTO_ORIGIN,
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -252,21 +252,21 @@ void lcl_AddPropertiesToVector(
 
     //Properties for interval marks:
     rOutProperties.push_back(
-        Property( C2U( "Marks" ),
+        Property( "Marks",
                   PROP_AXIS_MARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "HelpMarks" ),
+        Property( "HelpMarks",
                   PROP_AXIS_HELPMARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "MarkPosition" ),
+        Property( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -274,62 +274,62 @@ void lcl_AddPropertiesToVector(
 
     //Properties for labels:
     rOutProperties.push_back(
-        Property( C2U( "DisplayLabels" ),
+        Property( "DisplayLabels",
                   PROP_AXIS_DISPLAY_LABELS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "NumberFormat" ),
+        Property( "NumberFormat",
                   PROP_AXIS_NUMBERFORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LinkNumberFormatToSource" ),
+        Property( "LinkNumberFormatToSource",
                   PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LabelPosition" ),
+        Property( "LabelPosition",
                   PROP_AXIS_LABEL_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextRotation" ),
+        Property( "TextRotation",
                   PROP_AXIS_TEXT_ROTATION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ArrangeOrder" ),
+        Property( "ArrangeOrder",
                   PROP_AXIS_ARRANGE_ORDER,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisArrangeOrderType * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextBreak" ),
+        Property( "TextBreak",
                   PROP_AXIS_TEXTBREAK,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextCanOverlap" ),
+        Property( "TextCanOverlap",
                   PROP_AXIS_CAN_OVERLAP,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "StackedText" ),
+        Property( "StackedText",
                   PROP_AXIS_STACKEDTEXT,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -337,14 +337,14 @@ void lcl_AddPropertiesToVector(
 
     // Properties related to bar charts:
     rOutProperties.push_back(
-        Property( C2U( "Overlap" ),
+        Property( "Overlap",
                   PROP_AXIS_OVERLAP,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "GapWidth" ),
+        Property( "GapWidth",
                   PROP_AXIS_GAP_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -510,7 +510,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
 OUString SAL_CALL AxisWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return C2U( "com.sun.star.chart.ChartAxis" );
+    return rtl::OUString("com.sun.star.chart.ChartAxis");
 }
 
 // ____ XNumberFormatsSupplier ____
@@ -587,8 +587,8 @@ void AxisWrapper::updateReferenceSize()
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
     {
-        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
-            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+        if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
+            xProp->setPropertyValue("ReferencePageSize", uno::makeAny(
             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -597,7 +597,7 @@ Any AxisWrapper::getReferenceSize()
     Any aRet;
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
+        aRet = xProp->getPropertyValue("ReferencePageSize");
     return aRet;
 }
 awt::Size AxisWrapper::getCurrentSizeForReference()
@@ -623,7 +623,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
             Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+                xProp->setPropertyValue("Show", uno::makeAny( sal_False ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -649,18 +649,18 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     aWrappedProperties.push_back( new WrappedTextRotationProperty() );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "Marks" ), C2U( "MajorTickmarks" ) ) );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "HelpMarks" ), C2U( "MinorTickmarks" ) ) );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "TextCanOverlap" ), C2U( "TextOverlap" ) ) );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "ArrangeOrder" ), C2U( "ArrangeOrder" ) ) );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "Visible" ), C2U( "Show" ) ) );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "DisplayLabels" ), C2U( "DisplayLabels" ) ) );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "TextBreak" ), C2U( "TextBreak" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty("Marks","MajorTickmarks") );
+    aWrappedProperties.push_back( new WrappedProperty("HelpMarks","MinorTickmarks") );
+    aWrappedProperties.push_back( new WrappedProperty("TextCanOverlap","TextOverlap") );
+    aWrappedProperties.push_back( new WrappedProperty("ArrangeOrder","ArrangeOrder") );
+    aWrappedProperties.push_back( new WrappedProperty("Visible","Show") );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty("DisplayLabels","DisplayLabels") );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
     WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
     aWrappedProperties.push_back( pWrappedNumberFormatProperty );
     aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
-    aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedText" ), C2U( "StackCharacters" ) ) );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "CrossoverPosition" ), C2U( "CrossoverPosition" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty("StackedText","StackCharacters") );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty("CrossoverPosition","CrossoverPosition") );
     {
         WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
         WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );
@@ -689,9 +689,9 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
 Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart.ChartAxis" );
-    aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
-    aServices[ 2 ] = C2U( "com.sun.star.style.CharacterProperties" );
+    aServices[ 0 ] = "com.sun.star.chart.ChartAxis";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.style.CharacterProperties";
 
     return aServices;
 }

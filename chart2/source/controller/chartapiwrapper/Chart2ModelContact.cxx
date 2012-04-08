@@ -72,17 +72,17 @@ void Chart2ModelContact::setModel( const ::com::sun::star::uno::Reference<
     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartModel, uno::UNO_QUERY );
     if( xTableFactory.is() )
     {
-        uno::Reference< container::XNameContainer > xDashTable( xTableFactory->createInstance( C2U( "com.sun.star.drawing.DashTable" ) ), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xGradientTable( xTableFactory->createInstance( C2U( "com.sun.star.drawing.GradientTable" ) ), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xHatchTable( xTableFactory->createInstance( C2U( "com.sun.star.drawing.HatchTable" ) ), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xBitmapTable( xTableFactory->createInstance( C2U( "com.sun.star.drawing.BitmapTable" ) ), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xTransparencyGradientTable( xTableFactory->createInstance( C2U( "com.sun.star.drawing.TransparencyGradientTable" ) ), uno::UNO_QUERY );
+        uno::Reference< container::XNameContainer > xDashTable( xTableFactory->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameContainer > xGradientTable( xTableFactory->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameContainer > xHatchTable( xTableFactory->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameContainer > xBitmapTable( xTableFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameContainer > xTransparencyGradientTable( xTableFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
         //C2U( "com.sun.star.drawing.MarkerTable" )
-        m_aTableMap[ C2U( "LineDashName" ) ] = xDashTable;
-        m_aTableMap[ C2U( "FillGradientName" ) ] = xGradientTable;
-        m_aTableMap[ C2U( "FillHatchName" ) ] = xHatchTable;
-        m_aTableMap[ C2U( "FillBitmapName" ) ] = xBitmapTable;
-        m_aTableMap[ C2U( "FillTransparenceGradientName" ) ] = xTransparencyGradientTable;
+        m_aTableMap["LineDashName"] = xDashTable;
+        m_aTableMap["FillGradientName"] = xGradientTable;
+        m_aTableMap["FillHatchName"] = xHatchTable;
+        m_aTableMap["FillBitmapName"] = xBitmapTable;
+        m_aTableMap["FillTransparenceGradientName"] = xTransparencyGradientTable;
     }
 }
 
@@ -215,7 +215,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
     {
         ExplicitValueProvider* pProvider( getExplicitValueProvider() );
         if( pProvider )
-            aRect = pProvider->getRectangleOfObject( C2U("PlotAreaIncludingAxes") );
+            aRect = pProvider->getRectangleOfObject("PlotAreaIncludingAxes");
     }
     return aRect;
 }
