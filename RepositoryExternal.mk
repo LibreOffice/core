@@ -1024,6 +1024,7 @@ endif # SYSTEM_CURL
 ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
 
 define gb_LinkTarget__use_mozilla_headers
+$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
 $(eval $(call gb_LinkTarget_set_include,$(1),\
 	$(MOZILLA_HEADERS_CFLAGS) \
 	$$(INCLUDE) \
