@@ -248,9 +248,9 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 HandlerCFGAccess::HandlerCFGAccess( const ::rtl::OUString& sPackage )
     : ConfigItem( sPackage )
 {
-    css::uno::Sequence< ::rtl::OUString > lListenPathes(1);
-    lListenPathes[0] = SETNAME_HANDLER;
-    EnableNotification(lListenPathes);
+    css::uno::Sequence< ::rtl::OUString > lListenPaths(1);
+    lListenPaths[0] = SETNAME_HANDLER;
+    EnableNotification(lListenPaths);
 }
 
 //_________________________________________________________________________________________________________________
