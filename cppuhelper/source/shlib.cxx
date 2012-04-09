@@ -46,6 +46,10 @@
 #endif
 #include <vector>
 
+#ifdef IOS
+#include <osl/detail/ios-bootstrap.h>
+#endif
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
@@ -463,7 +467,6 @@ extern "C"
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sc_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
@@ -523,24 +526,33 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     oslGenericFunction pSym = NULL;
 
 #ifdef DISABLE_DYNLOADING
-    if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION)) )
-        pSym = (oslGenericFunction) bootstrap_component_getFactory;
-    else if ( rLibName.equals( OUSTR("libucb1.a")) )
-        pSym = (oslGenericFunction) ucb_component_getFactory;
-    else if ( rLibName.equals( OUSTR("configmgr.uno.a")) )
-        pSym = (oslGenericFunction) configmgr_component_getFactory;
-    else if ( rLibName.equals( OUSTR("libucpfile1.a")) )
-        pSym = (oslGenericFunction) ucpfile_component_getFactory;
-    else if ( rLibName.equals( OUSTR("libsclo.a")) )
-        pSym = (oslGenericFunction) sc_component_getFactory;
-    else if ( rLibName.equals( OUSTR("libfwklo.a")) )
-        pSym = (oslGenericFunction) fwk_component_getFactory;
-    else if ( rLibName.equals( OUSTR("i18npool.uno.a")) )
-        pSym = (oslGenericFunction) i18npool_component_getFactory;
-    else
+    // First test library names that aren't app-specific.
+    static lib_to_component_mapping non_app_specific_map[] = {
+        { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
+        { "configmgr.uno.a", configmgr_component_getFactory },
+        { "i18npool.uno.a", i18npool_component_getFactory },
+        { "libfwklo.a", fwk_component_getFactory },
+        { "libucb1.a", ucb_component_getFactory },
+        { "libucpfile1.a", ucpfile_component_getFactory },
+        { NULL, NULL }
+    };
+    for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
     {
+        if ( rLibName.equalsAscii( non_app_specific_map[i].lib ) )
+            pSym = (oslGenericFunction) non_app_specific_map[i].component_getFactory_function;
+    }
+
+    if ( pSym == NULL)
+    {
+        const lib_to_component_mapping *map = lo_get_libmap();
+        for (int i = 0; pSym == NULL && map[i].lib != NULL; ++i)
+        {
+            if ( rLibName.equalsAscii( map[i].lib ) )
+                pSym = (oslGenericFunction) map[i].component_getFactory_function;
+        }
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "attempting to load unknown library %s", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        if ( pSym == NULL )
+            OSL_TRACE( "attempting to load unknown library %s", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
     }
 #else
