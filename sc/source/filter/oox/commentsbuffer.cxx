@@ -145,35 +145,6 @@ void Comment::importComment( SequenceInputStream& rStrm )
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }
 
-void Comment::importNote( BiffInputStream& rStrm )
-{
-    BinAddress aBinAddr;
-    rStrm >> aBinAddr;
-    // cell range will be checked while inserting the comment into the document
-    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, BinRange( aBinAddr ), getSheetIndex() );
-
-    // remaining record data is BIFF dependent
-    switch( getBiff() )
-    {
-        case BIFF2:
-        case BIFF3:
-            importNoteBiff2( rStrm );
-        break;
-        case BIFF4:
-        case BIFF5:
-            importNoteBiff2( rStrm );
-            // in BIFF4 and BIFF5, comments can have an associated sound
-            if( (rStrm.getNextRecId() == BIFF_ID_NOTESOUND) && rStrm.startNextRecord() )
-                importNoteSound( rStrm );
-        break;
-        case BIFF8:
-            importNoteBiff8( rStrm );
-        break;
-        case BIFF_UNKNOWN:
-        break;
-    }
-}
-
 RichStringRef Comment::createText()
 {
     maModel.mxText.reset( new RichString( *this ) );

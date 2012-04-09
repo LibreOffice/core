@@ -735,11 +735,6 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
     return xCondFmt;
 }
 
-void CondFormatBuffer::importCfHeader( BiffInputStream& rStrm )
-{
-    createCondFormat()->importCfHeader( rStrm );
-}
-
 void CondFormatBuffer::finalizeImport()
 {
     maCondFormats.forEachMem( &CondFormat::finalizeImport );

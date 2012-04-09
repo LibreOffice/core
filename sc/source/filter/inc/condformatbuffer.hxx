@@ -168,8 +168,6 @@ public:
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
-    /** Imports settings from the CFHEADER record. */
-    void                importCfHeader( BiffInputStream& rStrm );
 
     /** Creates all conditional formatting in the Calc document. */
     void                finalizeImport();

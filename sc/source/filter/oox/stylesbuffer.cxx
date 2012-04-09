@@ -550,21 +550,6 @@ void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
     appendColor( nRgb & 0xFFFFFF );
 }
 
-void ColorPalette::importPalette( BiffInputStream& rStrm )
-{
-    sal_uInt16 nCount;
-    rStrm >> nCount;
-    OSL_ENSURE( rStrm.getRemaining() == 4 * nCount, "ColorPalette::importPalette - wrong palette size" );
-
-    // fill palette from BIFF_COLOR_USEROFFSET
-    mnAppendIndex = BIFF_COLOR_USEROFFSET;
-    for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
-    {
-        sal_Int32 nRgb = lclReadRgbColor( rStrm );
-        appendColor( nRgb & 0xFFFFFF );
-    }
-}
-
 sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 {
     sal_Int32 nColor = API_RGB_TRANSPARENT;

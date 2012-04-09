@@ -73,8 +73,6 @@ public:
     void                importCommentPr( const AttributeList& rAttribs );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( SequenceInputStream& rStrm );
-    /** Imports a cell comment from the passed stream of a NOTE record. */
-    void                importNote( BiffInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
     RichStringRef       createText();
