@@ -86,9 +86,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-#define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
-#define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
-
 class NoHelpErrorBox : public ErrorBox
 {
 public:

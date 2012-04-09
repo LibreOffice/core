@@ -37,8 +37,6 @@
 
 DBG_NAME(SfxFrameDescriptor);
 
-#define VERSION (sal_uInt16) 3
-
 struct SfxFrameDescriptor_Impl
 {
     Wallpaper*  pWallpaper;

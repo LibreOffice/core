@@ -137,9 +137,6 @@ using namespace ::com::sun::star::io;
 #include "sfxacldetect.hxx"
 #include "officecfg/Office/Common.hxx"
 
-#define MAX_REDIRECT 5
-
-
 //==========================================================
 namespace {
 

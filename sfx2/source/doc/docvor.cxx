@@ -73,7 +73,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/svstdarr.hxx>
 
-static const char cDelim = ':';
 sal_Bool SfxOrganizeListBox_Impl::bDropMoveOk = sal_True;
 
 using namespace ::com::sun::star;

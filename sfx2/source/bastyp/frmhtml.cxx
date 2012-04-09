@@ -40,9 +40,6 @@
 #include <sfx2/fcontnr.hxx>
 #include "sfxtypes.hxx"
 
-#define SFX_HTMLFRMSIZE_REL 0x0001
-#define SFX_HTMLFRMSIZE_PERCENT 0x0002
-
 static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
 static sal_Char const sHTML_SC_auto[] = "AUTO";

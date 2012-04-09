@@ -106,8 +106,6 @@ using ::std::advance;
 
 //========================================================================
 
-// #define DONT_USE_HIERARCHY
-
 #define TITLE                   "Title"
 #define IS_FOLDER               "IsFolder"
 #define PROPERTY_TYPE           "TypeDescription"

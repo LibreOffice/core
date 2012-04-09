@@ -54,9 +54,6 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
-#define DDELINK_COLD        0
-#define DDELINK_HOT         1
-
 #define DDELINK_ERROR_APP   1
 #define DDELINK_ERROR_DATA  2
 #define DDELINK_ERROR_LINK  3

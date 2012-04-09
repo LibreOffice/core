@@ -82,16 +82,8 @@ struct SfxProgress_Impl
 
 //========================================================================
 
-#define TIMEOUT_PROGRESS         5L /* 10th s */
-#define MAXPERCENT_PROGRESS     33
-
-#define TIMEOUT_RESCHEDULE      10L /* 10th s */
-#define MAXPERCENT_RESCHEDULE   50
-
 #define Progress
 #include "sfxslots.hxx"
-
-#define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
 extern sal_uInt32 Get10ThSec();
