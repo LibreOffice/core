@@ -35,8 +35,8 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbmm,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbmm))
 
-$(eval $(call gb_SrsTarget_set_include,dbaccess/dbmm,\
-    $$(INCLUDE) \
+$(eval $(call gb_SrsTarget_use_packages,dbaccess/dbmm,\
+	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/dbmm,\

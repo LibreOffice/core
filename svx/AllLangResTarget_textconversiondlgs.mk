@@ -36,9 +36,8 @@ $(eval $(call gb_AllLangResTarget_add_srs,textconversiondlgs,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/textconversiondlgs))
 
-$(eval $(call gb_SrsTarget_set_include,svx/textconversiondlgs,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/svx/inc/ \
+$(eval $(call gb_SrsTarget_use_packages,svx/textconversiondlgs,\
+	svtools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svx/textconversiondlgs,\

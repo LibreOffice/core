@@ -34,6 +34,14 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbui,dbaccess/dbui))
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbui))
 
+$(eval $(call gb_SrsTarget_use_package,dbaccess/dbui,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svx_globlmn_hrc \
+	svx_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbui,\
 	$$(INCLUDE) \
 	-I$(WORKDIR)/inc/dbaccess \
@@ -89,7 +97,5 @@ $(eval $(call gb_SrsTarget_add_templates,dbaccess/dbui,\
     dbaccess/source/ui/dlg/AutoControls_tmpl.hrc \
     dbaccess/source/ui/inc/toolbox_tmpl.hrc \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,dbaccess/dbui) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

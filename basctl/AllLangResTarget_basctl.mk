@@ -34,6 +34,15 @@ $(eval $(call gb_AllLangResTarget_add_srs,basctl,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
+$(eval $(call gb_SrsTarget_use_packages,basctl/res,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svtools_inc \
+	svx_globlmn_hrc \
+	svx_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,basctl/res,\
 	-I$(SRCDIR)/basctl/inc \
 	-I$(SRCDIR)/basctl/source/inc \
@@ -53,9 +62,5 @@ $(eval $(call gb_SrsTarget_add_files,basctl/res,\
 	basctl/source/dlged/dlgresid.src \
 	basctl/source/dlged/managelang.src \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,basctl/res) : \
-	$(call gb_Package_get_target,svx_globlmn_hrc) \
-	$(call gb_Package_get_target,svx_inc)
 
 # vim: set noet sw=4 ts=4:

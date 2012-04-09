@@ -36,10 +36,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,spa,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,padmin/source))
 
-$(eval $(call gb_SrsTarget_set_include,padmin/source,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,padmin/source,\
     padmin/source/padialog.src \
     padmin/source/rtsetup.src \

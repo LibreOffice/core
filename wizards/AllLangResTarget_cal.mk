@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,cal,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,cal/res))
 
-$(eval $(call gb_SrsTarget_set_include,cal/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,cal/res,\
 	wizards/source/schedule/schedule.src \
 ))

@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,tpl,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,tpl/res))
 
-$(eval $(call gb_SrsTarget_set_include,tpl/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,tpl/res,\
 	wizards/source/template/template.src \
 ))

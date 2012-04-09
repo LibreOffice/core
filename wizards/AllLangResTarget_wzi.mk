@@ -36,10 +36,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,wzi,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,wzi/res))
 
-$(eval $(call gb_SrsTarget_set_include,wzi/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,wzi/res,\
 	wizards/source/imagelists/imagelists.src \
 ))

@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,imp,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,imp/res))
 
-$(eval $(call gb_SrsTarget_set_include,imp/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,imp/res,\
 	wizards/source/importwizard/importwi.src \
 ))

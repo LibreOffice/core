@@ -35,6 +35,14 @@ $(eval $(call gb_AllLangResTarget_add_srs,chartcontroller,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,chart2/res))
 
+$(eval $(call gb_SrsTarget_use_packages,chart2/res,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svtools_inc \
+	svx_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,chart2/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/chart2/source/controller/dialogs \

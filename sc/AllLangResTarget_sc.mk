@@ -29,6 +29,16 @@ $(eval $(call gb_AllLangResTarget_add_srs,sc,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sc/res))
 
+$(eval $(call gb_SrsTarget_use_packages,sc/res,\
+	editeng_inc \
+	formula_inc \
+	sfx2_inc \
+	svl_inc \
+	svx_globlmn_hrc \
+	svx_inc \
+	tools_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,sc/res,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sc/inc \
@@ -103,7 +113,5 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/formdlg/dwfunctr.src \
     sc/source/core/src/compiler.src \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,sc/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbw,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbw/res))
 
-$(eval $(call gb_SrsTarget_set_include,dbw/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,dbw/res,\
 	wizards/source/formwizard/dbwizres.src \
 ))

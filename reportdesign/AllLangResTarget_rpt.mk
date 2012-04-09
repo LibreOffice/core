@@ -35,6 +35,11 @@ $(eval $(call gb_AllLangResTarget_add_srs,rpt,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/res))
 
+$(eval $(call gb_SrsTarget_use_packages,reportdesign/res,\
+	svl_inc \
+	svx_globlmn_hrc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,reportdesign/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/reportdesign/source/core/inc \
@@ -43,7 +48,5 @@ $(eval $(call gb_SrsTarget_set_include,reportdesign/res,\
 $(eval $(call gb_SrsTarget_add_files,reportdesign/res,\
     reportdesign/source/core/resource/strings.src \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,reportdesign/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

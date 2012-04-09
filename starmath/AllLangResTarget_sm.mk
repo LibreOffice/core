@@ -36,6 +36,13 @@ $(eval $(call gb_AllLangResTarget_set_reslocation,sm,starmath))
 
 $(eval $(call gb_SrsTarget_SrsTarget,sm/res))
 
+$(eval $(call gb_SrsTarget_use_packages,sm/res,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svx_globlmn_hrc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,sm/res,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/starmath/inc \
@@ -47,7 +54,5 @@ $(eval $(call gb_SrsTarget_add_files,sm/res,\
 	starmath/source/symbol.src \
 	starmath/source/toolbox.src \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,sm/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

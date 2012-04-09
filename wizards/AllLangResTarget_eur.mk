@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,eur,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,eur/res))
 
-$(eval $(call gb_SrsTarget_set_include,eur/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,eur/res,\
 	wizards/source/euro/euro.src \
 ))

@@ -34,9 +34,8 @@ $(eval $(call gb_AllLangResTarget_add_srs,svl,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,svl/res))
 
-$(eval $(call gb_SrsTarget_set_include,svl/res,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/svl/inc \
+$(eval $(call gb_SrsTarget_use_packages,svl/res,\
+	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svl/res,\

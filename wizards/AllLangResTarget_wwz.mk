@@ -34,10 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,wwz,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,wwz/res))
 
-$(eval $(call gb_SrsTarget_set_include,wwz/res,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_SrsTarget_add_files,wwz/res,\
 	wizards/source/webwizard/webwizar.src \
 ))

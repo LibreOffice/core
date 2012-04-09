@@ -34,9 +34,13 @@ $(eval $(call gb_AllLangResTarget_add_srs,ofa,svx/ofa))
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/ofa))
 
-$(eval $(call gb_SrsTarget_set_include,svx/ofa,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/svx/inc/ \
+$(eval $(call gb_SrsTarget_use_packages,svx/ofa,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svtools_inc \
+	svx_inc \
+	tools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svx/ofa,\

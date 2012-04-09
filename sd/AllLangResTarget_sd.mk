@@ -35,6 +35,16 @@ $(eval $(call gb_AllLangResTarget_add_srs,sd,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sd/res))
 
+$(eval $(call gb_SrsTarget_use_packages,sd/res,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svtools_inc \
+	svx_globlmn_hrc \
+	svx_inc \
+	tools_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,sd/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \
@@ -101,7 +111,5 @@ $(eval $(call gb_SrsTarget_add_templates,sd/res,\
     sd/source/ui/app/tbxids_tmpl.src \
     sd/source/ui/app/toolbox2_tmpl.src \
 ))
-
-$(call gb_SrsTemplateTarget_get_target,sd/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

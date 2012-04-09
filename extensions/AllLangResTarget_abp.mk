@@ -36,6 +36,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,abp,abp/res))
 
 $(eval $(call gb_SrsTarget_SrsTarget,abp/res))
 
+$(eval $(call gb_SrsTarget_use_packages,abp/res,\
+    svl_inc \
+))
+
 $(eval $(call gb_SrsTarget_set_include,abp/res,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/inc \
