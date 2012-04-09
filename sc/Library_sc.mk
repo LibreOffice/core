@@ -177,6 +177,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/doubleref \
 	sc/source/core/tool/editutil \
 	sc/source/core/tool/filtopt \
+	sc/source/core/tool/formulaopt \
 	sc/source/core/tool/formulaparserpool \
 	sc/source/core/tool/formularesult \
 	sc/source/core/tool/hints \

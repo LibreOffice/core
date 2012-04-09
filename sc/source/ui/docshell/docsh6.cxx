@@ -481,13 +481,13 @@ sal_Bool ScDocShell::ReloadTabLinks()
     return sal_True;        //! Fehler erkennen
 }
 
-void ScDocShell::SetFormulaOptions(const ScAppOptions& rAppOpt )
+void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
 {
-    aDocument.SetGrammar( rAppOpt.GetFormulaSyntax() );
+    aDocument.SetGrammar( rOpt.GetFormulaSyntax() );
 
     // This needs to be called first since it may re-initialize the entire
     // opcode map.
-    if (rAppOpt.GetUseEnglishFuncName())
+    if (rOpt.GetUseEnglishFuncName())
     {
         // switch native symbols to English.
         ScCompiler aComp(NULL, ScAddress());
@@ -503,7 +503,7 @@ void ScDocShell::SetFormulaOptions(const ScAppOptions& rAppOpt )
 
     // Update the separators.
     ScCompiler::UpdateSeparatorsNative(
-        rAppOpt.GetFormulaSepArg(), rAppOpt.GetFormulaSepArrayCol(), rAppOpt.GetFormulaSepArrayRow());
+        rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
 }
 
 void ScDocShell::CheckConfigOptions()
@@ -515,19 +515,19 @@ void ScDocShell::CheckConfigOptions()
     OUString aDecSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
 
     ScModule* pScMod = SC_MOD();
-    const ScAppOptions& rAppOpt=pScMod->GetAppOptions();
-    OUString aSepArg = rAppOpt.GetFormulaSepArg();
-    OUString aSepArrRow = rAppOpt.GetFormulaSepArrayRow();
-    OUString aSepArrCol = rAppOpt.GetFormulaSepArrayCol();
+    const ScFormulaOptions& rOpt=pScMod->GetFormulaOptions();
+    OUString aSepArg = rOpt.GetFormulaSepArg();
+    OUString aSepArrRow = rOpt.GetFormulaSepArrayRow();
+    OUString aSepArrCol = rOpt.GetFormulaSepArrayCol();
 
     if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
     {
         // One of arg separators conflicts with the current decimal
         // separator.  Reset them to default.
-        ScAppOptions aNew = rAppOpt;
+        ScFormulaOptions aNew = rOpt;
         aNew.ResetFormulaSeparators();
         SetFormulaOptions(aNew);
-        pScMod->SetAppOptions(aNew);
+        pScMod->SetFormulaOptions(aNew);
 
         // Launch a nice warning dialog to let the users know of this change.
         ScTabViewShell* pViewShell = GetBestViewShell();

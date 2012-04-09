@@ -36,13 +36,11 @@
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-
 #include "tpformula.hxx"
+#include "formulaopt.hxx"
 #include "optdlg.hrc"
 #include "scresid.hxx"
 #include "formula/grammar.hxx"
-#include "appoptio.hxx"
-#include "global.hxx"
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -87,7 +85,13 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maEdSepArrayRow.SetGetFocusHdl(aLink);
 
     // Get the decimal separator for current locale.
-    rtl::OUString aSep = SC_MOD()->GetAppOptions().GetLocaleDataWrapper().getNumDecimalSep();
+    ScFormulaOptions aOpt;
+    const SfxPoolItem* pItem = NULL;
+
+    if(SFX_ITEM_SET == rCoreAttrs.GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
+        aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
+
+    rtl::OUString aSep = aOpt.GetLocaleDataWrapper().getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
 }
 
@@ -98,7 +102,7 @@ ScTpFormulaOptions::~ScTpFormulaOptions()
 void ScTpFormulaOptions::ResetSeparators()
 {
     rtl::OUString aFuncArg, aArrayCol, aArrayRow;
-    ScAppOptions::GetDefaultFormulaSeparators(aFuncArg, aArrayCol, aArrayRow);
+    ScFormulaOptions::GetDefaultFormulaSeparators(aFuncArg, aArrayCol, aArrayRow);
     maEdSepFuncArg.SetText(aFuncArg);
     maEdSepArrayCol.SetText(aArrayCol);
     maEdSepArrayRow.SetText(aArrayRow);
@@ -208,96 +212,97 @@ SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreS
 
 sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
-    bool bRet = false;
-    if (maLbFormulaSyntax.GetSavedValue() != maLbFormulaSyntax.GetSelectEntryPos())
+    sal_Bool bRet = false;
+    ScFormulaOptions aOpt;
+    sal_Bool bEnglishFuncName = maCbEnglishFuncName.IsChecked();
+    sal_Int16 aSyntaxPos      = maLbFormulaSyntax.GetSelectEntryPos();
+    OUString aSep             = maEdSepFuncArg.GetText();
+    OUString aSepArrayCol     = maEdSepArrayCol.GetText();
+    OUString aSepArrayRow     = maEdSepArrayRow.GetText();
+
+    if ( maLbFormulaSyntax.GetSavedValue() != aSyntaxPos
+         || maCbEnglishFuncName.GetSavedValue() != bEnglishFuncName
+         || static_cast<OUString>(maEdSepFuncArg.GetSavedValue()) != aSep
+         || static_cast<OUString>(maEdSepArrayCol.GetSavedValue()) != aSepArrayCol
+         || static_cast<OUString>(maEdSepArrayRow.GetSavedValue()) != aSepArrayRow )
     {
-        rCoreSet.Put(
-            SfxUInt16Item(SID_SC_OPT_FORMULA_GRAMMAR, maLbFormulaSyntax.GetSelectEntryPos()));
+        ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
+
+        switch (aSyntaxPos)
+        {
+        case 0:
+            eGram = ::formula::FormulaGrammar::GRAM_NATIVE;
+        break;
+        case 1:
+            eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
+        break;
+        case 2:
+            eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+        break;
+        }
+
+        aOpt.SetFormulaSyntax(eGram);
+        aOpt.SetUseEnglishFuncName(bEnglishFuncName);
+        aOpt.SetFormulaSepArg(aSep);
+        aOpt.SetFormulaSepArrayCol(aSepArrayCol);
+        aOpt.SetFormulaSepArrayRow(aSepArrayRow);
+
+        rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
     }
-
-    if (maCbEnglishFuncName.GetSavedValue() != maCbEnglishFuncName.IsChecked())
-    {
-        rCoreSet.Put(
-            SfxBoolItem(SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, maCbEnglishFuncName.IsChecked()));
-        bRet = true;
-    }
-
-    if (maEdSepFuncArg.GetSavedValue() != maEdSepFuncArg.GetText())
-    {
-        rCoreSet.Put(
-            SfxStringItem(SID_SC_OPT_FORMULA_SEP_ARG, maEdSepFuncArg.GetText()));
-        bRet = true;
-    }
-
-    if (maEdSepArrayCol.GetSavedValue() != maEdSepArrayCol.GetText())
-    {
-        rCoreSet.Put(
-            SfxStringItem(SID_SC_OPT_FORMULA_SEP_ARRAY_COL, maEdSepArrayCol.GetText()));
-        bRet = true;
-    }
-
-    if (maEdSepArrayRow.GetSavedValue() != maEdSepArrayRow.GetText())
-    {
-        rCoreSet.Put(
-            SfxStringItem(SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, maEdSepArrayRow.GetText()));
-        bRet = true;
-    }
-
     return bRet;
 }
 
 void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
 {
+    ScFormulaOptions aOpt;
     const SfxPoolItem* pItem = NULL;
 
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
+        aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
+
     // formula grammar.
-    maLbFormulaSyntax.SelectEntryPos(0);
-    if (rCoreSet.HasItem(SID_SC_OPT_FORMULA_GRAMMAR, &pItem))
+    ::formula::FormulaGrammar::Grammar eGram = aOpt.GetFormulaSyntax();
+
+    switch (eGram)
     {
-        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        if (nVal <= 2)
-            maLbFormulaSyntax.SelectEntryPos(nVal);
+    case ::formula::FormulaGrammar::GRAM_NATIVE:
+        maLbFormulaSyntax.SelectEntryPos(0);
+        break;
+    case ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
+        maLbFormulaSyntax.SelectEntryPos(1);
+        break;
+    case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
+        maLbFormulaSyntax.SelectEntryPos(2);
+        break;
+    default:
+        maLbFormulaSyntax.SelectEntryPos(0);
     }
+
     maLbFormulaSyntax.SaveValue();
 
     // english function name.
-    maCbEnglishFuncName.Check(false);
-    if (rCoreSet.HasItem(SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, &pItem))
-    {
-        bool bVal = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        maCbEnglishFuncName.Check(bVal);
-    }
+    maCbEnglishFuncName.Check( aOpt.GetUseEnglishFuncName() );
     maCbEnglishFuncName.SaveValue();
 
-    ResetSeparators();
+    // Separators
+    OUString aSep = aOpt.GetFormulaSepArg();
+    OUString aSepArrayRow = aOpt.GetFormulaSepArrayRow();
+    OUString aSepArrayCol = aOpt.GetFormulaSepArrayCol();
 
-    // argument separator.
-    if (rCoreSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARG, &pItem))
+    if (aSep.getLength() == 1 && aSepArrayRow.getLength() == 1 && aSepArrayCol.getLength() == 1)
     {
-        rtl::OUString aVal = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        if (aVal.getLength() == 1)
-            maEdSepFuncArg.SetText(aVal);
-    }
-    maEdSepFuncArg.SaveValue();
+        // Each separator must be one character long.
+        maEdSepFuncArg.SetText(aSep);
+        maEdSepArrayCol.SetText(aSepArrayCol);
+        maEdSepArrayRow.SetText(aSepArrayRow);
 
-    // matrix column separator.
-    if (rCoreSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_COL, &pItem))
-    {
-        rtl::OUString aVal = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        if (aVal.getLength() == 1)
-            maEdSepArrayCol.SetText(aVal);
+        maEdSepFuncArg.SaveValue();
+        maEdSepArrayCol.SaveValue();
+        maEdSepArrayRow.SaveValue();
     }
-    maEdSepArrayCol.SaveValue();
-
-    // matrix row separator.
-    if (rCoreSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, &pItem))
-    {
-        rtl::OUString aVal = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        if (aVal.getLength() == 1)
-            maEdSepArrayRow.SetText(aVal);
-    }
-    maEdSepArrayRow.SaveValue();
+    else
+        ResetSeparators();
 }
 
 int ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)

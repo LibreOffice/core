@@ -40,6 +40,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "appoptio.hxx"
+#include "formulaopt.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
 #include "optutil.hxx"
@@ -321,7 +322,7 @@ public:
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     sal_Bool            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
 
-    void            SetFormulaOptions(const ScAppOptions& rAppOpt );
+    void            SetFormulaOptions(const ScFormulaOptions& rOpt );
     virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );

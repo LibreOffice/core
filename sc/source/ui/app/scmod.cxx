@@ -79,6 +79,7 @@
 #include "viewopti.hxx"
 #include "docoptio.hxx"
 #include "appoptio.hxx"
+#include "formulaopt.hxx"
 #include "inputopt.hxx"
 #include "printopt.hxx"
 #include "navicfg.hxx"
@@ -141,6 +142,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
+    pFormulaCfg( NULL ),
     pInputCfg( NULL ),
     pPrintCfg( NULL ),
     pNavipiCfg( NULL ),
@@ -342,6 +344,7 @@ void ScModule::DeleteCfg()
     DELETEZ( pViewCfg ); // Speichern passiert vor Exit() automatisch
     DELETEZ( pDocCfg );
     DELETEZ( pAppCfg );
+    DELETEZ( pFormulaCfg );
     DELETEZ( pInputCfg );
     DELETEZ( pPrintCfg );
     DELETEZ( pNavipiCfg );
@@ -849,6 +852,22 @@ const ScAppOptions& ScModule::GetAppOptions()
     return *pAppCfg;
 }
 
+void ScModule::SetFormulaOptions( const ScFormulaOptions& rOpt )
+{
+    if ( !pFormulaCfg )
+        pFormulaCfg = new ScFormulaCfg;
+
+    pFormulaCfg->SetOptions( rOpt );
+}
+
+const ScFormulaOptions& ScModule::GetFormulaOptions()
+{
+    if ( !pFormulaCfg )
+        pFormulaCfg = new ScFormulaCfg;
+
+    return *pFormulaCfg;
+}
+
 void ScModule::SetInputOptions( const ScInputOptions& rOpt )
 {
     if ( !pInputCfg )
@@ -987,7 +1006,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     sal_Bool                    bCalcAll            = false;
     sal_Bool                    bSaveAppOptions     = false;
     sal_Bool                    bSaveInputOptions   = false;
-    sal_Bool                    bUpdateDocFormat    = false;
 
     //--------------------------------------------------------------------------
 
@@ -1031,69 +1049,16 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // FormulaOptions
     //============================================
 
-
-    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, &pItem))
+    if (rOptSet.HasItem(SID_SCFORMULAOPTIONS, &pItem))
     {
-        pAppCfg->SetUseEnglishFuncName( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
-        bSaveAppOptions = true;
-        bUpdateDocFormat = true;
-    }
+        const ScFormulaOptions& rOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
+        SetFormulaOptions( rOpt );
 
-    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_GRAMMAR, &pItem))
-    {
-        sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        ::formula::FormulaGrammar::Grammar eOld = pAppCfg->GetFormulaSyntax();
-        ::formula::FormulaGrammar::Grammar eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
-
-        switch (nVal)
+        if ( pDocSh )
         {
-        case 0:
-            eNew = ::formula::FormulaGrammar::GRAM_NATIVE;
-            break;
-        case 1:
-            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
-            break;
-        case 2:
-            eNew = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
-            break;
-        default:
-            ;
+            pDocSh->SetFormulaOptions( rOpt );
+            pDocSh->SetDocumentModified();
         }
-
-        if (eOld != eNew)
-        {
-            pAppCfg->SetFormulaSyntax(eNew);
-            bSaveAppOptions = true;
-            bUpdateDocFormat = true;
-        }
-    }
-
-    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARG, &pItem))
-    {
-        pAppCfg->SetFormulaSepArg( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-        bSaveAppOptions = true;
-        bUpdateDocFormat = true;
-    }
-
-    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, &pItem))
-    {
-        pAppCfg->SetFormulaSepArrayRow( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-        bSaveAppOptions = true;
-        bUpdateDocFormat = true;
-    }
-
-    if (rOptSet.HasItem(SID_SC_OPT_FORMULA_SEP_ARRAY_COL, &pItem))
-    {
-        pAppCfg->SetFormulaSepArrayCol( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-        bSaveAppOptions = true;
-        bUpdateDocFormat = true;
-    }
-
-    // Do all the format updates on open documents in one go
-    if ( bUpdateDocFormat && pDocSh )
-    {
-        pDocSh->SetFormulaOptions( *pAppCfg );
-        pDocSh->SetDocumentModified();
     }
 
     //============================================
@@ -1995,11 +1960,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             // TP_COMPATIBILITY
                             SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
                             // TP_FORMULA
-                            SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME, SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
-                            SID_SC_OPT_FORMULA_GRAMMAR, SID_SC_OPT_FORMULA_GRAMMAR,
-                            SID_SC_OPT_FORMULA_SEP_ARG, SID_SC_OPT_FORMULA_SEP_ARG,
-                            SID_SC_OPT_FORMULA_SEP_ARRAY_COL, SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
-                            SID_SC_OPT_FORMULA_SEP_ARRAY_ROW, SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
+                            SID_SCFORMULAOPTIONS, SID_SCFORMULAOPTIONS,
                             0 );
 
         const ScAppOptions& rAppOpt = GetAppOptions();
@@ -2071,34 +2032,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                                    rAppOpt.GetKeyBindingType() ) );
 
         // TP_FORMULA
-        pRet->Put( SfxBoolItem( SID_SC_OPT_FORMULA_ENGLISH_FUNCNAME,
-                                rAppOpt.GetUseEnglishFuncName() ) );
-
-        sal_uInt16 nVal = 0;
-        switch (rAppOpt.GetFormulaSyntax())
-        {
-            case formula::FormulaGrammar::GRAM_NATIVE:
-                nVal = 0;
-            break;
-            case formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
-                nVal = 1;
-            break;
-            case formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
-                nVal = 2;
-            break;
-            default:
-                ;
-        }
-        pRet->Put( SfxUInt16Item( SID_SC_OPT_FORMULA_GRAMMAR, nVal ) );
-        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARG,
-                                  rAppOpt.GetFormulaSepArg() ) );
-        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_COL,
-                                  rAppOpt.GetFormulaSepArrayCol() ) );
-        pRet->Put( SfxStringItem( SID_SC_OPT_FORMULA_SEP_ARRAY_ROW,
-                                  rAppOpt.GetFormulaSepArrayRow() ) );
-
-        pRet->Put( aULItem );
-
+        pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, GetFormulaOptions() ) );
     }
     return pRet;
 }

@@ -432,7 +432,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
-    ScAppOptions  aAppOpt  = pScMod->GetAppOptions();
+    ScFormulaOptions aFormulaOpt = pScMod->GetFormulaOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
 
@@ -449,7 +449,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
-    SetFormulaOptions( aAppOpt );
+    SetFormulaOptions( aFormulaOpt );
 
     //  Druck-Optionen werden jetzt direkt vor dem Drucken gesetzt
 
