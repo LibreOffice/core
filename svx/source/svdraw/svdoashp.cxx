@@ -538,6 +538,18 @@ double SdrObjCustomShape::GetObjectRotation() const
     return fObjectRotation;
 }
 
+bool SdrObjCustomShape::IsPostRotate() const
+{
+    const com::sun::star::uno::Any* pAny;
+    bool bPostRotate = false;
+    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const rtl::OUString sIsPostRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "IsPostRotateAngle" ) );
+    pAny = rGeometryItem.GetPropertyValueByName( sIsPostRotateAngle );
+    if ( pAny )
+        *pAny >>= bPostRotate;
+    return bPostRotate;
+}
+
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const com::sun::star::uno::Any* pAny;

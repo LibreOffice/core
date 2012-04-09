@@ -182,6 +182,7 @@ class EnhancedCustomShape2d : public SfxItemSet
         sal_Bool                    IsFlipVert() { return bFlipV; };
         sal_Bool                    IsFlipHorz() { return bFlipH; };
         sal_Int32                   GetRotateAngle() { return nRotateAngle; };
+        SVX_DLLPUBLIC bool          IsPostRotate() const;
 
         SVX_DLLPUBLIC SdrObject*                    CreateLineGeometry();
         SVX_DLLPUBLIC SdrObject*                    CreateObject( sal_Bool bLineGeometryNeededOnly );
