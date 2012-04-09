@@ -1120,15 +1120,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(pItem)
             {
                 aSet = ((const SvxColorItem*)pItem)->GetValue();
-                rEdtWin.SetTextBackColor(aSet);
+                rEdtWin.SetTextBackColor(aSet); //select last color
             }
+            else
+                rEdtWin.SetTextBackColor(Color(COL_TRANSPARENT)); //if last was "no fill"
             if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
             {
                 SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
                 if(pItem)
-                    aBrushItem.SetColor(aSet);
+                    aBrushItem.SetColor(aSet); //set the selected color
                 else
-                    aBrushItem.SetColor(Color(COL_TRANSPARENT));
+                    aBrushItem.SetColor(Color(COL_TRANSPARENT));//set "no fill" color
                 rWrtSh.SetAttr( aBrushItem );
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
