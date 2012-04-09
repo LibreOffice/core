@@ -225,60 +225,17 @@ namespace canvas
             @param i_Transformation
             Transformation to apply to the input rectangle
 
-            @see calcRectToRectTransform()
-
             @return a reference to the resulting rectangle
          */
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&          o_Rect,
                                                         const ::basegfx::B2DRange&      i_Rect,
                                                         const ::basegfx::B2DHomMatrix&  i_Transformation );
 
-        /** Calc a transform that maps one rectangle on top of
-            another.
-
-            The method is a kissing cousin to
-            calcTransformedRectBounds(). It can be used to modify the
-            given transformation matrix, such that it transforms the
-            given input rectangle to the given output rectangle,
-            changing only translation and scale (if necessary). Thus,
-            if you've calculated an output rectangle via
-            calcTransformedRectBounds(), you can move and scale that
-            rectangle as you like, and have this method calculate the
-            required total transformation for it.
-
-            @param o_transform
-            Output parameter, to receive the resulting transformation
-            matrix.
-
-            @param i_destRect
-            Input parameter, specifies the requested destination
-            rectangle. The resulting transformation will exactly map
-            the source rectangle to the destination rectangle.
-
-            @param i_srcRect
-            Input parameter, specifies the original source
-            rectangle. The resulting transformation will exactly map
-            the source rectangle to the destination rectangle.
-
-            @param i_transformation
-            The original transformation matrix. This is changed with
-            translations and scalings (if necessary), to exactly map
-            the source rectangle to the destination rectangle.
-
-            @return a reference to the resulting transformation matrix
-
-            @see calcTransformedRectBounds()
-        */
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&            o_transform,
-                                                          const ::basegfx::B2DRange&        i_destRect,
-                                                          const ::basegfx::B2DRange&        i_srcRect,
-                                                          const ::basegfx::B2DHomMatrix&    i_transformation );
-
         /** Calc a transform that maps the upper, left corner of a
              rectangle to the origin.
 
             The method is a specialized version of
-            calcRectToRectTransform(), mapping the input rectangle's
+            calcRectToRectTransform() (Removed now), mapping the input rectangle's
             the upper, left corner to the origin, and leaving the size
             untouched.
 

@@ -734,7 +734,6 @@ canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Refere
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 canvas::tools::ElapsedTime::getTimeBase() const
-canvas::tools::calcRectToRectTransform(basegfx::B2DHomMatrix&, basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)

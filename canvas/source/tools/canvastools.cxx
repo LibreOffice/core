@@ -688,45 +688,6 @@ namespace canvas
             return outRect;
         }
 
-        ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&          o_transform,
-                                                          const ::basegfx::B2DRange&        destRect,
-                                                          const ::basegfx::B2DRange&        srcRect,
-                                                          const ::basegfx::B2DHomMatrix&    transformation )
-        {
-            if( srcRect.isEmpty() ||
-                destRect.isEmpty() )
-            {
-                return o_transform=transformation;
-            }
-
-            // transform inputRect by transformation
-            ::basegfx::B2DRectangle aTransformedRect;
-            calcTransformedRectBounds( aTransformedRect,
-                                       srcRect,
-                                       transformation );
-
-            // now move resulting left,top point of bounds to (0,0)
-            basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
-
-            // scale to match outRect
-            const double xDenom( aTransformedRect.getWidth() );
-            const double yDenom( aTransformedRect.getHeight() );
-            if( xDenom != 0.0 && yDenom != 0.0 )
-                aCorrectedTransform.scale( destRect.getWidth() / xDenom,
-                                           destRect.getHeight() / yDenom );
-            // TODO(E2): error handling
-
-            // translate to final position
-            aCorrectedTransform.translate( destRect.getMinX(),
-                                           destRect.getMinY() );
-
-            ::basegfx::B2DHomMatrix transform( transformation );
-            o_transform = aCorrectedTransform * transform;
-
-            return o_transform;
-        }
-
         bool isInside( const ::basegfx::B2DRange&       rContainedRect,
                        const ::basegfx::B2DRange&       rTransformRect,
                        const ::basegfx::B2DHomMatrix&   rTransformation )
