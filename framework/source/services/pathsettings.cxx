@@ -56,7 +56,7 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 
 #include <fwkdllapi.h>
 

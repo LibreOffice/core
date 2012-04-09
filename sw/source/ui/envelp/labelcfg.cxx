@@ -32,7 +32,7 @@
 #include <labelcfg.hxx>
 #include <labimp.hxx>
 #include <comphelper/string.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 
 #include <unomid.h>
 

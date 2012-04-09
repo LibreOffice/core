@@ -46,7 +46,7 @@
 
 //________________________________
 //  includes of other projects
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //________________________________

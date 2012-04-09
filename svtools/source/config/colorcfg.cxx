@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/configitem.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx> //Any2Bool
 #include <svl/smplhint.hxx>

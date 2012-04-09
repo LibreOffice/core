@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include "unotools/configpathes.hxx"
+#include "unotools/configpaths.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

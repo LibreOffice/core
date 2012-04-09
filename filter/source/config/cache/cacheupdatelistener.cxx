@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <salhelper/singletonref.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________

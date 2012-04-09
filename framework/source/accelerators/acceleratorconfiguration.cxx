@@ -63,7 +63,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <stdio.h>

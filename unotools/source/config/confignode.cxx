@@ -28,7 +28,7 @@
 
 
 #include <unotools/confignode.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/container/XHierarchicalName.hpp>

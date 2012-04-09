@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>

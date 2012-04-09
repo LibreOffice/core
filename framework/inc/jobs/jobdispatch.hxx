@@ -60,7 +60,7 @@
 
 //_______________________________________
 // other includes
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 

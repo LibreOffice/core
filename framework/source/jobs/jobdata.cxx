@@ -46,7 +46,7 @@
 //________________________________
 //  includes of other projects
 #include <tools/wldcrd.hxx>
-#include <unotools/configpathes.hxx>
+#include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

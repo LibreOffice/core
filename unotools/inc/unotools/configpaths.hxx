@@ -27,8 +27,8 @@
  ************************************************************************/
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
-#define UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#ifndef UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
+#define UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
 #include <sal/types.h>
 
 namespace rtl
@@ -178,6 +178,6 @@ namespace utl
 }   // namespace utl
 //----------------------------------------------------------------------------
 
-#endif // UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#endif // UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
