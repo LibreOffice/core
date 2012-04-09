@@ -232,6 +232,10 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 endif
 
+$(call gb_SrsTarget_get_external_headers_target,%) :
+	$(call gb_Helper_abbreviate_dirs,\
+	    mkdir -p $(dir $@) && touch $@)
+
 $(call gb_SrsTarget_get_target,%) :
 	$(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
 	$(call gb_Output_announce,$*,$(true),SRS,1)
@@ -284,6 +288,7 @@ $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_targe
 endif
 $(call gb_SrsPartTarget_SrsPartTarget,$(2))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
+$(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_external_headers_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
@@ -302,6 +307,16 @@ endef
 
 define gb_SrsTarget_add_templates
 $(foreach template,$(2),$(call gb_SrsTarget_add_template,$(1),$(template)))
+
+endef
+
+define gb_SrsTarget_use_package
+$(call gb_SrsTarget_get_external_headers_target,$(1)) : $(call gb_Package_get_target,$(2))
+
+endef
+
+define gb_SrsTarget_use_packages
+$(foreach package,$(2),$(call gb_SrsTarget_use_package,$(1),$(package)))
 
 endef
 

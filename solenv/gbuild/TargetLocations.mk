@@ -122,6 +122,7 @@ gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
+gb_SrsTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/SrsTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
