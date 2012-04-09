@@ -15,6 +15,15 @@ APPDIR=build/Debug-$(PLATFORM)/$(APP).app
 
 # Stuff lifted from solenv/gbuild/platform/IOS_ARM_GCC.mk
 
+gb_OSDEFS := \
+	-D$(OS) \
+	-D_PTHREADS \
+	-DUNIX \
+	-DUNX \
+	-D_REENTRANT \
+	-DNO_PTHREAD_PRIORITY \
+	$(EXTRA_CDEFS) \
+
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300 -g
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
@@ -36,7 +45,7 @@ all: $(APPDIR)/$(APP) stuff
 
 $(APPDIR)/$(APP): $(SRCS)
 	mkdir -p $(APPDIR)
-	$(CXX) -Wl,-map,$(APP).map.mangled -o $@ $(CFLAGS) $(gb_OBJCXXFLAGS) $(SRCS) $(LIBS)
+	$(CXX) -Wl,-map,$(APP).map.mangled -o $@ $(gb_OSDEFS) $(CFLAGS) $(gb_OBJCXXFLAGS) $(SRCS) $(LIBS)
 	c++filt <$(APP).map.mangled >$(APP).map && rm $(APP).map.mangled
 
 stuff:

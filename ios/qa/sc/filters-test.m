@@ -35,10 +35,31 @@
 #include "cppunit/plugin/TestPlugIn.h"
 //#include "cppunit/plugin/PlugInManager.h"
 
+#include <osl/detail/ios-bootstrap.h>
+
+#ifdef __cplusplus
 extern "C" {
-    extern CppUnitTestPlugIn *cppunitTestPlugIn(void);
-    extern int lo_main(int argc, const char **argv);
+#endif
+
+extern CppUnitTestPlugIn *cppunitTestPlugIn(void);
+extern int lo_main(int argc, const char **argv);
+
+extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+
+const lib_to_component_mapping *
+lo_get_libmap(void)
+{
+    static lib_to_component_mapping map[] = {
+        { "libsclo.a", sc_component_getFactory },
+        { NULL, NULL }
+    };
+
+    return map;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 int 
 main(int argc, char ** argv)
@@ -160,4 +181,3 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
