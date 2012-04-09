@@ -2019,34 +2019,6 @@ void NumberFormatsBuffer::importNumFmt( SequenceInputStream& rStrm )
     createNumFmt( nNumFmtId, aFmtCode );
 }
 
-void NumberFormatsBuffer::importFormat( BiffInputStream& rStrm )
-{
-    OUString aFmtCode;
-    switch( getBiff() )
-    {
-        case BIFF2:
-        case BIFF3:
-            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
-        break;
-        case BIFF4:
-            rStrm.skip( 2 );    // in BIFF4 the index field exists, but is undefined
-            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
-        break;
-        case BIFF5:
-            mnNextBiffIndex = rStrm.readuInt16();
-            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
-        break;
-        case BIFF8:
-            mnNextBiffIndex = rStrm.readuInt16();
-            aFmtCode = rStrm.readUniString();
-        break;
-        case BIFF_UNKNOWN: break;
-    }
-
-    createNumFmt( mnNextBiffIndex, aFmtCode );
-    ++mnNextBiffIndex;
-}
-
 void NumberFormatsBuffer::finalizeImport()
 {
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );

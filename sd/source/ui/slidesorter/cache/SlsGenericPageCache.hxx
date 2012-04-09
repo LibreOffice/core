@@ -120,12 +120,6 @@ public:
     */
     bool InvalidatePreviewBitmap (const CacheKey aKey);
 
-    /** Call this method when a view-object-contact object is being deleted
-        and does not need (a) its current bitmap in the cache and (b) a
-        requested a new bitmap.
-    */
-    void ReleasePreviewBitmap (const CacheKey aKey);
-
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.

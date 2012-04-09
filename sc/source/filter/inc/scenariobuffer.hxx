@@ -114,8 +114,6 @@ public:
     void                importScenarios( const AttributeList& rAttribs );
     /** Imports sheet scenario settings from a SCENARIOS record. */
     void                importScenarios( SequenceInputStream& rStrm );
-    /** Imports sheet scenario settings from a SCENARIOS record. */
-    void                importScenarios( BiffInputStream& rStrm );
 
     /** Creates and returns a new scenario in this collection. */
     Scenario&           createScenario();

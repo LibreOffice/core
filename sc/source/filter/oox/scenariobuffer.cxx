@@ -239,17 +239,6 @@ void SheetScenarios::importScenarios( SequenceInputStream& rStrm )
     maModel.mnShown   = rStrm.readuInt16();
 }
 
-void SheetScenarios::importScenarios( BiffInputStream& rStrm )
-{
-    rStrm.skip( 2 );    // scenario count
-    maModel.mnCurrent = rStrm.readuInt16();
-    maModel.mnShown   = rStrm.readuInt16();
-
-    // read following SCENARIO records
-    while( (rStrm.getNextRecId() == BIFF_ID_SCENARIO) && rStrm.startNextRecord() )
-        createScenario().importScenario( rStrm );
-}
-
 Scenario& SheetScenarios::createScenario()
 {
     ScenarioVector::value_type xScenario( new Scenario( *this, mnSheet ) );

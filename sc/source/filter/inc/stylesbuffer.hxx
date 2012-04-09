@@ -280,8 +280,6 @@ public:
     /** Imports a font style flag from a DXF record. */
     void                importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    /** Imports the FONT record from the passed stream. */
-    void                importFont( BiffInputStream& rStrm );
     /** Imports the FONTCOLOR record from the passed stream. */
     void                importFontColor( BiffInputStream& rStrm );
     /** Sets the font attributes from the font block of a CFRULE record. */
@@ -782,9 +780,6 @@ public:
 
     /** Imports the XF record from the passed stream. */
     void                importXf( SequenceInputStream& rStrm, bool bCellXf );
-
-    /** Imports the XF record from the passed stream. */
-    void                importXf( BiffInputStream& rStrm );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

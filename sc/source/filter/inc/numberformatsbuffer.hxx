@@ -111,8 +111,6 @@ public:
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );
     /** Inserts a new number format code from a NUMFMT record. */
     void                importNumFmt( SequenceInputStream& rStrm );
-    /** Inserts a new number format code from a FORMAT record. */
-    void                importFormat( BiffInputStream& rStrm );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

@@ -1188,36 +1188,6 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
 }
 
-void PivotCache::importPCDSource( BiffInputStream& rStrm )
-{
-    switch( rStrm.readuInt16() )
-    {
-        case BIFF_PCDSOURCE_WORKSHEET:
-        {
-            maSourceModel.mnSourceType = XML_worksheet;
-            sal_uInt16 nNextRecId = rStrm.getNextRecId();
-            switch( nNextRecId )
-            {
-                case BIFF_ID_DCONREF:       if( rStrm.startNextRecord() ) importDConRef( rStrm );       break;
-                case BIFF_ID_DCONNAME:      if( rStrm.startNextRecord() ) importDConName( rStrm );      break;
-                case BIFF_ID_DCONBINAME:    if( rStrm.startNextRecord() ) importDConBIName( rStrm );    break;
-            }
-        }
-        break;
-        case BIFF_PCDSOURCE_EXTERNAL:
-            maSourceModel.mnSourceType = XML_external;
-        break;
-        case BIFF_PCDSOURCE_CONSOLIDATION:
-            maSourceModel.mnSourceType = XML_consolidation;
-        break;
-        case BIFF_PCDSOURCE_SCENARIO:
-            maSourceModel.mnSourceType = XML_scenario;
-        break;
-        default:
-            maSourceModel.mnSourceType = XML_TOKEN_INVALID;
-    }
-}
-
 void PivotCache::importPCDefinition( BiffInputStream& rStrm )
 {
     sal_uInt16 nFlags, nUserNameLen;

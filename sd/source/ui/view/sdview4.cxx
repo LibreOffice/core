@@ -576,59 +576,6 @@ IMPL_LINK_NOARG(View, DropErrorHdl)
 #pragma optimize ( "", on )
 #endif
 
-/*************************************************************************
-|*
-|* Redraw sperren oder erlauben
-|*
-\************************************************************************/
-
-void View::LockRedraw(sal_Bool bLock)
-{
-    if (bLock)
-    {
-        mnLockRedrawSmph++;
-        DBG_ASSERT(mnLockRedrawSmph, "Ueberlauf im LockRedraw");
-    }
-    else
-    {
-        DBG_ASSERT(mnLockRedrawSmph, "Unterlauf im LockRedraw");
-        mnLockRedrawSmph--;
-
-        // alle gespeicherten Redraws ausfuehren
-        if (!mnLockRedrawSmph)
-        {
-            boost::ptr_vector<SdViewRedrawRec>::iterator iter;
-
-            while (!maLockedRedraws.empty())
-            {
-                iter = maLockedRedraws.begin();
-
-                OutputDevice* pCurrentOut = iter->mpOut;
-                Rectangle aBoundRect(iter->aRect);
-
-                iter = maLockedRedraws.erase(iter);
-
-                while (iter != maLockedRedraws.end())
-                {
-                    if (iter->mpOut == pCurrentOut)
-                    {
-                        aBoundRect.Union(iter->aRect);
-                        iter = maLockedRedraws.erase(iter);
-                    }
-                    else
-                    {
-                        ++iter;
-                    }
-                }
-
-                CompleteRedraw(pCurrentOut, Region(aBoundRect));
-            }
-        }
-    }
-}
-
-
-
 
 /*************************************************************************
 |*

@@ -414,8 +414,6 @@ public:
     /** Reads sheet source settings from the PCDSHEETSOURCE record. */
     void                importPCDSheetSource( SequenceInputStream& rStrm, const ::oox::core::Relations& rRelations );
 
-    /** Reads cache source settings from the PCDSOURCE record. */
-    void                importPCDSource( BiffInputStream& rStrm );
     /** Reads pivot cache global settings from the PCDEFINITION record. */
     void                importPCDefinition( BiffInputStream& rStrm );
 

@@ -161,8 +161,6 @@ public:
 
     void                    SetMarkedOriginalSize();
 
-    void                    LockRedraw(sal_Bool bLock);
-
     sal_Bool                    IsMorphingAllowed() const;
     sal_Bool                    IsVectorizeAllowed() const;
 

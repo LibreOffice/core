@@ -263,43 +263,6 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
         return false;
 }
 
-
-
-
-void GenericPageCache::ReleasePreviewBitmap (const CacheKey aKey)
-{
-    if (mpBitmapCache.get() != NULL)
-    {
-        // Suspend the queue processing temporarily to avoid the reinsertion
-        // of the request that is to be deleted.
-        mpQueueProcessor->Stop();
-
-        maRequestQueue.RemoveRequest(aKey);
-        mpQueueProcessor->RemoveRequest(aKey);
-
-        // Resume the queue processing.
-        if ( ! maRequestQueue.IsEmpty())
-        {
-            try
-            {
-                mpQueueProcessor->Start(maRequestQueue.GetFrontPriorityClass());
-            }
-            catch (const ::com::sun::star::uno::RuntimeException&)
-            {
-            }
-        }
-    }
-
-    // We do not relase the preview bitmap that is associated with the page
-    // of the given request data because this method is called when the
-    // request data, typically a view-object-contact object, is destroyed.
-    // The page object usually lives longer than that and thus the preview
-    // bitmap may be used later on.
-}
-
-
-
-
 void GenericPageCache::InvalidateCache (const bool bUpdateCache)
 {
     if (mpBitmapCache)
