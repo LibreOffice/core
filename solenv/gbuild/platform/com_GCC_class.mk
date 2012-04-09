@@ -28,6 +28,7 @@ gb_AsmObject_get_source = $(1)/$(2).s
 define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
