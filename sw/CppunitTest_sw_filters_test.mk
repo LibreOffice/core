@@ -89,7 +89,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-    xmlhelp/util/ucpchelp1 \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
+	    xmlhelp/util/ucpchelp1) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))
