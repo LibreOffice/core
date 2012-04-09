@@ -123,13 +123,6 @@ gb_STDLIBS := \
 	mingwex \
 
 
-# Helper class
-
-# Convert path to file URL.
-define gb_Helper_make_url
-file://$(strip $(1))
-endef
-
 # LinkTarget class
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
