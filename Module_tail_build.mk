@@ -92,7 +92,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
     writerperfect \
     xmerge \
-	$(if $(filter XMLHELP,$(BUILD_TYPE)), \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
 	    xmlhelp) \
     xmloff \
     xmlscript \
