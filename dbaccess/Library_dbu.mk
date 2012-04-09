@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(SRCDIR)/dbaccess/inc \
     -I$(SRCDIR)/dbaccess/source/inc \
     -I$(SRCDIR)/dbaccess/source/ui/inc \
-    -I$(WORKDIR)/inc/dbaccess \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
 ))
 
 $(eval $(call gb_Library_use_api,dbu,\
@@ -290,14 +290,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
 ))
 endif
 
-$(foreach object,\
-    dbaccess/source/ui/dlg/ConnectionHelper \
-    dbaccess/source/ui/dlg/ConnectionPage \
-    dbaccess/source/ui/dlg/ConnectionPageSetup \
-    dbaccess/source/ui/dlg/DBSetupConnectionPages \
-    dbaccess/source/ui/dlg/detailpages \
-    dbaccess/source/ui/dlg/tablespage \
-    dbaccess/source/ui/dlg/TextConnectionHelper \
-	,$(eval $(call gb_CxxObject_get_target,$(object)) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc))
+$(call gb_Library_get_headers_target,dbu) : $(call gb_SrsTemplateTarget_get_include_dir,dbaccess)/AutoControls.hrc
 
 # vim: set noet sw=4 ts=4:

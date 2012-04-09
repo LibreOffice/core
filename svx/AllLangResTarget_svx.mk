@@ -48,7 +48,7 @@ $(eval $(call gb_SrsTarget_use_packages,svx/res,\
 
 $(eval $(call gb_SrsTarget_set_include,svx/res,\
     $$(INCLUDE) \
-    -I$(WORKDIR)/inc/svx \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,svx) \
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/source/dialog \
     -I$(SRCDIR)/svx/inc/ \

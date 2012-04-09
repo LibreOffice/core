@@ -49,7 +49,7 @@ $(eval $(call gb_SrsTarget_set_include,chart2/res,\
     -I$(SRCDIR)/chart2/source/controller/inc \
     -I$(SRCDIR)/chart2/source/controller/main \
     -I$(SRCDIR)/chart2/source/inc \
-    -I$(WORKDIR)/inc/chart2 \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,chart2) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,chart2/res,\

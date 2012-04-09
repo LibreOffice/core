@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,svx_globlmn_hrc,$(WORKDIR)/inc/svx))
+$(eval $(call gb_Package_Package,svx_globlmn_hrc,$(call gb_SrsTemplateTarget_get_include_dir,svx)))
 
 $(eval $(call gb_Package_add_file,svx_globlmn_hrc,inc/svx/globlmn.hrc,globlmn.hrc))
 

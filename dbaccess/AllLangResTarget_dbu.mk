@@ -45,7 +45,7 @@ $(eval $(call gb_SrsTarget_use_packages,dbaccess/dbu,\
 
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\
     $$(INCLUDE) \
-    -I$(WORKDIR)/inc/dbaccess \
+	-I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
     -I$(SRCDIR)/dbaccess/inc \
     -I$(SRCDIR)/dbaccess/source/ui/inc \
 ))
