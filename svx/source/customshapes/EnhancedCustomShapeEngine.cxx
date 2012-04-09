@@ -276,6 +276,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
 
         EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
         sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
+        bool bPostRotateAngle = aCustomShape2d.IsPostRotate();
 
         sal_Bool bFlipV = aCustomShape2d.IsFlipVert();
         sal_Bool bFlipH = aCustomShape2d.IsFlipHorz();
@@ -315,6 +316,11 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 }
                 pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, sal_False);
             }
+            if( !bPostRotateAngle && nRotateAngle )
+            {
+                double a = nRotateAngle * F_PI18000;
+                pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
+            }
             if ( bFlipV )
             {
                 Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
@@ -327,8 +333,8 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRenderedShape->NbcMirror( aTop, aBottom );
             }
-            // Note that the rotation needs be done after flipping
-            if( nRotateAngle )
+            // Specifically for pptx imports
+            if( bPostRotateAngle && nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;
                 pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );

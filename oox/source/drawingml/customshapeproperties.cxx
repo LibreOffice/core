@@ -158,6 +158,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         aPropertyMap[ PROP_TextPreRotateAngle ] <<= Any( mnTextRotateAngle );
+        aPropertyMap[ PROP_IsPostRotateAngle ] <<= true; // For OpenXML Imports
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 

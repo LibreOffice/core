@@ -145,6 +145,7 @@ public:
 
     sal_Bool IsMirroredX() const;
     sal_Bool IsMirroredY() const;
+    bool     IsPostRotate() const;
     void SetMirroredX( const sal_Bool bMirroredX );
     void SetMirroredY( const sal_Bool bMirroredY );
 
