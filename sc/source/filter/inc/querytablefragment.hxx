@@ -57,20 +57,6 @@ private:
 
 // ============================================================================
 
-class BiffQueryTableContext : public BiffWorksheetContextBase
-{
-public:
-    explicit            BiffQueryTableContext( const WorksheetHelper& rHelper );
-
-    /** Imports all records related to the current query table. */
-    virtual void        importRecord( BiffInputStream& rStrm );
-
-private:
-    QueryTable&         mrQueryTable;
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

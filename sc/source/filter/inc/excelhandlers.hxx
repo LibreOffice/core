@@ -205,18 +205,6 @@ protected:
 
 // ----------------------------------------------------------------------------
 
-/** Fragment handler derived from the WorksheetHelper helper class.
-
-    Used to import sheet fragments.
- */
-class BiffWorksheetFragmentBase : public BiffFragmentHandler, public WorksheetHelper
-{
-protected:
-    explicit            BiffWorksheetFragmentBase(
-                            const WorksheetHelper& rHelper,
-                            const BiffWorkbookFragmentBase& rParent );
-};
-
 } // namespace xls
 } // namespace oox
 

@@ -127,12 +127,6 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
 
 // ----------------------------------------------------------------------------
 
-BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
-    BiffFragmentHandler( rParent ),
-    WorksheetHelper( rHelper )
-{
-}
-
 } // namespace xls
 } // namespace oox
 

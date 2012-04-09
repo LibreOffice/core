@@ -227,9 +227,6 @@ public:
     /** Closes the input stream but not the wrapped stream. */
     virtual void        close();
 
-    /** Returns the absolute position in the wrapped binary stream. */
-    sal_Int64           tellBase() const;
-
     // BinaryInputStream interface (stream read access) -----------------------
 
     /** Reads nBytes bytes to the passed sequence.

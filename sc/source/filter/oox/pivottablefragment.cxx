@@ -293,28 +293,6 @@ const RecordInfo* PivotTableFragment::getRecordInfos() const
 }
 
 // ============================================================================
-// ============================================================================
-
-BiffPivotTableContext::BiffPivotTableContext( const WorksheetHelper& rHelper ) :
-    BiffWorksheetContextBase( rHelper ),
-    mrPivotTable( getPivotTables().createPivotTable() )
-{
-}
-
-void BiffPivotTableContext::importRecord( BiffInputStream& rStrm )
-{
-    switch( rStrm.getRecId() )
-    {
-        case BIFF_ID_PTDEFINITION:      mrPivotTable.importPTDefinition( rStrm, getSheetIndex() );  break;
-        case BIFF_ID_PTDEFINITION2:     mrPivotTable.importPTDefinition2( rStrm );                  break;
-        case BIFF_ID_PTFIELD:           mrPivotTable.createTableField().importPTField( rStrm );     break;
-        case BIFF_ID_PTROWCOLFIELDS:    mrPivotTable.importPTRowColFields( rStrm );                 break;
-        case BIFF_ID_PTPAGEFIELDS:      mrPivotTable.importPTPageFields( rStrm );                   break;
-        case BIFF_ID_PTDATAFIELD:       mrPivotTable.importPTDataField( rStrm );                    break;
-    }
-}
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

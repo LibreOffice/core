@@ -85,23 +85,6 @@ const RecordInfo* QueryTableFragment::getRecordInfos() const
 
 // ============================================================================
 
-BiffQueryTableContext::BiffQueryTableContext( const WorksheetHelper& rHelper ) :
-    BiffWorksheetContextBase( rHelper ),
-    mrQueryTable( getQueryTables().createQueryTable() )
-{
-}
-
-void BiffQueryTableContext::importRecord( BiffInputStream& rStrm )
-{
-    switch( rStrm.getRecId() )
-    {
-        case BIFF_ID_QUERYTABLE:            mrQueryTable.importQueryTable( rStrm );         break;
-        case BIFF_ID_QUERYTABLEREFRESH:     mrQueryTable.importQueryTableRefresh( rStrm );  break;
-        case BIFF_ID_QUERYTABLESETTINGS:    mrQueryTable.importQueryTableSettings( rStrm ); break;
-    }
-}
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

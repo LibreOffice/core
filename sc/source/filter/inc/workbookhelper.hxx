@@ -280,8 +280,6 @@ public:
 
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
-    /** Sets text encoding from the default application font, if CODEPAGE record is missing. */
-    void                setAppFontEncoding( rtl_TextEncoding eAppFontEnc );
 
     /** Returns the codec helper that stores the encoder/decoder object. */
     BiffCodecHelper&    getCodecHelper() const;

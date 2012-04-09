@@ -233,14 +233,8 @@ public:
     inline rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
     /** Sets the text encoding to import/export byte strings. */
     void                setTextEncoding( rtl_TextEncoding eTextEnc );
-    /** Sets code page read from a CODEPAGE record for byte string import. */
-    void                setCodePage( sal_uInt16 nCodePage );
     /** Sets text encoding from the default application font, if CODEPAGE record is missing. */
     void                setAppFontEncoding( rtl_TextEncoding eAppFontEnc );
-    /** Enables workbook file mode, used for BIFF4 workspace files. */
-    void                setIsWorkbookFile();
-    /** Recreates global buffers that are used per sheet in specific BIFF versions. */
-    void                createBuffersPerSheet( sal_Int16 nSheet );
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
@@ -517,58 +511,10 @@ void WorkbookGlobals::setTextEncoding( rtl_TextEncoding eTextEnc )
         meTextEnc = eTextEnc;
 }
 
-void WorkbookGlobals::setCodePage( sal_uInt16 nCodePage )
-{
-    setTextEncoding( BiffHelper::calcTextEncodingFromCodePage( nCodePage ) );
-    mbHasCodePage = true;
-}
-
 void WorkbookGlobals::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
 {
     if( !mbHasCodePage )
         setTextEncoding( eAppFontEnc );
-}
-
-void WorkbookGlobals::setIsWorkbookFile()
-{
-    OSL_ENSURE( meBiff == BIFF4, "WorkbookGlobals::setIsWorkbookFile - invalid call" );
-    mbWorkbook = true;
-}
-
-void WorkbookGlobals::createBuffersPerSheet( sal_Int16 nSheet )
-{
-    switch( meBiff )
-    {
-        case BIFF2:
-        case BIFF3:
-            OSL_ENSURE( nSheet == 0, "WorkbookGlobals::createBuffersPerSheet - unexpected sheet index" );
-            mxDefNames->setLocalCalcSheet( nSheet );
-        break;
-
-        case BIFF4:
-            OSL_ENSURE( mbWorkbook || (nSheet == 0), "WorkbookGlobals::createBuffersPerSheet - unexpected sheet index" );
-            // #i11183# sheets in BIFF4W files have own styles and names
-            if( nSheet > 0 )
-            {
-                mxStyles.reset( new StylesBuffer( *this ) );
-                mxDefNames.reset( new DefinedNamesBuffer( *this ) );
-                mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
-            }
-            mxDefNames->setLocalCalcSheet( nSheet );
-        break;
-
-        case BIFF5:
-            // BIFF5 stores external references per sheet
-            if( nSheet > 0 )
-                mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
-        break;
-
-        case BIFF8:
-        break;
-
-        case BIFF_UNKNOWN:
-        break;
-    }
 }
 
 // private --------------------------------------------------------------------
@@ -960,11 +906,6 @@ BiffType WorkbookHelper::getBiff() const
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
     return mrBookGlob.getTextEncoding();
-}
-
-void WorkbookHelper::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
-{
-    mrBookGlob.setAppFontEncoding( eAppFontEnc );
 }
 
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const

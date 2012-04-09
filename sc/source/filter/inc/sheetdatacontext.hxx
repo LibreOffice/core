@@ -130,63 +130,6 @@ private:
 
 // ============================================================================
 
-/** This class implements importing row settings and all cells of a sheet.
- */
-class BiffSheetDataContext : public BiffWorksheetContextBase, private SheetDataContextBase
-{
-public:
-    explicit            BiffSheetDataContext( const WorksheetHelper& rHelper );
-
-    /** Tries to import a sheet data record. */
-    virtual void        importRecord( BiffInputStream& rStrm );
-
-private:
-    /** Imports row settings from a ROW record. */
-    void                importRow( BiffInputStream& rStrm );
-
-    /** Reads an XF identifier and initializes a new cell. */
-    bool                readCellXfId( BiffInputStream& rStrm, const BinAddress& rAddr, bool bBiff2 );
-    /** Reads a BIFF cell address and the following XF identifier. */
-    bool                readCellHeader( BiffInputStream& rStrm, bool bBiff2 );
-    /** Reads the formula range used by shared formulas, arrays, and data tables. */
-    bool                readFormulaRef( BiffInputStream& rStrm );
-
-    /** Imports a BLANK record describing a blank but formatted cell. */
-    void                importBlank( BiffInputStream& rStrm );
-    /** Imports a BOOLERR record describing a boolean or error code cell. */
-    void                importBoolErr( BiffInputStream& rStrm );
-    /** Imports a FORMULA record describing a formula cell. */
-    void                importFormula( BiffInputStream& rStrm );
-    /** Imports an INTEGER record describing a BIFF2 integer cell. */
-    void                importInteger( BiffInputStream& rStrm );
-    /** Imports a LABEL record describing an unformatted string cell. */
-    void                importLabel( BiffInputStream& rStrm );
-    /** Imports a LABELSST record describing a string cell using the shared string list. */
-    void                importLabelSst( BiffInputStream& rStrm );
-    /** Imports a MULTBLANK record describing a range of blank but formatted cells. */
-    void                importMultBlank( BiffInputStream& rStrm );
-    /** Imports a MULTRK record describing a range of numeric cells. */
-    void                importMultRk( BiffInputStream& rStrm );
-    /** Imports a NUMBER record describing a floating-point cell. */
-    void                importNumber( BiffInputStream& rStrm );
-    /** Imports an RK record describing a numeric cell. */
-    void                importRk( BiffInputStream& rStrm );
-
-    /** Imports an ARRAY record describing an array formula of a cell range. */
-    void                importArray( BiffInputStream& rStrm );
-    /** Imports table operation from a DATATABLE or DATATABLE2 record. */
-    void                importDataTable( BiffInputStream& rStrm );
-    /** Imports a SHAREDFMLA record describing a shared formula in a cell range. */
-    void                importSharedFmla( BiffInputStream& rStrm );
-
-private:
-    sal_uInt32          mnFormulaSkipSize;  /// Number of bytes to be ignored in FORMULA record.
-    sal_uInt32          mnArraySkipSize;    /// Number of bytes to be ignored in ARRAY record.
-    sal_uInt16          mnBiff2XfId;        /// Current XF identifier from IXFE record.
-    OptValue< bool >    mobBiff2HasXfs;     /// Select XF formatting or direct formatting in BIFF2.
-};
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

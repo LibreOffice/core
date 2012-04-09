@@ -275,11 +275,6 @@ void BiffInputStream::close()
 {
 }
 
-sal_Int64 BiffInputStream::tellBase() const
-{
-    return maRecBuffer.getBaseStream().tell();
-}
-
 // BinaryInputStream interface (stream read access) ---------------------------
 
 sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
