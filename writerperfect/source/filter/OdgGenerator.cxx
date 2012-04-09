@@ -805,10 +805,12 @@ void OdgGenerator::setStyle(const ::WPXPropertyList &propList, const ::WPXProper
 
 void OdgGenerator::startLayer(const ::WPXPropertyList & /* propList */)
 {
+    mpImpl->mBodyElements.push_back(new TagOpenElement("draw:g"));
 }
 
 void OdgGenerator::endLayer()
 {
+    mpImpl->mBodyElements.push_back(new TagCloseElement("draw:g"));
 }
 
 void OdgGenerator::drawRectangle(const ::WPXPropertyList &propList)
