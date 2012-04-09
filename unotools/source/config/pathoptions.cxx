@@ -130,7 +130,7 @@ class SvtPathOptions_Impl
                         SvtPathOptions_Impl();
 
         // get the paths, not const because of using a mutex
-        const String&   GetPath( SvtPathOptions::Pathes );
+        const String&   GetPath( SvtPathOptions::Paths );
         const String&   GetAddinPath() { return GetPath( SvtPathOptions::PATH_ADDIN ); }
         const String&   GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
         const String&   GetAutoTextPath() { return GetPath( SvtPathOptions::PATH_AUTOTEXT ); }
@@ -157,7 +157,7 @@ class SvtPathOptions_Impl
         const String&   GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
 
         // set the paths
-        void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
+        void            SetPath( SvtPathOptions::Paths, const String& rNewPath );
         void            SetAddinPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_ADDIN, rPath ); }
         void            SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }
         void            SetAutoTextPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOTEXT, rPath ); }
@@ -197,7 +197,7 @@ static sal_Int32 nRefCount = 0;
 struct PropertyStruct
 {
     const char*             pPropName;  // The ascii name of the Office path
-    SvtPathOptions::Pathes  ePath;      // The enum value used by SvtPathOptions
+    SvtPathOptions::Paths   ePath;      // The enum value used by SvtPathOptions
 };
 
 struct VarNameAttribute
@@ -244,7 +244,7 @@ static VarNameAttribute aVarNameAttribute[] =
 
 // class SvtPathOptions_Impl ---------------------------------------------
 
-const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
+const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
 {
     if ( ePath >= SvtPathOptions::PATH_COUNT )
         return m_aEmptyString;
@@ -268,7 +268,7 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
             ePath == SvtPathOptions::PATH_STORAGE
           )
         {
-            // These office paths have to be converted to system pathes
+            // These office paths have to be converted to system pates
             utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
             aPathValue = aResult;
         }
@@ -283,7 +283,7 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
     return m_aEmptyString;
 }
 
-void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
+void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const String& rNewPath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -457,7 +457,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         aTempHashMap.insert( NameToHandleMap::value_type( aProperty.Name, aProperty.Handle ));
     }
 
-    // Create mapping between internal enum (SvtPathOptions::Pathes) and property handle
+    // Create mapping between internal enum (SvtPathOptions::Paths) and property handle
     sal_Int32 nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
     sal_Int32 i;
     for ( i = 0; i < nCount; i++ )
@@ -866,7 +866,7 @@ String SvtPathOptions::UseVariable( const String& rPath ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
+sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
 {
     // check parameter: empty inifile name?
     if ( !rIniFile.Len() )

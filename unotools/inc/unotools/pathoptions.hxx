@@ -44,7 +44,7 @@ private:
     SvtPathOptions_Impl*    pImp;
 
 public:
-    enum Pathes
+    enum Paths
     {
         PATH_ADDIN,
         PATH_AUTOCORRECT,
@@ -129,7 +129,7 @@ public:
     String          SubstituteVariable( const String& rVar ) const;
     String          ExpandMacros( const String& rPath ) const;
     String          UseVariable( const String& rVar ) const;
-    sal_Bool        SearchFile( String& rIniFile, Pathes ePath = PATH_USERCONFIG );
+    sal_Bool        SearchFile( String& rIniFile, Paths ePath = PATH_USERCONFIG );
     ::com::sun::star::lang::Locale GetLocale() const;
     sal_Bool        IsReadonly() const;
 };

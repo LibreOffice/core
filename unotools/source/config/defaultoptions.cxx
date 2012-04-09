@@ -118,7 +118,7 @@ typedef String SvtDefaultOptions_Impl:: *PathStrPtr;
 
 struct PathToDefaultMapping_Impl
 {
-    SvtPathOptions::Pathes  _ePath;
+    SvtPathOptions::Paths   _ePath;
     PathStrPtr              _pDefaultPath;
 };
 
