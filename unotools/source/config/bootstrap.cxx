@@ -54,6 +54,7 @@
 #define BOOTSTRAP_ITEM_PRODUCT_SOURCE       "ProductSource"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
+#define BOOTSTRAP_ITEM_BUILDVERSION         "BuildVersion"
 
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BRAND_BASE_DIR"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
@@ -639,6 +640,17 @@ OUString Bootstrap::getProductSource(OUString const& _sDefault)
     // read ProductSource from version.ini (versionrc)
     data().getVersionValue( csProductSourceItem, sProductSource, _sDefault );
     return sProductSource;
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
+{
+    OUString const csBuildVersionItem(BOOTSTRAP_ITEM_BUILDVERSION);
+
+    OUString sBuildVersion;
+    // read ProductSource from version.ini (versionrc)
+    data().getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
+    return sBuildVersion;
 }
 // ---------------------------------------------------------------------------------------
 
