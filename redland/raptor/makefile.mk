@@ -75,6 +75,10 @@ PATCH_FILES+=raptor-1.4.18.libxml.patch
 PATCH_FILES+=raptor-1.4.18.libxslt.patch
 .ENDIF
 
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+=$(TARFILE_NAME).patch.no-soname
+.ENDIF
+
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw

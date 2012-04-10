@@ -61,6 +61,9 @@ OOO_PATCH_FILES= \
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+=$(TARFILE_NAME).patch.no-soname
+.ENDIF
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
