@@ -124,8 +124,6 @@ public:
 
     /** Imports an 8-bit or 16-bit palette color identifier from the passed BIFF stream. */
     void                importColorId( BiffInputStream& rStrm, bool b16Bit = true );
-    /** Imports a 32-bit RGBA color value from the passed BIFF stream. */
-    void                importColorRgb( BiffInputStream& rStrm );
 
     /** Returns true, if the color is set to automatic. */
     inline bool         isAuto() const { return isPlaceHolder(); }

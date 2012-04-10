@@ -377,25 +377,6 @@ binfilter::B3dEntityBucketMemArr::Insert(binfilter::B3dEntityBucketMemArr const*
 binfilter::B3dEntityBucketMemArr::Replace(char const*&, unsigned short)
 binfilter::B3dEntityBucketMemArr::Replace(char const**, unsigned short, unsigned short)
 binfilter::B3dEntityBucketMemArr::_ForEach(unsigned short, unsigned short, unsigned char (*)(char const*&, void*), void*)
-binfilter::ByteString::Append(char)
-binfilter::ByteString::Assign(char)
-binfilter::ByteString::ByteString(char const*, unsigned short)
-binfilter::ByteString::CompareIgnoreCaseToAscii(char const*, unsigned short) const
-binfilter::ByteString::CompareTo(binfilter::ByteString const&, unsigned short) const
-binfilter::ByteString::CompareTo(char const*, unsigned short) const
-binfilter::ByteString::Equals(binfilter::ByteString const&, unsigned short, unsigned short) const
-binfilter::ByteString::Equals(char const*, unsigned short, unsigned short) const
-binfilter::ByteString::EqualsIgnoreCaseAscii(binfilter::ByteString const&) const
-binfilter::ByteString::EqualsIgnoreCaseAscii(char const*) const
-binfilter::ByteString::GetToken(unsigned short, char, unsigned short&) const
-binfilter::ByteString::Match(binfilter::ByteString const&) const
-binfilter::ByteString::SearchAndReplace(binfilter::ByteString const&, binfilter::ByteString const&, unsigned short)
-binfilter::ByteString::SearchAndReplace(char const*, binfilter::ByteString const&, unsigned short)
-binfilter::ByteString::SearchAndReplaceAll(binfilter::ByteString const&, binfilter::ByteString const&)
-binfilter::ByteString::SearchAndReplaceAll(char const*, binfilter::ByteString const&)
-binfilter::ByteString::SearchAndReplaceAll(char, char)
-binfilter::ByteString::SetChar(unsigned short, char)
-binfilter::ByteString::SetToken(unsigned short, char, binfilter::ByteString const&, unsigned short)
 binfilter::CharPosArray::Insert(binfilter::CharPosArray const*, unsigned short, unsigned short, unsigned short)
 binfilter::CharPosArray::Replace(int const&, unsigned short)
 binfilter::CharPosArray::Replace(int const*, unsigned short, unsigned short)

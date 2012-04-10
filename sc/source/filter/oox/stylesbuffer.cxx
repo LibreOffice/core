@@ -444,11 +444,6 @@ void Color::importColorId( BiffInputStream& rStrm, bool b16Bit )
     setIndexed( b16Bit ? rStrm.readuInt16() : rStrm.readuInt8() );
 }
 
-void Color::importColorRgb( BiffInputStream& rStrm )
-{
-    setRgb( lclReadRgbColor( rStrm ) );
-}
-
 SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
 {
     orColor.importColor( rStrm );
