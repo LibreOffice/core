@@ -2806,19 +2806,19 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     DecRecalcLevel();
 }
 
-bool ScTable::IsDataFiltered() const
+bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const
 {
-    bool bAnyQuery = false;
-    const ScDBCollection* pDBs = pDocument->GetDBCollection();
-    const ScDBData* pDBData = pDBs->GetFilterDBAtTable(nTab);
-    if ( pDBData )
+    for (SCROW i = nRowStart; i <= nRowEnd; ++i)
     {
-        ScQueryParam aParam;
-        pDBData->GetQueryParam( aParam );
-        if ( aParam.GetEntry(0).bDoQuery )
-            bAnyQuery = true;
+        if (RowHidden(i))
+            return true;
     }
-    return bAnyQuery;
+    for (SCCOL i = nColStart; i <= nColEnd; ++i)
+    {
+        if (ColHidden(i))
+            return true;
+    }
+    return false;
 }
 
 

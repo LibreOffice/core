@@ -198,7 +198,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     rMinDigits = 0;
     rListData = NULL;
     rCmd = FILL_SIMPLE;
-    if ( (nScFillModeMouseModifier & KEY_MOD1) || IsDataFiltered() )
+    if ( (nScFillModeMouseModifier & KEY_MOD1) || IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
         return ;        // Ctrl-Taste: Copy
 
     SCCOL nAddX;
@@ -531,7 +531,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMin = nIStart;
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    bool bHasFiltered = IsDataFiltered();
+    bool bHasFiltered = IsDataFiltered(nCol1, nRow1, nCol2, nRow2);
 
     if (!bHasFiltered)
     {
@@ -1015,7 +1015,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             aValue = ((ScStringCell*)pCell)->GetString();
                         else
                             aValue = ((ScEditCell*)pCell)->GetString();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
@@ -1036,7 +1036,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     {
                         //  dabei kann's keinen Ueberlauf geben...
                         double nVal = ((ScValueCell*)pCell)->GetValue();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
                             nVal += (double) nDelta;
 
                         Color* pColor;

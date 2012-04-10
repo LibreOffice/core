@@ -674,7 +674,7 @@ public:
                 /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
     SCROW      GetLastChangedRow() const;
 
-    bool       IsDataFiltered() const;
+    bool       IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const;
     sal_uInt8       GetColFlags( SCCOL nCol ) const;
     sal_uInt8       GetRowFlags( SCROW nRow ) const;
 
