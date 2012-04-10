@@ -62,7 +62,7 @@ namespace utl
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
 
         /// retrieve the BuildVersion information item; uses the given default, if not found
-        static rtl::OUString getBuildVersion(rtl::OUOUString const& _sDefault);
+        static rtl::OUString getBuildVersion(rtl::OUString const& _sDefault);
 
         /// reload cached data
         static void reloadData();
