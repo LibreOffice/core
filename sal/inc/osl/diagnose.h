@@ -150,7 +150,7 @@ SAL_DLLPUBLIC pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugM
 
 #if OSL_DEBUG_LEVEL > 0
 #define OSL_ASSERT(c) \
-    SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT")
+    SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT: %s", #c)
 #define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
 #define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
 #else
