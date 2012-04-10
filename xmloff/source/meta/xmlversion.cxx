@@ -48,7 +48,7 @@ using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 
-sal_Char XMLN_VERSIONSLIST[] = "VersionList.xml";
+const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 // ------------------------------------------------------------------------
 // #110897#

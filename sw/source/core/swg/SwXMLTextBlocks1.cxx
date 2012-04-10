@@ -50,7 +50,7 @@
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
 
-sal_Char XMLN_BLOCKLIST[] = "BlockList.xml";
+const char XMLN_BLOCKLIST[] = "BlockList.xml";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

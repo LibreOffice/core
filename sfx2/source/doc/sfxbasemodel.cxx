@@ -3402,17 +3402,12 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                     {
                         SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
 
-                        char aNum[]   = "private:resource/toolbar/custom_OOo1x_0";
-                        char aTitle[] = "Toolbar 0";
-                        sal_Int32 nNumIndex = strlen( aNum )-1;
-                        sal_Int32 nTitleIndex = strlen( aTitle )-1;
+                        rtl::OUString aNum( "private:resource/toolbar/custom_OOo1x_" );
+                        rtl::OUString aTitle( "Toolbar " );
                         for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
                         {
-                            aNum[nNumIndex]++;
-                            aTitle[nTitleIndex]++;
-
-                            rtl::OUString aCustomTbxName( RTL_CONSTASCII_USTRINGPARAM( aNum ));
-                            rtl::OUString aCustomTbxTitle( RTL_CONSTASCII_USTRINGPARAM( aTitle ));
+                            rtl::OUString aCustomTbxName = aNum + rtl::OUString::valueOf( i + 1 );
+                            rtl::OUString aCustomTbxTitle = aTitle + rtl::OUString::valueOf( i + 1 );
 
                             uno::Reference< container::XIndexContainer > xToolbar = rToolbars[i];
                             ConvertSlotsToCommands( pObjShell, xToolbar );
