@@ -1128,7 +1128,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SHAPE;
             break;
         case RTF_SHPINST:
-            m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
+            // Don't try to support shapes inside tables for now.
+            if (m_pCurrentBuffer != &m_aTableBuffer)
+                m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
+            else
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_NESTTABLEPROPS:
             m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
