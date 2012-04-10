@@ -84,6 +84,11 @@ void ScRecursionHelper::ResumeIteration()
     aLastIterationStart = GetIterationStart();
 }
 
+void ScRecursionHelper::IncIteration()
+{
+    ++nIteration;
+}
+
 void ScRecursionHelper::EndIteration()
 {
     aRecursionFormulas.erase( GetIterationStart(), GetIterationEnd());

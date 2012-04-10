@@ -90,7 +90,7 @@ public:
     bool &  GetConvergingReference()        { return bConverging; }
     void StartIteration();
     void ResumeIteration();
-    void    IncIteration()                  { ++nIteration; }
+    void IncIteration();
     void EndIteration();
 
     ScFormulaRecursionList::iterator GetLastIterationStart() { return aLastIterationStart; }
