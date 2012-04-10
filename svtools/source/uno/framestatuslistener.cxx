@@ -114,7 +114,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
 
@@ -212,7 +212,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
                         if ( xOldDispatch.is() )
                             xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch (const Exception&)
                     {
                     }
                 }
@@ -228,7 +228,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
         if ( xDispatch.is() )
             xDispatch->addStatusListener( xStatusListener, aTargetURL );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 }
@@ -256,7 +256,7 @@ void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -297,7 +297,7 @@ void FrameStatusListener::bindListener()
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
                     }
-                    catch ( Exception& )
+                    catch (const Exception&)
                     {
                     }
                 }
@@ -307,7 +307,7 @@ void FrameStatusListener::bindListener()
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                 }
                 pIter->second = xDispatch;
@@ -331,7 +331,7 @@ void FrameStatusListener::bindListener()
                     rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -368,7 +368,7 @@ void FrameStatusListener::unbindListener()
                 {
                     xDispatch->removeStatusListener( xStatusListener, aTargetURL );
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                 }
             }
