@@ -70,8 +70,21 @@ SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
     ::osl::detail::ObjectRegistryData & rData, void const* pObj )
     SAL_THROW_EXTERN_C();
 
+// These functions presumably should not be extern "C", but changing
+// that would break binary compatibility.
+#if SUPD < 400
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+#endif
+#endif
 SAL_DLLPUBLIC ::osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
     SAL_THROW_EXTERN_C();
+#if SUPD < 400
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+#endif
 
 } // extern "C"
 
