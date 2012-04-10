@@ -31,7 +31,6 @@ Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
-ParagraphStyleManager::get(WPXString const&) const
 PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
@@ -124,7 +123,6 @@ SfxNavigatorWrapper::GetChildWindowId()
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
-SpanStyleManager::get(WPXString const&) const
 SpinButton::SpinButton(Window*, ResId const&)
 SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
@@ -306,10 +304,6 @@ VbaFoundFilesEnum::SetFileList(com::sun::star::uno::Sequence<rtl::OUString>&)
 VbaFoundFilesEnum::VbaFoundFilesEnum()
 VclEventListeners2::~VclEventListeners2()
 ViewShell::getIDocumentFieldsAccess() const
-WPXPropertyList::Iter::last()
-WPXPropertyListVector::Iter::last()
-WPXString::Iter::last()
-WPXSubDocument::WPXSubDocument()
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
@@ -367,7 +361,6 @@ _SwPamRanges_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(SwP
 _SwRedlineTbl::Insert(SwRedline* const*, unsigned short)
 _SwRedlineTbl::Insert(_SwRedlineTbl const*, unsigned short, unsigned short)
 _SwRedlineTbl::Remove(SwRedline* const&, unsigned short)
-_WPXTabStop::_WPXTabStop(double, WPXTabAlignment, unsigned short, unsigned char)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::tools::equal(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const&, double const&)
 basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon const&, double const&)
