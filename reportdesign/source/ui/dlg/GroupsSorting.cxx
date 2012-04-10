@@ -1355,7 +1355,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             nPos = 0;
     }
     m_aGroupOnLst.SelectEntryPos(nPos);
-    m_aGroupIntervalEd.SetText(String::CreateFromInt32(_xGroup->getGroupInterval()));
+    m_aGroupIntervalEd.SetText(rtl::OUString::valueOf(_xGroup->getGroupInterval()));
     m_aGroupIntervalEd.SaveValue();
     m_aGroupIntervalEd.Enable( nPos != 0 );
     m_aKeepTogetherLst.SelectEntryPos(_xGroup->getKeepTogether());

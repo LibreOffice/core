@@ -239,7 +239,7 @@ namespace svt { namespace uno
             DBG_UNHANDLED_EXCEPTION();
         }
         // fallback for ill-behaved clients: the numeric state
-        return String::CreateFromInt32( i_nState );
+        return rtl::OUString::valueOf(static_cast<sal_Int32>(i_nState));
     }
 
     //------------------------------------------------------------------------------------------------------------------

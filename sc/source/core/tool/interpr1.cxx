@@ -2102,7 +2102,7 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& r
         }
     }
     if( bAppendPrec )
-        rFmtStr += String::CreateFromInt32( nPrec );
+        rFmtStr += rtl::OUString::valueOf(static_cast<sal_Int32>(nPrec));
     const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
     if( lcl_FormatHasNegColor( pFormat ) )
         rFmtStr += '-';

@@ -490,10 +490,10 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
         OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
         if(aData.HasNumericValue())
         {
-            String sTxt( ' ' );
-            sTxt +=  String::CreateFromInt32( aData.GetNumericValue() );
+            rtl::OUStringBuffer sTxt;
+            aTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
             rDev.SetFont( aFont );
-            rDev.DrawText( aNewPos, sTxt );
+            rDev.DrawText( aNewPos, sTxt.makeStringAndClear() );
         }
 
         rDev.SetFont( aOldFont );

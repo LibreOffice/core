@@ -103,7 +103,7 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   const IntlWrapper *) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
-    rText = UniString::CreateFromInt32(m_nValue);
+    rText = rtl::OUString::valueOf(static_cast<sal_Int32>(m_nValue));
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
