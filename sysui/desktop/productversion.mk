@@ -45,7 +45,8 @@ PKGDIR=$(BIN)
 
 .INCLUDE : productversion.mk
 
-PKGVERSION = $(PRODUCTVERSION)
+PKGVERSION = $(VERSIONMAJOR).$(VERSIONMINOR).$(VERSIONMICRO)
+
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
 # without extension. Since it also does not know how to handle "2-writer"
