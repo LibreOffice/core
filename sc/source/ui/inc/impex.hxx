@@ -63,33 +63,33 @@ class SC_DLLPUBLIC ScImportExport
     ScRange     aRange;
     String      aStreamPath;
     String      aNonConvertibleChars;
-    sal_uLong       nSizeLimit;
+    sal_uLong   nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
-    sal_Bool        bFormulas;              // Formeln im Text?
-    sal_Bool        bIncludeFiltered;       // include filtered rows? (default true)
-    sal_Bool        bAll;                   // keine Selektion
-    sal_Bool        bSingle;                // Einfachselektion
-    sal_Bool        bUndo;                  // Mit Undo?
-    sal_Bool        bOverflow;              // zuviele Zeilen/Spalten
+    bool        bFormulas;              // Formeln im Text?
+    bool        bIncludeFiltered;       // include filtered rows? (default true)
+    bool        bAll;                   // keine Selektion
+    bool        bSingle;                // Einfachselektion
+    bool        bUndo;                  // Mit Undo?
+    bool        bOverflow;              // zuviele Zeilen/Spalten
     bool        mbApi;
     ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
-    sal_Bool StartPaste();                  // Protect-Check, Undo einrichten
+    bool StartPaste();                  // Protect-Check, Undo einrichten
     void EndPaste();                    // Undo/Redo-Aktionen, Repaint
-    sal_Bool Doc2Text( SvStream& );
-    sal_Bool Text2Doc( SvStream& );
-    sal_Bool Doc2Sylk( SvStream& );
-    sal_Bool Sylk2Doc( SvStream& );
-    sal_Bool Doc2HTML( SvStream&, const String& );
-    sal_Bool Doc2RTF( SvStream& );
-    sal_Bool Doc2Dif( SvStream& );
-    sal_Bool Dif2Doc( SvStream& );
-    sal_Bool ExtText2Doc( SvStream& );      // mit pExtOptions
-    sal_Bool RTF2Doc( SvStream&, const String& rBaseURL );
-    sal_Bool HTML2Doc( SvStream&, const String& rBaseURL );
+    bool Doc2Text( SvStream& );
+    bool Text2Doc( SvStream& );
+    bool Doc2Sylk( SvStream& );
+    bool Sylk2Doc( SvStream& );
+    bool Doc2HTML( SvStream&, const String& );
+    bool Doc2RTF( SvStream& );
+    bool Doc2Dif( SvStream& );
+    bool Dif2Doc( SvStream& );
+    bool ExtText2Doc( SvStream& );      // mit pExtOptions
+    bool RTF2Doc( SvStream&, const String& rBaseURL );
+    bool HTML2Doc( SvStream&, const String& rBaseURL );
 
 public:
     ScImportExport( ScDocument* );                  // Gesamtdokument
@@ -100,22 +100,22 @@ public:
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
 
-    sal_Bool IsDoubleRef() const { return sal_Bool( !( bAll || bSingle ) ); }
-    sal_Bool IsSingleRef() const { return bSingle; }
-    sal_Bool IsNoRef() const     { return bAll;    }
-    sal_Bool IsRef() const       { return sal_Bool( !bAll ); }
+    bool IsDoubleRef() const { return !( bAll || bSingle ); }
+    bool IsSingleRef() const { return bSingle; }
+    bool IsNoRef() const     { return bAll;    }
+    bool IsRef() const       { return !bAll; }
 
     const ScRange& GetRange() const { return aRange; }
 
-    sal_Bool IsUndo() const      { return bUndo; }
-    void SetUndo( sal_Bool b )   { bUndo = b;    }
+    bool IsUndo() const      { return bUndo; }
+    void SetUndo( bool b )   { bUndo = b;    }
 
-    static sal_Bool  IsFormatSupported( sal_uLong nFormat );
+    static bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
-    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, sal_Bool bZero = false );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
-    static  inline  sal_Bool    IsEndianSwap( const SvStream& rStrm );
+    static  inline  bool    IsEndianSwap( const SvStream& rStrm );
 
     //! only if stream is only used in own (!) memory
     static  inline  void    SetNoEndianSwap( SvStream& rStrm );
@@ -124,29 +124,29 @@ public:
     void SetSeparator( sal_Unicode c ) { cSep = c; }
     sal_Unicode GetDelimiter() const { return cStr; }
     void SetDelimiter( sal_Unicode c ) { cStr = c; }
-    sal_Bool IsFormulas() const { return bFormulas; }
-    void SetFormulas( sal_Bool b ) { bFormulas = b; }
-    sal_Bool IsIncludeFiltered() const { return bIncludeFiltered; }
-    void SetIncludeFiltered( sal_Bool b ) { bIncludeFiltered = b; }
+    bool IsFormulas() const { return bFormulas; }
+    void SetFormulas( bool b ) { bFormulas = b; }
+    bool IsIncludeFiltered() const { return bIncludeFiltered; }
+    void SetIncludeFiltered( bool b ) { bIncludeFiltered = b; }
 
     void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
 
     void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
     const String&   GetStreamPath() const { return aStreamPath; }
 
-    sal_Bool ImportString( const ::rtl::OUString&, sal_uLong=FORMAT_STRING );
-    sal_Bool ExportString( ::rtl::OUString&, sal_uLong=FORMAT_STRING );
-    sal_Bool ExportByteString( ::rtl::OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
+    bool ImportString( const ::rtl::OUString&, sal_uLong=FORMAT_STRING );
+    bool ExportString( ::rtl::OUString&, sal_uLong=FORMAT_STRING );
+    bool ExportByteString( ::rtl::OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
 
-    sal_Bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
-    sal_Bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
+    bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
+    bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
 
-    sal_Bool ImportData( const String& rMimeType,
+    bool ImportData( const String& rMimeType,
                      const ::com::sun::star::uno::Any & rValue );
-    sal_Bool ExportData( const String& rMimeType,
+    bool ExportData( const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
-    sal_Bool IsOverflow() const { return bOverflow; }       // nach dem Importieren
+    bool IsOverflow() const { return bOverflow; }       // nach dem Importieren
 
     const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 
@@ -157,7 +157,7 @@ public:
 };
 
 
-inline sal_Bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
+inline bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN;
@@ -193,7 +193,7 @@ public:
     ReadUniOrByteStringLine().
 
     @param bEmbeddedLineBreak
-    If sal_True and a line-break occurs inside a field of data,
+    If TRUE and a line-break occurs inside a field of data,
     a line feed LF '\n' and the next line are appended. Repeats
     until a line-break is not in a field. A field is determined
     by delimiting rFieldSeparators and optionally surrounded by
@@ -204,10 +204,10 @@ public:
     separator with no extra characters in between. Anything,
     including field separators and escaped quotes (by doubling
     them, or preceding them with a backslash if
-    bAllowBackslashEscape==sal_True) may appear in a quoted
+    bAllowBackslashEscape==TRUE) may appear in a quoted
     field.
 
-    If bEmbeddedLineBreak==sal_False, nothing is parsed and the
+    If bEmbeddedLineBreak==FALSE, nothing is parsed and the
     string returned is simply one ReadUniOrByteStringLine().
 
     @param rFieldSeparators
@@ -217,7 +217,7 @@ public:
     The quote character used.
 
     @param bAllowBackslashEscape
-    If sal_True, an embedded quote character inside a quoted
+    If TRUE, an embedded quote character inside a quoted
     field may also be escaped with a preceding backslash.
     Normally, quotes are escaped by doubling them.
 
@@ -240,9 +240,9 @@ public:
     may start under false preconditions.
 
   */
-SC_DLLPUBLIC rtl::OUString ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
+SC_DLLPUBLIC rtl::OUString ReadCsvLine(SvStream &rStream, bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
-        sal_Bool bAllowBackslashEscape = sal_False);
+        bool bAllowBackslashEscape = false);
 
 #endif
 

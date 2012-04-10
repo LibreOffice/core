@@ -43,7 +43,7 @@ public:
     virtual ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 
-    virtual void        WriteToDocument( sal_Bool bSizeColsRows = false, double nOutputFactor = 1.0,
+    virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );

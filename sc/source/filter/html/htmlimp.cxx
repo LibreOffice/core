@@ -60,18 +60,18 @@
 //------------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
-        ScRange& rRange, double nOutputFactor, sal_Bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
+        ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
     FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
-    aImp.WriteToDocument( sal_True, nOutputFactor, pFormatter, bConvertDate );
+    aImp.WriteToDocument( true, nOutputFactor, pFormatter, bConvertDate );
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight )
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight )
 {
     return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
 }
@@ -135,7 +135,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
 }
 
 void ScHTMLImport::WriteToDocument(
-    sal_Bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
+    bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
 

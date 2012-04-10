@@ -148,7 +148,7 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 //========================================================================
 
 FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc,
-        const ScRange& rRange, const CharSet /*eNach*/, sal_Bool bAll,
+        const ScRange& rRange, const CharSet /*eNach*/, bool bAll,
         const String& rStreamPath, String& rNonConvertibleChars )
 {
     ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath );

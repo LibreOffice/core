@@ -62,7 +62,7 @@ public:
 
     virtual sal_uLong    Read( SvStream& rStream, const String& rBaseURL );
     virtual ScRange  GetRange() { return maRange; }
-    virtual void     WriteToDocument( sal_Bool bSizeColsRows = false,
+    virtual void     WriteToDocument( bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = NULL,
                                       bool bConvertDate = true );
