@@ -277,10 +277,10 @@ private:
 public:
     /** Fills all cells of a line with the passed text (separators mode). */
     void                        ImplSetTextLineSep(
-                                    sal_Int32 nLine, const String& rTextLine,
+                                    sal_Int32 nLine, const rtl::OUString& rTextLine,
                                     const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
     /** Fills all cells of a line with the passed text (fixed width mode). */
-    void                        ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine );
+    void                        ImplSetTextLineFix( sal_Int32 nLine, const rtl::OUString& rTextLine );
 
     /** Returns the text of the specified cell. */
     const String&               GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;

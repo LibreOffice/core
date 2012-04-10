@@ -108,7 +108,7 @@ private:
 public:
     /** Fills all cells of all lines with the passed texts (Unicode strings). */
     void                        SetUniStrings(
-                                    const String* pTextLines, const String& rSepChars,
+                                    const rtl::OUString* pTextLines, const String& rSepChars,
                                     sal_Unicode cTextSep, bool bMergeSep );
 
     // column settings --------------------------------------------------------

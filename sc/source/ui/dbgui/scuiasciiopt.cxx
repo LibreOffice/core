@@ -441,7 +441,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 // ----------------------------------------------------------------------------
 
-bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
+bool ScImportAsciiDlg::GetLine( sal_uLong nLine, rtl::OUString &rText )
 {
     if (nLine >= ASCIIDLG_MAXROWS || !mpDatStream)
         return false;
@@ -704,7 +704,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
             break;
     }
     for (; i < CSV_PREVIEW_LINES; i++)
-        maPreviewLine[i].Erase();
+        maPreviewLine[i] = rtl::OUString();
 
     maTableBox.Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = (aCkbAsOnce.IsChecked() == sal_True);

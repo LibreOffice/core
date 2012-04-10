@@ -32,6 +32,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "address.hxx"
 #include "global.hxx"
@@ -80,9 +81,9 @@ private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
     sal_Bool                bPlain;
-    String              aLookAheadLine;
+    rtl::OUString       aLookAheadLine;
 
-    bool                ReadNextLine( String& rStr );
+    bool                ReadNextLine( rtl::OUString& rStr );
     bool                LookAhead();
     DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
     static inline sal_Bool  IsBOT( const sal_Unicode* pRef );

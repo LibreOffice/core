@@ -380,9 +380,37 @@ public:
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
 
-    sal_Bool        ReadLine( rtl::OString& rStr );
+                /** Read a line of bytes.
+
+                    @param nMaxBytesToRead
+                        Maximum of bytes to read, if line is longer it will be
+                        truncated.
+
+                        NOTE that the default is one character less than
+                        STRING_MAXLEN to prevent problems after conversion to
+                        String that may be lurking in various places doing
+                        something like
+                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
+                        causing endless loops ...
+                 */
+    sal_Bool        ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     sal_Bool        WriteLine( const rtl::OString& rStr );
 
+                /** Read a line of bytes.
+
+                    @param nMaxBytesToRead
+                        Maximum of bytes to read, if line is longer it will be
+                        truncated.
+
+                        NOTE that the default is one character less than
+                        STRING_MAXLEN to prevent problems after conversion to
+                        String that may be lurking in various places doing
+                        something like
+                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
+                        causing endless loops ...
+                 */
+    sal_Bool        ReadByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+                                        sal_Int32 nMaxBytesToRead = 0xFFFE );
     sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
 
@@ -403,17 +431,44 @@ public:
                  */
     sal_Bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
-                /// Read a line of Unicode
-    sal_Bool        ReadUniStringLine( String& rStr );
+                /** Read a line of Unicode.
+
+                    @param nMaxCodepointsToRead
+                        Maximum of codepoints (UCS-2 or UTF-16 pairs, not
+                        bytes) to read, if line is longer it will be truncated.
+
+                        NOTE that the default is one character less than
+                        STRING_MAXLEN to prevent problems after conversion to
+                        String that may be lurking in various places doing
+                        something like
+                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
+                        causing endless loops ...
+                 */
+    sal_Bool        ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
                 /// Read a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise read a 16bit length prefixed sequence of bytes and convert from eSrcCharSet
     rtl::OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
                 /// Write a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise convert to eSrcCharSet and write a 16bit length prefixed sequence of bytes
     SvStream&       WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEncoding eDestCharSet );
-                /// Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise read a line of Bytecode and convert from eSrcCharSet
-    sal_Bool        ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
+
+                /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+                    otherwise read a line of Bytecode and convert from eSrcCharSet
+
+                    @param nMaxCodepointsToRead
+                        Maximum of codepoints (2 bytes if Unicode, bytes if not
+                        Unicode) to read, if line is longer it will be
+                        truncated.
+
+                        NOTE that the default is one character less than
+                        STRING_MAXLEN to prevent problems after conversion to
+                        String that may be lurking in various places doing
+                        something like
+                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
+                        causing endless loops ...
+                 */
+    sal_Bool        ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+                                             sal_Int32 nMaxCodepointsToRead = 0xFFFE );
                 /// Write a sequence of Unicode characters if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write a sequence of Bytecodes converted to eDestCharSet
     sal_Bool        WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet );

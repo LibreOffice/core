@@ -4996,12 +4996,12 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
 
     // Parse the value of parameter FieldInfo.
     sal_uInt16 nRealCount = 0;
-    xub_StrLen* pColumns = NULL;
+    sal_Int32* pColumns = NULL;
     sal_uInt8* pFormats = NULL;
     if ( sFieldInfo.getLength() > 0 )
     {
         sal_uInt16 nCount = sFieldInfo.getLength();
-        pColumns = new xub_StrLen[nCount];
+        pColumns = new sal_Int32[nCount];
         pFormats = new sal_uInt8[nCount];
         sal_uInt16 nFormat = 1;
         uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
@@ -5012,7 +5012,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
                 nFormat = 1;
                 try
                 {
-                    uno::Any aConverted = xConverter->convertTo( sFieldInfo[nIndex][0], getCppuType((xub_StrLen*)0) );
+                    uno::Any aConverted = xConverter->convertTo( sFieldInfo[nIndex][0], getCppuType((sal_Int32*)0) );
                     aConverted >>= pColumns[nRealCount];
                     aConverted = xConverter->convertTo( sFieldInfo[nIndex][1], getCppuType((sal_uInt16*)0) );
                     aConverted >>= nFormat;

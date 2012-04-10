@@ -81,7 +81,7 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
 {
     if (nInfoCount)
     {
-        pColStart = new xub_StrLen[nInfoCount];
+        pColStart = new sal_Int32[nInfoCount];
         pColFormat = new sal_uInt8[nInfoCount];
         for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
@@ -104,7 +104,7 @@ ScAsciiOptions::~ScAsciiOptions()
 }
 
 
-void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat )
+void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat )
 {
     delete[] pColStart;
     delete[] pColFormat;
@@ -113,7 +113,7 @@ void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, co
 
     if (nInfoCount)
     {
-        pColStart = new xub_StrLen[nInfoCount];
+        pColStart = new sal_Int32[nInfoCount];
         pColFormat = new sal_uInt8[nInfoCount];
         for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
@@ -139,7 +139,7 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
     nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
     if( nInfoCount )
     {
-        pColStart = new xub_StrLen[ nInfoCount ];
+        pColStart = new sal_Int32[ nInfoCount ];
         pColFormat = new sal_uInt8[ nInfoCount ];
         for( sal_uInt16 nIx = 0; nIx < nInfoCount; ++nIx )
         {
@@ -276,11 +276,11 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         nInfoCount = nSub / 2;
         if (nInfoCount)
         {
-            pColStart = new xub_StrLen[nInfoCount];
+            pColStart = new sal_Int32[nInfoCount];
             pColFormat = new sal_uInt8[nInfoCount];
             for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
             {
-                pColStart[nInfo]  = (xub_StrLen) aToken.GetToken( 2*nInfo, '/' ).ToInt32();
+                pColStart[nInfo]  = (sal_Int32) aToken.GetToken( 2*nInfo, '/' ).ToInt32();
                 pColFormat[nInfo] = (sal_uInt8) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
             }
         }

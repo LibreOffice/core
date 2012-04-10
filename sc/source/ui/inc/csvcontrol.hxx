@@ -83,7 +83,7 @@ const sal_uInt8 SC_COL_ENGLISH          = 10;
 /** Exported data of a column (data used in the dialog). */
 struct ScCsvExpData
 {
-    xub_StrLen                  mnIndex;        /// Index of a column.
+    sal_Int32                   mnIndex;        /// Index of a column.
     sal_uInt8                   mnType;         /// External type of the column.
 
     inline                      ScCsvExpData() : mnIndex( 0 ), mnType( SC_COL_STANDARD ) {}

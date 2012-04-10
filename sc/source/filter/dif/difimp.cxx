@@ -312,7 +312,7 @@ TOPIC DifParser::GetNextTopic( void )
     };
 
     STATE                   eS = S_START;
-    String                  aLine;
+    rtl::OUString           aLine;
 
     nVector = 0;
     nVal = 0;
@@ -360,7 +360,7 @@ TOPIC DifParser::GetNextTopic( void )
                 break;
             case S_VectorVal:
             {
-                const sal_Unicode*      pCur = aLine.GetBuffer();
+                const sal_Unicode*      pCur = aLine.getStr();
 
                 pCur = ScanIntVal( pCur, nVector );
 
@@ -375,10 +375,11 @@ TOPIC DifParser::GetNextTopic( void )
             }
                 break;
             case S_Data:
-                OSL_ENSURE( aLine.Len() >= 2,
+                OSL_ENSURE( aLine.getLength() >= 2,
                     "+GetNextTopic(): <String> ist zu kurz!" );
-                if( aLine.Len() > 2 )
-                    aData = aLine.Copy( 1, aLine.Len() - 2 );
+                OSL_ENSURE( aLine.getLength() - 2 <= STRING_MAXLEN, "GetNextTopic(): line doesn't fit into data");
+                if( aLine.getLength() > 2 )
+                    aData = aLine.copy( 1, aLine.getLength() - 2 );
                 else
                     aData.Erase();
                 eS = S_END;
@@ -448,16 +449,16 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     return eRet;
 }
 
-bool DifParser::ReadNextLine( String& rStr )
+bool DifParser::ReadNextLine( rtl::OUString& rStr )
 {
-    if( aLookAheadLine.Len() == 0 )
+    if( aLookAheadLine.isEmpty() )
     {
         return rIn.ReadUniOrByteStringLine( rStr, rIn.GetStreamCharSet() );
     }
     else
     {
         rStr = aLookAheadLine;
-        aLookAheadLine.Erase();
+        aLookAheadLine = rtl::OUString();
         return true;
     }
 }
@@ -469,10 +470,10 @@ bool DifParser::LookAhead()
     const sal_Unicode* pAktBuffer;
     bool bValidStructure = false;
 
-    OSL_ENSURE( aLookAheadLine.Len() == 0, "*DifParser::LookAhead(): LookAhead called twice in a row" );
+    OSL_ENSURE( aLookAheadLine.isEmpty(), "*DifParser::LookAhead(): LookAhead called twice in a row" );
     rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamCharSet() );
 
-    pAktBuffer = aLookAheadLine.GetBuffer();
+    pAktBuffer = aLookAheadLine.getStr();
 
     switch( *pAktBuffer )
     {
@@ -493,7 +494,7 @@ bool DifParser::LookAhead()
             }
             break;
         case '1':                   // String Data
-            if( Is1_0( aLookAheadLine.GetBuffer() ) )
+            if( Is1_0( aLookAheadLine.getStr() ) )
             {
                 bValidStructure = true;
             }
@@ -505,12 +506,12 @@ bool DifParser::LookAhead()
 DATASET DifParser::GetNextDataset( void )
 {
     DATASET             eRet = D_UNKNOWN;
-    String              aLine;
+    rtl::OUString       aLine;
     const sal_Unicode*      pAktBuffer;
 
     ReadNextLine( aLine );
 
-    pAktBuffer = aLine.GetBuffer();
+    pAktBuffer = aLine.getStr();
 
     switch( *pAktBuffer )
     {
@@ -520,9 +521,9 @@ DATASET DifParser::GetNextDataset( void )
             if( Is1_0( pAktBuffer ) )
             {
                 ReadNextLine( aLine );
-                if( IsBOT( aLine.GetBuffer() ) )
+                if( IsBOT( aLine.getStr() ) )
                     eRet = D_BOT;
-                else if( IsEOD( aLine.GetBuffer() ) )
+                else if( IsEOD( aLine.getStr() ) )
                     eRet = D_EOD;
             }
             break;
@@ -532,25 +533,32 @@ DATASET DifParser::GetNextDataset( void )
             {
                 pAktBuffer++;
                 eRet = GetNumberDataset(pAktBuffer);
-                ReadNextLine( aData );
+                rtl::OUString aTmpLine;
+                ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
                     String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#ERR: " ));
                     aTmp += pAktBuffer;
                     aTmp.AppendAscii( " (" );
-                    aTmp += aData;
+                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN - aTmp.Len() - 1, "GetNextDataset(): line doesn't fit into data");
+                    aTmp += aTmpLine;
                     aTmp += sal_Unicode(')');
                     aData = aTmp;
                     eRet = D_STRING;
                 }
+                else
+                {
+                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
+                    aData = aTmpLine;
+                }
             }
             break;
         case '1':                   // String Data
-            if( Is1_0( aLine.GetBuffer() ) )
+            if( Is1_0( aLine.getStr() ) )
             {
                 ReadNextLine( aLine );
-                xub_StrLen nLineLength = aLine.Len();
-                const sal_Unicode* pLine = aLine.GetBuffer();
+                sal_Int32 nLineLength = aLine.getLength();
+                const sal_Unicode* pLine = aLine.getStr();
 
                 if( nLineLength >= 1 && *pLine == '"' )
                 {
@@ -562,7 +570,8 @@ DATASET DifParser::GetNextDataset( void )
                         // Single line string
                         if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
                         {
-                            aData = aLine.Copy( 1, nLineLength - 2 );
+                            OSL_ENSURE( aLine.getLength() - 2 <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
+                            aData = aLine.copy( 1, nLineLength - 2 );
                             lcl_DeEscapeQuotesDif( aData );
                             eRet = D_STRING;
                         }
@@ -570,7 +579,8 @@ DATASET DifParser::GetNextDataset( void )
                     else
                     {
                         // Multiline string
-                        aData = aLine.Copy( 1 );
+                        OSL_ENSURE( aLine.getLength() - 1 <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
+                        aData = aLine.copy( 1 );
                         bool bContinue = true;
                         while ( bContinue )
                         {
@@ -578,17 +588,19 @@ DATASET DifParser::GetNextDataset( void )
                             bContinue = !rIn.IsEof() && ReadNextLine( aLine );
                             if( bContinue )
                             {
-                                nLineLength = aLine.Len();
+                                nLineLength = aLine.getLength();
                                 if( nLineLength >= 1 )
                                 {
-                                    pLine = aLine.GetBuffer();
+                                    pLine = aLine.getStr();
                                     bContinue = !LookAhead();
                                     if( bContinue )
                                     {
+                                        OSL_ENSURE( aLine.getLength() <= STRING_MAXLEN - aData.Len(), "GetNextDataset(): line doesn't fit into data");
                                         aData.Append( aLine );
                                     }
                                     else if( pLine[nLineLength - 1] == '"' )
                                     {
+                                        OSL_ENSURE( nLineLength - 1 <= STRING_MAXLEN - aData.Len(), "GetNextDataset(): line doesn't fit into data");
                                         aData.Append( pLine, nLineLength - 1 );
                                         lcl_DeEscapeQuotesDif( aData );
                                         eRet = D_STRING;

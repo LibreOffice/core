@@ -537,7 +537,7 @@ void ScCsvGrid::FillColumnDataSep( ScAsciiOptions& rOptions ) const
         if( GetColumnType( nColIx ) != CSV_TYPE_DEFAULT )
             // 1-based column index
             aDataVec.push_back( ScCsvExpData(
-                static_cast< xub_StrLen >( nColIx + 1 ),
+                static_cast< sal_Int32 >( nColIx + 1 ),
                 lcl_GetExtColumnType( GetColumnType( nColIx ) ) ) );
     }
     rOptions.SetColumnInfo( aDataVec );
@@ -551,11 +551,10 @@ void ScCsvGrid::FillColumnDataFix( ScAsciiOptions& rOptions ) const
     for( sal_uInt32 nColIx = 0; nColIx < nCount; ++nColIx )
     {
         ScCsvExpData& rData = aDataVec[ nColIx ];
-        rData.mnIndex = static_cast< xub_StrLen >(
-            Min( static_cast< sal_Int32 >( STRING_MAXLEN ), GetColumnPos( nColIx ) ) );
+        rData.mnIndex = static_cast< sal_Int32 >( GetColumnPos( nColIx ) );
         rData.mnType = lcl_GetExtColumnType( GetColumnType( nColIx ) );
     }
-    aDataVec[ nCount ].mnIndex = STRING_MAXLEN;
+    aDataVec[ nCount ].mnIndex = SAL_MAX_INT32;
     aDataVec[ nCount ].mnType = SC_COL_SKIP;
     rOptions.SetColumnInfo( aDataVec );
 }
@@ -730,7 +729,7 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
 // cell contents --------------------------------------------------------------
 
 void ScCsvGrid::ImplSetTextLineSep(
-        sal_Int32 nLine, const String& rTextLine,
+        sal_Int32 nLine, const rtl::OUString& rTextLine,
         const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
 {
     if( nLine < GetFirstVisLine() ) return;
@@ -744,7 +743,7 @@ void ScCsvGrid::ImplSetTextLineSep(
     // scan for separators
     String aCellText;
     const sal_Unicode* pSepChars = rSepChars.GetBuffer();
-    const sal_Unicode* pChar = rTextLine.GetBuffer();
+    const sal_Unicode* pChar = rTextLine.getStr();
     sal_uInt32 nColIx = 0;
 
     while( *pChar && (nColIx < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT)) )
@@ -787,11 +786,11 @@ void ScCsvGrid::ImplSetTextLineSep(
     InvalidateGfx();
 }
 
-void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
+void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const rtl::OUString& rTextLine )
 {
     if( nLine < GetFirstVisLine() ) return;
 
-    sal_Int32 nChars = rTextLine.Len();
+    sal_Int32 nChars = rTextLine.getLength();
     if( nChars > GetPosCount() )
         Execute( CSVCMD_SETPOSCOUNT, nChars );
 
@@ -802,13 +801,13 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
     StringVec& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
     sal_uInt32 nColCount = GetColumnCount();
-    xub_StrLen nStrLen = rTextLine.Len();
-    xub_StrLen nStrIx = 0;
+    sal_Int32 nStrLen = rTextLine.getLength();
+    sal_Int32 nStrIx = 0;
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
-        xub_StrLen nColWidth = static_cast< xub_StrLen >( GetColumnWidth( nColIx ) );
-        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nColWidth, CSV_MAXSTRLEN ) ) );
-        nStrIx = sal::static_int_cast<xub_StrLen>( nStrIx + nColWidth );
+        sal_Int32 nColWidth = GetColumnWidth( nColIx );
+        rStrVec.push_back( rTextLine.copy( nStrIx, Max( nColWidth, static_cast<sal_Int32>(CSV_MAXSTRLEN) ) ) );
+        nStrIx = nStrIx + nColWidth;
     }
     InvalidateGfx();
 }

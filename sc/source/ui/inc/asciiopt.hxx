@@ -59,7 +59,7 @@ private:
     sal_Bool        bCharSetSystem;
     long        nStartRow;
     sal_uInt16      nInfoCount;
-    xub_StrLen* pColStart;  //! TODO replace with vector
+    sal_Int32* pColStart;  //! TODO replace with vector
     sal_uInt8*       pColFormat; //! TODO replace with vector
 
 public:
@@ -87,7 +87,7 @@ public:
     sal_Unicode         GetTextSep() const      { return cTextSep; }
     sal_Bool                IsFixedLen() const      { return bFixedLen; }
     sal_uInt16              GetInfoCount() const    { return nInfoCount; }
-    const xub_StrLen*   GetColStart() const     { return pColStart; }
+    const sal_Int32*   GetColStart() const     { return pColStart; }
     const sal_uInt8*            GetColFormat() const    { return pColFormat; }
     long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
@@ -103,7 +103,7 @@ public:
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
-    void    SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat );
+    void    SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 

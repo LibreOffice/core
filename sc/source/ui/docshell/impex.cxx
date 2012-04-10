@@ -87,6 +87,13 @@ class StarBASIC;
 
 //========================================================================
 
+// We don't want to end up with 2GB read in one line just because of malformed
+// multiline fields, so chop it _somewhere_, which is twice supported columns
+// times maximum cell content length, 2*1024*64K=128M, and because it's
+// sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
+// anyway.
+static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * STRING_MAXLEN;
+
 namespace
 {
     const char SYLK_LF[]  = "\x1b :";
@@ -562,6 +569,30 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
 }
 
 
+/** Append characters of [p1,p2) to rField.
+
+    @returns TRUE if ok; FALSE if data overflow, truncated
+ */
+static bool lcl_appendLineData( String& rField, const sal_Unicode* p1, const sal_Unicode* p2 )
+{
+    OSL_ENSURE( rField.Len() + (p2 - p1) <= STRING_MAXLEN, "lcl_appendLineData: data overflow");
+    if (rField.Len() + (p2 - p1) <= STRING_MAXLEN)
+    {
+        rField.Append( p1, sal::static_int_cast<xub_StrLen>( p2 - p1 ) );
+        return true;
+    }
+    else
+    {
+        // If STRING_MAXLEN is passed as length, then String attempts to
+        // determine the length of the string and comes up with an overflow
+        // casted to xub_StrLen again ... so pass max-1, data will be truncated
+        // anyway.
+        rField.Append( p1, (rField.Len() ? STRING_MAXLEN - rField.Len() : STRING_MAXLEN - 1) );
+        return false;
+    }
+}
+
+
 enum DoubledQuoteMode
 {
     DQM_KEEP,       // both are taken
@@ -613,7 +644,12 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                 p++;
         }
         if ( p0 < p )
-            rString.Append( p0, sal::static_int_cast<xub_StrLen>( ((*p || *(p-1) == cStr) ? p-1 : p) - p0 ) );
+        {
+            if (!lcl_appendLineData( rString, p0, ((*p || *(p-1) == cStr) ? p-1 : p)))
+            {
+                /* TODO: warning at UI, data truncated */
+            }
+        }
     } while ( bCont );
     return p;
 }
@@ -785,16 +821,17 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
 
     while( bOk )
     {
-        String aLine, aCell;
+        rtl::OUString aLine;
+        String aCell;
         SCROW nRow = nStartRow;
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet() );
+            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet(), nArbitraryLineLengthLimit );
             if( rStrm.IsEof() )
                 break;
             SCCOL nCol = nStartCol;
-            const sal_Unicode* p = aLine.GetBuffer();
+            const sal_Unicode* p = aLine.getStr();
             while( *p )
             {
                 aCell.Erase();
@@ -811,7 +848,10 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
                     const sal_Unicode* q = p;
                     while( *p && *p != cSep )
                         p++;
-                    aCell.Assign( q, sal::static_int_cast<xub_StrLen>( p - q ) );
+                    if (!lcl_appendLineData( aCell, q, p))
+                    {
+                        /* TODO: warning at UI, data truncated */
+                    }
                     if( *p )
                         p++;
                 }
@@ -1104,25 +1144,31 @@ static bool lcl_PutString(
 }
 
 
-String lcl_GetFixed( const String& rLine, xub_StrLen nStart, xub_StrLen nNext, bool& rbIsQuoted )
+String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext, bool& rbIsQuoted )
 {
-    xub_StrLen nLen = rLine.Len();
+    sal_Int32 nLen = rLine.getLength();
     if (nNext > nLen)
         nNext = nLen;
     if ( nNext <= nStart )
         return EMPTY_STRING;
 
-    const sal_Unicode* pStr = rLine.GetBuffer();
+    const sal_Unicode* pStr = rLine.getStr();
 
-    xub_StrLen nSpace = nNext;
+    sal_Int32 nSpace = nNext;
     while ( nSpace > nStart && pStr[nSpace-1] == ' ' )
         --nSpace;
 
     rbIsQuoted = (pStr[nStart] == sal_Unicode('"') && pStr[nSpace-1] == sal_Unicode('"'));
     if (rbIsQuoted)
-        return rLine.Copy(nStart+1, nSpace-nStart-2);
+    {
+        OSL_ENSURE( nSpace - nStart - 3 <= STRING_MAXLEN, "lcl_GetFixed: line doesn't fit into data");
+        return rLine.copy(nStart+1, nSpace-nStart-2);
+    }
     else
-        return rLine.Copy(nStart, nSpace-nStart);
+    {
+        OSL_ENSURE( nSpace - nStart <= STRING_MAXLEN, "lcl_GetFixed: line doesn't fit into data");
+        return rLine.copy(nStart, nSpace-nStart);
+    }
 }
 
 sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
@@ -1144,12 +1190,12 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     SCROW nStartRow = aRange.aStart.Row();
     SCTAB nTab = aRange.aStart.Tab();
 
-    sal_Bool    bFixed          = pExtOptions->IsFixedLen();
-    const String& rSeps     = pExtOptions->GetFieldSeps();
-    const sal_Unicode* pSeps = rSeps.GetBuffer();
-    sal_Bool    bMerge          = pExtOptions->IsMergeSeps();
-    sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
-    const xub_StrLen* pColStart = pExtOptions->GetColStart();
+    sal_Bool    bFixed           = pExtOptions->IsFixedLen();
+    const String& rSeps          = pExtOptions->GetFieldSeps();
+    const sal_Unicode* pSeps     = rSeps.GetBuffer();
+    sal_Bool    bMerge           = pExtOptions->IsMergeSeps();
+    sal_uInt16  nInfoCount       = pExtOptions->GetInfoCount();
+    const sal_Int32* pColStart   = pExtOptions->GetColStart();
     const sal_uInt8* pColFormat  = pExtOptions->GetColFormat();
     long nSkipLines = pExtOptions->GetStartRow();
 
@@ -1176,7 +1222,8 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
     }
 
-    String aLine, aCell;
+    rtl::OUString aLine;
+    String aCell;
     sal_uInt16 i;
     SCROW nRow = nStartRow;
 
@@ -1209,7 +1256,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if ( rStrm.IsEof() )
                 break;
 
-            xub_StrLen nLineLen = aLine.Len();
+            sal_Int32 nLineLen = aLine.getLength();
             SCCOL nCol = nStartCol;
             bool bMultiLine = false;
             if ( bFixed )               //  Feste Satzlaenge
@@ -1227,8 +1274,8 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             bOverflow = sal_True;       // display warning on import
                         else if (!bDetermineRange)
                         {
-                            xub_StrLen nStart = pColStart[i];
-                            xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
+                            sal_Int32 nStart = pColStart[i];
+                            sal_Int32 nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
                             bool bIsQuoted = false;
                             aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted );
                             if (bIsQuoted && bQuotedAsText)
@@ -1247,7 +1294,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             {
                 SCCOL nSourceCol = 0;
                 sal_uInt16 nInfoStart = 0;
-                const sal_Unicode* p = aLine.GetBuffer();
+                const sal_Unicode* p = aLine.getStr();
                 // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
@@ -1378,7 +1425,12 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         // Append remaining unquoted and undelimited data (dirty, dirty) to
         // this field.
         if (p > p1)
-            rField.Append( p1, sal::static_int_cast<xub_StrLen>( p - p1 ) );
+        {
+            if (!lcl_appendLineData( rField, p1, p))
+            {
+                /* TODO: warning at UI, data truncated */
+            }
+        }
         if( *p )
             p++;
     }
@@ -1387,7 +1439,10 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         const sal_Unicode* p0 = p;
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
-        rField.Append( p0, sal::static_int_cast<xub_StrLen>( p - p0 ) );
+        if (!lcl_appendLineData( rField, p0, p))
+        {
+            /* TODO: warning at UI, data truncated */
+        }
         if( *p )
             p++;
     }
@@ -2135,12 +2190,12 @@ inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
     return 0;
 }
 
-String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
+rtl::OUString ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape)
 {
-    String aStr;
-    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet());
+    rtl::OUString aStr;
+    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
 
     if (bEmbeddedLineBreak)
     {
@@ -2149,13 +2204,13 @@ String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
         // See if the separator(s) include tab.
         bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
 
-        xub_StrLen nLastOffset = 0;
-        xub_StrLen nQuotes = 0;
-        while (!rStream.IsEof() && aStr.Len() < STRING_MAXLEN)
+        sal_Int32 nLastOffset = 0;
+        sal_Int32 nQuotes = 0;
+        while (!rStream.IsEof() && aStr.getLength() < nArbitraryLineLengthLimit)
         {
             bool bBackslashEscaped = false;
             const sal_Unicode *p, *pStart;
-            p = pStart = aStr.GetBuffer();
+            p = pStart = aStr.getStr();
             p += nLastOffset;
             while (*p)
             {
@@ -2193,10 +2248,10 @@ String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
                 break;
             else
             {
-                nLastOffset = aStr.Len();
-                String aNext;
-                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet());
-                aStr += sal_Unicode(_LF);
+                nLastOffset = aStr.getLength();
+                rtl::OUString aNext;
+                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
+                aStr += rtl::OUString( sal_Unicode(_LF));
                 aStr += aNext;
             }
         }

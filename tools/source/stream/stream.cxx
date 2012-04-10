@@ -647,6 +647,15 @@ void SvStream::ResetError()
 |*
 *************************************************************************/
 
+sal_Bool SvStream::ReadByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+                                       sal_Int32 nMaxBytesToRead )
+{
+    rtl::OString aStr;
+    sal_Bool bRet = ReadLine( aStr, nMaxBytesToRead);
+    rStr = rtl::OStringToOUString(aStr, eSrcCharSet);
+    return bRet;
+}
+
 sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
 {
     rtl::OString aStr;
@@ -655,7 +664,7 @@ sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSe
     return bRet;
 }
 
-sal_Bool SvStream::ReadLine(rtl::OString& rStr)
+sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
 {
     sal_Char    buf[256+1];
     sal_Bool        bEnd        = sal_False;
@@ -663,7 +672,7 @@ sal_Bool SvStream::ReadLine(rtl::OString& rStr)
     sal_Char    c           = 0;
     sal_Size       nTotalLen   = 0;
 
-    rtl::OStringBuffer aBuf;
+    rtl::OStringBuffer aBuf(4096);
     while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
                                     // !!! weil wir blockweise
                                     // !!! lesen
@@ -695,8 +704,15 @@ sal_Bool SvStream::ReadLine(rtl::OString& rStr)
                 buf[n] = c;
             ++n;
         }
-        aBuf.append(buf, n);
         nTotalLen += j;
+        if (nTotalLen > static_cast<sal_Size>(nMaxBytesToRead))
+        {
+            n -= nTotalLen - nMaxBytesToRead;
+            nTotalLen = nMaxBytesToRead;
+            bEnd = sal_True;
+        }
+        if ( n )
+            aBuf.append(buf, n);
     }
 
     if ( !bEnd && !GetError() && aBuf.getLength() )
@@ -723,7 +739,7 @@ sal_Bool SvStream::ReadLine(rtl::OString& rStr)
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniStringLine( String& rStr )
+sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepointsToRead )
 {
     sal_Unicode buf[256+1];
     sal_Bool        bEnd        = sal_False;
@@ -733,7 +749,7 @@ sal_Bool SvStream::ReadUniStringLine( String& rStr )
 
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "ReadUniStringLine: swapping sizeof(sal_Unicode) not implemented" );
 
-    rStr.Erase();
+    rtl::OUStringBuffer aBuf(4096);
     while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
                                     // !!! weil wir blockweise
                                     // !!! lesen
@@ -742,10 +758,11 @@ sal_Bool SvStream::ReadUniStringLine( String& rStr )
         nLen /= sizeof(sal_Unicode);
         if ( !nLen )
         {
-            if ( rStr.Len() == 0 )
+            if ( aBuf.getLength() == 0 )
             {
                 // der allererste Blockread hat fehlgeschlagen -> Abflug
                 bIsEof = sal_True;
+                rStr = rtl::OUString();
                 return sal_False;
             }
             else
@@ -774,12 +791,18 @@ sal_Bool SvStream::ReadUniStringLine( String& rStr )
                 ++n;
             }
         }
-        if ( n )
-            rStr.Append( buf, n );
         nTotalLen += j;
+        if (nTotalLen > static_cast<sal_Size>(nMaxCodepointsToRead))
+        {
+            n -= nTotalLen - nMaxCodepointsToRead;
+            nTotalLen = nMaxCodepointsToRead;
+            bEnd = sal_True;
+        }
+        if ( n )
+            aBuf.append( buf, n );
     }
 
-    if ( !bEnd && !GetError() && rStr.Len() )
+    if ( !bEnd && !GetError() && aBuf.getLength() )
         bEnd = sal_True;
 
     nOldFilePos += nTotalLen * sizeof(sal_Unicode);
@@ -799,20 +822,22 @@ sal_Bool SvStream::ReadUniStringLine( String& rStr )
 
     if ( bEnd )
         bIsEof = sal_False;
+    rStr = aBuf.makeStringAndClear();
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
+sal_Bool SvStream::ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+                                            sal_Int32 nMaxCodepointsToRead )
 {
     if ( eSrcCharSet == RTL_TEXTENCODING_UNICODE )
-        return ReadUniStringLine( rStr );
+        return ReadUniStringLine( rStr, nMaxCodepointsToRead );
     else
-        return ReadByteStringLine( rStr, eSrcCharSet );
+        return ReadByteStringLine( rStr, eSrcCharSet, nMaxCodepointsToRead );
 }
 
 rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
 {
-    rtl::OStringBuffer aOutput;
+    rtl::OStringBuffer aOutput(256);
 
     sal_Char buf[ 256 + 1 ];
     sal_Bool bEnd = sal_False;

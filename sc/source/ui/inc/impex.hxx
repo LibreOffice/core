@@ -225,8 +225,8 @@ public:
 
     @ATTENTION
     Note that the string returned may be truncated even inside
-    a quoted field if STRING_MAXLEN was reached. There
-    currently is no way to exactly determine the conditions,
+    a quoted field if some (arbritary) maximum length was reached.
+    There currently is no way to exactly determine the conditions,
     whether this was at a line end, or whether open quotes
     would have closed the field before the line end, as even a
     ReadUniOrByteStringLine() may return prematurely but the
@@ -235,11 +235,12 @@ public:
     length and bytes read don't necessarily match, and
     resyncing to a previous position matching the string's
     length isn't always possible. As a result, a logical line
-    with embedded line breaks and more than STRING_MAXLEN
+    with embedded line breaks and more than the maximum length
     characters will be spoiled, and a subsequent ReadCsvLine()
     may start under false preconditions.
+
   */
-SC_DLLPUBLIC String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
+SC_DLLPUBLIC rtl::OUString ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape = sal_False);
 
