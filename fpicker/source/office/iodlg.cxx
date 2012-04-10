@@ -1436,7 +1436,8 @@ IMPL_STATIC_LINK ( SvtFileDialog, AddPlacePressed_Hdl, void*, EMPTYARG )
     // Maybe open the PlacesDialog would have been a better idea
     // there is an ux choice to make we did not make...
     INetURLObject aURLObj( pThis->_pFileView->GetViewURL() );
-    PlacePtr newPlace(new Place( aURLObj.GetLastName(),
+    PlacePtr newPlace(
+        new Place( aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET),
                 ::rtl::OUString(pThis->_pFileView->GetViewURL()), true));
     pThis->_pImp->_pPlaces->AppendPlace(newPlace);
     return 0;
