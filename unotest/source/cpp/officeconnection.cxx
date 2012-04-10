@@ -59,6 +59,9 @@ OfficeConnection::OfficeConnection(): process_(0) {}
 OfficeConnection::~OfficeConnection() {}
 
 void OfficeConnection::setUp() {
+    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
+        css::bridge::UnoUrlResolver::create(
+            cppu::defaultBootstrap_InitialComponentContext()));
     rtl::OUString desc;
     rtl::OUString argSoffice;
     CPPUNIT_ASSERT(
@@ -119,9 +122,6 @@ void OfficeConnection::setUp() {
             "\"soffice\" argument starts with neither \"path:\" nor"
             " \"connect:\"");
     }
-    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
-        css::bridge::UnoUrlResolver::create(
-            cppu::defaultBootstrap_InitialComponentContext()));
     for (;;) {
         try {
             context_ =
