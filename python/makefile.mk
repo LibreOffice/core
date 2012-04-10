@@ -65,10 +65,12 @@ CONFIGURE_DIR=
 BUILD_DIR=
 MYCWD=$(shell @pwd)/$(INPATH)/misc/build
 
+.IF "$(SYSTEM_OPENSSL)" != "YES"
 #we want to be sure we use our internal openssl if
 #that's enabled
 CC+:=-I$(SOLARINCDIR)$/external
 python_LDFLAGS+=-L$(SOLARLIBDIR)
+.ENDIF
 
 # CLFLAGS get overwritten in Makefile.pre.in
 .IF "$(SYSBASE)"!=""
