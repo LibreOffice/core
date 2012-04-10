@@ -177,7 +177,7 @@ public:
     virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
-    virtual SfxStyleSheetBase* Find(const UniString& rStr);
+    virtual SfxStyleSheetBase* Find(const rtl::OUString& rStr);
 
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
 };

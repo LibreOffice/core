@@ -311,8 +311,8 @@ const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
 }
 
 
-sal_uInt16 lcl_FindName( const SwPoolFmtList& rLst, SfxStyleFamily eFam,
-                        const String& rName )
+sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
+    const rtl::OUString& rName)
 {
     if(!rLst.empty())
     {
@@ -2762,7 +2762,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Next()
     return 0;
 }
 
-SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
+SfxStyleSheetBase*  SwStyleSheetIterator::Find(const rtl::OUString& rName)
 {
     // searching
     if( !bFirstCalled )

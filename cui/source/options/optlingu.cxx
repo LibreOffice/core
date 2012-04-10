@@ -491,7 +491,7 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
         if(aData.HasNumericValue())
         {
             rtl::OUStringBuffer sTxt;
-            aTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
+            sTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
             rDev.SetFont( aFont );
             rDev.DrawText( aNewPos, sTxt.makeStringAndClear() );
         }

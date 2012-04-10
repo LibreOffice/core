@@ -497,9 +497,9 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
 }
 
 
-SfxStyleSheetBase* SfxStyleSheetIterator::Find(const XubString& rStr)
+SfxStyleSheetBase* SfxStyleSheetIterator::Find(const rtl::OUString& rStr)
 {
-    for ( sal_uInt16 n = 0; n < pBasePool->aStyles.size(); n++ )
+    for ( sal_uInt16 n = 0; n < pBasePool->aStyles.size(); ++n )
     {
         SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
 
