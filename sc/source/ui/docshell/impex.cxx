@@ -118,7 +118,8 @@ ScImportExport::ScImportExport( ScDocument* p )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
-      bOverflow( false ), mbApi( true ), mExportTextOptions()
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -133,7 +134,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
-      bOverflow( false ), mbApi( true ), mExportTextOptions()
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -149,7 +151,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != NULL ),
-      bOverflow( false ), mbApi( true ), mExportTextOptions()
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -166,7 +169,8 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
-      bOverflow( false ), mbApi( true ), mExportTextOptions()
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -849,9 +853,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                     while( *p && *p != cSep )
                         p++;
                     if (!lcl_appendLineData( aCell, q, p))
-                    {
-                        /* TODO: warning at UI, data truncated */
-                    }
+                        bOverflowCell = true;   // display warning on import
                     if( *p )
                         p++;
                 }
@@ -866,7 +868,12 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                         pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell );
                 }
                 else                            // zuviele Spalten/Zeilen
-                    bOverflow = true;           // beim Import Warnung ausgeben
+                {
+                    if (!ValidRow(nRow))
+                        bOverflowRow = true;    // display warning on import
+                    if (!ValidCol(nCol))
+                        bOverflowCol = true;    // display warning on import
+                }
                 ++nCol;
             }
             ++nRow;
@@ -1144,7 +1151,8 @@ static bool lcl_PutString(
 }
 
 
-String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext, bool& rbIsQuoted )
+String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
+                     bool& rbIsQuoted, bool& rbOverflowCell )
 {
     sal_Int32 nLen = rLine.getLength();
     if (nNext > nLen)
@@ -1161,13 +1169,27 @@ String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNe
     rbIsQuoted = (pStr[nStart] == sal_Unicode('"') && pStr[nSpace-1] == sal_Unicode('"'));
     if (rbIsQuoted)
     {
-        OSL_ENSURE( nSpace - nStart - 3 <= STRING_MAXLEN, "lcl_GetFixed: line doesn't fit into data");
-        return rLine.copy(nStart+1, nSpace-nStart-2);
+        bool bFits = (nSpace - nStart - 3 <= STRING_MAXLEN);
+        OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
+        if (bFits)
+            return rLine.copy(nStart+1, nSpace-nStart-2);
+        else
+        {
+            rbOverflowCell = true;
+            return rLine.copy(nStart+1, STRING_MAXLEN);
+        }
     }
     else
     {
-        OSL_ENSURE( nSpace - nStart <= STRING_MAXLEN, "lcl_GetFixed: line doesn't fit into data");
-        return rLine.copy(nStart, nSpace-nStart);
+        bool bFits = (nSpace - nStart <= STRING_MAXLEN);
+        OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
+        if (bFits)
+            return rLine.copy(nStart, nSpace-nStart);
+        else
+        {
+            rbOverflowCell = true;
+            return rLine.copy(nStart, STRING_MAXLEN);
+        }
     }
 }
 
@@ -1271,13 +1293,13 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     if (nFmt != SC_COL_SKIP)        // sonst auch nCol nicht hochzaehlen
                     {
                         if (nCol > MAXCOL)
-                            bOverflow = true;       // display warning on import
+                            bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
                             sal_Int32 nStart = pColStart[i];
                             sal_Int32 nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
                             bool bIsQuoted = false;
-                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted );
+                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted, bOverflowCell );
                             if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 
@@ -1302,7 +1324,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 while (*p && nCol <= MAXCOL+1)
                 {
                     bool bIsQuoted = false;
-                    p = ScImportExport::ScanNextFieldFromString( p, aCell, cStr, pSeps, bMerge, bIsQuoted );
+                    p = ScImportExport::ScanNextFieldFromString( p, aCell,
+                            cStr, pSeps, bMerge, bIsQuoted, bOverflowCell );
 
                     sal_uInt8 nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
@@ -1317,7 +1340,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     if ( nFmt != SC_COL_SKIP )
                     {
                         if (nCol > MAXCOL)
-                            bOverflow = true;       // display warning on import
+                            bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
                             if (bIsQuoted && bQuotedAsText)
@@ -1346,7 +1369,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             ++nRow;
             if ( nRow > MAXROW )
             {
-                bOverflow = true;       // display warning on import
+                bOverflowRow = true;    // display warning on import
                 break;  // for
             }
         }
@@ -1399,7 +1422,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
 
 const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p,
-        String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted )
+        String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted,
+        bool& rbOverflowCell )
 {
     rbIsQuoted = false;
     rField.Erase();
@@ -1427,9 +1451,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if (p > p1)
         {
             if (!lcl_appendLineData( rField, p1, p))
-            {
-                /* TODO: warning at UI, data truncated */
-            }
+                rbOverflowCell = true;
         }
         if( *p )
             p++;
@@ -1440,9 +1462,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
         if (!lcl_appendLineData( rField, p0, p))
-        {
-            /* TODO: warning at UI, data truncated */
-        }
+            rbOverflowCell = true;
         if( *p )
             p++;
     }

@@ -71,7 +71,9 @@ class SC_DLLPUBLIC ScImportExport
     bool        bAll;                   // keine Selektion
     bool        bSingle;                // Einfachselektion
     bool        bUndo;                  // Mit Undo?
-    bool        bOverflow;              // zuviele Zeilen/Spalten
+    bool        bOverflowRow;           // too many rows
+    bool        bOverflowCol;           // too many columns
+    bool        bOverflowCell;          // too much data for a cell
     bool        mbApi;
     ScExportTextOptions mExportTextOptions;
 
@@ -112,7 +114,8 @@ public:
 
     static bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
-            String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
+            String& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
+            bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell );
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
     static  inline  bool    IsEndianSwap( const SvStream& rStrm );
@@ -146,7 +149,11 @@ public:
     bool ExportData( const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
-    bool IsOverflow() const { return bOverflow; }       // nach dem Importieren
+    // after import
+    bool IsOverflowRow() const { return bOverflowRow; }
+    bool IsOverflowCol() const { return bOverflowCol; }
+    bool IsOverflowCell() const { return bOverflowCell; }
+    bool IsOverflow() const { return bOverflowRow || bOverflowCol || bOverflowCell; }
 
     const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 

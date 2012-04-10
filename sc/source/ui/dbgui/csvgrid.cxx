@@ -750,7 +750,10 @@ void ScCsvGrid::ImplSetTextLineSep(
     {
         // scan for next cell text
         bool bIsQuoted = false;
-        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep, bIsQuoted );
+        bool bOverflowCell = false;
+        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText,
+                cTextSep, pSepChars, bMergeSep, bIsQuoted, bOverflowCell );
+        /* TODO: signal overflow somewhere in UI */
 
         // update column width
         sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );

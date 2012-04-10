@@ -1170,7 +1170,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             FltError eError = eERR_OK;
-            sal_Bool bOverflow = false;
+            bool bOverflowRow, bOverflowCol, bOverflowCell;
+            bOverflowRow = bOverflowCol = bOverflowCell = false;
 
             if( ! rMedium.IsStorage() )
             {
@@ -1186,7 +1187,9 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
                     aDocument.StartAllListeners();
                     aDocument.SetDirty();
-                    bOverflow = aImpEx.IsOverflow();
+                    bOverflowRow = aImpEx.IsOverflowRow();
+                    bOverflowCol = aImpEx.IsOverflowCol();
+                    bOverflowCell = aImpEx.IsOverflowCell();
                 }
                 else
                 {
@@ -1199,10 +1202,13 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (!GetError())
                     SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             }
-            else if ( bOverflow )
+            else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
             {
-                if (!GetError())
-                    SetError(SCWARN_IMPORT_RANGE_OVERFLOW, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
+                // precedence: row, column, cell
+                FltError nWarn = (bOverflowRow ? SCWARN_IMPORT_ROW_OVERFLOW :
+                        (bOverflowCol ? SCWARN_IMPORT_COLUMN_OVERFLOW :
+                         SCWARN_IMPORT_CELL_OVERFLOW));
+                SetError( nWarn, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             }
             bSetColWidths = sal_True;
             bSetSimpleTextColWidths = sal_True;
