@@ -1750,10 +1750,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the files from the binary directory into the binary table
             installer::windows::binary::update_binary_table($languageidtdir, $filesinproductlanguageresolvedarrayref, $binarytablefiles);
 
-            # setting patch codes to detect installed products
-
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $allvariableshashref->{'PDFCONVERTER'} )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
-
             # Adding Windows Installer CustomActions
 
             installer::windows::idtglobal::addcustomactions($languageidtdir, $windowscustomactionsarrayref, $filesinproductlanguageresolvedarrayref);
