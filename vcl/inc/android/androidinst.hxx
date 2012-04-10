@@ -71,11 +71,6 @@ protected:
     struct android_app *mpApp;
     Region maRedrawRegion;
     bool   mbQueueReDraw;
-
-private:
-    EGLDisplay mxDisplay;
-    EGLSurface mxSurface;
-    EGLContext mxContext;
 };
 
 #endif // ANDROID_SALINST_H

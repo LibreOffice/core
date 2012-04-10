@@ -564,9 +564,6 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
     , mpApp( NULL )
     , mbQueueReDraw( false )
-    , mxDisplay( EGL_NO_DISPLAY )
-    , mxSurface( EGL_NO_SURFACE )
-    , mxContext( EGL_NO_CONTEXT )
 {
     mpApp = lo_get_app();
     fprintf (stderr, "created Android Sal Instance for app %p window %p thread: %d\n",
