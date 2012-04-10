@@ -52,6 +52,8 @@ copy-stuff:
 		   comphelpgcc3 \
 		   datelo \
 		   dbaxmllo \
+		   dbtoolslo \
+		   evtattlo \
 		   expwrap.uno \
 		   fastsax.uno \
 		   fileacc \
@@ -60,6 +62,7 @@ copy-stuff:
 		   foruilo \
 		   freetype \
 		   frmlo \
+		   fsstorage.uno \
 		   gcc3_uno \
 		   hwplo \
 		   i18nisolang1gcc3 \
@@ -77,6 +80,7 @@ copy-stuff:
 		   jvmaccessgcc3 \
 		   jvmfwk \
 		   lo-bootstrap \
+		   localebe1.uno \
 		   localedata_en \
 		   localedata_others \
 		   lwpftlo \
@@ -84,6 +88,9 @@ copy-stuff:
 		   msfilterlo \
 		   msworkslo \
 		   ooxlo \
+		   raptor \
+		   rasqal \
+		   rdf \
 		   reflection.uno \
 		   reg \
 		   saxlo \
@@ -108,6 +115,7 @@ copy-stuff:
 		   uno_sal \
 		   uno_salhelpergcc3 \
 		   uno_cppuhelpergcc3 \
+		   unordflo \
 		   unoxmllo \
 		   utllo \
 		   vbahelperlo \
@@ -118,6 +126,8 @@ copy-stuff:
 		   xml2 \
 		   xmlfdlo \
 		   xmlreader \
+		   xmlsecurity \
+		   xslt \
 		   xstor \
 		  ); do \
 	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
