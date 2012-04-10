@@ -77,7 +77,6 @@ use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
 use installer::windows::msp;
-use installer::windows::patch;
 use installer::windows::property;
 use installer::windows::removefile;
 use installer::windows::registry;
