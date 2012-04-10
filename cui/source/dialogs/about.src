@@ -30,14 +30,11 @@
 ModalDialog RID_DEFAULTABOUT
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    MultiLineEdit ABOUT_FTXT_VERSION
+    MultiLineEdit ABOUT_DESCRIPTION_TEXT
     {
         Border = FALSE ;
-        Pos = MAP_APPFONT ( 54 , 6 ) ;
-        Size = MAP_APPFONT ( 118 , 16 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
@@ -45,92 +42,87 @@ ModalDialog RID_DEFAULTABOUT
         CENTER = TRUE ;
         RIGHT = FALSE ;
     };
-    MultiLineEdit ABOUT_FTXT_COPYRIGHT
+    MultiLineEdit ABOUT_COPYRIGHT_TEXT
     {
         Border = FALSE ;
-        Pos = MAP_APPFONT ( 54 , 25 ) ;
-        Size = MAP_APPFONT ( 168 , 71 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
-        AutoVScroll = TRUE ;
         LEFT = FALSE ;
         CENTER = TRUE ;
         RIGHT = FALSE ;
     };
-    FixedText ABOUT_FTXT_LINK
+    MultiLineEdit ABOUT_COPYRIGHT_TEXT_SHADOW
     {
-        NoLabel = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "Contributor credits";
-        Pos = MAP_APPFONT ( 54 , 100 ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Border = FALSE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
-    FixedText ABOUT_TDFSTR_LINK
+    MultiLineEdit ABOUT_VERSION_TEXT
     {
-        NoLabel = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "The Document Foundation";
-        Pos = MAP_APPFONT ( 54 , 100 ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
-    };
-    FixedText ABOUT_FEATURES_LINK
-    {
-        NoLabel = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "Features";
-        Pos = MAP_APPFONT ( 54 , 100 ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Border = FALSE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
     String ABOUT_STR_VERSION
     {
-        Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
+        Text = "version %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
+    };
+    String ABOUT_STR_DESCRIPTION
+    {
+        Text [ en-US ] = "%PRODUCTNAME is a modern, easy-to-use, open source productivity suite for word processing, spreadsheets, presentations and more.";
     };
     String ABOUT_STR_VENDOR
     {
-        Text[ en-US ] = "%PRODUCTNAME is a free and open source office suite. This release was supplied by %OOOVENDOR.";
+        Text[ en-US ] = "This release was supplied by %OOOVENDOR";
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "Copyright © 2000, 2012 LibreOffice contributors and/or their affiliates";
     };
-    String ABOUT_STR_COPYRIGHT_DERIVED
+    String ABOUT_STR_BASED
     {
-        Text[ en-US ] = "%PRODUCTNAME is derived from LibreOffice. LibreOffice is copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "LibreOffice was based on OpenOffice.org";
     };
-    String ABOUT_STR_COPYRIGHT_ORACLE_DERIVED
+    String ABOUT_STR_BASED_DERIVED
     {
-        Text[ en-US ] = "LibreOffice is derived from OpenOffice.org. OpenOffice.org is copyright © 2000, 2011 Oracle and/or its affiliates. All rights reserved.";
-    };
-    String ABOUT_STR_ACKNOWLEDGEMENT
-    {
-        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more information at the links below:";
-    };
-    String ABOUT_STR_LINK
-    {
-        Text[ en-US ] = "http://www.libreoffice.org/about-us/credits/";
+        Text[ en-US ] = "%PRODUCTNAME is derived from LibreOffice which was based on OpenOffice.org";
     };
     String ABOUT_STR_BUILD
     {
-        Text[ en-US ] = "Build ID:";
+        Text[ en-US ] = "(Build ID: %BUILDID)";
     };
-    String ABOUT_TDF_LINK
+    String ABOUT_STR_LINK_WEBSITE
     {
-        Text[ en-US ] = "http://www.documentfoundation.org/";
+        Text[ en-US ] = "http://www.libreoffice.org";
     };
-    String ABOUT_FEATURESSTR_LINK
+    String ABOUT_STR_LINK_CREDITS
     {
-        Text[ en-US ] = "http://www.libreoffice.org/features/";
+        Text[ en-US ] = "http://www.libreoffice.org/about-us/credits/";
     };
-    FixedLine ABOUT_BUTTONS_LINE
+    String ABOUT_STR_LINK_LICENSE
     {
-        Pos = MAP_APPFONT ( 0 , 245 ) ;
-        Size = MAP_APPFONT ( 170 , 2 ) ;
+        Text[ en-US ] = "http://www.libreoffice.org/download/license/";
     };
-    CancelButton ABOUT_BTN_CANCEL
+    PushButton ABOUT_BTN_CREDITS
     {
+        Text [ en-US ] = "Credits";
+    };
+    PushButton ABOUT_BTN_LICENSE
+    {
+        Text [ en-US ] = "License";
+    };
+    PushButton ABOUT_BTN_WEBSITE
+    {
+        Text [ en-US ] = "libreoffice.org";
         DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Close";
+    };
+    FixedImage ABOUT_IMAGE_LOGO
+    {
     };
 };

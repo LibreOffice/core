@@ -48,7 +48,7 @@ protected:
     ::vcl::ImplControlData* mpControlData;
 
 private:
-    sal_Bool                    mbHasFocus;
+    sal_Bool                mbHasFocus;
     Link                    maGetFocusHdl;
     Link                    maLoseFocusHdl;
 

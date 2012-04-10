@@ -133,7 +133,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                     aDateTime.Minutes * 60       +
                     aDateTime.Seconds            );
             }
-            catch (lang::IllegalArgumentException &)
+            catch (const lang::IllegalArgumentException &)
             {
                 // ignore
             }
@@ -160,11 +160,15 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         {
             ::rtl::OUString aPropName = xCustomSect->GetPropertyName( *aIt );
             uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
-            if( !aPropName.isEmpty() && aPropValue.hasValue() ) {
-                try {
+            if( !aPropName.isEmpty() && aPropValue.hasValue() )
+            {
+                try
+                {
                     xUserDefined->addProperty( aPropName,
                         beans::PropertyAttribute::REMOVEABLE, aPropValue );
-                } catch ( uno::Exception& ) {
+                }
+                catch (const uno::Exception&)
+                {
                     //ignore
                 }
             }
@@ -187,7 +191,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                 if ( xBuiltin->GetStringValue( aStrValue, PROPID_COMPANY ) )
                     xWriterProps->setCompany( aStrValue );
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
         }
@@ -237,13 +241,13 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     rGlobSect.SetFileTimeValue( PROPID_EDITTIME, aEditTime );
 
     rGlobSect.SetStringValue( PROPID_REVNUMBER,
-                String::CreateFromInt32( i_xDocProps->getEditingCycles() ) );
+                rtl::OUString::valueOf( i_xDocProps->getEditingCycles() ) );
     if ( i_pThumb && i_pThumb->getLength() )
         rGlobSect.SetThumbnailValue( PROPID_THUMBNAIL, *i_pThumb );
 
     // save the property set
     ErrCode nGlobError = aGlobSet.SavePropertySet(i_pStorage,
-        String( RTL_CONSTASCII_USTRINGPARAM( STREAM_SUMMARYINFO ) ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STREAM_SUMMARYINFO)));
 
     // *** custom properties into stream "005DocumentSummaryInformation" ***
 
@@ -278,8 +282,10 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         xUserDefinedProps->getPropertySetInfo();
     DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
     uno::Sequence<beans::Property> props = xPropInfo->getProperties();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-        try {
+    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+    {
+        try
+        {
             // skip transient properties
             if (~props[i].Attributes & beans::PropertyAttribute::TRANSIENT)
             {
@@ -290,7 +296,9 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
                     rCustomSect.SetPropertyName( nPropId, name );
                 }
             }
-        } catch (uno::Exception &) {
+        }
+        catch (const uno::Exception &)
+        {
             // may happen with concurrent modification...
             DBG_WARNING("SavePropertySet: exception");
         }

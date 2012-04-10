@@ -63,13 +63,4 @@ IntroWindow::~IntroWindow()
         pSVData->mpIntroWindow = NULL;
 }
 
-void IntroWindow::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
-{
-    if( ! rBitmapEx.IsEmpty() )
-    {
-        SalBitmap* pBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-        ImplGetFrame()->SetBackgroundBitmap( pBmp );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

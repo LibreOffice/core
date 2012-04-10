@@ -69,6 +69,7 @@ private:
     sal_Bool            mbIgnoreTab;
     sal_Bool            mbActivePopup;
     sal_Bool            mbSelectOnTab;
+    sal_Bool            mbTextSelectable;
 
 public:
                     TextWindow( Window* pParent );
@@ -96,7 +97,9 @@ public:
     sal_Bool            IsIgnoreTab() const { return mbIgnoreTab; }
     void            SetIgnoreTab( sal_Bool bIgnore ) { mbIgnoreTab = bIgnore; }
 
-    void            DisableSelectionOnFocus() {mbSelectOnTab = sal_False;}
+    void            DisableSelectionOnFocus() { mbSelectOnTab = sal_False; }
+
+    void            SetTextSelectable( sal_Bool bTextSelectable ) { mbTextSelectable = bTextSelectable; }
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
@@ -737,6 +740,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     mbIgnoreTab = sal_False;
     mbActivePopup = sal_False;
     mbSelectOnTab = sal_True;
+    mbTextSelectable = sal_True;
 
     SetPointer( Pointer( POINTER_TEXT ) );
 
@@ -769,6 +773,9 @@ void TextWindow::MouseMove( const MouseEvent& rMEvt )
 
 void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    if ( !mbTextSelectable )
+        return;
+
     mbInMBDown = sal_True;  // Dann im GetFocus nicht alles selektieren wird
     mpExtTextView->MouseButtonDown( rMEvt );
     Window::MouseButtonDown( rMEvt );
@@ -1002,6 +1009,7 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
     // MultiLineEdit's version while in the base Edit ctor:
     if ((GetStyle() & WB_HIDE) == 0)
         Show();
+
 }
 
 MultiLineEdit::~MultiLineEdit()
@@ -1602,6 +1610,11 @@ MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
 void MultiLineEdit::DisableSelectionOnFocus()
 {
     pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();
+}
+
+void MultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
+{
+    pImpSvMEdit->GetTextWindow()->SetTextSelectable( bTextSelectable );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

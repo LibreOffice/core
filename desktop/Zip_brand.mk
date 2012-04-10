@@ -27,10 +27,16 @@
 
 $(eval $(call gb_Zip_Zip,brand/intro,$(WORKDIR)/Zip/brand_intro))
 
-$(eval $(call gb_Zip_add_file,brand/intro,about.png,\
-	$(if $(ABOUT_BITMAP),\
-	    $(ABOUT_BITMAP),\
-		$(SRCDIR)/icon-themes/galaxy/brand/about.png)\
+$(eval $(call gb_Zip_add_file,brand/intro,shell/about.svg,\
+	$(if $(ABOUT_BACKGROUND_SVG),\
+	    $(ABOUT_BACKGROUND_SVG),\
+		$(SRCDIR)/icon-themes/galaxy/brand/shell/about.svg)\
+))
+
+$(eval $(call gb_Zip_add_file,brand/intro,flat_logo.svg,\
+	$(if $(FLAT_LOGO_SVG),\
+	    $(FLAT_LOGO_SVG),\
+		$(SRCDIR)/icon-themes/galaxy/brand/flat_logo.svg)\
 ))
 
 $(eval $(call gb_Zip_add_file,brand/intro,intro.png,\

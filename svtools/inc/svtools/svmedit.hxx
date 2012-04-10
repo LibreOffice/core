@@ -141,6 +141,8 @@ public:
     GetComponentInterface(sal_Bool bCreate = sal_True);
 
     void            DisableSelectionOnFocus();
+
+    void            SetTextSelectable( sal_Bool bTextSelectable );
 };
 
 inline sal_uLong MultiLineEdit::IsUpdateDataEnabled() const

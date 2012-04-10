@@ -46,8 +46,6 @@ private:
 public:
     IntroWindow();
     ~IntroWindow();
-
-    void SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_INTROWIN_HXX

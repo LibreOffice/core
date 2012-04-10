@@ -66,7 +66,7 @@ $(PIIM)/images_brand.zip :| $(PIIM)/.dir
 $(PIIM)/commandimagelist.ilst :| $(PIIM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
-		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" | \
+		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
 			sed "s#$(SRCDIR)/icon-themes/galaxy#%MODULE%#" | \
 			$(PERL) $(SOLARENV)/bin/sort.pl > $@.$(INPATH) && \
 		$(PERL) $(SOLARENV)/bin/diffmv.pl $@.$(INPATH) $@ \

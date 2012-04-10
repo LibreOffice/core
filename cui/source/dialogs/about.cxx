@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+// TODO: make the background of the dialog transparent and remove the titlebar
+
 // include ---------------------------------------------------------------
 
 #include <vcl/svapp.hxx>
@@ -53,231 +55,60 @@
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 using namespace ::com::sun::star;
 
-// defines ---------------------------------------------------------------
-
-#define SCROLL_OFFSET   1
-#define SPACE_OFFSET    5
-#define SCROLL_TIMER    30
-
-/* get good version information */
-static String
-GetBuildId()
+enum AboutDialogButton
 {
-    rtl::OUString sDefault;
-    rtl::OUString sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-    if (!sBuildId.isEmpty() && sBuildId.getLength() > 50)
-    {
-        rtl::OUStringBuffer aBuffer;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            rtl::OUString aToken = sBuildId.getToken( 0, '-', nIndex );
-            if (!aToken.isEmpty())
-            {
-                aBuffer.append(aToken);
-                if (nIndex >= 0)
-                {
-                    if (nIndex % 5)
-                        aBuffer.append(static_cast<sal_Unicode>('-'));
-                    else
-                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n"));
-                }
-            }
-        }
-        while ( nIndex >= 0 );
-        sBuildId = aBuffer.makeStringAndClear();
-    }
-
-    OSL_ENSURE( !sBuildId.isEmpty(), "No BUILDID in bootstrap file" );
-    return sBuildId;
-}
+    CREDITS_BUTTON,
+    WEBSITE_BUTTON,
+    LICENSE_BUTTON
+};
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
-
-    SfxModalDialog  ( pParent,  rId ),
-    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
-    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
-    aTdfLink        ( this,     ResId( ABOUT_TDFSTR_LINK, *rId.GetResMgr() ) ),
-    aFeaturesLink   ( this,     ResId( ABOUT_FEATURES_LINK, *rId.GetResMgr() ) ),
-    aButtonsLine    ( this,     ResId( ABOUT_BUTTONS_LINE, *rId.GetResMgr() ) ),
-    aCancelButton   ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
+    SfxModalDialog       ( pParent,  rId ),
+    aVersionText         ( this,     ResId( ABOUT_VERSION_TEXT, *rId.GetResMgr() ) ),
+    aDescriptionText     ( this,     ResId( ABOUT_DESCRIPTION_TEXT, *rId.GetResMgr() ) ),
+    aCopyrightText       ( this,     ResId( ABOUT_COPYRIGHT_TEXT, *rId.GetResMgr() ) ),
+    aCopyrightTextShadow ( this,     ResId( ABOUT_COPYRIGHT_TEXT, *rId.GetResMgr() ) ),
+    aLogoImage           ( this,     ResId( ABOUT_IMAGE_LOGO, *rId.GetResMgr() ) ),
+    aCreditsButton       ( this,     ResId( ABOUT_BTN_CREDITS, *rId.GetResMgr() ) ),
+    aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
+    aLicenseButton       ( this,     ResId( ABOUT_BTN_LICENSE, *rId.GetResMgr() ) ),
     aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
-    m_aOracleCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT_ORACLE_DERIVED, *rId.GetResMgr())),
-    m_aAcknowledgementTextStr(ResId(ABOUT_STR_ACKNOWLEDGEMENT, *rId.GetResMgr())),
-    m_aLinkStr(ResId( ABOUT_STR_LINK, *rId.GetResMgr())),
-    m_aTdfLinkStr(ResId( ABOUT_TDF_LINK, *rId.GetResMgr())),
-    m_aFeaturesLinkStr(ResId( ABOUT_FEATURESSTR_LINK, *rId.GetResMgr())),
-    m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
+    m_aCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT, *rId.GetResMgr())),
+    m_aBasedTextStr(ResId(ABOUT_STR_BASED, *rId.GetResMgr())),
+    m_aBasedDerivedTextStr(ResId(ABOUT_STR_BASED_DERIVED, *rId.GetResMgr())),
+    m_aWebsiteLinkStr(ResId( ABOUT_STR_LINK_WEBSITE, *rId.GetResMgr())),
+    m_aCreditsLinkStr(ResId( ABOUT_STR_LINK_CREDITS, *rId.GetResMgr())),
+    m_aLicenseLinkStr(ResId( ABOUT_STR_LINK_LICENSE, *rId.GetResMgr())),
+    m_sBuildStr(ResId::toString(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))),
+    m_aDescriptionTextStr(ResId(ABOUT_STR_DESCRIPTION, *rId.GetResMgr()))
 {
-    // load image from module path
-    aAppLogo = SfxApplication::GetApplicationLogo();
+    // Populate text items
+    aVersionText.SetText( GetVersionString() );
 
-    // Transparent Font
-    Font aFont = GetFont();
-    aFont.SetTransparent( sal_True );
-    SetFont( aFont );
+    aDescriptionText.SetText( m_aDescriptionTextStr );
 
-    // if necessary more info
-    String sVersion = aVersionTextStr;
-    sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
-    sVersion += '\n';
-    sVersion += m_sBuildStr;
-    sVersion += ' ';
-    sVersion += GetBuildId();
-#ifdef BUILD_VER_STRING
-    String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
-    sVersion += '\n';
-    sVersion += aBuildString;
-#endif
-    aVersionText.SetText( sVersion );
+    rtl::OUString aCopyrightString = GetCopyrightString();
+    aCopyrightText.SetText( aCopyrightString );
+    aCopyrightTextShadow.SetText( aCopyrightString );
 
-    // set for background and text the correct system color
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Color aWhiteCol( rSettings.GetWindowColor() );
-    Wallpaper aWall( aWhiteCol );
-    SetBackground( aWall );
-    Font aNewFont( aCopyrightText.GetFont() );
-    aNewFont.SetTransparent( sal_True );
+    StyleControls();
+    LayoutControls();
 
-    aVersionText.SetFont( aNewFont );
-    aCopyrightText.SetFont( aNewFont );
+    // Allow the button to be identifiable once they are clicked
+    aCreditsButton.SetData( (void*)CREDITS_BUTTON );
+    aWebsiteButton.SetData( (void*)WEBSITE_BUTTON );
+    aLicenseButton.SetData( (void*)LICENSE_BUTTON );
 
-    aVersionText.SetBackground();
-    aCopyrightText.SetBackground();
-    aInfoLink.SetURL(m_aLinkStr);
-    aInfoLink.SetBackground();
-    aInfoLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
-
-    aTdfLink.SetURL(m_aTdfLinkStr);
-    aTdfLink.SetBackground();
-    aTdfLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
-
-    aFeaturesLink.SetURL(m_aFeaturesLinkStr);
-    aFeaturesLink.SetBackground();
-    aFeaturesLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
-
-    aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
-
-    Color aTextColor( rSettings.GetWindowTextColor() );
-    aVersionText.SetControlForeground( aTextColor );
-    aCopyrightText.SetControlForeground( aTextColor );
-
-    rtl::OUStringBuffer sText(m_aVendorTextStr);
-    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
-    sal_uInt32 nCopyrightId = utl::ConfigManager::getProductName() == "LibreOffice" ? ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
-    String aProductCopyrightTextStr(ResId(nCopyrightId, *rId.GetResMgr()));
-    sText.append(aProductCopyrightTextStr);
-    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
-    sText.append(m_aOracleCopyrightTextStr);
-    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
-    sText.append(m_aAcknowledgementTextStr);
-    aCopyrightText.SetText(sText.makeStringAndClear());
-
-    // determine size and position of the dialog & elements
-    Size aAppLogoSiz = aAppLogo.GetSizePixel();
-
-    // analyze size of the aVersionText widget
-    // character size
-    Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    // preferred Version widget size
-    long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    long nDlgMargin  = a6Size.Width() * 2;
-    long nCtrlMargin = a6Size.Height() * 2;
-
-    aVersionText.SetSizePixel(Size(800, 600));
-    Size aVersionTextSize = aVersionText.CalcMinimumSize();
-    aVersionTextSize.Width() += nDlgMargin;
-
-    Size aOutSiz = GetOutputSizePixel();
-    aOutSiz.Width() = aAppLogoSiz.Width();
-
-    if (aOutSiz.Width() < aVersionTextSize.Width())
-        aOutSiz.Width() = aVersionTextSize.Width();
-
-    if (aOutSiz.Width() < 300)
-        aOutSiz.Width() = 300;
-
-    //round up to nearest even
-    aOutSiz.Width() += aOutSiz.Width() & 1;
-
-    long nTextWidth = (aOutSiz.Width() - nDlgMargin);
-
-    // finally set the aVersionText widget position and size
-    Size aVTSize = aVersionText.GetSizePixel();
-    aVTSize.Width() = nTextWidth;
-    aVersionText.SetSizePixel(aVTSize);
-    aVTSize = aVersionText.CalcMinimumSize();
-    Point aVTPnt;
-    aVTPnt.X() = ( aOutSiz.Width() - aVTSize.Width() ) / 2;
-    aVTPnt.Y() = nY;
-    aVersionText.SetPosSizePixel( aVTPnt, aVTSize );
-
-    nY += aVTSize.Height() + nCtrlMargin;
-
-    // Multiline edit with Copyright-Text
-    // preferred Version widget size
-    aCopyrightText.SetSizePixel(Size(nTextWidth,600));
-    Size aCTSize = aCopyrightText.CalcMinimumSize();
-    aCTSize.Width()= nTextWidth;
-    Point aCTPnt;
-    aCTPnt.X() = ( aOutSiz.Width() - aCTSize.Width() ) / 2;
-    aCTPnt.Y() = nY;
-    aCopyrightText.SetPosSizePixel( aCTPnt, aCTSize );
-
-    nY += aCTSize.Height() + nCtrlMargin;
-
-    const int nLineSpace = 4;
-    // FixedHyperlink with more info link
-    Size aLTSize = aTdfLink.CalcMinimumSize();
-    Point aLTPnt;
-    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
-    aLTPnt.Y() = nY;
-    aTdfLink.SetPosSizePixel( aLTPnt, aLTSize );
-
-    nY += aLTSize.Height();
-
-    aLTSize = aFeaturesLink.CalcMinimumSize();
-    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
-    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
-    aFeaturesLink.SetPosSizePixel( aLTPnt, aLTSize );
-
-    nY += aLTSize.Height() + nLineSpace;
-
-    aLTSize = aInfoLink.CalcMinimumSize();
-    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
-    aLTPnt.Y() = aLTPnt.Y() + aLTSize.Height() + nLineSpace;
-    aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
-
-    nY += aLTSize.Height();
-
-    // buttons delimiter line
-    Size aBDSize = aButtonsLine.GetSizePixel();
-    aBDSize.Width() = aOutSiz.Width();
-    Point aBDPnt;
-    aBDPnt.X() = 0;
-    aBDPnt.Y() = nY + nCtrlMargin / 2 + aBDSize.Height() / 2;
-    aButtonsLine.SetPosSizePixel( aBDPnt, aBDSize );
-
-    nY += nCtrlMargin + aBDSize.Height();
-
-    // Cancel-Button-Position (at the bottom and in the right)
-    Size aCancelSiz = aCancelButton.GetSizePixel();
-    Point aCancelPnt;
-    aCancelPnt.X() = aOutSiz.Width() - aCancelSiz.Width() - nDlgMargin / 2;
-    aCancelPnt.Y() = nY;
-    aCancelButton.SetPosPixel( aCancelPnt );
-
-    nY += aCancelSiz.Height() + nCtrlMargin / 2;
-
-    aOutSiz.Height() = nY;
-
-    // Change the size of the dialog
-    SetOutputSizePixel( aOutSiz );
+    // Connect all handlers
+    aCreditsButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+    aWebsiteButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+    aLicenseButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
     FreeResource();
 
@@ -285,47 +116,287 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     SetHelpId( CMD_SID_ABOUT );
 }
 
-//-----------------------------------------------------------------------
-IMPL_LINK_NOARG(AboutDialog, CancelHdl)
+IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 {
-    Close();
-    return 0;
-}
+    rtl::OUString sURL = "";
 
-// -----------------------------------------------------------------------
+    // Find which button was pressed and from this, get the URL to be opened
+    AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
+    if ( pDialogButton ==  (AboutDialogButton*)CREDITS_BUTTON )
+        sURL = m_aCreditsLinkStr;
+    else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
+        sURL = m_aWebsiteLinkStr;
+    else if ( pDialogButton == (AboutDialogButton*)LICENSE_BUTTON)
+        sURL = m_aLicenseLinkStr;
 
-IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
-{
-    rtl::OUString sURL=pHyperlink->GetURL();
-    rtl::OUString sTitle=GetText();
-
-    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
+    // If the URL is empty, don't do anything
+    if ( sURL.isEmpty() )
         return 1;
     try
     {
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),
+                                      com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         uno::Any exc( ::cppu::getCaughtException() );
         rtl::OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
-        aErrorBox.SetText( sTitle );
+        aErrorBox.SetText( GetText() );
         aErrorBox.Execute();
     }
 
     return 1;
 }
 
+void AboutDialog::StyleControls()
+{
+    // Make all the controls have a transparent background
+    aLogoImage.SetBackground();
+    aVersionText.SetPaintTransparent( sal_True );
+    aDescriptionText.SetPaintTransparent( sal_True );
+    aCopyrightText.SetPaintTransparent( sal_True );
+    aCopyrightTextShadow.SetPaintTransparent( sal_True );
+
+    Font aLabelFont = GetSettings().GetStyleSettings().GetLabelFont();
+    Font aLargeFont = aLabelFont;
+    aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.3 ) );
+
+    // Description Text
+    aDescriptionText.SetControlFont( aLargeFont );
+    aDescriptionText.SetControlForeground( Color( 46, 52, 54 ) );
+    aDescriptionText.SetTextSelectable( sal_False );
+
+    // Version Text
+    aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.2 ) );
+    aVersionText.SetControlFont( aLargeFont );
+    aVersionText.SetControlForeground( Color( 142, 142, 142 ) );
+
+    // Copyright Text
+    aCopyrightText.SetControlForeground( Color( 142, 142, 142 ) );
+    aCopyrightTextShadow.SetControlForeground( Color( 255, 255, 255 ) );
+    aCopyrightText.SetTextSelectable( sal_False );
+    aCopyrightTextShadow.SetTextSelectable( sal_False );
+
+    // Blue text on website button
+    aWebsiteButton.SetControlForeground( Color( 27, 102, 215 ) );
+    aWebsiteButton.GrabFocus();
+}
+
+void AboutDialog::LayoutControls()
+{
+    // Get the size of the screen
+    Rectangle aScreenRect = Application::GetScreenPosSizePixel( (unsigned int)0 );
+    // Obtain an appropriate text width from the size of the screen
+    sal_Int32 aIdealTextWidth = aScreenRect.GetWidth() / 2.4;
+
+    sal_Int32 aDialogBorder = 24;
+    sal_Int32 aContentWidth = aIdealTextWidth + aDialogBorder * 2;
+    sal_Int32 aShadowWidth = aContentWidth * 0.02;
+    sal_Int32 aDialogWidth = aContentWidth + aShadowWidth * 2;
+
+    // Render and Position Logo
+    vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
+    float aLogoWidthHeightRatio = (float)aRasterizerLogo.GetDefaultSizePixel().Width() /
+                               (float)aRasterizerLogo.GetDefaultSizePixel().Height();
+
+    Size aLogoSize( aContentWidth * 0.6, (aContentWidth * 0.6) / aLogoWidthHeightRatio );
+    Point aLogoPos( aShadowWidth + ( aContentWidth - aLogoSize.Width() ) / 2,
+                    aShadowWidth + aDialogBorder );
+    aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
+    aLogoImage.SetImage( Image( aLogoBitmap ) );
+    aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
+
+    // Position version text
+    sal_Int32 aLogoVersionSpacing = aLogoSize.Height() * 0.15;
+    Point aVersionPos( aShadowWidth + aDialogBorder,
+                       aLogoPos.Y() + aLogoSize.Height() + aLogoVersionSpacing );
+    Size aVersionSize = aVersionText.CalcMinimumSize();
+    aVersionSize.Width() = aIdealTextWidth;
+    aVersionText.SetPosSizePixel( aVersionPos, aVersionSize );
+
+    // Position description text
+    sal_Int32 aVersionDescriptionSpacing = aLogoSize.Height() * 0.45;
+    Point aDescriptionPos( aShadowWidth + aDialogBorder, aVersionPos.Y() + aVersionSize.Height() + aVersionDescriptionSpacing );
+    Size aDescriptionSize = aDescriptionText.GetSizePixel();
+    aDescriptionSize.Width() = aIdealTextWidth;
+    aDescriptionText.SetPosSizePixel( aDescriptionPos, aDescriptionSize );
+    aDescriptionSize = aDescriptionText.CalcMinimumSize();
+    aDescriptionText.SetSizePixel( aDescriptionSize );
+
+    // Layout Buttons
+    Size aButtonSize;
+    Point aButtonPos;
+    LayoutButtons( aContentWidth, aDialogBorder, aShadowWidth, aDescriptionPos,
+                   aDescriptionText.GetSizePixel().Height(),
+                   aVersionDescriptionSpacing, aButtonPos, aButtonSize );
+
+    // Layout copyright text
+    Point aCopyrightPos( aShadowWidth + aDialogBorder, aButtonPos.Y() + aButtonSize.Height() + aVersionDescriptionSpacing );
+    Size aCopyrightSize = aCopyrightText.GetSizePixel();
+    aCopyrightSize.Width() = aIdealTextWidth;
+    aCopyrightText.SetPosSizePixel( aCopyrightPos, aCopyrightSize );
+    aCopyrightSize = aCopyrightText.CalcMinimumSize();
+    aCopyrightSize.Width() = aIdealTextWidth;
+    aCopyrightText.SetSizePixel( aCopyrightSize );
+
+    // Position the copyright text shadow 1px below the real text
+    Point aCopyrightShadowPos = aCopyrightPos;
+    aCopyrightShadowPos.Y() += 1;
+    aCopyrightTextShadow.SetPosSizePixel( aCopyrightShadowPos, aCopyrightSize );
+
+    // Obtain preliminary dimensions for the dialog
+    vcl::RenderGraphicRasterizer aRasterizerBackground = Application::LoadBrandSVG("shell/about");
+    float aBackgroundWidthHeightRatio = (float)aRasterizerBackground.GetDefaultSizePixel().Width() /
+                               (float)aRasterizerBackground.GetDefaultSizePixel().Height();
+    Size aBackgroundSize( aDialogWidth, aDialogWidth / aBackgroundWidthHeightRatio );
+
+    // Make sure the dialog is tall enough
+    sal_Int32 aBottomY = aCopyrightPos.Y() + aCopyrightText.GetSizePixel().Height() + aDialogBorder + aShadowWidth;
+    // If not, make the dialog taller (and to maintain the aspect ratio of the background also wider)
+    if (aBottomY > aBackgroundSize.Height())
+        aBackgroundSize.Width() = aBottomY * aBackgroundWidthHeightRatio;
+        aBackgroundSize.Height() = aBottomY;
+
+    // If needed, adjust all control position to the new width
+    if (aBackgroundSize.Width() != aDialogWidth)
+    {
+        sal_Int32 aWidthDifference = aBackgroundSize.Width() - aDialogWidth;
+
+        MoveControl(aLogoImage, aWidthDifference / 2);
+        MoveControl(aVersionText, aWidthDifference / 2);
+        MoveControl(aDescriptionText, aWidthDifference / 2);
+        MoveControl(aCreditsButton, aWidthDifference / 2);
+        MoveControl(aWebsiteButton, aWidthDifference / 2);
+        MoveControl(aLicenseButton, aWidthDifference / 2);
+        MoveControl(aCopyrightText, aWidthDifference / 2);
+        MoveControl(aCopyrightTextShadow, aWidthDifference / 2);
+    }
+
+    // Render Background and set final dialog size
+    aBackgroundBitmap = aRasterizerBackground.Rasterize( aBackgroundSize );
+    SetOutputSizePixel( aBackgroundSize );
+}
+
+void AboutDialog::LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
+                                 sal_Int32 aShadowWidth, Point aDescriptionPos,
+                                 sal_Int32 aDescriptionTextHeight, sal_Int32 aVersionDescriptionSpacing,
+                                 Point& aButtonPos, Size& aButtonSize)
+{
+    // Position credits button
+    sal_Int32 aButtonVPadding = 5;
+    sal_Int32 aButtonHPadding = 4;
+    sal_Int32 aCreditsButtonWidth = aCreditsButton.CalcMinimumSize().Width();
+    sal_Int32 aLicenseButtonWidth = aLicenseButton.CalcMinimumSize().Width();
+    sal_Int32 aWebsiteButtonWidth = aWebsiteButton.CalcMinimumSize().Width();
+    sal_Int32 aLargestButtonWidth = 0;
+
+    if ( aCreditsButtonWidth >= aLicenseButtonWidth
+         && aCreditsButtonWidth >= aWebsiteButtonWidth )
+        aLargestButtonWidth = aCreditsButtonWidth;
+
+    else if ( aLicenseButtonWidth >= aCreditsButtonWidth
+              && aLicenseButtonWidth >= aWebsiteButtonWidth )
+        aLargestButtonWidth = aLicenseButtonWidth;
+    else if ( aWebsiteButtonWidth >= aCreditsButtonWidth
+              && aWebsiteButtonWidth >= aLicenseButtonWidth )
+        aLargestButtonWidth = aWebsiteButtonWidth;
+
+    aButtonSize.Width() = aLargestButtonWidth + ( 2 * aButtonHPadding );
+    aButtonSize.Height() = aWebsiteButton.CalcMinimumSize().Height() + ( 2 * aButtonVPadding );
+
+    aCreditsButton.SetSizePixel( aButtonSize );
+    aLicenseButton.SetSizePixel( aButtonSize );
+    aWebsiteButton.SetSizePixel( aButtonSize );
+
+    sal_Int32 aButtonSpacing = (aContentWidth - ( aDialogBorder * 2 ) - ( aButtonSize.Width() * 3 ) ) / 2;
+    if (aButtonSpacing < 1)
+        aButtonSpacing = 6;
+    aButtonPos.X() = aShadowWidth + aDialogBorder;
+    aButtonPos.Y() = aDescriptionPos.Y() + aDescriptionTextHeight + aVersionDescriptionSpacing;
+
+    aCreditsButton.SetPosPixel( aButtonPos );
+
+    aButtonPos.X() += aButtonSize.Width() + aButtonSpacing;
+    aWebsiteButton.SetPosPixel( aButtonPos );
+
+    aButtonPos.X() += aButtonSize.Width() + aButtonSpacing;
+    aLicenseButton.SetPosPixel( aButtonPos );
+}
+
+void AboutDialog::MoveControl(Control& rControl, sal_Int32 X)
+{
+    Point aControlPos = rControl.GetPosPixel();
+    aControlPos.X() += X;
+    rControl.SetPosPixel(aControlPos);
+}
+
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
     Point aPos( 0, 0 );
-    DrawImage( aPos, aAppLogo );
+
+    DrawBitmapEx( aPos, aBackgroundBitmap );
+}
+
+rtl::OUString AboutDialog::GetBuildId()
+{
+    rtl::OUString sDefault;
+    rtl::OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
+    if (!sBuildId.isEmpty())
+        return sBuildId;
+
+    sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
+
+    if (!sBuildId.isEmpty())
+    {
+        sal_Int32 nIndex = 0;
+        return sBuildId.getToken( 0, '-', nIndex );
+    }
+
+    OSL_ENSURE( !sBuildId.isEmpty(), "No BUILDID in bootstrap file" );
+    return sBuildId;
+}
+
+rtl::OUString AboutDialog::GetVersionString()
+{
+    rtl::OUString sVersion = aVersionTextStr;
+
+    rtl::OUString sBuildId = GetBuildId();
+
+    if (!sBuildId.isEmpty())
+    {
+        sVersion += " ";
+        sVersion += m_sBuildStr.replaceAll("%BUILDID", sBuildId);
+    }
+
+    return sVersion;
+}
+
+rtl::OUString AboutDialog::GetCopyrightString()
+{
+    rtl::OUString aCopyrightString = m_aVendorTextStr;
+    aCopyrightString += "\n";
+
+    aCopyrightString += m_aCopyrightTextStr;
+    aCopyrightString += "\n";
+
+    if (utl::ConfigManager::getProductName().equals("LibreOffice"))
+        aCopyrightString += m_aBasedTextStr;
+    else
+        aCopyrightString += m_aBasedDerivedTextStr;
+
+    return aCopyrightString;
+}
+
+IMPL_LINK_NOARG(AboutDialog, CancelHdl)
+{
+    Close();
+    return 0;
 }
 
 sal_Bool AboutDialog::Close()

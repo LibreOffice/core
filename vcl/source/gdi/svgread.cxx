@@ -50,6 +50,7 @@ namespace vcl
         ~SVGReaderImpl();
 
         GDIMetaFile& ImplRead( GDIMetaFile& rSVGMtf );
+        vcl::RenderGraphic ImplGetRenderGraphic();
 
     private:
 
@@ -73,36 +74,40 @@ namespace vcl
 
     GDIMetaFile& SVGReaderImpl::ImplRead( GDIMetaFile& rSVGMtf )
     {
-        const sal_uInt32 nStmPos = mrStm.Tell();
-        const sal_uInt32 nStmLen = mrStm.Seek( STREAM_SEEK_TO_END ) - nStmPos;
+        vcl::RenderGraphic aSVGGraphic = ImplGetRenderGraphic();
 
-        if( nStmLen )
+        if( !mrStm.GetError() )
         {
-            const vcl::RenderGraphic aSVGGraphic( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/svg+xml")), nStmLen );
+            const vcl::RenderGraphicRasterizer  aRasterizer( aSVGGraphic );
+            const Size                          aDefaultSizePixel( aRasterizer.GetDefaultSizePixel() );
 
-            mrStm.Seek( nStmPos );
-            mrStm.Read( aSVGGraphic.GetGraphicData().get(), nStmLen );
-
-            if( !mrStm.GetError() )
+            if( aDefaultSizePixel.Width() && aDefaultSizePixel.Height() )
             {
-                const vcl::RenderGraphicRasterizer  aRasterizer( aSVGGraphic );
-                const Size                          aDefaultSizePixel( aRasterizer.GetDefaultSizePixel() );
+                const Point aPos;
+                const Size  aPrefSize( aRasterizer.GetPrefSize() );
 
-                if( aDefaultSizePixel.Width() && aDefaultSizePixel.Height() )
-                {
-                    const Point aPos;
-                    const Size  aPrefSize( aRasterizer.GetPrefSize() );
-
-                    rSVGMtf.SetPrefMapMode( aRasterizer.GetPrefMapMode() );
-                    rSVGMtf.SetPrefSize( aPrefSize );
-                    rSVGMtf.AddAction( new MetaRenderGraphicAction( aPos, aPrefSize, aSVGGraphic ) );
-                    rSVGMtf.WindStart();
-                }
+                rSVGMtf.SetPrefMapMode( aRasterizer.GetPrefMapMode() );
+                rSVGMtf.SetPrefSize( aPrefSize );
+                rSVGMtf.AddAction( new MetaRenderGraphicAction( aPos, aPrefSize, aSVGGraphic ) );
+                rSVGMtf.WindStart();
             }
         }
 
         return( rSVGMtf );
     }
+
+    vcl::RenderGraphic SVGReaderImpl::ImplGetRenderGraphic()
+    {
+        const sal_uInt32 nStmPos = mrStm.Tell();
+        const sal_uInt32 nStmLen = mrStm.Seek( STREAM_SEEK_TO_END ) - nStmPos;
+
+        vcl::RenderGraphic aSVGGraphic( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/svg+xml")), nStmLen );
+        mrStm.Seek( nStmPos );
+        mrStm.Read( aSVGGraphic.GetGraphicData().get(), nStmLen );
+
+        return( aSVGGraphic );
+    }
+
 
     // -------------
     // - SVGReader -
@@ -126,6 +131,11 @@ namespace vcl
         rSVGMtf = GDIMetaFile();
 
         return( mapImpl.get() ? mapImpl->ImplRead( rSVGMtf ) : rSVGMtf );
+    }
+
+    vcl::RenderGraphic SVGReader::GetRenderGraphic()
+    {
+        return( mapImpl->ImplGetRenderGraphic() );
     }
 
 } // namespace vcl

@@ -31,6 +31,7 @@
 
 #include <vcl/dllapi.h>
 #include <memory>
+#include <vcl/rendergraphic.hxx>
 
 // -------------
 // - SVGReader -
@@ -64,6 +65,8 @@ namespace vcl
 
         */
         GDIMetaFile& Read( GDIMetaFile& rSVGMtf );
+
+        vcl::RenderGraphic GetRenderGraphic();
 
     private:
 

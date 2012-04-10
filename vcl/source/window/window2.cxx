@@ -1737,4 +1737,13 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
                         rNewSize.Height()+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder ) );
 }
 
+void Window::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
+{
+    if( !rBitmapEx.IsEmpty() )
+    {
+        SalBitmap* pBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
+        ImplGetFrame()->SetBackgroundBitmap( pBmp );
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

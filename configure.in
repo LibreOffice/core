@@ -1763,11 +1763,16 @@ AC_ARG_WITH(intro-progressbar-frame-color,
                           Usage: --with-intro-progressbar-frame-color=207,208,211
 ],,)
 
-AC_ARG_WITH(about-bitmap,
-[  --with-about-bitmap    Similarly to --with-intro-bitmap, this allows
-                          specification of bitmap for the About box.
+AC_ARG_WITH(flat-logo-svg,
+[  --with-flat-logo-svg    Allows specification of the flat Logo SVG.
 
-                          Usage:     --with-about-bitmap=/path/my_ooo_about.png
+                          Usage:     --with-about-background-svg=/path/my_flat_logo.svg
+],,)
+
+AC_ARG_WITH(about-background-svg,
+[  --with-about-background-svg    Allows specification of the background SVG for the About dialog.
+
+                          Usage:     --with-about-background-svg=/path/my_libo_about.svg
 ],,)
 
 AC_ARG_WITH(startcenter-left-bitmap,
@@ -10770,7 +10775,8 @@ AC_SUBST(PROGRESSFRAMECOLOR)
 
 AC_MSG_CHECKING([for alternative branding images directory])
 INTRO_BITMAP=
-ABOUT_BITMAP=
+ABOUT_BACKGROUND_SVG=
+FLAT_LOGO_SVG=
 STARTCENTER_LEFT_BITMAP=
 STARTCENTER_RIGHT_BITMAP=
 STARTCENTER_RTL_LEFT_BITMAP=
@@ -10780,14 +10786,16 @@ if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
 else
     INTRO_BITMAP="$with_branding/intro.png"
-    ABOUT_BITMAP="$with_branding/about.png"
+    ABOUT_BACKGROUND_SVG="$with_branding/about.svg"
+    FLAT_LOGO_SVG="$with_branding/flat_logo.svg"
     STARTCENTER_LEFT_BITMAP="$with_branding/backing_left.png"
     STARTCENTER_RIGHT_BITMAP="$with_branding/backing_right.png"
     STARTCENTER_RTL_LEFT_BITMAP="$with_branding/backing_rtl_left.png"
     STARTCENTER_RTL_RIGHT_BITMAP="$with_branding/backing_rtl_right.png"
     STARTCENTER_SPACE_BITMAP="$with_branding/backing_space.png"
     for i in $INTRO_BITMAP \
-             $ABOUT_BITMAP \
+             $ABOUT_BACKGROUND_SVG \
+             $FLAT_LOGO_SVG \
              $STARTCENTER_LEFT_BITMAP \
              $STARTCENTER_RIGHT_BITMAP \
              $STARTCENTER_RTL_LEFT_BITMAP \
@@ -10815,20 +10823,35 @@ else
 fi
 AC_SUBST(INTRO_BITMAP)
 
-AC_MSG_CHECKING([for yet another 'about' bitmap])
-if test -z "$with_about_bitmap" -o "$with_about_bitmap" = "no"; then
-    if test "$with_about_bitmap" = "no"; then
-        ABOUT_BITMAP=
+AC_MSG_CHECKING([for yet another 'about' svg])
+if test -z "$with_about_background_svg" -o "$with_about_background_svg" = "no" ; then
+    if test "$with_about_background_svg" = "no" ; then
+        ABOUT_BACKGROUND_SVG=
     fi
     AC_MSG_RESULT([none])
 else
-   case "$with_about_bitmap" in
-   *.png) ABOUT_BITMAP="$with_about_bitmap" ;;
-   *)     AC_MSG_WARN([About bitmap should be a .png file!]) ;;
+   case "$with_about_background_svg" in
+   *.svg) ABOUT_BACKGROUND_SVG="$with_about_background_svg" ;;
+   *)     AC_MSG_WARN([About background SVG should be a .svg file!]) ;;
+   esac
+   AC_MSG_RESULT([$ABOUT_BACKGROUND_SVG])
+fi
+AC_SUBST(ABOUT_BACKGROUND_SVG)
+
+AC_MSG_CHECKING([for yet another 'flat_logo' svg])
+if test -z "$with_flat_logo_svg" -o "$with_flat_logo_svg" = "no" ; then
+    if test "$with_flat_logo_svg" = "no" ; then
+        FLAT_LOGO_SVG=
+    fi
+    AC_MSG_RESULT([none])
+else
+   case "$with_flat_logo_svg" in
+   *.svg) FLAT_LOGO_SVG="$with_flat_logo_svg" ;;
+   *)     AC_MSG_WARN([Flat logo SVG should be a .svg file!]) ;;
    esac
    AC_MSG_RESULT([$ABOUT_BITMAP])
 fi
-AC_SUBST(ABOUT_BITMAP)
+AC_SUBST(FLAT_LOGO_SVG)
 
 AC_MSG_CHECKING([for yet another 'start center left' bitmap])
 if test -z "$with_startcenter_left_bitmap" -o "$with_startcenter_left_bitmap" = "no"; then

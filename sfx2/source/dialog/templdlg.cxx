@@ -2801,7 +2801,7 @@ sal_Bool SfxTemplateCatalog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     sal_uInt16 i;
     for ( i = 0; i < aFamIds.size() && aFamIds[i] != nMesId; i++ )
         ;
-    return aFamList.IsEntrySelected( String::CreateFromInt32(i) );
+    return aFamList.IsEntrySelected( rtl::OUString::valueOf(static_cast<sal_Int32>(i)) );
 }
 
 //-------------------------------------------------------------------------

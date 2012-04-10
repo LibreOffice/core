@@ -33,7 +33,9 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/svgread.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 namespace {
     static bool loadPng(const char *pPath, const rtl::OUString &rName, BitmapEx &rBitmap)
@@ -49,6 +51,25 @@ namespace {
         }
         else
             return false;
+    }
+
+    static vcl::RenderGraphicRasterizer loadSvg(const char *pPath, const rtl::OUString &rName)
+    {
+        rtl::OUString uri = rtl::OUString::createFromAscii( pPath ) + rName;
+        rtl::Bootstrap::expandMacros( uri );
+        INetURLObject aObj( uri );
+        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+
+        vcl::RenderGraphic aRenderGraphic;
+        vcl::RenderGraphic aRasterizer ( aRenderGraphic );
+
+        if ( !aStrm.GetError() ) {
+            vcl::SVGReader aSVGReader( aStrm );
+            aRenderGraphic = aSVGReader.GetRenderGraphic();
+            vcl::RenderGraphic aNewRasterizer ( aRenderGraphic );
+            aRasterizer = aNewRasterizer;
+        }
+        return aRasterizer;
     }
 }
 
@@ -74,6 +95,35 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
              loadPng ("$BRAND_BASE_DIR/program", aLocaleName, rBitmap) ||
              loadPng ("$BRAND_BASE_DIR/program/edition", aName, rBitmap) ||
              loadPng ("$BRAND_BASE_DIR/program", aName, rBitmap) );
+}
+
+vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
+{
+    rtl::OUString aBaseName = ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                                rtl::OUString::createFromAscii( pName ) );
+    rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM(".svg") );
+
+    rtl_Locale *pLoc = NULL;
+    osl_getProcessLocale (&pLoc);
+    rtl::OLocale aLoc( pLoc );
+
+    rtl::OUString aName = aBaseName + aSvg;
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("-")) +
+                                  aLoc.getLanguage() +
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) +
+                                  aLoc.getCountry() + aSvg );
+
+    vcl::RenderGraphicRasterizer aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aLocaleName);
+    if (!aRasterizer.GetRenderGraphic().IsEmpty())
+        return aRasterizer;
+    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aLocaleName);
+    if (!aRasterizer.GetRenderGraphic().IsEmpty())
+        return aRasterizer;
+    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aName);
+    if (!aRasterizer.GetRenderGraphic().IsEmpty())
+        return aRasterizer;
+    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aName);
+        return aRasterizer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

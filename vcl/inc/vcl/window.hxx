@@ -341,7 +341,8 @@ enum WindowSizeType {
 const char* ImplDbgCheckWindow( const void* pObj );
 #endif
 
-class   WindowImpl;
+class BitmapEx; // FIXME: really the SetBackgroundBitmap belongs in a toplevel 'window'
+class WindowImpl;
 class VCL_DLLPUBLIC Window : public OutputDevice
 {
     friend class Cursor;
@@ -923,6 +924,8 @@ public:
     // this may be the parent's background color; for controls
     // this may be a child's background color (e.g. ListBox)
     virtual const Wallpaper& GetDisplayBackground() const;
+
+    void                SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 
     void                SetHelpText( const XubString& rHelpText );
     const XubString&    GetHelpText() const;

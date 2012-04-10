@@ -45,35 +45,51 @@ typedef ::std::vector< Accelerator* > AccelList;
 class AboutDialog : public SfxModalDialog
 {
 private:
-    Image           aAppLogo;
+    BitmapEx           aBackgroundBitmap;
+    BitmapEx           aLogoBitmap;
 
     MultiLineEdit       aVersionText;
+    MultiLineEdit       aDescriptionText;
     MultiLineEdit       aCopyrightText;
-    svt::FixedHyperlink aInfoLink;
-    svt::FixedHyperlink aTdfLink;
-    svt::FixedHyperlink aFeaturesLink;
-    FixedLine           aButtonsLine;
-    CancelButton        aCancelButton;
+    MultiLineEdit       aCopyrightTextShadow;
+    FixedImage          aLogoImage;
+    PushButton          aCreditsButton;
+    PushButton          aWebsiteButton;
+    PushButton          aLicenseButton;
 
     String aVersionData;
     String aVersionTextStr;
     String m_aVendorTextStr;
-    String m_aOracleCopyrightTextStr;
-    String m_aAcknowledgementTextStr;
-    String m_aLinkStr;
-    String m_aTdfLinkStr;
-    String m_aFeaturesLinkStr;
-    String m_sBuildStr;
+    String m_aCopyrightTextStr;
+    String m_aBasedTextStr;
+    String m_aBasedDerivedTextStr;
+    String m_aWebsiteLinkStr;
+    String m_aCreditsLinkStr;
+    String m_aLicenseLinkStr;
+    rtl::OUString m_sBuildStr;
+    String m_aDescriptionTextStr;
+
+    void StyleControls();
+    void LayoutControls();
+    void LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
+                       sal_Int32 aShadowWidth, Point aDescriptionPos,
+                       sal_Int32 aDescriptionTextHeight,
+                       sal_Int32 aVersionDescriptionSpacing, Point& aButtonPos,
+                       Size& aButtonSize);
+    void MoveControl(Control& rControl, sal_Int32 X);
+    rtl::OUString GetBuildId();
+    rtl::OUString GetVersionString();
+    rtl::OUString GetCopyrightString();
 
 protected:
     virtual sal_Bool Close();
-    virtual void Paint( const Rectangle& rRect );
+    virtual void     Paint( const Rectangle& rRect );
 
 public:
     AboutDialog( Window* pParent, const ResId& rId);
 
-    DECL_LINK(CancelHdl, void *);
-    DECL_LINK(HandleHyperlink, svt::FixedHyperlink *);
+    DECL_LINK( CancelHdl, void * );
+    DECL_LINK( HandleClick, PushButton* );
 };
 
 #endif // #ifndef _ABOUT_HXX

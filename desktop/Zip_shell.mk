@@ -28,6 +28,7 @@
 $(eval $(call gb_Zip_Zip,shell,$(SRCDIR)/icon-themes/galaxy/brand/shell))
 
 $(eval $(call gb_Zip_add_files,shell,\
+    about.svg \
     backing_left.png \
     backing_right.png \
     backing_space.png \
