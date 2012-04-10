@@ -40,10 +40,10 @@ class ScFormulaCell;
 struct ScFormulaRecursionEntry
 {
     ScFormulaCell*  pCell;
-    sal_Bool            bOldRunning;
+    bool            bOldRunning;
     ScFormulaResult aPreviousResult;
-    ScFormulaRecursionEntry( ScFormulaCell* p, sal_Bool bR,
-            const ScFormulaResult & rRes ) :
+    ScFormulaRecursionEntry(
+        ScFormulaCell* p, bool bR, const ScFormulaResult & rRes ) :
         pCell(p), bOldRunning(bR), aPreviousResult( rRes)
     {
     }
@@ -65,44 +65,24 @@ class ScRecursionHelper
     bool                                bInIterationReturn;
     bool                                bConverging;
 
-    void    Init()
-    {
-        nRecursionCount    = 0;
-        bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
-        aInsertPos = GetEnd();
-        ResetIteration();
-    }
-    void    ResetIteration()
-    {
-        aLastIterationStart = GetEnd();
-        nIteration = 0;
-        bConverging = false;
-    }
+    void Init();
+    void ResetIteration();
 
-    public:
+public:
 
-    ScRecursionHelper() { Init(); }
+    ScRecursionHelper();
     sal_uInt16  GetRecursionCount() const       { return nRecursionCount; }
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
     /// A pure recursion return, no iteration.
     bool    IsInRecursionReturn() const     { return bInRecursionReturn &&
         !bInIterationReturn; }
-    void    SetInRecursionReturn( bool b )
-    {
-        // Do not use IsInRecursionReturn() here, it decouples iteration.
-        if (b && !bInRecursionReturn)
-            aInsertPos = aRecursionFormulas.begin();
-        bInRecursionReturn = b;
-    }
+    void SetInRecursionReturn( bool b );
     bool    IsDoingRecursion() const        { return bDoingRecursion; }
     void    SetDoingRecursion( bool b )     { bDoingRecursion = b; }
-    void    Insert( ScFormulaCell* p, sal_Bool bOldRunning,
-                    const ScFormulaResult & rRes )
-    {
-        aRecursionFormulas.insert( aInsertPos, ScFormulaRecursionEntry( p,
-                    bOldRunning, rRes));
-    }
+
+    void Insert( ScFormulaCell* p, bool bOldRunning, const ScFormulaResult & rRes );
+
     ScFormulaRecursionList::iterator    GetStart()
     {
         return aRecursionFormulas.begin();
@@ -112,33 +92,15 @@ class ScRecursionHelper
         return aRecursionFormulas.end();
     }
     bool    IsInIterationReturn() const     { return bInIterationReturn; }
-    void    SetInIterationReturn( bool b )
-    {
-        // An iteration return is always coupled to a recursion return.
-        SetInRecursionReturn( b);
-        bInIterationReturn = b;
-    }
+    void SetInIterationReturn( bool b );
     bool    IsDoingIteration() const        { return nIteration > 0; }
     sal_uInt16  GetIteration() const            { return nIteration; }
     bool &  GetConvergingReference()        { return bConverging; }
-    void    StartIteration()
-    {
-        SetInIterationReturn( false);
-        nIteration = 1;
-        bConverging = false;
-        aLastIterationStart = GetIterationStart();
-    }
-    void    ResumeIteration()
-    {
-        SetInIterationReturn( false);
-        aLastIterationStart = GetIterationStart();
-    }
+    void StartIteration();
+    void ResumeIteration();
     void    IncIteration()                  { ++nIteration; }
-    void    EndIteration()
-    {
-        aRecursionFormulas.erase( GetIterationStart(), GetIterationEnd());
-        ResetIteration();
-    }
+    void EndIteration();
+
     ScFormulaRecursionList::iterator GetLastIterationStart() { return aLastIterationStart; }
     ScFormulaRecursionList::iterator GetIterationStart() { return GetStart(); }
     ScFormulaRecursionList::iterator GetIterationEnd() { return GetEnd(); }
@@ -148,13 +110,8 @@ class ScRecursionHelper
     const ScFormulaRecursionList&   GetList() const { return aRecursionFormulas; }
     ScFormulaRecursionList&         GetList()       { return aRecursionFormulas; }
     ScRecursionInIterationStack&    GetRecursionInIterationStack()  { return aRecursionInIterationStack; }
-    void    Clear()
-    {
-        aRecursionFormulas.clear();
-        while (!aRecursionInIterationStack.empty())
-            aRecursionInIterationStack.pop();
-        Init();
-    }
+
+    void Clear();
 };
 
 #endif // INCLUDED_RECURSIONHELPER_HXX

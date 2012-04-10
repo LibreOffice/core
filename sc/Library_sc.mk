@@ -202,6 +202,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/rangeseq \
 	sc/source/core/tool/rangeutl \
 	sc/source/core/tool/rechead  \
+	sc/source/core/tool/recursionhelper \
 	sc/source/core/tool/refdata \
 	sc/source/core/tool/reffind \
 	sc/source/core/tool/refreshtimer \
