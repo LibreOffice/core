@@ -1,5 +1,5 @@
---- misc/pixman-0.24.0/Makefile.win32.common	2011-12-16 15:30:44.653987145 +0100
-+++ misc/build/pixman-0.24.0/Makefile.win32.common	2011-12-16 15:30:37.288130250 +0100
+--- misc/pixman-0.24.4/Makefile.win32.common	2011-12-16 15:30:44.653987145 +0100
++++ misc/build/pixman-0.24.4/Makefile.win32.common	2011-12-16 15:30:37.288130250 +0100
 @@ -1 +1,54 @@
 -dummy
 +LIBRARY = pixman-1
@@ -56,8 +56,8 @@
 +
 +clean: inform
 +	@$(RM) $(CFG_VAR)/*.{exe,ilk,lib,obj,pdb} $(BUILT_SOURCES) || exit 0
---- misc/pixman-0.24.0/Makefile.in	2011-11-06 22:11:25.000000000 +0100
-+++ misc/build/pixman-0.24.0/Makefile.in	2011-12-16 09:06:45.317211035 +0100
+--- misc/pixman-0.24.4/Makefile.in	2011-11-06 22:11:25.000000000 +0100
++++ misc/build/pixman-0.24.4/Makefile.in	2011-12-16 09:06:45.317211035 +0100
 @@ -272,7 +272,7 @@
  top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
@@ -67,8 +67,8 @@
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = pixman-1.pc
  GPGKEY = 6FF7C1A8
---- misc/pixman-0.24.0/config.sub	2008-08-30 00:27:25.000000000 +0200
-+++ misc/build/pixman-0.24.0/config.sub	2011-12-16 09:05:14.595773609 +0100
+--- misc/pixman-0.24.4/config.sub	2008-08-30 00:27:25.000000000 +0200
++++ misc/build/pixman-0.24.4/config.sub	2011-12-16 09:05:14.595773609 +0100
 @@ -120,7 +120,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
@@ -87,8 +87,8 @@
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
---- misc/pixman-0.24.0/configure	2011-11-06 22:11:27.000000000 +0100
-+++ misc/build/pixman-0.24.0/configure	2011-12-16 09:06:16.482898083 +0100
+--- misc/pixman-0.24.4/configure	2011-11-06 22:11:27.000000000 +0100
++++ misc/build/pixman-0.24.4/configure	2011-12-16 09:06:16.482898083 +0100
 @@ -20202,6 +20202,13 @@
  
  
@@ -112,8 +112,8 @@
   { $as_echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
  $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
  if test "${ac_cv_c_bigendian+set}" = set; then
---- misc/pixman-0.24.0/pixman/pixman-utils.c
-+++ misc/build/pixman-0.24.0/pixman/pixman-utils.c
+--- misc/pixman-0.24.4/pixman/pixman-utils.c
++++ misc/build/pixman-0.24.4/pixman/pixman-utils.c
 @@ -27,6 +27,7 @@
  #endif
  #include <stdio.h>
@@ -122,8 +122,8 @@
  
  #include "pixman-private.h"
  
---- misc/pixman-0.24.0/pixman/pixman-mmx.c	2011-11-06 13:47:42.000000000 -0700
-+++ misc/build/pixman-0.24.0/pixman/pixman-mmx.c	2011-12-19 00:41:42.280402800 -0700
+--- misc/pixman-0.24.4/pixman/pixman-mmx.c	2011-11-06 13:47:42.000000000 -0700
++++ misc/build/pixman-0.24.4/pixman/pixman-mmx.c	2011-12-19 00:41:42.280402800 -0700
 @@ -309,7 +309,7 @@
  
  /* Elemental unaligned loads */

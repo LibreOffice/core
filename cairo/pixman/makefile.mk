@@ -43,10 +43,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-PIXMANVERSION=0.24.0
+PIXMANVERSION=0.24.4
 
 TARFILE_NAME=pixman-$(PIXMANVERSION)
-TARFILE_MD5=db5ffcd50064421176e8afb7b85fd1a7
+TARFILE_MD5=c63f411b3ad147db2bcce1bf262a0e02
 
 ADDITIONAL_FILES=Makefile.win32.common
 

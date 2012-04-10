@@ -1,5 +1,5 @@
---- misc/pixman-0.24.0/ltmain.sh
-+++ misc/build/pixman-0.24.0/ltmain.sh
+--- misc/pixman-0.24.4/ltmain.sh
++++ misc/build/pixman-0.24.4/ltmain.sh
 @@ -3228,6 +3228,10 @@
  	fi
        else
