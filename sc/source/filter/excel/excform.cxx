@@ -158,7 +158,9 @@ void ImportExcel::Formula(
         {
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pCell, eErr );
-            (void)fCurVal;
+
+            if (!rtl::math::isNan(fCurVal))
+                pCell->SetHybridDouble(fCurVal);
         }
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );
