@@ -196,7 +196,7 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) :| \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : \
-       $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
+	$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
 $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 endif
@@ -301,10 +301,10 @@ $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -rf \
 			$(call gb_UnoApiHeadersTarget_get_dir,$*) \
-		   	$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*) \
+			$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*) \
 			$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*) \
 			$(call gb_UnoApiHeadersTarget_get_target,$*) \
-		   	$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$*)) \
+			$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$*)) \
 			$(call gb_UnoApiHeadersTarget_get_comprehensive_target,$*)
 
 define gb_UnoApiHeadersTarget_UnoApiHeadersTarget
