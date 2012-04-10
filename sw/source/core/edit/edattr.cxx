@@ -56,6 +56,7 @@
 #include <charfmt.hxx>  // #i27615#
 #include <numrule.hxx>
 
+#include <algorithm>
 
 /*************************************
  * harte Formatierung (Attribute)
