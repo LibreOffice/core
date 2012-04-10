@@ -664,9 +664,9 @@ FltError ImportExcel::Read( void )
                     case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
                     case EXC_ID_RK:             ReadRk();               break;
 
-                    case 0x0006:
-                    case 0x0206:
-                    case 0x0406:  Formula25(); break;
+                    case EXC_ID2_FORMULA:
+                    case EXC_ID3_FORMULA:
+                    case EXC_ID4_FORMULA:       Formula25(); break;
                     case 0x0A:  Eof(); eAkt = Z_Biff5E;                 break;
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
@@ -1184,9 +1184,9 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
                     case EXC_ID_RK:             ReadRk();               break;
 
-                    case 0x0006:
-                    case 0x0206:
-                    case 0x0406:    Formula25();            break;  // FORMULA      [ 2  5   ]
+                    case EXC_ID2_FORMULA:
+                    case EXC_ID3_FORMULA:
+                    case EXC_ID4_FORMULA:       Formula25();            break;
                     case 0x000C:    Calccount();            break;  // CALCCOUNT
                     case 0x0010:    Delta();                break;  // DELTA
                     case 0x0011:    Iteration();            break;  // ITERATION
