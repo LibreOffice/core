@@ -1390,9 +1390,9 @@ void ScFormulaCell::Interpret()
                 {
                     rRecursionHelper.SetInRecursionReturn( false);
                     for (ScFormulaRecursionList::const_iterator aIter(
-                                rRecursionHelper.GetStart());
+                                rRecursionHelper.GetIterationStart());
                             !rRecursionHelper.IsInReturn() && aIter !=
-                            rRecursionHelper.GetEnd(); ++aIter)
+                            rRecursionHelper.GetIterationEnd(); ++aIter)
                     {
                         ScFormulaCell* pCell = (*aIter).pCell;
                         if (pCell->IsDirtyOrInTableOpDirty())
@@ -1412,7 +1412,7 @@ void ScFormulaCell::Interpret()
                 else if (bResumeIteration ||
                         rRecursionHelper.IsDoingIteration())
                     rRecursionHelper.GetList().erase(
-                            rRecursionHelper.GetStart(),
+                            rRecursionHelper.GetIterationStart(),
                             rRecursionHelper.GetLastIterationStart());
                 else
                     rRecursionHelper.Clear();

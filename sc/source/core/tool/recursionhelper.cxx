@@ -32,13 +32,13 @@ void ScRecursionHelper::Init()
 {
     nRecursionCount    = 0;
     bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
-    aInsertPos = GetEnd();
+    aInsertPos = GetIterationEnd();
     ResetIteration();
 }
 
 void ScRecursionHelper::ResetIteration()
 {
-    aLastIterationStart = GetEnd();
+    aLastIterationStart = GetIterationEnd();
     nIteration = 0;
     bConverging = false;
 }
@@ -88,6 +88,16 @@ void ScRecursionHelper::EndIteration()
 {
     aRecursionFormulas.erase( GetIterationStart(), GetIterationEnd());
     ResetIteration();
+}
+
+ScFormulaRecursionList::iterator ScRecursionHelper::GetIterationStart()
+{
+    return aRecursionFormulas.begin();
+}
+
+ScFormulaRecursionList::iterator ScRecursionHelper::GetIterationEnd()
+{
+    return aRecursionFormulas.end();
 }
 
 void ScRecursionHelper::Clear()

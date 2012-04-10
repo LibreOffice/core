@@ -83,14 +83,6 @@ public:
 
     void Insert( ScFormulaCell* p, bool bOldRunning, const ScFormulaResult & rRes );
 
-    ScFormulaRecursionList::iterator    GetStart()
-    {
-        return aRecursionFormulas.begin();
-    }
-    ScFormulaRecursionList::iterator    GetEnd()
-    {
-        return aRecursionFormulas.end();
-    }
     bool    IsInIterationReturn() const     { return bInIterationReturn; }
     void SetInIterationReturn( bool b );
     bool    IsDoingIteration() const        { return nIteration > 0; }
@@ -102,8 +94,8 @@ public:
     void EndIteration();
 
     ScFormulaRecursionList::iterator GetLastIterationStart() { return aLastIterationStart; }
-    ScFormulaRecursionList::iterator GetIterationStart() { return GetStart(); }
-    ScFormulaRecursionList::iterator GetIterationEnd() { return GetEnd(); }
+    ScFormulaRecursionList::iterator GetIterationStart();
+    ScFormulaRecursionList::iterator GetIterationEnd();
     /** Any return, recursion or iteration, iteration is always coupled with
         recursion. */
     bool    IsInReturn() const              { return bInRecursionReturn; }
