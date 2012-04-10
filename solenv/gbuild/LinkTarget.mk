@@ -617,7 +617,8 @@ endif
 endef
 
 define gb_LinkTarget__use_internal_api_one
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_UnoApiHeadersTarget_get_$(3)target,$(api)))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$(call gb_UnoApiHeadersTarget_get_$(3)target,$(api))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
 ifeq ($(gb_FULLDEPS),$(true))
@@ -995,13 +996,13 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget__use_custom_headers
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$(call gb_CustomTarget_get_target,$(2))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
 endif
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_CustomTarget_get_target,$(2)))
-$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
 
 endef
 
@@ -1028,8 +1029,8 @@ endef
 
 # use a header package, possibly from another module (i.e. via OUTDIR)
 define gb_LinkTarget_use_package
-$(call gb_LinkTarget_get_headers_target,$(1) : | \
-	$(call gb_Package_get_target,$(strip $(2))))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$(call gb_Package_get_target,$(strip $(2)))
 
 endef
 
