@@ -120,25 +120,25 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
     if( GetAddressConverter().ConvertAddress( aScPos, rXclPos, GetCurrScTab(), true ) )
     {
         // Formula will be read next, length in nFormLen
-        const ScTokenArray* pErgebnis = 0;
-        sal_Bool                bConvert;
+        const ScTokenArray* pResult = NULL;
+        bool bConvert = false;
 
         pFormConv->Reset( aScPos );
 
         if( bShrFmla )
-            bConvert = !pFormConv->GetShrFmla( pErgebnis, maStrm, nFormLen );
+            bConvert = !pFormConv->GetShrFmla( pResult, maStrm, nFormLen );
         else
-            bConvert = sal_True;
+            bConvert = true;
 
         if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
+            eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
 
-        ScFormulaCell*      pZelle = NULL;
+        ScFormulaCell* pCell = NULL;
 
-        if( pErgebnis )
+        if (pResult)
         {
-            pZelle = new ScFormulaCell( pD, aScPos, pErgebnis );
-            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pZelle, true );
+            pCell = new ScFormulaCell( pD, aScPos, pResult );
+            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell, true );
         }
         else
         {
@@ -148,16 +148,16 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
             if( eCellType == CELLTYPE_FORMULA )
             {
                 pD->GetCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pBaseCell );
-                pZelle = ( ScFormulaCell* ) pBaseCell;
-                if( pZelle )
-                    pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+                pCell = ( ScFormulaCell* ) pBaseCell;
+                if( pCell )
+                    pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
             }
         }
 
-        if( pZelle )
+        if (pCell)
         {
             if( eErr != ConvOK )
-                ExcelToSc::SetError( *pZelle, eErr );
+                ExcelToSc::SetError( *pCell, eErr );
             (void)rCurVal;
         }
 
