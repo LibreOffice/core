@@ -37,13 +37,6 @@
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
 
-extern void VCL_DLLPUBLIC plasma_now(const char *msg);
-
-void plasma_now(const char *msg)
-{
-    fprintf (stderr, "Skipped plasma '%s' !\n", msg);
-}
-
 class AndroidSalData : public SalGenericData
 {
 public:
