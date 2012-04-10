@@ -48,6 +48,8 @@ else
 my_soffice:=path:$(OUTDIR)/installation/opt/program/soffice
 endif
 
+$(eval $(call gb_CppunitTest_use_ure,smoketest))
+
 $(eval $(call gb_CppunitTest_add_arguments,smoketest,\
 	-env:arg-soffice=$(my_soffice) \
 	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
