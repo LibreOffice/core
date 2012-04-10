@@ -1833,7 +1833,7 @@ sub put_msiproductversion_into_bootstrapfile
     {
         my $onefile = ${$filesref}[$i];
 
-        if ( $onefile->{'gid'} eq "gid_Profile_Version_Ini" )
+        if ( $onefile->{'gid'} eq "gid_Brand_Profile_Version_Ini" )
         {
             my $file = installer::files::read_file($onefile->{'sourcepath'});
 
