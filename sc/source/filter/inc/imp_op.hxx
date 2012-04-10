@@ -184,8 +184,8 @@ protected:
     void                    Bof5( void );                   // 0x0809
 
     // ---------------------------------------------------------------
-    void                    Formula( const XclAddress& rXclPos,
-                                sal_uInt16 nXF, sal_uInt16 nFormLen, double &rCurVal, sal_Bool bShrFmla );
+    void Formula(
+        const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla);
                                             //      -> excform.cxx
 
     virtual void            EndSheet( void );

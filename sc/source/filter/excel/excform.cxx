@@ -111,8 +111,8 @@ void ImportExcel::Formula4()
 }
 
 
-void ImportExcel::Formula( const XclAddress& rXclPos,
-    sal_uInt16 nXF, sal_uInt16 nFormLen, double& rCurVal, sal_Bool bShrFmla )
+void ImportExcel::Formula(
+    const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla)
 {
     ConvErr eErr = ConvOK;
 
@@ -158,7 +158,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         {
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pCell, eErr );
-            (void)rCurVal;
+            (void)fCurVal;
         }
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );
