@@ -511,18 +511,6 @@ void StringHelper::appendRange( OUStringBuffer& rStr, const Range& rRange )
     appendAddress( rStr, rRange.maLast );
 }
 
-void StringHelper::appendRangeList( OUStringBuffer& rStr, const RangeList& rRanges )
-{
-    OUStringBuffer aData;
-    for( RangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-    {
-        OUStringBuffer aRange;
-        appendRange( aRange, *aIt );
-        appendToken( aData, aRange.makeStringAndClear(), OOX_DUMP_LISTSEP );
-    }
-    rStr.append( aData.makeStringAndClear() );
-}
-
 void StringHelper::appendAddress( OUStringBuffer& rStr, const TokenAddress& rPos, bool bR1C1 )
 {
     if( bR1C1 && (rPos.mbRelCol || rPos.mbRelRow) )
@@ -535,13 +523,6 @@ void StringHelper::appendAddress( OUStringBuffer& rStr, const TokenAddress& rPos
         appendAddrCol( rStr, rPos.mnCol, rPos.mbRelCol );
         appendAddrRow( rStr, rPos.mnRow, rPos.mbRelRow );
     }
-}
-
-void StringHelper::appendRange( OUStringBuffer& rStr, const TokenRange& rRange, bool bR1C1 )
-{
-    appendAddress( rStr, rRange.maFirst, bR1C1 );
-    rStr.append( OOX_DUMP_RANGESEP );
-    appendAddress( rStr, rRange.maLast, bR1C1 );
 }
 
 // encoded text output --------------------------------------------------------

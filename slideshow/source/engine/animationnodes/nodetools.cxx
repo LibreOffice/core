@@ -58,14 +58,6 @@ namespace slideshow
 
             ++debugGetCurrentOffset();
         }
-
-        void debugNodesShowTreeWithin( const BaseNode* pNode )
-        {
-            if( pNode )
-                pNode->showTreeFromWithin();
-
-            ++debugGetCurrentOffset();
-        }
 #endif
 
         AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,

@@ -94,14 +94,6 @@ public:
         const Size& rSize,
         const bool bDoSuperSampling);
 
-    /** As we can not really terminate the rendering of a preview bitmap for
-        a request in midair this method acts more like a semaphor.  It
-        returns only when it is save for the caller to delete the request.
-        For this to work it is important to remove the request from the
-        queue before calling this method.
-    */
-    void RemoveRequest (CacheKey aKey);
-
     /** Use this method when the page cache is (maybe) using a different
         BitmapCache.  This is usually necessary after calling
         PageCacheManager::ChangeSize().

@@ -41,10 +41,8 @@
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 # define DEBUG_NODES_SHOWTREE(a) debugNodesShowTree(a);
-# define DEBUG_NODES_SHOWTREE_WITHIN(a) debugNodesShowTreeWithin(a);
 #else
 # define DEBUG_NODES_SHOWTREE(a)
-# define DEBUG_NODES_SHOWTREE_WITHIN(a)
 #endif
 
 namespace slideshow
@@ -58,7 +56,6 @@ namespace slideshow
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
         int& debugGetCurrentOffset();
         void debugNodesShowTree( const BaseNode* );
-        void debugNodesShowTreeWithin( const BaseNode* );
 #endif
 
         /** Look up an AttributableShape from ShapeManager.

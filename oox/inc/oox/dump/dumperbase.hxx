@@ -381,10 +381,8 @@ public:
 
     static void         appendAddress( ::rtl::OUStringBuffer& rStr, const Address& rPos );
     static void         appendRange( ::rtl::OUStringBuffer& rStr, const Range& rRange );
-    static void         appendRangeList( ::rtl::OUStringBuffer& rStr, const RangeList& rRanges );
 
     static void         appendAddress( ::rtl::OUStringBuffer& rStr, const TokenAddress& rPos, bool bR1C1 );
-    static void         appendRange( ::rtl::OUStringBuffer& rStr, const TokenRange& rRange, bool bR1C1 );
 
     // encoded text output ----------------------------------------------------
 

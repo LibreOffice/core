@@ -233,8 +233,6 @@ public:
     inline rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
     /** Sets the text encoding to import/export byte strings. */
     void                setTextEncoding( rtl_TextEncoding eTextEnc );
-    /** Sets text encoding from the default application font, if CODEPAGE record is missing. */
-    void                setAppFontEncoding( rtl_TextEncoding eAppFontEnc );
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
@@ -509,12 +507,6 @@ void WorkbookGlobals::setTextEncoding( rtl_TextEncoding eTextEnc )
 {
     if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
         meTextEnc = eTextEnc;
-}
-
-void WorkbookGlobals::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
-{
-    if( !mbHasCodePage )
-        setTextEncoding( eAppFontEnc );
 }
 
 // private --------------------------------------------------------------------

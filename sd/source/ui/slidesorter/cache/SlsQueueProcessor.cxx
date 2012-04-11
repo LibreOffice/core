@@ -231,19 +231,6 @@ void QueueProcessor::ProcessOneRequest (
     }
 }
 
-
-
-
-void QueueProcessor::RemoveRequest (CacheKey aKey)
-{
-    (void)aKey;
-    // See the method declaration above for an explanation why this makes sense.
-    ::osl::MutexGuard aGuard (maMutex);
-}
-
-
-
-
 void QueueProcessor::SetBitmapCache (
     const ::boost::shared_ptr<BitmapCache>& rpCache)
 {

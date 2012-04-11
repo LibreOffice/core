@@ -1349,14 +1349,6 @@ void PivotCache::importDConName( BiffInputStream& rStrm )
     importDConUrl( rStrm );
 }
 
-void PivotCache::importDConBIName( BiffInputStream& rStrm )
-{
-    sal_uInt8 nNameId = rStrm.readuInt8();
-    rStrm.skip( 3 );
-    maSheetSrcModel.maDefName = OUString( sal_Unicode( nNameId ) );
-    importDConUrl( rStrm );
-}
-
 void PivotCache::importDConUrl( BiffInputStream& rStrm )
 {
     // the URL with sheet name and optional URL of an external document

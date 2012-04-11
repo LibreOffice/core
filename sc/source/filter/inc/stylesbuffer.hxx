@@ -798,11 +798,6 @@ public:
     /** Writes all formatting attributes to the passed property set. */
     void                writeToPropertySet( PropertySet& rPropSet ) const;
 
-    /** Converts formatting information from BIFF2 cell record data directly. */
-    static void         writeBiff2CellFormatToPropertySet(
-                            const WorkbookHelper& rHelper, PropertySet& rPropSet,
-                            sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 );
-
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
 private:

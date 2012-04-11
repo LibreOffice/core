@@ -459,8 +459,6 @@ private:
     void                importDConRef( BiffInputStream& rStrm );
     /** Reads the defined name used for source data from the DCONNAME record. */
     void                importDConName( BiffInputStream& rStrm );
-    /** Reads the built-in defined name used for source data from the DCONBINAME record. */
-    void                importDConBIName( BiffInputStream& rStrm );
     /** Reads the sheet name and URL from the DCONREF, DCONNAME, or DCONBINAME records. */
     void                importDConUrl( BiffInputStream& rStrm );
 

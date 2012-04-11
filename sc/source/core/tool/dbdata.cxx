@@ -974,22 +974,6 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return NULL;
 }
 
-const ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
-{
-    NamedDBs::DBsType::const_iterator itr = find_if(
-        maNamedDBs.begin(), maNamedDBs.end(), FindFilterDBByTable(nTab));
-
-    const ScDBData* pData = itr == maNamedDBs.end() ? NULL : &(*itr);
-    if (pData)
-        return pData;
-
-    pData = pDoc->GetAnonymousDBData(nTab);
-    if (pData)
-        return pData;
-
-    return getAnonDBs().findByTable(nTab);
-}
-
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);

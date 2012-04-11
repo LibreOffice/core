@@ -25,7 +25,7 @@
 #  grep for the DEBUG_NODES_SHOWTREE macros in the slideshow source:
 #  Each such place dumps the current node tree to the trace output. Thus,
 #  if you need to check the tree state at other places or times, just add
-#  a DEBUG_NODES_SHOWTREE (or DEBUG_NODES_SHOWTREE_WITHIN, that is).
+#  a DEBUG_NODES_SHOWTREE
 #
 
 ###################################################
