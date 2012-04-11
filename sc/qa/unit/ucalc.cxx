@@ -208,6 +208,8 @@ public:
     void testSetBackgroundColor();
     void testRenameTable();
 
+    void testAutoFill();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
@@ -246,6 +248,7 @@ public:
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
+    CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4147,6 +4150,38 @@ void Test::testJumpToPrecedentsDependents()
         CPPUNIT_ASSERT_MESSAGE("C1:C2 should be the only dependent of A1.",
                                aRefTokens.size() == 1 && hasRange(aRefTokens, ScRange(2, 0, 0, 2, 1, 0)));
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testAutoFill()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    m_pDoc->SetValue(0,0,0,1);
+
+    ScMarkData aMarkData;
+    aMarkData.SelectTable(0, true);
+
+    m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 5);
+    for (SCROW i = 0; i< 6; ++i)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+
+    // check that hidden rows are not affected by autofill
+    // set values for hidden rows
+    m_pDoc->SetValue(0,1,0,10);
+    m_pDoc->SetValue(0,2,0,10);
+
+    m_pDoc->SetRowHidden(1, 2, 0, true);
+    m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 8);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,1,0), 1e-08);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,2,0), 1e-08);
+    for (SCROW i = 3; i< 8; ++i)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+
+
+
 
     m_pDoc->DeleteTab(0);
 }

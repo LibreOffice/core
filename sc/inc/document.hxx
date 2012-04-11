@@ -1146,7 +1146,7 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    SC_DLLPUBLIC void Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             ScProgress* pProgress, const ScMarkData& rMark,
                             sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
                             FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
