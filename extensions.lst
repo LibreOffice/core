@@ -55,10 +55,6 @@
 [ language=en.* ]
     68bfee769199749288c5e1aaf200a1ca http://sourceforge.net/projects/aoo-extensions/files/1232/7/dict-en-au-2008-12-15.oxt/download "dict-en-au-2008-12-15.oxt"
 
-# English (South Africa, en_ZA) dictionary
-[ language=en.* ]
-    c0c052e01b124a9ca5739facdb3ddbd5 http://sourceforge.net/projects/aoo-extensions/files/3089/0/dict-en_ZA-2009.10.22.oxt/download "dict-en_ZA-2009.10.22.oxt"
-
 # English (New Zealand, en_NZ) dictionary
 [ language=en.* ]
     87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download "dict-en-nz-2008-12-03.oxt"
