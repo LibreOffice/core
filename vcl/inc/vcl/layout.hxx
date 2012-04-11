@@ -36,6 +36,9 @@ class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
     VclContainer(Window *pParent) : Window(pParent) {}
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    using Window::SetPosSizePixel;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
@@ -60,10 +63,6 @@ public:
     {
         Show();
     }
-public:
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
-    using Window::SetPosSizePixel;
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -313,14 +312,19 @@ public:
     {
         return m_nColumnSpacing;
     }
-public:
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
-    using Window::SetPosSizePixel;
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 };
 
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
     sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
+
+class VCL_DLLPUBLIC VclFrame : public VclContainer
+{
+public:
+    VclFrame(Window *pParent) : VclContainer(pParent) {}
+protected:
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
+};
 
 // retro-fitting utilities //
 

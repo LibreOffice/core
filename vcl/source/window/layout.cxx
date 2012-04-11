@@ -27,6 +27,20 @@
  */
 
 #include <vcl/layout.hxx>
+#include "window.h"
+
+Size VclContainer::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Window::GetOptimalSize(eType);
+    return calculateRequisition();
+}
+
+void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+{
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
+    setAllocation(rAllocation);
+}
 
 Size VclBox::calculateRequisition() const
 {
@@ -74,13 +88,6 @@ Size VclBox::calculateRequisition() const
     aSize.Height() += nBorderWidth*2;
 
     return aSize;
-}
-
-Size VclBox::GetOptimalSize(WindowSizeType eType) const
-{
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Window::GetOptimalSize(eType);
-    return calculateRequisition();
 }
 
 void VclBox::setAllocation(const Size &rAllocation)
@@ -203,12 +210,6 @@ void VclBox::setAllocation(const Size &rAllocation)
             pChild->SetPosSizePixel(aChildPos, aChildSize);
         }
     }
-}
-
-void VclBox::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
-{
-    Window::SetPosSizePixel(rAllocPos, rAllocation);
-    setAllocation(rAllocation);
 }
 
 #define DEFAULT_CHILD_INTERNAL_PAD_X 4
@@ -397,13 +398,6 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vec
     }
 }
 
-Size VclGrid::GetOptimalSize(WindowSizeType eType) const
-{
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Window::GetOptimalSize(eType);
-    return calculateRequisition();
-}
-
 Size VclGrid::calculateRequisition() const
 {
     array_type A = assembleGrid();
@@ -442,12 +436,6 @@ Size VclGrid::calculateRequisition() const
     nTotalHeight += get_row_spacing() * (aHeights.size()-1);
 
     return Size(nTotalWidth, nTotalHeight);
-}
-
-void VclGrid::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
-{
-    Window::SetPosSizePixel(rAllocPos, rAllocation);
-    setAllocation(rAllocation);
 }
 
 void VclGrid::setAllocation(const Size& rAllocation)
@@ -521,6 +509,57 @@ void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 n
     rWidget.setChildProperty<sal_Int32>(sWidth, nWidth);
     rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
     rWidget.setChildProperty<sal_Int32>(sHeight, nHeight);
+}
+
+//To-Do, hook a DecorationView into VclFrame ?
+
+Size VclFrame::calculateRequisition() const
+{
+    Size aRet(0, 0);
+
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    Window *pChild = pWindowImpl->mpLastChild;
+    Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
+
+    if (pChild && pChild->IsVisible())
+        aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+
+    //To-Do, padding, borders, from style/theme
+    if (pLabel && pLabel->IsVisible())
+    {
+        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aRet.Height() += aLabelSize.Height();
+        aRet.Width() = std::max(aLabelSize.Width(), aRet.Width());
+    }
+
+    return aRet;
+}
+
+void VclFrame::setAllocation(const Size &rAllocation)
+{
+    Size aAllocation(rAllocation);
+    Point aChildPos(0, 0);
+
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    //The label widget is the last (of two) children
+    Window *pChild = pWindowImpl->mpLastChild;
+    Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
+
+    if (pLabel && pLabel->IsVisible())
+    {
+        //To-Do, borders etc.
+        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aLabelSize.Height() = std::min(aLabelSize.Height(), aAllocation.Height());
+        aLabelSize.Width() = std::min(aLabelSize.Width(), aAllocation.Width());
+        pLabel->SetPosSizePixel(aChildPos, aLabelSize);
+        aAllocation.Height() -= aLabelSize.Height();
+        aChildPos.Y() += aLabelSize.Height();
+    }
+
+    if (pChild && pChild->IsVisible())
+        pChild->SetPosSizePixel(aChildPos, aAllocation);
 }
 
 Size getLegacyBestSizeForChildren(const Window &rWindow)

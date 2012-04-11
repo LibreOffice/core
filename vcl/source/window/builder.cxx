@@ -71,6 +71,11 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
     {
+        //    <property name="visible">True</property>
+        //    <property name="can_focus">False</property>
+        //    <property name="orientation">vertical</property>
+        //    <property name="spacing">6</property>
+        //    <property name="homogeneous">True</property>
         if (bVertical)
             pWindow = new VclVBox(pParent);
         else
@@ -85,7 +90,17 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkGrid")))
     {
+        //    <property name="row_spacing">4</property>
+        //    <property name="column_spacing">2</property>
+        //    <property name="row_homogeneous">True</property>
+        //    <property name="column_homogeneous">True</property>
         pWindow = new VclGrid(pParent);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkFrame")))
+    {
+        //    <property name="label_xalign">0</property>
+        //    <property name="shadow_type">none</property>
+        pWindow = new VclFrame(pParent);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
     {
