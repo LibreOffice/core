@@ -79,6 +79,7 @@ public:
     void testFdo48104();
     void testFdo47107();
     void testFdo45182();
+    void testFdo44176();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testFdo48104);
     CPPUNIT_TEST(testFdo47107);
     CPPUNIT_TEST(testFdo45182);
+    CPPUNIT_TEST(testFdo44176);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -513,6 +515,22 @@ void RtfModelTest::testFdo45182()
     // Encoding in the footnote was wrong.
     OUString aExpected("živností", 10, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+void RtfModelTest::testFdo44176()
+{
+    load("fdo44176.rtf");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    sal_Int32 nFirstTop = 0, nDefaultTop = 0, nDefaultHeader = 0;
+    xFirstPage->getPropertyValue("TopMargin") >>= nFirstTop;
+    xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
+    xDefault->getPropertyValue("HeaderHeight") >>= nDefaultHeader;
+    CPPUNIT_ASSERT_EQUAL(nFirstTop, nDefaultTop + nDefaultHeader);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

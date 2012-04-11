@@ -778,9 +778,18 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
         operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderBottom );
     }
 
-    //now set the top/bottom margin for the follow page style
-    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin );
-    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin );
+    //now set the top/bottom margin
+    sal_Int32 nHeaderHeight = 0, nFooterHeight = 0;
+    if (bFirstPage)
+    {
+        // make sure the height of the header/footer is added to the top/bottom margin if necessary
+        if (m_aFollowPageStyle.is() && !HasHeader(true) && HasHeader(false))
+            m_aFollowPageStyle->getPropertyValue("HeaderHeight") >>= nHeaderHeight;
+        if (m_aFollowPageStyle.is() && !HasFooter(true) && HasFooter(false))
+            m_aFollowPageStyle->getPropertyValue("FooterHeight") >>= nFooterHeight;
+    }
+    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin + nHeaderHeight );
+    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin + nFooterHeight );
 }
 
 
