@@ -108,9 +108,6 @@ class Test : public test::BootstrapFixture
 public:
     Test();
 
-    virtual void setUp();
-    virtual void tearDown();
-
     void testConstruction();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -119,10 +116,6 @@ public:
 };
 
 Test::Test() {}
-
-void Test::setUp() {}
-
-void Test::tearDown() {}
 
 void Test::testConstruction()
 {
