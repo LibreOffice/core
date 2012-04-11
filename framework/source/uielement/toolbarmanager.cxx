@@ -1880,7 +1880,25 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
     if ( m_bDisposed )
         return 1;
     //modify for i33668 by shizhoubo:2008:04
-    GetToolBarCustomMenu(pToolBar);
+    PopupMenu * pMenu = GetToolBarCustomMenu(pToolBar);
+    if (pMenu)
+    {
+        sal_uInt16 nObsoleteItems = 6;
+        sal_uInt16 positionInMenu;
+        sal_uInt32 obsoleteItems[]  = {  MENUITEM_TOOLBAR_CLOSE ,
+                                     MENUITEM_TOOLBAR_VISIBLEBUTTON ,
+                                     MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR,
+                                     MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION,
+                                     MENUITEM_TOOLBAR_DOCKTOOLBAR,
+                                     MENUITEM_TOOLBAR_DOCKALLTOOLBAR
+                                   };
+        for( int i = 0 ; i < nObsoleteItems ; i++ )
+        {
+            positionInMenu = pMenu->GetItemPos( obsoleteItems[i] );
+            if ( positionInMenu != MENU_ITEM_NOTFOUND )
+                pMenu->RemoveItem( positionInMenu );
+        }
+    }
     //end
      return 0;
  }
