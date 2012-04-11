@@ -105,6 +105,8 @@ namespace sax_fastparser {
                 case '&':   sBuf.appendAscii( "&amp;" );    break;
                 case '\'':  sBuf.appendAscii( "&apos;" );   break;
                 case '"':   sBuf.appendAscii( "&quot;" );   break;
+                case '\n':  sBuf.appendAscii( "&#10;" );    break;
+                case '\r':  sBuf.appendAscii( "&#13;" );    break;
                 default:    sBuf.append( c );               break;
             }
         }
