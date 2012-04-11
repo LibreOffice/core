@@ -1027,7 +1027,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             aValue = ((ScStringCell*)pCell)->GetString();
                         else
                             aValue = ((ScEditCell*)pCell)->GetString();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nEndX, nEndY) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
@@ -1048,7 +1048,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     {
                         //  dabei kann's keinen Ueberlauf geben...
                         double nVal = ((ScValueCell*)pCell)->GetValue();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nEndX, nEndY) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                             nVal += (double) nDelta;
 
                         Color* pColor;
