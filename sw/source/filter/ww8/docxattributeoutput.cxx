@@ -2103,12 +2103,13 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
         }
     }
     // picture description
-    m_pSerializer->startElementNS( XML_wp, XML_docPr,
-            XML_id, "1",
-            XML_name, "Picture",
-            XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+    ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
+    attrList->add( XML_id, "1" );
+    attrList->add( XML_name, "Picture" );
+    attrList->add( XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
+    if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
+        attrList->add( XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
+    m_pSerializer->startElementNS( XML_wp, XML_docPr, XFastAttributeListRef( attrList ));
     // TODO hyperlink
     // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
     //         FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
