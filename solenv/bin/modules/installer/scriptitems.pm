@@ -528,12 +528,6 @@ sub set_global_directory_hostnames
             $installer::globals::officedirgid = $onedir->{'gid'};
             $allvariables->{'OFFICEDIRECTORYHOSTNAME'} = $installer::globals::officedirhostname;
         }
-        if ( $styles =~ /\bSUNDIRECTORY\b/ )
-        {
-            $installer::globals::sundirhostname = $onedir->{'HostName'};
-            $installer::globals::sundirgid = $onedir->{'gid'};
-            $allvariables->{'SUNDIRECTORYHOSTNAME'} = $installer::globals::sundirhostname;
-        }
     }
 }
 

@@ -235,15 +235,6 @@ sub create_unique_directorynames
             if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION alread set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
             $installer::globals::installlocationdirectory = $uniquename;
             $installer::globals::installlocationdirectoryset = 1;
-            if ( $installer::globals::installlocationdirectory =~ /oracle_/i ) { $installer::globals::sundirexists = 1; }
-        }
-
-        # setting the sundirectory
-        if ( $styles =~ /\bSUNDIRECTORY\b/ )
-        {
-            if ( $installer::globals::vendordirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag SUNDIRECTORY alread set: \"$installer::globals::vendordirectory\".", "create_unique_directorynames"); }
-            $installer::globals::vendordirectory = $uniquename;
-            $installer::globals::vendordirectoryset = 1;
         }
     }
 
