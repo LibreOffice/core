@@ -336,18 +336,12 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
 class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
 {
 public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> *pLayoutsToTransfer,
-                                               SdDrawDocument* pBookmarkDoc,
-                                               List* pBookmarkList, sal_uInt16 nBMSdPageCount ) :
-        mpLayoutsToTransfer(pLayoutsToTransfer), mpBookmarkDoc(pBookmarkDoc),
-        mpBookmarkList(pBookmarkList), mnBMSdPageCount(nBMSdPageCount) {}
+    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> *pLayoutsToTransfer )
+        : mpLayoutsToTransfer(pLayoutsToTransfer) {}
     virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
     virtual void operator()( SdDrawDocument&, SdPage* );
 private:
     std::vector<rtl::OUString> *mpLayoutsToTransfer;
-    SdDrawDocument* mpBookmarkDoc;
-    List*           mpBookmarkList;
-    sal_uInt16          mnBMSdPageCount;
 };
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
@@ -520,8 +514,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
     std::vector<rtl::OUString> aLayoutsToTransfer;
-    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( &aLayoutsToTransfer, pBookmarkDoc,
-                                                              pBookmarkList, nBMSdPageCount );
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( &aLayoutsToTransfer );
     IterateBookmarkPages( pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
 
 
