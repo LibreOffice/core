@@ -536,7 +536,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMin = nIStart;
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    bool bHasFiltered = IsDataFiltered(aFillRange.aStart.Col(), aFillRange.aStart.Row(), aFillRange.aEnd.Col(), aFillRange.aEnd.Row());
+    bool bHasFiltered = IsDataFiltered(aFillRange);
 
     if (!bHasFiltered)
     {
@@ -569,52 +569,52 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         rInner = nIStart;
         while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
         {
-            if ( bGetPattern )
+            if (!ColHidden(nCol) && !RowHidden(nRow))
             {
-                delete pNewPattern;
-                if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                    pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
-                else                // rInner&:=nCol, rOuter&:=nRow
-                    pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
-                bGetPattern = false;
-                pStyleSheet = pSrcPattern->GetStyleSheet();
-                //  Merge/Mergeflag nicht uebernehmen,
-                const SfxItemSet& rSet = pSrcPattern->GetItemSet();
-                if ( rSet.GetItemState(ATTR_MERGE, false) == SFX_ITEM_SET
-                  || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SFX_ITEM_SET )
+                if ( bGetPattern )
                 {
-                    pNewPattern = new ScPatternAttr( *pSrcPattern );
-                    SfxItemSet& rNewSet = pNewPattern->GetItemSet();
-                    rNewSet.ClearItem(ATTR_MERGE);
-                    rNewSet.ClearItem(ATTR_MERGE_FLAG);
-                }
-                else
-                    pNewPattern = NULL;
-            }
-
-            if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
-            {
-                //  Attribute komplett am Stueck setzen
-                if (pNewPattern || pSrcPattern != pDocument->GetDefPattern())
-                {
-                    //  Default steht schon da (DeleteArea)
-                    SCROW nY1 = static_cast<SCROW>(Min( nIStart, nIEnd ));
-                    SCROW nY2 = static_cast<SCROW>(Max( nIStart, nIEnd ));
-                    if ( pStyleSheet )
-                        aCol[nCol].ApplyStyleArea( nY1, nY2, *pStyleSheet );
-                    if ( pNewPattern )
-                        aCol[nCol].ApplyPatternArea( nY1, nY2, *pNewPattern );
+                    delete pNewPattern;
+                    if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
+                        pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
+                    else                // rInner&:=nCol, rOuter&:=nRow
+                        pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
+                    bGetPattern = false;
+                    pStyleSheet = pSrcPattern->GetStyleSheet();
+                    //  Merge/Mergeflag nicht uebernehmen,
+                    const SfxItemSet& rSet = pSrcPattern->GetItemSet();
+                    if ( rSet.GetItemState(ATTR_MERGE, false) == SFX_ITEM_SET
+                            || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SFX_ITEM_SET )
+                    {
+                        pNewPattern = new ScPatternAttr( *pSrcPattern );
+                        SfxItemSet& rNewSet = pNewPattern->GetItemSet();
+                        rNewSet.ClearItem(ATTR_MERGE);
+                        rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                    }
                     else
-                        aCol[nCol].ApplyPatternArea( nY1, nY2, *pSrcPattern );
+                        pNewPattern = NULL;
                 }
-                break;      // Schleife abbrechen
-            }
 
-            if (!RowFiltered( nRow ))
-            {
+                if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
+                {
+                    //  Attribute komplett am Stueck setzen
+                    if (pNewPattern || pSrcPattern != pDocument->GetDefPattern())
+                    {
+                        //  Default steht schon da (DeleteArea)
+                        SCROW nY1 = static_cast<SCROW>(Min( nIStart, nIEnd ));
+                        SCROW nY2 = static_cast<SCROW>(Max( nIStart, nIEnd ));
+                        if ( pStyleSheet )
+                            aCol[nCol].ApplyStyleArea( nY1, nY2, *pStyleSheet );
+                        if ( pNewPattern )
+                            aCol[nCol].ApplyPatternArea( nY1, nY2, *pNewPattern );
+                        else
+                            aCol[nCol].ApplyPatternArea( nY1, nY2, *pSrcPattern );
+                    }
+                    break;      // Schleife abbrechen
+                }
+
                 if ( bHasFiltered )
                     DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                               static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
+                            static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
 
                 if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
                 {
@@ -693,17 +693,20 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
             {
-                if (bPositive)
+                if(!ColHidden(nCol) && !RowHidden(nRow))
                 {
-                    ++nListIndex;
-                    if (nListIndex >= nListCount) nListIndex = 0;
+                    if (bPositive)
+                    {
+                        ++nListIndex;
+                        if (nListIndex >= nListCount) nListIndex = 0;
+                    }
+                    else
+                    {
+                        if (nListIndex == 0) nListIndex = nListCount;
+                        --nListIndex;
+                    }
+                    aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScStringCell(pListData->GetSubStr(nListIndex)));
                 }
-                else
-                {
-                    if (nListIndex == 0) nListIndex = nListCount;
-                    --nListIndex;
-                }
-                aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScStringCell(pListData->GetSubStr(nListIndex)));
 
                 if (rInner == nIEnd) break;
                 if (bPositive) ++rInner; else --rInner;
@@ -718,7 +721,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             sal_uLong nSource = nISrcStart;
             double nDelta;
-            if ( (nScFillModeMouseModifier & KEY_MOD1) || bHasFiltered )
+            if ( (nScFillModeMouseModifier & KEY_MOD1) )
                 nDelta = 0.0;
             else if ( bPositive )
                 nDelta = 1.0;
@@ -735,56 +738,53 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             ScBaseCell* pSrcCell = NULL;
             CellType eCellType = CELLTYPE_NONE;
             bool bIsOrdinalSuffix = false;
-            bool bRowFiltered = false;
 
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
             {
-                if ( bGetCell )
+                if(!ColHidden(nCol) && !RowHidden(nRow))
                 {
-                    if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                        pSrcCell = aCol[nCol].GetCell( static_cast<SCROW>(nSource) );
-                    else                // rInner&:=nCol, rOuter&:=nRow
-                        pSrcCell = aCol[nSource].GetCell( static_cast<SCROW>(nRow) );
-                    bGetCell = false;
-                    if ( pSrcCell )
+                    if ( bGetCell )
                     {
-                        eCellType = pSrcCell->GetCellType();
-                        switch ( eCellType )
+                        if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
+                            pSrcCell = aCol[nCol].GetCell( static_cast<SCROW>(nSource) );
+                        else                // rInner&:=nCol, rOuter&:=nRow
+                            pSrcCell = aCol[nSource].GetCell( static_cast<SCROW>(nRow) );
+                        bGetCell = false;
+                        if ( pSrcCell )
                         {
-                            case CELLTYPE_VALUE:
-                                nVal = ((ScValueCell*)pSrcCell)->GetValue();
-                            break;
-                            case CELLTYPE_STRING:
-                            case CELLTYPE_EDIT:
-                                if ( eCellType == CELLTYPE_STRING )
-                                    aValue = ((ScStringCell*)pSrcCell)->GetString();
-                                else
-                                    aValue = ((ScEditCell*)pSrcCell)->GetString();
-                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
-                                {
-                                    nCellDigits = 0;    // look at each source cell individually
-                                    nHeadNoneTail = lcl_DecompValueString(
-                                        aValue, nStringValue, &nCellDigits );
-
-                                    bIsOrdinalSuffix = aValue.Equals(
-                                            ScGlobal::GetOrdinalSuffix( nStringValue));
-                                }
-                            break;
-                            default:
+                            eCellType = pSrcCell->GetCellType();
+                            switch ( eCellType )
                             {
-                                // added to avoid warnings
+                                case CELLTYPE_VALUE:
+                                    nVal = ((ScValueCell*)pSrcCell)->GetValue();
+                                    break;
+                                case CELLTYPE_STRING:
+                                case CELLTYPE_EDIT:
+                                    if ( eCellType == CELLTYPE_STRING )
+                                        aValue = ((ScStringCell*)pSrcCell)->GetString();
+                                    else
+                                        aValue = ((ScEditCell*)pSrcCell)->GetString();
+                                    if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
+                                    {
+                                        nCellDigits = 0;    // look at each source cell individually
+                                        nHeadNoneTail = lcl_DecompValueString(
+                                                aValue, nStringValue, &nCellDigits );
+
+                                        bIsOrdinalSuffix = aValue.Equals(
+                                                ScGlobal::GetOrdinalSuffix( nStringValue));
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        // added to avoid warnings
+                                    }
                             }
                         }
+                        else
+                            eCellType = CELLTYPE_NONE;
                     }
-                    else
-                        eCellType = CELLTYPE_NONE;
-                }
 
-                bRowFiltered = RowHidden(nRow);
-
-                if (!bRowFiltered)
-                {
                     switch (eCellType)
                     {
                         case CELLTYPE_VALUE:
@@ -823,11 +823,11 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     case CELLTYPE_STRING:
                                     case CELLTYPE_EDIT:
                                         aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
-                                    break;
+                                        break;
                                     default:
-                                    {
-                                        // added to avoid warnings
-                                    }
+                                        {
+                                            // added to avoid warnings
+                                        }
                                 }
                             }
                             break;
@@ -840,9 +840,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 nMaxFormCnt = nFormulaCounter - nActFormCnt;
                             break;
                         default:
-                        {
-                            // added to avoid warnings
-                        }
+                            {
+                                // added to avoid warnings
+                            }
                     }
 
                     if (nSource==nISrcEnd)
@@ -852,7 +852,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nSource = nISrcStart;
                             bGetCell = true;
                         }
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
                             if ( bPositive )
                                 nDelta += 1.0;
