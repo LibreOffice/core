@@ -2821,6 +2821,11 @@ bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SC
     return false;
 }
 
+bool ScTable::IsDataFiltered(const ScRange& rRange) const
+{
+    return IsDataFiltered(rRange.aStart.Col(), rRange.aStart.Row(),
+                rRange.aEnd.Col(), rRange.aEnd.Row());
+}
 
 void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
 {

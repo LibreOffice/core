@@ -675,6 +675,7 @@ public:
     SCROW      GetLastChangedRow() const;
 
     bool       IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const;
+    bool       IsDataFiltered(const ScRange& rRange) const;
     sal_uInt8       GetColFlags( SCCOL nCol ) const;
     sal_uInt8       GetRowFlags( SCROW nRow ) const;
 

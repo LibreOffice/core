@@ -489,6 +489,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIEnd;
     sal_uLong nISrcStart;
     sal_uLong nISrcEnd;
+    ScRange aFillRange;
 
     if (bVertical)
     {
@@ -500,6 +501,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISrcEnd = nRow2;
             nIStart = nRow2 + 1;
             nIEnd = nRow2 + nFillCount;
+            aFillRange = ScRange(nCol1, nRow2+1, 0, nCol2, nRow2 + nFillCount, 0);
         }
         else
         {
@@ -507,6 +509,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISrcEnd = nRow1;
             nIStart = nRow1 - 1;
             nIEnd = nRow1 - nFillCount;
+            aFillRange = ScRange(nCol1, nRow1-1, 0, nCol2, nRow2 - nFillCount, 0);
         }
     }
     else
@@ -519,6 +522,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISrcEnd = nCol2;
             nIStart = nCol2 + 1;
             nIEnd = nCol2 + nFillCount;
+            aFillRange = ScRange(nCol2 + 1, nRow1, 0, nCol2 + nFillCount, nRow2, 0);
         }
         else
         {
@@ -526,12 +530,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISrcEnd = nCol1;
             nIStart = nCol1 - 1;
             nIEnd = nCol1 - nFillCount;
+            aFillRange = ScRange(nCol1 - 1, nRow1, 0, nCol1 - nFillCount, nRow2, 0);
         }
     }
     sal_uLong nIMin = nIStart;
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    bool bHasFiltered = IsDataFiltered(nCol1, nRow1, nCol2, nRow2);
+    bool bHasFiltered = IsDataFiltered(aFillRange.aStart.Col(), aFillRange.aStart.Row(), aFillRange.aEnd.Col(), aFillRange.aEnd.Row());
 
     if (!bHasFiltered)
     {
@@ -776,7 +781,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         eCellType = CELLTYPE_NONE;
                 }
 
-                bRowFiltered = mpFilteredRows->getValue(nRow);
+                bRowFiltered = RowHidden(nRow);
 
                 if (!bRowFiltered)
                 {
@@ -1022,7 +1027,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             aValue = ((ScStringCell*)pCell)->GetString();
                         else
                             aValue = ((ScEditCell*)pCell)->GetString();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nEndX, nEndY) )
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
@@ -1043,7 +1048,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     {
                         //  dabei kann's keinen Ueberlauf geben...
                         double nVal = ((ScValueCell*)pCell)->GetValue();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered(nCol1, nRow1, nEndX, nEndY) )
                             nVal += (double) nDelta;
 
                         Color* pColor;
@@ -1250,6 +1255,23 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     rVal = aDate - aNullDate;
 }
 
+namespace
+{
+
+bool HiddenRowColumn(sal_uLong nRowColumn, bool bVertical, ScTable* pTable)
+{
+    if(bVertical)
+    {
+        return pTable->RowHidden(static_cast<SCROW>(nRowColumn));
+    }
+    else
+    {
+        return pTable->ColHidden(static_cast<SCCOL>(nRowColumn));
+    }
+}
+
+}
+
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
@@ -1271,6 +1293,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIStart;
     sal_uLong nIEnd;
     sal_uLong nISource;
+    ScRange aFillRange;
 
     if (bVertical)
     {
@@ -1284,12 +1307,14 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISource = nRow1;
             nIStart = nRow1 + 1;
             nIEnd = nRow1 + nFillCount;
+            aFillRange = ScRange(nCol1, nRow1 + 1, nTab, nCol2, nRow1 + nFillCount, nTab);
         }
         else
         {
             nISource = nRow2;
             nIStart = nRow2 - 1;
             nIEnd = nRow2 - nFillCount;
+            aFillRange = ScRange(nCol1, nRow2 -1, nTab, nCol2, nRow2 - nFillCount, nTab);
         }
     }
     else
@@ -1304,12 +1329,14 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nISource = nCol1;
             nIStart = nCol1 + 1;
             nIEnd = nCol1 + nFillCount;
+            aFillRange = ScRange(nCol1 + 1, nRow1, nTab, nCol1 + nFillCount, nRow2, nTab);
         }
         else
         {
             nISource = nCol2;
             nIStart = nCol2 - 1;
             nIEnd = nCol2 - nFillCount;
+            aFillRange = ScRange(nCol2 - 1, nRow1, nTab, nCol2 - nFillCount, nRow2, nTab);
         }
     }
 
@@ -1317,10 +1344,15 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
     sal_uInt16 nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
-    if (bVertical)
-        DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), nDel);
-    else
-        DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, nDel);
+
+    bool bIsFiltered = IsDataFiltered(aFillRange);
+    if (!bIsFiltered)
+    {
+        if (bVertical)
+            DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), nDel);
+        else
+            DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, nDel);
+    }
 
     sal_uLong nProgress = 0;
     if (pProgress)
@@ -1344,11 +1376,29 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
             if (bVertical)
-                aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
-                        static_cast<SCROW>(nIMax), *pSrcPattern, true );
+            {
+                // if not filtered use the faster method
+                // hidden cols/rows should be skiped
+                if(!bIsFiltered)
+                {
+                    aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
+                            static_cast<SCROW>(nIMax), *pSrcPattern, true );
+                }
+                else
+                {
+                    for(SCROW nAtRow = static_cast<SCROW>(nIMin); nAtRow <= static_cast<SCROW>(nIMax); ++nAtRow)
+                    {
+                        if(!RowHidden(nAtRow))
+                            aCol[nCol].SetPatternArea( static_cast<SCROW>(nAtRow),
+                                    static_cast<SCROW>(nAtRow), *pSrcPattern, true);
+                    }
+
+                }
+            }
             else
                 for (SCCOL nAtCol = static_cast<SCCOL>(nIMin); nAtCol <= sal::static_int_cast<SCCOL>(nIMax); nAtCol++)
-                    aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern, true);
+                    if(!ColHidden(nAtCol))
+                        aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern, true);
         }
 
         if (pSrcCell)
@@ -1361,7 +1411,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
-                        if (pDocument->RowFiltered( rInner, nTab))
+                        if(HiddenRowColumn(rInner, bVertical, this))
                             continue;
                         sal_uLong nInd = nActFormCnt;
                         FillFormula(nInd, bFirst, (ScFormulaCell*)pSrcCell,
@@ -1375,7 +1425,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
-                        if (pDocument->RowFiltered( rInner, nTab))
+                        if(HiddenRowColumn(rInner, bVertical, this))
                             continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
                         aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
@@ -1402,62 +1452,75 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 rInner = nIStart;
                 while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
                 {
-                    if (!bError && !bOverflow)
+                    if(!ColHidden(nCol) && !RowHidden(nRow))
                     {
-                        switch (eFillCmd)
+                        if (!bError && !bOverflow)
                         {
-                            case FILL_LINEAR:
-                                {
-                                    //  use multiplication instead of repeated addition
-                                    //  to avoid accumulating rounding errors
-                                    nVal = nStartVal;
-                                    double nAdd = nStepValue;
-                                    if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
-                                         !SubTotal::SafePlus( nVal, nAdd ) )
-                                        bError = true;
-                                }
-                                break;
-                            case FILL_GROWTH:
-                                if (!SubTotal::SafeMult(nVal, nStepValue))
-                                    bError = true;
-                                break;
-                            case FILL_DATE:
-                                if (fabs(nVal) > _D_MAX_LONG_)
-                                    bError = true;
-                                else
-                                    IncDate(nVal, nDayOfMonth, nStepValue, eFillDateCmd);
-                                break;
-                            default:
+                            switch (eFillCmd)
                             {
-                                // added to avoid warnings
+                                case FILL_LINEAR:
+                                    {
+                                        //  use multiplication instead of repeated addition
+                                        //  to avoid accumulating rounding errors
+                                        nVal = nStartVal;
+                                        double nAdd = nStepValue;
+                                        if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                                !SubTotal::SafePlus( nVal, nAdd ) )
+                                            bError = true;
+                                    }
+                                    break;
+                                case FILL_GROWTH:
+                                    if (!SubTotal::SafeMult(nVal, nStepValue))
+                                        bError = true;
+                                    break;
+                                case FILL_DATE:
+                                    if (fabs(nVal) > _D_MAX_LONG_)
+                                        bError = true;
+                                    else
+                                        IncDate(nVal, nDayOfMonth, nStepValue, eFillDateCmd);
+                                    break;
+                                default:
+                                    {
+                                        // added to avoid warnings
+                                    }
+                            }
+
+                            if (nStepValue >= 0)
+                            {
+                                if (nVal > nMaxValue)           // Zielwert erreicht?
+                                {
+                                    nVal = nMaxValue;
+                                    bOverflow = true;
+                                }
+                            }
+                            else
+                            {
+                                if (nVal < nMaxValue)
+                                {
+                                    nVal = nMaxValue;
+                                    bOverflow = true;
+                                }
                             }
                         }
 
-                        if (nStepValue >= 0)
-                        {
-                            if (nVal > nMaxValue)           // Zielwert erreicht?
-                            {
-                                nVal = nMaxValue;
-                                bOverflow = true;
-                            }
-                        }
+                        if (bError)
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
+                        else if (bOverflow)
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), errIllegalFPOperation);
                         else
-                        {
-                            if (nVal < nMaxValue)
-                            {
-                                nVal = nMaxValue;
-                                bOverflow = true;
-                            }
-                        }
+                            aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal);
                     }
 
-                    if (bError)
-                        aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
-                    else if (!bOverflow)
-                        aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal);
-
-                    if (rInner == nIEnd) break;
-                    if (bPositive) ++rInner; else --rInner;
+                    if (rInner == nIEnd)
+                        break;
+                    if (bPositive)
+                    {
+                        ++rInner;
+                    }
+                    else
+                    {
+                        --rInner;
+                    }
                 }
                 nProgress += nIMax - nIMin + 1;
                 if(pProgress)
@@ -1497,68 +1560,73 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     rInner = nIStart;
                     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
                     {
-                        if (!bError && !bOverflow)
+                        if(!ColHidden(nCol) && !RowHidden(nRow))
                         {
-                            switch (eFillCmd)
+                            if (!bError && !bOverflow)
                             {
-                                case FILL_LINEAR:
-                                    {
-                                        //  use multiplication instead of repeated addition
-                                        //  to avoid accumulating rounding errors
-                                        nVal = nStartVal;
-                                        double nAdd = nStepValue;
-                                        if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
-                                             !SubTotal::SafePlus( nVal, nAdd ) )
+                                switch (eFillCmd)
+                                {
+                                    case FILL_LINEAR:
+                                        {
+                                            //  use multiplication instead of repeated addition
+                                            //  to avoid accumulating rounding errors
+                                            nVal = nStartVal;
+                                            double nAdd = nStepValue;
+                                            if ( !SubTotal::SafeMult( nAdd, (double) ++nIndex ) ||
+                                                    !SubTotal::SafePlus( nVal, nAdd ) )
+                                                bError = true;
+                                        }
+                                        break;
+                                    case FILL_GROWTH:
+                                        if (!SubTotal::SafeMult(nVal, nStepValue))
                                             bError = true;
+                                        break;
+                                    default:
+                                        {
+                                            // added to avoid warnings
+                                        }
+                                }
+
+                                if (nStepValue >= 0)
+                                {
+                                    if (nVal > nMaxValue)           // Zielwert erreicht?
+                                    {
+                                        nVal = nMaxValue;
+                                        bOverflow = true;
                                     }
-                                    break;
-                                case FILL_GROWTH:
-                                    if (!SubTotal::SafeMult(nVal, nStepValue))
-                                        bError = true;
-                                    break;
-                                default:
+                                }
+                                else
                                 {
-                                    // added to avoid warnings
+                                    if (nVal < nMaxValue)
+                                    {
+                                        nVal = nMaxValue;
+                                        bOverflow = true;
+                                    }
                                 }
                             }
 
-                            if (nStepValue >= 0)
-                            {
-                                if (nVal > nMaxValue)           // Zielwert erreicht?
-                                {
-                                    nVal = nMaxValue;
-                                    bOverflow = true;
-                                }
-                            }
+                            if (bError)
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
+                            else if (bOverflow)
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), errIllegalFPOperation);
                             else
                             {
-                                if (nVal < nMaxValue)
+                                nStringValue = (sal_Int32)nVal;
+                                String aStr;
+                                if ( nHeadNoneTail < 0 )
                                 {
-                                    nVal = nMaxValue;
-                                    bOverflow = true;
+                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                            lcl_getSuffixCell( pDocument,
+                                                nStringValue, nMinDigits, aValue,
+                                                eCellType, bIsOrdinalSuffix ));
                                 }
-                            }
-                        }
-
-                        if (bError)
-                            aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
-                        else if (!bOverflow)
-                        {
-                            nStringValue = (sal_Int32)nVal;
-                            String aStr;
-                            if ( nHeadNoneTail < 0 )
-                            {
-                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                        lcl_getSuffixCell( pDocument,
-                                            nStringValue, nMinDigits, aValue,
-                                            eCellType, bIsOrdinalSuffix ));
-                            }
-                            else
-                            {
-                                aStr = aValue;
-                                aStr += lcl_ValueString( nStringValue, nMinDigits );
-                                ScStringCell* pCell = new ScStringCell( aStr );
-                                aCol[nCol].Insert( static_cast<SCROW>(nRow), pCell );
+                                else
+                                {
+                                    aStr = aValue;
+                                    aStr += lcl_ValueString( nStringValue, nMinDigits );
+                                    ScStringCell* pCell = new ScStringCell( aStr );
+                                    aCol[nCol].Insert( static_cast<SCROW>(nRow), pCell );
+                                }
                             }
                         }
 
