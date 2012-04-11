@@ -989,8 +989,16 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             if( nPart == PART_ENTIRE_CONTROL )
             {
                 RECT aGutterRC = rc;
-                aGutterRC.left += aValue.getNumericVal();
-                aGutterRC.right = aGutterRC.left+3;
+                if( Application::GetSettings().GetLayoutRTL() )
+                {
+                    aGutterRC.right -= aValue.getNumericVal()+1;
+                    aGutterRC.left = aGutterRC.right-3;
+                }
+                else
+                {
+                    aGutterRC.left += aValue.getNumericVal();
+                    aGutterRC.right = aGutterRC.left+3;
+                }
                 return
                 ImplDrawTheme( hTheme, hDC, MENU_POPUPBACKGROUND, 0, rc, aCaption ) &&
                 ImplDrawTheme( hTheme, hDC, MENU_POPUPGUTTER, 0, aGutterRC, aCaption )
@@ -1012,13 +1020,18 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     if( aValue.getType() == CTRL_MENU_POPUP )
                     {
                         const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
-                        aBGRect.left   = rMVal.maItemRect.Left();
                         aBGRect.top    = rMVal.maItemRect.Top();
                         aBGRect.bottom = rMVal.maItemRect.Bottom()+1; // see below in drawNativeControl
-                        aBGRect.right  = rMVal.getNumericVal();
-
-                        // FIXME: magic
-                        aBGRect.left += 1; aBGRect.top += 1; aBGRect.bottom +=1;
+                        if( Application::GetSettings().GetLayoutRTL() )
+                        {
+                            aBGRect.right = rMVal.maItemRect.Right()+1;
+                            aBGRect.left = aBGRect.right - (rMVal.getNumericVal()-rMVal.maItemRect.Left());
+                        }
+                        else
+                        {
+                            aBGRect.right = rMVal.getNumericVal();
+                            aBGRect.left  = rMVal.maItemRect.Left();
+                        }
                     }
                     iState = (nState & CTRL_STATE_ENABLED) ? MCB_NORMAL : MCB_DISABLED;
                     ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
@@ -1033,7 +1046,11 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
             else if( nPart == PART_MENU_SEPARATOR )
             {
-                rc.left += aValue.getNumericVal(); // adjust for gutter position
+                // adjust for gutter position
+                if( Application::GetSettings().GetLayoutRTL() )
+                    rc.right -= aValue.getNumericVal()+1;
+                else
+                    rc.left += aValue.getNumericVal()+1;
                 Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPSEPARATOR, 0, Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
                 // center the separator inside the passed rectangle
