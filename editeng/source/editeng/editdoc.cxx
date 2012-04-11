@@ -688,7 +688,7 @@ size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
     // Through certain filter code-paths we do a lot of appends, which in
     // turn call GetPos - creating some N^2 nightmares. If we have a
     // non-trivially large list, do a few checks from the end first.
-    if (rLastPos > 16)
+    if (rLastPos > 16 && nArrayLen > 16)
     {
         size_t nEnd;
         if (rLastPos > nArrayLen - 2)
@@ -698,7 +698,7 @@ size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
 
         for (size_t nIdx = rLastPos - 2; nIdx < nEnd; ++nIdx)
         {
-            if (&rArray[nIdx] == p)
+            if (&rArray.at(nIdx) == p)
             {
                 rLastPos = nIdx;
                 return nIdx;
@@ -707,7 +707,7 @@ size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
     }
     // The world's lamest linear search from svarray ...
     for (size_t nIdx = 0; nIdx < nArrayLen; ++nIdx)
-        if (&rArray[nIdx] == p)
+        if (&rArray.at(nIdx) == p)
             return rLastPos = nIdx;
 
     // 0xFFFF is used to signify "not found" condition. We need to change this.
