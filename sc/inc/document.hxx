@@ -1148,10 +1148,10 @@ public:
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void            Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark,
+                            ScProgress* pProgress, const ScMarkData& rMark,
                             sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
                             FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
-                            double nStepValue = 1.0, double nMaxValue = 1E307);
+                            double nStepValue = 1.0, double nMaxValue = 1E307 );
     rtl::OUString          GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
     bool            GetSelectionFunction( ScSubTotalFunc eFunc,

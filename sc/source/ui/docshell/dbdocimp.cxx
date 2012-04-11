@@ -597,8 +597,14 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             // fill formulas
             ScMarkData aMark;
             aMark.SelectOneTable(nTab);
+
+            sal_uLong nProgCount = nFormulaCols;
+            nProgCount *= nEndRow-rParam.nRow1-1;
+            ScProgress aProgress( pDoc->GetDocumentShell(),
+                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
             pDoc->Fill( nEndCol+1, rParam.nRow1+1, nEndCol+nFormulaCols, rParam.nRow1+1,
-                            aMark, nEndRow-rParam.nRow1-1, FILL_TO_BOTTOM, FILL_SIMPLE );
+                            &aProgress, aMark, nEndRow-rParam.nRow1-1, FILL_TO_BOTTOM, FILL_SIMPLE );
         }
 
         //  if new range is smaller, clear old contents

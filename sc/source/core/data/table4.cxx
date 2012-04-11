@@ -467,7 +467,7 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, S
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        sal_uLong nFillCount, FillDir eFillDir, ScProgress& rProgress )
+                        sal_uLong nFillCount, FillDir eFillDir, ScProgress* pProgress )
 {
     if ( (nFillCount == 0) || !ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2) )
         return;
@@ -541,7 +541,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
     }
 
-    sal_uLong nProgress = rProgress.GetState();
+    sal_uLong nProgress = 0;
+    if (pProgress)
+        nProgress = pProgress->GetState();
 
     //
     //  ausfuehren
@@ -701,8 +703,11 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (rInner == nIEnd) break;
                 if (bPositive) ++rInner; else --rInner;
             }
-            nProgress += nIMax - nIMin + 1;
-            rProgress.SetStateOnPercent( nProgress );
+            if(pProgress)
+            {
+                nProgress += nIMax - nIMin + 1;
+                pProgress->SetStateOnPercent( nProgress );
+            }
         }
         else if (eFillCmd == FILL_SIMPLE)           // Auffuellen mit Muster
         {
@@ -871,11 +876,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 //  und auch dann nicht fuer jede einzelne
 
                 ++nProgress;
-                if ( eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT )
-                    rProgress.SetStateOnPercent( nProgress );
+                if ( pProgress && (eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT) )
+                    pProgress->SetStateOnPercent( nProgress );
 
             }
-            rProgress.SetStateOnPercent( nProgress );
+            if (pProgress)
+                pProgress->SetStateOnPercent( nProgress );
         }
         else
         {
@@ -886,13 +892,14 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        rProgress );
+                        pProgress );
             else
                 FillSeries( nCol1, static_cast<SCROW>(nRow), nCol2,
                         static_cast<SCROW>(nRow), nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        rProgress );
-            nProgress = rProgress.GetState();
+                        pProgress );
+            if (pProgress)
+                nProgress = pProgress->GetState();
         }
 
         nActFormCnt += nMaxFormCnt;
@@ -1246,7 +1253,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
-                    bool bAttribs, ScProgress& rProgress )
+                    bool bAttribs, ScProgress* pProgress )
 {
     //
     //  Richtung auswerten
@@ -1315,7 +1322,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     else
         DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, nDel);
 
-    sal_uLong nProgress = rProgress.GetState();
+    sal_uLong nProgress = 0;
+    if (pProgress)
+        nProgress = pProgress->GetState();
 
     //
     //  ausfuehren
@@ -1358,7 +1367,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         FillFormula(nInd, bFirst, (ScFormulaCell*)pSrcCell,
                             static_cast<SCCOL>(nCol), nRow, (rInner == nIEnd) );
                         bFirst = false;
-                        rProgress.SetStateOnPercent( ++nProgress );
+                        if(pProgress)
+                            pProgress->SetStateOnPercent( ++nProgress );
                     }
                 }
                 else if (eCellType != CELLTYPE_NOTE)
@@ -1371,7 +1381,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
                     }
                     nProgress += nIMax - nIMin + 1;
-                    rProgress.SetStateOnPercent( nProgress );
+                    if(pProgress)
+                        pProgress->SetStateOnPercent( nProgress );
                 }
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
@@ -1449,7 +1460,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (bPositive) ++rInner; else --rInner;
                 }
                 nProgress += nIMax - nIMin + 1;
-                rProgress.SetStateOnPercent( nProgress );
+                if(pProgress)
+                    pProgress->SetStateOnPercent( nProgress );
             }
             else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
             {
@@ -1554,14 +1566,17 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (bPositive) ++rInner; else --rInner;
                     }
                 }
-                nProgress += nIMax - nIMin + 1;
-                rProgress.SetStateOnPercent( nProgress );
+                if(pProgress)
+                {
+                    nProgress += nIMax - nIMin + 1;
+                    pProgress->SetStateOnPercent( nProgress );
+                }
             }
         }
-        else
+        else if(pProgress)
         {
             nProgress += nIMax - nIMin + 1;
-            rProgress.SetStateOnPercent( nProgress );
+            pProgress->SetStateOnPercent( nProgress );
         }
         ++nActFormCnt;
     }
@@ -1569,22 +1584,13 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
-                    double nStepValue, double nMaxValue)
+                    double nStepValue, double nMaxValue, ScProgress* pProgress)
 {
-    sal_uLong nProgCount;
-    if (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP)
-        nProgCount = nCol2 - nCol1 + 1;
-    else
-        nProgCount = nRow2 - nRow1 + 1;
-    nProgCount *= nFillCount;
-    ScProgress aProgress( pDocument->GetDocumentShell(),
-                            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
-
     if (eFillCmd == FILL_AUTO)
-        FillAuto(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir, aProgress);
+        FillAuto(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir, pProgress);
     else
         FillSeries(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir,
-                    eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, true, aProgress);
+                    eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, true, pProgress);
 }
 
 

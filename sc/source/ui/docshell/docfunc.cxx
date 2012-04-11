@@ -100,6 +100,7 @@
 #include "clipparam.hxx"
 #include "externalrefmgr.hxx"
 #include "undorangename.hxx"
+#include "progress.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -4078,9 +4079,18 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->CopyToDocument( aCopyRange, IDF_AUTOFILL, false, pUndoDoc, &aMark );
         }
 
+        sal_uLong nProgCount;
+        if (eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP)
+            nProgCount = aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1;
+        else
+            nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
+        nProgCount *= nCount;
+        ScProgress aProgress( pDoc->GetDocumentShell(),
+                ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
         pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
-                    aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aMark,
-                    nCount, eDir, FILL_SIMPLE );
+                aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
+                aMark, nCount, eDir, FILL_SIMPLE );
         AdjustRowHeight(aRange);
 
         if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
@@ -4194,9 +4204,19 @@ sal_Bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMar
                 SCTAB nTab = aDestArea.aStart.Tab();
                 pDoc->SetValue( nValX, nValY, nTab, fStart );
             }
+
+            sal_uLong nProgCount;
+            if (eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP)
+                nProgCount = aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1;
+            else
+                nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
+            nProgCount *= nCount;
+            ScProgress aProgress( pDoc->GetDocumentShell(),
+                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
             pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
-                        aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aMark,
-                        nCount, eDir, eCmd, eDateCmd, fStep, fMax );
+                        aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
+                        aMark, nCount, eDir, eCmd, eDateCmd, fStep, fMax );
             AdjustRowHeight(rRange);
 
             rDocShell.PostPaintGridAll();
@@ -4325,9 +4345,18 @@ sal_Bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillD
             IDF_AUTOFILL, false, pUndoDoc, &aMark );
     }
 
+    sal_uLong nProgCount;
+    if (eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP)
+        nProgCount = aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1;
+    else
+        nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
+    nProgCount *= nCount;
+    ScProgress aProgress( pDoc->GetDocumentShell(),
+            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
     pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
-                aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aMark,
-                nCount, eDir, eCmd, eDateCmd, fStep, fMax );
+            aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
+            aMark, nCount, eDir, eCmd, eDateCmd, fStep, fMax );
 
     AdjustRowHeight(aDestArea);
 

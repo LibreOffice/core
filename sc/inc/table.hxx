@@ -477,7 +477,7 @@ public:
                                       const ScRangeData::IndexMap& rMap );
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
-                        double nStepValue, double nMaxValue);
+                        double nStepValue, double nMaxValue, ScProgress* pProgress);
     String      GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
     void        UpdateSelectionFunction( ScFunctionData& rData,
@@ -792,13 +792,13 @@ private:
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,
                                 FillDateCmd eFillDateCmd,
                                 double nStepValue, double nMaxValue, sal_uInt16 nMinDigits,
-                                bool bAttribs, ScProgress& rProgress );
+                                bool bAttribs, ScProgress* pProgress );
     void        FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 FillCmd& rCmd, FillDateCmd& rDateCmd,
                                 double& rInc, sal_uInt16& rMinDigits,
                                 ScUserListData*& rListData, sal_uInt16& rListIndex);
     void        FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        sal_uLong nFillCount, FillDir eFillDir, ScProgress& rProgress );
+                        sal_uLong nFillCount, FillDir eFillDir, ScProgress* pProgress );
 
     bool        ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
                                 bool bMarked, bool bUnprotected );

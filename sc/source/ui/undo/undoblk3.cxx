@@ -60,6 +60,7 @@
 #include "paramisc.hxx"
 #include "postit.hxx"
 #include "docuno.hxx"
+#include "progress.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -714,11 +715,20 @@ void ScUndoAutoFill::Redo()
         SCTAB nTab = aSource.aStart.Tab();
         pDoc->SetValue( nValX, nValY, nTab, fStartValue );
     }
+    sal_uLong nProgCount;
+    if (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP)
+        nProgCount = aSource.aEnd.Col() - aSource.aStart.Col() + 1;
+    else
+        nProgCount = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
+    nProgCount *= nCount;
+    ScProgress aProgress( pDoc->GetDocumentShell(),
+            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
     pDoc->Fill( aSource.aStart.Col(), aSource.aStart.Row(),
-                aSource.aEnd.Col(),   aSource.aEnd.Row(),
-                aMarkData, nCount,
-                eFillDir, eFillCmd, eFillDateCmd,
-                fStepValue, fMaxValue );
+            aSource.aEnd.Col(), aSource.aEnd.Row(), &aProgress,
+            aMarkData, nCount,
+            eFillDir, eFillCmd, eFillDateCmd,
+            fStepValue, fMaxValue );
 
     SetChangeTrack();
 

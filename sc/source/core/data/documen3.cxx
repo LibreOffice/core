@@ -1100,7 +1100,7 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         maTabs[i]->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProgress* pProgress, const ScMarkData& rMark,
                         sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue)
 {
@@ -1112,7 +1112,7 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const 
         if (maTabs[*itr])
             maTabs[*itr]->Fill(nCol1, nRow1, nCol2, nRow2,
                             nFillCount, eFillDir, eFillCmd, eFillDateCmd,
-                            nStepValue, nMaxValue);
+                            nStepValue, nMaxValue, pProgress);
 }
 
 rtl::OUString ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )

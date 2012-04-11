@@ -61,6 +61,7 @@
 #include "hints.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include "progress.hxx"
 
 #include <set>
 
@@ -886,8 +887,14 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 ScMarkData aMark;
                 aMark.SelectOneTable(nDestTab);
                 SCROW nFStartY = aLocalParam.nRow1 + ( aLocalParam.bHasHeader ? 1 : 0 );
+
+                sal_uLong nProgCount = nFormulaCols;
+                nProgCount *= aLocalParam.nRow2 - nFStartY;
+                ScProgress aProgress( pDoc->GetDocumentShell(),
+                        ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
+
                 pDoc->Fill( aLocalParam.nCol2+1, nFStartY,
-                            aLocalParam.nCol2+nFormulaCols, nFStartY, aMark,
+                            aLocalParam.nCol2+nFormulaCols, nFStartY, &aProgress, aMark,
                             aLocalParam.nRow2 - nFStartY,
                             FILL_TO_BOTTOM, FILL_SIMPLE );
             }
