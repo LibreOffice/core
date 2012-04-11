@@ -283,9 +283,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
     if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
-    //added for issue33668 by shizhoubo
+
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
-    //end
     m_pToolBar->SetMenuType( nMenuType );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
     m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
@@ -507,7 +506,8 @@ void ToolBarManager::UpdateControllers()
     }
     m_bUpdateControllers = sal_False;
 }
-//for update toolbar controller via Support Visible by shizhoubo
+
+//for update toolbar controller via Support Visible
 void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
@@ -531,7 +531,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
     }
     m_bUpdateControllers = sal_False;
 }
-//end
+
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException )
 {
@@ -1086,7 +1086,7 @@ void ToolBarManager::CreateControllers()
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
-                //for Support Visiblitly by shizhoubo
+
                 if (pController)
                 {
                     if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
@@ -1096,8 +1096,6 @@ void ToolBarManager::CreateControllers()
                        )
                         pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
                 }
-
-                //end
             }
 
             // Request a item window from the toolbar controller and set it at the VCL toolbar
@@ -1118,7 +1116,8 @@ void ToolBarManager::CreateControllers()
                 }
             }
         }
-        //for update Controller via support visiable state by shizhoubo
+
+        //for update Controller via support visiable state
         Reference< XPropertySet > xPropSet( xController, UNO_QUERY );
         if ( xPropSet.is() )
         {
@@ -1141,8 +1140,6 @@ void ToolBarManager::CreateControllers()
             {
             }
         }
-        //end
-
     }
 
     AddFrameActionListener();
@@ -1724,7 +1721,6 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return true;
 }
 
-//added for i33668 by shizhoubo : 200804
 PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
 {
     // update the list of hidden tool items first
@@ -1783,10 +1779,8 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
-        //added for issue64028  by shizhoubo
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
             aPopupMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, sal_False);
-        //end
 
         pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
                                  MENU_FLAG_SHOWCHECKIMAGES);
@@ -1850,7 +1844,6 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
     return pMenu;
 }
 
-// addd for 33668  by shizhoubo
 IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
 {
     ResetableGuard aGuard( m_aLock );
@@ -1871,7 +1864,6 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
 
     return 0;
 }
-//end
 
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 {
@@ -1879,7 +1871,7 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 
     if ( m_bDisposed )
         return 1;
-    //modify for i33668 by shizhoubo:2008:04
+
     PopupMenu * pMenu = GetToolBarCustomMenu(pToolBar);
     if (pMenu)
     {
@@ -1899,8 +1891,8 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
                 pMenu->RemoveItem( positionInMenu );
         }
     }
-    //end
-     return 0;
+
+    return 0;
  }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )

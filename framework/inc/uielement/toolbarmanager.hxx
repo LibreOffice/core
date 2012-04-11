@@ -61,9 +61,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
-//shizhoubo
 #include <com/sun/star/frame/XToolbarController.hpp>
-//end
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -161,10 +160,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         typedef std::vector< ControllerParams > ControllerParamsVector;
 
     protected:
-        //added for 33668 by shizhoubo : 2008:04
         DECL_LINK( Command, CommandEvent * );
         PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
-        //end
         DECL_LINK(Click, void *);
         DECL_LINK(DropdownClick, void *);
         DECL_LINK(DoubleClick, void *);
@@ -188,7 +185,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const ::rtl::OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
-        //for update controller via Support Visiable by shizhoubo
+        //for update controller via Support Visiable
         void UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController);
         //end
         void AddFrameActionListener();
