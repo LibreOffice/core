@@ -59,9 +59,6 @@
 #include "objshimp.hxx"
 #include <sfx2/request.hxx>
 
-static const sal_uInt16 nCompatVersion = 2;
-static const sal_uInt16 nVersion = 3;
-
 // Static member
 SfxMacroConfig* SfxMacroConfig::pMacroConfig = NULL;
 

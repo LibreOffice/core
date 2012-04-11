@@ -76,9 +76,6 @@
 #include <sfx2/objface.hxx>
 #include "thessubmenu.hxx"
 
-static const sal_uInt16 nCompatVersion = 4;
-static const sal_uInt16 nVersion = 5;
-
 // static member initialization
 PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
 

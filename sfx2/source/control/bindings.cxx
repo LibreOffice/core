@@ -97,9 +97,6 @@ static sal_uInt16 nTimeOut = 300;
 #define TIMEOUT_UPDATING     20
 #define TIMEOUT_IDLE       2500
 
-static sal_uInt32 nCache1 = 0;
-static sal_uInt32 nCache2 = 0;
-
 typedef boost::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 //====================================================================
@@ -916,15 +913,12 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
     if ( pImp->nCachedFunc1 < pImp->pCaches->Count() &&
          (*pImp->pCaches)[pImp->nCachedFunc1]->GetId() == nId )
     {
-        ++nCache1;
         DBG_PROFSTOP(SfxBindingsMsgPos);
         return pImp->nCachedFunc1;
     }
     if ( pImp->nCachedFunc2 < pImp->pCaches->Count() &&
          (*pImp->pCaches)[pImp->nCachedFunc2]->GetId() == nId )
     {
-        ++nCache2;
-
         // swap the caches
         sal_uInt16 nTemp = pImp->nCachedFunc1;
         pImp->nCachedFunc1 = pImp->nCachedFunc2;
