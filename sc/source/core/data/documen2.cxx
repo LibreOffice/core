@@ -130,7 +130,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),
-        pNoteItemPool( NULL ),
         pShell( pDocShell ),
         pPrinter( NULL ),
         pVirtualDevice_100th_mm( NULL ),
@@ -435,7 +434,6 @@ ScDocument::~ScDocument()
     delete pChangeTrack;
     delete pEditEngine;
     delete pNoteEngine;
-    SfxItemPool::Free(pNoteItemPool);
     delete pChangeViewSettings;         // und weg damit
     delete pVirtualDevice_100th_mm;
 

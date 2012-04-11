@@ -237,7 +237,6 @@ private:
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
-    SfxItemPool*    pNoteItemPool; // SfxItemPool to be used if pDrawLayer not created.
     SfxObjectShell*     pShell;
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
