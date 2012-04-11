@@ -45,15 +45,15 @@ class SwTxtFormatter : public SwTxtPainter
 {
     const SwFmtDrop *pDropFmt;
     SwMultiPortion* pMulti; // during formatting a multi-portion
-    sal_uInt8 nCntEndHyph;  // zaehlt aufeinanderfolgende Hyphens am Zeilenende
-    sal_uInt8 nCntMidHyph;  // zaehlt aufeinanderfolgende Hyphens vor Flies
+    sal_uInt8 nCntEndHyph;  // Counts consecutive hyphens at the line end
+    sal_uInt8 nCntMidHyph;  // Counts consecutive hyphens before flies
     xub_StrLen nLeftScanIdx; // for increasing performance during
-    xub_StrLen nRightScanIdx;     // scanning for portion ends
-    sal_Bool bOnceMore : 1; // noch 'ne Runde?
-    sal_Bool bFlyInCntBase : 1; // Base-Referenz der zeichengeb. Rahmen setzen
-    sal_Bool bChanges : 1; // Flag, fuer die Berechnung des Repaint-Rechtecks
-    sal_Bool bTruncLines : 1; // Flag, Repaint-Rechtecks ggf. erweitern
-    sal_Bool bUnclipped : 1; // Flag, ob Repaint groesser als feste Zeilenhoehe
+    xub_StrLen nRightScanIdx; // scanning for portion ends
+    sal_Bool bOnceMore : 1; // Another round?
+    sal_Bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
+    sal_Bool bChanges : 1; // Flag for calculating the repaint rectangle
+    sal_Bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
+    sal_Bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     sal_uInt16 m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
@@ -76,7 +76,7 @@ class SwTxtFormatter : public SwTxtPainter
     SwTxtPortion *WhichTxtPor( SwTxtFormatInfo &rInf ) const;
     SwExpandPortion * TryNewNoLengthPortion( SwTxtFormatInfo & rInfo );
 
-    // Das Herzstueck der Formatierung
+    // The center pice of formatting
     void BuildPortions( SwTxtFormatInfo &rInf );
 
     sal_Bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
@@ -92,25 +92,25 @@ class SwTxtFormatter : public SwTxtPainter
      */
     void CalcFlyWidth( SwTxtFormatInfo &rInf );
 
-    // wird von SwTxtFormatter wegen UpdatePos ueberladen
+    // Is overloaded by SwTxtFormatter because of UpdatePos
     void CalcAdjustLine( SwLineLayout *pCurr );
 
     // consideres line spacing attributes
     void CalcRealHeight( sal_Bool bNewLine = sal_False );
 
-    // uebertraegt die Daten nach rInf
+    // Transfers the data to rInf
     void FeedInf( SwTxtFormatInfo &rInf ) const;
 
-    // behandelt die Unterlaufsituationen
+    // Treats underflow situations
     SwLinePortion *UnderFlow( SwTxtFormatInfo &rInf );
 
-    // errechnet den Ascent und die Hoehe aus der Fontmetric
+    // Calculates the ascent and the height from the fontmetric
     void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );
 
     // determines, if a optimized repaint rectange is allowed
     sal_Bool AllowRepaintOpt() const;
 
-    // wird von FormatLine gerufen.
+    // Is called by by FormatLine
     void FormatReset( SwTxtFormatInfo &rInf );
 
     /**
@@ -138,25 +138,25 @@ class SwTxtFormatter : public SwTxtPainter
      */
     sal_Bool ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const;
 
-    // Portion einfuegen.
+    // Insert portion
     void InsertPortion( SwTxtFormatInfo &rInf, SwLinePortion *pPor ) const;
 
-    // schaetzt die Hoehe fuer die DropPortion
+    // Guess height for the DropPortion
     void GuessDropHeight( const MSHORT nLines );
 
 public:
-    // errechnet die Hoehe fuer die DropPortion
+    // Calculate the height for the DropPortion
     void CalcDropHeight( const MSHORT nLines );
 
-    // errechnet den Bottom des Absatzes, beruecksichtigt an diesem verankerte
-    // Objekte mit Umlauf 1. Absatz.
+    // Calculates the paragraphs bottom, takes anchored objects within it into
+    // account which have a wrap setting of "wrap at 1st paragraph"
     SwTwips CalcBottomLine() const;
 
-    // Beruecksichtigt zeichengebundene Objekte bei der Repaintrechteck-
-    // berechnung in Zeilen mit fester Zeilenhoehe
+    // Takes character-bound objects into account when calculating the
+    // repaint rect in lines with fixed line height
     void CalcUnclipped( SwTwips& rTop, SwTwips& rBottom );
 
-    // u.a. fuer DropCaps
+    // Amongst others for DropCaps
     sal_Bool CalcOnceMore();
 
     void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
@@ -168,33 +168,33 @@ public:
 
     void RecalcRealHeight();
 
-    // Wir formatieren eine Zeile fuer die interaktive Trennung
+    // We format a line for interactive hyphenation
     sal_Bool Hyphenate( SwInterHyphInfo &rInf );
 
-    // Spezialmethode fuer QuoVadis-Texte
-    // nErgo ist die Seitennummer der ErgoSum-Ftn
-    // Bei 0 ist es noch unklar.
+    // A special method for QuoVadis texts:
+    // nErgo is the page number of the ErgoSum Ftn
+    // At 0 it's still unclear
     xub_StrLen FormatQuoVadis( const xub_StrLen nStart );
 
-    // Die Notbremse: Formatierung abbrechen, Zeile verwerfen.
+    // The emergency break: Cancel formatting, discard line
     inline sal_Bool IsStop() const { return GetInfo().IsStop(); }
 
-    // Das Gegenstueck: Formatierung unbedingt fortsetzen.
+    // The counterpart: Continue formatting at all costs
     inline sal_Bool IsNewLine() const { return GetInfo().IsNewLine(); }
 
-    // FormatQuick(); auffrischen von Formatinformationen
+    // FormatQuick(); Refresh formatting information
     inline sal_Bool IsQuick() const { return GetInfo().IsQuick(); }
 
-    // erzeugt ggfs. ein SwLineLayout, dass Ftn/Fly--Oszillation unterbindet.
+    // Create a SwLineLayout if needed, which avoids Ftn/Fly to oscillate
     void MakeDummyLine();
 
-    // SwTxtIter-Funktionalitaet
+    // SwTxtIter functionality
     void Insert( SwLineLayout *pLine );
 
-    // die noch verbleibende Hoehe bis zum Seitenrand
+    // The remaining height to the page border
     KSHORT GetFrmRstHeight() const;
 
-    // Wie breit waerest Du ohne rechte Begrenzungen (Flys etc.)?
+    // How wide would you be without any bounds (Flys etc.)?
     SwTwips _CalcFitToContent( );
 
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, xub_StrLen nPos);
