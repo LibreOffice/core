@@ -336,12 +336,12 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
 class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
 {
 public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> *pLayoutsToTransfer )
-        : mpLayoutsToTransfer(pLayoutsToTransfer) {}
+    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> &rLayoutsToTransfer )
+        : mrLayoutsToTransfer(rLayoutsToTransfer) {}
     virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
     virtual void operator()( SdDrawDocument&, SdPage* );
 private:
-    std::vector<rtl::OUString> *mpLayoutsToTransfer;
+    std::vector<rtl::OUString> &mrLayoutsToTransfer;
 };
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
@@ -355,9 +355,9 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     rtl::OUString aLayout(aFullNameLayout);
 
     std::vector<rtl::OUString>::const_iterator pIter =
-            find(mpLayoutsToTransfer->begin(),mpLayoutsToTransfer->end(),aLayout);
+            find(mrLayoutsToTransfer.begin(), mrLayoutsToTransfer.end(),aLayout);
 
-    bool bFound = pIter != mpLayoutsToTransfer->end();
+    bool bFound = pIter != mrLayoutsToTransfer.end();
 
     const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
     for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
@@ -376,7 +376,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     }
 
     if (!bFound)
-        mpLayoutsToTransfer->push_back(aLayout);
+        mrLayoutsToTransfer.push_back(aLayout);
 }
 
 /** Just add one page to the container given to the constructor.
@@ -514,7 +514,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
     std::vector<rtl::OUString> aLayoutsToTransfer;
-    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( &aLayoutsToTransfer );
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
     IterateBookmarkPages( pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
 
 
