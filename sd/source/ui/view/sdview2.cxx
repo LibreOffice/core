@@ -1013,11 +1013,10 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
     std::vector<rtl::OUString>::const_iterator pIter;
     for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
     {
-        String tmp = *pIter; ///TODO: remove when CreateSvxNameDialog uses OUString!!
-        rtl::OUString aNewName = *pIter;
+        String aNewName = *pIter;
 
         if( nType == 0  || nType == 2 )
-            bNameOK = mpDocSh->CheckPageName(mpViewSh->GetActiveWindow(), tmp);
+            bNameOK = mpDocSh->CheckPageName(mpViewSh->GetActiveWindow(), aNewName);
 
         if( bNameOK && ( nType == 1  || nType == 2 ) )
         {
@@ -1030,7 +1029,7 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
                 AbstractSvxNameDialog* pDlg = 0;
 
                 if (pFact)
-                    pDlg = pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), tmp, aDesc );
+                    pDlg = pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), aNewName, aDesc );
 
                 if( pDlg )
                 {
@@ -1041,9 +1040,9 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
 
                     while( !bNameOK && pDlg->Execute() == RET_OK )
                     {
-                        pDlg->GetName( tmp );
+                        pDlg->GetName( aNewName );
 
-                        if( !mrDoc.GetObj( tmp ) )
+                        if( !mrDoc.GetObj( aNewName ) )
                             bNameOK = true;
                     }
 
@@ -1052,7 +1051,7 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
             }
         }
 
-        bListIdentical = (*pIter == aNewName);
+        bListIdentical = pIter->equals(aNewName);
 
         rExchangeList.push_back(aNewName);
     }
