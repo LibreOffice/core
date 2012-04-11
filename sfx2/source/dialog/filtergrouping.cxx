@@ -54,9 +54,6 @@ namespace sfx2
 {
 //........................................................................
 
-//#define DISABLE_GROUPING_AND_CLASSIFYING
-    // not using the functionallity herein, yet
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::lang;
@@ -808,34 +805,6 @@ namespace sfx2
         }
     }
 
-#ifdef DISABLE_GROUPING_AND_CLASSIFYING
-    //--------------------------------------------------------------------
-    void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
-    {
-        // ===============================================================
-        String sAllFilterName;
-        if ( !lcl_hasAllFilesFilter( _rFilterMatcher, sAllFilterName ) )
-        {
-            try
-            {
-                _rxFilterManager->appendFilter( sAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
-                _rFirstNonEmpty = sAllFilterName;
-            }
-            catch( const IllegalArgumentException& )
-            {
-#ifdef DBG_UTIL
-                rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                    "sfx2::lcl_EnsureAllFilesEntry: could not append Filter"));
-                aMsg.append(rtl::OUStringToOString(sAllFilterName,
-                    RTL_TEXTENCODING_UTF8));
-                OSL_FAIL( aMsg.getStr() );
-#endif
-            }
-        }
-
-    }
-#endif
-
 // =======================================================================
 // = filling an XFilterManager
 // =======================================================================
@@ -1180,15 +1149,6 @@ namespace sfx2
         if ( !_rxFilterManager.is() )
             return;
 
-#ifdef DISABLE_GROUPING_AND_CLASSIFYING
-        // ===============================================================
-        // ensure that there's an entry "all" (with wildcard *.*)
-        lcl_EnsureAllFilesEntry( _rFilterMatcher, _rxFilterManager, _rFirstNonEmpty );
-
-        // ===============================================================
-        appendFilters( _rFilterMatcher, _rxFilterManager, _rFirstNonEmpty );
-#else
-
         // ===============================================================
         // group and classify the filters
         GroupedFilterList aAllFilters;
@@ -1221,7 +1181,6 @@ namespace sfx2
                 aAllFilters.end(),
                 AppendFilterGroup( _rxFilterManager, &_rFileDlgImpl ) );
         }
-#endif
     }
 
     ::rtl::OUString addExtension( const ::rtl::OUString& _rDisplayText,
