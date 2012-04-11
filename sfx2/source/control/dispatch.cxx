@@ -156,10 +156,6 @@ struct SfxDispatcher_Impl
     sal_uInt32           nDisableFlags;
 };
 
-#define NO_OBJECTBAR    0
-#define OWN_OBJECTBAR   1
-#define OTHER_OBJECTBAR 2
-
 //------------------------------------------------------------------
 
 #define SFX_FLUSH_TIMEOUT    50

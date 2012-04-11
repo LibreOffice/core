@@ -107,21 +107,11 @@ using ::std::advance;
 //========================================================================
 
 #define TITLE                   "Title"
-#define IS_FOLDER               "IsFolder"
-#define PROPERTY_TYPE           "TypeDescription"
 #define TARGET_URL              "TargetURL"
-#define TYPE_FOLDER             "application/vnd.sun.star.hier-folder"
-#define TYPE_LINK               "application/vnd.sun.star.hier-link"
-#define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
 
 #define TARGET_DIR_URL          "TargetDirURL"
-#define COMMAND_DELETE          "delete"
 #define COMMAND_TRANSFER        "transfer"
 
-#define STANDARD_FOLDER         "standard"
-
-#define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
-#define TYPEDETECTION_PARAMETER         "FileName"
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 #define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
 #define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"

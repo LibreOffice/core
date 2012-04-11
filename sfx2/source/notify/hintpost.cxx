@@ -78,7 +78,4 @@ void SfxHintPoster::SetEventHdl( const GenLink& rLink )
     aLink = rLink;
 }
 
-
-#define LOG( x )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
