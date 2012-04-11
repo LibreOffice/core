@@ -2103,11 +2103,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
         }
     }
     // picture description
-    // TODO the right image description
     m_pSerializer->startElementNS( XML_wp, XML_docPr,
             XML_id, "1",
             XML_name, "Picture",
-            XML_descr, "A description...",
+            XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr(),
+            XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
     // TODO hyperlink
     // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
