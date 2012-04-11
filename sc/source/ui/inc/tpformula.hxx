@@ -35,14 +35,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 
-#include <memory>
-
-#include <boost/shared_ptr.hpp>
-
-class ScAppOptions;
-class SfxItemSet;
-class Window;
-
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
@@ -50,7 +42,6 @@ public:
 
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
 
-//  static  USHORT*     GetRanges();
     virtual sal_Bool FillItemSet(SfxItemSet& rCoreSet);
     virtual void Reset( const SfxItemSet& rCoreSet );
     virtual int DeactivatePage(SfxItemSet* pSet = NULL);
