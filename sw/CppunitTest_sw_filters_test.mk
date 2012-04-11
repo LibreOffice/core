@@ -95,9 +95,4 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))
 
-# we need to explicitly depend on library localedata_en because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,sw_filters_test) : \
-    $(call gb_Library_get_target,localedata_en) \
-
 # vim: set noet sw=4 ts=4:

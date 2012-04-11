@@ -106,6 +106,5 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_swdoc_test))
 $(call gb_CppunitTest_get_target,sw_swdoc_test) : \
     $(WORKDIR)/AllLangRes/sw \
     $(call gb_AllLangResTarget_get_target,sw) \
-    $(call gb_Library_get_target,localedata_en) \
 
 # vim: set noet sw=4 ts=4:

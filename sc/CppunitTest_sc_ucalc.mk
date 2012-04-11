@@ -40,8 +40,6 @@ $(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
     $(WORKDIR)/AllLangRes/forui \
     $(WORKDIR)/AllLangRes/frm \
     $(WORKDIR)/AllLangRes/sc \
-    $(call gb_Library_get_target,localedata_en) \
-
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     avmedia \

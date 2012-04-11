@@ -127,11 +127,8 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,dbaccess_macros_test,\
 ))
 
 # we need to
-# a) explicitly depend on library msword because it is not implied by a link
-#    relation
-# b) explicitly depend on the sc resource files needed at unit-test runtime
+# - explicitly depend on the dbaccess resource files needed at unit-test runtime
 $(call gb_CppunitTest_get_target,dbaccess_macros_test) : \
     $(WORKDIR)/AllLangRes/dbaccess \
-    $(call gb_Library_get_target,localedata_en) \
 
 # vim: set noet sw=4 ts=4:
