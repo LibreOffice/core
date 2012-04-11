@@ -253,6 +253,7 @@ gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_
 
 # static members declared here because they are used globally
 
+gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
 gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest

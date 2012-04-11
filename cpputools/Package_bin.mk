@@ -12,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2012 David Ostrovsky <d.ostrovsky@gmx.de> (initial developer)
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -24,28 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,cpputools))
+# because the installation system is so incredibly inflexible...
+$(eval $(call gb_Package_Package,cpputools_bin,$(gb_Executable_BINDIR)))
 
-$(eval $(call gb_Module_add_targets,cpputools,\
-    Executable_sp2bv \
-))
+$(eval $(call gb_Package_add_file,cpputools_bin,bin/regcomp.bin,regcomp))
+$(eval $(call gb_Package_add_file,cpputools_bin,bin/uno.bin,uno))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,cpputools,\
-    StaticLibrary_uno \
-))
-else
-$(eval $(call gb_Module_add_targets,cpputools,\
-    Executable_regcomp \
-    Executable_regsingleton \
-    Executable_uno \
-))
-
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,cpputools,\
-    Package_bin \
-))
-endif
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:
