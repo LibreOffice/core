@@ -101,6 +101,7 @@ Module gid_Module_Root_Files_2
  	gid_File_Profile_Gengal,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
+	gid_File_Bin_UIPreviewer,
 	gid_File_Exe_Nsplugin,
 	gid_File_Lib_Npsoplugin,
         gid_File_Lib_Soffice,

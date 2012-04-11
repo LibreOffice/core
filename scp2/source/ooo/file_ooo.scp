@@ -126,6 +126,17 @@ File gid_File_Bin_Gengal
   #endif
 End
 
+File gid_File_Bin_UIPreviewer
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "ui-previewer";
+  #else
+    Name = "ui-previewer.exe";
+  #endif
+End
+
 #ifdef UNX
 
 File gid_File_Script_Gengal
