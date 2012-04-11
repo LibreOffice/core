@@ -213,11 +213,6 @@ public:
     /** Returns the VBA project manager. */
     ::oox::ole::VbaProject& getVbaProject() const;
 
-    /** Requests the encryption data from the media descriptor or from the user. On
-        success, the encryption data will be inserted into the media descriptor. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-                        requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
-
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
     bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );

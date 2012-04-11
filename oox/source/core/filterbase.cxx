@@ -413,14 +413,6 @@ VbaProject& FilterBase::getVbaProject() const
     return *mxImpl->mxVbaProject;
 }
 
-Sequence< NamedValue > FilterBase::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
-{
-    ::std::vector< OUString > aDefaultPasswords;
-    aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
-    return ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-        rVerifier, mxImpl->maMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
-}
-
 bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString& rStreamName )
 {
     OSL_ENSURE( !rStreamName.isEmpty(), "FilterBase::importBinaryData - empty stream name" );

@@ -762,7 +762,6 @@ nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::
 oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::core::BinaryFilterBase::BinaryFilterBase(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::core::FilterBase::openSubStorage(rtl::OUString const&, bool) const
-oox::core::FilterBase::requestEncryptionData(comphelper::IDocPasswordVerifier&) const
 oox::xls::Alignment::setBiff2Data(unsigned char)
 oox::xls::Alignment::setBiff3Data(unsigned short)
 oox::xls::Alignment::setBiff4Data(unsigned short)
