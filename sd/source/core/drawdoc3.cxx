@@ -580,19 +580,19 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
             SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
-            String  pName( pBMPage->GetName() );
+            String  sName( pBMPage->GetName() );
             sal_Bool    bIsMasterPage;
 
             if (bLink)
             {
                 // Es werden sich die Namen aller Seiten gemerkt
-                aNameMap.insert(std::make_pair(nBMSdPage,pName));
+                aNameMap.insert(std::make_pair(nBMSdPage,sName));
             }
 
             // Have to check for duplicate names here, too
             // don't change name if source and dest model are the same!
             if( pBookmarkDoc != this &&
-                GetPageByName(pName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
+                GetPageByName(sName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
                 // delay renaming *after* pages are copied (might destroy source otherwise)
                 aRenameSet.insert(nBMSdPage);
