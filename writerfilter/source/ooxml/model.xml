@@ -5009,6 +5009,14 @@
             <xs:documentation>Hidden</xs:documentation>
           </attribute>
         </optional>
+        <optional>
+          <attribute name="title">
+            <data type="string">
+              <xs:documentation>Title</xs:documentation>
+            </data>
+            <xs:documentation>Title</xs:documentation>
+          </attribute>
+        </optional>
       </define>
       <define name="CT_NonVisualDrawingShapeProps">
         <group>
@@ -5118,6 +5126,7 @@
       <attribute name="name" tokenid="ooxml:CT_NonVisualDrawingProps_name"/>
       <attribute name="descr" tokenid="ooxml:CT_NonVisualDrawingProps_descr"/>
       <attribute name="hidden" tokenid="ooxml:CT_NonVisualDrawingProps_hidden"/>
+      <attribute name="title" tokenid="ooxml:CT_NonVisualDrawingProps_title"/>
     </resource>
     <resource name="CT_NonVisualPictureProperties" resource="Properties" tag="shape">
       <element name="picLocks" tokenid="ooxml:CT_NonVisualPictureProperties_picLocks"/>

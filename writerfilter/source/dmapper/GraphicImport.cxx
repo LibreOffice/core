@@ -256,6 +256,7 @@ public:
 
     ::rtl::OUString sName;
     ::rtl::OUString sAlternativeText;
+    ::rtl::OUString title;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper) :
         nXSize(0)
@@ -791,6 +792,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             //alternative text
             m_pImpl->sAlternativeText = val.getString();
         break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_title:
+            //alternative text
+            m_pImpl->title = val.getString();
+        break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
             //disallow aspect ratio change - ignored
         break;
@@ -1318,8 +1323,10 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             }
 
             // setting properties for all types
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_DESCRIPTION ),
                 uno::makeAny( m_pImpl->sAlternativeText ));
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
+                uno::makeAny( m_pImpl->title ));
             if( m_pImpl->bPositionProtected )
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ),
                     uno::makeAny(true));
