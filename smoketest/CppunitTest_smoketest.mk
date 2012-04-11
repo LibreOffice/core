@@ -35,10 +35,6 @@ $(eval $(call gb_CppunitTest_use_api,smoketest,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
-	cppu \
-	cppuhelper \
-	sal \
-	unotest \
 	smoketest \
 ))
 
