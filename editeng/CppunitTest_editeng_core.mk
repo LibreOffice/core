@@ -26,23 +26,59 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,editeng))
+$(eval $(call gb_CppunitTest_CppunitTest,editeng_core))
 
-$(eval $(call gb_Module_add_targets,editeng,\
-    AllLangResTarget_editeng \
-    Library_editeng \
-    Package_inc \
+$(eval $(call gb_CppunitTest_add_exception_objects,editeng_core, \
+    editeng/qa/unit/core-test \
 ))
 
-# add any runtime tests (unit tests) here
-# remove if no tests
-$(eval $(call gb_Module_add_check_targets,editeng,\
-    CppunitTest_editeng_core \
-    CppunitTest_editeng_borderline \
+$(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
+    basegfx \
+    comphelper \
+    cppu \
+    cppuhelper \
+    editeng \
+    i18nisolang1 \
+    i18nutil \
+    lng \
+    sal \
+    salhelper \
+    sot \
+    svl \
+    svt \
+    test \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    xo \
+    $(gb_STDLIBS) \
 ))
 
-# add any subsequent checks (e.g. complex tests) here
-$(eval $(call gb_Module_add_subsequentcheck_targets,editeng,\
+$(eval $(call gb_CppunitTest_use_externals,editeng_core,\
+    icuuc \
 ))
+
+$(eval $(call gb_CppunitTest_set_include,editeng_core,\
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_CppunitTest_use_api,editeng_core,\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_CppunitTest_use_components,editeng_core,\
+    configmgr/source/configmgr \
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    sfx2/util/sfx \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    unoxml/source/service/unoxml \
+))
+
+$(eval $(call gb_CppunitTest_use_configuration,editeng_core))
 
 # vim: set noet sw=4 ts=4:
