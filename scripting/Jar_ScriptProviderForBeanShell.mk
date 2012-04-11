@@ -42,10 +42,9 @@ $(eval $(call gb_Jar_use_externals,ScriptProviderForBeanShell,\
 
 $(eval $(call gb_Jar_set_manifest,ScriptProviderForBeanShell,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/beanshell/MANIFEST.MF))
 
-#TODO: Ensure "file://$(BSH_JAR)" is a proper file URL:
 ifeq ($(SYSTEM_BSH),YES)
 $(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
-    ScriptFramework.jar file://$(BSH_JAR)))
+    ScriptFramework.jar $(call gb_Helper_make_url,$(BSH_JAR))))
 else
 $(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
     ScriptFramework.jar bsh.jar))
