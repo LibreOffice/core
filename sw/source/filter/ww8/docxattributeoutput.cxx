@@ -2016,17 +2016,17 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     if( isAnchor )
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
-        attrList->add( FSNS( XML_w, XML_behindDoc ), rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1" );
-        attrList->add( FSNS( XML_w, XML_distT ), "0" );
-        attrList->add( FSNS( XML_w, XML_distB ), "0" );
-        attrList->add( FSNS( XML_w, XML_distL ), "0" );
-        attrList->add( FSNS( XML_w, XML_distR ), "0" );
-        attrList->add( FSNS( XML_w, XML_simplePos ), "0" );
-        attrList->add( FSNS( XML_w, XML_locked ), "0" );
-        attrList->add( FSNS( XML_w, XML_layoutInCell ), "1" );
-        attrList->add( FSNS( XML_w, XML_allowOverlap ), "1" ); // TODO
+        attrList->add( XML_behindDoc, rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1" );
+        attrList->add( XML_distT, "0" );
+        attrList->add( XML_distB, "0" );
+        attrList->add( XML_distL, "0" );
+        attrList->add( XML_distR, "0" );
+        attrList->add( XML_simplePos, "0" );
+        attrList->add( XML_locked, "0" );
+        attrList->add( XML_layoutInCell, "1" );
+        attrList->add( XML_allowOverlap, "1" ); // TODO
         if( const SdrObject* pObj = rGrfNode.GetFlyFmt()->FindRealSdrObject())
-            attrList->add( FSNS( XML_w, XML_relativeHeight ), OString::valueOf( sal_Int32( pObj->GetOrdNum())));
+            attrList->add( XML_relativeHeight, OString::valueOf( sal_Int32( pObj->GetOrdNum())));
         m_pSerializer->startElementNS( XML_wp, XML_anchor, XFastAttributeListRef( attrList ));
         m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
