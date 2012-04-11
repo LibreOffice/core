@@ -341,8 +341,12 @@ fi
 /usr/share/mimelnk/application/*.desktop
 /usr/share/icons/gnome/*/apps/*png
 /usr/share/icons/gnome/*/mimetypes/*png
+/usr/share/icons/gnome/scalable/apps/*svg
+/usr/share/icons/gnome/scalable/mimetypes/*svg
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/mimetypes/*png
+/usr/share/icons/hicolor/scalable/apps/*svg
+/usr/share/icons/hicolor/scalable/mimetypes/*svg
 /usr/share/icons/locolor/*/apps/*png
 /usr/share/icons/locolor/*/mimetypes/*png
 

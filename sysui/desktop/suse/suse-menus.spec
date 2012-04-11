@@ -364,8 +364,12 @@ done
 /opt/kde3/share/mimelnk/application/*.desktop
 /opt/gnome/share/icons/gnome/*/apps/*png
 /opt/gnome/share/icons/gnome/*/mimetypes/*png
+/opt/gnome/share/icons/gnome/scalable/apps/*svg
+/opt/gnome/share/icons/gnome/scalable/mimetypes/*svg
 /opt/kde3/share/icons/hicolor/*/apps/*png
 /opt/kde3/share/icons/hicolor/*/mimetypes/*png
+/opt/kde3/share/icons/hicolor/scalable/apps/*svg
+/opt/kde3/share/icons/hicolor/scalable/mimetypes/*svg
 /opt/kde3/share/icons/locolor/*/apps/*png
 /opt/kde3/share/icons/locolor/*/mimetypes/*png
 /usr/share/mime/packages/*
