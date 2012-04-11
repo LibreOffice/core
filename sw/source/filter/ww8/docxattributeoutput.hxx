@@ -601,6 +601,7 @@ private:
     const SwOLENode* m_postponedMath;
     std::vector< const SwPostItField* > m_postitFields;
     unsigned int m_postitFieldsMaxId;
+    int m_anchorId;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
