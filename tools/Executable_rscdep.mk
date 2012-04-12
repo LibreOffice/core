@@ -57,15 +57,9 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
 ))
 
 ifeq ($(OS),WNT)
-ifeq ($(HAVE_GETOPT),YES)
-$(eval $(call gb_Executable_add_defs,rscdep,\
-    -DHAVE_GETOPT \
-))
-else
 $(eval $(call gb_Executable_use_libraries,rscdep,\
     gnu_getopt \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
