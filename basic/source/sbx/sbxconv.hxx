@@ -42,6 +42,8 @@ extern SbxError ImpScan
 // with advanced evaluation (International, "TRUE"/"FALSE")
 extern sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
+void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep );
+
 // SBXINT.CXX
 
 double      ImpRound( double );

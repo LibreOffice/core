@@ -40,13 +40,10 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
-    SvtSysLocale aSysLocale;
     sal_Unicode cDecimalSep = '.';
 #if MAYBEFUTURE
     sal_Unicode cThousandSep = ',';
-    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-    cDecimalSep = rData.getNumDecimalSep().GetBuffer()[0];
-    cThousandSep = rData.getNumThousandSep().GetBuffer()[0];
+    ImpGetIntntlSep( cDecimalSep, cThousandSep );
 #endif
 
     rtl::OUString aAbsStr = rtl::OUString::valueOf( absVal );
@@ -119,14 +116,12 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
 
     sal_Int32   nFractDigit = 4;
 
-    SvtSysLocale aSysLocale;
     sal_Unicode cDeciPnt = sal_Unicode('.');
     sal_Unicode c1000Sep = sal_Unicode(',');
 
 #if MAYBEFUTURE
-    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-    sal_Unicode cLocaleDeciPnt = rData.getNumDecimalSep().GetBuffer()[0];
-    sal_Unicode cLocale1000Sep = rData.getNumThousandSep().GetBuffer()[0];
+    sal_Unicode cLocaleDeciPnt, cLocale1000Sep;
+    ImpGetIntntlSep( cLocaleDeciPnt, cLocale1000Sep );
 
         // score each set of separators (Locale and Basic) on total number of matches
         // if one set has more matches use that set

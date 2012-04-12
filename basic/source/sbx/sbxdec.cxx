@@ -201,9 +201,6 @@ void SbxDecimal::setUInt( unsigned int val )
     setULong( (sal_uInt32)val );
 }
 
-// sbxscan.cxx
-void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep );
-
 bool SbxDecimal::setString( ::rtl::OUString* pOUString )
 {
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
