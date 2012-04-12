@@ -488,10 +488,8 @@ void SAL_CALL Listener::propertyChange (
 {
     ThrowIfDisposed();
 
-    static const ::rtl::OUString sCurrentPagePropertyName (
-        RTL_CONSTASCII_USTRINGPARAM("CurrentPage"));
-    static const ::rtl::OUString sEditModePropertyName (
-        RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
+    static const ::rtl::OUString sCurrentPagePropertyName ("CurrentPage");
+    static const ::rtl::OUString sEditModePropertyName ("IsMasterPageMode");
 
     if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {
@@ -501,8 +499,7 @@ void SAL_CALL Listener::propertyChange (
         {
             try
             {
-                Any aPageNumber = xPageSet->getPropertyValue (
-                    String(RTL_CONSTASCII_USTRINGPARAM("Number")));
+                Any aPageNumber = xPageSet->getPropertyValue ("Number");
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
                 // The selection is already set but we call SelectPage()
@@ -592,8 +589,7 @@ void Listener::UpdateEditMode (void)
     {
         try
         {
-            Any aValue (xSet->getPropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
+            Any aValue (xSet->getPropertyValue( "IsMasterPageMode" ));
             aValue >>= bIsMasterPageMode;
         }
         catch (beans::UnknownPropertyException&)
@@ -693,9 +689,7 @@ void Listener::ThrowIfDisposed (void)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SlideSorterController object has already been disposed")),
+        throw lang::DisposedException ("SlideSorterController object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

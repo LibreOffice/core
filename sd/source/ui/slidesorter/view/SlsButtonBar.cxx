@@ -1174,7 +1174,7 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
     if (xPresentation.is())
     {
         Sequence<PropertyValue> aProperties (1);
-        aProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstPage"));
+        aProperties[0].Name = ::rtl::OUString("FirstPage");
         const ::rtl::OUString sName (rpDescriptor->GetPage()->GetName());
         aProperties[0].Value = Any(sName);
 

@@ -828,11 +828,11 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     SdPage* pFirstPage = NULL;
     sal_uInt16  nFirstPage;
     sal_uInt16  nSelectedPages = (sal_uInt16)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
-    String aPageStr;
+    rtl::OUString aPageStr;
     String aLayoutStr;
 
     if (nSelectedPages > 0)
-        aPageStr = String(SdResId(STR_SD_PAGE));
+        aPageStr = rtl::OUString(ResId::toString(SdResId(STR_SD_PAGE)));
 
     if (nSelectedPages == 1)
     {
@@ -846,11 +846,10 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             nFirstPage = pPage->GetPageNum()/2;
             pFirstPage = pPage;
 
-            aPageStr += sal_Unicode(' ');
-            aPageStr += String::CreateFromInt32( nFirstPage + 1 );
-            aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-            aPageStr += String::CreateFromInt32(
-                mrSlideSorter.GetModel().GetPageCount());
+            aPageStr += " ";
+            aPageStr += rtl::OUString::valueOf( nFirstPage + 1 );
+            aPageStr += " / " ;
+            aPageStr += rtl::OUString::valueOf(mrSlideSorter.GetModel().GetPageCount());
 
             aLayoutStr = pFirstPage->GetLayoutName();
             aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );

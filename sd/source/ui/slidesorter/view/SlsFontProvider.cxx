@@ -66,8 +66,7 @@ FontProvider& FontProvider::Instance (void)
     // We throw an exception when for some strange reason no instance of
     // this class exists.
     if (mpInstance == NULL)
-        throw ::com::sun::star::uno::RuntimeException(::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues")),
+        throw ::com::sun::star::uno::RuntimeException("com.sun.star.document.IndexedPropertyValues",
             NULL);
 
     return *mpInstance;
