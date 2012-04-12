@@ -298,7 +298,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     throw (RuntimeException)
 {
     if( !xListener.is() )
-        throw RuntimeException();
+        throw RuntimeException("addContainerListener called with null xListener", static_cast< cppu::OWeakObject * >(this));
     Reference< XInterface > xIface( xListener, UNO_QUERY );
     maContainerListeners.addInterface( xIface );
 }
