@@ -33,11 +33,7 @@
 #define _WINDOWS
 #endif
 
-#ifdef SYSTEM_ZLIB
 #include <zlib.h>
-#else
-#include <external/zlib/zlib.h>
-#endif
 
 #include <string>
 #include <vector>

@@ -1,0 +1,14 @@
+diff -up zlib-1.2.5/contrib/minizip/unzip.c.fixuncrypt zlib-1.2.5/contrib/minizip/unzip.c
+--- zlib-1.2.5/contrib/minizip/unzip.c.fixuncrypt	2011-11-11 12:13:56.335867758 -0500
++++ zlib-1.2.5/contrib/minizip/unzip.c	2011-11-11 12:14:01.747799372 -0500
+@@ -68,10 +68,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#ifndef NOUNCRYPT
+-        #define NOUNCRYPT
+-#endif
+-
+ #include "zlib.h"
+ #include "unzip.h"
+ 

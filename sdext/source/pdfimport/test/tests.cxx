@@ -32,11 +32,7 @@
 
 #define BASEGFX_STATICLIBRARY
 
-#ifdef SYSTEM_ZLIB
 #include "zlib.h"
-#else
-#include <zlib/zlib.h>
-#endif
 
 #include "outputwrap.hxx"
 #include "contentsink.hxx"

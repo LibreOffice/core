@@ -47,10 +47,6 @@ CFLAGS_X64+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 .ENDIF
 CDEFS_X64+=-U_WIN32_IE -D_WIN32_IE=0x501 -U_WIN32_WINNT -D_WIN32_WINNT=0x0501
 
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CDEFS += -DSYSTEM_ZLIB
-.END
-
 # --- Files --------------------------------------------------------
 
 

@@ -220,16 +220,14 @@ MOZDIR=$(MISC)$/build$/seamonkey
 MOZTARGET=$(OS)$(COM)$(CPU)
 
 .IF "$(GUI)"=="WNT"
+#for moz to link to our static lz if necessary
+SYSTEM_ZLIB:="YES"
 # "Our" build environment uses "NO" for the environment variable that
 # indicate if system libraries should be used, the mozilla build uses
 # "" in this case. This conflicts (at least for W32) with mozilla (1.7b)
 # because it disables the library checks for msvc so that
 # --without-system-* is not evaluated. To build the included libraries
 # the affected variables have to be empty and not NO.
-.IF "$(SYSTEM_ZLIB)"=="NO"
-SYSTEM_ZLIB:=
-.EXPORT : SYSTEM_ZLIB
-.ENDIF
 .IF "$(SYSTEM_JPEG)"=="NO"
 SYSTEM_JPEG:=
 .EXPORT : SYSTEM_JPEG

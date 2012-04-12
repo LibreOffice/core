@@ -1,0 +1,59 @@
+diff -ru zlib-1.2.5/contrib/minizip/ioapi.c zlib-1.2.5-patch/contrib/minizip/ioapi.c
+--- zlib-1.2.5/contrib/minizip/ioapi.c	2010-01-04 12:31:24.000000000 -0500
++++ zlib-1.2.5-patch/contrib/minizip/ioapi.c	2011-07-05 15:47:48.263474587 -0400
+@@ -47,7 +47,7 @@
+     else
+     {
+         uLong tell_uLong = (*(pfilefunc->ztell32_file))(pfilefunc->zfile_func64.opaque,filestream);
+-        if ((tell_uLong) == ((uLong)-1))
++        if ((tell_uLong) == MAXU32)
+             return (ZPOS64_T)-1;
+         else
+             return tell_uLong;
+diff -ru zlib-1.2.5/contrib/minizip/ioapi.h zlib-1.2.5-patch/contrib/minizip/ioapi.h
+--- zlib-1.2.5/contrib/minizip/ioapi.h	2010-02-15 06:59:40.000000000 -0500
++++ zlib-1.2.5-patch/contrib/minizip/ioapi.h	2011-07-05 15:48:36.281546917 -0400
+@@ -85,6 +85,8 @@
+ typedef uint64_t ZPOS64_T;
+ #else
+ 
++/* Maximum unsigned 32-bit value used as placeholder for zip64 */
++#define MAXU32 0xffffffff
+ 
+ #if defined(_MSC_VER) || defined(__BORLANDC__)
+ typedef unsigned __int64 ZPOS64_T;
+diff -ru zlib-1.2.5/contrib/minizip/unzip.c zlib-1.2.5-patch/contrib/minizip/unzip.c
+--- zlib-1.2.5/contrib/minizip/unzip.c	2010-02-15 06:59:40.000000000 -0500
++++ zlib-1.2.5-patch/contrib/minizip/unzip.c	2011-07-05 15:50:31.409310349 -0400
+@@ -1040,26 +1040,26 @@
+             {
+                                                         uLong uL;
+ 
+-                                                                if(file_info.uncompressed_size == (ZPOS64_T)(unsigned long)-1)
++                                                                if(file_info.uncompressed_size == MAXU32)
+                                                                 {
+                                                                         if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.uncompressed_size) != UNZ_OK)
+                                                                                         err=UNZ_ERRNO;
+                                                                 }
+ 
+-                                                                if(file_info.compressed_size == (ZPOS64_T)(unsigned long)-1)
++                                                                if(file_info.compressed_size == MAXU32)
+                                                                 {
+                                                                         if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.compressed_size) != UNZ_OK)
+                                                                                   err=UNZ_ERRNO;
+                                                                 }
+ 
+-                                                                if(file_info_internal.offset_curfile == (ZPOS64_T)(unsigned long)-1)
++                                                                if(file_info_internal.offset_curfile == MAXU32)
+                                                                 {
+                                                                         /* Relative Header offset */
+                                                                         if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info_internal.offset_curfile) != UNZ_OK)
+                                                                                 err=UNZ_ERRNO;
+                                                                 }
+ 
+-                                                                if(file_info.disk_num_start == (unsigned long)-1)
++                                                                if(file_info.disk_num_start == MAXU32)
+                                                                 {
+                                                                         /* Disk Start Number */
+                                                                         if (unz64local_getLong(&s->z_filefunc, s->filestream,&uL) != UNZ_OK)
+

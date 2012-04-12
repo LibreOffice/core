@@ -61,7 +61,6 @@ $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && cd $(dir $@) && \
 	$(GNUTAR) -x -z $(STRIP_COMPONENTS)=1 -f $< && \
-	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-internal-zlib.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-warnings.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-gcc-atomics.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch && \

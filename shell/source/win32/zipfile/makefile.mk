@@ -35,10 +35,6 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CDEFS += -DSYSTEM_ZLIB
-.END
-
 # --- Files --------------------------------------------------------
 
 

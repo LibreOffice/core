@@ -73,26 +73,17 @@
  !IFDEF ZLIB
  ZLIB_CFLAGS = -I $(ZLIB)
 -ZLIB_LIBS = $(ZLIB)\projects\visualc6\Win32_LIB_Release\zlib.lib
-+ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
++ZLIB_LIBS = $(OUTDIR)\lib\z.lib
  !ELSE
 -ZLIB_CFLAGS = -I $(DEVTOP)\include
 -ZLIB_LIBS = $(DEVTOP)\lib\zdll.lib
-+ZLIB_CFLAGS = -I $(OUTDIR)\inc\external\zlib
-+ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
++ZLIB_CFLAGS = -I $(OUTDIR)\inc\external
++ZLIB_LIBS = $(OUTDIR)\lib\z.lib
  !ENDIF
  
  ################
 --- misc/glib-2.28.1/gio/gzlibcompressor.c	2011-02-11 16:23:12.000000000 +0100
 +++ misc/build/glib-2.28.1/gio/gzlibcompressor.c	2011-03-07 10:33:19.559189800 +0100
-@@ -25,7 +25,7 @@
- #include "gzlibcompressor.h"
- 
- #include <errno.h>
--#include <zlib.h>
-+#include <zlib/zlib.h>
- #include <string.h>
- 
- #include "gfileinfo.h"
 @@ -64,8 +64,10 @@
  
    GZlibCompressorFormat format;
@@ -115,15 +106,6 @@
    if (compressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP ||
 --- misc/glib-2.28.1/gio/gzlibdecompressor.c	2011-03-07 09:13:41.324890400 +0100
 +++ misc/build/glib-2.28.1/gio/gzlibdecompressor.c	2011-03-04 11:28:39.712480200 +0100
-@@ -25,7 +25,7 @@
- #include "gzlibdecompressor.h"
- 
- #include <errno.h>
--#include <zlib.h>
-+#include <zlib/zlib.h>
- #include <string.h>
- 
- #include "gfileinfo.h"
 @@ -76,7 +76,7 @@
  g_zlib_decompressor_set_gzheader (GZlibDecompressor *decompressor)
  {

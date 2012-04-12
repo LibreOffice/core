@@ -36,11 +36,7 @@
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
 #include <rtl/memory.h>
-#ifdef SYSTEM_ZLIB
 #include "zlib.h"
-#else
-#include <zlib/zlib.h>
-#endif
 
 #include <math.h>
 #include <map>

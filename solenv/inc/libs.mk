@@ -193,11 +193,7 @@ EXPATASCII3RDLIB=-lexpat
 EXPAT3RDLIB=-lexpat_xmlparse -lexpat_xmltok
 EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
 .ENDIF
-.IF "$(SYSTEM_ZLIB)"=="YES"
 ZLIB3RDLIB=-lz
-.ELSE
-ZLIB3RDLIB=-lzlib
-.ENDIF
 .IF "$(SYSTEM_MINIZIP)"=="YES"
 MINIZIP3RDLIB=$(MINIZIP_LIBS)
 .ELSE
@@ -467,7 +463,7 @@ LNGLIB=ilng.lib
 CLUCENELIB=iclucene.lib
 EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
-ZLIB3RDLIB=zlib.lib
+ZLIB3RDLIB=z.lib
 JPEG3RDLIB=jpeglib.lib
 NEON3RDLIB=ineon.lib
 BERKELEYLIB=libdb47.lib

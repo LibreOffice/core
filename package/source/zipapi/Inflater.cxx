@@ -27,11 +27,7 @@
  ************************************************************************/
 
 #include <package/Inflater.hxx>
-#ifdef SYSTEM_ZLIB
 #include <zlib.h>
-#else
-#include <external/zlib/zlib.h>
-#endif
 #include <string.h> // for memset
 
 using namespace com::sun::star::uno;

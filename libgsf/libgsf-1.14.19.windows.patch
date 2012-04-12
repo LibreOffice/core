@@ -55,7 +55,7 @@
 +
 +.INCLUDE : settings.mk
 +
-+CFLAGS+= -I.. -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/zlib -I$(SOLARINCDIR)$/external
++CFLAGS+= -I.. -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external
 +
 +# --- Files -------------------------------------
 +
@@ -115,7 +115,7 @@
 +    gobject-2.0.lib \
 +    glib-2.0.lib \
 +    intl.lib \
-+    zlib.lib \
++    z.lib \
 +	Advapi32.lib
 +
 +

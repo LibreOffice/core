@@ -139,6 +139,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmloff \
     xmlreader \
     xmlscript \
+    z \
 ))
 
 ifneq ($(SOLAR_JAVA),)

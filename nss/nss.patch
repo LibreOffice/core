@@ -67,20 +67,6 @@
  LDFLAGS			+= $(ARCHFLAG)
  
  # INCLUDES += -I/usr/include -Y/usr/include/linux
-@@ -158,8 +161,13 @@
- #
- CPU_TAG = _$(CPU_ARCH)
- 
-+ifeq ($(SYSTEM_ZLIB),YES)  
-+# Currently (3.12.4) only the tools modutil and signtool are linked with libz
-+# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
-+# is also build in nss.
- USE_SYSTEM_ZLIB = 1
- ZLIB_LIBS = -lz
-+endif
- 
- # The -rpath '$$ORIGIN' linker option instructs this library to search for its
- # dependencies in the same directory where it resides.
 --- misc/nss-3.12.8/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
 +++ misc/build/nss-3.12.8/mozilla/security/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
 @@ -89,8 +89,12 @@
