@@ -886,12 +886,6 @@ void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
-void Font::importFontColor( BiffInputStream& rStrm )
-{
-    OSL_ENSURE( !mbDxf, "Font::importFontColor - unexpected conditional formatting flag" );
-    maModel.maColor.importColorId( rStrm );
-}
-
 void Font::importCfRule( BiffInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importCfRule - missing conditional formatting flag" );
@@ -1269,48 +1263,6 @@ void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType
     rPropSet.setProperties( aPropMap );
 }
 
-void Font::importFontData2( BiffInputStream& rStrm )
-{
-    sal_uInt16 nHeight, nFlags;
-    rStrm >> nHeight >> nFlags;
-
-    maModel.setBiffHeight( nHeight );
-    maModel.mnFamily     = OOX_FONTFAMILY_NONE;
-    maModel.mnCharSet    = -1;    // ensure to not use font charset in byte string import
-    maModel.mnUnderline  = getFlagValue( nFlags, BIFF_FONTFLAG_UNDERLINE, XML_single, XML_none );
-    maModel.mnEscapement = XML_none;
-    maModel.mbBold       = getFlag( nFlags, BIFF_FONTFLAG_BOLD );
-    maModel.mbItalic     = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
-    maModel.mbStrikeout  = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
-    maModel.mbOutline    = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
-    maModel.mbShadow     = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
-}
-
-void Font::importFontData5( BiffInputStream& rStrm )
-{
-    sal_uInt16 nWeight, nEscapement;
-    sal_uInt8 nUnderline, nFamily, nCharSet;
-    rStrm >> nWeight >> nEscapement >> nUnderline >> nFamily >> nCharSet;
-    rStrm.skip( 1 );
-
-    maModel.setBiffWeight( nWeight );
-    maModel.setBiffUnderline( nUnderline );
-    maModel.setBiffEscapement( nEscapement );
-    // equal constants in XML and BIFF for family and charset
-    maModel.mnFamily  = nFamily;
-    maModel.mnCharSet = nCharSet;
-}
-
-void Font::importFontName2( BiffInputStream& rStrm )
-{
-    maModel.maName = rStrm.readByteStringUC( false, getTextEncoding() );
-}
-
-void Font::importFontName8( BiffInputStream& rStrm )
-{
-    maModel.maName = rStrm.readUniStringBody( rStrm.readuInt8() );
-}
-
 // ============================================================================
 
 AlignmentModel::AlignmentModel() :
@@ -1408,45 +1360,6 @@ void Alignment::setBiff12Data( sal_uInt32 nFlags )
     maModel.mbWrapText     = getFlag( nFlags, BIFF12_XF_WRAPTEXT );
     maModel.mbShrink       = getFlag( nFlags, BIFF12_XF_SHRINK );
     maModel.mbJustLastLine = getFlag( nFlags, BIFF12_XF_JUSTLASTLINE );
-}
-
-void Alignment::setBiff2Data( sal_uInt8 nFlags )
-{
-    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nFlags, 0, 3 ) );
-}
-
-void Alignment::setBiff3Data( sal_uInt16 nAlign )
-{
-    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT ); // new in BIFF3
-}
-
-void Alignment::setBiff4Data( sal_uInt16 nAlign )
-{
-    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 2 ) ); // new in BIFF4
-    maModel.setBiffTextOrient( extractValue< sal_uInt8 >( nAlign, 6, 2 ) ); // new in BIFF4
-    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
-}
-
-void Alignment::setBiff5Data( sal_uInt16 nAlign )
-{
-    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
-    maModel.setBiffTextOrient( extractValue< sal_uInt8 >( nAlign, 8, 2 ) );
-    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
-}
-
-void Alignment::setBiff8Data( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
-{
-    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
-    maModel.mnTextDir      = extractValue< sal_Int32 >( nMiscAttrib, 6, 2 ); // new in BIFF8
-    maModel.mnRotation     = extractValue< sal_Int32 >( nAlign, 8, 8 ); // new in BIFF8
-    maModel.mnIndent       = extractValue< sal_uInt8 >( nMiscAttrib, 0, 4 ); // new in BIFF8
-    maModel.mbWrapText     = getFlag( nAlign, BIFF_XF_WRAPTEXT );
-    maModel.mbShrink       = getFlag( nMiscAttrib, BIFF_XF_SHRINK ); // new in BIFF8
-    maModel.mbJustLastLine = getFlag( nAlign, BIFF_XF_JUSTLASTLINE ); // new in BIFF8(?)
 }
 
 void Alignment::finalizeImport()
@@ -1675,18 +1588,6 @@ void Protection::setBiff12Data( sal_uInt32 nFlags )
     maModel.mbHidden = getFlag( nFlags, BIFF12_XF_HIDDEN );
 }
 
-void Protection::setBiff2Data( sal_uInt8 nNumFmt )
-{
-    maModel.mbLocked = getFlag( nNumFmt, BIFF2_XF_LOCKED );
-    maModel.mbHidden = getFlag( nNumFmt, BIFF2_XF_HIDDEN );
-}
-
-void Protection::setBiff3Data( sal_uInt16 nProt )
-{
-    maModel.mbLocked = getFlag( nProt, BIFF_XF_LOCKED );
-    maModel.mbHidden = getFlag( nProt, BIFF_XF_HIDDEN );
-}
-
 void Protection::finalizeImport()
 {
     maApiData.maCellProt.IsLocked = maModel.mbLocked;
@@ -1864,49 +1765,6 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
         pBorderLine->setBiffStyle( nStyle );
         pBorderLine->mbUsed = true;
     }
-}
-
-void Border::setBiff2Data( sal_uInt8 nFlags )
-{
-    OSL_ENSURE( !mbDxf, "Border::setBiff2Data - unexpected conditional formatting flag" );
-    maModel.maLeft.setBiffData(   getFlagValue( nFlags, BIFF2_XF_LEFTLINE,   BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maModel.maRight.setBiffData(  getFlagValue( nFlags, BIFF2_XF_RIGHTLINE,  BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maModel.maTop.setBiffData(    getFlagValue( nFlags, BIFF2_XF_TOPLINE,    BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maModel.maBottom.setBiffData( getFlagValue( nFlags, BIFF2_XF_BOTTOMLINE, BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maModel.maDiagonal.mbUsed = false;
-}
-
-void Border::setBiff3Data( sal_uInt32 nBorder )
-{
-    OSL_ENSURE( !mbDxf, "Border::setBiff3Data - unexpected conditional formatting flag" );
-    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  8, 3 ), extractValue< sal_uInt16 >( nBorder, 11, 5 ) );
-    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder, 24, 3 ), extractValue< sal_uInt16 >( nBorder, 27, 5 ) );
-    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  3, 5 ) );
-    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder, 16, 3 ), extractValue< sal_uInt16 >( nBorder, 19, 5 ) );
-    maModel.maDiagonal.mbUsed = false;
-}
-
-void Border::setBiff5Data( sal_uInt32 nBorder, sal_uInt32 nArea )
-{
-    OSL_ENSURE( !mbDxf, "Border::setBiff5Data - unexpected conditional formatting flag" );
-    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  3, 3 ), extractValue< sal_uInt16 >( nBorder, 16, 7 ) );
-    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder,  6, 3 ), extractValue< sal_uInt16 >( nBorder, 23, 7 ) );
-    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  9, 7 ) );
-    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nArea,   22, 3 ), extractValue< sal_uInt16 >( nArea,   25, 7 ) );
-    maModel.maDiagonal.mbUsed = false;
-}
-
-void Border::setBiff8Data( sal_uInt32 nBorder1, sal_uInt32 nBorder2 )
-{
-    OSL_ENSURE( !mbDxf, "Border::setBiff8Data - unexpected conditional formatting flag" );
-    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder1,  0, 4 ), extractValue< sal_uInt16 >( nBorder1, 16, 7 ) );
-    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder1,  4, 4 ), extractValue< sal_uInt16 >( nBorder1, 23, 7 ) );
-    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder1,  8, 4 ), extractValue< sal_uInt16 >( nBorder2,  0, 7 ) );
-    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder1, 12, 4 ), extractValue< sal_uInt16 >( nBorder2,  7, 7 ) );
-    maModel.mbDiagTLtoBR = getFlag( nBorder1, BIFF_XF_DIAG_TLBR );
-    maModel.mbDiagBLtoTR = getFlag( nBorder1, BIFF_XF_DIAG_BLTR );
-    if( maModel.mbDiagTLtoBR || maModel.mbDiagBLtoTR )
-        maModel.maDiagonal.setBiffData( extractValue< sal_uInt8 >( nBorder2, 21, 4 ), extractValue< sal_uInt16 >( nBorder2, 14, 7 ) );
 }
 
 void Border::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
@@ -2290,46 +2148,6 @@ void Fill::importDxfStop( SequenceInputStream& rStrm )
     mxGradientModel->readGradientStop( rStrm, true );
 }
 
-void Fill::setBiff2Data( sal_uInt8 nFlags )
-{
-    OSL_ENSURE( !mbDxf, "Fill::setBiff2Data - unexpected conditional formatting flag" );
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    mxPatternModel->setBiffData(
-        BIFF2_COLOR_BLACK,
-        BIFF2_COLOR_WHITE,
-        getFlagValue( nFlags, BIFF2_XF_BACKGROUND, BIFF_PATT_125, BIFF_PATT_NONE ) );
-}
-
-void Fill::setBiff3Data( sal_uInt16 nArea )
-{
-    OSL_ENSURE( !mbDxf, "Fill::setBiff3Data - unexpected conditional formatting flag" );
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    mxPatternModel->setBiffData(
-        extractValue< sal_uInt16 >( nArea, 6, 5 ),
-        extractValue< sal_uInt16 >( nArea, 11, 5 ),
-        extractValue< sal_uInt8 >( nArea, 0, 6 ) );
-}
-
-void Fill::setBiff5Data( sal_uInt32 nArea )
-{
-    OSL_ENSURE( !mbDxf, "Fill::setBiff5Data - unexpected conditional formatting flag" );
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    mxPatternModel->setBiffData(
-        extractValue< sal_uInt16 >( nArea, 0, 7 ),
-        extractValue< sal_uInt16 >( nArea, 7, 7 ),
-        extractValue< sal_uInt8 >( nArea, 16, 6 ) );
-}
-
-void Fill::setBiff8Data( sal_uInt32 nBorder2, sal_uInt16 nArea )
-{
-    OSL_ENSURE( !mbDxf, "Fill::setBiff8Data - unexpected conditional formatting flag" );
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    mxPatternModel->setBiffData(
-        extractValue< sal_uInt16 >( nArea, 0, 7 ),
-        extractValue< sal_uInt16 >( nArea, 7, 7 ),
-        extractValue< sal_uInt8 >( nBorder2, 26, 6 ) );
-}
-
 void Fill::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
 {
     OSL_ENSURE( mbDxf, "Fill::importCfRule - missing conditional formatting flag" );
@@ -2625,23 +2443,6 @@ void Xf::writeToPropertySet( PropertySet& rPropSet ) const
     PropertyMap aPropMap;
     writeToPropertyMap( aPropMap );
     rPropSet.setProperties( aPropMap );
-}
-
-void Xf::setBiffUsedFlags( sal_uInt8 nUsedFlags )
-{
-    /*  Notes about finding the used flags:
-        - In cell XFs a *set* bit means a used attribute.
-        - In style XFs a *cleared* bit means a used attribute.
-        The boolean flags always store true, if the attribute is used.
-        The "isCellXf() == getFlag(...)" construct evaluates to true in both
-        mentioned cases: cell XF and set bit; or style XF and cleared bit.
-     */
-    maModel.mbFontUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_FONT_USED );
-    maModel.mbNumFmtUsed = isCellXf() == getFlag( nUsedFlags, BIFF_XF_NUMFMT_USED );
-    maModel.mbAlignUsed  = isCellXf() == getFlag( nUsedFlags, BIFF_XF_ALIGN_USED );
-    maModel.mbProtUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
-    maModel.mbBorderUsed = isCellXf() == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
-    maModel.mbAreaUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
 }
 
 const ::ScPatternAttr&

@@ -278,8 +278,6 @@ public:
     /** Imports a font style flag from a DXF record. */
     void                importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    /** Imports the FONTCOLOR record from the passed stream. */
-    void                importFontColor( BiffInputStream& rStrm );
     /** Sets the font attributes from the font block of a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm );
 
@@ -309,17 +307,6 @@ public:
     void                writeToPropertySet(
                             PropertySet& rPropSet,
                             FontPropertyType ePropType ) const;
-
-private:
-    /** Reads and sets height and flags. */
-    void                importFontData2( BiffInputStream& rStrm );
-    /** Reads and sets weight, escapement, underline, family, charset (BIFF5+). */
-    void                importFontData5( BiffInputStream& rStrm );
-
-    /** Reads and sets a byte string as font name. */
-    void                importFontName2( BiffInputStream& rStrm );
-    /** Reads and sets a Unicode string as font name. */
-    void                importFontName8( BiffInputStream& rStrm );
 
 private:
     FontModel           maModel;
@@ -390,16 +377,6 @@ public:
 
     /** Sets the alignment attributes from the passed BIFF12 XF record data. */
     void                setBiff12Data( sal_uInt32 nFlags );
-    /** Sets the alignment attributes from the passed BIFF2 XF record data. */
-    void                setBiff2Data( sal_uInt8 nFlags );
-    /** Sets the alignment attributes from the passed BIFF3 XF record data. */
-    void                setBiff3Data( sal_uInt16 nAlign );
-    /** Sets the alignment attributes from the passed BIFF4 XF record data. */
-    void                setBiff4Data( sal_uInt16 nAlign );
-    /** Sets the alignment attributes from the passed BIFF5 XF record data. */
-    void                setBiff5Data( sal_uInt16 nAlign );
-    /** Sets the alignment attributes from the passed BIFF8 XF record data. */
-    void                setBiff8Data( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -460,10 +437,6 @@ public:
 
     /** Sets the protection attributes from the passed BIFF12 XF record data. */
     void                setBiff12Data( sal_uInt32 nFlags );
-    /** Sets the protection attributes from the passed BIFF2 XF record data. */
-    void                setBiff2Data( sal_uInt8 nNumFmt );
-    /** Sets the protection attributes from the passed BIFF3-BIFF8 XF record data. */
-    void                setBiff3Data( sal_uInt16 nProt );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -559,14 +532,6 @@ public:
     /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    /** Sets the border attributes from the passed BIFF2 XF record data. */
-    void                setBiff2Data( sal_uInt8 nFlags );
-    /** Sets the border attributes from the passed BIFF3/BIFF4 XF record data. */
-    void                setBiff3Data( sal_uInt32 nBorder );
-    /** Sets the border attributes from the passed BIFF5 XF record data. */
-    void                setBiff5Data( sal_uInt32 nBorder, sal_uInt32 nArea );
-    /** Sets the border attributes from the passed BIFF8 XF record data. */
-    void                setBiff8Data( sal_uInt32 nBorder1, sal_uInt32 nBorder2 );
     /** Sets the border attributes from the border block of a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
 
@@ -691,14 +656,6 @@ public:
     /** Imports gradient stop settings from a DXF record. */
     void                importDxfStop( SequenceInputStream& rStrm );
 
-    /** Sets the fill attributes from the passed BIFF2 XF record data. */
-    void                setBiff2Data( sal_uInt8 nFlags );
-    /** Sets the fill attributes from the passed BIFF3/BIFF4 XF record data. */
-    void                setBiff3Data( sal_uInt16 nArea );
-    /** Sets the fill attributes from the passed BIFF5 XF record data. */
-    void                setBiff5Data( sal_uInt32 nArea );
-    /** Sets the fill attributes from the passed BIFF8 XF record data. */
-    void                setBiff8Data( sal_uInt32 nBorder2, sal_uInt16 nArea );
     /** Sets the fill attributes from the fill block of a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
 
@@ -799,10 +756,6 @@ public:
     void                writeToPropertySet( PropertySet& rPropSet ) const;
 
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
-
-private:
-    /** Sets 'attribute used' flags from the passed BIFF bit field. */
-    void                setBiffUsedFlags( sal_uInt8 nUsedFlags );
 
 private:
     typedef ::std::auto_ptr< ::ScPatternAttr > ScPatternAttrPtr;
