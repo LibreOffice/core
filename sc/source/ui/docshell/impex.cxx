@@ -606,7 +606,7 @@ enum DoubledQuoteMode
 };
 
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
-            sal_Unicode cStr, DoubledQuoteMode eMode )
+            sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
     p++;    //! jump over opening quote
     bool bCont;
@@ -637,9 +637,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                         {
                             // first part
                             if (!lcl_appendLineData( rString, p0, p-1))
-                            {
-                                /* TODO: warning at UI, data truncated */
-                            }
+                                rbOverflowCell = true;
                         }
                         p0 = ++p;       // text of next part starts here
                     break;
@@ -656,9 +654,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
         if ( p0 < p )
         {
             if (!lcl_appendLineData( rString, p0, ((*p || *(p-1) == cStr) ? p-1 : p)))
-            {
-                /* TODO: warning at UI, data truncated */
-            }
+                rbOverflowCell = true;
         }
     } while ( bCont );
     return p;
@@ -847,7 +843,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 aCell.Erase();
                 if( *p == cStr )
                 {
-                    p = lcl_ScanString( p, aCell, cStr, DQM_KEEP );
+                    p = lcl_ScanString( p, aCell, cStr, DQM_KEEP, bOverflowCell );
                     while( *p && *p != cSep )
                         p++;
                     if( *p )
@@ -1449,7 +1445,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
-        p1 = p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE );
+        p1 = p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE, rbOverflowCell );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
         // Append remaining unquoted and undelimited data (dirty, dirty) to
