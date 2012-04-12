@@ -49,20 +49,42 @@ class Test : public test::BootstrapFixture
 public:
     Test();
 
+    virtual void setUp();
+    virtual void tearDown();
+
     void testConstruction();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    EditEngineItemPool* mpItemPool;
 };
 
-Test::Test() {}
+Test::Test() : mpItemPool(NULL) {}
+
+void Test::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    mpItemPool = new EditEngineItemPool(true);
+}
+
+void Test::tearDown()
+{
+    SfxItemPool::Free(mpItemPool);
+
+    test::BootstrapFixture::tearDown();
+}
 
 void Test::testConstruction()
 {
-    EditEngineItemPool* pPool = new EditEngineItemPool(true);
-    EditEngine aEngine(pPool);
-    SfxItemPool::Free(pPool);
+    EditEngine aEngine(mpItemPool);
+
+    // TODO: This currently causes segfault in vcl.
+//  rtl::OUString aParaText = "I am Edit Engine.";
+//  aEngine.SetText(aParaText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

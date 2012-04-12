@@ -42,7 +42,6 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     comphelper \
     cppu \
     cppuhelper \
-    editeng \
     i18nisolang1 \
     i18nutil \
     lng \
