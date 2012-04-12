@@ -130,7 +130,7 @@ namespace sdr
                     }
                     else
                     {
-                        if(rObjectContact.isOutputToPrinter())
+                        if(rObjectContact.isOutputToPrinter() || rObjectContact.isOutputToPDFFile())
                         {
                             // #i76395# preview mechanism is only active if
                             // swapin is called from inside paint preparation, so mbInsidePaint
@@ -182,7 +182,7 @@ namespace sdr
                 {
                     ObjectContact& rObjectContact = GetObjectContact();
 
-                    if(rObjectContact.isOutputToPrinter())
+                    if(rObjectContact.isOutputToPrinter() || rObjectContact.isOutputToPDFFile())
                     {
                         // #i76395# preview mechanism is only active if
                         // swapin is called from inside paint preparation, so mbInsidePaint
@@ -195,7 +195,7 @@ namespace sdr
                         rGrafObj.mbInsidePaint = true;
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = false;
-                        }
+                    }
 
                     bRetval = true;
                 }
