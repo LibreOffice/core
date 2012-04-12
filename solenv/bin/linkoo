@@ -3,6 +3,8 @@
         if 0;
 
 use strict;
+use File::stat;
+use File::Copy;
 
 #*************************************************************************
 #
@@ -13,7 +15,7 @@ use strict;
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -56,19 +58,25 @@ export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
 
-if ($ENV{'OS'} eq 'MACOSX') {
-    print "FIXME: linkoo currently does not work on Mac OS X\n";
-    exit(0);
-}
-
 my $dry_run = 0;
 my $backup = 0;
+my $copy = 0;
 my $usage = 0;
+my $windows = 0;
 my $LANG;
 my $TARGET;
 my $LIBVER;
 my $OOO_BUILD;
 my $OOO_INSTALL;
+
+if ($ENV{'OS'} eq 'MACOSX') {
+    print "FIXME: linkoo currently does not work on Mac OS X\n";
+    exit(0);
+}
+if ($TARGET eq 'wntgcci.pro') {
+    $windows = 1;
+    $copy = 1;
+}
 
 # process options
 for my $a (@ARGV) {
@@ -80,7 +88,8 @@ for my $a (@ARGV) {
 	$usage = 1;
     } elsif ($a eq '--backup') {
 	$backup = 1;
-
+    } elsif ($a eq '--copy') {
+	$copy = 1;
     # ordered arguments
     } elsif (!defined $OOO_INSTALL) {
 	$OOO_INSTALL = $a;
@@ -97,7 +106,7 @@ if (!defined $OOO_BUILD && defined $ENV{SRC_ROOT}) {
 }
 
 if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
-    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--dry-run] [--backup]\n";
+    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--dry-run] [--backup] [--copy]\n";
     exit (1);
 }
 
@@ -117,10 +126,10 @@ my $ure_lib_dir = 'ure-link/lib';
 my $win_ure_lib_dir = 'URE/bin';
 
 my @exceptions = ( 'libsunjavaplugin', 'libjvmfwk' );
-push @exceptions, 'cppuhelper' if ($TARGET ne 'wntgcci.pro');
+push @exceptions, 'cppuhelper' if (!$windows);
 
 my $bin;
-$bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');
+$bin = "|\\.bin" if ($windows);
 my %replaceable = (
     $brand_program_dir => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
     $ure_lib_dir => "(\\.so\$|\\.so\\.3\$)",
@@ -200,7 +209,17 @@ sub do_link($$$$@)
     my $dest_name = shift;
     my $dont_check_link = shift;
 
-    if (-l "$dest/$dest_name" ) {
+    if ($copy) { # copy if older ...
+	my $src_mtime = stat("$src/$src_name")->mtime;
+	my $dest_mtime = stat("$dest/$dest_name")->mtime;
+	if ($src_mtime > $dest_mtime) {
+#	    print " copy $src/$src_name ($src_mtime) -> $dest/$dest_name ($dest_mtime)\n";
+	    print " copy $src/$src_name -> $dest/$dest_name\n";
+	    copy("$src/$src_name", "$dest/$dest_name") || die "Failed top copy: $!";
+	} else {
+#	    print " up-to-date $src/$src_name -> $dest/$dest_name\n";
+	}
+    } elsif (-l "$dest/$dest_name" ) {
 	my $link = readlink ("$dest/$dest_name");
 	if ($link =~ /^\//) { # Absolute path
 	    if (!$dry_run) {
@@ -324,6 +343,8 @@ sub evilness($)
     my $src  = "$OOO_BUILD/shell/$TARGET/lib/$name";
     my $dest = "$OOO_BUILD/sfx2/$TARGET/lib/$name";
 
+    return if ($windows);
+
     if ($doit eq 'undo') {
 	if (-l $dest) {
 	    print " unlink $name\n";
@@ -362,8 +383,7 @@ sub do_link_gdb_py($$$)
 
 sub link_gdb_py()
 {
-    return if ($TARGET eq 'wntgcci.pro');
-
+    return if ($windows);
     print "Special gdb.py helpers case: ";
 
     my $dirh;
@@ -396,7 +416,7 @@ sub link_gdb_py()
 
 sub link_pagein_files()
 {
-    return if ($TARGET eq 'wntgcci.pro');
+    return if ($windows);
 
     print "pagein case:";
     my $src  = "$OOO_BUILD/solver/$TARGET/bin";
@@ -427,7 +447,7 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
 evilness ('do');
 
 print "\nlinkoo finished";
-print ", please don't forget to source ooenv before ./soffice." if ($TARGET ne 'wntgcci.pro');
+print ", please don't forget to source ooenv before ./soffice." if (!$windows);
 print "\n";
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
