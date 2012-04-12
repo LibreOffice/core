@@ -533,12 +533,14 @@ void BasicLibs::Insert( BasicLibInfo* LibInfo )
 
 BasicLibInfo* BasicLibs::Remove( BasicLibInfo* LibInfo )
 {
-    size_t i = GetPos( LibInfo );
-    if ( i < aList.size() )
+    vector< BasicLibInfo* >::iterator it, eit = aList.end();
+    for (it = aList.begin(); it != eit; ++it)
     {
-        vector< BasicLibInfo* >::iterator it = aList.begin();
-        advance( it , i );
-        it = aList.erase( it );
+        if (*it == LibInfo)
+        {
+            aList.erase(it);
+            break;
+        }
     }
     return LibInfo;
 }
