@@ -847,7 +847,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             pFirstPage = pPage;
 
             aPageStr += " ";
-            aPageStr += rtl::OUString::valueOf( nFirstPage + 1 );
+            aPageStr += rtl::OUString::valueOf( static_cast<sal_Int32>(nFirstPage + 1) );
             aPageStr += " / " ;
             aPageStr += rtl::OUString::valueOf(mrSlideSorter.GetModel().GetPageCount());
 
