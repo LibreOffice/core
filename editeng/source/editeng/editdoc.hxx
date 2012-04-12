@@ -31,8 +31,8 @@
 
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
-#include <editattr.hxx>
-#include <edtspell.hxx>
+#include "editattr.hxx"
+#include "edtspell.hxx"
 #include <editeng/svxfont.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
