@@ -983,7 +983,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 {
     OSL_PRECOND( m_xSourceConnection.is(), "CopyTableWizard::impl_createSourceStatement_throw: illegal call!" );
     if ( !m_xSourceConnection.is() )
-        throw RuntimeException( ::rtl::OUString(), *const_cast< CopyTableWizard* >( this ) );
+        throw RuntimeException( "CopyTableWizard::impl_createSourceStatement_throw: illegal call!", *const_cast< CopyTableWizard* >( this ));
 
     ::utl::SharedUNOComponent< XPreparedStatement > xStatement;
     switch ( m_nCommandType )
@@ -1029,7 +1029,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
     default:
         // this should not have survived initialization phase
-        throw RuntimeException( ::rtl::OUString(), *const_cast< CopyTableWizard* >( this ) );
+        throw RuntimeException("No case matched, this should not have survived the initialization phase", *const_cast< CopyTableWizard* >( this ));
     }
 
     return xStatement;
@@ -1165,7 +1165,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 {
     OSL_PRECOND( m_xDestConnection.is(), "CopyTableWizard::impl_copyRows_throw: illegal call!" );
     if ( !m_xDestConnection.is() )
-        throw RuntimeException( ::rtl::OUString(), *this );
+        throw RuntimeException( "m_xDestConnection is set to null, CopyTableWizard::impl_copyRows_throw: illegal call!", *this );
 
     Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
 
