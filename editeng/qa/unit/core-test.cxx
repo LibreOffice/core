@@ -74,6 +74,7 @@ void Test::setUp()
 void Test::tearDown()
 {
     SfxItemPool::Free(mpItemPool);
+    EditDLL::Release();
 
     test::BootstrapFixture::tearDown();
 }
@@ -83,8 +84,8 @@ void Test::testConstruction()
     EditEngine aEngine(mpItemPool);
 
     // TODO: This currently causes segfault in vcl.
-//  rtl::OUString aParaText = "I am Edit Engine.";
-//  aEngine.SetText(aParaText);
+    rtl::OUString aParaText = "I am Edit Engine.";
+    aEngine.SetText(aParaText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
