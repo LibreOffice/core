@@ -33,18 +33,16 @@
 #include "optdlg.hrc"
 #include "scresid.hxx"
 #include "scmod.hxx"
-#include "docoptio.hxx"
+#include "defaultsoptions.hxx"
 #include "document.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
 
 #define INIT_SHEETS_MIN 1
 #define INIT_SHEETS_MAX 1024
 
 using ::rtl::OUString;
 
-ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
-    SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreAttrs),
+ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
+    SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreSet),
     aFLInitSpreadSheet ( this, ScResId( FL_INIT_SPREADSHEET ) ),
     aFtNSheets         ( this, ScResId( FT_NSHEETS ) ),
     aEdNSheets         ( this, ScResId( ED_NSHEETS ) ),
@@ -52,11 +50,6 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
     aEdSheetPrefix     ( this, ScResId( ED_SHEETPREFIX ) )
 {
     FreeResource();
-
-    const ScTpCalcItem& rItem = static_cast<const ScTpCalcItem&>(
-        rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
-    mpOldOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
-    mpNewOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
 
     long nTxtW = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
     long nCtrlW = aFtNSheets.GetSizePixel().Width();
@@ -83,27 +76,39 @@ SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCore
     return new ScTpDefaultsOptions(pParent, rCoreAttrs);
 }
 
-sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreAttrs)
+sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
 {
+    sal_Bool bRet = false;
+    ScDefaultsOptions aOpt;
+
     SCTAB nTabCount = static_cast<SCTAB>(aEdNSheets.GetValue());
     OUString aSheetPrefix = aEdSheetPrefix.GetText();
 
-    mpNewOptions->SetInitTabCount( nTabCount );
-    mpNewOptions->SetInitTabPrefix( aSheetPrefix );
 
-    if (*mpNewOptions != *mpOldOptions)
+    if ( aEdNSheets.GetSavedValue() != aEdNSheets.GetText()
+         || static_cast<OUString>(aEdSheetPrefix.GetSavedValue()) != aSheetPrefix )
     {
-        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpNewOptions));
-        return sal_True;
+        aOpt.SetInitTabCount( nTabCount );
+        aOpt.SetInitTabPrefix( aSheetPrefix );
+
+        rCoreSet.Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, aOpt ) );
+        bRet = true;
     }
-    else
-        return sal_False;
+    return bRet;
 }
 
-void ScTpDefaultsOptions::Reset(const SfxItemSet& /*rCoreAttrs*/)
+void ScTpDefaultsOptions::Reset(const SfxItemSet& rCoreSet)
 {
-    aEdNSheets.SetValue( static_cast<sal_uInt16>(mpOldOptions->GetInitTabCount()) );
-    aEdSheetPrefix.SetText( mpOldOptions->GetInitTabPrefix() );
+    ScDefaultsOptions aOpt;
+    const SfxPoolItem* pItem = NULL;
+
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCDEFAULTSOPTIONS, false , &pItem))
+        aOpt = ((const ScTpDefaultsItem*)pItem)->GetDefaultsOptions();
+
+    aEdNSheets.SetValue( static_cast<sal_uInt16>( aOpt.GetInitTabCount()) );
+    aEdSheetPrefix.SetText( aOpt.GetInitTabPrefix() );
+    aEdNSheets.SaveValue();
+    aEdSheetPrefix.SaveValue();
 }
 
 int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)

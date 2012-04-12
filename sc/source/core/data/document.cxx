@@ -95,7 +95,7 @@
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
 #include "stlalgorithm.hxx"
-#include "docoptio.hxx"
+#include "defaultsoptions.hxx"
 
 #include <map>
 #include <limits>
@@ -144,8 +144,8 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
         // Get Custom prefix
-        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
-        rtl::OUString aString = rDocOpt.GetInitTabPrefix();
+        const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+        rtl::OUString aString = rOpt.GetInitTabPrefix();
 
         aString += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
         if ( _bNeedsNameCheck )
@@ -313,8 +313,8 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
         // Find new one
 
         // Get Custom prefix
-        const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
-        rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+        const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+        rtl::OUString aStrTable = rOpt.GetInitTabPrefix();
 
         bool         bOk   = false;
 
@@ -361,8 +361,8 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
     aNames.clear();//ensure that the vector is empty
 
     // Get Custom prefix
-    const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
-    rtl::OUString aStrTable = rDocOpt.GetInitTabPrefix();
+    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    rtl::OUString aStrTable = rOpt.GetInitTabPrefix();
 
     rtl::OUStringBuffer rName;
     bool         bOk   = false;

@@ -40,11 +40,9 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;                // epsilon value dazu
+    double fIterEps;                    // epsilon value dazu
     sal_uInt16 nIterCount;              // number
-    SCTAB nInitTabCount;            // number of Tabs for new Spreadsheet doc
-    ::rtl::OUString aInitTabPrefix;   // The Tab prefix name in new Spreadsheet doc
-    sal_uInt16 nPrecStandardFormat; // precision for standard format
+    sal_uInt16 nPrecStandardFormat;     // precision for standard format
     sal_uInt16 nDay;                    // Null date:
     sal_uInt16 nMonth;
     sal_uInt16 nYear;
@@ -74,10 +72,6 @@ public:
     void   SetIter( sal_Bool bVal )         { bIsIter = bVal; }
     sal_uInt16 GetIterCount() const         { return nIterCount; }
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
-    SCTAB GetInitTabCount() const           { return nInitTabCount; }
-    void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
-    void   SetInitTabPrefix( ::rtl::OUString& aPrefix) { aInitTabPrefix = aPrefix; }
-    ::rtl::OUString GetInitTabPrefix() const			{ return aInitTabPrefix; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
@@ -113,8 +107,6 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bIsIgnoreCase       = rCpy.bIsIgnoreCase;
     bIsIter             = rCpy.bIsIter;
     nIterCount          = rCpy.nIterCount;
-    nInitTabCount       = rCpy.nInitTabCount;
-    aInitTabPrefix      = rCpy.aInitTabPrefix;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
     nDay                = rCpy.nDay;
@@ -137,8 +129,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
                 rOpt.bIsIgnoreCase          == bIsIgnoreCase
             &&  rOpt.bIsIter                == bIsIter
             &&  rOpt.nIterCount             == nIterCount
-            &&  rOpt.nInitTabCount          == nInitTabCount
-            &&  rOpt.aInitTabPrefix         == aInitTabPrefix
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
             &&  rOpt.nDay                   == nDay
@@ -190,15 +180,12 @@ class ScDocCfg : public ScDocOptions
 {
     ScLinkConfigItem    aCalcItem;
     ScLinkConfigItem    aLayoutItem;
-    ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
-    DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
 public:
             ScDocCfg();

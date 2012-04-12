@@ -91,7 +91,7 @@
 #include "navsett.hxx"
 #include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
-#include "docoptio.hxx"
+#include "defaultsoptions.hxx"
 #include "markdata.hxx"
 #include "preview.hxx"
 
@@ -1608,8 +1608,8 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
                 // Get the customized initial tab count...
 
                 // ... from option dialog.
-                const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
-                SCTAB nInitTabCount = rDocOpt.GetInitTabCount();
+                const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+                SCTAB nInitTabCount = rOpt.GetInitTabCount();
 
                 // ... by VBA API.
                 const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();

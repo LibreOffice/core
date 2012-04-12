@@ -79,6 +79,7 @@
 #include "viewopti.hxx"
 #include "docoptio.hxx"
 #include "appoptio.hxx"
+#include "defaultsoptions.hxx"
 #include "formulaopt.hxx"
 #include "inputopt.hxx"
 #include "printopt.hxx"
@@ -142,6 +143,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
+    pDefaultsCfg( NULL ),
     pFormulaCfg( NULL ),
     pInputCfg( NULL ),
     pPrintCfg( NULL ),
@@ -344,6 +346,7 @@ void ScModule::DeleteCfg()
     DELETEZ( pViewCfg ); // Speichern passiert vor Exit() automatisch
     DELETEZ( pDocCfg );
     DELETEZ( pAppCfg );
+    DELETEZ( pDefaultsCfg );
     DELETEZ( pFormulaCfg );
     DELETEZ( pInputCfg );
     DELETEZ( pPrintCfg );
@@ -852,6 +855,22 @@ const ScAppOptions& ScModule::GetAppOptions()
     return *pAppCfg;
 }
 
+void ScModule::SetDefaultsOptions( const ScDefaultsOptions& rOpt )
+{
+    if ( !pDefaultsCfg )
+        pDefaultsCfg = new ScDefaultsCfg;
+
+    pDefaultsCfg->SetOptions( rOpt );
+}
+
+const ScDefaultsOptions& ScModule::GetDefaultsOptions()
+{
+    if ( !pDefaultsCfg )
+        pDefaultsCfg = new ScDefaultsCfg;
+
+    return *pDefaultsCfg;
+}
+
 void ScModule::SetFormulaOptions( const ScFormulaOptions& rOpt )
 {
     if ( !pFormulaCfg )
@@ -1043,6 +1062,16 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bSaveAppOptions = true;
             pDocSh->ResetKeyBindings(eNew);
         }
+    }
+
+    //============================================
+    // DefaultsOptions
+    //============================================
+
+    if (rOptSet.HasItem(SID_SCDEFAULTSOPTIONS, &pItem))
+    {
+        const ScDefaultsOptions& rOpt = ((const ScTpDefaultsItem*)pItem)->GetDefaultsOptions();
+        SetDefaultsOptions( rOpt );
     }
 
     //============================================
@@ -1959,6 +1988,8 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
                             // TP_COMPATIBILITY
                             SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
+                            // TP_DEFAULTS
+                            SID_SCDEFAULTSOPTIONS, SID_SCDEFAULTSOPTIONS,
                             // TP_FORMULA
                             SID_SCFORMULAOPTIONS, SID_SCFORMULAOPTIONS,
                             0 );
@@ -2030,6 +2061,9 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         // TP_COMPATIBILITY
         pRet->Put( SfxUInt16Item( SID_SC_OPT_KEY_BINDING_COMPAT,
                                    rAppOpt.GetKeyBindingType() ) );
+
+        // TP_DEFAULTS
+        pRet->Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, GetDefaultsOptions() ) );
 
         // TP_FORMULA
         pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, GetFormulaOptions() ) );

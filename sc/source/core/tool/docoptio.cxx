@@ -84,8 +84,6 @@ ScDocOptions::ScDocOptions()
 ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
-            nInitTabCount( rCpy.nInitTabCount ),
-            aInitTabPrefix( rCpy.aInitTabPrefix ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
             nDay( rCpy.nDay ),
             nMonth( rCpy.nMonth ),
@@ -115,8 +113,6 @@ void ScDocOptions::ResetDocOptions()
     bIsIgnoreCase       = false;
     bIsIter             = false;
     nIterCount          = 100;
-    nInitTabCount       = 3;
-    aInitTabPrefix      = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
     nDay                = 30;
@@ -207,12 +203,6 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCDOCLAYOUTOPT_TABSTOP      0
 #define SCDOCLAYOUTOPT_COUNT        1
 
-#define CFGPATH_DEFAULTS    "Office.Calc/Defaults"
-#define SCDEFAULTSOPT_TAB_COUNT     0
-#define SCDEFAULTSOPT_TAB_PREFIX    1
-#define SCDEFAULTSOPT_COUNT         2
-
-
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
     static const char* aPropNames[] =
@@ -256,26 +246,9 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
     return aNames;
 }
 
-Sequence<OUString> ScDocCfg::GetDefaultsPropertyNames()
-{
-    static const char* aPropNames[] =
-    {
-        "Sheet/SheetCount",            // SCDEFAULTSOPT_TAB_COUNT
-        "Sheet/SheetPrefix"            // SCDEFAULTSOPT_TAB_PREFIX
-    };
-    Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for (int i = 0; i < SCDEFAULTSOPT_COUNT; ++i)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
-}
-
-
 ScDocCfg::ScDocCfg() :
     aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
-    aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT))),
-    aDefaultsItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DEFAULTS)))
+    aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT)))
 {
     sal_Int32 nIntVal = 0;
 
@@ -370,32 +343,6 @@ ScDocCfg::ScDocCfg() :
         }
     }
     aLayoutItem.SetCommitLink( LINK( this, ScDocCfg, LayoutCommitHdl ) );
-
-    aNames = GetDefaultsPropertyNames();
-    aValues = aDefaultsItem.GetProperties(aNames);
-    aDefaultsItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    if (aValues.getLength() == aNames.getLength())
-    {
-        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-        {
-            switch (nProp)
-            {
-
-            case SCDEFAULTSOPT_TAB_COUNT:
-                nIntVal = 3; // 3 = 'Default'
-                if (pValues[nProp] >>= nIntVal)
-                    SetInitTabCount( static_cast<SCTAB>(nIntVal) );
-                break;
-            case SCDEFAULTSOPT_TAB_PREFIX:
-                OUString aPrefix;
-                if (pValues[nProp] >>= aPrefix)
-                    SetInitTabPrefix(aPrefix);
-                break;
-            }
-        }
-    }
-    aDefaultsItem.SetCommitLink( LINK(this, ScDocCfg, DefaultsCommitHdl) );
 }
 
 IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
@@ -477,35 +424,12 @@ IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScDocCfg, DefaultsCommitHdl)
-{
-    Sequence<OUString> aNames = GetDefaultsPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
-
-    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
-    {
-        switch(nProp)
-        {
-        case SCDEFAULTSOPT_TAB_COUNT:
-            pValues[nProp] <<= static_cast<sal_Int32>(GetInitTabCount());
-        break;
-        case SCDEFAULTSOPT_TAB_PREFIX:
-            pValues[nProp] <<= GetInitTabPrefix();
-        break;
-        }
-    }
-    aDefaultsItem.PutProperties(aNames, aValues);
-    return 0;
-}
-
 void ScDocCfg::SetOptions( const ScDocOptions& rNew )
 {
     *(ScDocOptions*)this = rNew;
 
     aCalcItem.SetModified();
     aLayoutItem.SetModified();
-    aDefaultsItem.SetModified();
 }
 
 

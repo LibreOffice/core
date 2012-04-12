@@ -118,6 +118,7 @@
 
 // Format options
 #define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
+#define SID_SCDEFAULTSOPTIONS   (SC_VIEW_START + 21)
 
 // slot-IDs for attributes
 

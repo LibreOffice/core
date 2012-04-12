@@ -33,23 +33,19 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 
-#include <boost/shared_ptr.hpp>
-
-class ScDocOptions;
-
 class ScTpDefaultsOptions : public SfxTabPage
 {
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreAttrs);
+    static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
 
-    virtual sal_Bool FillItemSet(SfxItemSet& rCoreAttrs);
-    virtual void Reset(const SfxItemSet& rCoreAttrs);
+    virtual sal_Bool FillItemSet(SfxItemSet& rCoreSet);
+    virtual void Reset(const SfxItemSet& rCoreSet);
     virtual int DeactivatePage(SfxItemSet* pSet = NULL);
 
 private:
-    explicit ScTpDefaultsOptions(Window* pParent, const SfxItemSet& rCoreAttrs);
+    explicit ScTpDefaultsOptions(Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpDefaultsOptions();
 
     void CheckNumSheets();
@@ -69,9 +65,6 @@ private:
 
     // Stores old Sheet Prefix
     ::rtl::OUString maOldPrefixValue;
-
-    ::boost::shared_ptr<ScDocOptions> mpOldOptions;
-    ::boost::shared_ptr<ScDocOptions> mpNewOptions;
 };
 
 #endif
