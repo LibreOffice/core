@@ -279,13 +279,13 @@ sal_Bool SwTxtFrmInfo::IsBullet( xub_StrLen nTxtStart ) const
 // All lines (except for the first one) have the same left margin.
 // We do not want to be so picky and work with a tolerance of TOLERANCE twips.
 
-#define TOLERANCE 20
-
 SwTwips SwTxtFrmInfo::GetFirstIndent() const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
     const SwTwips nFirst = GetLineStart( aLine );
+    const SwTwips TOLERANCE = 20;
+
     if( !aLine.Next() )
         return 0;
 
