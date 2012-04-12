@@ -35,6 +35,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,editeng_core, \
     editeng/qa/unit/core-test \
 ))
 
+$(eval $(call gb_CppunitTest_use_library_objects,editeng_core,editeng))
+
 $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     basegfx \
     comphelper \
@@ -64,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_core,\
 ))
 
 $(eval $(call gb_CppunitTest_set_include,editeng_core,\
+    -I$(SRCDIR)/editeng/source \
     $$(INCLUDE) \
 ))
 

@@ -35,6 +35,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "svl/itempool.hxx"
+#include "editeng/eerdll.hxx"
+#include "editeng/eerdll2.hxx"
 #include "editeng/editeng.hxx"
 #include "editeng/eeitem.hxx"
 #include "editeng/editids.hrc"
@@ -99,7 +101,11 @@ const SfxItemInfo aItemInfos[] = {
 class TestPool : public SfxItemPool
 {
 public:
-    TestPool() : SfxItemPool("TestPool", EE_ITEMS_START, EE_ITEMS_END, aItemInfos, NULL, true) {}
+    TestPool() : SfxItemPool("TestPool", EE_ITEMS_START, EE_ITEMS_END, aItemInfos, NULL, true)
+    {
+        SfxPoolItem** ppDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
+        SetDefaults(ppDefItems);
+    }
     virtual ~TestPool() {}
 };
 
@@ -122,7 +128,7 @@ void Test::testConstruction()
     TestPool aPool;
 
     // TODO: fix me
-//  EditEngine aEngine(&aPool);
+    EditEngine aEngine(&aPool);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
