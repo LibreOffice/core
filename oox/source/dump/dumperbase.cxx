@@ -504,27 +504,6 @@ void StringHelper::appendAddress( OUStringBuffer& rStr, const Address& rPos )
     appendAddrRow( rStr, rPos.mnRow, true );
 }
 
-void StringHelper::appendRange( OUStringBuffer& rStr, const Range& rRange )
-{
-    appendAddress( rStr, rRange.maFirst );
-    rStr.append( OOX_DUMP_RANGESEP );
-    appendAddress( rStr, rRange.maLast );
-}
-
-void StringHelper::appendAddress( OUStringBuffer& rStr, const TokenAddress& rPos, bool bR1C1 )
-{
-    if( bR1C1 && (rPos.mbRelCol || rPos.mbRelRow) )
-    {
-        appendAddrName( rStr, OOX_DUMP_R1C1ROW, rPos.mnRow, rPos.mbRelRow );
-        appendAddrName( rStr, OOX_DUMP_R1C1COL, rPos.mnCol, rPos.mbRelCol );
-    }
-    else
-    {
-        appendAddrCol( rStr, rPos.mnCol, rPos.mbRelCol );
-        appendAddrRow( rStr, rPos.mnRow, rPos.mbRelRow );
-    }
-}
-
 // encoded text output --------------------------------------------------------
 
 void StringHelper::appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix )
@@ -2693,13 +2672,6 @@ void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
 {
     BinaryInputStreamRef xRecStrm( new SequenceInputStream( *mxRecData ) );
     RecordObjectBase::construct( rParent, rxBaseStrm, rSysFileName, xRecStrm, rRecNames, rSimpleRecs );
-}
-
-void SequenceRecordObjectBase::construct( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxBaseStrm, const String& rRecNames, const String& rSimpleRecs )
-{
-    BinaryInputStreamRef xRecStrm( new SequenceInputStream( *mxRecData ) );
-    RecordObjectBase::construct( rParent, rxBaseStrm, xRecStrm, rRecNames, rSimpleRecs );
 }
 
 bool SequenceRecordObjectBase::implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize )

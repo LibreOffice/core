@@ -231,8 +231,6 @@ public:
     inline BiffType     getBiff() const { return meBiff; }
     /** Returns the text encoding used to import/export byte strings. */
     inline rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
-    /** Sets the text encoding to import/export byte strings. */
-    void                setTextEncoding( rtl_TextEncoding eTextEnc );
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
@@ -502,12 +500,6 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
 }
 
 // BIFF specific --------------------------------------------------------------
-
-void WorkbookGlobals::setTextEncoding( rtl_TextEncoding eTextEnc )
-{
-    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
-        meTextEnc = eTextEnc;
-}
 
 // private --------------------------------------------------------------------
 

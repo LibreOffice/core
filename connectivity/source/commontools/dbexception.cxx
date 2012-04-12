@@ -437,11 +437,9 @@ void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, co
             STR_UNSUPPORTED_FUNCTION,
             "$functionname$", ::rtl::OUString::createFromAscii( _pAsciiFunctionName )
          ) );
-    throw SQLException(
+    throwFunctionNotSupportedException(
         sError,
         _rxContext,
-        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
-        0,
         _pNextException ? *_pNextException : Any()
     );
 }

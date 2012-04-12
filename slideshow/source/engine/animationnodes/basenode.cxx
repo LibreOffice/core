@@ -748,14 +748,6 @@ const char* BaseNode::getDescription() const
     return "BaseNode";
 }
 
-void BaseNode::showTreeFromWithin() const
-{
-    // find root node
-    BaseNodeSharedPtr pCurrNode( mpSelf );
-    while( pCurrNode->mpParent ) pCurrNode = pCurrNode->mpParent;
-
-    pCurrNode->showState();
-}
 #endif
 
 } // namespace internal

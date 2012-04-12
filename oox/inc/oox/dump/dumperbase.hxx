@@ -380,9 +380,6 @@ public:
     static void         appendAddrName( ::rtl::OUStringBuffer& rStr, sal_Unicode cPrefix, sal_Int32 nColRow, bool bRel );
 
     static void         appendAddress( ::rtl::OUStringBuffer& rStr, const Address& rPos );
-    static void         appendRange( ::rtl::OUStringBuffer& rStr, const Range& rRange );
-
-    static void         appendAddress( ::rtl::OUStringBuffer& rStr, const TokenAddress& rPos, bool bR1C1 );
 
     // encoded text output ----------------------------------------------------
 
@@ -1846,11 +1843,6 @@ protected:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
                             const ::rtl::OUString& rSysFileName,
-                            const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
-    void                construct(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxBaseStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
 

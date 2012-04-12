@@ -90,7 +90,6 @@ public:
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
-    sal_Bool        MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy = sal_False );
     Rectangle       GetVisibleArea() const;
 
     using Window::Scroll;

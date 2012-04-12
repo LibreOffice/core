@@ -112,7 +112,6 @@ public:
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
     virtual void showState() const;
     virtual const char* getDescription() const;
-    void showTreeFromWithin() const;
 #endif
 
     const ::boost::shared_ptr< BaseContainerNode >& getParentNode() const
