@@ -83,7 +83,6 @@ void Test::testConstruction()
 {
     EditEngine aEngine(mpItemPool);
 
-    // TODO: This currently causes segfault in vcl.
     rtl::OUString aParaText = "I am Edit Engine.";
     aEngine.SetText(aParaText);
 }
