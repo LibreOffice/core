@@ -127,7 +127,6 @@ void Test::testConstruction()
 {
     TestPool aPool;
 
-    // TODO: fix me
     EditEngine aEngine(&aPool);
 }
 
