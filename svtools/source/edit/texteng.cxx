@@ -78,7 +78,7 @@ SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
 #define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (-) class TextEngine
 // -------------------------------------------------------------------------
 TextEngine::TextEngine()

@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ExtTextEngine
 // -------------------------------------------------------------------------
 ExtTextEngine::ExtTextEngine() : maGroupChars( String::CreateFromAscii( "(){}[]", 6 ) )
@@ -236,7 +236,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
 }
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ExtTextView
 // -------------------------------------------------------------------------
 ExtTextView::ExtTextView( ExtTextEngine* pEng, Window* pWindow )

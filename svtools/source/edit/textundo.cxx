@@ -178,7 +178,7 @@ void TextUndoDelPara::Redo()
     SetSelection( aPaM );
 }
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // TextUndoConnectParas
 // ------------------------------------------------------------------------
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )

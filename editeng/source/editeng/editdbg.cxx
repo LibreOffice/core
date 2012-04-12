@@ -429,7 +429,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     if ( pEE->pImpEditEngine->GetStyleSheetPool() )
     {
         sal_uLong nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
-        fprintf( fp, "\n\n================================================================================" );
+        fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
         fprintf( fp, "\n#Template:   %lu\n", nStyles );

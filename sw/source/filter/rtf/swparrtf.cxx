@@ -4316,7 +4316,7 @@ void SwRTFParser::RestoreState()
 }
 #endif
 
-/**/
+/**/
 
 BookmarkPosition::BookmarkPosition(const SwPaM &rPaM)
     : maMkNode(rPaM.GetMark()->nNode),

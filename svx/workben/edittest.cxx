@@ -306,7 +306,7 @@ void __EXPORT MyView::Resize()
     pEditView->ShowCursor();
 }
 
-// --- MyView::KeyInput() --------------------------------------
+// --- MyView::KeyInput() --------------------------------------
 void __EXPORT MyView::KeyInput( const KeyEvent& rKEvt )
 {
     pEditView->PostKeyEvent( rKEvt );

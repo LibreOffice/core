@@ -1150,7 +1150,6 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
     return *pRTFDefaults;
 }
 
-/**/
 
 SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange )
     : aAttrSet( rPool, pWhichRange )
@@ -1356,7 +1355,6 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
     }
 }
 
-/**/
 
 RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
 {
