@@ -1024,6 +1024,9 @@ namespace cairocanvas
                             nBX = aB.getX();
                             nBY = aB.getY();
 
+                            cairo_matrix_transform_point( &aOrigMatrix, &nAX, &nAY );
+                            cairo_matrix_transform_point( &aOrigMatrix, &nBX, &nBY );
+
                             if( aOperation == Stroke )
                             {
                                 nAX += 0.5;
@@ -1031,8 +1034,7 @@ namespace cairocanvas
                                 nBX += 0.5;
                                 nBY += 0.5;
                             }
-                            cairo_matrix_transform_point( &aOrigMatrix, &nAX, &nAY );
-                            cairo_matrix_transform_point( &aOrigMatrix, &nBX, &nBY );
+
                             cairo_curve_to( pCairo, nAX, nAY, nBX, nBY, nX, nY );
                         }
                         else
