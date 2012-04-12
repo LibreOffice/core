@@ -2438,7 +2438,7 @@ sub set_spellcheckerlanguages
     {
         my $languagelist = "";
         if ( exists($spellcheckhash{$lang}) ) { $languagelist = $spellcheckhash{$lang}; }
-        else { $languagelist = $spellcheckhash{'en-US'}; }  # defaulting to English
+        else { $languagelist = ""; }  # no dictionary unless defined in SPELLCHECKERFILE
 
         my $langlisthash = installer::converter::convert_stringlist_into_hash(\$languagelist, ",");
         foreach my $onelang ( keys %{$langlisthash} ) { $installer::globals::spellcheckerlanguagehash{$onelang} = 1; }
