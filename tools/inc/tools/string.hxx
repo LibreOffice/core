@@ -343,6 +343,16 @@ inline UniString UniString::GetQuotedToken( xub_StrLen nToken, const UniString& 
     return GetQuotedToken( nToken, rQuotedPairs, cTok, nTempPos );
 }
 
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, UniString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        // best effort; potentially loses data due to conversion failures
+        // (stray surrogate halves) and embedded null characters
+}
+
 #endif // _STRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
