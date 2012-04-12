@@ -96,16 +96,15 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize)
 {
-    static const ::rtl::OUString sNone (RTL_CONSTASCII_USTRINGPARAM("None"));
-    static const ::rtl::OUString sCompress (RTL_CONSTASCII_USTRINGPARAM("Compress"));
-    static const ::rtl::OUString sErase (RTL_CONSTASCII_USTRINGPARAM("Erase"));
-    static const ::rtl::OUString sResolution (RTL_CONSTASCII_USTRINGPARAM("ResolutionReduction"));
-    static const ::rtl::OUString sPNGCompression (RTL_CONSTASCII_USTRINGPARAM("PNGCompression"));
+    static const ::rtl::OUString sNone ("None");
+    static const ::rtl::OUString sCompress ("Compress");
+    static const ::rtl::OUString sErase ("Erase");
+    static const ::rtl::OUString sResolution ("ResolutionReduction");
+    static const ::rtl::OUString sPNGCompression ("PNGCompression");
 
     ::boost::shared_ptr<BitmapCompressor> pCompressor;
     ::rtl::OUString sCompressionPolicy(sPNGCompression);
-    Any aCompressionPolicy (CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CompressionPolicy"))));
+    Any aCompressionPolicy (CacheConfiguration::Instance()->GetValue("CompressionPolicy"));
     if (aCompressionPolicy.has<rtl::OUString>())
         aCompressionPolicy >>= sCompressionPolicy;
     if (sCompressionPolicy == sNone)
@@ -119,8 +118,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     ::std::auto_ptr<CacheCompactor> pCompactor (NULL);
     ::rtl::OUString sCompactionPolicy(sCompress);
-    Any aCompactionPolicy (CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CompactionPolicy"))));
+    Any aCompactionPolicy (CacheConfiguration::Instance()->GetValue("CompactionPolicy"));
     if (aCompactionPolicy.has<rtl::OUString>())
         aCompactionPolicy >>= sCompactionPolicy;
     if (sCompactionPolicy == sNone)

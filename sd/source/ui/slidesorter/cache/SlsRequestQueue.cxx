@@ -202,9 +202,7 @@ CacheKey RequestQueue::GetFront (void)
     ::osl::MutexGuard aGuard (maMutex);
 
     if (mpRequestQueue->empty())
-        throw ::com::sun::star::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "RequestQueue::GetFront(): queue is empty")),
+        throw ::com::sun::star::uno::RuntimeException("RequestQueue::GetFront(): queue is empty",
             NULL);
 
     return mpRequestQueue->begin()->maKey;
@@ -218,9 +216,7 @@ RequestPriorityClass RequestQueue::GetFrontPriorityClass (void)
     ::osl::MutexGuard aGuard (maMutex);
 
     if (mpRequestQueue->empty())
-        throw ::com::sun::star::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "RequestQueue::GetFrontPriorityClass(): queue is empty")),
+        throw ::com::sun::star::uno::RuntimeException("RequestQueue::GetFrontPriorityClass(): queue is empty",
             NULL);
 
     return mpRequestQueue->begin()->meClass;

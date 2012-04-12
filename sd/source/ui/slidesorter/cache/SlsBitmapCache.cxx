@@ -144,8 +144,7 @@ BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
         mnMaximalNormalCacheSize = nMaximalNormalCacheSize;
     else
     {
-        Any aCacheSize (CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CacheSize"))));
+        Any aCacheSize (CacheConfiguration::Instance()->GetValue("CacheSize"));
         if (aCacheSize.has<sal_Int32>())
             aCacheSize >>= mnMaximalNormalCacheSize;
     }

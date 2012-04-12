@@ -62,7 +62,6 @@
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"
 
-#define C2U(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -87,12 +86,12 @@ static const OUString* getPropertyNames()
     static const OUString gPropNames[ CB_BANDED_COLUMNS-CB_HEADER_ROW+1 ] =
     {
 
-        C2U( "UseFirstRowStyle" ),
-        C2U( "UseLastRowStyle" ),
-        C2U( "UseBandingRowStyle" ),
-        C2U( "UseFirstColumnStyle" ),
-        C2U( "UseLastColumnStyle" ),
-        C2U( "UseBandingColumnStyle" )
+        "UseFirstRowStyle" ,
+        "UseLastRowStyle" ,
+        "UseBandingRowStyle" ,
+        "UseFirstColumnStyle" ,
+        "UseLastColumnStyle" ,
+        "UseBandingColumnStyle"
     };
     return &gPropNames[0];
 }
@@ -101,7 +100,7 @@ static const OUString* getPropertyNames()
 TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool bModal )
 : Control( pParent, SdResId(DLG_TABLEDESIGNPANE) )
 , mrBase( rBase )
-, msTableTemplate( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) )
+, msTableTemplate( "TableTemplate" )
 , mbModal( bModal )
 , mbStyleSelected( false )
 , mbOptionsChanged( false )
@@ -146,7 +145,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
         Reference< XController > xController( mrBase.GetController(), UNO_QUERY_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM("table" ) );
+        const OUString sFamilyName( "table" );
         mxTableFamily = Reference< XIndexAccess >( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 
     }
@@ -494,7 +493,7 @@ void TableDesignPane::updateControls()
     sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
     {
-        Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), UNO_QUERY );
+        Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( OUString( "TableTemplate" ) ), UNO_QUERY );
         if( xNamed.is() )
         {
             const OUString sStyleName( xNamed->getName() );
@@ -870,7 +869,7 @@ void TableDesignPane::FillDesignPreviewControl()
             Reference< XPropertySet > xPageSet( mxView->getCurrentPage(), UNO_QUERY );
             if( xPageSet.is() )
             {
-                const OUString sIsBackgroundDark( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) );
+                const OUString sIsBackgroundDark( "IsBackgroundDark" );
                 xPageSet->getPropertyValue(sIsBackgroundDark) >>= bIsPageDark;
             }
         }

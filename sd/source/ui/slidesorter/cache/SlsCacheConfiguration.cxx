@@ -82,14 +82,9 @@ Timer CacheConfiguration::maReleaseTimer;
 CacheConfiguration::CacheConfiguration (void)
 {
     // Get the cache size from configuration.
-    const ::rtl::OUString sConfigurationProviderServiceName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationProvider"));
-    const ::rtl::OUString sPathToImpressConfigurationRoot(
-        RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/"));
-    const ::rtl::OUString sPathToNode(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "MultiPaneGUI/SlideSorter/PreviewCache"));
+    const ::rtl::OUString sConfigurationProviderServiceName("com.sun.star.configuration.ConfigurationProvider");
+    const ::rtl::OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
+    const ::rtl::OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
 
     try
     {
@@ -104,25 +99,24 @@ CacheConfiguration::CacheConfiguration (void)
         // Obtain access to Impress configuration.
         Sequence<Any> aCreationArguments(3);
         aCreationArguments[0] = makeAny(beans::PropertyValue(
-            ::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            "nodepath",
             0,
             makeAny(sPathToImpressConfigurationRoot),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[1] = makeAny(beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+            "depth",
             0,
             makeAny((sal_Int32)-1),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[2] = makeAny(beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
+            "lazywrite",
             0,
             makeAny(true),
             beans::PropertyState_DIRECT_VALUE));
-        ::rtl::OUString sAccessService (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationAccess")));
+
         Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(
-            sAccessService, aCreationArguments));
+            "com.sun.star.configuration.ConfigurationAccess",
+            aCreationArguments));
         if ( ! xRoot.is())
             return;
         Reference<container::XHierarchicalNameAccess> xHierarchy (xRoot, UNO_QUERY);

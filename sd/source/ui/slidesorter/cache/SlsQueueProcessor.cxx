@@ -57,18 +57,15 @@ QueueProcessor::QueueProcessor (
 {
     // Look into the configuration if there for overriding values.
     ::com::sun::star::uno::Any aTimeBetweenReqeusts;
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenHighPriorityRequests")));
+    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenHighPriorityRequests");
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenHighPriorityRequests;
 
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenLowPriorityRequests")));
+    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenLowPriorityRequests");
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenLowPriorityRequests;
 
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenRequestsDuringShow")));
+    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenRequestsDuringShow");
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenRequestsWhenNotIdle;
 
