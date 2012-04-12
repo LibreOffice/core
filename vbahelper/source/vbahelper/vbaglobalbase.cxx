@@ -29,8 +29,10 @@
 #include <sal/macros.h>
 
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -47,21 +49,42 @@ const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& s
 {
     // overwrite context with custom one ( that contains the application )
     // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least thats what the code appears like it wants to do )
-    uno::Any aSrvMgr;
+    uno::Reference< uno::XInterface > aSrvMgr;
     if ( xContext.is() && xContext->getServiceManager().is() )
     {
-        aSrvMgr = uno::makeAny( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManagerWrapper") ), xContext ) );
+        aSrvMgr = xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManagerWrapper") ), xContext );
     }
 
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
         ::cppu::ContextEntry_Init( msApplication, uno::Any() ),
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
-        ::cppu::ContextEntry_Init( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.lang.theServiceManager" ) ), aSrvMgr )
+        ::cppu::ContextEntry_Init( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.lang.theServiceManager" ) ), uno::makeAny( aSrvMgr ) )
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
     mxContext = ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), NULL );
+    if ( aSrvMgr.is() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet >(
+                aSrvMgr, uno::UNO_QUERY_THROW )->
+                setPropertyValue( "DefaultContext", uno::makeAny( mxContext ) );
+        }
+        catch ( uno::RuntimeException & )
+        {
+            throw;
+        }
+        catch ( uno::Exception & )
+        {
+            uno::Any e(cppu::getCaughtException());
+            throw lang::WrappedTargetRuntimeException(
+                ("VbaGlobalsBase ctor, setting OServiceManagerWrapper"
+                 " DefaultContext failed"),
+                uno::Reference< uno::XInterface >(), e);
+        }
+    }
 }
 
 VbaGlobalsBase::~VbaGlobalsBase()
