@@ -80,10 +80,10 @@ private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 };
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=31271 for motivation
+//See https://bugs.freedesktop.org/show_bug.cgi?id=31271
 void TestBreakIterator::testLineBreaking()
 {
-    ::rtl::OUString aTest1(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
+    ::rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
 
     i18n::LineBreakHyphenationOptions aHyphOptions;
     i18n::LineBreakUserOptions aUserOptions;
@@ -94,18 +94,19 @@ void TestBreakIterator::testLineBreaking()
 
     {
         //Here we want the line break to leave text here) on the next line
-        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest1, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
+        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
         CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 6);
     }
 
     {
         //Here we want the line break to leave "here)" on the next line
-        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest1, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
+        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
         CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 11);
     }
 }
 
-//See http://qa.openoffice.org/issues/show_bug.cgi?id=111152 for motivation
+//See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40292
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -114,44 +115,88 @@ void TestBreakIterator::testGraphemeIteration()
 
     {
         const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
-        ::rtl::OUString aTest1(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
+        ::rtl::OUString aTest(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
-        nPos = m_xBreak->nextCharacters(aTest1, 0, aLocale,
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(BA_HALANT_LA));
-        nPos = m_xBreak->previousCharacters(aTest1, SAL_N_ELEMENTS(BA_HALANT_LA), aLocale,
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(BA_HALANT_LA), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 
     {
         const sal_Unicode HA_HALANT_NA_VOWELSIGNI[] = { 0x09B9, 0x09CD, 0x09A3, 0x09BF };
-        ::rtl::OUString aTest1(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
+        ::rtl::OUString aTest(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
-        nPos = m_xBreak->nextCharacters(aTest1, 0, aLocale,
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
-        nPos = m_xBreak->previousCharacters(aTest1, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI), aLocale,
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 
     {
         const sal_Unicode TA_HALANT_MA_HALANT_YA  [] = { 0x09A4, 0x09CD, 0x09AE, 0x09CD, 0x09AF };
-        ::rtl::OUString aTest1(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
+        ::rtl::OUString aTest(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
-        nPos = m_xBreak->nextCharacters(aTest1, 0, aLocale,
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
-        nPos = m_xBreak->previousCharacters(aTest1, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA), aLocale,
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
+    }
+
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ta"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+
+    {
+        const sal_Unicode KA_VIRAMA_SSA[] = { 0x0B95, 0x0BCD, 0x0BB7 };
+        ::rtl::OUString aTest(KA_VIRAMA_SSA, SAL_N_ELEMENTS(KA_VIRAMA_SSA));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(KA_VIRAMA_SSA));
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VIRAMA_SSA), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
+    }
+
+    {
+        const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI[] =
+            { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
+        ::rtl::OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI,
+            SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos=0;
+
+        for (sal_Int32 i = 0; i < 4; ++i)
+        {
+            sal_Int32 nOldPos = nPos;
+            nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale,
+                i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+            CPPUNIT_ASSERT_MESSAGE("Should skip 2 units", nPos == nOldPos+2);
+        }
+
+        for (sal_Int32 i = 0; i < 4; ++i)
+        {
+            sal_Int32 nOldPos = nPos;
+            nPos = m_xBreak->previousCharacters(aTest, nPos, aLocale,
+                i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+            CPPUNIT_ASSERT_MESSAGE("Should skip 2 units", nPos == nOldPos-2);
+        }
     }
 
     {

@@ -32,8 +32,9 @@ $OriyaLetter = [\u0B05-\u0B39 \u0B5C-\u0B61 \u0B71];
 $OriyaSignVirama = \u0B4D;
 $GurmukhiLetter = [\u0A05-\u0A39 \u0A59-\u0A5E];
 $GurmukhiSignVirama = \u0A4D;
-$TamilLetter = [\u0B85-\u0BB9];
+$TamilKa = \u0B95;
 $TamilSignVirama = \u0BCD;
+$TamilSsa = \u0BB7;
 $TeluguLetter = [\u0C05-\u0C39 \u0C58-\u0C61];
 $TeluguSignVirama = \u0C4D;
 
@@ -62,7 +63,7 @@ $KannadaLetter ($KannadaSignVirama $KannadaLetter?)+;
 $MalayalamLetter ($MalayalamSignVirama $MalayalamLetter?)+;
 $OriyaLetter ($OriyaSignVirama $OriyaLetter?)+;
 $GurmukhiLetter ($GurmukhiSignVirama $GurmukhiLetter?)+;
-$TamilLetter ($TamilSignVirama $TamilLetter?)+;
+$TamilKa $TamilSignVirama $TamilSsa;
 $TeluguLetter ($TeluguSignVirama $TeluguLetter?)+;
 
 $L ($L | $V | $LV | $LVT);
@@ -86,7 +87,7 @@ $LF $CR;
 ($MalayalamLetter? $MalayalamSignVirama)+ $MalayalamLetter;
 ($OriyaLetter? $OriyaSignVirama)+ $OriyaLetter;
 ($GurmukhiLetter? $GurmukhiSignVirama)+ $GurmukhiLetter;
-($TamilLetter? $TamilSignVirama)+ $TamilLetter;
+$TamilSsa $TamilSignVirama $TamilKa;
 ($TeluguLetter? $TeluguSignVirama)+ $TeluguLetter;
 ($L | $V | $LV | $LVT) $L;
 ($V | $T) ($LV | $V);
