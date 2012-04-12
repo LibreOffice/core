@@ -634,7 +634,13 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                     break;
                     case DQM_CONCAT :
                         if ( p0+1 < p )
-                            rString.Append( p0, sal::static_int_cast<xub_StrLen>( (p-1) - p0 ) );  // first part
+                        {
+                            // first part
+                            if (!lcl_appendLineData( rString, p0, p-1))
+                            {
+                                /* TODO: warning at UI, data truncated */
+                            }
+                        }
                         p0 = ++p;       // text of next part starts here
                     break;
                     case DQM_SEPARATE :
