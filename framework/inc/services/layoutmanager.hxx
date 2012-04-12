@@ -67,7 +67,6 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/frame/XInplaceLayout.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
@@ -79,7 +78,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <tools/wintypes.hxx>
@@ -96,12 +95,11 @@ namespace framework
     {
         class InfoHelperBuilder;
     }
-    typedef ::cppu::WeakImplHelper8 <   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::frame::XLayoutManager
                                     ,   ::com::sun::star::awt::XWindowListener
                                     ,   ::com::sun::star::frame::XFrameActionListener
                                     ,   ::com::sun::star::ui::XUIConfigurationListener
-                                    ,   ::com::sun::star::frame::XInplaceLayout
                                     ,   ::com::sun::star::frame::XMenuBarMergingAcceptor
                                     ,   ::com::sun::star::frame::XLayoutManagerEventBroadcaster
                                     >   LayoutManager_Base;
@@ -159,12 +157,6 @@ namespace framework
             virtual void SAL_CALL doLayout(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL isVisible() throw (::com::sun::star::uno::RuntimeException);
-
-            //---------------------------------------------------------------------------------------------------------
-            //  XInplaceLayout
-            //---------------------------------------------------------------------------------------------------------
-            virtual void SAL_CALL setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL resetInplaceMenuBar(  ) throw (::com::sun::star::uno::RuntimeException);
 
             //---------------------------------------------------------------------------------------------------------
             // XMenuBarMergingAcceptor
