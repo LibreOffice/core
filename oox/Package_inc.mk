@@ -36,7 +36,6 @@ $(eval $(call gb_Package_add_file,oox_inc,inc/oox/core/binarycodec.hxx,oox/core/
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/core/contexthandler.hxx,oox/core/contexthandler.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/core/contexthandler2.hxx,oox/core/contexthandler2.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/core/fragmenthandler.hxx,oox/core/fragmenthandler.hxx))
-$(eval $(call gb_Package_add_file,oox_inc,inc/oox/core/binaryfilterbase.hxx,oox/core/binaryfilterbase.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/dllapi.h,oox/dllapi.h))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/drawingml/chart/chartconverter.hxx,oox/drawingml/chart/chartconverter.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/drawingml/table/tablestylelist.hxx,oox/drawingml/table/tablestylelist.hxx))

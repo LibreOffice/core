@@ -29,7 +29,6 @@
 #ifndef OOX_XLS_EXCELFILTER_HXX
 #define OOX_XLS_EXCELFILTER_HXX
 
-#include "oox/core/binaryfilterbase.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
 namespace oox {

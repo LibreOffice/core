@@ -91,7 +91,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-using ::oox::core::BinaryFilterBase;
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
@@ -225,8 +224,6 @@ public:
 
     // BIFF2-BIFF8 specific ---------------------------------------------------
 
-    /** Returns the base BIFF filter object. */
-    inline BinaryFilterBase& getBiffFilter() const { return *mpBiffFilter; }
     /** Returns the BIFF type in binary filter. */
     inline BiffType     getBiff() const { return meBiff; }
     /** Returns the text encoding used to import/export byte strings. */
@@ -301,7 +298,6 @@ private:
     XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
 
     // BIFF2-BIFF8 specific
-    BinaryFilterBase*   mpBiffFilter;           /// Base BIFF2-BIFF8 filter object.
     BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
@@ -316,7 +312,6 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrExcelBase( rFilter ),
     meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
-    mpBiffFilter( 0 ),
     meBiff( BIFF_UNKNOWN ),
     mpDoc( NULL )
 {

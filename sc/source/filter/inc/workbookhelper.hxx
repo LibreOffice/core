@@ -57,7 +57,6 @@ namespace oox {
 }
 
 namespace oox { namespace core {
-    class BinaryFilterBase;
     class FilterBase;
     class FragmentHandler;
     class XmlFilterBase;

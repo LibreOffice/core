@@ -84,7 +84,6 @@ $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/binarycodec \
-    oox/source/core/binaryfilterbase \
     oox/source/core/contexthandler2 \
     oox/source/core/contexthandler \
     oox/source/core/fastparser \
