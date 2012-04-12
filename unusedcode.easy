@@ -318,7 +318,6 @@ XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
-XclPCField::GetBaseFieldIndex() const
 _CpyTabFrms::Insert(_CpyTabFrm const&, unsigned short&)
 _CpyTabFrms::Insert(_CpyTabFrm const*, unsigned short)
 _CpyTabFrms::Insert(_CpyTabFrms const*, unsigned short, unsigned short)
@@ -704,7 +703,6 @@ cairocanvas::SpriteDeviceHelper::getSurface()
 cairocanvas::TextLayout::draw(_cairo*)
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
-canvas::tools::ElapsedTime::getTimeBase() const
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
@@ -828,7 +826,6 @@ sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 sd::slidesorter::controller::SelectionFunction::EventDescriptor::EventDescriptor(KeyEvent const&, sd::slidesorter::SlideSorter&)
-sd::slidesorter::model::VisualState::SetVisualStateBlend(double)
 sd::slidesorter::view::Button::IsDown() const
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
 sdext::presenter::PresenterAnimation::PresenterAnimation(unsigned long, unsigned long, unsigned long)

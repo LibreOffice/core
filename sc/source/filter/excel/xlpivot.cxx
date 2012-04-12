@@ -323,11 +323,6 @@ bool XclPCField::IsGroupChildField() const
     return (meFieldType == EXC_PCFIELD_STDGROUP) || (meFieldType == EXC_PCFIELD_DATECHILD);
 }
 
-sal_uInt16 XclPCField::GetBaseFieldIndex() const
-{
-    return IsGroupChildField() ? maFieldInfo.mnGroupBase : mnFieldIdx;
-}
-
 bool XclPCField::HasOrigItems() const
 {
     return IsSupportedField() && ((maFieldInfo.mnOrigItems > 0) || HasPostponedItems());

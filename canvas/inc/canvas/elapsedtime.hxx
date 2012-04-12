@@ -68,10 +68,6 @@ namespace canvas
              */
             ElapsedTime( ::boost::shared_ptr<ElapsedTime> const & pTimeBase );
 
-            /** Gets this timer's base timer.
-             */
-            ::boost::shared_ptr<ElapsedTime> const & getTimeBase() const;
-
             /** Reset the time
 
                 The instance of the reset() call starts the time

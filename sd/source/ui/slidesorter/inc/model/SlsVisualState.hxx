@@ -55,7 +55,6 @@ public:
     ~VisualState (void);
 
     void SetVisualState (const State eState);
-    void SetVisualStateBlend (const double nBlend);
 
     void UpdateVisualState (const PageDescriptor& rDescriptor);
 
@@ -76,7 +75,6 @@ public:
 private:
     State meCurrentVisualState;
     State meOldVisualState;
-    double mnVisualStateBlend;
     sal_Int32 mnStateAnimationId;
     bool mbOldMouseOverState;
     bool mbCurrentMouseOverState;

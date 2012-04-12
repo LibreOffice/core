@@ -140,11 +140,6 @@ ElapsedTime::ElapsedTime(
 {
 }
 
-boost::shared_ptr<ElapsedTime> const & ElapsedTime::getTimeBase() const
-{
-    return m_pTimeBase;
-}
-
 void ElapsedTime::reset()
 {
     m_fLastQueriedTime = 0.0;

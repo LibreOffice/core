@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "model/SlsVisualState.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "controller/SlsAnimator.hxx"
@@ -37,7 +36,6 @@ VisualState::VisualState (const sal_Int32 nPageId)
     : mnPageId(nPageId),
       meCurrentVisualState(VS_None),
       meOldVisualState(VS_None),
-      mnVisualStateBlend(1.0),
       mnStateAnimationId(controller::Animator::NotAnAnimationId),
       maLocationOffset(0,0),
       mnLocationAnimationId(controller::Animator::NotAnAnimationId),
@@ -46,9 +44,6 @@ VisualState::VisualState (const sal_Int32 nPageId)
       mnButtonAlphaAnimationId(controller::Animator::NotAnAnimationId)
 {
 }
-
-
-
 
 VisualState::~VisualState (void)
 {
@@ -60,25 +55,11 @@ VisualState::~VisualState (void)
     }
 }
 
-
-
-
 void VisualState::SetVisualState (const State eState)
 {
     meOldVisualState = meCurrentVisualState;
     meCurrentVisualState = eState;
-    mnVisualStateBlend = 1.0;
 }
-
-
-
-
-void VisualState::SetVisualStateBlend (const double nBlend)
-{
-    mnVisualStateBlend = nBlend;
-}
-
-
 
 
 void VisualState::UpdateVisualState (const PageDescriptor& rDescriptor)
@@ -98,8 +79,6 @@ void VisualState::UpdateVisualState (const PageDescriptor& rDescriptor)
 }
 
 
-
-
 void VisualState::SetMouseOverState (const bool bIsMouseOver)
 {
     mbOldMouseOverState = mbCurrentMouseOverState;
@@ -107,14 +86,10 @@ void VisualState::SetMouseOverState (const bool bIsMouseOver)
 }
 
 
-
-
 Point VisualState::GetLocationOffset (void) const
 {
     return maLocationOffset;
 }
-
-
 
 
 bool VisualState::SetLocationOffset (const Point& rOffset)
@@ -129,14 +104,10 @@ bool VisualState::SetLocationOffset (const Point& rOffset)
 }
 
 
-
-
 double VisualState::GetButtonAlpha (void) const
 {
     return mnButtonAlpha;
 }
-
-
 
 
 void VisualState::SetButtonAlpha (const double nAlpha)
@@ -145,14 +116,10 @@ void VisualState::SetButtonAlpha (const double nAlpha)
 }
 
 
-
-
 double VisualState::GetButtonBarAlpha (void) const
 {
     return mnButtonBarAlpha;
 }
-
-
 
 
 void VisualState::SetButtonBarAlpha (const double nAlpha)
@@ -161,14 +128,10 @@ void VisualState::SetButtonBarAlpha (const double nAlpha)
 }
 
 
-
-
 sal_Int32 VisualState::GetButtonAlphaAnimationId (void) const
 {
     return mnButtonAlphaAnimationId;
 }
-
-
 
 
 void VisualState::SetButtonAlphaAnimationId (const sal_Int32 nAnimationId)

@@ -509,8 +509,6 @@ public:
     bool                IsGroupBaseField() const;
     /** Returns true, if this field is a child field in a grouping (it has a base field). */
     bool                IsGroupChildField() const;
-    /** Returns the index of the base field, if exists, otherwise the own index. */
-    sal_uInt16          GetBaseFieldIndex() const;
 
     /** Returns true, if the field is based on a column in the source data area. */
     bool                HasOrigItems() const;
