@@ -273,6 +273,8 @@ void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         initBackground();
         Invalidate();
+        // fdo#34392: Resize buttons to match the new text size.
+        Resize();
     }
 }
 
@@ -796,6 +798,23 @@ void BackingWindow::Resize()
     }
 
     long nYPos = maControlRect.Top() + mnBtnTop;
+
+    // Recompute column widths
+    mnTextColumnWidth[0] = maWriterButton.GetTextWidth( maWriterButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[0] < maCalcButton.GetTextWidth( maCalcButton.GetText() ) + maButtonImageSize.Width() + 8 )
+        mnTextColumnWidth[0] = maCalcButton.GetTextWidth( maCalcButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[0] < maImpressButton.GetTextWidth( maImpressButton.GetText() ) + maButtonImageSize.Width() + 8 )
+        mnTextColumnWidth[0] = maImpressButton.GetTextWidth( maImpressButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[0] < maOpenButton.GetTextWidth( maOpenButton.GetText() ) + maButtonImageSize.Width() + 26 )
+        mnTextColumnWidth[0] = maOpenButton.GetTextWidth( maOpenButton.GetText() ) + maButtonImageSize.Width() + 26;
+
+    mnTextColumnWidth[1] = maDrawButton.GetTextWidth( maDrawButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[1] < maDBButton.GetTextWidth( maDBButton.GetText() ) + maButtonImageSize.Width() + 8 )
+        mnTextColumnWidth[1] = maDBButton.GetTextWidth( maDBButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[1] < maMathButton.GetTextWidth( maMathButton.GetText() ) + maButtonImageSize.Width() + 8 )
+        mnTextColumnWidth[1] = maMathButton.GetTextWidth( maMathButton.GetText() ) + maButtonImageSize.Width() + 8;
+    if( mnTextColumnWidth[1] < maTemplateButton.GetTextWidth( maTemplateButton.GetText() ) + maButtonImageSize.Width() + 8 )
+        mnTextColumnWidth[1] = maTemplateButton.GetTextWidth( maTemplateButton.GetText() ) + maButtonImageSize.Width() + 8;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
