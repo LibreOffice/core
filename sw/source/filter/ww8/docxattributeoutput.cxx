@@ -2104,7 +2104,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     }
     // picture description
     ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
-    attrList->add( XML_id, OString::valueOf( m_anchorId++ ).getStr());
+    attrList->add( XML_id, OString::valueOf( sal_Int32( m_anchorId++ )).getStr());
     attrList->add( XML_name, "Picture" );
     attrList->add( XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
