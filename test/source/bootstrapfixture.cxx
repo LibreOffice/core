@@ -42,7 +42,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <editeng/eerdll.hxx>
 
 using namespace ::com::sun::star;
 
@@ -108,7 +107,6 @@ void test::BootstrapFixture::setUp()
 void test::BootstrapFixture::tearDown()
 {
     ucbhelper::ContentBroker::deinitialize();
-    EditDLL::Release();
     test::BootstrapFixtureBase::tearDown();
 }
 

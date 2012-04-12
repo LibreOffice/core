@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,test,\
     comphelper \
     cppu \
     cppuhelper \
-    editeng \
 	i18nisolang1 \
     sal \
 	tl \

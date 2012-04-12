@@ -72,27 +72,18 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
-
-#include <boost/scoped_ptr.hpp>
+#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star;
 
-namespace {
-
-boost::scoped_ptr<EditDLL> pDLL;
-
+namespace
+{
+    class theEditDLL : public rtl::Static<EditDLL, theEditDLL> {};
 }
 
 EditDLL& EditDLL::Get()
 {
-    if (!pDLL)
-        pDLL.reset(new EditDLL);
-    return *pDLL;
-}
-
-void EditDLL::Release()
-{
-    pDLL.reset();
+    return theEditDLL::get();
 }
 
 GlobalEditData::GlobalEditData()

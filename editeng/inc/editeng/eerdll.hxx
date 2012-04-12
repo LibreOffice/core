@@ -53,7 +53,6 @@ public:
     ResMgr*         GetResMgr() const       { return pResMgr; }
     GlobalEditData* GetGlobalData() const   { return pGlobalData; }
     static EditDLL& Get();
-    EDITENG_DLLPUBLIC static void Release();
 };
 
 #define EE_DLL() EditDLL::Get()
