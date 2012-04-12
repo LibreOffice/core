@@ -182,13 +182,13 @@ struct ShapeModel
     typedef ::std::auto_ptr< ClientData >                   ClientDataPtr;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    ::rtl::OUString     maType;             /// Shape template with default properties.
-    PointVector         maPoints;           /// Points for the polyline shape.
-    TextBoxPtr          mxTextBox;          /// Text contents and properties.
-    ClientDataPtr       mxClientData;       /// Excel specific client data.
-    ::rtl::OUString     maLegacyDiagramPath;/// Legacy Diagram Fragment Path
-    ::rtl::OUString     maFrom;             /// Start point for line shape.
-    ::rtl::OUString     maTo;               /// End point for line shape.
+    ::rtl::OUString     maType;             ///< Shape template with default properties.
+    PointVector         maPoints;           ///< Points for the polyline shape.
+    TextBoxPtr          mxTextBox;          ///< Text contents and properties.
+    ClientDataPtr       mxClientData;       ///< Excel specific client data.
+    ::rtl::OUString     maLegacyDiagramPath;///< Legacy Diagram Fragment Path
+    ::rtl::OUString     maFrom;             ///< Start point for line shape.
+    ::rtl::OUString     maTo;               ///< End point for line shape.
 
     explicit            ShapeModel();
                         ~ShapeModel();
