@@ -51,19 +51,19 @@ protected:
     SwLineLayout *pPrev;
     SwTwips nFrameStart;
     SwTwips nY;
-    SwTwips nRegStart;          // Anfangsposition (Y) des Registers
-    xub_StrLen nStart;          // Start im Textstring, Ende = pCurr->GetLen()
-    KSHORT nRegDiff;            // Zeilenabstand des Registers
-    MSHORT nLineNr;             // Zeilennummer
+    SwTwips nRegStart;          // The register's start position (Y)
+    xub_StrLen nStart;          // Start in the text string, end = pCurr->GetLen()
+    KSHORT nRegDiff;            // Register's line distance
+    MSHORT nLineNr;             // Line number
     sal_Bool bPrev          : 1;
-    sal_Bool bRegisterOn    : 1;    // Registerhaltigkeit
-    sal_Bool bOneBlock      : 1;    // Blocksatz: Einzelwoerter austreiben
-    sal_Bool bLastBlock     : 1;    // Blocksatz: Auch die letzte Zeile
-    sal_Bool bLastCenter    : 1;    // Blocksatz: Letzte Zeile zentrieren
+    sal_Bool bRegisterOn    : 1;    // Keep in register
+    sal_Bool bOneBlock      : 1;    // Justified text: Dispose single words
+    sal_Bool bLastBlock     : 1;    // Justified text: Also the last line
+    sal_Bool bLastCenter    : 1;    // Justified text: Center last line
 
     SwLineLayout *_GetPrev();
 
-    // Zuruecksetzen in die erste Zeile.
+    // Reset in the first line
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
     inline SwTxtIter(SwTxtNode* pTxtNode)
@@ -76,7 +76,7 @@ protected:
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
-    inline const SwLineLayout *GetCurr() const { return pCurr; } // niemals 0!
+    inline const SwLineLayout *GetCurr() const { return pCurr; } // NEVER 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
     inline xub_StrLen GetLength() const { return pCurr->GetLen(); }
@@ -97,7 +97,7 @@ public:
     const SwLineLayout *Next();
     const SwLineLayout *Prev();
 
-    // Ueberspringt die Dummyzeilen der FlyFrms
+    // Skips the FlyFrms dummy line
     const SwLineLayout *NextLine();
     const SwLineLayout *PrevLine();
     const SwLineLayout *GetNextLine() const;
@@ -106,18 +106,18 @@ public:
     void CharToLine( const xub_StrLen );
     const SwLineLayout *TwipsToLine(const SwTwips);
 
-    // schneidet ab pCurr alle ab.
+    // Truncates all after pCurr
     void TruncLines( sal_Bool bNoteFollow = sal_False );
 
     inline KSHORT GetLineHeight() const { return pCurr->GetRealHeight(); }
     void CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const;
 
-    // 5298, viel Aerger durch die Abfrage auf pCurr == pPara
+    // Lots of trouble for querying pCurr == pPara
     inline sal_Bool IsFirstTxtLine() const
     { return nStart == GetInfo().GetTxtStart() &&
         !( pCurr->IsDummy() && GetNextLine() ); }
 
-    // Als Ersatz fuer das alte IsFirstLine()
+    // Replacement for the old IsFirstLine()
     inline sal_Bool IsParaLine() const
         { return pCurr == pInf->GetParaPortion(); }
 
@@ -130,7 +130,7 @@ public:
     inline SwTxtFrm *GetTxtFrm() { return pFrm; }
     inline const SwTxtFrm *GetTxtFrm() const { return pFrm; }
 
-    // zaehlt aufeinanderfolgende Trennungen, um MaxHyphens einzuhalten
+    // Counts consecutive hyphens in order to be within the boundary given by MaxHyphens
     void CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const;
 };
 
@@ -153,9 +153,9 @@ private:
           SwTwips mnTabLeft;
 
 protected:
-    // fuer FormatQuoVadis
+    // For FormatQuoVadis
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
-    // fuer CalcFlyAdjust
+    // For CalcFlyAdjust
     inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
 
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
@@ -195,8 +195,8 @@ public:
     inline void SetDropDescent( const KSHORT nNew ) { nDropDescent = nNew; }
     void DropInit();
 
-    // liefert TxtPos fuer Start und Ende der aktuellen Zeile ohne whitespaces
-    // In frminf.cxx implementiert.
+    // Returns the TxtPos for start and end of the current line without whitespace
+    // Implemented in frminf.cxx
     xub_StrLen GetTxtStart() const;
     xub_StrLen GetTxtEnd() const;
 
@@ -214,22 +214,22 @@ public:
 
 class SwTxtAdjuster : public SwTxtMargin
 {
-    // Gleicht die Portions aus, wenn Adjustment und FlyFrms vorliegen.
+    // Adjusts the portion, if we have adjustment and FlyFrms
     void CalcFlyAdjust( SwLineLayout *pCurr );
 
-    // ruft SplitGlues und CalcBlockAdjust
+    // Calls SplitGlues and CalcBlockAdjust
     void FormatBlock( );
 
-    // Erstellt bei kurzen Zeilen die Glue-Kette.
+    // Creates the glue chain for short lines
     SwMarginPortion* CalcRightMargin( SwLineLayout *pCurr, SwTwips nReal = 0 );
 
-    // Berechnung des Adjustments (FlyPortions)
+    // Calculate the adjustment (FlyPortions)
     SwFlyPortion *CalcFlyPortion( const long nRealWidth,
                                   const SwRect &rCurrRect );
 
 protected:
     inline SwTxtAdjuster(SwTxtNode* pTxtNode) : SwTxtMargin(pTxtNode) { }
-    // spannt beim Blocksatz die Glues auf.
+    // Creates the Glues for adjusted paragraphs
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
@@ -237,17 +237,17 @@ public:
     inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtMargin(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
 
-    // wird von SwTxtFormatter wegen UpdatePos ueberladen
+    // Is overloaded by SwTxtFormatter due to UpdatePos
     void CalcAdjLine( SwLineLayout *pCurr );
 
-    // sorgt fuer das nachtraegliche adjustieren
+    // For adjusting afterwards
     inline void GetAdjusted() const
     {
         if( pCurr->IsFormatAdj() )
             ((SwTxtAdjuster*)this)->CalcAdjLine( pCurr );
     }
 
-    // DropCaps-Extrawurst
+    // Special treatment for DropCaps
     void CalcDropAdjust();
     void CalcDropRepaint();
 };
@@ -262,7 +262,7 @@ class SwTxtCursor : public SwTxtAdjuster
     // and to restore them
     friend class SwTxtCursorSave;
 
-    // 1170: Mehrdeutigkeiten
+    // Ambiguities
     static sal_Bool bRightMargin;
     void _GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* );
 protected:
@@ -277,7 +277,7 @@ public:
         const long nMax = 0 );
     xub_StrLen GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 const MSHORT nChgNode, SwCrsrMoveState* = 0 ) const;
-    // 1170: beruecksichtigt Mehrdeutigkeiten; Implementierung s.u.
+    // Respects ambiguities: For the implementation see below
     const SwLineLayout *CharCrsrToLine( const xub_StrLen nPos );
 
     // calculates baseline for portion rPor
@@ -308,7 +308,7 @@ public:
 };
 
 /*************************************************************************
- *                      Inline-Implementierungen
+ *                      Inline implementation
  *************************************************************************/
 
 inline sal_Bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )

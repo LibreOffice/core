@@ -75,7 +75,7 @@ xub_StrLen SwTxtMargin::GetTxtEnd() const
  *                   SwTxtFrmInfo::IsOneLine()
  *************************************************************************/
 
-// Passt der Absatz in eine Zeile?
+// Does the paragraph fit into one line?
 sal_Bool SwTxtFrmInfo::IsOneLine() const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
@@ -83,7 +83,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
         return sal_False;
     else
     {
-        // 6575: bei Follows natuerlich sal_False
+        // For follows sal_False of course
         if( pFrm->GetFollow() )
             return sal_False;
         pLay = pLay->GetNext();
@@ -101,7 +101,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
  *                   SwTxtFrmInfo::IsFilled()
  *************************************************************************/
 
-// Ist die Zeile zu X% gefuellt?
+// Is the line filled for X percent?
 sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
     const SwLineLayout *pLay = pFrm->GetPara();
@@ -120,7 +120,7 @@ sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
  *                   SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
-// Wo beginnt der Text (ohne whitespaces)? ( Dokument global )
+// Where does the text start (without whitespace)? (document global)
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 {
     xub_StrLen nTxtStart = rLine.GetTxtStart();
@@ -143,7 +143,7 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
  *                   SwTxtFrmInfo::GetLineStart()
  *************************************************************************/
 
-// Wo beginnt der Text (ohne whitespaces)? (rel. im Frame)
+// Where does the text start (without whitespace)? (relative in the Frame)
 SwTwips SwTxtFrmInfo::GetLineStart() const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -151,7 +151,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
     return GetLineStart( aLine ) - pFrm->Frm().Left() - pFrm->Prt().Left();
 }
 
-// errechne die Position des Zeichens und gebe die Mittelposition zurueck
+// Calculates the character's position and returns the middle position
 SwTwips SwTxtFrmInfo::GetCharPos( xub_StrLen nChar, sal_Bool bCenter ) const
 {
     SWRECTFN( pFrm )
@@ -197,11 +197,11 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
 {
     if( nLen )
     {
-        // Es koennte auch der erste sein.
+        // It could be the first
         if( pPam->HasMark() )
         {
-            // liegt die neue Position genau hinter der aktuellen, dann
-            // erweiter den Pam einfach
+            // If the new position is right after the current one, then
+            // simply extend the Pam
             if( nPos == pPam->GetPoint()->nContent.GetIndex() )
             {
                 pPam->GetPoint()->nContent += nLen;
@@ -218,7 +218,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
     return pPam;
 }
 
-// Sammelt die whitespaces am Zeilenbeginn und -ende im Pam
+// Accumulates the whitespace at line start and end in the Pam
 void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -230,14 +230,14 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
         if( aLine.GetCurr()->GetLen() )
         {
             xub_StrLen nPos = aLine.GetTxtStart();
-            // Bug 49649: von der ersten Line die Blanks/Tabs NICHT
-            //              mit selektieren
+            // Do NOT include the blanks/tabs from the first line
+            // in the selection
             if( !bFirstLine && nPos > aLine.GetStart() )
                 pPam = AddPam( pPam, pFrm, aLine.GetStart(),
                                 nPos - aLine.GetStart() );
 
-            // Bug 49649: von der letzten Line die Blanks/Tabs NICHT
-            //              mit selektieren
+            // Do NOT include the blanks/tabs from the last line
+            // in the selection
             if( aLine.GetNext() )
             {
                 nPos = aLine.GetTxtEnd();
@@ -260,7 +260,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
  *                   SwTxtFrmInfo::IsBullet()
  *************************************************************************/
 
-// Ist an der Textposition ein Bullet/Symbol etc?
+// Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL und DONTKNOW
 sal_Bool SwTxtFrmInfo::IsBullet( xub_StrLen nTxtStart ) const
 {
@@ -274,11 +274,10 @@ sal_Bool SwTxtFrmInfo::IsBullet( xub_StrLen nTxtStart ) const
  *                   SwTxtFrmInfo::GetFirstIndent()
  *************************************************************************/
 
-// Ermittelt Erstzeileneinzug
-// Voraussetzung fuer pos. oder neg. EZE ist, dass alle
-// Zeilen ausser der ersten Zeile den selben linken Rand haben.
-// Wir wollen nicht so knauserig sein und arbeiten mit einer Toleranz
-// von TOLERANCE Twips.
+// Get first line indent
+// The precondition for a positive or negative first line indent:
+// All lines (except for the first one) have the same left margin.
+// We do not want to be so picky and work with a tolerance of TOLERANCE twips.
 
 #define TOLERANCE 20
 
@@ -302,7 +301,7 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
         }
     }
 
-    // Vorerst wird nur +1, -1 und 0 returnt.
+    // At first we only return +1, -1 and 0
     if( nLeft == nFirst )
         return 0;
     else
@@ -325,14 +324,14 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
 
     if( pNextFrm )
     {
-        // ich bin einzeilig
+        // I'm a single line
         SwTxtSizeInfo aNxtInf( (SwTxtFrm*)pNextFrm );
         SwTxtCursor aNxtLine( (SwTxtFrm*)pNextFrm, &aNxtInf );
         nNextIndent = GetLineStart( aNxtLine );
     }
     else
     {
-        // ich bin mehrzeilig
+        // I'm multi-line
         if( aLine.Next() )
         {
             nNextIndent = GetLineStart( aLine );
@@ -348,7 +347,7 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
     if( 1 >= rFndPos )
         return 0;
 
-    // steht vor einem "nicht Space"
+    // Is on front of a non-space
     const XubString& rTxt = aInf.GetTxt();
     xub_Unicode aChar = rTxt.GetChar( rFndPos );
     if( CH_TAB == aChar || CH_BREAK == aChar || ' ' == aChar ||
@@ -356,12 +355,12 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
             aInf.HasHint( rFndPos ) ) )
         return 0;
 
-    // und hinter einem "Space"
+    // and after a space
     aChar = rTxt.GetChar( rFndPos - 1 );
     if( CH_TAB != aChar && CH_BREAK != aChar &&
         ( ( CH_TXTATR_BREAKWORD != aChar && CH_TXTATR_INWORD != aChar ) ||
             !aInf.HasHint( rFndPos - 1 ) ) &&
-        // mehr als 2 Blanks !!
+        // More than two Blanks!
         ( ' ' != aChar || ' ' != rTxt.GetChar( rFndPos - 2 ) ) )
         return 0;
 

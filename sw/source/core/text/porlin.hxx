@@ -40,17 +40,16 @@ class SwTxtPaintInfo;
 class SwTxtFormatInfo;
 class SwPortionHandler;
 
-// Die Ausgabeoperatoren der Portions sind virtuelle Methoden der Portion.
-// Das CLASSIO-Makro implementiert die 'freischwebende' Funktion.
-// Auf diese Weise erhaelt man beide Vorteile: virtuelle Ausgabeoperatoren
-// und allgemeine Verwendbarkeit.
+// The portions output operators are virtual methods of the portion.
+// The CLASSIO macro implements the 'levitating' function.
+// In doing so we end up with both benefits: virtual output operators and general utility
 #ifdef DBG_UTIL
 #define OUTPUT_OPERATOR  virtual SvStream &operator<<( SvStream & aOs ) const;
 #else
 #define OUTPUT_OPERATOR
 #endif
 
-// Portiongruppen
+// Portion groups
 #define PORGRP_TXT      0x8000
 #define PORGRP_EXP      0x4000
 #define PORGRP_FLD      0x2000
@@ -60,7 +59,7 @@ class SwPortionHandler;
 #define PORGRP_FIX      0x0200
 #define PORGRP_TAB      0x0100
 #define PORGRP_NOTRECY  0x0080
-// kleine Spezialgruppen
+// Small special groups
 #define PORGRP_FIXMARG  0x0040
 //#define PORGRP_?  0x0020
 #define PORGRP_TABNOTLFT 0x0010
@@ -73,11 +72,11 @@ class SwPortionHandler;
 class SwLinePortion: public SwPosSize
 {
 protected:
-    // Hier gibt es Bereiche mit unterschiedlichen Attributen.
+    // Here we have areas with different attributes
     SwLinePortion *pPortion;
-    // Anzahl der Zeichen und Spaces auf der Zeile
+    // Count of chars and spaces on the line
     xub_StrLen nLineLength;
-    KSHORT nAscent;      // Maximaler Ascender
+    KSHORT nAscent;      // Maximum ascender
 
     SwLinePortion();
 private:
@@ -89,7 +88,7 @@ public:
     inline          SwLinePortion(const SwLinePortion &rPortion);
            virtual ~SwLinePortion();
 
-    // Zugriffsmethoden
+    // Access methods
     inline SwLinePortion *GetPortion() const { return( pPortion ); }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
     inline sal_Bool operator==( const SwLinePortion &rPortion ) const;
@@ -106,19 +105,19 @@ public:
 
     inline const SwPosSize &PrtSize() const { return *this; }
 
-    // Einfuegeoperationen:
+    // Insert methods
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
     virtual SwLinePortion *Append( SwLinePortion *pPortion );
             SwLinePortion *Cut( SwLinePortion *pVictim );
     inline  void Truncate();
 
-    // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
+    // Returns 0, if there's no payload
     virtual SwLinePortion *Compress();
 
     inline void SetWhichPor( const MSHORT nNew )    { nWhichPor = nNew; }
     inline MSHORT GetWhichPor( ) const        { return nWhichPor; }
 
-// Gruppenabfragen:
+// Group queries
     inline sal_Bool InTxtGrp( ) const { return nWhichPor & PORGRP_TXT ? sal_True : sal_False; }
     inline sal_Bool InGlueGrp( )    const { return nWhichPor & PORGRP_GLUE ? sal_True : sal_False;}
     inline sal_Bool InTabGrp( ) const { return nWhichPor & PORGRP_TAB ? sal_True : sal_False; }
@@ -136,7 +135,7 @@ public:
         { return nWhichPor & PORGRP_FIXMARG ? sal_True : sal_False;  }
     inline sal_Bool InSpaceGrp( )const
         { return InTxtGrp() || IsMultiPortion();  }
-// Individuelle Abfragen:
+// Individual queries
     inline sal_Bool IsGrfNumPortion( )const{ return nWhichPor == POR_GRFNUM; }
     inline sal_Bool IsFlyCntPortion( )const{ return nWhichPor == POR_FLYCNT; }
     inline sal_Bool IsBlankPortion( )   const{ return nWhichPor == POR_BLANK; }
@@ -167,7 +166,7 @@ public:
     inline sal_Bool IsNumberPortion( ) const{ return nWhichPor == POR_NUMBER; } // #i23726#
     inline sal_Bool IsControlCharPortion() const { return nWhichPor == POR_CONTROLCHAR; }
 
-    // Positionierung
+    // Positioning
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
@@ -175,19 +174,19 @@ public:
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     void CalcTxtSize( const SwTxtSizeInfo &rInfo );
 
-    // Ausgabe
+    // Output
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
-    // wird fuer die letzte Portion der Zeile extra gerufen
+    // Is called for the line's last portion
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
             void Move( SwTxtPaintInfo &rInf );
 
-    // Fuer SwTxtSlot
+    // For SwTxtSlot
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
 
-    // fuer SwFldPortion, SwSoftHyphPortion
+    // For SwFldPortion, SwSoftHyphPortion
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
 
     // for text- and multi-portions

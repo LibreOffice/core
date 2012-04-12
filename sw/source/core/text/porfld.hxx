@@ -45,19 +45,19 @@ class SwFldPortion : public SwExpandPortion
 {
     friend class SwTxtFormatter;
 protected:
-    XubString  aExpand;            // das expandierte Feld
-    SwFont  *pFnt;              // Fuer mehrzeilige Felder
-    xub_StrLen nNextOffset;     // Offset des Follows im Originalstring
+    XubString  aExpand;             // The expanded field
+    SwFont  *pFnt;                  // For multi-line fields
+    xub_StrLen nNextOffset;         // Offset of the follow in the original string
     xub_StrLen nNextScriptChg;
-    KSHORT  nViewWidth;         // Screenbreite fuer leere Felder
-    sal_Bool bFollow : 1;           // 2. oder weiterer Teil eines Feldes
-    sal_Bool bLeft : 1;             // wird von SwNumberPortion benutzt
-    sal_Bool bHide : 1;             // wird von SwNumberPortion benutzt
-    sal_Bool bCenter : 1;           // wird von SwNumberPortion benutzt
-    sal_Bool bHasFollow : 1;        // geht in der naechsten Zeile weiter
-    sal_Bool bAnimated : 1;         // wird von SwGrfNumPortion benutzt
-    sal_Bool bNoPaint : 1;          // wird von SwGrfNumPortion benutzt
-    sal_Bool bReplace : 1;          // wird von SwGrfNumPortion benutzt
+    KSHORT  nViewWidth;             // Screen width for empty fields
+    sal_Bool bFollow : 1;           // 2nd or later part of a field
+    sal_Bool bLeft : 1;             // Used by SwNumberPortion
+    sal_Bool bHide : 1;             // Used by SwNumberPortion
+    sal_Bool bCenter : 1;           // Used by SwNumberPortion
+    sal_Bool bHasFollow : 1;        // Continues on the next line
+    sal_Bool bAnimated : 1;         // Used by SwGrfNumPortion
+    sal_Bool bNoPaint : 1;          // Used by SwGrfNumPortion
+    sal_Bool bReplace : 1;          // Used by SwGrfNumPortion
     const sal_Bool bPlaceHolder : 1;
     sal_Bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
@@ -81,7 +81,7 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 
-    // leere Felder sind auch erlaubt
+    // Empty fields are also allowed
     virtual SwLinePortion *Compress();
 
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
@@ -107,10 +107,10 @@ public:
     inline xub_StrLen GetNextScriptChg() const { return nNextScriptChg; }
     inline void SetNextScriptChg( xub_StrLen nNew ) { nNextScriptChg = nNew; }
 
-    // Felder-Cloner fuer SplitGlue
+    // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
 
-    // Extra-GetTxtSize wegen pFnt
+    // Extra GetTxtSize because of pFnt
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -122,7 +122,7 @@ public:
 /*************************************************************************
  *                      class SwHiddenPortion
  *************************************************************************/
-// Unterscheidung nur fuer's Painten/verstecken.
+// Distinguish only for painting/hide
 
 class SwHiddenPortion : public SwFldPortion
 {
@@ -133,7 +133,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
 
-    // Felder-Cloner fuer SplitGlue
+    // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
     OUTPUT_OPERATOR
 };
@@ -145,8 +145,8 @@ public:
 class SwNumberPortion : public SwFldPortion
 {
 protected:
-    KSHORT  nFixWidth;      // vgl. Glues
-    KSHORT  nMinDist;       // minimaler Abstand zum Text
+    KSHORT  nFixWidth;      // See Glues
+    KSHORT  nMinDist;       // Minimal distance to the text
     bool    mbLabelAlignmentPosAndSpaceModeActive;
 
 public:
@@ -160,7 +160,7 @@ public:
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
-    // Felder-Cloner fuer SplitGlue
+    // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
 
@@ -191,8 +191,8 @@ public:
 class SwGrfNumPortion : public SwNumberPortion
 {
     SvxBrushItem* pBrush;
-    long            nId;    //fuer StopAnimation
-    SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
+    long            nId;    // For StopAnimation
+    SwTwips         nYPos;  // _Always_ contains the current RelPos
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
