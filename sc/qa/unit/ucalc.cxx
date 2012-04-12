@@ -303,7 +303,6 @@ void Test::setUp()
 void Test::tearDown()
 {
     m_xDocShRef.Clear();
-
     BootstrapFixture::tearDown();
 }
 

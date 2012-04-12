@@ -74,8 +74,6 @@ void Test::setUp()
 void Test::tearDown()
 {
     SfxItemPool::Free(mpItemPool);
-    EditDLL::Release();
-
     test::BootstrapFixture::tearDown();
 }
 
