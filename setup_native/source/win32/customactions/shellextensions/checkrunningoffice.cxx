@@ -101,7 +101,7 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
     if ( sOfficeInstallPath.length() == 0 )
         return ERROR_SUCCESS;
 
-    DWORD aProcesses[1024], cbNeeded, cProcesses; /* 1024 processses ought to be enough for anybody */
+    DWORD aProcesses[1024], cbNeeded, cProcesses; /* 1024 processes ought to be enough for anybody */
 
     if ( !EnumProcesses( aProcesses, sizeof(aProcesses), &cbNeeded ) )
         return ERROR_INSTALL_FAILURE;
