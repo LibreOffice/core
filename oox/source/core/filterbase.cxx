@@ -363,11 +363,6 @@ StorageRef FilterBase::getStorage() const
     return mxImpl->mxStorage;
 }
 
-StorageRef FilterBase::openSubStorage( const OUString& rStorageName, bool bCreateMissing ) const
-{
-    return mxImpl->mxStorage->openSubStorage( rStorageName, bCreateMissing );
-}
-
 Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName ) const
 {
     return mxImpl->mxStorage->openInputStream( rStreamName );

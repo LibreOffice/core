@@ -161,18 +161,6 @@ public:
     /** Returns the base storage of the imported/exported file. */
     StorageRef          getStorage() const;
 
-    /** Opens and returns the specified sub storage from the base storage.
-
-        @param rStorageName
-            The name of the embedded storage. The name may contain slashes to
-            open storages from embedded substorages.
-        @param bCreateMissing
-            True = create missing sub storages (for export filters).
-     */
-    StorageRef          openSubStorage(
-                            const ::rtl::OUString& rStorageName,
-                            bool bCreateMissing ) const;
-
     /** Opens and returns the specified input stream from the base storage.
 
         @param rStreamName
