@@ -205,7 +205,7 @@ void Shape::addShape(
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
-    OSL_TRACE("Shape::addShape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO("oox", OSL_THIS_FUNC << " id: " << msId);
 
     try
     {
@@ -233,7 +233,7 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
-    OSL_TRACE("apply shape reference: %s to shape id: %s", rtl::OUStringToOString(rReferencedShape.msId, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO("oox", "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
 
     if ( rReferencedShape.mpTextBody.get() )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
@@ -331,7 +331,7 @@ Reference< XShape > Shape::createAndInsert(
         basegfx::B2DHomMatrix& aParentTransformation )
 {
     bool bIsEmbMedia = false;
-    OSL_TRACE("Shape::createAndInsert id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO("oox", OSL_THIS_FUNC << " id: " << msId);
 
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
@@ -468,7 +468,7 @@ Reference< XShape > Shape::createAndInsert(
 
         if ( mbHidden || mbHiddenMasterShape )
         {
-            OSL_TRACE("invisible shape with id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("oox", "invisible shape with id: " << msId);
             const OUString sVisible( CREATE_OUSTRING( "Visible" ) );
             xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
@@ -561,7 +561,7 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -nTextRotateAngle / 60000 );
             }
 
-            OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("oox", "==cscode== shape name: " << msName);
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
         else if( getTextBody() )
@@ -579,7 +579,7 @@ Reference< XShape > Shape::createAndInsert(
                     if( pTheme )
                         if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                             aCharStyleProperties.assignUsed( *pCharProps );
-                    OSL_TRACE("use font color");
+                    SAL_INFO("oox", "use font color");
                     aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                 }
 
@@ -615,7 +615,7 @@ void Shape::moveAllToPosition( const Point &rPoint )
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
-    OSL_TRACE("set master text list style to shape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO("oox", "set master text list style to shape id: %s" << msId);
 
     mpMasterTextListStyle = pMasterTextListStyle;
 }
