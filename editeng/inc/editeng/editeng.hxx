@@ -29,6 +29,41 @@
 #ifndef _MyEDITENG_HXX
 #define _MyEDITENG_HXX
 
+#include <rtl/ref.hxx>
+#include <vector>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/i18n/WordType.hpp>
+
+#include <rsc/rscsfx.hxx>
+#include <editeng/editdata.hxx>
+#include <i18npool/lang.h>
+#include "editeng/editengdllapi.h"
+
+#include <tools/rtti.hxx>   // due to typedef TypeId
+
+#include <editeng/eedata.hxx>
+
+namespace com { namespace sun { namespace star {
+  namespace linguistic2 {
+    class XSpellChecker1;
+    class XHyphenator;
+  }
+  namespace datatransfer {
+    class XTransferable;
+  }
+  namespace lang {
+    struct Locale;
+  }
+}}}
+
+namespace svx {
+struct SpellPortion;
+typedef std::vector<SpellPortion> SpellPortions;
+}
+
+namespace svl { class IUndoManager; }
+namespace basegfx { class B2DPolyPolygon; }
+
 class ImpEditEngine;
 class EditView;
 class OutputDevice;
@@ -62,41 +97,11 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
 class FontList;
-
-#include <rtl/ref.hxx>
-#include <vector>
-#include <com/sun/star/uno/Reference.h>
-
-namespace com { namespace sun { namespace star {
-  namespace linguistic2 {
-    class XSpellChecker1;
-    class XHyphenator;
-  }
-  namespace datatransfer {
-    class XTransferable;
-  }
-  namespace lang {
-    struct Locale;
-  }
-}}}
-namespace svx{
-struct SpellPortion;
-typedef std::vector<SpellPortion> SpellPortions;
-}
-namespace svl{
-class IUndoManager;
-}
-
-namespace basegfx { class B2DPolyPolygon; }
-#include <rsc/rscsfx.hxx>
-#include <editeng/editdata.hxx>
-#include <i18npool/lang.h>
-#include "editeng/editengdllapi.h"
-
-#include <tools/rtti.hxx>   // due to typedef TypeId
-
-#include <editeng/eedata.hxx>
 class SvxFieldData;
+class ContentNode;
+class ParaPortion;
+class EditSelection;
+class EditPaM;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -124,6 +129,32 @@ private:
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
     EDITENG_DLLPRIVATE sal_uInt8        PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
+
+    EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
+    EDITENG_DLLPRIVATE void CheckIdleFormatter();
+    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode* pNode);
+    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
+    EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
+    EDITENG_DLLPRIVATE const ParaPortion* GetNextVisPortion(const ParaPortion* pCurPortion) const;
+    EDITENG_DLLPRIVATE sal_uInt16 GetScriptType(const EditSelection& rSel) const;
+
+    EDITENG_DLLPRIVATE com::sun::star::uno::Reference<
+        com::sun::star::datatransfer::XTransferable>
+            CreateTransferable(const EditSelection& rSelection);
+
+    EDITENG_DLLPRIVATE EditSelection InsertText(
+        com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable >& rxDataObj,
+        const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
+
+    EDITENG_DLLPRIVATE EditPaM EndOfWord(
+        const EditPaM& rPaM, sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+
+    EDITENG_DLLPRIVATE EditPaM GetPaM(const Point& aDocPos, bool bSmart = true);
+
+    EDITENG_DLLPRIVATE EditSelection SelectWord(
+        const EditSelection& rCurSelection,
+        sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES,
+        bool bAcceptStartOfWord = true);
 
 protected:
 

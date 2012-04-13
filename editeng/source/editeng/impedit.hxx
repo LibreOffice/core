@@ -65,6 +65,7 @@ DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
 
 #define PIMPEE      pImpEditView->pEditEngine->pImpEditEngine
+#define PIMPE       pImpEditView->pEditEngine
 
 #define DEL_LEFT    1
 #define DEL_RIGHT   2
@@ -392,7 +393,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditUndoInsertFeature;
     friend class EditUndoMoveParagraphs;
 
-    friend class EditView;
     friend class ImpEditView;
     friend class EditEngine;        // For access to Imp-Methods
     friend class EditRTFParser;     // For access to Imp-Methods

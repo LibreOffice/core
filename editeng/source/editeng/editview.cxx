@@ -230,25 +230,25 @@ void EditView::SetSelection( const ESelection& rESel )
     if ( !pImpEditView->GetEditSelection().HasRange() )
     {
         ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
-        PIMPEE->CursorMoved( pNode );
+        PIMPE->CursorMoved( pNode );
     }
     EditSelection aNewSelection( PIMPEE->ConvertSelection( rESel.nStartPara, rESel.nStartPos, rESel.nEndPara, rESel.nEndPos ) );
 
     // If the selection is manipulated after a KeyInput:
-    PIMPEE->CheckIdleFormatter();
+    PIMPE->CheckIdleFormatter();
 
     // Selection may not start/end at an invisible paragraph:
-    const ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
+    const ParaPortion* pPortion = PIMPE->FindParaPortion( aNewSelection.Min().GetNode() );
     if ( !pPortion->IsVisible() )
     {
-        pPortion = PIMPEE->GetPrevVisPortion( pPortion );
+        pPortion = PIMPE->GetPrevVisPortion( pPortion );
         ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPEE->GetEditDoc().GetObject( 0 );
         aNewSelection.Min() = EditPaM( pNode, pNode->Len() );
     }
-    pPortion = PIMPEE->FindParaPortion( aNewSelection.Max().GetNode() );
+    pPortion = PIMPE->FindParaPortion( aNewSelection.Max().GetNode() );
     if ( !pPortion->IsVisible() )
     {
-        pPortion = PIMPEE->GetPrevVisPortion( pPortion );
+        pPortion = PIMPE->GetPrevVisPortion( pPortion );
         ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPEE->GetEditDoc().GetObject( 0 );
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
@@ -293,7 +293,7 @@ sal_uInt16 EditView::GetSelectedScriptType() const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return PIMPEE->GetScriptType( pImpEditView->GetEditSelection() );
+    return PIMPE->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
 void EditView::Paint( const Rectangle& rRect )
@@ -580,7 +580,8 @@ void EditView::Cut()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > EditView::GetTransferable()
 {
-    uno::Reference< datatransfer::XTransferable > xData = GetEditEngine()->pImpEditEngine->CreateTransferable( pImpEditView->GetEditSelection() );
+    uno::Reference< datatransfer::XTransferable > xData =
+        GetEditEngine()->CreateTransferable( pImpEditView->GetEditSelection() );
     return xData;
 }
 
@@ -705,7 +706,8 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
 
     PIMPEE->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
-    EditSelection aTextSel( PIMPEE->InsertText( xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
+    EditSelection aTextSel =
+        PIMPE->InsertText(xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial);
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
@@ -799,7 +801,7 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
     {
         pImpEditView->DrawSelection();
         EditSelection aSel = pImpEditView->GetEditSelection();
-        aSel = PIMPEE->EndOfWord( aSel.Max() );
+        aSel = PIMPE->EndOfWord( aSel.Max() );
         aSel = PIMPEE->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
         pImpEditView->SetEditSelection( aSel );
         if ( PIMPEE->IsModified() )
@@ -864,7 +866,7 @@ sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMa
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
-    EditPaM aPaM = pImpEditView->pEditEngine->pImpEditEngine->GetPaM( aPos, sal_False );
+    EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
@@ -895,7 +897,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
-    EditPaM aPaM = pImpEditView->pEditEngine->pImpEditEngine->GetPaM( aPos, sal_False );
+    EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     Reference< XSpellChecker1 >  xSpeller( PIMPEE->GetSpeller() );
     ESelection aOldSel = GetSelection();
     if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, sal_True ) )
@@ -1171,7 +1173,7 @@ sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
-    aCurSel = PIMPEE->SelectWord( aCurSel.Max(), nWordType );
+    aCurSel = PIMPE->SelectWord(aCurSel.Max(), nWordType);
     pImpEditView->SetEditSelection( aCurSel );
     pImpEditView->DrawSelection();
     ShowCursor( sal_True, sal_False );

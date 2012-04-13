@@ -683,6 +683,69 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
+void EditEngine::CursorMoved(ContentNode* pPrevNode)
+{
+    pImpEditEngine->CursorMoved(pPrevNode);
+}
+
+void EditEngine::CheckIdleFormatter()
+{
+    pImpEditEngine->CheckIdleFormatter();
+}
+
+ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode)
+{
+    return pImpEditEngine->FindParaPortion(pNode);
+}
+
+const ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode) const
+{
+    return pImpEditEngine->FindParaPortion(pNode);
+}
+
+const ParaPortion* EditEngine::GetPrevVisPortion(const ParaPortion* pCurPortion) const
+{
+    return pImpEditEngine->GetPrevVisPortion(pCurPortion);
+}
+
+const ParaPortion* EditEngine::GetNextVisPortion(const ParaPortion* pCurPortion) const
+{
+    return pImpEditEngine->GetNextVisPortion(pCurPortion);
+}
+
+sal_uInt16 EditEngine::GetScriptType(const EditSelection& rSel) const
+{
+    return pImpEditEngine->GetScriptType(rSel);
+}
+
+uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
+{
+    return pImpEditEngine->CreateTransferable(rSelection);
+}
+
+EditSelection EditEngine::InsertText(
+    uno::Reference<datatransfer::XTransferable >& rxDataObj,
+    const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
+{
+    return pImpEditEngine->InsertText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
+}
+
+EditPaM EditEngine::EndOfWord(const EditPaM& rPaM, sal_Int16 nWordType)
+{
+    return pImpEditEngine->EndOfWord(rPaM, nWordType);
+}
+
+EditPaM EditEngine::GetPaM(const Point& aDocPos, bool bSmart)
+{
+    return pImpEditEngine->GetPaM(aDocPos, bSmart);
+}
+
+EditSelection EditEngine::SelectWord(
+        const EditSelection& rCurSelection, sal_Int16 nWordType, bool bAcceptStartOfWord)
+{
+    return pImpEditEngine->SelectWord(rCurSelection, nWordType, bAcceptStartOfWord);
+}
+
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, Window* pFrameWin )
 {
     DBG_CHKTHIS( EditEngine, 0 );
