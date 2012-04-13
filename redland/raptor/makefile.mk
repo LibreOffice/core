@@ -59,7 +59,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32 \
     $(TARFILE_NAME).patch.rindex \
     raptor-aix.patch \
-    $(TARFILE_NAME).entities.patch
+    $(TARFILE_NAME).entities.patch \
+    $(TARFILE_NAME).patch.bundled-soname
 
 .IF "$(CROSS_COMPILING)"=="YES"
 OOO_PATCH_FILES += \
@@ -204,7 +205,7 @@ OUT2BIN+=src/raptor-config
 OUT2LIB+=src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="AIX"
-OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
+OUT2LIB+=src$/.libs$/libraptor-lo.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -215,7 +216,7 @@ OUT2BIN+=src/raptor-config
 # if we use dmake, this is done automagically
 .ENDIF
 .ELSE
-OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
+OUT2LIB+=src$/.libs$/libraptor-lo.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ENDIF
 

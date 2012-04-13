@@ -1567,15 +1567,15 @@ File gid_File_Lib_Raptor
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT4(libraptor,.,RAPTOR_MAJOR,UNXSUFFIX));
+       Name = STRING(CONCAT4(libraptor-lo,.,RAPTOR_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT4(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR));
+       Name = STRING(CONCAT4(libraptor-lo,UNXSUFFIX,.,RAPTOR_MAJOR));
     #endif
   #else
    #ifdef _gcc3
-    Name = "libraptor-1.dll";
+    Name = "libraptor-lo-1.dll";
    #else
-    Name = "raptor.dll";
+    Name = "raptor-lo.dll";
    #endif
   #endif
 End
@@ -1586,15 +1586,15 @@ File gid_File_Lib_Rasqal
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT4(librasqal,.,RASQAL_MAJOR,UNXSUFFIX));
+       Name = STRING(CONCAT4(librasqal-lo,.,RASQAL_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT4(librasqal,UNXSUFFIX,.,RASQAL_MAJOR));
+       Name = STRING(CONCAT4(librasqal-lo,UNXSUFFIX,.,RASQAL_MAJOR));
     #endif
   #else
    #ifdef _gcc3
-       Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
+       Name = STRING(CONCAT3(librasqal-lo-,RASQAL_MAJOR,.dll));
    #else
-    Name = "rasqal.dll";
+    Name = "rasqal-lo.dll";
    #endif
   #endif
 End
@@ -1605,15 +1605,15 @@ File gid_File_Lib_Rdf
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT4(librdf,.,REDLAND_MAJOR,UNXSUFFIX));
+       Name = STRING(CONCAT4(librdf-lo,.,REDLAND_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT4(librdf,UNXSUFFIX,.,REDLAND_MAJOR));
+       Name = STRING(CONCAT4(librdf-lo,UNXSUFFIX,.,REDLAND_MAJOR));
     #endif
   #else
    #ifdef _gcc3
-    Name = "librdf-0.dll";
+    Name = "librdf-lo-0.dll";
    #else
-    Name = "librdf.dll";
+    Name = "librdf-lo.dll";
    #endif
   #endif
 End

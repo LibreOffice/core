@@ -57,7 +57,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.win32 \
-    redland-aix.patch
+    redland-aix.patch \
+    $(TARFILE_NAME).patch.bundled-soname
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
@@ -163,7 +164,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
+OUT2LIB+=librdf$/.libs$/librdf-lo.$(REDLAND_MAJOR).dylib
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=librdf$/.libs$/librdf.a
 .ELIF "$(OS)"=="ANDROID"
@@ -176,7 +177,7 @@ OUT2BIN+=librdf$/.libs$/*.dll
 # if we use dmake, this is done automagically
 .ENDIF
 .ELSE
-OUT2LIB+=librdf$/.libs$/librdf.so.$(REDLAND_MAJOR)
+OUT2LIB+=librdf$/.libs$/librdf-lo.so.$(REDLAND_MAJOR)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

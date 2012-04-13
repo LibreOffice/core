@@ -57,7 +57,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.win32 \
-    rasqal-aix.patch
+    rasqal-aix.patch \
+    $(TARFILE_NAME).patch.bundled-soname
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
@@ -156,7 +157,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
+OUT2LIB+=src$/.libs$/librasqal-lo.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/librasqal.a
@@ -173,7 +174,7 @@ OUT2BIN+=src/rasqal-config
 # if we use dmake, this is done automagically
 .ENDIF
 .ELSE
-OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
+OUT2LIB+=src$/.libs$/librasqal-lo.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config
 .ENDIF
 
