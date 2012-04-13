@@ -136,7 +136,7 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
 	"-u $tmp_dir " .
-	"-buildid $BUILD $destdir $strip $msi" .
+	"-buildid $BUILD $destdir $strip $msi " .
 	"-simple $path") && die "Failed to install: $!";
 }
 print "Installer finished\n";
