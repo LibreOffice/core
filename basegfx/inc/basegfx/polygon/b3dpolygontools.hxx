@@ -67,12 +67,6 @@ namespace basegfx
         // get normal vector of polygon
         BASEGFX_DLLPUBLIC B3DVector getNormal(const B3DPolygon& rCandidate);
 
-        // get signed area of polygon
-        BASEGFX_DLLPUBLIC double getSignedArea(const B3DPolygon& rCandidate);
-
-        // get signed area of polygon
-        BASEGFX_DLLPUBLIC double getSignedArea(const B3DPolygon& rCandidate);
-
         // get area of polygon
         BASEGFX_DLLPUBLIC double getArea(const ::basegfx::B3DPolygon& rCandidate);
 

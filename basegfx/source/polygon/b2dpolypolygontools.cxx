@@ -475,27 +475,6 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
-        // comparators with tolerance for 2D PolyPolygons
-
-        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue)
-        {
-            const sal_uInt32 nPolygonCount(rCandidateA.count());
-
-            if(nPolygonCount != rCandidateB.count())
-                return false;
-
-            for(sal_uInt32 a(0); a < nPolygonCount; a++)
-            {
-                const B2DPolygon aCandidate(rCandidateA.getB2DPolygon(a));
-
-                if(!equal(aCandidate, rCandidateB.getB2DPolygon(a), rfSmallValue))
-                    return false;
-            }
-
-            return true;
-        }
-
         B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval;

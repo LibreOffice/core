@@ -227,10 +227,6 @@ namespace basegfx
         // #i76891# Try to remove existing curve segments if they are simply edges
         BASEGFX_DLLPUBLIC B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
-        //////////////////////////////////////////////////////////////////////
-        // comparators with tolerance for 2D PolyPolygons
-        BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
-
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values

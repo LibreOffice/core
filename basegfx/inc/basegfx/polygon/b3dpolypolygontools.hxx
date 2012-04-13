@@ -134,10 +134,6 @@ namespace basegfx
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         BASEGFX_DLLPUBLIC bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
 
-        //////////////////////////////////////////////////////////////////////
-        // comparators with tolerance for 3D PolyPolygons
-        BASEGFX_DLLPUBLIC bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue);
-
     } // end of namespace tools
 } // end of namespace basegfx
 
