@@ -113,7 +113,6 @@ sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
             bReturn = SwDrawBase::MouseButtonUp(rMEvt);
 
             // #i85045# removed double mechanism to check for AutoClose polygon

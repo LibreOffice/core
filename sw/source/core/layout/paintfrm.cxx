@@ -2062,7 +2062,6 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
-    Rectangle aTestNewRect( aSizedRect );
     /// check Left()
     --aSizedRect.Left();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );

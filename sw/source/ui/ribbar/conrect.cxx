@@ -94,8 +94,6 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
 sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
-
     sal_Bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
     if( bRet )
     {

@@ -245,7 +245,6 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
 void SwLayVout::_Flush()
 {
     OSL_ENSURE( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
-    Rectangle aTmp( aRect.SVRect() );
     pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),
                       aRect.Pos(), aRect.SSize(), *pVirDev );
     SetOutDev( pSh, pOut );
