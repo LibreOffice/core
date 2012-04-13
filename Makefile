@@ -304,7 +304,6 @@ clean: clean-host clean-build
 clean-host:
 	rm -fr $(SRCDIR)/*/$(INPATH)
 	rm -fr install
-	rm -f $(WORKDIR_BOOTSTRAP)
 
 clean-build:
 ifeq ($(CROSS_COMPILING),YES)
