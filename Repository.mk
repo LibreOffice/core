@@ -570,6 +570,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     $(if $(filter $(OS),WNT), \
         odma_lib \
     ) \
+	z \
 ))
 
 ifeq ($(OS),WNT)
