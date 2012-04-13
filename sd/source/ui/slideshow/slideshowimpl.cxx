@@ -478,8 +478,7 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             aValue[0] <<= xSlide;
             aValue[1] <<= xAnimNode;
             aProperties.push_back(
-                PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Prefetch" ) ),
+                PropertyValue( "Prefetch" ,
                     -1,
                     Any(aValue),
                     PropertyState_DIRECT_VALUE));
@@ -491,14 +490,12 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             // one to show all main sequence effects so that the user can
             // continue to undo effects.
             aProperties.push_back(
-                PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("SkipAllMainSequenceEffects")),
+                PropertyValue( "SkipAllMainSequenceEffects",
                     -1,
                     Any(sal_True),
                     PropertyState_DIRECT_VALUE));
             aProperties.push_back(
-                PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("SkipSlideTransition")),
+                PropertyValue("SkipSlideTransition",
                     -1,
                     Any(sal_True),
                     PropertyState_DIRECT_VALUE));
@@ -554,9 +551,9 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 #endif
 , mnEntryCounter(0)
 , mnLastSlideNumber(-1)
-, msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") )
-, msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") )
-, msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") )
+, msOnClick( "OnClick")
+, msBookmark( "Bookmark")
+, msVerb( "Verb")
 , mnEndShowEvent(0)
 , mnContextMenuEvent(0)
 , mnUpdateEvent(0)
@@ -617,7 +614,7 @@ SlideshowImpl::~SlideshowImpl()
 void SAL_CALL SlideshowImpl::disposing()
 {
     if( mxShow.is() && mpDoc )
-        NotifyDocumentEvent( mpDoc, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OnEndPresentation") ) );
+        NotifyDocumentEvent( mpDoc, "OnEndPresentation" );
 
     if( mbAutoSaveWasOn )
         setAutoSaveState( true );
@@ -830,7 +827,7 @@ bool SlideshowImpl::startPreview(
 
         sal_Int32 nSlideNumber = 0;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
-        xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nSlideNumber;
+        xSet->getPropertyValue( "Number" ) >>= nSlideNumber;
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
@@ -875,12 +872,12 @@ bool SlideshowImpl::startPreview(
             nPropertyCount++;
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
-        aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("AutomaticAdvancement") );
+        aProperties[0].Name = "AutomaticAdvancement";
         aProperties[0].Value = uno::makeAny( (double)1.0 ); // one second timeout
 
         if( mxPreviewAnimationNode.is() )
         {
-            aProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("NoSlideTransitions") );
+            aProperties[1].Name = "NoSlideTransitions";
             aProperties[1].Value = uno::makeAny( sal_True );
         }
 
@@ -1084,43 +1081,37 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             aProperties.reserve( 4 );
 
             aProperties.push_back(
-                beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("AdvanceOnClick") ),
+                beans::PropertyValue( "AdvanceOnClick" ,
                     -1, Any( ! (maPresSettings.mbLockedPages != sal_False) ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(
-                beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
+                beans::PropertyValue( "ImageAnimationsAllowed" ,
                     -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             const sal_Bool bZOrderEnabled(
                 SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
             aProperties.push_back(
-                beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("DisableAnimationZOrder") ),
+                beans::PropertyValue( "DisableAnimationZOrder" ,
                     -1, Any( bZOrderEnabled == sal_False ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(
-                beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
+                beans::PropertyValue( "ForceManualAdvance" ,
                     -1, Any( maPresSettings.mbManual != sal_False ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             if( mbUsePen )
              {
                 aProperties.push_back(
-                    beans::PropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") ),
+                    beans::PropertyValue( "UserPaintColor" ,
                         // User paint color is black by default.
                         -1, Any( mnUserPaintColor ),
                         beans::PropertyState_DIRECT_VALUE ) );
 
                 aProperties.push_back(
-                    beans::PropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintStrokeWidth") ),
+                    beans::PropertyValue( "UserPaintStrokeWidth" ,
                         // User paint color is black by default.
                         -1, Any( mdUserPaintStrokeWidth ),
                         beans::PropertyState_DIRECT_VALUE ) );
@@ -1128,8 +1119,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if (mbRehearseTimings) {
                 aProperties.push_back(
-                    beans::PropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("RehearseTimings") ),
+                    beans::PropertyValue( "RehearseTimings" ,
                         -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
             }
 
@@ -1178,8 +1168,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             if (xBitmap.is())
             {
                 mxShow->setProperty(
-                    beans::PropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("WaitSymbolBitmap") ),
+                    beans::PropertyValue( "WaitSymbolBitmap" ,
                         -1,
                         makeAny( xBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
@@ -1197,7 +1186,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         mxListenerProxy->addAsSlideShowListener();
 
 
-        NotifyDocumentEvent( mpDoc, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OnStartPresentation") ) );
+        NotifyDocumentEvent( mpDoc, "OnStartPresentation");
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
 
         return true;
@@ -2194,13 +2183,13 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
         Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), sal_False ) );
-            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), sal_False ) );
+            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, "slot:10617" , sal_False ) );
+            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, "slot:10618" , sal_False ) );
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), sal_False ) );
-                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), sal_False ) );
+                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, "slot:10616" , sal_False ) );
+                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, "slot:10619" , sal_False ) );
             }
         }
     }
@@ -2454,8 +2443,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
             ::comphelper::getProcessServiceFactory(),
             UNO_QUERY_THROW );
 
-        Reference< XInterface > xInt( xFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideShow")) ) );
+        Reference< XInterface > xInt( xFactory->createInstance( "com.sun.star.presentation.SlideShow" ) );
 
         xShow.set( xInt, UNO_QUERY_THROW );
     }
@@ -2699,7 +2687,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
                 {
                     Reference< frame::XLayoutManager > xLayoutManager;
                     Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame().GetFrameInterface(), UNO_QUERY_THROW );
-                    if ( ( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) )
+                    if ( ( xFrameProps->getPropertyValue( "LayoutManager" )
                                 >>= xLayoutManager )
                       && xLayoutManager.is() )
                     {
@@ -2861,18 +2849,18 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
 
         uno::Reference< util::XURLTransformer > xParser(
-            xFac->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" )) ),
+            xFac->createInstance( "com.sun.star.util.URLTransformer" ),
                 uno::UNO_QUERY_THROW);
         util::URL aURL;
-        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/setAutoSaveState"));
+        aURL.Complete = "vnd.sun.star.autorecovery:/setAutoSaveState";
         xParser->parseStrict(aURL);
 
         Sequence< beans::PropertyValue > aArgs(1);
-        aArgs[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
+        aArgs[0].Name = "AutoSaveState";
         aArgs[0].Value <<= bOn ? sal_True : sal_False;
 
         uno::Reference< frame::XDispatch > xAutoSave(
-            xFac->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery"))),
+            xFac->createInstance( "com.sun.star.frame.AutoRecovery" ),
             uno::UNO_QUERY_THROW);
         xAutoSave->dispatch(aURL, aArgs);
     }
@@ -3009,7 +2997,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
         if( mbUsePen )
             aValue <<= mnUserPaintColor;
         beans::PropertyValue aPenProp;
-        aPenProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserPaintColor" ));
+        aPenProp.Name = "UserPaintColor";
         aPenProp.Value = aValue;
         mxShow->setProperty( aPenProp );
 
@@ -3017,13 +3005,13 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
         if( mbUsePen )
         {
             beans::PropertyValue aPenPropWidth;
-            aPenPropWidth.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserPaintStrokeWidth" ));
+            aPenPropWidth.Name = "UserPaintStrokeWidth";
             aPenPropWidth.Value <<= mdUserPaintStrokeWidth;
             mxShow->setProperty( aPenPropWidth );
 
             // for Pen Mode
             beans::PropertyValue aPenPropSwitchPenMode;
-            aPenPropSwitchPenMode.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SwitchPenMode" ));
+            aPenPropSwitchPenMode.Name = "SwitchPenMode";
             aPenPropSwitchPenMode.Value <<= sal_True;
             mxShow->setProperty( aPenPropSwitchPenMode );
         }
@@ -3098,7 +3086,7 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeExc
         if( mxShow.is() ) try
         {
             beans::PropertyValue aPenPropEraseAllInk;
-            aPenPropEraseAllInk.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EraseAllInk" ));
+            aPenPropEraseAllInk.Name = "EraseAllInk";
             aPenPropEraseAllInk.Value <<= bEraseAllInk;
             mxShow->setProperty( aPenPropEraseAllInk );
         }

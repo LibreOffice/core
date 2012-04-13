@@ -669,7 +669,7 @@ void SlideShowView::init()
                                                             uno::UNO_QUERY_THROW );
 
     if( xFactory.is() )
-        mxPointer.set( xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer")) ),
+        mxPointer.set( xFactory->createInstance( "com.sun.star.awt.Pointer" ),
                         uno::UNO_QUERY );
 
     getTransformation();
@@ -683,8 +683,7 @@ void SlideShowView::init()
         {
             Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
                                                            uno::UNO_QUERY_THROW );
-            xCanvasProps->setPropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UnsafeScrolling")),
+            xCanvasProps->setPropertyValue("UnsafeScrolling",
                 uno::makeAny( true ) );
         }
         catch( uno::Exception& )

@@ -820,7 +820,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     if( xProvider.is() )
                     {
                         util::URL aURL;
-                        aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
+                        aURL.Complete = ".uno:CloseFrame";
 
                         uno::Reference< frame::XDispatch > xDispatch(
                             xProvider->queryDispatch(
@@ -1296,11 +1296,9 @@ sal_Int32 SlideShow::GetDisplay()
             Reference<XMultiServiceFactory > xFactory(
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW);
             Reference<XPropertySet> xMonitorProperties(
-                xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess"))),
+                xFactory->createInstance( "com.sun.star.awt.DisplayAccess" ),
                 UNO_QUERY_THROW);
-            const OUString sPropertyName (RTL_CONSTASCII_USTRINGPARAM("DefaultDisplay"));
-            xMonitorProperties->getPropertyValue(sPropertyName) >>= nDisplay;
+            xMonitorProperties->getPropertyValue("DefaultDisplay") >>= nDisplay;
         }
         catch( Exception& )
         {
