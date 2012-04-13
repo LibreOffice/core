@@ -72,7 +72,7 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 
 ::rtl::OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterTextView"));
+    return OUString("com.sun.star.comp.Draw.PresenterTextView");
 }
 
 
@@ -81,8 +81,7 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 Sequence<rtl::OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterTextView")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.PresenterTextView");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -191,8 +190,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     }
     else
     {
-        throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterTextView: invalid number of arguments")),
+        throw RuntimeException("PresenterTextView: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
 }
@@ -289,9 +287,7 @@ void PresenterTextView::ThrowIfDisposed (void)
         || PresenterTextViewInterfaceBase::rBHelper.bInDispose
         || mpImplementation.get()==NULL)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterTextView object has already been disposed")),
+        throw lang::DisposedException ("PresenterTextView object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }
@@ -302,15 +298,15 @@ void PresenterTextView::ThrowIfDisposed (void)
 //===== PresenterTextView::Implementation =====================================
 
 PresenterTextView::Implementation::Implementation (void)
-    : msTextPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Text"))),
-      msBitmapPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap"))),
-      msSizePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Size"))),
-      msBackgroundColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"))),
-      msTextColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TextColor"))),
-      msFontDescriptorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("FontDescriptor"))),
-      msTopPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Top"))),
-      msTopRelativePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeTop"))),
-      msTotalHeightPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TotalHeight"))),
+    : msTextPropertyName("Text"),
+      msBitmapPropertyName("Bitmap"),
+      msSizePropertyName("Size"),
+      msBackgroundColorPropertyName("BackgroundColor"),
+      msTextColorPropertyName("TextColor"),
+      msFontDescriptorPropertyName("FontDescriptor"),
+      msTopPropertyName("Top"),
+      msTopRelativePropertyName("RelativeTop"),
+      msTotalHeightPropertyName("TotalHeight"),
       mxBitmap(),
       mpCanvas(),
       mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),

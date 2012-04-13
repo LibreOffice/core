@@ -551,9 +551,9 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 #endif
 , mnEntryCounter(0)
 , mnLastSlideNumber(-1)
-, msOnClick( "OnClick")
-, msBookmark( "Bookmark")
-, msVerb( "Verb")
+, msOnClick( "OnClick" )
+, msBookmark( "Bookmark" )
+, msVerb( "Verb" )
 , mnEndShowEvent(0)
 , mnContextMenuEvent(0)
 , mnUpdateEvent(0)

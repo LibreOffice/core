@@ -98,7 +98,7 @@ Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
 
 ::rtl::OUString PresenterPreviewCache_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPreviewCache"));
+    return OUString("com.sun.star.comp.Draw.PresenterPreviewCache");
 }
 
 
@@ -107,8 +107,7 @@ Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
 Sequence<rtl::OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.PresenterPreviewCache");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -273,9 +272,7 @@ void PresenterPreviewCache::ThrowIfDisposed (void)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterPreviewCache object has already been disposed")),
+        throw lang::DisposedException ("PresenterPreviewCache object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

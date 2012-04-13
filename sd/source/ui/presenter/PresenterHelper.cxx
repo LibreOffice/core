@@ -60,7 +60,7 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 ::rtl::OUString PresenterHelperService_getImplementationName (void)
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper"));
+    return OUString("com.sun.star.comp.Draw.PresenterHelper");
 }
 
 
@@ -69,8 +69,7 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 Sequence<rtl::OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterHelper")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.PresenterHelper");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -175,8 +174,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
         || ! rxSharedWindow.is()
         || ! rxWindow.is())
     {
-        throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("illegal argument")),
+        throw RuntimeException("illegal argument",
             Reference<XInterface>(static_cast<XWeak*>(this)));
     }
 
@@ -222,7 +220,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
             xFactory->createInstanceWithArguments(
                 !rsOptionalCanvasServiceName.isEmpty()
                     ? rsOptionalCanvasServiceName
-                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
+                    : OUString("com.sun.star.rendering.VCLCanvas"),
                 aArg),
             UNO_QUERY);
     }

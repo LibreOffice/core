@@ -53,7 +53,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 ::rtl::OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideRenderer"));
+    return OUString("com.sun.star.comp.Draw.SlideRenderer");
 }
 
 
@@ -62,8 +62,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 Sequence<rtl::OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.SlideRenderer");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -105,8 +104,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
 
     if (rArguments.getLength() != 0)
     {
-        throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer: invalid number of arguments")),
+        throw RuntimeException("SlideRenderer: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
 }
@@ -191,16 +189,14 @@ BitmapEx SlideRenderer::CreatePreview (
 {
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == NULL)
-        throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid slide")),
+        throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid slide",
             static_cast<XWeak*>(this),
             0);
 
     // Determine the size of the current slide and its aspect ratio.
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
-        throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid size")),
+        throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid size",
             static_cast<XWeak*>(this),
             1);
 
@@ -250,9 +246,7 @@ void SlideRenderer::ThrowIfDisposed (void)
 {
     if (SlideRendererInterfaceBase::rBHelper.bDisposed || SlideRendererInterfaceBase::rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SlideRenderer object has already been disposed")),
+        throw lang::DisposedException ("SlideRenderer object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }
