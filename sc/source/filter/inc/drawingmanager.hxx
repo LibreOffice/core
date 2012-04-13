@@ -117,13 +117,6 @@ public:
     explicit            BiffDrawingObjectBase( const WorksheetHelper& rHelper );
     virtual             ~BiffDrawingObjectBase();
 
-    /** Reads the BIFF3 OBJ record, returns a new drawing object. */
-    static BiffDrawingObjectRef importObjBiff3( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
-    /** Reads the BIFF4 OBJ record, returns a new drawing object. */
-    static BiffDrawingObjectRef importObjBiff4( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
-    /** Reads the BIFF5 OBJ record, returns a new drawing object. */
-    static BiffDrawingObjectRef importObjBiff5( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
-
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
     inline void         setAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
     /** If set to true, the object supports a simple on-click macro and/or hyperlink. */
@@ -185,14 +178,6 @@ protected:
                         implConvertAndInsert( BiffDrawingBase& rDrawing,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const = 0;
-
-private:
-    /** Reads the contents of a BIFF3 OBJ record. */
-    void                importObjBiff3( BiffInputStream& rStrm );
-    /** Reads the contents of a BIFF4 OBJ record. */
-    void                importObjBiff4( BiffInputStream& rStrm );
-    /** Reads the contents of a BIFF5 OBJ record. */
-    void                importObjBiff5( BiffInputStream& rStrm );
 
 private:
     ShapeAnchor         maAnchor;       /// Position of the drawing object.
