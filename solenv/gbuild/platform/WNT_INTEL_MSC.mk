@@ -244,14 +244,9 @@ endif
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
+gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
-
-gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
-# Convert path to native notation
-define gb_Helper_native_path
-$(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE),$(1))
-endef
 
 # Convert path to file URL.
 define gb_Helper_make_url

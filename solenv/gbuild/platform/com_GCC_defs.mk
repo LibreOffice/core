@@ -115,7 +115,7 @@ gb_COMPILERNOOPTFLAGS := -O0
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-
+# Helper class
 
 ifeq ($(OS_FOR_BUILD),MACOSX)
 gb_Helper_LIBRARY_PATH_VAR := DYLD_LIBRARY_PATH
@@ -134,11 +134,6 @@ define gb_Helper_extend_ld_path
 $(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
 endef
 
-# Convert path to native notation
-define gb_Helper_native_path
-$(1)
-endef
-
 # Convert path to file URL.
 define gb_Helper_make_url
 file://$(strip $(1))
@@ -146,5 +141,6 @@ endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
+gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
 
 gb_Helper_get_rcfile = $(1)rc
