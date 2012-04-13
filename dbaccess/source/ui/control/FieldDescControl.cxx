@@ -74,7 +74,7 @@ using namespace ::com::sun::star::util;
 
 //==================================================================
 
-// fuer die Controls auf der OFieldDescGenPage
+// For the Controls on the OFieldDescGenPage
 #define CONTROL_SPACING_X   18  // 6
 #define CONTROL_SPACING_Y   4
 #define CONTROL_WIDTH_1     160 // 100
@@ -254,7 +254,7 @@ OFieldDescControl::~OFieldDescControl()
     pLastFocusWindow = NULL;
 
     //////////////////////////////////////////////////////////////////////
-    // Children zerstoeren
+    // Destroy children
     DeactivateAggregate( tpDefault );
     DeactivateAggregate( tpRequired );
     DeactivateAggregate( tpTextLen );
@@ -289,7 +289,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // Older versions may store a language dependend string as a default
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
@@ -329,7 +329,7 @@ namespace
 //------------------------------------------------------------------------------
 void OFieldDescControl::CheckScrollBars()
 {
-    // ein paar Berechnungen zur neuen Position der ScrollBars
+    // Calculate the ScrollBars' new position
     Size szOverallSize = GetSizePixel();
     long nHScrollHeight = m_pHorzScroll->GetSizePixel().Height();
     long nVScrollWidth = m_pVertScroll->GetSizePixel().Width();
@@ -339,8 +339,8 @@ void OFieldDescControl::CheckScrollBars()
 
     sal_Bool bNeedHScrollBar(sal_False), bNeedVScrollBar(sal_False);
 
-    // die Bereiche anpassen
-    // brauche ich ScrollBars eigentlich ?
+    // Adjust the areas
+    // Do I actually need ScrollBars?
     // horizontal :
     long lMaxXPosition = 0;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
@@ -352,12 +352,12 @@ void OFieldDescControl::CheckScrollBars()
 
     long lMaxXAvailable = szOverallSize.Width();
     bNeedHScrollBar = lMaxXPosition > lMaxXAvailable;
-        // aendert sich vielleicht noch
+        // Might change
 
-    // vertikal
-    // wieviel Controls habe ich
+    // Vertical
+    // How many Controls do I have?
     sal_uInt16 nActive = CountActiveAggregates();
-    // welches ist das letzte, was ganz drauf passt ?
+    // Which one is the last one that fits?
     sal_uInt16 nLastVisible;
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
@@ -369,20 +369,19 @@ void OFieldDescControl::CheckScrollBars()
 
     if (bNeedVScrollBar)
     {
-        // in die urspruengliche Berechnung von lMaxXAvailable ist nicht mit eingegangen, dass ich eine VScrollBar habe, also muss ich
-        // das nachholen
+        // When originally calculating lMaxXAvailable we did not take into account that we have a VScrollBar, so we need to do that now
         lMaxXAvailable -= nVScrollWidth;
         if (!bNeedHScrollBar && (lMaxXPosition > lMaxXAvailable))
         {
-            // durch die vertikale brauche ich jetzt ploetzlich doch eine horizontale
+            // The vertical one now necessitates a horizontal one
             bNeedHScrollBar = sal_True;
-            // nLastVisible anpassen
+            // Adjust nLastVisible
             nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
-                // bNeedVScrollBar aendert sich nicht : es ist schon auf sal_True und nLastVisible wird hoechstens kleiner
+                // bNeedVScrollBar does NOT change: it's already set to sal_True and nLastVisible will only decrease
         }
     }
 
-    // jetzt kann ich sie wirklich positionieren und ihre Parameter setzen
+    // Now we can really position them and set their parameters
     if (bNeedVScrollBar)
     {
         m_pVertScroll->Show();
@@ -501,7 +500,7 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Controls enablen/disablen
+    // Enable/disable Controls
     Control* ppAggregates[]     = {   pRequired, pNumType
                                         , pAutoIncrement, pDefault
                                         , pTextLen, pLength
@@ -531,7 +530,7 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Texte der Controls auslesen
+    // Read out the Controls' texts
     switch( nControlId )
     {
         case FIELD_PROPERTY_BOOL_DEFAULT:
@@ -589,7 +588,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Texte der Controls setzen
+    // Set the Controls' texts
     switch( nControlId )
     {
         case FIELD_PROPERTY_BOOL_DEFAULT:
@@ -669,7 +668,7 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Temporaere Column erzeugen, mit der Datenaustausch mit Dialog erfolgt
+    // Create temporary Column, which is used for data exchange with Dialog
     if( !pActFieldDescr )
         return 0;
 
@@ -717,17 +716,17 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
         SetModified(sal_True);
 
-    // Sonderbehandlund f"ur Bool Felder
+    // Special treatment for Boold fields
     if(pListBox == pRequired && pBoolDefault )
     {
-        // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
+        // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
         String sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
-        if(pRequired->GetSelectEntryPos() == 0) // JA
+        if(pRequired->GetSelectEntryPos() == 0) // Yes
         {
             pBoolDefault->RemoveEntry(String(ModuleRes(STR_VALUE_NONE)));
             if (!sDef.Equals(aYes) && !sDef.Equals(aNo))
-                pBoolDefault->SelectEntryPos(1);  // nein als Default
+                pBoolDefault->SelectEntryPos(1);  // No as a default
             else
                 pBoolDefault->SelectEntry(sDef);
         }
@@ -738,7 +737,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         }
     }
 
-    // nur fuer AutoIncrement eine Sonderbehandlung
+    // A special treatment only for AutoIncrement
     if (pListBox == pAutoIncrement)
     {
         if(pListBox->GetSelectEntryPos() == 1)
@@ -765,7 +764,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
             DeactivateAggregate( tpDefault );
             ActivateAggregate( tpAutoIncrementValue );
         }
-        // und jetzt alle nach oben schieben
+        // Move all up
         ArrangeAggregates();
     }
 
@@ -781,17 +780,17 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     return 0;
 }
 //------------------------------------------------------------------------------
-// alle Control neu anordnen, so dass sie in fester Reihenfolge und wirklich
-// OBEN auf der DescriptionPage stehen
+// Rearrange all Controls, such that they are in fixed order and really on top
+// of the DescriptionPage
 void OFieldDescControl::ArrangeAggregates()
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    // die Beschreibung eines Controls
+    // A Control's description
     struct AGGREGATE_DESCRIPTION
     {
-        Control*    pctrlInputControl;  // das eigentliche Control zur Eingabe
-        Control*    pctrlTextControl;   // das Label dazu
-        sal_uInt16      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
+        Control*    pctrlInputControl;  // The actual Control for input
+        Control*    pctrlTextControl;   // The corresponding Label
+        sal_uInt16      nPosSizeArgument;   // The second argument for SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -819,7 +818,7 @@ void OFieldDescControl::ArrangeAggregates()
 
     OSL_ENSURE(nMaxWidth != 0,"Invalid width!");
 
-    // und los ...
+    // And go ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
     for (size_t i=0; i < SAL_N_ELEMENTS(adAggregates); i++)
@@ -829,8 +828,7 @@ void OFieldDescControl::ArrangeAggregates()
             SetPosSize(&adAggregates[i].pctrlTextControl, nCurrentControlPos, 0);
             SetPosSize(&adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
 
-            // die Z-Order so, dass die Controls auch wirklich in derselben Reihenfolge durchwandert werden koennen, in der sie
-            // hier angeordnet wurden
+            // Set the z-order in a way such that the Controls can be traversed in the same sequence in which they have been arranged here
             adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
             adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, WINDOW_ZORDER_BEHIND );
             pZOrderPredecessor = adAggregates[i].pctrlInputControl;
@@ -845,7 +843,7 @@ void OFieldDescControl::ArrangeAggregates()
         }
     }
 
-    // eine Sonderbehandlung fuer die Format-Controls
+    // Special treatment for the Format Controls
     if (pFormat)
     {
         Point ptSamplePos(pFormatSample->GetPosPixel());
@@ -853,7 +851,7 @@ void OFieldDescControl::ArrangeAggregates()
         pFormat->SetPosPixel(Point(ptSamplePos.X() + szSampleSize.Width() + 5, ptSamplePos.Y()));
     }
 
-    // als letztes noch die ScrollBars in der ZOrder ganz nach oben
+    // Finally, put the ScrollBars at the top of the z-order
     m_pVertScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
     m_pHorzScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
 }
@@ -863,7 +861,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Controls erzeugen
+    // Create Controls
     switch( eType )
     {
     case tpDefault:
@@ -1069,7 +1067,7 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
-    pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
+    pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
     pControl->SetStrictFormat(sal_True);
 
     InitializeControl(pControl,_sHelpId,false);
@@ -1082,7 +1080,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     DBG_CHKTHIS(OFieldDescControl,NULL);
     pLastFocusWindow = NULL;
     //////////////////////////////////////////////////////////////////////
-    // Controls zerstoeren
+    // Destroy Controls
     switch( eType )
     {
     case tpDefault:
@@ -1147,7 +1145,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     DBG_CHKTHIS(OFieldDescControl,NULL);
 
     //////////////////////////////////////////////////////////////////////
-    // Groesse ermitteln
+    // Calculate size
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     Size aSize(0,nControlHeight);
     if ( isRightAligned() && nCol )
@@ -1174,7 +1172,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
 
 
     //////////////////////////////////////////////////////////////////////
-    // Position ermitteln
+    // Calculate Position
     Point aPosition;
     switch( nCol )
     {
@@ -1205,7 +1203,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
                     (nRow*nControlHeight);
 
     //////////////////////////////////////////////////////////////////////
-    // Control anzeigen
+    // Display Control
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
     aSize = (*ppControl)->GetSizePixel();
 
@@ -1232,7 +1230,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpAutoIncrementValue );
         m_pPreviousType = TOTypeInfoSP();
         //////////////////////////////////////////////////////////////////////
-        // Zeiger des gespeicherten Focus zuruecksetzen
+        // Reset the saved focus' pointer
         pLastFocusWindow = NULL;
         if ( m_bAdded )
         {
@@ -1257,15 +1255,15 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     OSL_ENSURE(pFieldType.get(),"We need a type information here!");
     //////////////////////////////////////////////////////////////////////
-    // Wenn sich der Typ geaendert hat, Controls austauschen
+    // If the type has changed, subsitute Controls
     if( m_pPreviousType != pFieldType )
     {
         //////////////////////////////////////////////////////////////////////
-        // Zeiger des gespeicherten Focus zuruecksetzen
+        // Reset the saved focus' pointer
         pLastFocusWindow = NULL;
 
         //////////////////////////////////////////////////////////////////////
-        // Controls, die nicht mehr angezeigt werden duerfen
+        // Controls, which must NOT be displayed again
         DeactivateAggregate( tpNumType );
 
         //////////////////////////////////////////////////////////////////////
@@ -1420,7 +1418,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         }
     }
     //////////////////////////////////////////////////////////////////////
-    // Controls initialisieren
+    // Initialize Controls
     if( pAutoIncrement )
     {
         if ( pFieldDescr->IsAutoIncrement() )
@@ -1438,7 +1436,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             DeactivateAggregate( tpAutoIncrementValue );
             pAutoIncrement->SelectEntryPos( 1 );        // no
             ActivateAggregate( tpDefault );
-            // hat Auswirkungen auf pRequired
+            // Affects pRequired
             if(!pFieldDescr->IsPrimaryKey())
                 ActivateAggregate( tpRequired );
         }
@@ -1452,19 +1450,19 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pBoolDefault )
     {
-        // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
+        // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
         ::rtl::OUString sValue;
         pFieldDescr->GetControlDefault() >>= sValue;
         String sDef = BoolStringUI(sValue);
 
-        // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
+        // Make sure that <<none>> is only present if the field can be NULL
         if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
         {
-            pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // der Typ sagt das
+            pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // The type says so
 
             pBoolDefault->RemoveEntry(String(ModuleRes(STR_VALUE_NONE)));
             if ( !sDef.Equals(aYes) && !sDef.Equals(aNo) )
-                pBoolDefault->SelectEntryPos(1);  // nein als Default
+                pBoolDefault->SelectEntryPos(1);  // No as a default
             else
                 pBoolDefault->SelectEntry(sDef);
 
@@ -1539,7 +1537,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
 
     //////////////////////////////////////////////////////////////////////
-    // Controls Enablen/Disablen
+    // Enable/disable Controls
     sal_Bool bRead(IsReadOnly());
 
 
@@ -1636,7 +1634,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         return;
 
     //////////////////////////////////////////////////////////////////////
-    // Controls auslesen
+    // Read out Controls
     ::rtl::OUString sDefault;
     if (pDefault)
     {
@@ -1686,7 +1684,7 @@ void OFieldDescControl::GetFocus()
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Setzt den Focus auf das zuletzt aktive Control
+    // Set the Focus to the Control that has been active last
     TabPage::GetFocus();
     if( pLastFocusWindow )
     {
@@ -1702,12 +1700,12 @@ void OFieldDescControl::implFocusLost(Window* _pWhich)
     OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     //////////////////////////////////////////////////////////////////////
-    // Das aktive Control merken
+    // Remember the active Control
     if (!pLastFocusWindow)
         pLastFocusWindow = _pWhich;
 
     //////////////////////////////////////////////////////////////////////
-    // HelpText zuruecksetzen
+    // Reset HelpText
     if (pHelp && !pHelp->HasChildPathFocus())
         pHelp->SetHelpText( String() );
 }

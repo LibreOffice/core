@@ -168,7 +168,7 @@ namespace dbaui
         {
             InsertDataColumn( SOURCE_COLUMN, m_pConnData->getReferencingTable()->GetWinName(), 100);
             InsertDataColumn( DEST_COLUMN, m_pConnData->getReferencedTable()->GetWinName(), 100);
-                // wenn es die Defs noch nicht gibt, dann muessen sie noch mit SetSource-/-DestDef gesetzt werden !
+            // If the Defs do not yet exits, we need to set them with SetSource-/-DestDef
 
             m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
 
@@ -397,7 +397,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ORelationControl::setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest)
     {
-        // wenn ich hier gerade editiere, ausblenden
+        // If I edit here, hide
         sal_Bool bWasEditing = IsEditing();
         if ( bWasEditing )
             DeactivateCell();
@@ -433,7 +433,7 @@ namespace dbaui
             m_pConnData->normalizeLines();
 
         }
-        // neu zeichnen
+        // Repaint
         Invalidate();
 
         if ( bWasEditing )
@@ -497,7 +497,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
-        // die Namen aller TabWins einsammeln
+        // Collect the names of all TabWins
         OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
         OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
         for(;aIter != aEnd;++aIter)
@@ -523,10 +523,10 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             m_strCurrentRight = m_strCurrentLeft;
         }
 
-        // die entsprechenden Defs an mein Controls
+        // The corresponding Defs for my Controls
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
-        // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
+        // The table selected in a ComboBox must not be available in the other
 
         if ( m_pTableMap->size() > 2 )
         {
@@ -534,7 +534,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             m_lmbRightTable.RemoveEntry(m_strCurrentLeft);
         }
 
-        // links das erste, rechts das zweite selektieren
+        // Select the first one on the left side and on the right side,
+        // select the second one
         m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
         m_lmbRightTable.SelectEntry(m_strCurrentRight);
 
@@ -547,7 +548,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         OTableWindow* pLeft     = NULL;
         OTableWindow* pRight    = NULL;
 
-        // eine Sonderbehandlung : wenn es nur zwei Tabellen gibt, muss ich bei Wechsel in einer LB auch in der anderen umschalten
+        // Special treatment: If there are only two tables, we need to switch the other one too when changing in a LB
         if ( m_pTableMap->size() == 2 )
         {
             ListBox* pOther;
@@ -575,19 +576,18 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         }
         else
         {
-            // zuerst brauche ich die TableDef zur Tabelle, dazu das TabWin
+            // First we need the TableDef to the Table and with it the TabWin
             OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(strSelected);
             OTableWindow* pLoop = NULL;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
-            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
-                // da ich die ListBoxen selber mit eben diesen Tabellennamen, mit denen ich sie jetzt vergleiche, gefuellt habe,
-                // MUSS ich strSelected finden
+            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
+                // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
             if (pListBox == &m_lmbLeftTable)
             {
-                // den vorher links selektierten Eintrag wieder rein rechts
+                // Insert the previously selected Entry on the left side on the right side
                 m_lmbRightTable.InsertEntry(m_strCurrentLeft);
-                // und den jetzt selektierten raus
+                // Remove the currently selected Entry
                 m_lmbRightTable.RemoveEntry(strSelected);
                 m_strCurrentLeft    = strSelected;
 
@@ -602,9 +602,9 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             }
             else
             {
-                // den vorher rechts selektierten Eintrag wieder rein links
+                // Insert the previously selected Entry on the right side on the left side
                 m_lmbLeftTable.InsertEntry(m_strCurrentRight);
-                // und den jetzt selektierten raus
+                // Remove the currently selected Entry
                 m_lmbLeftTable.RemoveEntry(strSelected);
                 m_strCurrentRight = strSelected;
 
@@ -626,7 +626,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::NotifyCellChange()
     {
-        // den Ok-Button en- oder disablen, je nachdem, ob ich eine gueltige Situation habe
+        // Enable/disable the OK button, depending on having a valid situation
         TTableConnectionData::value_type pConnData = m_pRC_Tables->getData();
         const OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
         m_pParentDialog->setValid(!pLines->empty());

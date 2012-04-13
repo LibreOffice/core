@@ -1014,7 +1014,7 @@ void SbaGridControl::PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu&
 //---------------------------------------------------------------------------------------
 void SbaGridControl::Select()
 {
-    // irgendeine Selektion hat sich geaendert ....
+    // Some selection has changed ...
     FmGridControl::Select();
 
     if (m_pMasterListener)
