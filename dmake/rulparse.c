@@ -299,9 +299,11 @@ int *state;
   }
 
   /* More than one percent target didn't work with prior versions. */
+#if 0
   if( (percent > 1) && !(op & R_OP_OR) )
     Warning( "Prior to dmake 4.5 only one\n"
              "%%-target per target-definition worked reliably. Check your makefiles.\n" );
+#endif
 
   if( !attr && targets == NIL(CELL) ) {
     Fatal( "Missing targets or attributes in rule" );
