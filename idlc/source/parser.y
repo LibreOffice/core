@@ -601,7 +601,8 @@ forward_dcl :
 		{
 			pForward = new AstInterface(*$1, NULL, pScope);
 			
-			if ( pDecl = pScope->lookupByName(pForward->getScopedName()) ) 
+			pDecl = pScope->lookupByName(pForward->getScopedName());
+			if ( pDecl ) 
 			{
 				if ( (pDecl != pForward) && 
 					 (pDecl->getNodeType() == NT_interface) )
