@@ -80,13 +80,15 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
     rm -f common_list.txt
     for module in gid_Module_Root gid_Module_Root_Brand \
-        gid_Module_Root_Files_Images \
         gid_Module_Root_Files_[0-9] \
         gid_Module_Root_Hack \
         gid_Module_Oo_Linguistic \
         gid_Module_Root_Ure_Hidden ; do
         merge_flists $module $FILELISTSDIR/common_list.txt
     done
+
+    # it is not a real extension; it used to be in the main package...
+    merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Javascript $FILELISTSDIR/common_list.txt
 
     if test "$SPLIT_APP_MODULES" = "YES" ; then
         merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/base_list.txt
@@ -118,6 +120,15 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/common_list.txt
         # FIXME: small; low dependencies; why optional module?
         merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
+    fi
+
+    if test "$SPLIT_APP_MODULES" = "YES" -a "$OOO_VENDOR" = "Novell, Inc." ; then
+        # move the prebuilt icons into a hacky temporary package
+        # we want to repack them into a noarch package as soon as possible
+        # without the build dependency on the huge devel package
+        merge_flists gid_Module_Root_Files_Images $FILELISTSDIR/icon_themes_prebuilt.txt
+    else
+        merge_flists gid_Module_Root_Files_Images $FILELISTSDIR/common_list.txt
     fi
 
     if test "$SPLIT_OPT_FEATURES" = "YES" ; then
@@ -238,6 +249,9 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     add_used_directories mono_list.txt common_list.txt
     # add the files from GAC if it was installed
     test -f mono_gac && cat mono_gac >>mono_list.txt
+    
+    # postgresql subpackage
+    test -f $DESTDIR/gid_Module_Optional_PostgresqlSdbc && cp $DESTDIR/gid_Module_Optional_PostgresqlSdbc postgresql_list.txt || :
 
     # mailmerge
     if test "$SPLIT_OPT_FEATURES" = "YES" ; then
@@ -250,8 +264,9 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         add_used_directories $flist common_list.txt
     fi
 
-    if test "z$OOO_VENDOR" = "zNovell" ; then
+    if test "z$OOO_VENDOR" = "zNovell, Inc." ; then
         # officebean subpackage
+        test -f $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell && cp $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell officebean_list.txt || :
         mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/classes/officebean.jar
         mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
         add_used_directories officebean_list.txt common_list.txt
@@ -270,17 +285,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         add_used_directories sdk_doc_list.txt sdk_list.txt
     fi
 
-    if test "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" ; then
-        # move the prebuilt icons into a hacky temporary package
-        # we want to repack them into a noarch package as soon as possible
-        # without the build dependency on the huge devel package
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_classic8.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_crystal.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_industrial.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_tango.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images.zip
-    fi
 
     # Mandriva packaging
     if test "$OOO_VENDOR" = "Mandriva"; then
