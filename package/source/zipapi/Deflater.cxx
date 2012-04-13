@@ -27,7 +27,11 @@
  ************************************************************************/
 
 #include <package/Deflater.hxx>
+#ifdef SYSTEM_ZLIB
 #include <zlib.h>
+#else
+#include <external/zlib/zlib.h>
+#endif
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <string.h> // for memset
 

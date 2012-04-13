@@ -70,7 +70,12 @@ cairo_LDFLAGS=-L$(SOLARVER)$/$(INPATH)$/lib
 
 cairo_CPPFLAGS=
 
+.IF "$(SYSTEM_ZLIB)"!="YES"
+cairo_CPPFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
+cairo_COMPRESS=z_compress
+.ELSE
 cairo_COMPRESS=compress
+.ENDIF
 cairo_CPPFLAGS+=$(INCLUDE)
 
 .IF "$(OS)"=="WNT"

@@ -46,6 +46,10 @@ CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 .ENDIF
 CDEFS+=-U_WIN32_IE -D_WIN32_IE=0x501 -U_WIN32_WINNT -D_WIN32_WINNT=0x0501
 
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CDEFS += -DSYSTEM_ZLIB
+.END
+
 # --- Files --------------------------------------------------------
 
 SLOFILES=$(SLO)$/ooofilt.obj\
@@ -58,7 +62,7 @@ SHL1STDLIBS=$(ZLIB3RDLIB) $(MINIZIP3RDLIB) $(EXPAT3RDLIB)
 SHL1LIBS=
 .ELSE
 SHL1STDLIBS=
-SHL1LIBS=$(SOLARLIBDIR)$/$(ZLIB3RDLIB)\
+SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
     $(SOLARLIBDIR)$/expat_xmltok.lib
 .ENDIF
@@ -104,7 +108,7 @@ SLOFILES_X64=$(SLO_X64)$/ooofilt.obj\
 
 SHL1TARGET_X64=$(TARGET)
 
-SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/$(ZLIB3RDLIB)\
+SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\
     $(SOLARLIBDIR_X64)$/expat_xmlparse.lib\
     $(SOLARLIBDIR_X64)$/expat_xmltok.lib
 

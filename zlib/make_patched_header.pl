@@ -1,7 +1,10 @@
+:
+eval 'exec perl -S $0 ${1+"$@"}'
+    if 0;
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -24,37 +27,40 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+#
+# make_patched_header - make patched header
+#
 
-PRJ=..$/..$/..
-PRJNAME=shell
-TARGET=zipfile
-ENABLE_EXCEPTIONS=TRUE
-EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+use strict;
+use File::Basename;
+use File::Path;
+use Carp;
 
-# --- Settings -----------------------------------------------------
+my $patched_file = shift @ARGV;
+$patched_file =~ s/\\/\//g;
+my $module = shift @ARGV;
+my $patch_dir = dirname($patched_file);
+my $orig_file = $patched_file;
+$orig_file =~ s/\/patched\//\//;
 
-.INCLUDE :  settings.mk
+if (!-f $orig_file) { carp("Cannot find file $orig_file\n"); };
+if (!-d $patch_dir) {
+    mkpath($patch_dir, 0, 0775);
+    if (!-d $patch_dir) {("mkdir: could not create directory $patch_dir\n"); };
+};
 
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CDEFS += -DSYSTEM_ZLIB
-.END
+open(PATCHED_FILE, ">$patched_file") or carp("Cannot open file $patched_file\n");
+open(ORIG_FILE, "<$orig_file") or carp("Cannot open file $orig_file\n");
+foreach (<ORIG_FILE>) {
+    if (/#include\s*"(\w+\.h\w*)"/) {
+        my $include = $1;
+        s/#include "$include"/#include <$module\/$include>/g;
+    };
+    print PATCHED_FILE $_;
+};
+close PATCHED_FILE;
+close ORIG_FILE;
 
-# --- Files --------------------------------------------------------
+exit(0);
 
-
-SLOFILES=$(SLO)$/zipfile.obj\
-    $(SLO)$/zipexcptn.obj
-
-SLOFILES_X64=$(SLO_X64)$/zipfile.obj\
-             $(SLO_X64)$/zipexcptn.obj
-             
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	set_wntx64.mk
-.INCLUDE :	target.mk
-.IF "$(OS)" == "WNT" 
-INCLUDE!:=$(subst,/stl, $(INCLUDE))
- 
-.ENDIF
-.INCLUDE :	tg_wntx64.mk
 

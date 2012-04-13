@@ -231,3 +231,51 @@
 +#define PNG_iTXt_SUPPORTED
 +/* end of options */
 +#endif /* PNGLCONF_H */
+--- misc/libpng-1.5.1/pngstruct.h	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.1/pngstruct.h	2011-03-24 21:47:23.380397048 +0100
+@@ -24,7 +24,15 @@
+  * in this structure and is required for decompressing the LZ compressed
+  * data in PNG files.
+  */
++/* WTF, surely this should depend explicitly on whether using the system or
++ * internal zlib, not on OS... But yeah, so maybe MacOSX, iOS and Android are the only OSes for which
++ * we use a system zlib but internal libpng, at least by default.
++ */
++#if defined MACOSX || defined IOS || defined ANDROID
+ #include "zlib.h"
++#else
++#include <external/zlib/zlib.h>
++#endif
+ 
+ struct png_struct_def
+ {
+--- misc/libpng-1.5.1/pngtest.c	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.1/pngtest.c	2011-03-24 21:47:23.380397048 +0100
+@@ -31,7 +31,12 @@
+  * of files at once by typing "pngtest -m file1.png file2.png ..."
+  */
+
++#if defined MACOSX || defined IOS || defined ANDROID
+ #include "zlib.h"
++#else
++#include <external/zlib/zlib.h>
++#endif
++
+ #include "png.h"
+ /* Copied from pngpriv.h but only used in error messages below. */
+ #ifndef PNG_ZBUF_SIZE
+--- misc/libpng-1.5.1/pngvalid.c	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.1/pngvalid.c	2011-03-24 21:47:23.381397048 +0100
+@@ -51,7 +51,11 @@
+ #define PNG_READ_16BIT_SUPPORTED
+ #endif
+
+-#include "zlib.h"   /* For crc32 */
++#if defined MACOSX || defined IOS || defined ANDROID
++#include "zlib.h"
++#else
++#include <external/zlib/zlib.h>
++#endif
+
+ #include <float.h>  /* For floating point constants */
+ #include <stdlib.h> /* For malloc */

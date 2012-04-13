@@ -25,45 +25,51 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..
-PRJNAME=shell
-TARGET=propsheets
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
+PRJ=.
+
+PRJNAME=zlib
+TARGET=zlib
+
+.IF "$(GUI)" == "UNX"
+.IF "$(SYSTEM_ZLIB)" == "YES"
+all:
+    @echo "An already available installation of zlib should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
-
-CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE
-CDEFS+=-U_WIN32_WINNT -D_WIN32_WINNT=0x0501 -U_WIN32_IE -D_WIN32_IE=0x501
-.IF "$(COM)"!="GCC"
-CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
-CFLAGS_X64+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE
-CFLAGS_X64+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
-CDEFS_X64+=-U_WIN32_WINNT -D_WIN32_WINNT=0x0501 -U_WIN32_IE -D_WIN32_IE=0x501
-.ENDIF
-
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CDEFS += -DSYSTEM_ZLIB
-.END
+.INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=$(SLO)$/propsheets.obj\
-    $(SLO)$/listviewbuilder.obj\
-    $(SLO)$/document_statistic.obj
+TARFILE_NAME=zlib-1.2.5
+TARFILE_MD5=c735eab2d659a96e5a594c9e8541ad63
 
-.IF "$(BUILD_X64)"!=""
-SLOFILES_X64=$(SLO_X64)$/propsheets.obj\
-    $(SLO_X64)$/listviewbuilder.obj\
-    $(SLO_X64)$/document_statistic.obj
-.ENDIF # "$(BUILD_X64)"!=""
+PATCH_FILES=zlib-1.2.5.patch
+ADDITIONAL_FILES=makefile.mk
+
+#relative to CONFIGURE_DIR
+
+BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+
+OUT2INC= \
+    zlib.h \
+    zconf.h \
+    contrib$/minizip$/unzip.h \
+    contrib$/minizip$/ioapi.h
+
+PATCHED_HEADERS=$(INCCOM)$/patched$/zlib.h
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	set_wntx64.mk
+.INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
-INCLUDE!:=$(subst,/stl, $(INCLUDE))
+.INCLUDE :	tg_ext.mk
 
-.INCLUDE :	tg_wntx64.mk
+ALLTAR: $(PATCHED_HEADERS)
+
+$(PATCHED_HEADERS) : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    @$(PERL) make_patched_header.pl $@ $(PRJNAME)

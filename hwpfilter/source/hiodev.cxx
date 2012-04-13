@@ -28,7 +28,12 @@
 
 #include <stdio.h>
 #include <errno.h>
+// DVO: add zlib/ prefix
+#ifdef SYSTEM_ZLIB
 #include <zlib.h>
+#else
+#include <zlib/zlib.h>
+#endif
 #ifdef WIN32
 # include <io.h>
 #else

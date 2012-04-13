@@ -1,3 +1,2 @@
-cl	zlib : soltools NULL
-cl	zlib			usr1	-   all	zl_mkout NULL
-cl	zlib\prj		nmake	-   all	zl_prj NULL
+zl	zlib	:	soltools NULL
+zl	zlib						nmake	-	all	zl_mkout NULL

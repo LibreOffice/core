@@ -41,7 +41,13 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
 
+#ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
 #include <zlib.h>
+#else
+#include <external/zlib/zlib.h>
+#endif
+#endif
 
 #include <vcl/salbtype.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -90,12 +90,12 @@ endef
 else # !SYSTEM_ZLIB
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	z \
+	zlib \
 ))
 
 define gb_LinkTarget__use_zlib
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	z \
+	zlib \
 )
 
 endef
