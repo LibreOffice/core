@@ -164,8 +164,7 @@ AccessiblePageShape* AccessibleDrawDocumentView::CreateDrawPageShape (void)
             uno::Reference<lang::XMultiServiceFactory> xFactory (mxModel, uno::UNO_QUERY);
             uno::Reference<drawing::XShape> xRectangle;
             if (xFactory.is())
-                xRectangle = uno::Reference<drawing::XShape>(xFactory->createInstance (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"))),
+                xRectangle = uno::Reference<drawing::XShape>(xFactory->createInstance ("com.sun.star.drawing.RectangleShape"),
                     uno::UNO_QUERY);
 
             // Set the shape's size and position.
@@ -177,19 +176,15 @@ AccessiblePageShape* AccessibleDrawDocumentView::CreateDrawPageShape (void)
 
                 // Set size and position of the shape to those of the draw
                 // page.
-                aValue = xSet->getPropertyValue (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+                aValue = xSet->getPropertyValue ("BorderLeft");
                 aValue >>= aPosition.X;
-                aValue = xSet->getPropertyValue (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+                aValue = xSet->getPropertyValue ("BorderTop");
                 aValue >>= aPosition.Y;
                 xRectangle->setPosition (aPosition);
 
-                aValue = xSet->getPropertyValue (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
+                aValue = xSet->getPropertyValue ("Width");
                 aValue >>= aSize.Width;
-                aValue = xSet->getPropertyValue (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
+                aValue = xSet->getPropertyValue ("Height");
                 aValue >>= aSize.Height;
                 xRectangle->setSize (aSize);
 
@@ -256,8 +251,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no accessible child with index "))
-            + rtl::OUString::valueOf(nIndex),
+            "no accessible child with index " + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 }
 
@@ -354,8 +348,7 @@ void SAL_CALL
     AccessibleDrawDocumentView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "AccessibleDrawDocumentView"));
+    return ::rtl::OUString("AccessibleDrawDocumentView");
 }
 
 
@@ -373,8 +366,7 @@ void SAL_CALL
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.drawing.AccessibleDrawDocumentView"));
+    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleDrawDocumentView");
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;

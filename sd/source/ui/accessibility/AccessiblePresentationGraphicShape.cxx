@@ -64,7 +64,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
     AccessiblePresentationGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePresentationGraphicShape"));
+    return ::rtl::OUString("AccessiblePresentationGraphicShape");
 }
 
 
@@ -81,14 +81,13 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressGraphicObject"));
+            sName = "ImpressGraphicObject";
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressShape"));
+            sName = "UnknownAccessibleImpressShape";
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
+                sName += ": " + xDescriptor->getShapeType();
     }
 
     return sName;
@@ -107,15 +106,14 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("PresentationGraphicShape"))));
+            aDG.Initialize ("PresentationGraphicShape");
             break;
         default:
-            aDG.Initialize (
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation graphic shape")));
+            aDG.Initialize ("Unknown accessible presentation graphic shape");
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
+                aDG.AppendString ("service name=");
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }

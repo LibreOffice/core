@@ -136,7 +136,7 @@ OUString SAL_CALL
     AccessibleScrollPanel::getImplementationName (void)
     throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleScrollPanel"));
+    return OUString("AccessibleScrollPanel");
 }
 
 

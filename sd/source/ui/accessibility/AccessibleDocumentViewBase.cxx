@@ -132,7 +132,7 @@ void AccessibleDocumentViewBase::Init (void)
     uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
     if (xSet.is())
         xSet->addPropertyChangeListener (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+            "",
             static_cast<beans::XPropertyChangeListener*>(this));
 
     // Register this object as dispose event listener at the controller.
@@ -278,10 +278,7 @@ Reference<XAccessible> SAL_CALL
         if (nIndex == 0)
             return mxAccessibleOLEObject;
 
-    throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("no child with index ") ))
-        + rtl::OUString::valueOf(nIndex),
-        NULL);
+    throw lang::IndexOutOfBoundsException ( "no child with index " + rtl::OUString::valueOf(nIndex), NULL);
 }
 
 
@@ -470,7 +467,7 @@ void SAL_CALL
     AccessibleDocumentViewBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleDocumentViewBase"));
+    return ::rtl::OUString("AccessibleDocumentViewBase");
 }
 
 
@@ -569,9 +566,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     {
         uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
         if (xSet.is())
-            xSet->removePropertyChangeListener (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
-                static_cast<beans::XPropertyChangeListener*>(this));
+            xSet->removePropertyChangeListener ("", static_cast<beans::XPropertyChangeListener*>(this));
 
         mxController->removeEventListener (
             static_cast<awt::XWindowListener*>(this));
@@ -724,8 +719,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
     AccessibleDocumentViewBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString (
-        RTL_CONSTASCII_USTRINGPARAM("AccessibleDocumentViewBase"));
+    return ::rtl::OUString ("AccessibleDocumentViewBase");
 }
 
 
@@ -746,14 +740,13 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         OUString sFirstService = xInfo->getSupportedServiceNames()[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
-            sDescription = OUString (RTL_CONSTASCII_USTRINGPARAM("Draw Document"));
+            sDescription = "Draw Document";
         }
         else
             sDescription = sFirstService;
     }
     else
-        sDescription = OUString (
-            RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
+        sDescription = "Accessible Draw Document";
     return sDescription;
 }
 

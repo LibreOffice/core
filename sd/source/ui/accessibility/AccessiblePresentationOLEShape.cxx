@@ -58,7 +58,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
     AccessiblePresentationOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePresentationOLEShape"));
+    return ::rtl::OUString("AccessiblePresentationOLEShape");
 }
 
 /// Set this object's name if it is different to the current name.
@@ -72,21 +72,19 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressOLE"));
+            sName = "ImpressOLE";
             break;
         case PRESENTATION_CHART:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressChart"));
+            sName = "ImpressChart";
             break;
         case PRESENTATION_TABLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressTable"));
+            sName = "ImpressTable";
             break;
         default:
-            sName = ::rtl::OUString (
-                RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressOLEShape"));
+            sName = "UnknownAccessibleImpressOLEShape";
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
+                sName += ": " + xDescriptor->getShapeType();
     }
 
     return sName;
@@ -102,29 +100,26 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("PresentationOLEShape")));
+            aDG.Initialize ("PresentationOLEShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM ("CLSID")),
-                DescriptionGenerator::STRING);
+            aDG.AddProperty ("CLSID" ,DescriptionGenerator::STRING);
             break;
         case PRESENTATION_CHART:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationChartShape")));
+            aDG.Initialize ("PresentationChartShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")),
-                DescriptionGenerator::STRING);
+            aDG.AddProperty ( "CLSID" , DescriptionGenerator::STRING);
             break;
         case PRESENTATION_TABLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationTableShape")));
+            aDG.Initialize ("PresentationTableShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")),
-                DescriptionGenerator::STRING);
+            aDG.AddProperty ("CLSID" , DescriptionGenerator::STRING);
             break;
         default:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation OLE shape")));
+            aDG.Initialize ("Unknown accessible presentation OLE shape");
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
+                aDG.AppendString ("service name=");
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }

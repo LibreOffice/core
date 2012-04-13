@@ -169,7 +169,7 @@ void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< 
     AccessibleOutlineView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleOutlineView"));
+    return ::rtl::OUString("AccessibleOutlineView");
 }
 
 

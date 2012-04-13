@@ -64,7 +64,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     AccessiblePresentationShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePresentationShape"));
+    return ::rtl::OUString("AccessiblePresentationShape");
 }
 
 
@@ -81,41 +81,40 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressTitle"));
+            sName = "ImpressTitle";
             break;
         case PRESENTATION_OUTLINER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressOutliner"));
+            sName = "ImpressOutliner";
             break;
         case PRESENTATION_SUBTITLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressSubtitle"));
+            sName = "ImpressSubtitle";
             break;
         case PRESENTATION_PAGE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressPage"));
+            sName = "ImpressPage";
             break;
         case PRESENTATION_NOTES:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressNotes"));
+            sName = "ImpressNotes";
             break;
         case PRESENTATION_HANDOUT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHandout"));
+            sName = "ImpressHandout";
             break;
         case PRESENTATION_HEADER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHeader"));
+            sName = "ImpressHeader";
             break;
         case PRESENTATION_FOOTER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressFooter"));
+            sName = "ImpressFooter";
             break;
         case PRESENTATION_DATETIME:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressDateAndTime"));
+            sName = "ImpressDateAndTime";
             break;
         case PRESENTATION_PAGENUMBER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressPageNumber"));
+            sName = "ImpressPageNumber";
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressShape"));
+            sName = "UnknownAccessibleImpressShape";
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
+                sName += ": " + xDescriptor->getShapeType();
     }
 
     return sName;
@@ -134,41 +133,41 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationTitleShape")));
+            aDG.Initialize ("PresentationTitleShape");
             break;
         case PRESENTATION_OUTLINER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationOutlinerShape")));
+            aDG.Initialize ("PresentationOutlinerShape");
             break;
         case PRESENTATION_SUBTITLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationSubtitleShape")));
+            aDG.Initialize ("PresentationSubtitleShape");
             break;
         case PRESENTATION_PAGE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationPageShape")));
+            aDG.Initialize ("PresentationPageShape");
             break;
         case PRESENTATION_NOTES:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationNotesShape")));
+            aDG.Initialize ("PresentationNotesShape");
             break;
         case PRESENTATION_HANDOUT:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationHandoutShape")));
+            aDG.Initialize ("PresentationHandoutShape");
             break;
         case PRESENTATION_HEADER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationHeaderShape")));
+            aDG.Initialize ("PresentationHeaderShape");
             break;
         case PRESENTATION_FOOTER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationFooterShape")));
+            aDG.Initialize ("PresentationFooterShape");
             break;
         case PRESENTATION_DATETIME:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationDateAndTimeShape")));
+            aDG.Initialize ("PresentationDateAndTimeShape");
             break;
         case PRESENTATION_PAGENUMBER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationPageNumberShape")));
+            aDG.Initialize ("PresentationPageNumberShape");
             break;
         default:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation shape")));
+            aDG.Initialize ("Unknown accessible presentation shape");
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
+                aDG.AppendString ("service name=");
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }

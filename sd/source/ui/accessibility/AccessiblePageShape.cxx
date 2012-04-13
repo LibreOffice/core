@@ -99,8 +99,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessiblePageShape::getAccessibleChild( sal_Int32 )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("page shape has no children") ),
+    throw lang::IndexOutOfBoundsException ("page shape has no children",
         static_cast<uno::XWeak*>(this));
 }
 
@@ -125,18 +124,14 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
             awt::Point aPosition;
             awt::Size aSize;
 
-            aValue = xSet->getPropertyValue (
-                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+            aValue = xSet->getPropertyValue ("BorderLeft");
             aValue >>= aBoundingBox.X;
-            aValue = xSet->getPropertyValue (
-                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+            aValue = xSet->getPropertyValue ("BorderTop");
             aValue >>= aBoundingBox.Y;
 
-            aValue = xSet->getPropertyValue (
-                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
+            aValue = xSet->getPropertyValue ("Width");
             aValue >>= aBoundingBox.Width;
-            aValue = xSet->getPropertyValue (
-                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
+            aValue = xSet->getPropertyValue ("Height");
             aValue >>= aBoundingBox.Height;
         }
 
@@ -193,7 +188,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")));
+            aColor = aSet->getPropertyValue ("LineColor");
             aColor >>= nColor;
         }
     }
@@ -222,8 +217,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
         if (xSet.is())
         {
             uno::Any aBGSet;
-            aBGSet = xSet->getPropertyValue (
-                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
+            aBGSet = xSet->getPropertyValue ("Background");
             Reference<beans::XPropertySet> xBGSet (aBGSet, uno::UNO_QUERY);
             if ( ! xBGSet.is())
             {
@@ -234,8 +228,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
                 {
                     xSet = Reference<beans::XPropertySet> (xTarget->getMasterPage(),
                         uno::UNO_QUERY);
-                    aBGSet = xSet->getPropertyValue (
-                        ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
+                    aBGSet = xSet->getPropertyValue ("Background");
                     xBGSet = Reference<beans::XPropertySet> (aBGSet, uno::UNO_QUERY);
                 }
             }
@@ -244,7 +237,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             if (xBGSet.is())
             {
                 uno::Any aColor;
-                aColor = xBGSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")));
+                aColor = xBGSet->getPropertyValue ("FillColor");
                 aColor >>= nColor;
             }
             else
@@ -269,7 +262,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePageShape"));
+    return ::rtl::OUString("AccessiblePageShape");
 }
 
 
@@ -327,7 +320,7 @@ void AccessiblePageShape::dispose (void)
     AccessiblePageShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageShape"));
+    return ::rtl::OUString ("PageShape");
 }
 
 
@@ -362,7 +355,7 @@ void AccessiblePageShape::dispose (void)
     AccessiblePageShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Page Shape"));
+    return ::rtl::OUString ("Page Shape");
 }
 
 

@@ -729,7 +729,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
        AccessibleSlideSorterView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleSlideSorterView"));
+    return OUString("AccessibleSlideSorterView");
 }
 
 
@@ -761,12 +761,9 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     ThrowIfDisposed ();
 
     static const OUString sServiceNames[3] = {
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.accessibility.Accessible")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.accessibility.AccessibleContext")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.drawing.AccessibleSlideSorterView"))
+            "com.sun.star.accessibility.Accessible",
+            "com.sun.star.accessibility.AccessibleContext",
+            "com.sun.star.drawing.AccessibleSlideSorterView"
     };
     return uno::Sequence<OUString> (sServiceNames, 3);
 }
@@ -780,8 +777,7 @@ void AccessibleSlideSorterView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
+        throw lang::DisposedException ("object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }
 }
