@@ -274,16 +274,17 @@ Reference< registry::XSimpleRegistry > readRdbDirectory(
              url),
             css::uno::Reference< css::uno::XInterface >());
     }
-    for (css::uno::Reference< css::registry::XSimpleRegistry > last(
-             lastRegistry);;)
+    std::vector<rtl::OUString> aURLs;
+    css::uno::Reference< css::registry::XSimpleRegistry > last(lastRegistry);
+    for (;;)
     {
         osl::DirectoryItem i;
-        switch (dir.getNextItem(i, SAL_MAX_UINT32)) {
-        case osl::FileBase::E_None:
+        osl::FileBase::RC eResult;
+        eResult = dir.getNextItem(i, SAL_MAX_UINT32);
+        if (eResult == osl::FileBase::E_NOENT)
             break;
-        case osl::FileBase::E_NOENT:
-            return last;
-        default:
+        if (eResult != osl::FileBase::E_None)
+        {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("cannot iterate directory ")) +
@@ -307,12 +308,49 @@ Reference< registry::XSimpleRegistry > readRdbDirectory(
         if (aName.toChar() == '.' || aName.endsWithAsciiL("~", 1))
             continue;
 
-        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
-            last = readRdbFile(
-                stat.getFileURL(), fatalErrors, last, simpleRegistryFactory,
-                nestedRegistryFactory);
+        if (stat.getFileType() != osl::FileStatus::Directory) //TODO: symlinks
+            aURLs.push_back(stat.getFileURL());
+    }
+
+    size_t nXML = 0;
+    for (std::vector<rtl::OUString>::iterator it = aURLs.begin(); it != aURLs.end(); it++)
+    {
+        // Read / sniff the nasty files ...
+        osl::File aIn( *it );
+        if (aIn.open(osl_File_OpenFlag_Read) != osl::FileBase::E_None)
+            continue;
+
+        sal_uInt64 nRead = 0;
+        char buffer[6];
+        bool bIsXML = aIn.read(buffer, 6, nRead) == osl::FileBase::E_None &&
+                      nRead == 6 && !strncmp(buffer, "<?xml ", 6);
+        aIn.close();
+        if (!bIsXML)
+        {
+            OSL_TRACE (OSL_LOG_PREFIX "rdb '%s' is a legacy format\n",
+                       rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr());
+            break;
+        }
+        nXML++;
+    }
+    if (nXML == aURLs.size())
+    {
+        OSL_TRACE (OSL_LOG_PREFIX "no legacy rdbs in directory '%s'\n",
+                   rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ).getStr());
+        // read whole directory...
+        last = readRdbFile( url, fatalErrors, last,
+                            simpleRegistryFactory, nestedRegistryFactory);
+    }
+    else
+    {
+        for (std::vector<rtl::OUString>::iterator it = aURLs.begin(); it != aURLs.end(); it++)
+        {
+            // Read / sniff the nasty files ...
+            last = readRdbFile(*it, fatalErrors, last,
+                               simpleRegistryFactory, nestedRegistryFactory);
         }
     }
+    return last;
 }
 
 Reference< registry::XSimpleRegistry > nestRegistries(

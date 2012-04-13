@@ -48,6 +48,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
+#include "osl/file.hxx"
 #include "registry/registry.hxx"
 #include "registry/regtype.h"
 #include "rtl/ref.hxx"
@@ -83,6 +84,12 @@ public:
 
 private:
     virtual rtl::OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL openRdb(
+        rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
+        throw (
+            css::registry::InvalidRegistryException,
+            css::uno::RuntimeException);
 
     virtual void SAL_CALL open(
         rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
@@ -1130,27 +1137,17 @@ rtl::OUString Key::getResolvedName(rtl::OUString const & aKeyName)
     return resolved;
 }
 
-rtl::OUString SimpleRegistry::getURL() throw (css::uno::RuntimeException) {
+rtl::OUString SimpleRegistry::getURL() throw (css::uno::RuntimeException)
+{
     osl::MutexGuard guard(mutex_);
     return textual_.get() == 0 ? registry_.getName() : textual_->getUri();
 }
 
-void SimpleRegistry::open(
+void SimpleRegistry::openRdb(
     rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
-    if (textual_.get() != 0) {
-        throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.registry.SimpleRegistry.open(")) +
-             rURL +
-             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "): instance already open"))),
-            static_cast< OWeakObject * >(this));
-    }
     RegError err = (rURL.isEmpty() && bCreate)
         ? REG_REGISTRY_NOT_EXISTS
         : registry_.open(rURL, bReadOnly ? REG_READONLY : REG_READWRITE);
@@ -1162,7 +1159,10 @@ void SimpleRegistry::open(
         break;
     case REG_INVALID_REGISTRY:
         if (bReadOnly && !bCreate) {
-            textual_.reset(new stoc::simpleregistry::TextualServices(rURL));
+            if (!textual_.get())
+                textual_.reset(new stoc::simpleregistry::TextualServices(rURL));
+            else
+                textual_->merge(rURL);
             break;
         }
         // fall through
@@ -1178,6 +1178,72 @@ void SimpleRegistry::open(
              rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
             static_cast< OWeakObject * >(this));
     }
+}
+
+void SimpleRegistry::open(
+    rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
+    throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
+{
+    osl::MutexGuard guard(mutex_);
+
+    osl::DirectoryItem aItem;
+    osl::FileBase::RC eErr;
+    osl::FileStatus aStatus(osl_FileStatus_Mask_Type);
+
+    // FIXME: busts the 'create' mode ...
+    if ((eErr = osl::DirectoryItem::get( rURL, aItem )) != osl::FileBase::E_None ||
+        (eErr = aItem.getFileStatus( aStatus )) != osl::FileBase::E_None ||
+        !aStatus.isDirectory())
+    {
+        if (textual_.get() != 0)
+            throw css::registry::InvalidRegistryException(
+                (rtl::OUString("com.sun.star.registry.SimpleRegistry.open(") +
+                 rURL + rtl::OUString("): instance already open")),
+                static_cast< OWeakObject * >(this));
+        openRdb (rURL, bReadOnly, bCreate);
+    }
+    else
+    {
+        osl::Directory dir(rURL);
+        eErr = dir.open();
+        if (eErr != osl::FileBase::E_None)
+            goto err_throw;
+
+        for (;;) {
+            osl::DirectoryItem i;
+            if (dir.getNextItem(i, SAL_MAX_UINT32) != osl::FileBase::E_None)
+                break;
+            osl::FileStatus stat(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+                                 osl_FileStatus_Mask_FileURL);
+            if (i.getFileStatus(stat) != osl::FileBase::E_None)
+                throw css::uno::RuntimeException(
+                        (rtl::OUString("cannot stat in directory ") + rURL ),
+                        css::uno::Reference< css::uno::XInterface >());
+
+            rtl::OUString aName = stat.getFileName();
+
+            // Ignore backup files - to allow people to edit their
+            // services/ without extremely confusing behaviour
+            if (aName.toChar() == '.' || aName.endsWithAsciiL("~", 1))
+                continue;
+
+            if (stat.getFileType() != osl::FileStatus::Directory)
+                openRdb(stat.getFileURL(), bReadOnly, bCreate);
+        }
+    }
+    return;
+
+err_throw:
+        throw css::registry::InvalidRegistryException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.registry.SimpleRegistry.open(")) +
+             rURL +
+             rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "): error statting url = ")) +
+             rtl::OUString::valueOf(static_cast< sal_Int32 >(eErr))),
+            static_cast< OWeakObject * >(this));
 }
 
 sal_Bool SimpleRegistry::isValid() throw (css::uno::RuntimeException) {
