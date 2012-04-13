@@ -717,8 +717,6 @@ void Chart2Positioner::createPositionMap()
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<Table> pCols(new Table);
-    auto_ptr<FormulaToken> pNewAddress;
-    auto_ptr<Table> pNewRowTable(new Table);
     SAL_WNODEPRECATED_DECLARATIONS_POP
     Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
@@ -750,25 +748,11 @@ void Chart2Positioner::createPositionMap()
 
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol)
             {
-                if (bNoGlue || meGlue == GLUETYPE_ROWS)
+                pCol = static_cast<Table*>(pCols->Get(nInsCol));
+                if (!pCol)
                 {
-                    pCol = static_cast<Table*>(pCols->Get(nInsCol));
-                    if (!pCol)
-                    {
-                        pCol = pNewRowTable.get();
-                        pCols->Insert(nInsCol, pNewRowTable.release());
-                        pNewRowTable.reset(new Table);
-                    }
-                }
-                else
-                {
-                    if (pCols->Insert(nInsCol, pNewRowTable.get()))
-                    {
-                        pCol = pNewRowTable.release();
-                        pNewRowTable.reset(new Table);
-                    }
-                    else
-                        pCol = static_cast<Table*>(pCols->Get(nInsCol));
+                    pCol = new Table;
+                    pCols->Insert(nInsCol, pCol);
                 }
 
                 sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
@@ -784,20 +768,18 @@ void Chart2Positioner::createPositionMap()
                     aCellData.nRow = nRow;
                     aCellData.nTab = nTab;
 
-                    if (bExternal)
-                        pNewAddress.reset(new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
-                    else
-                        pNewAddress.reset(new ScSingleRefToken(aCellData));
-
-                    if (pCol->Insert(nInsRow, pNewAddress.get()))
-                        pNewAddress.release(); // To prevent the instance from being destroyed.
+                    if (!pCol->Get(nInsRow))
+                    {
+                        if (bExternal)
+                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
+                        else
+                            pCol->Insert(nInsRow, new ScSingleRefToken(aCellData));
+                    }
                 }
             }
         }
         nNoGlueRow += nRow2 - nRow1 + 1;
     }
-    pNewAddress.reset(NULL);
-    pNewRowTable.reset(NULL);
 
     bool bFillRowHeader = mbRowHeaders;
     bool bFillColumnHeader = mbColHeaders;
