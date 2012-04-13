@@ -4179,7 +4179,28 @@ void Test::testAutoFill()
     for (SCROW i = 3; i< 8; ++i)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
 
-
+    m_pDoc->Fill( 0, 0, 0, 8, NULL, aMarkData, 5, FILL_TO_RIGHT );
+    for (SCCOL i = 0; i < 5; ++i)
+    {
+        for(SCROW j = 0; j < 8; ++j)
+        {
+            if (j > 2)
+            {
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(j-1+i), m_pDoc->GetValue(i, j, 0), 1e-8);
+            }
+            else if (j == 0)
+            {
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0), 1e-8);
+            }
+            else if (j == 1 || j== 2)
+            {
+                if(i == 0)
+                    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0), 1e-8);
+                else
+                    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(i,j,0), 1e-8);
+            }
+        }
+    }
 
 
     m_pDoc->DeleteTab(0);
