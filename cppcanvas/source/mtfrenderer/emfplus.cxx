@@ -902,7 +902,7 @@ namespace cppcanvas
             } else {
                 rState.isFillColorSet = true;
                 // extract UseBrush
-                EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor];
+                EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor & 0xff];
                 EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %u (type: %u)\n", (unsigned int)brushIndexOrColor, (unsigned int)brush->GetType ()));
 
                 // give up in case something wrong happened
@@ -1356,31 +1356,37 @@ namespace cppcanvas
                         EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
 
                         EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
-                        EMFPPen* pen = (EMFPPen*) aObjects [penIndex];
+                        EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
 
-                        rState.isFillColorSet = false;
-                        rState.isLineColorSet = true;
-                        rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
-                                                                                   rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
-                        ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
+                        SAL_WARN_IF( !pen, "cppcanvas", "EmfPlusRecordTypeDrawPath missing pen" );
+                        SAL_WARN_IF( !path, "cppcanvas", "EmfPlusRecordTypeDrawPath missing path" );
 
-                        polygon.transform( rState.mapModeTransform );
-                        rendering::StrokeAttributes aStrokeAttributes;
-
-                        pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
-
-                        ActionSharedPtr pPolyAction(
-                            internal::PolyPolyActionFactory::createPolyPolyAction(
-                                polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
-
-                        if( pPolyAction )
+                        if (pen && path)
                         {
-                            maActions.push_back(
-                                MtfAction(
-                                    pPolyAction,
-                                    rFactoryParms.mrCurrActionIndex ) );
+                            rState.isFillColorSet = false;
+                            rState.isLineColorSet = true;
+                            rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                                                                                       rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
+                            ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
 
-                            rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                            polygon.transform( rState.mapModeTransform );
+                            rendering::StrokeAttributes aStrokeAttributes;
+
+                            pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+
+                            ActionSharedPtr pPolyAction(
+                                internal::PolyPolyActionFactory::createPolyPolyAction(
+                                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
+
+                            if( pPolyAction )
+                            {
+                                maActions.push_back(
+                                    MtfAction(
+                                        pPolyAction,
+                                        rFactoryParms.mrCurrActionIndex ) );
+
+                                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                            }
                         }
                         break;
                     }
