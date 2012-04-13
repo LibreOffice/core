@@ -53,7 +53,7 @@ sub action($$$)
         ('app/UREBIN/URELIB' => '@executable_path/../lib',
          'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
          'app/OOO/OOO' => '@executable_path',
-         'app/SDK/URELIB' => '@executable_path/../../ure-link/lib',
+         'app/SDKBIN/URELIB' => '@executable_path/../../ure-link/lib',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
