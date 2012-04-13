@@ -123,6 +123,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     udkapi \
     unixODBC \
     UnoControls \
+    unodevtools \
     unoil \
     unotest \
     unotools \

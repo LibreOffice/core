@@ -63,6 +63,7 @@ ifneq ($(OS),IOS)
 $(eval $(call gb_Helper_register_executables,SDK, \
     javamaker \
     cppumaker \
+    uno-skeletonmaker \
 ))
 
 endif

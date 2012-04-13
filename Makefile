@@ -124,6 +124,7 @@ ucb\
 ucbhelper\
 udkapi\
 unixODBC\
+unodevtools\
 unoil\
 unotest\
 unotools\
@@ -234,7 +235,6 @@ sysui\
 testtools\
 tomcat\
 udm\
-unodevtools\
 vigra\
 x11_extensions\
 xpdf\
