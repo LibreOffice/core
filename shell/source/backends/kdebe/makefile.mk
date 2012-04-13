@@ -63,11 +63,12 @@ SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 SHL1IMPLIB=i$(SHL1TARGET)
-SHL1LINKFLAGS+=$(KDE_LIBS) -lkio
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB)
+        $(SALLIB) \
+        $(KDE_LIBS) \
+        -lkio
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)

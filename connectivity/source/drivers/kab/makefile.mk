@@ -111,14 +111,14 @@ SHL2VERSIONMAP=$(TARGET2).map
 
 SHL2TARGET= $(TARGET2)$(KAB_MAJOR)
 SHL2OBJS=$(SLO2FILES)
-SHL2LINKFLAGS+=$(KAB_LIB)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(SALLIB)                   \
     $(SALHELPERLIB)                   \
     $(DBTOOLSLIB)               \
-    $(COMPHELPERLIB)
+    $(COMPHELPERLIB)            \
+    $(KAB_LIB)
 
 SHL2DEPN=
 SHL2IMPLIB= i$(TARGET2)
