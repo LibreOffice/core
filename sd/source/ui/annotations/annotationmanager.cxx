@@ -89,7 +89,6 @@
 #include "textapi.hxx"
 #include "optsitem.hxx"
 
-#define C2U(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

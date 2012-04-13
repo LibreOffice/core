@@ -80,8 +80,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
-#define C2U(x) OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 namespace {
     /** This local version of the work window overloads DataChanged() so that it
@@ -277,7 +275,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Wind
 
 OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SlideShow") );
+    return OUString( "com.sun.star.comp.sd.SlideShow" );
 }
 
 // --------------------------------------------------------------------
@@ -291,7 +289,7 @@ sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) thro
 
 Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.Presentation") );
+    OUString aService( "com.sun.star.presentation.Presentation" );
     Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
@@ -845,7 +843,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
 void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException)
 {
     Sequence< PropertyValue > aArguments(1);
-    aArguments[0].Name = C2U("RehearseTimings");
+    aArguments[0].Name = "RehearseTimings";
     aArguments[0].Value <<= sal_True;
     startWithArguments( aArguments );
 }
@@ -963,20 +961,20 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
 {
     Sequence< PropertyValue > aArguments(4);
 
-    aArguments[0].Name = C2U("Preview");
+    aArguments[0].Name = "Preview";
     aArguments[0].Value <<= sal_True;
 
-    aArguments[1].Name = C2U("FirstPage");
+    aArguments[1].Name = "FirstPage";
     aArguments[1].Value <<= xDrawPage;
 
-    aArguments[2].Name = C2U("AnimationNode");
+    aArguments[2].Name = "AnimationNode";
     aArguments[2].Value <<= xAnimationNode;
 
     Reference< XWindow > xParentWindow;
     if( pParent )
         xParentWindow = VCLUnoHelper::GetInterface( pParent );
 
-    aArguments[3].Name = C2U("ParentWindow");
+    aArguments[3].Name = "ParentWindow";
     aArguments[3].Value <<= xParentWindow;
 
     startWithArguments( aArguments );

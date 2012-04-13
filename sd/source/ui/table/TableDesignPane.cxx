@@ -493,7 +493,7 @@ void TableDesignPane::updateControls()
     sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
     {
-        Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( OUString( "TableTemplate" ) ), UNO_QUERY );
+        Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( "TableTemplate" ), UNO_QUERY );
         if( xNamed.is() )
         {
             const OUString sStyleName( xNamed->getName() );

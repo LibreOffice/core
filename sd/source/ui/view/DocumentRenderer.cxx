@@ -71,11 +71,6 @@ using ::rtl::OUString;
 namespace sd {
 
 namespace {
-    OUString A2S (const char* pString)
-    {
-        return OUString::createFromAscii(pString);
-    }
-
 
 
     /** Convenience class to extract values from the sequence of properties
@@ -1297,14 +1292,14 @@ public:
 
         css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
 
-        aProperties[0].Name = A2S("ExtraPrintUIOptions");
+        aProperties[0].Name = "ExtraPrintUIOptions";
         aProperties[0].Value <<= m_aUIProperties;
 
-        aProperties[1].Name = A2S("PageSize");
+        aProperties[1].Name = "PageSize";
         aProperties[1].Value <<= maPrintSize;
 
         // FIXME: is this always true ?
-        aProperties[2].Name = A2S("PageIncludesNonprintableArea");
+        aProperties[2].Name = "PageIncludesNonprintableArea";
         aProperties[2].Value = makeAny( sal_True );
 
         return aProperties;

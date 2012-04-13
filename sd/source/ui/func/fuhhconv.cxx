@@ -52,7 +52,6 @@
 
 class SfxRequest;
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -256,9 +255,9 @@ void FuHangulHanjaConversion::StartChineseConversion()
                     {
                         try
                         {
-                            xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
-                            xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
-                            xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                            xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
+                            xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
+                            xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
                         }
                         catch( Exception& )
                         {

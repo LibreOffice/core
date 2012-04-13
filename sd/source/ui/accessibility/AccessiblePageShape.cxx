@@ -44,7 +44,6 @@ using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace accessibility {
 
@@ -346,14 +345,14 @@ void AccessiblePageShape::dispose (void)
     {
         if (xPageProperties.is())
         {
-            xPageProperties->getPropertyValue(A2S("LinkDisplayName")) >>= sCurrentSlideName;
+            xPageProperties->getPropertyValue( "LinkDisplayName" ) >>= sCurrentSlideName;
         }
     }
     catch (const beans::UnknownPropertyException&)
     {
     }
 
-    return CreateAccessibleBaseName()+A2S(": ")+sCurrentSlideName;
+    return CreateAccessibleBaseName()+": "+sCurrentSlideName;
 }
 
 

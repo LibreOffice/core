@@ -42,7 +42,6 @@ using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
-#define C2U(x) OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 namespace sd {
 
@@ -97,7 +96,7 @@ sal_Int32 SlideShowRestarter::GetDisplayCount (void)
         return 0;
 
     Reference<com::sun::star::container::XIndexAccess> xIndexAccess (
-        xFactory->createInstanceWithContext(C2U("com.sun.star.awt.DisplayAccess"),xContext),
+        xFactory->createInstanceWithContext("com.sun.star.awt.DisplayAccess",xContext),
         UNO_QUERY);
     if ( ! xIndexAccess.is())
         return 0;
@@ -161,8 +160,8 @@ void SlideShowRestarter::StartPresentation (void)
         if (mpSlideShow.is())
         {
             Sequence<css::beans::PropertyValue> aProperties (1);
-            aProperties[0].Name = C2U("FirstPage");
-            aProperties[0].Value <<= C2U("page") + OUString::valueOf(mnCurrentSlideNumber+1);
+            aProperties[0].Name = "FirstPage";
+            aProperties[0].Value <<= "page" + OUString::valueOf(mnCurrentSlideNumber+1);
             mpSlideShow->startWithArguments(aProperties);
         }
         mpSelf.reset();
