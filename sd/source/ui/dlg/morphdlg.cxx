@@ -92,8 +92,7 @@ MorphDlg::~MorphDlg()
 
 void MorphDlg::LoadSettings()
 {
-    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
-                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
+    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( rtl::OUString(SD_OPTION_MORPHING) ,
                                SD_OPTION_LOAD ) );
     sal_uInt16              nSteps;
     sal_Bool                bOrient, bAttrib;
@@ -119,8 +118,7 @@ void MorphDlg::LoadSettings()
 
 void MorphDlg::SaveSettings() const
 {
-    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
-                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
+    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( rtl::OUString(SD_OPTION_MORPHING) ,
                                SD_OPTION_STORE ) );
 
     if( xOStm.Is() )

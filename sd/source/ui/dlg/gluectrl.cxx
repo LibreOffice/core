@@ -113,11 +113,11 @@ void GlueEscDirLB::Select()
     {
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GlueEscapeDirection" ));
+        aArgs[0].Name   = "GlueEscapeDirection";
         aItem.QueryValue( a );
         aArgs[0].Value  = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GlueEscapeDirection" )),
+                                    ".uno:GlueEscapeDirection",
                                     aArgs );
     }
 /*

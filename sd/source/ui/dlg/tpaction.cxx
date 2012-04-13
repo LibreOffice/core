@@ -486,7 +486,7 @@ void SdTPAction::OpenFileDialog()
             // links on the desktop to directories.
             aFileDialog.AddFilter (
                 String (SfxResId (STR_SFX_FILTERNAME_ALL)),
-                String (RTL_CONSTASCII_USTRINGPARAM("*.*")));
+                rtl::OUString("*.*"));
 
 
             if( aFileDialog.Execute() == ERRCODE_NONE )

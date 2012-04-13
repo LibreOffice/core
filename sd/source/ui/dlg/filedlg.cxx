@@ -319,25 +319,25 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 {
     String aDescr;
     aDescr = String(SdResId(STR_ALL_FILES));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.*"));
 
     // setup filter
 #if defined UNX
     aDescr = String(SdResId(STR_AU_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.au;*.snd" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.au;*.snd" ));
     aDescr = String(SdResId(STR_VOC_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.voc" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.voc" ));
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.wav" ));
     aDescr = String(SdResId(STR_AIFF_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.aiff" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.aiff" ));
     aDescr = String(SdResId(STR_SVX_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.svx" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.svx" ));
 #else
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav;*.mp3;*.ogg" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.wav;*.mp3;*.ogg" ));
     aDescr = String(SdResId(STR_MIDI_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
+    mpImpl->AddFilter( aDescr, rtl::OUString("*.mid" ));
 #endif
 }
 

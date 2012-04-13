@@ -110,11 +110,11 @@ void SdPagesField::Modify()
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagesPerRow" ));
+    aArgs[0].Name   = "PagesPerRow";
     aItem.QueryValue( a );
     aArgs[0].Value  = a;
     SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
-                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PagesPerRow" )),
+                                 ".uno:PagesPerRow",
                                  aArgs );
 /*
     rBindings.GetDispatcher()->Execute(

@@ -434,15 +434,15 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     // Set text and icon of the 'Open...' button.
     {
-        String sText (GetUiTextForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))));
+        String sText (GetUiTextForCommand(".uno:Open"));
         // Remove the mnemonic and add a leading space so that icon and text
         // are not too close together.
-        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_USTRINGPARAM("~")),String());
-        sText.Insert(String(RTL_CONSTASCII_USTRINGPARAM(" ")),0);
+        sText.SearchAndReplaceAll(rtl::OUString("~"),String());
+        sText.Insert(rtl::OUString(" "),0);
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
-            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open")))
+            GetUiIconForCommand(".uno:Open")
         );
         mpPage1OpenPB->EnableImageDisplay(sal_True);
         mpPage1OpenPB->EnableTextDisplay(sal_True);
@@ -629,7 +629,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     UpdatePreview( sal_True );
 
     //check whether we should start with a template document initialy and preselect it
-    const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+    const ::rtl::OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
     String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
     if( aStandardTemplate.Len() )
     {
@@ -784,11 +784,10 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
         SvtHistoryOptions().GetList (ePICKLIST);
 
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ) ), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
 
     Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFileAccess(
-        xFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
+        xFactory->createInstance("com.sun.star.ucb.SimpleFileAccess"),
         UNO_QUERY_THROW);
 
     sal_uInt32 nCount = aHistory.getLength();
@@ -1579,12 +1578,10 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         }
         else
         {
-            const String aTargetStr( RTL_CONSTASCII_USTRINGPARAM("_default") );
-
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, aEmptyStr ) );
-            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, aTargetStr ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_default") ) );
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
@@ -1757,11 +1754,9 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
             if ( ! xFactory.is())
                 break;
 
-            ::rtl::OUString sModuleIdentifier (
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+            ::rtl::OUString sModuleIdentifier ("com.sun.star.presentation.PresentationDocument");
             Reference<container::XNameAccess> xNameAccess (
-                xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.UICommandDescription"))),
+                xFactory->createInstance("com.sun.star.frame.UICommandDescription"),
                 UNO_QUERY);
             if ( ! xNameAccess.is())
                 break;
@@ -1818,12 +1813,10 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
             if ( ! xFactory.is())
                 break;
 
-            ::rtl::OUString sModuleIdentifier (
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+            ::rtl::OUString sModuleIdentifier ("com.sun.star.presentation.PresentationDocument");
 
             Reference<com::sun::star::ui::XModuleUIConfigurationManagerSupplier> xSupplier (
-                xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
+                xFactory->createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"),
                 UNO_QUERY_THROW);
 
             Reference<com::sun::star::ui::XUIConfigurationManager> xManager (

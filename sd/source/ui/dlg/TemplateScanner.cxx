@@ -107,19 +107,19 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 
     if (rsURL.isEmpty())
         nPriority = 100;
-    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
+    else if (rsURL.indexOf("presnt")>=0)
     {
         nPriority = 30;
     }
-    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout")))>=0)
+    else if (rsURL.indexOf("layout")>=0)
     {
         nPriority = 20;
     }
-    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("educate")))>=0)
+    else if (rsURL.indexOf("educate")>=0)
     {
         nPriority = 40;
     }
-    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("finance")))>=0)
+    else if (rsURL.indexOf("finance")>=0)
     {
         nPriority = 40;
     }

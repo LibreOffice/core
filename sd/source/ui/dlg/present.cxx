@@ -185,7 +185,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
     try
     {
         Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xMultiMon( xFactory->createInstance("com.sun.star.awt.DisplayAccess" ), UNO_QUERY_THROW );
         maGrpMonitor.Show( true );
         maFtMonitor.Show( true );
         maLBMonitor.Show( true );
@@ -204,9 +204,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
             Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
             if( xMonProps.is() ) try
             {
-                const OUString sPropName1( RTL_CONSTASCII_USTRINGPARAM( "IsUnifiedDisplay" ) );
+                const OUString sPropName1( "IsUnifiedDisplay" );
                 xMonProps->getPropertyValue( sPropName1 ) >>= bUnifiedDisplay;
-                const OUString sPropName2( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
+                const OUString sPropName2( "DefaultDisplay" );
                 xMonProps->getPropertyValue( sPropName2 ) >>= nPrimaryIndex;
             }
             catch( Exception& )

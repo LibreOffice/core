@@ -302,7 +302,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         bDisableCtrls = sal_True;
         aBtnStop.Enable();
         aBtnStop.Update();
-        String aStr( RTL_CONSTASCII_USTRINGPARAM( "Animator:" ) ); // Hier sollte man sich noch etwas gescheites ausdenken!
+        rtl::OUString aStr("Animator:"); // Hier sollte man sich noch etwas gescheites ausdenken!
         pProgress = new SfxProgress( NULL, aStr, nFullTime );
     }
 

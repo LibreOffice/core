@@ -341,12 +341,12 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
     else
     {
         if( nError == ERRCODE_IO_BROKENPACKAGE )
-            SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            SetError( ERRCODE_IO_BROKENPACKAGE, OSL_LOG_PREFIX );
 
         // TODO/LATER: correct error handling?!
         //pStore->SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         else
-            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
     }
 
     // tell SFX to change viewshell when in preview mode
@@ -575,7 +575,7 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     if( GetError() == ERRCODE_NONE )
-        SetError( nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        SetError( nVBWarning, OSL_LOG_PREFIX );
 
     return bRet;
 }
@@ -729,28 +729,28 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
         SdrObject* pObj = NULL;
 
         rtl::OUString sBookmark( rBookmark );
-        const rtl::OUString sInteraction( RTL_CONSTASCII_USTRINGPARAM( "action?" ) );
+        const rtl::OUString sInteraction( "action?" );
         if ( sBookmark.match( sInteraction ) )
         {
-            const rtl::OUString sJump( RTL_CONSTASCII_USTRINGPARAM( "jump=" ) );
+            const rtl::OUString sJump( "jump=" );
             if ( sBookmark.match( sJump, sInteraction.getLength() ) )
             {
                 rtl::OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
-                if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "firstslide" ) ) ) )
+                if ( aDestination.match( "firstslide" ) )
                 {
                     nPageNumber = 1;
                 }
-                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "lastslide" ) ) ) )
+                else if ( aDestination.match( "lastslide" ) )
                 {
                     nPageNumber = mpDoc->GetPageCount() - 2;
                 }
-                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "previousslide" ) ) ) )
+                else if ( aDestination.match( "previousslide" ) )
                 {
                     SdPage* pPage = pDrawViewShell->GetActualPage();
                     nPageNumber = pPage->GetPageNum();
                     nPageNumber = nPageNumber > 2 ? nPageNumber - 2 : SDRPAGE_NOTFOUND;
                 }
-                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "nextslide" ) ) ) )
+                else if ( aDestination.match( "nextslide" ) )
                 {
                     SdPage* pPage = pDrawViewShell->GetActualPage();
                     nPageNumber = pPage->GetPageNum() + 2;
@@ -971,13 +971,13 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         {
                 *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
                 *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE : SOT_FORMATSTR_ID_STARDRAW_8;
-                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
+                *pFullTypeName = "Draw 8"; // HACK: method will be removed with new storage API
         }
         else
         {
                 *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
                 *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE : SOT_FORMATSTR_ID_STARIMPRESS_8;
-                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Impress 8")); // HACK: method will be removed with new storage API
+                *pFullTypeName = "Impress 8"; // HACK: method will be removed with new storage API
         }
     }
 
