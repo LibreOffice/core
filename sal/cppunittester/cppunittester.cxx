@@ -118,8 +118,8 @@ class CPPUNIT_API ProtectedFixtureFunctor
 private:
     const std::string &testlib;
     const std::string &args;
-    CppUnit::TestResult &result;
     std::vector<CppUnit::Protector *> &protectors;
+    CppUnit::TestResult &result;
 public:
     ProtectedFixtureFunctor(const std::string& testlib_, const std::string &args_, std::vector<CppUnit::Protector*> &protectors_, CppUnit::TestResult &result_)
         : testlib(testlib_)
