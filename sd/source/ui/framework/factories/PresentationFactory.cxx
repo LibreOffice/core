@@ -118,8 +118,7 @@ Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
 
 ::rtl::OUString PresentationFactoryProvider_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Draw.framework.PresentationFactoryProvider"));
+    return ::rtl::OUString("com.sun.star.comp.Draw.framework.PresentationFactoryProvider");
 }
 
 
@@ -128,8 +127,7 @@ Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
 Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.drawing.framework.PresentationFactoryProvider"));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.PresentationFactoryProvider");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -138,8 +136,7 @@ Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedService
 
 //===== PresentationFactory ===================================================
 
-const ::rtl::OUString PresentationFactory::msPresentationViewURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/Presentation"));
+const ::rtl::OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
 
 
 PresentationFactory::PresentationFactory (
@@ -252,9 +249,7 @@ void PresentationFactory::ThrowIfDisposed (void) const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresentationFactory object has already been disposed")),
+        throw lang::DisposedException ("PresentationFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

@@ -63,8 +63,7 @@ Reference<XInterface> SAL_CALL ResourceId_createInstance (
 
 ::rtl::OUString ResourceId_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.framework.ResourceId"));
+    return ::rtl::OUString("com.sun.star.comp.Draw.framework.ResourceId");
 }
 
 
@@ -73,8 +72,7 @@ Reference<XInterface> SAL_CALL ResourceId_createInstance (
 Sequence<rtl::OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ResourceId")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.ResourceId");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -602,8 +600,7 @@ void ResourceId::ParseResourceURL (void)
         Reference<lang::XMultiServiceFactory> xServiceManager (
             ::comphelper::getProcessServiceFactory());
         xURLTransformer = Reference<util::XURLTransformer>(
-            xServiceManager->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+            xServiceManager->createInstance("com.sun.star.util.URLTransformer"),
             UNO_QUERY);
         mxURLTransformerWeak = xURLTransformer;
         SdGlobalResourceContainer::Instance().AddResource(

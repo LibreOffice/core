@@ -76,8 +76,7 @@ Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
 
 ::rtl::OUString BasicViewFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.framework.BasicViewFactory"));
+    return ::rtl::OUString("com.sun.star.comp.Draw.framework.BasicViewFactory");
 }
 
 
@@ -86,8 +85,7 @@ Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicViewFactory")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicViewFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

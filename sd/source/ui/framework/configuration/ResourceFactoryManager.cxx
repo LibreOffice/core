@@ -54,8 +54,7 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
     Reference<lang::XMultiServiceFactory> xServiceManager (
         ::comphelper::getProcessServiceFactory());
     mxURLTransformer = Reference<util::XURLTransformer>(
-        xServiceManager->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+        xServiceManager->createInstance("com.sun.star.util.URLTransformer"),
         UNO_QUERY);
 }
 

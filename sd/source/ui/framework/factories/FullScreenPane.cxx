@@ -252,8 +252,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
         Reference<lang::XMultiServiceFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
-            xFactory->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.SpriteCanvas.VCL")),
+            xFactory->createInstanceWithArguments("com.sun.star.rendering.SpriteCanvas.VCL",
                 aArg),
             UNO_QUERY);
     }

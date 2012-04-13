@@ -247,9 +247,7 @@ void Pane::ThrowIfDisposed (void) const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Pane object has already been disposed")),
+        throw lang::DisposedException ("Pane object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

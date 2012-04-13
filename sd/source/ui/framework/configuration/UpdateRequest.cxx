@@ -69,7 +69,7 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
 OUString SAL_CALL UpdateRequest::getName (void)
     throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateRequest"));
+    return OUString("UpdateRequest");
 }
 
 

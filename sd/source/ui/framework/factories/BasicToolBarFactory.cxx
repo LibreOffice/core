@@ -55,8 +55,7 @@ Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
 
 ::rtl::OUString BasicToolBarFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.framework.BasicToolBarFactory"));
+    return ::rtl::OUString("com.sun.star.comp.Draw.framework.BasicToolBarFactory");
 }
 
 
@@ -65,8 +64,7 @@ Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicToolBarFactory")));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicToolBarFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -232,9 +230,7 @@ void BasicToolBarFactory::ThrowIfDisposed (void) const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "BasicToolBarFactory object has already been disposed")),
+        throw lang::DisposedException ("BasicToolBarFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

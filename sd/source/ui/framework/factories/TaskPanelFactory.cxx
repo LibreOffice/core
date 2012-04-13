@@ -54,8 +54,7 @@ Reference<XInterface> SAL_CALL TaskPanelFactory_createInstance (
 
 ::rtl::OUString TaskPanelFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.framework.TaskPanelFactory"));
+    return ::rtl::OUString("com.sun.star.comp.Draw.framework.TaskPanelFactory");
 }
 
 
@@ -64,8 +63,7 @@ Reference<XInterface> SAL_CALL TaskPanelFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.TaskPanelFactory"));
+    static const OUString sServiceName("com.sun.star.drawing.framework.TaskPanelFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

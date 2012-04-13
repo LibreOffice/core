@@ -174,85 +174,54 @@ namespace sd { namespace framework {
 
 // Pane URLS.
 
-const OUString FrameworkHelper::msPaneURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/"));
-const OUString FrameworkHelper::msCenterPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CenterPane")));
-const OUString FrameworkHelper::msFullScreenPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("FullScreenPane")));
-const OUString FrameworkHelper::msLeftImpressPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("LeftImpressPane")));
-const OUString FrameworkHelper::msLeftDrawPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("LeftDrawPane")));
-const OUString FrameworkHelper::msRightPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("RightPane")));
+const OUString FrameworkHelper::msPaneURLPrefix("private:resource/pane/");
+const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
+const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
+const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
+const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
+const OUString FrameworkHelper::msRightPaneURL( msPaneURLPrefix + "RightPane");
 
 
 // View URLs.
 
-const OUString FrameworkHelper::msViewURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/"));
-const OUString FrameworkHelper::msImpressViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("ImpressView")));
-const OUString FrameworkHelper::msDrawViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicView")));
-const OUString FrameworkHelper::msOutlineViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("OutlineView")));
-const OUString FrameworkHelper::msNotesViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("NotesView")));
-const OUString FrameworkHelper::msHandoutViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("HandoutView")));
-const OUString FrameworkHelper::msSlideSorterURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorter")));
-const OUString FrameworkHelper::msPresentationViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationView")));
-const OUString FrameworkHelper::msTaskPaneURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("TaskPane")));
+const OUString FrameworkHelper::msViewURLPrefix("private:resource/view/");
+const OUString FrameworkHelper::msImpressViewURL( msViewURLPrefix + "ImpressView");
+const OUString FrameworkHelper::msDrawViewURL( msViewURLPrefix + "GraphicView");
+const OUString FrameworkHelper::msOutlineViewURL( msViewURLPrefix + "OutlineView");
+const OUString FrameworkHelper::msNotesViewURL( msViewURLPrefix + "NotesView");
+const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView");
+const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
+const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
+const OUString FrameworkHelper::msTaskPaneURL( msViewURLPrefix + "TaskPane");
 
 
 // Tool bar URLs.
 
-const OUString FrameworkHelper::msToolBarURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
-const OUString FrameworkHelper::msViewTabBarURL(
-    msToolBarURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("ViewTabBar")));
+const OUString FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
+const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
 
 
 // Task panel URLs.
-const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/toolpanel/DrawingFramework/"));
-const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("MasterPages")));
-const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("Layouts")));
-const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("TableDesign")));
-const ::rtl::OUString FrameworkHelper::msCustomAnimationTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CustomAnimations")));
-const ::rtl::OUString FrameworkHelper::msSlideTransitionTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideTransitions")));
+const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/");
+const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
+const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts");
+const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign");
+const ::rtl::OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations");
+const ::rtl::OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions");
 
 
 // Event URLs.
-const OUString FrameworkHelper::msResourceActivationRequestEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivationRequested"));
-const OUString FrameworkHelper::msResourceDeactivationRequestEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivationRequest"));
-const OUString FrameworkHelper::msResourceActivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivation"));
-const OUString FrameworkHelper::msResourceDeactivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivation"));
-const OUString FrameworkHelper::msConfigurationUpdateStartEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateStart"));
-const OUString FrameworkHelper::msConfigurationUpdateEndEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd"));
+const OUString FrameworkHelper::msResourceActivationRequestEvent("ResourceActivationRequested");
+const OUString FrameworkHelper::msResourceDeactivationRequestEvent("ResourceDeactivationRequest");
+const OUString FrameworkHelper::msResourceActivationEvent("ResourceActivation");
+const OUString FrameworkHelper::msResourceDeactivationEvent("ResourceDeactivation");
+const OUString FrameworkHelper::msConfigurationUpdateStartEvent("ConfigurationUpdateStart");
+const OUString FrameworkHelper::msConfigurationUpdateEndEvent("ConfigurationUpdateEnd");
 
 
 // Service names of controllers.
-const OUString FrameworkHelper::msModuleControllerService(
-    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ModuleController"));
-const OUString FrameworkHelper::msConfigurationControllerService(
-    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ConfigurationController"));
+const OUString FrameworkHelper::msModuleControllerService("com.sun.star.drawing.framework.ModuleController");
+const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.drawing.framework.ConfigurationController");
 
 //----- helper ----------------------------------------------------------------
 namespace
@@ -907,7 +876,7 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
             Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
             for (sal_Int32 nIndex=0; nIndex < aAnchorURLs.getLength(); ++nIndex)
             {
-                sString += OUString(RTL_CONSTASCII_USTRINGPARAM(" | "));
+                sString += " | ";
                 sString += aAnchorURLs[nIndex];
             }
         }

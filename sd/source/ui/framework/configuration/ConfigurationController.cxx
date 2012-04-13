@@ -66,8 +66,7 @@ Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
 
 OUString ConfigurationController_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Draw.framework.configuration.ConfigurationController"));
+    return OUString("com.sun.star.comp.Draw.framework.configuration.ConfigurationController");
 }
 
 
@@ -76,8 +75,7 @@ OUString ConfigurationController_getImplementationName (void) throw(RuntimeExcep
 Sequence<rtl::OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.drawing.framework.ConfigurationController")));
+    static const OUString sServiceName("com.sun.star.drawing.framework.ConfigurationController");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -656,18 +654,14 @@ void ConfigurationController::ThrowIfDisposed (void) const
 {
     if (mbIsDisposed)
     {
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "ConfigurationController object has already been disposed")),
+        throw lang::DisposedException ("ConfigurationController object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 
     if (mpImplementation.get() == NULL)
     {
         OSL_ASSERT(mpImplementation.get() != NULL);
-        throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "ConfigurationController not initialized")),
+        throw RuntimeException("ConfigurationController not initialized",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

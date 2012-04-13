@@ -68,7 +68,7 @@ void ConfigurationTracer::TraceBoundResources (
 {
     Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
-    const ::rtl::OUString sIndentation (RTL_CONSTASCII_USTRINGPARAM("    "));
+    const ::rtl::OUString sIndentation ("    ");
     for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
     {
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
