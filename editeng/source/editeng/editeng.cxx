@@ -503,7 +503,7 @@ sal_uInt16 EditEngine::GetScriptType( const ESelection& rSelection ) const
 LanguageType EditEngine::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
     return pNode ? pImpEditEngine->GetLanguage( EditPaM( pNode, nPos ) ) : LANGUAGE_DONTKNOW;
 }
@@ -1322,8 +1322,8 @@ EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nPara
     DBG_ASSERT( nPara < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Startpara out of Range" );
     DBG_ASSERT( nParas <= pImpEditEngine->GetEditDoc().Count() - nPara, "CreateTextObject: Endpara out of Range" );
 
-    ContentNode* pStartNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
-    ContentNode* pEndNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara+nParas-1 );
+    ContentNode* pStartNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
+    ContentNode* pEndNode = pImpEditEngine->GetEditDoc().GetObject( nPara+nParas-1 );
     DBG_ASSERT( pStartNode, "Start-Paragraph does not exist: CreateTextObject" );
     DBG_ASSERT( pEndNode, "End-Paragraph does not exist: CreateTextObject" );
 
@@ -1344,7 +1344,7 @@ void EditEngine::RemoveParagraph( sal_uInt16 nPara )
     if( pImpEditEngine->GetEditDoc().Count() <= 1 )
         return;
 
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     const ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
     DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
     if ( pNode && pPortion )
@@ -1360,7 +1360,7 @@ void EditEngine::RemoveParagraph( sal_uInt16 nPara )
 sal_uInt16 EditEngine::GetTextLen( sal_uInt16 nPara ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     DBG_ASSERT( pNode, "Paragraph not found: GetTextLen" );
     if ( pNode )
         return pNode->Len();
@@ -1535,7 +1535,7 @@ Font EditEngine::GetStandardFont( sal_uInt16 nPara )
 SvxFont EditEngine::GetStandardSvxFont( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     return pNode->GetCharAttribs().GetDefFont();
 }
 
@@ -2046,7 +2046,7 @@ sal_Bool EditEngine::ShouldCreateBigTextObject() const
 sal_uInt16 EditEngine::GetFieldCount( sal_uInt16 nPara ) const
 {
     sal_uInt16 nFields = 0;
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     if ( pNode )
     {
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
@@ -2063,7 +2063,7 @@ sal_uInt16 EditEngine::GetFieldCount( sal_uInt16 nPara ) const
 
 EFieldInfo EditEngine::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
 {
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     if ( pNode )
     {
         sal_uInt16 nCurrentField = 0;
@@ -2176,7 +2176,7 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 {
     Rectangle aBounds;
-    ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( rPos.nPara );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( rPos.nPara );
 
     // Check against index, not paragraph
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )

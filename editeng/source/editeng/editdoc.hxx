@@ -811,9 +811,6 @@ public:
     sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
     void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
-    const ContentNode* SafeGetObject(size_t nPos) const;
-    ContentNode* SafeGetObject(size_t nPos);
-
     size_t GetPos(const ContentNode* pNode) const;
     const ContentNode* GetObject(size_t nPos) const;
     ContentNode* GetObject(size_t nPos);

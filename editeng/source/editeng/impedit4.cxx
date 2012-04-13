@@ -551,7 +551,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput << '{' << endl;
     for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
-        ContentNode* pNode = aEditDoc.SafeGetObject( nNode );
+        ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( pNode, "Node not found: Search&Replace" );
 
         // The paragraph attributes in advance ...
@@ -1057,7 +1057,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
     sal_uInt16 nNode;
     for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
-        ContentNode* pNode = aEditDoc.SafeGetObject( nNode );
+        ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( pNode, "Node not found: Search&Replace" );
 
         if ( bOnlyFullParagraphs )
@@ -1658,7 +1658,7 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
     String aRes;
     LanguageType nResLang = LANGUAGE_NONE;
 
-    /* ContentNode* pLastNode = */ aEditDoc.SafeGetObject( aEditDoc.Count()-1 );
+    /* ContentNode* pLastNode = */ aEditDoc.GetObject( aEditDoc.Count()-1 );
 
     EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
     EditSelection aCurSel = EditSelection( aPos, aPos );
@@ -1820,7 +1820,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
 
-    ContentNode* pLastNode = aEditDoc.SafeGetObject( (aEditDoc.Count()-1) );
+    ContentNode* pLastNode = aEditDoc.GetObject( (aEditDoc.Count()-1) );
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Min() = aCurSel.Max();
 
@@ -1892,7 +1892,7 @@ void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
 {
-    /* ContentNode* pLastNode = */ aEditDoc.SafeGetObject( (aEditDoc.Count()-1) );
+    aEditDoc.GetObject( (aEditDoc.Count()-1) );
     EditSelection aCurSel( rSelection.Min() );
 
     String aWord;
@@ -1952,7 +1952,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
     //if no selection previously exists the range is extended to the end of the object
     if(aCurSel.Min() == aCurSel.Max())
     {
-        ContentNode* pLastNode = aEditDoc.SafeGetObject( aEditDoc.Count()-1);
+        ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1);
         aCurSel.Max() = EditPaM(pLastNode, pLastNode->Len());
     }
     // check for next error in aCurSel and set aCurSel to that one if any was found
@@ -2248,7 +2248,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
     }
     sal_Bool bRestartTimer = sal_False;
 
-    ContentNode* pLastNode = aEditDoc.SafeGetObject( aEditDoc.Count() - 1 );
+    ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count() - 1 );
     sal_uInt16 nNodes = GetEditDoc().Count();
     sal_uInt16 nInvalids = 0;
     Sequence< PropertyValue > aEmptySeq;
@@ -2432,7 +2432,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
 {
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
 
-    ContentNode* pLastNode = aEditDoc.SafeGetObject( aEditDoc.Count() - 1 );
+    ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count() - 1 );
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
     String aWord;

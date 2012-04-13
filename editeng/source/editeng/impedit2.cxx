@@ -294,7 +294,7 @@ XubString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd e
     // iterate over the paragraphs ...
     for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
-        OSL_ENSURE( aEditDoc.SafeGetObject( nNode ), "Node not found: GetSelected" );
+        OSL_ENSURE( aEditDoc.GetObject( nNode ), "Node not found: GetSelected" );
         const ContentNode* pNode = aEditDoc.GetObject( nNode );
 
         xub_StrLen nStartPos = 0;
@@ -1438,13 +1438,13 @@ EditPaM ImpEditEngine::CursorEndOfParagraph( const EditPaM& rPaM )
 
 EditPaM ImpEditEngine::CursorStartOfDoc()
 {
-    EditPaM aPaM( aEditDoc.SafeGetObject( 0 ), 0 );
+    EditPaM aPaM( aEditDoc.GetObject( 0 ), 0 );
     return aPaM;
 }
 
 EditPaM ImpEditEngine::CursorEndOfDoc()
 {
-    ContentNode* pLastNode = aEditDoc.SafeGetObject( aEditDoc.Count()-1 );
+    ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1 );
     ParaPortion* pLastPortion = GetParaPortions().SafeGetObject( aEditDoc.Count()-1 );
     OSL_ENSURE( pLastNode && pLastPortion, "CursorEndOfDoc: Node or Portion not found" );
 
@@ -1453,7 +1453,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
         pLastNode = GetPrevVisNode( pLastPortion->GetNode() );
         OSL_ENSURE( pLastNode, "Kein sichtbarer Absatz?" );
         if ( !pLastNode )
-            pLastNode = aEditDoc.SafeGetObject( aEditDoc.Count()-1 );
+            pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1 );
     }
 
     EditPaM aPaM( pLastNode, pLastNode->Len() );
@@ -1495,7 +1495,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
     {
         // Previous paragraph...
         sal_uInt16 nCurPara = aEditDoc.GetPos( aNewPaM.GetNode() );
-        ContentNode* pPrevNode = aEditDoc.SafeGetObject( --nCurPara );
+        ContentNode* pPrevNode = aEditDoc.GetObject( --nCurPara );
         if ( pPrevNode )
         {
             aNewPaM.SetNode( pPrevNode );
@@ -1546,7 +1546,7 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
     {
         // Next paragraph ...
         sal_uInt16 nCurPara = aEditDoc.GetPos( aNewPaM.GetNode() );
-        ContentNode* pNextNode = aEditDoc.SafeGetObject( ++nCurPara );
+        ContentNode* pNextNode = aEditDoc.GetObject( ++nCurPara );
         if ( pNextNode )
         {
             aNewPaM.SetNode( pNextNode );
@@ -2050,7 +2050,7 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_uInt16 nPara, sal_uInt16 nPos, sal_
 {
     sal_uInt8 nRightToLeft = 0;
 
-    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
     if ( pNode && pNode->Len() )
     {
         ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
@@ -2490,8 +2490,8 @@ EditPaM ImpEditEngine::ImpDeleteSelection( EditSelection aSel )
 
 void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
 {
-    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
-    ContentNode* pNextNode = aEditDoc.SafeGetObject( nPara+1 );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
+    ContentNode* pNextNode = aEditDoc.GetObject( nPara+1 );
 
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
 
@@ -2913,7 +2913,7 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_uInt16 nPara )
     {
         if ( nPara )
         {
-            OSL_ENSURE( aEditDoc.SafeGetObject( nPara-1 ), "FastInsertParagraph: Prev does not exist" );
+            OSL_ENSURE( aEditDoc.GetObject( nPara-1 ), "FastInsertParagraph: Prev does not exist" );
             InsertUndo( new EditUndoSplitPara( this, nPara-1, aEditDoc.GetObject( nPara-1 )->Len() ) );
         }
         else
@@ -3293,7 +3293,7 @@ void ImpEditEngine::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uIn
 sal_uInt16 ImpEditEngine::GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     sal_uInt16 nLineNo = 0xFFFF;
-    const ContentNode* pNode = GetEditDoc().SafeGetObject( nPara );
+    const ContentNode* pNode = GetEditDoc().GetObject( nPara );
     OSL_ENSURE( pNode, "GetLineNumberAtIndex: invalid paragraph index" );
     if (pNode)
     {
@@ -3416,7 +3416,7 @@ EditSelection ImpEditEngine::ConvertSelection(
     EditSelection aNewSelection;
 
     // Start...
-    ContentNode* pNode = aEditDoc.SafeGetObject( nStartPara );
+    ContentNode* pNode = aEditDoc.GetObject( nStartPara );
     sal_uInt16 nIndex = nStartPos;
     if ( !pNode )
     {
@@ -3430,7 +3430,7 @@ EditSelection ImpEditEngine::ConvertSelection(
     aNewSelection.Min().SetIndex( nIndex );
 
     // End...
-    pNode = aEditDoc.SafeGetObject( nEndPara );
+    pNode = aEditDoc.GetObject( nEndPara );
     nIndex = nEndPos;
     if ( !pNode )
     {

@@ -132,7 +132,7 @@ SvParserState EditRTFParser::CallParser()
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         sal_uInt16 nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
-        ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara-1 );
+        ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().GetObject( nPara-1 );
         DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
         EditSelection aSel;
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
@@ -178,7 +178,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     sal_uInt16 nEndPara = pImpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
+        ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
         DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
             pNode->GetContentAttribs().GetItems().Put( aFontItem );
@@ -296,7 +296,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
-    ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SafeGetObject( nCurPara );
+    ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().GetObject( nCurPara );
     DBG_ASSERT( pPrevNode, "pPrevNode = 0!" );
     rpNodePos = new EditNodeIdx( pImpEditEngine, pPrevNode );
     rCntPos = pPrevNode->Len();
@@ -388,7 +388,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // All Complete paragraphs are paragraph attributes ...
     for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().SafeGetObject( z ), "Node does not exist yet(RTF)" );
+        DBG_ASSERT( pImpEditEngine->GetEditDoc().GetObject( z ), "Node does not exist yet(RTF)" );
         pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
     }
 
@@ -426,7 +426,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         for ( sal_uInt16 n = nStartNode; n <= nEndNode; n++ )
         {
-            ContentNode* pNode = pImpEditEngine->GetEditDoc().SafeGetObject( n );
+            ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
         }
     }
