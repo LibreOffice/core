@@ -73,13 +73,13 @@ if test -z "$start_dir" ; then
     echo "Error: Please, define where to unpack sources, try --help"
 fi
 
-if ! test -d $start_dir/src -a -f $start_dir/solenv/inc/target.mk ; then
-    echo "Error: $start_dir is not a valid bootstrap directory"
+if ! test -f $start_dir/Repository.mk -a -f $start_dir/solenv/inc/target.mk ; then
+    echo "Error: $start_dir is not a valid LibreOffice core source directory"
     exit 1;
 fi
 
-if test ! -f $start_dir/bootstrap.ver -o -d $start_dir/.git ; then
-    echo "Warning: bootstrap sources are from git and not from tarball"
+if test ! -f $start_dir/core.ver -o -d $start_dir/.git ; then
+    echo "Warning: core sources are from git and not from tarball"
     echo "         Do nothing."
     exit 0;
 fi
@@ -89,17 +89,18 @@ lo_src_dir="$start_dir/src"
 mkdir -p "$lo_src_dir"
 
 for tarball in $tarballs ; do
-    tarname=`basename $tarball | sed -e "s/.tar.bz2//"`
+    tarname=`basename $tarball | sed -e "s/\.tar\..*//"`
     if test -d $lo_src_dir/$tarname ; then
         echo "Warning: $lo_src_dir/$tarname already exists => skipping"
         continue;
     fi
 
     echo "Unpacking $tarname..."
-    tar -xjf "$tarball" -C "$lo_src_dir"
+    echo tar -xf "$tarball" -C "$lo_src_dir"
+    tar -xf "$tarball" -C "$lo_src_dir"
 
-    # create symlinks
-    for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -printf "$tarname/%f\n"` ; do
+    # create symlinks for module directories; ignore git-hooks directory
+    for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -path $lo_src_dir/$tarname/git-hooks -o -printf "$tarname/%f\n"` ; do
         ln -sf "src/$dir" "$start_dir"
     done
 done

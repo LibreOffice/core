@@ -183,17 +183,17 @@ if [ "$COM" = "MSC" ]; then
     downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
 fi
 
-if [ -f $start_dir/bootstrap.ver -a ! -d $start_dir/.git ] ; then
-    # bootstrap is from sources, so get the other source tarballs
-    . $start_dir/bootstrap.ver
+if [ -f $start_dir/core.ver -a ! -d $start_dir/.git ] ; then
+    # core is from sources, so get the other source tarballs
+    . $start_dir/core.ver
     lo_src_dir="$start_dir/src"
     mkdir -p "$lo_src_dir"
     for piece in `cat $start_dir/bin/repo-list` ; do
-        tarname="libreoffice-$piece-$lo_bootstrap_ver"
-        if [ ! -f "$TARFILE_LOCATION/$tarname.tar.bz2" ] ; then
-	    downloaditem "http://download.documentfoundation.org/libreoffice/src/" "$tarname.tar.bz2" ""
+        tarname="libreoffice-$piece-$lo_core_ver"
+        if [ ! -f "$TARFILE_LOCATION/$tarname.tar.xz" ] ; then
+	    downloaditem "http://download.documentfoundation.org/libreoffice/src/" "$tarname.tar.xz" ""
 	fi
-	$start_dir/bin/unpack-sources $start_dir $TARFILE_LOCATION/$tarname.tar.bz2
+	$start_dir/bin/unpack-sources $start_dir $TARFILE_LOCATION/$tarname.tar.xz
     done
 fi
 
