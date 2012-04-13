@@ -1573,9 +1573,9 @@ File gid_File_Lib_Raptor
     #endif
   #else
    #ifdef _gcc3
-    Name = "libraptor-lo-1.dll";
+    Name = "libraptor-1.dll";
    #else
-    Name = "raptor-lo.dll";
+    Name = "raptor.dll";
    #endif
   #endif
 End
@@ -1592,9 +1592,9 @@ File gid_File_Lib_Rasqal
     #endif
   #else
    #ifdef _gcc3
-       Name = STRING(CONCAT3(librasqal-lo-,RASQAL_MAJOR,.dll));
+       Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
    #else
-    Name = "rasqal-lo.dll";
+    Name = "rasqal.dll";
    #endif
   #endif
 End
@@ -1611,9 +1611,9 @@ File gid_File_Lib_Rdf
     #endif
   #else
    #ifdef _gcc3
-    Name = "librdf-lo-0.dll";
+    Name = "librdf-0.dll";
    #else
-    Name = "librdf-lo.dll";
+    Name = "librdf.dll";
    #endif
   #endif
 End

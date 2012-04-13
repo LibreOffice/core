@@ -4,8 +4,8 @@
  rdf_parser_raptor.c
  
  EXTRA_DIST = redland.spec redland.spec.in mysql-v1.ttl mysql-v2.ttl
--librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ -release lo \
-+librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ -release lo -no-undefined \
+-librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ \
++librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ -no-undefined \
  @LIBRDF_LDFLAGS@ @LIBRDF_EXTERNAL_LIBS@ $(MEM_LIBS)
  
  pkgdata_DATA = $(am__append_11)

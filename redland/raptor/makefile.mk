@@ -59,8 +59,12 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32 \
     $(TARFILE_NAME).patch.rindex \
     raptor-aix.patch \
-    $(TARFILE_NAME).entities.patch \
+    $(TARFILE_NAME).entities.patch
+
+.IF "$(GUI)" == "UNX"
+OOO_PATCH_FILES+= \
     $(TARFILE_NAME).patch.bundled-soname
+.ENDIF
 
 .IF "$(CROSS_COMPILING)"=="YES"
 OOO_PATCH_FILES += \

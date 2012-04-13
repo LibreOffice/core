@@ -57,8 +57,12 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.win32 \
-    redland-aix.patch \
+    redland-aix.patch
+
+.IF "$(GUI)" == "UNX"
+OOO_PATCH_FILES+= \
     $(TARFILE_NAME).patch.bundled-soname
+.ENDIF
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
