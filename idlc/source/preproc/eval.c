@@ -262,7 +262,7 @@ long
 {
     Token *tp;
     Nlist *np;
-    int ntok, rand;
+    int ntok, local_rand;
 
     trp->tp++;
     if (kw == KIFDEF || kw == KIFNDEF)
@@ -283,7 +283,7 @@ long
     vp = vals;
     op = ops;
     *op++ = END;
-    for (rand = 0, tp = trp->bp + ntok; tp < trp->lp; tp++)
+    for (local_rand = 0, tp = trp->bp + ntok; tp < trp->lp; tp++)
     {
         switch (tp->type)
         {
@@ -298,17 +298,17 @@ long
             case NUMBER:
             case CCON:
             case STRING:
-                if (rand)
+                if (local_rand)
                     goto syntax;
                 *vp++ = tokval(tp);
-                rand = 1;
+                local_rand = 1;
                 continue;
 
                 /* unary */
             case DEFINED:
             case TILDE:
             case NOT:
-                if (rand)
+                if (local_rand)
                     goto syntax;
                 *op++ = tp->type;
                 continue;
@@ -318,7 +318,7 @@ long
             case MINUS:
             case STAR:
             case AND:
-                if (rand == 0)
+                if (local_rand == 0)
                 {
                     if (tp->type == MINUS)
                         *op++ = UMINUS;
@@ -349,22 +349,22 @@ long
             case QUEST:
             case COLON:
             case COMMA:
-                if (rand == 0)
+                if (local_rand == 0)
                     goto syntax;
                 if (evalop(priority[tp->type]) != 0)
                     return 0;
                 *op++ = tp->type;
-                rand = 0;
+                local_rand = 0;
                 continue;
 
             case LP:
-                if (rand)
+                if (local_rand)
                     goto syntax;
                 *op++ = LP;
                 continue;
 
             case RP:
-                if (!rand)
+                if (!local_rand)
                     goto syntax;
                 if (evalop(priority[RP]) != 0)
                     return 0;
@@ -382,7 +382,7 @@ long
                     if (np && (np->val == KMACHINE))
                     {
                         tp++;
-                        if (rand)
+                        if (local_rand)
                             goto syntax;
                         *op++ = ARCHITECTURE;
                         continue;
@@ -395,7 +395,7 @@ long
                 return 0;
         }
     }
-    if (rand == 0)
+    if (local_rand == 0)
         goto syntax;
     if (evalop(priority[END]) != 0)
         return 0;
