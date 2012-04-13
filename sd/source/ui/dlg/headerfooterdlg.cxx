@@ -891,9 +891,6 @@ void PresLayoutPreview::Paint( const Rectangle& )
 {
     Push();
 
-    svtools::ColorConfig aColorConfig;
-    svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::APPBACKGROUND ) );
-
     maOutRect = Rectangle( Point(0,0), GetOutputSize() );
 
     // calculate page size with correct aspect ratio

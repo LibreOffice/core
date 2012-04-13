@@ -384,9 +384,6 @@ sal_uInt16 TitleBar::GetTextStyle (void)
 void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
 {
     // Fill a slightly rounded rectangle.
-    Color aFillColor (GetFillColor());
-    Color aLineColor (GetLineColor());
-
     switch (meType)
     {
         case TBT_SUB_CONTROL_HEADLINE:

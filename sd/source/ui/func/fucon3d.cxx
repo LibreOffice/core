@@ -380,7 +380,6 @@ sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
         bReturn = sal_True;
     }

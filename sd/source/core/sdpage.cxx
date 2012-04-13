@@ -1193,7 +1193,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     for( i = 1; i < MAX_PRESOBJS; i++ )
         rRectangle[i] = aLayoutRect;
 
-    Size        aTitleSize( aTitleRect.GetSize() );
     Point       aTitlePos( aTitleRect.TopLeft() );
     Size        aLayoutSize( aLayoutRect.GetSize() );
     Point       aLayoutPos( aLayoutRect.TopLeft() );

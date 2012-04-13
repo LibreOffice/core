@@ -199,19 +199,6 @@ void InsertionIndicatorHandler::SetPosition (
         maIconSize,
         mrSlideSorter.GetModel()));
 
-    static sal_Int32 TargetIndex (1);
-    if (aInsertPosition.GetIndex() == TargetIndex)
-    {
-        const view::InsertPosition aPosition (rLayouter.GetInsertPosition(
-            rPoint,
-            maIconSize,
-            mrSlideSorter.GetModel()));
-        const view::InsertPosition aPosition2 (rLayouter.GetInsertPosition(
-            rPoint,
-            maIconSize,
-            mrSlideSorter.GetModel()));
-    }
-
     if (maInsertPosition != aInsertPosition
         || meMode != eMode
         //        || ! mpInsertionIndicatorOverlay->IsVisible()

@@ -173,8 +173,6 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
         sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
         if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )

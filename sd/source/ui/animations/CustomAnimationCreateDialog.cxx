@@ -678,7 +678,6 @@ void CustomAnimationCreateDialog::setPosition()
         {
             Point aPos( GetPosPixel());
             Size  aSize( GetSizePixel());
-            Point aParentPos( pParent->GetPosPixel());
             Size  aParentSize( pParent->GetSizePixel());
 
             // right center
