@@ -455,10 +455,6 @@ public:
                             WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
 private:
-    /** Reads the worksheet source range from the DCONREF record. */
-    void                importDConRef( BiffInputStream& rStrm );
-    /** Reads the defined name used for source data from the DCONNAME record. */
-    void                importDConName( BiffInputStream& rStrm );
     /** Reads the sheet name and URL from the DCONREF, DCONNAME, or DCONBINAME records. */
     void                importDConUrl( BiffInputStream& rStrm );
 

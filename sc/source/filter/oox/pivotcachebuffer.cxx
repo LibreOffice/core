@@ -1330,25 +1330,6 @@ void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper&
 
 // private --------------------------------------------------------------------
 
-void PivotCache::importDConRef( BiffInputStream& rStrm )
-{
-    BinRange aBinRange;
-    aBinRange.read( rStrm, false );     // always 8-bit column indexes
-    // store range address unchecked with sheet index 0, will be resolved/checked later
-    getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, aBinRange, 0 );
-
-    // the URL with (required) sheet name and optional URL of an external document
-    importDConUrl( rStrm );
-    OSL_ENSURE( !maSheetSrcModel.maSheet.isEmpty(), "PivotCache::importDConRef - missing sheet name" );
-}
-
-void PivotCache::importDConName( BiffInputStream& rStrm )
-{
-    maSheetSrcModel.maDefName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
-    OSL_ENSURE( !maSheetSrcModel.maDefName.isEmpty(), "PivotCache::importDConName - missing defined name" );
-    importDConUrl( rStrm );
-}
-
 void PivotCache::importDConUrl( BiffInputStream& rStrm )
 {
     // the URL with sheet name and optional URL of an external document

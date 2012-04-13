@@ -154,10 +154,6 @@ public:
     /** Imports pivot field item reference settings from the PTREFERENCEITEM record. */
     void                importPTReferenceItem( SequenceInputStream& rStrm );
 
-    /** Imports pivot field settings from the PTFIELD and following records. */
-    void                importPTField( BiffInputStream& rStrm );
-    /** Imports pivot field settings from the PTFIELD2 record. */
-    void                importPTField2( BiffInputStream& rStrm );
     /** Imports settings of an item in this pivot field from the PTFITEM record. */
     void                importPTFItem( BiffInputStream& rStrm );
 
@@ -347,17 +343,6 @@ public:
     void                importPTPageField( SequenceInputStream& rStrm );
     /** Reads the settings of a field located in the data dimension from the PTDATAFIELD record. */
     void                importPTDataField( SequenceInputStream& rStrm );
-
-    /** Reads global pivot table settings from the PTDEFINITION record. */
-    void                importPTDefinition( BiffInputStream& rStrm, sal_Int16 nSheet );
-    /** Reads additional global pivot table settings from the PTDEFINITION2 record. */
-    void                importPTDefinition2( BiffInputStream& rStrm );
-    /** Reads the indexes of all fields located in the row or column dimension from a PTROWCOLFIELDS record. */
-    void                importPTRowColFields( BiffInputStream& rStrm );
-    /** Reads the settings of all fields located in the page dimension from a PTPAGEFIELDS record. */
-    void                importPTPageFields( BiffInputStream& rStrm );
-    /** Reads the settings of a field located in the data dimension from a PTDATAFIELD record. */
-    void                importPTDataField( BiffInputStream& rStrm );
 
     /** Creates and returns a new pivot table field. */
     PivotTableField&    createTableField();
