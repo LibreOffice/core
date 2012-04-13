@@ -135,16 +135,9 @@ void ScCellRangeObj::setUp()
 void ScCellRangeObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
-    {
         closeDocument(mxComponent);
-    }
 
     UnoApiTest::tearDown();
-
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxDesktop->terminate();
-    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);
