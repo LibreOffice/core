@@ -1119,9 +1119,9 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
     rUserData += ';';
     rUserData += String::CreateFromInt32( rVis.Top() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( bBrowse ? LONG_MIN : rVis.Right());
+    rUserData += String::CreateFromInt32( bBrowse ? SAL_MIN_INT32 : rVis.Right());
     rUserData += ';';
-    rUserData += String::CreateFromInt32( bBrowse ? LONG_MIN : rVis.Bottom());
+    rUserData += String::CreateFromInt32( bBrowse ? SAL_MIN_INT32 : rVis.Bottom());
     rUserData += ';';
     rUserData += String::CreateFromInt32(
             (sal_uInt16)pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
