@@ -313,6 +313,21 @@ struct WriteDep
     }
 };
 
+// write a dummy target for one included file, so the incremental build does
+// not break with "No rule to make target" if the included file is removed
+struct WriteDummy
+{
+    ::osl::File& m_rFile;
+    ::osl::FileBase::RC & m_rRC;
+    explicit WriteDummy(::osl::File & rFile, ::osl::FileBase::RC & rRC)
+        : m_rFile(rFile), m_rRC(rRC) { }
+    void operator() (::rtl::OString const& rEntry)
+    {
+        lcl_writeString(m_rFile, m_rRC, rEntry);
+        lcl_writeString(m_rFile, m_rRC, ":\n\n");
+    }
+};
+
 bool
 Idlc::dumpDeps(::rtl::OString const& rDepFile, ::rtl::OString const& rTarget)
 {
@@ -334,6 +349,9 @@ Idlc::dumpDeps(::rtl::OString const& rDepFile, ::rtl::OString const& rTarget)
     m_includes.erase(getRealFileName()); // eeek, that is a temp file...
     ::std::for_each(m_includes.begin(), m_includes.end(),
             WriteDep(depFile, rc));
+    lcl_writeString(depFile, rc, "\n\n");
+    ::std::for_each(m_includes.begin(), m_includes.end(),
+            WriteDummy(depFile, rc));
     if (::osl::FileBase::E_None != rc) {
         return false;
     }
