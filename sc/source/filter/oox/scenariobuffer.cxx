@@ -125,41 +125,6 @@ void Scenario::importInputCells( SequenceInputStream& rStrm )
     maCells.push_back( aModel );
 }
 
-void Scenario::importScenario( BiffInputStream& rStrm )
-{
-    sal_uInt16 nCellCount;
-    sal_uInt8 nNameLen, nCommentLen, nUserLen;
-    rStrm >> nCellCount;
-    // two bytes instead of flag field
-    maModel.mbLocked = rStrm.readuInt8() != 0;
-    maModel.mbHidden = rStrm.readuInt8() != 0;
-    rStrm >> nNameLen >> nCommentLen >> nUserLen;
-    maModel.maName = rStrm.readUniStringBody( nNameLen );
-    // user name: before comment (in difference to leading length field), repeated length
-    if( nUserLen > 0 )
-        maModel.maUser = rStrm.readUniString();
-    // comment: repeated length
-    if( nCommentLen > 0 )
-        maModel.maComment = rStrm.readUniString();
-
-    // list of cell addresses
-    for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
-    {
-        ScenarioCellModel aModel;
-        BinAddress aPos;
-        rStrm >> aPos;
-        // deleted flag is encoded in column index
-        aModel.mbDeleted = getFlag( aPos.mnCol, BIFF_SCENARIO_DELETED );
-        setFlag( aPos.mnCol, BIFF_SCENARIO_DELETED, false );
-        getAddressConverter().convertToCellAddressUnchecked( aModel.maPos, aPos, mnSheet );
-        maCells.push_back( aModel );
-    }
-
-    // list of cell values
-    for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); !rStrm.isEof() && (aIt != aEnd); ++aIt )
-        aIt->maValue = rStrm.readUniString();
-}
-
 void Scenario::finalizeImport()
 {
     AddressConverter& rAddrConv = getAddressConverter();

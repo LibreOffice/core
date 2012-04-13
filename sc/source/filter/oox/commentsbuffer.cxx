@@ -220,52 +220,6 @@ void Comment::finalizeImport()
 
 // private --------------------------------------------------------------------
 
-void Comment::importNoteBiff2( BiffInputStream& rStrm )
-{
-    sal_uInt16 nTotalLen;
-    rStrm >> nTotalLen;
-    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
-    RichStringRef xNoteText = createText();
-    xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
-
-    nTotalLen = nTotalLen - nPartLen;   // operator-=() gives compiler warning
-    while( (nTotalLen > 0) && (rStrm.getNextRecId() == BIFF_ID_NOTE) && rStrm.startNextRecord() )
-    {
-        sal_uInt16 nMarker;
-        rStrm >> nMarker;
-        rStrm.skip( 2 );
-        rStrm >> nPartLen;
-        OSL_ENSURE( nMarker == 0xFFFF, "Comment::importNoteBiff2 - missing continuation NOTE record" );
-        if( nMarker == 0xFFFF )
-        {
-            OSL_ENSURE( nPartLen <= nTotalLen, "Comment::importNoteBiff2 - string too long" );
-            // call to RichString::importCharArray() appends new text portion
-            xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
-            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
-        }
-        else
-        {
-            // seems to be a new note, rewind record, so worksheet fragment loop will find it
-            rStrm.rewindRecord();
-            nTotalLen = 0;
-        }
-    }
-}
-
-void Comment::importNoteBiff8( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFlags;
-    rStrm >> nFlags >> maModel.mnObjId;
-    maModel.maAuthor = rStrm.readUniString();
-    maModel.mbVisible = getFlag( nFlags, BIFF_NOTE_VISIBLE );
-}
-
-void Comment::importNoteSound( BiffInputStream& /*rStrm*/ )
-{
-}
-
-// ============================================================================
-
 CommentsBuffer::CommentsBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {

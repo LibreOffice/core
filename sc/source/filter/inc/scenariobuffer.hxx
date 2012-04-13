@@ -79,9 +79,6 @@ public:
     /** Imports a new cell for this scenario from a INPUTCELLS record. */
     void                importInputCells( SequenceInputStream& rStrm );
 
-    /** Imports a scenario definition from a SCENARIO record. */
-    void                importScenario( BiffInputStream& rStrm );
-
     /** Creates the scenario in the Calc document. */
     void                finalizeImport();
 

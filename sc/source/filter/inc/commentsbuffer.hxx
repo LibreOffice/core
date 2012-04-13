@@ -81,14 +81,6 @@ public:
     void                finalizeImport();
 
 private:
-    /** Reads a BIFF2-BIFF5 NOTE record. */
-    void                importNoteBiff2( BiffInputStream& rStrm );
-    /** Reads a BIFF8 NOTE record. */
-    void                importNoteBiff8( BiffInputStream& rStrm );
-    /** Reads a NOTESOUND record. */
-    void                importNoteSound( BiffInputStream& rStrm );
-
-private:
     CommentModel        maModel;
 };
 

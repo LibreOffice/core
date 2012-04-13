@@ -70,13 +70,6 @@ public:
     /** Imports query table settings from the QUERYTABLE record. */
     void                importQueryTable( SequenceInputStream& rStrm );
 
-    /** Imports query table settings from the QUERYTABLE record. */
-    void                importQueryTable( BiffInputStream& rStrm );
-    /** Imports query table settings from the QUERYTABLEREFRESH record. */
-    void                importQueryTableRefresh( BiffInputStream& rStrm );
-    /** Imports query table settings from the QUERYTABLESETTINGS record. */
-    void                importQueryTableSettings( BiffInputStream& rStrm );
-
     /** Inserts a web query into the sheet. */
     void                finalizeImport();
 
