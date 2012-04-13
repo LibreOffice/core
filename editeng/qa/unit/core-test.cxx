@@ -55,7 +55,7 @@ public:
     void testConstruction();
 
     CPPUNIT_TEST_SUITE(Test);
-//    CPPUNIT_TEST(testConstruction);
+    CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST_SUITE_END();
 
 private:

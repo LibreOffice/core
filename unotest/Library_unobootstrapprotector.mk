@@ -1,4 +1,5 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,12 +12,10 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Matúš Kukan <matus.kukan@gmail.com>
-# Portions created by the Initial Developer are Copyright (C) 2011 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2012 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -26,29 +25,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_breakiterator))
+$(eval $(call gb_Library_Library,unobootstrapprotector))
 
-$(eval $(call gb_CppunitTest_use_api,i18npool_test_breakiterator,\
+$(eval $(call gb_Library_use_package,unobootstrapprotector,unotest_inc))
+
+$(eval $(call gb_Library_use_api,unobootstrapprotector,\
 	udkapi \
 	offapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,i18npool_test_breakiterator,\
+$(eval $(call gb_Library_use_libraries,unobootstrapprotector,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
-	unotest \
-    $(gb_STDLIBS) \
+	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
-    i18npool/qa/cppunit/test_breakiterator \
+$(eval $(call gb_Library_use_externals,unobootstrapprotector,\
+	cppunit \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,i18npool_test_breakiterator))
-
-$(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
-	i18npool/util/i18npool \
+$(eval $(call gb_Library_add_exception_objects,unobootstrapprotector,\
+	unotest/source/cpp/unobootstrapprotector/unobootstrapprotector \
 ))
 
 # vim: set noet sw=4 ts=4:

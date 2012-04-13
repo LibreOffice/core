@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,unotest))
 
 $(eval $(call gb_Module_add_targets,unotest,\
+	Library_unobootstrapprotector \
 	Library_unoexceptionprotector \
 	Library_unotest \
     Package_inc \

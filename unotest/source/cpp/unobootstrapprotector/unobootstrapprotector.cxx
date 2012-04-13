@@ -34,6 +34,15 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
+
+#include <cppuhelper/bootstrap.hxx>
+#include <ucbhelper/contentbroker.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppunit/Message.h"
 #include "osl/thread.h"
@@ -46,55 +55,59 @@
 
 namespace {
 
-namespace css = com::sun::star;
+using namespace com::sun::star;
 
-// Best effort conversion:
-std::string convert(rtl::OUString const & s16) {
-    rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
-    return std::string(
-        s8.getStr(),
-        ((static_cast< sal_uInt32 >(s8.getLength())
-          > std::numeric_limits< std::string::size_type >::max())
-         ? std::numeric_limits< std::string::size_type >::max()
-         : static_cast< std::string::size_type >(s8.getLength())));
-}
+//cppunit calls instantiates a new TextFixture for each test and calls setUp
+//and tearDown on that for every test in a fixture
+//
+//We basically need to call dispose on our root component context context to
+//shut down cleanly in the right order.
+//
+//But we can't setup and tear down the root component context for
+//every test because all the uno singletons will be invalid after
+//the first dispose. So lets setup the default context once before
+//all tests are run, and tear it down once after all have finished
 
 class Prot : public CppUnit::Protector, private boost::noncopyable
 {
 public:
-    Prot() {}
+    Prot();
 
-    virtual ~Prot() {}
+    virtual ~Prot();
 
     virtual bool protect(
         CppUnit::Functor const & functor,
         CppUnit::ProtectorContext const & context);
+private:
+    uno::Reference<uno::XComponentContext> m_xContext;
 };
 
-bool Prot::protect(
-    CppUnit::Functor const & functor, CppUnit::ProtectorContext const & context)
+
+Prot::Prot()
 {
-    try {
-        return functor();
-    } catch (const css::uno::Exception &e) {
-        css::uno::Any a(cppu::getCaughtException());
-        reportError(
-            context,
-            CppUnit::Message(
-                convert(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "An uncaught exception of type "))
-                    + a.getValueTypeName()),
-                convert(e.Message)));
-    }
-    return false;
+    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
+
+    uno::Reference<lang::XMultiComponentFactory> xFactory = m_xContext->getServiceManager();
+    uno::Reference<lang::XMultiServiceFactory> xSFactory(xFactory, uno::UNO_QUERY_THROW);
+
+    comphelper::setProcessServiceFactory(xSFactory);
+}
+
+bool Prot::protect(
+    CppUnit::Functor const & functor, CppUnit::ProtectorContext const &)
+{
+    return functor();
+}
+
+Prot::~Prot()
+{
+    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector * SAL_CALL
-unoexceptionprotector() {
+extern "C" SAL_DLLPUBLIC_EXPORT CppUnit::Protector * SAL_CALL unobootstrapprotector()
+{
     return new Prot;
 }
 

@@ -180,7 +180,7 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 
     boost::ptr_vector<osl::Module> modules;
-    cppunittester::LibreOfficeProtector *throw_protector = 0;
+    CppUnit::Protector *throw_protector = 0;
     CppUnit::TestResult result;
     std::string args;
     std::string testlib;
@@ -231,14 +231,8 @@ SAL_IMPLEMENT_MAIN() {
         index+=3;
     }
 
-    bool ok = false;
     ProtectedFixtureFunctor tests(testlib, args, result);
-    //if the unoprotector was given on the command line, use it to catch
-    //and report the error message of exceptions
-    if (throw_protector)
-        ok = throw_protector->protect(tests);
-    else
-        ok = tests.run();
+    bool ok = tests.run();
 
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

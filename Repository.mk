@@ -406,6 +406,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpchelp1 \
     ucphier1 \
     ucppkg1 \
+    unobootstrapprotector \
     unoexceptionprotector \
     unopkgapp \
     unotest \

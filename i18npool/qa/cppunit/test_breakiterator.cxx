@@ -35,14 +35,11 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <unotest/bootstrapfixturebase.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -50,12 +47,9 @@
 
 using namespace ::com::sun::star;
 
-class TestBreakIterator : public CppUnit::TestFixture
+class TestBreakIterator : public test::BootstrapFixtureBase
 {
 public:
-    TestBreakIterator();
-    ~TestBreakIterator();
-
     virtual void setUp();
     virtual void tearDown();
 
@@ -72,11 +66,7 @@ public:
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
     CPPUNIT_TEST_SUITE_END();
-
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-    uno::Reference<lang::XMultiServiceFactory> m_xMSF;
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 };
 
@@ -327,27 +317,17 @@ void TestBreakIterator::testThai()
 #endif
 }
 
-TestBreakIterator::TestBreakIterator()
-{
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-    m_xMSF = uno::Reference<lang::XMultiServiceFactory>(m_xFactory, uno::UNO_QUERY_THROW);
-    m_xBreak = uno::Reference< i18n::XBreakIterator >(m_xMSF->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),
-        uno::UNO_QUERY_THROW);
-}
-
 void TestBreakIterator::setUp()
 {
-}
-
-TestBreakIterator::~TestBreakIterator()
-{
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
+    BootstrapFixtureBase::setUp();
+    m_xBreak = uno::Reference< i18n::XBreakIterator >(m_xSFactory->createInstance(
+        "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
 }
 
 void TestBreakIterator::tearDown()
 {
+    BootstrapFixtureBase::tearDown();
+    m_xBreak.clear();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestBreakIterator);

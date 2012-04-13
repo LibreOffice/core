@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
 test::BootstrapFixtureBase::BootstrapFixtureBase()
-    : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://")), m_aSolverRootURL( m_aSrcRootURL )
+    : m_aSrcRootURL("file://"), m_aSolverRootURL( m_aSrcRootURL )
 {
 #ifndef ANDROID
     const char* pSrcRoot = getenv( "SRC_ROOT" );
@@ -74,46 +74,38 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
 
 ::rtl::OUString test::BootstrapFixtureBase::getURLFromSrc( const char *pPath )
 {
-  return m_aSrcRootURL + rtl::OUString::createFromAscii( pPath );
+    return m_aSrcRootURL + rtl::OUString::createFromAscii( pPath );
 }
 
 ::rtl::OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
 {
-  return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
+    return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
 }
 
 ::rtl::OUString test::BootstrapFixtureBase::getURLFromSolver( const char *pPath )
 {
-  return m_aSolverRootURL + rtl::OUString::createFromAscii( pPath );
+    return m_aSolverRootURL + rtl::OUString::createFromAscii( pPath );
 }
 
 ::rtl::OUString test::BootstrapFixtureBase::getPathFromSolver( const char *pPath )
 {
-  return m_aSolverRootPath + rtl::OUString::createFromAscii( pPath );
+    return m_aSolverRootPath + rtl::OUString::createFromAscii( pPath );
 }
 
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
-    rtl::OUString sUserInstallURL = m_aSolverRootURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/unittest" ) );
-    aDefaultVars.set( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserInstallation") ),
-                         sUserInstallURL);
+    rtl::OUString sUserInstallURL = m_aSolverRootURL + rtl::OUString("/unittest");
+    aDefaultVars.set(rtl::OUString("UserInstallation"), sUserInstallURL);
 
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
+    m_xContext = comphelper::getProcessComponentContext();
     m_xFactory = m_xContext->getServiceManager();
-    m_xSFactory = uno::Reference<lang::XMultiServiceFactory> (m_xFactory, uno::UNO_QUERY_THROW);
-
-    // Without this we're crashing because callees are using
-    // getProcessServiceFactory.  In general those should be removed in favour
-    // of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(m_xSFactory);
+    m_xSFactory = uno::Reference<lang::XMultiServiceFactory>(m_xFactory, uno::UNO_QUERY_THROW);
 }
 
 void test::BootstrapFixtureBase::tearDown()
 {
-    //    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

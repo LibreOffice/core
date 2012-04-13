@@ -62,6 +62,12 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     : m_bNeedUCB( bNeedUCB )
     , m_bAssertOnDialog( bAssertOnDialog )
 {
+}
+
+void test::BootstrapFixture::setUp()
+{
+    test::BootstrapFixtureBase::setUp();
+
     // force locale (and resource files loaded) to en-US
     const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
@@ -69,11 +75,7 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
     lang::Locale aLocale(aLang, aCountry, rtl::OUString());
     ResMgr::SetDefaultLocale( aLocale );
-}
 
-void test::BootstrapFixture::setUp()
-{
-    test::BootstrapFixtureBase::setUp();
     if (m_bNeedUCB)
     {
         // initialise UCB-Broker
@@ -96,9 +98,8 @@ void test::BootstrapFixture::setUp()
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
     InitVCL(m_xSFactory);
-    if (Application::IsHeadlessModeRequested()) {
+    if (Application::IsHeadlessModeRequested())
         Application::EnableHeadlessMode(true);
-    }
 
     if( m_bAssertOnDialog )
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
