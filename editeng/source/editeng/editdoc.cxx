@@ -2030,9 +2030,9 @@ size_t EditDoc::Count() const
     return maContents.size();
 }
 
-XubString EditDoc::GetSepStr( LineEnd eEnd )
+rtl::OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
-    XubString aSep;
+    rtl::OUString aSep;
     if ( eEnd == LINEEND_CR )
         aSep = aCR;
     else if ( eEnd == LINEEND_LF )
@@ -2045,34 +2045,36 @@ XubString EditDoc::GetSepStr( LineEnd eEnd )
 XubString EditDoc::GetText( LineEnd eEnd ) const
 {
     sal_uLong nLen = GetTextLen();
-    sal_uInt16 nNodes = Count();
+    size_t nNodes = Count();
+    if (nNodes == 0)
+        return String();
 
-    String aSep = EditDoc::GetSepStr( eEnd );
-    sal_uInt16 nSepSize = aSep.Len();
+    rtl::OUString aSep = EditDoc::GetSepStr( eEnd );
+    sal_Int32 nSepSize = aSep.getLength();
 
     if ( nSepSize )
         nLen += nNodes * nSepSize;
     if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
     {
-        OSL_FAIL( "Text to large for String" );
-        return XubString();
+        OSL_FAIL( "Text too large for String" );
+        return String();
     }
     xub_Unicode* pStr = new xub_Unicode[nLen+1];
     xub_Unicode* pCur = pStr;
-    sal_uInt16 nLastNode = nNodes-1;
+    size_t nLastNode = nNodes-1;
     for ( sal_uInt16 nNode = 0; nNode < nNodes; nNode++ )
     {
-        XubString aTmp( GetParaAsString( GetObject(nNode) ) );
+        String aTmp( GetParaAsString( GetObject(nNode) ) );
         memcpy( pCur, aTmp.GetBuffer(), aTmp.Len()*sizeof(sal_Unicode) );
         pCur += aTmp.Len();
         if ( nSepSize && ( nNode != nLastNode ) )
         {
-            memcpy( pCur, aSep.GetBuffer(), nSepSize*sizeof(sal_Unicode ) );
+            memcpy( pCur, aSep.getStr(), nSepSize*sizeof(sal_Unicode ) );
             pCur += nSepSize;
         }
     }
     *pCur = '\0';
-    XubString aASCIIText( pStr );
+    String aASCIIText( pStr );
     delete[] pStr;
     return aASCIIText;
 }
