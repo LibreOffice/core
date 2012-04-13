@@ -58,6 +58,15 @@ $(eval $(call gb_Helper_register_executables,SDK, \
     idlcpp \
 ))
 
+ifneq ($(OS),IOS)
+
+$(eval $(call gb_Helper_register_executables,SDK, \
+    javamaker \
+    cppumaker \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
@@ -550,6 +559,9 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
+    codemaker \
+    commoncpp \
+    commonjava \
     dtobj \
     headless \
     libeay32 \

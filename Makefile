@@ -40,6 +40,7 @@ binaryurp\
 canvas\
 chart2\
 clucene\
+codemaker\
 comphelper\
 configmgr\
 cppcanvas\
@@ -153,7 +154,6 @@ boost\
 bridges\
 cairo\
 cli_ure\
-codemaker\
 connectivity\
 cosv\
 cppunit\

@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     canvas \
     chart2 \
     clucene \
+    codemaker \
     comphelper \
     configmgr \
     cppcanvas \
