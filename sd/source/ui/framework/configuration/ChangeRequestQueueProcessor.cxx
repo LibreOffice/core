@@ -44,7 +44,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace {
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL >= 2
 
 void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
