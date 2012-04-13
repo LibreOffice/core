@@ -119,10 +119,12 @@ private:
     const std::string &testlib;
     const std::string &args;
     CppUnit::TestResult &result;
+    std::vector<CppUnit::Protector *> &protectors;
 public:
-    ProtectedFixtureFunctor(const std::string& testlib_, const std::string &args_, CppUnit::TestResult &result_)
+    ProtectedFixtureFunctor(const std::string& testlib_, const std::string &args_, std::vector<CppUnit::Protector*> &protectors_, CppUnit::TestResult &result_)
         : testlib(testlib_)
         , args(args_)
+        , protectors(protectors_)
         , result(result_)
     {
     }
@@ -150,7 +152,13 @@ public:
         result.addListener(&timer);
 #endif
 
+        for (size_t i = 0; i < protectors.size(); ++i)
+            result.pushProtector(protectors[i]);
+
         runner.run(result);
+
+        for (size_t i = 0; i < protectors.size(); ++i)
+            result.popProtector();
 
         CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
         return collector.wasSuccessful();
@@ -180,7 +188,7 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 
     boost::ptr_vector<osl::Module> modules;
-    CppUnit::Protector *throw_protector = 0;
+    std::vector<CppUnit::Protector *> protectors;
     CppUnit::TestResult result;
     std::string args;
     std::string testlib;
@@ -218,20 +226,20 @@ SAL_IMPLEMENT_MAIN() {
         rtl::OUString sym(RTL_CONSTASCII_USTRINGPARAM("unoexceptionprotector"));
         oslGenericFunction fn = (oslGenericFunction) unoexceptionprotector;
 #endif
-        throw_protector = fn == 0
+        CppUnit::Protector *protector = fn == 0
             ? 0
             : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-        if (throw_protector == 0) {
+        if (protector == 0) {
             std::cerr
                 << "Failure instantiating protector \"" << convertLazy(lib)
                 << "\", \"" << convertLazy(sym) << '"' << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        result.pushProtector(throw_protector);
+        protectors.push_back(protector);
         index+=3;
     }
 
-    ProtectedFixtureFunctor tests(testlib, args, result);
+    ProtectedFixtureFunctor tests(testlib, args, protectors, result);
     bool ok = tests.run();
 
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
