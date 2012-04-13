@@ -59,7 +59,7 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
-// Toleranzwert in der Formatierung und Textausgabe.
+// Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
 
 class FormatLevel
@@ -77,7 +77,7 @@ MSHORT FormatLevel::nLevel = 0;
  *                          ValidateTxt/Frm()
  *************************************************************************/
 
-void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
+void ValidateTxt( SwFrm *pFrm )     // Friend of frame
 {
     if ( ( ! pFrm->IsVertical() &&
              pFrm->Frm().Width() == pFrm->GetUpper()->Prt().Width() ) ||
@@ -88,13 +88,12 @@ void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
 
 void SwTxtFrm::ValidateFrm()
 {
-    // Umgebung validieren, um Oszillationen zu verhindern.
+    // Validate surroundings to avoid oscillation
     SWAP_IF_SWAPPED( this )
 
     if ( !IsInFly() && !IsInTab() )
-    {   //Innerhalb eines Flys nur this validieren, der Rest sollte eigentlich
-        //nur fuer Fussnoten notwendig sein und die gibt es innerhalb von
-        //Flys nicht. Fix fuer 5544
+    {   // Only validate 'this' when inside a fly, the rest should actually only be
+        // needed for footnotes, which do not exist in flys.
         SwSectionFrm* pSct = FindSctFrm();
         if( pSct )
         {
@@ -111,7 +110,7 @@ void SwTxtFrm::ValidateFrm()
     }
     ValidateTxt( this );
 
-    //MA: mindestens das MustFit-Flag muessen wir retten!
+    // We at least have to save the MustFit flag!
     OSL_ENSURE( HasPara(), "ResetPreps(), missing ParaPortion." );
     SwParaPortion *pPara = GetPara();
     const sal_Bool bMustFit = pPara->IsPrepMustFit();
@@ -125,9 +124,9 @@ void SwTxtFrm::ValidateFrm()
  *                          ValidateBodyFrm()
  *************************************************************************/
 
-// nach einem RemoveFtn muss der BodyFrm und alle innenliegenden kalkuliert
-// werden, damit die DeadLine richtig sitzt.
-// Erst wird nach aussen hin gesucht, beim Rueckweg werden alle kalkuliert.
+// After a RemoveFtn the BodyFrm and all Frms contained within it, need to be
+// recalculated, so that the DeadLine is right.
+// First we search outwards, on the way back we calculate everything.
 
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
@@ -152,7 +151,7 @@ void SwTxtFrm::ValidateBodyFrm()
 {
     SWAP_IF_SWAPPED( this )
 
-     //siehe Kommtar in ValidateFrm()
+     // See comment in ValidateFrm()
     if ( !IsInFly() && !IsInTab() &&
          !( IsInSct() && FindSctFrm()->Lower()->IsColumnFrm() ) )
         _ValidateBodyFrm( GetUpper() );
@@ -241,7 +240,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         if ( !IsInFly() && GetNext() )
         {
             pPage = FindPageFrm();
-            //Minimieren - sprich ggf. zuruecksetzen - der Invalidierungen s.u.
+            // Minimize = that is set back if needed - for invalidation see below
             bOldInvaCntnt  = pPage->IsInvalidCntnt();
         }
 
@@ -258,7 +257,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
             }
         }
 
-        //Der Fussnotenbereich darf sich keinesfalls vergrossern.
+        // The footnote area must not get larger
         SwSaveFtnHeight aSave( FindFtnBossFrm( sal_True ), LONG_MAX );
 
         pMyFollow->CalcFtnFlag();
@@ -269,11 +268,10 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         {
             if( !FormatLevel::LastLevel() )
             {
-                // Weenn der Follow in einem spaltigen Bereich oder einem
-                // spaltigen Rahmen steckt, muss zunaechst dieser kalkuliert
-                // werden, da das FormatWidthCols() nicht funktioniert, wenn
-                // es aus dem MakeAll des _gelockten_ Follows heraus gerufen
-                // wird.
+                // If the follow is contained within a column section or column
+                // frame, we need to calculate that first. This is because the
+                // FormatWidthCols() does not work if it is called from MakeAll
+                // of the _locked_ follow.
                 SwSectionFrm* pSct = pMyFollow->FindSctFrm();
                 if( pSct && !pSct->IsAnLower( this ) )
                 {
@@ -313,8 +311,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                     }
 
                     pMyFollow->Calc();
-                    // Der Follow merkt anhand seiner Frm().Height(), dass was schief
-                    // gelaufen ist.
+                    // The Follow can tell from its Frm().Height() that something went wrong
                     OSL_ENSURE( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: cheesy follow" );
                     if( pMyFollow->GetPrev() )
                     {
@@ -327,13 +324,13 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                     pMyFollow->AllowFollowFormat();
                 }
 
-                //Sicherstellen, dass der Follow gepaintet wird.
+                // Make sure that the Follow gets painted
                 pMyFollow->SetCompletePaint();
             }
 
             pPara = GetPara();
-            //Solange der Follow wg. Orphans Zeilen angefordert, bekommt er
-            //diese und wird erneut formatiert, falls moeglich.
+            // As long as the Follow is requested due to orphan lines, it is passed these
+            // and is reformatted if possible
             if( pPara && pPara->IsPrepWidows() )
                 CalcPreps();
             else
@@ -386,7 +383,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 {
     if( IsUndersized() )
     {
-        if( GetOfst() && !IsFollow() ) // ein gescrollter Absatz (undersized)
+        if( GetOfst() && !IsFollow() ) // A scrolled paragraph (undersized)
             return;
         SetUndersized( nChgHght == 0 || bHasToFit );
     }
@@ -396,9 +393,8 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
     SWAP_IF_SWAPPED( this )
     SWRECTFN ( this )
 
-    // Die Size-Variable des Frames wird durch Grow inkrementiert
-    // oder durch Shrink dekrementiert. Wenn die Groesse
-    // unveraendert ist, soll nichts passieren!
+    // The Frame's size variable is incremented by Grow or decremented by Shrink.
+    // If the size cannot change, nothing should happen!
     if( nChgHght >= 0)
     {
         SwTwips nChgHeight = nChgHght;
@@ -430,12 +426,11 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 
             if ( IsInFly() )
             {
-                //MA 06. May. 93: Wenn einer der Upper ein Fly ist, so ist es
-                //sehr wahrscheinlich, dass dieser Fly durch das Grow seine
-                //Position veraendert - also muss auch meine Position korrigiert
-                //werden (sonst ist die Pruefung s.u. nicht aussagekraeftig).
-                //Die Vorgaenger muessen berechnet werden, damit die Position
-                //korrekt berechnet werden kann.
+                // If one of the Upper is a Fly, it's very likely that this fly changes its
+                // position by the Grow. Therefore, my position has to be corrected also or
+                // the check further down is not meaningful.
+                // The predecessors need to be calculated, so that the position can be
+                // calculated correctly.
                 if ( GetPrev() )
                 {
                     SwFrm *pPre = GetUpper()->Lower();
@@ -455,12 +450,11 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             }
             nChgHeight = 0;
         }
-        // Ein Grow() wird von der Layout-Seite immer akzeptiert,
-        // also auch, wenn die FixSize des umgebenden Layoutframes
-        // dies nicht zulassen sollte. Wir ueberpruefen diesen
-        // Fall und korrigieren die Werte.
-        // MA 06. May. 93: Der Frm darf allerdings auch im Notfall nicht
-        // weiter geschrumpft werden als es seine Groesse zulaesst.
+        // A Grow() is always accepted by the Layout, even if the
+        // FixSize of the surrounding layout frame should not allow it.
+        // We text for this case and correct the values.
+        // The Frm must NOT be shrinked further than its size permits
+        // even in the case of an emergency.
         SwTwips nRstHeight;
         if ( IsVertical() )
         {
@@ -482,8 +476,8 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                        + GetUpper()->Prt().Height()
                        - Frm().Top();
 
-        //In Tabellenzellen kann ich mir evtl. noch ein wenig dazuholen, weil
-        //durch eine vertikale Ausrichtung auch oben noch Raum sein kann.
+        // We can get a bit of space in table cells, because there could be some
+        // left through a vertical alignment to the top.
         // #115759# - assure, that first lower in upper
         // is the current one or is valid.
         if ( IsInTab() &&
@@ -497,25 +491,22 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         }
 
 /* ------------------------------------
- * #50964#: nRstHeight < 0 bedeutet, dass der TxtFrm komplett ausserhalb seines
- * Upper liegt. Dies kann passieren, wenn er innerhalb eines FlyAtCntFrm liegt, der
- * durch das Grow() die Seite gewechselt hat. In so einem Fall ist es falsch, der
- * folgenden Grow-Versuch durchzufuehren. Im Bugfall fuehrte dies sogar zur
- * Endlosschleife.
+ * nRstHeight < 0 means that the TxtFrm is located completely outside of its Upper.
+ * This can happen, if it's located within a FlyAtCntFrm, which changed sides by a
+ * Grow(). In such a case, it's wrong to execute the following Grow().
+ * In the case of a bug, we end up with an infinite loop.
  * -----------------------------------*/
         SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
         SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
 
         if( nRstHeight < nFrmHeight )
         {
-            //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
-            //klein ist und der Upper noch Platz schaffen kann.
+            // It can be that I have the right size, but the Upper is too small and can get me some room
             if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
                 nRstHeight += GetUpper()->Grow( nFrmHeight - nRstHeight );
-            // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
-            // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
-            // schrumpfen wir und notieren bUndersized, damit FormatWidthCols die richtige
-            // Spaltengroesse ermitteln kann.
+            // In column sections we do not want to get too big or else more areas are created by
+            // GetNextSctLeaf. Instead, we shrink and remember bUndersized, so that FormatWidthCols
+            // can calculate the right column size.
             if ( nRstHeight < nFrmHeight )
             {
                 if( bHasToFit || !IsMoveable() ||
