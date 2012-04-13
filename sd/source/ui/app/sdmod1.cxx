@@ -575,7 +575,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             //we start without wizard
 
             //check whether we should load a template document
-            const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+            const ::rtl::OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
             String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
 
             if( aStandardTemplate.Len() > 0 )
@@ -645,7 +645,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 aRequest.AppendItem (aPassword);
                             aRequest.AppendItem (SfxStringItem (
                                 SID_TARGETNAME,
-                                String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
+                                rtl::OUString("_default")));
                             try
                             {
                                 const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);

@@ -186,7 +186,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     if( xFrame.is() ) try
     {
         Reference< XPropertySet > xControllerSet( xFrame->getController(), UNO_QUERY_THROW );
-        xControllerSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawViewMode" ) ) ) >>= eMode;
+        xControllerSet->getPropertyValue( "DrawViewMode" ) >>= eMode;
     }
     catch( Exception& e )
     {
@@ -259,9 +259,9 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
         if( mxFrame.is() )
         {
             if( bInsertPage )
-                sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
+                sSlotStr = ".uno:DuplicatePage";
             else
-                sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
+                sSlotStr = ".uno:Undo";
             aSlotImage = ::GetImage( mxFrame, sSlotStr, sal_False );
 
             String sSlotTitle;
@@ -307,12 +307,12 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
     if( eLayout != AUTOLAYOUT__END )
     {
         aArgs = Sequence< PropertyValue >(1);
-        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WhatLayout" ) );
+        aArgs[0].Name = "WhatLayout";
         aArgs[0].Value <<= (sal_Int32)eLayout;
     }
     else if( mbInsertPage )
     {
-        sCommandURL = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
+        sCommandURL = ".uno:DuplicatePage";
     }
 
     mrController.dispatchCommand( sCommandURL, aArgs );
@@ -324,7 +324,7 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 
 OUString SlideLayoutController_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sd.SlideLayoutController" ));
+    return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
 
 // --------------------------------------------------------------------
@@ -332,7 +332,7 @@ OUString SlideLayoutController_getImplementationName()
 Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -340,14 +340,14 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
 
 Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new SlideLayoutController( rSMgr, OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )), false );
+    return *new SlideLayoutController( rSMgr, ".uno:AssignLayout", false );
 }
 
 // --------------------------------------------------------------------
 
 OUString InsertSlideController_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sd.InsertSlideController" ));
+    return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
 
 // --------------------------------------------------------------------
@@ -355,7 +355,7 @@ OUString InsertSlideController_getImplementationName()
 Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -363,7 +363,7 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
 
 Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new SlideLayoutController( rSMgr, OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPage" )), true );
+    return *new SlideLayoutController( rSMgr, ".uno:InsertPage" , true );
 }
 
 //========================================================================

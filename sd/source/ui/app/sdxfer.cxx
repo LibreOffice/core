@@ -220,14 +220,14 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                     return;
 
                 ::com::sun::star::form::FormButtonType  eButtonType;
-                Any                                     aTmp( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) ) ) );
+                Any                                     aTmp( xPropSet->getPropertyValue( "ButtonType" ) );
 
                 if( aTmp >>= eButtonType )
                 {
                     ::rtl::OUString aLabel, aURL;
 
-                    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) ) ) >>= aLabel;
-                    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TargetURL") ) ) >>= aURL;
+                    xPropSet->getPropertyValue( "Label" ) >>= aLabel;
+                    xPropSet->getPropertyValue( "TargetURL" ) >>= aURL;
 
                     mpBookmark = new INetBookmark( String( aURL ), String( aLabel ) );
                 }

@@ -105,8 +105,6 @@ using namespace ::com::sun::star::text;
 #define METABUTTON_AREA_WIDTH   30
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 
-#define EMPTYSTRING             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))
-
 namespace sd {
 
 extern OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotation );
@@ -579,7 +577,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
         if( !sDateTime.isEmpty() )
         {
             if( !sMeta.isEmpty() )
-                sMeta += OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
+                sMeta += "\n";
 
            sMeta += sDateTime;
         }

@@ -1999,7 +1999,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     pSet->getPropertyValue( nHandleCurrentPage ) >>= xCurrentPage;
     if( xCurrentPage.is() )
     {
-        const OUString aStrIsEmptyPresObj( RTL_CONSTASCII_USTRINGPARAM( "IsEmptyPresentationObject" ) );
+        const OUString aStrIsEmptyPresObj( "IsEmptyPresentationObject" );
 
         sal_Int32 nShape, nCount = xCurrentPage->getCount();
         for( nShape = 0; nShape < nCount; nShape++ )

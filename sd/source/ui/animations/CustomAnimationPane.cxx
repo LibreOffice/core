@@ -1099,7 +1099,7 @@ static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
         if( xText.is() )
         {
             Reference< XPropertySet > xParaSet;
-            const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
+            const OUString strNumberingLevel( "NumberingLevel" );
 
             Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
             while( xEnumeration->hasMoreElements() )
@@ -1141,11 +1141,11 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, CustomAnimationEffe
         }
 
     case nPropertyTypeFont:
-        return pEffect->getProperty( AnimationNodeType::SET, OUString( RTL_CONSTASCII_USTRINGPARAM("CharFontName") ), VALUE_TO );
+        return pEffect->getProperty( AnimationNodeType::SET, "CharFontName" , VALUE_TO );
 
     case nPropertyTypeCharHeight:
         {
-            const OUString aAttributeName( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
+            const OUString aAttributeName( "CharHeight" );
             Any aValue( pEffect->getProperty( AnimationNodeType::SET, aAttributeName, VALUE_TO ) );
             if( !aValue.hasValue() )
                 aValue = pEffect->getProperty( AnimationNodeType::ANIMATE, aAttributeName, VALUE_TO );
@@ -1156,7 +1156,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, CustomAnimationEffe
         return pEffect->getTransformationProperty( AnimationTransformType::ROTATE, VALUE_BY);
 
     case nPropertyTypeTransparency:
-        return pEffect->getProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("Opacity")), VALUE_TO );
+        return pEffect->getProperty( AnimationNodeType::SET, "Opacity" , VALUE_TO );
 
     case nPropertyTypeScale:
         return pEffect->getTransformationProperty( AnimationTransformType::SCALE, VALUE_BY );
@@ -1164,9 +1164,9 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, CustomAnimationEffe
     case nPropertyTypeCharDecoration:
         {
             Sequence< Any > aValues(3);
-            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeight")), VALUE_TO );
-            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharPosture")), VALUE_TO );
-            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharUnderline")), VALUE_TO );
+            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, "CharWeight" , VALUE_TO );
+            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, "CharPosture" , VALUE_TO );
+            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, "CharUnderline" , VALUE_TO );
             return makeAny( aValues );
         }
     }
@@ -1212,12 +1212,12 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
         break;
 
     case nPropertyTypeFont:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), VALUE_TO, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharFontName" , VALUE_TO, rValue );
         break;
 
     case nPropertyTypeCharHeight:
         {
-            const OUString aAttributeName( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
+            const OUString aAttributeName( "CharHeight" );
             bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, aAttributeName, VALUE_TO, rValue );
             if( !bEffectChanged )
                 bEffectChanged = pEffect->setProperty( AnimationNodeType::ANIMATE, aAttributeName, VALUE_TO, rValue );
@@ -1228,7 +1228,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
         break;
 
     case nPropertyTypeTransparency:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, OUString( RTL_CONSTASCII_USTRINGPARAM("Opacity") ), VALUE_TO, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "Opacity" , VALUE_TO, rValue );
         break;
 
     case nPropertyTypeScale:
@@ -1239,9 +1239,9 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
         {
             Sequence< Any > aValues(3);
             rValue >>= aValues;
-            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeight")), VALUE_TO, aValues[0] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharPosture")), VALUE_TO, aValues[1] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, OUString(RTL_CONSTASCII_USTRINGPARAM("CharUnderline")), VALUE_TO, aValues[2] );
+            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharWeight" , VALUE_TO, aValues[0] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharPosture" , VALUE_TO, aValues[1] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharUnderline" , VALUE_TO, aValues[2] );
         }
         break;
 
@@ -1259,8 +1259,8 @@ static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
         if( sShapeType == "com.sun.star.presentation.TitleTextShape" || sShapeType == "com.sun.star.presentation.OutlinerShape" ||
             sShapeType == "com.sun.star.presentation.SubtitleShape" || sShapeType == "com.sun.star.drawing.TextShape" )
         {
-            const OUString sFillStyle( RTL_CONSTASCII_USTRINGPARAM("FillStyle" ) );
-            const OUString sLineStyle( RTL_CONSTASCII_USTRINGPARAM("LineStyle" ) );
+            const OUString sFillStyle( "FillStyle" );
+            const OUString sLineStyle( "LineStyle" );
             Reference< XPropertySet > xSet( xShape, UNO_QUERY_THROW );
 
             FillStyle eFillStyle;
@@ -1376,17 +1376,17 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
                 addValue( pSet, nHandleProperty1Value, getProperty1Value( nType, pEffect ) );
             }
 
-            if( pDescriptor->hasProperty( OUString( RTL_CONSTASCII_USTRINGPARAM( "Accelerate" ) ) ) )
+            if( pDescriptor->hasProperty( "Accelerate" ) )
             {
                 addValue( pSet, nHandleAccelerate, makeAny( pEffect->getAcceleration() ) );
             }
 
-            if( pDescriptor->hasProperty( OUString( RTL_CONSTASCII_USTRINGPARAM( "Decelerate" ) ) ) )
+            if( pDescriptor->hasProperty( "Decelerate" ) )
             {
                 addValue( pSet, nHandleDecelerate, makeAny( pEffect->getDecelerate() ) );
             }
 
-            if( pDescriptor->hasProperty( OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoReverse" ) ) ) )
+            if( pDescriptor->hasProperty( "AutoReverse" ) )
             {
                 addValue( pSet, nHandleAutoReverse, makeAny( pEffect->getAutoReverse() ) );
             }
@@ -2376,11 +2376,11 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
-    Reference< XTimeContainer > xRoot(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer"))), UNO_QUERY);
+    Reference< XTimeContainer > xRoot(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY);
     if( xRoot.is() )
     {
         Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+        aUserData[0].Name = "node-type";
         aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
         xRoot->setUserData( aUserData );
         xRoot->appendChild( xAnimationNode );

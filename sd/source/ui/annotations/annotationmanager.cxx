@@ -179,7 +179,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
         if(aTime.GetTime() != 0)
-            sRet = sRet + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( aTime,false );
+            sRet = sRet + " "  + rLocalData.getTime( aTime,false );
     }
     return sRet;
 }
@@ -474,16 +474,16 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
         aStr.SearchAndReplaceAscii("%1", sAuthor);
 
-        aStr.Append( String(RTL_CONSTASCII_USTRINGPARAM(" (") ) );
-        aStr.Append( String( getAnnotationDateTimeString( xAnnotation ) ) );
-        aStr.Append( String(RTL_CONSTASCII_USTRINGPARAM("): \"") ) );
+        aStr.Append( rtl::OUString(" (") );
+        aStr.Append( rtl::OUString( getAnnotationDateTimeString( xAnnotation ) ) );
+        aStr.Append( rtl::OUString("): \"") );
 
         String sQuote( pTextApi->GetText() );
 
         if( sQuote.Len() == 0 )
-            sQuote = String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            sQuote = rtl::OUString( "..." );
         aStr.Append( sQuote );
-        aStr.Append( String(RTL_CONSTASCII_USTRINGPARAM("\"\n") ) );
+        aStr.Append( rtl::OUString("\"\n") );
 
         sal_uInt16 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
         for( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
@@ -1051,7 +1051,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
             nId = pMenu->GetItemId( nPos );
             if( pMenu->IsItemEnabled( nId ) )
             {
-                OUString sSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                OUString sSlotURL( "slot:" );
                 sSlotURL += OUString::valueOf( sal_Int32( nId ));
 
                 Image aImage( GetImage( xFrame, sSlotURL, false ) );

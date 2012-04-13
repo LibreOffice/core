@@ -388,7 +388,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     }
 
     XDash aDash( XDASH_RECT, 1, 80, 1, 80, 80);
-    String aEmpty( RTL_CONSTASCII_USTRINGPARAM("?") );
+    rtl::OUString aEmpty( "?" );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
     mpPathObj->SetMergedItem( XLineStyleItem( XLINE_DASH ) );
     mpPathObj->SetMergedItem( XLineColorItem(aEmpty, ::Color(COL_GRAY)) );
@@ -431,7 +431,7 @@ MotionPathTag::~MotionPathTag()
 
 void MotionPathTag::updatePathAttributes()
 {
-    String aEmpty( RTL_CONSTASCII_USTRINGPARAM("?") );
+    rtl::OUString aEmpty( "?" );
 
     ::basegfx::B2DPolygon aCandidate;
     if( mxPolyPoly.count() )

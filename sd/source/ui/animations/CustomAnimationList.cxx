@@ -134,12 +134,12 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     if( xSet.is() )
     {
         Reference< XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-        const OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UINameSingular") );
+        const OUString aPropName( "UINameSingular");
         if( xInfo->hasPropertyByName( aPropName ) )
             xSet->getPropertyValue( aPropName ) >>= aDescription;
     }
 
-    aDescription += OUString( RTL_CONSTASCII_USTRINGPARAM(" "));
+    aDescription += " ";
     aDescription += OUString::valueOf( getShapeIndex( xShape ) );
 
     if( bWithText )
@@ -150,7 +150,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
             OUString aText( xText->getString() );
             if( !aText.isEmpty() )
             {
-                aDescription += OUString(RTL_CONSTASCII_USTRINGPARAM(": "));
+                aDescription += ": ";
 
                 aText = aText.replace( (sal_Unicode)'\n', (sal_Unicode)' ' );
                 aText = aText.replace( (sal_Unicode)'\r', (sal_Unicode)' ' );
@@ -670,7 +670,7 @@ void CustomAnimationList::update()
                 SvLBoxEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
                 OUString aDescription = String( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
-                aDescription += OUString( RTL_CONSTASCII_USTRINGPARAM(": ") );
+                aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription, this ) );
                 Insert( pLBoxEntry );
