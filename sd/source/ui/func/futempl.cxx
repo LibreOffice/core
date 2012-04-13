@@ -161,7 +161,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     Reference< XPropertySet > xInfo( xStyles->getByName( pNameItem->GetValue() ), UNO_QUERY_THROW );
 
                     OUString aUIName;
-                    xInfo->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")) ) >>= aUIName;
+                    xInfo->getPropertyValue( "DisplayName" ) >>= aUIName;
                     if ( !aUIName.isEmpty() )
                         rReq.AppendItem( SfxStringItem( nSId, aUIName ) );
                 }

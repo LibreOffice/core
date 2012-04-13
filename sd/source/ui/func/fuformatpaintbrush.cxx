@@ -265,7 +265,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         // except in a few cases (?)
         if( pObj )
         {
-            String sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatPaintbrush" ) ) ) );
+            rtl::OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(".uno:FormatPaintbrush" ) );
             mpDoc->BegUndo( sLabel );
             mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, sal_False, sal_True ) );
         }

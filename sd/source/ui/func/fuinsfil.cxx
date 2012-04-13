@@ -120,21 +120,21 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 SFXWB_INSERT );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-        String aOwnCont;
-        String aOtherCont;
+        rtl::OUString aOwnCont;
+        rtl::OUString aOtherCont;
         const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
         {
-            aOwnCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
-            aOtherCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
+            aOwnCont = "simpress";
+            aOtherCont = "sdraw";
         }
         else
         {
-            aOtherCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
-            aOwnCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
+            aOtherCont = "simpress";
+            aOwnCont = "sdraw" ;
         }
 
         SfxFilterMatcher aMatch( aOwnCont );
@@ -752,13 +752,13 @@ void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterV
 
     rFilterVector.clear();
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/plain" ) ) ) ) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/plain" )) != NULL )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "application/rtf" ) ) ) ) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "application/rtf" ) ) != NULL )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/html" ) ) ) ) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/html" ) ) != NULL )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 }
 

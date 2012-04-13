@@ -380,15 +380,15 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             {
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
-                    pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarChart" ) ) );
+                    pOleObj->SetProgName( rtl::OUString( "StarChart" ));
                 }
                 else if (nSlotId == SID_ATTR_TABLE)
                 {
-                    pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarCalc" ) ) );
+                    pOleObj->SetProgName( rtl::OUString( "StarCalc" ) );
                 }
                 else if (nSlotId == SID_INSERT_MATH)
                 {
-                    pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
+                    pOleObj->SetProgName( rtl::OUString( "StarMath" ) );
                 }
 
                 pOleObj->SetLogicRect(aRect);
@@ -503,7 +503,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
                                 if ( xSet.is() )
                                 {
-                                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                                    xSet->setPropertyValue("PluginURL",
                                             uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                                 }
                             }
