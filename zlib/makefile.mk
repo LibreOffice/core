@@ -57,9 +57,7 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
     zlib.h \
-    zconf.h \
-    contrib$/minizip$/unzip.h \
-    contrib$/minizip$/ioapi.h
+    zconf.h
 
 PATCHED_HEADERS=$(INCCOM)$/patched$/zlib.h
 
