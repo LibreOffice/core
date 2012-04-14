@@ -102,6 +102,9 @@ protected:
     ButtonPosition mePosition;
 
 private:
+    /// Compute the size of the are for the given button size.
+    // TODO this is supposed to be static, fix that
+    Size MinimumSize( Button::IconSize eSize, const ::std::vector<SharedButton>& rButtons );
     void UpdateMinimumIconSizes(const ::std::vector<SharedButton>& rButtons);
 };
 
@@ -752,47 +755,35 @@ void ButtonBar::BackgroundTheme::SetPreviewBoundingBox (const Rectangle& rPrevie
 }
 
 
+Size ButtonBar::BackgroundTheme::MinimumSize( Button::IconSize eSize,
+        const ::std::vector<SharedButton>& rButtons )
+{
+    OSL_ASSERT(mpTheme);
+
+    int nMaximumHeight = 0;
+    const int nGap = mpTheme->GetIntegerValue(Theme::Integer_ButtonGap);
+    const int nBorder = mpTheme->GetIntegerValue(Theme::Integer_ButtonBorder);
+
+    int nTotalWidth = (rButtons.size()-1) * nGap + 2*nBorder;
+    for ( int nIndex = 0; nIndex < int( rButtons.size() ); ++nIndex )
+    {
+        // Update large size.
+        Size aSize( rButtons[nIndex]->GetSize(eSize) );
+        if ( aSize.Height() > nMaximumHeight )
+            nMaximumHeight = aSize.Height();
+        nTotalWidth += aSize.Width();
+    }
+    return Size( nTotalWidth, nMaximumHeight + 2*nBorder );
+}
 
 
 void ButtonBar::BackgroundTheme::UpdateMinimumIconSizes (
     const ::std::vector<SharedButton>& rButtons)
 {
-    OSL_ASSERT(mpTheme);
-
-    sal_Int32 nMaximumHeightLarge (0);
-    sal_Int32 nMaximumHeightMedium (0);
-    sal_Int32 nMaximumHeightSmall (0);
-    const sal_Int32 nGap (mpTheme->GetIntegerValue(Theme::Integer_ButtonGap));
-    const sal_Int32 nBorder (mpTheme->GetIntegerValue(Theme::Integer_ButtonBorder));
-    sal_Int32 nTotalWidthLarge ((rButtons.size()-1) * nGap + 2*nBorder);
-    sal_Int32 nTotalWidthMedium ((rButtons.size()-1) * nGap + 2*nBorder);
-    sal_Int32 nTotalWidthSmall ((rButtons.size()-1) * nGap + 2*nBorder);
-    for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
-    {
-        // Update large size.
-        Size aSize = rButtons[nIndex]->GetSize(Button::IconSize_Large);
-        if (aSize.Height() > nMaximumHeightLarge)
-            nMaximumHeightLarge = aSize.Height();
-        nTotalWidthLarge += aSize.Width();
-
-        // Update medium size.
-        aSize = rButtons[nIndex]->GetSize(Button::IconSize_Medium);
-        if (aSize.Height() > nMaximumHeightMedium)
-            nMaximumHeightMedium = aSize.Height();
-        nTotalWidthMedium += aSize.Width();
-
-        // Update small size.
-        aSize = rButtons[nIndex]->GetSize(Button::IconSize_Small);
-        if (aSize.Height() > nMaximumHeightSmall)
-            nMaximumHeightSmall = aSize.Height();
-        nTotalWidthSmall += aSize.Width();
-    }
-    maMinimumLargeButtonAreaSize = Size(nTotalWidthLarge, nMaximumHeightLarge+2*nBorder);
-    maMinimumMediumButtonAreaSize = Size(nTotalWidthMedium, nMaximumHeightMedium+2*nBorder);
-    maMinimumSmallButtonAreaSize = Size(nTotalWidthSmall, nMaximumHeightSmall+2*nBorder);
+    maMinimumLargeButtonAreaSize = MinimumSize( Button::IconSize_Large, rButtons );
+    maMinimumMediumButtonAreaSize = MinimumSize( Button::IconSize_Medium, rButtons );
+    maMinimumSmallButtonAreaSize = MinimumSize( Button::IconSize_Small, rButtons );
 }
-
-
 
 
 Button::IconSize ButtonBar::BackgroundTheme::GetIconSize (void) const
