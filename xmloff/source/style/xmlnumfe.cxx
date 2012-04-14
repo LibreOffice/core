@@ -54,6 +54,7 @@
 #include <xmloff/xmlexp.hxx>
 
 #include <set>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -114,12 +115,7 @@ struct SvXMLEmbeddedTextEntry
         nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
 };
 
-typedef SvXMLEmbeddedTextEntry* SvXMLEmbeddedTextEntryPtr;
-SV_DECL_PTRARR_DEL( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr, 4 )
-
-//-------------------------------------------------------------------------
-
-SV_IMPL_PTRARR( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr );
+class SvXMLEmbeddedTextEntryArr : public boost::ptr_vector<SvXMLEmbeddedTextEntry> {};
 
 //-------------------------------------------------------------------------
 
@@ -614,10 +610,10 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
     //  number:embedded-text as child elements
 
-    sal_uInt16 nEntryCount = rEmbeddedEntries.Count();
+    sal_uInt16 nEntryCount = rEmbeddedEntries.size();
     for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
     {
-        SvXMLEmbeddedTextEntry* pObj = rEmbeddedEntries[nEntry];
+        const SvXMLEmbeddedTextEntry* pObj = &rEmbeddedEntries[nEntry];
 
         //  position attribute
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
@@ -627,12 +623,12 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
         //  text as element content
         rtl::OUString aContent( pObj->aText );
-        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1]->nFormatPos == pObj->nFormatPos )
+        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
         {
             // The array can contain several elements for the same position in the number
             // (for example, literal text and space from underscores). They must be merged
             // into a single embedded-text element.
-            aContent += rEmbeddedEntries[nEntry+1]->aText;
+            aContent += rEmbeddedEntries[nEntry+1].aText;
             ++nEntry;
         }
         rExport.Characters( aContent );
@@ -861,9 +857,9 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
 
 sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
 {
-    sal_uInt16 nCount = rEmbeddedEntries.Count();
+    sal_uInt16 nCount = rEmbeddedEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
-        if ( rEmbeddedEntries[i]->nSourcePos == nPos )
+        if ( rEmbeddedEntries[i].nSourcePos == nPos )
             return sal_True;
 
     return sal_False;       // not found
@@ -1133,7 +1129,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  format elements
     //
 
-    SvXMLEmbeddedTextEntryArr aEmbeddedEntries(0);
+    SvXMLEmbeddedTextEntryArr aEmbeddedEntries;
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
@@ -1259,7 +1255,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
                             SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr );
-                            aEmbeddedEntries.Insert( pObj, aEmbeddedEntries.Count() );
+                            aEmbeddedEntries.push_back( pObj );
                         }
                         break;
                 }
