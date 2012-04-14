@@ -188,6 +188,12 @@ class Button
 public:
     Button (
         SlideSorter& rSlideSorter,
+        const BitmapEx& rLargeIcon,
+        const BitmapEx& rLargeHoverIcon,
+        const BitmapEx& rMediumIcon,
+        const BitmapEx& rMediumHoverIcon,
+        const BitmapEx& rSmallIcon,
+        const BitmapEx& rSmallHoverIcon,
         const ::rtl::OUString& rsHelpText);
     virtual ~Button (void);
 
@@ -201,12 +207,12 @@ public:
     */
     bool SetState (const State eState);
 
-    virtual void Place (const Rectangle aButtonBarBox) = 0;
+    virtual void Place (const Rectangle aButtonBarBox);
     virtual void Paint (
         OutputDevice& rDevice,
         const Point aOffset,
         const double nAlpha,
-        const ::boost::shared_ptr<Theme>& rpTheme) const = 0;
+        const ::boost::shared_ptr<Theme>& rpTheme) const;
     virtual void ProcessClick (const model::SharedPageDescriptor& rpDescriptor) = 0;
 
     /** Return the bounding box of the layouted button.
@@ -215,8 +221,8 @@ public:
     /** Return the minimum size required to completely paint the
         button.
     */
-    virtual Size GetSize (void) const = 0;
-    virtual Size GetSize (const IconSize eIconSize) const = 0;
+    virtual Size GetSize (void) const;
+    virtual Size GetSize (const IconSize eIconSize) const;
     ::rtl::OUString GetHelpText (void) const;
     bool IsDown (void) const;
     void SetActiveState (const bool bIsActive);
@@ -234,33 +240,7 @@ protected:
     // Buttons that lie (partly) outside the button bar are deactivated.
     bool mbIsActive;
     IconSize meIconSize;
-};
 
-
-
-class ImageButton : public Button
-{
-public:
-    ImageButton (
-        SlideSorter& rSlideSorter,
-        const BitmapEx& rLargeIcon,
-        const BitmapEx& rLargeHoverIcon,
-        const BitmapEx& rMediumIcon,
-        const BitmapEx& rMediumHoverIcon,
-        const BitmapEx& rSmallIcon,
-        const BitmapEx& rSmallHoverIcon,
-        const ::rtl::OUString& rsHelpText);
-
-    virtual void Place (const Rectangle aButtonBarBox);
-    virtual void Paint (
-        OutputDevice& rDevice,
-        const Point aOffset,
-        const double nAlpha,
-        const ::boost::shared_ptr<Theme>& rpTheme) const;
-    virtual Size GetSize (void) const;
-    virtual Size GetSize (const IconSize eIconSize) const;
-
-private:
     const BitmapEx maLargeIcon;
     const BitmapEx maLargeHoverIcon;
     const BitmapEx maMediumIcon;
@@ -270,7 +250,8 @@ private:
 };
 
 
-class UnhideButton : public ImageButton
+
+class UnhideButton : public Button
 {
 public:
     UnhideButton (SlideSorter& rSlideSorter);
@@ -280,7 +261,7 @@ protected:
 };
 
 
-class StartShowButton : public ImageButton
+class StartShowButton : public Button
 {
 public:
     StartShowButton (SlideSorter& rSlideSorter);
@@ -291,7 +272,7 @@ protected:
 };
 
 
-class HideButton : public ImageButton
+class HideButton : public Button
 {
 public:
     HideButton (SlideSorter& rSlideSorter);
@@ -301,7 +282,7 @@ protected:
 };
 
 
-class DuplicateButton : public ImageButton
+class DuplicateButton : public Button
 {
 public:
     DuplicateButton (SlideSorter& rSlideSorter);

@@ -857,17 +857,27 @@ void ButtonBar::BackgroundTheme::Layout (void)
 
 Button::Button (
     SlideSorter& rSlideSorter,
+    const BitmapEx& rLargeIcon,
+    const BitmapEx& rLargeHoverIcon,
+    const BitmapEx& rMediumIcon,
+    const BitmapEx& rMediumHoverIcon,
+    const BitmapEx& rSmallIcon,
+    const BitmapEx& rSmallHoverIcon,
     const ::rtl::OUString& rsHelpText)
     : mrSlideSorter(rSlideSorter),
       meState(State_Normal),
       maBoundingBox(),
       msHelpText(rsHelpText),
       mbIsActive(false),
-      meIconSize(IconSize_Large)
+      meIconSize(IconSize_Large),
+      maLargeIcon(rLargeIcon),
+      maLargeHoverIcon(rLargeHoverIcon.IsEmpty() ? rLargeIcon : rLargeHoverIcon),
+      maMediumIcon(rMediumIcon),
+      maMediumHoverIcon(rMediumHoverIcon.IsEmpty() ? rMediumIcon : rMediumHoverIcon),
+      maSmallIcon(rSmallIcon),
+      maSmallHoverIcon(rSmallHoverIcon.IsEmpty() ? rSmallIcon : rSmallHoverIcon)
 {
 }
-
-
 
 
 Button::~Button (void)
@@ -951,33 +961,7 @@ bool Button::IsEnabled (void) const
 }
 
 
-
-
-//===== ImageButon ============================================================
-
-ImageButton::ImageButton (
-    SlideSorter& rSlideSorter,
-    const BitmapEx& rLargeIcon,
-    const BitmapEx& rLargeHoverIcon,
-    const BitmapEx& rMediumIcon,
-    const BitmapEx& rMediumHoverIcon,
-    const BitmapEx& rSmallIcon,
-    const BitmapEx& rSmallHoverIcon,
-    const ::rtl::OUString& rsHelpText)
-    : Button(rSlideSorter, rsHelpText),
-      maLargeIcon(rLargeIcon),
-      maLargeHoverIcon(rLargeHoverIcon.IsEmpty() ? rLargeIcon : rLargeHoverIcon),
-      maMediumIcon(rMediumIcon),
-      maMediumHoverIcon(rMediumHoverIcon.IsEmpty() ? rMediumIcon : rMediumHoverIcon),
-      maSmallIcon(rSmallIcon),
-      maSmallHoverIcon(rSmallHoverIcon.IsEmpty() ? rSmallIcon : rSmallHoverIcon)
-{
-}
-
-
-
-
-void ImageButton::Place (const Rectangle aButtonBarBox)
+void Button::Place (const Rectangle aButtonBarBox)
 {
     const sal_Int32 nWidth (GetSize().Width());
     maBoundingBox = Rectangle(
@@ -989,9 +973,7 @@ void ImageButton::Place (const Rectangle aButtonBarBox)
 }
 
 
-
-
-void ImageButton::Paint (
+void Button::Paint (
     OutputDevice& rDevice,
     const Point aOffset,
     const double nAlpha,
@@ -1052,17 +1034,13 @@ void ImageButton::Paint (
 }
 
 
-
-
-Size ImageButton::GetSize (void) const
+Size Button::GetSize (void) const
 {
     return GetSize(meIconSize);
 }
 
 
-
-
-Size ImageButton::GetSize (const Button::IconSize eIconSize) const
+Size Button::GetSize (const Button::IconSize eIconSize) const
 {
     switch (eIconSize)
     {
@@ -1084,7 +1062,7 @@ Size ImageButton::GetSize (const Button::IconSize eIconSize) const
 //===== UnhideButton ==========================================================
 
 UnhideButton::UnhideButton (SlideSorter& rSlideSorter)
-    : ImageButton(
+    : Button(
         rSlideSorter,
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BLarge),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BLargeHover),
@@ -1116,7 +1094,7 @@ void UnhideButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor
 //===== StartSlideShowButton ==================================================
 
 StartShowButton::StartShowButton (SlideSorter& rSlideSorter)
-    : ImageButton(
+    : Button(
         rSlideSorter,
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Large),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1LargeHover),
@@ -1182,7 +1160,7 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
 //===== HideButton ============================================================
 
 HideButton::HideButton (SlideSorter& rSlideSorter)
-    : ImageButton(
+    : Button(
         rSlideSorter,
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Large),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2LargeHover),
@@ -1214,7 +1192,7 @@ void HideButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor)
 //===== DuplicateButton =======================================================
 
 DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
-    : ImageButton(
+    : Button(
         rSlideSorter,
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Large),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3LargeHover),
