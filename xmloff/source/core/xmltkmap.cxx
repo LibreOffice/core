@@ -30,6 +30,7 @@
 #include <svl/svarray.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <boost/ptr_container/ptr_set.hpp>
 
 using namespace ::xmloff::token;
 
@@ -72,9 +73,7 @@ public:
     }
 };
 
-typedef SvXMLTokenMapEntry_Impl *SvXMLTokenMapEntry_ImplPtr;
-SV_DECL_PTRARR_SORT_DEL( SvXMLTokenMap_Impl, SvXMLTokenMapEntry_ImplPtr, 5 )
-SV_IMPL_OP_PTRARR_SORT( SvXMLTokenMap_Impl, SvXMLTokenMapEntry_ImplPtr )
+class SvXMLTokenMap_Impl : public boost::ptr_set<SvXMLTokenMapEntry_Impl> {};
 
 // ---------------------------------------------------------------------
 
@@ -84,10 +83,10 @@ SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
     SvXMLTokenMapEntry_Impl *pRet = 0;
     SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
 
-    sal_uInt16 nPos;
-    if( pImpl->Seek_Entry( &aTst, &nPos ) )
+    SvXMLTokenMap_Impl::iterator it = pImpl->find( aTst );
+    if( it != pImpl->end() )
     {
-        pRet = (*pImpl)[nPos];
+        pRet = &*it;
     }
 
     return pRet;
@@ -98,7 +97,7 @@ SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap ) :
 {
     while( pMap->eLocalName != XML_TOKEN_INVALID )
     {
-        pImpl->Insert( new SvXMLTokenMapEntry_Impl( *pMap ) );
+        pImpl->insert( new SvXMLTokenMapEntry_Impl( *pMap ) );
         pMap++;
     }
 }
