@@ -143,52 +143,14 @@ private:
 
 };
 
-class DownSearchToolboxController : public svt::ToolboxController,
-                                    public css::lang::XServiceInfo
+class UpDownSearchToolboxController : public svt::ToolboxController,
+                                      public css::lang::XServiceInfo
 {
 public:
+    enum Type { UP, DOWN };
 
-    DownSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
-    ~DownSearchToolboxController();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
-
-    static ::rtl::OUString getImplementationName_Static() throw()
-    {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.DownSearchToolboxController" ));
-    }
-
-    static css::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
-
-    // XComponent
-    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException );
-
-    // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw ( css::uno::RuntimeException);
-
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
-
-};
-
-class UpSearchToolboxController : public svt::ToolboxController,
-                                  public css::lang::XServiceInfo
-{
-public:
-
-    UpSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager );
-    ~UpSearchToolboxController();
+    UpDownSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager, Type eType );
+    ~UpDownSearchToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException );
@@ -200,9 +162,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static ::rtl::OUString getImplementationName_Static() throw()
+    static ::rtl::OUString getImplementationName_Static( Type eType ) throw()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.UpSearchToolboxController" ));
+        return eType == UP? ::rtl::OUString( "com.sun.star.svx.UpSearchToolboxController" ) :
+                            ::rtl::OUString( "com.sun.star.svx.DownSearchToolboxController" );
     }
 
     static css::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
@@ -219,6 +182,8 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
 
+private:
+    Type meType;
 };
 
 // protocol handler for "vnd.sun.star.findbar:*" URLs

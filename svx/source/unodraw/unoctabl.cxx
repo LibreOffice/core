@@ -310,19 +310,19 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::FindTextToolbarController_createInstance,
                 svx::FindTextToolbarController::getSupportedServiceNames_Static() );
         }
-        else if ( svx::DownSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        else if ( svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::DOWN ).equalsAscii( pImplName ) )
         {
             xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::DownSearchToolboxController::getImplementationName_Static(),
+                svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::DOWN ),
                 svx::DownSearchToolboxController_createInstance,
-                svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
+                svx::UpDownSearchToolboxController::getSupportedServiceNames_Static() );
         }
-        else if ( svx::UpSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        else if ( svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::UP ).equalsAscii( pImplName ) )
         {
             xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::UpSearchToolboxController::getImplementationName_Static(),
+                svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::UP ),
                 svx::UpSearchToolboxController_createInstance,
-                svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
+                svx::UpDownSearchToolboxController::getSupportedServiceNames_Static() );
         }
         else if ( svx::FindbarDispatcher::getImplementationName_Static().equalsAscii( pImplName ) )
         {
