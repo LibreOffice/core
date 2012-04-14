@@ -284,8 +284,7 @@ XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 
 // --------------------------------------------------------------------------
 
-typedef XMLTextColumnContext_Impl *XMLTextColumnContext_ImplPtr;
-SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr, 5 )
+class XMLTextColumnsArray_Impl : public std::vector<XMLTextColumnContext_Impl *> {};
 
 TYPEINIT1( XMLTextColumnsContext, XMLElementPropertyContext );
 
@@ -343,12 +342,10 @@ XMLTextColumnsContext::~XMLTextColumnsContext()
 {
     if( pColumns )
     {
-        sal_uInt16 nColCount = pColumns->Count();
-        while( nColCount )
+        while( !pColumns->empty() )
         {
-            nColCount--;
-            XMLTextColumnContext_Impl *pColumn = (*pColumns)[nColCount];
-            pColumns->Remove( nColCount, 1 );
+            XMLTextColumnContext_Impl *pColumn = *pColumns->begin();
+            pColumns->erase( pColumns->begin() );
             pColumn->ReleaseRef();
         }
     }
@@ -378,7 +375,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
         if( !pColumns )
             pColumns = new XMLTextColumnsArray_Impl;
 
-        pColumns->Insert( pColumn, pColumns->Count() );
+        pColumns->push_back( pColumn );
         pColumn->AddRef();
 
         pContext = pColumn;
@@ -419,7 +416,7 @@ void XMLTextColumnsContext::EndElement( )
         xColumns->setColumnCount( 1 );
     }
     else if( !bAutomatic && pColumns &&
-             pColumns->Count() == (sal_uInt16)nCount )
+             pColumns->size() == (sal_uInt16)nCount )
     {
         // if we have column descriptions, one per column, and we don't use
         // automatic width, then set the column widths
