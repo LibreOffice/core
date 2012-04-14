@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtftok,\
 $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_rtftok))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
+	comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \

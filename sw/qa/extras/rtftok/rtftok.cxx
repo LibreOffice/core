@@ -42,6 +42,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -80,6 +81,7 @@ public:
     void testFdo47107();
     void testFdo45182();
     void testFdo44176();
+    void testZoom();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -102,6 +104,7 @@ public:
     CPPUNIT_TEST(testFdo47107);
     CPPUNIT_TEST(testFdo45182);
     CPPUNIT_TEST(testFdo44176);
+    CPPUNIT_TEST(testZoom);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -531,6 +534,18 @@ void RtfModelTest::testFdo44176()
     xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
     xDefault->getPropertyValue("HeaderHeight") >>= nDefaultHeader;
     CPPUNIT_ASSERT_EQUAL(nFirstTop, nDefaultTop + nDefaultHeader);
+}
+
+void RtfModelTest::testZoom()
+{
+    load("zoom.rtf");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
+    sal_Int16 nValue = 0;
+    xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

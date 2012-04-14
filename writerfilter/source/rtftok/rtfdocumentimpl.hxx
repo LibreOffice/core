@@ -425,7 +425,9 @@ namespace writerfilter {
                 bool m_bNeedPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
-                /// The settings table.
+                /// The settings table attributes.
+                RTFSprms m_aSettingsTableAttributes;
+                /// The settings table sprms.
                 RTFSprms m_aSettingsTableSprms;
 
                 oox::StorageRef m_xStorage;

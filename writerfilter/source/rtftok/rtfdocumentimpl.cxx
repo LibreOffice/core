@@ -253,6 +253,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bNeedCr(false),
     m_bNeedPar(true),
     m_aListTableSprms(),
+    m_aSettingsTableAttributes(),
     m_aSettingsTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
@@ -374,8 +375,7 @@ void RTFDocumentImpl::checkFirstRun()
     if (m_bFirstRun)
     {
         // output settings table
-        RTFSprms aAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aSettingsTableSprms));
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms));
         RTFReferenceTable::Entries_t aSettingsTableEntries;
         aSettingsTableEntries.insert(make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
@@ -2754,6 +2754,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
                 lcl_putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_Lvl_rPr, NS_sprm::LN_CRgFtc0, pValue);
             }
+            break;
+        case RTF_VIEWSCALE:
+            m_aSettingsTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_Zoom_percent, pIntValue));
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
