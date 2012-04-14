@@ -211,6 +211,7 @@ public:
     void testAutoFill();
 
     CPPUNIT_TEST_SUITE(Test);
+#if 0
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
+#endif
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4202,7 +4204,22 @@ void Test::testAutoFill()
         }
     }
 
+    // test auto fill user data lists
+    m_pDoc->SetString( 0, 100, 0, "January" );
+    m_pDoc->Fill( 0, 100, 0, 100, NULL, aMarkData, 2, FILL_TO_BOTTOM, FILL_AUTO );
+    rtl::OUString aTestValue = m_pDoc->GetString( 0, 101, 0 );
+    CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("February") );
+    aTestValue = m_pDoc->GetString( 0, 102, 0 );
+    CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("March") );
 
+    // test that two same user data list entries will not result in incremental fill
+    m_pDoc->SetString( 0, 101, 0, "January" );
+    m_pDoc->Fill( 0, 100, 0, 101, NULL, aMarkData, 2, FILL_TO_BOTTOM, FILL_AUTO );
+    for ( SCROW i = 102; i <= 103; ++i )
+    {
+        aTestValue = m_pDoc->GetString( 0, i, 0 );
+        CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("January") );
+    }
     m_pDoc->DeleteTab(0);
 }
 
