@@ -220,9 +220,7 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
 };
 
-typedef SvXMLImportContext *SvXMLImportContextPtr;
-SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20 )
-SV_IMPL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr )
+class SvXMLImportContexts_Impl : public std::vector<SvXMLImportContext *> {};
 
 SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
                                          const OUString& rLocalName,
@@ -378,11 +376,10 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpEventImportHelper;
     if( mpContexts )
     {
-        while( mpContexts->Count() )
+        while( !mpContexts->empty() )
         {
-            sal_uInt16 n = mpContexts->Count() - 1;
-            SvXMLImportContext *pContext = (*mpContexts)[n];
-            mpContexts->Remove( n, 1 );
+            SvXMLImportContext *pContext = mpContexts->back();
+            mpContexts->pop_back();
             if( pContext )
                 pContext->ReleaseRef();
         }
@@ -636,7 +633,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
     SvXMLImportContext *pContext;
-    sal_uInt16 nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->size();
     if( nCount > 0 )
     {
         pContext = (*mpContexts)[nCount - 1]->CreateChildContext( nPrefix,
@@ -684,7 +681,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     pContext->StartElement( xAttrList );
 
     // Push context on stack.
-    mpContexts->Insert( pContext, nCount );
+    mpContexts->push_back( pContext );
 }
 
 void SAL_CALL SvXMLImport::endElement( const OUString&
@@ -694,13 +691,13 @@ rName
 )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    sal_uInt16 nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->size();
     DBG_ASSERT( nCount, "SvXMLImport::endElement: no context left" );
     if( nCount > 0 )
     {
         // Get topmost context and remove it from the stack.
-        SvXMLImportContext *pContext = (*mpContexts)[nCount-1];
-        mpContexts->Remove( nCount-1, 1 );
+        SvXMLImportContext *pContext = mpContexts->back();
+        mpContexts->pop_back();
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
@@ -735,10 +732,9 @@ rName
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    sal_uInt16 nCount = mpContexts->Count();
-    if( nCount > 0 )
+    if( !mpContexts->empty() )
     {
-        (*mpContexts)[nCount - 1]->Characters( rChars );
+        mpContexts->back()->Characters( rChars );
     }
 }
 
