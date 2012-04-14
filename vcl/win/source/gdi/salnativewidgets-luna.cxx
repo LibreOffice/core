@@ -1015,13 +1015,18 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     if( aValue.getType() == CTRL_MENU_POPUP )
                     {
                         const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
-                        aBGRect.left   = rMVal.maItemRect.Left();
                         aBGRect.top    = rMVal.maItemRect.Top();
                         aBGRect.bottom = rMVal.maItemRect.Bottom()+1; // see below in drawNativeControl
-                        aBGRect.right  = rMVal.getNumericVal();
-
-                        // FIXME: magic
-                        aBGRect.left += 1; aBGRect.top += 1; aBGRect.bottom +=1;
+                        if( Application::GetSettings().GetLayoutRTL() )
+                        {
+                            aBGRect.right = rMVal.maItemRect.Right()+1;
+                            aBGRect.left = aBGRect.right - (rMVal.getNumericVal()-rMVal.maItemRect.Left());
+                        }
+                        else
+                        {
+                            aBGRect.right = rMVal.getNumericVal();
+                            aBGRect.left  = rMVal.maItemRect.Left();
+                        }
                     }
                     iState = (nState & CTRL_STATE_ENABLED) ? MCB_NORMAL : MCB_DISABLED;
                     ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
