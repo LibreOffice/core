@@ -297,7 +297,6 @@ public:
     void            PSRotate (sal_Int32 nAngle);
     void            PSTranslate (const Point& rPoint);
     void            PSMoveTo (const Point& rPoint);
-    void            PSRMoveTo (sal_Int32 nDx, sal_Int32 nDy = 0);
     void            PSScale (double fScaleX, double fScaleY);
     void            PSLineTo(const Point& rPoint );
     void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
@@ -396,7 +395,6 @@ public:
                              bool bArtItalic,
                              bool bArtBold
                              );
-    sal_uInt16      SetFallbackFont ( sal_Int32 nFontID );
     sal_Int32       GetFontAngle () const
     { return mnTextAngle; }
     sal_Int32       GetFontID () const

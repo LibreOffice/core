@@ -908,13 +908,6 @@ PrinterGfx::PSLineTo (const Point& rPoint)
     PSPointOp (rPoint, "lineto");
 }
 
-void
-PrinterGfx::PSRMoveTo (sal_Int32 nDx, sal_Int32 nDy)
-{
-    Point aPoint(nDx, nDy);
-    PSPointOp (aPoint, "rmoveto");
-}
-
 /* get a compressed representation of the path information */
 
 #define DEBUG_BINPATH 0

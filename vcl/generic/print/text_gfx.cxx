@@ -139,13 +139,6 @@ PrinterGfx::SetFont(
     return 0;
 }
 
-sal_uInt16
-PrinterGfx::SetFallbackFont ( sal_Int32 nFontID )
-{
-    mnFallbackID = nFontID;
-    return 0;
-}
-
 void PrinterGfx::drawGlyphs(
                             const Point& rPoint,
                             sal_uInt32* pGlyphIds,

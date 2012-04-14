@@ -767,8 +767,6 @@ psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp co
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)
 psp::PrinterGfx::GetGlyphOutline(unsigned short, unsigned short**, Point**, unsigned char**)
 psp::PrinterGfx::GetResolution(int&, int&) const
-psp::PrinterGfx::PSRMoveTo(int, int)
-psp::PrinterGfx::SetFallbackFont(int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
