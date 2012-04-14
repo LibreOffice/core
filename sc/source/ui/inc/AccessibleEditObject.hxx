@@ -39,13 +39,6 @@ namespace accessibility
 class EditView;
 class Window;
 
-enum EditObjectType
-{
-    CellInEditMode,
-    EditLine,
-    EditControl
-};
-
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
@@ -54,7 +47,13 @@ class ScAccessibleEditObject
     :   public  ScAccessibleContextBase
 {
 public:
-    //=====  internal  ========================================================
+    enum EditObjectType
+    {
+        CellInEditMode,
+        EditLine,
+        EditControl
+    };
+
     ScAccessibleEditObject(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,

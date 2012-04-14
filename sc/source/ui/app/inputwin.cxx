@@ -1998,7 +1998,7 @@ void ScTextWnd::ImplInitSettings()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
-        rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), EditLine);
+        rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::EditLine);
 }
 
 void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
