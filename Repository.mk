@@ -561,8 +561,8 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
     codemaker \
-    commoncpp \
-    commonjava \
+    codemaker_cpp \
+    codemaker_java \
     dtobj \
     headless \
     libeay32 \

@@ -29,8 +29,8 @@ $(eval $(call gb_Module_Module,codemaker))
 $(eval $(call gb_Module_add_targets,codemaker,\
     Package_inc \
     StaticLibrary_codemaker \
-    StaticLibrary_commoncpp \
-    StaticLibrary_commonjava \
+    StaticLibrary_codemaker_cpp \
+    StaticLibrary_codemaker_java \
     Executable_javamaker \
     Executable_cppumaker \
 ))

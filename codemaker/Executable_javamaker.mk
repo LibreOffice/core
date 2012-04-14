@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_use_libraries,javamaker,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,javamaker,\
-    commonjava \
+    codemaker_java \
     codemaker \
 ))
 

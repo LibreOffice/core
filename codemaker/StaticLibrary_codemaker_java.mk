@@ -25,15 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,commoncpp))
+$(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_java))
 
-$(eval $(call gb_StaticLibrary_set_include,commoncpp,\
+$(eval $(call gb_StaticLibrary_set_include,codemaker_java,\
     -I$(SRCDIR)/codemaker/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,commoncpp,\
-	codemaker/source/commoncpp/commoncpp \
+$(eval $(call gb_StaticLibrary_add_exception_objects,codemaker_java,\
+	codemaker/source/commonjava/commonjava \
 ))
 
 # vim: set noet sw=4 ts=4:

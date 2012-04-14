@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_use_libraries,cppumaker,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,cppumaker,\
-    commoncpp \
+    codemaker_cpp \
     codemaker \
 ))
 

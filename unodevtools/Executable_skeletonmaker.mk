@@ -45,8 +45,8 @@ $(eval $(call gb_Executable_use_libraries,uno-skeletonmaker,\
 
 $(eval $(call gb_Executable_use_static_libraries,uno-skeletonmaker,\
     codemaker \
-    commoncpp \
-    commonjava \
+    codemaker_cpp \
+    codemaker_java \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,uno-skeletonmaker,\
