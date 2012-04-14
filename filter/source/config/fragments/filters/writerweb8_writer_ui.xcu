@@ -1,5 +1,5 @@
     <node oor:name="writerweb8_writer">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% Text (%productname% Writer/Web)</value>
+            <value xml:lang="en-US">%productname% Text (Writer/Web)</value>
                     </prop>
     </node>
