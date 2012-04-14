@@ -51,7 +51,7 @@ class Entry:
             prefix += "%s." % self.items[3]
         self.keys = []
         # 10..13 are translation types
-        for idx in range(10, 14):
+        for idx in [10,12,13]:
             try:
                 if len(self.items[idx]):
                     t = {10:'text', 12:'quickhelptext', 13:'title'}[idx]

@@ -72,6 +72,7 @@ typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
     MergeDataHashMap;
 
 #define SOURCE_LANGUAGE rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))
+#define X_COMMENT rtl::OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))
 #define LIST_REFID  "LIST_REFID"
 
 typedef OStringHashMap ExportListEntry;

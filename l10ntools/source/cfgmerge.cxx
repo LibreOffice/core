@@ -483,6 +483,7 @@ void CfgExport::WorkOnRessourceEnd()
     if ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
         {
             rtl::OString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
+            rtl::OString sXComment = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
             rtl::OString sLocalId = pStackData->sIdentifier;
             rtl::OString sGroupId;
             if ( aStack.size() == 1 ) {
@@ -512,7 +513,8 @@ void CfgExport::WorkOnRessourceEnd()
                 sOutput += sCur;
                 sOutput += "\t";
 
-                sOutput += sText; sOutput += "\t\t\t\t";
+                sOutput += sText; sOutput += "\t";
+                sOutput += sXComment; sOutput += "\t\t\t";
 
                 pOutputStream << sOutput.getStr() << '\n';
             }

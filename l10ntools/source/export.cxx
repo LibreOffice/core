@@ -1006,8 +1006,8 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                         sXText = pResData->sText[ SOURCE_LANGUAGE ];
                     }
 
-                    if (!pResData->sHelpText[ sCur ].isEmpty())
-                        sXHText = pResData->sHelpText[ sCur ];
+                    if (!pResData->sText[ X_COMMENT ].isEmpty())
+                        sXHText = pResData->sText[ X_COMMENT ];
                     else {
                         sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
                     }
