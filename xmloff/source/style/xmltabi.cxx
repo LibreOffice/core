@@ -184,8 +184,7 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
 
 
 
-typedef SvxXMLTabStopContext_Impl *SvxXMLTabStopContext_Impl_ImplPtr;
-SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr, 20 )
+class SvxXMLTabStopArray_Impl : public std::vector<SvxXMLTabStopContext_Impl *> {};
 
 
 // ---
@@ -206,12 +205,10 @@ SvxXMLTabStopImportContext::~SvxXMLTabStopImportContext()
 {
     if( mpTabStops )
     {
-        sal_uInt16 nCount = mpTabStops->Count();
-        while( nCount )
+        while( !mpTabStops->empty() )
         {
-            nCount--;
-            SvxXMLTabStopContext_Impl *pTabStop = (*mpTabStops)[nCount];
-            mpTabStops->Remove( nCount, 1 );
+            SvxXMLTabStopContext_Impl *pTabStop = mpTabStops->back();
+            mpTabStops->pop_back();
             pTabStop->ReleaseRef();
         }
     }
@@ -237,7 +234,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
         if( !mpTabStops )
             mpTabStops = new SvxXMLTabStopArray_Impl;
 
-        mpTabStops->Insert( pTabStopContext, mpTabStops->Count() );
+        mpTabStops->push_back( pTabStopContext );
         pTabStopContext->AddRef();
 
         pContext = pTabStopContext;
@@ -252,7 +249,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
 
 void SvxXMLTabStopImportContext::EndElement( )
 {
-    sal_uInt16 nCount = mpTabStops ? mpTabStops->Count() : 0;
+    sal_uInt16 nCount = mpTabStops ? mpTabStops->size() : 0;
     uno::Sequence< style::TabStop> aSeq( nCount );
 
     if( mpTabStops )
