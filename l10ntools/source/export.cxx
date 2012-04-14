@@ -995,73 +995,43 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         rtl::OString sXQHText;
         rtl::OString sXTitle;
 
-        rtl::OString sCur;
+        sXText = pResData->sText[ SOURCE_LANGUAGE ];
+        if (!pResData->sText[ X_COMMENT ].isEmpty())
+            sXHText = pResData->sText[ X_COMMENT ];
+        else
+            sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
+        sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
+        sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
 
-        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-            sCur = aLanguages[ n ];
-                if (!sCur.equalsIgnoreAsciiCase("x-comment") ){
-                    if (!pResData->sText[ sCur ].isEmpty())
-                        sXText = pResData->sText[ sCur ];
-                    else {
-                        sXText = pResData->sText[ SOURCE_LANGUAGE ];
-                    }
+        if (sXText.isEmpty())
+            sXText = "-";
 
-                    if (!pResData->sText[ X_COMMENT ].isEmpty())
-                        sXHText = pResData->sText[ X_COMMENT ];
-                    else {
-                        sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
-                    }
-
-                    if (!pResData->sQuickHelpText[ sCur ].isEmpty())
-                        sXQHText = pResData->sQuickHelpText[ sCur ];
-                    else {
-                        sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
-                    }
-
-                    if (!pResData->sTitle[ sCur ].isEmpty())
-                        sXTitle = pResData->sTitle[ sCur ];
-                    else
-                        sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
-
-                    if (sXText.isEmpty())
-                        sXText = "-";
-
-                    if (sXHText.isEmpty())
-                    {
-                        if (!pResData->sHelpText[ SOURCE_LANGUAGE ].isEmpty())
-                            sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
-                    }
-                }
-                else
-                    sXText = pResData->sText[ sCur ];
-
-                rtl::OString sOutput( sProject ); sOutput += "\t";
-                if ( !sRoot.isEmpty())
-                    sOutput += sActFileName;
-                sOutput += "\t0\t";
-                sOutput += pResData->sResTyp; sOutput += "\t";
-                sOutput += sGID; sOutput += "\t";
-                sOutput += sLID; sOutput += "\t";
-                sOutput += pResData->sHelpId; sOutput   += "\t";
-                sOutput += pResData->sPForm; sOutput    += "\t";
-                sOutput += rtl::OString::valueOf(pResData->nWidth); sOutput += "\t";
-                sOutput += sCur; sOutput += "\t";
+        rtl::OString sOutput( sProject ); sOutput += "\t";
+        if ( !sRoot.isEmpty())
+            sOutput += sActFileName;
+        sOutput += "\t0\t";
+        sOutput += pResData->sResTyp; sOutput += "\t";
+        sOutput += sGID; sOutput += "\t";
+        sOutput += sLID; sOutput += "\t";
+        sOutput += pResData->sHelpId; sOutput   += "\t";
+        sOutput += pResData->sPForm; sOutput    += "\t";
+        sOutput += rtl::OString::valueOf(pResData->nWidth); sOutput += "\t";
+        sOutput += "en-US"; sOutput += "\t";
 
 
-                sOutput += sXText; sOutput  += "\t";
-                sOutput += sXHText; sOutput += "\t";
-                sOutput += sXQHText; sOutput+= "\t";
-                sOutput += sXTitle; sOutput += "\t";
+        sOutput += sXText; sOutput  += "\t";
+        sOutput += sXHText; sOutput += "\t";
+        sOutput += sXQHText; sOutput+= "\t";
+        sOutput += sXTitle; sOutput += "\t";
 
-                aOutput << sOutput.getStr() << '\n';
+        aOutput << sOutput.getStr() << '\n';
 
-                if ( bCreateNew ) {
-                    pResData->sText[ sCur ]         = "";
-                    pResData->sHelpText[ sCur ]     = "";
-                    pResData->sQuickHelpText[ sCur ]= "";
-                    pResData->sTitle[ sCur ]        = "";
-                }
-            }
+        if ( bCreateNew ) {
+            pResData->sText[ SOURCE_LANGUAGE ]         = "";
+            pResData->sHelpText[ SOURCE_LANGUAGE ]     = "";
+            pResData->sQuickHelpText[ SOURCE_LANGUAGE ]= "";
+            pResData->sTitle[ SOURCE_LANGUAGE ]        = "";
+        }
     }
     if ( pResData->pStringList ) {
         rtl::OString sList( "stringlist" );
