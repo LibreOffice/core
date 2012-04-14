@@ -48,7 +48,7 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer)
 {
-    SetName (String(RTL_CONSTASCII_USTRINGPARAM("RecentMasterPagesSelector")));
+    SetName (rtl::OUString("RecentMasterPagesSelector"));
 }
 
 

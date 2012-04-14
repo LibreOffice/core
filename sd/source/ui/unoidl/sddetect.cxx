@@ -390,9 +390,8 @@ SdFilterDetect::~SdFilterDetect()
                                         nBase = 1;
                                     else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
                                         nBase = 0;
-                                    String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
-                                    FilterConfigItem aFilterConfigItem( aFilterConfigPath );
-                                    aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
+                                    FilterConfigItem aFilterConfigItem( "Office.Common/Filter/Graphic/Import/PCD" );
+                                    aFilterConfigItem.WriteInt32( "Resolution" , nBase );
                                 }
 
                                 SfxFilterMatcher aMatch( String::CreateFromAscii("sdraw") );

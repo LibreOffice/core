@@ -163,7 +163,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
     maBulletFont.SetColor( COL_AUTO );
     maBulletFont.SetHeight( 1000 );
     maBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
-    maBulletFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )) );
+    maBulletFont.SetName( OUString( "StarSymbol" ) );
     maBulletFont.SetWeight(WEIGHT_NORMAL);
     maBulletFont.SetUnderline(UNDERLINE_NONE);
     maBulletFont.SetStrikeout(STRIKEOUT_NONE);

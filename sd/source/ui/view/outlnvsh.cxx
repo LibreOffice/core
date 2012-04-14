@@ -173,8 +173,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
 
     pLastPage = GetActualPage();
 
-    String aName( RTL_CONSTASCII_USTRINGPARAM( "OutlineViewShell" ));
-    SetName (aName);
+    SetName( OUString( "OutlineViewShell" ) );
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
     GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );
@@ -1599,7 +1598,7 @@ String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
             ESelection aSel = pOutlinerView->GetSelection();
             String aStrCurrentDelimiters = pOl->GetWordDelimiters();
 
-            pOl->SetWordDelimiters( String( RTL_CONSTASCII_USTRINGPARAM( " .,;\"'" )));
+            pOl->SetWordDelimiters( OUString( " .,;\"'" ) );
             aStrSelection = pOl->GetWord( aSel.nEndPara, aSel.nEndPos );
             pOl->SetWordDelimiters( aStrCurrentDelimiters );
         }

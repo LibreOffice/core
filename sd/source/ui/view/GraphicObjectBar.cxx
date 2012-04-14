@@ -93,7 +93,7 @@ GraphicObjectBar::GraphicObjectBar (
     SetUndoManager( pDocShell->GetUndoManager() );
     SetRepeatTarget( mpView );
     SetHelpId( SD_IF_SDDRAWGRAFOBJECTBAR );
-    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Graphic objectbar" )));
+    SetName( rtl::OUString( "Graphic objectbar" ));
 }
 
 // -----------------------------------------------------------------------------

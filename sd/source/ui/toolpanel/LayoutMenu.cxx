@@ -206,7 +206,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     SetExtraSpacing(2);
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     SetPool (&rDocumentShell.GetDoc()->GetPool());
-    SetName(String(RTL_CONSTASCII_USTRINGPARAM("LayoutMenu")));
+    SetName(rtl::OUString("LayoutMenu"));
     InvalidateContent();
 
     Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));

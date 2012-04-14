@@ -506,7 +506,7 @@ String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
             ESelection aSel = pOlView->GetSelection();
             String aStrCurrentDelimiters = pOl->GetWordDelimiters();
 
-            pOl->SetWordDelimiters( String( RTL_CONSTASCII_USTRINGPARAM( " .,;\"'" )));
+            pOl->SetWordDelimiters( OUString(" .,;\"'" ));
             aStrSelection = pOl->GetWord( aSel.nEndPara, aSel.nEndPos );
             pOl->SetWordDelimiters( aStrCurrentDelimiters );
         }

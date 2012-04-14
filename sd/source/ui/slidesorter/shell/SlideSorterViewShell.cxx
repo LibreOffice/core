@@ -140,7 +140,7 @@ SlideSorterViewShell::SlideSorterViewShell (
         mpFrameView = new FrameView(GetDoc());
     GetFrameView()->Connect();
 
-    SetName (String (RTL_CONSTASCII_USTRINGPARAM("SlideSorterViewShell")));
+    SetName (rtl::OUString("SlideSorterViewShell"));
 
     pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }

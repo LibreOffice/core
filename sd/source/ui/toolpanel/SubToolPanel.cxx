@@ -52,7 +52,7 @@ SubToolPanel::SubToolPanel (
       mnVerticalGap(3),
       mnHorizontalBorder(2)
 {
-    SetAccessibleName (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
+    SetAccessibleName (::rtl::OUString("Sub Task Panel"));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);

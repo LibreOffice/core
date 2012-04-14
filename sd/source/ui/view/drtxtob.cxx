@@ -133,7 +133,7 @@ TextObjectBar::TextObjectBar (
         }
     }
 
-    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "TextObjectBar" )));
+    SetName( rtl::OUString( "TextObjectBar" ));
 
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }

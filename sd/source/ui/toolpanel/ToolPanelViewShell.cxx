@@ -512,7 +512,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     mpHorizontalRuler.reset();
     mpVerticalRuler.reset();
 
-    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
+    SetName( rtl::OUString( "ToolPanelViewShell" ) );
 
     // enforce the creation of the Accessible object here.
     // In some not-always-to-reproduce situations, creating the accessible on demand only leads to some

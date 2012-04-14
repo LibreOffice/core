@@ -60,7 +60,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer)
 {
-    SetName(String(RTL_CONSTASCII_USTRINGPARAM("CurrentMasterPagesSelector")));
+    SetName(rtl::OUString("CurrentMasterPagesSelector"));
 
     // For this master page selector only we change the default action for
     // left clicks.
