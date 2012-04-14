@@ -198,7 +198,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     rMinDigits = 0;
     rListData = NULL;
     rCmd = FILL_SIMPLE;
-    if ( (nScFillModeMouseModifier & KEY_MOD1) || IsDataFiltered(nCol1, nRow1, nCol2, nRow2) )
+    if ( (nScFillModeMouseModifier & KEY_MOD1) )
         return ;        // Ctrl-Taste: Copy
 
     SCCOL nAddX;
