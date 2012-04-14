@@ -1078,8 +1078,16 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
 const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes )
 {
+    if (rTableNodes.empty())
+        return NULL;
+
+    std::vector<SwNodeRange> rFirstRange = *rTableNodes.begin();
+
+    if (rFirstRange.empty())
+        return NULL;
+
     /* Save first node in the selection if it is a content node. */
-    SwCntntNode * pSttCntntNd = rTableNodes.begin()->begin()->aStart.GetNode().GetCntntNode();
+    SwCntntNode * pSttCntntNd = rFirstRange.begin()->aStart.GetNode().GetCntntNode();
 
     /**debug**/
 #if OSL_DEBUG_LEVEL > 1
