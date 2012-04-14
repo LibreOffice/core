@@ -986,7 +986,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 RECT aGutterRC = rc;
                 if( Application::GetSettings().GetLayoutRTL() )
                 {
-                    aGutterRC.right -= aValue.getNumericVal();
+                    aGutterRC.right -= aValue.getNumericVal()+1;
                     aGutterRC.left = aGutterRC.right-3;
                 }
                 else
@@ -1043,9 +1043,9 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 // adjust for gutter position
                 if( Application::GetSettings().GetLayoutRTL() )
-                    rc.right -= aValue.getNumericVal();
+                    rc.right -= aValue.getNumericVal()+1;
                 else
-                    rc.left += aValue.getNumericVal();
+                    rc.left += aValue.getNumericVal()+1;
                 Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPSEPARATOR, 0, Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
                 // center the separator inside the passed rectangle
