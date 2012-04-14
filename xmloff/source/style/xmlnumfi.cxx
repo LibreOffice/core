@@ -51,6 +51,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -69,8 +71,7 @@ struct SvXMLNumFmtEntry
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
-typedef SvXMLNumFmtEntry* SvXMLNumFmtEntryPtr;
-SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4 )
+class SvXMLNumFmtEntryArr : public boost::ptr_vector<SvXMLNumFmtEntry> {};
 
 struct SvXMLEmbeddedElement
 {
@@ -379,7 +380,6 @@ static SvXMLDefaultDateFormat aDefaultDateFormats[] =
 
 //-------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr );
 SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 
 //-------------------------------------------------------------------------
@@ -414,10 +414,10 @@ SvXMLNumImpData::~SvXMLNumImpData()
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
 {
-    sal_uInt16 nCount = aNameEntries.Count();
+    sal_uInt16 nCount = aNameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const SvXMLNumFmtEntry* pObj = aNameEntries[i];
+        const SvXMLNumFmtEntry* pObj = &aNameEntries[i];
         if ( pObj->aName == rName )
             return pObj->nKey;              // found
     }
@@ -431,10 +431,10 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_B
         //  if there is already an entry for this key without the bRemoveAfterUse flag,
         //  clear the flag for this entry, too
 
-        sal_uInt16 nCount = aNameEntries.Count();
+        sal_uInt16 nCount = aNameEntries.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
-            SvXMLNumFmtEntry* pObj = aNameEntries[i];
+            SvXMLNumFmtEntry* pObj = &aNameEntries[i];
             if ( pObj->nKey == nKey && !pObj->bRemoveAfterUse )
             {
                 bRemoveAfterUse = sal_False;        // clear flag for new entry
@@ -449,15 +449,15 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_B
     }
 
     SvXMLNumFmtEntry* pObj = new SvXMLNumFmtEntry( rName, nKey, bRemoveAfterUse );
-    aNameEntries.Insert( pObj, aNameEntries.Count() );
+    aNameEntries.push_back( pObj );
 }
 
 void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
 {
-    sal_uInt16 nCount = aNameEntries.Count();
+    sal_uInt16 nCount = aNameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        SvXMLNumFmtEntry* pObj = aNameEntries[i];
+        SvXMLNumFmtEntry* pObj = &aNameEntries[i];
         if ( pObj->nKey == nKey )
         {
             pObj->bRemoveAfterUse = sal_False;      // used -> don't remove
@@ -478,10 +478,10 @@ void SvXMLNumImpData::RemoveVolatileFormats()
     if ( !pFormatter )
         return;
 
-    sal_uInt16 nCount = aNameEntries.Count();
+    sal_uInt16 nCount = aNameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const SvXMLNumFmtEntry* pObj = aNameEntries[i];
+        const SvXMLNumFmtEntry* pObj = &aNameEntries[i];
         if ( pObj->bRemoveAfterUse )
         {
             const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
