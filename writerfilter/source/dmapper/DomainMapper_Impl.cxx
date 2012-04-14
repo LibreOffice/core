@@ -74,6 +74,8 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/oustringostreaminserter.hxx>
@@ -3542,6 +3544,24 @@ void DomainMapper_Impl::ApplySettingsTable()
                 aSpacing.Mode = style::LineSpacingMode::PROP;
                 aSpacing.Height = sal_Int16(115);
                 xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
+            }
+
+            if (m_pSettingsTable->GetZoomFactor())
+            {
+                uno::Sequence<beans::PropertyValue> aViewProps(3);
+                aViewProps[0].Name = "ZoomFactor";
+                aViewProps[0].Value <<= m_pSettingsTable->GetZoomFactor();
+                aViewProps[1].Name = "VisibleBottom";
+                aViewProps[1].Value <<= sal_Int32(0);
+                aViewProps[2].Name = "ZoomType";
+                aViewProps[2].Value <<= sal_Int16(0);
+
+                uno::Reference<container::XIndexContainer> xBox(m_xComponentContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.IndexedPropertyValues",
+                            m_xComponentContext), uno::UNO_QUERY );
+                xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
+                uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
+                uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
+                xViewDataSupplier->setViewData(xIndexAccess);
             }
         }
         catch(const uno::Exception& )

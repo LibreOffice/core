@@ -67,6 +67,9 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     /// Automatically update styles from document template?
     bool GetLinkStyles() const;
 
+    /// What's the zoom factor set in percents?
+    sal_Int16 GetZoomFactor() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

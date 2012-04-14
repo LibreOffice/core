@@ -75,6 +75,7 @@ struct SettingsTable_Impl
     ::rtl::OUString     m_sHash;
     ::rtl::OUString     m_sSalt;
     bool                m_bLinkStyles;
+    sal_Int16           m_nZoomFactor;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -92,6 +93,7 @@ struct SettingsTable_Impl
     , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
     , m_nCryptSpinCount(0)
     , m_bLinkStyles(false)
+    , m_nZoomFactor(0)
     {}
 
 };
@@ -111,16 +113,13 @@ SettingsTable::~SettingsTable()
 
 void SettingsTable::lcl_attribute(Id nName, Value & val)
 {
-    (void) nName;
     int nIntValue = val.getInt();
-    (void)nIntValue;
-    ::rtl::OUString sValue = val.getString();
-    (void)sValue;
 
     switch(nName)
     {
-    //case NS_ooxml:::
-    //break;
+    case NS_ooxml::LN_CT_Zoom_percent:
+        m_pImpl->m_nZoomFactor = nIntValue;
+    break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -224,6 +223,11 @@ int SettingsTable::GetDefaultTabStop() const
 bool SettingsTable::GetLinkStyles() const
 {
     return m_pImpl->m_bLinkStyles;
+}
+
+sal_Int16 SettingsTable::GetZoomFactor() const
+{
+    return m_pImpl->m_nZoomFactor;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
