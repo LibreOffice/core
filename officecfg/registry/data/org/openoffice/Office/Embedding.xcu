@@ -47,7 +47,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">~Edit</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-1</value>
@@ -63,7 +62,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">~Open</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-2</value>
@@ -124,7 +122,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">Propert~ies...</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-7</value>
@@ -140,7 +137,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">Save Copy ~as...</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-8</value>
