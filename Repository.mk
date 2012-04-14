@@ -280,7 +280,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwm \
     guesslang \
     helplinker \
-    hsqldb \
     hwp \
     hyphen \
     i18nregexp \
@@ -307,8 +306,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	macabdrv1 \
 	MacOSXSpell \
     merged \
+    mozab2 \
     mozabdrv \
-    mozbootstrap \
     msfilter \
     msword \
 	mysql \
@@ -331,7 +330,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scn \
     scui \
     sd \
-    sdbc2 \
     sdbt \
     sdd \
     sdfilt \
@@ -426,6 +424,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     embobj \
     emboleobj \
     fileacc \
+    hsqldb \
     index_data \
     java_uno_accessbridge \
     localedata_en \
@@ -433,9 +432,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_euro \
     localedata_others \
     mcnttype \
+    mozbootstrap \
     officebean \
     package2 \
     scriptframe \
+    sdbc2 \
     smoketest \
     sofficeapp \
     srtrs1 \
@@ -522,7 +523,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     lomenubar \
     migrationoo2 \
     migrationoo3 \
-    mozab2 \
     msforms \
     mtfrenderer \
     nullcanvas \
