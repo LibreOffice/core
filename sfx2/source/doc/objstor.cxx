@@ -2236,7 +2236,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
         }
 
         return xLoader->filter( aArgs );
-        }catch(const uno::Exception&)
+        }catch(...)
         {}
     }
 

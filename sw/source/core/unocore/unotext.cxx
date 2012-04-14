@@ -2230,6 +2230,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     std::vector<VerticallyMergedCell> aMergedCells;
 
     SwTable const*const pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
+
+    if (!pTable)
+        return uno::Reference< text::XTextTable >();
+
     SwXTextTable *const pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
     const uno::Reference< text::XTextTable > xRet = pTextTable;
     const uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
