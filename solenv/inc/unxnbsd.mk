@@ -18,7 +18,7 @@ BUILD64=1
 # NetBSD has no support for using relative paths with $ORIGIN
 LINKFLAGSRUNPATH_UREBIN=
 LINKFLAGSRUNPATH_OOO=
-LINKFLAGSRUNPATH_SDK=
+LINKFLAGSRUNPATH_SDKBIN=
 
 LINKFLAGSDEFS=-Wl,--ignore-unresolved-symbol,environ
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)

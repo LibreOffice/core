@@ -43,7 +43,7 @@ BRANDPROGRAMDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt
 LINKFLAGSRUNPATH_URELIB:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib
 LINKFLAGSRUNPATH_UREBIN:=-Wl,-blibpath:$(URELIBDIRS):$(UREBINDIRS):/usr/lib:/lib
 LINKFLAGSRUNPATH_OOO:=-Wl,-blibpath:$(BRANDPROGRAMDIRS):$(URELIBDIRS):/usr/lib:/lib
-LINKFLAGSRUNPATH_SDK:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib
+LINKFLAGSRUNPATH_SDKBIN:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib
 LINKFLAGS:=-Wl,-brtl -Wl,-bnolibpath
 
 LINKFLAGSAPPGUI:=
