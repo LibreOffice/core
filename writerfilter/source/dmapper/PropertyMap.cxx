@@ -982,7 +982,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 else if (m_nBreakType == 4)
                     nPageStyleLayout = style::PageStyleLayout_RIGHT;
                 if (nPageStyleLayout)
-                    xFollowPageStyle->setPropertyValue("PageStyleLayout", uno::makeAny(nPageStyleLayout));
+                    xFollowPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_STYLE_LAYOUT), uno::makeAny(nPageStyleLayout));
                 if(m_bPageNoRestart || m_nPageNumber >= 0)
                 {
                     sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;

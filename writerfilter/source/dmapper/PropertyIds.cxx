@@ -322,6 +322,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FRM_DIRECTION:        sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FRMDirection")); break;
             case PROP_EMBEDDED_OBJECT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedObject")); break;
             case PROP_IS_VISIBLE: sName = "IsVisible"; break;
+            case PROP_PAGE_STYLE_LAYOUT: sName = "PageStyleLayout"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
