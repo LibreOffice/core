@@ -92,8 +92,8 @@ endif
 
 ifeq ($(ENABLE_EVOAB2),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_evoab2 \
-	Library_evoab2 \
+	Configuration_evoab \
+	Library_evoab \
 ))
 endif
 

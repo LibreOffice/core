@@ -264,7 +264,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ept \
     era \
     eti \
-	evoab2 \
+    evoab \
     exp \
 	file \
 	filterconfig \

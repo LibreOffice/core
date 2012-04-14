@@ -25,13 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Configuration_Configuration,driver_evoab2))
+$(eval $(call gb_Configuration_Configuration,driver_evoab))
 
-$(eval $(call gb_Configuration_add_spool_modules,driver_evoab2,connectivity/registry/evoab2,\
+$(eval $(call gb_Configuration_add_spool_modules,driver_evoab,connectivity/registry/evoab2,\
 	org/openoffice/Office/DataAccess/Drivers-evoab2.xcu \
 ))
 
-$(eval $(call gb_Configuration_add_localized_datas,driver_evoab2,connectivity/registry/evoab2,\
+$(eval $(call gb_Configuration_add_localized_datas,driver_evoab,connectivity/registry/evoab2,\
 	org/openoffice/Office/DataAccess/Drivers.xcu \
 ))
 

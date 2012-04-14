@@ -25,30 +25,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,evoab2))
+$(eval $(call gb_Library_Library,evoab))
 
 $(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
-$(eval $(call gb_Library_set_include,evoab2,\
+$(eval $(call gb_Library_set_include,evoab,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_externals,evoab2,\
+$(eval $(call gb_Library_use_externals,evoab,\
 	gtk \
 	gobject \
 ))
 
-$(eval $(call gb_Library_set_componentfile,evoab2,connectivity/source/drivers/evoab2/evoab))
+$(eval $(call gb_Library_set_componentfile,evoab,connectivity/source/drivers/evoab2/evoab))
 
-$(eval $(call gb_Library_use_api,evoab2,\
+$(eval $(call gb_Library_use_api,evoab,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_use_libraries,evoab2,\
+$(eval $(call gb_Library_use_libraries,evoab,\
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -63,7 +63,7 @@ $(eval $(call gb_Library_use_libraries,evoab2,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,evoab2,\
+$(eval $(call gb_Library_add_exception_objects,evoab,\
 	connectivity/source/drivers/evoab2/NDriver \
 	connectivity/source/drivers/evoab2/NTable \
 	connectivity/source/drivers/evoab2/NColumns \

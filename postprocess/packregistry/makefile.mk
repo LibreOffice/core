@@ -331,7 +331,7 @@ ERROR : unknown-GUIBASE
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
-MY_DRIVERS += evoab2
+MY_DRIVERS += evoab
 .END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
