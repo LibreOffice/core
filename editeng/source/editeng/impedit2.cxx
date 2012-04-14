@@ -684,7 +684,7 @@ sal_Bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
     return sal_True;
 }
 
-EditPaM ImpEditEngine::InsertText( EditSelection aSel, const XubString& rStr )
+EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const String& rStr)
 {
     EditPaM aPaM = ImpInsertText( aSel, rStr );
     return aPaM;
@@ -2690,7 +2690,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
     return aPaM;
 }
 
-EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rStr )
+EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const String& rStr)
 {
     UndoActionStart( EDITUNDO_INSERT );
 

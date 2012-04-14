@@ -723,6 +723,11 @@ uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const
     return pImpEditEngine->CreateTransferable(rSelection);
 }
 
+EditPaM EditEngine::InsertText(const EditSelection& aCurEditSelection, const String& rStr)
+{
+    return pImpEditEngine->InsertText(aCurEditSelection, rStr);
+}
+
 EditSelection EditEngine::InsertText(
     uno::Reference<datatransfer::XTransferable >& rxDataObj,
     const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
@@ -744,6 +749,79 @@ EditSelection EditEngine::SelectWord(
         const EditSelection& rCurSelection, sal_Int16 nWordType, bool bAcceptStartOfWord)
 {
     return pImpEditEngine->SelectWord(rCurSelection, nWordType, bAcceptStartOfWord);
+}
+
+long EditEngine::GetXPos(
+        const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart) const
+{
+    return pImpEditEngine->GetXPos(pParaPortion, pLine, nIndex, bPreferPortionStart);
+}
+
+Range EditEngine::GetLineXPosStartEnd(
+        const ParaPortion* pParaPortion, const EditLine* pLine) const
+{
+    return pImpEditEngine->GetLineXPosStartEnd(pParaPortion, pLine);
+}
+
+bool EditEngine::IsFormatted() const
+{
+    return pImpEditEngine->IsFormatted();
+}
+
+EditPaM EditEngine::CursorRight(const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode)
+{
+    return pImpEditEngine->CursorRight(rPaM, nCharacterIteratorMode);
+}
+
+sal_uInt16 EditEngine::GetOnePixelInRef() const
+{
+    return pImpEditEngine->nOnePixelInRef;
+}
+
+InternalEditStatus& EditEngine::GetInternalEditStatus()
+{
+    return pImpEditEngine->GetStatus();
+}
+
+EditDoc& EditEngine::GetEditDoc()
+{
+    return pImpEditEngine->GetEditDoc();
+}
+
+void EditEngine::SeekCursor(
+        ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich)
+{
+    pImpEditEngine->SeekCursor(pNode, nPos, rFont, pOut, nIgnoreWhich);
+}
+
+EditPaM EditEngine::DeleteSelection(const EditSelection& rSel)
+{
+    return pImpEditEngine->ImpDeleteSelection(rSel);
+}
+
+void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)
+{
+    pImpEditEngine->aBeginPasteOrDropHdl.Call(&rInfos);
+}
+
+void EditEngine::HandleEndPasteOrDrop(PasteOrDropInfos& rInfos)
+{
+    pImpEditEngine->aEndPasteOrDropHdl.Call(&rInfos);
+}
+
+bool EditEngine::HasText() const
+{
+    return pImpEditEngine->ImplHasText();
+}
+
+const EditSelectionEngine& EditEngine::GetSelectionEngine() const
+{
+    return pImpEditEngine->aSelEngine;
+}
+
+void EditEngine::SetInSelectionMode(bool b)
+{
+    pImpEditEngine->bInSelection = b;
 }
 
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, Window* pFrameWin )

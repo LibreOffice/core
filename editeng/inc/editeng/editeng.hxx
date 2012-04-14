@@ -33,6 +33,7 @@
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
@@ -102,6 +103,12 @@ class ContentNode;
 class ParaPortion;
 class EditSelection;
 class EditPaM;
+class EditLine;
+class InternalEditStatus;
+class EditSelectionEngine;
+class EditDoc;
+struct PasteOrDropInfos;
+class Range;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -142,6 +149,7 @@ private:
         com::sun::star::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
+    EDITENG_DLLPRIVATE EditPaM InsertText(const EditSelection& aCurEditSelection, const String& rStr);
     EDITENG_DLLPRIVATE EditSelection InsertText(
         com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable >& rxDataObj,
         const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
@@ -155,6 +163,31 @@ private:
         const EditSelection& rCurSelection,
         sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES,
         bool bAcceptStartOfWord = true);
+
+    EDITENG_DLLPRIVATE long GetXPos(
+        const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false) const;
+
+    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
+        const ParaPortion* pParaPortion, const EditLine* pLine) const;
+
+    EDITENG_DLLPRIVATE bool IsFormatted() const;
+
+    EDITENG_DLLPRIVATE EditPaM CursorRight(
+        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
+
+    EDITENG_DLLPRIVATE sal_uInt16 GetOnePixelInRef() const;
+    EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
+    EDITENG_DLLPRIVATE EditDoc& GetEditDoc();
+
+    EDITENG_DLLPRIVATE void SeekCursor(
+        ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);
+
+    EDITENG_DLLPRIVATE EditPaM DeleteSelection(const EditSelection& rSel);
+    EDITENG_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);
+    EDITENG_DLLPRIVATE void HandleEndPasteOrDrop(PasteOrDropInfos& rInfos);
+    EDITENG_DLLPRIVATE bool HasText() const;
+    EDITENG_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
+    EDITENG_DLLPRIVATE void SetInSelectionMode(bool b);
 
 protected:
 

@@ -393,7 +393,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditUndoInsertFeature;
     friend class EditUndoMoveParagraphs;
 
-    friend class ImpEditView;
     friend class EditEngine;        // For access to Imp-Methods
     friend class EditRTFParser;     // For access to Imp-Methods
     friend class EditHTMLParser;    // For access to Imp-Methods
@@ -569,7 +568,7 @@ private:
     EditPaM             ImpDeleteSelection( EditSelection aEditSelection);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, bool bKeepEndingAttribs = true );
-    EditPaM             ImpInsertText( EditSelection aCurEditSelection, const String& rStr );
+    EditPaM             ImpInsertText(const EditSelection& aCurEditSelection, const String& rStr);
     EditPaM             ImpInsertFeature( EditSelection aEditSelection, const SfxPoolItem& rItem );
     void                ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
     void                ImpRemoveParagraph( sal_uInt16 nPara );
@@ -768,7 +767,7 @@ public:
     void            SetText( const String& rText );
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
-    EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
+    EditPaM         InsertText(const EditSelection& aCurEditSelection, const String& rStr);
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
