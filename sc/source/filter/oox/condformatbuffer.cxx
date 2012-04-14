@@ -665,25 +665,6 @@ void CondFormat::importCfRule( SequenceInputStream& rStrm )
     insertRule( xRule );
 }
 
-void CondFormat::importCfHeader( BiffInputStream& rStrm )
-{
-    // import the CFHEADER record
-    sal_uInt16 nRuleCount;
-    BinRangeList aRanges;
-    rStrm >> nRuleCount;
-    rStrm.skip( 10 );
-    rStrm >> aRanges;
-    getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
-
-    // import following list of CFRULE records
-    for( sal_uInt16 nRule = 0; (nRule < nRuleCount) && (rStrm.getNextRecId() == BIFF_ID_CFRULE) && rStrm.startNextRecord(); ++nRule )
-    {
-        CondFormatRuleRef xRule = createRule();
-        xRule->importCfRule( rStrm, nRule + 1 );
-        insertRule( xRule );
-    }
-}
-
 void CondFormat::finalizeImport()
 {
     try

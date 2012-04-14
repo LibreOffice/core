@@ -723,9 +723,6 @@ class Xf : public WorkbookHelper
 public:
     explicit            Xf( const WorkbookHelper& rHelper );
 
-    /** Sets all "attribute used" flags to the passed state. */
-    void                setAllUsedFlags( bool bUsed );
-
     /** Sets all attributes from the xf element. */
     void                importXf( const AttributeList& rAttribs, bool bCellXf );
     /** Sets all attributes from the alignment element. */
@@ -847,8 +844,6 @@ public:
     void                importCellStyle( const AttributeList& rAttribs );
     /** Imports style settings from a CELLSTYLE record. */
     void                importCellStyle( SequenceInputStream& rStrm );
-    /** Imports style settings from a STYLE record. */
-    void                importStyle( BiffInputStream& rStrm );
 
     /** Creates the style sheet in the document described by this cell style object. */
     void                createCellStyle();
@@ -882,8 +877,6 @@ public:
     CellStyleRef        importCellStyle( const AttributeList& rAttribs );
     /** Imports the CELLSTYLE record from the passed stream. */
     CellStyleRef        importCellStyle( SequenceInputStream& rStrm );
-    /** Imports the STYLE record from the passed stream. */
-    CellStyleRef        importStyle( BiffInputStream& rStrm );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

@@ -124,8 +124,6 @@ public:
     void                setFormula( const ::rtl::OUString& rFormula );
     /** Imports the defined name from a DEFINEDNAME record in the passed stream. */
     void                importDefinedName( SequenceInputStream& rStrm );
-    /** Imports the defined name from a DEFINEDNAME record in the passed BIFF stream. */
-    void                importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcSheet );
 
     /** Creates a defined name in the Calc document. */
     void                createNameObject( sal_Int32 nIndex );
@@ -179,15 +177,10 @@ class DefinedNamesBuffer : public WorkbookHelper
 public:
     explicit            DefinedNamesBuffer( const WorkbookHelper& rHelper );
 
-    /** Sets the sheet index for local names (BIFF2-BIFF4 only). */
-    void                setLocalCalcSheet( sal_Int16 nCalcSheet );
-
     /** Imports a defined name from the passed attribute set. */
     DefinedNameRef      importDefinedName( const AttributeList& rAttribs );
     /** Imports a defined name from a DEFINEDNAME record in the passed stream. */
     void                importDefinedName( SequenceInputStream& rStrm );
-    /** Imports a defined name from a DEFINEDNAME record in the passed BIFF stream. */
-    void                importDefinedName( BiffInputStream& rStrm );
 
     /** Creates all defined names in the document. */
     void                finalizeImport();

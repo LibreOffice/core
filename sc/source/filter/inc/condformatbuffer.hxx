@@ -135,9 +135,6 @@ public:
     /** Imports a conditional formatting rule from the CFRULE record. */
     void                importCfRule( SequenceInputStream& rStrm );
 
-    /** Imports settings from the CFHEADER record. */
-    void                importCfHeader( BiffInputStream& rStrm );
-
     /** Creates the conditional formatting in the Calc document. */
     void                finalizeImport();
 

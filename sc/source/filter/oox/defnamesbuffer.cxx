@@ -366,114 +366,6 @@ void DefinedName::importDefinedName( SequenceInputStream& rStrm )
     }
 }
 
-void DefinedName::importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcSheet )
-{
-    BiffType eBiff = getBiff();
-    sal_uInt16 nFlags = 0;
-    sal_Int16 nRefId = BIFF_DEFNAME_GLOBAL;
-    sal_Int16 nTabId = BIFF_DEFNAME_GLOBAL;
-    sal_uInt8 nNameLen = 0, nShortCut = 0;
-
-    switch( eBiff )
-    {
-        case BIFF2:
-        {
-            sal_uInt8 nFlagsBiff2;
-            rStrm >> nFlagsBiff2;
-            rStrm.skip( 1 );
-            rStrm >> nShortCut >> nNameLen;
-            mnFmlaSize = rStrm.readuInt8();
-            setFlag( nFlags, BIFF_DEFNAME_FUNC, getFlag( nFlagsBiff2, BIFF2_DEFNAME_FUNC ) );
-            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
-        }
-        break;
-        case BIFF3:
-        case BIFF4:
-            rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize;
-            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
-        break;
-        case BIFF5:
-            rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
-            rStrm.skip( 4 );
-            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
-        break;
-        case BIFF8:
-            rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
-            rStrm.skip( 4 );
-            maModel.maName = rStrm.readUniStringBody( nNameLen, true );
-        break;
-        case BIFF_UNKNOWN: break;
-    }
-
-    // macro function/command, hidden flag
-    maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 6 );
-    maModel.mbMacro       = getFlag( nFlags, BIFF_DEFNAME_MACRO );
-    maModel.mbFunction    = getFlag( nFlags, BIFF_DEFNAME_FUNC );
-    maModel.mbVBName      = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
-    maModel.mbHidden      = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
-
-    // get built-in name index from name
-    if( getFlag( nFlags, BIFF_DEFNAME_BUILTIN ) )
-    {
-        // name may be the built-in identifier or the built-in base name
-        if( maModel.maName.getLength() == 1 )
-            mcBuiltinId = maModel.maName[ 0 ];
-        else
-            mcBuiltinId = lclGetBuiltinIdFromBaseName( maModel.maName );
-    }
-    /*  In BIFF5, '_FilterDatabase' appears as hidden user name without
-        built-in flag, and even worse, localized. */
-    else if( (eBiff == BIFF5) && lclIsFilterDatabaseName( maModel.maName ) )
-    {
-        mcBuiltinId = BIFF_DEFNAME_FILTERDATABASE;
-    }
-
-    // get sheet index for sheet-local names in BIFF5-BIFF8
-    switch( getBiff() )
-    {
-        case BIFF2:
-        case BIFF3:
-        case BIFF4:
-            // BIFF2-BIFF4: all defined names are sheet-local
-            mnCalcSheet = nCalcSheet;
-        break;
-        case BIFF5:
-            // #i44019# nTabId may be invalid, resolve nRefId to sheet index
-            if( nRefId != BIFF_DEFNAME_GLOBAL )
-                if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get() )
-                    if( pExtLink->getLinkType() == LINKTYPE_INTERNAL )
-                        mnCalcSheet = pExtLink->getCalcSheetIndex();
-        break;
-        case BIFF8:
-            // convert one-based worksheet index to zero-based Calc sheet index
-            OSL_ENSURE( nTabId >= 0, "DefinedName::importDefinedName - invalid local sheet index" );
-            if( nTabId != BIFF_DEFNAME_GLOBAL )
-                mnCalcSheet = getWorksheets().getCalcSheetIndex( nTabId - 1 );
-        break;
-        case BIFF_UNKNOWN:
-        break;
-    }
-
-    if( (getBiff() <= BIFF4) && maModel.mbHidden && (maModel.maName.getLength() > 1) && (maModel.maName[ 0 ] == '\x01') )
-    {
-        /*  Read the token array of special internal names containing addresses
-            for BIFF3-BIFF4 3D references immediately. It is expected that
-            these names contain a simple cell reference or range reference.
-            Other regular defined names and external names rely on existence of
-            this reference. */
-        ApiTokenSequence aTokens = importBiffFormula( mnCalcSheet, rStrm, &mnFmlaSize );
-        extractReference( aTokens );
-    }
-    else
-    {
-        /*  Store record position of other defined names to be able to import
-            token array later. This is needed to correctly resolve references
-            to names that are stored later in the defined names list following
-            this name. */
-        mxBiffStrm.reset( new BiffInputStreamPos( rStrm ) );
-    }
-}
-
 void DefinedName::createNameObject( sal_Int32 nIndex )
 {
     // do not create names for (macro) functions or VBA procedures
@@ -610,13 +502,6 @@ DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
 {
 }
 
-void DefinedNamesBuffer::setLocalCalcSheet( sal_Int16 nCalcSheet )
-{
-    OSL_ENSURE( (getFilterType() == FILTER_BIFF) && (getBiff() <= BIFF4),
-        "DefinedNamesBuffer::setLocalCalcSheet - invalid call" );
-    mnCalcSheet = nCalcSheet;
-}
-
 DefinedNameRef DefinedNamesBuffer::importDefinedName( const AttributeList& rAttribs )
 {
     DefinedNameRef xDefName = createDefinedName();
@@ -627,11 +512,6 @@ DefinedNameRef DefinedNamesBuffer::importDefinedName( const AttributeList& rAttr
 void DefinedNamesBuffer::importDefinedName( SequenceInputStream& rStrm )
 {
     createDefinedName()->importDefinedName( rStrm );
-}
-
-void DefinedNamesBuffer::importDefinedName( BiffInputStream& rStrm )
-{
-    createDefinedName()->importDefinedName( rStrm, mnCalcSheet );
 }
 
 void DefinedNamesBuffer::finalizeImport()

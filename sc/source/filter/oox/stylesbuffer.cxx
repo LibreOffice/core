@@ -2305,12 +2305,6 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
 {
 }
 
-void Xf::setAllUsedFlags( bool bUsed )
-{
-    maModel.mbAlignUsed = maModel.mbProtUsed = maModel.mbFontUsed =
-        maModel.mbNumFmtUsed = maModel.mbBorderUsed = maModel.mbAreaUsed = bUsed;
-}
-
 void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
@@ -2815,39 +2809,6 @@ void CellStyle::importCellStyle( SequenceInputStream& rStrm )
     maModel.mbHidden = getFlag( nFlags, BIFF12_CELLSTYLE_HIDDEN );
 }
 
-void CellStyle::importStyle( BiffInputStream& rStrm )
-{
-    sal_uInt16 nStyleXf;
-    rStrm >> nStyleXf;
-    maModel.mnXfId = static_cast< sal_Int32 >( nStyleXf & BIFF_STYLE_XFMASK );
-    maModel.mbBuiltin = getFlag( nStyleXf, BIFF_STYLE_BUILTIN );
-    if( maModel.mbBuiltin )
-    {
-        maModel.mnBuiltinId = rStrm.readInt8();
-        maModel.mnLevel = rStrm.readInt8();
-    }
-    else
-    {
-        maModel.maName = (getBiff() == BIFF8) ?
-            rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
-        // #i103281# check if this is a new built-in style introduced in XL2007
-        if( (getBiff() == BIFF8) && (rStrm.getNextRecId() == BIFF_ID_STYLEEXT) && rStrm.startNextRecord() )
-        {
-            sal_uInt8 nExtFlags;
-            rStrm.skip( 12 );
-            rStrm >> nExtFlags;
-            maModel.mbBuiltin = getFlag( nExtFlags, BIFF_STYLEEXT_BUILTIN );
-            maModel.mbCustom = getFlag( nExtFlags, BIFF_STYLEEXT_CUSTOM );
-            maModel.mbHidden = getFlag( nExtFlags, BIFF_STYLEEXT_HIDDEN );
-            if( maModel.mbBuiltin )
-            {
-                maModel.mnBuiltinId = rStrm.readInt8();
-                maModel.mnLevel = rStrm.readInt8();
-            }
-        }
-    }
-}
-
 void CellStyle::createCellStyle()
 {
 
@@ -2912,14 +2873,6 @@ CellStyleRef CellStyleBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
     CellStyleRef xCellStyle( new CellStyle( *this ) );
     xCellStyle->importCellStyle( rStrm );
-    insertCellStyle( xCellStyle );
-    return xCellStyle;
-}
-
-CellStyleRef CellStyleBuffer::importStyle( BiffInputStream& rStrm )
-{
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
-    xCellStyle->importStyle( rStrm );
     insertCellStyle( xCellStyle );
     return xCellStyle;
 }

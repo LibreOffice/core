@@ -611,10 +611,6 @@ public:
     /** Converts the passed BIFF error to a double containing the respective Calc error code. */
     static double       calcDoubleFromError( sal_uInt8 nErrorCode );
 
-    /** Returns a text encoding from an Windows code page.
-        @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
-    static rtl_TextEncoding calcTextEncodingFromCodePage( sal_uInt16 nCodePage );
-
     // BIFF12 import ----------------------------------------------------------
 
     /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */

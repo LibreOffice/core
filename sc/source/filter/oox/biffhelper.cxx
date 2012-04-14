@@ -115,21 +115,6 @@ union DecodedDouble
     return aDecDbl.mfValue;
 }
 
-/*static*/ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
-{
-    // some specials for BIFF
-    switch( nCodePage )
-    {
-        case 1200:  return RTL_TEXTENCODING_DONTKNOW;       // BIFF8 Unicode
-        case 32768: return RTL_TEXTENCODING_APPLE_ROMAN;
-        case 32769: return RTL_TEXTENCODING_MS_1252;        // BIFF2-BIFF3
-    }
-
-    rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
-    OSL_ENSURE( eTextEnc != RTL_TEXTENCODING_DONTKNOW, "BiffHelper::calcTextEncodingFromCodePage - unknown code page" );
-    return eTextEnc;
-}
-
 // BIFF12 import --------------------------------------------------------------
 
 /*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen, bool bAllowNulChars )

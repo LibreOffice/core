@@ -99,9 +99,6 @@ public:
     /** Imports the DDEITEM_STRING record containing a string in a link result. */
     void                importDdeItemString( SequenceInputStream& rStrm );
 
-    /** Imports the EXTERNALNAME record from the passed stream. */
-    void                importExternalName( BiffInputStream& rStrm );
-
     /** Returns true, if the name refers to an OLE object. */
     inline bool         isOleObject() const { return maExtNameModel.mbOleObj; }
 
@@ -242,13 +239,6 @@ public:
     /** Imports the EXTERNALADDIN record from the passed stream. */
     void                importExternalAddin( SequenceInputStream& rStrm );
 
-    /** Imports the EXTERNSHEET record from the passed stream. */
-    void                importExternSheet( BiffInputStream& rStrm );
-    /** Imports the EXTERNALBOOK record from the passed stream. */
-    void                importExternalBook( BiffInputStream& rStrm );
-    /** Imports the EXTERNALNAME record from the passed stream. */
-    void                importExternalName( BiffInputStream& rStrm );
-
     /** Sets the link type to 'self reference'. */
     inline void         setSelfLinkType() { meLinkType = LINKTYPE_SELF; }
 
@@ -357,13 +347,6 @@ public:
     void                importExternalAddin( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSHEETS record from the passed stream. */
     void                importExternalSheets( SequenceInputStream& rStrm );
-
-    /** Imports the EXTERNSHEET record from the passed stream. */
-    ExternalLinkRef     importExternSheet( BiffInputStream& rStrm );
-    /** Imports the EXTERNALBOOK record from the passed stream. */
-    ExternalLinkRef     importExternalBook( BiffInputStream& rStrm );
-    /** Imports the BIFF8 EXTERNSHEET record from the passed stream. */
-    void                importExternSheet8( BiffInputStream& rStrm );
 
     /** Returns the sequence of link infos needed by the XML formula parser. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::ExternalLinkInfo >

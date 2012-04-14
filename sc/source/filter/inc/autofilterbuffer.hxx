@@ -199,8 +199,6 @@ public:
     void                importFilterColumn( const AttributeList& rAttribs );
     /** Imports auto filter column settings from the FILTERCOLUMN record. */
     void                importFilterColumn( SequenceInputStream& rStrm );
-    /** Imports auto filter column settings from the FILTERCOLUMN record. */
-    void                importFilterColumn( BiffInputStream& rStrm );
 
     /** Creates and returns the specified filter settings object. */
     template< typename FilterSettingsType >

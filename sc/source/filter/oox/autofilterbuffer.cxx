@@ -631,19 +631,6 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
     mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }
 
-void FilterColumn::importFilterColumn( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFlags;
-    mnColId = rStrm.readuInt16();
-    rStrm >> nFlags;
-
-    // BIFF5/BIFF8 support top-10 filters and custom filters
-    if( getFlag( nFlags, BIFF_FILTERCOLUMN_TOP10FILTER ) )
-        createFilterSettings< Top10Filter >().importBiffRecord( rStrm, nFlags );
-    else
-        createFilterSettings< CustomFilter >().importBiffRecord( rStrm, nFlags );
-}
-
 ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
 {
     ApiFilterSettings aSettings;
