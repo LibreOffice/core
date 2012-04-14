@@ -31,6 +31,7 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
 #include <tools/urlobj.hxx>
@@ -414,26 +415,26 @@ getRandString()
     return aRet;
 }
 
-#ifdef COMPLEX
 static SwPosition
-getRandomPosition(SwDoc *pDoc, int nOffset)
+getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 {
-    SwPaM aPam(pDoc->GetNodes());
-    SwCursor aCrs(*aPam.Start(), 0, false);
-    for (int sskip = getRand(nOffset); sskip > 0; sskip--)
-        aCrs.GoNextSentence();
-    aCrs.GoNextCell(getRand(50));
-    return *aCrs.GetPoint();
+    const SwPosition aPos(pDoc->GetNodes().GetEndOfContent());
+	sal_uLong nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
+	sal_uLong n = (rand() * nNodes) / RAND_MAX;
+	SwPaM pam(aPos);
+	for (sal_uLong i = 0; i < n; ++i) {
+		pam.Move(fnMoveBackward, fnGoNode);
+	}
+    return *pam.GetPoint();
 }
-#endif
 
 void SwDocTest::randomTest()
 {
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
     RedlineMode_t modes[] = {
-        nsRedlineMode_t::REDLINE_NONE,
         nsRedlineMode_t::REDLINE_ON,
         nsRedlineMode_t::REDLINE_SHOW_MASK,
+        nsRedlineMode_t::REDLINE_NONE,
         nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_MASK,
         nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE,
         nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE | nsRedlineMode_t::REDLINE_SHOW_MASK,
@@ -444,38 +445,26 @@ void SwDocTest::randomTest()
         "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
     };
 
-    for( sal_uInt16 rlm = 0;
-         rlm < SAL_N_ELEMENTS(modes);
-#ifdef COMPLEX // otherwise it returns at end of loop, so avoid "unreachable code" warning
-         rlm++
-#endif
-        )
+    for( sal_uInt16 rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++ )
     {
-#ifdef COMPLEX
         m_pDoc->ClearDoc();
 
         // setup redlining
         m_pDoc->SetRedlineMode(modes[rlm]);
         SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[0]));
-#endif
 
         for( int i = 0; i < 2000; i++ )
         {
-#ifdef COMPLEX
             SwPaM aPam(m_pDoc->GetNodes());
             SwCursor aCrs(getRandomPosition(m_pDoc, i/20), 0, false);
             aCrs.SetMark();
-            aCrs.GoNextCell(getRand(30));
-#else // simple:
-            SwNodeIndex nNode( m_pDoc->GetNodes().GetEndOfContent(), -1 );
-            SwPaM aCrs( nNode );
-#endif
 
             switch (getRand (i < 50 ? 3 : 6)) {
             // insert ops first
             case 0: {
-                if (!m_pDoc->InsertString(aCrs, getRandString()))
-                    fprintf (stderr, "failed to insert string !\n");
+                if (!m_pDoc->InsertString(aCrs, getRandString())) {
+//                    fprintf (stderr, "failed to insert string !\n");
+                }
                 break;
             }
             case 1:
@@ -486,7 +475,6 @@ void SwDocTest::randomTest()
                 break;
             }
 
-#ifdef COMPLEX
             // movement / deletion ops later
             case 3: // deletion
                 switch (getRand(6)) {
@@ -518,7 +506,7 @@ void SwDocTest::randomTest()
                 m_pDoc->MoveRange(aCrs, aTo, nFlags);
                 break;
             }
-#endif
+
             case 5:
                 break;
 
@@ -526,35 +514,20 @@ void SwDocTest::randomTest()
             default:
                 break;
             }
-#ifdef COMPLEX
-            SwPosition start(m_pDoc->GetNodes());
-            SwPosition end(m_pDoc->GetNodes().GetEndOfContent());
-            CheckNodesRange(start.nNode, end.nNode, sal_True);
-#endif
         }
 
+// Debug / verify the produced document has real content
 #if 0
-        fprintf (stderr, "write it !\n");
-#ifdef COMPLEX
-        SfxFilter aFilter(rtl::OUString::createFromAscii("writer8"),
-                          rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")),
-                          rtl::OUString() );
-#else
-        SfxFilter aFilter(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")),
-                          rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT")), rtl::OUString() );
-#endif
-        SfxMedium aDstMed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/test.txt")),
-                          STREAM_STD_READWRITE, true);
-        aDstMed.SetFilter(&aFilter);
-        m_xDocShRef->DoSaveAs(aDstMed);
-        m_xDocShRef->DoSaveCompleted(&aDstMed);
-        m_xDocShRef->DoInitNew(0);
-#endif
+        rtl::OStringBuffer aBuffer("nodes-");
+        aBuffer.append(sal_Int32(rlm));
+        aBuffer.append(".xml");
 
-#ifndef COMPLEX
-        return;
+        xmlTextWriterPtr writer;
+        writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );
+        xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+        m_pDoc->dumpAsXml(writer);
+        xmlTextWriterEndDocument( writer );
+        xmlFreeTextWriter( writer );
 #endif
     }
 }

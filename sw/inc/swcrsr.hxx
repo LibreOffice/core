@@ -67,7 +67,7 @@ namespace nsSwCursorSelOverFlags
     const SwCursorSelOverFlags SELOVER_CHANGEPOS           = 0x08;
 }
 
-class SwCursor : public SwPaM
+class SW_DLLPUBLIC SwCursor : public SwPaM
 {
     friend class SwCrsrSaveState;
 
