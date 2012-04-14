@@ -125,7 +125,7 @@ ScDPItemData::ScDPItemData(const rtl::OUString* pStr) :
     mpString(pStr), meType(String), mbStringInterned(true) {}
 
 ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
-    meType(GroupValue)
+    meType(GroupValue), mbStringInterned(false)
 {
     maGroupValue.mnGroupType = nGroupType;
     maGroupValue.mnValue = nValue;
