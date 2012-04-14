@@ -31,7 +31,7 @@ gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
 # generated sources, jars/classdirs etc.
-gb_JavaClassSet_get_preparation_target = $(WORKDIR)/JavaClassSet/$(1)/prepared
+gb_JavaClassSet_get_preparation_target = $(WORKDIR)/JavaClassSet/$(1).prepared
 
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_JavaClassSet_JAVACDEBUG := -g
@@ -41,6 +41,7 @@ define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(filter-out $(JARDEPS),$(4)), \
+		rm -rf $(call gb_JavaClassSet_get_classdir,$(2))/* && \
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
 			$(call gb_Helper_native_path,\
 			$(filter-out $(JARDEPS),$(4)))) && \
@@ -61,7 +62,8 @@ $(call gb_JavaClassSet_get_target,%) :
 $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),JCS,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
+		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*))) \
+			$(call gb_JavaClassSet_get_preparation_target,$*)
 
 $(call gb_JavaClassSet_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@
