@@ -713,7 +713,7 @@ private:
     eBookStatus* pStatus;
     long nIMax;                         // Number of Booknotes
     sal_uInt16 nIsEnd;
-    int nBookmarkId; // counter incremented by GetUniqueBookmarkName.
+    sal_Int32 nBookmarkId; // counter incremented by GetUniqueBookmarkName.
 
     //No copying
     WW8PLCFx_Book(const WW8PLCFx_Book&);
@@ -740,7 +740,7 @@ public:
     bool MapName(String& rName);
     String GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
-    String GetUniqueBookmarkName(const rtl::OUString &rSuggestedName);
+    rtl::OUString GetUniqueBookmarkName(const rtl::OUString &rSuggestedName);
 };
 
 /*

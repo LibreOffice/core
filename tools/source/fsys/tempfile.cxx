@@ -31,6 +31,7 @@
 #include "comdep.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <tools/time.hxx>
@@ -119,9 +120,10 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     for ( unsigned long nOld = u; ++u != nOld; )
     {
         u %= (nRadix*nRadix*nRadix);
-        String aTmp( aName );
-        aTmp += String::CreateFromInt32( (sal_Int32) (unsigned) u, nRadix );
-        aTmp += String::CreateFromAscii( ".tmp" );
+        rtl::OUString aTmp = rtl::OUStringBuffer(aName).
+            append((sal_Int32)(unsigned)u, nRadix).
+            append(".tmp").
+            makeStringAndClear();
 
         if ( bDir )
         {
@@ -200,12 +202,14 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const
     aName += rLeadingChars;
     for ( sal_Int32 i=0;; i++ )
     {
-        String aTmp( aName );
-        aTmp += String::CreateFromInt32( i );
+        rtl::OUStringBuffer aTmpBuffer(aName);
+        aTmpBuffer.append(i);
         if ( pExtension )
-            aTmp += *pExtension;
+            aTmpBuffer.append(*pExtension);
         else
-            aTmp += String::CreateFromAscii( ".tmp" );
+            aTmpBuffer.append(".tmp");
+        rtl::OUString aTmp = aTmpBuffer.makeStringAndClear();
+
         if ( bDirectory )
         {
             FileBase::RC err = Directory::create( aTmp );

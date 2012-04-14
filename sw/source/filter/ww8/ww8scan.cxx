@@ -4155,23 +4155,23 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     return bFound ? aBookNames[i] : aEmptyStr;
 }
 
-String WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggestedName)
+rtl::OUString WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggestedName)
 {
-    String aRet=(rSuggestedName.isEmpty() ? rtl::OUString("Unnamed") : rSuggestedName);
-    unsigned int i=0;
-    while(i<aBookNames.size()) {
-        String &s=aBookNames[i];
-        if (aRet.CompareTo(s)==0) {
-            int len=aRet.Len();
-            int p=len-1;
-            while(p>0 && aRet.GetChar(static_cast<sal_uInt16>(p))>='0' && aRet.GetChar(static_cast<sal_uInt16>(p))<='9')
-                p--;
-            aRet=String(aRet, 0, static_cast<sal_uInt16>(p+1));
-            aRet += String::CreateFromInt32( nBookmarkId++ );
-            i=0; // start search from beginning
-        } else {
-            i++;
+    rtl::OUString aRet(rSuggestedName.isEmpty() ? rtl::OUString("Unnamed") : rSuggestedName);
+    size_t i = 0;
+    while (i < aBookNames.size())
+    {
+        if (aRet.equals(aBookNames[i]))
+        {
+            sal_Int32 len = aRet.getLength();
+            sal_Int32 p = len - 1;
+            while (p > 0 && aRet[p] >= '0' && aRet[p] <= '9')
+                --p;
+            aRet = aRet.copy(0, p+1) + rtl::OUString::valueOf(nBookmarkId++);
+            i = 0; // start search from beginning
         }
+        else
+            ++i;
     }
     return aRet;
 }

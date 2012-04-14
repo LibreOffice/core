@@ -159,15 +159,15 @@ Color WW8TransCol(SVBT32 nWC)
     return Color(nWC[0], nWC[1], nWC[2]);
 }
 
-void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const String &rFixed)
+void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const rtl::OUString &rFixed)
 {
-    if (mbIsDisabled || !rFixed.Len())
+    if (mbIsDisabled || rFixed.isEmpty())
         return;
-    String aName(msSeed);
-    aName += String::CreateFromInt32(++mnImportedGraphicsCount);
-    aName.APPEND_CONST_ASC( ": " );
-    aName += rFixed;
-    pFrmFmt->SetName( aName );
+    rtl::OUStringBuffer aName(msSeed);
+    aName.append(++mnImportedGraphicsCount);
+    aName.append(": ");
+    aName.append(rFixed);
+    pFrmFmt->SetName(aName.makeStringAndClear());
 }
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker

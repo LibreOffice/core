@@ -840,20 +840,18 @@ public:
     void delete_all_from_doc();
 };
 
-class wwFrameNamer
+class wwFrameNamer : private ::boost::noncopyable
 {
 private:
-    String msSeed;
-    int mnImportedGraphicsCount;
+    rtl::OUString msSeed;
+    sal_Int32 mnImportedGraphicsCount;
     bool mbIsDisabled;
-    //No copying
-    wwFrameNamer(const wwFrameNamer&);
-    wwFrameNamer& operator=(const wwFrameNamer&);
 public:
-    void SetUniqueGraphName(SwFrmFmt *pFrmFmt,const String &rFixedPart);
-    wwFrameNamer(bool bIsDisabled, const String &rSeed)
+    void SetUniqueGraphName(SwFrmFmt *pFrmFmt, const rtl::OUString &rFixedPart);
+    wwFrameNamer(bool bIsDisabled, const rtl::OUString &rSeed)
         : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
-        { }
+    {
+    }
 };
 
 class wwSectionNamer
@@ -1212,7 +1210,7 @@ private:
     bool bParaAutoAfter;
 
     bool bDropCap;
-    int nDropCap;
+    sal_Int32 nDropCap;
 
     int nIdctHint;
     bool bBidi;

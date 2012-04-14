@@ -161,13 +161,13 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 String sShortcut = rLNm;
 
                 // Need to check make sure the shortcut is not already being used
-                xub_StrLen nStart = 0;
+                sal_Int32 nStart = 0;
                 sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
                 xub_StrLen nLen = sShortcut.Len();
                 while( (sal_uInt16)-1 != nCurPos )
                 {
                     sShortcut.Erase( nLen ) +=
-                        String::CreateFromInt32( ++nStart );    // add an Number to it
+                        rtl::OUString::valueOf(++nStart);    // add an Number to it
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
 

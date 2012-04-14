@@ -3537,8 +3537,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 
             if(pAktItemSet && !pFmt)
             {
-                String sPrefix(CREATE_CONST_ASC( "WW8Dropcap"));
-                sPrefix += String::CreateFromInt32( nDropCap++ );
+                rtl::OUString sPrefix(rtl::OUStringBuffer("WW8Dropcap").append(nDropCap++).makeStringAndClear());
                 pNewSwCharFmt = rDoc.MakeCharFmt(sPrefix, (SwCharFmt*)rDoc.GetDfltCharFmt());
                  pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
                 pNewSwCharFmt->SetFmtAttr( *pAktItemSet );
@@ -5659,7 +5658,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
     if( bRet )
     {
         rStorageName = '_';
-        rStorageName += String::CreateFromInt32(nPictureId);
+        rStorageName += rtl::OUString::valueOf(nPictureId);
         rSrcStorage = rReader.pStg->OpenSotStorage(CREATE_CONST_ASC(
             SL::aObjectPool));
         if (!rReader.mpDocShell)
