@@ -342,6 +342,22 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         rtl::OUString aStr;
         GetString(nCol, nRow, aStr);
+
+        // fdo#39500 don't deduce increment from multiple equal list entries
+        bool bAllSame = true;
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            rtl::OUString aTestStr;
+            GetString(static_cast<SCCOL>(nCol + i* nAddX), static_cast<SCROW>(nRow + i * nAddY), aTestStr);
+            if(aStr != aTestStr)
+            {
+                bAllSame = false;
+                break;
+            }
+        }
+        if(bAllSame && nCount > 1)
+            return;
+
         rListData = (ScUserListData*)(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
         {
