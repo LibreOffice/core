@@ -44,7 +44,7 @@ all:
 .INCLUDE : $(PRJ)$/unodevtools.pmk
 
 APP1TARGET = $(TARGET)
-APP1RPATH=SDK
+APP1RPATH=SDKBIN
 
 APP1OBJS = $(OBJ)$/skeletonmaker.obj \
     $(OBJ)$/skeletoncommon.obj \

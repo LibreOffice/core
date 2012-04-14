@@ -71,7 +71,7 @@ sub action($$$)
     return $act;
 }
 
-@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDK|OXT|NONE <filepath>*';
+@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDKBIN|OXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "Executable")
