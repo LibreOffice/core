@@ -144,13 +144,13 @@ my_components += \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
     component/connectivity/source/drivers/dbase/dbase \
-    component/connectivity/source/drivers/cpool/dbpool2 \
-    component/connectivity/source/drivers/dbtools/dbtools \
+    component/connectivity/source/cpool/dbpool2 \
+    component/connectivity/source/dbtools/dbtools \
     component/connectivity/source/drivers/flat/flat \
     localebe1 \
     component/connectivity/source/drivers/mysql/mysql \
     component/connectivity/source/drivers/odbc/odbc \
-    component/connectivity/source/drivers/sdbc2/sdbc2 \
+    component/connectivity/source/manager/sdbc2 \
 
 .ENDIF
 
@@ -381,7 +381,7 @@ my_components += \
     "$(WITH_MOZILLA)" != "NO"
 my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
-my_components += mozbootstrap
+my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
 .ENDIF
 
