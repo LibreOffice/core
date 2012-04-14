@@ -324,7 +324,10 @@ void SpellDialog::Init_Impl()
     aSuggestionLB.SetDoubleClickHdl( LINK( this, SpellDialog, ChangeHdl ) );
 
     aSentenceED.SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
-    aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictionaryHdl ) );
+
+    aAddToDictMB.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
+    aAddToDictMB.SetClickHdl(LINK ( this, SpellDialog, AddToDictClickHdl ) );
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
     aExplainLink.SetClickHdl( LINK( this, SpellDialog, HandleHyperlink ) );
@@ -1003,7 +1006,19 @@ void SpellDialog::InitUserDicts()
 }
 
 //-----------------------------------------------------------------------
-IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
+IMPL_LINK(SpellDialog, AddToDictClickHdl, MenuButton*, pButton )
+{
+    return AddToDictionaryExecute(1, pButton->GetPopupMenu());
+}
+
+//-----------------------------------------------------------------------
+IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton )
+{
+    return AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
+}
+
+//-----------------------------------------------------------------------
+int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 {
     aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
 
@@ -1011,8 +1026,6 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
     //manually changed
     const String aNewWord= aSentenceED.GetErrorText();
 
-    sal_uInt16 nItemId = pButton->GetCurItemId();
-    PopupMenu *pMenu = pButton->GetPopupMenu();
     String aDicName ( pMenu->GetItemText( nItemId ) );
 
     uno::Reference< linguistic2::XDictionary >      xDic;

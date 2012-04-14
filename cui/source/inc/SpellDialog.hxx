@@ -212,13 +212,15 @@ private:
     DECL_LINK(CancelHdl, void *);
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
     DECL_LINK(UndoHdl, void *);
-    DECL_LINK( AddToDictionaryHdl, MenuButton* );
+    DECL_LINK( AddToDictSelectHdl, MenuButton* );
+    DECL_LINK( AddToDictClickHdl, MenuButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
     DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 
     DECL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog * );
 
+    int             AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
     void            StartSpellOptDlg_Impl();
     void            InitUserDicts();
     void            UpdateBoxes_Impl();
