@@ -182,15 +182,17 @@ css::uno::TypeDescription Unmarshal::readType() {
                 }
                 return state_.typeCache[idx];
             } else {
-                css::uno::TypeDescription t(readString());
+                rtl::OUString const str(readString());
+                css::uno::TypeDescription t(str);
                 if (!t.is() ||
                     t.get()->eTypeClass != static_cast< typelib_TypeClass >(tc))
                 {
+
                     throw css::io::IOException(
                         rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "binaryurp::Unmarshal: type with unknown"
-                                " name")),
+                                " name: ")) + str,
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 for (css::uno::TypeDescription t2(t);
