@@ -324,7 +324,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     {
                         nVal2 = ((ScValueCell*)pCell)->GetValue();
                         double nDiff = nVal2 - nVal1;
-                        if ( !::rtl::math::approxEqual( nDiff, rInc ) )
+                        if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
                         nVal1 = nVal2;
                     }
@@ -395,7 +395,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             if ( nFlag1 == nFlag2 )
                             {
                                 double nDiff = (double)nVal2 - (double)nVal1;
-                                if ( !::rtl::math::approxEqual( nDiff, rInc ) )
+                                if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                                     bVal = false;
                                 nVal1 = nVal2;
                             }

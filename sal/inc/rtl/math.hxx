@@ -263,6 +263,19 @@ inline bool approxEqual(double a, double b)
         < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
 }
 
+/** Test equality of two values with an accuracy defined by nPrec
+
+    @attention
+    approxEqual( value!=0.0, 0.0 ) _never_ yields true.
+ */
+inline bool approxEqual(double a, double b, sal_Int16 nPrec)
+{
+    if ( a == b )
+        return true;
+    double x = a - b;
+    return (x < 0.0 ? -x : x)
+        < ((a < 0.0 ? -a : a) * (1.0 / (pow(2, nPrec))));
+}
 /** Add two values.
 
     If signs differ and the absolute values are equal according to approxEqual()
