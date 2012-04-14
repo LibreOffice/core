@@ -117,17 +117,17 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     ::rtl::OUString sValue = val.getString();
     (void)sValue;
 
-#if 0 //no values known, yet
-
-    switch(Name)
+    switch(nName)
     {
-    case NS_ooxml:::
-    break;
+    //case NS_ooxml:::
+    //break;
     default:
     {
-    }
-    }
+#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+        dmapper_logger->element("unhandled");
 #endif
+    }
+    }
 }
 
 void SettingsTable::lcl_sprm(Sprm& rSprm)
