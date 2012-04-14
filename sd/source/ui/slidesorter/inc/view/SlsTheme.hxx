@@ -77,8 +77,7 @@ public:
 
     enum FontType {
         Font_PageNumber,
-        Font_PageCount,
-        Font_Button
+        Font_PageCount
     };
     static ::boost::shared_ptr<Font> GetFont (
         const FontType eType,

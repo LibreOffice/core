@@ -258,16 +258,6 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
                 pFont->SetSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
             }
             break;
-
-        case Font_Button:
-            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(sal_True);
-            pFont->SetWeight(WEIGHT_BOLD);
-            {
-                const Size aSize (pFont->GetSize());
-                pFont->SetSize(Size(aSize.Width()*4/3, aSize.Height()*4/3));
-            }
-            break;
     }
 
     if (pFont)
