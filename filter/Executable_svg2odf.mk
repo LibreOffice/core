@@ -34,6 +34,11 @@ $(eval $(call gb_Executable_use_api,svg2odf,\
     udkapi \
 ))
 
+$(eval $(call gb_Executable_set_include,svg2odf,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/filter/inc \
+))
+
 $(eval $(call gb_Executable_use_libraries,svg2odf,\
     svgfilter \
     $(gb_STDLIBS) \
