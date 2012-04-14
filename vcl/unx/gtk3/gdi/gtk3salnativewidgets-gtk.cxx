@@ -1166,12 +1166,17 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetButtonRolloverTextColor( aTextColor );
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
-#if 0
-    // Tooltip colors
-    GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nScreen].gTooltipPopup );
-    aTextColor = getColor( pTooltipStyle->fg[ GTK_STATE_NORMAL ] );
-    aStyleSet.SetHelpTextColor( aTextColor );
-#endif
+    // FIXME: each gtk3 theme needs to define a set of well-known
+    // color names for LibreOffice eg.
+    // @define-color tooltip_bg_color #343434;
+    GdkRGBA tooltip_bg_color;
+    if( gtk_style_context_lookup_color( pStyle, "tooltip_bg_color", &tooltip_bg_color ) )
+    {
+        aStyleSet.SetHelpTextColor( getColor( tooltip_bg_color ) );
+        fprintf (stderr, "Set tooltip bg color %g %g %g %g\n",
+                 tooltip_bg_color.red, tooltip_bg_color.green,
+                 tooltip_bg_color.blue, tooltip_bg_color.alpha );
+    }
 
     // background colors
     GdkRGBA background_color;
@@ -1184,15 +1189,24 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetCheckedColorSpecialCase( );
 
+{ // FIXME: turn me into a helper function ...
+    // construct style context for text view
+    GtkStyleContext *pCStyle = gtk_style_context_new();
+    gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+    GtkWidgetPath *pCPath = gtk_widget_path_new();
+    gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
+    gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
+    gtk_style_context_set_path( pCStyle, pCPath );
+    gtk_widget_path_free( pCPath );
     GdkRGBA field_background_color;
-    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
+    gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
+    g_object_unref( pCStyle );
+
     ::Color aBackFieldColor = getColor( field_background_color );
-    // FIXME: we really need some work getting the right style contexts.
-    // it seems a window has a rather different background color from what we want.
-    aBackFieldColor = ::Color( COL_WHITE );
     aStyleSet.SetFieldColor( aBackFieldColor );
     // This baby is the default page/paper color
     aStyleSet.SetWindowColor( aBackFieldColor );
+}
 
     // highlighting colors
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
