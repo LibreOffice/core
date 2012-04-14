@@ -54,7 +54,6 @@ public:
             area has to be, how many digits to except for the largest page number.
     */
     PageObjectLayouter(
-        const ::boost::shared_ptr<Theme>& rpTheme,
         const Size& rPageObjectWindowSize,
         const Size& rPreviewModelSize,
         const SharedSdWindow& rpWindow,

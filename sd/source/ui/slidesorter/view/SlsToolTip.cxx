@@ -47,7 +47,7 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
       mnHelpWindowHandle(0),
       maTimer()
 {
-    maTimer.SetTimeout(rSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ToolTipDelay));
+    maTimer.SetTimeout(Theme_ToolTipDelay);
     maTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
 }
 

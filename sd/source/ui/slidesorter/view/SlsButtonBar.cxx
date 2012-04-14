@@ -103,8 +103,7 @@ protected:
 
 private:
     /// Compute the size of the are for the given button size.
-    // TODO this is supposed to be static, fix that
-    Size MinimumSize( Button::IconSize eSize, const ::std::vector<SharedButton>& rButtons );
+    static Size MinimumSize( Button::IconSize eSize, const ::std::vector<SharedButton>& rButtons );
     void UpdateMinimumIconSizes(const ::std::vector<SharedButton>& rButtons);
 };
 
@@ -496,8 +495,8 @@ void ButtonBar::LayoutButtons (const Size aPageObjectSize)
 
 bool ButtonBar::LayoutButtons (void)
 {
-    const sal_Int32 nGap (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonGap));
-    const sal_Int32 nBorder (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBorder));
+    const sal_Int32 nGap = Theme_ButtonGap;
+    const sal_Int32 nBorder = Theme_ButtonBorder;
 
     const Button::IconSize eIconSize (mpBackgroundTheme->GetIconSize());
 
@@ -534,7 +533,7 @@ bool ButtonBar::LayoutButtons (void)
     mpBackgroundTheme->Layout();
     maButtonBoundingBox = mpBackgroundTheme->GetButtonArea();
     maBackgroundLocation = mpBackgroundTheme->GetBackgroundLocation();
-    if (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonPaintType) == 1)
+    if (Theme_ButtonPaintType == 1)
     {
         // Center the buttons.
         maButtonBoundingBox.Left() += (maButtonBoundingBox.GetWidth() - nRegularTotalWidth)/2;
@@ -684,12 +683,8 @@ void ButtonBar::StartFadeAnimation (
     // buttons are already showing.  Fade out is faster than fade in.
     const double nDelay (nCurrentButtonBarAlpha>0 && nCurrentButtonBarAlpha<1
         ? 0
-        : (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
-            ?  Theme::Integer_ButtonFadeInDelay
-            :  Theme::Integer_ButtonFadeOutDelay)));
-    const double nDuration (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
-            ?  Theme::Integer_ButtonFadeInDuration
-            :  Theme::Integer_ButtonFadeOutDuration));
+        : (bFadeIn ? Theme_ButtonFadeInDelay : Theme_ButtonFadeOutDelay));
+    const double nDuration (bFadeIn ? Theme_ButtonFadeInDuration : Theme_ButtonFadeOutDuration);
     pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
         mrSlideSorter.GetController().GetAnimator()->AddAnimation(
             ::boost::bind(
@@ -758,11 +753,9 @@ void ButtonBar::BackgroundTheme::SetPreviewBoundingBox (const Rectangle& rPrevie
 Size ButtonBar::BackgroundTheme::MinimumSize( Button::IconSize eSize,
         const ::std::vector<SharedButton>& rButtons )
 {
-    OSL_ASSERT(mpTheme);
-
     int nMaximumHeight = 0;
-    const int nGap = mpTheme->GetIntegerValue(Theme::Integer_ButtonGap);
-    const int nBorder = mpTheme->GetIntegerValue(Theme::Integer_ButtonBorder);
+    const int nGap = Theme_ButtonGap;
+    const int nBorder = Theme_ButtonBorder;
 
     int nTotalWidth = (rButtons.size()-1) * nGap + 2*nBorder;
     for ( int nIndex = 0; nIndex < int( rButtons.size() ); ++nIndex )

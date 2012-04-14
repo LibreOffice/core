@@ -502,8 +502,8 @@ Layouter::Implementation::Implementation (
       mnRightBorder(5),
       mnTopBorder(5),
       mnBottomBorder(5),
-      mnVerticalGap (10 - 2*rpTheme->GetIntegerValue(Theme::Integer_FocusIndicatorWidth)),
-      mnHorizontalGap(10 - 2*rpTheme->GetIntegerValue(Theme::Integer_FocusIndicatorWidth)),
+      mnVerticalGap (10 - 2*Theme_FocusIndicatorWidth),
+      mnHorizontalGap(10 - 2*Theme_FocusIndicatorWidth),
       maMinimalSize(132,98),
       maPreferredSize(200,150),
       maMaximalSize(300,200),
@@ -600,7 +600,6 @@ bool Layouter::Implementation::Rearrange  (
 
     mpPageObjectLayouter.reset(
         new PageObjectLayouter(
-            mpTheme,
             CalculateTargetSize(rWindowSize, rPreviewModelSize),
             rPreviewModelSize,
             mpWindow,

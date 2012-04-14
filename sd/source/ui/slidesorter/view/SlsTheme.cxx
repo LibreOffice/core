@@ -78,8 +78,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maPageBackgroundColor(COL_WHITE),
       maGradients(),
       maIcons(),
-      maColor(),
-      maIntegerValues()
+      maColor()
 {
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
@@ -103,20 +102,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maColor[Color_PageNumberBrightBackground] = 0x333333;
         maColor[Color_PageNumberDarkBackground] = 0xcccccc;
         maColor[Color_PreviewBorder] = 0x949599;
-
-        maIntegerValues.resize(_IntegerValueType_Size_);
-        maIntegerValues[Integer_ButtonCornerRadius] = 3;
-        maIntegerValues[Integer_ButtonMaxAlpha] = 0;
-        maIntegerValues[Integer_ButtonBarMaxAlpha] = 0;
-        maIntegerValues[Integer_ButtonPaintType] = 1;
-        maIntegerValues[Integer_ButtonBorder] = 4;
-        maIntegerValues[Integer_ButtonGap] = 0;
-        maIntegerValues[Integer_ButtonFadeInDelay] = 800;
-        maIntegerValues[Integer_ButtonFadeInDuration] = 100;
-        maIntegerValues[Integer_ButtonFadeOutDelay] = 0;
-        maIntegerValues[Integer_ButtonFadeOutDuration] = 100;
-        maIntegerValues[Integer_ToolTipDelay] = 1000;
-        maIntegerValues[Integer_FocusIndicatorWidth] = 3;
     }
 
     Update(rpProperties);
@@ -374,20 +359,6 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
     {
         OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
         return maIcons[0];
-    }
-}
-
-
-
-
-sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
-{
-    if (eType>=0 && size_t(eType)<maIntegerValues.size())
-        return maIntegerValues[eType];
-    else
-    {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maIntegerValues.size());
-        return 0;
     }
 }
 

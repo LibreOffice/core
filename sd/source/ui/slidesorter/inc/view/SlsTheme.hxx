@@ -46,6 +46,18 @@ class Properties;
 
 namespace sd { namespace slidesorter { namespace view {
 
+const int Theme_ButtonCornerRadius = 3;
+const int Theme_ButtonMaxAlpha = 0;
+const int Theme_ButtonBarMaxAlpha = 0;
+const int Theme_ButtonPaintType = 1;
+const int Theme_ButtonBorder = 4;
+const int Theme_ButtonGap = 0;
+const int Theme_ButtonFadeInDelay = 800;
+const int Theme_ButtonFadeInDuration = 100;
+const int Theme_ButtonFadeOutDelay = 0;
+const int Theme_ButtonFadeOutDuration = 100;
+const int Theme_ToolTipDelay = 1000;
+const int Theme_FocusIndicatorWidth = 3;
 
 /** Collection of colors and styles that are used to paint the slide sorter
     view.
@@ -156,24 +168,6 @@ public:
     };
     const BitmapEx& GetIcon (const IconType eType);
 
-    enum IntegerValueType
-    {
-        Integer_ButtonCornerRadius,
-        Integer_ButtonMaxAlpha,
-        Integer_ButtonBarMaxAlpha,
-        Integer_ButtonPaintType,
-        Integer_ButtonBorder,
-        Integer_ButtonGap,
-        Integer_ButtonFadeInDelay,
-        Integer_ButtonFadeInDuration,
-        Integer_ButtonFadeOutDelay,
-        Integer_ButtonFadeOutDuration,
-        Integer_ToolTipDelay,
-        Integer_FocusIndicatorWidth,
-        _IntegerValueType_Size_
-    };
-    sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
-
     enum StringType
     {
         String_Unhide,
@@ -212,7 +206,6 @@ private:
     ::std::vector<GradientDescriptor> maGradients;
     ::std::vector<BitmapEx> maIcons;
     ::std::vector<ColorData> maColor;
-    ::std::vector<sal_Int32> maIntegerValues;
     ::std::vector<rtl::OUString> maStrings;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);

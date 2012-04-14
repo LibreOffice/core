@@ -46,7 +46,6 @@ const static sal_Int32 gnInfoAreaMinWidth = 26;
 }
 
 PageObjectLayouter::PageObjectLayouter (
-    const ::boost::shared_ptr<Theme>& rpTheme,
     const Size& rPageObjectWindowSize,
     const Size& rPageSize,
     const SharedSdWindow& rpWindow,
@@ -64,7 +63,7 @@ PageObjectLayouter::PageObjectLayouter (
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 
     const int nMaximumBorderWidth (gnOuterBorderWidth);
-    const int nFocusIndicatorWidth (rpTheme->GetIntegerValue(Theme::Integer_FocusIndicatorWidth));
+    const int nFocusIndicatorWidth (Theme_FocusIndicatorWidth);
 
     maPreviewBoundingBox = CalculatePreviewBoundingBox(
         maPageObjectSize,
