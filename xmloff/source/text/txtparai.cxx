@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <svl/svarray.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -64,9 +65,7 @@
 
 // OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
-typedef XMLHint_Impl *XMLHint_ImplPtr;
-SV_DECL_PTRARR_DEL( XMLHints_Impl, XMLHint_ImplPtr, 5 )
-SV_IMPL_PTRARR( XMLHints_Impl, XMLHint_ImplPtr )
+class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
 // OD 2004-04-21 #i26791#
 
 using ::rtl::OUString;
@@ -211,7 +210,7 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
         // degenerates to point reference, if no end is found!
         pHint->SetEnd(rImport.GetTextImport()->GetCursor()->getStart() );
 
-        rHints.Insert(pHint, rHints.Count());
+        rHints.push_back(pHint);
     }
 }
 
@@ -275,10 +274,10 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     if (XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
     {
         // search for reference start
-        sal_uInt16 nCount = rHints.Count();
+        sal_uInt16 nCount = rHints.size();
         for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
         {
-            XMLHint_Impl *pHint = rHints[nPos];
+            XMLHint_Impl *pHint = &rHints[nPos];
             if ( pHint->IsReference() &&
                  sName.equals( ((XMLReferenceHint_Impl *)pHint)->GetRefName()) )
             {
@@ -426,7 +425,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
             pHint->SetTargetFrameName(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("_self" ) ) );
     }
-    rHints.Insert( pHint, rHints.Count() );
+    rHints.push_back( pHint );
 }
 
 XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
@@ -1127,7 +1126,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             {
                 ProcessAttributes(xAttrList, xMark);
                 XMLHint_Impl* pHint = new XMLIndexMarkHint_Impl(xMark, xPos);
-                rHints.Insert(pHint, rHints.Count());
+                rHints.push_back(pHint);
             }
             // else: can't create mark -> ignore
             break;
@@ -1148,7 +1147,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
                     // process only if we find an ID
                     XMLHint_Impl* pHint =
                         new XMLIndexMarkHint_Impl(xMark, xPos, sID);
-                    rHints.Insert(pHint, rHints.Count());
+                    rHints.push_back(pHint);
                 }
                 // else: no ID -> we'll never find the end -> ignore
             }
@@ -1167,10 +1166,10 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             if (!sID.isEmpty())
             {
                 // if we have an ID, find the hint and set the end position
-                sal_uInt16 nCount = rHints.Count();
+                sal_uInt16 nCount = rHints.size();
                 for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
                 {
-                    XMLHint_Impl *pHint = rHints[nPos];
+                    XMLHint_Impl *pHint = &rHints[nPos];
                     if ( pHint->IsIndexMark() &&
                          sID.equals(
                              ((XMLIndexMarkHint_Impl *)pHint)->GetID()) )
@@ -1599,7 +1598,7 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
     {
         pHint = new XMLStyleHint_Impl( aStyleName,
                   GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
-            rHints.Insert( pHint, rHints.Count() );
+            rHints.push_back( pHint );
     }
 }
 
@@ -1749,9 +1748,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             if( TextContentAnchorType_AT_CHARACTER ==
                                             pTextFrameContext->GetAnchorType() )
             {
-                rHints.Insert( new XMLTextFrameHint_Impl(
-                    pTextFrameContext, xAnchorPos ),
-                    rHints.Count() );
+                rHints.push_back( new XMLTextFrameHint_Impl(
+                    pTextFrameContext, xAnchorPos ) );
             }
             pContext = pTextFrameContext;
             rIgnoreLeadingSpace = sal_False;
@@ -1766,7 +1764,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                         TextContentAnchorType_AS_CHARACTER );
             XMLTextFrameHint_Impl *pHint =
                 new XMLTextFrameHint_Impl( pContext, xAnchorPos);
-            rHints.Insert( pHint, rHints.Count() );
+            rHints.push_back( pHint );
         }
         break;
 
@@ -1839,8 +1837,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             // adjust its anchor position, if its at-character anchored
             Reference < XTextRange > xAnchorPos =
                 rImport.GetTextImport()->GetCursor()->getStart();
-            rHints.Insert( new XMLDrawHint_Impl( pShapeContext, xAnchorPos ),
-                           rHints.Count() );
+            rHints.push_back( new XMLDrawHint_Impl( pShapeContext, xAnchorPos ) );
         }
         if( !pContext )
         {
@@ -2135,11 +2132,11 @@ XMLParaContext::~XMLParaContext()
         }
     }
 
-    if( pHints && pHints->Count() )
+    if( pHints && !pHints->empty() )
     {
-        for( sal_uInt16 i=0; i<pHints->Count(); i++ )
+        for( sal_uInt16 i=0; i<pHints->size(); i++ )
         {
-            XMLHint_Impl *pHint = (*pHints)[i];
+            XMLHint_Impl *pHint = &(*pHints)[i];
             xAttrCursor->gotoRange( pHint->GetStart(), sal_False );
             xAttrCursor->gotoRange( pHint->GetEnd(), sal_True );
             switch( pHint->GetType() )
