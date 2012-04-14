@@ -30,6 +30,6 @@
 
 #include <limits>
 
-size_t EE_APPEND = std::numeric_limits<size_t>::max();
+const size_t EE_APPEND = std::numeric_limits<size_t>::max();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
