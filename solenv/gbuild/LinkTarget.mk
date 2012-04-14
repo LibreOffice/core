@@ -197,7 +197,7 @@ gb_YaccTarget_get_source = $(1)/$(2).y
 
 .PHONY : $(call gb_YaccTarget_get_clean_target,%)
 $(call gb_YaccTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$(2),$(false),YAC,3)
+	$(call gb_Output_announce,$*,$(false),YAC,3)
 	$(call gb_Helper_abbreviate_dirs,\
 	    rm -f $(call gb_YaccTarget_get_grammar_target,$*) $(call gb_YaccTarget_get_header_target,$*) $(call gb_YaccTarget_get_target,$*))
 
@@ -547,6 +547,15 @@ endif
 
 endef
 
+define gb_LinkTarget__add_include
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(2)
+endif
+
+endef
+
 define gb_LinkTarget_set_include
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
@@ -584,24 +593,14 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget_use_api
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
-	$$(foreach api,$(2),$$(call gb_Package_get_target,$$(api)_inc))
-$(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
-endif
+$(foreach api,$(2),$(call gb_LinkTarget__use_internal_api_one,$(1),$(api)))
 
 endef
 
 define gb_LinkTarget__use_internal_api_one
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
-	$(call gb_UnoApiHeadersTarget_get_$(3)target,$(api))
-$(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
-endif
+	$(call gb_UnoApiHeadersTarget_get_$(3)target,$(2))
+$(call gb_LinkTarget__add_include,$(1),$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(2)))
 
 endef
 
@@ -831,9 +830,10 @@ endef
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
 $(call gb_YaccTarget_YaccTarget,$(2))
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),YaccTarget/$(2))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccTarget_get_header_target,$(2)))
+$(call gb_LinkTarget__add_include,$(1),$(dir $(call gb_YaccTarget_get_header_target,$(2))))
 
 endef
 
@@ -976,11 +976,7 @@ endef
 define gb_LinkTarget__use_custom_headers
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
 	$(call gb_CustomTarget_get_target,$(2))
-$(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
-endif
+$(call gb_LinkTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
 
 endef
 

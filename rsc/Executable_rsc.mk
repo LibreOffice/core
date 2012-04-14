@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_Executable,rsc))
 $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/rsc/inc \
-	-I$(WORKDIR)/YaccTarget/rsc/source/parser \
 ))
 
 $(eval $(call gb_Executable_use_api,rsc,\
@@ -54,8 +53,6 @@ $(eval $(call gb_Executable_use_libraries,rsc,\
 $(eval $(call gb_Executable_add_grammars,rsc,\
 	rsc/source/parser/rscyacc \
 ))
-
-$(WORKDIR)/GenCxxObject/YaccTarget/rsc/source/parser/rscyacc.o: T_CXXFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 
 $(eval $(call gb_Executable_add_exception_objects,rsc,\
 	rsc/source/parser/erscerr \

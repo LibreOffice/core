@@ -27,7 +27,6 @@
 $(eval $(call gb_Executable_Executable,idlc))
 
 $(eval $(call gb_Executable_set_include,idlc,\
-    -I$(WORKDIR)/YaccTarget/idlc/source \
     -I$(SRCDIR)/idlc/inc \
     -I$(SRCDIR)/idlc/source \
     $$(INCLUDE) \
@@ -42,8 +41,6 @@ $(eval $(call gb_Executable_use_libraries,idlc,\
 $(eval $(call gb_Executable_add_grammars,idlc,\
     idlc/source/parser \
 ))
-
-$(WORKDIR)/GenCxxObject/YaccTarget/idlc/source/parser.o: T_CXXFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 
 $(eval $(call gb_Executable_use_custom_headers,idlc,idlc/scanner))
 
