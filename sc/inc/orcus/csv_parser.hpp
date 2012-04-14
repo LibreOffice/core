@@ -256,14 +256,14 @@ void csv_parser<_Handler>::quoted_cell()
         }
 
         // Closing quote.
-        push_cell_value(p0, len-1);
+        m_handler.cell(p0, len-1);
         next();
         skip_blanks();
         return;
     }
 
     // Stream ended prematurely.  Handle it gracefully.
-    push_cell_value(p0, len);
+    m_handler.cell(p0, len);
     next();
     skip_blanks();
 }
@@ -309,7 +309,7 @@ void csv_parser<_Handler>::parse_cell_with_quote(const char* p0, size_t len0)
         // buffer, push the value to the handler, and exit normally.
         append_to_cell_buf(p_cur, cur_len);
 
-        push_cell_value(&m_cell_buf[0], m_cell_buf_size);
+        m_handler.cell(&m_cell_buf[0], m_cell_buf_size);
         next();
         skip_blanks();
         return;
