@@ -25,20 +25,20 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_AllLangResTarget_AllLangResTarget,connectivity))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,cnr))
 
-$(eval $(call gb_AllLangResTarget_add_srs,connectivity,\
-	connectivity/res \
+$(eval $(call gb_AllLangResTarget_add_srs,cnr,\
+	cnr/res \
 ))
 
-$(eval $(call gb_SrsTarget_SrsTarget,connectivity/res))
+$(eval $(call gb_SrsTarget_SrsTarget,cnr/res))
 
-$(eval $(call gb_SrsTarget_set_include,connectivity/res,\
+$(eval $(call gb_SrsTarget_set_include,cnr/res,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,connectivity/res,\
+$(eval $(call gb_SrsTarget_add_files,cnr/res,\
 	connectivity/source/resource/conn_shared_res.src \
 ))
 
