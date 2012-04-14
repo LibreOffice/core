@@ -88,7 +88,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
     // Create this early, as custom shapes may have properties before the type arrives.
-    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
+    createShape("com.sun.star.drawing.CustomShape", xShape, xPropertySet);
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
@@ -103,7 +103,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             switch (nType)
             {
                 case 20: // Line
-                    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")), xShape, xPropertySet);
+                    createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
                     break;
                 default:
                     bCustom = true;
@@ -113,7 +113,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             // Defaults
             aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
             if (xPropertySet.is())
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
+                xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "wzName" )
         {
@@ -130,34 +130,34 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             m_rImport.setDestinationText(i->second);
             bPib = true;
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")) && xPropertySet.is())
+        else if (i->first == "fillColor" && xPropertySet.is())
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
+            xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")) && xPropertySet.is())
+        else if (i->first == "lineColor" && xPropertySet.is())
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
+            xPropertySet->setPropertyValue("LineColor", aAny);
         }
         else if ( i->first == "lineBackColor" )
             ; // Ignore: complementer of lineColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")) && xPropertySet.is())
+        else if (i->first == "txflTextFlow" && xPropertySet.is())
         {
             if (i->second.toInt32() == 1)
             {
                 aAny <<= text::WritingMode_TB_RL;
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")), aAny);
+                xPropertySet->setPropertyValue("TextWritingMode", aAny);
             }
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fLine")) && xPropertySet.is())
+        else if (i->first == "fLine" && xPropertySet.is())
         {
             if (i->second.toInt32() == 0)
             {
                 aAny <<= drawing::LineStyle_NONE;
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny);
+                xPropertySet->setPropertyValue("LineStyle", aAny);
             }
         }
         else if ( i->first == "pVerticies" )
@@ -199,7 +199,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 }
             }
             while (nCharIndex >= 0);
-            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
+            aPropertyValue.Name = "Coordinates";
             aPropertyValue.Value <<= aCoordinates;
             aPathPropVec.push_back(aPropertyValue);
         }
@@ -257,7 +257,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 }
             }
             while (nCharIndex >= 0);
-            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
+            aPropertyValue.Name = "Segments";
             aPropertyValue.Value <<= aSegments;
             aPathPropVec.push_back(aPropertyValue);
         }
@@ -300,13 +300,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     std::vector<beans::PropertyValue> aGeomPropVec;
     if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
+        aPropertyValue.Name = "ViewBox";
         aPropertyValue.Value <<= aViewBox;
         aGeomPropVec.push_back(aPropertyValue);
     }
     if (aPathPropSeq.getLength())
     {
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Path"));
+        aPropertyValue.Name = "Path";
         aPropertyValue.Value <<= aPathPropSeq;
         aGeomPropVec.push_back(aPropertyValue);
     }
@@ -315,7 +315,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
         *pGeomValues++ = *i;
     if (aGeomPropSeq.getLength() && xPropertySet.is())
-        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeomPropSeq));
+        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomPropSeq));
 
     // Set position and size
     if (xShape.is())

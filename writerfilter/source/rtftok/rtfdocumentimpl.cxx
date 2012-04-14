@@ -624,9 +624,8 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
-    OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
     if (m_xModelFactory.is())
-        xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+        xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier( m_xDstDoc, uno::UNO_QUERY);
     if ( xDrawSupplier.is() )
@@ -639,15 +638,12 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     {
         // Set bitmap
         beans::PropertyValues aMediaProperties(1);
-        aMediaProperties[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aMediaProperties[0].Name = "URL";
         aMediaProperties[0].Value <<= aGraphicUrl;
-        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(
-                m_xContext->getServiceManager()->createInstanceWithContext(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")),
-                    m_xContext),
+        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.graphic.GraphicProvider", m_xContext),
                 uno::UNO_QUERY_THROW);
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
-        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")), uno::Any(xGraphic));
+        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
 
         // Set the object size
         awt::Size aSize;
@@ -660,7 +656,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         return 0;
     }
     if (xPropertySet.is())
-        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
+        xPropertySet->setPropertyValue("GraphicURL", uno::Any(aGraphicUrl));
 
     // Send it to the dmapper.
     RTFSprms aSprms;
@@ -1967,15 +1963,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             {
                 if (!m_pCurrentBuffer)
                     m_pCurrentBuffer = &m_aSuperBuffer;
-                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
-                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                RTFValue::Pointer_t pValue(new RTFValue("superscript"));
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
         case RTF_SUB:
             {
-                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("subscript"));
-                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                RTFValue::Pointer_t pValue(new RTFValue("subscript"));
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
@@ -2047,7 +2041,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
         case RTF_DPLINE:
                 {
-                    m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))), uno::UNO_QUERY);
+                    m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.LineShape"), uno::UNO_QUERY);
                     m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
@@ -2058,7 +2052,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYMARGIN:
                 {
                     beans::PropertyValue aPropertyValue;
-                    aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM((nKeyword == RTF_DOBXMARGIN ? "HoriOrientRelation" : "VertOrientRelation")));
+                    aPropertyValue.Name = (nKeyword == RTF_DOBXMARGIN ? "HoriOrientRelation" : "VertOrientRelation");
                     aPropertyValue.Value <<= text::RelOrientation::PAGE_PRINT_AREA;
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
                 }
@@ -2067,7 +2061,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYPAGE:
                 {
                     beans::PropertyValue aPropertyValue;
-                    aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM((nKeyword == RTF_DOBXPAGE ? "HoriOrientRelation" : "VertOrientRelation")));
+                    aPropertyValue.Name = (nKeyword == RTF_DOBXPAGE ? "HoriOrientRelation" : "VertOrientRelation");
                     aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
                 }
@@ -2665,10 +2659,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 OUString aName;
                 switch (nKeyword)
                 {
-                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); nParam = 99; break;
-                    case RTF_NOFWORDS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount")); break;
-                    case RTF_NOFCHARS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount")); break;
-                    case RTF_NOFCHARSWS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount")); break;
+                    case RTF_NOFPAGES: aName = "PageCount"; nParam = 99; break;
+                    case RTF_NOFWORDS: aName = "WordCount"; break;
+                    case RTF_NOFCHARS: aName = "CharacterCount"; break;
+                    case RTF_NOFCHARSWS: aName = "NonWhitespaceCharacterCount"; break;
                     default: break;
                 }
                 if (!aName.isEmpty())
@@ -3181,8 +3175,7 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
-        OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ?
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Company"));
+        OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ? OUString("Operator") : OUString("Company");
         if (m_xDocumentProperties.is())
         {
             uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
