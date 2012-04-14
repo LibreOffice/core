@@ -52,6 +52,7 @@
 #include <xmloff/xmltoken.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -86,8 +87,7 @@ struct SvXMLEmbeddedElement
     sal_Bool operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
 };
 
-typedef SvXMLEmbeddedElement* SvXMLEmbeddedElementPtr;
-SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0 )
+typedef boost::ptr_set<SvXMLEmbeddedElement> SvXMLEmbeddedElementArr;
 
 //-------------------------------------------------------------------------
 
@@ -377,10 +377,6 @@ static SvXMLDefaultDateFormat aDefaultDateFormats[] =
     { NF_DATETIME_SYSTEM_SHORT_HHMM,    XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_NONE,   sal_True },
     { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
 };
-
-//-------------------------------------------------------------------------
-
-SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 
 //-------------------------------------------------------------------------
 
@@ -1047,15 +1043,15 @@ void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const 
     if ( !rContent.isEmpty() )
     {
         SvXMLEmbeddedElement* pObj = new SvXMLEmbeddedElement( nFormatPos, rContent );
-        if ( !aNumInfo.aEmbeddedElements.Insert( pObj ) )
+        if ( !aNumInfo.aEmbeddedElements.insert( pObj ).second )
         {
             //  there's already an element at this position - append text to existing element
 
             delete pObj;
-            sal_uInt16 nElementCount = aNumInfo.aEmbeddedElements.Count();
-            for (sal_uInt16 i=0; i<nElementCount; i++)
+            for (SvXMLEmbeddedElementArr::iterator it = aNumInfo.aEmbeddedElements.begin();
+                 it != aNumInfo.aEmbeddedElements.end(); ++it)
             {
-                pObj = aNumInfo.aEmbeddedElements[i];
+                pObj = &*it;
                 if ( pObj->nFormatPos == nFormatPos )
                 {
                     pObj->aText += rContent;
@@ -1754,7 +1750,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         nGenPrec = 0;               // generate format without decimals...
 
     sal_Bool bGrouping = rInfo.bGrouping;
-    sal_uInt16 nEmbeddedCount = rInfo.aEmbeddedElements.Count();
+    sal_uInt16 nEmbeddedCount = rInfo.aEmbeddedElements.size();
     if ( nEmbeddedCount )
         bGrouping = sal_False;      // grouping and embedded characters can't be used together
 
@@ -1782,7 +1778,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             nZeroPos = aNumStr.Len();
 
         //  aEmbeddedElements is sorted - last entry has the largest position (leftmost)
-        const SvXMLEmbeddedElement* pLastObj = rInfo.aEmbeddedElements[nEmbeddedCount - 1];
+        const SvXMLEmbeddedElement* pLastObj = &*rInfo.aEmbeddedElements.rbegin();
         sal_Int32 nLastFormatPos = pLastObj->nFormatPos;
         if ( nLastFormatPos >= nZeroPos )
         {
@@ -1797,9 +1793,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         }
 
         //  aEmbeddedElements is sorted with ascending positions - loop is from right to left
-        for (sal_uInt16 nElement = 0; nElement < nEmbeddedCount; nElement++)
+        for (SvXMLEmbeddedElementArr::const_iterator it = rInfo.aEmbeddedElements.begin();
+             it != rInfo.aEmbeddedElements.end(); ++it)
         {
-            const SvXMLEmbeddedElement* pObj = rInfo.aEmbeddedElements[nElement];
+            const SvXMLEmbeddedElement* pObj = &*it;
             sal_Int32 nFormatPos = pObj->nFormatPos;
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
             if ( nFormatPos >= 0 && nInsertPos >= 0 )
