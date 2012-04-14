@@ -28,20 +28,12 @@
 $(eval $(call gb_Library_Library,tubes))
 
 $(eval $(call gb_Library_set_include,tubes,\
-	-I$(realpath $(SRCDIR)/tubes/inc) \
+	-I$(SRCDIR)/tubes/inc \
 	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,tubes,\
-       -DTUBES_DLLIMPLEMENTATION \
-))
-
-$(eval $(call gb_Library_add_cxxflags,tubes,\
-    $$(TELEPATHY_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_libs,tubes,\
-    $$(TELEPATHY_LIBS) \
+	-DTUBES_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tubes,\

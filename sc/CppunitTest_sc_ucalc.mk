@@ -49,8 +49,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc,\
 	tubes \
 ))
 
-$(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
-    $$(TELEPATHY_LIBS) \
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
+	telepathy \
 ))
 
 endif

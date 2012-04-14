@@ -48,14 +48,6 @@ $(eval $(call gb_Library_add_linked_libs,sc,\
 	tubes \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,sc,\
-	$$(TELEPATHY_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_libs,sc,\
-	$$(TELEPATHY_LIBS) \
-))
-
 $(eval $(call gb_Library_use_externals,sc,\
 	telepathy \
 ))

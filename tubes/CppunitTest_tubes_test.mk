@@ -27,25 +27,27 @@
 $(eval $(call gb_CppunitTest_CppunitTest,tubes_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tubes_test, \
-    tubes/qa/test_manager \
+	tubes/qa/test_manager \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,tubes_test, \
-    tubes \
-    sal \
-    unotest \
-    $(gb_STDLIBS) \
+	sal \
+	tubes \
+	unotest \
+	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_libs,tubes_test, \
-    $$(TELEPATHY_LIBS) \
+$(eval $(call gb_CppunitTest_use_externals,tubes_test,\
+	telepathy \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,tubes_test,\
-    -I$(realpath $(SRCDIR)/tubes/inc) \
-    -I$(realpath $(OUTDIR)/inc/udkapi) \
-    $$(TELEPATHY_CFLAGS) \
-    $$(INCLUDE) \
+	-I$(SRCDIR)/tubes/inc \
+	$$(INCLUDE) \
+))
+
+$(eval $(call gb_CppunitTest_add_api,tubes_test, \
+	udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:
