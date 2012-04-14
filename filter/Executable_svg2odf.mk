@@ -41,7 +41,21 @@ $(eval $(call gb_Executable_set_include,svg2odf,\
 
 $(eval $(call gb_Executable_use_libraries,svg2odf,\
     svgfilter \
-    $(gb_STDLIBS) \
+	svxcore \
+	editeng \
+	xo \
+	svt \
+	vcl \
+	svl \
+	utl \
+	tl \
+	sax \
+	comphelper \
+	basegfx \
+	cppuhelper \
+	cppu \
+	sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_cxxobjects,svg2odf,\
