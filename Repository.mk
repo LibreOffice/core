@@ -47,6 +47,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     saxparser \
     so_checksum \
     sp2bv \
+    svg2odf \
     svidl \
     typesconfig \
     xml2cmp \

@@ -27,6 +27,8 @@
 #ifndef INCLUDED_SVGREADER_HXX
 #define INCLUDED_SVGREADER_HXX
 
+#include <filter/dllapi.h>
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -42,11 +44,11 @@ class SVGReader
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >  m_xDocumentHandler;
 
 public:
-    SVGReader( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&           xServiceFactory,
+    FILTER_DLLPUBLIC SVGReader( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&           xServiceFactory,
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >&               xInputStream,
                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
 
-    sal_Bool parseAndConvert();
+    FILTER_DLLPUBLIC sal_Bool parseAndConvert();
 };
 
 } // namespace svgi

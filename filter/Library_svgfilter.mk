@@ -27,6 +27,11 @@ $(eval $(call gb_Library_add_defs,svgfilter,\
 	-DUSE_MODERN_SPIRIT \
 ))
 
+$(eval $(call gb_Library_set_include,svgfilter,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/filter/inc \
+))
+
 $(eval $(call gb_Library_use_api,svgfilter,\
 	udkapi \
 	offapi \
