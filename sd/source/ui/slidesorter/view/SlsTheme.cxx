@@ -93,9 +93,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
         maColor.resize(_ColorType_Size_);
         maColor[Color_Background] = maBackgroundColor;
-        maColor[Color_ButtonBackground] = Black;
-        maColor[Color_ButtonText] = 0xc0c0c0;
-        maColor[Color_ButtonTextHover] = White;
         maColor[Color_PageNumberDefault] = 0x0808080;
         maColor[Color_PageNumberHover] = 0x4c4c4c;
         maColor[Color_PageNumberHighContrast] = White;

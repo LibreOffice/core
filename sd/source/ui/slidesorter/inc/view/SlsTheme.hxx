@@ -85,9 +85,6 @@ public:
 
     enum ColorType {
         Color_Background,
-        Color_ButtonBackground,
-        Color_ButtonText,
-        Color_ButtonTextHover,
         Color_PageNumberDefault,
         Color_PageNumberHover,
         Color_PageNumberHighContrast,
