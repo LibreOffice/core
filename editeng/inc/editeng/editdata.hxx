@@ -52,8 +52,9 @@ enum EVAnchorMode       {
 #define EE_PARA_NOT_FOUND       0xFFFF
 #define EE_PARA_APPEND          0xFFFF
 #define EE_PARA_ALL             0xFFFF
-#define EE_APPEND               0xFFFF
 #define EE_INDEX_NOT_FOUND      0xFFFF
+
+extern size_t EE_APPEND;
 
 // Error messages for Read / Write Method
 #define EE_READWRITE_OK              (SVSTREAM_OK)

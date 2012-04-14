@@ -383,6 +383,9 @@ EditView* EditEngine::RemoveView(size_t nIndex)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
+    if (nIndex >= rViews.size())
+        return NULL;
+
     EditView* pView = rViews[nIndex];
     if ( pView )
         return RemoveView( pView );

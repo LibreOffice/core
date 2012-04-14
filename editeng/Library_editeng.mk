@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/accessibility/AccessibleStaticTextBase \
     editeng/source/accessibility/AccessibleStringWrap \
     editeng/source/editeng/editattr \
+    editeng/source/editeng/editdata \
     editeng/source/editeng/editdbg \
     editeng/source/editeng/editdoc \
     editeng/source/editeng/editeng \
