@@ -1085,8 +1085,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAl
 
 // ---------------------------------------------------------------------
 
-typedef SvxXMLListLevelStyleContext_Impl *SvxXMLListLevelStyleContext_ImplPtr;
-SV_DECL_PTRARR( SvxXMLListStyle_Impl, SvxXMLListLevelStyleContext_ImplPtr, 10 )
+class SvxXMLListStyle_Impl : public std::vector<SvxXMLListLevelStyleContext_Impl *> {};
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
@@ -1125,11 +1124,10 @@ SvxXMLListStyleContext::~SvxXMLListStyleContext()
 {
     if( pLevelStyles )
     {
-        while( pLevelStyles->Count() )
+        while( !pLevelStyles->empty() )
         {
-            sal_uInt16 n = pLevelStyles->Count() - 1;
-            SvxXMLListLevelStyleContext_Impl *pStyle = (*pLevelStyles)[n];
-            pLevelStyles->Remove( n, 1 );
+            SvxXMLListLevelStyleContext_Impl *pStyle = pLevelStyles->back();
+            pLevelStyles->pop_back();
             pStyle->ReleaseRef();
         }
     }
@@ -1158,7 +1156,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
                                                   rLocalName, xAttrList );
         if( !pLevelStyles )
             pLevelStyles = new SvxXMLListStyle_Impl;
-        pLevelStyles->Insert( pLevelStyle, pLevelStyles->Count() );
+        pLevelStyles->push_back( pLevelStyle );
         pLevelStyle->AddRef();
 
         pContext = pLevelStyle;
@@ -1179,7 +1177,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
     {
         if( pLevelStyles && rNumRule.is() )
         {
-            sal_uInt16 nCount = pLevelStyles->Count();
+            sal_uInt16 nCount = pLevelStyles->size();
             sal_Int32 l_nLevels = rNumRule->getCount();
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
