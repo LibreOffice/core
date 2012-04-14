@@ -268,7 +268,7 @@ en-US = "Installs the Bengali (Bangladesh) user interface"
 [STR_NAME_MODULE_LANGPACK_BN_IN]
 en-US = "Bengali (India)"
 
-[STR_DESC_MODULE_LANGPACK_BN]
+[STR_DESC_MODULE_LANGPACK_BN_IN]
 en-US = "Installs the Bengali (India) user interface"
 
 [STR_NAME_MODULE_LANGPACK_OR]
