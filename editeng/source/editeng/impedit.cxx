@@ -174,7 +174,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             pOutWin->GetCursor()->Hide();
     }
 
-    DBG_ASSERT( !pEditEngine->aIdleFormatter.IsActive(), "DrawSelection: Not formatted!" );
+    DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelection: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();

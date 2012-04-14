@@ -702,6 +702,11 @@ void EditEngine::CheckIdleFormatter()
     pImpEditEngine->CheckIdleFormatter();
 }
 
+bool EditEngine::IsIdleFormatterActive() const
+{
+    return pImpEditEngine->aIdleFormatter.IsActive();
+}
+
 ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode)
 {
     return pImpEditEngine->FindParaPortion(pNode);

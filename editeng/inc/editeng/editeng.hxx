@@ -139,6 +139,7 @@ private:
 
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();
+    EDITENG_DLLPRIVATE bool IsIdleFormatterActive() const;
     EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode* pNode);
     EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
