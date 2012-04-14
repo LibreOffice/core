@@ -573,6 +573,77 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
 }
 
 
+enum QuoteType
+{
+    FIELDSTART_QUOTE,
+    FIRST_QUOTE,
+    SECOND_QUOTE,
+    FIELDEND_QUOTE,
+    DONTKNOW_QUOTE
+};
+
+
+/** Determine if *p is a quote that ends a quoted field.
+
+    Precondition: we are parsing a quoted field already and *p is a quote.
+
+    @return
+        FIELDEND_QUOTE if end of field quote
+        DONTKNOW_QUOTE anything else
+ */
+static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* pSeps )
+{
+    // Due to broken CSV generators that don't double embedded quotes check if
+    // a field separator immediately or with trailing spaces follows the quote,
+    // only then end the field, or at end of string.
+    while (p[1] == ' ')
+        ++p;
+    if (!p[1] || ScGlobal::UnicodeStrChr( pSeps, p[1]))
+        return FIELDEND_QUOTE;
+    return DONTKNOW_QUOTE;
+}
+
+
+/** Determine if *p is a quote that is escaped by being doubled or ends a
+    quoted field.
+
+    Precondition: *p is a quote.
+
+    @param nQuotes
+        Quote characters encountered so far.
+        Odd (after opening quote) means either no embedded quotes or only quote
+        pairs so far.
+        Even means either not in a quoted field or already one quote
+        encountered, the first of a pair.
+
+    @return
+        FIELDSTART_QUOTE if first quote in a field, either starting content or
+                            embedded so caller should check beforehand.
+        FIRST_QUOTE      if first of a doubled quote
+        SECOND_QUOTE     if second of a doubled quote
+        FIELDEND_QUOTE   if end of field quote
+        DONTKNOW_QUOTE   if an unescaped quote we don't consider as end of field,
+                            do not increment nQuotes in caller then!
+ */
+static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unicode* p,
+        const sal_Unicode* pSeps, sal_Unicode cStr )
+{
+    if ((nQuotes % 2) == 0)
+    {
+        if (p[-1] == cStr)
+            return SECOND_QUOTE;
+        else
+        {
+            SAL_WARN( "sc", "lcl_isEscapedOrFieldEndQuote: really want a FIELDSTART_QUOTE?");
+            return FIELDSTART_QUOTE;
+        }
+    }
+    if (p[1] == cStr)
+        return FIRST_QUOTE;
+    return lcl_isFieldEndQuote( p, pSeps);
+}
+
+
 /** Append characters of [p1,p2) to rField.
 
     @returns TRUE if ok; FALSE if data overflow, truncated
@@ -606,7 +677,7 @@ enum DoubledQuoteMode
 };
 
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
-            sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
+            const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
     p++;    //! jump over opening quote
     bool bCont;
@@ -621,7 +692,18 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
             if( *p == cStr )
             {
                 if ( *++p != cStr )
-                    break;
+                {
+                    // break or continue for loop
+                    if (eMode == DQM_ESCAPE)
+                    {
+                        if (lcl_isFieldEndQuote( p-1, pSeps) == FIELDEND_QUOTE)
+                            break;
+                        else
+                            continue;
+                    }
+                    else
+                        break;
+                }
                 // doubled quote char
                 switch ( eMode )
                 {
@@ -815,6 +897,10 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 {
     bool bOk = true;
 
+    sal_Unicode pSeps[2];
+    pSeps[0] = cSep;
+    pSeps[1] = 0;
+
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
     SCCOL nEndCol = aRange.aEnd.Col();
@@ -843,7 +929,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 aCell.Erase();
                 if( *p == cStr )
                 {
-                    p = lcl_ScanString( p, aCell, cStr, DQM_KEEP, bOverflowCell );
+                    p = lcl_ScanString( p, aCell, pSeps, cStr, DQM_KEEP, bOverflowCell );
                     while( *p && *p != cSep )
                         p++;
                     if( *p )
@@ -1277,7 +1363,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         for( ;; )
         {
             aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr);
-            if ( rStrm.IsEof() )
+            if ( rStrm.IsEof() && aLine.isEmpty() )
                 break;
 
             sal_Int32 nLineLen = aLine.getLength();
@@ -1445,7 +1531,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
-        p1 = p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE, rbOverflowCell );
+        p1 = p = lcl_ScanString( p, rField, pSeps, cStr, DQM_ESCAPE, rbOverflowCell );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
         // Append remaining unquoted and undelimited data (dirty, dirty) to
@@ -2212,9 +2298,8 @@ inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
     return 0;
 }
 
-rtl::OUString ReadCsvLine(SvStream &rStream, bool bEmbeddedLineBreak,
-        const String& rFieldSeparators, sal_Unicode cFieldQuote,
-        bool bAllowBackslashEscape)
+rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
+        const String& rFieldSeparators, sal_Unicode cFieldQuote )
 {
     rtl::OUString aStr;
     rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
@@ -2226,11 +2311,13 @@ rtl::OUString ReadCsvLine(SvStream &rStream, bool bEmbeddedLineBreak,
         // See if the separator(s) include tab.
         bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
 
+        QuoteType eQuoteState = FIELDEND_QUOTE;
+        bool bFieldStart = true;
+
         sal_Int32 nLastOffset = 0;
         sal_Int32 nQuotes = 0;
         while (!rStream.IsEof() && aStr.getLength() < nArbitraryLineLengthLimit)
         {
-            bool bBackslashEscaped = false;
             const sal_Unicode *p, *pStart;
             p = pStart = aStr.getStr();
             p += nLastOffset;
@@ -2248,25 +2335,66 @@ rtl::OUString ReadCsvLine(SvStream &rStream, bool bEmbeddedLineBreak,
                         break;
                     }
 
-                    if (*p == cFieldQuote && !bBackslashEscaped)
-                        ++nQuotes;
-                    else if (bAllowBackslashEscape)
+                    if (*p == cFieldQuote)
                     {
-                        if (*p == '\\')
-                            bBackslashEscaped = !bBackslashEscaped;
+                        if (bFieldStart)
+                        {
+                            ++nQuotes;
+                            bFieldStart = false;
+                            eQuoteState = FIELDSTART_QUOTE;
+                        }
+                        // Do not detect a FIELDSTART_QUOTE if not in
+                        // bFieldStart mode, in which case for unquoted content
+                        // we are in FIELDEND_QUOTE state.
+                        else if (eQuoteState != FIELDEND_QUOTE)
+                        {
+                            eQuoteState = lcl_isEscapedOrFieldEndQuote( nQuotes, p, pSeps, cFieldQuote);
+                            // DONTKNOW_QUOTE is an embedded unescaped quote we
+                            // don't count for pairing.
+                            if (eQuoteState != DONTKNOW_QUOTE)
+                                ++nQuotes;
+                        }
+                    }
+                    else if (eQuoteState == FIELDEND_QUOTE)
+                    {
+                        if (bFieldStart)
+                            // If blank is a separator it starts a field, if it
+                            // is not and thus maybe leading before quote we
+                            // are still at start of field regarding quotes.
+                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
                         else
-                            bBackslashEscaped = false;
+                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
                     }
                 }
-                else if (*p == cFieldQuote && (p == pStart ||
-                            lcl_UnicodeStrChr( pSeps, p[-1])))
-                    nQuotes = 1;
+                else
+                {
+                    if (*p == cFieldQuote && bFieldStart)
+                    {
+                        nQuotes = 1;
+                        eQuoteState = FIELDSTART_QUOTE;
+                        bFieldStart = false;
+                    }
+                    else if (eQuoteState == FIELDEND_QUOTE)
+                    {
+                        // This also skips leading blanks at beginning of line
+                        // if followed by a quote. It's debatable whether we
+                        // actually want that or not, but congruent with what
+                        // ScanNextFieldFromString() does.
+                        if (bFieldStart)
+                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                        else
+                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                    }
+                }
                 // A quote character inside a field content does not start
                 // a quote.
                 ++p;
             }
 
             if (nQuotes % 2 == 0)
+                // We still have a (theoretical?) problem here if due to
+                // nArbitraryLineLengthLimit we split a string right between a
+                // doubled quote pair.
                 break;
             else
             {

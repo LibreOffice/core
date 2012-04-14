@@ -208,11 +208,10 @@ public:
     within a field, the field content MUST be surrounded by
     cFieldQuote characters, and the opening cFieldQuote MUST be
     at the very start of a line or follow right behind a field
-    separator with no extra characters in between. Anything,
+    separator with no extra characters in between, with the
+    exception of blanks contradictory to RFC 4180. Anything,
     including field separators and escaped quotes (by doubling
-    them, or preceding them with a backslash if
-    bAllowBackslashEscape==TRUE) may appear in a quoted
-    field.
+    them) may appear in a quoted field.
 
     If bEmbeddedLineBreak==FALSE, nothing is parsed and the
     string returned is simply one ReadUniOrByteStringLine().
@@ -222,11 +221,6 @@ public:
 
     @param cFieldQuote
     The quote character used.
-
-    @param bAllowBackslashEscape
-    If TRUE, an embedded quote character inside a quoted
-    field may also be escaped with a preceding backslash.
-    Normally, quotes are escaped by doubling them.
 
     check Stream::good() to detect IO problems during read
 
@@ -247,9 +241,8 @@ public:
     may start under false preconditions.
 
   */
-SC_DLLPUBLIC rtl::OUString ReadCsvLine(SvStream &rStream, bool bEmbeddedLineBreak,
-        const String& rFieldSeparators, sal_Unicode cFieldQuote,
-        bool bAllowBackslashEscape = false);
+SC_DLLPUBLIC rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
+        const String& rFieldSeparators, sal_Unicode cFieldQuote );
 
 #endif
 
