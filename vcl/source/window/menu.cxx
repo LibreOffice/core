@@ -2751,7 +2751,10 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
-                            MenupopupValue aVal( nTextPos-GUTTERBORDER, Rectangle( aPos, pData->aSz ) );
+                            Size aSz( pData->aSz );
+                            aSz.Width() = aOutSz.Width() - 2*nOuterSpace;
+                            Rectangle aItemRect( aPos, aSz );
+                            MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
                             pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
                                                      aCheckRect,
                                                      nState,
