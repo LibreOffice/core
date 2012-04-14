@@ -35,6 +35,7 @@ $(UIJM)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
 		$(call gb_Executable_get_target_for_build,javamaker) | $(UIJM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
+	rm -r $(UIJM) && \
 	$(call gb_Helper_execute,javamaker -BUCR -O$(UIJM) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@)
 
