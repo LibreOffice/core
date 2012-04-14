@@ -39,6 +39,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -974,8 +975,14 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
                 xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
                     uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
-    //  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number
-    //  or add even/odd page break types
+                // handle page breaks with odd/even page numbering
+                style::PageStyleLayout nPageStyleLayout;
+                if (m_nBreakType == 3)
+                    nPageStyleLayout = style::PageStyleLayout_LEFT;
+                else if (m_nBreakType == 4)
+                    nPageStyleLayout = style::PageStyleLayout_RIGHT;
+                if (nPageStyleLayout)
+                    xFollowPageStyle->setPropertyValue("PageStyleLayout", uno::makeAny(nPageStyleLayout));
                 if(m_bPageNoRestart || m_nPageNumber >= 0)
                 {
                     sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;

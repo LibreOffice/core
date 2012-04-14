@@ -31,7 +31,9 @@
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -50,12 +52,14 @@ public:
     void testN751054();
     void testN751117();
     void testN751017();
+    void testN750935();
 
     CPPUNIT_TEST_SUITE(OoxmlModelTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN751054);
     CPPUNIT_TEST(testN751117);
     CPPUNIT_TEST(testN751017);
+    CPPUNIT_TEST(testN750935);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -169,6 +173,16 @@ void OoxmlModelTest::testN751017()
     }
     CPPUNIT_ASSERT(bFoundSet);
     CPPUNIT_ASSERT(bFoundGet);
+}
+
+void OoxmlModelTest::testN750935()
+{
+    load("n750935.docx");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OoxmlModelTest);
