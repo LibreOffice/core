@@ -67,7 +67,6 @@ PageObjectPainter::PageObjectPainter (
       maFocusedSelectionBackground(),
       maMouseOverBackground(),
       maMouseOverFocusedBackground(),
-      msUnhideString(mpTheme->GetString(Theme::String_Unhide)),
       mrButtonBar(rSlideSorter.GetView().GetButtonBar()),
       maSize()
 {

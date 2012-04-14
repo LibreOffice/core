@@ -30,6 +30,7 @@
 #include "view/SlsButtonBar.hxx"
 
 #include "SlideSorter.hxx"
+#include "SlsResource.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "view/SlsTheme.hxx"
@@ -1070,7 +1071,7 @@ UnhideButton::UnhideButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BMediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BSmall),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BSmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2B))
+        String(SdResId(STRING_COMMAND2_B)))
 {
 }
 
@@ -1102,7 +1103,7 @@ StartShowButton::StartShowButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1SmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command1))
+        String(SdResId(STRING_COMMAND1)))
 {
 }
 
@@ -1168,7 +1169,7 @@ HideButton::HideButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2SmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2))
+        String(SdResId(STRING_COMMAND2_A)))
 {
 }
 
@@ -1200,7 +1201,7 @@ DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3SmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command3))
+        String(SdResId(STRING_COMMAND3)))
 {
 }
 

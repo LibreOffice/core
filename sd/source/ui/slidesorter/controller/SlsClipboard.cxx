@@ -35,6 +35,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsResource.hrc"
 #include "view/SlsTheme.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
@@ -120,17 +121,16 @@ class Clipboard::UndoContext
 public:
     UndoContext (
         SdDrawDocument* pDocument,
-        const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
-        const ::boost::shared_ptr<view::Theme>& rpTheme)
+        const ::boost::shared_ptr<ViewShell>& rpMainViewShell)
         : mpDocument(pDocument),
           mpMainViewShell(rpMainViewShell)
     {
         if (mpDocument!=NULL && mpDocument->IsUndoEnabled())
         {
             if (mpMainViewShell && mpMainViewShell->GetShellType() == ViewShell::ST_DRAW)
-                mpDocument->BegUndo(rpTheme->GetString(view::Theme::String_DragAndDropPages));
+                mpDocument->BegUndo(String(SdResId(STRING_DRAG_AND_DROP_PAGES)));
             else
-                mpDocument->BegUndo(rpTheme->GetString(view::Theme::String_DragAndDropSlides));
+                mpDocument->BegUndo(String(SdResId(STRING_DRAG_AND_DROP_SLIDES)));
         }
     }
 
@@ -714,8 +714,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 // Handle a general drop operation.
                 mpUndoContext.reset(new UndoContext (
                     mrSlideSorter.GetModel().GetDocument(),
-                    mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell(),
-                    mrSlideSorter.GetTheme()));
+                    mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
                 mpSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
 
                 HandlePageDrop(*pDragTransferable);

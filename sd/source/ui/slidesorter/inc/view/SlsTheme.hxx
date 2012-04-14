@@ -164,19 +164,6 @@ public:
     };
     const BitmapEx& GetIcon (const IconType eType);
 
-    enum StringType
-    {
-        String_Unhide,
-        String_DragAndDropPages,
-        String_DragAndDropSlides,
-        String_Command1,
-        String_Command2,
-        String_Command2B,
-        String_Command3,
-        _StringType_Size_
-    };
-    ::rtl::OUString GetString (const StringType eType) const;
-
 private:
     bool mbIsHighContrastMode;
     class GradientDescriptor
@@ -202,7 +189,6 @@ private:
     ::std::vector<GradientDescriptor> maGradients;
     ::std::vector<BitmapEx> maIcons;
     ::std::vector<ColorData> maColor;
-    ::std::vector<rtl::OUString> maStrings;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
     /** Guarded initialization of the specified icon in the maIcons

@@ -83,14 +83,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
 
-        maStrings.resize(_StringType_Size_);
-        maStrings[String_DragAndDropPages] = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
-        maStrings[String_DragAndDropSlides] = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
-        maStrings[String_Command1] = String(SdResId(STRING_COMMAND1));
-        maStrings[String_Command2] = String(SdResId(STRING_COMMAND2_A));
-        maStrings[String_Command2B] = String(SdResId(STRING_COMMAND2_B));
-        maStrings[String_Command3] = String(SdResId(STRING_COMMAND3));
-
         maColor.resize(_ColorType_Size_);
         maColor[Color_Background] = maBackgroundColor;
         maColor[Color_PageNumberDefault] = 0x0808080;
@@ -346,20 +338,6 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
     {
         OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
         return maIcons[0];
-    }
-}
-
-
-
-
-::rtl::OUString Theme::GetString (const StringType eType) const
-{
-    if (eType>=0 && size_t(eType)<maStrings.size())
-        return maStrings[eType];
-    else
-    {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maStrings.size());
-        return ::rtl::OUString();
     }
 }
 
