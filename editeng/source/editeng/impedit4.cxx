@@ -2369,7 +2369,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                 aStatus.GetStatusWord() |= EE_STAT_WRONGWORDCHANGED;
                 CallStatusHdl();
 
-                if ( aEditViews.Count() )
+                if (!aEditViews.empty())
                 {
                     // For SimpleRepaint one was painted over a range without
                     // reaching VDEV, but then one would have to intersect, c
@@ -2390,7 +2390,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                     }
                     else if ( bSimpleRepaint )
                     {
-                        for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+                        for (size_t nView = 0; nView < aEditViews.size(); ++nView)
                         {
                             EditView* pView = aEditViews[nView];
                             Rectangle aClipRec( aInvalidRec );

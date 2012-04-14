@@ -79,8 +79,8 @@ sal_Bool EditUndoManager::Undo()
 
     if ( !pImpEE->GetActiveView() )
     {
-        if ( pImpEE->GetEditViews().Count() )
-            pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
+        if (!pImpEE->GetEditViews().empty())
+            pImpEE->SetActiveView(pImpEE->GetEditViews()[0]);
         else
         {
             OSL_FAIL("Undo in engine is not possible without a View! ");
@@ -114,8 +114,8 @@ sal_Bool EditUndoManager::Redo()
 
     if ( !pImpEE->GetActiveView() )
     {
-        if ( pImpEE->GetEditViews().Count() )
-            pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
+        if (!pImpEE->GetEditViews().empty())
+            pImpEE->SetActiveView(pImpEE->GetEditViews()[0]);
         else
         {
             OSL_FAIL( "Redo in Engine ohne View nicht moeglich!" );

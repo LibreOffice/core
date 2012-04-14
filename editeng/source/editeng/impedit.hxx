@@ -378,9 +378,6 @@ public:
 //  ImpEditEngine
 //  ----------------------------------------------------------------------
 
-typedef EditView* EditViewPtr;
-SV_DECL_PTRARR( EditViews, EditViewPtr, 0 )
-
 class ImpEditEngine : public SfxListener, boost::noncopyable
 {
     // The Undos have to manipulate directly ( private-Methods ),
@@ -399,6 +396,9 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EdtAutoCorrDoc;    // For access to Imp-Methods
     friend class EditDbg;           // Debug Routines
 
+public:
+    typedef std::vector<EditView*> ViewsType;
+
 private:
 
     // ================================================================
@@ -414,7 +414,7 @@ private:
 
     // Engine Specific data ...
     EditEngine*         pEditEngine;
-    EditViews           aEditViews;
+    ViewsType           aEditViews;
     EditView*           pActiveView;
     TextRanger*         pTextRanger;
 
@@ -706,7 +706,8 @@ public:
 
     const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
-    EditViews&              GetEditViews()          { return aEditViews; }
+    ViewsType& GetEditViews() { return aEditViews; }
+    const ViewsType& GetEditViews() const { return aEditViews; }
 
     const Size&             GetPaperSize() const                    { return aPaperSize; }
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }

@@ -333,15 +333,17 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
         pOutDev->SetClipRegion();
 }
 
-void EditEngine::InsertView( EditView* pEditView, sal_uInt16 nIndex )
+void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     DBG_CHKOBJ( pEditView, EditView, 0 );
 
-    if ( nIndex > pImpEditEngine->GetEditViews().Count() )
-        nIndex = pImpEditEngine->GetEditViews().Count();
+    if ( nIndex > pImpEditEngine->GetEditViews().size() )
+        nIndex = pImpEditEngine->GetEditViews().size();
 
-    pImpEditEngine->GetEditViews().Insert( pEditView, nIndex );
+    ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
+    rViews.insert(rViews.begin()+nIndex, pEditView);
+
     EditSelection aStartSel;
     aStartSel = pImpEditEngine->GetEditDoc().GetStartPaM();
     pEditView->pImpEditView->SetEditSelection( aStartSel );
@@ -357,13 +359,15 @@ EditView* EditEngine::RemoveView( EditView* pView )
     DBG_CHKOBJ( pView, EditView, 0 );
 
     pView->HideCursor();
-    EditView* pRemoved = 0;
-    sal_uInt16 nPos = pImpEditEngine->GetEditViews().GetPos( pView );
-    DBG_ASSERT( nPos != USHRT_MAX, "RemoveView with invalid index" );
-    if ( nPos != USHRT_MAX )
+    EditView* pRemoved = NULL;
+    ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
+    ImpEditEngine::ViewsType::iterator it = std::find(rViews.begin(), rViews.end(), pView);
+
+    DBG_ASSERT( it != rViews.end(), "RemoveView with invalid index" );
+    if (it != rViews.end())
     {
-        pRemoved = pImpEditEngine->GetEditViews().GetObject( nPos );
-        pImpEditEngine->GetEditViews().Remove( nPos );
+        pRemoved = *it;
+        rViews.erase(it);
         if ( pImpEditEngine->GetActiveView() == pView )
         {
             pImpEditEngine->SetActiveView( 0 );
@@ -375,30 +379,32 @@ EditView* EditEngine::RemoveView( EditView* pView )
     return pRemoved;
 }
 
-EditView* EditEngine::RemoveView( sal_uInt16 nIndex )
+EditView* EditEngine::RemoveView(size_t nIndex)
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    EditView* pView = pImpEditEngine->GetEditViews().GetObject( nIndex );
+    ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
+    EditView* pView = rViews[nIndex];
     if ( pView )
         return RemoveView( pView );
     return NULL;
 }
 
-EditView* EditEngine::GetView( sal_uInt16 nIndex ) const
+EditView* EditEngine::GetView(size_t nIndex) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetEditViews().GetObject( nIndex );
+    return pImpEditEngine->GetEditViews()[nIndex];
 }
 
-sal_uInt16 EditEngine::GetViewCount() const
+size_t EditEngine::GetViewCount() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetEditViews().Count();
+    return pImpEditEngine->GetEditViews().size();
 }
 
 sal_Bool EditEngine::HasView( EditView* pView ) const
 {
-    return pImpEditEngine->GetEditViews().GetPos( pView ) != USHRT_MAX;
+    ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
+    return std::find(rViews.begin(), rViews.end(), pView) != rViews.end();
 }
 
 EditView* EditEngine::GetActiveView() const
@@ -429,10 +435,10 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
     sal_Bool bAutoPageSize = pImpEditEngine->GetStatus().AutoPageSize();
     if ( bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() ) )
     {
-        for ( sal_uInt16 nView = 0; nView < pImpEditEngine->aEditViews.Count(); nView++ )
+        for (size_t nView = 0; nView < pImpEditEngine->aEditViews.size(); ++nView)
         {
             EditView* pView = pImpEditEngine->aEditViews[nView];
-             DBG_CHKOBJ( pView, EditView, 0 );
+            DBG_CHKOBJ( pView, EditView, 0 );
             if ( bAutoPageSize )
                 pView->pImpEditView->RecalcOutputArea();
             else if ( pView->pImpEditView->DoAutoSize() )
@@ -447,7 +453,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
             // Changing the width has no effect for AutoPageSize, as this is
             // determined by the text width.
             // Optimization first after Vobis delivery was enabled ...
-                pImpEditEngine->FormatFullDoc();
+            pImpEditEngine->FormatFullDoc();
 
             pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 

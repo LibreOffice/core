@@ -286,7 +286,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
-    for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
         DBG_CHKOBJ( pView, EditView, 0 );
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG_INLINE_START(ImpEditEngine, IdleFormatHdl)
     // else probably the idle format timer fired while we're already
     // downing
     EditView* pView = aIdleFormatter.GetView();
-    for( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         if( aEditViews[nView] == pView )
         {
@@ -467,7 +467,7 @@ void ImpEditEngine::FormatDoc()
             CheckAutoPageSize();
         else if ( nDiff )
         {
-            for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+            for (size_t nView = 0; nView < aEditViews.size(); ++nView)
             {
                 EditView* pView = aEditViews[nView];
                 ImpEditView* pImpView = pView->pImpEditView;
@@ -570,7 +570,7 @@ void ImpEditEngine::CheckAutoPageSize()
         aInvalidRec = Rectangle( Point(), aSz );
 
 
-        for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+        for (size_t nView = 0; nView < aEditViews.size(); ++nView)
         {
             EditView* pView = aEditViews[nView];
             pView->pImpEditView->RecalcOutputArea();

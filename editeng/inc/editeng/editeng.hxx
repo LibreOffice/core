@@ -216,11 +216,11 @@ public:
     void            ForceAutoColor( sal_Bool b );
     sal_Bool            IsForceAutoColor() const;
 
-    void            InsertView( EditView* pEditView, sal_uInt16 nIndex = EE_APPEND );
+    void            InsertView(EditView* pEditView, size_t nIndex = EE_APPEND);
     EditView*       RemoveView( EditView* pEditView );
-    EditView*       RemoveView( sal_uInt16 nIndex = EE_APPEND );
-    EditView*       GetView( sal_uInt16 nIndex = 0 ) const;
-    sal_uInt16          GetViewCount() const;
+    EditView*       RemoveView(size_t nIndex = EE_APPEND);
+    EditView*       GetView(size_t nIndex = 0) const;
+    size_t          GetViewCount() const;
     sal_Bool            HasView( EditView* pView ) const;
     EditView*       GetActiveView() const;
 

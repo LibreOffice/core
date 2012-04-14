@@ -702,7 +702,7 @@ EditPaM ImpEditEngine::Clear()
 
     ResetUndoManager();
 
-    for ( sal_uInt16 nView = aEditViews.Count(); nView; )
+    for (size_t nView = aEditViews.size(); nView; )
     {
         EditView* pView = aEditViews[--nView];
         DBG_CHKOBJ( pView, EditView, 0 );
@@ -718,9 +718,9 @@ EditPaM ImpEditEngine::RemoveText()
 
     EditPaM aStartPaM = aEditDoc.GetStartPaM();
     EditSelection aEmptySel( aStartPaM, aStartPaM );
-    for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
-        EditView* pView = aEditViews.GetObject(nView);
+        EditView* pView = aEditViews[nView];
         DBG_CHKOBJ( pView, EditView, 0 );
         pView->pImpEditView->SetEditSelection( aEmptySel );
     }
@@ -742,7 +742,7 @@ void ImpEditEngine::SetText( const XubString& rText )
     if ( rText.Len() )
         aPaM = ImpInsertText( aEmptySel, rText );
 
-    for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
         DBG_CHKOBJ( pView, EditView, 0 );
@@ -3349,9 +3349,9 @@ void ImpEditEngine::UpdateSelections()
 {
     // Check whether one of the selections is at a deleted node...
     // If the node is valid, the index has yet to be examined!
-    for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
-        EditView* pView = aEditViews.GetObject(nView);
+        EditView* pView = aEditViews[nView];
         DBG_CHKOBJ( pView, EditView, 0 );
         EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
         bool bChanged = false;
