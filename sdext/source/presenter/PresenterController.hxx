@@ -63,7 +63,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-class PresenterAnimator;
 class PresenterCanvasHelper;
 class PresenterPaintManager;
 class PresenterPaneAnimator;
@@ -224,7 +223,6 @@ private:
     ::boost::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;
-    ::boost::shared_ptr<PresenterAnimator> mpAnimator;
     ::boost::shared_ptr<PresenterCanvasHelper> mpCanvasHelper;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
     ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;

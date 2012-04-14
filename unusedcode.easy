@@ -774,7 +774,6 @@ sd::ViewShellBase::RegisterFactory(unsigned short)
 sd::slidesorter::controller::SelectionFunction::EventDescriptor::EventDescriptor(KeyEvent const&, sd::slidesorter::SlideSorter&)
 sd::slidesorter::view::Button::IsDown() const
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
-sdext::presenter::PresenterAnimation::PresenterAnimation(unsigned long, unsigned long, unsigned long)
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const

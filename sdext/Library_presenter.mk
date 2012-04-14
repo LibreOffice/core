@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,PresenterScreen,\
 
 $(eval $(call gb_Library_add_exception_objects,PresenterScreen,\
     sdext/source/presenter/PresenterAccessibility \
-    sdext/source/presenter/PresenterAnimation \
-    sdext/source/presenter/PresenterAnimator \
     sdext/source/presenter/PresenterBitmapContainer \
     sdext/source/presenter/PresenterButton \
     sdext/source/presenter/PresenterCanvasHelper \

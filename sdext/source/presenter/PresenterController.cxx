@@ -29,7 +29,6 @@
 #include "PresenterController.hxx"
 
 #include "PresenterAccessibility.hxx"
-#include "PresenterAnimator.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterCurrentSlideObserver.hxx"
 #include "PresenterFrameworkObserver.hxx"
@@ -118,7 +117,6 @@ PresenterController::PresenterController (
       mpTheme(),
       mxMainWindow(),
       mpPaneBorderPainter(),
-      mpAnimator(new PresenterAnimator()),
       mpCanvasHelper(new PresenterCanvasHelper()),
       mxPresenterHelper(),
       mpPaintManager(),
@@ -254,7 +252,6 @@ void PresenterController::disposing (void)
         if (xComponent.is())
             xComponent->dispose();
     }
-    mpAnimator.reset();
     mpCanvasHelper.reset();
     {
         Reference<lang::XComponent> xComponent (mxPresenterHelper, UNO_QUERY);

@@ -30,8 +30,6 @@
 //#define ENABLE_PANE_RESIZING
 
 #include "PresenterWindowManager.hxx"
-#include "PresenterAnimation.hxx"
-#include "PresenterAnimator.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterHelper.hxx"
