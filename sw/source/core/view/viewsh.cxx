@@ -370,25 +370,29 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                     if ( GetWin() )
                     {
                         Window& rWindow = *(GetWin());
-                        if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                        if (rWindow.IsChildTransparentModeEnabled())
                         {
-                            const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
-
-                            for ( sal_uInt16 a(0); a < rWindow.GetChildCount(); a++ )
+                            Window* pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+                            if (pCandidate)
                             {
-                                Window* pCandidate = rWindow.GetChild(a);
+                                const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
 
-                                if ( pCandidate && pCandidate->IsPaintTransparent() )
+                                while (pCandidate)
                                 {
-                                    const Rectangle aCandidatePosSizePixel(
-                                                    pCandidate->GetPosPixel(),
-                                                    pCandidate->GetSizePixel());
-
-                                    if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
+                                    if ( pCandidate->IsPaintTransparent() )
                                     {
-                                        pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
-                                        pCandidate->Update();
-                }
+                                        const Rectangle aCandidatePosSizePixel(
+                                                        pCandidate->GetPosPixel(),
+                                                        pCandidate->GetSizePixel());
+
+                                        if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
+                                        {
+                                            pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                                            pCandidate->Update();
+                                        }
+                                    }
+
+                                    pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
                                 }
                             }
                         }
