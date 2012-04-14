@@ -2436,7 +2436,6 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
             // Remove portion;
             sal_uInt8 nType = pTP->GetKind();
             pParaPortion->GetTextPortions().Remove( nPortion );
-            delete pTP;
             if ( nType == PORTIONKIND_LINEBREAK )
             {
                 TextPortion* pNext = pParaPortion->GetTextPortions()[ nPortion ];
@@ -2444,7 +2443,6 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
                 {
                     // Remove dummy portion
                     pParaPortion->GetTextPortions().Remove( nPortion );
-                    delete pNext;
                 }
             }
         }
@@ -2462,7 +2460,6 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
         {
             // Discard portion; if possible, correct the ones before,
             // if the Hyphenator portion has swallowed one character...
-            pParaPortion->GetTextPortions().Remove( nLastPortion );
             if ( nLastPortion && pTP->GetLen() )
             {
                 TextPortion* pPrev = pParaPortion->GetTextPortions()[nLastPortion - 1];
@@ -2470,7 +2467,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
                 pPrev->SetLen( pPrev->GetLen() + pTP->GetLen() );
                 pPrev->GetSize().Width() = (-1);
             }
-            delete pTP;
+            pParaPortion->GetTextPortions().Remove( nLastPortion );
         }
     }
 #if OSL_DEBUG_LEVEL > 2
