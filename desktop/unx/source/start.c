@@ -786,6 +786,19 @@ exec_javaldx (Args *args)
         osl_closeFile(fileOut);
 }
 
+// has to be a global :(
+oslProcess * g_pProcess = 0;
+
+void sigterm_handler(int ignored)
+{
+    (void) ignored;
+    if (g_pProcess)
+    {
+        // forward signal to soffice.bin
+        osl_terminateProcess(g_pProcess);
+    }
+}
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int fd = 0;
@@ -798,6 +811,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
+    signal( SIGTERM, &sigterm_handler );
 
     args = args_parse ();
     args->pAppPath = get_app_path( argv[0] );
@@ -870,6 +884,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
             info = child_spawn (args, bAllArgs, bShortWait);
+            g_pProcess = info->child;
             while (!child_exited_wait (info, bShortWait))
             {
                 ProgressStatus eResult;
@@ -895,6 +910,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 #endif
 
             status = child_get_exit_code(info);
+            g_pProcess = 0; // reset
             switch (status) {
             case 79: // re-start with just -env: parameters
 #if OSL_DEBUG_LEVEL > 0
