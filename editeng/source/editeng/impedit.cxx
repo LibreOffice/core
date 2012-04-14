@@ -174,7 +174,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             pOutWin->GetCursor()->Hide();
     }
 
-    DBG_ASSERT( !pEditEngine->pImpEditEngine->aIdleFormatter.IsActive(), "DrawSelection: Not formatted!" );
+    DBG_ASSERT( !pEditEngine->aIdleFormatter.IsActive(), "DrawSelection: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
@@ -1663,11 +1663,11 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 
                 DrawSelection();
                 EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
-                DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel is buggy!" );
+                DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->GetEditDoc() ), "ToBeDel is buggy!" );
                 pEditEngine->DeleteSelection(aDelSel);
                 if ( !bBeforeSelection )
                 {
-                    DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->pImpEditEngine->aEditDoc), "Bad" );
+                    DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->GetEditDoc()), "Bad" );
                     SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
                 }
                 pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
