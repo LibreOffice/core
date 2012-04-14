@@ -103,7 +103,6 @@ namespace connectivity
             virtual                         ~MQueryHelper();
 
             void                            reset();
-            void                            rewind();
 
             MQueryHelperResultEntry*   next( );
 
@@ -112,8 +111,6 @@ namespace connectivity
             const ErrorDescriptor&     getError() const { return m_aError; }
 
             sal_Bool                   isError() const;
-            sal_Bool                   hasMore() const;
-            sal_Bool                   atEnd() const;
 
             sal_Bool                   queryComplete() const;
 

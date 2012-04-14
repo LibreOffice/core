@@ -91,12 +91,6 @@ void OCatalog::refreshGroups()
 void OCatalog::refreshUsers()
 {
 }
-// -------------------------------------------------------------------------
-const ::rtl::OUString& OCatalog::getDot()
-{
-    static const ::rtl::OUString sDot = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("."));
-    return sDot;
-}
 // -----------------------------------------------------------------------------
 
 // XTablesSupplier

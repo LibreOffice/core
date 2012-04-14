@@ -717,10 +717,7 @@ connectivity::OSQLScanner::GetCurrentRule() const
 connectivity::SQLError::getSQLState(int) const
 connectivity::file::OStatement_Base::reset()
 connectivity::file::OStatement_Base::setWarning(com::sun::star::sdbc::SQLWarning const&)
-connectivity::mozab::MQueryHelper::atEnd() const
-connectivity::mozab::MQueryHelper::hasMore() const
 connectivity::mozab::MQueryHelper::next()
-connectivity::mozab::MQueryHelper::rewind()
 connectivity::mozab::OCatalog::getDot()
 connectivity::mozab::OResultSet::initializeRow(rtl::Reference<connectivity::ODeleteVector<connectivity::ORowSetValue> >&, int)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)

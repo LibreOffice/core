@@ -56,7 +56,6 @@ namespace connectivity
             sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}
             sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
 
-            static const ::rtl::OUString& getDot();
         };
     }
 }

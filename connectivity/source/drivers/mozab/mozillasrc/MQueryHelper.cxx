@@ -136,12 +136,6 @@ MQueryHelper::clear_results()
 }
 
 void
-MQueryHelper::rewind()
-{
-    m_nIndex = 0;
-}
-
-void
 MQueryHelper::reset()
 {
     m_nIndex = 0;
@@ -253,18 +247,6 @@ MQueryHelper::getByIndex( sal_uInt32 nRow )
             return( m_aResults[ nRow -1 ] );
         }
     } while ( sal_True );
-}
-
-sal_Bool
-MQueryHelper::hasMore() const
-{
-    return m_bHasMore;
-}
-
-sal_Bool
-MQueryHelper::atEnd() const
-{
-    return m_bAtEnd;
 }
 
 sal_Bool
