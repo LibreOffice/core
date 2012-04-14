@@ -52,10 +52,12 @@
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
+#define CSV_FORMAT_TYPE 195
 
 #define ODS     0
 #define XLS     1
 #define XLSX    2
+#define CSV     3
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -69,7 +71,8 @@ struct FileFormat {
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "csv" , "Text - txt - csv (StarCalc)", "calc_Text_txt_csv_StarCalc", CSV_FORMAT_TYPE }
 };
 
 }
@@ -113,6 +116,7 @@ public:
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
+    void testBrokenQuotesCSV();
 
     //misc tests unrelated to the import filters
     void testPasswordNew();
@@ -135,6 +139,9 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+#if 0
+    CPPUNIT_TEST(testBrokenQuotesCSV);
+#endif
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
@@ -633,6 +640,30 @@ void ScFiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBrokenQuotesCSV()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes."));
+    rtl::OUString aFileExtension(aFileFormats[CSV].pName, strlen(aFileFormats[CSV].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[CSV].pFilterName, strlen(aFileFormats[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[CSV].pTypeName, strlen(aFileFormats[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[CSV].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[CSV].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo48621_broken_quotes.csv", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+
+    rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes_exported."));
+    rtl::OUString aCSVPath;
+    createCSVPath( aSheet2CSV, aCSVPath );
+    // fdo#48621
+    testFile( aCSVPath, pDoc, 0, PureString);
+
     xDocSh->DoClose();
 }
 
