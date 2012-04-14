@@ -52,7 +52,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::__cxxabiv1;
 
-
 namespace CPPU_CURRENT_NAMESPACE
 {
 
@@ -253,7 +252,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
-    // avoiding locked counts
 	rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );

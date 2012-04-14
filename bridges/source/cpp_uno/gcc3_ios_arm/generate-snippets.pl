@@ -42,10 +42,12 @@ sub gen_x86 ($$$)
 {
     my ($funIndex, $vtableOffset, $executor) = @_;
     printf ("codeSnippet%08x%d%s:\n", $funIndex, $vtableOffset, $executor);
-    printf ("\tmovl %#08x, %%eax\n", $funIndex);
+    printf ("\tmovl \$%#08x, %%eax\n", $funIndex);
     printf ("\tmovl \$%d, %%edx\n", $vtableOffset);
     printf ("\tjmp _privateSnippetExecutor%s\n", $executor);
 }
+
+printf (".text\n");
 
 printf ("#ifdef __arm\n");
 printf ("\t.align 4\n");
@@ -60,6 +62,7 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 }
 
 printf ("#else\n");
+printf ("\t.align 1, 0x90\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
 {
@@ -96,8 +99,8 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 	printf ("#else\n");
 	foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
 	{
-	    printf ("\t.long codeSnippet%08x%d%s\n", $funIndex, $vtableOffset, $executor);
-	    printf ("\t.long codeSnippet%08x%d%s\n", $funIndex|0x80000000, $vtableOffset, $executor);
+	    printf ("\t.long codeSnippet%08x%d%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
+	    printf ("\t.long codeSnippet%08x%d%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
 	}
 	printf ("#endif\n");
     }

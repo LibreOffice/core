@@ -367,11 +367,7 @@ extern "C" void cpp_vtable_call(
 //==================================================================================================
 extern "C" { 
 extern int nFunIndexes, nVtableOffsets;
-#ifdef __arm
 extern int codeSnippets[];
-#else
-extern unsigned char **codeSnippets;
-#endif
 }
 
 unsigned char * codeSnippet(
@@ -395,7 +391,7 @@ unsigned char * codeSnippet(
     return ((unsigned char *) &codeSnippets) + codeSnippets[functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam];
 #else
     enum { General, Void, Hyper, Float, Double, Class } exec;
-    int flag = 0;
+    bool bHasHiddenParam = false;
     if (pReturnTypeRef == 0) {
         exec = Void;
     }
@@ -434,7 +430,7 @@ unsigned char * codeSnippet(
         case typelib_TypeClass_SEQUENCE:
         case typelib_TypeClass_INTERFACE:
         case typelib_TypeClass_ANY:
-            flag = 1;
+            bHasHiddenParam = 1;
             exec = Class;
             break;
         default:
@@ -443,7 +439,12 @@ unsigned char * codeSnippet(
         }
     }
 
-    return codeSnippets[functionIndex*nVtableOffsets*6*2 + vtableOffset*6*2 + exec*2 + flag];
+    // The codeSnippets table is indexed by functionIndex, vtableOffset, exec and flag
+
+    fprintf(stderr, "Indexing codeSnippets with %ld [%ld,%ld,%d,%d]\n",
+            functionIndex*nVtableOffsets*6*2 + vtableOffset*6*2 + exec*2 + bHasHiddenParam,
+            functionIndex, vtableOffset, (int) exec, bHasHiddenParam);
+    return ((unsigned char *) &codeSnippets) + codeSnippets[functionIndex*nVtableOffsets*6*2 + vtableOffset*6*2 + exec*2 + bHasHiddenParam];
 #endif
 }
 
@@ -548,6 +549,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const *, unsigned char const *)
-{}
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

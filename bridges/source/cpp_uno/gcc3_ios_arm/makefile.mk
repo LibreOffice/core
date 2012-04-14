@@ -68,7 +68,7 @@ SHL1STDLIBS= \
 .INCLUDE :  target.mk
 
 $(SLO)/helper.obj: helper.S $(MISC)/codesnippets.S generate-snippets.pl
-    $(CC) -c -I $(MISC) -o $(SLO)/helper.o helper.S
+    $(CC) $(CFLAGS) -c -I $(MISC) -o $(SLO)/helper.o helper.S
     touch $@
 
 $(MISC)/codesnippets.S: generate-snippets.pl

@@ -450,7 +450,7 @@ namespace abi = __cxxabiv1;
 #endif // __RTTI_H
 
 // As this code is used both for the simulatos (x86) and device (ARM),
-// this file is a combination of the share.hxx in ../gcc3_linux_intel
+// this file is a combination of the share.hxx in ../gcc3_macosx_intel
 // and in ../gcc3_linux_arm.
 
 #ifdef __arm
@@ -473,9 +473,10 @@ namespace CPPU_CURRENT_NAMESPACE
         __cxa_exception *nextException;
 
         int handlerCount;
+
 #ifdef __ARM_EABI__
-    __cxa_exception *nextPropagatingException;
-    int propagationCount;
+        __cxa_exception *nextPropagatingException;
+        int propagationCount;
 #else
         int handlerSwitchValue;
         const unsigned char *actionRecord;
@@ -544,6 +545,8 @@ struct __cxa_exception
     const unsigned char *languageSpecificData;
     void *catchTemp;
     void *adjustedPtr;
+
+    size_t referenceCount;
 
     _Unwind_Exception unwindHeader;
 };
