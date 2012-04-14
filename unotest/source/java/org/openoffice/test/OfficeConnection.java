@@ -119,24 +119,33 @@ public final class OfficeConnection {
             boolean desktopTerminated = true;
             if (process != null) {
                 if (context != null) {
-                    XMultiComponentFactory factory = context.getServiceManager();
-                    assertNotNull(factory);
-                    XDesktop desktop = UnoRuntime.queryInterface(
-                        XDesktop.class,
-                        factory.createInstanceWithContext(
-                            "com.sun.star.frame.Desktop", context));
-                    context = null;
+                    XDesktop desktop = null;
                     try {
-                        desktopTerminated = desktop.terminate();
-                        if (!desktopTerminated) {
-                            // in case terminate() fails we would wait forever
-                            // for the process to die, so kill it
-                            process.destroy();
-                        }
-                        assertTrue(desktopTerminated);
-                    } catch (DisposedException e) {}
+                        XMultiComponentFactory factory =
+                            context.getServiceManager();
+                        assertNotNull(factory);
+                        desktop = UnoRuntime.queryInterface(XDesktop.class,
+                            factory.createInstanceWithContext(
+                                "com.sun.star.frame.Desktop", context));
+                    } catch (DisposedException e) {
+                        // it can happen that the Java bridge was disposed
+                        // already, we want to ensure soffice.bin is killed
+                        process.destroy();
+                    }
+                    context = null;
+                    if (desktop != null) {
+                        try {
+                            desktopTerminated = desktop.terminate();
+                            if (!desktopTerminated) {
+                                // in case terminate() fails we would wait
+                                // forever for the process to die, so kill it
+                                process.destroy();
+                            }
+                            assertTrue(desktopTerminated);
+                        } catch (DisposedException e) {}
                         // it appears that DisposedExceptions can already happen
                         // while receiving the response of the terminate call
+                    }
                     desktop = null;
                 } else {
                     process.destroy();
