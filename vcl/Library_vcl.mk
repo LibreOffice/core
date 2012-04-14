@@ -523,8 +523,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/dtrans/service_entry \
     vcl/ios/source/gdi/salcoretextfontutils \
     vcl/ios/source/gdi/salcoretextlayout \
+    vcl/ios/source/gdi/salcoretextstyle \
     vcl/ios/source/gdi/salbmp \
     vcl/ios/source/gdi/salgdi \
+    vcl/ios/source/gdi/salgdicommon \
     vcl/ios/source/gdi/salnativewidgets \
     vcl/ios/source/gdi/salgdiutils \
     vcl/ios/source/gdi/salvd \

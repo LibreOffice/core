@@ -203,7 +203,7 @@ struct SystemFontData
 #elif defined( QUARTZ )
     void*           aATSUFontID;    // native font object
 #elif defined( IOS )
-    CGFontRef       rFont;          // native font object
+    void*           rCTFont;        // native font object
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags

@@ -237,6 +237,14 @@ bool IosSalGraphics::CheckContext()
     return (mrContext != NULL);
 }
 
+CGContextRef IosSalGraphics::GetContext()
+{
+    if(!mrContext)
+    {
+        CheckContext();
+    }
+    return mrContext;
+}
 
 void IosSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
 {
