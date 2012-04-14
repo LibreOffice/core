@@ -32,6 +32,7 @@ TARGET = packregistry
 MY_XCS = registry/schema/org/openoffice
 MY_XCU = registry/data/org/openoffice
 MY_MOD = registry/spool
+MY_DRIVERS =
 
 MY_XCDS = \
     $(MISC)/base.xcd \
@@ -76,6 +77,7 @@ MY_FILES_calc = \
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
 MY_FILES_calc += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
+MY_DRIVERS += calc
 .ENDIF
 
 MY_DEPS_cjk = main
@@ -285,6 +287,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
+MY_DRIVERS += dbase flat mysql odbc
 .ENDIF
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
@@ -294,6 +297,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Common-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-macosx.xcu
         # Inet-macosx.xcu must come after Inet.xcu
+MY_DRIVERS += macab
 .ELIF "$(GUIBASE)" == "unx"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Inet-unixdesktop.xcu \
@@ -314,6 +318,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
         # Inet-wnt.xcu must come after Inet.xcu
+MY_DRIVERS += ado
 .ELIF "$(GUIBASE)" == "cocoatouch"
 # ?
 .ELIF "$(GUIBASE)" == "android"
@@ -326,24 +331,29 @@ ERROR : unknown-GUIBASE
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
+MY_DRIVERS += evoab2
 .END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
+MY_DRIVERS += hsqldb jdbc
 .END
 .IF "$(ENABLE_TDEAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/tdeab.xcu
 .END
 .IF "$(ENABLE_KAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
+MY_DRIVERS += kab
 .END
 .IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
         "$(OS)" != "MACOSX"
 .IF "$(OS)" == "WNT"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
+MY_DRIVERS += mozab
 .ELSE
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
+MY_DRIVERS += mozab2
 .END
 .END
 .IF "$(SYSTEM_LIBEXTTEXTCAT_DATA)" != ""
@@ -440,6 +450,7 @@ MY_FILES_binfilter = \
 MY_XCDS += $(MISC)/postgresqlsdbc.xcd
 MY_DEPS_postgresqlsdbc = main
 MY_FILES_postgresqlsdbc = $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
+MY_DRIVERS += postgresql
 .END
 
 .IF "$(GUIBASE)" == "unx" && \
@@ -481,6 +492,8 @@ MY_DEPS_forcedefault = main
 MY_FILES_forcedefault = \
     $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 .END
+
+DRIVERS = driver_{$(MY_DRIVERS)}
 
 .INCLUDE : settings.mk
 .INCLUDE : target.mk
@@ -534,8 +547,7 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
 $(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
-$(MISC)/lang/registry_{$(alllangiso)}.xcd : \
-    $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/{$(DRIVERS)}_$$(@:b:s/registry_//).zip
 .END
 
 .IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
@@ -557,12 +569,15 @@ $(MISC)/lang/registry_%.xcd .ERRREMOVE :
         '<filename>$i</filename>') >> $(MISC)/$(@:b).list
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
     # Add fcfg_drivers_*.zip content to *.list:
-    rm -rf $(MISC)/fcfg_drivers_$*.unzip
-    mkdir $(MISC)/fcfg_drivers_$*.unzip
-    cd $(MISC)/fcfg_drivers_$*.unzip && unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
-    # Filter out filenames starting with ".":
+    rm -rf $(MISC)/{$(DRIVERS)}_$*.unzip
+    mkdir $(MISC)/{$(DRIVERS)}_$*.unzip
+    cd $(MISC) \
+    $(foreach,driver,$(DRIVERS) \
+	&& cd $(driver)_$*.unzip && \
+	    unzip $(SOLARPCKDIR)/$(driver)_$*.zip && \
+	    cd ..)
     echo $(foreach,i,$(shell cd $(MISC) && \
-        find fcfg_drivers_$*.unzip -name \[!.\]\*.xcu -print) \
+        find $(@:b).unzip {$(DRIVERS)}_$*.unzip -name \[!.\]\*.xcu -print) \
         '<filename>$i</filename>') >> $(MISC)/$(@:b).list
 .END
 .IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
