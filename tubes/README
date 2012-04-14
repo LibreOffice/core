@@ -8,6 +8,15 @@ the same TeleConference abstraction.
 
 To enable configure LibO with --enable-telepathy
 
+Currently (2012-04-14) at least telepathy-glib 0.18 is needed, which doesn't
+come with distributions. Download it from
+http://telepathy.freedesktop.org/releases/telepathy-glib/
+and make install it locally, e.g. with --prefix=$HOME/usr
+For LibO configure then use PKG_CONFIG_PATH="$HOME/usr/lib/pkgconfig
+To not have tubes and sc cppunittests stumble (LD_LIBRARY_PATH is not evaluated
+in unit tests and thus not a solution) copy the libs to the solver, i.e.
+cp -p $HOME/usr/lib/libtelepathy-glib.* $SRCDIR/solver/$INPATH/lib/
+
 If you have a Telepathy-enabled LibreOffice installed to /usr (including
 liboapprover) you may also want to install the .service and .client files to
 make everything service-activatable:
