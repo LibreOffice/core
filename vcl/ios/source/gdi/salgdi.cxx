@@ -49,7 +49,7 @@
 #include "ios/salbmp.h"
 #include "ios/salframe.h"
 #include "ios/salcolorutils.hxx"
-#include "ios/salctfontutils.hxx"
+#include "ios/salcoretextfontutils.hxx"
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"
