@@ -97,7 +97,7 @@ ODMHANDLE ContentProvider::getHandle()
 {
     if(!m_aOdmHandle)
     {
-        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,(DWORD) choose_parent_window( ),NULL);
+        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,const_cast<char*>(ODMA_ODMA_REGNAME),(DWORD) choose_parent_window( ),NULL);
         switch(odm)
         {
         case ODM_SUCCESS:
