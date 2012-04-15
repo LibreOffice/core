@@ -41,6 +41,10 @@
 #include <svtools/svtdllapi.h>
 
 
+#if defined CDECL
+#undef CDECL
+#endif
+
 // for the bsearch
 #ifdef WNT
 #define CDECL _cdecl
