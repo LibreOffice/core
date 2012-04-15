@@ -214,17 +214,22 @@ SAL_IMPLEMENT_MAIN() {
         if (rtl_getAppCommandArgCount() - index < 3) {
             usageFailure();
         }
-#ifndef DISABLE_DYNLOADING
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
+#ifndef DISABLE_DYNLOADING
         modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
         oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
 #else
-        // The only "protector" we ever use is the unoexceptionprotector...
-        // Oh the joys of over-engineering.
-        rtl::OUString lib(RTL_CONSTASCII_USTRINGPARAM("<static>"));
-        rtl::OUString sym(RTL_CONSTASCII_USTRINGPARAM("unoexceptionprotector"));
-        oslGenericFunction fn = (oslGenericFunction) unoexceptionprotector;
+        oslGenericFunction fn;
+        if (sym == "unoexceptionprotector")
+            fn = (oslGenericFunction) unoexceptionprotector;
+        else if (sym == "unobootstrapprotector")
+            fn = (oslGenericFunction) unobootstrapprotector;
+        else
+        {
+            fprintf(stderr, "Only unoexceptionprotector or unobootstrapprotector protectors allowed\n");
+            assert(!"unrecognized protector");
+        }
 #endif
         CppUnit::Protector *protector = fn == 0
             ? 0

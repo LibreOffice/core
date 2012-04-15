@@ -45,6 +45,7 @@ namespace cppunittester
 
 #ifdef DISABLE_DYNLOADING
 extern "C" CppUnit::Protector *unoexceptionprotector();
+extern "C" CppUnit::Protector *unobootstrapprotector();
 #endif
 
 #endif
