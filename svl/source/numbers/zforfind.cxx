@@ -1811,6 +1811,11 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
             if ( nSign )   // DM -1
                 SkipBlanks(rString, nPos);
         }
+        if ( GetDecSep(rString, nPos) )             // decimal separator follows currency
+        {
+            nDecPos = 1;
+            SkipBlanks(rString, nPos);
+        }
     }
     else
     {
