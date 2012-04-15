@@ -157,7 +157,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 }
             }
 
-            if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) )
+            if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
             {
                 Remember_Impl(GetText());
 
