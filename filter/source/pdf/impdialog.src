@@ -181,7 +181,7 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:Edit:RID_PDF_TAB_GENER:EDIT_WATERMARKTEXT";
         Pos = MAP_APPFONT ( 15, 160 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Border = TRUE;
 
     };
