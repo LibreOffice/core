@@ -81,7 +81,7 @@ public:
     virtual void                ScriptChanged();
     virtual void                PageCreated (SfxAllItemSet aSet);
 
-    // --------- Erben aus der Basis -------------
+    // --------- inherit from the base -------------
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
     virtual void                Reset( const SfxItemSet& rSet );
 
@@ -113,7 +113,7 @@ public:
         const SfxItemSet& rSet
     );
 
-    // --------- Erben aus der Basis -------------
+    // --------- inherit from the base -------------
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 

@@ -187,7 +187,7 @@ SvxLineTabPage::SvxLineTabPage
     SetFieldUnit( aMtrStartWidth, eFUnit );
     SetFieldUnit( aMtrEndWidth, eFUnit );
 
-    // PoolUnit ermitteln
+    // determine PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
@@ -1592,7 +1592,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 {
-    if( aLbLineStyle.GetSelectEntryPos() == 0 ) // unsichtbar
+    if( aLbLineStyle.GetSelectEntryPos() == 0 ) // invisible
     {
         aFtColor.Disable();
         if(!bSymbols)

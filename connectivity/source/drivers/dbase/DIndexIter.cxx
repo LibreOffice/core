@@ -256,7 +256,7 @@ sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
     ONDXKey* pKey;
     if (bFirst)
     {
-        // erst alle NULL werte abklappern
+        // go through all NULL values first
         for (sal_uIntPtr nRec = GetNull(bFirst);
              nRec != STRING_NOTFOUND;
              nRec = GetNull(sal_False))

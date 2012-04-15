@@ -70,7 +70,7 @@
 #define CB_MERGEADJACENTBORDERS 66
 #define FT_WIDTH                67
 
-// ImageListe fuer ValueSets:
+// ImageList for ValueSets:
 #define IL_PRE_BITMAPS          1400
 #define IID_PRE_CELL_NONE       1
 #define IID_PRE_CELL_ALL        2

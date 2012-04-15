@@ -103,10 +103,9 @@ class FmSearchDialog : public ModalDialog
 
     Link    m_lnkContextSupplier;       // for search in contexts
 
-    // an Array, in dem ich mir fuer jeden Kontext das aktuell selektierte Feld merke
+    // memorize the currently selected field for every context
     ::std::vector<String> m_arrContextFields;
 
-    // fuer die eigentliche Arbeit ...
     FmSearchEngine* m_pSearchEngine;
 
     Timer           m_aDelayedPaint;
@@ -114,38 +113,38 @@ class FmSearchDialog : public ModalDialog
 
     ::svxform::FmSearchConfigItem*      m_pConfig;
 public:
-    /** hiermit kann in verschiedenen Saetzen von Feldern gesucht werden. Es gibt eine Reihe von Kontexten, deren Namen in
-        strContexts stehen (getrennt durch ';'), der Benutzer kann einen davon auswaehlen.
-        Wenn der Benutzer einen Kontext auswaehlt, wird lnkContextSupplier aufgerufen, er bekommt einen Zeiger auf eine
-        FmSearchContext-Struktur, die gefuellt werden muss.
-        Fuer die Suche gilt dann :
-        a) bei formatierter Suche wird der Iterator selber verwendet (wie beim ersten Constructor auch)
-        b) bei formatierter Suche wird NICHT der FormatKey an den Fields des Iterators verwendet, sondern die entsprechende
-            TextComponent wird gefragt (deshalb auch die Verwendung des originalen Iterator, durch dessen Move werden hoffentlich
-            die hinter den TextComponent-Interfaces stehenden Controls geupdatet)
-        c) bei nicht formatierter Suche wird ein Clone des Iterators verwendet (da ich hier die TextComponent-Interfaces nicht
-            fragen muss)
-        (natuerlich zwingend erforderlich : der String Nummer i in strUsedFields eines Kontexts muss mit dem Interface Nummer i
-        in arrFields des Kontexts korrespondieren)
+    /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (seperated
+        by ';'), the user can choose one of them.
+        When the user chooses a context, lnkContextSupplier is called, it gets a pointer on an FmSearchContext-structure,
+        that has to be filled.
+        The following counts for the search :
+        a) in case of formatted search the iterator itself is used (like in the first constructor)
+        b) in case of formatted search NOT the FormatKey at the fields of the iterator is used, but the respective TextComponent
+            is asked (that's why the original iterator is used; by its move the controls behind the TextComponent-interface are
+            updated hopefully)
+        c) in case of not-formatted search a clone of the iterator is used (because the TextComponent-interfaces don't need to
+            be asked)
+        (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
+        arrFields of the context)
     */
     FmSearchDialog(Window* pParent, const String& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
         const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
 
-    /** der Found-Handler bekommt im "gefunden"-Fall einen Zeiger auf eine FmFoundRecordInformation-Struktur
-        (dieser ist nur im Handler gueltig, wenn man sich also die Daten merken muss, nicht den Zeiger, sondern die
-        Struktur kopieren)
-        Dieser Handler MUSS gesetzt werden.
-        Ausserdem sollte beachtet werden, dass waehrend des Handlers der Suchdialog immer noch modal ist
+    /** The found-handler gets in the 'found'-case a pointer on a FmFoundRecordInformation-structure
+        (which is only valid in the handler; so if one needs to memorize the data, don't copy the pointer but
+        the structure).
+        This handler MUST be set.
+        Furthermore, it should be considered, that during the handler the search-dialog is still modal.
     */
     void SetFoundHandler(const Link& lnk) { m_lnkFoundHandler = lnk; }
     /**
-        Wenn die Suche abgebrochen oder erfolglos beendet wurde, wird im Suchdialog immer der aktuelle Datensatz angezeigt
-        Damit das mit der eventuellen Anzeige des Aufrufers synchron geht, existiert dieser Handler (der nicht undbedingt gesetzt
-        werden muss).
-        Der dem Handler uebergebene Zeiger zeigt auf eine FmFoundRecordInformation-Struktur, bei der aPosition und eventuell
-        (bei Suche mit Kontexten) nContext gueltig sind.
+        If the search has been cancelled or has been finished without success, the current data set is always displayed in the
+        search dialog. This handler exists to make this synchronous with the possible display of the caller (it does not
+        necessarily need to be set).
+        The pointer that is passed to the handler points to a FmFoundRecordInformation-structure, for which aPosition and
+        possibly (in a search with contexts) nContext are valid.
     */
     void SetCanceledNotFoundHdl(const Link& lnk) { m_lnkCanceledNotFoundHdl = lnk; }
 
@@ -155,21 +154,22 @@ protected:
     virtual sal_Bool Close();
 
     void Init(const String& strVisibleFields, const String& strInitialText);
-        // nur von den Constructoren aus zu verwenden
+        // only to be used out of the constructors
 
     void OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos);
 
     void EnableSearchUI(sal_Bool bEnable);
-        // beim Suchen in einem eigenen Thread moechte ich natuerlich die UI zum Starten/Parameter-Setzen der Suche disablen
-        // Bei bEnable == sal_False wird fuer alle betroffenen Controls das Painten kurz aus- und mittels m_aDelayedPaint nach
-        // einer kurzen Weile wieder angeschaltet. Wenn inzwischen eine Anforderung mit bEnable==sal_True kommt, wird der Timer gestoppt
-        // und das Painten gleich wieder angeschaltet. Als Konsequenz dieses umstaendlichen Vorgehens ist kein Flackern zu sehen,
-        // wenn man schnell hintereinander aus- und wieder einschaltet.
+
+    /*  When searching in an own thread I naturally want to disable the UI for starting the search and for setting search
+        parameters. If bEnalbe == sal_False, for all affected controls painting is turned off and shortly after turned on
+        again using m_aDelayedPaint. If there is a demand with bEnable == sal_True inbetween, the timer is stopped and
+        painting is turned on immediately. As a consequence for this intricateness there is no flickering when turning
+        off and on quickly.
+    */
 
     void EnableSearchForDependees(sal_Bool bEnable);
 
     void EnableControlPaint(sal_Bool bEnable);
-        // enabled (disabled) fuer alle wichtigen Controls ihr Paint
 
     void InitContext(sal_Int16 nContext);
 
@@ -191,7 +191,6 @@ private:
 
     DECL_LINK( OnContextSelection, ListBox* );
 
-    // Such-Fortschritt
     DECL_LINK( OnSearchProgress, FmSearchProgress* );
 
     DECL_LINK( OnDelayedPaint, void* );

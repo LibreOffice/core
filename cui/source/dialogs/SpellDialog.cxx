@@ -308,7 +308,7 @@ SpellDialog::~SpellDialog()
 
 void SpellDialog::Init_Impl()
 {
-    // Handler initialisieren
+    // initialize handler
     aClosePB.SetClickHdl(LINK( this, SpellDialog, CancelHdl ) );
     aChangePB.SetClickHdl(LINK( this, SpellDialog, ChangeHdl ) );
     aChangeAllPB.SetClickHdl(LINK( this, SpellDialog, ChangeAllHdl ) );
@@ -368,7 +368,7 @@ void SpellDialog::UpdateBoxes_Impl()
     SetSelectedLang_Impl( nAltLanguage );
     InitUserDicts();
 
-    // Alternativen eintragen
+    // enter alternatives
     const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
     const sal_Int32 nSize = aNewWords.getLength();
     for ( i = 0; i < nSize; ++i )
@@ -620,8 +620,6 @@ void SpellDialog::StartSpellOptDlg_Impl()
     pDlg->SetTabPage( pPage );
     if(RET_OK == pDlg->Execute())
     {
-
-        // Benutzerb"ucher anzeigen
         InitUserDicts();
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
         if(pOutSet)
@@ -888,17 +886,13 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 // -----------------------------------------------------------------------
 
 void SpellDialog::SetLanguage( sal_uInt16 nLang )
-
-/*  [Beschreibung]
-
-    wenn die Sprache im Thesaurus umgestellt wurde,
-    muss auch hier die Sprache umgestellt werden.
+/*
+    Description:
+    If the language has been changed in thesaurus,
+    it must be changed here, too.
 */
-
 {
     SetTitle_Impl( nLang );
-
-    // den richtigen Eintrag finden, da sortiert
     aLanguageLB.SelectLanguage( nLang );
 }
 
@@ -1050,7 +1044,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
     if (DIC_ERR_NONE != nAddRes)
     {
         SvxDicError( this, nAddRes );
-        return 0;   // Nicht weitermachen
+        return 0; // don't continue
     }
 
     // go on

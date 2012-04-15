@@ -54,7 +54,7 @@ namespace connectivity
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor that is needed to return the object:
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
             OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                const ::rtl::OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly

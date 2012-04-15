@@ -105,10 +105,10 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    // Metrik einstellen
+    // adjust metric
     eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
@@ -123,7 +123,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     SetFieldUnit( aMtrLength1, eFUnit );
     SetFieldUnit( aMtrLength2, eFUnit );
 
-    // PoolUnit ermitteln
+    // determine PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
@@ -151,11 +151,11 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aLbLineStyles.SetSelectHdl(
         LINK( this, SvxLineDefTabPage, SelectLinestyleHdl_Impl ) );
 
-    // Absolut (in mm) oder Relativ (in %)
+    // absolute (in mm) or relative (in %)
     aCbxSynchronize.SetClickHdl(
         LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
 
-    // Wenn sich etwas aendert, muss Preview upgedatet werden werden
+    // preview must be updated when there's something changed
     Link aLink = LINK( this, SvxLineDefTabPage, SelectTypeHdl_Impl );
     aLbType1.SetSelectHdl( aLink );
     aLbType2.SetSelectHdl( aLink );
@@ -178,7 +178,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
 void SvxLineDefTabPage::Construct()
 {
-    // Linienstile
     aLbLineStyles.Fill( pDashList );
 }
 
@@ -186,9 +185,9 @@ void SvxLineDefTabPage::Construct()
 
 void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( *pDlgType == 0 ) // Flaechen-Dialog
+    if( *pDlgType == 0 ) // area dialog
     {
-        // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
+        // ActivatePage() is called before the dialog receives PageCreated() !!!
         if( pDashList.is() )
         {
             if( *pPageType == 1 &&
@@ -196,11 +195,11 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
             {
                 aLbLineStyles.SelectEntryPos( *pPosDashLb );
             }
-            // Damit evtl. vorhandener Linestyle verworfen wird
+            // so that a possibly existing line style is discarded
             SelectLinestyleHdl_Impl( this );
 
-            // Ermitteln (evtl. abschneiden) des Namens und in
-            // der GroupBox darstellen
+            // determining (and possibly cutting) the name
+            // and displaying it in the GroupBox
             String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pDashList->GetPath() );
 
@@ -229,7 +228,7 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxLineDefTabPage::CheckChanges_Impl()
 {
-    // wird hier benutzt, um Aenderungen NICHT zu verlieren
+    // is here used to NOT lose changes
     //XDashStyle eXDS;
 
     if( aNumFldNumber1.GetText()     != aNumFldNumber1.GetSavedValue() ||
@@ -258,13 +257,13 @@ void SvxLineDefTabPage::CheckChanges_Impl()
 
         switch( nRet )
         {
-            case RET_BTN_1: // Aendern
+            case RET_BTN_1:
             {
                 ClickModifyHdl_Impl( this );
             }
             break;
 
-            case RET_BTN_2: // Hinzufuegen
+            case RET_BTN_2:
             {
                 ClickAddHdl_Impl( this );
             }
@@ -289,7 +288,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
 
 sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    if( *pDlgType == 0 ) // Linien-Dialog
+    if( *pDlgType == 0 ) // line dialog
     {
         if( *pPageType == 2 )
         {
@@ -334,7 +333,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
     }
     SelectLinestyleHdl_Impl( NULL );
 
-    // Status der Buttons ermitteln
+    // determine button state
     if( pDashList->Count() )
     {
         aBtnModify.Enable();
@@ -379,9 +378,9 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 
         aCtlPreview.Invalidate();
 
-        // Wird erst hier gesetzt, um den Style nur dann zu uebernehmen,
-        // wenn in der ListBox ein Eintrag ausgewaehlt wurde
-        // Wenn ueber Reset() gerufen wurde ist p == NULL
+        // Is not set before, in order to take the new style
+        // only if there was an entry selected in the ListBox.
+        // If it was called via Reset(), then p is == NULL
         if( p )
             *pPageType = 2;
     }
@@ -448,7 +447,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     {
         long nTmp1, nTmp2, nTmp3;
 
-        // Wurde ueber Control geaendert
+        // was changed with Control
         if( p )
         {
             nTmp1 = GetCoreValue( aMtrLength1, ePoolUnit ) * XOUT_WIDTH / 100;
@@ -465,7 +464,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
         aMtrLength2.SetDecimalDigits( 2 );
         aMtrDistance.SetDecimalDigits( 2 );
 
-        // Metrik einstellen
+        // adjust metric
         aMtrLength1.SetUnit( eFUnit );
         aMtrLength2.SetUnit( eFUnit );
         aMtrDistance.SetUnit( eFUnit );
@@ -478,7 +477,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     {
         long nTmp1, nTmp2, nTmp3;
 
-        // Wurde ueber Control geaendert
+        // was changed with Control
         if( p )
         {
             nTmp1 = GetCoreValue( aMtrLength1, ePoolUnit ) * 100 / XOUT_WIDTH;
@@ -602,12 +601,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 
             aLbLineStyles.SelectEntryPos( aLbLineStyles.GetEntryCount() - 1 );
 
-            // Flag fuer modifiziert setzen
             *pnDashListState |= CT_MODIFIED;
 
             *pPageType = 2;
 
-            // Werte sichern fuer Changes-Erkennung ( -> Methode )
+            // save values for changes recognition (-> method)
             aNumFldNumber1.SaveValue();
             aMtrLength1.SaveValue();
             aLbType1.SaveValue();
@@ -625,7 +623,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     }
     delete( pDlg );
 
-    // Status der Buttons ermitteln
+    // determine button state
     if ( pDashList->Count() )
     {
         aBtnModify.Enable();
@@ -683,12 +681,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 
                 aLbLineStyles.SelectEntryPos( nPos );
 
-                // Flag fuer modifiziert setzen
                 *pnDashListState |= CT_MODIFIED;
 
                 *pPageType = 2;
 
-                // Werte sichern fuer Changes-Erkennung ( -> Methode )
+                // save values for changes recognition (-> method)
                 aNumFldNumber1.SaveValue();
                 aMtrLength1.SaveValue();
                 aLbType1.SaveValue();
@@ -727,16 +724,15 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
             aLbLineStyles.SelectEntryPos( 0 );
 
             SelectLinestyleHdl_Impl( this );
-            *pPageType = 0; // Style soll nicht uebernommen werden
+            *pPageType = 0; // style should not be taken
 
-            // Flag fuer modifiziert setzen
             *pnDashListState |= CT_MODIFIED;
 
             ChangePreviewHdl_Impl( this );
         }
     }
 
-    // Status der Buttons ermitteln
+    // determine button state
     if ( !pDashList->Count() )
     {
         aBtnModify.Disable();
@@ -795,9 +791,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 
                 pDashList->SetName( aURL.getName() );
 
-                // Flag fuer gewechselt setzen
                 *pnDashListState |= CT_CHANGED;
-                // Flag fuer modifiziert entfernen
                 *pnDashListState &= ~CT_MODIFIED;
             }
             else
@@ -807,7 +801,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // Status der Buttons ermitteln
+    // determine button state
     if ( pDashList->Count() )
     {
         aBtnModify.Enable();
@@ -857,9 +851,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 
         if( pDashList->Save() )
         {
-            // Flag fuer gespeichert setzen
             *pnDashListState |= CT_SAVED;
-            // Flag fuer modifiziert entfernen
             *pnDashListState &= ~CT_MODIFIED;
         }
         else
@@ -918,7 +910,7 @@ void SvxLineDefTabPage::FillDialog_Impl()
 
     ChangeMetricHdl_Impl( NULL );
 
-    // Werte sichern fuer Changes-Erkennung ( -> Methode )
+    // save values for changes recognition (-> method)
     aNumFldNumber1.SaveValue();
     aMtrLength1.SaveValue();
     aLbType1.SaveValue();

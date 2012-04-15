@@ -186,7 +186,6 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
-    // Undo-Schritte
     if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
         officecfg::Office::Common::Undo::Steps::set(
             aUndoEdit.GetValue(), batch);
@@ -236,7 +235,6 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem*  pItem;
 
-    // Undo-Schritte
     aUndoEdit.SetValue(officecfg::Office::Common::Undo::Steps::get());
     aUndoEdit.SaveValue();
 

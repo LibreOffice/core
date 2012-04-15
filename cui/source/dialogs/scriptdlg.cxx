@@ -97,7 +97,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
 
-    nMode = 0xFF;    // Alles
+    nMode = 0xFF;    // everything
 }
 
 SFTreeListBox::~SFTreeListBox()

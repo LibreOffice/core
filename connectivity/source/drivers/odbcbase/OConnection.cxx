@@ -122,7 +122,6 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 
 #ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)(sal_IntPtr)nTimeOut,SQL_IS_UINTEGER);
-    // Verbindung aufbauen
 #endif
 
 #ifdef LINUX
@@ -176,7 +175,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     }
 
 
-    // autocoomit ist immer default
+    // autocoomit is always default
 
     if (!m_bReadOnly)
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)SQL_AUTOCOMMIT_ON,SQL_IS_INTEGER);
@@ -190,7 +189,6 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     m_sURL  = url;
     setConnectionInfo(info);
 
-    // Connection allozieren
     N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
     if(m_aConnectionHandle == SQL_NULL_HANDLE)
         throw SQLException();

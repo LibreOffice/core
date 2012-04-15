@@ -110,7 +110,7 @@ static sal_uInt16 aPageRg[] = {
     0
 };
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
     {
         2, // Number of Tabs
@@ -151,11 +151,11 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
 
 void _SfxMacroTabPage::EnableButtons()
 {
-    // Solange die Eventbox leer ist, nichts tun
+    // don't do anything as long as the eventbox is empty
     const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
-        // Gebundenes Macro holen
+        // get bound macro
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)(sal_uLong) pE->GetUserData() );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
@@ -186,7 +186,7 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, sal_uInt16 nEventId 
     String sTmp( rEventName );
     sTmp += '\t';
 
-    // falls die Tabelle schon gueltig ist
+    // if the table is valid already
     SvxMacro* pM = aTbl.Get( nEventId );
     if( pM )
     {
@@ -200,7 +200,7 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, sal_uInt16 nEventId 
 
 void _SfxMacroTabPage::ScriptChanged()
 {
-    // neue Bereiche und deren Funktionen besorgen
+    // get new areas and their functions
     {
         mpImpl->pGroupLB->Show();
         mpImpl->pMacroLB->Show();
@@ -327,7 +327,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
-    // aus der Tabelle entfernen
+    // remove from the table
     sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
     pThis->aTbl.Erase( nEvent );
 
@@ -380,7 +380,6 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
 
 void _SfxMacroTabPage::InitAndSetHandler()
 {
-    // Handler installieren
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
     Link                aLnk(STATIC_LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
@@ -430,7 +429,7 @@ void _SfxMacroTabPage::FillEvents()
 
     sal_uLong       nEntryCnt = rListBox.GetEntryCount();
 
-    // Events aus der Tabelle holen und die EventListBox entsprechen fuellen
+    // get events from the table and fill the EventListBox respectively
     for( sal_uLong n = 0 ; n < nEntryCnt ; ++n )
     {
         SvLBoxEntry*    pE = rListBox.GetEntry( n );

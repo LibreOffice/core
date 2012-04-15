@@ -189,7 +189,7 @@ public:
 
 /*************************************************************************
 |*
-|* Drehwinkel-Tab-Page
+|* rotation angle tab page
 |*
 \************************************************************************/
 class SvxAngleTabPage : public SvxTabPage
@@ -246,7 +246,7 @@ public:
 
 /*************************************************************************
 |*
-|* Schraegstellen/Eckenradius-Tab-Page
+|* slant/corner radius tab page
 |*
 \************************************************************************/
 class SvxSlantTabPage : public SvxTabPage

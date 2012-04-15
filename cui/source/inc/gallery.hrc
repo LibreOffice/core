@@ -26,7 +26,7 @@
  ************************************************************************/
 #include <cuires.hrc>
 
-// Gallery-TabDialoge/-TabPages
+// Gallery TabDialogs/TabPages
 #define RID_SVXTABDLG_GALLERY                   (RID_CUI_GALLERY_START )
 #define RID_SVXTABDLG_GALLERYTHEME              (RID_CUI_GALLERY_START + 2)
 #define RID_SVXDLG_GALLERY_TITLE                (RID_CUI_GALLERY_START + 82)
@@ -34,7 +34,7 @@
 #define RID_SVXTABPAGE_GALLERY_GENERAL          (RID_CUI_GALLERY_START + 1)
 #define RID_SVXTABPAGE_GALLERYTHEME_FILES       (RID_CUI_GALLERY_START + 4)
 
-// Dialoge
+// Dialogs
 #define RID_SVXDLG_GALLERY_SEARCH_PROGRESS      (RID_CUI_GALLERY_START + 6)
 #define RID_SVXDLG_GALLERY_TAKE_PROGRESS        (RID_CUI_GALLERY_START + 7)
 #define RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS   (RID_CUI_GALLERY_START + 8)
@@ -54,7 +54,7 @@
 #define RID_SVXBMP_THEME_READONLY_BIG           (RID_CUI_GALLERY_START + 53)
 #define RID_SVXBMP_THEME_DEFAULT_BIG            (RID_CUI_GALLERY_START + 55)
 
-// lokale Defines
+// local Defines
 #define BTN_OK 1
 #define BTN_CANCEL 1
 #define BTN_HELP 1

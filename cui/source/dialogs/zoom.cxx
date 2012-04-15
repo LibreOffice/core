@@ -111,15 +111,15 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 {
     switch ( nBtnId )
     {
-        case ZOOMBTN_OPTIMAL: // Optimal-Button
+        case ZOOMBTN_OPTIMAL:
             aOptimalBtn.Hide();
             break;
 
-        case ZOOMBTN_PAGEWIDTH: // Seitenbreite-Button
+        case ZOOMBTN_PAGEWIDTH:
             aPageWidthBtn.Hide();
             break;
 
-        case ZOOMBTN_WHOLEPAGE: // Ganze Seite-Button
+        case ZOOMBTN_WHOLEPAGE:
             aWholePageBtn.Hide();
             break;
 
@@ -191,12 +191,12 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aOKBtn.SetClickHdl( LINK( this, SvxZoomDialog, OKHdl ) );
     aUserEdit.SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
 
-    // Default-Werte
+    // default values
     sal_uInt16 nValue = 100;
     sal_uInt16 nMin = 10;
     sal_uInt16 nMax = 1000;
 
-    // ggf. erst den alten Wert besorgen
+    // maybe get the old value first
     const SfxUInt16Item* pOldUserItem = 0;
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -206,7 +206,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     if ( pOldUserItem )
         nValue = pOldUserItem->GetValue();
 
-    // UserEdit initialisieren
+    // initialize UserEdit
     if ( nMin > nValue )
         nMin = nValue;
     if ( nMax < nValue )
@@ -469,7 +469,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         if ( aViewLayoutFl.IsEnabled() )
             pOutSet->Put( aViewLayoutItem );
 
-        // Wert aus dem UserEdit "uber den Dialog hinaus merken
+        // memorize value from the UserEdit beyond the dialog
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         if ( pSh )

@@ -45,8 +45,8 @@
 
 /*  {k:\svx\prototyp\dialog\page.bmp}
 
-    [Beschreibung]
-    TabPage zur Einstellung einer Seite (Groesse, Raender, ...)
+    [Description]
+    TabPage for page settings (size, margins, ...)
 
     [Items]
     <SvxPageItem>:          <SID_ATTR_PAGE>
@@ -176,20 +176,16 @@ class SvxPageDescPage : public SfxTabPage
     DECL_LINK(CenterHdl_Impl, void *);
     void                UpdateExample_Impl( bool bResetbackground = false );
 
-    // Papiergroesse
     DECL_LINK(          PaperSizeSelect_Impl, ListBox* );
     DECL_LINK(PaperSizeModify_Impl, void *);
 
     DECL_LINK(          FrameDirectionModify_Impl, ListBox* );
 
-    // Hintergrund
     void                ResetBackground_Impl( const SfxItemSet& rSet );
 
-    // Grenzwerte
     DECL_LINK(RangeHdl_Impl, void *);
     void                CalcMargin_Impl();
 
-    // Registerhaltigkeit
     DECL_LINK(          RegisterModify, CheckBox * );
 
     // page direction

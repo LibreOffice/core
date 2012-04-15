@@ -51,7 +51,7 @@ class IconChoicePage;
 
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef sal_uInt16*         (*GetPageRanges)(); // liefert internationale Which-Wert
+typedef sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
 
 // position of iconchoicectrl
 enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
@@ -64,14 +64,14 @@ enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
 
 struct IconChoicePageData
 {
-    sal_uInt16 nId;                  // Die ID
-    CreatePage fnCreatePage;     // Pointer auf die Factory
-    GetPageRanges fnGetRanges;// Pointer auf die Ranges-Funktion
-    IconChoicePage* pPage;       // die TabPage selber
-    sal_Bool bOnDemand;              // Flag: ItemSet onDemand
-    sal_Bool bRefresh;               // Flag: Seite mu\s neu initialisiert werden
+    sal_uInt16 nId;
+    CreatePage fnCreatePage;    // pointer to the factory
+    GetPageRanges fnGetRanges;  // pointer to the ranges-function
+    IconChoicePage* pPage;      // the TabPage itself
+    sal_Bool bOnDemand;         // Flag: ItemSet onDemand
+    sal_Bool bRefresh;          // Flag: page has to be newly initialized
 
-    // Konstruktor
+    // constructor
     IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, sal_Bool bDemand )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
@@ -125,12 +125,11 @@ public :
     void                SetExchangeSupport( sal_Bool bNew = sal_True )  { bHasExchangeSupport = bNew; }
 
     enum {
-        KEEP_PAGE = 0x0000,     // Fehlerbehandlung; Seite nicht wechseln
-            // 2. F"ullen eines ItemSets f"ur die Aktualilsierung
-            // "ubergeordneter Beispiele; dieser Pointer kann immer
-            // NULL sein!!
+        KEEP_PAGE = 0x0000,     // error handling
+            // 2nd filling of an ItemSet for updating superior examples;
+            // this pointer can always be NULL!!
         LEAVE_PAGE = 0x0001,
-            // Set aktualisieren und andere Page aktualisieren
+            // refresh set and update other pages
         REFRESH_SET = 0x0002
     };
 
@@ -157,12 +156,12 @@ class IconChoiceDialog : public ModalDialog
 private :
     friend class IconChoicePage;
 
-    EIconChoicePos          meChoicePos;    // Position des IconChoiceCtrl's
-    ::std::vector< IconChoicePageData* > maPageList;    // Liste von PageData-Pointer
+    EIconChoicePos          meChoicePos;
+    ::std::vector< IconChoicePageData* > maPageList;
 
-    SvtIconChoiceCtrl       maIconCtrl;     // DAS IconChoice-Control
+    SvtIconChoiceCtrl       maIconCtrl;
 
-    sal_uInt16                  mnCurrentPageId;    // Id der aktuell sichtbaren Page
+    sal_uInt16                  mnCurrentPageId;
 
     // Buttons
     OKButton                aOKBtn;
@@ -216,20 +215,20 @@ protected :
 
 public :
 
-    // im Ctor k�nnte auch die Position des IconChoiceCtrl's gesetzt werden.
+    // the IconChoiceCtrl's could also be set in the Ctor
 
     IconChoiceDialog ( Window* pParent, const ResId &rResId,
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
     ~IconChoiceDialog ();
 
     ///////////////////////////////////////////////////////////////////////////////////
-    // virtuelle Methoden
+    // virtual methods
     //
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Resize();
 
     ///////////////////////////////////////////////////////////////////////////////////
-    // Schnittstelle
+    // interface
     //
 
     SvxIconChoiceCtrlEntry* AddTabPage(
@@ -241,7 +240,7 @@ public :
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
 
-                        // liefert ggf. per Map konvertierte lokale Slots
+                        // gives via map converted local slots if applicable
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }

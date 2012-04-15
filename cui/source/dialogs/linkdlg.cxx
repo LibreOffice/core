@@ -64,7 +64,7 @@ using namespace sfx2;
 
 SV_DECL_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
     {   4, // Number of Tabs
         0, 77, 144, 209
@@ -109,9 +109,9 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
     aTbLinks.SetSelectionMode( MULTIPLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
+    aTbLinks.Resize();  // OS: hack for correct selection
 
-    // UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
+    // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
     //IAccessibility2 Implementation 2009-----
@@ -150,7 +150,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         (sal_uInt16)pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
-        //bei Mehrfachselektion ggf. alte Eintraege deselektieren
+        // possibly deselect old entries in case of multi-selection
         SvLBoxEntry* pEntry = 0;
         SvBaseLink* pLink = 0;
         pEntry = pSvTabListBox->GetHdlEntry();
@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
         {
             SvBaseLinkRef xLink = aLnkArr[ n ];
 
-            // suche erstmal im Array nach dem Eintrag
+            // first look for the entry in the array
             for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
                 }
         }
 
-        // falls jemand der Meinung ist, seine Links auszutauschen (SD)
+        // if somebody is of the opinion to swap his links (SD)
         LinkManager* pNewMgr = pLinkMgr;
         pLinkMgr = 0;
         SetManager( pNewMgr );
@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
         if( 0 == (pE = rListBox.GetEntry( aPosArr[ 0 ] )) ||
             pE->GetUserData() != aLnkArr[ 0 ] )
         {
-            // suche mal den Link
+            // search the link
             pE = rListBox.First();
             while( pE )
             {
@@ -412,13 +412,13 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         {
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
 
-            // falls Object noch vorhanden, dann das schliessen
+            // close object, if it's still existing
             sal_Bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
 
-            // dem Link sagen, das er aufgeloest wird!
+            // tell the link that it will be resolved!
             xLink->Closed();
 
-            // falls einer vergessen hat sich auszutragen
+            // if somebody has forgotten to deregister himself
             if( xLink.Is() )
                 pLinkMgr->Remove( &xLink );
 
@@ -455,21 +455,20 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             for( sal_uLong i = 0; i < aLinkList.Count(); i++ )
             {
                 SvBaseLinkRef xLink = aLinkList.GetObject( i );
-                // dem Link sagen, das er aufgeloest wird!
+                // tell the link that it will be resolved!
                 xLink->Closed();
 
-                // falls einer vergessen hat sich auszutragen
+                // if somebody has forgotten to deregister himself
                 pLinkMgr->Remove( &xLink );
                 bModified = sal_True;
             }
-            //Danach alle selektierten Eintraege entfernen
+            // then remove all selected entries
         }
     }
     if(bModified)
     {
         if( !Links().GetEntryCount() )
         {
-            // Der letzte macht das Licht aus
             Automatic().Disable();
             Manual().Disable();
             UpdateNow().Disable();
@@ -514,10 +513,10 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
-        // StarImpress/Draw tauschen die LinkObjecte selbst aus!
-        // also suche den Link im Manager, wenn der nicht mehr existiert,
-        // dann setze fuelle die Liste komplett neu. Ansonsten braucht
-        // nur der editierte Linkt aktualisiert werden.
+        // StarImpress/Draw swap the LinkObjects themselves!
+        // So search for the link in the manager; if it does not exist
+        // anymore, fill the list completely new. Otherwise only the
+        // edited link needs to be refreshed.
         sal_Bool bLinkFnd = sal_False;
         for( sal_uInt16 n = pLinkMgr->GetLinks().Count(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
@@ -572,7 +571,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
         return;
 
     if( pNewMgr )
-        // Update muss vor Clear gestoppt werden
+        // update has to be stopped before clear
         Links().SetUpdateMode( sal_False );
 
     Links().Clear();
@@ -613,8 +612,8 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
 
     pLinkMgr->GetDisplayNames( (SvBaseLink*)&rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
-    // GetTab(0) gibt die Position der von der TabListBox automatisch eingefuegten
-    // Bitmap. Die Breite der ersten Textspalte ergibt sich deshalb aus Tab(2)-Tab(1)
+    // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
+    // So the first text column's width is Tab(2)-Tab(1).
     long nWidthPixel = Links().GetLogicTab( 2 ) - Links().GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
     XubString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );

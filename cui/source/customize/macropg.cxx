@@ -90,7 +90,7 @@ _SvxMacroTabPage_Impl::~_SvxMacroTabPage_Impl()
     delete pEventLB;
 }
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
     {
         2, // Number of Tabs

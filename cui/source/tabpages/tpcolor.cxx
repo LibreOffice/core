@@ -196,7 +196,7 @@ IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickLoadHdl_Impl)
                                         meType, aDlg.GetPath(), mpXPool )->AsColorList();
             if( pList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
+                // check whether the table may be deleted:
                 SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg );
                 SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg );
 
@@ -384,16 +384,16 @@ SvxColorTabPage::SvxColorTabPage
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    // Setzen des Output-Devices
+    // setting the output device
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXFillColorItem );
     aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
-    // Handler ueberladen
+    // overload handler
     aLbColor.SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorLBHdl_Impl ) );
     aValSetColorList.SetSelectHdl(
@@ -447,7 +447,7 @@ void SvxColorTabPage::Construct()
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( *pDlgType == 0 ) // Flaechen-Dialog
+    if( *pDlgType == 0 ) // area dialog
     {
         *pbAreaTP = sal_False;
 
@@ -476,7 +476,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                     aMtrFldColorModel2.SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
                     aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
 
-                    // ItemSet fuellen und an XOut weiterleiten
+                    // fill ItemSet and pass it on to XOut
                     rXFSet.Put( XFillColorItem( String(), aAktuellColor ) );
                     aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
                     aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
@@ -486,7 +486,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 }
             }
 
-            // Damit evtl. geaenderte Farbe verworfen wird
+            // so that the possibly changed color is discarded
             SelectColorLBHdl_Impl( this );
 
             *pPageType = PT_COLOR;
@@ -514,7 +514,7 @@ int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 long SvxColorTabPage::CheckChanges_Impl()
 {
-    // wird hier benutzt, um Aenderungen NICHT zu verlieren
+    // used to NOT lose changes
 
     Color aTmpColor (aAktuellColor);
     if (eCM != CM_RGB)
@@ -526,7 +526,7 @@ long SvxColorTabPage::CheckChanges_Impl()
         Color aColor = pColorList->GetColor( nPos )->GetColor();
         String aString = aLbColor.GetSelectEntry();
 
-        // aNewColor, da COL_USER != COL_irgendwas, auch wenn RGB-Werte gleich
+        // aNewColor, because COL_USER != COL_something, even if RGB values are the same
         // Color aNewColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
 
         if( ColorToPercent_Impl( aTmpColor.GetRed() ) != ColorToPercent_Impl( aColor.GetRed() ) ||
@@ -550,14 +550,14 @@ long SvxColorTabPage::CheckChanges_Impl()
 
             switch( nRet )
             {
-                case RET_BTN_1: // Aendern
+                case RET_BTN_1:
                 {
                     ClickModifyHdl_Impl( this );
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
                 break;
 
-                case RET_BTN_2: // Hinzufuegen
+                case RET_BTN_2:
                 {
                     ClickAddHdl_Impl( this );
                     nPos = aLbColor.GetSelectEntryPos();
@@ -571,7 +571,7 @@ long SvxColorTabPage::CheckChanges_Impl()
             delete aMessDlg;
         }
     }
-    if( *pDlgType == 0 ) // Flaechen-Dialog
+    if( *pDlgType == 0 ) // area dialog
     {
         nPos = aLbColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -634,7 +634,7 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
         aEdtName.SetText( aLbColor.GetSelectEntry() );
     }
 
-    // Farbmodell setzen
+    // set color model
     String aStr = GetUserData();
     aLbColorModel.SelectEntryPos( (sal_uInt16) aStr.ToInt32() );
 
@@ -656,11 +656,11 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 //------------------------------------------------------------------------
 
 //
-// Wird aufgerufen, wenn Inhalt der MtrFileds f�r Farbwerte ver�ndert wird
+// is called when the content of the MtrFields is changed for color values
 //
 IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 {
-    // lese aktuelle MtrFields aus, wenn cmyk, dann k-Wert als Trans.-Farbe
+    // read current MtrFields, if cmyk, then k-value as transparency
     aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel4.GetValue() ),
                                     (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel1.GetValue() ),
                                     (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel2.GetValue() ),
@@ -695,12 +695,12 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     long nCount = pColorList->Count();
     sal_Bool bDifferent = sal_True;
 
-    // Pruefen, ob Name schon vorhanden ist
+    // check if name is already existing
     for ( long i = 0; i < nCount && bDifferent; i++ )
         if ( aName == pColorList->GetColor( i )->GetName() )
             bDifferent = sal_False;
 
-    // Wenn ja, wird wiederholt ein neuer Name angefordert
+    // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
     {
         WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
@@ -731,7 +731,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
         delete( pDlg );
     }
 
-    // Wenn nicht vorhanden, wird Eintrag aufgenommen
+    // if not existing the entry is entered
     if( bDifferent )
     {
         if (eCM != CM_RGB)
@@ -746,7 +746,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         aLbColor.SelectEntryPos( aLbColor.GetEntryCount() - 1 );
 
-        // Flag fuer modifiziert setzen
         *pnColorListState |= CT_MODIFIED;
 
         SelectColorLBHdl_Impl( this );
@@ -770,12 +769,12 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         long nCount = pColorList->Count();
         sal_Bool bDifferent = sal_True;
 
-        // Pruefen, ob Name schon vorhanden ist
+        // check if name is already existing
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pColorList->GetColor( i )->GetName() && nPos != i )
                 bDifferent = sal_False;
 
-        // Wenn ja, wird wiederholt ein neuer Name angefordert
+        // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
         {
             WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
@@ -804,7 +803,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             delete( pDlg );
         }
 
-        // Wenn nicht vorhanden, wird Eintrag aufgenommen
+        // if not existing the entry is entered
         if( bDifferent )
         {
             XColorEntry* pEntry = pColorList->GetColor( nPos );
@@ -825,7 +824,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 
             aCtlPreviewOld.Invalidate();
 
-            // Flag fuer modifiziert setzen
             *pnColorListState |= CT_MODIFIED;
         }
     }
@@ -858,7 +856,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
         aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
         aMtrFldColorModel4.SetValue( ColorToPercent_Impl( nK ) );
 
-        // ItemSet fuellen und an XOut weiterleiten
+        // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( String(), aPreviewColor ) );
         //aCtlPreviewOld.SetAttributes( aXFillAttr );
         aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
@@ -887,18 +885,17 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
             DBG_ASSERT( pEntry, "ColorEntry not found !" );
             delete pEntry;
 
-            // Listbox und ValueSet aktualisieren
+            // update Listbox and ValueSet
             aLbColor.RemoveEntry( nPos );
             aValSetColorList.Clear();
             FillValueSet_Impl( aValSetColorList );
 
-            // Positionieren
+            // positioning
             aLbColor.SelectEntryPos( nPos );
             SelectColorLBHdl_Impl( this );
 
             aCtlPreviewOld.Invalidate();
 
-            // Flag fuer modifiziert setzen
             *pnColorListState |= CT_MODIFIED;
         }
     }
@@ -955,9 +952,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
 
 //------------------------------------------------------------------------
 
-//
-// Farbwerte je nach �bergebenes Farbmodell umrechnen
-//
 void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 {
     switch (eModell)
@@ -979,9 +973,6 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     }
 }
 
-//
-// Auswahl Listbox 'Farbmodell' (RGB/CMY)
-//
 IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 {
     int nPos = aLbColorModel.GetSelectEntryPos();
@@ -989,7 +980,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
     {
         if (eCM != (ColorModel) nPos)
         {
-            // wenn Farbmodell geaendert wurde, dann Werte umrechnen
             ConvertColorValues (aAktuellColor, (ColorModel) nPos);
         }
 
@@ -1017,14 +1007,14 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
                 aMtrFldColorModel2.SetHelpId( HID_TPCOLOR_RGB_2 );
                 aMtrFldColorModel3.SetHelpId( HID_TPCOLOR_RGB_3 );
 
-                // Da der alte HelpText noch am Control steht wuerde
-                // ein Umsetzen der HelpID alleine nichts bewirken
+                // Because the old HelpText is still at the Control
+                // a change of the HelpID alone would not work
                 aMtrFldColorModel1.SetHelpText( String() );
                 aMtrFldColorModel2.SetHelpText( String() );
                 aMtrFldColorModel3.SetHelpText( String() );
 
-                // RGB-Werte im Bereich 0..255 verarbeiten (nicht in %),
-                // dazu MetricField's entsprechend einstellen
+                // handle RGB-values (0..255, not in %),
+                // and adjust MetricFields respectively
                 aMtrFldColorModel1.SetUnit(FUNIT_NONE);
                 aMtrFldColorModel1.SetMin(0);
                 aMtrFldColorModel1.SetMax(255);
@@ -1068,8 +1058,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
                 aMtrFldColorModel2.SetHelpText( String() );
                 aMtrFldColorModel3.SetHelpText( String() );
 
-                // CMYK-Werte im Bereich 0..100% verarbeiten,
-                // dazu MetricField's entsprechend einstellen
+                // handle CMYK-values (0..100%)
+                // and adjust MetricFields respectively
                 String aStrUnit( RTL_CONSTASCII_USTRINGPARAM( " %" ) );
 
                 aMtrFldColorModel1.SetUnit(FUNIT_CUSTOM);
@@ -1125,7 +1115,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
         aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
         aMtrFldColorModel4.SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
 
-        // ItemSet fuellen und an XOut weiterleiten
+        // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( String(), pEntry->GetColor() ) );
         aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
@@ -1154,11 +1144,10 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 
 //------------------------------------------------------------------------
 
-// Ein RGB-Wert wird in einen CMYK-Wert konvertiert, wobei die Color-
-// Klasse vergewaltigt wird, da R in C, G in M und B in Y umgewandelt
-// wird. Der Wert K wird in einer Extra-Variablen gehalten.
-// Bei weiteren Farbmodellen sollte man hierfuer eigene Klassen entwickeln,
-// die dann auch entsprechende Casts enthalten.
+// A RGB value is converted to a CMYK value - not in an ideal way as
+// R is converted into C, G into M and B into Y. The K value is held in an
+// extra variable. For further color models one should develop own
+// classes which should contain the respective casts.
 
 void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
 {
@@ -1175,7 +1164,7 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
 
 //------------------------------------------------------------------------
 
-// Umgekehrter Fall zu RgbToCmyk_Impl (s.o.)
+// reverse case to RgbToCmyk_Impl (see above)
 
 void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 {
@@ -1244,7 +1233,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 
 void SvxColorTabPage::FillUserData()
 {
-    // Das Farbmodell wird in der Ini-Datei festgehalten
+    // the color model is saved in the Ini-file
     SetUserData( UniString::CreateFromInt32( eCM ) );
 }
 

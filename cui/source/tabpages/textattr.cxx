@@ -63,7 +63,7 @@ static sal_uInt16 pRanges[] =
 
 /*************************************************************************
 |*
-|* Dialog (Seite) zum Kopieren von Objekten
+|* dialog (page) for copying objects
 |*
 \************************************************************************/
 
@@ -129,7 +129,7 @@ SvxTextAttrPage::~SvxTextAttrPage()
 
 /*************************************************************************
 |*
-|* Liest uebergebenen Item-Set
+|* reads the passed item set
 |*
 \************************************************************************/
 
@@ -139,7 +139,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
-    // Linker Abstand vom Rahmen
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_TEXT_LEFTDIST );
 
     if( !pItem )
@@ -153,7 +152,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aMtrFldLeft.SetText( String() );
     aMtrFldLeft.SaveValue();
 
-    // Rechter Abstand vom Rahmen
     pItem = GetItem( rAttrs, SDRATTR_TEXT_RIGHTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_RIGHTDIST );
@@ -166,7 +164,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aMtrFldRight.SetText( String() );
     aMtrFldRight.SaveValue();
 
-    // Oberer Abstand vom Rahmen
     pItem = GetItem( rAttrs, SDRATTR_TEXT_UPPERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_UPPERDIST );
@@ -179,7 +176,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aMtrFldTop.SetText( String() );
     aMtrFldTop.SaveValue();
 
-    // Unterer Abstand vom Rahmen
     pItem = GetItem( rAttrs, SDRATTR_TEXT_LOWERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LOWERDIST );
@@ -192,7 +188,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aMtrFldBottom.SetText( String() );
     aMtrFldBottom.SaveValue();
 
-    // An Hoehe anpassen
+    // adjust to height
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
     {
         aTsbAutoGrowHeight.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
@@ -203,7 +199,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aTsbAutoGrowHeight.SetState( STATE_DONTKNOW );
     aTsbAutoGrowHeight.SaveValue();
 
-    // An Breite anpassen
+    // adjust to width
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
     {
         aTsbAutoGrowWidth.SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
@@ -317,7 +313,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aFlPosition.Enable( sal_False );
     }
 
-    // Am Rahmen anpassen
+    // adjust to border
     if ( rAttrs.GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SFX_ITEM_DONTCARE )
     {
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
@@ -329,7 +325,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aTsbFitToSize.SetState( STATE_DONTKNOW );
     aTsbFitToSize.SaveValue();
 
-    // Konturfluss
     if( rAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
         sal_Bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
@@ -345,7 +340,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 
 /*************************************************************************
 |*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
+|* fills the passed item set with dialog box attributes
 |*
 \************************************************************************/
 
@@ -406,7 +401,6 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         rAttrs.Put( SdrTextWordWrapItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    // Konturfluss
     eState = aTsbContour.GetState();
     if( eState != aTsbContour.GetSavedValue() )
     {
@@ -427,7 +421,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
 
-    // zentriert
+    // centered
     RECT_POINT eRP = aCtlPosition.GetActualRP();
     SdrTextVertAdjust eTVA, eOldTVA;
     SdrTextHorzAdjust eTHA, eOldTHA;
@@ -521,10 +515,10 @@ void SvxTextAttrPage::Construct()
                 {
                     if ( ((SdrTextObj*)pObj)->HasText() )
                     {
-                        // Konturfluss ist NICHT bei reinen Textobjekten m�glich
+                        // contour NOT possible for pure text objects
                         bContourEnabled = sal_False;
 
-                        // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten m�glich
+                        // adjusting width and height is ONLY possible for pure text objects
                         bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_True;
                     }
                 }
@@ -550,7 +544,7 @@ void SvxTextAttrPage::Construct()
 
 /*************************************************************************
 |*
-|* Erzeugt die Seite
+|* creates the page
 |*
 \************************************************************************/
 
@@ -616,7 +610,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
 
 /*************************************************************************
 |*
-|* Aendert evtl. die Position des Positions-Controls
+|* possibly changes the position of the position-control
 |*
 \************************************************************************/
 
@@ -678,7 +672,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 
 /*************************************************************************
 |*
-|* Enabled/Disabled "Groesse an Text" oder "Am Rahmen Anpassen"
+|* enables/disables "size at text" or "adjust to frame"
 |*
 \************************************************************************/
 

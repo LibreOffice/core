@@ -113,7 +113,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     if ( LANGUAGE_ENGLISH_US == eLang )
     {
-        // amerikanische Postadresse aufbauen
+        // construct American post/mail address
         aPLZEdit.Hide();
         aCityEdit.Hide();
         aCityLbl.SetText( CUI_RES( STR_US_STATE ) );
@@ -190,7 +190,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     Link aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
@@ -245,7 +245,7 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
-    // Eingaben trimmen (f"uhrende und nachfolgende Leerzeichen entfernen)
+    // remove leading and trailing whitespaces
     aCompanyEdit.SetText( TRIM(aCompanyEdit.GetText()) );
     aFirstName.SetText( TRIM(aFirstName.GetText()) );
     aName.SetText( TRIM(aName.GetText()) );

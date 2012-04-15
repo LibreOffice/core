@@ -749,7 +749,7 @@ sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::seekRow" );
     // ----------------------------------------------------------
-    // Positionierung vorbereiten:
+    // prepare positioning:
 
     sal_uInt32 nNumberOfRecords = m_nDataRows;
     sal_uInt32 nTempPos = m_nFilePos;
@@ -808,7 +808,7 @@ Error:
                 m_nFilePos = 0;
             break;
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;   // vorherige Position
+            m_nFilePos = nTempPos;   // previous position
     }
     //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
     return sal_False;

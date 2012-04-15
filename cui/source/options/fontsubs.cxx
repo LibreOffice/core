@@ -42,7 +42,7 @@
 
 /*********************************************************************/
 /*                                                                   */
-/*  TabPage Fontersetzung                                            */
+/*  TabPage font replacement                                         */
 /*                                                                   */
 /*********************************************************************/
 
@@ -312,8 +312,8 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
     if (pWin == &aNewDelTBX)
     {
         SvLBoxEntry* pEntry;
-        // nCol ist behaemmerterweise die nCol'te Textspalte, werden nicht gezaehlt!
-        // Daher als Spalte "0".
+        // nCol is stupidly the nCol'th text column, not counted!
+        // Therefor "0" as column.
         sal_uLong nPos = aCheckLB.GetEntryPos(aFont1CB.GetText(), 0);
 
         switch (aNewDelTBX.GetCurItemId())
@@ -322,13 +322,13 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
             {
                 if (nPos != 0xffffffff)
                 {
-                    // Eintrag aendern
+                    // change entry
                     aCheckLB.SetEntryText(aFont2CB.GetText(), nPos, 1);
                     pEntry = aCheckLB.GetEntry(nPos);
                 }
                 else
                 {
-                    // Neuer Eintrag
+                    // new entry
                     String sFont1 = aFont1CB.GetText();
                     String sFont2 = aFont2CB.GetText();
 
@@ -422,7 +422,7 @@ void SvxFontSubstTabPage::CheckEnable()
         sEntry += '\t';
         sEntry += aFont2CB.GetText();
 
-        // Wegen OS/2-Optimierungsfehler (Bug #56267) etwas umstaendlicher:
+        // because of OS/2 optimization error (Bug #56267) a bit more intricate:
         if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len())
             bApply = sal_False;
         else if(aFont1CB.GetText() == aFont2CB.GetText())

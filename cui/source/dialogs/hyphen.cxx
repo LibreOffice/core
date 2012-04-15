@@ -89,7 +89,7 @@ void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
             Edit::KeyInput(rKEvt);
             break;
         default:
-            Control::KeyInput( rKEvt ); // An den Dialog weiterleiten
+            Control::KeyInput( rKEvt ); // pass on to the dialog
             break;
     }
 }

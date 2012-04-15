@@ -285,11 +285,11 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             break;
         case DataType::LONGVARCHAR:
         case DataType::CLOB:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
+            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // only for finding
             break;
         case DataType::LONGVARBINARY:
         case DataType::BLOB:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
+            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // only for finding
             break;
         case DataType::DATE:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new DATE_STRUCT),_nType);

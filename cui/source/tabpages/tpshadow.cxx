@@ -80,10 +80,10 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    // Metrik einstellen
+    // adjust metric
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
@@ -96,12 +96,12 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     }
     SetFieldUnit( aMtrDistance, eFUnit );
 
-    // PoolUnit ermitteln
+    // determine PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
 
-    // Setzen des Output-Devices
+    // setting the output device
     XFillStyle eXFS = XFILL_SOLID;
     if( rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE )
     {
@@ -109,7 +109,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
         switch( eXFS )
         {
-            //case XFILL_NONE: --> NICHTS
+            //case XFILL_NONE: --> NOTHING
 
             case XFILL_SOLID:
                 if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
@@ -183,7 +183,6 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
 void SvxShadowTabPage::Construct()
 {
-    // Farbtabelle fuellen
     aLbShadowColor.Fill( pColorList );
 
     if( bDisable )
@@ -241,7 +240,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 aLbShadowColor.Fill( pColorList );
                 nCount = aLbShadowColor.GetEntryCount();
                 if( nCount == 0 )
-                    ; // Dieser Fall sollte nicht auftreten
+                    ; // this case should not occur
                 else if( nCount <= nPos )
                     aLbShadowColor.SelectEntryPos( 0 );
                 else
@@ -273,7 +272,6 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     if( !bDisable )
     {
-        // Schatten
         TriState eState = aTsbShowShadow.GetState();
         if( eState != aTsbShowShadow.GetSavedValue() )
         {
@@ -286,9 +284,9 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
 
-        // Schatten-Entfernung
-        // Etwas umstaendliche Abfrage, ob etwas geaendert wurde,
-        // da Items nicht direkt auf Controls abbildbar sind
+        // shadow removal
+        // a bit intricate inquiry whether there was something changed,
+        // as the items can't be displayed directly on controls
         sal_Int32 nX = 0L, nY = 0L;
         sal_Int32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
 
@@ -305,15 +303,15 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             case RP_MM: break;
         }
 
-        // Wenn die Werte des Schattenabstanden==SFX_ITEM_DONTCARE und der angezeigte
-        // String im entspr. MetricField=="", dann w�rde der Vergleich zw. alten und
-        // neuen Distance-Werte ein falsches Ergebnis liefern, da in so einem Fall die
-        // neuen Distance-Werte den Default-Werten des MetricField entspr�chen !!!!
+        // If the values of the shadow distances==SFX_ITEM_DONTCARE and the displayed
+        // string in the respective MetricField=="", then the comparison of the old
+        // and the new distance values would return a wrong result because in such a
+        // case the new distance values would matche the default values of the MetricField !!!!
         if ( !aMtrDistance.IsEmptyFieldValue()                                  ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE    )
         {
-            sal_Int32 nOldX = 9876543; // Unmoeglicher Wert, entspr. DontCare
+            sal_Int32 nOldX = 9876543; // impossible value, so DontCare
             sal_Int32 nOldY = 9876543;
             if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
                 rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
@@ -356,7 +354,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
 
-        // Transparenz
+        // transparency
         sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
         if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() )
         {
@@ -381,10 +379,10 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
 {
     if( !bDisable )
     {
-        // Alle Objekte koennen einen Schatten besitzen
-        // z.Z. gibt es nur 8 m�gliche Positionen den Schatten zu setzen
+        // all objects can have a shadow
+        // at the moment there are only 8 possible positions where a shadow can be set
 
-        // Ist Schatten gesetzt?
+        // has a shadow been set?
         if( rAttrs.GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
         {
             aTsbShowShadow.EnableTriState( sal_False );
@@ -399,8 +397,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         else
             aTsbShowShadow.SetState( STATE_DONTKNOW );
 
-        // Entfernung (nur 8 moegliche Positionen), deshalb
-        // wird nur ein Item ausgewertet
+        // distance (only 8 possible positions),
+        // so there is only one item evaluated
 
         if( rAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
             rAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
@@ -413,12 +411,12 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
             else
                 SetMetricValue( aMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
 
-            // Setzen des Schatten-Controls
+            // setting the shadow control
             if     ( nX <  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_LT );
             else if( nX == 0L && nY <  0L ) aCtlPosition.SetActualRP( RP_MT );
             else if( nX >  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_RT );
             else if( nX <  0L && nY == 0L ) aCtlPosition.SetActualRP( RP_LM );
-            // Mittelpunkt gibt es nicht mehr
+            // there's no center point anymore
             else if( nX == 0L && nY == 0L ) aCtlPosition.SetActualRP( RP_RB );
             else if( nX >  0L && nY == 0L ) aCtlPosition.SetActualRP( RP_RM );
             else if( nX <  0L && nY >  0L ) aCtlPosition.SetActualRP( RP_LB );
@@ -441,14 +439,13 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
                     SetMetricValue( aMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
             }
 
-            // Tristate, z.B. mehrer Objekte wurden markiert, wovon einige einen Schatten besitzen, einige nicht.
-            // Der anzuzeigende Text des MetricFields wird auf "" gesetzt und dient in der Methode FillItemSet
-            // als Erkennungszeichen daf�r, das der Distance-Wert NICHT ver�ndert wurde !!!!
+            // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
+            // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
+            // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
             aMtrDistance.SetText( String() );
             aCtlPosition.SetActualRP( RP_MM );
         }
 
-        // SchattenFarbe:
         if( rAttrs.GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
         {
             aLbShadowColor.SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
@@ -456,7 +453,6 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         else
             aLbShadowColor.SetNoSelection();
 
-        // Transparenz
         if( rAttrs.GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
         {
             sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
@@ -465,7 +461,6 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         else
             aMtrTransparent.SetText( String() );
 
-        // Werte sichern
         //aCtlPosition
         aMtrDistance.SaveValue();
         aLbShadowColor.SaveValue();
@@ -548,7 +543,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     XFillTransparenceItem aItem( nVal );
     rXFSet.Put( XFillTransparenceItem( aItem ) );
 
-    // Schatten-Entfernung
+    // shadow removal
     sal_Int32 nX = 0L, nY = 0L;
     sal_Int32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
     switch( aCtlPosition.GetActualRP() )
@@ -579,7 +574,7 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 
-    // Schatten neu zeichnen
+    // repaint shadow
     ModifyShadowHdl_Impl( pWindow );
 }
 

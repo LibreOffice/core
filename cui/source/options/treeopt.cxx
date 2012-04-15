@@ -618,7 +618,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     return pPageInfo;
 }
 
-// der ItemSet* geht in den Besitz des Dialogs
+// the ItemSet* is passed on to the dialog's ownership
 sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
                 int nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet);
                 if ( nLeave == SfxTabPage::KEEP_PAGE )
                 {
-                    //die Seite darf nicht verlassen werden!
+                    // the page mustn't be left
                     aTreeLB.Select(pCurrentPageEntry);
                     return 0;
                 }
@@ -715,7 +715,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
     return 0;
 }
 
-// Eine aufgeklappte Gruppe soll vollstaendig sichtbar sein
+// an opened group shall be completely visible
 IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
@@ -1031,7 +1031,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 }
                 if(bIdentical)
                     pGroupInfo->m_pShell = pGroupInfo->m_pModule;
-                //jetzt noch testen, ob es auch in anderen Gruppen das gleiche Module gab (z.B. Text+HTML)
+                // now test whether there was the same module in other groups, too (e. g. Text+HTML)
                 SvLBoxEntry* pTemp = aTreeLB.First();
                 while(pTemp)
                 {
@@ -1281,7 +1281,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
-                // Sonstiges - Year2000
+                // miscellaneous - Year2000
                 if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
@@ -1291,7 +1291,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
 
 
-            // Sonstiges - Tabulator
+            // miscellaneous - Tabulator
             pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
 
             sal_uInt16 nFlag = aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0;
@@ -1309,7 +1309,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
                     0 );
 
-            // fuer die Linguistik
+            // for linguistic
 
             Reference< XSpellChecker1 >  xSpell = SvxGetSpellChecker();
             pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
@@ -1415,10 +1415,10 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SFX_APP()->SetOptions( aOptSet );
-            // Dispatcher neu holen, weil SetOptions() ggf. den Dispatcher zerst"ort hat
+            // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 // -------------------------------------------------------------------------
-//          Year2000 auswerten
+//          evaluate Year2000
 // -------------------------------------------------------------------------
             sal_uInt16 nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
@@ -1434,7 +1434,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             }
 
 // -------------------------------------------------------------------------
-//          Drucken auswerten
+//          evaluate print
 // -------------------------------------------------------------------------
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, sal_False, &pItem))
                 aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
@@ -1690,7 +1690,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
-        // Textdokument
+        // text document
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
         if (   aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) )
             || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) )
@@ -1719,7 +1719,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 #endif
             }
 
-            // HTML-Dokument
+            // HTML documents
             if ( !lcl_isOptionHidden( SID_SW_ONLINEOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();

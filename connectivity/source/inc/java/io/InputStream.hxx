@@ -42,7 +42,7 @@ namespace connectivity
                                 public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream>
     {
     protected:
-    // statische Data for the class
+    // static Data for the Class
         static jclass theClass;
         virtual ~java_io_InputStream();
     public:

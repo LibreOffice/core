@@ -94,7 +94,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     rXLSet.Put( aXLStyle );
@@ -163,9 +163,9 @@ void SvxLineEndDefTabPage::Construct()
 
 void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( *pDlgType == 0 ) // Flaechen-Dialog
+    if( *pDlgType == 0 ) // area dialog
     {
-        // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
+        // ActivatePage() is called before the dialog receives PageCreated() !!!
         if( pLineEndList.is() )
         {
             if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
@@ -224,7 +224,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
 sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( *pDlgType == 0 ) // Linien-Dialog
+    if( *pDlgType == 0 ) // line dialog
     {
         if( *pPageType == 3 )
         {
@@ -264,7 +264,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
         aCtlPreview.Invalidate();
     }
 
-    // Status der Buttons ermitteln
+    // determine button state
     if( pLineEndList->Count() )
     {
         aBtnModify.Enable();
@@ -307,8 +307,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 
         aCtlPreview.Invalidate();
 
-        // Wird erst hier gesetzt, um den Style nur dann zu uebernehmen,
-        // wenn in der ListBox ein Eintrag ausgewaehlt wurde
+        // Is not set before, in order to only take the new style,
+        // if there is an entry selected in the ListBox
         *pPageType = 3;
     }
     return( 0L );
@@ -336,12 +336,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         long nCount = pLineEndList->Count();
         sal_Bool bDifferent = sal_True;
 
-        // Pruefen, ob Name schon vorhanden ist
+        // check whether the name is existing already
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
                 bDifferent = sal_False;
 
-        // Wenn ja, wird wiederholt ein neuer Name angefordert
+        // if yes, repeat and demand a new name
         if ( !bDifferent )
         {
             WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             delete( pDlg );
         }
 
-        // Wenn nicht vorhanden, wird Eintrag aufgenommen
+        // if not existing, enter the entry
         if( bDifferent )
         {
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
@@ -385,7 +385,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             aLbLineEnds.Modify( pEntry, nPos, pLineEndList->GetBitmap( nPos ) );
             aLbLineEnds.SelectEntryPos( nPos );
 
-            // Flag fuer modifiziert setzen
             *pnLineEndListState |= CT_MODIFIED;
 
             *pPageType = 3;
@@ -417,20 +416,19 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return( 0L ); // Abbruch, zusaetzliche Sicherheit, die bei
-                            // Gruppenobjekten aber nichts bringt.
+                    return( 0L ); // cancel, additional safety, which
+                            // has no use for group objects though.
             }
-            else return( 0L ); // Abbruch
+            else return( 0L ); // cancel
         }
 
         basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->GetPathPoly());
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
-        // Normalisieren
+        // normalize
         aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
             -aNewRange.getMinX(), -aNewRange.getMinY()));
 
-        // Loeschen des angelegten PolyObjektes
         SdrObject::Free( pConvPolyObj );
 
         XLineEndEntry* pEntry;
@@ -482,11 +480,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pLineEndList->Insert( pEntry, nLineEndCount );
                 Bitmap* pBitmap = pLineEndList->GetBitmap( nLineEndCount );
 
-                // Zur ListBox hinzufuegen
+                // add to the ListBox
                 aLbLineEnds.Append( pEntry, pBitmap );
                 aLbLineEnds.SelectEntryPos( aLbLineEnds.GetEntryCount() - 1 );
 
-                // Flag fuer modifiziert setzen
                 *pnLineEndListState |= CT_MODIFIED;
 
                 SelectLineEndHdl_Impl( this );
@@ -503,7 +500,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
     else
         aBtnAdd.Disable();
 
-    // Status der Buttons ermitteln
+    // determine button state
     if ( pLineEndList->Count() )
     {
         aBtnModify.Enable();
@@ -531,15 +528,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
             aLbLineEnds.SelectEntryPos( 0 );
 
             SelectLineEndHdl_Impl( this );
-            *pPageType = 0; // LineEnd soll nicht uebernommen werden
+            *pPageType = 0; // LineEnd shall not be taken over
 
-            // Flag fuer modifiziert setzen
             *pnLineEndListState |= CT_MODIFIED;
 
             ChangePreviewHdl_Impl( this );
         }
     }
-    // Status der Buttons ermitteln
+    // determine button state
     if( !pLineEndList->Count() )
     {
         aBtnModify.Disable();
@@ -596,9 +592,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
                 pLineEndList->SetName( aURL.getName() );
 
-                // Flag fuer gewechselt setzen
                 *pnLineEndListState |= CT_CHANGED;
-                // Flag fuer modifiziert entfernen
                 *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
@@ -607,7 +601,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
         }
     }
 
-    // Status der Buttons ermitteln
+    // determine button state
     if ( pLineEndList->Count() )
     {
         aBtnModify.Enable();
@@ -657,9 +651,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 
         if( pLineEndList->Save() )
         {
-            // Flag fuer gespeichert setzen
             *pnLineEndListState |= CT_SAVED;
-            // Flag fuer modifiziert entfernen
             *pnLineEndListState &= ~CT_MODIFIED;
         }
         else

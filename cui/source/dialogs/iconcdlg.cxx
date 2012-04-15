@@ -499,7 +499,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     maIconCtrl.ArrangeIcons();
 
     ////////////////////////////////////////
-    // Pages resizen & positionieren
+    // resize & position the pages
     //
     for ( size_t i = 0; i < maPageList.size(); i++ )
     {
@@ -544,7 +544,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     }
 
     ////////////////////////////////////////
-    // Buttons positionieren
+    // position the buttons
     //
     sal_uLong nXOffset=0;
     if ( meChoicePos == PosRight )
@@ -697,7 +697,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 
     if ( pData->bOnDemand )
     {
-        // CSet auf AIS hat hier Probleme, daher getrennt
+        // CSet on AIS has problems here, therefore seperated
         const SfxItemSet* _pSet = &( pData->pPage->GetItemSet() );
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
@@ -829,11 +829,11 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
         {
             pSet = GetRefreshedSet();
             DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
-            // alle Pages als neu zu initialsieren flaggen
+            // flag all pages to be newly initialized
             for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
                 IconChoicePageData* pObj = maPageList[ i ];
-                if ( pObj->pPage != pPage ) // eigene Page nicht mehr refreshen
+                if ( pObj->pPage != pPage )
                     pObj->bRefresh = sal_True;
                 else
                     pObj->bRefresh = sal_False;
@@ -857,7 +857,7 @@ void IconChoiceDialog::ResetPageImpl ()
 
     if ( pData->bOnDemand )
     {
-        // CSet auf AIS hat hier Probleme, daher getrennt
+        // CSet on AIS has problems here, therefore seperated
         const SfxItemSet* _pSet = &pData->pPage->GetItemSet();
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
@@ -906,7 +906,6 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
             aUS[i] = rPool.GetWhich( aUS[i] );
     }
 
-    // sortieren
     if ( aUS.size() > 1 )
     {
         std::sort( aUS.begin(), aUS.end() );
@@ -1010,15 +1009,15 @@ void IconChoiceDialog::Start_Impl()
     else
         nActPage = mnCurrentPageId;
 
-    // Konfiguration vorhanden?
+    // configuration existing?
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
 
     if ( aTabDlgOpt.Exists() )
     {
-        // ggf. Position aus Konfig
+        // possibly position from config
         SetWindowState(rtl::OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
-        // initiale TabPage aus Programm/Hilfe/Konfig
+        // initial TabPage from program/help/config
         nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();
 
         if ( USHRT_MAX != mnCurrentPageId )
@@ -1114,7 +1113,7 @@ short IconChoiceDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( sal_False ); // ohne Items
+            pOutSet = pSet->Clone( sal_False ); // without items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }

@@ -126,7 +126,7 @@ private:
     FixedText           maFTEdgeStyle;
     LineEndLB           maLBEdgeStyle;
 
-    //#58425# Symbole auf einer Linie (z.B. StarChart) ->
+    //#58425# symbols on a line (e. g. StarChart) ->
     SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
     bool                bNewSize;
     Graphic             aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
@@ -177,7 +177,7 @@ private:
     // #63083#
     sal_Int32           nActLineWidth;
 
-    //Handler f�r Gallery-Popup-Menue-Button + Size
+    // handler for gallery popup menu button + size
     DECL_LINK( GraphicHdl_Impl, MenuButton * );
     DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
     DECL_STATIC_LINK( SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );

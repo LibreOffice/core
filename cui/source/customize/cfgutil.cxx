@@ -293,10 +293,10 @@ void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& )
 }
 
 IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
-/*  Beschreibung
-    Timer-Handler f"ur die Einblendung eines Hilfetextes. Wenn nach Ablauf des Timers
-    der Mauszeiger immer noch auf dem aktuell selektierten Eintrag steht, wird der
-    Helptext des Entries als Balloon-Help eingeblendet.
+/*  Description
+    Timer-handler for showing a help-text. If the mouse pointer is
+    still on the currently selected entry after the timer has run out,
+    the entry's help-text is shown as a balloon-help.
 */
 {
     (void)pTimer; // unused
@@ -304,9 +304,9 @@ IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
 }
 
 void SfxConfigFunctionListBox_Impl::ClearAll()
-/*  Beschreibung
-    L"oscht alle Eintr"age in der FunctionListBox, alle UserDaten und alle evtl.
-    vorhandenen MacroInfos.
+/*  Description
+    Deletes all entries in the FunctionListBox, all UserData and all
+    possibly existing MacroInfo.
 */
 {
     sal_uInt16 nCount = aArr.Count();
@@ -374,9 +374,9 @@ String SfxConfigFunctionListBox_Impl::GetCurLabel()
 }
 
 void SfxConfigFunctionListBox_Impl::FunctionSelected()
-/*  Beschreibung
-    Setzt die Balloonhelp zur"uck, da diese immer den Helptext des selektierten
-    Entry anzeigen soll.
+/*  Description
+    Resets the balloon-help because it shall
+    always show the help-text of the selected entry.
 */
 {
 }
@@ -465,9 +465,8 @@ void SfxConfigGroupListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 }
 
 String SfxConfigGroupListBox_Impl::GetGroup()
-/*  Beschreibung
-    Gibt den Namen der selektierten Funktionsgruppe bzw. des selektierten
-    Basics zur"uck.
+/*  Description
+    Returns the name of the selected function group/the selected basic.
 */
 {
     SvLBoxEntry *pEntry = FirstSelected();
@@ -893,9 +892,9 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
 
 //-----------------------------------------------
 void SfxConfigGroupListBox_Impl::GroupSelected()
-/*  Beschreibung
-    Eine Funktionsgruppe oder eine Basicmodul wurde selektiert. Alle Funktionen bzw.
-    Macros werden in der Functionlistbox anzeigt.
+/*  Description
+    A function group or a basic module has been selected.
+    All functions/macros are displayed in the functionlistbox.
 */
 {
     SvLBoxEntry *pEntry = FirstSelected();
@@ -1028,21 +1027,16 @@ sal_Bool SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
     sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
-        // Wieviele Entries k"onnen angezeigt werden ?
         sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
 
-        // Wieviele Kinder sollen angezeigt werden ?
         sal_uLong nChildCount = GetVisibleChildCount( pParent );
 
-        // Passen alle Kinder und der parent gleichzeitig in die View ?
         if ( nChildCount+1 > nEntries )
         {
-            // Wenn nicht, wenigstens parent ganz nach oben schieben
             MakeVisible( pParent, sal_True );
         }
         else
         {
-            // An welcher relativen ViewPosition steht der aufzuklappende parent
             SvLBoxEntry *pEntry = GetFirstEntryInView();
             sal_uLong nParentPos = 0;
             while ( pEntry && pEntry != pParent )
@@ -1051,7 +1045,6 @@ sal_Bool SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
                 pEntry = GetNextEntryInView( pEntry );
             }
 
-            // Ist unter dem parent noch genug Platz f"ur alle Kinder ?
             if ( nParentPos + nChildCount + 1 > nEntries )
                 ScrollOutputArea( (short)( nEntries - ( nParentPos + nChildCount + 1 ) ) );
         }
@@ -1061,8 +1054,8 @@ sal_Bool SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 }
 
 void SfxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
-/*  Beschreibung
-    Ein Basic oder eine Bibliothek werden ge"offnet
+/*  Description
+    A basic or a library is opened.
 */
 {
     SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();

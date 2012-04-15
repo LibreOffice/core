@@ -149,9 +149,9 @@ class SvxBulletPickTabPage : public SfxTabPage
 };
 
 /*--------------------------------------------------
-    TabPage fuer vollstaendig Numerierung
+    TabPage for complete numeration
 --------------------------------------------------*/
-#define NUMTYPE_MEMBER 4   // Anzahl der Elemente des FormatStrings je Ebene
+#define NUMTYPE_MEMBER 4   // number of elements of the FormatString per level
 #define NUM_VALUSET_COUNT 16
 class SvxNumPickTabPage : public SfxTabPage
 {
@@ -163,7 +163,7 @@ class SvxNumPickTabPage : public SfxTabPage
     String              sNumCharFmtName;
     String              sBulletCharFmtName;
 
-    SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // wird mit den fuenf Formaten initialisiert
+    SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // is initialized with the five formats
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
@@ -409,7 +409,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     sal_Bool                bModified           : 1;
     sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    sal_Bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be correctet from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();

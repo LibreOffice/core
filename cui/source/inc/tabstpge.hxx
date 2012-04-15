@@ -47,8 +47,8 @@ class TabWin_Impl;
 /*
     {k:\svx\prototyp\dialog\tabstop.bmp}
 
-    [Beschreibung]
-    In dieser TabPage werden Tabulatoren verwaltet.
+    [Description]
+    In this TabPage tabulators are managed.
 
     [Items]
     <SvxTabStopItem><SID_ATTR_TABSTOP>
@@ -78,7 +78,7 @@ protected:
 private:
     SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
 
-    // Tabulatoren und Positionen
+    // tabulators and positions
     FixedLine       aTabLabel;
     MetricBox       aTabBox;
     FixedLine       aTabLabelVert;
@@ -99,19 +99,19 @@ private:
     Edit            aDezChar;
 
     FixedLine       aFillLabel;
-    // Fuellzeichen
+
     RadioButton     aNoFillChar;
     RadioButton     aFillPoints;
     RadioButton     aFillDashLine ;
     RadioButton     aFillSolidLine;
     RadioButton     aFillSpecial;
     Edit            aFillChar;
-    // Buttons
+
     PushButton      aNewBtn;
     PushButton      aDelAllBtn;
     PushButton      aDelBtn;
 
-    // lokale Variablen, interne Funktionen
+    // local variables, internal functions
     SvxTabStop      aAktTab;
     SvxTabStopItem  aNewTabs;
     long            nDefDist;

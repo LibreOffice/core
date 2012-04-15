@@ -746,18 +746,18 @@ private:
 
     void    FillValueSet_Impl( ValueSet& rVs );
     //-----------------------------------------------------------------------------------------------------
-    DECL_LINK( ClickAddHdl_Impl, void * );      // Button 'Hinzufuegen'
-    DECL_LINK( ClickModifyHdl_Impl, void * );   // Button 'Aendern'
-    DECL_LINK( ClickDeleteHdl_Impl, void * );   // Button 'loeschen'
-    DECL_LINK( ClickWorkOnHdl_Impl, void * );   // Button 'Bearbeiten'
+    DECL_LINK( ClickAddHdl_Impl, void * );
+    DECL_LINK( ClickModifyHdl_Impl, void * );
+    DECL_LINK( ClickDeleteHdl_Impl, void * );
+    DECL_LINK( ClickWorkOnHdl_Impl, void * );
 
-    DECL_LINK( SelectColorLBHdl_Impl, void * ); // Farbe aus Listbox ausw�hlen
-    DECL_LINK( SelectValSetHdl_Impl, void * );  // Farbe aus Farbpalette (links) ausw�hlen
-    DECL_LINK( SelectColorModelHdl_Impl, void * );  // Auswahl Listbox 'Farbmodell'
+    DECL_LINK( SelectColorLBHdl_Impl, void * );
+    DECL_LINK( SelectValSetHdl_Impl, void * );
+    DECL_LINK( SelectColorModelHdl_Impl, void * );
     long ChangeColorHdl_Impl( void* p );
-    DECL_LINK( ModifiedHdl_Impl, void * );      // Inhalt der Farbwerte-Felder wurde ver�ndert
-    DECL_LINK( ClickLoadHdl_Impl, void * );     // Button 'Farbtabelle laden'
-    DECL_LINK( ClickSaveHdl_Impl, void * );     // Button 'Farbtabelle sichern'
+    DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK( ClickLoadHdl_Impl, void * );
+    DECL_LINK( ClickSaveHdl_Impl, void * );
 
     long CheckChanges_Impl();
 #endif

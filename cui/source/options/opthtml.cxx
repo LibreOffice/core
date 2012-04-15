@@ -37,7 +37,7 @@
 #include <dialmgr.hxx>
 #include <sal/macros.h>
 
-// Umwandlung der Modi zu den Positionen in der Listbox
+// modus convertion to the positions in the listbox
 const sal_uInt16 aPosToExportArr[] =
 {
     HTML_CFG_MSIE,

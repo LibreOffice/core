@@ -59,7 +59,7 @@ static sal_uInt16 pRanges[] =
 
 /*************************************************************************
 |*
-|* Dialog zum Aendern von Konnektoren (Connectors)
+|* dialog for changing connectors
 |*
 \************************************************************************/
 
@@ -88,7 +88,7 @@ SvxConnectionDialog::~SvxConnectionDialog()
 
 /*************************************************************************
 |*
-|* Seite zum Aendern von Konnektoren (Connectors)
+|* page for changing connectors
 |*
 \************************************************************************/
 
@@ -176,7 +176,7 @@ SvxConnectionPage::~SvxConnectionPage()
 
 /*************************************************************************
 |*
-|* Liest uebergebenen Item-Set
+|* reads passed Item-Set
 |*
 \************************************************************************/
 
@@ -325,7 +325,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
 /*************************************************************************
 |*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
+|* fills the passed Item-Set width Dialogbox attributes
 |*
 \************************************************************************/
 
@@ -413,7 +413,7 @@ void SvxConnectionPage::Construct()
 
 /*************************************************************************
 |*
-|* Erzeugt die Seite
+|* creates the page
 |*
 \************************************************************************/
 
@@ -498,7 +498,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == &aLbType )
     {
-        // Anzahl der Linienversaetze ermitteln
+        // get the number of line displacements
         sal_uInt16 nCount = aCtlPreview.GetLineDeltaAnz();
 
         aFtLine3.Enable( nCount > 2 );
@@ -535,7 +535,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
 void SvxConnectionPage::FillTypeLB()
 {
-    // ListBox mit Verbindernamen fuellen
+    // fill ListBox with connector names
     const SfxPoolItem* pItem = GetItem( rOutAttrs, SDRATTR_EDGEKIND );
     const SfxItemPool* pPool = rOutAttrs.GetPool();
 

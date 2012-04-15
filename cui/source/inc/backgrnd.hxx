@@ -39,9 +39,9 @@
 // class SvxBackgroundTabPage --------------------------------------------
 /*
 {k:\svx\prototyp\dialog\backgrnd.bmp}
-    [Beschreibung]
-    Mit dieser TabPage kann eine Brush (z.B. fuer die Hintergrundfarbe eines
-    Rahmens) eingestellt werden.
+    [Description]
+    With this TabPage a Brush (e. g. for a frame's background color)
+    can be set.
     [Items]
     <SvxBrushItem>:     <SID_ATTR_BRUSH>;
 */

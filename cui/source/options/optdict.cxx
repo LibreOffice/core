@@ -108,12 +108,12 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
     aHelpBtn        ( this, CUI_RES( BTN_NEWDICT_HLP ) ),
     xSpell( xSpl )
 {
-    // Handler installieren
+    // install handler
     aNameEdit.SetModifyHdl(
         LINK( this, SvxNewDictionaryDialog, ModifyHdl_Impl ) );
     aOKBtn.SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
 
-    // Sprachen anzeigen
+    // display languages
     aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
     aLanguageLB.SelectEntryPos(0);
 
@@ -150,13 +150,13 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
     if ( bFound )
     {
-        // Doppelte Namen?
+        // duplicate names?
         InfoBox( this, CUI_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
         aNameEdit.GrabFocus();
         return 0;
     }
 
-    // Erzeugen und hinzufuegen
+    // create and add
     sal_uInt16 nLang = aLanguageLB.GetSelectLanguage();
     try
     {
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     {
         xNewDic = NULL;
 
-        // Fehler: konnte neues W"orterbuch nicht anlegen
+        // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, String(),
             this, RID_SVXERRCTX, &CUI_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
@@ -262,7 +262,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
 
     nWidth=aWordED.GetSizePixel().Width();
-    // Handler installieren
+    // install handler
     aNewReplacePB.SetClickHdl(
         LINK( this, SvxEditDictionaryDialog, NewDelHdl));
     aDeletePB.SetClickHdl(
@@ -278,7 +278,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     aWordED.SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
     aReplaceED.SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
 
-    // Listbox mit allen verfuegbaren WB's fuellen
+    // fill listbox with all available WB's
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
     sal_Int32 nCount = aDics.getLength();
 
@@ -433,7 +433,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
     {
         aNewReplacePB.Enable( sal_False );
         aDeletePB    .Enable( sal_False );
-        // Dictionary anzeigen
+        // display dictionary
         ShowWords_Impl( nPos );
         // enable or disable new and delete button according to file attributes
         Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
@@ -565,8 +565,8 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         {
             SvLBoxEntry* pEntry = pBox->FirstSelected();
             String sTmpShort(pBox->GetEntryText(pEntry, 0));
-            // wird der Text ueber den ModifyHdl gesetzt, dann steht der Cursor
-            //sonst immer am Wortanfang, obwohl man gerade hier editiert
+            // without this the curser is always at the beginning of a word, if the text
+            // is set over the ModifyHdl, although you're editing there at the moment
             if(aWordED.GetText() != sTmpShort)
                 aWordED.SetText(sTmpShort);
             aReplaceED.SetText(pBox->GetEntryText(pEntry, 1));
@@ -666,15 +666,15 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
             aWordsLB.MakeVisible( pNewEntry );
             aWordsLB.SetUpdateMode(sal_True);
-            // falls der Request aus dem ReplaceEdit kam, dann Focus in das ShortEdit setzen
+            // if the request came from the ReplaceEdit, give focus to the ShortEdit
             if(aReplaceED.HasFocus())
                 aWordED.GrabFocus();
         }
     }
     else
     {
-        // das kann nur ein Enter in einem der beiden Edit-Felder sein und das
-        // bedeutet EndDialog() - muss im KeyInput ausgewertet werden
+        // this can only be an enter in one of the two edit fields
+        // which means EndDialog() - has to be evaluated in KeyInput
         return 0;
     }
     ModifyHdl(&aWordED);
@@ -793,8 +793,8 @@ void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {
-        //wird bei Enter nichts getan, dann doch die Basisklasse rufen
-        // um den Dialog zu schliessen
+        // if there's nothing done on enter, call the
+        // base class after all to close the dialog
         if(!nModifier && !aActionLink.Call(this))
                  Edit::KeyInput(rKEvt);
     }

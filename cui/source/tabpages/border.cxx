@@ -61,17 +61,17 @@ using namespace ::editeng;
 // -----------------------------------------------------------------------
 
 /*
- * [Beschreibung:]
- * TabPage zum Einstellen der Rahmen-Attribute.
- * Benoetigt
- *      ein SvxShadowItem: Schatten
- *      ein SvxBoxItem:    Linien links,rechts,oben,unten ),
- *      ein SvxBoxInfo:    Linien vertikal,horizontal, Abstaende, Flags )
+ * [Description:]
+ * TabPage for setting the border attributes.
+ * Needs
+ *      a SvxShadowItem: shadow
+ *      a SvxBoxItem:    lines left, right, top, bottom,
+ *      a SvxBoxInfo:    lines vertical, horizontal, distance, flags
  *
- * Linien koennen drei Zustaende haben.
- *      1. Show     ( -> gueltige Werte )
+ * Lines can have three conditions:
+ *      1. Show     ( -> valid values )
  *      2. Hide     ( -> NULL-Pointer )
- *      3. DontCare ( -> gesonderte Valid-Flags im InfoItem )
+ *      3. DontCare ( -> special Valid-Flags in the InfoItem )
  */
 
 // static ----------------------------------------------------------------
@@ -149,7 +149,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         mbSync(true)
 
 {
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     /*  Use SvxMarginItem instead of margins from SvxBoxItem, if present.
@@ -157,7 +157,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             is needed across various functions... */
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),sal_True) != SFX_ITEM_UNKNOWN;
 
-    // Metrik einstellen
+    // set metric
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
 
     if( mbUseMarginItem )
@@ -201,7 +201,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     if ( rCoreAttrs.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
-        // Absatz oder Tabelle
+        // paragraph or table
         const SvxBoxInfoItem* pBoxInfo =
             (const SvxBoxInfoItem*)&( rCoreAttrs.Get( nWhich ) );
 
@@ -272,7 +272,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     FillValueSets();
     FillLineListBox_Impl();
 
-    // ColorBox aus der XColorList fuellen.
+    // fill ColorBox out of the XColorList
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
@@ -290,7 +290,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     if ( pColorTable.is() )
     {
-        // fuellen der Linienfarben-Box
+        // filling the line color box
         aLbLineColor.SetUpdateMode( sal_False );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
@@ -299,7 +299,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             aLbLineColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         aLbLineColor.SetUpdateMode( sal_True );
-        // dann nur noch in die Schattenfarben-Box kopieren
+
         aLbShadowColor.CopyEntries( aLbLineColor );
     }
     FreeResource();
@@ -389,7 +389,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         ResetFrameLine_Impl( svx::FRAMEBORDER_HOR,    pBoxInfoItem->GetHori(), pBoxInfoItem->IsValid( VALID_HORI ) );
 
         //-------------------
-        // Abstand nach innen
+        // distance inside
         //-------------------
         if( !mbUseMarginItem )
         {
@@ -435,10 +435,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                         long nBottomDist = pBoxItem->GetDistance( BOX_LINE_BOTTOM);
                         SetMetricValue( aBottomMF, nBottomDist, eCoreUnit );
 
-                        // ist der Abstand auf nicht-default gesetzt,
-                        // dann soll der Wert auch nicht
-                        // mehr autom. veraendert werden
-
                         // if the distance is set with no active border line
                         // or it is null with an active border line
                         // no automatic changes should be made
@@ -474,12 +470,12 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        // ResetFrameLine-Aufrufe einsparen:
+        // avoid ResetFrameLine-calls:
         aFrameSel.HideAllBorders();
     }
 
     //-------------------------------------------------------------
-    // Linie/Linienfarbe in Controllern darstellen, wenn eindeutig:
+    // depict line (color) in controllers if unambiguous:
     //-------------------------------------------------------------
     {
         // Do all visible lines show the same line widths?
@@ -531,7 +527,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     aWndPresets.SetNoSelection();
 
-    // - keine Line - sollte nicht selektiert sein
+    // - no line - should not be selected
 
     if ( aLbLineStyle.GetSelectEntryPos() == 0 )
     {
@@ -548,7 +544,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         sal_uInt16 nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
-            //Im Html-Mode gibt es keinen Schatten und nur komplette Umrandungen
+            // there are no shadows in Html-mode and only complete borders
             aFtShadowPos  .Disable();
             aWndShadows   .Disable();
             aFtShadowSize .Disable();
@@ -606,7 +602,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     const SfxPoolItem* pOld = 0;
 
     //------------------
-    // Umrandung aussen:
+    // outter border:
     //------------------
     typedef ::std::pair<svx::FrameBorderType,sal_uInt16> TBorderPair;
     TBorderPair eTypes1[] = {
@@ -620,7 +616,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         aBoxItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
 
     //--------------------------------
-    // Umrandung hor/ver und TableFlag
+    // border hor/ver and TableFlag
     //--------------------------------
     TBorderPair eTypes2[] = {
                                 TBorderPair(svx::FRAMEBORDER_HOR,BOXINFO_LINE_HORI),
@@ -633,7 +629,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     aBoxInfoItem.EnableVer( mbVerEnabled );
 
     //-------------------
-    // Abstand nach Innen
+    // inner distance
     //-------------------
     if( aLeftMF.IsVisible() )
     {
@@ -690,7 +686,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     }
 
     //------------------------------------------
-    // Don't Care Status im Info-Item vermerken:
+    // note Don't Care Status in the Info-Item:
     //------------------------------------------
     aBoxInfoItem.SetValid( VALID_TOP,    aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
     aBoxInfoItem.SetValid( VALID_BOTTOM, aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
@@ -700,7 +696,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     aBoxInfoItem.SetValid( VALID_VERT,   aFrameSel.GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
 
     //
-    // Put oder Clear der Umrandung?
+    // Put or Clear of the border?
     //
     bPut = sal_True;
 
@@ -1122,10 +1118,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
                 aBottomMF.SetValue(0);
             }
         }
-        //fuer Tabellen ist alles erlaubt
+        // for tables everything is allowed
         sal_uInt16 nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
 
-        //fuer Rahmen und  Absatz wird das Edit disabled, wenn keine Border gesetzt ist
+        // for border and paragraph the edit is disabled, if there's no border set
         if(nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_PARA))
         {
             if(bLineSet)

@@ -134,7 +134,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     if ( !pFormats )
         pFormats = &rHelper.GetDataFlavorExVector();
 
-    //Dialogbox erzeugen und fuellen
+    // create and fill dialog box
     String aSourceName, aTypeName;
     sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;

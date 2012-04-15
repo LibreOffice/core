@@ -50,7 +50,7 @@
 #include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
 
-// Toleranz fuer WorkingArea
+// tolerance for WorkingArea
 #define DIFF 1000
 
 // static ----------------------------------------------------------------
@@ -114,7 +114,7 @@ void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 
 /*************************************************************************
 |*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
+|* constructor of the tab dialog: adds the pages to the dialog
 |*
 \************************************************************************/
 
@@ -216,8 +216,8 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 
 /*************************************************************************
 |*
-|*      Dialog zum Aendern der Position des Drehwinkels und des Drehwinkels
-|*      der Grafikobjekte
+|*      dialog for changing the positions of the rotation
+|*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
 
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxAngleTabPage, ModifiedHdl)
 
 /*************************************************************************
 |*
-|*      Dialog zum Aendern des Eckenradius und zum Schraegstellen
+|*      dialog for changing slant and corner radius
 |*
 \************************************************************************/
 
@@ -583,7 +583,7 @@ sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
     if( bModified )
     {
-        // Referenzpunkt setzen
+        // set reference points
         // #75897#
         Rectangle aObjectRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
@@ -604,7 +604,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
     // if the view has selected objects, items with SFX_ITEM_DEFAULT need to be disabled
     const SfxPoolItem* pItem;
 
-    // Eckenradius
+    // corner radius
     if(!pView->IsEdgeRadiusAllowed())
     {
         aFlRadius.Disable();
@@ -630,7 +630,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
 
     aMtrRadius.SaveValue();
 
-    // Schraegstellen: Winkel
+    // slant: angle
     if( !pView->IsShearAllowed() )
     {
         aFlAngle.Disable();
@@ -753,7 +753,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     DBG_ASSERT( pPool, "no pool (!)" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
-    meRP = RP_LT; // s.o.
+    meRP = RP_LT; // see above
 
     maMtrWidth.SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeWidthHdl ) );
     maMtrHeight.SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeHeightHdl ) );
@@ -1089,7 +1089,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
     else
         maTsbAutoGrowHeight.SetState( STATE_DONTKNOW );
 
-    // Ist Abgleich gesetzt?
+    // Is matching set?
     String aStr = GetUserData();
     maCbxScale.Check( (sal_Bool)aStr.ToInt32() );
 
@@ -1679,7 +1679,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
 
 void SvxPositionSizeTabPage::FillUserData()
 {
-    // Abgleich wird in der Ini-Datei festgehalten
+    // matching is saved in the Ini-file
     UniString aStr = UniString::CreateFromInt32( (sal_Int32) maCbxScale.IsChecked() );
     SetUserData( aStr );
 }

@@ -65,7 +65,7 @@
 #define STR_US_STATE    10
 #define STR_QUERY_REG   11
 
-// Positionierungshilfen f"ur den Dialog
+// positioning help for the dialog
 
 #define HSPACE      2
 #define VSPACE      3

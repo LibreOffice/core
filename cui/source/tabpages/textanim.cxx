@@ -52,7 +52,7 @@ static sal_uInt16 pRanges[] =
 
 /*************************************************************************
 |*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
+|* constructor of the tab dialog: adds pages to the dialog
 |*
 \************************************************************************/
 
@@ -188,7 +188,7 @@ SvxTextAnimationPage::~SvxTextAnimationPage()
 
 /*************************************************************************
 |*
-|* Liest uebergebenen Item-Set
+|* reads the passed item set
 |*
 \************************************************************************/
 
@@ -196,7 +196,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 {
     const SfxItemPool* pPool = rAttrs.GetPool();
 
-    // Animationstyp
+    // animation type
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIKIND );
 
     if( !pItem )
@@ -210,7 +210,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         aLbEffect.SetNoSelection();
     aLbEffect.SaveValue();
 
-    // Animationsrichtung
+    // animation direction
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDIRECTION );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
@@ -265,7 +265,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         aTsbStopInside.SetState( STATE_DONTKNOW );
     aTsbStopInside.SaveValue();
 
-    // Anzahl
+    // quantity
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANICOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
@@ -298,7 +298,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     aTsbEndless.SaveValue();
     aNumFldCount.SaveValue();
 
-    // Verzoegerung
+    // delay
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDELAY );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
@@ -323,7 +323,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     aTsbAuto.SaveValue();
     aMtrFldDelay.SaveValue();
 
-    // Schrittweite
+    // step size
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIAMOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
@@ -381,7 +381,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 
 /*************************************************************************
 |*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
+|* fills the passed item set with dialog box attributes
 |*
 \************************************************************************/
 
@@ -391,7 +391,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     sal_uInt16 nPos;
     TriState eState;
 
-    // Animationstyp
+    // animation type
     nPos = aLbEffect.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         nPos != aLbEffect.GetSavedValue() )
@@ -400,7 +400,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // Animationsrichtung
+    // animation direction
     if( aBtnUp.GetSavedValue() != aBtnUp.IsChecked() ||
         aBtnLeft.GetSavedValue() != aBtnLeft.IsChecked() ||
         aBtnRight.GetSavedValue() != aBtnRight.IsChecked() ||
@@ -427,7 +427,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // Anzahl
+    // quantity
     eState = aTsbEndless.GetState();
     String aStr = aNumFldCount.GetText();
     if( eState != aTsbEndless.GetSavedValue() ||
@@ -448,7 +448,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextAniCountItem( (sal_uInt16) nValue ) );
     }
 
-    // Verzoegerung
+    // delay
     eState = aTsbAuto.GetState();
     aStr = aMtrFldDelay.GetText();
     if( eState != aTsbAuto.GetSavedValue() ||
@@ -469,7 +469,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextAniDelayItem( (sal_uInt16) nValue ) );
     }
 
-    // Schrittweite
+    // step size
     eState = aTsbPixel.GetState();
     aStr = aMtrFldAmount.GetText();
     if( eState != aTsbPixel.GetSavedValue() ||
@@ -516,7 +516,7 @@ sal_uInt16* SvxTextAnimationPage::GetRanges()
 
 /*************************************************************************
 |*
-|* Erzeugt die Seite
+|* creates the page
 |*
 \************************************************************************/
 

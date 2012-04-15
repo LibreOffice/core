@@ -86,7 +86,7 @@ class OPropertySetHelperInfo_Impl
 public:
     OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW(());
 
-    // XPropertySetInfo-Methoden
+    // XPropertySetInfo-methods
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
     virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);

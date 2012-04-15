@@ -133,7 +133,7 @@ namespace dbtools
     //------------------------------------------------------------------------------
     sal_Int32 DBTypeConversion::toINT32(const Time& rVal)
     {
-        // Zeit normalisieren
+        // normalize time
         sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
         sal_Int32 nHundredthSeconds = rVal.HundredthSeconds % 100;
         sal_Int32 nMinutes          = rVal.Minutes + nSeconds / 60;
@@ -141,14 +141,14 @@ namespace dbtools
         sal_Int32 nHours            = rVal.Hours + nMinutes / 60;
         nMinutes                    = nMinutes % 60;
 
-        // Zeit zusammenbauen
+        // assemble time
         return (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
     }
 
     //------------------------------------------------------------------------------
     sal_Int64 DBTypeConversion::toINT64(const DateTime& rVal)
     {
-        // Zeit normalisieren
+        // normalize time
         sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
         sal_Int32 nHundredthSeconds = rVal.HundredthSeconds % 100;
         sal_Int32 nMinutes          = rVal.Minutes + nSeconds / 60;
@@ -156,7 +156,7 @@ namespace dbtools
         sal_Int32 nHours            = rVal.Hours + nMinutes / 60;
         nMinutes                    = nMinutes % 60;
 
-        // Zeit zusammenbauen
+        // assemble time
         sal_Int32 nTime = (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
         sal_Int32 nDate = ((sal_Int32)(rVal.Day%100)) + (((sal_Int32)(rVal.Month%100))*100) + (((sal_Int32) rVal.Year%10000)*10000);
         sal_Int64 nRet;
@@ -369,7 +369,7 @@ namespace dbtools
             nSign = 1;
 
         Time xRet;
-        // Zeit normalisieren
+        // normalize time
         // we have to sal_Int32 here because otherwise we get an overflow
         sal_Int32 nHundredthSeconds = nMS/10;
         sal_Int32 nSeconds          = nHundredthSeconds / 100;
@@ -380,7 +380,7 @@ namespace dbtools
         xRet.Hours                  = (sal_uInt16)(nMinutes / 60);
         xRet.Minutes                = (sal_uInt16)(nMinutes % 60);
 
-        // Zeit zusammenbauen
+        // assemble time
         sal_Int32 nTime = (sal_Int32)(xRet.HundredthSeconds + (xRet.Seconds*100) + (xRet.Minutes*10000) + (xRet.Hours*1000000)) * nSign;
 
         if(nTime < 0)

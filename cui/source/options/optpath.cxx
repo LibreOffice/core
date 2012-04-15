@@ -363,10 +363,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     String aUserData = GetUserData();
     if ( aUserData.Len() )
     {
-        // Spaltenbreite restaurieren
+        // restore column width
         pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( NULL );
-        // Sortierrichtung restaurieren
+        // restore sort direction
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
         HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
 

@@ -309,7 +309,7 @@ short SvInsertOleDlg::Execute()
                 {
                     if( aFileName.Len() )  // from OLE Dialog
                     {
-                        // Objekt konnte nicht aus Datei erzeugt werden
+                        // object couldn't be created from file
                         // global Resource from svtools (former so3 resource)
                         String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                         aErr.SearchAndReplace( String( '%' ), aFileName );
@@ -317,7 +317,7 @@ short SvInsertOleDlg::Execute()
                     }
                     else
                     {
-                        // Objekt konnte nicht erzeugt werden
+                        // object couldn't be created
                         // global Resource from svtools (former so3 resource)
                         String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
                         aErr.SearchAndReplace( String( '%' ), aServerName );
@@ -370,7 +370,7 @@ short SvInsertOleDlg::Execute()
 
             if ( !m_xObj.is() )
             {
-                // Objekt konnte nicht aus Datei erzeugt werden
+                // object couldn't be created from file
                 // global Resource from svtools (former so3 resource)
                 String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr.SearchAndReplace( String( '%' ), aFileName );
@@ -526,7 +526,7 @@ short SvInsertPlugInDialog::Execute()
         }
         else
         {
-            // PlugIn konnte nicht erzeugt werden
+            // PlugIn couldn't be created
             // global Resource from svtools (former so3 resource)
             String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
             aErr.SearchAndReplace( String( '%' ), aURL );

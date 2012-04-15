@@ -41,7 +41,7 @@ class SdrView;
 
 /*************************************************************************
 |*
-|* Page zum "Andern von TextAnimationen (Lauftext etc.)
+|* Page for changing TextAnimations (running text etc.)
 |*
 \************************************************************************/
 

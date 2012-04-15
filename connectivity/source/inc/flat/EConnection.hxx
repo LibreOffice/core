@@ -42,9 +42,9 @@ namespace connectivity
             sal_Int32   m_nMaxRowsToScan;
             sal_Bool    m_bHeaderLine;          // column names in first row
             sal_Unicode m_cFieldDelimiter;      // look at the name
-            sal_Unicode m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
-            sal_Unicode m_cDecimalDelimiter;    // Dezimal-delimiter (Dezimalpoint)
-            sal_Unicode m_cThousandDelimiter;   //
+            sal_Unicode m_cStringDelimiter;
+            sal_Unicode m_cDecimalDelimiter;
+            sal_Unicode m_cThousandDelimiter;
         public:
             OFlatConnection(ODriver*    _pDriver);
             virtual ~OFlatConnection();

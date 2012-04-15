@@ -151,7 +151,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 
 /*************************************************************************
 |*
-|* Dialog zum Abbrechen, Speichern oder Hinzufuegen
+|* dialog for cancelling, saving or adding
 |*
 \************************************************************************/
 

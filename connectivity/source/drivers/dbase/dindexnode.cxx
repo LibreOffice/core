@@ -75,7 +75,7 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 // -----------------------------------------------------------------------------
 
 //==================================================================
-// Index Seite
+// index page
 //==================================================================
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            :nPagePos(nPos)
@@ -204,7 +204,7 @@ sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                     --nCount;   // (otherwise we might get Assertions and GPFs - 60593)
                     bResult = Insert(rIndex.m_nCurNode + 1, rNode);
                 }
-                else  // Position unbekannt
+                else  // position unknown
                 {
                     sal_uInt16 nPos = NODE_NOTFOUND;
                     while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;

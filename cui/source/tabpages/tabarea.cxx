@@ -145,7 +145,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
 
-    // Speichern der Tabellen, wenn sie geaendert wurden.
+    // save the tables when they have been changed
 
     const String aPath( SvtPathOptions().GetPalettePath() );
 
@@ -155,7 +155,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpHatchingList->Save();
 
         SvxHatchListItem aItem( mpHatchingList, SID_HATCH_LIST );
-        // ToolBoxControls werden benachrichtigt:
+        // ToolBoxControls are informed:
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -168,7 +168,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpBitmapList->Save();
 
         SvxBitmapListItem aItem( mpBitmapList, SID_BITMAP_LIST );
-        // ToolBoxControls werden benachrichtigt:
+        // ToolBoxControls are informed:
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -183,7 +183,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpGradientList->Save();
 
         SvxGradientListItem aItem( mpGradientList, SID_GRADIENT_LIST );
-        // ToolBoxControls werden benachrichtigt:
+        // ToolBoxControls are informed:
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -198,7 +198,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpColorList->Save();
 
         SvxColorListItem aItem( mpColorList, SID_COLOR_TABLE );
-        // ToolBoxControls werden benachrichtigt:
+        // ToolBoxControls are informed:
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -213,9 +213,9 @@ short SvxAreaTabDialog::Ok()
 {
     SavePalettes();
 
-    // Es wird RET_OK zurueckgeliefert, wenn wenigstens eine
-    // TabPage in FillItemSet() sal_True zurueckliefert. Dieses
-    // geschieht z.Z. standardmaessig.
+    // RET_OK is returned, if at least one
+    // TabPage returns sal_True in FillItemSet().
+    // This happens by default at the moment.
     return( SfxTabDialog::Ok() );
 }
 
@@ -250,7 +250,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &mnBitmapListState );
             ( (SvxAreaTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxAreaTabPage&) rPage ).Construct();
-            // ActivatePage() wird das erste mal nicht gerufen
+            // ActivatePage() is not called the first time
             ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
 
         break;

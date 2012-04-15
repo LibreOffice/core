@@ -667,7 +667,7 @@ SvxThesaurusDialog::~SvxThesaurusDialog()
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
 {
-    // Sprache anpassen
+    // adjust language
     String aStr( GetText() );
     aStr.Erase( aStr.Search( sal_Unicode( '(' ) ) - 1 );
     aStr.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) ) );

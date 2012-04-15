@@ -65,7 +65,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
     {
         FilterMap aMap;
 
-        // mimetypes zusammenfassen: eine description, mehrere extensions
+        // sum up the mimetypes: one description, multiple extensions
 
         Sequence<PluginDescription > aDescriptions( xPMgr->getPluginDescriptions() );
         const PluginDescription * pDescriptions = aDescriptions.getConstArray();

@@ -342,7 +342,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetTabs()
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 {
-    // Sortierung durch diese Ueberladung abgeklemmt
+    // sorting is stopped by this overloading
 }
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(

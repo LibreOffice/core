@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         // initialize temporary variable
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSetAtIndex";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, index,count,obj);

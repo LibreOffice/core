@@ -486,7 +486,7 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
         Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
 
-        //??? das untere byte aus dem user data in string wandeln
+        //??? convert the lower byte from the user date into a string
         OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
         if(aData.HasNumericValue())
         {
@@ -1206,7 +1206,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 //------------------------------------------------------------------------
 
-//nicht �berladen wegschmeissen
+// don't throw away overloaded
 sal_uInt16* SvxLinguTabPage::GetRanges()
 {
     //TL???
@@ -1910,8 +1910,8 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry( String& rTxt, sal_uInt16 nCol )
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
     pEntry->AddItem( new BrwString_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;
@@ -2075,8 +2075,8 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, sal_uInt16 nCol )
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
     pEntry->AddItem( new BrwStringDic_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;

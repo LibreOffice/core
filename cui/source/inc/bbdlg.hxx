@@ -33,7 +33,7 @@
 #include <sfx2/tabdlg.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Border Background Pages buendeln
+    Description:   bunch the border background pages
  --------------------------------------------------------------------*/
 
 class SvxBorderBackgroundDlg: public SfxTabDialog

@@ -51,7 +51,7 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Grafik zuschneiden
+    description: crop graphic
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
@@ -190,7 +190,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
     if ( SFX_ITEM_SET == rSet.GetItemState( nW, sal_False, &pItem ) )
     {
-        // Orientation und Size aus dem PageItem
+        // orientation and size from the PageItem
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
 
         aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
@@ -253,7 +253,7 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 
         SvxSizeItem aSz( nW );
 
-        // die Groesse koennte schon von einer anderen Page gesetzt worden sein
+        // size could already have been set from another page
         // #44204#
         const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
         const SfxPoolItem* pItem = 0;
@@ -331,8 +331,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     {
         if(!bReset)
         {
-            // Wert wurde von Umlauf-Tabpage geaendert und muss
-            // mit Modify-Flag gesetzt werden
+            // value was changed by wrap-tabpage and has to
+            // be set with modify-flag
             aWidthMF.SetUserValue(nWidth, FUNIT_TWIP);
         }
         else
@@ -344,8 +344,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     {
         if (!bReset)
         {
-            // Wert wurde von Umlauf-Tabpage geaendert und muss
-            // mit Modify-Flag gesetzt werden
+            // value was changed by wrap-tabpage and has to
+            // be set with modify-flag
             aHeightMF.SetUserValue(nHeight, FUNIT_TWIP);
         }
         else
@@ -389,7 +389,7 @@ int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Massstab geaendert, Groesse anpassen
+    description: scale changed, adjust size
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxGrfCropPage, ZoomHdl, MetricField *, pField )
@@ -420,7 +420,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, MetricField *, pField )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Groesse aendern, Massstab anpassen
+    description: change size, adjust scale
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
@@ -458,7 +458,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Raender auswerten
+    description: evaluate border
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
@@ -494,7 +494,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         aExampleWN.SetRight(nRight);
         if(bZoom)
         {
-            //Massstab bleibt -> Breite neu berechnen
+            // scale stays, recompute width
             ZoomHdl(&aWidthZoomMF);
         }
     }
@@ -523,19 +523,19 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         aExampleWN.SetBottom( nBottom );
         if(bZoom)
         {
-            //Massstab bleibt -> Hoehe neu berechnen
+            // scale stays, recompute height
             ZoomHdl(&aHeightZoomMF);
         }
     }
     aExampleWN.Invalidate();
-    //Groesse und Raender veraendert -> Massstab neu berechnen
+    // size and border changed -> recompute scale
     if(!bZoom)
         CalcZoom();
     CalcMinMaxBorder();
     return 0;
 }
 /*--------------------------------------------------------------------
-    Beschreibung: Originalgroesse einstellen
+    description: set original size
  --------------------------------------------------------------------*/
 
 IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
@@ -559,7 +559,7 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
     return 0;
 }
 /*--------------------------------------------------------------------
-    Beschreibung: Massstab berechnen
+    description: compute scale
  --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::CalcZoom()
@@ -588,7 +588,7 @@ void SvxGrfCropPage::CalcZoom()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Minimal-/Maximalwerte fuer die Raender setzen
+    description: set minimum/maximum values for the margins
  --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::CalcMinMaxBorder()
@@ -616,8 +616,8 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     aTopMF.SetMax( aTopMF.Normalize(nMin), eUnit );
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Spinsize auf 1/20 der Originalgroesse setzen,
-                    FixedText mit der Originalgroesse fuellen
+    description:   set spinsize to 1/20 of the original size,
+                   fill FixedText with the original size
  --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
@@ -633,7 +633,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, aLeftMF.GetUnit());
 
-        // Ist der Rand zu gross, wird er auf beiden Seiten auf 1/3 eingestellt.
+        // if the margin is too big, it is set to 1/3 on both pages
         long nR = lcl_GetValue( aRightMF, eUnit );
         long nL = lcl_GetValue( aLeftMF, eUnit );
         if((nL + nR) < - aOrigSize.Width())
@@ -663,7 +663,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         aTopMF.SetSpinSize(nSpin);
         aBottomMF.SetSpinSize(nSpin);
 
-        //Originalgroesse anzeigen
+        // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
         MetricField aFld(this, WB_HIDE);

@@ -48,9 +48,9 @@ class SvxParagraphControllerItem;
 
 /*  {k:\svx\prototyp\dialog\parastd.bmp}
 
-    [Beschreibung]
-    Mit dieser TabPage koennen Standard-Attribute eines Absatzes eingestellt
-    werden (Einzug, Abstand, Ausrichtung, Zeilenabstand).
+    [Description]
+    With this TabPage standard attributes of a paragraph can be set
+    (indention, distance, alignment, line spacing).
 
     [Items]
     <SvxAdjustItem><SID_ATTR_PARA_ADJUST>
@@ -67,7 +67,7 @@ private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     FixedLine               aIndentFrm;
-    // Einzug
+    // indention
     FixedText               aLeftLabel;
     SvxRelativeField        aLeftIndent;
 
@@ -80,14 +80,14 @@ private:
 
     FixedLine               aDistFrm;
 
-    // Abstaende
+    // distance
     FixedText               aTopLabel;
     SvxRelativeField        aTopDist;
     FixedText               aBottomLabel;
     SvxRelativeField        aBottomDist;
     CheckBox                aContextualCB;
 
-    // Zeilenabstand
+    // line spacing
     FixedLine               aLineDistFrm;
     ListBox                 aLineDist;
     FixedText               aLineDistAtLabel;
@@ -96,7 +96,7 @@ private:
     String                  sAbsDist;
     SvxParaPrevWindow       aExampleWin;
 
-    //Registerhaltigkeit - nur Writer
+    // only writer
     FixedLine               aRegisterFL;
     CheckBox                aRegisterCB;
 
@@ -146,7 +146,7 @@ class SvxParaAlignTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 
-    // Ausrichtung
+    // alignment
     FixedLine               aAlignFrm;
     RadioButton             aLeft;
     RadioButton             aRight;
@@ -199,9 +199,9 @@ public:
 
 /*  {k:\svx\prototyp\dialog\paraext.bmp}
 
-    [Beschreibung]
-    Mit dieser TabPage koennen Spezial-Attribute eines Absatzes eingestellt
-    werden (Silbentrennung, Seitenumbruch, Schusterjungen, Hurenkinder, ...).
+    [Description]
+    With this TabPage special attributes of a paragraph can be set
+    (hyphenation, pagebreak, orphan, widow, ...).
 
     [Items]
     <SvxHyphenZoneItem><SID_ATTR_PARA_HYPHENZONE>
@@ -233,7 +233,7 @@ protected:
 private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
-    // Silbentrennung
+    // hyphenation
     FixedLine           aExtFL;
     TriStateBox         aHyphenBox;
     FixedText           aBeforeText;
@@ -243,7 +243,7 @@ private:
     FixedText           aMaxHyphenLabel;
     NumericField        aMaxHyphenEdit;
 
-    // Seitenumbruch
+    // pagebreak
     FixedLine           aBreaksFL;
     TriStateBox         aPageBreakBox;
     FixedText           aBreakTypeFT;
@@ -257,11 +257,11 @@ private:
 
     FixedLine           aExtendFL;
 
-    // Absatzteilung
+    // paragraph division
     TriStateBox         aKeepTogetherBox;
     TriStateBox         aKeepParaBox;
 
-    // Witwen/Waisen
+    // orphan/widow
     TriStateBox         aOrphanBox;
     NumericField        aOrphanRowNo;
     FixedText           aOrphanRowLabel;

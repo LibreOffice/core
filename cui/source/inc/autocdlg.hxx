@@ -220,7 +220,7 @@ struct DoubleString
 {
     String  sShort;
     String  sLong;
-    void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
+    void*   pUserData; // CheckBox -> form. Text Bool -> selection text
 };
 typedef std::vector<DoubleString> DoubleStringArray;
 typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
@@ -260,7 +260,7 @@ private:
         DECL_LINK(NewDelHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
 
-        void            RefillReplaceBox(sal_Bool bFromReset, //Box mit neuer Sprache fuellen
+        void            RefillReplaceBox(sal_Bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 

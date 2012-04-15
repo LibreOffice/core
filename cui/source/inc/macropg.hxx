@@ -123,7 +123,7 @@ public:
 
 // class SvxMacroAssignDlg --------------------------------------------------
 
-typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef sal_uInt16* (*GetTabPageRanges)(); // gives international Which-values
 
 class SvxMacroAssignSingleTabDialog : public SfxModalDialog
 {

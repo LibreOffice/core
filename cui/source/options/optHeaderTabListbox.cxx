@@ -74,7 +74,7 @@ void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
 
     for ( sal_uInt16 nCol = 1; nCol < _nTabCount; ++nCol )
     {
-        // alle Spalten mit eigener Klasse initialisieren (Spalte 0 == Bitmap)
+        // initialize all columns with own class (column 0 == Bitmap)
         SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
         OptLBoxString_Impl* pStr = new OptLBoxString_Impl( pEntry, 0, pCol->GetText() );
         pEntry->ReplaceItem( pStr, nCol );

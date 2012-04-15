@@ -323,13 +323,11 @@ void TakeThread::execute()
 
     for( sal_uInt16 i = 0; i < nEntries && schedule(); i++ )
     {
-        // kompletten Filenamen aus FoundList holen
         if( mpBrowser->bTakeAll )
             aURL = INetURLObject( *mpBrowser->aFoundList[ nPos = i ] );
         else
             aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
-        // Position in Taken-Liste uebernehmen
         mrTakenList.push_back( (sal_uLong)nPos );
 
         {
@@ -707,7 +705,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFtMSShowType.SetText( aType );
     aFtMSShowPath.SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    // Ein- oder Mehrzahl?
+    // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
         aObjStr = aObjStr.GetToken( 0 );
     else
@@ -728,7 +726,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aAccess += aLocaleData.getTime( pData->aThemeChangeTime );
     aFtMSShowChangeDate.SetText( aAccess );
 
-    // Image setzen
+    // set image
     sal_uInt16 nId;
 
     if( pThm->IsImported() )

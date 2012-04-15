@@ -30,7 +30,7 @@
 // defines ------------------------------------------------------------------
 
 //================================================
-// Zahlen-TabPage:
+// number TabPage:
 #define WND_NUMBER_PREVIEW      2
 #define FT_CATEGORY             3
 #define FT_FORMAT               4

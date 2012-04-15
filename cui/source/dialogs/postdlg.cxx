@@ -85,7 +85,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     pOutSet     ( 0 )
 
 {
-    if (bRedline)   // HelpIDs fuer Redlining
+    if (bRedline)   // HelpIDs for redlining
     {
         SetHelpId(HID_REDLINING_DLG);
         aEditED.SetHelpId(HID_REDLINING_EDIT);
@@ -154,7 +154,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     if ( !bNew )
         SetText( CUI_RESSTR( STR_NOTIZ_EDIT ) );
     else
-        // neu anlegen
+        // create newly
         SetText( CUI_RESSTR( STR_NOTIZ_INSERT ) );
 
     FreeResource();

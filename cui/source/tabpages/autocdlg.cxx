@@ -185,7 +185,7 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
     void* pVoid = pBox->GetEntryData(nPos);
     LanguageType eNewLang = (LanguageType)(long)pVoid;
-    //alte Einstellungen speichern und neu fuellen
+    // save old settings and fill anew
     if(eNewLang != eLastDialogLanguage)
     {
         sal_uInt16  nPageId = GetCurPageId();
@@ -288,7 +288,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 
 /*********************************************************************/
 /*                                                                   */
-/*  Hilfs-struct fuer dUserDaten der Checklistbox                    */
+/*  helping struct for dUserData of the Checklistbox                 */
 /*                                                                   */
 /*********************************************************************/
 
@@ -304,7 +304,7 @@ struct ImpUserData
 
 /*********************************************************************/
 /*                                                                   */
-/*  Dialog fuer Prozenteinstellung                                   */
+/*  dialog for per cent settings                                     */
 /*                                                                   */
 /*********************************************************************/
 
@@ -331,7 +331,7 @@ class OfaAutoFmtPrcntSet : public ModalDialog
 
 /*********************************************************************/
 /*                                                                   */
-/*  veraenderter LBoxString                                          */
+/*  changed LBoxString                                               */
 /*                                                                   */
 /*********************************************************************/
 
@@ -393,7 +393,7 @@ void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlag
 
 /*********************************************************************/
 /*                                                                   */
-/*  TabPage Autoformat anwenden                                      */
+/*  use TabPage autoformat                                           */
 /*                                                                   */
 /*********************************************************************/
 
@@ -458,7 +458,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
 {
     FreeResource();
 
-    //typ. Anfuehrungszeichen einsetzen
+    // set typ. inverted commas
     SvtSysLocale aSysLcl;
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
@@ -497,16 +497,16 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
         aCheckLB.SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
 
     String sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
@@ -676,8 +676,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.SetUpdateMode(sal_False);
     aCheckLB.Clear();
 
-    // Die folgenden Eintraege muessen in der selben Reihenfolge, wie im
-    // OfaAutoFmtOptions-enum eingefuegt werden!
+    // The following entries have to be inserted in the same order
+    // as in the OfaAutoFmtOptions-enum!
     aCheckLB.GetModel()->Insert(CreateEntry(sUseReplaceTbl,     CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttWord,       CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttSent,       CBCOL_BOTH  ));
@@ -784,7 +784,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     }
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
-        // Dialog fuer Prozenteinstellung
+        // dialog for per cent settings
         OfaAutoFmtPrcntSet aDlg(this);
         aDlg.GetPrcntFld().SetValue(nPercent);
         if(RET_OK == aDlg.Execute())
@@ -895,7 +895,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sa
 
 void OfaACorrCheckListBox::HBarClick()
 {
-    // Sortierung durch diese Ueberladung abgeklemmt
+    // sorting is stopped by this overload
 }
 
 void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
@@ -1007,21 +1007,21 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     {
         LanguageType eCurLang = it->first;
         DoubleStringArray& rDoubleStringArray = it->second;
-        if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
+        if(eCurLang != eLang) // the current language is treated later
         {
             SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
             sal_uInt16 nWordListCount = pWordList->Count();
             sal_uInt16 nDoubleStringArrayCount = rDoubleStringArray.size();
             sal_uInt16 nPos = nDoubleStringArrayCount;
             sal_uInt16 nLastPos = nPos;
-            // 1. Durchlauf: Eintraege loeschen oder veraendern:
+            // 1st run: delete or change entries:
 
 
             for( sal_uInt16 nWordListPos = nWordListCount; nWordListPos; nWordListPos-- )
             {
                 SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(nWordListPos - 1);
                 String sEntry(pWordPtr->GetShort());
-                // formatierter Text steht nur im Writer
+                // formatted text is only in Writer
                 sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
                 while(!bFound && nPos)
                 {
@@ -1052,7 +1052,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
             nDoubleStringArrayCount = rDoubleStringArray.size();
             for(sal_uInt16 nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
             {
-                //jetzt sollte es nur noch neue Eintraege geben
+                // now there should only be new entries left
                 DoubleString& rDouble = rDoubleStringArray[ nDoubleStringArrayPos ];
                 if(rDouble.pUserData == &bHasSelectionText)
                     pAutoCorrect->PutText( rDouble.sShort,
@@ -1066,7 +1066,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         }
     }
     aDoubleStringTable.clear();
-    // jetzt noch die aktuelle Selektion
+    // and now the current selection
     SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
     sal_uInt16 nWordListCount = pWordList->Count();
     sal_uInt16 nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
@@ -1074,14 +1074,14 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     aReplaceTLB.SetUpdateMode(sal_False);
     sal_uInt16 nListBoxPos = nListBoxCount;
     sal_uInt16 nLastListBoxPos = nListBoxPos;
-    // 1. Durchlauf: Eintraege loeschen oder veraendern:
+    // 1st run: delete or change entries:
 
     sal_uInt16 i;
     for( i = nWordListCount; i; i-- )
     {
         SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i- 1);
         String sEntry(pWordPtr->GetShort());
-        // formatierter Text steht nur im Writer
+        // formatted text is only in Writer
         sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
         while(!bFound && nListBoxPos)
         {
@@ -1114,7 +1114,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
     for(i = 0; i < nListBoxCount; i++ )
     {
-        //jetzt sollte es nur noch neue Eintraege geben
+        // now there should only be new entries left
         SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
         String sShort = aReplaceTLB.GetEntryText(pEntry, 0);
         if(pEntry->GetUserData() == &bHasSelectionText)
@@ -1173,7 +1173,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         {
             DoubleString& rDouble = rArray[i];
             sal_Bool bTextOnly = 0 == rDouble.pUserData;
-            // formatierter Text wird nur im Writer angeboten
+            // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
                 String sEntry(rDouble.sShort);
@@ -1182,7 +1182,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 SvLBoxEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
                 aTextOnlyCB.Check(bTextOnly);
                 if(!bTextOnly)
-                    pEntry->SetUserData(rDouble.pUserData); // Das heisst: mit Formatinfo oder sogar mit Selektionstext
+                    pEntry->SetUserData(rDouble.pUserData); // that means: with format info or even with selection text
             }
             else
                 aFormatText.insert(rDouble.sShort);
@@ -1197,7 +1197,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         {
             SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i);
             sal_Bool bTextOnly = pWordPtr->IsTextOnly();
-            // formatierter Text wird nur im Writer angeboten
+            // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
                 String sEntry(pWordPtr->GetShort());
@@ -1206,7 +1206,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 SvLBoxEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
                 aTextOnlyCB.Check(pWordPtr->IsTextOnly());
                 if(!bTextOnly)
-                    pEntry->SetUserData(&aTextOnlyCB); // Das heisst: mit Formatinfo
+                    pEntry->SetUserData(&aTextOnlyCB); // that means: with format info
             }
             else
                 aFormatText.insert(pWordPtr->GetShort());
@@ -1259,20 +1259,20 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     {
         SvLBoxEntry* pEntry = pBox->FirstSelected();
         String sTmpShort(pBox->GetEntryText(pEntry, 0));
-        // wird der Text ueber den ModifyHdl gesetzt, dann steht der Cursor sonst immer am Wortanfang,
-        // obwohl man gerade hier editiert
+        // if the text is set via ModifyHdl, the cursor is always at the beginning
+        // of a word, although you're editing here
         sal_Bool bSameContent = 0 == pCompareClass->compareString(
                 sTmpShort, aShortED.GetText() );
         Selection aSel = aShortED.GetSelection();
         if(aShortED.GetText() != sTmpShort)
         {
             aShortED.SetText(sTmpShort);
-            //war es nur eine andere Schreibweise, dann muss die Selektion auch wieder gesetzt werden
+            // if it was only a different notation, the selection has to be set again
             if(bSameContent)
                 aShortED.SetSelection(aSel);
         }
         aReplaceED.SetText(pBox->GetEntryText(pEntry, 1));
-        // mit UserData gibt es eine Formatinfo
+        // with UserData there is a Formatinfo
         aTextOnlyCB.Check(0 == pEntry->GetUserData());
     }
     else
@@ -1329,11 +1329,11 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
                     sEntry, static_cast< SvLBoxEntry * >(NULL), false,
                     nPos == USHRT_MAX ? LIST_APPEND : nPos);
             if( !bReplaceEditChanged && !aTextOnlyCB.IsChecked())
-                pInsEntry->SetUserData(&bHasSelectionText); // neuer formatierter Text
+                pInsEntry->SetUserData(&bHasSelectionText); // new formatted text
 
             aReplaceTLB.MakeVisible( pInsEntry );
             aReplaceTLB.SetUpdateMode(sal_True);
-            // falls der Request aus dem ReplaceEdit kam, dann Focus in das ShortEdit setzen
+            // if the request came from the ReplaceEdit, give focus to the ShortEdit
             if(aReplaceED.HasFocus())
                 aShortED.GrabFocus();
 
@@ -1341,8 +1341,8 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     }
     else
     {
-        // das kann nur ein Enter in einem der beiden Edit-Felder sein und das
-        // bedeutet EndDialog() - muss im KeyInput ausgewertet werden
+        // this can only be an enter in one of the two edit fields
+        // which means EndDialog() - has to be evaluated in KeyInput
         return 0;
     }
     ModifyHdl(&aShortED);
@@ -1528,7 +1528,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
     {
         LanguageType eCurLang = it1->first;
         StringsArrays& rArrays = it1->second;
-        if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
+        if(eCurLang != eLang) // current language is treated later
         {
             SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWrdSttExceptList(eCurLang);
 
@@ -1539,7 +1539,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 for( i = nCount; i; )
                 {
                     String* pString = pWrdList->GetObject( --i );
-                    //Eintrag finden u. gfs entfernen
+
                     if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
                       pWrdList->DeleteAndDestroy( i );
                 }
@@ -1633,7 +1633,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
 {
     if(eLang != eSet)
     {
-        //alte Einstellungen speichern und neu fuellen
+        // save old settings and fill anew
         RefillReplaceBoxes(sal_False, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
@@ -1790,8 +1790,8 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {
-        //wird bei Enter nichts getan, dann doch die Basisklasse rufen
-        // um den Dialog zu schliessen
+        // if there's nothing done on enter, call the
+        // base class after all to close the dialog
         if(!nModifier && !aActionLink.Call(this))
                  Edit::KeyInput(rKEvt);
     }
@@ -1815,16 +1815,16 @@ SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
         aSwCheckLB.SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
 
     String sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
@@ -2085,7 +2085,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         nMode = DBL_START;
     else if(pBtn == &aEndQuotePB)
         nMode = DBL_END;
-    // Zeichenauswahl-Dialog starten
+    // start character selection dialog
     SvxCharacterMap* pMap = new SvxCharacterMap( this, sal_True );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));

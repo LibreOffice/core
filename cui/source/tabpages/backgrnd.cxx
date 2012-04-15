@@ -46,7 +46,7 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
-// Tabellenhintergrund
+// table background
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
@@ -149,9 +149,9 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 
 // class BackgroundPreview -----------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Vorschaufenster f"ur Brush oder Bitmap
+    preview window for brush or bitmap
 */
 
 class BackgroundPreviewImpl : public Window
@@ -359,7 +359,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     pParaBck_Impl       ( NULL )
 
 {
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
@@ -413,9 +413,9 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
 
 sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    gibt den Bereich der Which-Werte zur"uck
+    returns the area of the which-values
 */
 
 {
@@ -427,9 +427,9 @@ sal_uInt16* SvxBackgroundTabPage::GetRanges()
 SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Create-Methode f"ur den TabDialog
+    create method for the TabDialog
 */
 
 {
@@ -440,8 +440,8 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 {
-// os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
-//      es muss aber im rSet vorhanden sein!
+// os: Such a nonsense! One will always find such an item somewhere,
+//     but it must be existing in the rSet!
 //  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), sal_False))
@@ -450,15 +450,15 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         return;
     }
 
-    // Zustand des Vorschau-Buttons durch UserData persistent
+    // condition of the preview button is persistent due to UserData
     String aUserData = GetUserData();
     aBtnPreview.Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
 
-    // nach Reset kein ShowSelector() mehr aufrufen d"urfen
+    // don't be allowed to call ShowSelector() after reset anymore
     bAllowShowSelector = sal_False;
 
 
-    // Input-BrushItem besorgen und auswerten
+    // get and evaluate Input-BrushItem
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
     const SfxPoolItem* pItem;
@@ -487,11 +487,11 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
                 SID_PARA_BACKGRND_DESTINATION, sal_False, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
-        // ist gerade Zeichen aktiviert?
+        // character activated?
         sal_uInt16 nParaSel  = aParaLBox.GetSelectEntryPos();
         if(1 == nParaSel)
         {
-            // dann war das ein "Standard" - Aufruf
+            // then it was a "standard"-call
             nDestValue = nParaSel;
         }
         aParaLBox.SelectEntryPos(nDestValue);
@@ -635,11 +635,11 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 {
     ShowSelector();
 
-    // Zustand des Vorschau-Buttons durch UserData persistent
+    // condition of the preview button is persistent due to UserData
     String aUserData = GetUserData();
     aBtnPreview.Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
 
-    // Input-BrushItem besorgen und auswerten
+    // get and evaluate Input-BrushItem
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
     sal_uInt16 nWhich = GetWhich( nSlot );
@@ -658,7 +658,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     if ( pBgdAttr )
     {
         FillControls_Impl(*pBgdAttr, aUserData);
-        // Auch bei Anzeige der Grafik, soll die Brush erhalten bleiben
+        // brush shall be kept when showing the graphic, too
         if( aBgdColor != pBgdAttr->GetColor() )
         {
             aBgdColor = pBgdAttr->GetColor();
@@ -693,12 +693,12 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
 void SvxBackgroundTabPage::FillUserData()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Beim Destruieren einer SfxTabPage wird diese virtuelle Methode gerufen,
-    damit die TabPage interne Informationen sichern kann.
+    When destroying a SfxTabPage this virtual method is called,
+    so that the TabPage can save internal information.
 
-    In diesem Fall wird der Zustand des Vorschau-Buttons gesichert.
+    In this case the condition of the preview button is saved.
 */
 
 {
@@ -714,8 +714,8 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         pPageImpl->pLoadTimer->Stop();
         LoadTimerHdl_Impl( pPageImpl->pLoadTimer );
     }
-// os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
-//      es muss aber im rSet vorhanden sein!
+// os: Such a nonsense! One will always find such an item somewhere,
+//     but it must be existing in the rSet!
 
 //  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
@@ -772,13 +772,13 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             aBgdColor.SetTransparency(lcl_PercentToTransparency(static_cast<long>(aColTransMF.GetValue())));
         }
         if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
-            || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap gewechselt?
+            || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
         {
-            // Hintergrund-Art wurde nicht gewechselt:
+            // background art hasn't been changed:
 
             if ( (GPOS_NONE == eOldPos) || !aLbSelect.IsVisible() )
             {
-                // Brush-Behandlung:
+                // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
                         (SFX_ITEM_AVAILABLE >= eOldItemState && !aBackgroundColorSet.IsNoSelection()))
                 {
@@ -790,7 +790,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
             else
             {
-                // Bitmap-Behandlung:
+                // Bitmap-treatment:
 
                 SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
                 const sal_Bool          bIsLink  = aBtnLink.IsChecked();
@@ -831,7 +831,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     rCoreSet.ClearItem( nWhich );
             }
         }
-        else // Brush <-> Bitmap gewechselt!
+        else // Brush <-> Bitmap changed!
         {
             if ( bIsBrush )
                 rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
@@ -873,7 +873,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
     if( aTblLBox.IsVisible() )
     {
-        // Der aktuelle Zustand wurde bereits geputtet
+        // the current condition has already been put
         if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
         {
             const SfxPoolItem* pOldCell =
@@ -919,8 +919,8 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     else if(aParaLBox.GetData() == &aParaLBox)
     {
-        // Der aktuelle Zustand wurde bereits geputtet
-        if( nSlot != SID_ATTR_BRUSH && aParaLBox.IsVisible()) // nicht im Suchen-Format-Dialog
+        // the current condition has already been put
+        if( nSlot != SID_ATTR_BRUSH && aParaLBox.IsVisible()) // not in search format dialog
         {
             const SfxPoolItem* pOldPara =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH );
@@ -971,13 +971,13 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
     sal_Bool                bModified = sal_False;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
-        || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap gewechselt?
+        || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
     {
-        // Hintergrund-Art wurde nicht gewechselt:
+        // background art hasn't been changed
 
         if ( (GPOS_NONE == eOldPos) || !aLbSelect.IsVisible() )
         {
-            // Brush-Behandlung:
+            // Brush-treatment:
             if ( rOldItem.GetColor() != aBgdColor )
             {
                 bModified = sal_True;
@@ -990,7 +990,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
         }
         else
         {
-            // Bitmap-Behandlung:
+            // Bitmap-treatment:
             SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
 
             int bBitmapChanged = ( ( eNewPos != eOldPos ) ||
@@ -1011,7 +1011,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
                 rCoreSet.ClearItem( nWhich );
         }
     }
-    else // Brush <-> Bitmap gewechselt!
+    else // Brush <-> Bitmap changed!
     {
         CntWallpaperItem aItem( nWhich );
         if ( bIsBrush )
@@ -1038,9 +1038,9 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
 
 int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    virtuelle Methode, wird beim Deaktivieren gerufen
+    virtual method; is called on deactivation
 */
 
 {
@@ -1057,7 +1057,7 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 {
-    // muss implementiert werden, damit Position-Control funktioniert
+    // has to be implemented so that position control can work
 }
 
 //-----------------------------------------------------------------------
@@ -1076,9 +1076,9 @@ void SvxBackgroundTabPage::ShowSelector()
         aBtnTile.SetClickHdl( HDL(RadioClickHdl_Impl) );
         aBtnPosition.SetClickHdl( HDL(RadioClickHdl_Impl) );
 
-        // Verz"ogertes Laden "uber Timer (wg. UI-Update)
+        // delayed loading via timer (because of UI-Update)
         pPageImpl->pLoadTimer = new Timer;
-        pPageImpl->pLoadTimer->SetTimeout( 500 ); // 500ms verz"ogern
+        pPageImpl->pLoadTimer->SetTimeout( 500 );
         pPageImpl->pLoadTimer->SetTimeoutHdl(
             LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
 
@@ -1122,12 +1122,6 @@ sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 
 
 void SvxBackgroundTabPage::FillColorValueSets_Impl()
-
-/*  [Beschreibung]
-
-    F"ullen des Farb-Sets
-*/
-
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
@@ -1183,10 +1177,10 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 
 void SvxBackgroundTabPage::ShowColorUI_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die Controls f"ur das Einstellen der Grafik ausblenden und die
-    Controls f"ur die Farbeinstellung einblenden.
+    Hide the controls for editing the bitmap
+    and show the controls for color settings instead.
 */
 
 {
@@ -1221,10 +1215,10 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
 
 void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die Controls f"ur die Farbeinstellung ausblenden und die
-    Controls f"ur das Einstellen der Grafik einblenden.
+    Hide the the controls for color settings
+    and show controls for editing the bitmap instead.
 */
 
 {
@@ -1263,12 +1257,6 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 //------------------------------------------------------------------------
 
 void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
-
-/*  [Beschreibung]
-
-    Die Controls f"ur die Grafikposition einstellen.
-*/
-
 {
     switch ( ePos )
     {
@@ -1315,12 +1303,6 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 //------------------------------------------------------------------------
 
 SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
-
-/*  [Beschreibung]
-
-    Die Position der Grafik zur"uckgeben.
-*/
-
 {
     if ( aBtnTile.IsChecked() )
         return GPOS_TILED;
@@ -1370,12 +1352,12 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     if ( 0 == aLbSelect.GetSelectEntryPos() )
     {
         ShowColorUI_Impl();
-        aParaLBox.Enable(); // Zeichenhintergrund kann keine Bitmap sein
+        aParaLBox.Enable(); // drawing background can't be a bitmap
     }
     else
     {
         ShowBitmapUI_Impl();
-        aParaLBox.Enable(sal_False);// Zeichenhintergrund kann keine Bitmap sein
+        aParaLBox.Enable(sal_False); // drawing background can't be a bitmap
     }
     return 0;
 }
@@ -1413,8 +1395,8 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
             }
             else
             {
-                if ( aBgdGraphicPath.Len() > 0 ) // nur bei gelinkter Grafik
-                    RaiseLoadError_Impl();       // ein Fehler
+                if ( aBgdGraphicPath.Len() > 0 ) // only for linked bitmap
+                    RaiseLoadError_Impl();
                 pPreviewWin2->NotifyChange( NULL );
             }
         }
@@ -1448,10 +1430,10 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Handler, gerufen durch das Dr"ucken des Durchsuchen-Buttons.
-    Grafik/Einf"ugen-Dialog erzeugen, Pfad setzen und starten.
+    Handler, called by pressing the browse button.
+    Create graphic/insert dialog, set path and start.
 */
 
 {
@@ -1472,12 +1454,12 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     {
         if ( bHtml )
             aBtnLink.Check();
-        // wenn Verkn"upfen nicht gecheckt ist und die Vorschau auch nicht,
-        // dann die Vorschau aktivieren, damit der Anwender sieht,
-        // welche Grafik er ausgew"ahlt hat
+        // if link isn't checked and preview isn't, either,
+        // activate preview, so that the user sees which
+        // graphic he has chosen
         if ( !aBtnLink.IsChecked() && !aBtnPreview.IsChecked() )
             aBtnPreview.Check( sal_True );
-        // timer-verz"ogertes Laden der Grafik
+        // timer-delayed loading of the graphic
         pPageImpl->pLoadTimer->Start();
     }
     else
@@ -1489,11 +1471,11 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
 IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Verz"ogertes Laden der Grafik.
-    Grafik wird nur dann geladen, wenn sie unterschiedlich zur
-    aktuellen Grafik ist.
+    Delayed loading of the graphic.
+    Graphic is only loaded, if it's
+    different to the current graphic.
 */
 
 {
@@ -1507,7 +1489,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
             INetURLObject aNew( pImportDlg->GetPath() );
             if ( !aBgdGraphicPath.Len() || aNew != aOld )
             {
-                // neue Datei gew"ahlt
+                // new file chosen
                 aBgdGraphicPath   = pImportDlg->GetPath();
                 aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
                 sal_Bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? sal_True : pImportDlg->IsAsLink();
@@ -1528,7 +1510,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                     }
                 }
                 else
-                    bIsGraphicValid = sal_False; // Grafik erst beim Preview-Click laden
+                    bIsGraphicValid = sal_False; // load graphic not until preview click
 
                 if ( aBtnPreview.IsChecked() && bIsGraphicValid )
                 {
@@ -1567,7 +1549,7 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
         aTblDesc.Show();
         aParaLBox.Show();
     }
-    aParaLBox.SetData(&aParaLBox); // hier erkennt man, dass dieser Mode eingeschaltet ist
+    aParaLBox.SetData(&aParaLBox); // here it can be recognized that this mode is turned on
 }
 //-----------------------------------------------------------------------
 
@@ -1596,7 +1578,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         pTableBck_Impl->nActPos = nSelPos;
         if(!*pActItem)
             *pActItem = new SvxBrushItem(nWhich);
-        if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
+        if(0 == aLbSelect.GetSelectEntryPos())  // brush selected
         {
             **pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
@@ -1666,7 +1648,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             break;
         }
         pParaBck_Impl->nActPos = nSelPos;
-        if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
+        if(0 == aLbSelect.GetSelectEntryPos())  // brush selected
         {
             sal_uInt16 nWhich = (*pActItem)->Which();
             **pActItem = SvxBrushItem( aBgdColor, nWhich );
@@ -1748,7 +1730,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
 
         pPreviewWin1->NotifyChange( aBgdColor );
-        if ( aLbSelect.IsVisible() ) // Grafikteil initialisieren
+        if ( aLbSelect.IsVisible() ) // initialize graphic part
         {
             aBgdGraphicFilter.Erase();
             aBgdGraphicPath.Erase();
@@ -1758,7 +1740,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             aBtnLink.Check( sal_False );
             aBtnLink.Disable();
             pPreviewWin2->NotifyChange( NULL );
-            SetGraphicPosition_Impl( GPOS_TILED );  // Kacheln als Default
+            SetGraphicPosition_Impl( GPOS_TILED );  // tiles as default
         }
     }
     else
@@ -1805,8 +1787,8 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if ( !pStrLink || aBtnPreview.IsChecked() )
         {
-            // Grafik ist im Item vorhanden und muss nicht
-            // geladen werden:
+            // Graphic exists in the item and doesn't have
+            // to be loaded:
 
             const Graphic* pGraphic = rBgdAttr.GetGraphic();
 

@@ -109,8 +109,8 @@
 #define FL_OFFSET 5
 #define FL_STEPCOUNT 7
 
-// Farben definieren TabPage
-// nur temporaer !!!
+// Colors define TabPage
+// only temporarily!!!
 // #define RID_SVXPAGE_COLOR 999
 
 //#define GRP_COLORTABLE 1

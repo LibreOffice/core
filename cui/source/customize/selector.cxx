@@ -153,7 +153,6 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
 
 String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 {
-    // Information zum selektierten Entry aus den Userdaten holen
     SvxGroupInfo_Impl *pInfo =
         pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
 
@@ -864,21 +863,16 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
     sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
-        // Wieviele Entries k"onnen angezeigt werden ?
         sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
 
-        // Wieviele Kinder sollen angezeigt werden ?
         sal_uLong nChildCount = GetVisibleChildCount( pParent );
 
-        // Passen alle Kinder und der parent gleichzeitig in die View ?
         if ( nChildCount+1 > nEntries )
         {
-            // Wenn nicht, wenigstens parent ganz nach oben schieben
             MakeVisible( pParent, sal_True );
         }
         else
         {
-            // An welcher relativen ViewPosition steht der aufzuklappende parent
             SvLBoxEntry *pEntry = GetFirstEntryInView();
             sal_uLong nParentPos = 0;
             while ( pEntry && pEntry != pParent )
@@ -887,7 +881,6 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
                 pEntry = GetNextEntryInView( pEntry );
             }
 
-            // Ist unter dem parent noch genug Platz f"ur alle Kinder ?
             if ( nParentPos + nChildCount + 1 > nEntries )
                 ScrollOutputArea( (short)( nEntries - ( nParentPos + nChildCount + 1 ) ) );
         }

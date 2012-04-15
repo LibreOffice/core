@@ -147,7 +147,7 @@ void SvxNoSpaceEdit::Modify()
         rtl::OUString aValue = GetText();
 
         if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
-            // der H�chstwert einer Portnummer ist USHRT_MAX
+            // the maximum value of a port number is USHRT_MAX
             ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
 }

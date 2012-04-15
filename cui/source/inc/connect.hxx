@@ -42,7 +42,7 @@ class SdrView;
 
 /*************************************************************************
 |*
-|* Dialog zum Aendern von Konnektoren (Connectors)
+|* Dialog for changing connectors.
 |*
 \************************************************************************/
 
@@ -101,8 +101,8 @@ public:
 
 /*************************************************************************
 |*
-|* Von SfxSingleTabDialog abgeleitet, um vom Control "uber virtuelle Methode
-|* benachrichtigt werden zu k"onnen.
+|* Derived from SfxSingleTabDialog, in order to be informed about
+|* virtual methods by the control.
 |*
 \************************************************************************/
 

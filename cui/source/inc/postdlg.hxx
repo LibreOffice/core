@@ -41,10 +41,10 @@
 /*
     {k:\svx\prototyp\dialog\memo.bmp}
 
-    [Beschreibung]
-    In diesem Dialog kann eine Notiz erstellt oder bearbeitet werden. Wenn die
-    Applikation eine Liste von Notizen haelt, kann mit Hilfe von Links, ueber
-    diese Liste iteriert werden.
+    [Description]
+    In this dialog a note can be created or edited. If the
+    application holds a list of notes, it can be iterated
+    over this list with links.
 
     [Items]
     <SvxPostitAuthorItem><SID_ATTR_POSTIT_AUTHOR>

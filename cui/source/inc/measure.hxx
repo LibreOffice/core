@@ -40,7 +40,7 @@ class SdrView;
 
 /*************************************************************************
 |*
-|* Dialog zum "Andern von TextAttributen
+|* Dialog for changing TextAtrributes
 |*
 \************************************************************************/
 
@@ -110,8 +110,8 @@ public:
 
 /*************************************************************************
 |*
-|* Von SfxSingleTabDialog abgeleitet, um vom Control "uber virtuelle Methode
-|* benachrichtigt werden zu k"onnen.
+|* Derived from SfxSingleTabDialog, in order to be able to be
+|* informed about virtual methods by the control.
 |*
 \************************************************************************/
 

@@ -141,7 +141,7 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
     maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
-    // Tree-ListBox mit Linien versehen
+    // add lines to the Tree-ListBox
     maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
                             WB_HSCROLL | WB_HASBUTTONSATROOT );

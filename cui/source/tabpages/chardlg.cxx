@@ -581,14 +581,14 @@ namespace
             DBG_ASSERT( _pPage->GetItemSet().GetParent(), "No parent set" );
             const SvxFontHeightItem& rOldItem = (SvxFontHeightItem&)_pPage->GetItemSet().GetParent()->Get( _nFontHeightWhich );
 
-            // alter Wert, skaliert
+            // old value, scaled
             long nHeight;
             if ( _pFontSizeLB->IsPtRelative() )
                 nHeight = rOldItem.GetHeight() + PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
             else
                 nHeight = static_cast<long>(rOldItem.GetHeight() * _pFontSizeLB->GetValue() / 100);
 
-            // Umrechnung in twips fuer das Beispiel-Window
+            // conversion twips for the example-window
             aSize.Height() =
                 ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), SFX_FUNIT_TWIP );
         }
@@ -665,8 +665,8 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
 
     if ( m_pImpl->m_bInSearchMode )
     {
-        // Bei der Suche zus"atzliche Eintr"age:
-        // "Nicht Fett" und "Nicht Kursiv"
+        // additional entries for the search:
+        // "not bold" and "not italic"
         String aEntry = m_pImpl->m_aNoStyleText;
         const sal_Char sS[] = "%1";
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
@@ -761,11 +761,9 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
     }
 
-    // die FontListBox fuellen
     const FontList* pFontList = GetFontList();
     pNameBox->Fill( pFontList );
 
-    // Font ermitteln
     const SvxFontItem* pFontItem = NULL;
     SfxItemState eState = rSet.GetItemState( nWhich );
 
@@ -818,7 +816,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         bStyle = false;
     bStyleAvailable = bStyleAvailable && (eState >= SFX_ITEM_DONTCARE);
 
-    // Aktuell eingestellter Font
+    // currently chosen font
     if ( bStyle && pFontItem )
     {
         FontInfo aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
@@ -839,7 +837,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         pStyleLabel->Disable( );
     }
 
-    // SizeBox fuellen
     FillSizeBox_Impl( pNameBox );
     switch ( eLangGrp )
     {
@@ -1050,7 +1047,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         bChanged = ( nEntryPos == m_pImpl->m_nExtraEntryPos );
 
-    String aText( pStyleBox->GetText() ); // Tristate, dann Text leer
+    String aText( pStyleBox->GetText() ); // Tristate, then text empty
 
     if ( bChanged && aText.Len() )
     {
@@ -1110,7 +1107,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     // FontSize
     long nSize = static_cast<long>(pSizeBox->GetValue());
 
-    if ( !pSizeBox->GetText().Len() )   // GetValue() gibt dann Min-Wert zurueck
+    if ( !pSizeBox->GetText().Len() )   // GetValue() returns the min-value
         nSize = 0;
     long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
     bool bRel = true;
@@ -1377,9 +1374,9 @@ namespace
         short nCurHeight =
             static_cast< short >( CalcToPoint( rHeightItem.GetHeight(), eUnit, 1 ) * 10 );
 
-        // ausgehend von der akt. Hoehe:
-        //      - negativ bis minimal 2 pt
-        //      - positiv bis maximal 999 pt
+        // based on the current height:
+        //      - negative until minimum of 2 pt
+        //      - positive until maximum of 999 pt
         _pFontSizeLB->EnablePtRelativeMode( sal::static_int_cast< short >(-(nCurHeight - 20)), (9999 - nCurHeight), 10 );
     }
 }
@@ -3156,7 +3153,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_aLowPosBtn.Check( sal_False );
     }
 
-    // BspFont setzen
+    // set BspFont
     SetPrevFontEscapement( nProp, nEscProp, nEsc );
 
     // Kerning
@@ -3171,7 +3168,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         long nBig = static_cast<long>(m_aKerningEdit.Normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
-        // Kerning am Font setzen, vorher in Twips umrechnen
+        // set Kerning at the Font, convert into Twips before
         long nKern = LogicToLogic( rItem.GetValue(), (MapUnit)eUnit, MAP_TWIP );
         rFont.SetFixKerning( (short)nKern );
         rCJKFont.SetFixKerning( (short)nKern );
@@ -3318,7 +3315,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
 sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 {
-    //  Position (hoch, normal oder tief)
+    //  Position (high, normal or low)
     const SfxItemSet& rOldSet = GetItemSet();
     sal_Bool bModified = sal_False, bChanged = sal_True;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );

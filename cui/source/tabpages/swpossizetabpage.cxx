@@ -697,7 +697,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 long nVertByPos =
                             static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
 
-                // Altes Rechteck mit CoreUnit
+                // old rectangle with CoreUnit
                 m_aRect = m_pSdrView->GetAllMarkedRect();
                 m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
@@ -1049,7 +1049,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
 
     if ( m_pHMap )
     {
-        // Ausrichtung Horizontal
+        // horizontal alignment
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, m_aHoriToLB);
         sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, m_aHoriLB, m_aHoriToLB);
         sal_uInt16 nRel = GetRelation(m_pHMap, m_aHoriToLB);
@@ -1062,7 +1062,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
 
     if ( m_pVMap )
     {
-        // Ausrichtung Vertikal
+        // vertical alignment
         sal_uInt16 nMapPos = GetMapPos(m_pVMap, m_aVertLB);
         sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, m_aVertLB, m_aVertToLB);
         sal_uInt16 nRel = GetRelation(m_pVMap, m_aVertToLB);
@@ -1092,7 +1092,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
     nWidth = aVal.nWidth;
     nHeight = aVal.nHeight;
 
-    // Mindestbreite auch fuer Vorlage
+    // minimum width also for style
     m_aHeightMF.SetMin(m_aHeightMF.Normalize(aVal.nMinHeight), FUNIT_TWIP);
     m_aWidthMF. SetMin(m_aWidthMF.Normalize(aVal.nMinWidth), FUNIT_TWIP);
 
@@ -1158,7 +1158,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
     else
         m_bAtVertPosModified = sal_True;
 
-    if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) // wieder Sonderbehandlung
+    if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) // again special treatment
     {
         if(bHori)
         {
@@ -1173,7 +1173,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
             }
         }
     }
-    if (pLB)    // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
+    if (pLB)    // only if the hanlder has been called by a change of the controller
         RangeModifyHdl(0);
 
     return 0;
@@ -1204,7 +1204,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
         m_aVertByFT.Enable( bEnable );
     }
 
-    if (pLB)    // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
+    if (pLB)    // only if the hanlder has been called by a change of the controller
         RangeModifyHdl( 0 );
 
     short nRel = 0;
@@ -1226,15 +1226,15 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     else
         m_bAtVertPosModified = sal_True;
 
-    // Sonderbehandlung fuer HTML-Mode mit horz-vert-Abhaengigkeiten
+    // special treatment for HTML-Mode with horz-vert-dependencies
     if(m_bHtmlMode && m_nHtmlMode & HTMLMODE_SOME_ABS_POS &&
             TextContentAnchorType_AT_CHARACTER == GetAnchorType())
     {
         sal_Bool bSet = sal_False;
         if(bHori)
         {
-            // rechts ist nur unterhalb erlaubt - von links nur oben
-            // von links am Zeichen -> unterhalb
+            // on the right only below is allowed - from the left only at the top
+            // from the left at the character -> below
             if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
                     0 == m_aVertLB.GetSelectEntryPos())
             {
@@ -1474,8 +1474,8 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     m_aHoriLB.Enable( bEnable );
     m_aHoriFT.Enable( bEnable );
 
-    // aktuelle Pos selektieren
-    // Horizontal
+    // select current Pos
+    // horizontal
     if ( nH == USHRT_MAX )
     {
         nH    = m_nOldH;
@@ -1485,7 +1485,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     sal_uInt16 nMapPos = FillPosLB(m_pHMap, nH, nHRel, m_aHoriLB);
     FillRelLB(m_pHMap, nMapPos, nH, nHRel, m_aHoriToLB, m_aHoriToFT);
 
-    // Vertikal
+    // vertical
     if ( nV == USHRT_MAX )
     {
         nV    = m_nOldV;
@@ -1497,7 +1497,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
 
     // Edits init
     bEnable = nH == HoriOrientation::NONE &&
-            nAnchor != TextContentAnchorType_AS_CHARACTER;//#61359# warum nicht in Formaten&& !bFormat;
+            nAnchor != TextContentAnchorType_AS_CHARACTER;//#61359# why not in formats&& !bFormat;
     if (!bEnable)
     {
         m_aHoriByMF.SetValue( 0, FUNIT_TWIP );
@@ -1678,7 +1678,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                 rLB.SelectEntry(sSelEntry);
             else
             {
-                // Warscheinlich Ankerwechsel. Daher aehnliche Relation suchen
+                // Probably anchor change. So look for a similar relation.
                 switch (nRel)
                 {
                     case RelOrientation::FRAME:             nRel = RelOrientation::PAGE_FRAME;    break;
@@ -1739,11 +1739,11 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                                ? 0L
                                : ::lcl_GetLBRelationsForRelations( _nRel );
 
-    // Listbox fuellen
+    // fill listbox
     std::size_t nCount = ::lcl_GetFrmMapCount(_pMap);
     for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
-//      #61359# Warum nicht von links/von innen bzw. von oben?
+//      #61359# why not from the left/from inside or from the top?
 //      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
         {
             SvxSwFramePosString::StringId eStrId = m_aHoriMirrorCB.IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
@@ -1751,7 +1751,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
             String sEntry(m_aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
-                // bei zeichengebundenen Rahmen keine doppelten Eintraege einfuegen
+                // don't insert duplicate entries at character wrapped borders
                 _rLB.InsertEntry(sEntry);
             }
             // #i22341# - add condition to handle map <aVCharMap>
@@ -1785,14 +1785,14 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         return;
     }
 
-    // Setzen des Rechtecks und der Workingarea
+    // setting of the rectangle and the working area
     m_aRect = m_pSdrView->GetAllMarkedRect();
     m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
     // get WorkArea
     m_aWorkArea = m_pSdrView->GetWorkArea();
 
-    // Beruecksichtigung Ankerposition (bei Writer)
+    // consider anchor position (for Writer)
     const SdrMarkList& rMarkList = m_pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {

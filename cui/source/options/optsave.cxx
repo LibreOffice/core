@@ -328,7 +328,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
                                  (sal_uInt16)aAutoSaveEdit.GetValue() ) );
         bModified |= sal_True;
     }
-    // relativ speichern
+    // save relatively
     if ( aRelativeFsysCB.IsChecked() != aRelativeFsysCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
@@ -511,7 +511,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
 
     aAutoSaveEdit.SetValue( aSaveOpt.GetAutoSaveTime() );
 
-    // relativ speichern
+    // save relatively
     aRelativeFsysCB.Check( aSaveOpt.IsSaveRelFSys() );
 
     aRelativeInetCB.Check( aSaveOpt.IsSaveRelINet() );

@@ -107,7 +107,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aFT_WINKEL.Hide();
     aLB_WINKEL.Hide();
 
-    //------------Positionen korrigieren-------------------------
+    //------------correct positions-------------------------
     aFT_ANSATZ_REL.SetPosPixel( aFT_UM.GetPosPixel() );
     aLB_ANSATZ_REL.SetPosPixel(
         Point(
@@ -125,7 +125,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
         mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
 
-    //------------ValueSet installieren--------------------------
+    //------------install ValueSet--------------------------
     aCT_CAPTTYPE.SetStyle( aCT_CAPTTYPE.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
     aCT_CAPTTYPE.SetColCount(5);//XXX
     aCT_CAPTTYPE.SetLineCount(1);
@@ -158,7 +158,7 @@ SvxCaptionTabPage::~SvxCaptionTabPage()
 
 void SvxCaptionTabPage::Construct()
 {
-    // Setzen des Rechtecks und der Workingarea
+    // set rectangle and working area
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 }
 
@@ -181,7 +181,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
         _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(aMF_ABSTAND, eUnit ) ) );
     }
 
-    // Sonderbehandlung!!! XXX
+    // special treatment!!! XXX
     if( nCaptionType==SDRCAPT_TYPE1 )
     {
         switch( nEscDir )
@@ -229,7 +229,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
         }
     }
 
-//NYI-------------die Winkel muessen noch hier rein!!! XXX----------------------
+//NYI-------------the angles have to be added here!!! XXX----------------------
 
     return( sal_True );
 }
@@ -239,7 +239,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 {
 
-    //------------Metrik einstellen-----------------------------
+    //------------set metric-----------------------------
 
     FieldUnit eFUnit = GetModuleFieldUnit( rOutAttrs );
 
@@ -262,29 +262,27 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     sal_uInt16          nWhich;
     SfxMapUnit      eUnit;
 
-    //------- Winkel ----------
+    //------- angle ----------
     nWhich = GetWhich( SDRATTR_CAPTIONANGLE );
     nFixedAngle = ( ( const SdrCaptionAngleItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
 
-    //------- absolute Ansatzentfernung ----------
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );
     nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_ANSATZ, nEscAbs, eUnit );
     nEscAbs = static_cast<long>(aMF_ANSATZ.GetValue());
 
-    //------- relative Ansatzentfernung ----------
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
     nEscRel = (long)( ( const SdrCaptionEscRelItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
 
-    //------- Linienlaenge ----------
+    //------- line length ----------
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_LAENGE, nLineLen, eUnit );
     nLineLen = static_cast<long>(aMF_LAENGE.GetValue());
 
-    //------- Abstand zur Box ----------
+    //------- distance to box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
@@ -297,7 +295,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nEscDir = (short)( ( const SdrCaptionEscDirItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
 
-    // Sonderbehandlung!!! XXX
+    // special treatment!!! XXX
     if( nCaptionType==SDRCAPT_TYPE1 )
     {
         switch( nEscDir )
@@ -369,7 +367,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     aLB_WINKEL.SelectEntryPos( nWinkelTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
-    aCT_CAPTTYPE.SelectItem( nCaptionType+1 );// Enum beginnt bei 0!
+    aCT_CAPTTYPE.SelectItem( nCaptionType+1 ); // Enum starts at 0!
     SetupType_Impl( nCaptionType+1 );
 }
 
@@ -397,7 +395,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
     switch( nType )
     {
         case AZ_OPTIMAL:
-//      aMF_ANSATZ.Hide(); //XXX auch bei OPTIMAL werden Abswerte genommen
+//      aMF_ANSATZ.Hide(); //XXX in case of OPTIMAL also absolute values are taken
 //      aFT_UM.Hide();
         aMF_ANSATZ.Show();
         aFT_UM.Show();

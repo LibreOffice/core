@@ -50,9 +50,9 @@ namespace connectivity
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
             ::rtl::Reference<OSQLColumns>                           m_aColumns;
-            sal_Int32                                           m_nFilePos;                 // aktuelle IResultSetHelper::Movement
+            sal_Int32                                           m_nFilePos;                 // current IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
-            sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
+            sal_uInt16                                          m_nBufferSize;  // size of the ReadBuffer, if pBuffer != NULL
             sal_Bool                                            m_bWriteable;   // svstream cann't say if we are writeable
                                                                                 // so we have to
 

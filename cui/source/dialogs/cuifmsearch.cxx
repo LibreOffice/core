@@ -135,7 +135,6 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
 {
     DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
 
-    // erst mal die Informationen fuer den initialen Kontext
     FmSearchContext fmscInitial;
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(&fmscInitial);
@@ -345,18 +344,17 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
 {
     if (m_pbClose.IsEnabled())
-    {   // der Button hat die Funktion 'Suchen'
+    {   // the button has the function 'search'
         UniString strThisRoundText = m_cmbSearchText.GetText();
-        // zur History dazu
+        // to history
         m_cmbSearchText.RemoveEntry(strThisRoundText);
         m_cmbSearchText.InsertEntry(strThisRoundText, 0);
-            // das Remove/Insert stellt a) sicher, dass der UniString nicht zweimal auftaucht, b), dass die zuletzt gesuchten Strings am
-            // Anfang stehen
-        // und die Listenlaenge beschraenken
+        // the remove/insert makes sure that a) the UniString does not appear twice and
+        // that b) the last searched strings are at the beginning and limit the list length
         while (m_cmbSearchText.GetEntryCount() > MAX_HISTORY_ENTRIES)
             m_cmbSearchText.RemoveEntry(m_cmbSearchText.GetEntryCount()-1);
 
-        // den 'Ueberlauf'-Hint rausnehmen
+        // take out the 'overflow' hint
         m_ftHint.SetText(UniString());
         m_ftHint.Invalidate();
 
@@ -379,11 +377,11 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
         }
     }
     else
-    {   // der Button hat die Fukntion 'Abbrechen'
+    {   // the button has the function 'cancel'
         DBG_ASSERT(m_pSearchEngine->GetSearchMode() != SM_BRUTE, "FmSearchDialog, OnClickedSearchAgain : falscher Modus !");
-            // der CancelButton wird normalerweise nur disabled, wenn ich in einem Thread oder mit Reschedule arbeite
+            // the CancelButton is usually only disabled, when working in a thread or with reschedule
         m_pSearchEngine->CancelSearch();
-            // mein ProgressHandler wird gerufen, wenn es wirklich zu Ende ist, das hier war nur eine Anforderung
+            // the ProgressHandler is called when it's really finished, here it's only a demand
     }
     return 0;
 }
@@ -464,7 +462,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
     DBG_ASSERT(pBox->GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->RebuildUsedFields(m_rbAllFields.IsChecked() ? -1 : (sal_Int16)m_lbField.GetSelectEntryPos());
-        // ruft auch m_pSearchEngine->InvalidatePreviousLoc auf
+        // calls m_pSearchEngine->InvalidatePreviousLoc too
 
     sal_Int32 nCurrentContext = m_lbForm.GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
@@ -477,21 +475,20 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
 
-    // Formatter oder case -> an die Engine weiterreichen
+    // formatter or case -> pass on to the engine
     if (pBox == &m_cbUseFormat)
         m_pSearchEngine->SetFormatterUsing(bChecked);
     else if (pBox == &m_cbCase)
         m_pSearchEngine->SetCaseSensitive(bChecked);
-    // Richtung -> weiterreichen und Checkbox-Text fuer StartOver neu setzen
+    // direction -> pass on and reset the checkbox-text for StartOver
     else if (pBox == &m_cbBackwards)
     {
         m_cbStartOver.SetText( String( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
-    // Aehnlichkeitssuche oder regulaerer Ausdruck
+    // similarity-search or regular expression
     else if ((pBox == &m_cbApprox) || (pBox == &m_cbRegular) || (pBox == &m_cbWildCard))
     {
-        // die beiden jeweils anderen Boxes disablen oder enablen
         CheckBox* pBoxes[] = { &m_cbWildCard, &m_cbRegular, &m_cbApprox };
         for (sal_uInt32 i=0; i< SAL_N_ELEMENTS(pBoxes); ++i)
         {
@@ -504,13 +501,13 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
             }
         }
 
-        // an die Engine weiterreichen
+        // pass on to the engine
         m_pSearchEngine->SetWildcard(m_cbWildCard.IsEnabled() ? m_cbWildCard.IsChecked() : sal_False);
         m_pSearchEngine->SetRegular(m_cbRegular.IsEnabled() ? m_cbRegular.IsChecked() : sal_False);
         m_pSearchEngine->SetLevenshtein(m_cbApprox.IsEnabled() ? m_cbApprox.IsChecked() : sal_False);
-            // (Boxes, die disabled sind, muessen als sal_False an die Engine gehen)
+            // (disabled boxes have to be passed to the engine as sal_False)
 
-        // die Position-Listbox anpassen (ist bei Wildcard-Suche nicht erlaubt)
+        // adjust the Position-Listbox (which is not allowed during Wildcard-search)
         if (pBox == &m_cbWildCard)
         {
             if (bChecked)
@@ -525,7 +522,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
             }
         }
 
-        // und den Button fuer die Aehnlichkeitssuche
+        // and the button for similarity-search
         if (pBox == &m_cbApprox)
         {
             if (bChecked)
@@ -570,7 +567,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_lnkContextSupplier.Call(&fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
-    // packen wir zuerst die Feld-Namen in die entsprechende Listbox
+    // put teh field names into the respective listbox
     m_lbField.Clear();
 
     if (fmscContext.sFieldDisplayNames.Len() != 0)
@@ -599,11 +596,9 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
             m_lbField.GrabFocus();
     }
 
-    // dann geben wir der Engine Bescheid
     m_pSearchEngine->SwitchToContext(fmscContext.xCursor, fmscContext.strUsedFields, fmscContext.arrFields,
         m_rbAllFields.IsChecked() ? -1 : 0);
 
-    // und die Position des neuen Cursors anzeigen
     m_ftRecord.SetText(String::CreateFromInt32(fmscContext.xCursor->getRow()));
 }
 
@@ -617,17 +612,17 @@ IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox*, pBox)
 //------------------------------------------------------------------------
 void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 {
-    // wenn die Controls disabled werden sollen, schalte ich mal eben kurz ihr Paint aus und verzoegert wieder an
+    // when the controls shall be disabled their paint is turned off and then turned on again after a delay
     if (!bEnable)
         EnableControlPaint(sal_False);
     else
-    {   // beim Enablen teste ich, ob der Timer fuer das delayed paint aktiv ist und stoppe ihn wenn noetig
+    {
         if (m_aDelayedPaint.IsActive())
             m_aDelayedPaint.Stop();
     }
-    // (das ganze geht unten noch weiter)
-    // diese kleine Verrenkung fuehrt hoffentlich dazu, dass es nicht flackert, wenn man die SearchUI schnell hintereinander
-    // aus- und wieder einschaltet (wie das bei einem kurzen Suchvorgang zwangslaeufig der Fall ist)
+    // (the whole thing goes on below)
+    // this small intricateness hopfully leads to no flickering when turning the SearchUI off
+    // and on again shortly after (like it's the case during a short search process)
 
     if ( !bEnable )
     {
@@ -639,11 +634,10 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
             m_pPreSearchFocus = NULL;
     }
 
-    // der Suchen-Button hat einen Doppelfunktion, seinen Text entsprechend anpassen
+    // the search button has two functions -> adjust its text accordingly
     String sButtonText( bEnable ? m_sSearch : m_sCancel );
     m_pbSearchAgain.SetText( sButtonText );
 
-    // jetzt Controls en- oder disablen
     if (m_pSearchEngine->GetSearchMode() != SM_BRUTE)
     {
         m_flSearchFor.Enable        (bEnable);
@@ -670,7 +664,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
         }
     }
 
-    // und den Rest fuer das delayed paint
     if (!bEnable)
         m_aDelayedPaint.Start();
     else
@@ -750,19 +743,17 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
 {
     FmFoundRecordInformation friInfo;
     friInfo.nContext = m_lbForm.GetSelectEntryPos();
-        // wenn ich keine Suche in Kontexten mache, steht hier was ungueltiges drin, aber dann ist es auch egal
+    // if I don't do a search in a context, this has an invalid value - but then it doesn't matter anyway
     friInfo.aPosition = aCursorPos;
     if (m_rbAllFields.IsChecked())
         friInfo.nFieldPos = nFieldPos;
     else
         friInfo.nFieldPos = m_lbField.GetSelectEntryPos();
-        // das setzt natuerlich voraus, dass ich wirklich in dem Feld gesucht habe, dass in der Listbox ausgewaehlt ist,
-        // genau das wird auch in RebuildUsedFields sichergestellt
+        // this of course implies that I have really searched in the field that is selected in the listbox,
+        // which is made sure in RebuildUsedFields
 
-    // dem Handler Bescheid sagen
     m_lnkFoundHandler.Call(&friInfo);
 
-    // und wieder Focus auf mich
     m_cmbSearchText.GrabFocus();
 }
 
@@ -770,8 +761,8 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
 IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
 {
     SolarMutexGuard aGuard;
-        // diese eine Methode Thread-sicher machen (das ist ein Overkill, die ganze restliche Applikation dafuer zu blockieren,
-        // aber im Augenblick haben wir kein anderes Sicherheitskonpzept)
+        // make this single method thread-safe (it's an overkill to block the whole application for this,
+        // but we don't have another safety concept at the moment)
 
     switch (pProgress->aSearchState)
     {
@@ -815,7 +806,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
             {
                 FmFoundRecordInformation friInfo;
                 friInfo.nContext = m_lbForm.GetSelectEntryPos();
-                    // wenn ich keine Suche in Kontexten mache, steht hier was ungueltiges drin, aber dann ist es auch egal
+                // if I don't do a search in a context, this has an invalid value - but then it doesn't matter anyway
                 friInfo.aPosition = pProgress->aBookmark;
                 m_lnkCanceledNotFoundHdl.Call(&friInfo);
             }
@@ -837,22 +828,22 @@ void FmSearchDialog::LoadParams()
     for (; pHistory != pHistoryEnd; ++pHistory)
         m_cmbSearchText.InsertEntry( *pHistory );
 
-    // die Einstellungen nehme ich an meinen UI-Elementen vor und rufe dann einfach den entsprechenden Change-Handler auf,
-    // dadurch werden die Daten an die SearchEngine weitergereicht und alle abhaengigen Enstellungen vorgenommen
+    // I do the settings at my UI-elements and then I simply call the respective change-handler,
+    // that way the data is handed on to the SearchEngine and all dependent settings are done
 
-    // aktuelles Feld
+    // current field
     sal_uInt16 nInitialField = m_lbField.GetEntryPos( String( aParams.sSingleSearchField ) );
     if (nInitialField == COMBOBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_lbField.SelectEntryPos(nInitialField);
     LINK(this, FmSearchDialog, OnFieldSelected).Call(&m_lbField);
-    // alle/einzelnes Feld (NACH dem Selektieren des Feldes, da OnClickedFieldRadios dort einen gueltigen Eintrag erwartet)
+    // all fields/single field (AFTER selcting the field because OnClickedFieldRadios expects a valid value there)
     if (aParams.bAllFields)
     {
         m_rbSingleField.Check(sal_False);
         m_rbAllFields.Check(sal_True);
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbAllFields);
-        // OnClickedFieldRadios ruft auch um RebuildUsedFields
+        // OnClickedFieldRadios also calls to RebuildUsedFields
     }
     else
     {
@@ -861,11 +852,10 @@ void FmSearchDialog::LoadParams()
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbSingleField);
     }
 
-    // Position im Feld
     m_lbPosition.SelectEntryPos(aParams.nPosition);
     LINK(this, FmSearchDialog, OnPositionSelected).Call(&m_lbPosition);
 
-    // Feld-Formatierung/Case-Sensitivitaet/Richtung
+    // field formatting/case sensitivity/direction
     m_cbUseFormat.Check(aParams.bUseFormatter);
     m_cbCase.Check( aParams.isCaseSensitive() );
     m_cbBackwards.Check(aParams.bBackwards);
@@ -878,8 +868,6 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aHalfFullFormsCJK);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aSoundsLikeCJK);
 
-    // die drei Checkboxen fuer spezielle Sucharten
-    // erst mal alle ruecksetzen
     m_cbWildCard.Check(sal_False);
     m_cbRegular.Check(sal_False);
     m_cbApprox.Check(sal_False);
@@ -887,7 +875,6 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbRegular);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbApprox);
 
-    // dann die richtige setzen
     CheckBox* pToCheck = NULL;
     if (aParams.bWildcard)
         pToCheck = &m_cbWildCard;
@@ -903,7 +890,7 @@ void FmSearchDialog::LoadParams()
         LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(pToCheck);
     }
 
-    // die Levenshtein-Parameter direkt an der SearchEngine setzen
+    // set Levenshtein-parameters directly at the SearchEngine
     m_pSearchEngine->SetLevRelaxed(aParams.bLevRelaxed);
     m_pSearchEngine->SetLevOther(aParams.nLevOther);
     m_pSearchEngine->SetLevShorter(aParams.nLevShorter);
