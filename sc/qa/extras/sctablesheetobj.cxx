@@ -29,6 +29,7 @@
 #include <test/unoapi_test.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
+#include <test/sheet/xprintareas.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -36,7 +37,7 @@
 namespace sc_apitest
 {
 
-class ScTableSheetObj : public UnoApiTest, apitest::XSearchable, apitest::XReplaceable
+class ScTableSheetObj : public UnoApiTest, apitest::XSearchable, apitest::XReplaceable, apitest::XPrintAreas
 {
 public:
     ScTableSheetObj();
@@ -49,6 +50,9 @@ public:
     CPPUNIT_TEST(testFindFirst);
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
+    // XPrintAreas
+    CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
+    CPPUNIT_TEST(testSetAndGetPrintTitleRows);
     CPPUNIT_TEST_SUITE_END();
 
 private:
