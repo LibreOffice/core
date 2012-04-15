@@ -166,8 +166,6 @@ public:
 
     virtual SfxStyleSheet*  GetStyleSheet() const;
 
-    sal_Bool                    GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_uInt16 nType );
-
     /*************************************************************************
     |*
     |* Rueckgabeparameter:

@@ -908,17 +908,6 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Rueckgabeparameter:
-|* pExchangeList == NULL -> Namen sind alle eindeutig
-|* bNameOK == sal_False -> Benutzer hat abgebrochen
-|* nType == 0 -> Seiten
-|* nType == 1 -> Objekte
-|* nType == 2 -> Seiten + Objekte
-|*
-\************************************************************************/
-
 bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
                             std::vector<rtl::OUString> &rBookmarkList,
                             const sal_uInt16 nType)
