@@ -401,7 +401,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )
-                bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, aExchangeList,
+                bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,
                                     bLink, bReplace, nPos,
                                     sal_False, NULL, sal_True, sal_True, sal_False );
 

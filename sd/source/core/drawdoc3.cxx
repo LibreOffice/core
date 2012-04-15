@@ -353,7 +353,7 @@ sal_Bool SdDrawDocument::InsertBookmark(
     if ( bOK && bInsertPages )
     {
         // Zuerst werden alle Seiten-Bookmarks eingefuegt
-        bOK = InsertBookmarkAsPage(rBookmarkList, rExchangeList, bLink, bReplace,
+        bOK = InsertBookmarkAsPage(rBookmarkList, &rExchangeList, bLink, bReplace,
                                    nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, sal_True, sal_False);
     }
 
@@ -369,7 +369,7 @@ sal_Bool SdDrawDocument::InsertBookmark(
 
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     const std::vector<rtl::OUString> &rBookmarkList,
-    std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
+    std::vector<rtl::OUString> *pExchangeList,            // Liste der zu verwendenen Namen
     sal_Bool bLink,
     sal_Bool bReplace,
     sal_uInt16 nInsertPos,
@@ -816,12 +816,16 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             nSdPageEnd = nSdPageStart + nReplacedStandardPages - 1;
         }
 
-        std::vector<rtl::OUString>::iterator pExchangeIter = rExchangeList.begin();
+        std::vector<rtl::OUString>::iterator pExchangeIter;
+
+        if (pExchangeList)
+            pExchangeIter = pExchangeList->begin();
+
         for (sal_uInt16 nSdPage = nSdPageStart; nSdPage <= nSdPageEnd; nSdPage++)
         {
             pRefPage = GetSdPage(nSdPage, PK_STANDARD);
 
-            if (pExchangeIter != rExchangeList.end())
+            if (pExchangeList && pExchangeIter != pExchangeList->end())
             {
                 // Zuverwendener Name aus Exchange-Liste holen
                 String aExchangeName (*pExchangeIter);
@@ -879,7 +883,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         }
 
         ///Remove processed elements, to avoid doings hacks in InsertBookmarkAsObject
-        rExchangeList.erase(rExchangeList.begin(),pExchangeIter);
+        if ( pExchangeList )
+            pExchangeList->erase(pExchangeList->begin(),pExchangeIter);
 
         for (sal_uInt16 nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
         {
@@ -930,7 +935,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
 sal_Bool SdDrawDocument::InsertBookmarkAsObject(
     const std::vector<rtl::OUString> &rBookmarkList,
-    std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
+    const std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
     sal_Bool /* bLink */,
     ::sd::DrawDocShell* pBookmarkDocSh,
     Point* pObjPos, bool bCalcObjCount)

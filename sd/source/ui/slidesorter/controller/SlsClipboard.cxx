@@ -344,14 +344,13 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     sal_Int32 nInsertPageCount (0);
     if (pClipTransferable->HasPageBookmarks())
     {
-        std::vector<rtl::OUString> aExchangeList;
         const std::vector<rtl::OUString> &rBookmarkList = pClipTransferable->GetPageBookmarks();
         const SolarMutexGuard aGuard;
 
         nInsertPageCount = (sal_uInt16) rBookmarkList.size();
         rModel.GetDocument()->InsertBookmarkAsPage(
             rBookmarkList,
-            aExchangeList,
+            NULL,
             sal_False,
             sal_False,
             nInsertIndex,
@@ -370,14 +369,13 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         if (pDataDoc!=NULL
             && pDataDoc->GetSdPageCount(PK_STANDARD))
         {
-            std::vector<rtl::OUString> aBookmarkList, aExchangeList;
             const SolarMutexGuard aGuard;
 
             bMergeMasterPages = (pDataDoc != rModel.GetDocument());
             nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );
             rModel.GetDocument()->InsertBookmarkAsPage(
-                aBookmarkList,
-                aExchangeList,
+                std::vector<rtl::OUString>(),
+                NULL,
                 sal_False,
                 sal_False,
                 nInsertIndex,

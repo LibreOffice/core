@@ -324,14 +324,15 @@ public:
         page, or preserve the old name
      */
 
-    sal_Bool InsertBookmarkAsPage(const std::vector<rtl::OUString> &rBookmarkList, std::vector<rtl::OUString> &rExchangeList,
+    sal_Bool InsertBookmarkAsPage(const std::vector<rtl::OUString> &rBookmarkList,
+                                  std::vector<rtl::OUString> *pExchangeList,
                               sal_Bool bLink, sal_Bool bReplace, sal_uInt16 nPgPos,
                               sal_Bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                               sal_Bool bCopy, sal_Bool bMergeMasterPages,
                               sal_Bool bPreservePageNames);
 
     sal_Bool InsertBookmarkAsObject(const std::vector<rtl::OUString> &rBookmarkList,
-                                    std::vector<rtl::OUString> &rExchangeList,
+                                    const std::vector<rtl::OUString> &rExchangeList,
                                     sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                     Point* pObjPos, bool bCalcObjCount = false);
 

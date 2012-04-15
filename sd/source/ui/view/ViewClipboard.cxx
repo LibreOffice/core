@@ -246,10 +246,9 @@ sal_uInt16 ViewClipboard::InsertSlides (
         if( bWait )
             pWin->LeaveWait();
 
-        std::vector<rtl::OUString> aExchangeList;
         rDoc.InsertBookmarkAsPage(
-            *pBookmarkList,
-            aExchangeList,
+            pBookmarkList ? *pBookmarkList : std::vector<rtl::OUString>(),
+            NULL,
             sal_False,
             sal_False,
             nInsertPosition,

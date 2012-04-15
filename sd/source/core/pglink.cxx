@@ -116,8 +116,7 @@ SdPageLink::~SdPageLink()
                 bCopy = sal_True;
             }
 
-            std::vector<rtl::OUString> aExchangeList;
-            pDoc->InsertBookmarkAsPage(aBookmarkList, aExchangeList, bLink, bReplace,
+            pDoc->InsertBookmarkAsPage(aBookmarkList, NULL, bLink, bReplace,
                                        nInsertPos, bNoDialogs, NULL, bCopy, sal_True, sal_True);
 
             if( !pDoc->pDocLockedInsertingLinks )
