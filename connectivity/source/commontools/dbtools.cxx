@@ -1302,11 +1302,11 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSingleSelectQueryComposer >* _pxComposer )
+Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder )
     SAL_THROW( ( SQLException ) )
 {
-    ::rtl::OUString sStatement;
+    Reference< XSingleSelectQueryComposer > xComposer;
     try
     {
         Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
@@ -1337,13 +1337,8 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
                     aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
             }
 
-            sStatement = aComposer.getQuery();
-
-            if ( _pxComposer )
-            {
-                *_pxComposer = aComposer.getComposer();
-                aComposer.setDisposeComposer( false );
-            }
+            xComposer = aComposer.getComposer();
+            aComposer.setDisposeComposer( false );
         }
     }
     catch( const SQLException& )
@@ -1355,7 +1350,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sStatement;
+    return xComposer;
 }
 
 //------------------------------------------------------------------------------
@@ -1366,7 +1361,7 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
     Reference< XSingleSelectQueryComposer > xReturn;
     try
     {
-        getComposedRowSetStatement( _rxRowSetProps, _rxFactory, sal_True, sal_True, &xReturn );
+        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxFactory, sal_True, sal_True );
     }
     catch( const SQLException& )
     {
