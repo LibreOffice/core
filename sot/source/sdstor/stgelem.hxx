@@ -87,7 +87,6 @@ public:
     void  SetMasters( sal_Int32 n );
     short GetFAT1Size() const           { return 109;           }
     const ClsId& GetClassId() const     { return aClsId;        }
-    void  SetClassId( const ClsId& );
     sal_Int32 GetFATPage( short ) const;
     void  SetFATPage( short, sal_Int32 );
 };

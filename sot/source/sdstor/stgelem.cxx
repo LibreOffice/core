@@ -187,12 +187,6 @@ void StgHeader::SetFATPage( short n, sal_Int32 nb )
     }
 }
 
-void StgHeader::SetClassId( const ClsId& r )
-{
-    if( memcmp( &aClsId, &r, sizeof( ClsId ) ) )
-        bDirty = sal_True, memcpy( &aClsId, &r, sizeof( ClsId ) );
-}
-
 void StgHeader::SetTOCStart( sal_Int32 n )
 {
     if( n != nTOCstrm ) bDirty = sal_True, nTOCstrm = n;
