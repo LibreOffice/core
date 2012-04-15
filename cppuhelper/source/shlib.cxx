@@ -473,6 +473,8 @@ extern "C"
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * utl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * xstor_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
 #endif
 
@@ -541,6 +543,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "libsfxlo.a", sfx_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { "libucpfile1.a", ucpfile_component_getFactory },
+        { "libutllo.a", utl_component_getFactory },
+        { "libxstor.a", xstor_component_getFactory },
         { "stocservices.uno.a", stocservices_component_getFactory },
         { NULL, NULL }
     };
