@@ -465,9 +465,11 @@ extern "C"
 {
     extern void * bootstrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sfx_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * stocservices_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -533,11 +535,13 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
         { "configmgr.uno.a", configmgr_component_getFactory },
         { "i18npool.uno.a", i18npool_component_getFactory },
+        { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libsfxlo.a", sfx_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { "libucpfile1.a", ucpfile_component_getFactory },
+        { "stocservices.uno.a", stocservices_component_getFactory },
         { NULL, NULL }
     };
     for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
