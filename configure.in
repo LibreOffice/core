@@ -3426,15 +3426,22 @@ AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
-if test -n "$enable_debug" -a "$enable_debug" != "no"; then
-    ENABLE_DEBUG="TRUE"
-    enable_symbols="yes"
-    AC_MSG_RESULT([yes])
+if test -n "$enable_debug" && test "$enable_debug" != "no"; then
+    if test "$enable_debug" = "y" || test "$enable_debug" = "yes"; then
+        ENABLE_DEBUG="TRUE"
+        ENABLE_DEBUG_ONLY=
+    else
+        ENABLE_DEBUG=""
+        ENABLE_DEBUG_ONLY="$enable_debug"
+        AC_MSG_RESULT([for $enable_debug])
+    fi
 else
     ENABLE_DEBUG=""
+    ENABLE_DEBUG_ONLY=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+AC_SUBST(ENABLE_DEBUG_ONLY)
 
 
 dnl Determine whether to use linkoo for the smoketest installation
