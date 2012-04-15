@@ -4625,21 +4625,21 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
 
     if ( lcl_GetLineWidth( pTopBottomBorder ) > 0 )
     {
-        double nExtentIS = lcl_GetExtent( pRightBorder, NULL );
-        double nExtentIE = lcl_GetExtent( pLeftBorder, NULL );
-        double nExtentOS = lcl_GetExtent( NULL, pRightBorder );
-        double nExtentOE = lcl_GetExtent( NULL, pLeftBorder );
+        double nExtentIS = lcl_GetExtent( NULL, pLeftBorder );
+        double nExtentIE = lcl_GetExtent( NULL, pRightBorder );
+        double nExtentOS = lcl_GetExtent( pLeftBorder, NULL );
+        double nExtentOE = lcl_GetExtent( pRightBorder, NULL );
 
         if ( !_bTop )
         {
-            nExtentIS = lcl_GetExtent( NULL, pRightBorder );
-            nExtentIE = lcl_GetExtent( NULL, pLeftBorder );
-            nExtentOS = lcl_GetExtent( pRightBorder, NULL );
-            nExtentOE = lcl_GetExtent( pLeftBorder, NULL );
+            nExtentIS = lcl_GetExtent( pLeftBorder, NULL );
+            nExtentIE = lcl_GetExtent( pRightBorder, NULL );
+            nExtentOS = lcl_GetExtent( NULL, pLeftBorder );
+            nExtentOE = lcl_GetExtent( NULL, pRightBorder );
         }
 
-        basegfx::B2DPoint aStart( aRect.Right() - lcl_GetLineWidth( pRightBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
-        basegfx::B2DPoint aEnd( aRect.Left() + lcl_GetLineWidth( pLeftBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
+        basegfx::B2DPoint aStart( aRect.Left() + lcl_GetLineWidth( pLeftBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
+        basegfx::B2DPoint aEnd( aRect.Right() - lcl_GetLineWidth( pRightBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
 
         double nLeftWidth = !_bTop ? pTopBottomBorder->GetOutWidth() : pTopBottomBorder->GetInWidth( );
         double nRightWidth = !_bTop ? pTopBottomBorder->GetInWidth() : pTopBottomBorder->GetOutWidth( );
