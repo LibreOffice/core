@@ -1389,8 +1389,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     sal_Bool bElExists = xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-    sal_Int32 nInd = 0;
-    for ( nInd = 0; nInd < lArguments.getLength(); nInd++ )
+    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
@@ -1400,7 +1399,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
     SwitchOwnPersistence( xStorage, sEntName );
 
-    for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
         if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
             lObjArgs[nInd].Value >>= m_bStoreVisRepl;
 
