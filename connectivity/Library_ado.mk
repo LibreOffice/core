@@ -29,6 +29,11 @@ $(eval $(call gb_Library_Library,ado))
 
 $(eval $(call gb_Library_set_componentfile,ado,connectivity/source/drivers/ado/ado))
 
+$(eval $(call gb_Library_set_include,ado,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_add_api,ado,\
 	offapi \
 	udkapi \
