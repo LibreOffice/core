@@ -574,34 +574,42 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
 int RTFDocumentImpl::resolvePict(bool bInline)
 {
     SvMemoryStream aStream;
-    int b = 0, count = 2;
+    SvStream *pStream = 0;
 
-    // Feed the destination text to a stream.
-    OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-    const char *str = aStr.getStr();
-    for (int i = 0; i < aStr.getLength(); ++i)
+    if (!m_pBinaryData.get())
     {
-        char ch = str[i];
-        if (ch != 0x0d && ch != 0x0a)
+        pStream = &aStream;
+        int b = 0, count = 2;
+
+        // Feed the destination text to a stream.
+        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+        const char *str = aStr.getStr();
+        for (int i = 0; i < aStr.getLength(); ++i)
         {
-            b = b << 4;
-            sal_Int8 parsed = m_pTokenizer->asHex(ch);
-            if (parsed == -1)
-                return ERROR_HEX_INVALID;
-            b += parsed;
-            count--;
-            if (!count)
+            char ch = str[i];
+            if (ch != 0x0d && ch != 0x0a)
             {
-                aStream << (char)b;
-                count = 2;
-                b = 0;
+                b = b << 4;
+                sal_Int8 parsed = m_pTokenizer->asHex(ch);
+                if (parsed == -1)
+                    return ERROR_HEX_INVALID;
+                b += parsed;
+                count--;
+                if (!count)
+                {
+                    aStream << (char)b;
+                    count = 2;
+                    b = 0;
+                }
             }
         }
     }
+    else
+        pStream = m_pBinaryData.get();
 
     // Store, and get its URL.
-    aStream.Seek(0);
-    uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(&aStream));
+    pStream->Seek(0);
+    uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
     WMF_EXTERNALHEADER aExtHeader;
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
     aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
@@ -736,6 +744,19 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
 int RTFDocumentImpl::resolveChars(char ch)
 {
+    if (m_aStates.top().nInternalState == INTERNAL_BIN)
+    {
+        m_pBinaryData.reset(new SvMemoryStream());
+        *m_pBinaryData << ch;
+        for (int i = 0; i < m_aStates.top().nBinaryToRead - 1; ++i)
+        {
+            Strm() >> ch;
+            *m_pBinaryData << ch;
+        }
+        m_aStates.top().nInternalState = INTERNAL_NORMAL;
+        return 0;
+    }
+
     if (m_aStates.top().nInternalState != INTERNAL_HEX)
         checkUnicode(false, true);
 
@@ -2758,6 +2779,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_VIEWSCALE:
             m_aSettingsTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_Zoom_percent, pIntValue));
             break;
+        case RTF_BIN:
+            m_aStates.top().nInternalState = INTERNAL_BIN;
+            m_aStates.top().nBinaryToRead = nParam;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3545,6 +3570,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nCurrentEncoding(0),
     nUc(1),
     nCharsToSkip(0),
+    nBinaryToRead(0),
     nListLevelNum(0),
     aListLevelEntries(),
     aLevelNumbers(),

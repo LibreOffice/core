@@ -280,6 +280,8 @@ namespace writerfilter {
                 int nUc;
                 /// Characters to skip, set to nUc by \u.
                 int nCharsToSkip;
+                /// Characters to read, once in binary mode.
+                int nBinaryToRead;
 
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
@@ -466,6 +468,8 @@ namespace writerfilter {
                 bool m_bObject;
                 /// Contents of the objdata group.
                 boost::shared_ptr<SvStream> m_pObjectData;
+                /// If the data for a picture is a binary one, it's stored here.
+                boost::shared_ptr<SvStream> m_pBinaryData;
 
                 RTFReferenceTable::Entries_t m_aFontTableEntries;
                 int m_nCurrentFontIndex;
