@@ -61,6 +61,7 @@
 
 #include "fmexch.hxx"
 #include <vector>
+#include <set>
 
 class SdrObjListIter;
 class FmFormShell;
@@ -228,8 +229,7 @@ public:
 //========================================================================
 // FmNavRequestSelectHint - jemand teilt dem NavigatorTree mit, dass er bestimmte Eintraege selektieren soll
 
-typedef FmEntryData* FmEntryDataPtr;
-SV_DECL_PTRARR_SORT( FmEntryDataArray, FmEntryDataPtr, 16 )
+typedef std::set<FmEntryData*> FmEntryDataArray;
 
 class FmNavRequestSelectHint : public SfxHint
 {
@@ -242,8 +242,8 @@ public:
 
     void SetMixedSelection(sal_Bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
     sal_Bool IsMixedSelection() { return m_bMixedSelection; }
-    void AddItem(FmEntryData* pEntry) { m_arredToSelect.Insert(pEntry); }
-    void ClearItems() { m_arredToSelect.Remove(sal_uInt16(0), m_arredToSelect.Count()); }
+    void AddItem(FmEntryData* pEntry) { m_arredToSelect.insert(pEntry); }
+    void ClearItems() { m_arredToSelect.clear(); }
     FmEntryDataArray& GetItems() { return m_arredToSelect; }
 };
 

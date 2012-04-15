@@ -1926,7 +1926,7 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::SynchronizeSelection" );
         LockSelectionHandling();
-        if (arredToSelect.Count() == 0)
+        if (arredToSelect.empty())
         {
             SelectAll(sal_False);
         }
@@ -1939,11 +1939,11 @@ namespace svxform
                 FmEntryData* pCurrent = (FmEntryData*)pSelection->GetUserData();
                 if (pCurrent != NULL)
                 {
-                    sal_uInt16 nPosition;
-                    if ( arredToSelect.Seek_Entry(pCurrent, &nPosition) )
+                    FmEntryDataArray::iterator it = arredToSelect.find(pCurrent);
+                    if ( it != arredToSelect.end() )
                     {   // der Entry ist schon selektiert, steht aber auch in der SelectList -> er kann aus letzterer
                         // raus
-                        arredToSelect.Remove(nPosition, 1);
+                        arredToSelect.erase(it);
                     } else
                     {   // der Entry ist selektiert, aber steht nicht in der SelectList -> Selektion rausnehmen
                         Select(pSelection, sal_False);
@@ -1971,8 +1971,8 @@ namespace svxform
             while( pLoop )
             {
                 FmEntryData* pCurEntryData = (FmEntryData*)pLoop->GetUserData();
-                sal_uInt16 nPosition;
-                if ( arredToSelect.Seek_Entry(pCurEntryData, &nPosition) )
+                FmEntryDataArray::iterator it = arredToSelect.find(pCurEntryData);
+                if ( it != arredToSelect.end() )
                 {
                     Select(pLoop, sal_True);
                     MakeVisible(pLoop);

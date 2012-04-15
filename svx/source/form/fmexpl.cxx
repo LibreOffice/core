@@ -85,7 +85,6 @@ using namespace ::com::sun::star::container;
 
 //========================================================================
 
-SV_IMPL_PTRARR_SORT( FmEntryDataArray, FmEntryDataPtr )
 SV_IMPL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr )
 
 //========================================================================
