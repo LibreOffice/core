@@ -114,29 +114,28 @@ class SwRootFrm: public SwLayoutFrm
     //Die letzte Seite wollen wir uns nicht immer muehsam zusammensuchen.
     SwPageFrm *pLastPage;
 
-    //Die Root kuemmert sich nun auch um den Shell-Zugriff. Ueber das Dokument
-    //sollte man auch immer an die Root herankommen und somit auch immer
-    //einen Zugriff auf die Shell haben.
-    //Der Pointer pCurrShell ist der Pointer auf irgendeine der Shells fuer
-    //das Dokument
-    //Da es durchaus nicht immer egal ist, auf welcher Shell gearbeitet wird,
-    //ist es notwendig die aktive Shell zu kennen. Das wird dadurch angenaehert,
-    //dass der Pointer pCurrShell immer dann umgesetzt wird, wenn eine
-    //Shell den Fokus erhaelt (FEShell). Zusaetzlich wird der Pointer
-    //Temporaer von SwCurrShell umgesetzt, dieses wird typischerweise
-    //ueber das Macro SET_CURR_SHELL erledigt. Makro + Klasse sind in der
-    //ViewShell zu finden. Diese Objekte koennen auch verschachtelt (auch fuer
-    //unterschiedliche Shells) erzeugt werden. Sie werden im Array pCurrShells
-    //gesammelt.
-    //Weiterhin kann es noch vorkommen, dass eine Shell aktiviert wird,
-    //waehrend noch ein CurrShell-Objekt "aktiv" ist. Dieses wird dann in
-    //pWaitingCurrShell eingetragen und vom letzten DTor der CurrShell
-    //"aktiviert".
-    //Ein weiteres Problem ist dass Zerstoeren einer Shell waehrend sie aktiv
-    //ist. Der Pointer pCurrShell wird dann auf eine beliebige andere Shell
-    //umgesetzt.
-    //Wenn zum Zeitpunkt der zerstoerung einer Shell diese noch in irgendwelchen
-    //CurrShell-Objekten referenziert wird, so wird auch dies aufgeklart.
+2
+    // [ Comment from the original StarOffice checkin ]:
+    // The root takes care of the shell access. Via the document
+    // it should be possible to get at the root frame, and thus always
+    // have access to the shell.
+    // the pointer pCurrShell is the pointer to any of the shells for
+    // the document.
+    // Because sometimes it matters which shell is used, it is necessary to
+    // know the active shell.
+    // this is approximated by setting the pointer pCurrShell when a
+    // shell gets the focus (FEShell). Acditionally the pointer will be
+    // set temporarily by SwCurrShell typically via  SET_CURR_SHELL
+    // The macro and class can be found in the ViewShell. These object can
+    // be created nested (also for different kinds of Shells). They are
+    // collected into the Array pCurrShells.
+    // Futhermore it can happen that a shell is activated while a curshell
+    // object is still 'active'. This one will be entered into pWaitingCurrShell
+    // and will be activated by the last d'tor of CurrShell.
+    // One other problem is the destruction of a shell while it is active.
+    // The pointer pCurrShell is then reset to an arbitrary other shell.
+    // If at the time of the destruction of a shell, which is still referneced
+    // by a curshell object, that will be cleaned up as well.
     friend class CurrShell;
     friend void SetShell( ViewShell *pSh );
     friend void InitCurrShells( SwRootFrm *pRoot );
