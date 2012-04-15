@@ -169,13 +169,14 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
     return width;
 }
 
-bool CoreTextLayout::GetBoundRect( CGContextRef context, Rectangle& rVCLRect ) const
+bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
 
     msgs_debug(layout,"-->");
     if ( !m_has_bound_rec )
     {
-        CGRect bound_rect = CTLineGetImageBounds( m_line, context );
+        AquaSalGraphics& gr = static_cast<AquaSalGraphics&>(rGraphics);
+        CGRect bound_rect = CTLineGetImageBounds( m_line, gr.mrContext );
         if ( !CGRectIsNull( bound_rect ) )
         {
             m_bound_rect = Rectangle(
@@ -300,7 +301,10 @@ long CoreTextLayout::GetTextWidth() const
 }
 
 // not needed. CoreText manage fallback directly
-void CoreTextLayout::InitFont() {}
+void CoreTextLayout::InitFont() const
+{
+    msgs_debug(layout,"<-->");
+}
 
 bool CoreTextLayout::InitGIA() const
 {
