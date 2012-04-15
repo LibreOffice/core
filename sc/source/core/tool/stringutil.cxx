@@ -39,7 +39,8 @@ using ::rtl::OUStringBuffer;
 ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(NULL),
     mbDetectNumberFormat(true),
-    mbSetTextCellFormat(false)
+    mbSetTextCellFormat(false),
+    mbHandleApostrophe(true)
 {
 }
 

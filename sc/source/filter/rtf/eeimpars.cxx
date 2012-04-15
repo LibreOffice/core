@@ -337,6 +337,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 aParam.mpNumFormatter = pFormatter;
                 aParam.mbDetectNumberFormat = true;
                 aParam.mbSetTextCellFormat = true;
+                aParam.mbHandleApostrophe = false;
 
                 if (!aValStr.isEmpty())
                     mpDoc->SetValue( nCol, nRow, nTab, fVal );

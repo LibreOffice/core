@@ -61,6 +61,16 @@ struct SC_DLLPUBLIC ScSetStringParam
      */
     bool mbSetTextCellFormat;
 
+    /**
+     * When true, treat input with a leading apostrophe / single quote special
+     * in that it escapes numeric or date/time input such that it is not
+     * interpreted and the input string is taken instead. This can be used
+     * during text file import so the leading apostrophe is not lost if it
+     * precedes a numeric value.
+     * Usually set mbHandleApostrophe = !mbSetTextCellFormat
+     */
+    bool mbHandleApostrophe;
+
     ScSetStringParam();
 };
 

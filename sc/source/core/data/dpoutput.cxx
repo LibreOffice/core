@@ -794,11 +794,13 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             aParam.mbDetectNumberFormat = true;
             aParam.mbSetTextCellFormat = false;
+            aParam.mbHandleApostrophe = true;
         }
         else
         {
             aParam.mbDetectNumberFormat = false;
             aParam.mbSetTextCellFormat = true;
+            aParam.mbHandleApostrophe = false;
         }
         pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
     }
@@ -836,6 +838,7 @@ void ScDPOutput::FieldCell(
     ScSetStringParam aParam;
     aParam.mbDetectNumberFormat = false;
     aParam.mbSetTextCellFormat = true;
+    aParam.mbHandleApostrophe = false;
     pDoc->SetString(nCol, nRow, nTab, rData.maCaption, &aParam);
 
     if (bInTable)

@@ -1234,14 +1234,19 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         }
         else if ( cFirstChar == '\'')                       // 'Text
         {
-            // Cell format is not 'Text', and the first char
-            // is an apostrophe.  Check if the input is considered a number.
-            String aTest = rString.Copy(1);
-            double fTest;
-            if (aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest))
-                // This is a number.  Strip out the first char.
-                pNewCell = new ScStringCell(aTest);
-            else
+            bool bNumeric = false;
+            if (aParam.mbHandleApostrophe)
+            {
+                // Cell format is not 'Text', and the first char
+                // is an apostrophe.  Check if the input is considered a number.
+                String aTest = rString.Copy(1);
+                double fTest;
+                bNumeric = aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest);
+                if (bNumeric)
+                    // This is a number.  Strip out the first char.
+                    pNewCell = new ScStringCell(aTest);
+            }
+            if (!bNumeric)
                 // This is a normal text. Take it as-is.
                 pNewCell = new ScStringCell(rString);
         }
