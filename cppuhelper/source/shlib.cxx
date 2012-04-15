@@ -561,7 +561,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 #if OSL_DEBUG_LEVEL > 1
         if ( pSym == NULL )
         {
-            fprintf( stderr, "attempting to load unknown library %s", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
             assert( !"Attempt to load unknown library" );
         }
 #endif
