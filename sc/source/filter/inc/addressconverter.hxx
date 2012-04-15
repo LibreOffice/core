@@ -173,12 +173,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList
     return rStrm;
 }
 
-inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRangeList& orRanges )
-{
-    orRanges.read( rStrm );
-    return rStrm;
-}
-
 // ============================================================================
 
 /** Different target types that can be encoded in a BIFF URL. */
