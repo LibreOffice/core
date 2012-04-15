@@ -1766,14 +1766,13 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
             {
                 if(0 == pFocusBox->GetModel()->GetDepth(pEntry))
                 {
-                    const String aNoName( SfxResId(STR_NONAME) );
+                    const rtl::OUString aNoName(ResId::toString(SfxResId(STR_NONAME)));
                     SvLBoxEntry* pParent = pFocusBox->GetParent(pEntry);
-                    String aName(aNoName);
-                    sal_uInt16 n = 1;
+                    rtl::OUString aName(aNoName);
+                    sal_Int32 n = 1;
                     while(!pFocusBox->IsUniqName_Impl(aName, pParent))
                     {
-                        aName = aNoName;
-                        aName += String::CreateFromInt32( n++ );
+                        aName = aNoName + rtl::OUString::valueOf(n++);
                     }
                     aMgr.InsertDir( pFocusBox, aName,
                             (sal_uInt16)pFocusBox->GetModel()->GetRelPos(pEntry)+1);

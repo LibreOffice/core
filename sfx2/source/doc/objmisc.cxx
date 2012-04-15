@@ -869,10 +869,12 @@ String SfxObjectShell::GetTitle
             return X(pImp->aTitle);
 
         // must it be numbered?
-        String aNoName( SfxResId( STR_NONAME ) );
-        if ( pImp->bIsNamedVisible )
+        rtl::OUString aNoName(ResId::toString(SfxResId(STR_NONAME)));
+        if (pImp->bIsNamedVisible)
+        {
             // Append number
-            aNoName += String::CreateFromInt32( pImp->nVisualDocumentNumber );
+            aNoName += rtl::OUString::valueOf(static_cast<sal_Int32>(pImp->nVisualDocumentNumber));
+        }
 
         // Document called "noname" for the time being
         return X(aNoName);
