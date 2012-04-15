@@ -105,7 +105,7 @@ const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-int ScGridOptions::operator==( const ScGridOptions& rCpy ) const
+bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
     return (   nFldDrawX        == rCpy.nFldDrawX
             && nFldDivisionX    == rCpy.nFldDivisionX

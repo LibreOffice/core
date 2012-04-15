@@ -74,13 +74,13 @@ const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
     return *this;
 }
 
-int ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
+bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
 {
     return bSkipEmpty == rOpt.bSkipEmpty
         && bAllSheets == rOpt.bAllSheets;
 }
 
-int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
+bool ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 {
     return !(operator==(rOpt));
 }

@@ -83,8 +83,8 @@ public:
 
     void                    SetDefaults();
     const ScGridOptions&    operator=  ( const ScGridOptions& rCpy );
-    int                     operator== ( const ScGridOptions& rOpt ) const;
-    int                     operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
+    bool                    operator== ( const ScGridOptions& rOpt ) const;
+    bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
 
 //==================================================================
