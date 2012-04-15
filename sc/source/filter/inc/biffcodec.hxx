@@ -94,9 +94,6 @@ typedef ::boost::shared_ptr< BiffDecoderBase > BiffDecoderRef;
 /** Decodes BIFF stream contents that are encoded using the old XOR algorithm. */
 class BiffDecoder_XOR : public BiffDecoderBase
 {
-public:
-    explicit            BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash );
-
 private:
     /** Copy constructor for cloning. */
                         BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder );
@@ -128,12 +125,6 @@ private:
 /** Decodes BIFF stream contents that are encoded using the RC4 algorithm. */
 class BiffDecoder_RCF : public BiffDecoderBase
 {
-public:
-    explicit            BiffDecoder_RCF(
-                            sal_uInt8 pnSalt[ 16 ],
-                            sal_uInt8 pnVerifier[ 16 ],
-                            sal_uInt8 pnVerifierHash[ 16 ] );
-
 private:
     /** Copy constructor for cloning. */
                         BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder );

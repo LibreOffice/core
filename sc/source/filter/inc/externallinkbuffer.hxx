@@ -118,8 +118,6 @@ public:
                             ::rtl::OUString& orDdeItem );
 
 private:
-    /** Tries to convert the passed token sequence to an ExternalReference. */
-    void                extractExternalReference( const ApiTokenSequence& rTokens );
     /** Sets the size of the result matrix. */
     void                setResultSize( sal_Int32 nColumns, sal_Int32 nRows );
 

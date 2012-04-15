@@ -375,82 +375,6 @@ void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId 
     }
 }
 
-void Connection::importDbQuery( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFlags, nSqlParamCount, nCommandCount, nPostMethodCount, nServerSqlCount, nOdbcConnCount;
-    rStrm >> nFlags >> nSqlParamCount >> nCommandCount >> nPostMethodCount >> nServerSqlCount >> nOdbcConnCount;
-
-    // same type constants in all BIFF versions
-    maModel.mnType = extractValue< sal_Int32 >( nFlags, 0, 3 );
-    maModel.mbSavePassword = getFlag( nFlags, BIFF_DBQUERY_SAVEPASSWORD );
-
-    OSL_ENSURE( getFlag( nFlags, BIFF_DBQUERY_ODBC ) == (maModel.mnType == BIFF12_CONNECTION_ODBC), "Connection::importDbQuery - wrong ODBC flag" );
-    OSL_ENSURE( getFlag( nFlags, BIFF_DBQUERY_SQLQUERY ) != (maModel.mnType == BIFF12_CONNECTION_HTML), "Connection::importDbQuery - wrong SQL query flag" );
-    OSL_ENSURE( getFlag( nFlags, BIFF_DBQUERY_HTML ) == (maModel.mnType == BIFF12_CONNECTION_HTML), "Connection::importDbQuery - wrong HTML flag" );
-
-    if( (maModel.mnType == BIFF12_CONNECTION_HTML) && getFlag( nFlags, BIFF_DBQUERY_HTML ) )
-    {
-        WebPrModel& rWebPr = maModel.createWebPr();
-        rWebPr.mbHtmlTables = getFlag( nFlags, BIFF_DBQUERY_HTMLTABLES );
-
-        // read HTML query URL and post method
-        rWebPr.maUrl = lclReadQueryString( rStrm, nCommandCount );
-        rWebPr.maPostMethod = lclReadQueryString( rStrm, nPostMethodCount );
-    }
-}
-
-void Connection::importQueryTableSettings( BiffInputStream& rStrm )
-{
-    rStrm.skip( 4 );
-    // source data type, again
-    sal_uInt16 nType = rStrm.readuInt16();
-    OSL_ENSURE( nType == maModel.mnType, "Connection::importQueryTableSettings - source data type mismatch" );
-    if( nType == maModel.mnType )
-    {
-        sal_uInt16 nFlags1, nFlags2, nFlags3, nHtmlFormat;
-        rStrm >> nFlags1 >> nFlags2 >> nFlags3;
-        rStrm.skip( 10 );
-        maModel.mnInterval = rStrm.readuInt16();
-        rStrm >> nHtmlFormat;
-
-        // first flags field: generic connection flags
-        maModel.mbKeepAlive = getFlag( nFlags1, BIFF_QTSETTINGS_KEEPALIVE );
-        maModel.mbNew       = getFlag( nFlags1, BIFF_QTSETTINGS_NEW );
-
-        // meaning of second flags field is dependent on source data type
-        if( (maModel.mnType == BIFF12_CONNECTION_HTML) && maModel.mxWebPr.get() )
-        {
-            WebPrModel& rWebPr = *maModel.mxWebPr;
-
-            // HTML format is one-based in BIFF8 (but zero-based in BIFF12)
-            static const sal_Int32 spnHmlFormats[] = { XML_none, XML_none, XML_rtf, XML_all };
-            rWebPr.mnHtmlFormat = STATIC_ARRAY_SELECT( spnHmlFormats, nHtmlFormat, XML_none );
-
-            rWebPr.mbXml             = getFlag( nFlags1, BIFF_QTSETTINGS_XML );
-            rWebPr.mbSourceData      = getFlag( nFlags1, BIFF_QTSETTINGS_SOURCEDATA );
-            rWebPr.mbParsePre        = getFlag( nFlags2, BIFF_QTSETTINGS_PARSEPRE );
-            rWebPr.mbConsecutive     = getFlag( nFlags2, BIFF_QTSETTINGS_CONSECUTIVE );
-            rWebPr.mbFirstRow        = getFlag( nFlags2, BIFF_QTSETTINGS_FIRSTROW );
-            rWebPr.mbXl97Created     = getFlag( nFlags2, BIFF_QTSETTINGS_XL97CREATED );
-            rWebPr.mbTextDates       = getFlag( nFlags2, BIFF_QTSETTINGS_TEXTDATES );
-            rWebPr.mbXl2000Refreshed = getFlag( nFlags2, BIFF_QTSETTINGS_XL2000REFRESHED );
-
-            // list of HTML table names or indexes
-            if( getFlag( nFlags3, BIFF_QTSETTINGS_TABLENAMES ) )
-            {
-                // a QUERYTABLESTRING record containing the table names must follow
-                bool bHasQTString = (rStrm.getNextRecId() == BIFF_ID_QUERYTABLESTRING) && rStrm.startNextRecord();
-                OSL_ENSURE( bHasQTString, "Connection::importQueryTableSettings - missing QUERYTABLESTRING record" );
-                if( bHasQTString )
-                {
-                    rStrm.skip( 4 );
-                    lclParseTables( rWebPr.maTables, rStrm.readUniString() );
-                }
-            }
-        }
-    }
-}
-
 // ============================================================================
 
 ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
@@ -463,14 +387,6 @@ Connection& ConnectionsBuffer::createConnection()
 {
     ConnectionRef xConnection( new Connection( *this ) );
     maConnections.push_back( xConnection );
-    return *xConnection;
-}
-
-Connection& ConnectionsBuffer::createConnectionWithId()
-{
-    ConnectionRef xConnection( new Connection( *this, mnUnusedId ) );
-    maConnections.push_back( xConnection );
-    insertConnectionToMap( xConnection );
     return *xConnection;
 }
 

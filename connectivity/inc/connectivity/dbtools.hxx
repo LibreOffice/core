@@ -426,29 +426,6 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>()
     );
 
-    /** returns the statement which is composed from the current settings of a row set
-
-        If the row set is currently not connected, it is attempted to do so with it's current settings.
-        (TODO: isn't this a resource leak? Do we really need this behaviour?).
-
-        @param _rxRowSet
-            the row set whose settings should be examined. Must not be <NULL/>
-        @param _rxFactory
-            a service factory which may be needed to connect the row set
-        @param _bUseRowSetFilter
-            If <TRUE/>, the <b>Filter</b> property of the row set will also be examined. In case it is
-            not empty, and <b>ApplyFilter</b> is <TRUE/>, it will also be added to the composed statement.
-        @param _bUseRowSetOrder
-            If <TRUE/>, the <b>Order</b> property of the row set will also be examined. In case it is
-            not empty, it will also be added to the composed statement.
-    */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getComposedRowSetStatement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-            sal_Bool _bUseRowSetFilter = sal_True,
-            sal_Bool _bUseRowSetOrder = sal_True
-    )   SAL_THROW( ( ::com::sun::star::sdbc::SQLException ) );
-
     /** create an <type scope="com::sun::star::sdb">XSingleSelectQueryComposer</type> which represents
         the current settings (Command/CommandType/Filter/Order) of the given rowset.
 

@@ -122,9 +122,6 @@ public:
     /** Imports a 32-bit palette color identifier from the passed BIFF12 stream. */
     void                importColorId( SequenceInputStream& rStrm );
 
-    /** Imports an 8-bit or 16-bit palette color identifier from the passed BIFF stream. */
-    void                importColorId( BiffInputStream& rStrm, bool b16Bit = true );
-
     /** Returns true, if the color is set to automatic. */
     inline bool         isAuto() const { return isPlaceHolder(); }
 };
@@ -337,8 +334,6 @@ struct AlignmentModel
     void                setBiffHorAlign( sal_uInt8 nHorAlign );
     /** Sets vertical alignment from the passed BIFF data. */
     void                setBiffVerAlign( sal_uInt8 nVerAlign );
-    /** Sets rotation from the passed BIFF text orientation. */
-    void                setBiffTextOrient( sal_uInt8 nTextOrient );
 };
 
 // ----------------------------------------------------------------------------

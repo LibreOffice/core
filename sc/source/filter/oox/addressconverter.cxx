@@ -158,14 +158,6 @@ void BinRangeList::read( SequenceInputStream& rStrm )
         aIt->read( rStrm );
 }
 
-void BinRangeList::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
-{
-    sal_uInt16 nCount = rStrm.readuInt16();
-    resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / lclGetBiffRangeSize( bCol16Bit, bRow32Bit ) ) );
-    for( iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        aIt->read( rStrm, bCol16Bit, bRow32Bit );
-}
-
 // ============================================================================
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :

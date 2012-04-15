@@ -455,8 +455,6 @@ public:
                             WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
 private:
-    /** Reads the sheet name and URL from the DCONREF, DCONNAME, or DCONBINAME records. */
-    void                importDConUrl( BiffInputStream& rStrm );
 
     /** Finalizes the pivot cache if it is based on internal sheet data. */
     void                finalizeInternalSheetSource();

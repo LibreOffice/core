@@ -102,8 +102,6 @@ public:
     void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
     /** Imports the client anchor settings from a VML element. */
     void                importVmlAnchor( const ::rtl::OUString& rAnchor );
-    /** Imports the client anchor settings from a BIFF or DFF stream. */
-    void                importBiffAnchor( BinaryInputStream& rStrm );
 
     /** Calculates the resulting shape anchor in EMUs. */
     ::oox::drawingml::EmuRectangle calcAnchorRectEmu(

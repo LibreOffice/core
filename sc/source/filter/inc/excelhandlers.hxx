@@ -111,18 +111,6 @@ public:
 
 // ----------------------------------------------------------------------------
 
-/** Context handler derived from the WorkbookHelper helper class.
-
-    Used to import contexts in global workbook fragments.
- */
-class BiffWorkbookContextBase : public BiffContextHandler, public WorkbookHelper
-{
-protected:
-    explicit            BiffWorkbookContextBase( const WorkbookHelper& rHelper );
-};
-
-// ----------------------------------------------------------------------------
-
 /** Context handler derived from the WorksheetHelper helper class.
 
     Used to import contexts in sheet fragments.

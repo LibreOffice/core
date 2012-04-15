@@ -439,11 +439,6 @@ void Color::importColorId( SequenceInputStream& rStrm )
     setIndexed( rStrm.readInt32() );
 }
 
-void Color::importColorId( BiffInputStream& rStrm, bool b16Bit )
-{
-    setIndexed( b16Bit ? rStrm.readuInt16() : rStrm.readuInt8() );
-}
-
 SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
 {
     orColor.importColor( rStrm );
@@ -1290,14 +1285,6 @@ void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
     static const sal_Int32 spnVerAligns[] = {
         XML_top, XML_center, XML_bottom, XML_justify, XML_distributed };
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
-}
-
-void AlignmentModel::setBiffTextOrient( sal_uInt8 nTextOrient )
-{
-    static const sal_Int32 spnRotations[] = {
-        OOX_XF_ROTATION_NONE, OOX_XF_ROTATION_STACKED,
-        OOX_XF_ROTATION_90CCW, OOX_XF_ROTATION_90CW };
-    mnRotation = STATIC_ARRAY_SELECT( spnRotations, nTextOrient, OOX_XF_ROTATION_NONE );
 }
 
 // ----------------------------------------------------------------------------

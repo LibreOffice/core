@@ -290,37 +290,6 @@ void lclSetSheetCacheIndex( SingleReference& orApiRef, sal_Int32 nCacheIdx )
 
 } // namespace
 
-void ExternalName::extractExternalReference( const ApiTokenSequence& rTokens )
-{
-    OSL_ENSURE( (getFilterType() == FILTER_BIFF) && (getBiff() <= BIFF4), "ExternalName::setExternalReference - unexpected call" );
-    sal_Int32 nDocLinkIdx = mrParentLink.getDocumentLinkIndex();
-    sal_Int32 nCacheIdx = mrParentLink.getSheetCacheIndex();
-    if( (nDocLinkIdx >= 0) && (nCacheIdx >= 0) )
-    {
-        ExternalReference aExtApiRef;
-        aExtApiRef.Index = nDocLinkIdx;
-
-        Any aRefAny = getFormulaParser().extractReference( rTokens );
-        if( aRefAny.has< SingleReference >() )
-        {
-            SingleReference aApiRef;
-            aRefAny >>= aApiRef;
-            lclSetSheetCacheIndex( aApiRef, nCacheIdx );
-            aExtApiRef.Reference <<= aApiRef;
-            maRefAny <<= aExtApiRef;
-        }
-        else if( aRefAny.has< ComplexReference >() )
-        {
-            ComplexReference aApiRef;
-            aRefAny >>= aApiRef;
-            lclSetSheetCacheIndex( aApiRef.Reference1, nCacheIdx );
-            lclSetSheetCacheIndex( aApiRef.Reference2, nCacheIdx );
-            aExtApiRef.Reference <<= aApiRef;
-            maRefAny <<= aExtApiRef;
-        }
-    }
-}
-
 void ExternalName::setResultSize( sal_Int32 nColumns, sal_Int32 nRows )
 {
     OSL_ENSURE( (mrParentLink.getLinkType() == LINKTYPE_DDE) || (mrParentLink.getLinkType() == LINKTYPE_OLE) ||

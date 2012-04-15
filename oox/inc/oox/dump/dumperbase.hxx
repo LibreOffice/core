@@ -377,9 +377,6 @@ public:
 
     static void         appendAddrCol( ::rtl::OUStringBuffer& rStr, sal_Int32 nCol, bool bRel );
     static void         appendAddrRow( ::rtl::OUStringBuffer& rStr, sal_Int32 nRow, bool bRel );
-    static void         appendAddrName( ::rtl::OUStringBuffer& rStr, sal_Unicode cPrefix, sal_Int32 nColRow, bool bRel );
-
-    static void         appendAddress( ::rtl::OUStringBuffer& rStr, const Address& rPos );
 
     // encoded text output ----------------------------------------------------
 

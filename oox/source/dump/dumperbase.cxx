@@ -485,25 +485,6 @@ void StringHelper::appendAddrRow( OUStringBuffer& rStr, sal_Int32 nRow, bool bRe
     appendDec( rStr, nRow + 1 );
 }
 
-void StringHelper::appendAddrName( OUStringBuffer& rStr, sal_Unicode cPrefix, sal_Int32 nColRow, bool bRel )
-{
-    rStr.append( cPrefix );
-    if( bRel && (nColRow != 0) )
-    {
-        rStr.append( OOX_DUMP_R1C1OPEN );
-        appendDec( rStr, nColRow );
-        rStr.append( OOX_DUMP_R1C1CLOSE );
-    }
-    else if( !bRel )
-        appendDec( rStr, nColRow + 1 );
-}
-
-void StringHelper::appendAddress( OUStringBuffer& rStr, const Address& rPos )
-{
-    appendAddrCol( rStr, rPos.mnCol, true );
-    appendAddrRow( rStr, rPos.mnRow, true );
-}
-
 // encoded text output --------------------------------------------------------
 
 void StringHelper::appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix )

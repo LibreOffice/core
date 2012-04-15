@@ -163,7 +163,6 @@ public:
     inline explicit     BinRangeList() {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
 
 // ----------------------------------------------------------------------------

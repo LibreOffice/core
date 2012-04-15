@@ -70,14 +70,6 @@ WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
 {
 }
 
-/*static*/ OUString WorksheetBuffer::getBaseFileName( const OUString& rUrl )
-{
-    sal_Int32 nFileNamePos = ::std::max< sal_Int32 >( rUrl.lastIndexOf( '/' ) + 1, 0 );
-    sal_Int32 nExtPos = rUrl.lastIndexOf( '.' );
-    if( nExtPos <= nFileNamePos ) nExtPos = rUrl.getLength();
-    return rUrl.copy( nFileNamePos, nExtPos - nFileNamePos );
-}
-
 void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
     SheetInfoModel aModel;

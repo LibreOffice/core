@@ -202,22 +202,6 @@ private:
 
 // ============================================================================
 
-/** A placeholder object for unknown/unsupported object types. */
-class BiffPlaceholderObject : public BiffDrawingObjectBase
-{
-public:
-    explicit            BiffPlaceholderObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-};
-
-// ============================================================================
-
 /** A group object that is able to contain other child objects. */
 class BiffGroupObject : public BiffDrawingObjectBase
 {
@@ -245,36 +229,6 @@ protected:
     BiffDrawingObjectContainer maChildren;     /// All child objects contained in this group object.
     sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
 };
-
-// ============================================================================
-
-/** A simple line object. */
-class BiffLineObject : public BiffDrawingObjectBase
-{
-public:
-    explicit            BiffLineObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-
-protected:
-    BiffObjLineModel    maLineModel;    /// Line formatting.
-    sal_uInt16          mnArrows;       /// Line arrows.
-    sal_uInt8           mnStartPoint;   /// Starting point.
-};
-
-// ============================================================================
 
 /** A simple rectangle object (used as base class for oval objects). */
 class BiffRectObject : public BiffDrawingObjectBase
@@ -306,81 +260,6 @@ protected:
     BiffObjFillModel    maFillModel;    /// Fill formatting.
     BiffObjLineModel    maLineModel;    /// Line formatting.
     sal_uInt16          mnFrameFlags;   /// Additional flags.
-};
-
-// ============================================================================
-
-/** A simple oval object. */
-class BiffOvalObject : public BiffRectObject
-{
-public:
-    explicit            BiffOvalObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-};
-
-// ============================================================================
-
-/** A simple arc object. */
-class BiffArcObject : public BiffDrawingObjectBase
-{
-public:
-    explicit            BiffArcObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-
-protected:
-    BiffObjFillModel    maFillModel;    /// Fill formatting.
-    BiffObjLineModel    maLineModel;    /// Line formatting.
-    sal_uInt8           mnQuadrant;     /// Visible quadrant of the circle.
-};
-
-// ============================================================================
-
-/** A simple polygon object. */
-class BiffPolygonObject : public BiffRectObject
-{
-public:
-    explicit            BiffPolygonObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-
-private:
-    /** Reads the COORDLIST record following the OBJ record. */
-    void                importCoordList( BiffInputStream& rStrm );
-
-protected:
-    typedef ::std::vector< ::com::sun::star::awt::Point > PointVector;
-    PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
-    sal_uInt16          mnPolyFlags;    /// Additional flags.
-    sal_uInt16          mnPointCount;   /// Polygon point count.
 };
 
 // ============================================================================

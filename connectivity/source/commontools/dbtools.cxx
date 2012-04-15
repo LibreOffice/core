@@ -1359,14 +1359,6 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString getComposedRowSetStatement(
-                    const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-                    sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder )
-{
-    return getComposedRowSetStatement( _rxRowSet, _rxFactory, _bUseRowSetFilter, _bUseRowSetOrder, NULL );
-}
-
-//------------------------------------------------------------------------------
 Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
                 const Reference< XPropertySet>& _rxRowSetProps,
                 const Reference< XMultiServiceFactory>& _rxFactory)

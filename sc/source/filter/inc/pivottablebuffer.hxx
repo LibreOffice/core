@@ -154,9 +154,6 @@ public:
     /** Imports pivot field item reference settings from the PTREFERENCEITEM record. */
     void                importPTReferenceItem( SequenceInputStream& rStrm );
 
-    /** Imports settings of an item in this pivot field from the PTFITEM record. */
-    void                importPTFItem( BiffInputStream& rStrm );
-
     /** Finalizes the field after import, creates grouping and other settings. */
     void                finalizeImport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotDescriptor >& rxDPDesc );

@@ -329,15 +329,6 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 
 //-------------------------------------------------------------------
 
-Rectangle ScrollableWindow::GetVisibleArea() const
-{
-    Point aTopLeft( PixelToLogic( Point() ) );
-    Size aSz( GetOutputSize() );
-    return Rectangle( aTopLeft, aSz );
-}
-
-//-------------------------------------------------------------------
-
 void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {
     if ( !bScrolling )

@@ -259,14 +259,6 @@ void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
     maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
-void PhoneticSettings::importStringData( BiffInputStream& rStrm )
-{
-    sal_uInt16 nFontId, nFlags;
-    rStrm >> nFontId >> nFlags;
-    maModel.mnFontId = nFontId;
-    maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
-}
-
 // ============================================================================
 
 RichStringPhonetic::RichStringPhonetic( const WorkbookHelper& rHelper ) :
@@ -482,37 +474,6 @@ RichStringPhoneticRef RichString::createPhonetic()
     RichStringPhoneticRef xPhonetic( new RichStringPhonetic( *this ) );
     maPhonPortions.push_back( xPhonetic );
     return xPhonetic;
-}
-
-void RichString::createTextPortions( const OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions )
-{
-    maTextPortions.clear();
-    if( !rText.isEmpty())
-    {
-        sal_Int32 nStrLen = rText.getLength();
-        // add leading and trailing string position to ease the following loop
-        if( rPortions.empty() || (rPortions.front().mnPos > 0) )
-            rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
-        if( rPortions.back().mnPos < nStrLen )
-            rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
-
-        // create all string portions according to the font id vector
-        for( FontPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
-        {
-            sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
-            if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
-            {
-                // convert byte string to unicode string, using current font encoding
-                FontRef xFont = getStyles().getFont( aIt->mnFontId );
-                rtl_TextEncoding eFontEnc = xFont.get() ? xFont->getFontEncoding() : eTextEnc;
-                OUString aUniStr = OStringToOUString( rText.copy( aIt->mnPos, nPortionLen ), eFontEnc );
-                // create string portion
-                RichStringPortionRef xPortion = createPortion();
-                xPortion->setText( aUniStr );
-                xPortion->setFontId( aIt->mnFontId );
-            }
-        }
-    }
 }
 
 void RichString::createTextPortions( const OUString& rText, FontPortionModelList& rPortions )

@@ -167,8 +167,6 @@ public:
 
     /** Imports phonetic settings from a rich string. */
     void                importStringData( SequenceInputStream& rStrm );
-    /** Imports phonetic settings from a rich string. */
-    void                importStringData( BiffInputStream& rStrm );
 
 private:
     PhoneticDataModel   maModel;
@@ -276,8 +274,6 @@ private:
     /** Creates, appends, and returns a new empty phonetic text portion. */
     RichStringPhoneticRef createPhonetic();
 
-    /** Create base text portions from the passed string and character formatting. */
-    void                createTextPortions( const ::rtl::OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions );
     /** Create base text portions from the passed string and character formatting. */
     void                createTextPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */

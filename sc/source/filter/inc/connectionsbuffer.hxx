@@ -130,11 +130,6 @@ public:
     /** Imports a web query table identifier from the PCITEM_MISSING, PCITEM_STRING, or PCITEM_INDEX record. */
     void                importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId );
 
-    /** Imports connection settings from the DBQUERY record. */
-    void                importDbQuery( BiffInputStream& rStrm );
-    /** Imports connection settings from the QUERYTABLESETTINGS record. */
-    void                importQueryTableSettings( BiffInputStream& rStrm );
-
     /** Returns the unique connection identifier. */
     inline sal_Int32    getConnectionId() const { return maModel.mnId; }
     /** Returns the source data type of the connection. */
@@ -157,8 +152,6 @@ public:
 
     /** Creates a new empty connection. */
     Connection&         createConnection();
-    /** Creates a new empty connection with a valid but unused identifier. */
-    Connection&         createConnectionWithId();
 
     /** Maps all connections by their identifier. */
     void                finalizeImport();

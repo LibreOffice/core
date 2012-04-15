@@ -83,13 +83,6 @@ void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
 
 // ============================================================================
 
-BiffDecoder_XOR::BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash ) :
-    maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
-    mnKey( nKey ),
-    mnHash( nHash )
-{
-}
-
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
@@ -168,13 +161,6 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
 } // namespace
 
 // ----------------------------------------------------------------------------
-
-BiffDecoder_RCF::BiffDecoder_RCF( sal_uInt8 pnSalt[ 16 ], sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
-    maSalt( pnSalt, pnSalt + 16 ),
-    maVerifier( pnVerifier, pnVerifier + 16 ),
-    maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
-{
-}
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning

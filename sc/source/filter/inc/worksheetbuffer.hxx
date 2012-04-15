@@ -68,9 +68,6 @@ class WorksheetBuffer : public WorkbookHelper
 public:
     explicit            WorksheetBuffer( const WorkbookHelper& rHelper );
 
-    /** Returns the base file name without path and file extension. */
-    static ::rtl::OUString getBaseFileName( const ::rtl::OUString& rUrl );
-
     /** Imports the attributes of a sheet element. */
     void                importSheet( const AttributeList& rAttribs );
     /** Imports the SHEET record from the passed BIFF12 stream. */

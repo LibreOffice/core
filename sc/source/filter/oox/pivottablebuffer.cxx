@@ -434,21 +434,6 @@ void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
     rStrm >> maModel.mnSortRefItem;
 }
 
-void PivotTableField::importPTFItem( BiffInputStream& rStrm )
-{
-    PTFieldItemModel aModel;
-    sal_uInt16 nType, nFlags;
-    sal_Int16 nCacheItem;
-    rStrm >> nType >> nFlags >> nCacheItem;
-
-    aModel.setBiffType( nType );
-    aModel.mnCacheItem = nCacheItem;
-    aModel.mbShowDetails = !getFlag( nFlags, BIFF_PTFITEM_HIDEDETAILS );
-    aModel.mbHidden      = getFlag( nFlags, BIFF_PTFITEM_HIDDEN );
-
-    maItems.push_back( aModel );
-}
-
 void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& rxDPDesc )
 {
     /*  Process all fields based on source data, other fields (e.g. group

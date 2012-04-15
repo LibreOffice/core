@@ -68,13 +68,6 @@ BiffContextHandler::~BiffContextHandler()
 
 // ----------------------------------------------------------------------------
 
-BiffWorkbookContextBase::BiffWorkbookContextBase( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
-{
-}
-
-// ----------------------------------------------------------------------------
-
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {

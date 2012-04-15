@@ -90,8 +90,6 @@ public:
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
-    Rectangle       GetVisibleArea() const;
-
     using Window::Scroll;
     virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
 

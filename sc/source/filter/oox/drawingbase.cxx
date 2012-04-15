@@ -191,13 +191,6 @@ void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
     }
 }
 
-void ShapeAnchor::importBiffAnchor( BinaryInputStream& rStrm )
-{
-    meAnchorType = ANCHOR_TWOCELL;          /// BIFF/DFF use two-cell anchors only
-    meCellAnchorType = CELLANCHOR_COLROW;   /// BIFF/DFF use fraction of column/row for offset values
-    rStrm >> maFrom >> maTo;
-}
-
 EmuRectangle ShapeAnchor::calcAnchorRectEmu( const Size& rPageSizeHmm ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();

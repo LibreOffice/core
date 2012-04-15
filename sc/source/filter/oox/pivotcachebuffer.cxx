@@ -1330,29 +1330,6 @@ void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper&
 
 // private --------------------------------------------------------------------
 
-void PivotCache::importDConUrl( BiffInputStream& rStrm )
-{
-    // the URL with sheet name and optional URL of an external document
-    OUString aEncodedUrl;
-    if( getBiff() == BIFF8 )
-    {
-        // empty string does not contain a flags byte, cannot use simple readUniString() here...
-        sal_uInt16 nChars = rStrm.readuInt16();
-        if( nChars > 0 )
-            aEncodedUrl = rStrm.readUniString( nChars );
-    }
-    else
-    {
-        aEncodedUrl = rStrm.readByteStringUC( false, getTextEncoding() );
-    }
-
-    if( !aEncodedUrl.isEmpty() )
-    {
-        OUString aClassName;
-        getAddressConverter().parseBiffTargetUrl( aClassName, maTargetUrl, maSheetSrcModel.maSheet, aEncodedUrl, true );
-    }
-}
-
 void PivotCache::finalizeInternalSheetSource()
 {
     // resolve sheet name to sheet index
