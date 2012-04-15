@@ -160,14 +160,6 @@ sal_Unicode lclGetBuiltinIdFromBaseName( const OUString& rModelName )
     return BIFF_DEFNAME_UNKNOWN;
 }
 
-bool lclIsFilterDatabaseName( const OUString& rModelName )
-{
-    for( const sal_Char* const* ppcName = sppcFilterDbNames; ppcName < STATIC_ARRAY_END( sppcFilterDbNames ); ++ppcName )
-        if( rModelName.equalsIgnoreAsciiCaseAscii( *ppcName ) )
-            return true;
-    return false;
-}
-
 OUString lclGetUpcaseModelName( const OUString& rModelName )
 {
     // TODO: i18n?

@@ -210,15 +210,6 @@ const sal_Int16 BIFF_PTPAGEFIELDS_ALLITEMS          = 0x7FFD;
 const sal_Int16 BIFF_PTDATAFIELD_PREVIOUS           = 0x7FFB;
 const sal_Int16 BIFF_PTDATAFIELD_NEXT               = 0x7FFC;
 
-// ----------------------------------------------------------------------------
-
-OUString lclReadPivotString( const WorkbookHelper& rHelper, BiffInputStream& rStrm, sal_uInt16 nLen )
-{
-    if( nLen == BIFF_PT_NOSTRING )
-        return OUString();
-    return (rHelper.getBiff() == BIFF8) ? rStrm.readUniStringBody( nLen ) : rStrm.readCharArrayUC( nLen, rHelper.getTextEncoding() );
-}
-
 } // namespace
 
 // ============================================================================

@@ -171,12 +171,6 @@ const sal_uInt16 BIFF_OBJCMO_AUTOFILL       = 0x4000;   /// Automatic fill forma
 
 // ----------------------------------------------------------------------------
 
-inline BiffInputStream& operator>>( BiffInputStream& rStrm, ShapeAnchor& rAnchor )
-{
-    rAnchor.importBiffAnchor( rStrm );
-    return rStrm;
-}
-
 } // namespace
 
 // ============================================================================
