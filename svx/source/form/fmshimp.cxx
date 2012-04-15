@@ -2305,8 +2305,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 
     // und zum Feld (dazu habe ich vor dem Start des Suchens die XVclComponent-Interfaces eingesammelt)
     DBG_ASSERT(pfriWhere->nFieldPos < m_arrSearchedControls.Count(), "FmXFormShell::OnFoundData : ungueltige Daten uebergeben !");
-    SdrObject* pObject = m_arrSearchedControls.GetObject(pfriWhere->nFieldPos);
-    DBG_ASSERT(pObject != NULL, "FmXFormShell::OnFoundData : unerwartet : ungueltiges VclControl-Interface");
+    SdrObject* pObject = m_arrSearchedControls.at(pfriWhere->nFieldPos);
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
     m_pShell->GetFormView()->MarkObj(pObject, m_pShell->GetFormView()->GetSdrPageView());
@@ -2405,7 +2404,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // --------------------------------------------------------------------------------------------
     // assemble the list of fields to involve (that is, the ControlSources of all fields that have such a property)
     UniString strFieldList, sFieldDisplayNames;
-    m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
+    m_arrSearchedControls.clear();
     m_arrRelativeGridColumn.clear();
 
     // small problem: To mark found fields, I need SdrObjects. To determine which controls
@@ -2517,7 +2516,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             pfmscContextInfo->arrFields.push_back(xCurrentColumn);
 
                             // and the SdrOject to the Field
-                            m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
+                            m_arrSearchedControls.push_back(pCurrent);
                             // the number of the column
                             m_arrRelativeGridColumn.push_back(nViewPos);
                         }
@@ -2546,7 +2545,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         sFieldDisplayNames += ';';
 
                         // mark the SdrObject (accelerates the treatment in OnFoundData)
-                        m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
+                        m_arrSearchedControls.push_back(pCurrent);
 
                         // the number of the colum (here a dummy, since it is only interesting for GridControls)
                         m_arrRelativeGridColumn.push_back(-1);

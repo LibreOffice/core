@@ -75,11 +75,11 @@
 #include <set>
 #include <vector>
 
-SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32)
+typedef std::vector<SdrObject*> SdrObjArray;
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
-// catch databse exceptions if occur
+// catch database exceptions if they occur
 #define DO_SAFE(statement) try { statement; } catch( const Exception& ) { OSL_FAIL("unhandled exception (I tried to move a cursor (or something like that).)"); }
 
 #define GA_DISABLE_SYNC     1
