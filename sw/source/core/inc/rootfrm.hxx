@@ -114,7 +114,6 @@ class SwRootFrm: public SwLayoutFrm
     //Die letzte Seite wollen wir uns nicht immer muehsam zusammensuchen.
     SwPageFrm *pLastPage;
 
-2
     // [ Comment from the original StarOffice checkin ]:
     // The root takes care of the shell access. Via the document
     // it should be possible to get at the root frame, and thus always
