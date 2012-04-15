@@ -4105,8 +4105,6 @@ sal_Bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>&
 //==============================================================================
 //==============================================================================
 
-SV_IMPL_PTRARR(StatusForwarderArray, SfxStatusForwarder*)
-
 SFX_IMPL_MENU_CONTROL(ControlConversionMenuController, SfxBoolItem);
 
 //------------------------------------------------------------------------------
@@ -4124,7 +4122,7 @@ ControlConversionMenuController::ControlConversionMenuController( sal_uInt16 _nI
         {
             _rBindings.Invalidate(m_pConversionMenu->GetItemId(i));
             SfxStatusForwarder* pForwarder = new SfxStatusForwarder(m_pConversionMenu->GetItemId(i), *this);
-            m_aStatusForwarders.C40_INSERT(SfxStatusForwarder, pForwarder, m_aStatusForwarders.Count());
+            m_aStatusForwarders.push_back(pForwarder);
         }
     }
 }

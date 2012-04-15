@@ -74,6 +74,7 @@
 #include <queue>
 #include <set>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 typedef std::vector<SdrObject*> SdrObjArray;
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
@@ -584,7 +585,7 @@ public:
 };
 
 // ========================================================================
-SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16)
+typedef boost::ptr_vector<SfxStatusForwarder> StatusForwarderArray;
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:
