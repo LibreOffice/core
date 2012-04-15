@@ -1302,8 +1302,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 //------------------------------------------------------------------------------
-Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder )
+Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory )
     SAL_THROW( ( SQLException ) )
 {
     Reference< XSingleSelectQueryComposer > xComposer;
@@ -1325,17 +1324,13 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
 
             StatementComposer aComposer( xConn, sCommand, nCommandType, bEscapeProcessing );
             // append sort
-            if ( _bUseRowSetOrder )
-                aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Order" )) ) ) );
+            aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Order" )) ) ) );
 
             // append filter
-            if ( _bUseRowSetFilter )
-            {
-                sal_Bool bApplyFilter = sal_True;
-                _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" )) ) >>= bApplyFilter;
-                if ( bApplyFilter )
-                    aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
-            }
+            sal_Bool bApplyFilter = sal_True;
+            _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" )) ) >>= bApplyFilter;
+            if ( bApplyFilter )
+                aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
 
             xComposer = aComposer.getComposer();
             aComposer.setDisposeComposer( false );
@@ -1361,7 +1356,7 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
     Reference< XSingleSelectQueryComposer > xReturn;
     try
     {
-        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxFactory, sal_True, sal_True );
+        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxFactory );
     }
     catch( const SQLException& )
     {
