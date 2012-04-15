@@ -149,6 +149,7 @@ protected:
     sal_Int32                   mnViewPDFMode;
     sal_Bool                    mbConvertOOoTargets;
     sal_Bool                    mbExportBmkToPDFDestination;
+    ::rtl::OUString             maWatermarkText;
 
 public:
 
@@ -217,6 +218,11 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     FixedText                   maFtAddStreamDescription;
     CheckBox                    maCbEmbedStandardFonts;
 
+    FixedLine                   maFlWatermark;
+    CheckBox                    maCbWatermark;
+    FixedText                   maFtWatermark;
+    Edit                        maEdWatermark;
+
     sal_Bool                    mbIsPresentation;
     sal_Bool                    mbIsWriter;
 
@@ -225,6 +231,7 @@ const ImpPDFTabDialog*          mpaParent;
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
     DECL_LINK( ToggleReduceImageResolutionHdl, void* );
+    DECL_LINK( ToggleWatermarkHdl, void* );
     DECL_LINK( ToggleAddStreamHdl, void* );
     DECL_LINK( ToggleExportFormFieldsHdl, void* );
 

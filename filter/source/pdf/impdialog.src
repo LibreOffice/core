@@ -154,6 +154,39 @@ TabPage  RID_PDF_TAB_GENER
         };
     };
 
+    FixedLine FL_WATERMARK
+    {
+        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        Text[ en-US ] = "Watermark";
+    };
+
+    CheckBox CB_WATERMARK
+    {
+        HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_SIGNWITHWATERMARK";
+        Pos = MAP_APPFONT ( 6, 135 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Sign with Watermark";
+    };
+
+    FixedText FT_WATERMARK
+    {
+        Pos = MAP_APPFONT ( 6 , 150) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Watermark Text";
+    };
+
+    Edit ED_WATERMARK
+    {
+        HelpID = "filter:Edit:RID_PDF_TAB_GENER:EDIT_WATERMARKTEXT";
+        Pos = MAP_APPFONT ( 15, 160 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Border = TRUE;
+
+    };
+
+
     FixedLine FL_GENERAL_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;

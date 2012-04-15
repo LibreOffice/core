@@ -386,9 +386,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
-    int nElementAdded = 5;
+    int nElementAdded = 6;
 
     aRet.realloc( aRet.getLength() + nElementAdded );
+
+    // add the encryption enable flag
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= maWatermarkText;
+    nElementAdded--;
 
 // add the encryption enable flag
     aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) );
@@ -468,6 +473,11 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
     maFtAddStreamDescription( this, PDFFilterResId( FT_ADDSTREAMDESCRIPTION ) ),
     maCbEmbedStandardFonts( this, PDFFilterResId( CB_EMBEDSTANDARDFONTS ) ),
+
+    maFlWatermark( this, PDFFilterResId( FL_WATERMARK ) ),
+    maCbWatermark( this, PDFFilterResId( CB_WATERMARK ) ),
+    maFtWatermark( this, PDFFilterResId(FT_WATERMARK)),
+    maEdWatermark( this, PDFFilterResId(ED_WATERMARK)),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False),
     mpaParent( 0 )
@@ -536,7 +546,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     aStrRes.Append( String( RTL_CONSTASCII_USTRINGPARAM( " DPI" ) ) );
     maCoReduceImageResolution.SetText( aStrRes );
     maCoReduceImageResolution.Enable( bReduceImageResolution );
-
+    maCbWatermark.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
+    maFtWatermark.Enable(false );
+    maEdWatermark.Enable( false );
     maCbPDFA1b.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl) );
     switch( paParent->mnPDFTypeSelection )
     {
@@ -648,6 +660,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
         paParent->mbEmbedStandardFonts = maCbEmbedStandardFonts.IsChecked();
     }
+    paParent->maWatermarkText = maEdWatermark.GetText();
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -692,6 +705,17 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl)
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl)
 {
     maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
+    return 0;
+}
+
+
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl)
+{
+    maEdWatermark.Enable( maCbWatermark.IsChecked() );
+    maFtWatermark.Enable (maCbWatermark.IsChecked() );
+    if ( maCbWatermark.IsChecked() )
+        maEdWatermark.GrabFocus();
+
     return 0;
 }
 
