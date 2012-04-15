@@ -108,10 +108,15 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "--headless",
         "--protector",
         "dummy-libunoexceptionprotector",
-        "dummy-unoexceptionprotector",
+        "unoexceptionprotector",
+        "--protector",
+        "dummy-libunobootstrapprotector",
+        "unobootstrapprotector",
         "placeholder-uno-types",
         "placeholder-uno-services"
     };
+
+    const int argc = sizeof(argv)/sizeof(*argv);
 
     NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 
@@ -125,7 +130,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
     uno_types = [uno_types stringByAppendingString: @"file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
 
-    argv[6] = [uno_types UTF8String];
+    argv[argc-2] = [uno_types UTF8String];
 
     NSString *uno_services = @"-env:UNO_SERVICES=";
 
@@ -170,9 +175,9 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
             uno_services = [uno_services stringByAppendingString: @" "];
     }
 
-    argv[7] = [uno_services UTF8String];
+    argv[argc-1] = [uno_services UTF8String];
 
-    lo_main(sizeof(argv)/sizeof(*argv), argv);
+    lo_main(argc, argv);
 
     [self.window makeKeyAndVisible];
     return YES;
