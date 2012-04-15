@@ -95,7 +95,9 @@ int RTFTokenizer::resolveParse()
             return ERROR_GROUP_UNDER;
         if (!m_rImport.isEmpty() && m_rImport.getState().nInternalState == INTERNAL_BIN)
         {
-            OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
+            ret = m_rImport.resolveChars(ch);
+            if (ret)
+                return ret;
         }
         else
         {
