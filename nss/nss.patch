@@ -189,3 +189,23 @@
  endif
  CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
  
+--- misc/nss-3.12.8/mozilla/security/coreconf/Darwin.mk
++++ misc/build/nss-3.12.8/mozilla/security/coreconf/Darwin.mk
+@@ -64,12 +64,16 @@
+ endif
+ 
+ ifneq (,$(MACOS_SDK_DIR))
++    CLANG_VERSION_FULL := $(shell $(CC) -v 2>&1 | grep "clang version" | sed -e "s/^.*clang version[  ]*//" | awk '{ print $$1 }')
+     GCC_VERSION_FULL := $(shell $(CC) -v 2>&1 | grep "gcc version" | sed -e "s/^.*gcc version[  ]*//" | awk '{ print $$1 }')
+     GCC_VERSION_MAJOR := $(shell echo $(GCC_VERSION_FULL) | awk -F. '{ print $$1 }')
+     GCC_VERSION_MINOR := $(shell echo $(GCC_VERSION_FULL) | awk -F. '{ print $$2 }')
+     GCC_VERSION = $(GCC_VERSION_MAJOR).$(GCC_VERSION_MINOR)
++    ifneq (,$(CLANG_VERSION_FULL))
++        DARWIN_SDK_CFLAGS = -isysroot $(MACOS_SDK_DIR)
++        DARWIN_SDK_SHLIBFLAGS = -isysroot $(MACOS_SDK_DIR)
+ 
+-    ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
++    else ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
+         # GCC <= 3
+         DARWIN_SDK_FRAMEWORKS = -F$(MACOS_SDK_DIR)/System/Library/Frameworks
+         ifneq (,$(shell find $(MACOS_SDK_DIR)/Library/Frameworks -maxdepth 0))
