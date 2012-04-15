@@ -84,10 +84,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 //========================================================================
-
-SV_IMPL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr )
-
-//========================================================================
 // class FmNavInsertedHint
 //========================================================================
 TYPEINIT1( FmNavInsertedHint, SfxHint );

@@ -419,8 +419,7 @@ namespace svxform
     };
 
     //========================================================================
-    typedef SvLBoxEntry* SvLBoxEntryPtr;
-    SV_DECL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr, 16 )
+    typedef std::set<SvLBoxEntry*> SvLBoxEntrySortedArray;
 
     class NavigatorTree : public SvTreeListBox, public SfxListener
     {

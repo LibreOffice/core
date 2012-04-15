@@ -245,16 +245,17 @@ namespace svxform
 
         // die Informationen fuer das AcceptDrop und ExecuteDrop
         CollectSelectionData(SDI_ALL);
-        if (!m_arrCurrentSelection.Count())
+        if (m_arrCurrentSelection.empty())
             // nothing to do
             return sal_False;
 
         // testen, ob es sich vielleicht ausschliesslich um hidden controls handelt (dann koennte ich pCtrlExch noch ein
         // zusaetzliches Format geben)
         sal_Bool bHasNonHidden = sal_False;
-        for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); i++)
+        for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+              it != m_arrCurrentSelection.end(); ++it )
         {
-            FmEntryData* pCurrent = static_cast< FmEntryData* >( m_arrCurrentSelection[(sal_uInt16)i]->GetUserData() );
+            FmEntryData* pCurrent = static_cast< FmEntryData* >( (*it)->GetUserData() );
             if ( IsHiddenControl( pCurrent ) )
                 continue;
             bHasNonHidden = sal_True;
@@ -275,7 +276,6 @@ namespace svxform
     sal_Bool NavigatorTree::implPrepareExchange( sal_Int8 _nAction )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implPrepareExchange" );
-        sal_Int32 i;
 
         EndSelection();
 
@@ -286,8 +286,9 @@ namespace svxform
         m_aControlExchange.prepareDrag();
         m_aControlExchange->setFocusEntry( GetCurEntry() );
 
-        for ( i = 0; i < m_arrCurrentSelection.Count(); ++i )
-            m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[(sal_uInt16)i]);
+        for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+              it != m_arrCurrentSelection.end(); ++it )
+            m_aControlExchange->addSelectedEntry(*it);
 
         m_aControlExchange->setFormsRoot( GetNavModel()->GetFormPage()->GetForms() );
         m_aControlExchange->buildPathFormat( this, m_pRootEntry );
@@ -295,10 +296,11 @@ namespace svxform
         if (!bHasNonHidden)
         {
             // eine entsprechende Sequenz aufbauen
-            Sequence< Reference< XInterface > > seqIFaces(m_arrCurrentSelection.Count());
+            Sequence< Reference< XInterface > > seqIFaces(m_arrCurrentSelection.size());
             Reference< XInterface >* pArray = seqIFaces.getArray();
-            for (i=0; i<m_arrCurrentSelection.Count(); ++i, ++pArray)
-                *pArray = static_cast< FmEntryData* >( m_arrCurrentSelection[(sal_uInt16)i]->GetUserData() )->GetElement();
+            for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+                  it != m_arrCurrentSelection.end(); ++it, ++pArray )
+                *pArray = static_cast< FmEntryData* >( (*it)->GetUserData() )->GetElement();
 
             // und das neue Format
             m_aControlExchange->addHiddenControlsFormat(seqIFaces);
@@ -348,7 +350,7 @@ namespace svxform
                 }
                 else
                 {
-                    if (m_arrCurrentSelection.Count() == 0) // kann nur bei Kontextmenue ueber Tastatur passieren
+                    if (m_arrCurrentSelection.empty()) // kann nur bei Kontextmenue ueber Tastatur passieren
                         break;
 
                     SvLBoxEntry* pCurrent = GetCurEntry();
@@ -362,15 +364,15 @@ namespace svxform
 
                 // wenn mindestens ein Nicht-Root-Eintrag selektiert ist und die Root auch, dann nehme ich letztere aus der Selektion
                 // fix wieder raus
-                if ( (m_arrCurrentSelection.Count() > 1) && m_bRootSelected )
+                if ( (m_arrCurrentSelection.size() > 1) && m_bRootSelected )
                 {
                     Select( m_pRootEntry, sal_False );
-                    SetCursor( m_arrCurrentSelection.GetObject(0), sal_True);
+                    SetCursor( *m_arrCurrentSelection.begin(), sal_True);
                 }
-                sal_Bool bSingleSelection = (m_arrCurrentSelection.Count() == 1);
+                sal_Bool bSingleSelection = (m_arrCurrentSelection.size() == 1);
 
 
-                DBG_ASSERT( (m_arrCurrentSelection.Count() > 0) || m_bRootSelected, "keine Eintraege selektiert" );
+                DBG_ASSERT( (m_arrCurrentSelection.size() > 0) || m_bRootSelected, "keine Eintraege selektiert" );
                     // solte nicht passieren, da ich oben bei der IsSelected-Abfrage auf jeden Fall einen selektiert haette,
                     // wenn das vorher nicht der Fall gewesen waere
 
@@ -432,7 +434,7 @@ namespace svxform
                     {
                         aContextMenu.SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
 #if OSL_DEBUG_LEVEL > 0
-                        FmControlData* pCurrent = (FmControlData*)(m_arrCurrentSelection[0]->GetUserData());
+                        FmControlData* pCurrent = (FmControlData*)(*m_arrCurrentSelection.begin())->GetUserData();
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
 #endif
@@ -462,7 +464,7 @@ namespace svxform
                             pFormModel->BegUndo(aUndoStr);
                             // der Slot war nur verfuegbar, wenn es genau einen selektierten Eintrag gibt und dieser die Root
                             // oder ein Formular ist
-                            NewForm( m_arrCurrentSelection.GetObject(0) );
+                            NewForm( *m_arrCurrentSelection.begin() );
                             pFormModel->EndUndo();
 
                         }   break;
@@ -475,7 +477,7 @@ namespace svxform
                             pFormModel->BegUndo(aUndoStr);
                             // dieser Slot war guletig bei (genau) einem selektierten Formular
                             rtl::OUString fControlName = FM_COMPONENT_HIDDEN;
-                            NewControl( fControlName, m_arrCurrentSelection.GetObject(0) );
+                            NewControl( fControlName, *m_arrCurrentSelection.begin() );
                             pFormModel->EndUndo();
 
                         }   break;
@@ -500,7 +502,7 @@ namespace svxform
                         case SID_FM_TAB_DIALOG:
                         {
                             // dieser Slot galt bei genau einem selektierten Formular
-                            SvLBoxEntry* pSelectedForm = m_arrCurrentSelection.GetObject(0);
+                            SvLBoxEntry* pSelectedForm = *m_arrCurrentSelection.begin();
                             DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: Dieser Eintrag muss ein FormEntry sein." );
 
                             FmFormData* pFormData = (FmFormData*)pSelectedForm->GetUserData();
@@ -521,7 +523,7 @@ namespace svxform
                         case SID_FM_RENAME_OBJECT:
                         {
                             // das war bei genau einem Nicht-Root-Eintrag erlaubt
-                            EditEntry( m_arrCurrentSelection.GetObject(0) );
+                            EditEntry( *m_arrCurrentSelection.begin() );
                         }
                         break;
                         case SID_FM_OPEN_READONLY:
@@ -539,7 +541,7 @@ namespace svxform
                         default:
                             if (pFormShell->GetImpl()->isControlConversionSlot(nSlotId))
                             {
-                                FmControlData* pCurrent = (FmControlData*)(m_arrCurrentSelection[0]->GetUserData());
+                                FmControlData* pCurrent = (FmControlData*)(*m_arrCurrentSelection.begin())->GetUserData();
                                 if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
                                     ShowSelectionProperties();
                             }
@@ -841,7 +843,7 @@ namespace svxform
         SvLBoxEntry* pLoop = _pTargetEntry;
         while (pLoop)
         {
-            arrDropAnchestors.Insert(pLoop);
+            arrDropAnchestors.insert(pLoop);
             pLoop = GetParent(pLoop);
         }
 
@@ -873,8 +875,7 @@ namespace svxform
             // test for 3)
             if ( IsFormEntry(pCurrent) )
             {
-                sal_uInt16 nPosition;
-                if ( arrDropAnchestors.Seek_Entry(pCurrent, &nPosition) )
+                if ( arrDropAnchestors.find(pCurrent) != arrDropAnchestors.end() )
                     return DND_ACTION_NONE;
             } else if ( IsFormComponentEntry(pCurrent) )
             {
@@ -1300,9 +1301,10 @@ namespace svxform
             m_bKeyboardCut = sal_True;
 
             // mark all the entries we just "cut" into the clipboard as "nearly moved"
-            for ( sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i )
+            for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+                  it != m_arrCurrentSelection.end(); ++it )
             {
-                SvLBoxEntry* pEntry = m_arrCurrentSelection[ (sal_uInt16)i ];
+                SvLBoxEntry* pEntry = *it;
                 if ( pEntry )
                 {
                     m_aCutEntries.insert( pEntry );
@@ -1637,7 +1639,7 @@ namespace svxform
             return;
 
         CollectSelectionData(SDI_ALL);
-        DBG_ASSERT( m_nFormsSelected + m_nControlsSelected + (m_bRootSelected ? 1 : 0) == m_arrCurrentSelection.Count(),
+        DBG_ASSERT( m_nFormsSelected + m_nControlsSelected + (m_bRootSelected ? 1 : 0) == m_arrCurrentSelection.size(),
             "NavigatorTree::ShowSelectionProperties : selection meta data invalid !");
 
 
@@ -1652,16 +1654,16 @@ namespace svxform
             ;                                   // mixed selection -> no properties
         else
         {   // either only forms, or only controls are selected
-            if (m_arrCurrentSelection.Count() == 1)
+            if (m_arrCurrentSelection.size() == 1)
             {
                 if (m_nFormsSelected > 0)
                 {   // es ist genau eine Form selektiert
-                    FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject(0)->GetUserData();
+                    FmFormData* pFormData = (FmFormData*)(*m_arrCurrentSelection.begin())->GetUserData();
                     aSelection.insert( Reference< XInterface >( pFormData->GetFormIface(), UNO_QUERY ) );
                 }
                 else
                 {   // es ist genau ein Control selektiert (egal ob hidden oder normal)
-                    FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject(0)->GetUserData();
+                    FmEntryData* pEntryData = (FmEntryData*)(*m_arrCurrentSelection.begin())->GetUserData();
 
                     aSelection.insert( Reference< XInterface >( pEntryData->GetElement(), UNO_QUERY ) );
                 }
@@ -1671,20 +1673,24 @@ namespace svxform
                 if (m_nFormsSelected > 0)
                 {   // ... nur Forms
                     // erstmal die PropertySet-Interfaces der Forms einsammeln
+                   SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                     for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
-                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
+                        FmFormData* pFormData = (FmFormData*)(*it)->GetUserData();
                         aSelection.insert( pFormData->GetPropertySet().get() );
+                        ++it;
                     }
                 }
                 else
                 {   // ... nur Controls
                     if (m_nHiddenControls == m_nControlsSelected)
                     {   // ein MultiSet fuer die Properties der hidden controls
+                        SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                         for ( sal_Int32 i = 0; i < m_nHiddenControls; ++i )
                         {
-                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
+                            FmEntryData* pEntryData = (FmEntryData*)(*it)->GetUserData();
                             aSelection.insert( pEntryData->GetPropertySet().get() );
+                            ++it;
                         }
                     }
                     else if (m_nHiddenControls == 0)
@@ -1756,10 +1762,10 @@ namespace svxform
         // then go on to the strucure. This means I have to delete the forms *after* the normal controls, so
         // that during UNDO, they're restored in the proper order.
         pFormShell->GetImpl()->EnableTrackProperties(sal_False);
-        sal_uInt16 i;
-        for (i = m_arrCurrentSelection.Count(); i>0; --i)
+        for (SvLBoxEntrySortedArray::reverse_iterator it = m_arrCurrentSelection.rbegin();
+             it != m_arrCurrentSelection.rend(); )
         {
-            FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i - 1)->GetUserData());
+            FmEntryData* pCurrent = (FmEntryData*)((*it)->GetUserData());
 
             // eine Form ?
             sal_Bool bIsForm = pCurrent->ISA(FmFormData);
@@ -1785,12 +1791,16 @@ namespace svxform
                     // hidden layer (#i28502#), or something like this.
                     // In the first case, it will be deleted below, in the second case, we currently don't
                     // delete it, as there's no real (working!) API for this, neither in UNO nor in non-UNO.
-                    m_arrCurrentSelection.Remove( i - 1, 1 );
+                    m_arrCurrentSelection.erase( --(it.base()) );
                 }
+                else
+                   ++it;
                 // In case there is no shape for the current entry, we keep the entry in m_arrCurrentSelection,
-                // since then we can definately remove it.
+                // since then we can definitely remove it.
                 // #103597#
             }
+            else
+                ++it;
         }
         pFormShell->GetImpl()->EnableTrackProperties(sal_True);
 
@@ -1805,7 +1815,7 @@ namespace svxform
             // ---------------
             // initialize UNDO
             String aUndoStr;
-            if ( m_arrCurrentSelection.Count() == 1 )
+            if ( m_arrCurrentSelection.size() == 1 )
             {
                 aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE);
                 if (m_nFormsSelected)
@@ -1817,15 +1827,16 @@ namespace svxform
             else
             {
                 aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
-                aUndoStr.SearchAndReplaceAscii( "#", String::CreateFromInt32( m_arrCurrentSelection.Count() ) );
+                aUndoStr.SearchAndReplaceAscii( "#", String::CreateFromInt32( m_arrCurrentSelection.size() ) );
             }
             pFormModel->BegUndo(aUndoStr);
         }
 
         // remove remaining structure
-        for (i=0; i<m_arrCurrentSelection.Count(); ++i)
+        for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+             it != m_arrCurrentSelection.end(); ++it)
         {
-            FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i)->GetUserData());
+            FmEntryData* pCurrent = (FmEntryData*)((*it)->GetUserData());
 
             // if the entry still has children, we skipped deletion of one of those children.
             // This may for instance be because the shape is in a hidden layer, where we're unable
@@ -1854,7 +1865,7 @@ namespace svxform
         if (sdiHow == m_sdiState)
             return;
 
-        m_arrCurrentSelection.Remove((sal_uInt16)0, m_arrCurrentSelection.Count());
+        m_arrCurrentSelection.clear();
         m_nFormsSelected = m_nControlsSelected = m_nHiddenControls = 0;
         m_bRootSelected = sal_False;
 
@@ -1880,7 +1891,7 @@ namespace svxform
             {
                 // alles, was schon einen selektierten Vorfahr hat, nicht mitnehmen
                 if (pSelectionLoop == m_pRootEntry)
-                    m_arrCurrentSelection.Insert(pSelectionLoop);
+                    m_arrCurrentSelection.insert(pSelectionLoop);
                 else
                 {
                     SvLBoxEntry* pParentLoop = GetParent(pSelectionLoop);
@@ -1896,7 +1907,7 @@ namespace svxform
                             if (m_pRootEntry == pParentLoop)
                             {
                                 // bis (exclusive) zur Root gab es kein selektiertes Parent -> der Eintrag gehoert in die normalisierte Liste
-                                m_arrCurrentSelection.Insert(pSelectionLoop);
+                                m_arrCurrentSelection.insert(pSelectionLoop);
                                 break;
                             }
                             else
@@ -1909,10 +1920,10 @@ namespace svxform
             {
                 SvLBoxEntry* pParent = GetParent(pSelectionLoop);
                 if (!pParent || !IsSelected(pParent) || IsFormEntry(pSelectionLoop))
-                    m_arrCurrentSelection.Insert(pSelectionLoop);
+                    m_arrCurrentSelection.insert(pSelectionLoop);
             }
             else
-                m_arrCurrentSelection.Insert(pSelectionLoop);
+                m_arrCurrentSelection.insert(pSelectionLoop);
 
 
             pSelectionLoop = NextSelected(pSelectionLoop);
@@ -2014,9 +2025,10 @@ namespace svxform
 
         UnmarkAllViewObj();
 
-        for (sal_uInt32 i=0; i<m_arrCurrentSelection.Count(); ++i)
+        for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
+             it != m_arrCurrentSelection.end(); ++it)
         {
-            SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((sal_uInt16)i);
+            SvLBoxEntry* pSelectionLoop = *it;
             // Bei Formselektion alle Controls dieser Form markieren
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
                 MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), sal_True, sal_False);
@@ -2055,7 +2067,7 @@ namespace svxform
         // wenn jetzt genau eine Form selektiert ist, sollte die Shell das als CurrentForm mitbekommen
         // (wenn SelectionHandling nicht locked ist, kuemmert sich die View eigentlich in MarkListHasChanged drum,
         // aber der Mechanismus greift zum Beispiel nicht, wenn die Form leer ist)
-        if ((m_arrCurrentSelection.Count() == 1) && (m_nFormsSelected == 1))
+        if ((m_arrCurrentSelection.size() == 1) && (m_nFormsSelected == 1))
         {
             FmFormData* pSingleSelectionData = PTR_CAST( FmFormData, static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
             DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
