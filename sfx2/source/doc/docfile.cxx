@@ -1912,9 +1912,20 @@ void SfxMedium::Transfer_Impl()
             xComEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
                                                       Reference< ::com::sun::star::ucb::XProgressHandler >() );
 
-        if ( ::utl::LocalFileHelper::IsLocalFile( aDest.GetMainURL( INetURLObject::NO_DECODE ) ) || !aDest.removeSegment() )
+        rtl::OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( ::utl::LocalFileHelper::IsLocalFile( aDestURL ) || !aDest.removeSegment() )
         {
             TransactedTransferForFS_Impl( aSource, aDest, xComEnv );
+
+            // Hideous - no clean way to do this, so we re-open the file just to fsync it
+            osl::File aFile( aDestURL );
+            if ( aFile.open( osl_File_OpenFlag_Write ) == osl::FileBase::E_None )
+            {
+                aFile.sync();
+                OSL_TRACE("fsync'd saved file '%s'\n",
+                          rtl::OUStringToOString( aDestURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+                aFile.close();
+            }
         }
         else
         {
