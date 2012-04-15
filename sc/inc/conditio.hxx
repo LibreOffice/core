@@ -66,13 +66,6 @@ enum ScConditionMode
     SC_COND_NONE
 };
 
-enum ScConditionValType
-{
-    SC_VAL_VALUE,
-    SC_VAL_STRING,
-    SC_VAL_FORMULA
-};
-
 class ScConditionalFormat;
 
 class SC_DLLPUBLIC ScConditionEntry
