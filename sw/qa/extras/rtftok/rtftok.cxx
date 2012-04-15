@@ -82,6 +82,7 @@ public:
     void testFdo45182();
     void testFdo44176();
     void testZoom();
+    void testFdo39053();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testFdo45182);
     CPPUNIT_TEST(testFdo44176);
     CPPUNIT_TEST(testZoom);
+    CPPUNIT_TEST(testFdo39053);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -546,6 +548,25 @@ void RtfModelTest::testZoom()
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+}
+
+void RtfModelTest::testFdo39053()
+{
+    load("fdo39053.rtf");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    int nAsCharacter = 0;
+    for (int i = 0; i < xDraws->getCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(i), uno::UNO_QUERY);
+        text::TextContentAnchorType eValue;
+        xPropertySet->getPropertyValue("AnchorType") >>= eValue;
+        if (eValue == text::TextContentAnchorType_AS_CHARACTER)
+            nAsCharacter++;
+    }
+    // The image in binary format was ignored.
+    CPPUNIT_ASSERT_EQUAL(1, nAsCharacter);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
