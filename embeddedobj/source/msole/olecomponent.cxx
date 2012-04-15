@@ -631,8 +631,8 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
                 sal_uInt32 nSupportedAspects = 0;
                 do
                 {
-                    HRESULT hr = pFormatEnum->Next( MAX_ENUM_ELE, pElem, &nNum );
-                    if( hr == S_OK || hr == S_FALSE )
+                    HRESULT hr2 = pFormatEnum->Next( MAX_ENUM_ELE, pElem, &nNum );
+                    if( hr2 == S_OK || hr2 == S_FALSE )
                     {
                         for( sal_uInt32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
                             {
@@ -684,21 +684,21 @@ sal_Bool OleComponent::InitializeObject_Impl()
     if ( SUCCEEDED( m_pNativeImpl->m_pObj->QueryInterface( IID_IOleCache, (void**)&pIOleCache ) ) && pIOleCache )
     {
         IEnumSTATDATA* pEnumSD = NULL;
-        HRESULT hr = pIOleCache->EnumCache( &pEnumSD );
+        HRESULT hr2 = pIOleCache->EnumCache( &pEnumSD );
 
-        if ( SUCCEEDED( hr ) && pEnumSD )
+        if ( SUCCEEDED( hr2 ) && pEnumSD )
         {
             pEnumSD->Reset();
             STATDATA aSD;
             DWORD nNum;
             while( SUCCEEDED( pEnumSD->Next( 1, &aSD, &nNum ) ) && nNum == 1 )
-                hr = pIOleCache->Uncache( aSD.dwConnection );
+                hr2 = pIOleCache->Uncache( aSD.dwConnection );
         }
 
         // No IDataObject implementation, caching must be used instead
         DWORD nConn;
         FORMATETC aFormat = { 0, 0, DVASPECT_CONTENT, -1, TYMED_MFPICT };
-        hr = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
+        hr2 = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
 
         pIOleCache->Release();
         pIOleCache = NULL;
