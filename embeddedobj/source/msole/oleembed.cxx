@@ -748,6 +748,9 @@ namespace
             xNativeTempFile->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile")),
                 uno::makeAny(sal_True));
         }
+#else
+        (void) xFactory;
+        (void) xObjectStream;
 #endif
         return sUrl;
     }
