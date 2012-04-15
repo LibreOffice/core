@@ -147,7 +147,6 @@ Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 ScDefaultsCfg::ScDefaultsCfg() :
     ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_FORMULA )) )
 {
-    sal_Int32 nIntVal = 0;
     OUString aPrefix;
 
     Sequence<OUString> aNames = GetPropertyNames();
@@ -156,6 +155,7 @@ ScDefaultsCfg::ScDefaultsCfg() :
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
+        sal_Int32 nIntVal = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
