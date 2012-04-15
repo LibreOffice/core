@@ -35,7 +35,7 @@ $(eval $(call gb_Library_add_api,ado,\
 ))
 
 ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_cflags,ado,\
+$(eval $(call gb_Library_add_cxxflags,ado,\
 	-fpermissive \
 ))
 endif
