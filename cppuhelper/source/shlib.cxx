@@ -468,6 +468,7 @@ extern "C"
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * package2_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sfx_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * stocservices_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -540,6 +541,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
+        { "libpackage2.a", package2_component_getFactory },
         { "libsfxlo.a", sfx_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { "libucpfile1.a", ucpfile_component_getFactory },
