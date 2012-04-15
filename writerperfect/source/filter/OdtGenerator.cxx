@@ -1192,6 +1192,14 @@ void OdtGenerator::openFrame(const WPXPropertyList &propList)
     if (propList["fo:max-height"])
         frameAutomaticStylePropertiesElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
 
+    // check if the frame has border, background attributes
+    if (propList["fo:border"])
+        frameAutomaticStylePropertiesElement->addAttribute("fo:border", propList["fo:border"]->getStr());
+    if (propList["style:border-line-width"])
+        frameAutomaticStylePropertiesElement->addAttribute("style:border-line-width", propList["style:border-line-width"]->getStr());
+    if (propList["fo:background-color"])
+        frameAutomaticStylePropertiesElement->addAttribute("fo:background-color", propList["fo:background-color"]->getStr());
+
     frameAutomaticStylePropertiesElement->addAttribute("draw:ole-draw-aspect", "1");
 
     mpImpl->mFrameAutomaticStyles.push_back(frameAutomaticStylePropertiesElement);
