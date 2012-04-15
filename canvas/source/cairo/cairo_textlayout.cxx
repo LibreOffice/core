@@ -511,7 +511,7 @@ namespace cairocanvas
             //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
             font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);
 # else // iOS
-            font_face = cairo_quartz_font_face_create_for_cgfont( CTFontCopyGraphicsFont( (CTFontRef) rSysFontData.rCTFont, NULL ) );
+            font_face = cairo_quartz_font_face_create_for_cgfont( CTFontCopyGraphicsFont( rSysFontData.rCTFont, NULL ) );
 # endif
 
 #elif defined CAIRO_HAS_WIN32_SURFACE

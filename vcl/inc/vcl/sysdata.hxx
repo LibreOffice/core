@@ -44,7 +44,7 @@ class NSView;
 #endif
 
 #ifdef IOS
-typedef struct CGFont *CGFontRef;
+typedef const struct __CTFont * CTFontRef;
 typedef struct CGContext *CGContextRef;
 typedef struct CGLayer *CGLayerRef;
 #ifdef __OBJC__
@@ -203,7 +203,7 @@ struct SystemFontData
 #elif defined( QUARTZ )
     void*           aATSUFontID;    // native font object
 #elif defined( IOS )
-    void*           rCTFont;        // native font object
+    CTFontRef       rCTFont;        // native font object
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags

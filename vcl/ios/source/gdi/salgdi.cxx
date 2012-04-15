@@ -204,7 +204,7 @@ SystemFontData IosSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontSystemFontType, 0.0, NULL);
     font = (CTFontRef)CFRetain(font);
-    aSysFontData.rCTFont = (void*)font;
+    aSysFontData.rCTFont = font;
 
     CTFontRef italic_font = CTFontCreateCopyWithSymbolicTraits( font,
                                                                 0.0,
