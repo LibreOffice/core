@@ -35,6 +35,8 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 
 #include <docsh.hxx>
+#include <viewsh.hxx>
+#include <viewopt.hxx>
 #include <ndtxt.hxx>
 #include <fmtpdsc.hxx>
 #include <section.hxx>
@@ -504,6 +506,13 @@ void RtfExport::ExportDocument_Impl()
     WriteInfo();
     // Default TabSize
     Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << sNewLine;
+    // Zoom
+    ViewShell *pViewShell(pDoc->GetCurrentViewShell());
+    if (pViewShell)
+    {
+        Strm() << OOO_STRING_SVTOOLS_RTF_VIEWSCALE;
+        OutULong(pViewShell->GetViewOptions()->GetZoom());
+    }
     // Page description
     WritePageDescTable();
 
