@@ -69,7 +69,7 @@ public:
     |*
     \************************************************************************/
 
-    void GetList ( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries);
+    std::vector<rtl::OUString> GetList ( const sal_uInt16 nType ) ;
 
     sal_Bool        IsLink();
     sal_Bool        IsRemoveUnnessesaryMasterPages() const;

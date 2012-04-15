@@ -115,7 +115,7 @@ void SdInsertPagesObjsDlg::Reset()
     aCbxMasters.Check( sal_True );
 }
 
-void SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries )
+std::vector<rtl::OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
 {
     // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
     // zurueckgegeben werden
@@ -129,10 +129,10 @@ void SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType, std::vector<rtl::OUS
         // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
-            return;
+            return std::vector<rtl::OUString>();
     }
 
-    aLbTree.GetSelectEntryList( nType,rEntries );
+    return aLbTree.GetSelectEntryList( nType );
 }
 
 /*************************************************************************

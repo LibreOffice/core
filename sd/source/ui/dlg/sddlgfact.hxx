@@ -187,7 +187,7 @@ class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl,SdInsertPagesObjsDlg)
     virtual ::Window *  GetWindow(); //this method is added for return a Window type pointer
-    virtual void GetList ( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries);
+    virtual std::vector<rtl::OUString> GetList ( const sal_uInt16 nType );
     virtual sal_Bool        IsLink();
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const;
 };

@@ -354,10 +354,9 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     if( nRet == RET_OK )
     {
-        std::vector<rtl::OUString> aBookmarkList;       // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
-
+        // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
         // Zuerst Seiten einfuegen
-        pDlg->GetList( 1, aBookmarkList ); // Seiten
+        std::vector<rtl::OUString> aBookmarkList = pDlg->GetList( 1 ); // Seiten
         sal_Bool bLink = pDlg->IsLink();
         sal_Bool bReplace = sal_False;
         SdPage* pPage = NULL;
@@ -387,8 +386,8 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         }
 
         sal_Bool  bNameOK;
-        std::vector<rtl::OUString> aObjectBookmarkList, aExchangeList;
-        pDlg->GetList( 2, aObjectBookmarkList ); // Objekte
+        std::vector<rtl::OUString> aExchangeList;
+        std::vector<rtl::OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // Objekte
 
         // Es werden ausgewaehlte Seiten und/oder ausgewaehlte Objekte oder
         // alles eingefuegt, wenn pBookmarkList NULL ist!

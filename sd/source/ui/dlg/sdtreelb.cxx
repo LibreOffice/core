@@ -661,8 +661,9 @@ String SdPageObjsTLB::GetSelectEntry()
     return( GetEntryText( GetCurEntry() ) );
 }
 
-void SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth, std::vector<rtl::OUString> &rEntries ) const
+std::vector<rtl::OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
 {
+    std::vector<rtl::OUString> aEntries;
     SvLBoxEntry* pEntry = FirstSelected();
 
     while( pEntry )
@@ -670,10 +671,12 @@ void SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth, std::vector<rtl::OUSt
         sal_uInt16 nListDepth = GetModel()->GetDepth( pEntry );
 
         if( nListDepth == nDepth )
-            rEntries.push_back(GetEntryText(pEntry));
+            aEntries.push_back(GetEntryText(pEntry));
 
         pEntry = NextSelected( pEntry );
     }
+
+    return aEntries;
 }
 
 /*************************************************************************

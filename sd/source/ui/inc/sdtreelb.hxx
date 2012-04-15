@@ -215,7 +215,7 @@ public:
     |*
     \************************************************************************/
 
-    void                    GetSelectEntryList (sal_uInt16 nDepth, std::vector<rtl::OUString> &rEntries) const;
+    std::vector<rtl::OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }

@@ -283,9 +283,9 @@ sal_Bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
     return (::Window*)pDlg;
 }
 
-void AbstractSdInsertPagesObjsDlg_Impl::GetList (const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries)
+std::vector<rtl::OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
 {
-    pDlg->GetList(nType,rEntries);
+    return pDlg->GetList(nType);
 }
 
 sal_Bool AbstractSdInsertPagesObjsDlg_Impl::IsLink()
