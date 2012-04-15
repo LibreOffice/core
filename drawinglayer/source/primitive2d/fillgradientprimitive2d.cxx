@@ -72,6 +72,8 @@ namespace drawinglayer
                 nSteps = nMaxSteps;
             }
 
+            nSteps = std::max(sal_uInt32(1), nSteps);
+
             switch(getFillGradient().getStyle())
             {
                 case attribute::GRADIENTSTYLE_LINEAR:
