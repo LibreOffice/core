@@ -41,6 +41,17 @@ using namespace cppu;
 using namespace osl;
 using namespace stoc_services;
 
+#ifdef DISABLE_DYNLOADING
+
+// Do we really to have non-static global variable with the same name
+// g_moduleCount in *all* (more or less, it seems) modules even in the
+// normal dynamic loading case? Weird. Anyway, in the DISABLE_DYNLOADING
+// case we have no use for these, and they can't be the same name.
+
+#define g_moduleCount g_stocservices_moduleCount
+
+#endif
+
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static struct ImplementationEntry g_entries[] =
@@ -88,12 +99,19 @@ static struct ImplementationEntry g_entries[] =
 extern "C"
 {
 
+#ifndef DISABLE_DYNLOADING
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
 
-//==================================================================================================
+#endif
+
+#ifdef DISABLE_DYNLOADING
+#define component_getFactory stocservices_component_getFactory
+#endif
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
