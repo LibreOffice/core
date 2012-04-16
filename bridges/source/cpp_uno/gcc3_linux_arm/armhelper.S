@@ -10,6 +10,17 @@
 #  define UNWIND @
 #endif
 
+@ If the VFP ABI variant (armhf in Debian/Ubuntu) is used, an additional extra 64 bytes
+@ are taken up on the stack (the equivalent of the 8 double precision VFP registers)
+
+#ifdef __ARM_PCS_VFP
+#  define PAD 80
+#  define DISCARDED 84
+#else
+#  define PAD 16
+#  define DISCARDED 20
+#endif
+
 	.file	"armhelper.s"
 	.text
 	.align	4
@@ -19,9 +30,12 @@ privateSnippetExecutor:
 	UNWIND .fnstart            @ start of unwinder entry
 
 	stmfd sp!, {r0-r3}         @ follow other parameters on stack
-	UNWIND .pad  #16           @ throw this data away on exception
 	mov   r0, ip               @ r0 points to functionoffset/vtable
 	mov   r1, sp               @ r1 points to this and params
+#ifdef __ARM_PCS_VFP
+	vpush {d0-d7}              @ floating point parameter on stack
+#endif
+	UNWIND .pad  #PAD          @ throw this data away on exception
 	                           @ (see cppuno.cxx:codeSnippet())
 	stmfd sp!, {r4,lr}         @ save return address 
 	                           @ (r4 pushed to preserve stack alignment)
@@ -30,7 +44,7 @@ privateSnippetExecutor:
 	bl    cpp_vtable_call(PLT)
 
 	add   sp, sp, #4           @ no need to restore r4 (we didn't touch it)
-	ldr   pc, [sp], #20        @ return, discarding function arguments
+	ldr   pc, [sp], #DISCARDED @ return, discarding function arguments
 
 	UNWIND .fnend              @ end of unwinder entry
 
