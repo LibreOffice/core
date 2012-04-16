@@ -195,7 +195,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditS
         aSel = ImpDeleteSelection( aSel );
 
     EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, rBaseURL, pHTTPHeaderAttrs );
-    SvParserState eState = xPrsr->CallParser( this, aSel.Max() );
+    SvParserState eState = xPrsr->CallParser(pEditEngine, aSel.Max());
     if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
     {
         rInput.SetError( EE_READWRITE_WRONGFORMAT );

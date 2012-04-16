@@ -34,7 +34,7 @@
 #include <editdoc.hxx>
 #include <svtools/parhtml.hxx>
 
-class ImpEditEngine;
+class EditEngine;
 
 #define MAX_NUMBERLEVEL         10
 
@@ -51,7 +51,7 @@ private:
     ::rtl::OUStringBuffer maStyleSource;
     EditSelection           aCurSel;
     String                  aBaseURL;
-    ImpEditEngine*          pImpEditEngine;
+    EditEngine* mpEditEngine;
     AnchorInfo*             pCurAnchor;
 
     bool                    bInPara:1;
@@ -84,10 +84,10 @@ protected:
     virtual void            NextToken( int nToken );
 
 public:
-                            EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs );
-                            ~EditHTMLParser();
+    EditHTMLParser(SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
+    ~EditHTMLParser();
 
-    virtual SvParserState   CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
+    SvParserState CallParser(EditEngine* pEE, const EditPaM& rPaM);
 
     const EditSelection&    GetCurSelection() const { return aCurSel; }
 };

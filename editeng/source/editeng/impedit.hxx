@@ -391,7 +391,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditUndoMoveParagraphs;
 
     friend class EditEngine;        // For access to Imp-Methods
-    friend class EditHTMLParser;    // For access to Imp-Methods
     friend class EdtAutoCorrDoc;    // For access to Imp-Methods
     friend class EditDbg;           // Debug Routines
 
