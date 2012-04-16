@@ -1332,6 +1332,8 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
             if ( bApplyFilter )
                 aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
 
+            aComposer.getQuery();
+
             xComposer = aComposer.getComposer();
             aComposer.setDisposeComposer( false );
         }
