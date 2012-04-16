@@ -678,7 +678,8 @@ namespace frm
             return;
         }
 
-        ::boost::optional< sal_Int16 > aBoundColumn;
+        ::boost::optional< sal_Int16 > aBoundColumn(0);
+        aBoundColumn.reset();
         if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
         {
             sal_Int16 nBoundColumn( 0 );
