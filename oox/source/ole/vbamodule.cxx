@@ -277,7 +277,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
                                 KeyEvent aKeyEvent = ooo::vba::parseKeyEvent( sApiKey );
                                 ooo::vba::applyShortCutKeyBinding( mxDocModel, aKeyEvent, sProc );
                             }
-                            catch( Exception& )
+                            catch (const Exception&)
                             {
                             }
                         }
@@ -393,7 +393,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
             {
                 aModuleInfo.ModuleObject.set( rxDocObjectNA->getByName( maName ), UNO_QUERY );
             }
-            catch(const Exception& )
+            catch (const Exception&)
             {
             }
         break;
@@ -427,7 +427,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
         Reference< XVBAModuleInfo > xVBAModuleInfo( rxBasicLib, UNO_QUERY_THROW );
         xVBAModuleInfo->insertModuleInfo( maName, aModuleInfo );
     }
-    catch(const Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -436,7 +436,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     {
         rxBasicLib->insertByName( maName, Any( aSourceCode.makeStringAndClear() ) );
     }
-    catch(const Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "VbaModule::createModule - cannot insert module into library" );
     }
