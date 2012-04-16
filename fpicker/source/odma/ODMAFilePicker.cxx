@@ -115,7 +115,7 @@ sal_Int16 SAL_CALL ODMAFilePicker::execute( )
     WORD count = 0;
     DWORD flags;
 
-    status = NODMRegisterApp( &handle, ODM_API_VERSION, "sodma", (DWORD) choose_parent_window( ), NULL );
+    status = NODMRegisterApp( &handle, ODM_API_VERSION, const_cast<char*>("sodma"), (DWORD) choose_parent_window( ), NULL );
     if (status == ODM_SUCCESS)
     {
         if (m_nDialogKind == OPEN)
