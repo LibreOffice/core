@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,slideshow))
 
+$(eval $(call gb_Library_use_packages,slideshow,\
+	animations_inc \
+))
+
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(SRCDIR)/slideshow/source/inc \
@@ -44,7 +48,6 @@ $(eval $(call gb_Library_add_defs,slideshow,\
 endif
 
 $(eval $(call gb_Library_use_api,slideshow,\
-    animations \
     offapi \
     udkapi \
 ))

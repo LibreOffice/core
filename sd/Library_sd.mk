@@ -48,6 +48,10 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
     sd/sdi/sdslots \
 ))
 
+$(eval $(call gb_Library_use_packages,sd,\
+	animations_inc \
+))
+
 $(eval $(call gb_Library_set_include,sd,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \
@@ -68,7 +72,6 @@ $(eval $(call gb_Library_set_defs,sd,\
 endif
 
 $(eval $(call gb_Library_use_api,sd,\
-    animations \
     offapi \
     udkapi \
 ))
