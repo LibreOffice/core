@@ -36,7 +36,9 @@
 #include "document.hxx"
 
 #ifdef WNT
+#if !defined NOMINMAX
 #define NOMINMAX
+#endif
 #include <prewin.h>
 #include <postwin.h>
 #undef NOMINMAX
