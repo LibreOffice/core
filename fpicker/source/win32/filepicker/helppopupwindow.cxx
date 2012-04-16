@@ -147,7 +147,7 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     // and the dimensions and resize the window
 
     m_hwnd = CreateWindowEx(
-        NULL,
+        0,
         HELPPOPUPWND_CLASS_NAME,
         NULL,
         WS_POPUP,
