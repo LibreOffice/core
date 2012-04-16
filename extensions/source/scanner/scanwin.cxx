@@ -50,10 +50,14 @@
 #include <vcl/salbtype.hxx>
 #include "scanner.hxx"
 
+#if defined MSC
 #pragma warning (push,1)
 #pragma warning (disable:4668)
+#endif
 #include "twain/twain.h"
+#if defined MSC
 #pragma warning (pop)
+#endif
 
 using namespace ::com::sun::star;
 
