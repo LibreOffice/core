@@ -278,18 +278,6 @@ bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, 
 
 // private --------------------------------------------------------------------
 
-namespace {
-
-void lclSetSheetCacheIndex( SingleReference& orApiRef, sal_Int32 nCacheIdx )
-{
-    using namespace ::com::sun::star::sheet::ReferenceFlags;
-    setFlag( orApiRef.Flags, SHEET_RELATIVE, false );
-    setFlag( orApiRef.Flags, SHEET_3D, true );
-    orApiRef.Sheet = nCacheIdx;
-}
-
-} // namespace
-
 void ExternalName::setResultSize( sal_Int32 nColumns, sal_Int32 nRows )
 {
     OSL_ENSURE( (mrParentLink.getLinkType() == LINKTYPE_DDE) || (mrParentLink.getLinkType() == LINKTYPE_OLE) ||

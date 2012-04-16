@@ -77,7 +77,6 @@ namespace dbtools
             instance is destroyed.
         */
         void    setDisposeComposer( bool _bDoDispose );
-        bool    getDisposeComposer() const;
 
         void    setFilter( const ::rtl::OUString& _rFilter );
         void    setOrder( const ::rtl::OUString& _rOrder );

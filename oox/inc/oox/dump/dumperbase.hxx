@@ -373,11 +373,6 @@ public:
     template< typename Type >
     static void         appendValue( ::rtl::OUStringBuffer& rStr, Type nData, FormatType eFmtType );
 
-    // append columns, rows, addresses ----------------------------------------
-
-    static void         appendAddrCol( ::rtl::OUStringBuffer& rStr, sal_Int32 nCol, bool bRel );
-    static void         appendAddrRow( ::rtl::OUStringBuffer& rStr, sal_Int32 nRow, bool bRel );
-
     // encoded text output ----------------------------------------------------
 
     static void         appendCChar( ::rtl::OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix = true );

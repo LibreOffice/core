@@ -59,10 +59,6 @@ public:
 
     static const sal_Int32 NotAValidTaskId = 0;
 
-    static sal_Int32 ScheduleSingleTaskAbsolute (
-        const Task& rTask,
-        const TimeValue& rDueTime);
-
     /** Schedule a task to be executed repeatedly.  The task is executed the
         first time after nFirst nano-seconds (1000000000 corresponds to one
         second).  After that task is executed in intervalls that are

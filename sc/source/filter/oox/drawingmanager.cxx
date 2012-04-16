@@ -203,11 +203,6 @@ BiffObjFillModel::BiffObjFillModel() :
 {
 }
 
-bool BiffObjFillModel::isFilled() const
-{
-    return mbAuto || (mnPattern != BIFF_OBJ_PATT_NONE);
-}
-
 BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
 {
     sal_uInt8 nFlags;
@@ -524,10 +519,6 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
     aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-void BiffDrawingObjectBase::convertFrameProperties( ShapePropertyMap& /*rPropMap*/, sal_uInt16 /*nFrameFlags*/ ) const
-{
-}
-
 void BiffDrawingObjectBase::implReadObjBiff3( BiffInputStream& /*rStrm*/, sal_uInt16 /*nMacroSize*/ )
 {
 }
@@ -606,57 +597,6 @@ Reference< XShape > BiffGroupObject::implConvertAndInsert( BiffDrawingBase& rDra
     {
     }
     return xGroupShape;
-}
-
-// ============================================================================
-
-BiffRectObject::BiffRectObject( const WorksheetHelper& rHelper ) :
-    BiffDrawingObjectBase( rHelper ),
-    mnFrameFlags( 0 )
-{
-    setAreaObj( true );
-}
-
-void BiffRectObject::readFrameData( BiffInputStream& rStrm )
-{
-    rStrm >> maFillModel >> maLineModel >> mnFrameFlags;
-}
-
-void BiffRectObject::convertRectProperties( ShapePropertyMap& rPropMap ) const
-{
-    convertLineProperties( rPropMap, maLineModel );
-    convertFillProperties( rPropMap, maFillModel );
-    convertFrameProperties( rPropMap, mnFrameFlags );
-}
-
-void BiffRectObject::implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    readFrameData( rStrm );
-    readMacroBiff3( rStrm, nMacroSize );
-}
-
-void BiffRectObject::implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    readFrameData( rStrm );
-    readMacroBiff4( rStrm, nMacroSize );
-}
-
-void BiffRectObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
-{
-    readFrameData( rStrm );
-    readNameBiff5( rStrm, nNameLen );
-    readMacroBiff5( rStrm, nMacroSize );
-}
-
-Reference< XShape > BiffRectObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
-{
-    ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
-    convertRectProperties( aPropMap );
-
-    Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ), rxShapes, rShapeRect );
-    PropertySet( xShape ).setProperties( aPropMap );
-    return xShape;
 }
 
 // ============================================================================

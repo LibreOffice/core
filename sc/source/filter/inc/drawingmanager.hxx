@@ -72,9 +72,6 @@ struct BiffObjFillModel
     bool                mbAuto;             /// True = automatic fill format.
 
     explicit            BiffObjFillModel();
-
-    /** Returns true, if the fill formatting is visible (automatic or explicit). */
-    bool                isFilled() const;
 };
 
 // ============================================================================
@@ -161,8 +158,6 @@ protected:
     void                convertLineProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
     /** Converts the passed fill formatting to the passed property map. */
     void                convertFillProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
-    /** Converts the passed frame flags to the passed property map. */
-    void                convertFrameProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, sal_uInt16 nFrameFlags ) const;
 
     /** Derived classes read the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
@@ -228,38 +223,6 @@ protected:
 protected:
     BiffDrawingObjectContainer maChildren;     /// All child objects contained in this group object.
     sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
-};
-
-/** A simple rectangle object (used as base class for oval objects). */
-class BiffRectObject : public BiffDrawingObjectBase
-{
-public:
-    explicit            BiffRectObject( const WorksheetHelper& rHelper );
-
-protected:
-    /** Reads the fill model, the line model, and frame flags. */
-    void                readFrameData( BiffInputStream& rStrm );
-
-    /** Converts fill formatting, line formatting, and frame style. */
-    void                convertRectProperties( ::oox::drawingml::ShapePropertyMap& rPropMap ) const;
-
-    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-
-protected:
-    BiffObjFillModel    maFillModel;    /// Fill formatting.
-    BiffObjLineModel    maLineModel;    /// Line formatting.
-    sal_uInt16          mnFrameFlags;   /// Additional flags.
 };
 
 // ============================================================================

@@ -469,22 +469,6 @@ void StringHelper::appendBool( OUStringBuffer& rStr, bool bData )
     rStr.appendAscii( bData ? "true" : "false" );
 }
 
-// append columns, rows, addresses --------------------------------------------
-
-void StringHelper::appendAddrCol( OUStringBuffer& rStr, sal_Int32 nCol, bool bRel )
-{
-    if( !bRel ) rStr.append( OOX_DUMP_ADDRABS );
-    sal_Int32 nPos = rStr.getLength();
-    for( sal_Int32 nTemp = nCol; nTemp >= 0; (nTemp /= 26) -= 1 )
-        rStr.insert( nPos, static_cast< sal_Unicode >( 'A' + (nTemp % 26) ) );
-}
-
-void StringHelper::appendAddrRow( OUStringBuffer& rStr, sal_Int32 nRow, bool bRel )
-{
-    if( !bRel ) rStr.append( OOX_DUMP_ADDRABS );
-    appendDec( rStr, nRow + 1 );
-}
-
 // encoded text output --------------------------------------------------------
 
 void StringHelper::appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bPrefix )

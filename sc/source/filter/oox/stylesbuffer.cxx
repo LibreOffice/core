@@ -924,17 +924,6 @@ void Font::importCfRule( BiffInputStream& rStrm )
         maModel.mbShadow = getFlag( nStyle, BIFF_CFRULE_FONT_SHADOW );
 }
 
-rtl_TextEncoding Font::getFontEncoding() const
-{
-    // #i63105# cells use text encoding from FONT record character set
-    // #i67768# BIFF2-BIFF4 FONT records do not contain character set
-    // #i71033# do not use maApiData, this function is used before finalizeImport()
-    rtl_TextEncoding eFontEnc = RTL_TEXTENCODING_DONTKNOW;
-    if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= SAL_MAX_UINT8) )
-        eFontEnc = rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) );
-    return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? getTextEncoding() : eFontEnc;
-}
-
 void Font::finalizeImport()
 {
     namespace cssawt = ::com::sun::star::awt;

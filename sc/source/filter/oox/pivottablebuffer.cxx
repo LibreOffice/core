@@ -1371,16 +1371,6 @@ void PivotTable::importFields( IndexVector& orFields, SequenceInputStream& rStrm
         orFields.push_back( rStrm.readInt32() );
 }
 
-void PivotTable::importFields( IndexVector& orFields, BiffInputStream& rStrm, sal_Int32 nCount )
-{
-    OSL_ENSURE( orFields.empty(), "PivotTable::importFields - multiple record instances" );
-    orFields.clear();
-    OSL_ENSURE( 2 * nCount == rStrm.getRemaining(), "PivotTable::importFields - invalid field count" );
-    nCount = static_cast< sal_Int32 >( rStrm.getRemaining() / 2 );
-    for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-        orFields.push_back( rStrm.readInt16() );
-}
-
 // ============================================================================
 
 PivotTableBuffer::PivotTableBuffer( const WorkbookHelper& rHelper ) :

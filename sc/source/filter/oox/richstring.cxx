@@ -190,26 +190,6 @@ void FontPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-void FontPortionModelList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode )
-{
-    clear();
-    reserve( nCount );
-    /*  #i33341# real life -- same character index may occur several times
-        -> use appendPortion() to validate string position. */
-    FontPortionModel aPortion;
-    for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
-    {
-        aPortion.read( rStrm, eMode );
-        appendPortion( aPortion );
-    }
-}
-
-void FontPortionModelList::importPortions( BiffInputStream& rStrm, bool b16Bit )
-{
-    sal_uInt16 nCount = b16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
-    importPortions( rStrm, nCount, b16Bit ? BIFF_FONTPORTION_16BIT : BIFF_FONTPORTION_8BIT );
-}
-
 // ============================================================================
 
 PhoneticDataModel::PhoneticDataModel() :
@@ -294,13 +274,6 @@ void PhoneticPortionModel::read( SequenceInputStream& rStrm )
     mnBaseLen = rStrm.readuInt16();
 }
 
-void PhoneticPortionModel::read( BiffInputStream& rStrm )
-{
-    mnPos = rStrm.readuInt16();
-    mnBasePos = rStrm.readuInt16();
-    mnBaseLen = rStrm.readuInt16();
-}
-
 // ----------------------------------------------------------------------------
 
 void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPortion )
@@ -334,32 +307,6 @@ void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
             appendPortion( aPortion );
         }
     }
-}
-
-OUString PhoneticPortionModelList::importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize )
-{
-    OUString aPhoneticText;
-    sal_uInt16 nPortionCount, nTextLen1, nTextLen2;
-    rStrm >> nPortionCount >> nTextLen1 >> nTextLen2;
-    OSL_ENSURE( nTextLen1 == nTextLen2, "PhoneticPortionModelList::importPortions - wrong phonetic text length" );
-    if( (nTextLen1 == nTextLen2) && (nTextLen1 > 0) )
-    {
-        sal_Int32 nMinSize = 2 * nTextLen1 + 6 * nPortionCount + 14;
-        OSL_ENSURE( nMinSize <= nPhoneticSize, "PhoneticPortionModelList::importPortions - wrong size of phonetic data" );
-        if( nMinSize <= nPhoneticSize )
-        {
-            aPhoneticText = rStrm.readUnicodeArray( nTextLen1 );
-            clear();
-            reserve( nPortionCount );
-            PhoneticPortionModel aPortion;
-            for( sal_uInt16 nPortion = 0; nPortion < nPortionCount; ++nPortion )
-            {
-                aPortion.read( rStrm );
-                appendPortion( aPortion );
-            }
-        }
-    }
-    return aPhoneticText;
 }
 
 // ============================================================================

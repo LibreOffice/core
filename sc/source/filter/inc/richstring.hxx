@@ -133,10 +133,6 @@ public:
     void                appendPortion( const FontPortionModel& rPortion );
     /** Reads count and font identifiers from the passed stream. */
     void                importPortions( SequenceInputStream& rStrm );
-    /** Reads nCount font identifiers from the passed stream. */
-    void                importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode );
-    /** Reads count and font identifiers from the passed stream. */
-    void                importPortions( BiffInputStream& rStrm, bool b16Bit );
 };
 
 // ============================================================================
@@ -210,7 +206,6 @@ struct PhoneticPortionModel
                             mnPos( nPos ), mnBasePos( nBasePos ), mnBaseLen( nBaseLen ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
@@ -225,8 +220,6 @@ public:
     void                appendPortion( const PhoneticPortionModel& rPortion );
     /** Reads all phonetic portions from the passed stream. */
     void                importPortions( SequenceInputStream& rStrm );
-    /** Reads phonetic portion data from the passed stream. */
-    ::rtl::OUString     importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize );
 };
 
 // ============================================================================

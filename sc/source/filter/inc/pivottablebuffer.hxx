@@ -389,8 +389,6 @@ private:
     static void         importField( IndexVector& orFields, const AttributeList& rAttribs );
     /** Reads an array of field indexes for the row or column dimension. */
     static void         importFields( IndexVector& orFields, SequenceInputStream& rStrm );
-    /** Reads an array of field indexes for the row or column dimension. */
-    static void         importFields( IndexVector& orFields, BiffInputStream& rStrm, sal_Int32 nCount );
 
 private:
     PivotTableFieldVector maFields;         /// All pivot table fields.

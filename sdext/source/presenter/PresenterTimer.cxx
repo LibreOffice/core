@@ -125,15 +125,6 @@ private:
 
 //===== PresenterTimer ========================================================
 
-sal_Int32 PresenterTimer::ScheduleSingleTaskAbsolute (
-    const Task& rTask,
-    const TimeValue& rDueTime)
-{
-    SharedTimerTask pTask (TimerScheduler::CreateTimerTask(rTask, rDueTime, 0));
-    TimerScheduler::Instance()->ScheduleTask(pTask);
-    return pTask->mnTaskId;
-}
-
 sal_Int32 PresenterTimer::ScheduleRepeatedTask (
     const Task& rTask,
     const sal_Int64 nDelay,

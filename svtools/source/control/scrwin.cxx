@@ -115,13 +115,6 @@ Size ScrollableWindow::GetOutputSizePixel() const
 
 //-------------------------------------------------------------------
 
-Size ScrollableWindow::GetOutputSize() const
-{
-    return PixelToLogic( GetOutputSizePixel() );
-}
-
-//-------------------------------------------------------------------
-
 IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling

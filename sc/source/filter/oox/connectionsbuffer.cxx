@@ -104,66 +104,6 @@ const sal_uInt16 BIFF_QTSETTINGS_XL2000REFRESHED        = 0x0020;
 const sal_uInt16 BIFF_QTSETTINGS_TEXTQUERY              = 0x0001;
 const sal_uInt16 BIFF_QTSETTINGS_TABLENAMES             = 0x0002;
 
-// ----------------------------------------------------------------------------
-
-OUString lclReadQueryString( BiffInputStream& rStrm, sal_uInt16 nCount )
-{
-    bool bValidRec = true;
-    OUStringBuffer aBuffer;
-    for( sal_uInt16 nIndex = 0; bValidRec && (nIndex < nCount); ++nIndex )
-    {
-        bValidRec = (rStrm.getNextRecId() == BIFF_ID_PCITEM_STRING) && rStrm.startNextRecord();
-        if( bValidRec )
-            aBuffer.append( rStrm.readUniString() );
-    }
-    OSL_ENSURE( bValidRec, "lclReadQueryString - missing PCITEM_STRING records" );
-    return aBuffer.makeStringAndClear();
-}
-
-void lclParseTables( WebPrModel::TablesVector& rTables, const OUString& rTableNames )
-{
-    rTables.clear();
-    OUString aTableNames = rTableNames.trim();
-    while( !aTableNames.isEmpty() )
-    {
-        sal_Int32 nSep = -1;
-        // table names are enclosed in double quotes
-        if( aTableNames[ 0 ] == '"' )
-        {
-            // search closing quote character
-            sal_Int32 nEndQuote = aTableNames.indexOf( '"', 1 );
-            OSL_ENSURE( nEndQuote >= 1, "lclParseTables - invalid syntax" );
-            if( nEndQuote < 0 )
-                nEndQuote = aTableNames.getLength();
-            else
-                nSep = aTableNames.indexOf( ',', nEndQuote + 1 );
-            // extract text between quote characters
-            OUString aTableName = aTableNames.copy( 1, nEndQuote - 1 ).trim();
-            if( !aTableName.isEmpty() )
-                rTables.push_back( Any( aTableName ) );
-            else
-                rTables.push_back( Any() );
-        }
-        else
-        {
-            nSep = aTableNames.indexOf( ',' );
-            if( nSep < 0 )
-                nSep = aTableNames.getLength();
-            OUString aTableIndex = aTableNames.copy( 0, nSep ).trim();
-            if( !aTableIndex.isEmpty() && (aTableIndex[ 0 ] >= '1') && (aTableIndex[ 0 ] <= '9') )
-                rTables.push_back( Any( aTableIndex.toInt32() ) );
-            else
-                rTables.push_back( Any() );
-        }
-
-        // remove processed item from aTableNames
-        if( (nSep < 0) || (nSep >= aTableNames.getLength()) )
-            aTableNames = OUString();
-        else
-            aTableNames = aTableNames.copy( nSep + 1 ).trim();
-    }
-}
-
 } // namespace
 
 // ============================================================================

@@ -272,12 +272,6 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool StatementComposer::getDisposeComposer() const
-    {
-        return m_pData->bDisposeComposer;
-    }
-
-    //--------------------------------------------------------------------
     void StatementComposer::setFilter( const ::rtl::OUString& _rFilter )
     {
         m_pData->sFilter = _rFilter;

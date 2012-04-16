@@ -281,9 +281,6 @@ public:
     /** Returns the font model structure. This function can be called before
         finalizeImport() has been called. */
     inline const FontModel& getModel() const { return maModel; }
-    /** Returns the text encoding for strings used with this font. This
-        function can be called before finalizeImport() has been called. */
-    rtl_TextEncoding    getFontEncoding() const;
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

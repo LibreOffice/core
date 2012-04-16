@@ -95,7 +95,6 @@ public:
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
-    SVT_DLLPRIVATE Size         GetOutputSize() const;
 };
 
 #endif
