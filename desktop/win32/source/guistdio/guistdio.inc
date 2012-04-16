@@ -256,11 +256,13 @@ DWORD WINAPI InputThread( LPVOID pParam )
 
 DWORD WINAPI WaitForUIThread( LPVOID pParam )
 {
+#ifndef UNOPKG
     HANDLE  hProcess = (HANDLE)pParam;
 
-#ifndef UNOPKG
     if ( !_tgetenv( TEXT("UNOPKG") ) )
         WaitForInputIdle( hProcess, INFINITE );
+#else
+    (void) pParam;
 #endif
 
     return 0;
