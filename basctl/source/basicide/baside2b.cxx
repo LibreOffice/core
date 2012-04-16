@@ -68,9 +68,6 @@ long nHeaderBarHeight;
 
 static const char cSuffixes[] = "%&!#@$";
 
-MapUnit eEditMapUnit = MAP_100TH_MM;
-
-
 /**
  * Helper functions to get/set text in TextEngine using
  * the stream interface.

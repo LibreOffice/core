@@ -70,8 +70,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-static const rtl::OUString sStandardLibName( RTL_CONSTASCII_USTRINGPARAM("Standard"));
-
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerBASE;
 
 class ContainerListenerImpl : public ContainerListenerBASE
