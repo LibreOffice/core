@@ -58,6 +58,23 @@ class ScaAnyConverter;
 
 
 inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
+
+#ifdef DISABLE_DYNLOADING
+
+// Avoid clash with the functions with same name in
+// scaddins/source/datefunc/datefunc.cxx. I am not sure if each pair
+// have identical semantics, but if yes, one copy should be enough,
+// but what would be a suitable library where such functions could go?
+// Or can the analysis library depend on the date library or the other
+// way around?
+
+#define DaysInMonth analysishelper_DaysInMonth
+#define DateToDays analysishelper_DateToDays
+#define DaysToDate analysishelper_DaysToDate
+#define GetNullDate analysishelper_GetNullDate
+
+#endif
+
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
