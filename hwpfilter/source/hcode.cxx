@@ -39,7 +39,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#ifdef WIN32
+#if defined WIN32 && defined MSC
 #include <float.h>
 #define isnan _isnan
 #endif
