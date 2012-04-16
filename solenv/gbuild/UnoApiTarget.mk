@@ -109,7 +109,7 @@ $(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_RDBMAKERCOMMAND),-O$(1) -
 endef
 
 define gb_UnoApiTarget__command
-$(call gb_Output_announce,$*,$(true),RDB,3)
+$(call gb_Output_announce,$*,$(true),UNO,4)
 mkdir -p $(dir $(1)) && \
 $(if $(UNOAPI_FILES),\
 	$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES)),\
@@ -139,7 +139,7 @@ $(call gb_UnoApiTarget_get_target,%):
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),RDB,3)
+	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiTarget_get_target,$*))
 		-rm -rf $(call gb_UnoApiTarget_get_dep_target,$*) \
