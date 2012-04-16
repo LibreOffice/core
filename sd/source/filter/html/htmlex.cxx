@@ -2050,7 +2050,7 @@ bool HtmlExport::CreateOutlinePages()
     }
 
     // Seite 0 wird der zugeklappte Outline, Seite 1 der aufgeklappte
-    for( int nPage = 0; nPage < (mbImpress?2:1) && bOk; nPage++ )
+    for (sal_Int32 nPage = 0; nPage < (mbImpress?2:1) && bOk; ++nPage)
     {
         // Html Kopf
         String aStr(maHTMLHeader);
