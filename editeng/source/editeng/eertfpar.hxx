@@ -120,10 +120,6 @@ public:
     EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
 };
 
-SV_DECL_REF( EditRTFParser )
-SV_IMPL_REF( EditRTFParser );
-
-
 #endif  //_EERTFPAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
