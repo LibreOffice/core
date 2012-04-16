@@ -44,13 +44,21 @@ extern "C" {
 extern CppUnitTestPlugIn *cppunitTestPlugIn(void);
 extern int lo_main(int argc, const char **argv);
 
+extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+extern void * date_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
 extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
 
 const lib_to_component_mapping *
 lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
+        { "libanalysislo.a", analysis_component_getFactory },
+        { "libdatelo.a", date_component_getFactory },
+        { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsclo.a", sc_component_getFactory },
+        { "libunoxmllo.a", unoxml_component_getFactory },
         { NULL, NULL }
     };
 
