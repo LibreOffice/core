@@ -118,7 +118,6 @@ struct FontPortionModel
                             mnPos( nPos ), mnFontId( nFontId ) {}
 
     void                read( SequenceInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, BiffFontPortionMode eMode );
 };
 
 // ----------------------------------------------------------------------------

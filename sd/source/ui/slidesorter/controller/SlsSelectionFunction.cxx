@@ -146,11 +146,6 @@ private:
     */
     sal_uInt32 EncodeMouseEvent (const MouseEvent& rEvent) const;
 
-    /** Compute a numerical code that describes a key event and that can
-        be used for fast look up of the appropriate reaction.
-    */
-    sal_uInt32 EncodeKeyEvent (const KeyEvent& rEvent) const;
-
     /** Compute a numerical code that describes the current state like
         whether the selection rectangle is visible or whether the page under
         the mouse or the one that has the focus is selected.
@@ -1009,26 +1004,6 @@ sal_uInt32 SelectionFunction::EventDescriptor::EncodeMouseEvent (
 
     return nEventCode;
 }
-
-
-
-
-sal_uInt32 SelectionFunction::EventDescriptor::EncodeKeyEvent (const KeyEvent& rEvent) const
-{
-    // The key code in the lower 16 bit.
-    sal_uInt32 nEventCode (rEvent.GetKeyCode().GetCode());
-
-    // Detect pressed modifier keys.
-    if (rEvent.GetKeyCode().IsShift())
-        nEventCode |= SHIFT_MODIFIER;
-    if (rEvent.GetKeyCode().IsMod1())
-        nEventCode |= CONTROL_MODIFIER;
-
-    return nEventCode;
-}
-
-
-
 
 sal_uInt32 SelectionFunction::EventDescriptor::EncodeState (void) const
 {

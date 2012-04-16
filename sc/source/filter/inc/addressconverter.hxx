@@ -247,24 +247,6 @@ public:
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
-    /** Tries to parse an encoded name of an external link target in BIFF
-        documents, e.g. from EXTERNSHEET or SUPBOOK records.
-
-        @param orClassName  (out-parameter) DDE server name or OLE class name.
-        @param orTargetUrl  (out-parameter) Target URL, DDE topic or OLE object name.
-        @param orSheetName  (out-parameter) Sheet name in target document.
-        @param rBiffEncoded  Encoded name of the external link target.
-        @param bFromDConRec  True = path from DCONREF/DCONNAME/DCONBINAME records, false = other records.
-
-        @return  Type of the decoded target.
-      */
-    BiffTargetType      parseBiffTargetUrl(
-                            ::rtl::OUString& orClassName,
-                            ::rtl::OUString& orTargetUrl,
-                            ::rtl::OUString& orSheetName,
-                            const ::rtl::OUString& rBiffTargetUrl,
-                            bool bFromDConRec = false );
-
     // ------------------------------------------------------------------------
 
     /** Returns the biggest valid cell address in the own Calc document. */

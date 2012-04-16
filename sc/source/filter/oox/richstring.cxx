@@ -140,26 +140,6 @@ void FontPortionModel::read( SequenceInputStream& rStrm )
     mnFontId = rStrm.readuInt16();
 }
 
-void FontPortionModel::read( BiffInputStream& rStrm, BiffFontPortionMode eMode )
-{
-    switch( eMode )
-    {
-        case BIFF_FONTPORTION_8BIT:
-            mnPos = rStrm.readuInt8();
-            mnFontId = rStrm.readuInt8();
-        break;
-        case BIFF_FONTPORTION_16BIT:
-            mnPos = rStrm.readuInt16();
-            mnFontId = rStrm.readuInt16();
-        break;
-        case BIFF_FONTPORTION_OBJ:
-            mnPos = rStrm.readuInt16();
-            mnFontId = rStrm.readuInt16();
-            rStrm.skip( 4 );
-        break;
-    }
-}
-
 // ----------------------------------------------------------------------------
 
 void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )

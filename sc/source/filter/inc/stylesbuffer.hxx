@@ -782,9 +782,6 @@ public:
     /** Imports the DXF record from the passed stream. */
     void                importDxf( SequenceInputStream& rStrm );
 
-    /** Imports font, border, and fill settings from the CFRULE record. */
-    void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
-
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 

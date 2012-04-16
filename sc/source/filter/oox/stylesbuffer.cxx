@@ -2581,20 +2581,6 @@ void Dxf::importDxf( SequenceInputStream& rStrm )
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
-void Dxf::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
-{
-    if( getFlag( nFlags, BIFF_CFRULE_FONTBLOCK ) )
-        createFont()->importCfRule( rStrm );
-    if( getFlag( nFlags, BIFF_CFRULE_ALIGNBLOCK ) )
-        rStrm.skip( 8 );
-    if( getFlag( nFlags, BIFF_CFRULE_BORDERBLOCK ) )
-        createBorder()->importCfRule( rStrm, nFlags );
-    if( getFlag( nFlags, BIFF_CFRULE_FILLBLOCK ) )
-        createFill()->importCfRule( rStrm, nFlags );
-    if( getFlag( nFlags, BIFF_CFRULE_PROTBLOCK ) )
-        rStrm.skip( 2 );
-}
-
 void Dxf::finalizeImport()
 {
     if( mxFont.get() )
