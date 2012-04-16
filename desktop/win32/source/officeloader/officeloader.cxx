@@ -274,8 +274,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 if ( INVALID_HANDLE_VALUE != hPipe )
                 {
                     DWORD   dwBytesWritten;
-                    int argc = 0;
-                    LPWSTR  *argv = CommandLineToArgvW( GetCommandLine(), &argc );
+                    int argc2 = 0;
+                    LPWSTR  *argv2 = CommandLineToArgvW( GetCommandLine(), &argc2 );
 
                     fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
                     if (fSuccess) {
@@ -287,9 +287,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                                 &dwBytesWritten, NULL);
                         }
                     }
-                    for ( int argn = 1; fSuccess && argn < argc; argn++ )
+                    for ( int argn = 1; fSuccess && argn < argc2; argn++ )
                     {
-                        fSuccess = writeArgument(hPipe, ',', argv[argn]);
+                        fSuccess = writeArgument(hPipe, ',', argv2[argn]);
                     }
 
                     if ( fSuccess )
@@ -359,17 +359,17 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             // mode as self-destruction of the soffice.bin process can lead to
             // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
             // See 138244 for more information.
-            int     argc;
-            LPTSTR  *argv = GetCommandArgs( &argc );
+            int     argc2;
+            LPTSTR  *argv2 = GetCommandArgs( &argc2 );
 
-            if ( argc > 1 )
+            if ( argc2 > 1 )
             {
                 int n;
 
-                for ( n = 1; n < argc; n++ )
+                for ( n = 1; n < argc2; n++ )
                 {
-                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) ||
-                         0 == _tcsnicmp( argv[n], _T("--headless"), 9 ) )
+                    if ( 0 == _tcsnicmp( argv2[n], _T("-headless"), 9 ) ||
+                         0 == _tcsnicmp( argv2[n], _T("--headless"), 9 ) )
                     {
                         bHeadlessMode = TRUE;
                     }
