@@ -78,13 +78,12 @@ if ! test -f $start_dir/Repository.mk -a -f $start_dir/solenv/inc/target.mk ; th
     exit 1;
 fi
 
-if test ! -f $start_dir/core.ver -o -d $start_dir/.git ; then
-    echo "Warning: core sources are from git and not from tarball"
+if test ! -f $start_dir/sources.ver -o -d $start_dir/.git ; then
+    echo "Warning: sources are from git and not from tarball"
     echo "         Do nothing."
     exit 0;
 fi
 
-source $start_dir/bootstrap.ver
 lo_src_dir="$start_dir/src"
 mkdir -p "$lo_src_dir"
 
