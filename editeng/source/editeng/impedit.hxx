@@ -391,7 +391,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditUndoMoveParagraphs;
 
     friend class EditEngine;        // For access to Imp-Methods
-    friend class EditRTFParser;     // For access to Imp-Methods
     friend class EditHTMLParser;    // For access to Imp-Methods
     friend class EdtAutoCorrDoc;    // For access to Imp-Methods
     friend class EditDbg;           // Debug Routines
@@ -772,7 +771,7 @@ public:
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
-    EditPaM         InsertLineBreak( EditSelection aEditSelection );
+    EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
     EditPaM         InsertTab( EditSelection aEditSelection );
     EditPaM         InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
     sal_Bool        UpdateFields();

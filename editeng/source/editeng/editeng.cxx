@@ -737,6 +737,22 @@ uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const
     return pImpEditEngine->CreateTransferable(rSelection);
 }
 
+void EditEngine::ParaAttribsToCharAttribs(ContentNode* pNode)
+{
+    pImpEditEngine->ParaAttribsToCharAttribs(pNode);
+}
+
+EditPaM EditEngine::ConnectParagraphs(
+        ContentNode* pLeft, ContentNode* pRight, bool bBackward)
+{
+    return pImpEditEngine->ImpConnectParagraphs(pLeft, pRight, bBackward);
+}
+
+EditPaM EditEngine::InsertField(const EditSelection& rEditSelection, const SvxFieldItem& rFld)
+{
+    return pImpEditEngine->InsertField(rEditSelection, rFld);
+}
+
 EditPaM EditEngine::InsertText(const EditSelection& aCurEditSelection, const String& rStr)
 {
     return pImpEditEngine->InsertText(aCurEditSelection, rStr);
@@ -782,6 +798,11 @@ bool EditEngine::IsFormatted() const
     return pImpEditEngine->IsFormatted();
 }
 
+EditPaM EditEngine::CursorLeft(const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode)
+{
+    return pImpEditEngine->CursorLeft(rPaM, nCharacterIteratorMode);
+}
+
 EditPaM EditEngine::CursorRight(const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode)
 {
     return pImpEditEngine->CursorRight(rPaM, nCharacterIteratorMode);
@@ -802,6 +823,11 @@ EditDoc& EditEngine::GetEditDoc()
     return pImpEditEngine->GetEditDoc();
 }
 
+const EditDoc& EditEngine::GetEditDoc() const
+{
+    return pImpEditEngine->GetEditDoc();
+}
+
 void EditEngine::SeekCursor(
         ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich)
 {
@@ -811,6 +837,26 @@ void EditEngine::SeekCursor(
 EditPaM EditEngine::DeleteSelection(const EditSelection& rSel)
 {
     return pImpEditEngine->ImpDeleteSelection(rSel);
+}
+
+ESelection EditEngine::CreateESelection(const EditSelection& rSel)
+{
+    return pImpEditEngine->CreateESel(rSel);
+}
+
+const SfxItemSet& EditEngine::GetBaseParaAttribs(sal_uInt16 nPara) const
+{
+    return pImpEditEngine->GetParaAttribs(nPara);
+}
+
+void EditEngine::SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet)
+{
+    pImpEditEngine->SetParaAttribs(nPara, rSet);
+}
+
+void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial)
+{
+    pImpEditEngine->SetAttribs(rSel, rSet, nSpecial);
 }
 
 void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)
@@ -2030,6 +2076,11 @@ void EditEngine::QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
     pImpEditEngine->RemoveCharAttribs( nPara, nWhich );
 }
 
+void EditEngine::SetStyleSheet(const EditSelection& aSel, SfxStyleSheet* pStyle)
+{
+    pImpEditEngine->SetStyleSheet(aSel, pStyle);
+}
+
 void EditEngine::SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2245,13 +2296,18 @@ EFieldInfo EditEngine::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
 }
 
 
-sal_Bool EditEngine::UpdateFields()
+bool EditEngine::UpdateFields()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bChanges = pImpEditEngine->UpdateFields();
     if ( bChanges )
         pImpEditEngine->FormatAndUpdate();
     return bChanges;
+}
+
+bool EditEngine::UpdateFieldsOnly()
+{
+    return pImpEditEngine->UpdateFields();
 }
 
 void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
@@ -2719,6 +2775,31 @@ void EditEngine::SetFirstWordCapitalization( sal_Bool bCapitalize )
     pImpEditEngine->SetFirstWordCapitalization( bCapitalize );
 }
 
+bool EditEngine::IsImportHandlerSet() const
+{
+    return pImpEditEngine->aImportHdl.IsSet();
+}
+
+bool EditEngine::IsImportRTFStyleSheetsSet() const
+{
+    return pImpEditEngine->GetStatus().DoImportRTFStyleSheets();
+}
+
+void EditEngine::CallImportHandler(ImportInfo& rInfo)
+{
+    pImpEditEngine->aImportHdl.Call(&rInfo);
+}
+
+EditPaM EditEngine::InsertParaBreak(
+        const EditSelection& rEditSelection, bool bKeepEndingAttribs)
+{
+    return pImpEditEngine->ImpInsertParaBreak(rEditSelection, bKeepEndingAttribs);
+}
+
+EditPaM EditEngine::InsertLineBreak(const EditSelection& rEditSelection)
+{
+    return pImpEditEngine->InsertLineBreak(rEditSelection);
+}
 
 EFieldInfo::EFieldInfo()
 {

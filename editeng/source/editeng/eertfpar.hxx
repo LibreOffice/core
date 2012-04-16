@@ -33,29 +33,30 @@
 #include <editdoc.hxx>
 #include <impedit.hxx>
 
+class EditEngine;
+
 class EditNodeIdx : public SvxNodeIdx
 {
 private:
-    ContentNode*        pNode;
-    ImpEditEngine*      pImpEditEngine;
+    EditEngine*   mpEditEngine;
+    ContentNode*  mpNode;
 
 public:
-                        EditNodeIdx( ImpEditEngine* pIEE, ContentNode* pNd = 0)
-                            { pImpEditEngine = pIEE; pNode = pNd; }
-    virtual sal_uLong       GetIdx() const;
+    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = NULL);
+
+    virtual sal_uLong   GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
-    ContentNode*        GetNode() { return pNode; }
+    ContentNode* GetNode() { return mpNode; }
 };
 
 class EditPosition : public SvxPosition
 {
 private:
-    EditSelection*  pCurSel;
-    ImpEditEngine*  pImpEditEngine;
+    EditEngine*     mpEditEngine;
+    EditSelection*  mpCurSel;
 
 public:
-                    EditPosition( ImpEditEngine* pIEE, EditSelection* pSel )
-                            { pImpEditEngine = pIEE; pCurSel = pSel; }
+    EditPosition(EditEngine* pIEE, EditSelection* pSel);
 
     virtual sal_uLong   GetNodeIdx() const;
     virtual sal_uInt16  GetCntIdx() const;
@@ -74,7 +75,7 @@ class EditRTFParser : public SvxRTFParser
 {
 private:
     EditSelection       aCurSel;
-    ImpEditEngine*      pImpEditEngine;
+    EditEngine*         mpEditEngine;
     CharSet             eDestCharSet;
     MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
@@ -104,8 +105,8 @@ protected:
     void                SkipGroup();
 
 public:
-                EditRTFParser( SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, ImpEditEngine* pImpEditEngine );
-                ~EditRTFParser();
+    EditRTFParser(SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine);
+    ~EditRTFParser();
 
     virtual SvParserState   CallParser();
 

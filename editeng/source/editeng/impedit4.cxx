@@ -178,7 +178,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     DBG_ASSERT(pPool && pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")),
         "ReadRTF: no EditEnginePool!");
 
-    EditRTFParserRef xPrsr = new EditRTFParser( rInput, aSel, *pPool, this );
+    EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, pEditEngine);
     SvParserState eState = xPrsr->CallParser();
     if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
     {

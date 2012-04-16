@@ -150,7 +150,6 @@ private:
         com::sun::star::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
-    EDITENG_DLLPRIVATE EditPaM InsertText(const EditSelection& aCurEditSelection, const String& rStr);
     EDITENG_DLLPRIVATE EditSelection InsertText(
         com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable >& rxDataObj,
         const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
@@ -173,17 +172,9 @@ private:
 
     EDITENG_DLLPRIVATE bool IsFormatted() const;
 
-    EDITENG_DLLPRIVATE EditPaM CursorRight(
-        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
-
     EDITENG_DLLPRIVATE sal_uInt16 GetOnePixelInRef() const;
     EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
-    EDITENG_DLLPRIVATE EditDoc& GetEditDoc();
 
-    EDITENG_DLLPRIVATE void SeekCursor(
-        ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);
-
-    EDITENG_DLLPRIVATE EditPaM DeleteSelection(const EditSelection& rSel);
     EDITENG_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);
     EDITENG_DLLPRIVATE void HandleEndPasteOrDrop(PasteOrDropInfos& rInfos);
     EDITENG_DLLPRIVATE bool HasText() const;
@@ -392,6 +383,7 @@ public:
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();
 
+    void SetStyleSheet(const EditSelection& aSel, SfxStyleSheet* pStyle);
     void                SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
     const SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara ) const;
     SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara );
@@ -436,7 +428,8 @@ public:
     sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
     virtual sal_Bool    ConvertNextDocument();
 
-    sal_Bool            UpdateFields();
+    bool UpdateFields();
+    bool UpdateFieldsOnly();
     void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
 
     sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const;
@@ -514,6 +507,41 @@ public:
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( sal_Bool bCapitalize );
+
+    EditDoc& GetEditDoc();
+    const EditDoc& GetEditDoc() const;
+
+    bool IsImportHandlerSet() const;
+    bool IsImportRTFStyleSheetsSet() const;
+
+    void CallImportHandler(ImportInfo& rInfo);
+
+    void ParaAttribsToCharAttribs(ContentNode* pNode);
+
+    EditPaM ConnectParagraphs(
+        ContentNode* pLeft, ContentNode* pRight, bool bBackward = false);
+
+    EditPaM InsertField(const EditSelection& rEditSelection, const SvxFieldItem& rFld);
+    EditPaM InsertText(const EditSelection& aCurEditSelection, const String& rStr);
+    EditPaM InsertParaBreak(
+        const EditSelection& rEditSelection, bool bKeepEndingAttribs = true);
+    EditPaM InsertLineBreak(const EditSelection& rEditSelection);
+
+    EditPaM CursorLeft(
+        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
+    EditPaM CursorRight(
+        const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = com::sun::star::i18n::CharacterIteratorMode::SKIPCELL);
+
+    void SeekCursor(
+        ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0);
+
+    EditPaM DeleteSelection(const EditSelection& rSel);
+
+    ESelection CreateESelection(const EditSelection& rSel);
+
+    const SfxItemSet& GetBaseParaAttribs(sal_uInt16 nPara) const;
+    void SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet);
+    void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
 };
 
 #endif // _MyEDITENG_HXX

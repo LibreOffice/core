@@ -39,8 +39,11 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
+#include "editeng/editeng.hxx"
 
 #include <svtools/rtftoken.h>
+
+using namespace com::sun::star;
 
 // Set all values to defaultt; is called after loading the bitmap!
 void SvxRTFPictureType::ResetValues()
@@ -71,11 +74,12 @@ ImportInfo::~ImportInfo()
 {
 }
 
-EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, ImpEditEngine* pImpEE  )
-    : SvxRTFParser( rAttrPool, rIn, 0 ), aRTFMapMode( MAP_TWIP )
+EditRTFParser::EditRTFParser(
+    SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
+    SvxRTFParser(rAttrPool, rIn, 0),
+    mpEditEngine(pEditEngine),
+    aRTFMapMode(MAP_TWIP)
 {
-
-    pImpEditEngine  = pImpEE;
     aCurSel         = aSel;
     eDestCharSet    = RTL_TEXTENCODING_DONTKNOW;
     nDefFont        = 0;
@@ -83,13 +87,13 @@ EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rA
     nLastAction     = 0;
     nDefFontHeight  = 0;
 
-    SetInsPos( EditPosition( pImpEditEngine, &aCurSel ) );
+    SetInsPos(EditPosition(mpEditEngine, &aCurSel));
 
     // Convert the twips values ...
-    SetCalcValue( sal_True );
-    SetChkStyleAttr( pImpEE->GetStatus().DoImportRTFStyleSheets() );
-    SetNewDoc( sal_False );     // So that the Pool-Defaults are not overwritten...
-    aEditMapMode = MapMode( pImpEE->GetRefDevice()->GetMapMode().GetMapUnit() );
+    SetCalcValue(true);
+    SetChkStyleAttr(mpEditEngine->IsImportRTFStyleSheetsSet());
+    SetNewDoc(false);     // So that the Pool-Defaults are not overwritten...
+    aEditMapMode = MapMode(mpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit());
 }
 
 EditRTFParser::~EditRTFParser()
@@ -106,38 +110,38 @@ SvParserState EditRTFParser::CallParser()
     // aStart2PaM: First position of the imported content
     // aEnd2PaM: Last position of the imported content
     EditPaM aStart1PaM( aCurSel.Min().GetNode(), aCurSel.Min().GetIndex() );
-    aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
+    aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
     EditPaM aStart2PaM = aCurSel.Min();
     // Useful or not?
     aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
     AddRTFDefaultValues( aStart2PaM, aStart2PaM );
-    EditPaM aEnd1PaM( pImpEditEngine->ImpInsertParaBreak( aCurSel.Max() ) );
+    EditPaM aEnd1PaM = mpEditEngine->InsertParaBreak(aCurSel.Max());
     // aCurCel now points to the gap
 
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_START, this, pImpEditEngine->CreateESel( aCurSel ) );
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        ImportInfo aImportInfo(RTFIMP_START, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
 
     SvParserState _eState = SvxRTFParser::CallParser();
 
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_END, this, pImpEditEngine->CreateESel( aCurSel ) );
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        ImportInfo aImportInfo(RTFIMP_END, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
 
     if ( nLastAction == ACTION_INSERTPARABRK )
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
-        sal_uInt16 nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
-        ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().GetObject( nPara-1 );
+        sal_uInt16 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
+        ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject(nPara-1);
         DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
         EditSelection aSel;
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
         aSel.Max() = EditPaM( pCurNode, 0 );
-        aCurSel.Max() = pImpEditEngine->ImpDeleteSelection( aSel );
+        aCurSel.Max() = mpEditEngine->DeleteSelection(aSel);
     }
     EditPaM aEnd2PaM( aCurSel.Max() );
     //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
@@ -148,14 +152,14 @@ SvParserState EditRTFParser::CallParser()
 
     sal_Bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
     if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
-        pImpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
-    aCurSel.Min() = pImpEditEngine->ImpConnectParagraphs(
+        mpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
+    aCurSel.Min() = mpEditEngine->ConnectParagraphs(
         aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
     bSpecialBackward = aEnd1PaM.GetNode()->Len() ? sal_True : sal_False;
     // when bOnlyOnePara, then the node is gone on Connect.
     if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )
-        pImpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );
-    aCurSel.Max() = pImpEditEngine->ImpConnectParagraphs(
+        mpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );
+    aCurSel.Max() = mpEditEngine->ConnectParagraphs(
         ( bOnlyOnePara ? aStart1PaM.GetNode() : aEnd2PaM.GetNode() ),
             aEnd1PaM.GetNode(), bSpecialBackward );
 
@@ -167,18 +171,18 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     // Problem: DefFont and DefFontHeight
     Size aSz( 12, 0 );
     MapMode aPntMode( MAP_POINT );
-    MapMode _aEditMapMode( pImpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit() );
-    aSz = pImpEditEngine->GetRefDevice()->LogicToLogic( aSz, &aPntMode, &_aEditMapMode );
+    MapMode _aEditMapMode(mpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit());
+    aSz = mpEditEngine->GetRefDevice()->LogicToLogic(aSz, &aPntMode, &_aEditMapMode);
     SvxFontHeightItem aFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT );
     Font aDefFont( GetDefFont() );
     SvxFontItem aFontItem( aDefFont.GetFamily(), aDefFont.GetName(),
                     aDefFont.GetStyleName(), aDefFont.GetPitch(), aDefFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    sal_uInt16 nStartPara = pImpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
-    sal_uInt16 nEndPara = pImpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
+    sal_uInt16 nStartPara = mpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
+    sal_uInt16 nEndPara = mpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
+        ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( nPara );
         DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
             pNode->GetContentAttribs().GetItems().Put( aFontItem );
@@ -203,12 +207,12 @@ void EditRTFParser::NextToken( int nToken )
         break;
         case RTF_CELL:
         {
-            aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
+            aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
         }
         break;
         case RTF_LINE:
         {
-            aCurSel = pImpEditEngine->InsertLineBreak( aCurSel );
+            aCurSel = mpEditEngine->InsertLineBreak(aCurSel);
         }
         break;
         case RTF_FIELD:
@@ -230,12 +234,12 @@ void EditRTFParser::NextToken( int nToken )
         }
         break;
     }
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_NEXTTOKEN, this, pImpEditEngine->CreateESel( aCurSel ) );
+        ImportInfo aImportInfo(RTFIMP_NEXTTOKEN, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = short(nTokenValue);
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
 }
 
@@ -243,45 +247,47 @@ void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 {
     // for Tokens which are not evaluated in ReadAttr
     // Actually, only for Calc (RTFTokenHdl), so that RTF_INTBL
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_UNKNOWNATTR, this, pImpEditEngine->CreateESel( aCurSel ) );
+        ImportInfo aImportInfo(RTFIMP_UNKNOWNATTR, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = short(nTokenValue);
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
 }
 
 void EditRTFParser::InsertText()
 {
     String aText( aToken );
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_INSERTTEXT, this, pImpEditEngine->CreateESel( aCurSel ) );
+        ImportInfo aImportInfo(RTFIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.aText = aText;
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
-    aCurSel = pImpEditEngine->ImpInsertText( aCurSel, aText );
+    aCurSel = mpEditEngine->InsertText(aCurSel, aText);
     nLastAction = ACTION_INSERTTEXT;
 }
 
 void EditRTFParser::InsertPara()
 {
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
-        ImportInfo aImportInfo( RTFIMP_INSERTPARA, this, pImpEditEngine->CreateESel( aCurSel ) );
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        ImportInfo aImportInfo(RTFIMP_INSERTPARA, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
-    aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
+    aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
     nLastAction = ACTION_INSERTPARABRK;
 }
 
 void EditRTFParser::MovePos( int bForward )
 {
     if( bForward )
-        aCurSel = pImpEditEngine->CursorRight( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
+        aCurSel = mpEditEngine->CursorRight(
+            aCurSel.Max(), i18n::CharacterIteratorMode::SKIPCHARACTER);
     else
-        aCurSel = pImpEditEngine->CursorLeft( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
+        aCurSel = mpEditEngine->CursorLeft(
+            aCurSel.Max(), i18n::CharacterIteratorMode::SKIPCHARACTER);
 }
 
 void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
@@ -292,13 +298,13 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     //                      This "\pard" always apply on the right paragraph.
 
     ContentNode* pN = aCurSel.Max().GetNode();
-    sal_uInt16 nCurPara = pImpEditEngine->GetEditDoc().GetPos( pN );
+    sal_uInt16 nCurPara = mpEditEngine->GetEditDoc().GetPos( pN );
     DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
-    ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().GetObject( nCurPara );
+    ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject( nCurPara );
     DBG_ASSERT( pPrevNode, "pPrevNode = 0!" );
-    rpNodePos = new EditNodeIdx( pImpEditEngine, pPrevNode );
+    rpNodePos = new EditNodeIdx(mpEditEngine, pPrevNode);
     rCntPos = pPrevNode->Len();
 }
 
@@ -319,7 +325,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary
-    const MapUnit eDestUnit = ( MapUnit )( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
+    const MapUnit eDestUnit = (MapUnit)(mpEditEngine->GetEditDoc().GetItemPool().GetMetric(0));
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
@@ -330,7 +336,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             {
                 sal_uInt32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
                 long nNewHeight;
-                nNewHeight = pImpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
+                nNewHeight = mpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
                 SvxFontHeightItem aFntHeightItem( nNewHeight, ((SvxFontHeightItem*)pItem)->GetProp(), aFntHeightIems[i] );
                 rSet.GetAttrSet().Put( aFntHeightItem );
@@ -347,7 +353,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         {
             nEsc *= 10; //HalPoints => Twips was embezzled in RTFITEM.CXX!
             SvxFont aFont;
-            pImpEditEngine->SeekCursor( aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont );
+            mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
             nEsc = nEsc * 100 / aFont.GetSize().Height();
 
             SvxEscapementItem aEscItem( (short) nEsc, ((SvxEscapementItem*)pItem)->GetProp(), EE_CHAR_ESCAPEMENT );
@@ -355,28 +361,30 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         }
     }
 
-    if ( pImpEditEngine->aImportHdl.IsSet() )
+    if (mpEditEngine->IsImportHandlerSet())
     {
         EditSelection aSel( aStartPaM, aEndPaM );
-        ImportInfo aImportInfo( RTFIMP_SETATTR, this, pImpEditEngine->CreateESel( aSel ) );
+        ImportInfo aImportInfo(RTFIMP_SETATTR, this, mpEditEngine->CreateESelection(aSel));
         aImportInfo.pAttrs = &rSet;
-        pImpEditEngine->aImportHdl.Call( &aImportInfo );
+        mpEditEngine->CallImportHandler(aImportInfo);
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
     ContentNode* pEN = aEndPaM.GetNode();
-    sal_uInt16 nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
-    sal_uInt16 nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
+    sal_uInt16 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
+    sal_uInt16 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
     sal_Int16 nOutlLevel = 0xff;
 
-    if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
+    if (rSet.StyleNo() && mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
     {
         SvxRTFStyleTbl::iterator it = GetStyleTbl().find( rSet.StyleNo() );
         DBG_ASSERT( it != GetStyleTbl().end(), "Template not defined in RTF!" );
         if ( it != GetStyleTbl().end() )
         {
             SvxRTFStyleType* pS = it->second;
-            pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pS->sName, SFX_STYLE_FAMILY_ALL ) );
+            mpEditEngine->SetStyleSheet(
+                EditSelection(aStartPaM, aEndPaM),
+                (SfxStyleSheet*)mpEditEngine->GetStyleSheetPool()->Find(pS->sName, SFX_STYLE_FAMILY_ALL));
             nOutlLevel = pS->nOutlineNo;
         }
     }
@@ -388,36 +396,39 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // All Complete paragraphs are paragraph attributes ...
     for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().GetObject( z ), "Node does not exist yet(RTF)" );
-        pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
+        DBG_ASSERT(mpEditEngine->GetEditDoc().GetObject(z), "Node does not exist yet(RTF)");
+        mpEditEngine->SetParaAttribsOnly(z, rSet.GetAttrSet());
     }
 
     if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
     {
         // The rest dof the StartNodes...
         if ( aStartPaM.GetIndex() == 0 )
-            pImpEditEngine->SetParaAttribs( nStartNode, rSet.GetAttrSet() );
+            mpEditEngine->SetParaAttribsOnly(nStartNode, rSet.GetAttrSet());
         else
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, EditPaM( aStartPaM.GetNode(), aStartPaM.GetNode()->Len() ) ), rSet.GetAttrSet() );
+            mpEditEngine->SetAttribs(
+                EditSelection(aStartPaM, EditPaM(aStartPaM.GetNode(), aStartPaM.GetNode()->Len())), rSet.GetAttrSet());
 
         // the beginning of the EndNodes....
         if ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() )
-            pImpEditEngine->SetParaAttribs( nEndNode, rSet.GetAttrSet() );
+            mpEditEngine->SetParaAttribsOnly(nEndNode, rSet.GetAttrSet());
         else
-            pImpEditEngine->SetAttribs( EditSelection( EditPaM( aEndPaM.GetNode(), 0 ), aEndPaM ), rSet.GetAttrSet() );
+            mpEditEngine->SetAttribs(
+                EditSelection(EditPaM(aEndPaM.GetNode(), 0), aEndPaM), rSet.GetAttrSet());
     }
     else
     {
         if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
         {
             // When settings char attribs as para attribs, we must merge with existing attribs, not overwrite the ItemSet!
-            SfxItemSet aAttrs = pImpEditEngine->GetParaAttribs( nStartNode );
+            SfxItemSet aAttrs = mpEditEngine->GetBaseParaAttribs(nStartNode);
             aAttrs.Put( rSet.GetAttrSet() );
-            pImpEditEngine->SetParaAttribs( nStartNode, aAttrs );
+            mpEditEngine->SetParaAttribsOnly(nStartNode, aAttrs);
         }
         else
         {
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rSet.GetAttrSet() );
+            mpEditEngine->SetAttribs(
+                EditSelection(aStartPaM, aEndPaM), rSet.GetAttrSet());
         }
     }
 
@@ -426,7 +437,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         for ( sal_uInt16 n = nStartNode; n <= nEndNode; n++ )
         {
-            ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
+            ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
         }
     }
@@ -447,7 +458,7 @@ SvxRTFStyleType* EditRTFParser::FindStyleSheet( const XubString& rName )
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 {
     // Check if a template exists, then it will not be changed!
-    SfxStyleSheet* pStyle = (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SFX_STYLE_FAMILY_ALL );
+    SfxStyleSheet* pStyle = (SfxStyleSheet*)mpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SFX_STYLE_FAMILY_ALL );
     if ( pStyle )
         return pStyle;
 
@@ -464,7 +475,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
         }
     }
 
-    pStyle = (SfxStyleSheet*) &pImpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA );
+    pStyle = (SfxStyleSheet*) &mpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA );
 
     // 1) convert and take over Items ...
     ConvertAndPutItems( pStyle->GetItemSet(), pRTFStyle->aAttrSet );
@@ -472,7 +483,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     // 2) As long as Parent is not in the pool, also create this ...
     if ( aParent.Len() && ( aParent != aName ) )
     {
-        SfxStyleSheet* pS = (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( aParent, SFX_STYLE_FAMILY_ALL );
+        SfxStyleSheet* pS = (SfxStyleSheet*)mpEditEngine->GetStyleSheetPool()->Find( aParent, SFX_STYLE_FAMILY_ALL );
         if ( !pS )
         {
             // If not found anywhere, create from RTF ...
@@ -490,7 +501,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 void EditRTFParser::CreateStyleSheets()
 {
     // the SvxRTFParser haa  now created the template...
-    if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
+    if (mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
     {
         for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
         {
@@ -569,8 +580,8 @@ void EditRTFParser::ReadField()
                 aFldRslt = aFldInst;
 
             SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
-            aCurSel = pImpEditEngine->InsertField( aCurSel, aField );
-            pImpEditEngine->UpdateFields();
+            aCurSel = mpEditEngine->InsertField(aCurSel, aField);
+            mpEditEngine->UpdateFieldsOnly();
             nLastAction = ACTION_INSERTTEXT;
         }
     }
@@ -603,35 +614,41 @@ void EditRTFParser::SkipGroup()
     SkipToken( -1 );        // the closing brace is evaluated "above"
 }
 
+EditNodeIdx::EditNodeIdx(EditEngine* pEE, ContentNode* pNd) :
+    mpEditEngine(pEE), mpNode(pNd) {}
+
 sal_uLong EditNodeIdx::GetIdx() const
 {
-    return pImpEditEngine->GetEditDoc().GetPos( pNode );
+    return mpEditEngine->GetEditDoc().GetPos(mpNode);
 }
 
 SvxNodeIdx* EditNodeIdx::Clone() const
 {
-    return new EditNodeIdx( pImpEditEngine, pNode );
+    return new EditNodeIdx(mpEditEngine, mpNode);
 }
+
+EditPosition::EditPosition(EditEngine* pEE, EditSelection* pSel) :
+    mpEditEngine(pEE), mpCurSel(pSel) {}
 
 SvxPosition* EditPosition::Clone() const
 {
-    return new EditPosition( pImpEditEngine, pCurSel );
+    return new EditPosition(mpEditEngine, mpCurSel);
 }
 
 SvxNodeIdx* EditPosition::MakeNodeIdx() const
 {
-    return new EditNodeIdx( pImpEditEngine, pCurSel->Max().GetNode() );
+    return new EditNodeIdx(mpEditEngine, mpCurSel->Max().GetNode());
 }
 
 sal_uLong EditPosition::GetNodeIdx() const
 {
-    ContentNode* pN = pCurSel->Max().GetNode();
-    return pImpEditEngine->GetEditDoc().GetPos( pN );
+    ContentNode* pN = mpCurSel->Max().GetNode();
+    return mpEditEngine->GetEditDoc().GetPos(pN);
 }
 
 sal_uInt16 EditPosition::GetCntIdx() const
 {
-    return pCurSel->Max().GetIndex();
+    return mpCurSel->Max().GetIndex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

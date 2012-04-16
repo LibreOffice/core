@@ -3018,7 +3018,7 @@ sal_Bool ImpEditEngine::UpdateFields()
     return bChanges;
 }
 
-EditPaM ImpEditEngine::InsertLineBreak( EditSelection aCurSel )
+EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
 {
     EditPaM aPaM( ImpInsertFeature( aCurSel, SfxVoidItem( EE_FEATURE_LINEBR ) ) );
     return aPaM;
