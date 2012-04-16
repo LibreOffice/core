@@ -399,7 +399,6 @@ int _tmain( int, _TCHAR ** )
         DWORD   dwWaitForUIThreadId;
         HANDLE  hWaitForUIThread = CreateThread( NULL, 0, WaitForUIThread, (LPVOID)aProcessInfo.hProcess, 0, &dwWaitForUIThreadId );
 
-        DWORD   dwWaitResult;
         HANDLE  hObjects[] =
             {
                 hTargetProcess,
@@ -409,13 +408,13 @@ int _tmain( int, _TCHAR ** )
             };
 
  #ifdef UNOPKG
-        dwWaitResult = WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, TRUE, INFINITE );
+        WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, TRUE, INFINITE );
  #else
         bool    bDetach = false;
         int     nOpenPipes = 2;
         do
         {
-            dwWaitResult = WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, FALSE, INFINITE );
+            DWORD dwWaitResult = WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, FALSE, INFINITE );
 
             switch ( dwWaitResult )
             {
