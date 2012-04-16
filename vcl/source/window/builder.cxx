@@ -62,99 +62,108 @@ VclBuilder::~VclBuilder()
     }
 }
 
-Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool bVertical)
+namespace
+{
+    bool extractOrientation(VclBuilder::stringmap &rMap)
+    {
+        bool bVertical = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
+        if (aFind != rMap.end())
+        {
+            bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
+            rMap.erase(aFind);
+        }
+        return bVertical;
+    }
+
+    Window * extractStockAndBuildButton(Window *pParent, VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+
+        bool bIsStock = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("use-stock")));
+        if (aFind != rMap.end())
+        {
+            bIsStock = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+
+        Window *pWindow = NULL;
+
+        if (bIsStock)
+        {
+            rtl::OString sType;
+            aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
+            if (aFind != rMap.end())
+            {
+                sType = aFind->second;
+                rMap.erase(aFind);
+            }
+
+            if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-ok")))
+                pWindow = new OKButton(pParent, nBits);
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-cancel")))
+                pWindow = new CancelButton(pParent, nBits);
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-help")))
+                pWindow = new HelpButton(pParent, nBits);
+            else
+                fprintf(stderr, "unknown stock type %s\n", sType.getStr());
+        }
+
+        if (!pWindow)
+            pWindow = new PushButton(pParent, nBits);
+        return pWindow;
+    }
+}
+
+Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, stringmap &rMap)
 {
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
-    {
         pWindow = new Dialog(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
     {
-        //    <property name="visible">True</property>
-        //    <property name="can_focus">False</property>
-        //    <property name="orientation">vertical</property>
-        //    <property name="spacing">6</property>
-        //    <property name="homogeneous">True</property>
-        if (bVertical)
+        if (extractOrientation(rMap))
             pWindow = new VclVBox(pParent);
         else
             pWindow = new VclHBox(pParent);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButtonBox")))
     {
-        if (bVertical)
+        if (extractOrientation(rMap))
             pWindow = new VclVButtonBox(pParent);
         else
             pWindow = new VclHButtonBox(pParent);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkGrid")))
-    {
-        //    <property name="row_spacing">4</property>
-        //    <property name="column_spacing">2</property>
-        //    <property name="row_homogeneous">True</property>
-        //    <property name="column_homogeneous">True</property>
         pWindow = new VclGrid(pParent);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkFrame")))
-    {
-        //    <property name="label_xalign">0</property>
-        //    <property name="shadow_type">none</property>
         pWindow = new VclFrame(pParent);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAlignment")))
-    {
-        //    <property name="label_xalign">0</property>
-        //    <property name="shadow_type">none</property>
         pWindow = new VclAlignment(pParent);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
-    {
-        pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    }
+        pWindow = extractStockAndBuildButton(pParent, rMap);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
-    {
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
-    {
         pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
-    {
         pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
-    {
         pWindow = new ListBox(pParent, WB_DROPDOWN|WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
-    {
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
-    {
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK );
-    }
     else
-    {
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
-    }
     fprintf(stderr, "for %s, created %p child of %p\n", name.getStr(), pWindow, pParent);
     return pWindow;
 }
 
 Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rMap)
 {
-    bool bVertical = false;
-    stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
-    if (aFind != rMap.end())
-    {
-        bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
-        rMap.erase(aFind);
-    }
-
-    Window *pCurrentChild = makeObject(pParent, rClass, bVertical);
+    Window *pCurrentChild = makeObject(pParent, rClass, rMap);
     if (!pCurrentChild)
         fprintf(stderr, "missing object!\n");
 

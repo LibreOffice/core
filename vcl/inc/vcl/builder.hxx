@@ -38,14 +38,14 @@ class VCL_DLLPUBLIC VclBuilder
 {
 private:
     std::vector<Window*> m_aChildren;
-    typedef std::map<rtl::OString, rtl::OString> stringmap;
 public:
     VclBuilder(Window *pParent, rtl::OUString sUIFile);
     ~VclBuilder();
     Window *get_widget_root();
+    typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
     Window *insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
-    Window *makeObject(Window *pParent, const rtl::OString &rClass, bool bVertical=false);
+    Window *makeObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
