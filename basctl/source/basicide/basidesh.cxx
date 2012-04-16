@@ -417,9 +417,9 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     else
     {
         sal_Bool bCanClose = sal_True;
-        for ( sal_uLong nWin = 0; bCanClose && ( nWin < aIDEWindowTable.size() ); nWin++ )
+        for (IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); bCanClose && (it != aIDEWindowTable.end()); ++it)
         {
-            IDEBaseWindow* pWin = aIDEWindowTable[ nWin ];
+            IDEBaseWindow* pWin = it->second;
             if ( !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
