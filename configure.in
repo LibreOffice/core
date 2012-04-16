@@ -8166,7 +8166,7 @@ if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" = "yes"; then
         AC_PATH_PROG([UUIDGEN], [uuid])
         if test -z "$UUIDGEN"; then
-            AC_MSG_ERROR([uuid is needed for dev-install])
+            AC_MSG_WARN([uuid is needed for dev-install])
         fi
     else
         # presence is already tested above in the WINDOWS_SDK_HOME check
