@@ -616,7 +616,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
                         SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
-                        SfxStringItem aReferer( SID_REFERER, UniString() );
+                        SfxStringItem aReferer( SID_REFERER, rtl::OUString());
                         SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, com::sun::star::uno::makeAny(aPasswrd) );
 
                         if ( xTargetFrame.is() )

@@ -401,8 +401,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine->EnableUndo (sal_True);
         pEditEngine->SetDefTab (sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth(
-                UniString::CreateFromAscii("XXXX"))));
+            Application::GetDefaultDevice()->GetTextWidth(rtl::OUString("XXXX"))));
 
         pEditEngine->SetControlWord(
                 (pEditEngine->GetControlWord()
@@ -410,8 +409,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
                 (~EE_CNTRL_UNDOATTRIBS) &
                 (~EE_CNTRL_PASTESPECIAL));
 
-        pEditEngine->SetWordDelimiters (
-            UniString::CreateFromAscii(" .=+-*/(){}[];\""));
+        pEditEngine->SetWordDelimiters (rtl::OUString(" .=+-*/(){}[];\""));
         pEditEngine->SetRefMapMode (MAP_PIXEL);
         pEditEngine->SetPaperSize (Size(800, 0));
         pEditEngine->EraseVirtualDevice();

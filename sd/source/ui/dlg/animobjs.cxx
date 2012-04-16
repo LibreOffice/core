@@ -919,7 +919,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             if( !nLoopCount ) // unendlich
                                 aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
                             else
-                                aLbLoopCount.SelectEntry( UniString::CreateFromInt32( nLoopCount ) );
+                                aLbLoopCount.SelectEntry(rtl::OUString::valueOf( nLoopCount ) );
                         }
 
                         // Time

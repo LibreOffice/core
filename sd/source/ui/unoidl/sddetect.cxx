@@ -335,7 +335,7 @@ SdFilterDetect::~SdFilterDetect()
                         SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
                         if ( !aStorage->GetError() )
                         {
-                            String aStreamName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "PowerPoint Document" ) );
+                            rtl::OUString aStreamName("PowerPoint Document");
                             if ( aStorage->IsStream( aStreamName ) && SvtModuleOptions().IsImpress() )
                             {
                                 String aFileName(aMedium.GetName());
