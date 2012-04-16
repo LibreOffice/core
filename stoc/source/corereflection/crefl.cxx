@@ -478,6 +478,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
 
+#ifdef DISABLE_DYNLOADING
+#define component_getFactory reflection_component_getFactory
+#endif
+
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )

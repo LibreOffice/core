@@ -2906,6 +2906,10 @@ Reference< XInterface > SAL_CALL ImplIntrospection_CreateInstance( const Referen
 
 }
 
+#ifdef DISABLE_DYNLOADING
+#define component_getFactory introspection_component_getFactory
+#endif
+
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
