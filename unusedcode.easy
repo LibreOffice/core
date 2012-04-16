@@ -758,11 +758,6 @@ oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPr
 oox::dump::RecordObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, oox::dump::String const&)
 oox::xls::BiffGroupObject::BiffGroupObject(oox::xls::WorksheetHelper const&)
 oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
-oox::xls::CondFormatRule::importCfRule(oox::xls::BiffInputStream&, int)
-oox::xls::DefinedNameBase::extractReference(com::sun::star::uno::Sequence<com::sun::star::sheet::FormulaToken> const&)
-oox::xls::ExternalLink::getCalcSheetIndex(int) const
-oox::xls::ExternalLink::parseBiffTargetUrl(rtl::OUString const&)
-oox::xls::RefSheetsModel::readBiff8Data(oox::xls::BiffInputStream&)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

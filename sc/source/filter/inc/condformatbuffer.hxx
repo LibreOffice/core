@@ -89,9 +89,6 @@ public:
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( SequenceInputStream& rStrm );
 
-    /** Imports rule settings from a CFRULE record. */
-    void                importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority );
-
     /** Creates a conditional formatting rule in the Calc document. */
     void                finalizeImport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetConditionalEntries >& rxEntries );

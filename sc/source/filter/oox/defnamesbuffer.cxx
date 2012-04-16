@@ -288,12 +288,6 @@ ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffI
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
 
-void DefinedNameBase::extractReference( const ApiTokenSequence& rTokens )
-{
-    OSL_ENSURE( (getFilterType() == FILTER_BIFF) && (getBiff() <= BIFF4), "DefinedNameBase::extractReference - unexpected call" );
-    maRefAny = getFormulaParser().extractReference( rTokens );
-}
-
 // ============================================================================
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :

@@ -484,14 +484,6 @@ FunctionLibraryType ExternalLink::getFuncLibraryType() const
     return (meLinkType == LINKTYPE_LIBRARY) ? meFuncLibType : FUNCLIB_UNKNOWN;
 }
 
-sal_Int16 ExternalLink::getCalcSheetIndex( sal_Int32 nTabId ) const
-{
-    OSL_ENSURE( meLinkType == LINKTYPE_INTERNAL, "ExternalLink::getCalcSheetIndex - invalid link type" );
-    OSL_ENSURE( (nTabId == 0) || (getFilterType() == FILTER_OOXML) || (getBiff() == BIFF8),
-        "ExternalLink::getCalcSheetIndex - invalid sheet index" );
-    return ContainerHelper::getVectorElement( maCalcSheets, nTabId, -1 );
-}
-
 sal_Int32 ExternalLink::getDocumentLinkIndex() const
 {
     OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::getDocumentLinkIndex - invalid link type" );
@@ -627,49 +619,6 @@ void ExternalLink::parseExternalReference( const Relations& rRelations, const OU
         setExternalTargetUrl( pRelation->maTarget, pRelation->maType );
 }
 
-OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
-{
-    meLinkType = LINKTYPE_UNKNOWN;
-
-    OUString aClassName, aTargetUrl, aSheetName;
-    switch( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, rBiffTargetUrl ) )
-    {
-        case BIFF_TARGETTYPE_URL:
-            if( aTargetUrl.isEmpty() )
-            {
-                meLinkType = aSheetName.isEmpty() ? LINKTYPE_SELF : LINKTYPE_INTERNAL;
-            }
-            else if( (aTargetUrl.getLength() == 1) && (aTargetUrl[ 0 ] == ':') )
-            {
-                if( getBiff() >= BIFF4 )
-                    meLinkType = LINKTYPE_ANALYSIS;
-            }
-            else if( (aTargetUrl.getLength() > 1) || (aTargetUrl[ 0 ] != ' ') )
-            {
-                setExternalTargetUrl( aTargetUrl, OOX_TARGETTYPE_EXTLINK );
-            }
-        break;
-
-        case BIFF_TARGETTYPE_SAMESHEET:
-            OSL_ENSURE( aTargetUrl.isEmpty() && aSheetName.isEmpty(), "ExternalLink::parseBiffTargetUrl - unexpected target or sheet name" );
-            meLinkType = LINKTYPE_SAME;
-        break;
-
-        case BIFF_TARGETTYPE_LIBRARY:
-            OSL_ENSURE( aSheetName.isEmpty(), "ExternalLink::parseBiffTargetUrl - unexpected sheet name" );
-            setExternalTargetUrl( aTargetUrl, OOX_TARGETTYPE_LIBRARY );
-        break;
-
-        case BIFF_TARGETTYPE_DDE_OLE:
-            setDdeOleTargetUrl( aClassName, aTargetUrl, LINKTYPE_MAYBE_DDE_OLE );
-        break;
-
-        case BIFF_TARGETTYPE_UNKNOWN:
-        break;
-    }
-    return aSheetName;
-}
-
 void ExternalLink::insertExternalSheet( const OUString& rSheetName )
 {
     OSL_ENSURE( !rSheetName.isEmpty(), "ExternalLink::insertExternalSheet - empty sheet name" );
@@ -700,13 +649,6 @@ RefSheetsModel::RefSheetsModel() :
 void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
 {
     rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
-}
-
-void RefSheetsModel::readBiff8Data( BiffInputStream& rStrm )
-{
-    mnExtRefId = rStrm.readuInt16();
-    mnTabId1 = rStrm.readInt16();
-    mnTabId2 = rStrm.readInt16();
 }
 
 // ----------------------------------------------------------------------------

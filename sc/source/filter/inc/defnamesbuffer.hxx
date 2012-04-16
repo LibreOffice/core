@@ -101,9 +101,6 @@ protected:
     /** Imports the BIFF formula from the passed stream. */
     ApiTokenSequence    importBiffFormula( sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
-    /** Tries to convert the passed token sequence to a SingleReference or ComplexReference. */
-    void                extractReference( const ApiTokenSequence& rTokens );
-
 protected:
     DefinedNameModel    maModel;            /// Model data for this defined name.
     mutable ::rtl::OUString maUpModelName;  /// Model name converted to uppercase ASCII.

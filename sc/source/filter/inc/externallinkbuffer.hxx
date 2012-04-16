@@ -257,9 +257,6 @@ public:
     /** Returns the type of the external library if this is a library link. */
     FunctionLibraryType getFuncLibraryType() const;
 
-    /** Returns the internal Calc sheet index or for the passed sheet. */
-    sal_Int16           getCalcSheetIndex( sal_Int32 nTabId = 0 ) const;
-
     /** Returns the token index of the external document. */
     sal_Int32           getDocumentLinkIndex() const;
     /** Returns the external sheet cache index or for the passed sheet. */
@@ -278,7 +275,6 @@ private:
     void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl, const ::rtl::OUString& rTargetType );
     void                setDdeOleTargetUrl( const ::rtl::OUString& rClassName, const ::rtl::OUString& rTargetUrl, ExternalLinkType eLinkType );
     void                parseExternalReference( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
-    ::rtl::OUString     parseBiffTargetUrl( const ::rtl::OUString& rBiffTargetUrl );
 
     /** Creates an external locument link and the sheet cache for the passed sheet name. */
     void                insertExternalSheet( const ::rtl::OUString& rSheetName );
@@ -322,7 +318,6 @@ struct RefSheetsModel
     explicit            RefSheetsModel();
 
     void                readBiff12Data( SequenceInputStream& rStrm );
-    void                readBiff8Data( BiffInputStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------

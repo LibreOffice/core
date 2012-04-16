@@ -395,40 +395,6 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     }
 }
 
-void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
-{
-    sal_uInt8 nType, nOperator;
-    sal_uInt16 nFmla1Size, nFmla2Size;
-    sal_uInt32 nFlags;
-    rStrm >> nType >> nOperator >> nFmla1Size >> nFmla2Size >> nFlags;
-    rStrm.skip( 2 );
-
-    static const sal_Int32 spnTypeIds[] = { XML_TOKEN_INVALID, XML_cellIs, XML_expression };
-    maModel.mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_TOKEN_INVALID );
-
-    maModel.setBiffOperator( nOperator );
-    maModel.mnPriority = nPriority;
-    maModel.mbStopIfTrue = true;
-
-    DxfRef xDxf = getStyles().createDxf( &maModel.mnDxfId );
-    xDxf->importCfRule( rStrm, nFlags );
-    xDxf->finalizeImport();
-
-    // import the formulas
-    OSL_ENSURE( (nFmla1Size > 0) || (nFmla2Size == 0), "CondFormatRule::importCfRule - missing first formula" );
-    if( nFmla1Size > 0 )
-    {
-        CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm, &nFmla1Size );
-        maModel.maFormulas.push_back( aTokens );
-        if( nFmla2Size > 0 )
-        {
-            aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm, &nFmla2Size );
-            maModel.maFormulas.push_back( aTokens );
-        }
-    }
-}
-
 void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >& rxEntries )
 {
     sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
