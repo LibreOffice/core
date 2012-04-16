@@ -858,9 +858,9 @@ bool WMAdaptor::getNetWmName()
                                         && nItems != 0
                                         )
                                     {
-                                        String aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
-                                        nVersionMajor = aMetaVersion.GetToken( 0, '.' ).ToInt32();
-                                        nVersionMinor = aMetaVersion.GetToken( 1, '.' ).ToInt32();
+                                        rtl::OUString aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                        nVersionMajor = aMetaVersion.getToken(0, '.').toInt32();
+                                        nVersionMinor = aMetaVersion.getToken(1, '.').toInt32();
                                     }
                                     if( pProperty )
                                     {

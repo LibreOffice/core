@@ -144,9 +144,9 @@ void SvxNoSpaceEdit::Modify()
 
     if ( bOnlyNumeric )
     {
-        XubString aValue = GetText();
+        rtl::OUString aValue = GetText();
 
-        if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
+        if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
             // der H�chstwert einer Portnummer ist USHRT_MAX
             ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
@@ -596,9 +596,9 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 
 IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
-    XubString aValue = pEdit->GetText();
+    rtl::OUString aValue = pEdit->GetText();
 
-    if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
+    if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
         pEdit->SetText( '0' );
     return 0;
 }
