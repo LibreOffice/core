@@ -1099,6 +1099,10 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
 Size ComboBox::CalcMinimumSize() const
 {
     Size aSz;
+
+    if (!mpImplLB)
+        return aSz;
+
     if ( !IsDropDownBox() )
     {
         aSz = mpImplLB->CalcSize( mpImplLB->GetEntryList()->GetEntryCount() );
