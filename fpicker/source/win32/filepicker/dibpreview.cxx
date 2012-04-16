@@ -270,8 +270,11 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
             int nX = abs(nWidth - cxDib) / 2;
             int nY = abs(nHeight - cyDib) / 2;
 
+#if OSL_DEBUG_LEVEL > 0
             int GDIError = GDI_ERROR;
-            GDIError = StretchDIBits(
+            GDIError =
+#endif
+            StretchDIBits(
                 hDC, nX, nY, cxDib, cyDib,
                 0, 0, cxDib, cyDib, pBits, pbmi,
                 DIB_RGB_COLORS, SRCCOPY);
