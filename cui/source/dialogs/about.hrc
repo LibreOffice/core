@@ -45,3 +45,4 @@
 #define ABOUT_BTN_LICENSE           16
 #define ABOUT_VERSION_TEXT          17
 #define ABOUT_STR_DESCRIPTION       18
+#define ABOUT_BTN_CANCEL            19

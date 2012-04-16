@@ -77,6 +77,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aCreditsButton       ( this,     ResId( ABOUT_BTN_CREDITS, *rId.GetResMgr() ) ),
     aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
     aLicenseButton       ( this,     ResId( ABOUT_BTN_LICENSE, *rId.GetResMgr() ) ),
+    aCancelButton        ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
     aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT, *rId.GetResMgr())),
@@ -109,6 +110,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aCreditsButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     aWebsiteButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     aLicenseButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+
+    aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
+    aCancelButton.Hide();
 
     FreeResource();
 

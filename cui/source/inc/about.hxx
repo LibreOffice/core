@@ -56,6 +56,7 @@ private:
     PushButton          aCreditsButton;
     PushButton          aWebsiteButton;
     PushButton          aLicenseButton;
+    CancelButton        aCancelButton;
 
     String aVersionData;
     String aVersionTextStr;
