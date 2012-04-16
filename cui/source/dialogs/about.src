@@ -71,7 +71,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_VERSION
     {
-        Text = "version %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
+        Text [ en-US ] = "version %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
     };
     String ABOUT_STR_DESCRIPTION
     {
@@ -95,7 +95,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_BUILD
     {
-        Text[ en-US ] = "(Build ID: %BUILDID)";
+        Text[ en-US ] = "(Build ID: $BUILDID)";
     };
     String ABOUT_STR_LINK_WEBSITE
     {

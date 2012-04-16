@@ -368,10 +368,10 @@ rtl::OUString AboutDialog::GetVersionString()
 
     rtl::OUString sBuildId = GetBuildId();
 
-    if (!sBuildId.isEmpty())
+    if (!(sBuildId.trim()).isEmpty())
     {
         sVersion += " ";
-        sVersion += m_sBuildStr.replaceAll("%BUILDID", sBuildId);
+        sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
     return sVersion;

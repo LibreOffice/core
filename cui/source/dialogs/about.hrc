@@ -27,21 +27,21 @@
 
 #include <sfx2/sfx.hrc>
 
-#define ABOUT_STR_BUILD     6
-#define ABOUT_STR_VERSION   7
-#define ABOUT_STR_VENDOR    8
-#define ABOUT_STR_COPYRIGHT 9
-#define ABOUT_STR_BASED 10
-#define ABOUT_STR_BASED_DERIVED 11
-#define ABOUT_STR_LINK_WEBSITE      13
-#define ABOUT_STR_LINK_CREDITS 15
-#define ABOUT_STR_LINK_LICENSE 22
-#define ABOUT_BTN_CREDITS    17
-#define ABOUT_DESCRIPTION_TEXT 18
-#define ABOUT_COPYRIGHT_TEXT 24
-#define ABOUT_COPYRIGHT_TEXT_SHADOW 25
-#define ABOUT_IMAGE_LOGO 19
-#define ABOUT_BTN_WEBSITE    20
-#define ABOUT_BTN_LICENSE    21
-#define ABOUT_VERSION_TEXT 23
-#define ABOUT_STR_DESCRIPTION 24
+#define ABOUT_STR_BUILD             1
+#define ABOUT_STR_VERSION           2
+#define ABOUT_STR_VENDOR            3
+#define ABOUT_STR_COPYRIGHT         4
+#define ABOUT_STR_BASED             5
+#define ABOUT_STR_BASED_DERIVED     6
+#define ABOUT_STR_LINK_WEBSITE      7
+#define ABOUT_STR_LINK_CREDITS      8
+#define ABOUT_STR_LINK_LICENSE      9
+#define ABOUT_BTN_CREDITS           10
+#define ABOUT_DESCRIPTION_TEXT      11
+#define ABOUT_COPYRIGHT_TEXT        12
+#define ABOUT_COPYRIGHT_TEXT_SHADOW 13
+#define ABOUT_IMAGE_LOGO            14
+#define ABOUT_BTN_WEBSITE           15
+#define ABOUT_BTN_LICENSE           16
+#define ABOUT_VERSION_TEXT          17
+#define ABOUT_STR_DESCRIPTION       18
