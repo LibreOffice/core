@@ -54,14 +54,6 @@ public:
     */
     static FontProvider& Instance (void);
 
-    /** Return a font that is scaled according to the current map mode of
-        the given device.  Repeated calls with a device, not necessarily the
-        same device, with the same map mode will return the same font.  The
-        first call with a different map mode will release the old font and
-        create a new one that is correctly scaled.
-    */
-    SharedFontPointer GetFont (const OutputDevice& rDevice);
-
     /** Call this method to tell an object to release its currently used
         font.  The next call to GetFont() will then create a new one.
         Typically called after a DataChange event when for instance a system

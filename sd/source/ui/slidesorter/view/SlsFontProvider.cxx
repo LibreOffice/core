@@ -98,35 +98,6 @@ void FontProvider::Invalidate (void)
 
 
 
-
-FontProvider::SharedFontPointer FontProvider::GetFont (const OutputDevice& rDevice)
-{
-    // Reset the font when the map mode has changed since its creation.
-    if (maMapMode != rDevice.GetMapMode())
-        maFont.reset();
-
-    if (maFont.get() == NULL)
-    {
-        // Initialize the font from the application style settings.
-        maFont.reset(new Font (Application::GetSettings().GetStyleSettings().GetAppFont()));
-        maFont->SetTransparent(sal_True);
-        maFont->SetWeight(WEIGHT_NORMAL);
-
-        // Transform the point size to pixel size.
-        MapMode aFontMapMode (MAP_POINT);
-        Size aFontSize (rDevice.LogicToPixel(maFont->GetSize(), aFontMapMode));
-
-        // Transform the font size to the logical coordinates of the device.
-        maFont->SetSize (rDevice.PixelToLogic(aFontSize));
-
-        // Remember the map mode of the given device to detect different
-        // devices or modified zoom scales on future calls.
-        maMapMode = rDevice.GetMapMode();
-    }
-
-    return maFont;
-}
-
 } } }  // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

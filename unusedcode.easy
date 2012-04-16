@@ -764,9 +764,6 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
-sd::slidesorter::controller::SelectionFunction::EventDescriptor::EventDescriptor(KeyEvent const&, sd::slidesorter::SlideSorter&)
-sd::slidesorter::view::Button::IsDown() const
-sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const

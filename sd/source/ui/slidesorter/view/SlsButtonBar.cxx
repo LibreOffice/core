@@ -924,14 +924,6 @@ Rectangle Button::GetBoundingBox (void) const
 
 
 
-bool Button::IsDown (void) const
-{
-    return mbIsActive && meState==State_Down;
-}
-
-
-
-
 void Button::SetActiveState (const bool bIsActive)
 {
     mbIsActive = bIsActive;

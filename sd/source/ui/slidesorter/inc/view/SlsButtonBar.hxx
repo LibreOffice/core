@@ -224,7 +224,6 @@ public:
     virtual Size GetSize (void) const;
     virtual Size GetSize (const IconSize eIconSize) const;
     ::rtl::OUString GetHelpText (void) const;
-    bool IsDown (void) const;
     void SetActiveState (const bool bIsActive);
     bool IsActive (void) const;
     void SetIconSize (const IconSize eIconSize);

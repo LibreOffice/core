@@ -139,9 +139,6 @@ public:
         const AcceptDropEvent& rEvent,
         const sal_Int8 nDragAction,
         SlideSorter& rSlideSorter);
-    EventDescriptor (
-        const KeyEvent& rEvent,
-        SlideSorter& rSlideSorter);
 
 private:
     /** Compute a numerical code that describes a mouse event and that can
@@ -974,32 +971,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
              rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
 }
 
-
-
-
-SelectionFunction::EventDescriptor::EventDescriptor (
-    const KeyEvent& rEvent,
-    SlideSorter& rSlideSorter)
-    : maMousePosition(),
-      maMouseModelPosition(),
-      mpHitDescriptor(),
-      mpHitPage(),
-      mnEventCode(KEY_EVENT),
-      mbIsOverButton(rSlideSorter.GetView().GetButtonBar().IsMouseOverButton()),
-      meDragMode(InsertionIndicatorHandler::MoveMode),
-      mbMakeSelectionVisible(true),
-      mbIsLeaving(false)
-{
-    model::SharedPageDescriptor pHitDescriptor (
-        rSlideSorter.GetController().GetFocusManager().GetFocusedPageDescriptor());
-    if (pHitDescriptor.get() != NULL)
-    {
-        mpHitPage = pHitDescriptor->GetPage();
-        mpHitDescriptor = pHitDescriptor;
-    }
-
-    mnEventCode |= EncodeKeyEvent(rEvent) | EncodeState();
-}
 
 
 
