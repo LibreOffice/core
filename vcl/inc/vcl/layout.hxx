@@ -317,13 +317,51 @@ public:
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
     sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
 
-class VCL_DLLPUBLIC VclFrame : public VclContainer
+class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:
-    VclFrame(Window *pParent) : VclContainer(pParent) {}
+    VclBin(Window *pParent) : VclContainer(pParent) {}
+    Window *get_child();
+    const Window *get_child() const;
+};
+
+
+class VCL_DLLPUBLIC VclFrame : public VclBin
+{
+public:
+    VclFrame(Window *pParent) : VclBin(pParent) {}
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
+};
+
+class VCL_DLLPUBLIC VclAlignment : public VclBin
+{
+public:
+    VclAlignment(Window *pParent)
+        : VclBin(pParent)
+        , m_nBottomPadding(0)
+        , m_nLeftPadding(0)
+        , m_nRightPadding(0)
+        , m_nTopPadding(0)
+        , m_fXAlign(0.0)
+        , m_fXScale(1.0)
+        , m_fYAlign(0.0)
+        , m_fYScale(1.0)
+    {
+    }
+protected:
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
+private:
+    sal_Int32 m_nBottomPadding;
+    sal_Int32 m_nLeftPadding;
+    sal_Int32 m_nRightPadding;
+    sal_Int32 m_nTopPadding;
+    float m_fXAlign;
+    float m_fXScale;
+    float m_fYAlign;
+    float m_fYScale;
 };
 
 // retro-fitting utilities //

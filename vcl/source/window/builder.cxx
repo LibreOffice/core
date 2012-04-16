@@ -102,6 +102,12 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
         //    <property name="shadow_type">none</property>
         pWindow = new VclFrame(pParent);
     }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAlignment")))
+    {
+        //    <property name="label_xalign">0</property>
+        //    <property name="shadow_type">none</property>
+        pWindow = new VclAlignment(pParent);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
     {
         pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);

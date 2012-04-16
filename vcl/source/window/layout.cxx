@@ -511,6 +511,18 @@ void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 n
     rWidget.setChildProperty<sal_Int32>(sHeight, nHeight);
 }
 
+const Window *VclBin::get_child() const
+{
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    return pWindowImpl->mpLastChild;
+}
+
+Window *VclBin::get_child()
+{
+    return const_cast<Window*>(const_cast<const VclBin*>(this)->get_child());
+}
+
 //To-Do, hook a DecorationView into VclFrame ?
 
 Size VclFrame::calculateRequisition() const
@@ -519,8 +531,8 @@ Size VclFrame::calculateRequisition() const
 
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    Window *pChild = pWindowImpl->mpLastChild;
-    Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
+    const Window *pChild = get_child();
+    const Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
 
     if (pChild && pChild->IsVisible())
         aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -544,7 +556,7 @@ void VclFrame::setAllocation(const Size &rAllocation)
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     //The label widget is the last (of two) children
-    Window *pChild = pWindowImpl->mpLastChild;
+    Window *pChild = get_child();
     Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
 
     if (pLabel && pLabel->IsVisible())
@@ -562,11 +574,42 @@ void VclFrame::setAllocation(const Size &rAllocation)
         pChild->SetPosSizePixel(aChildPos, aAllocation);
 }
 
+Size VclAlignment::calculateRequisition() const
+{
+    Size aRet(m_nLeftPadding + m_nRightPadding,
+        m_nTopPadding + m_nBottomPadding);
+
+    const Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+    {
+        Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aRet.Width() += aChildSize.Width();
+        aRet.Height() += aChildSize.Height();
+    }
+
+    return aRet;
+}
+
+void VclAlignment::setAllocation(const Size &rAllocation)
+{
+    Window *pChild = get_child();
+    if (!pChild || !pChild->IsVisible())
+        return;
+
+    Point aChildPos(m_nLeftPadding, m_nTopPadding);
+
+    Size aAllocation;
+    aAllocation.Width() = rAllocation.Width() - (m_nLeftPadding + m_nRightPadding);
+    aAllocation.Height() = rAllocation.Height() - (m_nTopPadding + m_nBottomPadding);
+
+    pChild->SetPosSizePixel(aChildPos, aAllocation);
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;
 
-    for (Window* pChild = rWindow.GetWindow(WINDOW_FIRSTCHILD); pChild;
+    for (const Window* pChild = rWindow.GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
