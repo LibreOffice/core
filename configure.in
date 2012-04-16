@@ -9202,6 +9202,7 @@ dnl ===================================================================
 
 KDE4_CFLAGS=""
 KDE4_LIBS=""
+QMAKE4="qmake"
 MOC4="moc"
 KDE_GLIB_CFLAGS=""
 KDE_GLIB_LIBS=""
@@ -9271,6 +9272,18 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
         AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
     fi
 
+    dnl Check for qmake
+    AC_PATH_PROG( QMAKEQT4, qmake-qt4, no, [`dirname $qt_lib_dir`/bin:$QT4DIR/bin:$PATH] )
+    QMAKE4="$QMAKEQT4"
+    if test "$QMAKE4" = "no" ; then
+        AC_PATH_PROG( QMAKE4, qmake, no, [`dirname $qt_lib_dir`/bin:$QT4DIR/bin:$PATH] )
+        if test "$QMAKE4" = "no" ; then
+            AC_MSG_ERROR([Qmake not found.  Please specify
+the root of your Qt installation by exporting QT4DIR before running "configure".])
+        fi
+    fi
+
+    qt_libdirs="`$QMAKE4 -query QT_INSTALL_LIBS` $qt_libdirs"
     AC_MSG_CHECKING([for Qt4 libraries])
     qt_lib_dir="no"
     for lib_dir in $qt_libdirs; do
