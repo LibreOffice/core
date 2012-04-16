@@ -86,7 +86,7 @@ EditHTMLParser::~EditHTMLParser()
 
 SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
 {
-    DBG_ASSERT( pImpEE, "CallParser: ImpEditEngine ?!" );
+    DBG_ASSERT(pEE, "CallParser: ImpEditEngine ?!");
     mpEditEngine = pEE;
     SvParserState _eState = SVPAR_NOTSTARTED;
     if ( mpEditEngine )

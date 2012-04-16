@@ -2573,7 +2573,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
 
         ContentNode* pNode = aSel.Max().GetNode();
         sal_uInt16 nIndex = aSel.Max().GetIndex();
-        EdtAutoCorrDoc aAuto( this, pNode, nIndex, c );
+        EdtAutoCorrDoc aAuto(pEditEngine, pNode, nIndex, c);
         pAutoCorrect->AutoCorrect(
             aAuto, pNode->GetString(), nIndex, c, !bOverwrite, pFrameWin );
         aSel.Max().SetIndex( aAuto.GetCursor() );

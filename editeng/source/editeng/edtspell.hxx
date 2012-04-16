@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 
 class EditView;
-class ImpEditEngine;
+class EditEngine;
 class ContentNode;
 
 class EditSpellWrapper : public SvxSpellWrapper
@@ -136,7 +136,7 @@ public:
 
 class EdtAutoCorrDoc : public SvxAutoCorrDoc
 {
-    ImpEditEngine*  pImpEE;
+    EditEngine* mpEditEngine;
     ContentNode*    pCurNode;
     sal_uInt16          nCursor;
 
@@ -147,8 +147,8 @@ protected:
     void            ImplStartUndoAction();
 
 public:
-                    EdtAutoCorrDoc( ImpEditEngine* pImpEE, ContentNode* pCurNode, sal_uInt16 nCrsr, xub_Unicode cIns );
-                    ~EdtAutoCorrDoc();
+    EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_uInt16 nCrsr, sal_Unicode cIns);
+    ~EdtAutoCorrDoc();
 
     virtual sal_Bool    Delete( sal_uInt16 nStt, sal_uInt16 nEnd );
     virtual sal_Bool    Insert( sal_uInt16 nPos, const String& rTxt );

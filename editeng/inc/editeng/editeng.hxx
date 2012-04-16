@@ -144,7 +144,6 @@ private:
     EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetNextVisPortion(const ParaPortion* pCurPortion) const;
-    EDITENG_DLLPRIVATE sal_uInt16 GetScriptType(const EditSelection& rSel) const;
 
     EDITENG_DLLPRIVATE com::sun::star::uno::Reference<
         com::sun::star::datatransfer::XTransferable>
@@ -228,6 +227,7 @@ public:
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
     sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
+    LanguageType    GetLanguage(const EditPaM& rPaM) const;
     LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const;
 
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
@@ -310,6 +310,7 @@ public:
     ::svl::IUndoManager&
                     GetUndoManager();
     void            UndoActionStart( sal_uInt16 nId );
+    void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd( sal_uInt16 nId );
     sal_Bool        IsInUndo();
 
@@ -542,6 +543,10 @@ public:
     const SfxItemSet& GetBaseParaAttribs(sal_uInt16 nPara) const;
     void SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet);
     void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
+
+    String GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
+
+    sal_uInt16 GetScriptType(const EditSelection& rSel) const;
 };
 
 #endif // _MyEDITENG_HXX

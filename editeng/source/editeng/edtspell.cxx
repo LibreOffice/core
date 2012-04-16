@@ -574,27 +574,24 @@ sal_Bool WrongList::DbgIsBuggy() const
 
 //////////////////////////////////////////////////////////////////////
 
-EdtAutoCorrDoc::EdtAutoCorrDoc( ImpEditEngine* pE, ContentNode* pN,
-            sal_uInt16 nCrsr, xub_Unicode cIns )
-{
-    pImpEE = pE;
-    pCurNode = pN;
-    nCursor = nCrsr;
-
-    bUndoAction = sal_False;
-    bAllowUndoAction = cIns ? sal_True : sal_False;
-}
+EdtAutoCorrDoc::EdtAutoCorrDoc(
+    EditEngine* pE, ContentNode* pN, sal_uInt16 nCrsr, sal_Unicode cIns) :
+    mpEditEngine(pE),
+    pCurNode(pN),
+    nCursor(nCrsr),
+    bAllowUndoAction(cIns != 0),
+    bUndoAction(false) {}
 
 EdtAutoCorrDoc::~EdtAutoCorrDoc()
 {
     if ( bUndoAction )
-        pImpEE->UndoActionEnd( EDITUNDO_INSERT );
+        mpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
 }
 
 sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
 {
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
-    pImpEE->ImpDeleteSelection( aSel );
+    mpEditEngine->DeleteSelection(aSel);
     SAL_WARN_IF(nCursor < nEnd, "editeng",
             "Cursor in the heart of the action?!");
     nCursor -= ( nEnd-nStt );
@@ -605,7 +602,7 @@ sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
 sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const String& rTxt )
 {
     EditSelection aSel = EditPaM( pCurNode, nPos );
-    pImpEE->ImpInsertText( aSel, rTxt );
+    mpEditEngine->InsertText(aSel, rTxt);
     SAL_WARN_IF(nCursor < nPos, "editeng",
             "Cursor in the heart of the action?!");
     nCursor = nCursor + rTxt.Len();
@@ -630,8 +627,9 @@ sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength
         nEnd = pCurNode->Len();
 
     // #i5925# First insert new text behind to be deleted text, for keeping attributes.
-    pImpEE->ImpInsertText( EditSelection( EditPaM( pCurNode, nEnd ) ), rTxt );
-    pImpEE->ImpDeleteSelection( EditSelection( EditPaM( pCurNode, nPos ), EditPaM( pCurNode, nEnd ) ) );
+    mpEditEngine->InsertText(EditSelection(EditPaM(pCurNode, nEnd)), rTxt);
+    mpEditEngine->DeleteSelection(
+        EditSelection(EditPaM(pCurNode, nPos), EditPaM(pCurNode, nEnd)));
 
     if ( nPos == nCursor )
         nCursor = nCursor + rTxt.Len();
@@ -647,7 +645,7 @@ sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength
 sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
             sal_uInt16 nSlotId, SfxPoolItem& rItem )
 {
-    SfxItemPool* pPool = &pImpEE->GetEditDoc().GetItemPool();
+    SfxItemPool* pPool = &mpEditEngine->GetEditDoc().GetItemPool();
     while ( pPool->GetSecondaryPool() &&
             !pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")) )
     {
@@ -659,13 +657,13 @@ sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
     {
         rItem.SetWhich( nWhich );
 
-        SfxItemSet aSet( pImpEE->GetEmptyItemSet() );
+        SfxItemSet aSet = mpEditEngine->GetEmptyItemSet();
         aSet.Put( rItem );
 
         EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
         aSel.Max().SetIndex( nEnd );    // ???
-        pImpEE->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
-        bAllowUndoAction = sal_False;
+        mpEditEngine->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
+        bAllowUndoAction = false;
     }
     return sal_True;
 }
@@ -675,23 +673,23 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
 {
     // Turn the Text into a command field ...
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
-    String aText = pImpEE->GetSelected( aSel );
-    aSel = pImpEE->ImpDeleteSelection( aSel );
+    String aText = mpEditEngine->GetSelected(aSel);
+    aSel = mpEditEngine->DeleteSelection(aSel);
     SAL_WARN_IF(nCursor < nEnd, "editeng",
             "Cursor in the heart of the action?!");
     nCursor -= ( nEnd-nStt );
     SvxFieldItem aField( SvxURLField( rURL, aText, SVXURLFORMAT_REPR ),
                                       EE_FEATURE_FIELD  );
-    pImpEE->InsertField( aSel, aField );
+    mpEditEngine->InsertField(aSel, aField);
     nCursor++;
-    pImpEE->UpdateFields();
-    bAllowUndoAction = sal_False;
+    mpEditEngine->UpdateFieldsOnly();
+    bAllowUndoAction = false;
     return sal_True;
 }
 
 sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
 {
-    sal_uInt16 nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
+    sal_uInt16 nScriptType = mpEditEngine->GetScriptType( EditPaM( pCurNode, nStt ) );
     sal_uInt16 nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
 
     const CharAttribList::AttribsType& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
@@ -720,18 +718,18 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 
     bAllowUndoAction = sal_False;   // Not anymore ...
 
-    EditDoc& rNodes = pImpEE->GetEditDoc();
+    EditDoc& rNodes = mpEditEngine->GetEditDoc();
     sal_uInt16 nPos = rNodes.GetPos( pCurNode );
 
     // Special case: Bullet => Paragraph start => simply return NULL...
     const SfxBoolItem& rBulletState = (const SfxBoolItem&)
-            pImpEE->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
+            mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
     sal_Bool bBullet = rBulletState.GetValue() ? sal_True : sal_False;
-    if ( !bBullet && ( pImpEE->aStatus.GetControlWord() & EE_CNTRL_OUTLINER ) )
+    if ( !bBullet && (mpEditEngine->GetControlWord() & EE_CNTRL_OUTLINER) )
     {
         // The Outliner has still a Bullet at Level 0.
         const SfxInt16Item& rLevel = (const SfxInt16Item&)
-                pImpEE->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL );
+                mpEditEngine->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL );
         if ( rLevel.GetValue() == 0 )
             bBullet = sal_True;
     }
@@ -763,18 +761,18 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
     if( !aShort.Len() )
         return bRet;
 
-    LanguageType eLang = pImpEE->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );
+    LanguageType eLang = mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(pCurNode->GetString(), rSttPos, nEndPos, *this, eLang);
     if( pFnd && pFnd->IsTextOnly() )
     {
         // then replace
         EditSelection aSel( EditPaM( pCurNode, rSttPos ),
                             EditPaM( pCurNode, nEndPos ) );
-        aSel = pImpEE->ImpDeleteSelection( aSel );
+        aSel = mpEditEngine->DeleteSelection(aSel);
         SAL_WARN_IF(nCursor < nEndPos, "editeng",
                 "Cursor in the heart of the action?!");
         nCursor -= ( nEndPos-rSttPos );
-        pImpEE->ImpInsertText( aSel, pFnd->GetLong() );
+        mpEditEngine->InsertText(aSel, pFnd->GetLong());
         nCursor = nCursor + pFnd->GetLong().Len();
         if( ppPara )
             *ppPara = &pCurNode->GetString();
@@ -786,14 +784,14 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
 
 LanguageType EdtAutoCorrDoc::GetLanguage( sal_uInt16 nPos, sal_Bool ) const
 {
-    return pImpEE->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
+    return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
 }
 
 void EdtAutoCorrDoc::ImplStartUndoAction()
 {
-    sal_uInt16 nPara = pImpEE->GetEditDoc().GetPos( pCurNode );
+    sal_uInt16 nPara = mpEditEngine->GetEditDoc().GetPos( pCurNode );
     ESelection aSel( nPara, nCursor, nPara, nCursor );
-    pImpEE->UndoActionStart( EDITUNDO_INSERT, aSel );
+    mpEditEngine->UndoActionStart( EDITUNDO_INSERT, aSel );
     bUndoAction = sal_True;
     bAllowUndoAction = sal_False;
 }

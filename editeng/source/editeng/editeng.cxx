@@ -153,6 +153,11 @@ void EditEngine::UndoActionStart( sal_uInt16 nId )
         pImpEditEngine->UndoActionStart( nId );
 }
 
+void EditEngine::UndoActionStart(sal_uInt16 nId, const ESelection& rSel)
+{
+    pImpEditEngine->UndoActionStart(nId, rSel);
+}
+
 void EditEngine::UndoActionEnd( sal_uInt16 nId )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -509,6 +514,11 @@ sal_uInt16 EditEngine::GetScriptType( const ESelection& rSelection ) const
     return pImpEditEngine->GetScriptType( aSel );
 }
 
+LanguageType EditEngine::GetLanguage(const EditPaM& rPaM) const
+{
+    return pImpEditEngine->GetLanguage(rPaM);
+}
+
 LanguageType EditEngine::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -857,6 +867,11 @@ void EditEngine::SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet)
 void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial)
 {
     pImpEditEngine->SetAttribs(rSel, rSet, nSpecial);
+}
+
+String EditEngine::GetSelected(const EditSelection& rSel, const LineEnd eParaSep) const
+{
+    return pImpEditEngine->GetSelected(rSel, eParaSep);
 }
 
 void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)
