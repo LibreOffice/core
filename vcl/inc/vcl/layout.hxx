@@ -63,6 +63,23 @@ public:
     {
         Show();
     }
+    void set_spacing(int nSpacing)
+    {
+        m_nSpacing = nSpacing;
+    }
+    int get_spacing() const
+    {
+        return m_nSpacing;
+    }
+    void set_homogeneous(bool bHomogeneous)
+    {
+        m_bHomogeneous = bHomogeneous;
+    }
+    bool get_homogeneous() const
+    {
+        return m_bHomogeneous;
+    }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -312,6 +329,7 @@ public:
     {
         return m_nColumnSpacing;
     }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
@@ -324,7 +342,6 @@ public:
     Window *get_child();
     const Window *get_child() const;
 };
-
 
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
@@ -364,6 +381,11 @@ private:
     float m_fYAlign;
     float m_fYScale;
 };
+
+/*
+ * @return true if rValue is "True", "true", "1", etc.
+ */
+bool toBool(const rtl::OString &rValue);
 
 // retro-fitting utilities //
 

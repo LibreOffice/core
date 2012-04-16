@@ -212,6 +212,17 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 }
 
+bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("spacing")))
+        set_spacing(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("homogeneous")))
+        set_homogeneous(toBool(rValue));
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
+}
+
 #define DEFAULT_CHILD_INTERNAL_PAD_X 4
 #define DEFAULT_CHILD_INTERNAL_PAD_Y 0
 #define DEFAULT_CHILD_MIN_WIDTH 85
@@ -499,6 +510,26 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
+bool toBool(const rtl::OString &rValue)
+{
+    return (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
+}
+
+bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-spacing")))
+        set_row_spacing(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-spacing")))
+        set_row_spacing(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-homogeneous")))
+        set_row_homogeneous(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-homogeneous")))
+        set_column_homogeneous(toBool(rValue));
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
+}
+
 void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
 {
     rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
@@ -607,7 +638,6 @@ void VclAlignment::setAllocation(const Size &rAllocation)
 
 bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    fprintf(stderr, "VclAlignment::set_property %s %s\n", rKey.getStr(), rValue.getStr());
     if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("bottom-padding")))
         m_nBottomPadding = rValue.toInt32();
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-padding")))
