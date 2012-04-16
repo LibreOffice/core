@@ -61,7 +61,7 @@ namespace /* private */
     const size_t MAX_FILETITLE_BUFF_SIZE = 32000;
     const size_t MAX_FILTER_BUFF_SIZE    = 4096;
 
-    const LPTSTR CURRENT_INSTANCE = TEXT("CurrInst");
+    const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 
     //------------------------------------------
     // find an appropriate parent window
