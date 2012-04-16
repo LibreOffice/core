@@ -796,12 +796,6 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
     {
     }
 
-    if( bCont )
-    {
-        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
-            nRet = STYLE_SYMBOLS_TANGO;
-    }
-
     // falback to any existing style
     if ( ! CheckSymbolStyle (nRet) )
     {
