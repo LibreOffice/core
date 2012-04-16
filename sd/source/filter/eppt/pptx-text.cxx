@@ -119,7 +119,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
         sal_Bool bSymbol = sal_False;
 
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( rtl::OUString( "CharFontCharSet" ), sal_False ) )
         {
             sal_Int16 nCharset = 0;
             mAny >>= nCharset;
@@ -228,7 +228,7 @@ void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
 void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue )
 {
 
-    sal_Bool bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue );
+    sal_Bool bOk = ImplGetPropertyValue( rtl::OUString( "CharFontName" ), bGetPropStateValue );
     meFontName = ePropState;
     if ( bOk )
     {
@@ -238,11 +238,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         if ( mnFont == nCount )
         {
             FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( rtl::OUString( "CharFontCharSet" ), sal_False ) )
                 mAny >>= rFontDesc.CharSet;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamily" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( rtl::OUString( "CharFontFamily" ), sal_False ) )
                 mAny >>= rFontDesc.Family;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitch" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( rtl::OUString( "CharFontPitch" ), sal_False ) )
                 mAny >>= rFontDesc.Pitch;
         }
     }
@@ -255,7 +255,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
     {
-        bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue );
+        bOk = ImplGetPropertyValue( rtl::OUString( "CharFontNameAsian" ), bGetPropStateValue );
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
@@ -265,18 +265,18 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontCharSetAsian" ), sal_False ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontFamilyAsian" ), sal_False ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontPitchAsian" ), sal_False ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
     }
     else
     {
-        bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameComplex" ) ), bGetPropStateValue );
+        bOk = ImplGetPropertyValue( rtl::OUString( "CharFontNameComplex" ), bGetPropStateValue );
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
@@ -286,11 +286,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontCharSetComplex" ), sal_False ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontFamilyComplex" ), sal_False ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( rtl::OUString( "CharFontPitchComplex" ), sal_False ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -301,26 +301,26 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     {
         case com::sun::star::i18n::ScriptType::ASIAN :
         {
-            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightAsian" ) );
-            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightAsian" ) );
-            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleAsian" ) );
-            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureAsian" ) );
+            aCharHeightName  = "CharHeightAsian";
+            aCharWeightName  = "CharWeightAsian";
+            aCharLocaleName  = "CharLocaleAsian";
+            aCharPostureName = "CharPostureAsian";
             break;
         }
         case com::sun::star::i18n::ScriptType::COMPLEX :
         {
-            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightComplex" ) );
-            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) );
-            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleComplex" ) );
-            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) );
+            aCharHeightName  = "CharHeightComplex";
+            aCharWeightName  = "CharWeightComplex";
+            aCharLocaleName  = "CharLocaleComplex";
+            aCharPostureName = "CharPostureComplex";
             break;
         }
         default:
         {
-            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
-            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) );
-            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
-            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) );
+            aCharHeightName  = "CharHeight";
+            aCharWeightName  = "CharWeight";
+            aCharLocaleName  = "CharLocale";
+            aCharPostureName = "CharPosture";
             break;
         }
     }
@@ -371,7 +371,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         }
     }
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "CharUnderline" ), bGetPropStateValue ) )
     {
         sal_Int16 nVal(0);
         mAny >>= nVal;
@@ -386,7 +386,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 4;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "CharShadowed" ), bGetPropStateValue ) )
     {
         sal_Bool bBool(sal_False);
         mAny >>= bBool;
@@ -396,7 +396,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "CharRelief" ), bGetPropStateValue ) )
     {
         sal_Int16 nVal(0);
         mAny >>= nVal;
@@ -406,7 +406,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 512;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "CharColor" ), bGetPropStateValue ) )
     {
         sal_uInt32 nSOColor = *( (sal_uInt32*)mAny.getValue() );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
@@ -416,7 +416,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     meCharColor = ePropState;
 
     mnCharEscapement = 0;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharEscapement" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "CharEscapement" ), bGetPropStateValue ) )
     {
         mAny >>= mnCharEscapement;
         if ( mnCharEscapement > 100 )
@@ -487,7 +487,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextPortionType" ) ), sal_True ) )
+    if ( GetPropertyValue( aAny, rXPropSet, rtl::OUString( "TextPortionType" ), sal_True ) )
     {
         String  aTextFieldType( *(::rtl::OUString*)aAny.getValue() );
         if ( aTextFieldType == String( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) ) )
@@ -506,13 +506,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             String aFieldKind( aXTextField->getPresentation( sal_True ) );
                             if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
                                     sal_Bool bBool = sal_False;
                                     aAny >>= bBool;
                                     if ( !bBool )  // Fixed DateFields gibt es in PPT nicht
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "Format" ) ), sal_True )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
@@ -534,7 +534,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "URL" ) ), sal_True )
                                     rURL = String( *(::rtl::OUString*)aAny.getValue() );
                                 nRetValue = 4 << 28;
                             }
@@ -548,13 +548,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Time" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
                                     sal_Bool bBool = sal_False;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
@@ -572,13 +572,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtTime" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
                                     sal_Bool bBool = sal_False;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "Format" ) ), sal_True )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
@@ -785,23 +785,23 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "ParaLeftMargin" ) ) )
     {
         sal_Int32 nVal(0);
         if ( aAny >>= nVal )
             nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
     }
-    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaFirstLineIndent" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "ParaFirstLineIndent" ) ) )
     {
         if ( aAny >>= nBulletOfs )
             nBulletOfs = static_cast< sal_Int32 >( nBulletOfs / ( 2540.0 / 576 ) + 0.5 );
     }
-    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsNumber" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "NumberingIsNumber" ) ) )
         aAny >>= bNumberingIsNumber;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > aXIndexReplace;
 
-    if ( bIsBullet && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ), bGetPropStateValue ) )
+    if ( bIsBullet && ImplGetPropertyValue( rtl::OUString( "NumberingRules" ), bGetPropStateValue ) )
     {
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
@@ -1088,10 +1088,10 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     }
     ImplGetNumberingLevel( rBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabStops" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaTabStops" ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
     sal_Int16 eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
-    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
+    if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "ParaAdjust" ), bGetPropStateValue ) )
         aAny >>= eTextAdjust;
     switch ( (::com::sun::star::style::ParagraphAdjust)eTextAdjust )
     {
@@ -1111,7 +1111,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     }
     meTextAdjust = ePropState;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaLineSpacing" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaLineSpacing" ), bGetPropStateValue ) )
     {
         ::com::sun::star::style::LineSpacing aLineSpacing
             = *( (::com::sun::star::style::LineSpacing*)mAny.getValue() );
@@ -1135,30 +1135,30 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     }
     meLineSpacing = ePropState;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaBottomMargin" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaBottomMargin" ), bGetPropStateValue ) )
     {
         double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTopMargin" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaTopMargin" ), bGetPropStateValue ) )
     {
         double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaIsForbiddenRules" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaIsForbiddenRules" ), bGetPropStateValue ) )
         mAny >>= mbForbiddenRules;
     meForbiddenRules = ePropState;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaIsHangingPunctuation" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "ParaIsHangingPunctuation" ), bGetPropStateValue ) )
         mAny >>= mbParagraphPunctation;
     meParagraphPunctation = ePropState;
 
     mnBiDi = 0;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( rtl::OUString( "WritingMode" ), bGetPropStateValue ) )
     {
         sal_Int16 nWritingMode = 0;
         mAny >>= nWritingMode;
@@ -1346,7 +1346,7 @@ FontCollection::FontCollection() :
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xMSF = ::comphelper::getProcessServiceFactory();
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ) );
+        xInterface = xMSF->createInstance( "com.sun.star.i18n.BreakIterator" );
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );

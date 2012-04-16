@@ -1168,7 +1168,7 @@ void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeExc
 
 OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdStyleSheetPool") );
+    return OUString( "SdStyleSheetPool" );
 }
 
 // --------------------------------------------------------------------

@@ -926,7 +926,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const rtl::OUString& rPreset, sal_uIn
     sal_uInt32 nPresetId = 0;
     bPresetId = sal_False;
 
-    if ( rPreset.match( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ppt_" ) ), 0 ) )
+    if ( rPreset.match( rtl::OUString( "ppt_" ), 0 ) )
     {
     sal_Int32 nLast = rPreset.lastIndexOf( '_' );
     if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
@@ -1445,26 +1445,26 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     {
         sal_Int32 nColor = 0;
         Sequence< double > aHSL( 3 );
-        rtl::OUString aP( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+        rtl::OUString aP( "," );
         if ( rSourceValue >>= aHSL )
         {
-            aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hsl(" ) );
+            aDest += "hsl(";
             aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
             aDest += aP;
             aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
             aDest += aP;
             aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
-            aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+            aDest += ")";
         }
         else if ( rSourceValue >>= nColor )
         {
-            aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "rgb(" ) );
+            aDest += "rgb(";
             aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)nColor ) );
             aDest += aP;
             aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 8 ) ) );
             aDest += aP;
             aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 16 ) ) );
-            aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+            aDest += ")";
         }
     }
     else if ( rAttributeName == "FillStyle" )
@@ -1473,9 +1473,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= eFillStyle )
         {
             if ( eFillStyle == ::com::sun::star::drawing::FillStyle_NONE )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "none" ) );    // ?
+                aDest += "none";    // ?
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "solid" ) );
+                aDest += "solid";
         }
     }
     else if ( rAttributeName == "LineStyle" )
@@ -1484,9 +1484,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= eLineStyle )
         {
             if ( eLineStyle == ::com::sun::star::drawing::LineStyle_NONE )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+                aDest += "false";
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+                aDest += "true";
         }
     }
     else if ( rAttributeName == "CharWeight" )
@@ -1495,9 +1495,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= fFontWeight )
         {
             if ( fFontWeight == com::sun::star::awt::FontWeight::BOLD )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bold" ) );
+                aDest += "bold";
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );
+                aDest += "normal";
         }
     }
     else if ( rAttributeName == "CharUnderline" )
@@ -1506,9 +1506,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= nFontUnderline )
         {
             if ( nFontUnderline == com::sun::star::awt::FontUnderline::NONE )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+                aDest += "false";
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+                aDest += "true";
         }
     }
     else if ( rAttributeName == "CharPosture" )
@@ -1517,9 +1517,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= eFontSlant )
         {
             if ( eFontSlant == com::sun::star::awt::FontSlant_ITALIC )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "italic" ) );
+                aDest += "italic";
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );  // ?
+                aDest += "normal";  // ?
         }
     }
     else if ( rAttributeName == "Visibility" )
@@ -1528,9 +1528,9 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= bVisible )
         {
             if ( bVisible )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "visible" ) );
+                aDest += "visible";
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hidden" ) );
+                aDest += "hidden";
         }
     }
     Any aRet;
@@ -1703,7 +1703,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
             {
                 if( nForceAttributeNames == 1 )
                 {
-                    aAttributeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "r" ));
+                    aAttributeName = "r";
                 }
             }
             sal_Int32 nIndex = 0;

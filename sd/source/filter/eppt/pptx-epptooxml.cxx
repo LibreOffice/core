@@ -357,7 +357,7 @@ bool PowerPointExport::exportDocument() throw()
     mXModel.set( getModel(), UNO_QUERY );
     mXStatusIndicator.set( getStatusIndicator(), UNO_QUERY );
 
-    rtl::OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    rtl::OUString sBaseURI( "BaseURI");
     std::vector< PropertyValue > aProperties;
     PropertyValue aProperty;
     aProperty.Name = sBaseURI;
@@ -391,7 +391,7 @@ bool PowerPointExport::exportDocument() throw()
 
 ::oox::ole::VbaProject* PowerPointExport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Impress" ) );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
 }
 
 void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropertySet > rXPropSet )
@@ -446,7 +446,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
       </p:grpSpPr>"
 
 #define GETA(propName) \
-    ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( #propName ) ) )
+    ImplGetPropertyValue( mXPagePropSet, rtl::OUString( #propName ) )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
@@ -2123,7 +2123,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    if( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) ) &&
+    if( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) &&
     ( mAny >>= aXBackgroundPropSet ) )
     ImplWriteBackground( pFS, aXBackgroundPropSet );
 
@@ -2162,16 +2162,14 @@ sal_Bool PowerPointExport::ImplCreateMainNotes()
     return sal_True;
 }
 
-#define IMPL_NAME "com.sun.star.comp.Impress.oox.PowerPointExport"
-
 OUString SAL_CALL PowerPointExport_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( IMPL_NAME );
+    return OUString( "com.sun.star.comp.Impress.oox.PowerPointExport" );
 }
 
 uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.ooxpptx" );
+    const OUString aServiceName( "com.sun.star.comp.ooxpptx" );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

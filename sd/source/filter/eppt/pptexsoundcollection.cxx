@@ -46,7 +46,7 @@ ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
         ::ucbhelper::Content aCnt( aSoundURL,
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         sal_Int64 nVal = 0;
-        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
+        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( "Size" ) ) );
         nFileSize = (sal_uInt32)nVal;
     }
     catch( ::com::sun::star::uno::Exception& )
