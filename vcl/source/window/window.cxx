@@ -9673,4 +9673,53 @@ Size Window::get_preferred_size() const
     return aRet;
 }
 
+bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
+        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
+    {
+        bool bIsVisible = (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
+        Show(bIsVisible);
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
+
+        float f = rValue.toFloat();
+        if (f == 0.0)
+            nBits |= WB_LEFT;
+        else if (f == 1.0)
+            nBits |= WB_RIGHT;
+        else if (f == 0.5)
+            nBits |= WB_CENTER;
+
+        SetStyle(nBits);
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
+
+        float f = rValue.toFloat();
+        if (f == 0.0)
+            nBits |= WB_TOP;
+        else if (f == 1.0)
+            nBits |= WB_BOTTOM;
+        else if (f == 0.5)
+            nBits |= WB_CENTER;
+
+        SetStyle(nBits);
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
+        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else
+    {
+        fprintf(stderr, "unhandled property %s\n", rKey.getStr());
+        return false;
+    }
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

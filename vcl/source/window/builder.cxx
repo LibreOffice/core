@@ -149,13 +149,14 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
     bool bVertical = false;
     stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
     if (aFind != rMap.end())
+    {
         bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
+        rMap.erase(aFind);
+    }
 
     Window *pCurrentChild = makeObject(pParent, rClass, bVertical);
     if (!pCurrentChild)
-    {
         fprintf(stderr, "missing object!\n");
-    }
 
     if (pCurrentChild)
     {
@@ -165,56 +166,17 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
         {
             const rtl::OString &rKey = aI->first;
             const rtl::OString &rValue = aI->second;
-            if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
-                pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
-            {
-                bool bIsVisible = (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
-                pCurrentChild->Show(bIsVisible);
-            }
-            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
-            {
-                WinBits nBits = pCurrentChild->GetStyle();
-                nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
-
-                float f = rValue.toFloat();
-                if (f == 0.0)
-                    nBits |= WB_LEFT;
-                else if (f == 1.0)
-                    nBits |= WB_RIGHT;
-                else if (f == 0.5)
-                    nBits |= WB_CENTER;
-
-                pCurrentChild->SetStyle(nBits);
-            }
-            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
-            {
-                WinBits nBits = pCurrentChild->GetStyle();
-                nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
-
-                float f = rValue.toFloat();
-                if (f == 0.0)
-                    nBits |= WB_TOP;
-                else if (f == 1.0)
-                    nBits |= WB_BOTTOM;
-                else if (f == 0.5)
-                    nBits |= WB_CENTER;
-
-                pCurrentChild->SetStyle(nBits);
-            }
-            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
-                pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-            else
-                fprintf(stderr, "unhandled property %s\n", rKey.getStr());
+            pCurrentChild->set_property(rKey, rValue);
         }
     }
+
+    rMap.clear();
 
     if (!pCurrentChild)
     {
         fprintf(stderr, "missing object!\n");
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back();
     }
-    rMap.clear();
     return pCurrentChild;
 }
 
@@ -428,10 +390,11 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
         {
             name = reader.getAttributeValue(false);
             rtl::OString sProperty(name.begin, name.length);
+            sProperty = sProperty.replace('_', '-');
             reader.nextItem(
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
-            rMap[sProperty] = sValue.replace('_', '-');;
+            rMap[sProperty] = sValue.replace('_', '-');
         }
     }
 }

@@ -1096,6 +1096,13 @@ public:
      */
     Size get_preferred_size() const;
 
+    /*
+     * Sets a widget property
+     *
+     * @return false if property is unknown
+     */
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
     virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
     virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;
 

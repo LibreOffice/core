@@ -350,6 +350,7 @@ public:
         , m_fYScale(1.0)
     {
     }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

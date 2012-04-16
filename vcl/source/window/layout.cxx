@@ -605,6 +605,30 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     pChild->SetPosSizePixel(aChildPos, aAllocation);
 }
 
+bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    fprintf(stderr, "VclAlignment::set_property %s %s\n", rKey.getStr(), rValue.getStr());
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("bottom-padding")))
+        m_nBottomPadding = rValue.toInt32();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-padding")))
+        m_nLeftPadding = rValue.toInt32();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("right-padding")))
+        m_nRightPadding = rValue.toInt32();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-padding")))
+        m_nTopPadding = rValue.toInt32();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
+        m_fXAlign = rValue.toFloat();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xscale")))
+        m_fXScale = rValue.toFloat();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
+        m_fYAlign = rValue.toFloat();
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yscale")))
+        m_fYScale = rValue.toFloat();
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;
