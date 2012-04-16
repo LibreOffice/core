@@ -176,7 +176,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 
 #else   /* DISABLE_DYNLOADING */
         (void) nRtldMode;
-        printf("No DL Functions\n");
+        fprintf(stderr, "No DL Functions, osl_loadModuleAscii(%s) does nothing\n", pModuleName);
 #endif  /* DISABLE_DYNLOADING */
     }
     return NULL;
