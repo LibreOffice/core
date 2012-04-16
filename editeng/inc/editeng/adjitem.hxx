@@ -78,14 +78,14 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual sal_uInt16           GetValueCount() const;
-    virtual String           GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16           GetEnumValue() const;
+    virtual sal_uInt16       GetValueCount() const;
+    virtual rtl::OUString    GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16       GetEnumValue() const;
     virtual void             SetEnumValue( sal_uInt16 nNewVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const;
 
     inline void SetOneWord( const SvxAdjust eType )
     {

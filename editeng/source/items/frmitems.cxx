@@ -1527,10 +1527,10 @@ sal_uInt16 SvxShadowItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-XubString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
+rtl::OUString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < SVX_SHADOW_END, "enum overflow!" );
-    return XubString( EditResId( RID_SVXITEMS_SHADOW_BEGIN + nPos ) );
+    return EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -2926,11 +2926,10 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-XubString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
+rtl::OUString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < SVX_BREAK_END, "enum overflow!" );
-    XubString aStr( EditResId( RID_SVXITEMS_BREAK_BEGIN + nPos ) );
-    return aStr;
+    return EE_RESSTR(RID_SVXITEMS_BREAK_BEGIN + nPos);
 }
 
 // -----------------------------------------------------------------------

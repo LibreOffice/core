@@ -43,7 +43,7 @@ TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 struct SfxAllEnumValue_Impl
 {
     sal_uInt16 nValue;
-    XubString aText;
+    rtl::OUString aText;
 };
 
 SV_DECL_PTRARR_DEL(SfxAllEnumValueArr, SfxAllEnumValue_Impl*, 0)
@@ -139,7 +139,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-XubString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
+rtl::OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->Count(), "enum overflow" );
@@ -219,7 +219,7 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
 // -----------------------------------------------------------------------
 
-void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const XubString &rValue )
+void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const rtl::OUString &rValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
@@ -242,7 +242,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
     pVal->nValue = nValue;
-    pVal->aText = XubString::CreateFromInt32( nValue );
+    pVal->aText = rtl::OUString::valueOf(static_cast<sal_Int32>(nValue));
     const SfxAllEnumValue_Impl *pTemp = pVal;
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;

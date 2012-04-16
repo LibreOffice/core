@@ -57,7 +57,7 @@ public:
 
 #define EE_DLL() EditDLL::Get()
 
-#define EE_RESSTR(x) String( EditResId(x) )
+#define EE_RESSTR(x) ResId::toString(EditResId(x))
 
 #endif //_EERDLL_HXX
 

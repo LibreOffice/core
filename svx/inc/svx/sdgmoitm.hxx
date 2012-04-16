@@ -52,7 +52,7 @@ public:
     virtual sal_uInt16          GetValueCount() const;
     GraphicDrawMode         GetValue() const { return (GraphicDrawMode) SfxEnumItem::GetValue(); }
 
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,

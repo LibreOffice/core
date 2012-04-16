@@ -105,9 +105,9 @@ public:
             return *this;
         }
 
-    virtual sal_uInt16          GetValueCount() const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetEnumValue() const;
+    virtual sal_uInt16      GetValueCount() const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16      GetEnumValue() const;
     virtual void            SetEnumValue( sal_uInt16 nNewVal );
 };
 

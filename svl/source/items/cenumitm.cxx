@@ -91,10 +91,10 @@ bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
 }
 
 //============================================================================
-XubString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
+rtl::OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
 {
     DBG_WARNING("SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
-    return XubString();
+    return rtl::OUString();
 }
 
 //============================================================================

@@ -53,10 +53,10 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const;
 
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-     virtual sal_uInt16         GetValueCount() const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16      GetValueCount() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

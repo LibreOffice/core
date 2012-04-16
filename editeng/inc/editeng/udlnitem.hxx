@@ -63,8 +63,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetValueCount() const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16      GetValueCount() const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
@@ -73,7 +73,7 @@ public:
     void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     virtual int             HasBoolValue() const;
-    virtual sal_Bool            GetBoolValue() const;
+    virtual sal_Bool        GetBoolValue() const;
     virtual void            SetBoolValue( sal_Bool bVal );
 
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -109,7 +109,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
 };
 
 // class SvxOverlineItem ------------------------------------------------
@@ -126,7 +126,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
 };
 
 #endif // #ifndef _SVX_UDLNITEM_HXX

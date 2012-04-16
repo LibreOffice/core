@@ -316,16 +316,24 @@ sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-XubString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
+rtl::OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     //! load strings from resource
-    XubString aText;
+    rtl::OUString aText;
     switch ( nPos )
     {
-        case SVX_LINESPACE_USER                 : aText.AppendAscii( "User" );  break;
-        case SVX_LINESPACE_ONE_LINE             : aText.AppendAscii( "One line" );  break;
-        case SVX_LINESPACE_ONE_POINT_FIVE_LINES : aText.AppendAscii( "1.5 line" );  break;
-        case SVX_LINESPACE_TWO_LINES            : aText.AppendAscii( "Two lines" ); break;
+        case SVX_LINESPACE_USER:
+            aText = "User";
+            break;
+        case SVX_LINESPACE_ONE_LINE:
+            aText = "One line";
+            break;
+        case SVX_LINESPACE_ONE_POINT_FIVE_LINES:
+            aText = "1.5 line";
+            break;
+        case SVX_LINESPACE_TWO_LINES:
+            aText = "Two lines";
+            break;
     }
     return aText;
 }
@@ -472,7 +480,7 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-XubString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
+rtl::OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)SVX_ADJUST_BLOCKLINE, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_ADJUST_BEGIN + nPos);
@@ -889,17 +897,17 @@ XubString SvxTabStop::GetValueString() const
     aStr += sal_Unicode( '(' );
     aStr += rtl::OUString::valueOf(static_cast<sal_Int32>(nTabPos));
     aStr += cpDelim;
-    aStr += XubString( EditResId( RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment ) );
+    aStr += EE_RESSTR(RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment);
 
     aStr += cpDelim;
     aStr += sal_Unicode('[');
-    aStr += XubString( EditResId( RID_SVXITEMS_TAB_DECIMAL_CHAR ) );
+    aStr += EE_RESSTR(RID_SVXITEMS_TAB_DECIMAL_CHAR);
     aStr += GetDecimal();
     aStr += sal_Unicode(']');
     aStr += cpDelim;
     aStr += cpDelim;
     aStr += sal_Unicode('[');
-    aStr += XubString( EditResId( RID_SVXITEMS_TAB_FILL_CHAR ) );
+    aStr += EE_RESSTR(RID_SVXITEMS_TAB_FILL_CHAR);
     aStr += cFill;
     aStr += sal_Unicode(']');
     aStr += sal_Unicode(')');

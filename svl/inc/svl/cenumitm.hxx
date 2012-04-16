@@ -61,7 +61,7 @@ public:
 
     virtual sal_uInt16 GetValueCount() const = 0;
 
-    virtual XubString GetValueTextByPos(sal_uInt16 nPos) const;
+    virtual rtl::OUString GetValueTextByPos(sal_uInt16 nPos) const;
 
     virtual sal_uInt16 GetValueByPos(sal_uInt16 nPos) const;
 

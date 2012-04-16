@@ -49,7 +49,7 @@ public:
     virtual sal_uInt16           GetValueCount() const; // { return 3; }
     SdrCaptionEscDir GetValue() const      { return (SdrCaptionEscDir)SfxEnumItem::GetValue(); }
 
-    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
+    virtual rtl::OUString GetValueTextByPos(sal_uInt16 nPos) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };

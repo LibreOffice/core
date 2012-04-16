@@ -64,8 +64,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetValueCount() const;
+    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16      GetValueCount() const;
 
     // MS VC4.0 kommt durcheinander
     void                    SetValue( sal_uInt16 nNewVal )
