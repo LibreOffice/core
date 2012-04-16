@@ -1111,7 +1111,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 Font SdStyleSheetPool::GetBulletFont() const
 {
-    Font aBulletFont( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )), Size(0, 1000) );
+    Font aBulletFont( OUString( "StarSymbol" ), Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(UNDERLINE_NONE);

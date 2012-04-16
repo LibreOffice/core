@@ -532,13 +532,13 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
             Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
             xTableFamily->insertByName( OUString( rName ), Any( xDefaultTableStyle ) );
 
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("body") ), rBody  );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-rows") ), rBanding );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-columns") ), rBanding );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-row") ), rHeading );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-column") ), rHeading );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-row") ), rHeading );
-            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-column") ), rHeading );
+            xDefaultTableStyle->replaceByName( "body", rBody  );
+            xDefaultTableStyle->replaceByName( "odd-rows" , rBanding );
+            xDefaultTableStyle->replaceByName( "odd-columns" , rBanding );
+            xDefaultTableStyle->replaceByName( "first-row" , rHeading );
+            xDefaultTableStyle->replaceByName( "first-column" , rHeading );
+            xDefaultTableStyle->replaceByName( "last-row" , rHeading );
+            xDefaultTableStyle->replaceByName( "last-column" , rHeading );
         }
     }
     catch( Exception& )
@@ -553,14 +553,14 @@ void SdDrawDocument::CreateDefaultCellStyles()
     SfxStyleSheetBase*      pSheet = NULL;
     String                  aHelpFile;
 
-    const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
-    Reference< XNameContainer > xTableFamily( pSSPool->getByName( sFamilyName ), UNO_QUERY );
+    //const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
+    Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
 
     // ---- Default -----------------------------------------------
 
     sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
 
-    OUString aDefaultCellStyleName( RTL_CONSTASCII_USTRINGPARAM("default") );
+    OUString aDefaultCellStyleName( "default" );
 
     pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
     pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
@@ -631,91 +631,91 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- default --------------------------------------------------
 
-    Any aGray1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
-    Any aGray2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
-    Any aGray3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray3") ), aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
+    Any aGray1( implMakeSolidCellStyle( pSSPool, "gray1" , aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
+    Any aGray2( implMakeSolidCellStyle( pSSPool, "gray2" , aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
+    Any aGray3( implMakeSolidCellStyle( pSSPool, "gray3" , aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
 
     implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("default") ), aGray1, aGray3, aGray2 );
 
     // ---- BW ------------------------------------------------
 
-    Any aBW1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
-    Any aBW2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw2") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
-    Any aBW3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw3") ), aDefaultCellStyleName, RGB_COLORDATA(0,0,0)));
+    Any aBW1( implMakeSolidCellStyle( pSSPool, "bw1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
+    Any aBW2( implMakeSolidCellStyle( pSSPool, "bw2" , aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
+    Any aBW3( implMakeSolidCellStyle( pSSPool, "bw3" , aDefaultCellStyleName, RGB_COLORDATA(0,0,0)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("bw") ), aBW1, aBW3, aBW2 );
+    implCreateTableTemplate( xTableFamily, "bw" , aBW1, aBW3, aBW2 );
 
     // ---- Orange --------------------------------------------------
 
-    Any aOrange1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange1") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
-    Any aOrange2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange2") ), aDefaultCellStyleName, RGB_COLORDATA(255,153,102)));
-    Any aOrange3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange3") ), aDefaultCellStyleName, RGB_COLORDATA(255,102,51)));
+    Any aOrange1( implMakeSolidCellStyle( pSSPool, "orange1" , aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+    Any aOrange2( implMakeSolidCellStyle( pSSPool, "orange2" , aDefaultCellStyleName, RGB_COLORDATA(255,153,102)));
+    Any aOrange3( implMakeSolidCellStyle( pSSPool, "orange3" , aDefaultCellStyleName, RGB_COLORDATA(255,102,51)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("orange") ), aOrange1, aOrange3, aOrange2 );
+    implCreateTableTemplate( xTableFamily, "orange" , aOrange1, aOrange3, aOrange2 );
 
     // ---- Turquise --------------------------------------------------
 
-    Any aTurquise1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise1") ), aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
-    Any aTurquise2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise2") ), aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
-    Any aTurquise3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise3") ), aDefaultCellStyleName, RGB_COLORDATA(25,138,138)));
+    Any aTurquise1( implMakeSolidCellStyle( pSSPool, "turquise1" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
+    Any aTurquise2( implMakeSolidCellStyle( pSSPool, "turquise2" , aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
+    Any aTurquise3( implMakeSolidCellStyle( pSSPool, "turquise3" , aDefaultCellStyleName, RGB_COLORDATA(25,138,138)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("turquise") ), aTurquise1, aTurquise3, aTurquise2 );
+    implCreateTableTemplate( xTableFamily, "turquise" , aTurquise1, aTurquise3, aTurquise2 );
 
     // ---- Gray ------------------------------------------------
 
-    Any aBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue1") ), aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
-    Any aBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue2") ), aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
-    Any aBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue3") ), aDefaultCellStyleName, RGB_COLORDATA(0,102,204)));
+    Any aBlue1( implMakeSolidCellStyle( pSSPool, "blue1" , aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
+    Any aBlue2( implMakeSolidCellStyle( pSSPool, "blue2" , aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
+    Any aBlue3( implMakeSolidCellStyle( pSSPool, "blue3" , aDefaultCellStyleName, RGB_COLORDATA(0,102,204)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("blue")), aBlue1, aBlue3, aBlue2 );
+    implCreateTableTemplate( xTableFamily, "blue" , aBlue1, aBlue3, aBlue2 );
 
     // ---- Sun ------------------------------------------------
 
-    Any aSun1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
-    Any aSun2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,255)));
-    Any aSun3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun3") ), aDefaultCellStyleName, RGB_COLORDATA(153,153,255)));
+    Any aSun1( implMakeSolidCellStyle( pSSPool, "sun1" , aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
+    Any aSun2( implMakeSolidCellStyle( pSSPool, "sun2" , aDefaultCellStyleName, RGB_COLORDATA(204,204,255)));
+    Any aSun3( implMakeSolidCellStyle( pSSPool, "sun3" , aDefaultCellStyleName, RGB_COLORDATA(153,153,255)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("sun") ), aSun1, aSun3, aSun2 );
+    implCreateTableTemplate( xTableFamily, "sun" , aSun1, aSun3, aSun2 );
 
     // ---- Earth ----------------------------------------------
 
-    Any aEarth1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
-    Any aEarth2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth2") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
-    Any aEarth3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth3") ), aDefaultCellStyleName, RGB_COLORDATA(204,102,51)));
+    Any aEarth1( implMakeSolidCellStyle( pSSPool, "earth1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aEarth2( implMakeSolidCellStyle( pSSPool, "earth2" , aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+    Any aEarth3( implMakeSolidCellStyle( pSSPool, "earth3" , aDefaultCellStyleName, RGB_COLORDATA(204,102,51)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("earth") ), aEarth1, aEarth3, aEarth2 );
+    implCreateTableTemplate( xTableFamily, "earth" , aEarth1, aEarth3, aEarth2 );
 
     // ---- Green ----------------------------------------------
 
-    Any aGreen1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
-    Any aGreen2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green2") ), aDefaultCellStyleName, RGB_COLORDATA(148,189,94)));
-    Any aGreen3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green3") ), aDefaultCellStyleName, RGB_COLORDATA(92,133,38)));
+    Any aGreen1( implMakeSolidCellStyle( pSSPool, "green1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aGreen2( implMakeSolidCellStyle( pSSPool, "green2" , aDefaultCellStyleName, RGB_COLORDATA(148,189,94)));
+    Any aGreen3( implMakeSolidCellStyle( pSSPool, "green3" , aDefaultCellStyleName, RGB_COLORDATA(92,133,38)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("green") ), aGreen1, aGreen3, aGreen2 );
+    implCreateTableTemplate( xTableFamily, "green" , aGreen1, aGreen3, aGreen2 );
 
     // ---- Seetang ----------------------------------------------
 
-    Any aSeetang1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang1") ), aDefaultCellStyleName, RGB_COLORDATA(204,255,255)));
-    Any aSeetang2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang2") ), aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
-    Any aSeetang3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang3") ), aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
+    Any aSeetang1( implMakeSolidCellStyle( pSSPool, "seetang1" , aDefaultCellStyleName, RGB_COLORDATA(204,255,255)));
+    Any aSeetang2( implMakeSolidCellStyle( pSSPool, "seetang2" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
+    Any aSeetang3( implMakeSolidCellStyle( pSSPool, "seetang3" , aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("seetang") ), aSeetang1, aSeetang3, aSeetang2 );
+    implCreateTableTemplate( xTableFamily, "seetang" , aSeetang1, aSeetang3, aSeetang2 );
 
     // ---- LightBlue ----------------------------------------------
 
-    Any aLightBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
-    Any aLightBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue2") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
-    Any aLightBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue3") ), aDefaultCellStyleName, RGB_COLORDATA(153,153,204)));
+    Any aLightBlue1( implMakeSolidCellStyle( pSSPool, "lightblue1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
+    Any aLightBlue2( implMakeSolidCellStyle( pSSPool, "lightblue2" , aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
+    Any aLightBlue3( implMakeSolidCellStyle( pSSPool, "lightblue3" , aDefaultCellStyleName, RGB_COLORDATA(153,153,204)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("lightblue") ), aLightBlue1, aLightBlue3, aLightBlue2 );
+    implCreateTableTemplate( xTableFamily, "lightblue" , aLightBlue1, aLightBlue3, aLightBlue2 );
 
     // ---- Yellow ----------------------------------------------
 
-    Any aYellow1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
-    Any aYellow2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow2") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,153)));
-    Any aYellow3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow3") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+    Any aYellow1( implMakeSolidCellStyle( pSSPool, "yellow1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aYellow2( implMakeSolidCellStyle( pSSPool, "yellow2" , aDefaultCellStyleName, RGB_COLORDATA(255,255,153)));
+    Any aYellow3( implMakeSolidCellStyle( pSSPool, "yellow3" , aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("yellow") ), aYellow1, aYellow3, aYellow2 );
+    implCreateTableTemplate( xTableFamily, "yellow" , aYellow1, aYellow3, aYellow2 );
 }
 
 /*************************************************************************

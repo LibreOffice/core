@@ -323,7 +323,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_CHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarChart" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
@@ -333,7 +333,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_ORGCHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarOrg" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
@@ -343,7 +343,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_CALC:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarCalc" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);

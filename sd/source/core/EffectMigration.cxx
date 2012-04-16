@@ -648,7 +648,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 else
                 {
                     OUString aEmpty;
-                    CustomAnimationPresetPtr pShapePreset( rPresets.getEffectDescriptor( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo-entrance-appear" ) ) ) );
+                    CustomAnimationPresetPtr pShapePreset( rPresets.getEffectDescriptor( "ooo-entrance-appear" ) );
 
                     Reference< XAnimationNode > xNode( pPreset->create( aEmpty ) );
                     DBG_ASSERT( xNode.is(), "EffectMigration::SetTextAnimationEffect(), could not create preset!" );

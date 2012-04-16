@@ -260,9 +260,7 @@ RealPoint2D SAL_CALL Annotation::getPosition() throw (RuntimeException)
 
 void SAL_CALL Annotation::setPosition(const RealPoint2D & the_value) throw (RuntimeException)
 {
-    prepareSet(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Position")),
-        Any(), Any(), 0);
+    prepareSet("Position", Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -279,9 +277,7 @@ RealSize2D SAL_CALL Annotation::getSize() throw (RuntimeException)
 
 void SAL_CALL Annotation::setSize(const RealSize2D & the_value) throw (RuntimeException)
 {
-    prepareSet(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")),
-        Any(), Any(), 0);
+    prepareSet("Size", Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -297,9 +293,7 @@ OUString SAL_CALL Annotation::getAuthor() throw (RuntimeException)
 
 void SAL_CALL Annotation::setAuthor(const OUString & the_value) throw (RuntimeException)
 {
-    prepareSet(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Author")),
-        Any(), Any(), 0);
+    prepareSet("Author", Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -315,9 +309,7 @@ util::DateTime SAL_CALL Annotation::getDateTime() throw (RuntimeException)
 
 void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value) throw (RuntimeException)
 {
-    prepareSet(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
-        Any(), Any(), 0);
+    prepareSet("DateTime", Any(), Any(), 0);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -335,7 +327,7 @@ void Annotation::createChangeUndo()
     {
         pModel->SetChanged();
         Reference< XInterface > xSource( static_cast<uno::XWeak*>( this ) );
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), OUString( RTL_CONSTASCII_USTRINGPARAM("OnAnnotationChanged") ), xSource );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationChanged" , xSource );
     }
 }
 

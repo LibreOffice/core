@@ -187,7 +187,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
 
 OUString SAL_CALL SdStyleFamily::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdStyleFamily") );
+    return OUString( "SdStyleFamily" );
 }
 
 // ----------------------------------------------------------
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName ) 
 
 Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames() throw(RuntimeException)
 {
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.StyleFamily") );
+    OUString aServiceName( "com.sun.star.style.StyleFamily" );
     Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -565,7 +565,7 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
     }
     else
     {
-        throw UnknownPropertyException( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + PropertyName, static_cast<OWeakObject *>(this) );
+        throw UnknownPropertyException( "unknown property: " + PropertyName, static_cast<OWeakObject *>(this) );
     }
 }
 

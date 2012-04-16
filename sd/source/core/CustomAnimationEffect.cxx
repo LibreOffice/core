@@ -314,7 +314,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
         {
             // TODO/LATER: Optimize this, don't create a break iterator each time
             Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" )) ), UNO_QUERY );
+            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( "com.sun.star.i18n.BreakIterator" ), UNO_QUERY );
             DBG_ASSERT( xBI.is(), "sd::CustomAnimationEffect::getNumberOfSubitems(), could not create a 'com.sun.star.i18n.BreakIterator'!" );
 
             if( xBI.is() )
@@ -322,7 +322,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
                 Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
                 Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY_THROW );
                 Locale aLocale;
-                const OUString aStrLocaleName( RTL_CONSTASCII_USTRINGPARAM("CharLocale") );
+                const OUString aStrLocaleName( "CharLocale" );
                 Reference< XTextRange > xParagraph;
 
                 sal_Int32 nPara = 0;
@@ -463,7 +463,7 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
             {
                 nLength = aUserData.getLength();
                 aUserData.realloc( nLength + 1);
-                aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "preset-class" ) );
+                aUserData[nLength].Name = "preset-class";
                 aUserData[nLength].Value <<= mnPresetClass;
             }
 
@@ -504,7 +504,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
             {
                 nLength = aUserData.getLength();
                 aUserData.realloc( nLength + 1);
-                aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+                aUserData[nLength].Name = "node-type";
                 aUserData[nLength].Value <<= mnNodeType;
             }
 
@@ -545,7 +545,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
         {
             nLength = aUserData.getLength();
             aUserData.realloc( nLength + 1);
-            aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "group-id" ) );
+            aUserData[nLength].Name = "group-id";
             aUserData[nLength].Value <<= mnGroupId;
         }
 
@@ -597,7 +597,7 @@ bool CustomAnimationEffect::checkForText()
                         if( xParaSet.is() )
                         {
                             sal_Int32 nParaDepth = 0;
-                            const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
+                            const OUString strNumberingLevel( "NumberingLevel" );
                             xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
                             bChange |= nParaDepth != mnParaDepth;
                             mnParaDepth = nParaDepth;
@@ -992,12 +992,12 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     if( maDimColor.hasValue() )
     {
         aTo = maDimColor;
-        aAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) );
+        aAttributeName = "DimColor";
     }
     else
     {
         aTo = makeAny( (sal_Bool)sal_False );
-        aAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( "Visibility" ) );
+        aAttributeName = "Visibility";
     }
 
     Any aBegin;
@@ -1557,7 +1557,7 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
     if( !mxAudio.is() ) try
     {
         Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< XAudio > xAudio( xMsf->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Audio") ) ), UNO_QUERY_THROW );
+        Reference< XAudio > xAudio( xMsf->createInstance( "com.sun.star.animations.Audio" ), UNO_QUERY_THROW );
         xAudio->setSource( rSource );
         xAudio->setVolume( fVolume );
         setAudio( xAudio );
@@ -1653,7 +1653,7 @@ void CustomAnimationEffect::setStopAudio()
             removeAudio();
 
         Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< XCommand > xCommand( xMsf->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Command") ) ), UNO_QUERY_THROW );
+        Reference< XCommand > xCommand( xMsf->createInstance( "com.sun.star.animations.Command" ), UNO_QUERY_THROW );
 
         xCommand->setCommand( EffectCommands::STOPAUDIO );
 
@@ -1886,7 +1886,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     try
     {
         Reference< XTimeContainer > xEffectContainer( createParallelTimeContainer() );
-        const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.AnimateMotion" ) );
+        const OUString aServiceName( "com.sun.star.animations.AnimateMotion" );
         Reference< XAnimationNode > xAnimateMotion( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY_THROW );
 
         xAnimateMotion->setDuration( Any( fDuration ) );
@@ -2107,7 +2107,7 @@ void EffectSequenceHelper::implRebuild()
 
 Reference< XTimeContainer > EffectSequenceHelper::createParallelTimeContainer() const
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.ParallelTimeContainer" ) );
+    const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
     return Reference< XTimeContainer >( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
 }
 
@@ -2160,7 +2160,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             Sequence< NamedValue > aUserData( rNode.mxNode->getUserData() );
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "master-element" ) );
+            aUserData[nSize].Name = "master-element";
             aUserData[nSize].Value <<= xMasterNode;
             rNode.mxNode->setUserData( aUserData );
 
@@ -2199,7 +2199,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                         else
                         {
                             // this does not yet have a child container, create one
-                            const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer") );
+                            const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
                             xNextContainer = Reference< XTimeContainer >::query( xMsf->createInstance(aServiceName) );
 
                             if( xNextContainer.is() )
@@ -2216,7 +2216,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                 // if we don't have a next container, we add one to the sequence container
                 if( !xNextContainer.is() )
                 {
-                    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer") );
+                    const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
                     Reference< XTimeContainer > xNewClickContainer( xMsf->createInstance(aServiceName), UNO_QUERY_THROW );
 
                     Reference< XAnimationNode > xNewClickNode( xNewClickContainer, UNO_QUERY_THROW );
@@ -2640,7 +2640,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     {
         EffectSequence::iterator aInsertIter( find( pEffect ) );
 
-        const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
+        const OUString strNumberingLevel( "NumberingLevel" );
         Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
 
@@ -3202,7 +3202,7 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 // ====================================================================
 
 MainSequence::MainSequence()
-: mxTimingRootNode( ::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY )
+: mxTimingRootNode( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"), UNO_QUERY )
 , mbRebuilding( false )
 , mnRebuildLockGuard( 0 )
 , mbPendingRebuildRequest( false )
@@ -3210,7 +3210,7 @@ MainSequence::MainSequence()
     if( mxTimingRootNode.is() )
     {
         Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+        aUserData[0].Name = "node-type";
         aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
         mxTimingRootNode->setUserData( aUserData );
     }
@@ -3306,11 +3306,11 @@ void MainSequence::createMainSequence()
         // see if we have a mainsequence at all. if not, create one...
         if( !mxSequenceRoot.is() )
         {
-            mxSequenceRoot = Reference< XTimeContainer >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))));
+            mxSequenceRoot = Reference< XTimeContainer >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"));
             if( mxSequenceRoot.is() )
             {
                 uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-                aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+                aUserData[0].Name = "node-type";
                 aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
                 mxSequenceRoot->setUserData( aUserData );
 
@@ -3371,12 +3371,12 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     InteractiveSequencePtr pIS;
 
     // create a new interactive sequence container
-    Reference< XTimeContainer > xISRoot( ::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY );
+    Reference< XTimeContainer > xISRoot( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"), UNO_QUERY );
     DBG_ASSERT( xISRoot.is(), "sd::MainSequence::createInteractiveSequence(), could not create \"com.sun.star.animations.SequenceTimeContainer\"!");
     if( xISRoot.is() )
     {
         uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+        aUserData[0].Name = "node-type";
         aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ;
         xISRoot->setUserData( aUserData );
 

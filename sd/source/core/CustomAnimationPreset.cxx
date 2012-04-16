@@ -81,13 +81,12 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
     {
         Sequence< Any > aArgs( 1 );
         PropertyValue   aPropValue;
-        aPropValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = "nodepath";
         aPropValue.Value <<= rNodePath;
         aArgs[0] <<= aPropValue;
 
         xConfigAccess = Reference< XNameAccess >::query(
-            xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )),
+            xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess" ,
                 aArgs ));
     }
     catch (const Exception&)
@@ -105,7 +104,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
         Reference< XNameAccess > xConfigAccess( getNodeAccess( xConfigProvider, rNodePath ) );
         if( xConfigAccess.is() )
         {
-            OUString aLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+            OUString aLabel( "Label" );
             Reference< XNameAccess > xNameAccess;
             Sequence< OUString > aNames( xConfigAccess->getElementNames() );
             const OUString* p = aNames.getConstArray();
@@ -268,19 +267,14 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         aParserInput.aInputStream = xInputStream;
 
         // get parser
-        Reference< xml::sax::XParser > xParser(
-            xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
-            UNO_QUERY );
+        Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance("com.sun.star.xml.sax.Parser" ), UNO_QUERY );
 
         DBG_ASSERT( xParser.is(), "Can't create parser" );
         if( !xParser.is() )
             return xRootNode;
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter(
-            xServiceFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Xmloff.AnimationsImport" ) ) ), UNO_QUERY );
+        Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY );
 
         DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
         if( !xFilter.is() )
@@ -330,33 +324,29 @@ void CustomAnimationPresets::importEffects()
 
         uno::Reference< beans::XPropertySet > xProps( xServiceFactory, UNO_QUERY );
         uno::Reference< uno::XComponentContext > xContext;
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+        xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
 
         uno::Reference< util::XMacroExpander > xMacroExpander;
         if( xContext.is() )
-            xMacroExpander.set( xContext->getValueByName(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
-                                UNO_QUERY );
+            xMacroExpander.set( xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"), UNO_QUERY );
 
         Reference< XMultiServiceFactory > xConfigProvider(
-            xServiceFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))),
+            xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ),
             UNO_QUERY_THROW );
 
         // read path to transition effects files from config
         Any propValue = uno::makeAny(
             beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" )), -1,
-                uno::makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/Misc") )),
+                "nodepath", -1,
+                uno::makeAny( OUString( "/org.openoffice.Office.Impress/Misc" )),
                 beans::PropertyState_DIRECT_VALUE ) );
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
         uno::Sequence< rtl::OUString > aFiles;
-        xNameAccess->getByName(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("EffectFiles"))) >>= aFiles;
+        xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
@@ -429,32 +419,29 @@ void CustomAnimationPresets::importResources()
         if( !xServiceFactory.is() )
             return;
 
-        Reference< XMultiServiceFactory > xConfigProvider(
-            xServiceFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))),
-            UNO_QUERY );
+        Reference< XMultiServiceFactory > xConfigProvider( xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ), UNO_QUERY );
 
-        const OUString aPropertyPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/UserInterface/Properties" ) );
+        const OUString aPropertyPath("/org.openoffice.Office.UI.Effects/UserInterface/Properties" );
         implImportLabels( xConfigProvider, aPropertyPath, maPropertyNameMap );
 
-        const OUString aEffectsPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/UserInterface/Effects" ) );
+        const OUString aEffectsPath( "/org.openoffice.Office.UI.Effects/UserInterface/Effects" );
         implImportLabels( xConfigProvider, aEffectsPath, maEffectNameMap );
 
         importEffects();
 
-        const OUString aEntrancePath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Entrance" ) );
+        const OUString aEntrancePath( "/org.openoffice.Office.UI.Effects/Presets/Entrance" );
         importPresets( xConfigProvider, aEntrancePath, maEntrancePresets );
 
-        const OUString aEmphasisPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Emphasis" ) );
+        const OUString aEmphasisPath( "/org.openoffice.Office.UI.Effects/Presets/Emphasis" );
         importPresets( xConfigProvider, aEmphasisPath, maEmphasisPresets );
 
-        const OUString aExitPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Exit" ) );
+        const OUString aExitPath( "/org.openoffice.Office.UI.Effects/Presets/Exit" );
         importPresets( xConfigProvider, aExitPath, maExitPresets );
 
-        const OUString aMotionPathsPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/MotionPaths" ) );
+        const OUString aMotionPathsPath( "/org.openoffice.Office.UI.Effects/Presets/MotionPaths" );
         importPresets( xConfigProvider, aMotionPathsPath, maMotionPathsPresets );
 
-        const OUString aMiscPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Misc" ) );
+        const OUString aMiscPath( "/org.openoffice.Office.UI.Effects/Presets/Misc" );
         importPresets( xConfigProvider, aMiscPath, maMiscPresets );
     }
     catch (const lang::WrappedTargetException&)
@@ -479,8 +466,8 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
         if( xTypeAccess.is() )
         {
             Reference< XNameAccess > xCategoryAccess;
-            const OUString aEffectsName( RTL_CONSTASCII_USTRINGPARAM( "Effects" ) );
-            const OUString aLabelName( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+            const OUString aEffectsName( "Effects" );
+            const OUString aLabelName( "Label" );
 
             Sequence< OUString > aNames( xTypeAccess->getElementNames() );
             const OUString* p = aNames.getConstArray();

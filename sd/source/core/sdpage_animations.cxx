@@ -62,11 +62,11 @@ Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
 {
     if( !mxAnimationNode.is() )
     {
-        mxAnimationNode = Reference< XAnimationNode >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer"))));
+        mxAnimationNode = Reference< XAnimationNode >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.ParallelTimeContainer"));
         if( mxAnimationNode.is() )
         {
             Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-            aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+            aUserData[0].Name = "node-type";
             aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
             mxAnimationNode->setUserData( aUserData );
         }

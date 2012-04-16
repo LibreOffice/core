@@ -160,38 +160,33 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
         uno::Reference< beans::XPropertySet > xProps( xServiceFactory, UNO_QUERY );
         uno::Reference< uno::XComponentContext > xContext;
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+        xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
 
         uno::Reference< util::XMacroExpander > xMacroExpander;
         if( xContext.is() )
-            xMacroExpander.set( xContext->getValueByName(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
-                                UNO_QUERY );
+            xMacroExpander.set( xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"), UNO_QUERY );
 
         // import ui strings
         Reference< XMultiServiceFactory > xConfigProvider(
-            xServiceFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))),
-            UNO_QUERY_THROW );
+            xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ), UNO_QUERY_THROW );
 
         UStringMap aTransitionNameMape;
-        const OUString aTransitionPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/UserInterface/Transitions" ) );
+        const OUString aTransitionPath("/org.openoffice.Office.UI.Effects/UserInterface/Transitions" );
         implImportLabels( xConfigProvider, aTransitionPath, aTransitionNameMape );
 
         // read path to transition effects files from config
         Any propValue = uno::makeAny(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
-                uno::makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/Misc"))),
+            beans::PropertyValue("nodepath", -1,
+                uno::makeAny( OUString("/org.openoffice.Office.Impress/Misc")),
                 beans::PropertyState_DIRECT_VALUE ) );
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
-                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+                "com.sun.star.configuration.ConfigurationAccess",
+                Sequence<Any>( &propValue, 1 ) ),
+                UNO_QUERY_THROW );
         uno::Sequence< rtl::OUString > aFiles;
-        xNameAccess->getByName(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("TransitionFiles"))) >>= aFiles;
+        xNameAccess->getByName("TransitionFiles") >>= aFiles;
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {

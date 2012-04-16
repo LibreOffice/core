@@ -670,7 +670,7 @@ void SdStyleSheet::SetHelpId( const String& r, sal_uLong nId )
 
     if( (nId >= HID_PSEUDOSHEET_OUTLINE1) && ( nId <= HID_PSEUDOSHEET_OUTLINE9 ) )
     {
-        msApiName = OUString( RTL_CONSTASCII_USTRINGPARAM("outline") );
+        msApiName = "outline";
         msApiName += OUString( (sal_Unicode)( '1' + (nId - HID_PSEUDOSHEET_OUTLINE1) ) );
     }
     else
@@ -726,11 +726,11 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
     switch( eFamily )
     {
     case SD_STYLE_FAMILY_CELL:
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( "cell" ) );
+        return OUString( "cell" );
     default:
         OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
     case SD_STYLE_FAMILY_GRAPHICS:
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
+        return OUString( "graphics" );
     }
 }
 
@@ -746,7 +746,7 @@ void SdStyleSheet::throwIfDisposed() throw (RuntimeException)
 
 SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily )
 {
-    OUString aPrefix( RTL_CONSTASCII_USTRINGPARAM("user") );
+    OUString aPrefix( "user" );
     OUString aName;
     sal_Int32 nIndex = 1;
     do
@@ -823,10 +823,7 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException)
         }
         catch (const Exception & exc)
         {
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "unexpected UNO exception caught: ") ) +
-                exc.Message, Reference< XInterface >() );
+            throw RuntimeException( "unexpected UNO exception caught: "  +  exc.Message, Reference< XInterface >() );
         }
     }
 }
@@ -911,7 +908,7 @@ void SdStyleSheet::notifyModifyListener()
 
 OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdStyleSheet" ) );
+    return OUString( "SdStyleSheet" );
 }
 
 // --------------------------------------------------------------------
@@ -928,16 +925,16 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
     Sequence< OUString > aNameSequence( 10 );
     OUString* pStrings = aNameSequence.getArray();
 
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.Style" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FillProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ShadowProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ConnectorProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MeasureProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TextProperties" ) );
-    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.Text" ) );
+    *pStrings++ = "com.sun.star.style.Style";
+    *pStrings++ = "com.sun.star.drawing.FillProperties";
+    *pStrings++ = "com.sun.star.drawing.LineProperties";
+    *pStrings++ = "com.sun.star.drawing.ShadowProperties";
+    *pStrings++ = "com.sun.star.drawing.ConnectorProperties";
+    *pStrings++ = "com.sun.star.drawing.MeasureProperties";
+    *pStrings++ = "com.sun.star.style.ParagraphProperties";
+    *pStrings++ = "com.sun.star.style.CharacterProperties";
+    *pStrings++ = "com.sun.star.drawing.TextProperties";
+    *pStrings++ = "com.sun.star.drawing.Text";
 
     return aNameSequence;
 }
@@ -1152,7 +1149,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
             {
                 const OUString aLayoutName( GetName() );
-                aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR) ) ) );
+                aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf(OUString( SD_LT_SEPARATOR) ) );
             }
             else
             {
