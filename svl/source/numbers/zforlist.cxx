@@ -1546,7 +1546,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         sal_uInt32 nFIndex,
                                         String& sOutString,
-                                        Color** ppColor)
+                                        Color** ppColor,
+                                        bool bUseStarFormat )
 {
     if (bNoZero && fOutNumber == 0.0)
     {
@@ -1557,13 +1558,17 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);
     ChangeIntl(pFormat->GetLanguage());
+    if ( bUseStarFormat )
+        pFormat->SetStarFormatSupport( true );
     pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
+    if ( bUseStarFormat )
+        pFormat->SetStarFormatSupport( false );
 }
 
 void SvNumberFormatter::GetOutputString(String& sString,
                                         sal_uInt32 nFIndex,
                                         String& sOutString,
-                                        Color** ppColor)
+                                        Color** ppColor )
 {
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
@@ -1583,7 +1588,8 @@ void SvNumberFormatter::GetOutputString(String& sString,
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         sal_uInt32 nFIndex,
                                         rtl::OUString& sOutString,
-                                        Color** ppColor)
+                                        Color** ppColor,
+                                        bool bUseStarFormat )
 {
     if (bNoZero && fOutNumber == 0.0)
     {
@@ -1595,7 +1601,11 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
         pFormat = GetFormatEntry(ZF_STANDARD);
     ChangeIntl(pFormat->GetLanguage());
     String aOutString;
+    if ( bUseStarFormat )
+        pFormat->SetStarFormatSupport( true );
     pFormat->GetOutputString(fOutNumber, aOutString, ppColor);
+    if ( bUseStarFormat )
+        pFormat->SetStarFormatSupport( false );
     sOutString = aOutString;
 }
 

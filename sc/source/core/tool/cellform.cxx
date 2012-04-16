@@ -49,7 +49,8 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                               Color** ppColor, SvNumberFormatter& rFormatter,
                               sal_Bool bNullVals,
                               sal_Bool bFormula,
-                              ScForceTextFmt eForceTextFmt )
+                              ScForceTextFmt eForceTextFmt,
+                              bool bUseStarFormat )
 {
     *ppColor = NULL;
     if (&rFormatter==NULL)
@@ -92,7 +93,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                         rFormatter.GetOutputString( aTemp, nFormat, rString, ppColor );
                     }
                     else
-                        rFormatter.GetOutputString( nValue, nFormat, rString, ppColor );
+                        rFormatter.GetOutputString( nValue, nFormat, rString, ppColor, bUseStarFormat );
                 }
             }
             break;

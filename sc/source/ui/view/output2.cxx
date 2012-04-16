@@ -128,6 +128,8 @@ class ScDrawStringsVars
 
     Color               aBackConfigColor;       // used for ScPatternAttr::GetFont calls
     Color               aTextConfigColor;
+    sal_Int32           nPos;
+    sal_Unicode         nChar;
 
 public:
                 ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL);
@@ -162,6 +164,7 @@ public:
     sal_Bool    GetLineBreak() const                    { return bLineBreak; }
     sal_Bool    IsRepeat() const                        { return bRepeat; }
     sal_Bool    IsShrink() const                        { return bShrink; }
+    void        RepeatToFill( long colWidth );
 
     long    GetAscent() const   { return nAscentPixel; }
     sal_Bool    IsRotated() const   { return bRotated; }
@@ -206,7 +209,9 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL) :
     bLineBreak  ( false ),
     bRepeat     ( false ),
     bShrink     ( false ),
-    bPixelToLogic( bPTL )
+    bPixelToLogic( bPTL ),
+    nPos( STRING_NOTFOUND ),
+    nChar( 0x0 )
 {
     ScModule* pScMod = SC_MOD();
     bCellContrast = pOutput->bUseStyleColor &&
@@ -502,9 +507,19 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
                                      *pOutput->pDoc->GetFormatTable(),
                                      pOutput->bShowNullValues,
                                      pOutput->bShowFormulas,
-                                     ftCheck );
+                                     ftCheck, true );
             aString = aOUString;
-
+            if ( nFormat )
+            {
+                nPos = aString.Search( 0x1B );
+                if ( nPos != STRING_NOTFOUND )
+                {
+                    nPos = nPos - 1;
+                    nChar = aString.GetChar( nPos );
+                    // delete placeholder and char to repeat
+                    aString.Erase( nPos, 2 );
+                }
+            }
             if (aString.Len() > DRAWTEXT_MAX)
                 aString.Erase(DRAWTEXT_MAX);
 
@@ -535,6 +550,27 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
 void ScDrawStringsVars::SetHashText()
 {
     SetAutoText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+}
+
+void ScDrawStringsVars::RepeatToFill( long colWidth )
+{
+    if ( nPos ==  STRING_NOTFOUND || nPos >= aString.Len() )
+        return;
+
+    long charWidth = pOutput->pFmtDevice->GetTextWidth(String(nChar));
+    if (bPixelToLogic)
+        colWidth = pOutput->pRefDevice->PixelToLogic(Size(colWidth,0)).Width();
+    // Are there restrictions on the cell type we should filter out here ?
+    long aSpaceToFill = ( colWidth - aTextSize.Width() );
+
+    if ( aSpaceToFill <= charWidth )
+        return;
+
+    long nCharsToInsert = aSpaceToFill / charWidth;
+    for ( int i = 0; i < nCharsToInsert; ++i )
+        aString.Insert( nChar, nPos );
+
+    TextChanged();
 }
 
 void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
@@ -1618,6 +1654,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                                    bCellIsValue || bRepeat || bShrink, bBreak, false,
                                    aAreaParam );
 
+                    aVars.RepeatToFill( aAreaParam.mnColWidth - nTotalMargin );
                     if ( bShrink )
                     {
                         if ( aVars.GetOrient() != SVX_ORIENTATION_STANDARD )

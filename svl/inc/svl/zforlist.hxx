@@ -483,11 +483,11 @@ public:
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
-                          String& sOutString, Color** ppColor );
+                          String& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
-                          rtl::OUString& sOutString, Color** ppColor );
+                          rtl::OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode

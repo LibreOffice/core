@@ -53,7 +53,9 @@ public:
                                Color** ppColor, SvNumberFormatter& rFormatter,
                                sal_Bool bNullVals = sal_True,
                                sal_Bool bFormula  = false,
-                               ScForceTextFmt eForceTextFmt = ftDontForce );
+                               ScForceTextFmt eForceTextFmt = ftDontForce,
+                               bool bUseStarFormat = false );
+
 
     static void     GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                                       SvNumberFormatter& rFormatter );
