@@ -51,8 +51,8 @@ using rtl::OUString;
 //
 //------------------------------------------------------------------------
 
-CAutoUnicodeBuffer::CAutoUnicodeBuffer( size_t size, sal_Bool bLazyCreation ) :
-    m_buffSize( size ),
+CAutoUnicodeBuffer::CAutoUnicodeBuffer( size_t nSize, sal_Bool bLazyCreation ) :
+    m_buffSize( nSize ),
     m_pBuff( NULL )
 {
     if ( !bLazyCreation )

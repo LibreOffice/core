@@ -49,7 +49,7 @@ public:
 
     // if bLazyCreation is true the buffer will be created
     // when someone wants to fill the buffer
-    CAutoUnicodeBuffer( size_t size, sal_Bool bLazyCreation = sal_False );
+    CAutoUnicodeBuffer( size_t nSize, sal_Bool bLazyCreation = sal_False );
     ~CAutoUnicodeBuffer( );
 
     // resizes the buffer
