@@ -8160,6 +8160,22 @@ fi
 AC_SUBST(WINDOWS_SDK_HOME)
 
 dnl =========================================
+dnl Check for uuidgen
+dnl =========================================
+if test "$_os" = "WINNT"; then
+    if test "$WITH_MINGW" = "yes"; then
+        AC_PATH_PROG([UUIDGEN], [uuid])
+        if test -z "$UUIDGEN"; then
+            AC_MSG_ERROR([uuid is needed for dev-install])
+        fi
+    else
+        # presence is already tested above in the WINDOWS_SDK_HOME check
+        UUIDGEN=uuidgen.exe
+        AC_SUBST(UUIDGEN)
+    fi
+fi
+
+dnl =========================================
 dnl Check for the Microsoft DirectX SDK.
 dnl =========================================
 if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then

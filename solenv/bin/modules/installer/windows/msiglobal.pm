@@ -1266,7 +1266,7 @@ sub get_guid_list
 
     if ( $log ) { installer::logger::include_header_into_logfile("Generating $number GUID"); }
 
-    my $uuidgen = "uuidgen.exe";        # Has to be in the path
+    my $uuidgen = $ENV{'UUIDGEN'};        # Has to be in the path
 
     # "-c" for uppercase output
 
