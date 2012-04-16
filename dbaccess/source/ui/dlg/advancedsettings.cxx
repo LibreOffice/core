@@ -300,7 +300,8 @@ namespace dbaui
             if ( !*setting->ppControl )
                 continue;
 
-            ::boost::optional< bool > aValue;
+            ::boost::optional< bool > aValue(false);
+            aValue.reset();
 
             SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, sal_True );
             if ( pItem->ISA( SfxBoolItem ) )
@@ -320,7 +321,7 @@ namespace dbaui
             }
             else
             {
-                sal_Bool bValue = *aValue;
+                bool bValue = *aValue;
                 if ( setting->bInvertedDisplay )
                     bValue = !bValue;
                 (*setting->ppControl)->Check( bValue );
