@@ -941,7 +941,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                              uno::makeAny
                              (m_pImpl->rDomainMapper.GetCurrentTextRange()));
 
-                        awt::Point aPoint(m_xShape->getPosition());
                         awt::Size aSize(m_xShape->getSize());
 
                         if (m_pImpl->isXSizeValid())
