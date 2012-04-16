@@ -118,13 +118,13 @@ Reference< XInterface >
 ::rtl::OUString SdHtmlOptionsDialog_getImplementationName()
     throw( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.SdHtmlOptionsDialog" ) );
+    return ::rtl::OUString( "com.sun.star.comp.draw.SdHtmlOptionsDialog" );
 }
-#define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
+
 sal_Bool SAL_CALL SdHtmlOptionsDialog_supportsService( const ::rtl::OUString& ServiceName )
     throw( RuntimeException )
 {
-    return ServiceName == SERVICE_NAME;
+    return ServiceName.equals("com.sun.star.ui.dialog.FilterOptionsDialog");
 }
 
 Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
@@ -132,10 +132,9 @@ Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceName
 {
     Sequence< ::rtl::OUString > aRet(1);
     ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    pArray[0] = ::rtl::OUString("com.sun.star.ui.dialog.FilterOptionsDialog");
     return aRet;
 }
-#undef SERVICE_NAME
 
 // -----------------------------------------------------------------------------
 
@@ -203,7 +202,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    maMediaDescriptor[ i ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+    maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
@@ -269,12 +268,12 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
             ( xDoc, UNO_QUERY );
     if ( xServiceInfo.is() )
     {
-        if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+        if ( xServiceInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
         {
             meDocType = DOCUMENT_TYPE_IMPRESS;
             return;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
         {
             meDocType = DOCUMENT_TYPE_DRAW;
             return;

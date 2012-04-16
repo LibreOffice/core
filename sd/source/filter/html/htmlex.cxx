@@ -397,12 +397,12 @@ HtmlExport::HtmlExport(
         mpThumbnailFiles(NULL),
         mpPageNames(NULL),
         mpTextFiles(NULL),
-        maIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
+        maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
-        maHTMLHeader( RTL_CONSTASCII_USTRINGPARAM(
+        maHTMLHeader(
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" ) ),
+            "<html>\r\n<head>\r\n" ),
         mpButtonSet( new ButtonSet() )
 {
     bool bChange = mpDoc->IsChanged();
@@ -953,10 +953,10 @@ bool HtmlExport::SavePresentation()
         if( xStorable.is() )
         {
             uno::Sequence< beans::PropertyValue > aProperties( 2 );
-            aProperties[ 0 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
+            aProperties[ 0 ].Name = "Overwrite";
             aProperties[ 0 ].Value <<= (sal_Bool)sal_True;
-            aProperties[ 1 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
-            aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("impress8"));
+            aProperties[ 1 ].Name = "FilterName";
+            aProperties[ 1 ].Value <<= rtl::OUString("impress8");
             xStorable->storeToURL( aURL, aProperties );
 
             mpDocSh->EnableSetModified( false );
@@ -984,7 +984,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
         if( !xMSF.is() )
             return false;
 
-        Reference< XExporter > xGraphicExporter( xMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ), UNO_QUERY );
+        Reference< XExporter > xGraphicExporter( xMSF->createInstance( "com.sun.star.drawing.GraphicExportFilter" ), UNO_QUERY );
         Reference< XFilter > xFilter( xGraphicExporter, UNO_QUERY );
 
         DBG_ASSERT( xFilter.is(), "no com.sun.star.drawing.GraphicExportFilter?" );
@@ -992,29 +992,29 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
             return false;
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
-        aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelWidth") );
+        aFilterData[0].Name = "PixelWidth";
         aFilterData[0].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
-        aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelHeight") );
+        aFilterData[1].Name = "PixelHeight";
         aFilterData[1].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
         if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
-            aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality") );
+            aFilterData[2].Name = "Quality";
             aFilterData[2].Value <<= (sal_Int32)mnCompression;
         }
 
         Sequence< PropertyValue > aDescriptor( 3 );
-        aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
-        aDescriptor[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        aDescriptor[0].Name = "URL";
+        aDescriptor[1].Name = "FilterName";
         OUString sFormat;
         if( meFormat == FORMAT_PNG )
-            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("PNG") );
+            sFormat = "PNG";
         else if( meFormat == FORMAT_GIF )
-            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("GIF") );
+            sFormat = "GIF";
         else
-            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("JPG") );
+            sFormat = "JPG";
 
         aDescriptor[1].Value <<= sFormat;
-        aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
+        aDescriptor[2].Name = "FilterData";
         aDescriptor[2].Value <<= aFilterData;
 
         for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
@@ -2022,9 +2022,11 @@ bool HtmlExport::CreateNotesPages()
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        String aFileName( RTL_CONSTASCII_USTRINGPARAM("note") );
-        aFileName += String::CreateFromInt32(nSdPage);
+        OUString aFileName( "note" );
+        aFileName += OUString::valueOf(nSdPage);
         bOk = WriteHtml( aFileName, true, aStr );
+
+
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2088,8 +2090,8 @@ bool HtmlExport::CreateOutlinePages()
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        String aFileName( RTL_CONSTASCII_USTRINGPARAM("outline") );
-        aFileName += String::CreateFromInt32(nPage);
+        OUString aFileName( "outline" );
+        aFileName += OUString::valueOf(nPage);
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
@@ -2896,7 +2898,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
     String      aScript;
 
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("webcast") ) );
+    aURL.Append( rtl::OUString("webcast") );
     aURL.Append( rSource );
 
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
@@ -3005,10 +3007,10 @@ bool HtmlExport::CreatePERLScripts()
             return false;
     }
 
-    if(!CopyScript(maExportPath, String( RTL_CONSTASCII_USTRINGPARAM("edit.pl")), maIndex, true ))
+    if(!CopyScript(maExportPath, rtl::OUString("edit.pl"), maIndex, true ))
         return false;
 
-    if(!CopyScript(maExportPath, String( RTL_CONSTASCII_USTRINGPARAM("index.pl")), maIndexUrl, true ))
+    if(!CopyScript(maExportPath, rtl::OUString("index.pl"), maIndexUrl, true ))
         return false;
 
     return true;
@@ -3325,8 +3327,8 @@ sal_Bool HtmlErrorContext::GetString( sal_uLong, String& rCtxStr )
 
     rCtxStr = String( SdResId( mnResId ) );
 
-    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL1)")), maURL1 );
-    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL2)")), maURL2 );
+    rCtxStr.SearchAndReplace( rtl::OUString("$(URL1)"), maURL1 );
+    rCtxStr.SearchAndReplace( rtl::OUString("$(URL2)"), maURL2 );
 
     return true;
 }

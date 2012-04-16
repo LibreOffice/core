@@ -159,7 +159,7 @@ SdPublishingDesign::SdPublishingDesign()
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
     FilterConfigItem aFilterConfigItem( aFilterConfigPath );
-    sal_Int32 nCompression = aFilterConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), 75 );
+    sal_Int32 nCompression = aFilterConfigItem.ReadInt32( OUString( KEY_QUALITY ), 75 );
     m_aCompression = UniString::CreateFromInt32( nCompression );
     m_aCompression.Append( sal_Unicode('%') );
 
@@ -438,10 +438,10 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    String  aText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("index")) );
+    String  aText( OUString("index") );
     aText += String(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION));
     pPage2_Index->SetText(aText);
-    pPage2_CGI->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "/cgi-bin/" ) ) );
+    pPage2_CGI->SetText( OUString( "/cgi-bin/" ) );
 
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
@@ -469,10 +469,10 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     FreeResource();
 
-    pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "25%" ) ) );
-    pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "50%" ) ) );
-    pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "75%" ) ) );
-    pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "100%" ) ) );
+    pPage3_Quality->InsertEntry( OUString( "25%" ) );
+    pPage3_Quality->InsertEntry( OUString( "50%" ) );
+    pPage3_Quality->InsertEntry( OUString( "75%" ) );
+    pPage3_Quality->InsertEntry( OUString( "100%" ) );
 
     pPage5_Buttons->SetColCount( 1 );
     pPage5_Buttons->SetLineCount( 4 );
@@ -808,59 +808,59 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
 
     // Page 2
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PublishMode" ) );
+    aValue.Name = "PublishMode";
     aValue.Value <<= (sal_Int32)(pPage2_Standard->IsChecked()?PUBLISH_HTML:
                                           pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
                                           pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:PUBLISH_WEBCAST);
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsExportContentsPage" ) );
+    aValue.Name = "IsExportContentsPage";
     aValue.Value <<= (sal_Bool)pPage2_Content->IsChecked();
     aProps.push_back( aValue );
 
     if(m_bImpress)
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsExportNotes" ) );
+        aValue.Name = "IsExportNotes";
         aValue.Value <<= (sal_Bool)pPage2_Notes->IsChecked();
         aProps.push_back( aValue );
     }
 
     if( pPage2_WebCast->IsChecked() )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastScriptLanguage" ) );
+        aValue.Name = "WebCastScriptLanguage";
         if( pPage2_ASP->IsChecked() )
-            aValue.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "asp" ) );
+            aValue.Value <<= OUString( "asp" );
         else
-            aValue.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "perl" ) );
+            aValue.Value <<= OUString( "perl" );
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastCGIURL" ) );
+        aValue.Name = "WebCastCGIURL";
         aValue.Value <<= OUString( pPage2_CGI->GetText() );
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastTargetURL" ) );
+        aValue.Name = "WebCastTargetURL";
         aValue.Value <<= OUString( pPage2_URL->GetText() );
         aProps.push_back( aValue );
     }
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IndexURL" ) );
+    aValue.Name = "IndexURL";
     aValue.Value <<= OUString( pPage2_Index->GetText() );
     aProps.push_back( aValue );
 
 
     if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "KioskSlideDuration" ) );
+        aValue.Name = "KioskSlideDuration";
         aValue.Value <<= (sal_uInt32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "KioskEndless" ) );
+        aValue.Name = "KioskEndless";
         aValue.Value <<= (sal_Bool)pPage2_Endless->IsChecked();
         aProps.push_back( aValue );
     }
 
     // Page 3
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+    aValue.Name = "Width";
     sal_Int32 nTmpWidth = 512;
     if( pPage3_Resolution_2->IsChecked() )
         nTmpWidth = 640;
@@ -870,11 +870,11 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= nTmpWidth;
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) );
+    aValue.Name = "Compression";
     aValue.Value <<= OUString( pPage3_Quality->GetText() );
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Format" ) );
+    aValue.Name = "Format";
     sal_Int32 nFormat;
     if( pPage3_Png->IsChecked() )
         nFormat = static_cast<sal_Int32>(FORMAT_PNG);
@@ -885,20 +885,20 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= nFormat;
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SlideSound" ) );
+    aValue.Name = "SlideSound";
     aValue.Value <<= pPage3_SldSound->IsChecked() ? sal_True : sal_False;
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenSlides" ) );
+    aValue.Name = "HiddenSlides";
     aValue.Value <<= pPage3_HiddenSlides->IsChecked() ? sal_True : sal_False;
     aProps.push_back( aValue );
 
     // Page 4
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Author" ) );
+    aValue.Name = "Author";
     aValue.Value <<= OUString( pPage4_Author->GetText() );
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EMail" ) );
+    aValue.Name = "EMail";
     aValue.Value <<= OUString( pPage4_Email->GetText() );
     aProps.push_back( aValue );
 
@@ -907,17 +907,17 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
                             INET_PROT_HTTP,     // default proto is HTTP
                             INetURLObject::ENCODE_ALL );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "HomepageURL" ) );
+    aValue.Name = "HomepageURL";
     aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::NO_DECODE ) );
     aProps.push_back( aValue );
 
-    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserText" ) );
+    aValue.Name = "UserText";
     aValue.Value <<= OUString( pPage4_Misc->GetText() );
     aProps.push_back( aValue );
 
     if( m_bImpress )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableDownload" ) );
+        aValue.Name = "EnableDownload";
         aValue.Value <<= (sal_Bool)pPage4_Download->IsChecked();
         aProps.push_back( aValue );
     }
@@ -925,7 +925,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // Page 5
     if( !pPage5_TextOnly->IsChecked() )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UseButtonSet" ) );
+        aValue.Name = "UseButtonSet";
         aValue.Value <<= (sal_Int32)(pPage5_Buttons->GetSelectItemId() - 1);
         aProps.push_back( aValue );
     }
@@ -933,30 +933,30 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // Page 6
     if( pPage6_User->IsChecked() )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "BackColor" ) );
+        aValue.Name = "BackColor";
         aValue.Value <<= (sal_Int32)m_aBackColor.GetColor();
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) );
+        aValue.Name = "TextColor";
         aValue.Value <<= (sal_Int32)m_aTextColor.GetColor();
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LinkColor" ) );
+        aValue.Name = "LinkColor";
         aValue.Value <<= (sal_Int32)m_aLinkColor.GetColor();
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "VLinkColor" ) );
+        aValue.Name = "VLinkColor";
         aValue.Value <<= (sal_Int32)m_aVLinkColor.GetColor();
         aProps.push_back( aValue );
 
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ALinkColor" ) );
+        aValue.Name = "ALinkColor";
         aValue.Value <<= (sal_Int32)m_aALinkColor.GetColor();
         aProps.push_back( aValue );
     }
 
     if( pPage6_DocColors->IsChecked() )
     {
-        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsUseDocumentColors" ) );
+        aValue.Name = "IsUseDocumentColors";
         aValue.Value <<= (sal_Bool)sal_True;
         aProps.push_back( aValue );
     }
@@ -1604,7 +1604,7 @@ sal_Bool SdPublishingDlg::Load()
     m_bDesignListDirty = sal_False;
 
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "designs.sod" ) ) );
+    aURL.Append( OUString( "designs.sod" ) );
 
     // check if file exists, SfxMedium shows an errorbox else
     {
@@ -1657,7 +1657,7 @@ sal_Bool SdPublishingDlg::Load()
 sal_Bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "designs.sod" ) ) );
+    aURL.Append( OUString( "designs.sod" ) );
     SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, sal_False );
     aMedium.IsRemote();
 
