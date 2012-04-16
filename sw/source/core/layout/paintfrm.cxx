@@ -130,6 +130,9 @@
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
+using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
+using ::std::pair;
+using ::std::make_pair;
 
 //subsidiary lines enabled?
 #define IS_SUBS_TABLE \
@@ -215,19 +218,21 @@ public:
 
 class BorderLines
 {
-    ::comphelper::SequenceAsVector<
-         ::drawinglayer::primitive2d::Primitive2DReference> m_Lines;
+    typedef ::comphelper::SequenceAsVector<
+        ::rtl::Reference<BorderLinePrimitive2D> > Lines_t;
+    Lines_t m_Lines;
 public:
-    void AddBorderLine(
-            ::drawinglayer::primitive2d::Primitive2DReference const& xLine)
-    {
-        m_Lines.push_back(xLine);
-    }
+    void AddBorderLine(::rtl::Reference<BorderLinePrimitive2D> const& xLine);
     drawinglayer::primitive2d::Primitive2DSequence GetBorderLines_Clear()
     {
         ::comphelper::SequenceAsVector<
             ::drawinglayer::primitive2d::Primitive2DReference> lines;
-        ::std::swap(m_Lines, lines);
+        for (Lines_t::const_iterator it = m_Lines.begin(); it != m_Lines.end();
+                ++it)
+        {
+            lines.push_back(it->get());
+        }
+        m_Lines.clear();
         return lines.getAsConstList();
     }
 };
@@ -431,6 +436,121 @@ SwSavePaintStatics::~SwSavePaintStatics()
 }
 
 //----------------- Implementation for the table borders --------------
+
+static pair<bool, pair<double, double> >
+lcl_TryMergeLines(pair<double, double> const mergeA,
+                  pair<double, double> const mergeB)
+{
+    double const fMergeGap(nPixelSzW + nHalfPixelSzW); // NOT static!
+    if (   (mergeA.second + fMergeGap >= mergeB.first )
+        && (mergeA.first  - fMergeGap <= mergeB.second))
+    {
+        return make_pair(true, make_pair(
+                                std::min(mergeA.first, mergeB.first),
+                                std::max(mergeA.second, mergeB.second)));
+    }
+    return make_pair(false, make_pair(0, 0));
+}
+
+static ::rtl::Reference<BorderLinePrimitive2D>
+lcl_MergeBorderLines(
+    BorderLinePrimitive2D const& rLine, BorderLinePrimitive2D const& rOther,
+    basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd)
+{
+    return new BorderLinePrimitive2D(rStart, rEnd,
+                rLine.getLeftWidth(),
+                rLine.getDistance(),
+                rLine.getRightWidth(),
+                rLine.getExtendLeftStart(),
+                rOther.getExtendLeftEnd(),
+                rLine.getExtendRightStart(),
+                rOther.getExtendRightEnd(),
+                rLine.getRGBColorLeft(),
+                rLine.getRGBColorGap(),
+                rLine.getRGBColorRight(),
+                rLine.hasGapColor(),
+                rLine.getStyle());
+}
+
+static ::rtl::Reference<BorderLinePrimitive2D>
+lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
+                       BorderLinePrimitive2D const& rOther)
+{
+    assert(rThis.getEnd().getX() >= rThis.getStart().getX());
+    assert(rThis.getEnd().getY() >= rThis.getStart().getY());
+    assert(rOther.getEnd().getX() >= rOther.getStart().getX());
+    assert(rOther.getEnd().getY() >= rOther.getStart().getY());
+    double thisHeight = rThis.getEnd().getY() - rThis.getStart().getY();
+    double thisWidth  = rThis.getEnd().getX() - rThis.getStart().getX();
+    double otherHeight = rOther.getEnd().getY() -  rOther.getStart().getY();
+    double otherWidth  = rOther.getEnd().getX() -  rOther.getStart().getX();
+    // check for same orientation, same line width and matching colors
+    if (    ((thisHeight > thisWidth) == (otherHeight > otherWidth))
+        &&  (rThis.getLeftWidth()     == rOther.getLeftWidth())
+        &&  (rThis.getDistance()      == rOther.getDistance())
+        &&  (rThis.getRightWidth()    == rOther.getRightWidth())
+        &&  (rThis.getRGBColorLeft()  == rOther.getRGBColorLeft())
+        &&  (rThis.getRGBColorRight() == rOther.getRGBColorRight())
+        &&  (rThis.hasGapColor()      == rOther.hasGapColor())
+        &&  (!rThis.hasGapColor() ||
+             (rThis.getRGBColorGap()  == rOther.getRGBColorGap())))
+    {
+        if (thisHeight > thisWidth) // vertical line
+        {
+            if (rThis.getStart().getX() == rOther.getStart().getX())
+            {
+                assert(rThis.getEnd().getX() == rOther.getEnd().getX());
+                pair<bool, pair<double, double>> const res = lcl_TryMergeLines(
+                    make_pair(rThis.getStart().getY(), rThis.getEnd().getY()),
+                    make_pair(rOther.getStart().getY(),rOther.getEnd().getY()));
+                if (res.first) // merge them
+                {
+                    basegfx::B2DPoint const start(
+                            rThis.getStart().getX(), res.second.first);
+                    basegfx::B2DPoint const end(
+                            rThis.getStart().getX(), res.second.second);
+                    return lcl_MergeBorderLines(rThis, rOther, start, end);
+                }
+            }
+        }
+        else // horizontal line
+        {
+            if (rThis.getStart().getY() == rOther.getStart().getY())
+            {
+                assert(rThis.getEnd().getY() == rOther.getEnd().getY());
+                pair<bool, pair<double, double>> const res = lcl_TryMergeLines(
+                    make_pair(rThis.getStart().getX(), rThis.getEnd().getX()),
+                    make_pair(rOther.getStart().getX(),rOther.getEnd().getX()));
+                if (res.first) // merge them
+                {
+                    basegfx::B2DPoint const start(
+                            res.second.first, rThis.getStart().getY());
+                    basegfx::B2DPoint const end(
+                            res.second.second, rThis.getEnd().getY());
+                    return lcl_MergeBorderLines(rThis, rOther, start, end);
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+void BorderLines::AddBorderLine(
+        rtl::Reference<BorderLinePrimitive2D> const& xLine)
+{
+    for (Lines_t::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
+         ++it)
+    {
+        ::rtl::Reference<BorderLinePrimitive2D> const xMerged =
+            lcl_TryMergeBorderLine(**it, *xLine);
+        if (xMerged.is())
+        {
+            *it = xMerged; // replace existing line with merged
+            return;
+        }
+    }
+    m_Lines.push_back(xLine);
+}
 
 
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
@@ -4571,8 +4691,8 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
         Color aLeftColor = _bLeft ? pLeftRightBorder->GetColorOut( _bLeft ) : pLeftRightBorder->GetColorIn( _bLeft );
         Color aRightColor = _bLeft ? pLeftRightBorder->GetColorIn( _bLeft ) : pLeftRightBorder->GetColorOut( _bLeft );
 
-        drawinglayer::primitive2d::Primitive2DReference xLine =
-            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+        ::rtl::Reference<BorderLinePrimitive2D> xLine =
+            new BorderLinePrimitive2D(
                 aStart, aEnd, nLeftWidth, pLeftRightBorder->GetDistance(), nRightWidth,
                 nExtentIS, nExtentIE, nExtentOS, nExtentOE,
                 aLeftColor.getBColor(), aRightColor.getBColor(),
@@ -4646,8 +4766,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
         Color aLeftColor = _bTop ? pTopBottomBorder->GetColorOut( _bTop ) : pTopBottomBorder->GetColorIn( _bTop );
         Color aRightColor = _bTop ? pTopBottomBorder->GetColorIn( _bTop ) : pTopBottomBorder->GetColorOut( _bTop );
 
-        drawinglayer::primitive2d::Primitive2DReference xLine =
-            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+        ::rtl::Reference<BorderLinePrimitive2D> xLine =
+            new BorderLinePrimitive2D(
                 aStart, aEnd, nLeftWidth, pTopBottomBorder->GetDistance(), nRightWidth,
                 nExtentIS, nExtentIE, nExtentOS, nExtentOE,
                 aLeftColor.getBColor(), aRightColor.getBColor(),
