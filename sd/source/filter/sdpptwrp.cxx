@@ -92,25 +92,25 @@ sal_Bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("PowerPoint Document") ), STREAM_STD_READ );
+        SvStream* pDocStream = pStorage->OpenSotStream( rtl::OUString("PowerPoint Document") , STREAM_STD_READ );
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
-                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            if ( pStorage->IsStream( rtl::OUString("EncryptedSummary" ) ) )
+                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, OSL_LOG_PREFIX );
             else
             {
                 ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
                 if ( pLibrary )
                 {
-                    ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImportPPT" ) ) ) );
+                    ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
                     if ( PPTImport )
                         bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
                     if ( !bRet )
-                        mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                        mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
                 }
             }
 
@@ -133,7 +133,7 @@ sal_Bool SdPPTFilter::Export()
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
-            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportPPT")) ));
+            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( "ExportPPT" ));
 
             if( PPTExport && xStorRef.Is() )
             {
@@ -155,10 +155,10 @@ sal_Bool SdPPTFilter::Export()
                 if( mbShowProgress )
                     CreateStatusIndicator();
 
-                rtl::OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+                //rtl::OUString sBaseURI( "BaseURI");
                 std::vector< PropertyValue > aProperties;
                 PropertyValue aProperty;
-                aProperty.Name = sBaseURI;
+                aProperty.Name = "BaseURI";
                 aProperty.Value = makeAny( mrMedium.GetBaseURL( true ) );
                 aProperties.push_back( aProperty );
                 
@@ -179,7 +179,7 @@ void SdPPTFilter::PreSaveBasic()
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveVBA")) ));
+            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( "SaveVBA" ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );

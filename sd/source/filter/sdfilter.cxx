@@ -76,7 +76,7 @@ SdFilter::~SdFilter()
 
 ::rtl::OUString SdFilter::ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const
 {
-    String aTemp(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?"))));
+    String aTemp(::rtl::OUString(SVLIBRARY("?")));
     xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
     aTemp.Replace( nIndex, 1, rLibraryName );
     ::rtl::OUString aLibraryName( aTemp );

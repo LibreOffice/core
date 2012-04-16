@@ -229,8 +229,7 @@ sal_Int32 ReadThroughComponent(
 
     // get parser
     Reference< xml::sax::XParser > xParser(
-        rFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
+        rFactory->createInstance("com.sun.star.xml.sax.Parser" ),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -426,7 +425,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        OUString sPropName( "StreamName" );
         xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
@@ -439,8 +438,7 @@ sal_Int32 ReadThroughComponent(
         if ( !xStream.is() || ! xProps.is() )
             return SD_XML_READERROR;
 
-        Any aAny = xProps->getPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+        Any aAny = xProps->getPropertyValue( "Encrypted" );
 
         sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
@@ -534,7 +532,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Preview" )), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( "Preview" , uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -545,7 +543,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            OUString sPropName( "BuildId" );
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
                 xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -590,12 +588,12 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
             // set ProgressRange
             uno::Any aProgRange;
             aProgRange <<= nProgressRange;
-            xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+            xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
 
             // set ProgressCurrent
             uno::Any aProgCurrent;
             aProgCurrent <<= nProgressCurrent;
-            xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressCurrent")), aProgCurrent);
+            xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
         }
     }
 
@@ -607,7 +605,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     Reference<io::XInputStream> xInputStream;
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 
-    OUString sSourceStorage( RTL_CONSTASCII_USTRINGPARAM("SourceStorage") );
+    OUString sSourceStorage( "SourceStorage");
     xInfoSet->setPropertyValue( sSourceStorage, Any( xStorage ) );
 
     if( !xStorage.is() )
@@ -627,8 +625,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     // Set base URI
-    const OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sBaseURI, makeAny( mrMedium.GetBaseURL() ) );
+    xInfoSet->setPropertyValue( "BaseURI" , makeAny( mrMedium.GetBaseURL() ) );
 
     if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
     {
@@ -641,21 +638,14 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                 aName = pDocHierarchItem->GetValue();
         }
         else
-            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
+            aName = "dummyObjectName" ;
 
         if( !aName.isEmpty() )
-        {
-            const OUString sStreamRelPath(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sStreamRelPath, Any( aName ) );
-        }
+            xInfoSet->setPropertyValue( "StreamRelPath", Any( aName ) );
     }
 
     if (SDXMLMODE_Organizer == meFilterMode)
-    {
-        ::rtl::OUString const sOrganizerMode(
-            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
-        xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
-    }
+        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
 
     // -------------------------------------
 
@@ -761,28 +751,28 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     {
         try
         {
-            const OUString aName( RTL_CONSTASCII_USTRINGPARAM( "~clear~" ) );
-            uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable") ) ), uno::UNO_QUERY );
+            const OUString aName("~clear~" );
+            uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( "com.sun.star.drawing.GradientTable" ), uno::UNO_QUERY );
             if( xGradient.is() )
                 xGradient->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xHatch( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameContainer > xHatch( xModelFactory->createInstance( "com.sun.star.drawing.HatchTable" ), uno::UNO_QUERY );
             if( xHatch.is() )
                 xHatch->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xBitmap( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameContainer > xBitmap( xModelFactory->createInstance( "com.sun.star.drawing.BitmapTable" ), uno::UNO_QUERY );
             if( xBitmap.is() )
                 xBitmap->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xTransGradient( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameContainer > xTransGradient( xModelFactory->createInstance( "com.sun.star.drawing.TransparencyGradientTable" ), uno::UNO_QUERY );
             if( xTransGradient.is() )
                 xTransGradient->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xMarker( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameContainer > xMarker( xModelFactory->createInstance( "com.sun.star.drawing.MarkerTable" ), uno::UNO_QUERY );
             if( xMarker.is() )
                 xMarker->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xDashes( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameContainer > xDashes( xModelFactory->createInstance( "com.sun.star.drawing.DashTable" ), uno::UNO_QUERY );
             if( xDashes.is() )
                 xDashes->removeByName( aName );
         }
@@ -799,7 +789,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            const OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            const OUString sPropName( "BuildId" );
 
             OUString sBuildId;
             xInfoSet->getPropertyValue(sPropName) >>= sBuildId;
@@ -885,7 +875,7 @@ sal_Bool SdXMLFilter::Export()
 
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
 
-        if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
+        if( !xServiceInfo.is() || !xServiceInfo->supportsService( "com.sun.star.drawing.GenericDrawingDocument" ) )
         {
             OSL_FAIL( "Model is no DrawingDocument in XMLExport" );
             return sal_False;
@@ -899,7 +889,7 @@ sal_Bool SdXMLFilter::Export()
             return sal_False;
         }
 
-        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
+        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( "com.sun.star.xml.sax.Writer" ) );
 
         if( !xWriter.is() )
         {
@@ -942,17 +932,17 @@ sal_Bool SdXMLFilter::Export()
 
 
         SvtSaveOptions aSaveOpt;
-        OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+        OUString sUsePrettyPrinting("UsePrettyPrinting");
         sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
         xInfoSet->setPropertyValue( sUsePrettyPrinting, makeAny( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        OUString sPropName( "BaseURI" );
         xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL( true ) ) );
 
-        OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        OUString sTargetStorage( "TargetStorage" );
         xInfoSet->setPropertyValue( sTargetStorage, Any( xStorage ) );
 
         if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
@@ -968,7 +958,7 @@ sal_Bool SdXMLFilter::Export()
 
             if( !aName.isEmpty() )
             {
-                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                sPropName = OUString( "StreamRelPath" );
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
@@ -977,7 +967,7 @@ sal_Bool SdXMLFilter::Export()
         uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
         beans::PropertyValue* pProps = aDescriptor.getArray();
 
-        pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
+        pProps[0].Name = "FileName";
         pProps[0].Value <<= OUString( mrMedium.GetName() );
 
         {
@@ -1007,12 +997,12 @@ sal_Bool SdXMLFilter::Export()
                     // set ProgressRange
                     uno::Any aProgRange;
                     aProgRange <<= nProgressRange;
-                    xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+                    xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
 
                     // set ProgressCurrent
                     uno::Any aProgCurrent;
                     aProgCurrent <<= nProgressCurrent;
-                    xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressCurrent")), aProgCurrent);
+                    xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
                 }
             }
 
@@ -1067,16 +1057,16 @@ sal_Bool SdXMLFilter::Export()
                     if( !xDocOut.is() || !xProps.is() )
                         return sal_False;
 
-                    uno::Any aAny; aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-                    xProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
+                    uno::Any aAny; aAny <<= OUString( "text/xml");
+                    xProps->setPropertyValue( "MediaType" , aAny);
 
-                    OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+                    OUString aUseCommonPassPropName( "UseCommonStoragePasswordEncryption");
                     if( pServices->mbPlain )
-                        xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
+                        xProps->setPropertyValue( "Compressed" , uno::makeAny( (sal_Bool) sal_False ) );
                     // if the document is encrypted even the plain streams should be encrypted
                     xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
 
-                    const OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+                    const OUString sStreamName( "StreamName");
                     xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
                 }
 

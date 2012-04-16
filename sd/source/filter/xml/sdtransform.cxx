@@ -95,9 +95,9 @@ void TransformOOo2xDocument( SdDrawDocument* pDocument )
 SdTransformOOo2xDocument::SdTransformOOo2xDocument( SdDrawDocument& rDocument )
 : mrDocument( rDocument )
 , mrOutliner( rDocument.GetDrawOutliner() )
-, msEnableNumbering( RTL_CONSTASCII_USTRINGPARAM( "enable-numbering" ) )
-, msTextNamespace( RTL_CONSTASCII_USTRINGPARAM( "urn:oasis:names:tc:opendocument:xmlns:text:1.0" ) )
-, msTrue( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+, msEnableNumbering( "enable-numbering" )
+, msTextNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0" )
+, msTrue( "true" )
 {
 }
 

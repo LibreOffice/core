@@ -3133,8 +3133,7 @@ bool HtmlExport::checkForExistingFiles()
     try
     {
         Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFA( xMsf->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY_THROW );
+        Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFA( xMsf->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), UNO_QUERY_THROW );
 
         sal_uInt16 nSdPage;
         for( nSdPage = 0; !bFound && (nSdPage < mnSdPageCount); nSdPage++)
