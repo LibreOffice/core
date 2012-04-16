@@ -36,8 +36,6 @@
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
 
-#define ITEMID_SIZE 0
-
 // if without PCH's:
 #include <ide_pch.hxx>
 

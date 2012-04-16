@@ -318,8 +318,6 @@ public:
 };
 
 
-#define SYNTAX_COLOR_MAX    5
-
 class ModulWindow: public IDEBaseWindow
 {
     friend class BasicIDEShell;

@@ -62,8 +62,6 @@ using namespace ::com::sun::star::uno;
 #define BMARGPRN        1000
 #define BORDERPRN       300
 
-#define APPWAIT_START   100
-
 #define VALIDWINDOW     0x1234
 
 #if defined(OW) || defined(MTF)

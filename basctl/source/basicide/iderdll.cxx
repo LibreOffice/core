@@ -52,8 +52,6 @@
 #include <basicmod.hxx>
 #include <propbrw.hxx>
 
-
-#define ITEMID_SEARCH   0
 #include <svl/srchitem.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
