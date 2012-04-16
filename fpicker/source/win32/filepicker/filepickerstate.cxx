@@ -30,6 +30,8 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
+#include <boost/scoped_ptr.hpp>
+
 #include "filepickerstate.hxx"
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
@@ -44,7 +46,6 @@
 #include <osl/file.hxx>
 #include "FileOpenDlg.hxx"
 
-#include <memory>
 #include "../misc/WinImplHelper.hxx"
 //---------------------------------------------
 //
@@ -117,7 +118,7 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
     if (m_FirstControlCommand)
     {
         // pass the request along the command-chain
-        std::auto_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
+        boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
 
         OSL_ENSURE( result.get(), "invalid getValue request" );
 
@@ -181,7 +182,7 @@ OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
     CControlCommandRequest label_request( aControlId );
 
     // pass the request along the command-chain
-    std::auto_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &label_request ) );
+    boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &label_request ) );
 
     OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
 
