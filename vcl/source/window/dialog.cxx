@@ -511,6 +511,22 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
+        if (isLayoutEnabled())
+        {
+            maLayoutTimer.Stop();
+
+            //resize dialog to fit requisition on initial show
+            const Window *pContainer = GetWindow(WINDOW_FIRSTCHILD);
+            Size aSize = pContainer->get_preferred_size();
+
+            Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
+            aSize.Width() = std::min(aMax.Width(), aSize.Width());
+            aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
+            SetMinOutputSizePixel(aSize);
+            SetSizePixel(aSize);
+        }
+
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
@@ -993,8 +1009,8 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
 bool Dialog::isLayoutEnabled() const
 {
-    //Has one child, and that child is a container => we're layout enabled
-    return (GetChildCount() == 1 && dynamic_cast<const VclContainer*>(GetChild(0)));
+    //Child is a container => we're layout enabled
+    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
@@ -1002,7 +1018,7 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
     if (eType == WINDOWSIZE_MAXIMUM || !isLayoutEnabled())
         return SystemWindow::GetOptimalSize(eType);
 
-    Size aSize = GetChild(0)->GetOptimalSize(eType);
+    Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
     return Window::CalcWindowSize(aSize);
 }
 
@@ -1013,13 +1029,17 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
     aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;
     aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder;
     Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
-    GetChild(0)->SetPosSizePixel(aPos, aSize);
+    GetWindow(WINDOW_FIRSTCHILD)->SetPosSizePixel(aPos, aSize);
     return 0;
 }
 
 void Dialog::Resize()
 {
-    if (hasPendingLayout() || !isLayoutEnabled())
+    if (hasPendingLayout())
+        return;
+    if (IsInClose())
+        return;
+    if (!isLayoutEnabled())
         return;
     maLayoutTimer.Start();
 }

@@ -94,8 +94,9 @@ ComboBox::~ComboBox()
     SetSubEdit( NULL );
     delete mpSubEdit;
 
-    delete mpImplLB;
+    ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
+    delete pImplLB;
 
     delete mpFloatWin;
     delete mpBtn;

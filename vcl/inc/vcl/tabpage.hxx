@@ -59,8 +59,10 @@ public:
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
 
+    //To-Do, inherit from VclContainer
+    using Window::SetPosSizePixel;
+    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
-    virtual void    Resize();
 };
 
 #endif  // _SV_TABPAGE_HXX

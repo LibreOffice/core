@@ -205,8 +205,8 @@ void TabPage::DeactivatePage()
 
 bool TabPage::isLayoutEnabled() const
 {
-    //Has one child, and that child is a container => we're layout enabled
-    return (GetChildCount() == 1 && dynamic_cast<const VclContainer*>(GetChild(0)));
+    //Child is a container => we're layout enabled
+    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
 }
 
 Size TabPage::GetOptimalSize(WindowSizeType eType) const
@@ -215,16 +215,17 @@ Size TabPage::GetOptimalSize(WindowSizeType eType) const
         return Window::GetOptimalSize(eType);
     Size aSize;
     if (isLayoutEnabled())
-        aSize = GetChild(0)->GetOptimalSize(eType);
+        aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
     else
         aSize = getLegacyBestSizeForChildren(*this);
     return Window::CalcWindowSize(aSize);
 }
 
-void TabPage::Resize()
+void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
     if (isLayoutEnabled())
-        GetChild(0)->SetPosSizePixel(Point(0,0), GetSizePixel());
+        GetWindow(WINDOW_FIRSTCHILD)->SetPosSizePixel(Point(0, 0), rAllocation);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

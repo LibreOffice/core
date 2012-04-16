@@ -49,10 +49,8 @@ Size VclBox::calculateRequisition() const
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
-    sal_uInt16 nChildren = GetChildCount();
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
@@ -92,16 +90,11 @@ Size VclBox::calculateRequisition() const
 
 void VclBox::setAllocation(const Size &rAllocation)
 {
-    sal_uInt16 nChildren = GetChildCount();
-    if (!nChildren)
-        return;
-
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
 
     sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
@@ -149,9 +142,8 @@ void VclBox::setAllocation(const Size &rAllocation)
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
-        for (sal_uInt16 i = 0; i < nChildren; ++i)
+        for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
         {
-            Window *pChild = GetChild(i);
             if (!pChild->IsVisible())
                 continue;
 
@@ -238,10 +230,8 @@ Size VclButtonBox::calculateRequisition() const
     sal_Int32 nChildMinHeight = getWidgetStyleProperty<sal_Int32>(sChildMinHeight, DEFAULT_CHILD_MIN_HEIGHT);
     Size aSize(nChildMinWidth, nChildMinHeight);
 
-    sal_uInt16 nChildren = GetChildCount();
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
@@ -276,14 +266,9 @@ Size VclButtonBox::calculateRequisition() const
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
-    sal_uInt16 nChildren = GetChildCount();
-    if (!nChildren)
-        return;
-
     sal_uInt16 nVisibleChildren = 0;
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
@@ -312,9 +297,8 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
         - getPrimaryDimension(aRequisition));
 
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
 

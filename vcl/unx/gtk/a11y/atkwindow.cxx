@@ -97,7 +97,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
 
         default:
         {
-            Window *pChild = pWindow->GetChild( 0 );
+            Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
             if( pChild )
             {
                 if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )

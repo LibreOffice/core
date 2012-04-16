@@ -9619,25 +9619,6 @@ void Window::queue_resize()
     Dialog *pParent = GetParentDialog();
     if (!pParent)
         return;
-    if (pParent->IsInClose())
-        return;
-    if (!pParent->isLayoutEnabled())
-        return;
-    if (!pParent->IsReallyShown())
-    {
-        //resize dialog to fit requisition
-        const Window *pContainer = pParent->GetChild(0);
-        Size aSize = pContainer->get_preferred_size();
-
-        Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);
-        aSize.Width() = std::min(aMax.Width(), aSize.Width());
-        aSize.Height() = std::min(aMax.Height(), aSize.Height());
-
-        pParent->SetMinOutputSizePixel(aSize);
-        pParent->SetSizePixel(aSize);
-    }
-    if (pParent->hasPendingLayout())
-        return;
     pParent->Resize();
 }
 

@@ -83,11 +83,11 @@ ListBox::~ListBox()
     //#109201#
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
-    delete mpImplLB;
-
     // Beim zerstoeren des FloatWins macht TH ein GrabFocus auf den Parent,
     // also diese ListBox => PreNotify()...
+    ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
+    delete pImplLB;
 
     delete mpFloatWin;
     delete mpImplWin;
