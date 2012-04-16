@@ -49,7 +49,7 @@ using osl::Mutex;
 namespace /* private */
 {
 
-    const LPTSTR CURRENT_INSTANCE = TEXT("CurrInst");
+    const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 
 };
 
