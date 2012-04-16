@@ -92,9 +92,6 @@ public:
     const EditSelection&    GetCurSelection() const { return aCurSel; }
 };
 
-SV_DECL_REF( EditHTMLParser )
-SV_IMPL_REF( EditHTMLParser );
-
 #endif // _EEHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

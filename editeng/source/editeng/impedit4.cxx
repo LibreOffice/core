@@ -194,7 +194,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditS
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
 
-    EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, rBaseURL, pHTTPHeaderAttrs );
+    boost::scoped_ptr<EditHTMLParser> xPrsr(new EditHTMLParser(rInput, rBaseURL, pHTTPHeaderAttrs));
     SvParserState eState = xPrsr->CallParser(pEditEngine, aSel.Max());
     if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
     {
