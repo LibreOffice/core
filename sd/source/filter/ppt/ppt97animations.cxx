@@ -298,22 +298,22 @@ void Ppt97Animation::UpdateCacheData() const
     switch( m_aAtom.nFlyMethod )
     {
         case 0x0:
-            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear"));                  // --- appear ---
+            m_aPresetId = "ooo-entrance-appear";                  // --- appear ---
         break;
         case 0x01:
-            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random"));                  // --- random ---
+            m_aPresetId = "ooo-entrance-random";                  // --- random ---
         break;
         case 0x02:                                                                                  // --- blinds effect ---
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-venetian-blinds"));
-                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal"));                    // horizontal
+                    m_aPresetId = "ooo-entrance-venetian-blinds";
+                    m_aSubType = "horizontal";                    // horizontal
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-venetian-blinds"));
-                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));                      // vertical
+                    m_aPresetId = "ooo-entrance-venetian-blinds";
+                    m_aSubType = "vertical";                      // vertical
                 break;
             }
         }
@@ -323,30 +323,30 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-checkerboard"));
-                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("across"));                        // vertical ???
+                    m_aPresetId = "ooo-entrance-checkerboard";
+                    m_aSubType = "across";                        // vertical ???
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-checkerboard"));
-                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("downward"));                      // horizontal ???
+                    m_aPresetId = "ooo-entrance-checkerboard";
+                    m_aSubType = "downward";                      // horizontal ???
                 break;
             }
         }
         break;
         case 0x05:
-            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-dissolve-in"));
+            m_aPresetId = "ooo-entrance-dissolve-in";
         break;
         case 0x08:                                                                                  // --- (hor/ver) lines ---
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random-bars"));
-                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));                      // horizontal ???
+                    m_aPresetId = "ooo-entrance-random-bars";
+                    m_aSubType = "vertical";                      // horizontal ???
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random-bars"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal"));                      // vertical ???
+                    m_aPresetId = "ooo-entrance-random-bars";
+                    m_aSubType = "horizontal";                      // vertical ???
                 break;
             }
         }
@@ -356,20 +356,20 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x4:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left-to-top"));                     // to left top
+                    m_aPresetId = "ooo-entrance-diagonal-squares";
+                    m_aSubType = "left-to-top";                     // to left top
                 break;
                 case 0x5:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right-to-top"));                    // to right top
+                    m_aPresetId = "ooo-entrance-diagonal-squares";
+                    m_aSubType = "right-to-top";                    // to right top
                 break;
                 case 0x6:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left-to-bottom"));                  // to left bottom
+                    m_aPresetId = "ooo-entrance-diagonal-squares";
+                    m_aSubType = "left-to-bottom";                  // to left bottom
                 break;
                 case 0x7:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right-to-bottom"));                 // to right bottom
+                    m_aPresetId = "ooo-entrance-diagonal-squares";
+                    m_aSubType = "right-to-bottom";                 // to right bottom
                 break;
             }
         }
@@ -379,20 +379,20 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));                      // from right
+                    m_aPresetId = "ooo-entrance-wipe";
+                    m_aSubType = "from-right";                      // from right
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));                     // from bottom
+                    m_aPresetId = "ooo-entrance-wipe";
+                    m_aSubType = "from-bottom";                     // from bottom
                 break;
                 case 0x2:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));                       // from left
+                    m_aPresetId = "ooo-entrance-wipe";
+                    m_aSubType = "from-left";                       // from left
                 break;
                 case 0x3:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));                        // from top
+                    m_aPresetId = "ooo-entrance-wipe";
+                    m_aSubType = "from-top";                        // from top
                 break;
             }
         }
@@ -402,12 +402,12 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-box"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out"));                             // from center
+                    m_aPresetId = "ooo-entrance-box";
+                    m_aSubType = "out";                             // from center
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-box"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in"));                              // to center
+                    m_aPresetId = "ooo-entrance-box";
+                    m_aSubType = "in";                              // to center
                 break;
             }
         }
@@ -417,128 +417,128 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-left";
 
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-top";
                 break;
                 case 0x2:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-right";
                 break;
                 case 0x3:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-bottom";
                 break;
                 case 0x4:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top-left"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-top-left";
                 break;
                 case 0x5:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top-right"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-top-right";
                 break;
                 case 0x6:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom-left"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-bottom-left";
                 break;
                 case 0x7:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom-right"));
+                    m_aPresetId = "ooo-entrance-fly-in";
+                    m_aSubType = "from-bottom-right";
                 break;
                 case 0x8:                                                                               // -- short text effects --
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
+                    m_aPresetId = "ooo-entrance-peek-in";
+                    m_aSubType = "from-left";
                 break;
                 case 0x9:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
+                    m_aPresetId = "ooo-entrance-peek-in";
+                    m_aSubType = "from-bottom";
                 break;
                 case 0xa:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
+                    m_aPresetId = "ooo-entrance-peek-in";
+                    m_aSubType = "from-right";
                 break;
                 case 0xb:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
+                    m_aPresetId = "ooo-entrance-peek-in";
+                    m_aSubType = "from-top";
                 break;
                 case 0xc:                                                                               // -- slow text effects --
                 {
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
+                    m_aPresetId = "ooo-entrance-fly-in-slow";
+                    m_aSubType = "from-left";
                 }
                 break;
                 case 0xd:
                 {
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
+                    m_aPresetId = "ooo-entrance-fly-in-slow";
+                    m_aSubType = "from-top";
                 }
                 break;
                 case 0xe:
                 {
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
+                    m_aPresetId = "ooo-entrance-fly-in-slow";
+                    m_aSubType = "from-right";
                 }
                 break;
                 case 0xf:
                 {
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
+                    m_aPresetId = "ooo-entrance-fly-in-slow";
+                    m_aSubType = "from-bottom";
                 }
                 break;
                 case 0x10:                                                                              // --- zoom ---
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "in";
                 break;
                 case 0x11:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in-slightly"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "in-slightly";
                 break;
                 case 0x12:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "out";
                 break;
                 case 0x13:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out-slightly"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "out-slightly";
                 break;
                 case 0x14:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in-from-screen-center"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "in-from-screen-center";
                 break;
                 case 0x15:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out-from-screen-center"));
+                    m_aPresetId = "ooo-entrance-zoom";
+                    m_aSubType = "out-from-screen-center";
                 break;
                 case 0x16:                                                                              // --- stretch ---
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("across"));
+                    m_aPresetId = "ooo-entrance-stretchy";
+                    m_aSubType = "across";
                 break;
                 case 0x17:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
+                    m_aPresetId = "ooo-entrance-stretchy";
+                    m_aSubType = "from-left";
                 break;
                 case 0x18:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
+                    m_aPresetId = "ooo-entrance-stretchy";
+                    m_aSubType = "from-top";
                 break;
                 case 0x19:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
+                    m_aPresetId = "ooo-entrance-stretchy";
+                    m_aSubType = "from-right";
                 break;
                 case 0x1a:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
+                    m_aPresetId = "ooo-entrance-stretchy";
+                    m_aSubType = "from-bottom";
                 break;
                 case 0x1b:                                                                              // --- rotate ---
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-swivel"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));
+                    m_aPresetId = "ooo-entrance-swivel";
+                    m_aSubType = "vertical";
                 break;
                 case 0x1c:                                                                              // --- spirale ---
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-spiral-in"));
+                    m_aPresetId = "ooo-entrance-spiral-in";
                 break;
             }
         }
@@ -548,27 +548,27 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal-out"));                      //horizontal open
+                    m_aPresetId = "ooo-entrance-split";
+                    m_aSubType = "horizontal-out";                      //horizontal open
                 break;
                 case 0x1:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal-in"));                       //horizontal close
+                    m_aPresetId = "ooo-entrance-split";
+                    m_aSubType = "horizontal-in";                       //horizontal close
                 break;
                 case 0x2:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical-out"));                        // vertical open
+                    m_aPresetId = "ooo-entrance-split";
+                    m_aSubType = "vertical-out";                        // vertical open
                 break;
                 case 0x3:
-                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
-                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical-in"));                         // vertical close
+                    m_aPresetId = "ooo-entrance-split";
+                    m_aSubType = "vertical-in";                         // vertical close
                 break;
             }
         }
         break;
         case 0x0e:                                                                                      // --- blink ---
         {
-            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-flash-once"));
+            m_aPresetId = "ooo-entrance-flash-once";
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0: //fast
@@ -588,7 +588,7 @@ void Ppt97Animation::UpdateCacheData() const
         break;
         default:
         {
-            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear"));
+            m_aPresetId = "ooo-entrance-appear";
             OSL_FAIL("no effect mapped");
         }
         break;

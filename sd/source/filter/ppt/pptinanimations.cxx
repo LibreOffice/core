@@ -1186,7 +1186,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
 
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+            aUserData[nSize].Name = "node-type";
             aUserData[nSize].Value <<= nNodeType;
         }
     }
@@ -1198,7 +1198,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "group-id" ) );
+            aUserData[nSize].Name = "group-id";
             aUserData[nSize].Value <<= nGroupId;
         }
     }
@@ -1222,7 +1222,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
             }
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "preset-class" ) );
+            aUserData[nSize].Name = "preset-class";
             aUserData[nSize].Value <<= nEffectPresetClass;
         }
     }
@@ -1233,7 +1233,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "preset-id" ) );
+            aUserData[nSize].Name = "preset-id";
 
             const preset_maping* p = gPresetMaping;
             while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
@@ -1272,7 +1272,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
             {
                 sal_Int32 nSize = aUserData.getLength();
                 aUserData.realloc(nSize+1);
-                aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "preset-sub-type" ) );
+                aUserData[nSize].Name = "preset-sub-type";
                 aUserData[nSize].Value <<= getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
             }
         }
@@ -1284,7 +1284,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "after-effect" ) );
+            aUserData[nSize].Name = "after-effect";
             aUserData[nSize].Value <<= bAfterEffect;
         }
     }
@@ -1296,7 +1296,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "master-rel" ) );
+            aUserData[nSize].Name = "master-rel";
             aUserData[nSize].Value <<= nMasterRel;
         }
     }
@@ -1420,7 +1420,7 @@ void AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference<
                 {
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
-                        const OUString aServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Command")) );
+                        const OUString aServiceName( "com.sun.star.animations.Command" );
                         Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
                         importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
@@ -2237,7 +2237,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                     double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
                     if( eStatus == rtl_math_ConversionStatus_Ok )
                     {
-                        aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("MediaTime"));
+                        aParamValue.Name = "MediaTime";
                         aParamValue.Value <<= fMediaTime;
                     }
                     nCommand = EffectCommands::PLAY;
@@ -2253,7 +2253,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 break;
             case 2: // verb
                 {
-                    aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Verb"));
+                    aParamValue.Name = "Verb";
                     aParamValue.Value <<= aParam.toInt32();
 
                     nCommand = EffectCommands::VERB;
@@ -2265,7 +2265,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             if( nCommand == EffectCommands::CUSTOM )
             {
                 OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
-                aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefined"));
+                aParamValue.Name = "UserDefined";
                 aParamValue.Value <<= aParam;
             }
 

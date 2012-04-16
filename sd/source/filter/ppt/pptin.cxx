@@ -143,7 +143,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
 #endif
 
     PowerPointImportParam aParam( rDocStream, nImportFlags );
-    SvStream* pCurrentUserStream = rStorage.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
+    SvStream* pCurrentUserStream = rStorage.OpenSotStream( rtl::OUString( "Current User" ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
         *pCurrentUserStream >> aParam.aCurrentUserAtom;
@@ -200,7 +200,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
         {
             sal_uLong nPosMerk = rStCtrl.Tell();
 
-            pStData = rStorage_.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ), STREAM_STD_READ );
+            pStData = rStorage_.OpenSotStream( rtl::OUString( "Pictures" ), STREAM_STD_READ );
 
             rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
             sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
@@ -274,7 +274,7 @@ sal_Bool ImplSdPPTImport::Import()
         SeekOle( pDocShell, mnFilterOptions );
 
     // hyperlinks
-    PropRead* pDInfoSec2 = new PropRead( mrStorage, String( RTL_CONSTASCII_USTRINGPARAM( "\005DocumentSummaryInformation" ) ) );
+    PropRead* pDInfoSec2 = new PropRead( mrStorage, rtl::OUString( "\005DocumentSummaryInformation" ) );
     if ( pDInfoSec2->IsValid() )
     {
         PropItem aPropItem;
@@ -375,7 +375,7 @@ sal_Bool ImplSdPPTImport::Import()
                 Dictionary aDict;
                 if ( pSection->GetDictionary( aDict ) )
                 {
-                    Dictionary::const_iterator iter = aDict.find( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS" )));
+                    Dictionary::const_iterator iter = aDict.find( rtl::OUString("_PID_HLINKS") );
 
                     if ( iter != aDict.end() )
                     {
