@@ -85,13 +85,12 @@ static const OUString* getPropertyNames()
 {
     static const OUString gPropNames[ CB_BANDED_COLUMNS-CB_HEADER_ROW+1 ] =
     {
-
-        "UseFirstRowStyle" ,
-        "UseLastRowStyle" ,
-        "UseBandingRowStyle" ,
-        "UseFirstColumnStyle" ,
-        "UseLastColumnStyle" ,
-        "UseBandingColumnStyle"
+        OUString("UseFirstRowStyle") ,
+        OUString("UseLastRowStyle") ,
+        OUString("UseBandingRowStyle") ,
+        OUString("UseFirstColumnStyle") ,
+        OUString("UseLastColumnStyle") ,
+        OUString("UseBandingColumnStyle")
     };
     return &gPropNames[0];
 }
