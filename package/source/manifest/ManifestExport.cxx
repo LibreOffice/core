@@ -302,7 +302,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 sEncAlgName = sBlowfish_Name;
             }
             else
-                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpecte encryption algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected encryption algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
 
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
