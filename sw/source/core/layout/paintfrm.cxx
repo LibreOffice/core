@@ -500,7 +500,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
             if (rThis.getStart().getX() == rOther.getStart().getX())
             {
                 assert(rThis.getEnd().getX() == rOther.getEnd().getX());
-                pair<bool, pair<double, double>> const res = lcl_TryMergeLines(
+                pair<bool, pair<double, double> > const res = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getY(), rThis.getEnd().getY()),
                     make_pair(rOther.getStart().getY(),rOther.getEnd().getY()));
                 if (res.first) // merge them
@@ -518,7 +518,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
             if (rThis.getStart().getY() == rOther.getStart().getY())
             {
                 assert(rThis.getEnd().getY() == rOther.getEnd().getY());
-                pair<bool, pair<double, double>> const res = lcl_TryMergeLines(
+                pair<bool, pair<double, double> > const res = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getX(), rThis.getEnd().getX()),
                     make_pair(rOther.getStart().getX(),rOther.getEnd().getX()));
                 if (res.first) // merge them
